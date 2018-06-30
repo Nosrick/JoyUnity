@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Conversations>
+  <Line Value="Let's talk." ID="1" NextTopic="2" />
+  <Line Value="Can you tell me anything about this place?" ID="1" NextTopic="3" />
+  <Line Value="Do you have anything to trade?" ID="1" NextTopic="4" />
+  <Line Value="Is there anything I can do for you?" ID="1" NextTopic="90002" />
+  <Line Value="Fancy a quicky?" ID="1" NextTopic="90003" />
+  <Line Value="Would you do me the honour of becoming my spouse?" ID="1" NextTopic="90004" />
+</Conversations>

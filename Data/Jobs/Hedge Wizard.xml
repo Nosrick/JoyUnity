@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Job>
+  <Description>The most basic of the wizards. Has basic training in Crossbows and Nature Magic, as well as specialisation in Sorcery, Law and Chaos Magics.</Description>
+  <Statistic Name="Strength" Growth="0.3" />
+  <Statistic Name="Agility" Growth="0.5" />
+  <Statistic Name="Endurance" Growth="0.4" />
+  <Statistic Name="Cognition" Growth="1" />
+  <Statistic Name="Perception" Growth="0.5" />
+  <Statistic Name="Focus" Growth="0.8" />
+  <Statistic Name="Personality" Growth="0.4" />
+  <Statistic Name="Suavity" Growth="0.3" />
+  <Statistic Name="Wit" Growth="0.4" />
+
+  <Skill Name="Crossbow" Growth="30" />
+  <Skill Name="Sorcery Magic" Growth="85" />
+  <Skill Name="Nature Magic" Growth="40" />
+  <Skill Name="Law Magic" Growth="70" />
+  <Skill Name="Chaos Magic" Growth="70" />
+
+  <Ability Name="ChaosBolt" Level="1" />
+</Job>

@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Materials>
+  <Material>
+    <Name>Iron</Name>
+    <Hardness>0.50</Hardness>
+    <Bonus>2</Bonus>
+    <Weight>7.874</Weight>
+  </Material>
+
+  <Material>
+    <Name>Steel</Name>
+    <Hardness>1.0</Hardness>
+    <Bonus>4</Bonus>
+    <Weight>7.800</Weight>
+  </Material>
+
+  <Material>
+    <Name>Bronze</Name>
+    <Hardness>0.65</Hardness>
+    <Bonus>2</Bonus>
+    <Weight>8.520</Weight>
+  </Material>
+
+  <Material>
+    <Name>Copper</Name>
+    <Hardness>0.5</Hardness>
+    <Bonus>1</Bonus>
+    <Weight>8.96</Weight>
+  </Material>
+</Materials>

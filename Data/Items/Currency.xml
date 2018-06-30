@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Items>
+  <Category>Currency</Category>
+  <IdentifiedItem>
+    <Name>Copper coin</Name>
+    <Description>A coin made from copper, from a local mint.</Description>
+    <Value>1</Value>
+    <Materials>Copper</Materials>
+    <Size>1</Size>
+    <SpawnWeight>50</SpawnWeight>
+  </IdentifiedItem>
+</Items>

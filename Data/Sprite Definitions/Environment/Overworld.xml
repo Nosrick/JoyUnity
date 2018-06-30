@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Objects>
+  <TilesetName>Overworld</TilesetName>
+  <Sheet>Floor</Sheet>
+  <ItemIcon Name="Grassland" Position="8,7"/>
+</Objects>

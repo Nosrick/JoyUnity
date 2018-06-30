@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Items>
+  <ActionWord>stabs</ActionWord>
+  <Category>Weapons</Category>
+  
+  <IdentifiedItem>
+    <Name>Dagger</Name>
+    <Description>A short, bladed weapon that is easily concealed and good for stabbing.</Description>
+    <Value>15</Value>
+    <Skill>Blades</Skill>
+    <SpawnWeight>20</SpawnWeight>
+    <Materials>Iron,Steel,Bronze,Glass,Bone</Materials>
+    <Size>60</Size>
+    <Slot>Hands</Slot>
+  </IdentifiedItem>
+
+  <UnidentifiedItem>
+    <Name>Dagger</Name>
+    <Description>A short, bladed weapon that is easily concealed and good for stabbing.</Description>
+  </UnidentifiedItem>
+</Items>

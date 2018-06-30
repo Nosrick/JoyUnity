@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Objects>
+  <TilesetName>Weapons</TilesetName>
+  <Sheet>ShortWep</Sheet>
+
+  <ItemIcon Name="Dagger" Position="0,0" />
+  <ItemIcon Name="Dagger" Position="1,0" />
+  <ItemIcon Name="Dagger" Position="2,0" />
+  <ItemIcon Name="Dagger" Position="3,0" />
+  <ItemIcon Name="Dagger" Position="4,0" />
+  <ItemIcon Name="Dagger" Position="5,0" />
+  <ItemIcon Name="Dagger" Position="6,0" />
+  <ItemIcon Name="Dagger" Position="7,0" />
+
+  <ItemIcon Name="Dagger" Position="0,1" />
+  <ItemIcon Name="Dagger" Position="1,1" />
+</Objects>

@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Conversations>
+  <Line Value="Good to see you." Relationship="&gt;80" />
+  <Line Value="Hi there!" Relationship="&gt;49" />
+  <Line Value="Greetings, stranger." Relationship="&lt;50"/>
+</Conversations>

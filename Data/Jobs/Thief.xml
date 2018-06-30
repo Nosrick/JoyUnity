@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Job>
+  <Description>The quintessential thief. Average in most respects, but excels at stealth, pickpocketing and lockpicking.</Description>
+  
+  <Statistic Name="Strength" Growth="0.5" />
+  <Statistic Name="Agility" Growth="1" />
+  <Statistic Name="Endurance" Growth="0.6" />
+  <Statistic Name="Cognition" Growth="0.6" />
+  <Statistic Name="Perception" Growth="0.7" />
+  <Statistic Name="Focus" Growth="0.4" />
+  <Statistic Name="Personality" Growth="0.5" />
+  <Statistic Name="Suavity" Growth="0.5" />
+  <Statistic Name="Wit" Growth="0.5" />
+
+  <Skill Name="Blades" Growth="55" />
+  <Skill Name="Evasion" Growth="60" />
+  <Skill Name="Light Armour" Growth="50" />
+  <Skill Name="Crossbows" Growth="50" />
+  <Skill Name="Mercantile" Growth="30" />
+  <Skill Name="Bluff" Growth="50" />
+  <Skill Name="Stealth" Growth="70" />
+  <Skill Name="Lockpicking" Growth="70" />
+  <Skill Name="Pickpocketing" Growth="70" />
+</Job>

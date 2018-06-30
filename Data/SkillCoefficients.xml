@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Coefficients>
+  <!--Martial Skills-->
+  <Coefficient Skill="Blades" Health="0.05" Confidence="0.05" />
+  <Coefficient Skill="Blunt" Health="0.05" Confidence="0.05" />
+  <Coefficient Skill="Axes" Health="0.05" Confidence="0.05" />
+  <Coefficient Skill="Polearms" Health="0.05" Confidence="0.05" />
+  <Coefficient Skill="Bows" Health="0.05" Confidence="0.05" />
+  <Coefficient Skill="Crossbows" Health="0.05" Confidence="0.05" />
+  <Coefficient Skill="Martial Arts" Health="0.07" Confidence="0.03" />
+  <Coefficient Skill="Throwing" Health="0.05" Confidence="0.05" />
+
+  <!--Defensive Skills-->
+  <Coefficient Skill="Evasion" Health="0.03" Confidence="0.07" />
+  <Coefficient Skill="Light Armour" Health="0.04" Confidence="0.06" />
+  <Coefficient Skill="Medium Armour" Health="0.05" Confidence="0.05" />
+  <Coefficient Skill="Heavy Armour" Health="0.06" Confidence="0.04" />
+  
+  <!--Magic Skills-->
+  <Coefficient Skill="Life Magic" Friendship="0.07" Family="0.03" />
+  <Coefficient Skill="Death Magic" Morality="0.1" />
+  <Coefficient Skill="Law Magic" Morality="0.05" Respect="0.05" />
+  <Coefficient Skill="Chaos Magic" Confidence="0.1" />
+  <Coefficient Skill="Nature Magic" Food="0.025" Drink="0.025" Sleep="0.025" Sex="0.025" />
+  <Coefficient Skill="Sorcery Magic" Confidence="0.05" Respect="0.05" />
+  <Coefficient Skill="The Verse" All="0.01" />
+  
+  <!--Speech Skills-->
+  <Coefficient Skill="Mercantile" Confidence="0.07" Property="0.03" />
+  <Coefficient Skill="Persuasion" Confidence="0.05" Friendship="0.05" />
+  <Coefficient Skill="Bluff" Confidence="0.1" />
+  
+  <!--Stealth Skills-->
+  <Coefficient Skill="Stealth" Confidence="0.1" />
+  <Coefficient Skill="Lockpicking" Confidence="0.1" />
+  <Coefficient Skill="Pickpocketing" Confidence="0.1" />
+  
+  <!--Profession Skills-->
+  <Coefficient Skill="Farming" Property="0.06" Employment="0.04" />
+  <Coefficient Skill="Mining" Property="0.04" Employment="0.06" />
+  <Coefficient Skill="Cooking" Confidence="0.06" Health="0.02" Employment="0.02" />
+  <Coefficient Skill="Performance" Friendship="0.02" Confidence="0.06" Respect="0.02" />
+</Coefficients>

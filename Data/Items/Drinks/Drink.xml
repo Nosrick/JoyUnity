@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Items>
+  <Category>Drinks</Category>
+  
+  <IdentifiedItem>
+    <Name>Cider</Name>
+    <Description>Crisp, delicious cider. Made from the finest apples.</Description>
+    <Value>5</Value>
+    <Effect>Drink.py</Effect>
+    <SpawnWeight>30</SpawnWeight>
+    <Materials>Glass</Materials>
+    <Size>50</Size>
+  </IdentifiedItem>
+
+  <IdentifiedItem>
+    <Name>Water</Name>
+    <Description>Clear, cool water in a leather skin.</Description>
+    <Value>10</Value>
+    <Effect>Drink.py</Effect>
+    <SpawnWeight>30</SpawnWeight>
+    <Materials>Glass</Materials>
+    <Size>50</Size>
+  </IdentifiedItem>
+
+  <IdentifiedItem>
+    <Name>Wine</Name>
+    <Description>Red wine, made from grapes.</Description>
+    <Value>15</Value>
+    <Effect>Drink.py</Effect>
+    <SpawnWeight>30</SpawnWeight>
+    <Materials>Glass</Materials>
+    <Size>100</Size>
+  </IdentifiedItem>
+</Items>

@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Objects>
+  <TilesetName>Stairs</TilesetName>
+  <Sheet>Tile</Sheet>
+  <ItemIcon Name="DownStairs" Position="1,1" />
+  <ItemIcon Name="UpStairs" Position="0,1" />
+</Objects>

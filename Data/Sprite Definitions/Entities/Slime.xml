@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Objects>
+  <TilesetName>Slime</TilesetName>
+  <Sheet>Slime0</Sheet>
+  <Sheet>Slime1</Sheet>
+
+  <ItemIcon Name="Dungeon Slime" Position="0,1" />
+</Objects>

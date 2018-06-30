@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Objects>
+  <TilesetName>Reptiles</TilesetName>
+  <Sheet>Reptile0</Sheet>
+  <Sheet>Reptile1</Sheet>
+
+  <ItemIcon Name="Naga" Position="1,6" />
+</Objects>

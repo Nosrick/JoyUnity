@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Objects>
+  <TilesetName>Misc</TilesetName>
+  <Sheet>Light</Sheet>
+
+  <ItemIcon Name="Lantern" Position="3,0" />
+</Objects>

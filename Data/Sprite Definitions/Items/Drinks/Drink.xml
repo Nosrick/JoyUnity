@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Objects>
+  <TilesetName>Drinks</TilesetName>
+  <Sheet>Drinks</Sheet>
+
+  <ItemIcon Name="Cider" Position="0,0" />
+  <ItemIcon Name="Water" Position="1,0" />
+  <ItemIcon Name="Wine" Position="2,0" />
+</Objects>

@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Objects>
+  <TilesetName>Needs</TilesetName>
+  <Sheet>Needs</Sheet>
+
+  <ItemIcon Name="Food" Position="0,0" />
+  <ItemIcon Name="Drink" Position="1,0" />
+  <ItemIcon Name="Sex" Position="2,0" />
+  <ItemIcon Name="Sleep" Position="3,0" />
+
+  <ItemIcon Name="Health" Position="4,0" />
+  <ItemIcon Name="Employment" Position="5,0" />
+  <ItemIcon Name="Property" Position="6,0" />
+
+  <ItemIcon Name="Friendship" Position="7,0" />
+  <ItemIcon Name="Family" Position="8,0" />
+  <ItemIcon Name="Morality" Position="9,0" />
+
+  <ItemIcon Name="Confidence" Position="10,0" />
+  <ItemIcon Name="Respect" Position="11,0" />
+</Objects>

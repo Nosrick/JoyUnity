@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Slots>
+  <EntityType>
+    <Name>Humanoid</Name>
+    <Slot>Head</Slot>
+    <Slot>Neck</Slot>
+    <Slot>Shoulders</Slot>
+    <Slot>Torso</Slot>
+    <Slot>Waist</Slot>
+    <Slot>Legs</Slot>
+    <Slot>Feet</Slot>
+    <Slot>Hand1</Slot>
+    <Slot>Hand2</Slot>
+    <Slot>Ring1</Slot>
+    <Slot>Ring2</Slot>
+    <Slot>Ranged</Slot>
+    <Slot>Ammo</Slot>
+    <Slot>Job Pin</Slot>
+    <Slot>Throw</Slot>
+  </EntityType>
+
+  <EntityType>
+    <Name>Naga</Name>
+    <Slot>Head</Slot>
+    <Slot>Neck</Slot>
+    <Slot>Shoulders</Slot>
+    <Slot>Torso</Slot>
+    <Slot>Waist</Slot>
+    <Slot>Tail</Slot>
+    <Slot>Hand1</Slot>
+    <Slot>Hand2</Slot>
+    <Slot>Ring1</Slot>
+    <Slot>Ring2</Slot>
+    <Slot>Ranged</Slot>
+    <Slot>Ammo</Slot>
+    <Slot>Job Pin</Slot>
+    <Slot>Throw</Slot>
+  </EntityType>
+
+  <EntityType>
+    <Name>Slime</Name>
+    <Slot>Torso</Slot>
+  </EntityType>
+</Slots>

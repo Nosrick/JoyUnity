@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Items>
+  <Category>Containers</Category>
+  <IdentifiedItem>
+    <Name>Leather bag</Name>
+    <Description>A leather bag, used to store things.</Description>
+    <Value>5</Value>
+    <Materials>Leather</Materials>
+    <Size>100</Size>
+  </IdentifiedItem>
+</Items>

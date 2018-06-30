@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Job>
+  <Description>The versatile warrior. Trained in all melee weapons and all armour types.</Description>
+  
+  <Statistic Name="Strength" Growth="1" />
+  <Statistic Name="Agility" Growth="0.6" />
+  <Statistic Name="Endurance" Growth="0.8" />
+  <Statistic Name="Cognition" Growth="0.4" />
+  <Statistic Name="Perception" Growth="0.5" />
+  <Statistic Name="Focus" Growth="0.3" />
+  <Statistic Name="Personality" Growth="0.4" />
+  <Statistic Name="Suavity" Growth="0.3" />
+  <Statistic Name="Wit" Growth="0.3" />
+
+  <Skill Name="Blades" Growth="60" />
+  <Skill Name="Blunt" Growth="60" />
+  <Skill Name="Axes" Growth="60" />
+  <Skill Name="Polearms" Growth="60" />
+  <Skill Name="Martial Arts" Growth="30" />
+  <Skill Name="Light Armour" Growth="60" />
+  <Skill Name="Medium Armour" Growth="60" />
+  <Skill Name="Heavy Armour" Growth="60" />
+
+  <Ability Name="PowerAttack" Level="1" />
+  <Ability Name="Backdraft" Level="3" />
+</Job>

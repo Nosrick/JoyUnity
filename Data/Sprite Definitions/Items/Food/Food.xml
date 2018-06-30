@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Objects>
+  <TilesetName>Food</TilesetName>
+  <Sheet>Food</Sheet>
+
+  <ItemIcon Name="Apple" Position="0,2" />
+</Objects>
