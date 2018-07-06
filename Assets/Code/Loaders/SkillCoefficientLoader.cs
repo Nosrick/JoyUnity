@@ -7,9 +7,9 @@ namespace JoyLib.Code.Loaders
 {
     public static class SkillCoefficientLoader
     {
-        public static Dictionary<string, Dictionary<string, float>> LoadSkillCoefficients()
+        public static Dictionary<string, Dictionary<NeedIndex, float>> LoadSkillCoefficients()
         {
-            Dictionary<string, Dictionary<string, float>> skillCoefficients = new Dictionary<string, Dictionary<string, float>>();
+            Dictionary<string, Dictionary<NeedIndex, float>> skillCoefficients = new Dictionary<string, Dictionary<NeedIndex, float>>();
 
             XmlReader reader = XmlReader.Create(Directory.GetCurrentDirectory() + "/Data/SkillCoefficients.xml");
 
@@ -25,7 +25,7 @@ namespace JoyLib.Code.Loaders
                 {
                     string name = reader.GetAttribute("Skill");
                     reader.MoveToNextAttribute();
-                    Dictionary<string, float> coefficients = new Dictionary<string, float>();
+                    Dictionary<NeedIndex, float> coefficients = new Dictionary<NeedIndex, float>();
                     for (int i = 1; i < reader.AttributeCount; i++)
                     {
                         NeedIndex index;
@@ -34,7 +34,7 @@ namespace JoyLib.Code.Loaders
 
                         float coefficient = 0;
                         float.TryParse(reader.GetAttribute(i), out coefficient);
-                        coefficients.Add(index.ToString(), coefficient);
+                        coefficients.Add(index, coefficient);
                     }
 
                     skillCoefficients.Add(name, coefficients);

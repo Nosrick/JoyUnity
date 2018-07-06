@@ -1,26 +1,26 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Objects>
-  <TilesetName>TealBrickFloor</TilesetName>
+  <TilesetName>Floor</TilesetName>
   <Sheet>Floor</Sheet>
-  <ItemIcon Name="TopLeft" Position="0,3" />
-  <ItemIcon Name="TopMiddle" Position="1,3" />
-  <ItemIcon Name="TopRight" Position="2,3" />
-
-  <ItemIcon Name="MiddleLeft" Position="0,4" />
-  <ItemIcon Name="MiddleMiddle" Position="1,4" />
-  <ItemIcon Name="MiddleRight" Position="2,4" />
-
-  <ItemIcon Name="BottomLeft" Position="0,5" />
-  <ItemIcon Name="BottomMiddle" Position="1,5" />
-  <ItemIcon Name="BottomRight" Position="2,5" />
-
-  <ItemIcon Name="SingleTopVert" Position="3,3" />
-  <ItemIcon Name="SingleMiddleVert" Position="3,4" />
-  <ItemIcon Name="SingleBottomVert" Position="3,5" />
-
-  <ItemIcon Name="Solo" Position="5,3" />
+  <ItemIcon Name="TopLeft" Position="0,38" />
+  <ItemIcon Name="TopMiddle" Position="1,38" />
+  <ItemIcon Name="TopRight" Position="2,38" />
   
-  <ItemIcon Name="SingleLeftHor" Position="4,4" />
-  <ItemIcon Name="SingleMiddleHor" Position="5,4" />
-  <ItemIcon Name="SingleRightHor" Position="6,4" />
+  <ItemIcon Name="MiddleLeft" Position="0,37" />
+  <ItemIcon Name="MiddleMiddle" Position="1,37" />
+  <ItemIcon Name="MiddleRight" Position="2,37" />
+  
+  <ItemIcon Name="BottomLeft" Position="0,36" />
+  <ItemIcon Name="BottomMiddle" Position="1,36" />
+  <ItemIcon Name="BottomRight" Position="2,36" />
+  
+  <ItemIcon Name="VerticalTop" Position="3,38" />
+  <ItemIcon Name="VerticalMiddle" Position="3,37" />
+  <ItemIcon Name="VerticalBottom" Position="3,36" />
+  
+  <ItemIcon Name="SoloFloor" Position="5,38" />
+  
+  <ItemIcon Name="HorizontalLeft" Position="4,37" />
+  <ItemIcon Name="HorizontalMiddle" Position="5,37" />
+  <ItemIcon Name="HorizontalRight" Position="6,37" />
 </Objects>

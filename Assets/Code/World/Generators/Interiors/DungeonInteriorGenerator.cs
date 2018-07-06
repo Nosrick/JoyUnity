@@ -51,8 +51,8 @@ namespace JoyLib.Code.World.Generators.Interiors
                         m_UntreatedTiles[i, j] == GeneratorTileType.Wall ||
                         m_UntreatedTiles[i, j] == GeneratorTileType.None)
                     {
-                        walls.Add(JoyObject.Create("MiddleMiddle0", 1, new Vector2Int(i, j), new []{ ObjectIcons.GetIcon("TealBrickWall", "MiddleMiddle0") }, 
-                            "TealBrickWall", false, true));
+                        walls.Add(JoyObject.Create("Surround", 1, new Vector2Int(i, j), new []{ ObjectIcons.GetIcon("Walls", "Surround") }, 
+                            "Wall", false, true));
                     }
                 }
             }

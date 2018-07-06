@@ -1,23 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Objects>
-  <TilesetName>TealBrickWall</TilesetName>
+  <TilesetName>Walls</TilesetName>
   <Sheet>Wall</Sheet>
-  <ItemIcon Name="TopLeft" Position="0,3" />
-  <ItemIcon Name="TopMiddle" Position="1,3" />
-  <ItemIcon Name="TopRight" Position="2,3" />
-
-  <ItemIcon Name="MiddleSide" Position="0,4" />
+  <ItemIcon Name="TopLeft" Position="0,50" />
+  <ItemIcon Name="TopRight" Position="2,50" />
+  <ItemIcon Name="BottomLeft" Position="0,48" />
+  <ItemIcon Name="BottomRight" Position="2,48" />
   
-  <ItemIcon Name="Solo" Position="1,4" />
+  <ItemIcon Name="HorizontalWall" Position="1,50" />
+  <ItemIcon Name="VerticalWall" Position="0,49" />
+  
+  <ItemIcon Name="TopT" Position="4,50" />
+  <ItemIcon Name="LeftT" Position="3,49" />
+  <ItemIcon Name="RightT" Position="5,49" />
+  <ItemIcon Name="BottomT" Position="4,48" />
+  
+  <ItemIcon Name="Cross" Position="4,49" />
 
-  <ItemIcon Name="BottomLeft" Position="0,5" />
-  <ItemIcon Name="BottomRight" Position="2,5" />
-
-  <ItemIcon Name="MiddleMiddle" Position="3,3" />
-
-  <ItemIcon Name="TopT" Position="4,3" />
-  <ItemIcon Name="LeftT" Position="3,4" />
-  <ItemIcon Name="Cross" Position="4,4" />
-  <ItemIcon Name="RightT" Position="5,4" />
-  <ItemIcon Name="BottomT" Position="4,5" />
+  <ItemIcon Name="SoloWall" Position="1,49" />
+  <ItemIcon Name="Surround" Position="3,50" />
 </Objects>

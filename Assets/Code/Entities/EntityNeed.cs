@@ -164,7 +164,7 @@ namespace JoyLib.Code.Entities
             Dictionary<NeedIndex, EntityNeed> needs = new Dictionary<NeedIndex, EntityNeed>();
 
             //Add tier 1 needs
-            needs.Add(NeedIndex.Food, new EntityNeed(60, 200, true, RNG.Roll(5, 24),
+            needs.Add(NeedIndex.Hunger, new EntityNeed(60, 200, true, RNG.Roll(5, 24),
                 24, 12, 0, 0, "Hunger"));
             needs.Add(NeedIndex.Drink, new EntityNeed(50, 200, true, RNG.Roll(5, 20),
                 20, 10, 0, 0, "Drink"));
@@ -181,7 +181,7 @@ namespace JoyLib.Code.Entities
 
             //Add tier 2 needs
             //Health is an aggregate of food, drink and sleep, and gets a flat bonus of 50 for having no diseases
-            int health = ((needs[NeedIndex.Food].value + needs[NeedIndex.Drink].value + needs[NeedIndex.Sleep].value) / 3) + CLEAN_BONUS;
+            int health = ((needs[NeedIndex.Hunger].value + needs[NeedIndex.Drink].value + needs[NeedIndex.Sleep].value) / 3) + CLEAN_BONUS;
 
             needs.Add(NeedIndex.Health, new EntityNeed(0, RNG.Roll(50, 150), false, health, 300, RNG.Roll(100, 200), 0, 0, "Health"));
             needs.Add(NeedIndex.Employment, new EntityNeed(RNG.Roll(200, 400), RNG.Roll(10, 150), true, 0, 300, RNG.Roll(50, 200), 0, 0, "Employment"));

@@ -2,7 +2,7 @@
 {
     public enum NeedIndex
     {
-        Food,
+        Hunger,
         Drink,
         Sleep,
         Sex,

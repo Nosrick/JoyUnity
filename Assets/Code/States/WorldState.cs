@@ -19,6 +19,8 @@ namespace JoyLib.Code.States
 
         protected GameplayFlags s_GameplayFlags;
 
+        protected Camera m_Camera;
+
         protected DateTime m_DateTime;
 
         protected const int TICK_TIMER = 50;
@@ -32,6 +34,8 @@ namespace JoyLib.Code.States
             SetUpUi();
 
             //MusicHandler.Play("DashRoog");
+
+            m_Camera = GameObject.Find("Main Camera").GetComponent<Camera>();
         }
 
         public override void LoadContent()
@@ -131,7 +135,7 @@ namespace JoyLib.Code.States
                 return;
 
             bool hasMoved = false;
-
+            
             /*
             if (m_Input.currentMouseState.ScrollWheelValue > m_Input.lastMouseState.ScrollWheelValue)
             {
@@ -459,8 +463,6 @@ namespace JoyLib.Code.States
         public override void Update()
         {
             base.Update();
-
-            m_TickTimer = Environment.TickCount;
         }
 
         private void GainFocus()

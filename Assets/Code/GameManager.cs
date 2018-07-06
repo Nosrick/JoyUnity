@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
 {
     private StateManager m_StateManager;
 
+    private Camera m_Camera;
+
 	// Use this for initialization
 	void Start ()
     {
@@ -26,6 +28,9 @@ public class GameManager : MonoBehaviour
         thief.PlayerControlled = true;
 
         m_StateManager.ChangeState(new WorldCreationState(thief));
+
+        m_Camera = GameObject.Find("Main Camera").GetComponent<Camera>();
+        m_Camera.transform.position = new Vector3(thief.transform.position.x, thief.transform.position.y, m_Camera.transform.position.z);
     }
 
     private void InitialiseEverything()

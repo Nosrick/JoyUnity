@@ -247,7 +247,7 @@ namespace JoyLib.Code.World
 
             foreach (Entity entity in m_Entities)
             {
-                Thread childThread = new Thread(new ThreadStart(entity.Update));
+                Thread childThread = new Thread(new ThreadStart(entity.UpdateMe));
                 childThread.Start();
             }
         }

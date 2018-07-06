@@ -21,9 +21,9 @@
   <Coefficient Skill="Death Magic" Morality="0.1" />
   <Coefficient Skill="Law Magic" Morality="0.05" Respect="0.05" />
   <Coefficient Skill="Chaos Magic" Confidence="0.1" />
-  <Coefficient Skill="Nature Magic" Food="0.025" Drink="0.025" Sleep="0.025" Sex="0.025" />
+  <Coefficient Skill="Nature Magic" Hunger="0.025" Drink="0.025" Sleep="0.025" Sex="0.025" />
   <Coefficient Skill="Sorcery Magic" Confidence="0.05" Respect="0.05" />
-  <Coefficient Skill="The Verse" All="0.01" />
+  <Coefficient Skill="The Verse" Confidence="0.01" Drink="0.01" Employment="0.01" Family="0.01" Friendship="0.01" Health="0.01" Hunger="0.01" Morality="0.01" Property="0.01" Respect="0.01" Sex="0.01" Sleep="0.01"/>
   
   <!--Speech Skills-->
   <Coefficient Skill="Mercantile" Confidence="0.07" Property="0.03" />

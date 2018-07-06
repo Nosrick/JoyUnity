@@ -119,23 +119,7 @@ namespace JoyLib.Code.States
         {
             Gender m_PlayerGender = (Gender)m_GenderIndex;
 
-            Dictionary<string, EntitySkill> skills = new Dictionary<string,EntitySkill>();
-
-            Dictionary<string, Dictionary<string, float>> coefficients = SkillCoefficientLoader.LoadSkillCoefficients();
-            Dictionary<string, List<NeedIndex>> governingNeeds = GoverningNeedsLoader.GetGoverningNeeds();
             Dictionary<NeedIndex, EntityNeed> needs = EntityNeed.GetFullRandomisedNeeds();
-
-            foreach (KeyValuePair<string, List<NeedIndex>> pair in governingNeeds)
-            {
-                Dictionary<string, EntityNeed> skillNeeds = new Dictionary<string, EntityNeed>();
-
-                foreach(NeedIndex needIndex in pair.Value)
-                {
-                    skillNeeds.Add(needIndex.ToString(), needs[needIndex]);
-                }
-
-                skills.Add(pair.Key, new EntitySkill(0, 0, coefficients[pair.Key], skillNeeds));
-            }
 
             EntityTemplate humanTemplate = EntityTemplateHandler.Get("Human");
             m_Player = Entity.CreateBrandNew(humanTemplate, needs, 1, m_Jobs[m_JobIndex], m_PlayerGender, Sexuality.Bisexual, new UnityEngine.Vector2Int(-1, -1),

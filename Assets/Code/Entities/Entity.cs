@@ -94,7 +94,15 @@ namespace JoyLib.Code.Entities
             entity.m_Sexuality = sexuality;
             entity.m_IdentifiedItems = identifiedItems;
             entity.m_Statistics = template.Statistics;
-            entity.m_Skills = template.Skills;
+
+            if (template.Skills.Count == 0)
+            {
+                entity.m_Skills = EntitySkillHandler.GetSkillBlock(needs);
+            }
+            else
+            {
+                entity.m_Skills = template.Skills;
+            }
             entity.m_Needs = needs;
             entity.m_Abilities = template.Abilities;
             entity.m_Level = level;
@@ -161,7 +169,15 @@ namespace JoyLib.Code.Entities
             entity.m_Sexuality = sexuality;
             entity.m_IdentifiedItems = new List<string>();
             entity.m_Statistics = template.Statistics;
-            entity.m_Skills = template.Skills;
+
+            if (template.Skills.Count == 0)
+            {
+                entity.m_Skills = EntitySkillHandler.GetSkillBlock(needs);
+            }
+            else
+            {
+                entity.m_Skills = template.Skills;
+            }
             entity.m_Needs = needs;
             entity.m_Abilities = template.Abilities;
             entity.m_Level = level;
@@ -281,10 +297,10 @@ namespace JoyLib.Code.Entities
             RegenTicker += 1;
             if(RegenTicker == REGEN_TICK_TIME)
             {
-                m_HitPointsRemaining = Math.Min(m_HitPoints, m_HitPointsRemaining + (int)(Statistics[StatisticIndex.Endurance] / 10));
-                m_ConcentrationRemaining = Math.Min(m_Concentration, m_ConcentrationRemaining + (int)(Statistics[StatisticIndex.Focus] / 10));
-                m_ComposureRemaining = Math.Min(m_Composure, m_ComposureRemaining + (int)(Statistics[StatisticIndex.Wit] / 10));
-                m_ManaRemaining = Math.Min(m_Mana, m_ManaRemaining + (int)((Statistics[StatisticIndex.Focus] + Statistics[StatisticIndex.Endurance] + Statistics[StatisticIndex.Wit]) / 30));
+                m_HitPointsRemaining = Math.Min(m_HitPoints, m_HitPointsRemaining + 1);
+                m_ConcentrationRemaining = Math.Min(m_Concentration, m_ConcentrationRemaining + 1);
+                m_ComposureRemaining = Math.Min(m_Composure, m_ComposureRemaining + 1);
+                m_ManaRemaining = Math.Min(m_Mana, m_ManaRemaining + 1);
                 RegenTicker = 0;
             }
 
@@ -365,7 +381,12 @@ namespace JoyLib.Code.Entities
             m_Backpack.Remove(itemRef);
         }
 
-        public void Update()
+        public override void Update()
+        {
+            base.Update();
+        }
+
+        public void UpdateMe()
         {
             m_Vision = MyWorld.GetVision(this);
 
