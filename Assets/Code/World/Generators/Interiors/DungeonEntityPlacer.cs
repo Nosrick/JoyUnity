@@ -21,16 +21,16 @@ namespace JoyLib.Code.World.Generators.Interiors
             List<EntityTemplate> templates = EntityTemplateHandler.Templates;
             templates = templates.Where(x => entityTypes.Contains(x.CreatureType)).ToList();
 
-            int numberToPlace = (worldRef.tiles.GetLength(0) * worldRef.tiles.GetLength(1)) / 50;
+            int numberToPlace = (worldRef.Tiles.GetLength(0) * worldRef.Tiles.GetLength(1)) / 50;
 
             List<Vector2Int> availablePoints = new List<Vector2Int>();
 
-            for (int i = 0; i < worldRef.tiles.GetLength(0); i++)
+            for (int i = 0; i < worldRef.Tiles.GetLength(0); i++)
             {
-                for (int j = 0; j < worldRef.tiles.GetLength(1); j++)
+                for (int j = 0; j < worldRef.Tiles.GetLength(1); j++)
                 {
                     Vector2Int point = new Vector2Int(i, j);
-                    if (PhysicsManager.IsCollision(point, point, worldRef) == PhysicsResult.None && point != worldRef.spawnPoint)
+                    if (PhysicsManager.IsCollision(point, point, worldRef) == PhysicsResult.None && point != worldRef.SpawnPoint)
                     {
                         availablePoints.Add(point);
                     }
@@ -53,11 +53,8 @@ namespace JoyLib.Code.World.Generators.Interiors
                     Dictionary<string, int> jobLevels = new Dictionary<string, int>();
                     jobLevels.Add(jobType.name, 1);
 
-                    newEntity = Entity.Create(templates[entityIndex], EntityNeed.GetFullRandomisedNeeds(), 1, 0, jobType, culture.ChooseGender(),
-                        templates[entityIndex].CreatureType, availablePoints[pointIndex], templates[entityIndex].JoyType, 
-                        ObjectIcons.GetIcons(templates[entityIndex].Tileset, templates[entityIndex].CreatureType).ToList(),
-                        NaturalWeaponHelper.MakeNaturalWeapon(templates[entityIndex].Size), new Dictionary<string, ItemInstance>(), new List<ItemInstance>(), new Dictionary<int, int>(), 
-                        new List<string>(), culture.ChooseSexuality(), new Dictionary<int, RelationshipStatus>(), jobLevels, worldRef, templates[entityIndex].Tileset);
+                    newEntity = Entity.CreateBrandNew(templates[entityIndex], EntityNeed.GetFullRandomisedNeeds(), 1, jobType, culture.ChooseGender(), culture.ChooseSexuality(),
+                        new Vector2Int(-1, -1), ObjectIcons.GetIcons(templates[entityIndex].Tileset, templates[entityIndex].CreatureType).ToList(), null);
                 }
                 else
                 {
@@ -68,10 +65,8 @@ namespace JoyLib.Code.World.Generators.Interiors
                     Dictionary<string, int> jobLevels = new Dictionary<string, int>();
                     jobLevels.Add(jobType.name, 1);
 
-                    newEntity = Entity.Create(templates[entityIndex], EntityNeed.GetBasicRandomisedNeeds(), 1, 0, jobType, culture.ChooseGender(), templates[entityIndex].CreatureType,
-                        availablePoints[pointIndex], templates[entityIndex].JoyType, ObjectIcons.GetIcons(templates[entityIndex].Tileset, templates[entityIndex].CreatureType).ToList(),
-                        NaturalWeaponHelper.MakeNaturalWeapon(templates[entityIndex].Size), new Dictionary<string, ItemInstance>(), new List<ItemInstance>(), new Dictionary<int, int>(),
-                        new List<string>(), culture.ChooseSexuality(), new Dictionary<int, RelationshipStatus>(), jobLevels, worldRef, templates[entityIndex].Tileset);
+                    newEntity = Entity.CreateBrandNew(templates[entityIndex], EntityNeed.GetBasicRandomisedNeeds(), 1, jobType, culture.ChooseGender(), culture.ChooseSexuality(),
+                        new Vector2Int(-1, -1), ObjectIcons.GetIcons(templates[entityIndex].Tileset, templates[entityIndex].CreatureType).ToList(), null);
                 }
                 newEntity.Move(availablePoints[pointIndex]);
                 newEntity.MyWorld = worldRef;

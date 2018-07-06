@@ -10,6 +10,7 @@ namespace JoyLib.Code.Entities.Abilities
 
         private static void Load()
         {
+            s_Abilities = new List<Ability>();
             List<Type> types = typeof(Ability).Assembly.GetTypes().Where(x => x.IsSubclassOf(typeof(Ability))).ToList();
             foreach (Type type in types)
             {
