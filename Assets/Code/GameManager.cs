@@ -1,30 +1,49 @@
-﻿using JoyLib.Code.Graphics;
+﻿using Joy.Code.Managers;
+using JoyLib.Code.Cultures;
+using JoyLib.Code.Entities;
+using JoyLib.Code.Entities.Abilities;
+using JoyLib.Code.Entities.Items;
+using JoyLib.Code.Entities.Jobs;
+using JoyLib.Code.Graphics;
+using JoyLib.Code.Helpers;
+using JoyLib.Code.States;
+using System;
+using System.Linq;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    private StateManager m_StateManager;
 
 	// Use this for initialization
 	void Start ()
     {
+        InitialiseEverything();
+
+        m_StateManager = new StateManager();
+
+        Entity thief = Entity.CreateBrandNew(EntityTemplateHandler.Get("Human"), EntityNeed.GetFullRandomisedNeeds(), 1, JobHandler.Get("Thief"), Gender.Neutral, Sexuality.Bisexual, Vector2Int.zero, ObjectIcons.GetIcons("Jobs", "Thief").ToList(), null);
+        thief.PlayerControlled = true;
+
+        m_StateManager.ChangeState(new WorldCreationState(thief));
+    }
+
+    private void InitialiseEverything()
+    {
+        RNG.SetSeed(DateTime.Now.Millisecond);
         ObjectIcons.Load();
-        
-        JoyObject wizard = Instantiate(Resources.Load<JoyObject>("Prefabs/Sprite"));
-        wizard.Initialise("Wizard", 1, new Vector2Int(0, 0), ObjectIcons.GetIcons("Jobs", "Hedge Wizard"), "Test", true);
-
-        JoyObject warrior = Instantiate(Resources.Load<JoyObject>("Prefabs/Sprite"));
-        warrior.Initialise("Warrior", 1, new Vector2Int(1, 0), ObjectIcons.GetIcons("Jobs", "Warrior"), "Test", true);
-        
-        JoyObject thief = Instantiate(Resources.Load<JoyObject>("Prefabs/Sprite"));
-        thief.Initialise("Thief", 1, new Vector2Int(2, 0), ObjectIcons.GetIcons("Jobs", "Thief"), "Test", true);
-
-        JoyObject naga = Instantiate(Resources.Load<JoyObject>("Prefabs/Sprite"));
-        naga.Initialise("Naga", 1, new Vector2Int(1, 1), ObjectIcons.GetIcons("Reptiles", "Naga"), "Test", true);
-	}
+        AbilityHandler.Initialise();
+        JobHandler.Initialise();
+        CultureHandler.Initialise();
+        MaterialHandler.Initialise();
+        ItemHandler.LoadItems();
+        NameProvider.Initialise();
+        EntityTemplateHandler.Initialise();
+    }
 	
 	// Update is called once per frame
 	void Update ()
     {
-		
+        m_StateManager.Update();
 	}
 }

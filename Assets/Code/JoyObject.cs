@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using JoyLib.Code.Helpers;
+using System;
+using System.Collections.Generic;
 
+[Serializable]
 public class JoyObject : MonoBehaviour
 {
     protected int m_HitPoints;
@@ -16,42 +19,114 @@ public class JoyObject : MonoBehaviour
 
     protected const int FRAMES_PER_SECOND = 30;
 
-    public void Initialise(string name, int hitPoints, Vector2Int worldPosition, Texture2D[] icons, string baseType, bool isAnimated, bool isWall = false)
+    public static JoyObject Create(string name, int hitPoints, Vector2Int worldPosition, Texture2D[] icons, string baseType, bool isAnimated, bool isWall = false)
+    {
+        JoyObject newObject = Instantiate(Resources.Load<JoyObject>("Prefabs/JoyObject"));
+
+        newObject.JoyName = name;
+        newObject.name = newObject.JoyName;
+
+        newObject.m_HitPoints = hitPoints;
+
+        newObject.m_WorldPosition = worldPosition;
+        newObject.Move(newObject.m_WorldPosition);
+
+        newObject.m_Icons = new Sprite[icons.Length];
+        for (int i = 0; i < icons.Length; i++)
+        {
+            newObject.m_Icons[i] = Sprite.Create(icons[i], new Rect(0, 0, 16, 16), new Vector2(0, 0), 16);
+        }
+
+        newObject.BaseType = baseType;
+        newObject.IsAnimated = isAnimated;
+        newObject.IsWall = isWall;
+
+        //If it's not animated, select a random icon to represent it
+        if (!newObject.IsAnimated && icons != null)
+        {
+            newObject.ChosenIcon = RNG.Roll(0, icons.Length - 1);
+        }
+        else
+        {
+            newObject.ChosenIcon = 0;
+        }
+
+        newObject.GetComponent<SpriteRenderer>().sprite = newObject.Icon;
+
+        newObject.m_LastIcon = 0;
+        newObject.m_FramesSinceLastChange = 0;
+
+        return newObject;
+
+        //GUID = GUIDManager.AssignGUID();
+    }
+
+    public static JoyObject Create(string name, int hitPoints, Vector2Int position, List<Sprite> sprites, string baseType, bool isAnimated, bool isWall = false)
+    {
+        JoyObject newObject = Instantiate(Resources.Load<JoyObject>("Prefabs/Sprite"));
+
+        newObject.JoyName = name;
+        newObject.name = newObject.JoyName;
+
+        newObject.m_HitPoints = hitPoints;
+
+        newObject.m_WorldPosition = position;
+        newObject.Move(newObject.m_WorldPosition);
+
+        newObject.m_Icons = sprites.ToArray();
+
+        newObject.BaseType = baseType;
+        newObject.IsAnimated = isAnimated;
+        newObject.IsWall = isWall;
+
+        //If it's not animated, select a random icon to represent it
+        if (!newObject.IsAnimated && sprites != null)
+        {
+            newObject.ChosenIcon = RNG.Roll(0, sprites.Count - 1);
+        }
+        else
+        {
+            newObject.ChosenIcon = 0;
+        }
+
+        newObject.GetComponent<SpriteRenderer>().sprite = newObject.Icon;
+
+        newObject.m_LastIcon = 0;
+        newObject.m_FramesSinceLastChange = 0;
+
+        return newObject;
+    }
+
+    public void Initialise(string name, int hitPoints, Vector2Int position, List<Sprite> sprites, string baseType, bool isAnimated, bool isWall = false)
     {
         this.JoyName = name;
         this.name = this.JoyName;
 
         this.m_HitPoints = hitPoints;
 
-        m_WorldPosition = worldPosition;
-        Move(m_WorldPosition);
+        this.m_WorldPosition = position;
+        this.Move(this.m_WorldPosition);
 
-        m_Icons = new Sprite[icons.Length];
-        for (int i = 0; i < icons.Length; i++)
-        {
-            m_Icons[i] = Sprite.Create(icons[i], new Rect(0, 0, 16, 16), new Vector2(0, 0), 16);
-        }
+        this.m_Icons = sprites.ToArray();
 
-        BaseType = baseType;
+        this.BaseType = baseType;
         this.IsAnimated = isAnimated;
         this.IsWall = isWall;
 
         //If it's not animated, select a random icon to represent it
-        if (!this.IsAnimated && icons != null)
+        if (!this.IsAnimated && sprites != null)
         {
-            ChosenIcon = RNG.Roll(0, icons.Length - 1);
+            this.ChosenIcon = RNG.Roll(0, sprites.Count - 1);
         }
         else
         {
-            ChosenIcon = 0;
+            this.ChosenIcon = 0;
         }
 
-        this.GetComponent<SpriteRenderer>().sprite = Icon;
+        this.GetComponent<SpriteRenderer>().sprite = this.Icon;
 
-        m_LastIcon = 0;
-        m_FramesSinceLastChange = 0;
-
-        //GUID = GUIDManager.AssignGUID();
+        this.m_LastIcon = 0;
+        this.m_FramesSinceLastChange = 0;
     }
 
     public void Move(Vector2Int newPosition)
@@ -68,6 +143,15 @@ public class JoyObject : MonoBehaviour
     public virtual void HealMe(int value)
     {
         m_HitPointsRemaining = System.Math.Min(m_HitPoints, m_HitPointsRemaining + value);
+    }
+
+    public void SetIcons(Texture2D[] textures)
+    {
+        m_Icons = new Sprite[textures.Length];
+        for(int i = 0; i < textures.Length; i++)
+        {
+            m_Icons[i] = Sprite.Create(textures[i], new Rect(0, 0, 16, 16), Vector2.zero, 16);
+        }
     }
 
     // Use this for initialization

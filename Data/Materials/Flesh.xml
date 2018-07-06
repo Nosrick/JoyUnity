@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Materials>
+  <Material>
+    <Name>Flesh</Name>
+    <Hardness>0.2</Hardness>
+    <Bonus>0</Bonus>
+    <Weight>1.0</Weight>
+  </Material>
+</Materials>

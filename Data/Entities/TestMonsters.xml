@@ -3,38 +3,36 @@
   <Entity>
     <CreatureType>Naga</CreatureType>
     <Sentient>Yes</Sentient>
-    <Job>Warrior</Job>
     <Type>Naga</Type>
     <Tileset>Reptiles</Tileset>
     <VisionType>Nocturnal</VisionType>
 
-    <Statistic Name="Strength" Value="30" />
-    <Statistic Name="Agility" Value="60" />
-    <Statistic Name="Endurance" Value="40" />
-    <Statistic Name="Cognition" Value="50" />
-    <Statistic Name="Perception" Value="60" />
-    <Statistic Name="Focus" Value="30" />
-    <Statistic Name="Personality" Value="40" />
-    <Statistic Name="Suavity" Value="50" />
-    <Statistic Name="Wit" Value="30" />
+    <Statistic Name="Strength" Value="3" />
+    <Statistic Name="Agility" Value="6" />
+    <Statistic Name="Endurance" Value="4" />
+    <Statistic Name="Cognition" Value="5" />
+    <Statistic Name="Perception" Value="6" />
+    <Statistic Name="Focus" Value="3" />
+    <Statistic Name="Personality" Value="4" />
+    <Statistic Name="Suavity" Value="5" />
+    <Statistic Name="Wit" Value="3" />
   </Entity>
 
   <Entity>
     <CreatureType>Dungeon Slime</CreatureType>
     <Sentient>No</Sentient>
-    <Job>Warrior</Job>
     <Type>Slime</Type>
     <Tileset>Slime</Tileset>
     <VisionType>Nocturnal</VisionType>
 
-    <Statistic Name="Strength" Value="30" />
-    <Statistic Name="Agility" Value="20" />
-    <Statistic Name="Endurance" Value="60" />
-    <Statistic Name="Cognition" Value="10" />
-    <Statistic Name="Perception" Value ="20" />
-    <Statistic Name="Focus" Value="20" />
-    <Statistic Name="Personality" Value="10" />
-    <Statistic Name="Suavity" Value="10" />
-    <Statistic Name="Wit" Value="10" />
+    <Statistic Name="Strength" Value="3" />
+    <Statistic Name="Agility" Value="2" />
+    <Statistic Name="Endurance" Value="6" />
+    <Statistic Name="Cognition" Value="1" />
+    <Statistic Name="Perception" Value ="2" />
+    <Statistic Name="Focus" Value="2" />
+    <Statistic Name="Personality" Value="1" />
+    <Statistic Name="Suavity" Value="1" />
+    <Statistic Name="Wit" Value="1" />
   </Entity>
 </Entities>

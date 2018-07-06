@@ -4,5 +4,5 @@
   <Sheet>Slime0</Sheet>
   <Sheet>Slime1</Sheet>
 
-  <ItemIcon Name="Dungeon Slime" Position="0,1" />
+  <ItemIcon Name="Dungeon Slime" Position="0,3" />
 </Objects>

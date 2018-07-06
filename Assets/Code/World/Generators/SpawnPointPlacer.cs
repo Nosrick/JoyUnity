@@ -1,0 +1,146 @@
+﻿using JoyLib.Code.Entities.AI;
+using JoyLib.Code.Helpers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+
+namespace JoyLib.Code.World.Generators
+{
+    public class SpawnPointPlacer
+    {
+        public Vector2Int PlaceSpawnPoint(WorldInstance worldRef)
+        {
+            Dictionary<Vector2Int, JoyObject> walls = worldRef.Objects.Where(a => a.IsWall).ToDictionary(a => a.WorldPosition, a => a);
+            int x, y;
+
+            x = RNG.Roll(1, worldRef.Tiles.GetLength(0) - 1);
+            y = RNG.Roll(1, worldRef.Tiles.GetLength(1) - 1);
+
+            Vector2Int point = new Vector2Int(x, y);
+
+            while (walls.Keys.Any(l => l.ToString().Equals(point.ToString())))
+            {
+                x = RNG.Roll(1, worldRef.Tiles.GetLength(0) - 1);
+                y = RNG.Roll(1, worldRef.Tiles.GetLength(1) - 1);
+                point = new Vector2Int(x, y);
+            }
+
+            return point;
+        }
+
+        public Vector2Int PlaceTransitionPoint(WorldInstance worldRef)
+        {
+            Dictionary<Vector2Int, JoyObject> walls = worldRef.GetObjectsOfType("Wall");
+            int x, y;
+
+            x = RNG.Roll(1, worldRef.Tiles.GetLength(0) - 1);
+            y = RNG.Roll(1, worldRef.Tiles.GetLength(1) - 1);
+
+            Vector2Int point = new Vector2Int(x, y);
+
+            while (walls.Keys.Any(l => l.ToString().Equals(point.ToString())) && 
+                (point.x != worldRef.SpawnPoint.x && point.y != worldRef.SpawnPoint.y))
+            {
+                x = RNG.Roll(1, worldRef.Tiles.GetLength(0) - 1);
+                y = RNG.Roll(1, worldRef.Tiles.GetLength(1) - 1);
+                point = new Vector2Int(x, y);
+            }
+
+            Pathfinder pathfinder = new Pathfinder();
+            Queue<Vector2Int> points = pathfinder.FindPath(worldRef.SpawnPoint, point, worldRef);
+
+            if (points.Count > 0)
+                return point;
+
+            return new Vector2Int(-1, -1);
+        }
+
+        private bool CanReachPoint(Vector2Int fromRef, Vector2Int toRef, WorldInstance worldRef)
+        {
+            Dictionary<Vector2Int, JoyObject> walls = worldRef.GetObjectsOfType("Wall");
+            bool[,] blocked = new bool[worldRef.Tiles.GetLength(0), worldRef.Tiles.GetLength(1)];
+
+            for (int i = 0; i < blocked.GetLength(0); i++)
+            {
+                for (int j = 0; j < blocked.GetLength(1); j++)
+                {
+                    if (walls.Keys.Any(x => x.ToString().Equals(new Vector2Int(i, j).ToString())))
+                    {
+                        blocked[i, j] = true;
+                    }
+                }
+            }
+
+            return ReachOut(fromRef, toRef, blocked, blocked);
+        }
+
+        private bool ReachOut(Vector2Int point, Vector2Int destination, bool[,] blockedTiles, bool[,] steppedTiles)
+        {
+            if (point.x <= 0)
+                return false;
+
+            if (point.x >= blockedTiles.GetLength(0))
+                return false;
+
+            if (point.y <= 0)
+                return false;
+
+            if (point.y >= blockedTiles.GetLength(1))
+                return false;
+
+            if (blockedTiles[point.x, point.y])
+                return false;
+
+            if (destination.x == point.x && destination.y == point.y)
+            {
+                return true;
+            }
+            else
+            {
+                steppedTiles[point.x, point.y] = true;
+
+                //North
+                if(!steppedTiles[point.x, point.y - 1])
+                    if (ReachOut(new Vector2Int(point.x, point.y - 1), destination, blockedTiles, steppedTiles))
+                        return true;
+
+                //North East
+                if (!steppedTiles[point.x + 1, point.y - 1])
+                    if (ReachOut(new Vector2Int(point.x + 1, point.y - 1), destination, blockedTiles, steppedTiles))
+                         return true;
+
+                //East
+                if (!steppedTiles[point.x + 1, point.y])
+                    if (ReachOut(new Vector2Int(point.x + 1, point.y), destination, blockedTiles, steppedTiles))
+                        return true;
+
+                //South East
+                if (!steppedTiles[point.x + 1, point.y + 1])
+                    if (ReachOut(new Vector2Int(point.x + 1, point.y + 1), destination, blockedTiles, steppedTiles))
+                        return true;
+
+                //South
+                if (!steppedTiles[point.x, point.y + 1])
+                    if (ReachOut(new Vector2Int(point.x, point.y + 1), destination, blockedTiles, steppedTiles))
+                        return true;
+
+                //South West
+                if (!steppedTiles[point.x - 1, point.y + 1])
+                    if (ReachOut(new Vector2Int(point.x - 1, point.y + 1), destination, blockedTiles, steppedTiles))
+                        return true;
+
+                //West
+                if (!steppedTiles[point.x - 1, point.y])
+                    if (ReachOut(new Vector2Int(point.x - 1, point.y), destination, blockedTiles, steppedTiles))
+                        return true;
+
+                //North West
+                if (!steppedTiles[point.x - 1, point.y - 1])
+                    if (ReachOut(new Vector2Int(point.x - 1, point.y - 1), destination, blockedTiles, steppedTiles))
+                        return true;
+            }
+            return false;
+        }
+    }
+}
