@@ -2,25 +2,25 @@
 <Objects>
   <TilesetName>Floor</TilesetName>
   <Sheet>Floor</Sheet>
-  <ItemIcon Name="TopLeft" Position="0,38" />
-  <ItemIcon Name="TopMiddle" Position="1,38" />
-  <ItemIcon Name="TopRight" Position="2,38" />
+  <ItemIcon Name="TopLeft" Position="0,35" />
+  <ItemIcon Name="TopMiddle" Position="1,35" />
+  <ItemIcon Name="TopRight" Position="2,35" />
   
-  <ItemIcon Name="MiddleLeft" Position="0,37" />
-  <ItemIcon Name="MiddleMiddle" Position="1,37" />
-  <ItemIcon Name="MiddleRight" Position="2,37" />
+  <ItemIcon Name="MiddleLeft" Position="0,34" />
+  <ItemIcon Name="MiddleMiddle" Position="1,34" />
+  <ItemIcon Name="MiddleRight" Position="2,34" />
   
-  <ItemIcon Name="BottomLeft" Position="0,36" />
-  <ItemIcon Name="BottomMiddle" Position="1,36" />
-  <ItemIcon Name="BottomRight" Position="2,36" />
+  <ItemIcon Name="BottomLeft" Position="0,33" />
+  <ItemIcon Name="BottomMiddle" Position="1,33" />
+  <ItemIcon Name="BottomRight" Position="2,33" />
   
-  <ItemIcon Name="VerticalTop" Position="3,38" />
-  <ItemIcon Name="VerticalMiddle" Position="3,37" />
-  <ItemIcon Name="VerticalBottom" Position="3,36" />
+  <ItemIcon Name="VerticalTop" Position="3,35" />
+  <ItemIcon Name="VerticalMiddle" Position="3,34" />
+  <ItemIcon Name="VerticalBottom" Position="3,33" />
   
-  <ItemIcon Name="SoloFloor" Position="5,38" />
+  <ItemIcon Name="SoloFloor" Position="5,35" />
   
-  <ItemIcon Name="HorizontalLeft" Position="4,37" />
-  <ItemIcon Name="HorizontalMiddle" Position="5,37" />
-  <ItemIcon Name="HorizontalRight" Position="6,37" />
+  <ItemIcon Name="HorizontalLeft" Position="4,34" />
+  <ItemIcon Name="HorizontalMiddle" Position="5,34" />
+  <ItemIcon Name="HorizontalRight" Position="6,34" />
 </Objects>

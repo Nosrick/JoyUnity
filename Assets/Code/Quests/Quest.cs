@@ -47,7 +47,7 @@ namespace JoyLib.Code.Quests
             string rewardString = m_Rewards.Count > 0 ? "I'll give you " : "";
             for (int i = 0; i < m_Rewards.Count; i++)
             {
-                rewardString += m_Rewards[i].name;
+                rewardString += m_Rewards[i].JoyName;
                 if(m_Rewards[i].Contents.Count != 0)
                 {
                     rewardString += ", " + m_Rewards[i].ContentString;

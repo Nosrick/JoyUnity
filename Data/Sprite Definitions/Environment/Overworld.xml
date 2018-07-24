@@ -2,5 +2,5 @@
 <Objects>
   <TilesetName>Overworld</TilesetName>
   <Sheet>Floor</Sheet>
-  <ItemIcon Name="Grassland" Position="8,7"/>
+  <ItemIcon Name="Grassland" Position="8,31"/>
 </Objects>

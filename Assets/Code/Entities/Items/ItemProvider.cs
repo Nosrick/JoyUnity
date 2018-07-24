@@ -19,7 +19,7 @@ namespace JoyLib.Code.Entities.Items
                 }
             }
 
-            return ItemInstance.Create(itemChances[RNG.Roll(0, itemChances.Count - 1)], new Vector2Int(-1, -1), identified);
+            return new ItemInstance(itemChances[RNG.Roll(0, itemChances.Count - 1)], new Vector2Int(-1, -1), identified);
         }
 
         public static ItemInstance RandomItemOfType(string type, bool identified = false)
@@ -35,7 +35,7 @@ namespace JoyLib.Code.Entities.Items
                 }
             }
 
-            return ItemInstance.Create(itemChances[RNG.Roll(0, itemChances.Count - 1)], new Vector2Int(-1, -1), identified);
+            return new ItemInstance(itemChances[RNG.Roll(0, itemChances.Count - 1)], new Vector2Int(-1, -1), identified);
         }
     }
 }

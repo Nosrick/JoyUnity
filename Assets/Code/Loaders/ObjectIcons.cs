@@ -98,6 +98,18 @@ namespace JoyLib.Code.Graphics
 
                 reader.Close();
             }
+
+            Sprites = new Dictionary<string, List<Tuple<string, Sprite>>>();
+            foreach(KeyValuePair<string, List<Tuple<string, Texture2D>>> pair in objectIcons)
+            {
+                List<Tuple<string, Sprite>> newSprites = new List<Tuple<string, Sprite>>();
+                foreach (Tuple<string, Texture2D> tuple in pair.Value)
+                {
+                    Sprite sprite = Sprite.Create(tuple.Second, new Rect(0, 0, SPRITE_SIZE, SPRITE_SIZE), Vector2.zero, SPRITE_SIZE);
+                    newSprites.Add(new Tuple<string, Sprite>(tuple.First, sprite));
+                }
+                Sprites.Add(pair.Key, newSprites);
+            }
         }
 
         private static Color[] GetImageData(Color[] colourData, int textureWidth, Rect rectangle)
@@ -151,8 +163,50 @@ namespace JoyLib.Code.Graphics
             return icons.ToArray();
         }
 
+        public static Sprite GetSprite(string tileSet, string tileName)
+        {
+            if(Sprites.ContainsKey(tileSet))
+            {
+                if(Sprites[tileSet].Any(x => x.First.Equals(tileName)))
+                {
+                    return Sprites[tileSet].First(x => x.First.Equals(tileName)).Second;
+                }
+            }
+
+            return Sprites["DEFAULT"][0].Second;
+        }
+
+        public static List<Sprite> GetSprites(string tileSet, string tileName)
+        {
+            List<Sprite> sprites = new List<Sprite>();
+            if(Sprites.ContainsKey(tileSet))
+            {
+                List<Tuple<string, Sprite>> find = Sprites[tileSet].FindAll(x => x.First.Contains(tileName));
+                foreach(Tuple<string, Sprite> found in find)
+                {
+                    sprites.Add(found.Second);
+                }
+            }
+
+            if(sprites.Count == 0)
+            {
+                List<Sprite> defaultSprite = new List<Sprite>();
+                defaultSprite.Add(Sprites["DEFAULT"][0].Second);
+                return defaultSprite;
+            }
+
+            return sprites;
+        }
+
         //First key is tileset name, second key is tile name
         public static Dictionary<string, List<Tuple<string, Texture2D>>> objectIcons
+        {
+            get;
+            private set;
+        }
+
+        //First key is the tileset name, second key is the tile name
+        public static Dictionary<string, List<Tuple<string, Sprite>>> Sprites
         {
             get;
             private set;

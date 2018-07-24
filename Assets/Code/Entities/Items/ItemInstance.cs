@@ -1,5 +1,4 @@
 ﻿using JoyLib.Code.Graphics;
-using JoyLib.Code.Helpers;
 using JoyLib.Code.Managers;
 using System;
 using System.Collections.Generic;
@@ -17,31 +16,19 @@ namespace JoyLib.Code.Entities.Items
         protected List<ItemInstance> m_Contents;
         protected BaseItemType m_Type;
 
-        public static ItemInstance Create(BaseItemType type, Vector2Int position, bool identified)
-        {
-            ItemInstance newInstance = Instantiate(Resources.Load<ItemInstance>("Prefabs/ItemInstance"));
+        public ItemInstance(BaseItemType type, Vector2Int position, bool identified) :
+            base(type.UnidentifiedName, type.GetHitPoints(), position, ObjectIcons.GetSprites(type.Category, type.UnidentifiedName), type.Category, false)
+        {            
+            this.m_Type = type;
+            this.Move(position);
 
-            Texture2D[] textures = ObjectIcons.GetIcons(type.Category, type.UnidentifiedName);
-            List<Sprite> sprites = new List<Sprite>(textures.Length);
-            for (int i = 0; i < textures.Length; i++)
-            {
-                sprites.Add(Sprite.Create(textures[i], new Rect(0, 0, 16, 16), Vector2.zero, 16));
-            }
-
-            newInstance.Initialise(type.UnidentifiedName, type.GetHitPoints(), position, sprites, type.Category, false);
-
-            newInstance.m_Type = type;
-            newInstance.Move(position);
-
-            newInstance.m_HitPoints = type.GetHitPoints();
-            newInstance.m_HitPointsRemaining = newInstance.m_HitPoints;
-            newInstance.GUID = GUIDManager.AssignGUID();
-            newInstance.Identified = identified;
+            this.m_HitPoints = type.GetHitPoints();
+            this.m_HitPointsRemaining = this.m_HitPoints;
+            this.GUID = GUIDManager.AssignGUID();
+            this.Identified = identified;
             //chosenIcon = RNG.Roll(0, m_Icons.Length - 1);
 
-            newInstance.m_Contents = new List<ItemInstance>();
-
-            return newInstance;
+            this.m_Contents = new List<ItemInstance>();
         }
 
         /*
@@ -254,14 +241,14 @@ namespace JoyLib.Code.Entities.Items
 
                 while (items.Count > 0)
                 {
-                    List<ItemInstance> types = items.Where(x => x.name == items[0].name).ToList();
-                    string name = types[0].name;
+                    List<ItemInstance> types = items.Where(x => x.JoyName == items[0].JoyName).ToList();
+                    string name = types[0].JoyName;
                     contentString += types.Count + " " + name + ", ";
 
                     List<ItemInstance> itemsToRemove = new List<ItemInstance>();
                     for (int i = 0; i < items.Count; i++)
                     {
-                        if (items[i].name == name)
+                        if (items[i].JoyName == name)
                         {
                             itemsToRemove.Add(items[i]);
                         }

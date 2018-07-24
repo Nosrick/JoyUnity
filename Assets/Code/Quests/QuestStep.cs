@@ -35,7 +35,7 @@ namespace JoyLib.Code.Quests
                     actorString = " to ";
                     for (int i = 0; i < actors.Count; i++)
                     {
-                        actorString += actors[i].name;
+                        actorString += actors[i].JoyName;
                         if (i < actors.Count - 2)
                         {
                             actorString += ", ";
@@ -51,7 +51,7 @@ namespace JoyLib.Code.Quests
                     actionString = "Destroy ";
                     for(int i = 0; i < objects.Count; i++)
                     {
-                        actionString += objects[i].name;
+                        actionString += objects[i].JoyName;
                         if(i < objects.Count - 2)
                         {
                             actionString += ", ";
@@ -64,7 +64,7 @@ namespace JoyLib.Code.Quests
 
                     for(int i = 0; i < actors.Count; i++)
                     {
-                        actionString += actors[i].name;
+                        actionString += actors[i].JoyName;
                         if (i < actors.Count - 2)
                         {
                             actionString += ", ";
@@ -98,7 +98,7 @@ namespace JoyLib.Code.Quests
                     actorString = " to ";
                     for (int i = 0; i < actors.Count; i++)
                     {
-                        actorString += actors[i].name;
+                        actorString += actors[i].JoyName;
                         if (i < actors.Count - 2)
                         {
                             actorString += ", ";
@@ -113,7 +113,7 @@ namespace JoyLib.Code.Quests
 
             for (int i = 0; i < objects.Count; i++)
             {
-                objectString += objects[i].name;
+                objectString += objects[i].JoyName;
                 if (i < objects.Count - 2)
                 {
                     objectString += ", ";

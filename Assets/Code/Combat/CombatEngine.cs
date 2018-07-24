@@ -82,7 +82,7 @@ namespace JoyLib.Code.Combat
                 if (attackerToHit < defenderDodge)
                 {
                     if(log)
-                        ActionLog.AddText(attackerRef.name + " misses " + defenderRef.name, LogType.Information);
+                        ActionLog.AddText(attackerRef.JoyName+ " misses " + defenderRef.JoyName, LogType.Information);
                     return 0;
                 }
             }
@@ -90,7 +90,7 @@ namespace JoyLib.Code.Combat
             int totalDamage = attackerToHit + attackerSkillBonus + RNG.Roll(1, attackerRef.Statistics[StatisticIndex.Strength]);
 
             if (log)
-                ActionLog.AddText(attackerRef.name + " " + weaponRef.ItemType.ActionString + " " + defenderRef.JoyName + " for " + totalDamage, LogType.Information);
+                ActionLog.AddText(attackerRef.JoyName + " " + weaponRef.ItemType.ActionString + " " + defenderRef.JoyName + " for " + totalDamage, LogType.Information);
 
             return totalDamage;
         }

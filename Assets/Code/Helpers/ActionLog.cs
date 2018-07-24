@@ -25,7 +25,7 @@ namespace JoyLib.Code.Helpers
 
         public static void LogDamage(int damage, Entity attacker, Entity defender, ItemInstance weapon)
         {
-            string damageString = attacker.name + " " + weapon.ItemType.ActionString + " " + defender.name + " for " + damage + ".";
+            string damageString = attacker.JoyName + " " + weapon.ItemType.ActionString + " " + defender.JoyName + " for " + damage + ".";
             AddText(damageString);
         }
 

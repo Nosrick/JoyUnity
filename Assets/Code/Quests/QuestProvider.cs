@@ -57,7 +57,7 @@ namespace JoyLib.Code.Quests
             QuestAction action = QuestAction.Deliver;
 
             int random = RNG.Roll(0, ItemHandler.GetFlatItemList().Count - 1);
-            ItemInstance deliveryItem = ItemInstance.Create(ItemHandler.GetFlatItemList()[random], new Vector2Int(-1, -1), true);
+            ItemInstance deliveryItem = new ItemInstance(ItemHandler.GetFlatItemList()[random], new Vector2Int(-1, -1), true);
             if (provider.Backpack.Count > 0)
             {
                 int result = RNG.Roll(0, provider.Backpack.Count - 1);

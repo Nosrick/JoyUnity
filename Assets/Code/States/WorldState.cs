@@ -1,8 +1,10 @@
-﻿using JoyLib.Code.Conversation.Subengines;
+﻿using JoyLib.Code.Combat;
+using JoyLib.Code.Conversation.Subengines;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.IO;
+using JoyLib.Code.Physics;
 using JoyLib.Code.Quests;
 using JoyLib.Code.States.Gameplay;
 using JoyLib.Code.World;
@@ -13,11 +15,11 @@ namespace JoyLib.Code.States
 {
     public class WorldState : GameState
     {
-        protected WorldInstance s_ActiveWorld;
+        protected WorldInstance m_ActiveWorld;
 
-        protected WorldInstance s_Overworld;
+        protected WorldInstance m_Overworld;
 
-        protected GameplayFlags s_GameplayFlags;
+        protected GameplayFlags m_GameplayFlags;
 
         protected Camera m_Camera;
 
@@ -28,9 +30,9 @@ namespace JoyLib.Code.States
 
         public WorldState(WorldInstance overworldRef, WorldInstance activeWorldRef, GameplayFlags flagsRef) : base()
         {
-            s_ActiveWorld = activeWorldRef;
-            s_GameplayFlags = flagsRef;
-            s_Overworld = overworldRef;
+            m_ActiveWorld = activeWorldRef;
+            m_GameplayFlags = flagsRef;
+            m_Overworld = overworldRef;
             SetUpUi();
 
             //MusicHandler.Play("DashRoog");
@@ -51,9 +53,9 @@ namespace JoyLib.Code.States
         public override void Start()
         {
             base.Start();
-            s_ActiveWorld.Player.Vision = s_ActiveWorld.GetVision(s_ActiveWorld.Player);
-            s_GameplayFlags = GameplayFlags.Moving;
-            RumourMill.GenerateRumours(s_ActiveWorld);
+            m_ActiveWorld.Player.Vision = m_ActiveWorld.GetVision(m_ActiveWorld.Player);
+            m_GameplayFlags = GameplayFlags.Moving;
+            RumourMill.GenerateRumours(m_ActiveWorld);
 
             SetEntityWorld(overworld);
         }
@@ -61,7 +63,7 @@ namespace JoyLib.Code.States
         public override void Stop()
         {
             base.Stop();
-            WorldSerialiser.Serialise(s_Overworld);
+            WorldSerialiser.Serialise(m_Overworld);
         }
 
         protected void SetEntityWorld(WorldInstance world)
@@ -79,20 +81,22 @@ namespace JoyLib.Code.States
 
         protected void ChangeWorld(WorldInstance newWorld, Vector2Int spawnPoint)
         {
-            WorldInstance oldWorld = s_ActiveWorld;
+            Done = true;
+
+            WorldInstance oldWorld = m_ActiveWorld;
             Entity player = oldWorld.Player;
-            s_ActiveWorld.RemoveEntity(player.WorldPosition);
+            m_ActiveWorld.RemoveEntity(player.WorldPosition);
 
-            s_ActiveWorld = newWorld;
-            s_ActiveWorld.AddEntity(player);
+            m_ActiveWorld = newWorld;
+            m_ActiveWorld.AddEntity(player);
 
-            s_ActiveWorld.Player.Move(spawnPoint);
-            s_ActiveWorld.Player.Vision = s_ActiveWorld.GetVision(s_ActiveWorld.Player);
+            m_ActiveWorld.Player.Move(spawnPoint);
+            m_ActiveWorld.Player.Vision = m_ActiveWorld.GetVision(m_ActiveWorld.Player);
 
-            player.MyWorld = s_ActiveWorld;
+            player.MyWorld = m_ActiveWorld;
 
-            s_GameplayFlags = GameplayFlags.Moving;
-            RumourMill.GenerateRumours(s_ActiveWorld);
+            m_GameplayFlags = GameplayFlags.Moving;
+            RumourMill.GenerateRumours(m_ActiveWorld);
 
             QuestTracker.PerformExploration(player, newWorld);
             Tick();
@@ -104,7 +108,7 @@ namespace JoyLib.Code.States
 
         protected void SetToAttack(object sender, EventArgs e)
         {
-            s_GameplayFlags = GameplayFlags.Attacking;
+            m_GameplayFlags = GameplayFlags.Attacking;
         }
 
         protected void InteractWithCreature(object sender, EventArgs e)
@@ -131,11 +135,10 @@ namespace JoyLib.Code.States
         {
             base.HandleInput();
 
-            if (!InFocus)
-                return;
-
             bool hasMoved = false;
-            
+
+            Entity player = m_ActiveWorld.Player;
+
             /*
             if (m_Input.currentMouseState.ScrollWheelValue > m_Input.lastMouseState.ScrollWheelValue)
             {
@@ -166,138 +169,140 @@ namespace JoyLib.Code.States
             {
                 s_ActiveWorld.player.LevelUp();
             }
+            
+            */
 
-            if (m_Input.IsOldPress(Keys.Enter))
+            if (Input.GetKeyDown(KeyCode.Return))
             {
                 //Going up a level
-                if (s_ActiveWorld.parent != null && s_ActiveWorld.player.position == s_ActiveWorld.spawnPoint && !s_ActiveWorld.player.hasMoved)
+                if (m_ActiveWorld.Parent != null && player.WorldPosition == m_ActiveWorld.SpawnPoint && !player.HasMoved)
                 {
-                    ChangeWorld(s_ActiveWorld.parent, PointStringConverter.StringToPoint(s_ActiveWorld.parent.areas.First(x => x.Value.GUID == s_ActiveWorld.GUID).Key));
+                    ChangeWorld(m_ActiveWorld.Parent, m_ActiveWorld.Parent.SpawnPoint);
                 }
 
                 //Going down a level
-                else if (s_ActiveWorld.areas.ContainsKey(s_ActiveWorld.player.position.ToString()) && !s_ActiveWorld.player.hasMoved)
+                else if (m_ActiveWorld.Areas.ContainsKey(player.WorldPosition) && !player.HasMoved)
                 { 
-                    ChangeWorld(s_ActiveWorld.areas[s_ActiveWorld.player.position.ToString()], s_ActiveWorld.areas[s_ActiveWorld.player.position.ToString()].spawnPoint);
+                    ChangeWorld(m_ActiveWorld.Areas[player.WorldPosition], m_ActiveWorld.Areas[player.WorldPosition].SpawnPoint);
                 }
+                return;
             }
-
-            Point newPlayerPoint = s_ActiveWorld.player.position;
+            Vector2Int newPlayerPoint = m_ActiveWorld.Player.WorldPosition;
 
             //North
-            if (m_Input.IsOldPress(Keys.NumPad8))
+            if (Input.GetKeyDown(KeyCode.Keypad8))
             {
-                if (s_GameplayFlags == GameplayFlags.Targeting)
+                if (m_GameplayFlags == GameplayFlags.Targeting)
                 {
-                    s_ActiveWorld.player.targetPoint = new Point(s_ActiveWorld.player.targetPoint.X, s_ActiveWorld.player.targetPoint.Y - 1);
+                    player.TargetPoint = new Vector2Int(player.TargetPoint.x, player.TargetPoint.y - 1);
                 }
                 else
                 {
-                    newPlayerPoint.Y -= 1;
+                    newPlayerPoint.y += 1;
                     hasMoved = true;
                 }
             }
             //North east
-            else if (m_Input.IsOldPress(Keys.NumPad9))
+            else if (Input.GetKeyDown(KeyCode.Keypad9))
             {
-                if (s_GameplayFlags == GameplayFlags.Targeting)
+                if (m_GameplayFlags == GameplayFlags.Targeting)
                 {
-                    s_ActiveWorld.player.targetPoint = new Point(s_ActiveWorld.player.targetPoint.X + 1, s_ActiveWorld.player.targetPoint.Y - 1);
+                    player.TargetPoint = new Vector2Int(player.TargetPoint.x + 1, player.TargetPoint.y - 1);
                 }
                 else
                 {
-                    newPlayerPoint.X += 1;
-                    newPlayerPoint.Y -= 1;
+                    newPlayerPoint.x += 1;
+                    newPlayerPoint.y += 1;
                     hasMoved = true;
                 }
             }
             //East
-            else if (m_Input.IsOldPress(Keys.NumPad6))
+            else if (Input.GetKeyDown(KeyCode.Keypad6))
             {
-                if (s_GameplayFlags == GameplayFlags.Targeting)
+                if (m_GameplayFlags == GameplayFlags.Targeting)
                 {
-                    s_ActiveWorld.player.targetPoint = new Point(s_ActiveWorld.player.targetPoint.X + 1, s_ActiveWorld.player.targetPoint.Y);
+                    player.TargetPoint = new Vector2Int(player.TargetPoint.x + 1, player.TargetPoint.y);
                 }
                 else
                 {
-                    newPlayerPoint.X += 1;
+                    newPlayerPoint.x += 1;
                     hasMoved = true;
                 }
             }
             //South east
-            else if (m_Input.IsOldPress(Keys.NumPad3))
+            else if (Input.GetKeyDown(KeyCode.Keypad3))
             {
-                if (s_GameplayFlags == GameplayFlags.Targeting)
+                if (m_GameplayFlags == GameplayFlags.Targeting)
                 {
-                    s_ActiveWorld.player.targetPoint = new Point(s_ActiveWorld.player.targetPoint.X + 1, s_ActiveWorld.player.targetPoint.Y + 1);
+                    player.TargetPoint = new Vector2Int(player.TargetPoint.x + 1, player.TargetPoint.y + 1);
                 }
                 else
                 {
-                    newPlayerPoint.X += 1;
-                    newPlayerPoint.Y += 1;
+                    newPlayerPoint.x += 1;
+                    newPlayerPoint.y -= 1;
                     hasMoved = true;
                 }
             }
             //South
-            else if (m_Input.IsOldPress(Keys.NumPad2))
+            else if (Input.GetKeyDown(KeyCode.Keypad2))
             {
-                if (s_GameplayFlags == GameplayFlags.Targeting)
+                if (m_GameplayFlags == GameplayFlags.Targeting)
                 {
-                    s_ActiveWorld.player.targetPoint = new Point(s_ActiveWorld.player.targetPoint.X, s_ActiveWorld.player.targetPoint.Y + 1);
+                    player.TargetPoint = new Vector2Int(player.TargetPoint.x, player.TargetPoint.y + 1);
                 }
                 else
                 {
-                    newPlayerPoint.Y += 1;
+                    newPlayerPoint.y -= 1;
                     hasMoved = true;
                 }
             }
             //South west
-            else if (m_Input.IsOldPress(Keys.NumPad1))
+            else if (Input.GetKeyDown(KeyCode.Keypad1))
             {
-                if (s_GameplayFlags == GameplayFlags.Targeting)
+                if (m_GameplayFlags == GameplayFlags.Targeting)
                 {
-                    s_ActiveWorld.player.targetPoint = new Point(s_ActiveWorld.player.targetPoint.X - 1, s_ActiveWorld.player.targetPoint.Y + 1);
+                    player.TargetPoint = new Vector2Int(player.TargetPoint.x - 1, player.TargetPoint.y + 1);
                 }
                 else
                 {
-                    newPlayerPoint.X -= 1;
-                    newPlayerPoint.Y += 1;
+                    newPlayerPoint.x -= 1;
+                    newPlayerPoint.y -= 1;
                     hasMoved = true;
                 }
             }
             //West
-            else if (m_Input.IsOldPress(Keys.NumPad4))
+            else if (Input.GetKeyDown(KeyCode.Keypad4))
             {
-                if (s_GameplayFlags == GameplayFlags.Targeting)
+                if (m_GameplayFlags == GameplayFlags.Targeting)
                 {
-                    s_ActiveWorld.player.targetPoint = new Point(s_ActiveWorld.player.targetPoint.X - 1, s_ActiveWorld.player.targetPoint.Y);
+                    player.TargetPoint = new Vector2Int(player.TargetPoint.x - 1, player.TargetPoint.y);
                 }
                 else
                 {
-                    newPlayerPoint.X -= 1;
+                    newPlayerPoint.x -= 1;
                     hasMoved = true;
                 }
             }
             //North west
-            else if (m_Input.IsOldPress(Keys.NumPad7))
+            else if (Input.GetKeyDown(KeyCode.Keypad7))
             {
-                if (s_GameplayFlags == GameplayFlags.Targeting)
+                if (m_GameplayFlags == GameplayFlags.Targeting)
                 {
-                    s_ActiveWorld.player.targetPoint = new Point(s_ActiveWorld.player.targetPoint.X - 1, s_ActiveWorld.player.targetPoint.Y - 1);
+                    player.TargetPoint = new Vector2Int(player.TargetPoint.x - 1, player.TargetPoint.y - 1);
                 }
                 else
                 {
-                    newPlayerPoint.X -= 1;
-                    newPlayerPoint.Y -= 1;
+                    newPlayerPoint.x -= 1;
+                    newPlayerPoint.y += 1;
                     hasMoved = true;
                 }
             }
-            else if (m_Input.IsOldPress(Keys.NumPad5))
+            else if (Input.GetKeyDown(KeyCode.Keypad5))
             {
                 Tick();
                 return;
             }
-            else if (s_ActiveWorld.player.fulfilmentCounter > 0 || autoTurn)
+            else if (player.FulfilmentCounter > 0 || autoTurn)
             { 
                 if (m_TickTimer % TICK_TIMER == 0)
                 {
@@ -305,44 +310,46 @@ namespace JoyLib.Code.States
                     return;
                 }
             }
-            else if(m_Input.IsOldPress(Keys.Enter))
+            else if(Input.GetKeyDown(KeyCode.Return))
             {
-                PhysicsResult physicsResult = PhysicsManager.IsCollision(s_ActiveWorld.player.position, newPlayerPoint, s_ActiveWorld);
+                PhysicsResult physicsResult = PhysicsManager.IsCollision(player.WorldPosition, newPlayerPoint, m_ActiveWorld);
                 if (physicsResult == PhysicsResult.ObjectCollision)
                 {
-                    s_ActiveWorld.PickUpObject(s_ActiveWorld.player);
+                    m_ActiveWorld.PickUpObject(player);
                 }
             }
 
             if (hasMoved)
             {
-                PhysicsResult physicsResult = PhysicsManager.IsCollision(s_ActiveWorld.player.position, newPlayerPoint, s_ActiveWorld);
+                PhysicsResult physicsResult = PhysicsManager.IsCollision(player.WorldPosition, newPlayerPoint, m_ActiveWorld);
 
                 if (physicsResult == PhysicsResult.EntityCollision)
                 {
-                    Entity tempEntity = s_ActiveWorld.GetEntity(newPlayerPoint);
-                    if (s_GameplayFlags == GameplayFlags.Interacting)
+                    Entity tempEntity = m_ActiveWorld.GetEntity(newPlayerPoint);
+                    if (m_GameplayFlags == GameplayFlags.Interacting)
                     {
-                        if(tempEntity.sentient)
+                        if(tempEntity.Sentient)
                             TalkToPlayer(tempEntity);
                     }
-                    else if (s_GameplayFlags == GameplayFlags.Giving)
+                    else if (m_GameplayFlags == GameplayFlags.Giving)
                     {
                     }
-                    else if (s_GameplayFlags == GameplayFlags.Moving)
+                    else if (m_GameplayFlags == GameplayFlags.Moving)
                     {
-                        playerWorld.SwapPosition(s_ActiveWorld.player, tempEntity);
+                        playerWorld.SwapPosition(player, tempEntity);
                         Tick();
                     }
-                    else if(s_GameplayFlags == GameplayFlags.Attacking)
+                    else if(m_GameplayFlags == GameplayFlags.Attacking)
                     {
-                        if (tempEntity.GUID != s_ActiveWorld.player.GUID)
+                        if (tempEntity.GUID != player.GUID)
                         {
-                            CombatEngine.PerformCombat(s_ActiveWorld.player, tempEntity);
-                            tempEntity.InfluenceMe(s_ActiveWorld.player.GUID, -50);
-                            if (!tempEntity.alive)
+                            CombatEngine.PerformCombat(player, tempEntity);
+                            tempEntity.InfluenceMe(player.GUID, -50);
+                            if (!tempEntity.Alive)
                             {
-                                s_ActiveWorld.RemoveEntity(newPlayerPoint);
+                                m_ActiveWorld.RemoveEntity(newPlayerPoint);
+
+                                //Find a way to remove the GameObject
                             }
                         }
                     }
@@ -350,43 +357,42 @@ namespace JoyLib.Code.States
                 }
                 else if (physicsResult == PhysicsResult.WallCollision)
                 {
-
+                    //Do nothing!
                 }
                 else
                 {
-                    s_ActiveWorld.player.Move(newPlayerPoint);
-                    s_ActiveWorld.player.vision = s_ActiveWorld.GetVision(s_ActiveWorld.player);
+                    player.Move(newPlayerPoint);
+                    player.Vision = m_ActiveWorld.GetVision(player);
                     Tick();
                 }
             }
-            else if (s_GameplayFlags == GameplayFlags.Targeting)
+            else if (m_GameplayFlags == GameplayFlags.Targeting)
             {
-                if (s_ActiveWorld.player.targetingAbility.targetType == AbilityTarget.Adjacent)
+                if (player.TargetingAbility.targetType == AbilityTarget.Adjacent)
                 {
-                    if (AdjacencyHelper.IsAdjacent(s_ActiveWorld.player.position, s_ActiveWorld.player.targetPoint))
+                    if (AdjacencyHelper.IsAdjacent(player.WorldPosition, player.TargetPoint))
                     {
-                        Entity tempEntity = s_ActiveWorld.GetEntity(s_ActiveWorld.player.targetPoint);
-                        if (tempEntity != null && m_Input.IsOldPress(Keys.Enter))
+                        Entity tempEntity = m_ActiveWorld.GetEntity(player.TargetPoint);
+                        if (tempEntity != null && Input.GetKeyDown(KeyCode.Return))
                         {
-                            s_ActiveWorld.player.targetingAbility.Use(s_ActiveWorld.player, tempEntity);
+                            player.TargetingAbility.Use(player, tempEntity);
                             Tick();
-                            s_GameplayFlags = GameplayFlags.Moving;
+                            m_GameplayFlags = GameplayFlags.Moving;
                         }
                     }
                 }
-                else if (s_ActiveWorld.player.targetingAbility.targetType == AbilityTarget.Ranged)
+                else if (player.TargetingAbility.targetType == AbilityTarget.Ranged)
                 {
-                    Entity tempEntity = s_ActiveWorld.GetEntity(s_ActiveWorld.player.targetPoint);
-                    if(tempEntity != null && m_Input.IsOldPress(Keys.Enter))
+                    Entity tempEntity = m_ActiveWorld.GetEntity(player.TargetPoint);
+                    if(tempEntity != null && Input.GetKeyDown(KeyCode.Return))
                     {
-                        s_ActiveWorld.player.targetingAbility.Use(s_ActiveWorld.player, tempEntity);
+                        player.TargetingAbility.Use(player, tempEntity);
                         Tick();
-                        s_GameplayFlags = GameplayFlags.Moving;
+                        m_GameplayFlags = GameplayFlags.Moving;
                     }
                 }
             }
-            m_Camera.position = new Vector2(s_ActiveWorld.player.position.X * ObjectIcons.SPRITE_SIZE, s_ActiveWorld.player.position.Y * ObjectIcons.SPRITE_SIZE);
-            */
+            m_Camera.transform.position = new Vector3(player.WorldPosition.x, player.WorldPosition.y, m_Camera.transform.position.z);
         }
 
         public static void HandBack(Ability abilityRef)
@@ -400,8 +406,8 @@ namespace JoyLib.Code.States
 
         protected void Tick()
         {
-            s_ActiveWorld.Tick();
-            s_ActiveWorld.Update();
+            m_ActiveWorld.Tick();
+            m_ActiveWorld.Update();
             
             /*
             for (int i = 0; i < s_ActiveWorld.entities.Count; i++)
@@ -429,13 +435,13 @@ namespace JoyLib.Code.States
 
         protected void DrawTargetCursor()
         {
-            if (s_GameplayFlags != GameplayFlags.Targeting)
+            if (m_GameplayFlags != GameplayFlags.Targeting)
                 return;
         }
 
         protected void DrawTiles()
         {
-            lock(s_ActiveWorld.Tiles)
+            lock(m_ActiveWorld.Tiles)
             {
             }
         }
@@ -448,14 +454,14 @@ namespace JoyLib.Code.States
         {
             Color obscured = LightLevelHelper.GetColour(1);
 
-            lock(s_ActiveWorld.Objects)
+            lock(m_ActiveWorld.Objects)
             {
             }
         }
 
         protected void DrawEntities()
         {
-            lock(s_ActiveWorld.Entities)
+            lock(m_ActiveWorld.Entities)
             {
             }
         }
@@ -477,14 +483,14 @@ namespace JoyLib.Code.States
 
         public override GameState GetNextState()
         {
-            return new MainMenuState();
+            return new WorldDestructionState(m_Overworld, m_ActiveWorld);
         }
 
         public WorldInstance overworld
         {
             get
             {
-                return s_Overworld;
+                return m_Overworld;
             }
         }
 
@@ -492,7 +498,7 @@ namespace JoyLib.Code.States
         {
             get
             {
-                return s_ActiveWorld;
+                return m_ActiveWorld;
             }
         }
 

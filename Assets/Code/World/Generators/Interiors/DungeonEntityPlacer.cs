@@ -1,7 +1,5 @@
 ﻿using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.AI;
-using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Jobs;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
@@ -53,8 +51,8 @@ namespace JoyLib.Code.World.Generators.Interiors
                     Dictionary<string, int> jobLevels = new Dictionary<string, int>();
                     jobLevels.Add(jobType.name, 1);
 
-                    newEntity = Entity.CreateBrandNew(templates[entityIndex], EntityNeed.GetFullRandomisedNeeds(), 1, jobType, culture.ChooseGender(), culture.ChooseSexuality(),
-                        new Vector2Int(-1, -1), ObjectIcons.GetIcons(templates[entityIndex].Tileset, templates[entityIndex].CreatureType).ToList(), null);
+                    newEntity = new Entity(templates[entityIndex], EntityNeed.GetFullRandomisedNeeds(), 1, jobType, culture.ChooseGender(), culture.ChooseSexuality(),
+                        new Vector2Int(-1, -1), ObjectIcons.GetSprites(templates[entityIndex].Tileset, templates[entityIndex].CreatureType).ToList(), null);
                 }
                 else
                 {
@@ -65,8 +63,8 @@ namespace JoyLib.Code.World.Generators.Interiors
                     Dictionary<string, int> jobLevels = new Dictionary<string, int>();
                     jobLevels.Add(jobType.name, 1);
 
-                    newEntity = Entity.CreateBrandNew(templates[entityIndex], EntityNeed.GetBasicRandomisedNeeds(), 1, jobType, culture.ChooseGender(), culture.ChooseSexuality(),
-                        new Vector2Int(-1, -1), ObjectIcons.GetIcons(templates[entityIndex].Tileset, templates[entityIndex].CreatureType).ToList(), null);
+                    newEntity = new Entity(templates[entityIndex], EntityNeed.GetBasicRandomisedNeeds(), 1, jobType, culture.ChooseGender(), culture.ChooseSexuality(),
+                        new Vector2Int(-1, -1), ObjectIcons.GetSprites(templates[entityIndex].Tileset, templates[entityIndex].CreatureType).ToList(), null);
                 }
                 newEntity.Move(availablePoints[pointIndex]);
                 newEntity.MyWorld = worldRef;

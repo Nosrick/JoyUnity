@@ -11,7 +11,7 @@ namespace JoyLib.Code.Helpers
             BaseItemType baseItem = new BaseItemType("Weapon", "A claw, fist or psuedopod.", "A claw, fist or psuedopod.", "Natural Weapon", "Natural Weapon", "Hand1", 
                 wielderSize * 40.0f, itemMaterial, "Weapon", "Martial Arts", "strikes", null, 0, 0);
 
-            return ItemInstance.Create(baseItem, new Vector2Int(-1, -1), true);
+            return new ItemInstance(baseItem, new Vector2Int(-1, -1), true);
         }
     }
 }

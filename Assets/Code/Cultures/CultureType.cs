@@ -29,7 +29,7 @@ namespace JoyLib.Code.Cultures
 
         public string GetRandomName(Gender genderRef)
         {
-            List<NameData> validFirstNames = m_NameData.Where(x => x.gender == genderRef || x.gender == Gender.Neutral && x.isSurname == false).ToList();
+            List<NameData> validFirstNames = m_NameData.Where(x => x.gender == genderRef || x.gender == Gender.Neutral && (x.isSurname == false)).ToList();
             List<NameData> validLastNames = m_NameData.Where(x => x.isSurname).ToList();
             return validFirstNames[RNG.Roll(0, validFirstNames.Count - 1)].name + " " + validLastNames[RNG.Roll(0, validLastNames.Count - 1)].name;
         }

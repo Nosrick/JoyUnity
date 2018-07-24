@@ -80,7 +80,7 @@ namespace JoyLib.Code.IO
         {
             foreach(JoyObject obj in parent.Objects)
             {
-                obj.SetIcons(ObjectIcons.GetIcons(obj.BaseType, obj.name));
+                obj.SetIcons(ObjectIcons.GetIcons(obj.BaseType, obj.JoyName));
             }
 
             foreach(Entity entity in parent.Entities)

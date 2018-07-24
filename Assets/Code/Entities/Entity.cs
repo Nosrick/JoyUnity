@@ -71,156 +71,162 @@ namespace JoyLib.Code.Entities
 
         protected static Dictionary<string, CultureType> s_Cultures = CultureLoader.LoadCultures();
 
-        public static Entity Create(EntityTemplate template, Dictionary<NeedIndex, EntityNeed> needs, int level, float experience, JobType job, Gender gender, Sexuality sexuality,
-            Vector2Int position, List<Texture2D> icons, ItemInstance naturalWeapons, Dictionary<string, ItemInstance> equipment, 
+        /// <summary>
+        /// Create an entity with job levels, equipment, family, etc
+        /// </summary>
+        /// <param name="template"></param>
+        /// <param name="needs"></param>
+        /// <param name="level"></param>
+        /// <param name="experience"></param>
+        /// <param name="job"></param>
+        /// <param name="gender"></param>
+        /// <param name="sexuality"></param>
+        /// <param name="position"></param>
+        /// <param name="icons"></param>
+        /// <param name="naturalWeapons"></param>
+        /// <param name="equipment"></param>
+        /// <param name="backpack"></param>
+        /// <param name="relationships"></param>
+        /// <param name="identifiedItems"></param>
+        /// <param name="family"></param>
+        /// <param name="jobLevels"></param>
+        /// <param name="world"></param>
+        /// <param name="tileset"></param>
+        public Entity(EntityTemplate template, Dictionary<NeedIndex, EntityNeed> needs, int level, float experience, JobType job, Gender gender, Sexuality sexuality,
+            Vector2Int position, List<Sprite> sprites, ItemInstance naturalWeapons, Dictionary<string, ItemInstance> equipment, 
             List<ItemInstance> backpack, Dictionary<int, int> relationships, List<string> identifiedItems, Dictionary<int, RelationshipStatus> family,
-            Dictionary<string, int> jobLevels, WorldInstance world, string tileset)
+            Dictionary<string, int> jobLevels, WorldInstance world, string tileset) : 
+            base(NameProvider.GetRandomName(template.CreatureType, gender), template.Statistics[StatisticIndex.Endurance] * 2, position, sprites, template.JoyType, true)
         {
-            Entity entity = Instantiate(Resources.Load<Entity>("Prefabs/Sprite"));
+            this.CreatureType = template.CreatureType;
 
-            List<Sprite> sprites = new List<Sprite>();
-            for(int i = 0; i < icons.Count; i++)
-            {
-                sprites.Add(Sprite.Create(icons[i], new Rect(0, 0, 16, 16), Vector2.zero, 16));
-            }
+            this.m_Size = template.Size;
 
-            entity.CreatureType = template.CreatureType;
-
-            entity.Initialise(NameProvider.GetRandomName(template.CreatureType, gender), (template.Statistics[StatisticIndex.Endurance] * 2), position, sprites, template.JoyType, true);
-
-            entity.m_Size = template.Size;
-
-            entity.m_JobLevels = jobLevels;
-            entity.m_Sexuality = sexuality;
-            entity.m_IdentifiedItems = identifiedItems;
-            entity.m_Statistics = template.Statistics;
+            this.m_JobLevels = jobLevels;
+            this.m_Sexuality = sexuality;
+            this.m_IdentifiedItems = identifiedItems;
+            this.m_Statistics = template.Statistics;
 
             if (template.Skills.Count == 0)
             {
-                entity.m_Skills = EntitySkillHandler.GetSkillBlock(needs);
+                this.m_Skills = EntitySkillHandler.GetSkillBlock(needs);
             }
             else
             {
-                entity.m_Skills = template.Skills;
+                this.m_Skills = template.Skills;
             }
-            entity.m_Needs = needs;
-            entity.m_Abilities = template.Abilities;
-            entity.m_Level = level;
+            this.m_Needs = needs;
+            this.m_Abilities = template.Abilities;
+            this.m_Level = level;
             for(int i = 1; i < level; i++)
             {
-                entity.LevelUp();
+                this.LevelUp();
             }
-            entity.m_Experience = experience;
-            entity.m_CurrentJob = job;
-            entity.m_Sentient = template.Sentient;
-            entity.m_NaturalWeapons = naturalWeapons;
-            entity.m_Equipment = equipment;
-            entity.m_Backpack = backpack;
-            entity.m_Relationships = relationships;
-            entity.Gender = gender;
-            entity.m_Family = family;
-            entity.m_VisionType = template.VisionType;
+            this.m_Experience = experience;
+            this.m_CurrentJob = job;
+            this.m_Sentient = template.Sentient;
+            this.m_NaturalWeapons = naturalWeapons;
+            this.m_Equipment = equipment;
+            this.m_Backpack = backpack;
+            this.m_Relationships = relationships;
+            this.Gender = gender;
+            this.m_Family = family;
+            this.m_VisionType = template.VisionType;
 
-            entity.m_Tileset = tileset;
+            this.m_Tileset = tileset;
 
-            entity.CalculateDerivatives();
+            this.CalculateDerivatives();
 
-            entity.m_Vision = new bool[1, 1];
+            this.m_Vision = new bool[1, 1];
 
-            entity.m_Pathfinder = new Pathfinder();
-            entity.m_PathfindingData = new Queue<Vector2Int>();
+            this.m_Pathfinder = new Pathfinder();
+            this.m_PathfindingData = new Queue<Vector2Int>();
 
-            foreach(EntityNeed need in entity.m_Needs.Values)
+            foreach(EntityNeed need in this.m_Needs.Values)
             {
-                need.SetParent(entity);
+                need.SetParent(this);
             }
 
-            entity.m_FulfillingNeed = (NeedIndex)(-1);
-            entity.m_FulfilmentCounter = 0;
+            this.m_FulfillingNeed = (NeedIndex)(-1);
+            this.m_FulfilmentCounter = 0;
 
-            entity.RegenTicker = RNG.Roll(0, REGEN_TICK_TIME - 1);
+            this.RegenTicker = RNG.Roll(0, REGEN_TICK_TIME - 1);
 
-            entity.MyWorld = world;
-
-            Entity gameEntity = entity.gameObject.GetComponent<Entity>();
-            gameEntity = entity;
-            
-            return entity;
+            this.MyWorld = world;
         }
 
-        public static Entity CreateBrandNew(EntityTemplate template, Dictionary<NeedIndex, EntityNeed> needs, int level, JobType job, Gender gender, Sexuality sexuality,
-            Vector2Int position, List<Texture2D> icons, WorldInstance world)
+        /// <summary>
+        /// Create a new entity, naked and squirming
+        /// Created with no equipment, knowledge, family, etc
+        /// </summary>
+        /// <param name="template"></param>
+        /// <param name="needs"></param>
+        /// <param name="level"></param>
+        /// <param name="job"></param>
+        /// <param name="gender"></param>
+        /// <param name="sexuality"></param>
+        /// <param name="position"></param>
+        /// <param name="icons"></param>
+        /// <param name="world"></param>
+        public Entity(EntityTemplate template, Dictionary<NeedIndex, EntityNeed> needs, int level, JobType job, Gender gender, Sexuality sexuality,
+            Vector2Int position, List<Sprite> sprites, WorldInstance world) :
+            base(NameProvider.GetRandomName(template.CreatureType, gender), template.Statistics[StatisticIndex.Endurance] * 2, position, sprites, template.JoyType, true)
         {
-            Entity entity = Instantiate(Resources.Load<Entity>("Prefabs/Entity"));
+            this.CreatureType = template.CreatureType;
 
-            List<Sprite> sprites = new List<Sprite>();
-            for (int i = 0; i < icons.Count; i++)
-            {
-                sprites.Add(Sprite.Create(icons[i], new Rect(0, 0, 16, 16), Vector2.zero, 16));
-            }
+            this.m_Size = template.Size;
 
-            entity.CreatureType = template.CreatureType;
-
-            entity.Initialise(NameProvider.GetRandomName(template.CreatureType, gender), (template.Statistics[StatisticIndex.Endurance] * 2), position, sprites, template.JoyType, true);
-
-            entity.m_Size = template.Size;
-
-            entity.m_JobLevels = new Dictionary<string, int>();
-            entity.m_Sexuality = sexuality;
-            entity.m_IdentifiedItems = new List<string>();
-            entity.m_Statistics = template.Statistics;
+            this.m_JobLevels = new Dictionary<string, int>();
+            this.m_Sexuality = sexuality;
+            this.m_IdentifiedItems = new List<string>();
+            this.m_Statistics = template.Statistics;
 
             if (template.Skills.Count == 0)
             {
-                entity.m_Skills = EntitySkillHandler.GetSkillBlock(needs);
+                this.m_Skills = EntitySkillHandler.GetSkillBlock(needs);
             }
             else
             {
-                entity.m_Skills = template.Skills;
+                this.m_Skills = template.Skills;
             }
-            entity.m_Needs = needs;
-            entity.m_Abilities = template.Abilities;
-            entity.m_Level = level;
+            this.m_Needs = needs;
+            this.m_Abilities = template.Abilities;
+            this.m_Level = level;
             for (int i = 1; i < level; i++)
             {
-                entity.LevelUp();
+                this.LevelUp();
             }
-            entity.m_Experience = 0;
-            entity.m_CurrentJob = job;
-            entity.m_Sentient = template.Sentient;
-            entity.m_NaturalWeapons = NaturalWeaponHelper.MakeNaturalWeapon(template.Size);
-            entity.m_Equipment = new Dictionary<string, ItemInstance>();
-            entity.m_Backpack = new List<ItemInstance>();
-            entity.m_Relationships = new Dictionary<int, int>();
-            entity.Gender = gender;
-            entity.m_Family = new Dictionary<int, RelationshipStatus>();
-            entity.m_VisionType = template.VisionType;
+            this.m_Experience = 0;
+            this.m_CurrentJob = job;
+            this.m_Sentient = template.Sentient;
+            this.m_NaturalWeapons = NaturalWeaponHelper.MakeNaturalWeapon(template.Size);
+            this.m_Equipment = new Dictionary<string, ItemInstance>();
+            this.m_Backpack = new List<ItemInstance>();
+            this.m_Relationships = new Dictionary<int, int>();
+            this.Gender = gender;
+            this.m_Family = new Dictionary<int, RelationshipStatus>();
+            this.m_VisionType = template.VisionType;
 
-            entity.m_Tileset = template.Tileset;
+            this.m_Tileset = template.Tileset;
 
-            entity.CalculateDerivatives();
+            this.CalculateDerivatives();
 
-            entity.m_Vision = new bool[1, 1];
+            this.m_Vision = new bool[1, 1];
 
-            entity.m_Pathfinder = new Pathfinder();
-            entity.m_PathfindingData = new Queue<Vector2Int>();
+            this.m_Pathfinder = new Pathfinder();
+            this.m_PathfindingData = new Queue<Vector2Int>();
 
-            foreach (EntityNeed need in entity.m_Needs.Values)
+            foreach (EntityNeed need in this.m_Needs.Values)
             {
-                need.SetParent(entity);
+                need.SetParent(this);
             }
 
-            entity.m_FulfillingNeed = (NeedIndex)(-1);
-            entity.m_FulfilmentCounter = 0;
+            this.m_FulfillingNeed = (NeedIndex)(-1);
+            this.m_FulfilmentCounter = 0;
 
-            entity.RegenTicker = RNG.Roll(0, REGEN_TICK_TIME - 1);
+            this.RegenTicker = RNG.Roll(0, REGEN_TICK_TIME - 1);
 
-            entity.MyWorld = world;
-
-            Entity gameEntity = entity.gameObject.GetComponent<Entity>();
-            gameEntity = entity;
-
-            return entity;
+            this.MyWorld = world;
         }
 
         /*
@@ -447,7 +453,7 @@ namespace JoyLib.Code.Entities
                         {
                             if (WorldPosition == need.needData.target.WorldPosition)
                             {
-                                ActionLog.AddText(name + " (" + GUID + ") has arrived at " + need.needData.target.name + " at " + WorldPosition.ToString(), Helpers.LogType.Debug);
+                                ActionLog.AddText(JoyName + " (" + GUID + ") has arrived at " + need.needData.target.JoyName + " at " + WorldPosition.ToString(), Helpers.LogType.Debug);
                                 //TODO: FIX THIS
                                 //need.ExecutePythonFunction("Interact", new dynamic[] { need, this, need.needData.target });
                             }
@@ -487,7 +493,7 @@ namespace JoyLib.Code.Entities
 
                         if(WorldPosition == need.needData.targetPoint)
                         {
-                            ActionLog.AddText(name + " (" + GUID + ") has arrived at " + need.needData.targetPoint + " and is looking for fulfilment of " + need.name + ".", Helpers.LogType.Debug);
+                            ActionLog.AddText(JoyName + " (" + GUID + ") has arrived at " + need.needData.targetPoint + " and is looking for fulfilment of " + need.name + ".", Helpers.LogType.Debug);
                         }
                     }
                 }
@@ -560,10 +566,10 @@ namespace JoyLib.Code.Entities
                 return;
             }
 
-            if (m_IdentifiedItems.Contains(item.name))
+            if (m_IdentifiedItems.Contains(item.JoyName))
             {
                 item.IdentifyMe();
-                m_IdentifiedItems.Add(item.name);
+                m_IdentifiedItems.Add(item.JoyName);
             }
 
             m_Backpack.Add(item);

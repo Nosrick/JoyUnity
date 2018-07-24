@@ -122,12 +122,12 @@ namespace JoyLib.Code.States
             Dictionary<NeedIndex, EntityNeed> needs = EntityNeed.GetFullRandomisedNeeds();
 
             EntityTemplate humanTemplate = EntityTemplateHandler.Get("Human");
-            m_Player = Entity.CreateBrandNew(humanTemplate, needs, 1, m_Jobs[m_JobIndex], m_PlayerGender, Sexuality.Bisexual, new UnityEngine.Vector2Int(-1, -1),
-                ObjectIcons.GetIcons("Jobs", m_Jobs[m_JobIndex].name).ToList(), null);
+            m_Player = new Entity(humanTemplate, needs, 1, m_Jobs[m_JobIndex], m_PlayerGender, Sexuality.Bisexual, new UnityEngine.Vector2Int(-1, -1),
+                ObjectIcons.GetSprites("Jobs", m_Jobs[m_JobIndex].name).ToList(), null);
 
             m_Player.PlayerControlled = true;
 
-            m_Player.AddItem(ItemInstance.Create(ItemHandler.GetSpecificItem("Lantern"), new UnityEngine.Vector2Int(-1, -1), true));
+            m_Player.AddItem(new ItemInstance(ItemHandler.GetSpecificItem("Lantern"), new UnityEngine.Vector2Int(-1, -1), true));
         }
 
         public override GameState GetNextState()

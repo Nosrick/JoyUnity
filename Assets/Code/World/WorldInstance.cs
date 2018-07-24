@@ -24,7 +24,7 @@ namespace JoyLib.Code.World
         protected readonly WorldType m_Type;
 
         //Worlds and where to access them
-        protected Dictionary<string, WorldInstance> m_Areas;
+        protected Dictionary<Vector2Int, WorldInstance> m_Areas;
 
         [NonSerialized]
         protected WorldInstance m_Parent;
@@ -40,7 +40,7 @@ namespace JoyLib.Code.World
         protected string m_Name;
         protected int m_GUID;
 
-        public WorldInstance(WorldTile[,] tiles, Dictionary<string, WorldInstance> areas, List<Entity> entities,
+        public WorldInstance(WorldTile[,] tiles, Dictionary<Vector2Int, WorldInstance> areas, List<Entity> entities,
             List<JoyObject> objects, WorldType type, string name)
         {
             this.Name = name;
@@ -811,7 +811,7 @@ namespace JoyLib.Code.World
             return objects;
         }
 
-        public void AddArea(string key, WorldInstance value)
+        public void AddArea(Vector2Int key, WorldInstance value)
         {
             value.Parent = this;
             m_Areas.Add(key, value);
@@ -851,7 +851,7 @@ namespace JoyLib.Code.World
             return "I don't know much about this place, sorry.";
         }
         
-        public Dictionary<string, WorldInstance> Areas
+        public Dictionary<Vector2Int, WorldInstance> Areas
         {
             get
             {
@@ -863,13 +863,7 @@ namespace JoyLib.Code.World
         {
             get
             {
-                Entity[] newEntities = new Entity[m_Entities.Count];
-                m_Entities.CopyTo(newEntities);
-                return newEntities.ToList();
-            }
-            set
-            {
-                m_Entities = value;
+                return m_Entities;
             }
         }
 

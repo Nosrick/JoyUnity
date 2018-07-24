@@ -2,9 +2,10 @@
 using JoyLib.Code.Helpers;
 using System;
 using System.Collections.Generic;
+using JoyLib.Code.Managers;
 
 [Serializable]
-public class JoyObject : MonoBehaviour
+public class JoyObject
 {
     protected int m_HitPoints;
     protected int m_HitPointsRemaining;
@@ -19,88 +20,19 @@ public class JoyObject : MonoBehaviour
 
     protected const int FRAMES_PER_SECOND = 30;
 
-    public static JoyObject Create(string name, int hitPoints, Vector2Int worldPosition, Texture2D[] icons, string baseType, bool isAnimated, bool isWall = false)
-    {
-        JoyObject newObject = Instantiate(Resources.Load<JoyObject>("Prefabs/JoyObject"));
-
-        newObject.JoyName = name;
-        newObject.name = newObject.JoyName;
-
-        newObject.m_HitPoints = hitPoints;
-
-        newObject.m_WorldPosition = worldPosition;
-        newObject.Move(newObject.m_WorldPosition);
-
-        newObject.m_Icons = new Sprite[icons.Length];
-        for (int i = 0; i < icons.Length; i++)
-        {
-            newObject.m_Icons[i] = Sprite.Create(icons[i], new Rect(0, 0, 16, 16), new Vector2(0, 0), 16);
-        }
-
-        newObject.BaseType = baseType;
-        newObject.IsAnimated = isAnimated;
-        newObject.IsWall = isWall;
-
-        //If it's not animated, select a random icon to represent it
-        if (!newObject.IsAnimated && icons != null)
-        {
-            newObject.ChosenIcon = RNG.Roll(0, icons.Length - 1);
-        }
-        else
-        {
-            newObject.ChosenIcon = 0;
-        }
-
-        newObject.GetComponent<SpriteRenderer>().sprite = newObject.Icon;
-
-        newObject.m_LastIcon = 0;
-        newObject.m_FramesSinceLastChange = 0;
-
-        return newObject;
-
-        //GUID = GUIDManager.AssignGUID();
-    }
-
-    public static JoyObject Create(string name, int hitPoints, Vector2Int position, List<Sprite> sprites, string baseType, bool isAnimated, bool isWall = false)
-    {
-        JoyObject newObject = Instantiate(Resources.Load<JoyObject>("Prefabs/Sprite"));
-
-        newObject.JoyName = name;
-        newObject.name = newObject.JoyName;
-
-        newObject.m_HitPoints = hitPoints;
-
-        newObject.m_WorldPosition = position;
-        newObject.Move(newObject.m_WorldPosition);
-
-        newObject.m_Icons = sprites.ToArray();
-
-        newObject.BaseType = baseType;
-        newObject.IsAnimated = isAnimated;
-        newObject.IsWall = isWall;
-
-        //If it's not animated, select a random icon to represent it
-        if (!newObject.IsAnimated && sprites != null)
-        {
-            newObject.ChosenIcon = RNG.Roll(0, sprites.Count - 1);
-        }
-        else
-        {
-            newObject.ChosenIcon = 0;
-        }
-
-        newObject.GetComponent<SpriteRenderer>().sprite = newObject.Icon;
-
-        newObject.m_LastIcon = 0;
-        newObject.m_FramesSinceLastChange = 0;
-
-        return newObject;
-    }
-
-    public void Initialise(string name, int hitPoints, Vector2Int position, List<Sprite> sprites, string baseType, bool isAnimated, bool isWall = false)
+    /// <summary>
+    /// Creation of a JoyObject (MonoBehaviour) using a List of Sprites
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="hitPoints"></param>
+    /// <param name="position"></param>
+    /// <param name="sprites"></param>
+    /// <param name="baseType"></param>
+    /// <param name="isAnimated"></param>
+    /// <param name="isWall"></param>
+    public JoyObject(string name, int hitPoints, Vector2Int position, List<Sprite> sprites, string baseType, bool isAnimated, bool isWall = false, bool isDestructible = true)
     {
         this.JoyName = name;
-        this.name = this.JoyName;
 
         this.m_HitPoints = hitPoints;
 
@@ -112,6 +44,7 @@ public class JoyObject : MonoBehaviour
         this.BaseType = baseType;
         this.IsAnimated = isAnimated;
         this.IsWall = isWall;
+        this.IsDestructible = isDestructible;
 
         //If it's not animated, select a random icon to represent it
         if (!this.IsAnimated && sprites != null)
@@ -123,16 +56,18 @@ public class JoyObject : MonoBehaviour
             this.ChosenIcon = 0;
         }
 
-        this.GetComponent<SpriteRenderer>().sprite = this.Icon;
-
         this.m_LastIcon = 0;
         this.m_FramesSinceLastChange = 0;
+    }
+
+    ~JoyObject()
+    {
+        GUIDManager.ReleaseGUID(this.GUID);
     }
 
     public void Move(Vector2Int newPosition)
     {
         m_WorldPosition = newPosition;
-        this.transform.position = new Vector3(m_WorldPosition.x, m_WorldPosition.y);
     }
 
     public virtual void DamageMe(int value)
@@ -174,8 +109,6 @@ public class JoyObject : MonoBehaviour
         {
             ChosenIcon += 1;
             ChosenIcon %= m_Icons.Length;
-
-            this.GetComponent<SpriteRenderer>().sprite = Icon;
 
             m_FramesSinceLastChange = 0;
         }
@@ -252,6 +185,12 @@ public class JoyObject : MonoBehaviour
     }
 
     public bool IsWall
+    {
+        get;
+        protected set;
+    }
+
+    public bool IsDestructible
     {
         get;
         protected set;

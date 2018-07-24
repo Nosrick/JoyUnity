@@ -92,7 +92,7 @@ namespace JoyLib.Code.Conversation.Subengines
                         skills.Add(skillPair.Key);
                     }
                 }
-                return "I heard " + entityRef.name + " is terrible at " + skills[RNG.Roll(0, skills.Count - 1)] + ", how embarrassing!";
+                return "I heard " + entityRef.JoyName + " is terrible at " + skills[RNG.Roll(0, skills.Count - 1)] + ", how embarrassing!";
             }
             else
             {
@@ -105,19 +105,19 @@ namespace JoyLib.Code.Conversation.Subengines
                         skills.Add(skillPair.Key);
                     }
                 }
-                return entityRef.name + " is really good at " + skills[RNG.Roll(0, skills.Count - 1)] + ", I'm pretty envious.";
+                return entityRef.JoyName + " is really good at " + skills[RNG.Roll(0, skills.Count - 1)] + ", I'm pretty envious.";
             }
         }
 
         private static string GenerateScandal(Entity left, Entity right)
         {
-            string rumour = "Did you hear about " + left.name + " and " + right.name + "? It's scandalous!";
+            string rumour = "Did you hear about " + left.JoyName + " and " + right.JoyName + "? It's scandalous!";
             return rumour;
         }
 
         private static string GenerateArgument(Entity left, Entity right)
         {
-            return "Apparently " + left.name + " and " + right.name + 
+            return "Apparently " + left.JoyName + " and " + right.JoyName + 
                 " are embroiled in some sort of feud? I don't know what it's about, though.";
         }
 
@@ -126,9 +126,9 @@ namespace JoyLib.Code.Conversation.Subengines
             string itemName = "something";
             if(left.Backpack.Count > 0)
             {
-                itemName = left.Backpack[RNG.Roll(0, left.Backpack.Count - 1)].name;
+                itemName = left.Backpack[RNG.Roll(0, left.Backpack.Count - 1)].JoyName;
             }
-            return "I heard " + left.name + " stole " + itemName + " from " + right.name + ".";
+            return "I heard " + left.JoyName + " stole " + itemName + " from " + right.JoyName + ".";
         }
     }
 }

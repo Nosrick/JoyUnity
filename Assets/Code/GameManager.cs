@@ -15,8 +15,6 @@ public class GameManager : MonoBehaviour
 {
     private StateManager m_StateManager;
 
-    private Camera m_Camera;
-
 	// Use this for initialization
 	void Start ()
     {
@@ -24,13 +22,12 @@ public class GameManager : MonoBehaviour
 
         m_StateManager = new StateManager();
 
-        Entity thief = Entity.CreateBrandNew(EntityTemplateHandler.Get("Human"), EntityNeed.GetFullRandomisedNeeds(), 1, JobHandler.Get("Thief"), Gender.Neutral, Sexuality.Bisexual, Vector2Int.zero, ObjectIcons.GetIcons("Jobs", "Thief").ToList(), null);
-        thief.PlayerControlled = true;
+        Entity thief = new Entity(EntityTemplateHandler.Get("Human"), EntityNeed.GetFullRandomisedNeeds(), 1, JobHandler.Get("Thief"), Gender.Neutral, Sexuality.Bisexual, Vector2Int.zero, ObjectIcons.GetSprites("Jobs", "Thief").ToList(), null)
+        {
+            PlayerControlled = true
+        };
 
         m_StateManager.ChangeState(new WorldCreationState(thief));
-
-        m_Camera = GameObject.Find("Main Camera").GetComponent<Camera>();
-        m_Camera.transform.position = new Vector3(thief.transform.position.x, thief.transform.position.y, m_Camera.transform.position.z);
     }
 
     private void InitialiseEverything()

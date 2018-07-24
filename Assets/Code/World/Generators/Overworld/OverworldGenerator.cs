@@ -1,7 +1,5 @@
-﻿using System;
+﻿using JoyLib.Code.Graphics;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace JoyLib.Code.World.Generators.Overworld
 {
@@ -20,6 +18,22 @@ namespace JoyLib.Code.World.Generators.Overworld
             }
 
             return tiles;
+        }
+
+        public List<JoyObject> GenerateTileObjects(WorldTile[,] tiles)
+        {
+            List<JoyObject> objects = new List<JoyObject>(tiles.GetLength(0) * tiles.GetLength(1));
+
+            for(int i = 0; i < tiles.GetLength(0); i++)
+            {
+                for(int j = 0; j < tiles.GetLength(1); j++)
+                {
+                    JoyObject joyObject = new JoyObject("Terrain", 1, new UnityEngine.Vector2Int(i, j), ObjectIcons.GetSprites("Overworld", "Grassland"), "Terrain", false, false, true);
+                    objects.Add(joyObject);
+                }
+            }
+
+            return objects;
         }
     }
 }

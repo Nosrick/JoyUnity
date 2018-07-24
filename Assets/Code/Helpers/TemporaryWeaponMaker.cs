@@ -16,7 +16,7 @@ namespace JoyLib.Code.Helpers
 
             BaseItemType tempItem = new BaseItemType("", "", "", "Temporary weapon", "Temporary weapon", "None", size, material, "Weapon", skill, actionString, null, 0, 0, 0);
 
-            return ItemInstance.Create(tempItem, new Vector2Int(-1, -1), true);
+            return new ItemInstance(tempItem, new Vector2Int(-1, -1), true);
         }
     }
 }

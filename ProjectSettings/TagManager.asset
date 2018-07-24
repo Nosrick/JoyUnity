@@ -41,3 +41,15 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Terrain
+    uniqueID: 1120430391
+    locked: 0
+  - name: Walls
+    uniqueID: 26241253
+    locked: 0
+  - name: Objects
+    uniqueID: 3401644641
+    locked: 0
+  - name: Entities
+    uniqueID: 3339809639
+    locked: 0
