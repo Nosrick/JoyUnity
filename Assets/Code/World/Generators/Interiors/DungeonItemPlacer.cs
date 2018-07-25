@@ -8,9 +8,9 @@ namespace JoyLib.Code.World.Generators.Interiors
 {
     public static class DungeonItemPlacer
     {
-        public static List<JoyObject> PlaceItems(WorldInstance worldRef)
+        public static List<ItemInstance> PlaceItems(WorldInstance worldRef)
         {
-            List<JoyObject> placedItems = new List<JoyObject>();
+            List<ItemInstance> placedItems = new List<ItemInstance>();
 
             int dungeonArea = worldRef.Tiles.GetLength(0) * worldRef.Tiles.GetLength(1);
             int itemsToPlace = dungeonArea / 50;

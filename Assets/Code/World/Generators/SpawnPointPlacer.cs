@@ -31,6 +31,8 @@ namespace JoyLib.Code.World.Generators
 
         public Vector2Int PlaceTransitionPoint(WorldInstance worldRef)
         {
+            int breakout = (worldRef.Tiles.GetLength(0) * worldRef.Tiles.GetLength(1)) / 4;
+
             Dictionary<Vector2Int, JoyObject> walls = worldRef.GetObjectsOfType("Wall");
             int x, y;
 
@@ -39,19 +41,37 @@ namespace JoyLib.Code.World.Generators
 
             Vector2Int point = new Vector2Int(x, y);
 
-            while (walls.Keys.Any(l => l.ToString().Equals(point.ToString())) && 
-                (point.x != worldRef.SpawnPoint.x && point.y != worldRef.SpawnPoint.y))
+            int count = 0;
+            while (walls.Keys.Any(l => l == point) && 
+                (point.x != worldRef.SpawnPoint.x && point.y != worldRef.SpawnPoint.y ||
+                count < breakout))
             {
                 x = RNG.Roll(1, worldRef.Tiles.GetLength(0) - 1);
                 y = RNG.Roll(1, worldRef.Tiles.GetLength(1) - 1);
                 point = new Vector2Int(x, y);
+                count += 1;
             }
 
             Pathfinder pathfinder = new Pathfinder();
-            Queue<Vector2Int> points = pathfinder.FindPath(worldRef.SpawnPoint, point, worldRef);
+            Queue<Vector2Int> points = pathfinder.FindPath(point, worldRef.SpawnPoint, worldRef);
 
             if (points.Count > 0)
+            {
                 return point;
+            }
+            else
+            {
+                count = 0;
+                while (walls.Keys.Any(l => l == point) &&
+                (point.x != worldRef.SpawnPoint.x && point.y != worldRef.SpawnPoint.y ||
+                count < breakout))
+                {
+                    x = RNG.Roll(1, worldRef.Tiles.GetLength(0) - 1);
+                    y = RNG.Roll(1, worldRef.Tiles.GetLength(1) - 1);
+                    point = new Vector2Int(x, y);
+                    count += 1;
+                }
+            }
 
             return new Vector2Int(-1, -1);
         }
@@ -65,7 +85,7 @@ namespace JoyLib.Code.World.Generators
             {
                 for (int j = 0; j < blocked.GetLength(1); j++)
                 {
-                    if (walls.Keys.Any(x => x.ToString().Equals(new Vector2Int(i, j).ToString())))
+                    if (walls.Keys.Any(x => x == new Vector2Int(i, j)))
                     {
                         blocked[i, j] = true;
                     }

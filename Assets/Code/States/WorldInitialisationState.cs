@@ -58,7 +58,17 @@ namespace JoyLib.Code.States
                     GameObject gameObject = GameObject.Instantiate(sprite);
                     gameObject.transform.position = new Vector3(i, j);
                     gameObject.GetComponent<SpriteRenderer>().sortingLayerName = "Terrain";
-                    gameObject.GetComponent<SpriteRenderer>().sprite = ObjectIcons.GetSprite("Floor", "SoloFloor0");
+                    switch(m_ActiveWorld.Tiles[i, j])
+                    {
+                        case WorldTile.Paving:
+                            gameObject.GetComponent<SpriteRenderer>().sprite = ObjectIcons.GetSprite("Paving", "MiddleMiddle0");
+                            break;
+
+                        case WorldTile.Plains:
+                            gameObject.GetComponent<SpriteRenderer>().sprite = ObjectIcons.GetSprite("Plains", "MiddleMiddle0");
+                            break;
+                    }
+                    
                     gameObject.transform.parent = objectHolder.transform;
                 }
             }

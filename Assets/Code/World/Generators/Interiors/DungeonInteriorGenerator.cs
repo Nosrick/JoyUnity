@@ -39,7 +39,7 @@ namespace JoyLib.Code.World.Generators.Interiors
             return tiles;
         }
 
-        public List<JoyObject> GenerateWalls()
+        public List<JoyObject> GenerateWalls(WorldTile[,] worldTiles)
         {
             List<JoyObject> walls = new List<JoyObject>();
 
@@ -57,6 +57,10 @@ namespace JoyLib.Code.World.Generators.Interiors
             }
 
             return walls;
+        }
+
+        public void GenerateTileObjects(WorldTile[,] worldTiles)
+        {
         }
     }
 }

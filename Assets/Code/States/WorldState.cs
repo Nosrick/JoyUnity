@@ -2,6 +2,7 @@
 using JoyLib.Code.Conversation.Subengines;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Abilities;
+using JoyLib.Code.Entities.AI;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.IO;
 using JoyLib.Code.Physics;
@@ -9,6 +10,7 @@ using JoyLib.Code.Quests;
 using JoyLib.Code.States.Gameplay;
 using JoyLib.Code.World;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace JoyLib.Code.States
@@ -89,11 +91,12 @@ namespace JoyLib.Code.States
 
             m_ActiveWorld = newWorld;
             m_ActiveWorld.AddEntity(player);
-
-            m_ActiveWorld.Player.Move(spawnPoint);
-            m_ActiveWorld.Player.Vision = m_ActiveWorld.GetVision(m_ActiveWorld.Player);
-
             player.MyWorld = m_ActiveWorld;
+
+            player = m_ActiveWorld.Player;
+
+            player.Move(spawnPoint);
+            player.Vision = m_ActiveWorld.GetVision(player);
 
             m_GameplayFlags = GameplayFlags.Moving;
             RumourMill.GenerateRumours(m_ActiveWorld);
@@ -172,12 +175,24 @@ namespace JoyLib.Code.States
             
             */
 
+            if(Input.GetMouseButtonDown(0))
+            {
+                Vector3 mouseWorld = m_Camera.ScreenToWorldPoint(Input.mousePosition);
+                int x = (int)mouseWorld.x;
+                int y = (int)mouseWorld.y;
+
+                Pathfinder pathfinder = new Pathfinder();
+                Queue<Vector2Int> path = pathfinder.FindPath(player.WorldPosition, new Vector2Int(x, y), m_ActiveWorld);
+                player.SetPath(path);
+                autoTurn = true;
+            }
+
             if (Input.GetKeyDown(KeyCode.Return))
             {
                 //Going up a level
                 if (m_ActiveWorld.Parent != null && player.WorldPosition == m_ActiveWorld.SpawnPoint && !player.HasMoved)
                 {
-                    ChangeWorld(m_ActiveWorld.Parent, m_ActiveWorld.Parent.SpawnPoint);
+                    ChangeWorld(m_ActiveWorld.Parent, m_ActiveWorld.Parent.TransitionPoint);
                 }
 
                 //Going down a level
@@ -302,14 +317,6 @@ namespace JoyLib.Code.States
                 Tick();
                 return;
             }
-            else if (player.FulfilmentCounter > 0 || autoTurn)
-            { 
-                if (m_TickTimer % TICK_TIMER == 0)
-                {
-                    Tick();
-                    return;
-                }
-            }
             else if(Input.GetKeyDown(KeyCode.Return))
             {
                 PhysicsResult physicsResult = PhysicsManager.IsCollision(player.WorldPosition, newPlayerPoint, m_ActiveWorld);
@@ -391,6 +398,11 @@ namespace JoyLib.Code.States
                         m_GameplayFlags = GameplayFlags.Moving;
                     }
                 }
+            }
+
+            if(autoTurn)
+            {
+                Tick();
             }
             m_Camera.transform.position = new Vector3(player.WorldPosition.x, player.WorldPosition.y, m_Camera.transform.position.z);
         }

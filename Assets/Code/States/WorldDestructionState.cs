@@ -33,7 +33,7 @@ namespace JoyLib.Code.States
 
             for(int i = 0; i < worldEntities.transform.childCount; i++)
             {
-                GameObject.Destroy(worldObjects.transform.GetChild(i).gameObject);
+                GameObject.Destroy(worldEntities.transform.GetChild(i).gameObject);
             }
 
             Done = true;

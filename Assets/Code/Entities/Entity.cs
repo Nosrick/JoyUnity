@@ -298,7 +298,9 @@ namespace JoyLib.Code.Entities
         public void Tick()
         {
             if (m_FulfilmentCounter > 0)
+            {
                 m_FulfilmentCounter -= 1;
+            }
 
             RegenTicker += 1;
             if(RegenTicker == REGEN_TICK_TIME)
@@ -314,6 +316,8 @@ namespace JoyLib.Code.Entities
             {
                 need.Tick();
             }
+
+            UpdateMe();
         }
 
         public void AddQuest(Quest quest)
@@ -404,11 +408,11 @@ namespace JoyLib.Code.Entities
                 List<NeedAIData> validTargets = attackData.Where(x => x.target.GetType().Equals(typeof(Entity))).ToList();
                 validTargets = validTargets.Where(x => HasRelationship(x.target.GUID) < -50).ToList();
 
-                if(validTargets.Count > 0 && m_CurrentTarget.target == null)
+                if (validTargets.Count > 0 && m_CurrentTarget.target == null)
                 {
                     m_CurrentTarget = validTargets[RNG.Roll(0, validTargets.Count - 1)];
                     m_PathfindingData = m_Pathfinder.FindPath(WorldPosition, m_CurrentTarget.target.WorldPosition, MyWorld);
-                    if(AdjacencyHelper.IsAdjacent(WorldPosition, m_CurrentTarget.target.WorldPosition))
+                    if (AdjacencyHelper.IsAdjacent(WorldPosition, m_CurrentTarget.target.WorldPosition))
                     {
                         //CombatEngine.PerformCombat(this, (Entity)m_CurrentTarget.target);
                     }
@@ -418,9 +422,9 @@ namespace JoyLib.Code.Entities
                     }
                     return;
                 }
-                else if(m_CurrentTarget.target != null)
+                else if (m_CurrentTarget.target != null)
                 {
-                    if(m_PathfindingData.Count == 0)
+                    if (m_PathfindingData.Count == 0)
                     {
                         m_PathfindingData = m_Pathfinder.FindPath(WorldPosition, m_CurrentTarget.target.WorldPosition, MyWorld);
                     }
@@ -428,7 +432,7 @@ namespace JoyLib.Code.Entities
                     {
                         //CombatEngine.PerformCombat(this, (Entity)m_CurrentTarget.target);
                     }
-                    else if(m_PathfindingData.Count > 0)
+                    else if (m_PathfindingData.Count > 0)
                     {
                         MoveToTarget(m_CurrentTarget);
                     }
@@ -437,7 +441,7 @@ namespace JoyLib.Code.Entities
 
                 List<EntityNeed> needs = m_Needs.Values.OrderByDescending(x => x.priority).ToList();
                 //Act on needs first
-                foreach(EntityNeed need in needs)
+                foreach (EntityNeed need in needs)
                 {
                     if (need.contributingHappiness)
                         continue;
@@ -458,10 +462,10 @@ namespace JoyLib.Code.Entities
                                 //need.ExecutePythonFunction("Interact", new dynamic[] { need, this, need.needData.target });
                             }
                         }
-                        else if(need.needData.target.GetType().Equals(typeof(Entity)))
+                        else if (need.needData.target.GetType().Equals(typeof(Entity)))
                         {
                             Entity target = (Entity)need.needData.target;
-                            if(AdjacencyHelper.IsAdjacent(WorldPosition, need.needData.target.WorldPosition))
+                            if (AdjacencyHelper.IsAdjacent(WorldPosition, need.needData.target.WorldPosition))
                             {
                                 if (need.needData.intent == Intent.Interact && target.FulfilmentCounter <= 0)
                                 {
@@ -487,14 +491,38 @@ namespace JoyLib.Code.Entities
                             }
                         }
                     }
-                    else if(need.needData.target == null)
+                    else if (need.needData.target == null)
                     {
                         MoveToTarget(need.needData);
 
-                        if(WorldPosition == need.needData.targetPoint)
+                        if (WorldPosition == need.needData.targetPoint)
                         {
                             ActionLog.AddText(JoyName + " (" + GUID + ") has arrived at " + need.needData.targetPoint + " and is looking for fulfilment of " + need.name + ".", Helpers.LogType.Debug);
                         }
+                    }
+                }
+            }
+            else
+            {
+                if (!HasMoved && m_PathfindingData.Count > 0)
+                {
+                    Vector2Int nextPoint = m_PathfindingData.Peek();
+                    PhysicsResult physicsResult = PhysicsManager.IsCollision(WorldPosition, nextPoint, MyWorld);
+                    if(physicsResult != PhysicsResult.EntityCollision)
+                    {
+                        m_PathfindingData.Dequeue();
+                        Move(nextPoint);
+                        HasMoved = true;
+                        //m_Vision = MyWorld.GetVision(this);
+                    }
+                    else if(physicsResult == PhysicsResult.EntityCollision)
+                    {
+                        MyWorld.SwapPosition(this, MyWorld.GetEntity(nextPoint));
+
+                        m_PathfindingData.Dequeue();
+                        Move(nextPoint);
+                        HasMoved = true;
+                        //m_Vision = MyWorld.GetVision(this);
                     }
                 }
             }

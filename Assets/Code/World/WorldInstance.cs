@@ -40,6 +40,34 @@ namespace JoyLib.Code.World
         protected string m_Name;
         protected int m_GUID;
 
+        /// <summary>
+        /// A template for adding stuff to later. A blank WorldInstance.
+        /// </summary>
+        /// <param name="tiles"></param>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        public WorldInstance(WorldTile[,] tiles, WorldType type, string name)
+        {
+            this.Name = name;
+            this.m_Type = type;
+            m_Tiles = tiles;
+            m_Areas = new Dictionary<Vector2Int, WorldInstance>();
+            m_Entities = new List<Entity>();
+            m_Objects = new List<JoyObject>();
+            GUID = GUIDManager.AssignGUID();
+            m_Discovered = new bool[m_Tiles.GetLength(0), m_Tiles.GetLength(1)];
+            m_Light = new int[m_Tiles.GetLength(0), m_Tiles.GetLength(1)];
+        }
+
+        /// <summary>
+        /// For creating a well-established WorldInstance
+        /// </summary>
+        /// <param name="tiles"></param>
+        /// <param name="areas"></param>
+        /// <param name="entities"></param>
+        /// <param name="objects"></param>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
         public WorldInstance(WorldTile[,] tiles, Dictionary<Vector2Int, WorldInstance> areas, List<Entity> entities,
             List<JoyObject> objects, WorldType type, string name)
         {
@@ -51,7 +79,6 @@ namespace JoyLib.Code.World
             m_Objects = objects;
             GUID = GUIDManager.AssignGUID();
             m_Discovered = new bool[m_Tiles.GetLength(0), m_Tiles.GetLength(1)];
-            m_Type = type;
             CalculatePlayerIndex();
             m_Light = new int[m_Tiles.GetLength(0), m_Tiles.GetLength(1)];
         }
@@ -885,6 +912,12 @@ namespace JoyLib.Code.World
             {
                 m_SpawnPoint = value;
             }
+        }
+
+        public Vector2Int TransitionPoint
+        {
+            get;
+            set;
         }
         
         public WorldInstance Parent

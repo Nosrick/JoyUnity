@@ -56,12 +56,13 @@ namespace JoyLib.Code.States
 
             //Do the spawn point
             SpawnPointPlacer spawnPlacer = new SpawnPointPlacer();
-            Vector2Int transition = spawnPlacer.PlaceTransitionPoint(m_World);
+            Vector2Int transition = spawnPlacer.PlaceSpawnPoint(m_World);
             while((transition.x == -1 && transition.y == -1))
             {
                 transition = spawnPlacer.PlaceSpawnPoint(m_World);
             }
             m_World.SpawnPoint = transition;
+            m_World.TransitionPoint = spawnPlacer.PlaceTransitionPoint(m_World);
 
             //Set up the player
             m_Player.Move(m_World.SpawnPoint);
@@ -72,10 +73,16 @@ namespace JoyLib.Code.States
             List<string> dungeonTypes = new List<string>();
             dungeonTypes.Add("Naga");
             dungeonTypes.Add("Slime");
+
+            WorldInstance dungeon = DungeonGenerator.GenerateDungeon("Naga Pits", WORLD_SIZE, 3, dungeonTypes.ToArray());
+            m_World.AddArea(m_World.TransitionPoint, dungeon);
             
+            /*
             DungeonInteriorGenerator dunGen = new DungeonInteriorGenerator();
             WorldInstance firstFloor = new WorldInstance(dunGen.GenerateWorldSpace(WORLD_SIZE), new Dictionary<Vector2Int, WorldInstance>(),
                 new List<Entity>(), dunGen.GenerateWalls(), WorldType.Interior, "Naga Pits 1");
+
+            //Do the spawn point
             firstFloor.SpawnPoint = spawnPlacer.PlaceSpawnPoint(firstFloor);
             List<Entity> newEntities = DungeonEntityPlacer.PlaceEntities(firstFloor, dungeonTypes);
             foreach(Entity entity in newEntities)
@@ -90,7 +97,10 @@ namespace JoyLib.Code.States
             }
 
             firstFloor.Objects.AddRange(DungeonItemPlacer.PlaceItems(firstFloor));
+
+            //Adding the first floor
             m_World.AddArea(transition, firstFloor);
+            m_World.TransitionPoint = transition;
             
             WorldInstance secondFloor = new WorldInstance(dunGen.GenerateWorldSpace(WORLD_SIZE), new Dictionary<Vector2Int, WorldInstance>(),
                 new List<Entity>(), dunGen.GenerateWalls(), WorldType.Interior, "Naga Pits 2");
@@ -110,6 +120,7 @@ namespace JoyLib.Code.States
             secondFloor.AddArea(transition, thirdFloor);
 
             //SimulateWorld();
+            */
             Done = true;
         }
 
