@@ -2,6 +2,6 @@
 <Objects>
   <TilesetName>Stairs</TilesetName>
   <Sheet>Tile</Sheet>
-  <ItemIcon Name="DownStairs" Position="1,1" />
-  <ItemIcon Name="UpStairs" Position="0,1" />
+  <ItemIcon Name="DownStairs" Position="1,2" />
+  <ItemIcon Name="UpStairs" Position="0,2" />
 </Objects>

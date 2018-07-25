@@ -2,21 +2,21 @@
 <Objects>
   <TilesetName>Walls</TilesetName>
   <Sheet>Wall</Sheet>
-  <ItemIcon Name="TopLeft" Position="0,50" />
-  <ItemIcon Name="TopRight" Position="2,50" />
-  <ItemIcon Name="BottomLeft" Position="0,48" />
-  <ItemIcon Name="BottomRight" Position="2,48" />
+  <ItemIcon Name="TopLeft" Position="0,47" />
+  <ItemIcon Name="TopRight" Position="2,47" />
+  <ItemIcon Name="BottomLeft" Position="0,45" />
+  <ItemIcon Name="BottomRight" Position="2,45" />
   
-  <ItemIcon Name="HorizontalWall" Position="1,50" />
-  <ItemIcon Name="VerticalWall" Position="0,49" />
+  <ItemIcon Name="HorizontalWall" Position="1,47" />
+  <ItemIcon Name="VerticalWall" Position="0,46" />
   
-  <ItemIcon Name="TopT" Position="4,50" />
-  <ItemIcon Name="LeftT" Position="3,49" />
-  <ItemIcon Name="RightT" Position="5,49" />
-  <ItemIcon Name="BottomT" Position="4,48" />
+  <ItemIcon Name="TopT" Position="4,47" />
+  <ItemIcon Name="LeftT" Position="3,46" />
+  <ItemIcon Name="RightT" Position="5,46" />
+  <ItemIcon Name="BottomT" Position="4,45" />
   
-  <ItemIcon Name="Cross" Position="4,49" />
+  <ItemIcon Name="Cross" Position="4,46" />
 
-  <ItemIcon Name="SoloWall" Position="1,49" />
-  <ItemIcon Name="Surround" Position="3,50" />
+  <ItemIcon Name="SoloWall" Position="1,46" />
+  <ItemIcon Name="Surround" Position="3,47" />
 </Objects>

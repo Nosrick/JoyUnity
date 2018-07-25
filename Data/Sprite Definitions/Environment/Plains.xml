@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Objects>
+  <TilesetName>Plains</TilesetName>
+  <Sheet>Floor</Sheet>
+  <ItemIcon Name="TopLeft" Position="7,32" />
+  <ItemIcon Name="TopMiddle" Position="8,32" />
+  <ItemIcon Name="TopRight" Position="9,32" />
+  
+  <ItemIcon Name="MiddleLeft" Position="7,31" />
+  <ItemIcon Name="MiddleMiddle" Position="8,31" />
+  <ItemIcon Name="MiddleRight" Position="9,31" />
+  
+  <ItemIcon Name="BottomLeft" Position="7,30" />
+  <ItemIcon Name="BottomMiddle" Position="8,30" />
+  <ItemIcon Name="BottomRight" Position="9,30" />
+  
+  <ItemIcon Name="VerticalTop" Position="10,32" />
+  <ItemIcon Name="VerticalMiddle" Position="10,31" />
+  <ItemIcon Name="VerticalBottom" Position="10,30" />
+  
+  <ItemIcon Name="SoloFloor" Position="12,32" />
+  
+  <ItemIcon Name="HorizontalLeft" Position="11,31" />
+  <ItemIcon Name="HorizontalMiddle" Position="12,31" />
+  <ItemIcon Name="HorizontalRight" Position="13,31" />
+</Objects>
