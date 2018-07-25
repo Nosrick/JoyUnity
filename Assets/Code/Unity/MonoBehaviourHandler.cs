@@ -46,7 +46,7 @@ namespace JobLib.Code.Unity
             {
                 if(m_JoyObject.GetType() == typeof(ItemInstance))
                 {
-                    m_SpriteRenderer.sortingLayerName = "Items";
+                    m_SpriteRenderer.sortingLayerName = "Objects";
                 }
                 else
                 {
