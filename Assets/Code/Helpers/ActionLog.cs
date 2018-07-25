@@ -20,7 +20,9 @@ namespace JoyLib.Code.Helpers
             }
 
             if (m_Log.Count > LINES_TO_KEEP)
+            {
                 m_Log.RemoveAt(0);
+            }
         }
 
         public static void LogDamage(int damage, Entity attacker, Entity defender, ItemInstance weapon)

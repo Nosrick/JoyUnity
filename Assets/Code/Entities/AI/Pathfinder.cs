@@ -361,17 +361,25 @@ namespace JoyLib.Code.Entities.AI
                     // the TotalCost is higher, we will throw away the current successor.
                     AStarNode NodeOpen = null;
                     if (m_OpenList.Contains(NodeSuccessor))
+                    {
                         NodeOpen = (AStarNode)m_OpenList[m_OpenList.IndexOf(NodeSuccessor)];
+                    }
                     if ((NodeOpen != null) && (NodeSuccessor.totalCost > NodeOpen.totalCost))
+                    {
                         continue;
+                    }
 
                     // Test if the currect successor node is on the closed list, if it is and
                     // the TotalCost is higher, we will throw away the current successor.
                     AStarNode NodeClosed = null;
                     if (m_ClosedList.Contains(NodeSuccessor))
+                    {
                         NodeClosed = (AStarNode)m_ClosedList[m_ClosedList.IndexOf(NodeSuccessor)];
+                    }
                     if ((NodeClosed != null) && (NodeSuccessor.totalCost > NodeClosed.totalCost))
+                    {
                         continue;
+                    }
 
                     // Remove the old successor from the open list
                     m_OpenList.Remove(NodeOpen);
@@ -460,7 +468,9 @@ namespace JoyLib.Code.Entities.AI
 
             Vector2Int point = new Vector2Int(AX, AY);
             if (walls.Contains(point))
+            {
                 return;
+            }
 
             if (CurrentCost == -1)
             {
