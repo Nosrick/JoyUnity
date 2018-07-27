@@ -53,3 +53,6 @@ TagManager:
   - name: Entities
     uniqueID: 3339809639
     locked: 0
+  - name: Fog of War
+    uniqueID: 4192967451
+    locked: 0

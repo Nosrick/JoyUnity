@@ -2,13 +2,10 @@
 using JoyLib.Code.Entities.AI;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Helpers;
-using JoyLib.Code.IO;
 using JoyLib.Code.Managers;
-using JoyLib.Code.States;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using UnityEngine;
 
 namespace JoyLib.Code.World
@@ -32,6 +29,7 @@ namespace JoyLib.Code.World
         protected List<Entity> m_Entities;
         
         protected List<JoyObject> m_Objects;
+        protected Dictionary<Vector2Int, JoyObject> m_Walls;
         
         protected Vector2Int m_SpawnPoint;
 
@@ -54,6 +52,7 @@ namespace JoyLib.Code.World
             m_Areas = new Dictionary<Vector2Int, WorldInstance>();
             m_Entities = new List<Entity>();
             m_Objects = new List<JoyObject>();
+            m_Walls = new Dictionary<Vector2Int, JoyObject>();
             GUID = GUIDManager.AssignGUID();
             m_Discovered = new bool[m_Tiles.GetLength(0), m_Tiles.GetLength(1)];
             m_Light = new int[m_Tiles.GetLength(0), m_Tiles.GetLength(1)];
@@ -69,7 +68,7 @@ namespace JoyLib.Code.World
         /// <param name="type"></param>
         /// <param name="name"></param>
         public WorldInstance(WorldTile[,] tiles, Dictionary<Vector2Int, WorldInstance> areas, List<Entity> entities,
-            List<JoyObject> objects, WorldType type, string name)
+            List<JoyObject> objects, Dictionary<Vector2Int, JoyObject> walls, WorldType type, string name)
         {
             this.Name = name;
             this.m_Type = type;
@@ -77,6 +76,7 @@ namespace JoyLib.Code.World
             m_Areas = areas;
             m_Entities = entities;
             m_Objects = objects;
+            m_Walls = walls;
             GUID = GUIDManager.AssignGUID();
             m_Discovered = new bool[m_Tiles.GetLength(0), m_Tiles.GetLength(1)];
             CalculatePlayerIndex();
@@ -110,7 +110,9 @@ namespace JoyLib.Code.World
             for(int i = 0; i < objects.Count; i++)
             {
                 if (objects[i] is ItemInstance == false)
+                {
                     continue;
+                }
 
                 ItemInstance item = (ItemInstance)objects[i];
 
@@ -173,22 +175,20 @@ namespace JoyLib.Code.World
         {
             int[,] vision = lightRef;
 
-            lock (m_Objects)
-            {
-                Dictionary<Vector2Int, JoyObject> walls = m_Objects.Where(x => x.IsWall).ToDictionary(x => x.WorldPosition, x => x);
+            int lightLevel = objectRef.ItemType.LightLevel;
+            Rect lightRect = new Rect(objectRef.WorldPosition.x - lightLevel, objectRef.WorldPosition.y - lightLevel, lightLevel * 2, lightLevel * 2);
 
-                for (int i = 0; i < 360; i++)
-                {
-                    float x = (float)Math.Cos(i * 0.01745f);
-                    float y = (float)Math.Sin(i * 0.01745f);
-                    vision = LightTile(x, y, objectRef, walls, vision);
-                }
+            for (int i = 0; i < 360; i++)
+            {
+                float x = (float)Math.Cos(i * 0.01745f);
+                float y = (float)Math.Sin(i * 0.01745f);
+                vision = LightTile(x, y, objectRef, vision);
             }
 
             return vision;
         }
 
-        protected int[,] LightTile(float x, float y, ItemInstance objectRef, Dictionary<Vector2Int, JoyObject> walls, int[,] visionRef)
+        protected int[,] LightTile(float x, float y, ItemInstance objectRef, int[,] visionRef)
         {
             int[,] vision = visionRef;
             float oX, oY;
@@ -196,21 +196,28 @@ namespace JoyLib.Code.World
             oX = objectRef.WorldPosition.x + 0.5f;
             oY = objectRef.WorldPosition.y + 0.5f;
 
+            int itemPosX = objectRef.WorldPosition.x;
+            int itemPosY = objectRef.WorldPosition.y;
+
             for (int i = 0; i < objectRef.ItemType.LightLevel; i++)
             {
 
+                int posX = (int)oX;
+                int posY = (int)oY;
                 if (oX < 0.0f || oY < 0.0f || oX >= vision.GetLength(0) || oY >= vision.GetLength(1))
+                {
                     return vision;
+                }
 
                 /*
-                if (m_Light[(int)oX, (int)oY] == 0)
+                if (Walls.ContainsKey(new Vector2Int(posX, posY)))
+                {
                     return vision;
+                }
                 */
 
-                vision[(int)oX, (int)oY] = (int)Math.Max(0, (objectRef.ItemType.LightLevel - Vector2.Distance(objectRef.WorldPosition, new Vector2(oX, oY))));
-                //vision[(int)oX, (int)oY] = Math.Min(16, vision[(int)oX, (int)oY]);
-                if (walls.ContainsKey(new Vector2Int((int)oX, (int)oY)))
-                    return vision;
+                int lightLevel = (int)Math.Max(objectRef.ItemType.LightLevel, Math.Sqrt(((itemPosX - posX) * (itemPosX - posX) + (itemPosY - posY) * (itemPosY - posY))));
+                vision[posX, posY] = lightLevel;
 
                 oX += x;
                 oY += y;
@@ -221,7 +228,11 @@ namespace JoyLib.Code.World
 
         public void AddObject(JoyObject objectRef)
         {
-            lock(m_Objects)
+            if(objectRef.IsWall)
+            {
+                m_Walls.Add(objectRef.WorldPosition, objectRef);
+            }
+            else
             {
                 m_Objects.Add(objectRef);
             }
@@ -229,15 +240,12 @@ namespace JoyLib.Code.World
 
         public void RemoveObject(Vector2Int positionRef)
         {
-            lock(m_Objects)
+            for (int i = 0; i < m_Objects.Count; i++)
             {
-                for (int i = 0; i < m_Objects.Count; i++)
+                if (m_Objects[i].WorldPosition == positionRef)
                 {
-                    if (m_Objects[i].WorldPosition == positionRef)
-                    {
-                        m_Objects.RemoveAt(i);
-                        return;
-                    }
+                    m_Objects.RemoveAt(i);
+                    return;
                 }
             }
         }
@@ -269,13 +277,11 @@ namespace JoyLib.Code.World
 
         public void Update()
         {
-            Thread thread = new Thread(new ThreadStart(CalculateLightLevels));
-            thread.Start();
+            //CalculateLightLevels();
 
             foreach (Entity entity in m_Entities)
             {
-                Thread childThread = new Thread(new ThreadStart(entity.UpdateMe));
-                childThread.Start();
+                entity.UpdateMe();
             }
         }
 
@@ -515,6 +521,19 @@ namespace JoyLib.Code.World
             return worlds;
         }
 
+        public Vector2Int GetTransitionPointForParent()
+        {
+            foreach(KeyValuePair<Vector2Int, WorldInstance> pair in Parent.m_Areas)
+            {
+                if(pair.Value.GUID == this.GUID)
+                {
+                    return pair.Key;
+                }
+            }
+
+            return new Vector2Int(-1, -1);
+        }
+
         public WorldInstance GetOverworld()
         {
             if(Parent == null)
@@ -594,24 +613,68 @@ namespace JoyLib.Code.World
         {
             bool[,] vision = visionRef;
 
-            float entityPerceptionMod = entityRef.Statistics[StatisticIndex.Perception] / 10 + 1;
-
-            lock(m_Objects)
+            int entityPerception = entityRef.Statistics[StatisticIndex.Perception] + Entity.MINIMUM_VISION_DISTANCE;
+            for(int i = 0; i < 360; i++)
             {
-                Dictionary<Vector2Int, JoyObject> walls = m_Objects.Where(x => x.IsWall).ToDictionary(x => x.WorldPosition, x => x);
+                float x = (float)Math.Cos(i * 0.01745f);
+                float y = (float)Math.Sin(i * 0.01745f);
+                vision = DiscoverTile(x, y, entityRef, entityPerception, vision);
+            }
+            return vision;
+        }
 
-                for (int i = 0; i < 360; i++)
+        protected bool[,] DiscoverTile(float x, float y, Entity entityRef, int perception, bool[,] visionRef)
+        {
+            bool[,] vision = visionRef;
+
+            float oX = entityRef.WorldPosition.x + 0.5f;
+            float oY = entityRef.WorldPosition.y + 0.5f;
+
+            int arrayX = vision.GetLength(0);
+            int arrayY = vision.GetLength(1);
+
+            for (int i = 0; i < perception; i++)
+            {
+                if(oX < 0.0f || oY < 0.0f || oX >= arrayX || oY >= arrayY)
                 {
-                    float x = (float)Math.Cos(i * 0.01745f);
-                    float y = (float)Math.Sin(i * 0.01745f);
-                    vision = DiscoverTile(x, y, entityRef, entityPerceptionMod, walls, vision);
+                    return vision;
                 }
+
+                int posX = (int)oX;
+                int posY = (int)oY;
+
+                vision[posX, posY] = true;
+                if(Walls.ContainsKey(new Vector2Int(posX, posY)))
+                {
+                    return vision;
+                }
+
+                oX += x;
+                oY += y;
             }
 
             return vision;
         }
 
-        protected bool[,] DiscoverTile(float x, float y, Entity entityRef, float perceptionMod, 
+        protected bool[,] DiscoverTilesOLD(Vector2Int pointRef, Entity entityRef, bool[,] visionRef)
+        {
+            bool[,] vision = visionRef;
+
+            float entityPerceptionMod = entityRef.Statistics[StatisticIndex.Perception] / 10 + 1;
+            
+            Dictionary<Vector2Int, JoyObject> walls = m_Objects.Where(x => x.IsWall).ToDictionary(x => x.WorldPosition, x => x);
+
+            for (int i = 0; i < 360; i++)
+            {
+                float x = (float)Math.Cos(i * 0.01745f);
+                float y = (float)Math.Sin(i * 0.01745f);
+                vision = DiscoverTileOLD(x, y, entityRef, entityPerceptionMod, walls, vision);
+            }
+
+            return vision;
+        }
+
+        protected bool[,] DiscoverTileOLD(float x, float y, Entity entityRef, float perceptionMod, 
             Dictionary<Vector2Int, JoyObject> walls, bool[,] visionRef)
         {
             bool[,] vision = visionRef;
@@ -901,6 +964,14 @@ namespace JoyLib.Code.World
                 return m_Objects;
             }
         }
+
+        public Dictionary<Vector2Int, JoyObject> Walls
+        {
+            get
+            {
+                return m_Walls;
+            }
+        }
         
         public Vector2Int SpawnPoint
         {
@@ -912,12 +983,6 @@ namespace JoyLib.Code.World
             {
                 m_SpawnPoint = value;
             }
-        }
-
-        public Vector2Int TransitionPoint
-        {
-            get;
-            set;
         }
         
         public WorldInstance Parent

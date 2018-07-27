@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Objects>
+  <TilesetName>Obscure</TilesetName>
+  <Sheet>obscure</Sheet>
+  <ItemIcon Name="Obscure" Position="0,0"/>
+</Objects>

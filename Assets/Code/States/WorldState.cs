@@ -30,6 +30,8 @@ namespace JoyLib.Code.States
         protected const int TICK_TIMER = 50;
         protected double m_TickTimer;
 
+        protected GameObject m_FogOfWarHolder;
+
         public WorldState(WorldInstance overworldRef, WorldInstance activeWorldRef, GameplayFlags flagsRef) : base()
         {
             m_ActiveWorld = activeWorldRef;
@@ -40,6 +42,7 @@ namespace JoyLib.Code.States
             //MusicHandler.Play("DashRoog");
 
             m_Camera = GameObject.Find("Main Camera").GetComponent<Camera>();
+            m_FogOfWarHolder = GameObject.Find("WorldFog");
         }
 
         public override void LoadContent()
@@ -175,6 +178,7 @@ namespace JoyLib.Code.States
             
             */
 
+            /*
             if(Input.GetMouseButtonDown(0))
             {
                 Vector3 mouseWorld = m_Camera.ScreenToWorldPoint(Input.mousePosition);
@@ -186,13 +190,14 @@ namespace JoyLib.Code.States
                 player.SetPath(path);
                 autoTurn = true;
             }
+            */
 
             if (Input.GetKeyDown(KeyCode.Return))
             {
                 //Going up a level
                 if (m_ActiveWorld.Parent != null && player.WorldPosition == m_ActiveWorld.SpawnPoint && !player.HasMoved)
                 {
-                    ChangeWorld(m_ActiveWorld.Parent, m_ActiveWorld.Parent.TransitionPoint);
+                    ChangeWorld(m_ActiveWorld.Parent, m_ActiveWorld.GetTransitionPointForParent());
                 }
 
                 //Going down a level
@@ -464,23 +469,36 @@ namespace JoyLib.Code.States
 
         protected void DrawObjects()
         {
-            Color obscured = LightLevelHelper.GetColour(1);
+            Entity player = m_ActiveWorld.Player;
 
-            lock(m_ActiveWorld.Objects)
+            for(int i = 0; i < m_FogOfWarHolder.transform.childCount; i++)
             {
+                GameObject fog = m_FogOfWarHolder.transform.GetChild(i).gameObject;
+                Vector2Int position = new Vector2Int((int)fog.transform.position.x, (int)fog.transform.position.y);
+
+                bool visible = player.Vision[position.x, position.y];
+                int lightLevel;
+                if(visible)
+                {
+                    lightLevel = 16;
+                }
+                else
+                {
+                    lightLevel = 0;
+                }
+
+                fog.GetComponent<SpriteRenderer>().color = LightLevelHelper.GetColour(lightLevel);
             }
         }
 
         protected void DrawEntities()
         {
-            lock(m_ActiveWorld.Entities)
-            {
-            }
         }
 
         public override void Update()
         {
             base.Update();
+            DrawObjects();
         }
 
         private void GainFocus()

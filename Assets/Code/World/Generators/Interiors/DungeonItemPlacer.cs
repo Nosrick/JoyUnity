@@ -16,7 +16,7 @@ namespace JoyLib.Code.World.Generators.Interiors
             int itemsToPlace = dungeonArea / 50;
 
             List<Vector2Int> unavailablePoints = new List<Vector2Int>();
-            foreach(JoyObject wall in worldRef.Objects.Where(x => x.IsWall))
+            foreach(JoyObject wall in worldRef.Walls.Values)
             {
                 unavailablePoints.Add(wall.WorldPosition);
             }

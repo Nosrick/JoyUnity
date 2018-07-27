@@ -1,4 +1,5 @@
 ﻿using JoyLib.Code.Entities;
+using JoyLib.Code.Entities.Items;
 using JoyLib.Code.States.Gameplay;
 using JoyLib.Code.World;
 using JoyLib.Code.World.Generators;
@@ -48,21 +49,19 @@ namespace JoyLib.Code.States
             OverworldGenerator overworldGen = new OverworldGenerator();
 
             //Generate the basic overworld
-            m_World = new WorldInstance(overworldGen.GenerateWorldSpace(WORLD_SIZE), new Dictionary<Vector2Int, WorldInstance>(), new List<Entity>(),
-                new List<JoyObject>(), WorldType.Overworld, "Everse");
+            m_World = new WorldInstance(overworldGen.GenerateWorldSpace(WORLD_SIZE), WorldType.Overworld, "Everse");
 
             //Set the date and time for 1/1/1555, 12:00pm
             m_World.SetDateTime(new DateTime(1555, 1, 1, 12, 0, 0));
 
             //Do the spawn point
             SpawnPointPlacer spawnPlacer = new SpawnPointPlacer();
-            Vector2Int transition = spawnPlacer.PlaceSpawnPoint(m_World);
-            while((transition.x == -1 && transition.y == -1))
+            Vector2Int spawnPoint = spawnPlacer.PlaceSpawnPoint(m_World);
+            while((spawnPoint.x == -1 && spawnPoint.y == -1))
             {
-                transition = spawnPlacer.PlaceSpawnPoint(m_World);
+                spawnPoint = spawnPlacer.PlaceSpawnPoint(m_World);
             }
-            m_World.SpawnPoint = transition;
-            m_World.TransitionPoint = spawnPlacer.PlaceTransitionPoint(m_World);
+            m_World.SpawnPoint = spawnPoint;
 
             //Set up the player
             m_Player.Move(m_World.SpawnPoint);
@@ -75,53 +74,12 @@ namespace JoyLib.Code.States
             dungeonTypes.Add("Slime");
 
             WorldInstance dungeon = DungeonGenerator.GenerateDungeon("Naga Pits", WORLD_SIZE, 3, dungeonTypes.ToArray());
-            m_World.AddArea(m_World.TransitionPoint, dungeon);
-            
-            /*
-            DungeonInteriorGenerator dunGen = new DungeonInteriorGenerator();
-            WorldInstance firstFloor = new WorldInstance(dunGen.GenerateWorldSpace(WORLD_SIZE), new Dictionary<Vector2Int, WorldInstance>(),
-                new List<Entity>(), dunGen.GenerateWalls(), WorldType.Interior, "Naga Pits 1");
 
-            //Do the spawn point
-            firstFloor.SpawnPoint = spawnPlacer.PlaceSpawnPoint(firstFloor);
-            List<Entity> newEntities = DungeonEntityPlacer.PlaceEntities(firstFloor, dungeonTypes);
-            foreach(Entity entity in newEntities)
-            {
-                firstFloor.AddEntity(entity);
-            }
-
-            transition = spawnPlacer.PlaceTransitionPoint(firstFloor);
-            while ((transition.x == -1 && transition.y == -1) || transition == m_World.SpawnPoint)
-            {
-                transition = spawnPlacer.PlaceTransitionPoint(firstFloor);
-            }
-
-            firstFloor.Objects.AddRange(DungeonItemPlacer.PlaceItems(firstFloor));
-
-            //Adding the first floor
-            m_World.AddArea(transition, firstFloor);
-            m_World.TransitionPoint = transition;
-            
-            WorldInstance secondFloor = new WorldInstance(dunGen.GenerateWorldSpace(WORLD_SIZE), new Dictionary<Vector2Int, WorldInstance>(),
-                new List<Entity>(), dunGen.GenerateWalls(), WorldType.Interior, "Naga Pits 2");
-            secondFloor.SpawnPoint = spawnPlacer.PlaceSpawnPoint(secondFloor);
-
-            transition = spawnPlacer.PlaceTransitionPoint(secondFloor);
-            while ((transition.x == -1 && transition.y == -1) || transition == secondFloor.SpawnPoint)
-            {
-                transition = spawnPlacer.PlaceTransitionPoint(secondFloor);
-            }
-
-            firstFloor.AddArea(transition, secondFloor);
-            
-            WorldInstance thirdFloor = new WorldInstance(dunGen.GenerateWorldSpace(WORLD_SIZE), new Dictionary<Vector2Int, WorldInstance>(),
-                new List<Entity>(), dunGen.GenerateWalls(), WorldType.Interior, "Naga Pits 3");
-            thirdFloor.SpawnPoint = spawnPlacer.PlaceSpawnPoint(thirdFloor);
-            secondFloor.AddArea(transition, thirdFloor);
-
-            //SimulateWorld();
-            */
+            Vector2Int transitionPoint = spawnPlacer.PlaceTransitionPoint(m_World);
+            m_World.AddArea(transitionPoint, dungeon);
             Done = true;
+
+            m_Player.AddItem(new ItemInstance(ItemHandler.GetSpecificItem("Lantern"), new Vector2Int(-1, -1), true));
         }
 
         protected void SimulateWorld()

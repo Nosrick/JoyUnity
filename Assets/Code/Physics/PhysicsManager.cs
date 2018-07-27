@@ -16,19 +16,20 @@ namespace JoyLib.Code.Physics
                     return PhysicsResult.EntityCollision;
             }
 
-            lock(worldRef.Objects)
+            if (worldRef.Walls.ContainsKey(to))
             {
-                if (worldRef.Objects.Any(x => x.WorldPosition.Equals(to) && x.IsWall))
-                {
-                    return PhysicsResult.WallCollision;
-                }
-
-                if (worldRef.Objects.Any(x => x.WorldPosition.Equals(to)))
-                {
-                    return PhysicsResult.ObjectCollision;
-                }
+                return PhysicsResult.WallCollision;
             }
-            return PhysicsResult.None;
+
+            JoyObject obj = worldRef.GetObject(to);
+            if (obj != null)
+            {
+                return PhysicsResult.ObjectCollision;
+            }   
+            else
+            {
+                return PhysicsResult.None;
+            }
         }
     }
 }

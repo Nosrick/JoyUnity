@@ -14,7 +14,7 @@ namespace JoyLib.Code.Helpers
         public static Color GetColour(int light)
         {
             float normalised = Normalise(light);
-            return new Color(normalised, normalised, normalised, 1.0f);
+            return new Color(normalised, normalised, normalised, 1.0f - normalised);
         }
     }
 }

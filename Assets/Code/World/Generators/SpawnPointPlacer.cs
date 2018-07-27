@@ -1,6 +1,5 @@
 ﻿using JoyLib.Code.Entities.AI;
 using JoyLib.Code.Helpers;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -11,7 +10,6 @@ namespace JoyLib.Code.World.Generators
     {
         public Vector2Int PlaceSpawnPoint(WorldInstance worldRef)
         {
-            Dictionary<Vector2Int, JoyObject> walls = worldRef.Objects.Where(a => a.IsWall).ToDictionary(a => a.WorldPosition, a => a);
             int x, y;
 
             x = RNG.Roll(1, worldRef.Tiles.GetLength(0) - 1);
@@ -19,7 +17,7 @@ namespace JoyLib.Code.World.Generators
 
             Vector2Int point = new Vector2Int(x, y);
 
-            while (walls.Keys.Any(l => l.ToString().Equals(point.ToString())))
+            while (worldRef.Walls.Keys.Any(l => l.Equals(point)))
             {
                 x = RNG.Roll(1, worldRef.Tiles.GetLength(0) - 1);
                 y = RNG.Roll(1, worldRef.Tiles.GetLength(1) - 1);
@@ -32,8 +30,6 @@ namespace JoyLib.Code.World.Generators
         public Vector2Int PlaceTransitionPoint(WorldInstance worldRef)
         {
             int breakout = (worldRef.Tiles.GetLength(0) * worldRef.Tiles.GetLength(1)) / 4;
-
-            Dictionary<Vector2Int, JoyObject> walls = worldRef.GetObjectsOfType("Wall");
             int x, y;
 
             x = RNG.Roll(1, worldRef.Tiles.GetLength(0) - 1);
@@ -42,7 +38,7 @@ namespace JoyLib.Code.World.Generators
             Vector2Int point = new Vector2Int(x, y);
 
             int count = 0;
-            while (walls.Keys.Any(l => l == point) && 
+            while (worldRef.Walls.Keys.Any(l => l == point) && 
                 (point.x != worldRef.SpawnPoint.x && point.y != worldRef.SpawnPoint.y ||
                 count < breakout))
             {
@@ -62,7 +58,7 @@ namespace JoyLib.Code.World.Generators
             else
             {
                 count = 0;
-                while (walls.Keys.Any(l => l == point) &&
+                while (worldRef.Walls.Keys.Any(l => l == point) &&
                 (point.x != worldRef.SpawnPoint.x && point.y != worldRef.SpawnPoint.y ||
                 count < breakout))
                 {

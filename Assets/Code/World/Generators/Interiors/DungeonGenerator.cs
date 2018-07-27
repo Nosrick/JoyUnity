@@ -45,11 +45,6 @@ namespace JoyLib.Code.World.Generators.Interiors
                 //Do the spawn points
                 worldInstance.SpawnPoint = spawnPointPlacer.PlaceSpawnPoint(worldInstance);
 
-                if (i != levels)
-                {
-                    worldInstance.TransitionPoint = spawnPointPlacer.PlaceTransitionPoint(worldInstance);
-                }
-
                 //Use this as our root if we don't have one
                 if(root == null)
                 {

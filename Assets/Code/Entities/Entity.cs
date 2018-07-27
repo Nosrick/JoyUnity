@@ -69,6 +69,8 @@ namespace JoyLib.Code.Entities
         protected const int NEED_FULFILMENT_COUNTER = 5;
         protected const int REGEN_TICK_TIME = 10;
 
+        public const int MINIMUM_VISION_DISTANCE = 5;
+
         protected static Dictionary<string, CultureType> s_Cultures = CultureLoader.LoadCultures();
 
         /// <summary>
