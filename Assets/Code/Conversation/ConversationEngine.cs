@@ -18,15 +18,15 @@ namespace JoyLib.Code.Conversation
         
         public static List<TopicData> Converse(Entity instigator, Entity listener, int selectedItem = 0)
         {
-            instigator.FulfillNeed(NeedIndex.Friendship, listener.Statistics[StatisticIndex.Personality], 0);
-            listener.FulfillNeed(NeedIndex.Friendship, instigator.Statistics[StatisticIndex.Personality], 0);
-            instigator.InfluenceMe(listener.GUID, listener.Statistics[StatisticIndex.Personality]);
-            listener.InfluenceMe(instigator.GUID, instigator.Statistics[StatisticIndex.Personality]);
+            instigator.FulfillNeed(NeedIndex.Friendship, listener.Statistics[StatisticIndex.Personality].Value, 0);
+            listener.FulfillNeed(NeedIndex.Friendship, instigator.Statistics[StatisticIndex.Personality].Value, 0);
+            instigator.InfluenceMe(listener.GUID, listener.Statistics[StatisticIndex.Personality].Value);
+            listener.InfluenceMe(instigator.GUID, instigator.Statistics[StatisticIndex.Personality].Value);
 
             if (instigator.Family.ContainsKey(listener.GUID))
             {
-                instigator.FulfillNeed(NeedIndex.Family, listener.Statistics[StatisticIndex.Personality], 0);
-                listener.FulfillNeed(NeedIndex.Family, instigator.Statistics[StatisticIndex.Personality], 0);
+                instigator.FulfillNeed(NeedIndex.Family, listener.Statistics[StatisticIndex.Personality].Value, 0);
+                listener.FulfillNeed(NeedIndex.Family, instigator.Statistics[StatisticIndex.Personality].Value, 0);
             }
 
             //If selectedItem == 0, the conversation is just starting

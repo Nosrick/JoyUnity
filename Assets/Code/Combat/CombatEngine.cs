@@ -7,6 +7,7 @@ namespace JoyLib.Code.Combat
 {
     public static class CombatEngine
     {
+        /*
         public static void PerformCombat(Entity attackerRef, Entity defenderRef)
         {
             ItemInstance attackerMainWeapon = attackerRef.GetEquipment("Hand1");
@@ -44,26 +45,31 @@ namespace JoyLib.Code.Combat
                 QuestTracker.PerformEntityDestruction(defenderRef, attackerRef );
             }
         }
+        */
 
-        public static int SwingWeapon(Entity attackerRef, JoyObject defenderRef, ItemInstance weaponRef, bool log = true)
+        //PUT IN EVENT PROCESSING TRIGGERS AND STUFF
+        public static int SwingWeapon(Entity attackerRef, JoyObject defenderRef, bool log = true)
         {
-            if(weaponRef == null)
+            ItemInstance mainHand = attackerRef.GetEquipment("Hand1");
+            ItemInstance offHand = attackerRef.GetEquipment("Hand2");
+
+            if(mainHand == null)
             {
                 return 0;
             }
 
-            int attackerToHit = RNG.Roll(1, attackerRef.Statistics[StatisticIndex.Agility]);
+            int attackerToHit = RNG.RollSuccesses(attackerRef.Statistics[StatisticIndex.Agility].Value, attackerRef.Statistics[StatisticIndex.Agility].SuccessThreshold);
             int attackerSkillBonus = 0;
-            if (weaponRef.ItemType.GoverningSkill != "None")
+            if (mainHand.ItemType.GoverningSkill != "None")
             {
-                if (attackerRef.Skills[weaponRef.ItemType.GoverningSkill].value > 0)
+                if (attackerRef.Skills[mainHand.ItemType.GoverningSkill].value > 0)
                 {
-                    attackerSkillBonus = RNG.Roll(1, attackerRef.Skills[weaponRef.ItemType.GoverningSkill].value);
+                    attackerSkillBonus = RNG.RollSuccesses(attackerRef.Skills[mainHand.ItemType.GoverningSkill].value, attackerRef.Skills[mainHand.ItemType.GoverningSkill].SuccessThreshold);
                 }
             }
             else
             {
-                attackerSkillBonus = RNG.Roll(1, attackerRef.Skills["Throwing"].value);
+                attackerSkillBonus = RNG.RollSuccesses(attackerRef.Skills["Throwing"].value, attackerRef.Skills["Throwing"].SuccessThreshold);
             }
 
             attackerToHit += attackerSkillBonus;
@@ -71,26 +77,33 @@ namespace JoyLib.Code.Combat
             if (defenderRef.GetType().Equals(typeof(Entity)))
             {
                 Entity defender = (Entity)defenderRef;
-                int defenderDodge = RNG.Roll(1, (int)defender.Statistics[StatisticIndex.Agility]);
+                int defenderDodge = RNG.RollSuccesses(attackerRef.Statistics[StatisticIndex.Agility].Value, attackerRef.Statistics[StatisticIndex.Agility].SuccessThreshold);
                 int defenderEvasion = 0;
 
                 if (defender.Skills["Evasion"].value > 0)
-                    defenderEvasion = RNG.Roll(1, defender.Skills["Evasion"].value);
+                {
+                    defenderEvasion = RNG.RollSuccesses(defender.Skills["Evasion"].value, defender.Skills["Evasion"].SuccessThreshold);
+                }
 
                 defenderDodge += defenderEvasion;
 
                 if (attackerToHit < defenderDodge)
                 {
-                    if(log)
-                        ActionLog.AddText(attackerRef.JoyName+ " misses " + defenderRef.JoyName, LogType.Information);
+                    if (log)
+                    {
+                        ActionLog.AddText(attackerRef.JoyName + " misses " + defenderRef.JoyName, LogType.Information);
+                    }
+
                     return 0;
                 }
             }
 
-            int totalDamage = attackerToHit + attackerSkillBonus + RNG.Roll(1, attackerRef.Statistics[StatisticIndex.Strength]);
+            int totalDamage = attackerToHit + attackerSkillBonus + RNG.RollSuccesses(attackerRef.Statistics[StatisticIndex.Strength].Value, attackerRef.Statistics[StatisticIndex.Strength].SuccessThreshold);
 
             if (log)
-                ActionLog.AddText(attackerRef.JoyName + " " + weaponRef.ItemType.ActionString + " " + defenderRef.JoyName + " for " + totalDamage, LogType.Information);
+            {
+                ActionLog.AddText(attackerRef.JoyName + " " + mainHand.ItemType.ActionString + " " + defenderRef.JoyName + " for " + totalDamage, LogType.Information);
+            }
 
             return totalDamage;
         }

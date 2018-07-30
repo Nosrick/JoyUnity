@@ -30,7 +30,7 @@ namespace JoyLib.Code.Loaders
                     string tileset;
                     bool sentient;
                     int size;
-                    Dictionary<StatisticIndex, int> statistics;
+                    Dictionary<StatisticIndex, EntityStatistic> statistics;
                     Dictionary<string, EntitySkill> skills;
                     List<Ability> abilities;
                     VisionType visionType;
@@ -53,7 +53,7 @@ namespace JoyLib.Code.Loaders
                             tileset = "DEFAULT";
                             sentient = false;
                             size = 1;
-                            statistics = new Dictionary<StatisticIndex, int>(9);
+                            statistics = new Dictionary<StatisticIndex, EntityStatistic>(9);
                             skills = new Dictionary<string, EntitySkill>();
                             
 
@@ -95,7 +95,7 @@ namespace JoyLib.Code.Loaders
                                     int statValue;
                                     int.TryParse(reader.GetAttribute("Value"), out statValue);
 
-                                    statistics.Add(statIndex, statValue);
+                                    statistics.Add(statIndex, new EntityStatistic(statValue, GlobalConstants.DEFAULT_SUCCESS_THRESHOLD));
                                 }
                                 else if(reader.Name.Equals("VisionType"))
                                 {

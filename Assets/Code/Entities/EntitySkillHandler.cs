@@ -16,7 +16,7 @@ namespace JoyLib.Code.Entities
             
             foreach(string key in s_SkillCoefficients.Keys)
             {
-                skills.Add(key, new EntitySkill(1, 0, s_SkillCoefficients[key], governingNeeds));
+                skills.Add(key, new EntitySkill(1, GlobalConstants.DEFAULT_SUCCESS_THRESHOLD, 0, s_SkillCoefficients[key], governingNeeds));
             }
 
             return skills;

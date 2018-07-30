@@ -40,8 +40,8 @@ public class GameManager : MonoBehaviour
         RNG.SetSeed(DateTime.Now.Millisecond);
         ScriptingEngine.Initialise();
         ObjectIcons.Load();
-        AbilityHandler.Initialise();
         NeedHandler.Initialise();
+        AbilityHandler.Initialise();
         JobHandler.Initialise();
         CultureHandler.Initialise();
         MaterialHandler.Initialise();

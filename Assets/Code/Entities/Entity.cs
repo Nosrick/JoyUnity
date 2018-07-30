@@ -1,4 +1,5 @@
-﻿using JoyLib.Code.Cultures;
+﻿using JoyLib.Code.Combat;
+using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.AI;
 using JoyLib.Code.Entities.Items;
@@ -8,6 +9,7 @@ using JoyLib.Code.Helpers;
 using JoyLib.Code.Loaders;
 using JoyLib.Code.Physics;
 using JoyLib.Code.Quests;
+using JoyLib.Code.Scripting;
 using JoyLib.Code.States;
 using JoyLib.Code.World;
 using System;
@@ -19,7 +21,7 @@ namespace JoyLib.Code.Entities
 {
     public class Entity : JoyObject
     {
-        protected Dictionary<StatisticIndex, int> m_Statistics;
+        protected Dictionary<StatisticIndex, EntityStatistic> m_Statistics;
         protected Dictionary<string, EntitySkill> m_Skills;
         protected Dictionary<NeedIndex, EntityNeed> m_Needs;
         protected List<Ability> m_Abilities;
@@ -72,6 +74,8 @@ namespace JoyLib.Code.Entities
 
         public const int MINIMUM_VISION_DISTANCE = 5;
 
+        public const int ATTACK_THRESHOLD = -50;
+
         protected static Dictionary<string, CultureType> s_Cultures = CultureLoader.LoadCultures();
 
         /// <summary>
@@ -99,7 +103,7 @@ namespace JoyLib.Code.Entities
             Vector2Int position, List<Sprite> sprites, ItemInstance naturalWeapons, Dictionary<string, ItemInstance> equipment, 
             List<ItemInstance> backpack, Dictionary<long, int> relationships, List<string> identifiedItems, Dictionary<long, RelationshipStatus> family,
             Dictionary<string, int> jobLevels, WorldInstance world, string tileset) : 
-            base(NameProvider.GetRandomName(template.CreatureType, sex), template.Statistics[StatisticIndex.Endurance] * 2, position, sprites, template.JoyType, true)
+            base(NameProvider.GetRandomName(template.CreatureType, sex), template.Statistics[StatisticIndex.Endurance].Value * 2, position, sprites, template.JoyType, true)
         {
             this.CreatureType = template.CreatureType;
 
@@ -145,11 +149,6 @@ namespace JoyLib.Code.Entities
             this.m_Pathfinder = new Pathfinder();
             this.m_PathfindingData = new Queue<Vector2Int>();
 
-            foreach(EntityNeed need in this.m_Needs.Values)
-            {
-                need.SetParent(this);
-            }
-
             this.m_FulfillingNeed = (NeedIndex)(-1);
             this.m_FulfilmentCounter = 0;
 
@@ -173,7 +172,7 @@ namespace JoyLib.Code.Entities
         /// <param name="world"></param>
         public Entity(EntityTemplate template, Dictionary<NeedIndex, EntityNeed> needs, int level, JobType job, Sex sex, Sexuality sexuality,
             Vector2Int position, List<Sprite> sprites, WorldInstance world) :
-            base(NameProvider.GetRandomName(template.CreatureType, sex), template.Statistics[StatisticIndex.Endurance] * 2, position, sprites, template.JoyType, true)
+            base(NameProvider.GetRandomName(template.CreatureType, sex), template.Statistics[StatisticIndex.Endurance].Value * 2, position, sprites, template.JoyType, true)
         {
             this.CreatureType = template.CreatureType;
 
@@ -218,11 +217,6 @@ namespace JoyLib.Code.Entities
 
             this.m_Pathfinder = new Pathfinder();
             this.m_PathfindingData = new Queue<Vector2Int>();
-
-            foreach (EntityNeed need in this.m_Needs.Values)
-            {
-                need.SetParent(this);
-            }
 
             this.m_FulfillingNeed = (NeedIndex)(-1);
             this.m_FulfilmentCounter = 0;
@@ -395,101 +389,91 @@ namespace JoyLib.Code.Entities
 
             if (!PlayerControlled)
             {
-                List<NeedAIData> attackData = MyWorld.SearchForEntities(this, "Entities", Intent.Attack);
-                List<NeedAIData> validTargets = attackData.Where(x => x.target.GetType().Equals(typeof(Entity))).ToList();
-                validTargets = validTargets.Where(x => HasRelationship(x.target.GUID) < -50).ToList();
-
-                if (validTargets.Count > 0 && m_CurrentTarget.target == null)
+                //Attack immediate threats
+                List<NeedAIData> targets = MyWorld.SearchForEntities(this, "Any", Intent.Attack, EntityTypeSearch.Any, EntitySentienceSearch.Any);
+                List<NeedAIData> validTargets = targets.Where(x => this.HasRelationship(x.target.GUID) < ATTACK_THRESHOLD).ToList();
+                if(validTargets.Count > 0 && CurrentTarget.target == null)
                 {
-                    m_CurrentTarget = validTargets[RNG.Roll(0, validTargets.Count - 1)];
-                    m_PathfindingData = m_Pathfinder.FindPath(WorldPosition, m_CurrentTarget.target.WorldPosition, MyWorld);
-                    if (AdjacencyHelper.IsAdjacent(WorldPosition, m_CurrentTarget.target.WorldPosition))
+                    //TODO: Write a threat assessment system
+                    //For now, choose a random target and go after them
+                    int result = RNG.Roll(0, validTargets.Count - 1);
+                    NeedAIData data = validTargets[result];
+
+                    CurrentTarget = data;
+                    m_PathfindingData = m_Pathfinder.FindPath(this.WorldPosition, CurrentTarget.target.WorldPosition, this.MyWorld);
+                }
+
+                //If you're idle
+                if (CurrentTarget.idle == true)
+                {
+                    //Let's find something to do
+                    List<EntityNeed> needs = m_Needs.Values.OrderByDescending(x => x.priority).ToList();
+                    //Act on first need
+
+                    bool idle = true;
+                    foreach(EntityNeed need in needs)
                     {
-                        //CombatEngine.PerformCombat(this, (Entity)m_CurrentTarget.target);
+                        if(need.contributingHappiness)
+                        {
+                            continue;
+                        }
+
+                        ScriptingEngine.RunScript(need.InteractionFileContents, need.name, "SeekFulfillmentObject", new object[] { new MoonEntity(this) });
+                        idle = false;
+                        break;
+                    }
+                    m_CurrentTarget.idle = idle;
+                }
+                //Otherwise, carry on with what you're doing
+                else
+                {
+                    //If we've not arrived at our target
+                    if (WorldPosition != CurrentTarget.targetPoint || (CurrentTarget.target != null && AdjacencyHelper.IsAdjacent(WorldPosition, CurrentTarget.target.WorldPosition) == true))
+                    {
+                        //Move to target
+                        MoveToTarget(CurrentTarget);
                     }
                     else
                     {
-                        MoveToTarget(m_CurrentTarget);
-                    }
-                    return;
-                }
-                else if (m_CurrentTarget.target != null)
-                {
-                    if (m_PathfindingData.Count == 0)
-                    {
-                        m_PathfindingData = m_Pathfinder.FindPath(WorldPosition, m_CurrentTarget.target.WorldPosition, MyWorld);
-                    }
-                    if (AdjacencyHelper.IsAdjacent(WorldPosition, m_CurrentTarget.target.WorldPosition))
-                    {
-                        //CombatEngine.PerformCombat(this, (Entity)m_CurrentTarget.target);
-                    }
-                    else if (m_PathfindingData.Count > 0)
-                    {
-                        MoveToTarget(m_CurrentTarget);
-                    }
-                    return;
-                }
-
-                List<EntityNeed> needs = m_Needs.Values.OrderByDescending(x => x.priority).ToList();
-                //Act on needs first
-                foreach (EntityNeed need in needs)
-                {
-                    if (need.contributingHappiness)
-                        continue;
-
-                    if (m_FulfilmentCounter > 0)
-                        continue;
-
-                    if (need.needData.target != null)
-                    {
-                        MoveToTarget(need.needData);
-
-                        if (need.needData.target.GetType().Equals(typeof(ItemInstance)))
+                        //If we've arrived at the target point
+                        if(CurrentTarget.targetPoint != new Vector2Int(-1, -1))
                         {
-                            if (WorldPosition == need.needData.target.WorldPosition)
+                            try
                             {
-                                ActionLog.AddText(JoyName + " (" + GUID + ") has arrived at " + need.needData.target.JoyName + " at " + WorldPosition.ToString(), Helpers.LogType.Debug);
-                                //TODO: FIX THIS
-                                //need.ExecutePythonFunction("Interact", new dynamic[] { need, this, need.needData.target });
-                            }
-                        }
-                        else if (need.needData.target.GetType().Equals(typeof(Entity)))
-                        {
-                            Entity target = (Entity)need.needData.target;
-                            if (AdjacencyHelper.IsAdjacent(WorldPosition, need.needData.target.WorldPosition))
-                            {
-                                if (need.needData.intent == Intent.Interact && target.FulfilmentCounter <= 0)
+                                //We're interacting with an object here
+                                ItemInstance item = (ItemInstance)MyWorld.GetObject(CurrentTarget.targetPoint);
+                                if (item != null)
                                 {
-                                    //need.ExecutePythonFunction("Interact", new dynamic[] { need, this, need.needData.target });
-                                    if (target.PlayerControlled)
+                                    if (CurrentTarget.intent == Intent.Interact)
                                     {
-                                        WorldState.TalkToPlayer(this);
+                                        MyWorld.PickUpObject(this);
                                     }
-                                    else
+                                    else if(CurrentTarget.intent == Intent.Attack)
                                     {
-                                        m_FulfillingNeed = (NeedIndex)Enum.Parse(NeedIndex.Confidence.GetType(), need.name);
-                                        m_FulfilmentCounter = NEED_FULFILMENT_COUNTER;
+                                        CombatEngine.SwingWeapon(this, item);
                                     }
                                 }
                             }
-                            else
+                            catch(Exception e)
                             {
-
-                                if (m_PathfindingData.Count == 0)
-                                {
-                                    m_PathfindingData = m_Pathfinder.FindPath(WorldPosition, need.needData.target.WorldPosition, MyWorld);
-                                }
+                                Debug.LogError(e.Message);
+                                Debug.LogError(e.StackTrace);
                             }
                         }
-                    }
-                    else if (need.needData.target == null)
-                    {
-                        MoveToTarget(need.needData);
-
-                        if (WorldPosition == need.needData.targetPoint)
+                        //If we have a target
+                        else if(CurrentTarget.target != null)
                         {
-                            ActionLog.AddText(JoyName + " (" + GUID + ") has arrived at " + need.needData.targetPoint + " and is looking for fulfilment of " + need.name + ".", Helpers.LogType.Debug);
+                            //We're interacting with an entity here
+                            if (CurrentTarget.intent == Intent.Interact)
+                            {
+                                //TODO: WRITE AN ENTITY INTERACTION
+                            }
+                            else if(CurrentTarget.intent == Intent.Attack)
+                            {
+                                CombatEngine.SwingWeapon(this, CurrentTarget.target);
+                            }
                         }
+                        
                     }
                 }
             }
@@ -504,7 +488,6 @@ namespace JoyLib.Code.Entities
                         m_PathfindingData.Dequeue();
                         Move(nextPoint);
                         HasMoved = true;
-                        //m_Vision = MyWorld.GetVision(this);
                     }
                     else if(physicsResult == PhysicsResult.EntityCollision)
                     {
@@ -513,7 +496,6 @@ namespace JoyLib.Code.Entities
                         m_PathfindingData.Dequeue();
                         Move(nextPoint);
                         HasMoved = true;
-                        //m_Vision = MyWorld.GetVision(this);
                     }
                 }
             }
@@ -530,7 +512,6 @@ namespace JoyLib.Code.Entities
                     m_PathfindingData.Dequeue();
                     Move(nextPoint);
                     HasMoved = true;
-                    m_Vision = MyWorld.GetVision(this);
                 }
                 else if (physicsResult == PhysicsResult.EntityCollision)
                 {
@@ -538,7 +519,6 @@ namespace JoyLib.Code.Entities
                     m_PathfindingData.Dequeue();
                     Move(nextPoint);
                     HasMoved = true;
-                    m_Vision = MyWorld.GetVision(this);
                 }
             }
             else if (m_PathfindingData.Count == 0)
@@ -668,7 +648,7 @@ namespace JoyLib.Code.Entities
         protected void PerformFirstImpression(long GUID)
         {
             Entity entity = MyWorld.GetEntityRecursive(GUID);
-            int firstImpression = (int)((entity.Statistics[StatisticIndex.Personality] + entity.Statistics[StatisticIndex.Suavity] + entity.Statistics[StatisticIndex.Wit]) / 3);
+            int firstImpression = (entity.Statistics[StatisticIndex.Personality].Value + entity.Statistics[StatisticIndex.Suavity].Value + entity.Statistics[StatisticIndex.Wit].Value);
             m_Relationships.Add(GUID, firstImpression);
         }
 
@@ -765,10 +745,10 @@ namespace JoyLib.Code.Entities
             int lastComp = m_Composure;
             int lastMana = m_Mana;
 
-            m_HitPoints = (int)(m_Statistics[StatisticIndex.Endurance] * 2);
-            m_Concentration = (int)(m_Statistics[StatisticIndex.Focus] * 2);
-            m_Composure = (int)(m_Statistics[StatisticIndex.Wit] * 2);
-            m_Mana = (int)(m_Statistics[StatisticIndex.Focus] + m_Statistics[StatisticIndex.Endurance] + m_Statistics[StatisticIndex.Wit]) / 3;
+            m_HitPoints = (int)(m_Statistics[StatisticIndex.Endurance].Value * 2);
+            m_Concentration = (int)(m_Statistics[StatisticIndex.Focus].Value * 2);
+            m_Composure = (int)(m_Statistics[StatisticIndex.Wit].Value * 2);
+            m_Mana = (int)(m_Statistics[StatisticIndex.Focus].Value + m_Statistics[StatisticIndex.Endurance].Value + m_Statistics[StatisticIndex.Wit].Value) / 3;
 
             m_HitPointsRemaining += m_HitPoints - lastHP;
             m_ConcentrationRemaining += m_Concentration - lastConc;
@@ -808,6 +788,18 @@ namespace JoyLib.Code.Entities
             protected set;
         }
 
+        public NeedAIData CurrentTarget
+        {
+            get
+            {
+                return m_CurrentTarget;
+            }
+            set
+            {
+                m_CurrentTarget = value;
+            }
+        }
+
         public Dictionary<long, int> Relationships
         {
             get
@@ -832,7 +824,7 @@ namespace JoyLib.Code.Entities
             }
         }
 
-        public Dictionary<StatisticIndex, int> Statistics
+        public Dictionary<StatisticIndex, EntityStatistic> Statistics
         {
             get
             {

@@ -628,7 +628,7 @@ namespace JoyLib.Code.World
         {
             bool[,] vision = visionRef;
 
-            int entityPerception = entityRef.Statistics[StatisticIndex.Perception] + Entity.MINIMUM_VISION_DISTANCE;
+            int entityPerception = entityRef.Statistics[StatisticIndex.Perception].Value + Entity.MINIMUM_VISION_DISTANCE;
             for(int i = 0; i < 360; i++)
             {
                 float x = (float)Math.Cos(i * 0.01745f);
@@ -675,7 +675,7 @@ namespace JoyLib.Code.World
         {
             bool[,] vision = visionRef;
 
-            float entityPerceptionMod = entityRef.Statistics[StatisticIndex.Perception] / 10 + 1;
+            float entityPerceptionMod = entityRef.Statistics[StatisticIndex.Perception].Value + Entity.MINIMUM_VISION_DISTANCE;
             
             Dictionary<Vector2Int, JoyObject> walls = m_Objects.Where(x => x.IsWall).ToDictionary(x => x.WorldPosition, x => x);
 

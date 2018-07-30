@@ -1,37 +1,38 @@
-﻿using System;
+﻿using JoyLib.Code.Helpers;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 
 namespace JoyLib.Code.Entities.Needs
 {
     public static class NeedHandler
     {
-        private static List<NeedAbstract> s_Needs;
+        private static Dictionary<string, string> s_InteractionFileContents;
 
         public static void Initialise()
         {
-            if(s_Needs != null)
+            if (s_InteractionFileContents != null)
             {
                 return;
             }
 
-            s_Needs = new List<NeedAbstract>();
+            s_InteractionFileContents = new Dictionary<string, string>();
 
-            List<Type> types = typeof(NeedAbstract).Assembly.GetTypes().Where(x => x.IsSubclassOf(typeof(NeedAbstract))).ToList();
-            foreach(Type type in types)
+            string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + GlobalConstants.SCRIPTS_FOLDER + "Needs", "*.lua");
+            foreach(string file in files)
             {
-                s_Needs.Add((NeedAbstract)type.Assembly.CreateInstance(type.Name));
+                string name = FileNameExtractor.ExtractName(file, 3);
+                string contents = File.ReadAllText(file);
+                s_InteractionFileContents.Add(name, contents);
             }
         }
 
-        public static NeedAbstract Get(string name)
+        public static string Get(string name)
         {
-            if(s_Needs.Any(x => x.Name == name))
+            if(s_InteractionFileContents.ContainsKey(name))
             {
-                return s_Needs.First(x => x.Name == name);
+                return s_InteractionFileContents[name];
             }
-
-            return null;
+            return "";
         }
     }
 }

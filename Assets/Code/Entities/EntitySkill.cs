@@ -13,10 +13,11 @@ namespace JoyLib.Code.Entities
 
         protected const int MAXIMUM_XP = 100;
 
-        public EntitySkill(int value, float experience, Dictionary<NeedIndex, float> coefficients, 
+        public EntitySkill(int value, int successThreshold, float experience, Dictionary<NeedIndex, float> coefficients, 
             Dictionary<NeedIndex, EntityNeed> governingNeeds)
         {
             m_Value = value;
+            SuccessThreshold = successThreshold;
             m_Experience = experience;
             m_Coefficients = coefficients;
             m_GoverningNeeds = governingNeeds;
@@ -58,6 +59,12 @@ namespace JoyLib.Code.Entities
             {
                 return m_Experience;
             }
+        }
+
+        public int SuccessThreshold
+        {
+            get;
+            set;
         }
 
         public Dictionary<NeedIndex, float> coefficients

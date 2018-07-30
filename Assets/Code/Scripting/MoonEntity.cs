@@ -3,6 +3,7 @@ using JoyLib.Code.Entities.AI;
 using JoyLib.Code.Entities.Items;
 using MoonSharp.Interpreter;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace JoyLib.Code.Scripting
@@ -45,6 +46,59 @@ namespace JoyLib.Code.Scripting
         public void AddItemToBackpack(MoonItem item)
         {
             m_AssociatedEntity.AddItem(item.ItemInstance);
+        }
+
+        public List<MoonItem> SearchBackpack(string itemType)
+        {
+            List<ItemInstance> items = new List<ItemInstance>();
+            foreach(ItemInstance item in m_AssociatedEntity.Backpack)
+            {
+                if(item.BaseType == itemType)
+                {
+                    items.Add(item);
+                }
+            }
+
+            List<MoonItem> moonItems = new List<MoonItem>();
+            foreach(ItemInstance item in items)
+            {
+                moonItems.Add(new MoonItem(item));
+            }
+
+            return moonItems;
+        }
+
+        public List<MoonItem> SearchSurroundingsForObject(string type)
+        {
+            List<NeedAIData> items = m_AssociatedEntity.MyWorld.SearchForObjects(m_AssociatedEntity, type, Intent.Interact);
+
+            List<MoonItem> moonItems = new List<MoonItem>();
+            foreach(NeedAIData data in items)
+            {
+                ItemInstance item = (ItemInstance)data.target;
+                moonItems.Add(new MoonItem(item));
+            }
+            return moonItems;
+        }
+
+        public void Seek(JoyObject joyObject)
+        {
+            NeedAIData needAIData = new NeedAIData();
+            needAIData.intent = Intent.Interact;
+            needAIData.searching = false;
+            needAIData.target = joyObject;
+            needAIData.targetPoint = joyObject.WorldPosition;
+
+            m_AssociatedEntity.CurrentTarget = needAIData;
+        }
+
+        public void Wander()
+        {
+            NeedAIData needAIData = new NeedAIData();
+            needAIData.intent = Intent.Interact;
+            needAIData.searching = true;
+
+            m_AssociatedEntity.CurrentTarget = needAIData;
         }
 
         public void EquipItem(MoonItem item, string slot)
@@ -186,7 +240,7 @@ namespace JoyLib.Code.Scripting
             try
             {
                 StatisticIndex statisticIndex = (StatisticIndex)Enum.Parse(typeof(StatisticIndex), statistic, true);
-                return m_AssociatedEntity.Statistics[statisticIndex];
+                return m_AssociatedEntity.Statistics[statisticIndex].Value;
             }
             catch (Exception e)
             {

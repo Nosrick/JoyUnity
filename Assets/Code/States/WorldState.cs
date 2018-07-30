@@ -360,7 +360,7 @@ namespace JoyLib.Code.States
                     {
                         if (tempEntity.GUID != player.GUID)
                         {
-                            CombatEngine.PerformCombat(player, tempEntity);
+                            CombatEngine.SwingWeapon(player, tempEntity);
                             tempEntity.InfluenceMe(player.GUID, -50);
                             if (!tempEntity.Alive)
                             {

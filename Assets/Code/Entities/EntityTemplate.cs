@@ -8,7 +8,7 @@ namespace JoyLib.Code.Entities
         protected readonly string m_CreatureType;
         protected readonly string m_Type;
 
-        protected readonly Dictionary<StatisticIndex, int> m_Statistics;
+        protected readonly Dictionary<StatisticIndex, EntityStatistic> m_Statistics;
         protected readonly Dictionary<string, EntitySkill> m_Skills;
         protected readonly List<Ability> m_Abilities;
         
@@ -19,7 +19,7 @@ namespace JoyLib.Code.Entities
 
         protected readonly string m_Tileset;
 
-        public EntityTemplate(Dictionary<StatisticIndex, int> statistics, Dictionary<string, EntitySkill> skills, List<Ability> abilities, int size, bool sentient, VisionType visionType,
+        public EntityTemplate(Dictionary<StatisticIndex, EntityStatistic> statistics, Dictionary<string, EntitySkill> skills, List<Ability> abilities, int size, bool sentient, VisionType visionType,
             string creatureType, string type, string tileset)
         {
             m_Statistics = statistics;
@@ -38,7 +38,7 @@ namespace JoyLib.Code.Entities
             m_Tileset = tileset;
         }
 
-        public Dictionary<StatisticIndex, int> Statistics
+        public Dictionary<StatisticIndex, EntityStatistic> Statistics
         {
             get
             {

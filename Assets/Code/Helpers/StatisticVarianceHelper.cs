@@ -6,13 +6,13 @@ namespace JoyLib.Code.Helpers
 {
     public static class StatisticVarianceHelper
     {
-        public static Dictionary<StatisticIndex, int> Get(Entity entity)
+        public static Dictionary<StatisticIndex, EntityStatistic> Get(Entity entity)
         {
-            Dictionary<StatisticIndex, int> returnStats = entity.Statistics;
+            Dictionary<StatisticIndex, EntityStatistic> returnStats = entity.Statistics;
 
             foreach(StatisticIndex key in returnStats.Keys.ToList())
             {
-                returnStats[key] += entity.Culture.StatVariance();
+                returnStats[key].Modify(entity.Culture.StatVariance());
             }
 
             return returnStats;

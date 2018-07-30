@@ -1,7 +1,9 @@
 ﻿using JoyLib.Code.Entities.AI;
 using JoyLib.Code.Helpers;
+using JoyLib.Code.Scripting;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEngine;
 
@@ -38,12 +40,6 @@ namespace JoyLib.Code.Entities.Needs
         //Bonus to health for having no diseases
         protected const int CLEAN_BONUS = 50;
 
-        protected Entity m_Parent;
-
-        protected NeedAIData m_NeedData;
-
-        protected NeedAbstract m_NeedProvider;
-
         public EntityNeed(int decay, int priority, bool doesDecay, int value, int maximumValue,
             int happinessThreshold, int averageForDay, int averageForWeek, string name)
         {
@@ -58,14 +54,15 @@ namespace JoyLib.Code.Entities.Needs
             m_AverageForDay = averageForDay;
             m_AverageForWeek = averageForWeek;
 
-            //m_NeedProvider = NeedHandler.Get(name);
-
-            m_NeedData.target = null;
-        }
-
-        public void SetParent(Entity parentRef)
-        {
-            parent = parentRef;
+            try
+            {
+                InteractionFileContents = NeedHandler.Get(name);
+            }
+            catch(Exception e)
+            {
+                Debug.LogError(e.Message);
+                Debug.LogError(e.StackTrace);
+            }
         }
 
         //This will be called once per in-game minute
@@ -76,69 +73,6 @@ namespace JoyLib.Code.Entities.Needs
             {
                 m_DecayCounter = m_Decay;
                 Decay(1);
-            }
-
-            if(!contributingHappiness && !parent.PlayerControlled)
-            {
-                SeekFulfilment();
-            }
-
-            //PythonEngine.ExecuteClassFunction(m_FilePath, m_PythonObject, "OnTick", new dynamic[] { this, parent });
-            //m_NeedProvider.OnTick(this, parent);
-        }
-
-        public void ClearTarget()
-        {
-            m_NeedData = new NeedAIData();
-        }
-
-        private void SeekFulfilment()
-        {
-            if (m_NeedData.target == null)
-            {
-                //TODO: FIX THIS
-                //m_NeedData = PythonEngine.ExecuteClassFunction(m_FilePath, m_PythonObject, "FindFulfilmentObject", new[] { parent });
-                //m_NeedData = m_NeedProvider.FindFulfilmentObject(parent);
-            }
-            if(m_NeedData.target == null)
-            {
-                m_NeedData.searching = true;
-                LookForPoint();
-            }
-        }
-
-        private void LookForPoint()
-        {
-            //Choose a visible point to go towards
-            List<Vector2Int> visiblePoints = new List<Vector2Int>();
-            int perceptionMod = (int)parent.Statistics[StatisticIndex.Perception] / 10 + 1;
-            for (int i = parent.WorldPosition.x - perceptionMod; i <= parent.WorldPosition.x + perceptionMod; i++)
-            {
-                if (i < 0)
-                    continue;
-
-                if (i >= parent.Vision.GetLength(0))
-                    continue;
-
-                for (int j = parent.WorldPosition.y - perceptionMod; j <= parent.WorldPosition.y + perceptionMod; j++)
-                {
-                    if (j < 0)
-                        continue;
-
-                    if (j >= parent.Vision.GetLength(1))
-                        continue;
-
-                    if (parent.Vision[i, j])
-                    {
-                        Vector2 point = new Vector2(i, j);
-                        if (Vector2.Distance(point, parent.WorldPosition) <= perceptionMod)
-                            visiblePoints.Add(new Vector2Int(i, j));
-                    }
-                }
-            }
-            if (visiblePoints.Count > 0)
-            {
-                m_NeedData.targetPoint = visiblePoints[RNG.Roll(0, visiblePoints.Count - 1)];
             }
         }
 
@@ -265,32 +199,11 @@ namespace JoyLib.Code.Entities.Needs
                 return m_AverageForWeek;
             }
         }
-        
-        public NeedAIData needData
-        {
-            get
-            {
-                return m_NeedData;
-            }
-        }
 
-        protected Entity parent
+        public string InteractionFileContents
         {
-            get
-            {
-                return m_Parent;
-            }
-            set
-            {
-                m_Parent = value;
-                if(m_Parent.Sexuality == Sexuality.Asexual && name.Equals("Sex"))
-                {
-                    m_Priority = 0;
-                    m_HappinessThreshold = 0;
-                    m_Value = 1;
-                    m_DoesDecay = false;
-                }
-            }
+            get;
+            protected set;
         }
     }
 }
