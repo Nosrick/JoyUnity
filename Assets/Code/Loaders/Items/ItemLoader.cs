@@ -12,7 +12,7 @@ namespace JoyLib.Code.Loaders.Items
         {
             List<BaseItemType> weapons = new List<BaseItemType>();
 
-            string folderPath = Directory.GetCurrentDirectory() + "/Data/Items";
+            string folderPath = Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Items";
             string[] files = Directory.GetFiles(folderPath, "*.xml", SearchOption.AllDirectories);
 
 
@@ -59,7 +59,7 @@ namespace JoyLib.Code.Loaders.Items
                             }
                             else if (reader.Name.Equals("Effect"))
                             {
-                                item.interactionFile = Directory.GetCurrentDirectory() + "//Data//Scripts//Items//Potions//" + reader.ReadElementContentAsString();
+                                item.interactionFile = reader.ReadElementContentAsString();
                             }
                             else if(reader.Name.Equals("SpawnWeight"))
                             {

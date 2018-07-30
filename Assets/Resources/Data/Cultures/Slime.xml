@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Culture>
+  <CultureName>Slime Conglomerate</CultureName>
+  <CreatureName>Dungeon Slime</CreatureName>
+
+  <Sexes>N</Sexes>
+
+  <Ruler>Great Slime</Ruler>
+
+  <Sexuality>0,0,95,5</Sexuality>
+
+  <FirstName Name="Glorp" Sex="N" />
+  <FirstName Name="Blip" Sex="N" />
+  <FirstName Name="Slorp" Sex="N" />
+  <FirstName Name="Glurg" Sex="N" />
+
+  <LastName Name="Slimington" />
+</Culture>

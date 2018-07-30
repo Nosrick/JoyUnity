@@ -80,6 +80,7 @@ namespace JoyLib.Code.States
             Done = true;
 
             m_Player.AddItem(new ItemInstance(ItemHandler.GetSpecificItem("Lantern"), new Vector2Int(-1, -1), true));
+            m_World.Tick();
         }
 
         protected void SimulateWorld()

@@ -1,13 +1,18 @@
 ﻿using Joy.Code.Managers;
+using JoyLib.Code;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Jobs;
+using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
+using JoyLib.Code.Scripting;
 using JoyLib.Code.States;
+using MoonSharp.Interpreter;
 using System;
+using System.IO;
 using System.Linq;
 using UnityEngine;
 
@@ -20,9 +25,11 @@ public class GameManager : MonoBehaviour
     {
         InitialiseEverything();
 
+        string data = File.ReadAllText(Directory.GetCurrentDirectory() + GlobalConstants.SCRIPTS_FOLDER + "test.txt");
+
         m_StateManager = new StateManager();
 
-        Entity thief = new Entity(EntityTemplateHandler.Get("Human"), EntityNeed.GetFullRandomisedNeeds(), 1, JobHandler.Get("Thief"), Gender.Neutral, Sexuality.Bisexual, Vector2Int.zero, ObjectIcons.GetSprites("Jobs", "Thief").ToList(), null)
+        Entity thief = new Entity(EntityTemplateHandler.Get("Human"), EntityNeed.GetFullRandomisedNeeds(), 1, JobHandler.Get("Thief"), Sex.Neutral, Sexuality.Bisexual, Vector2Int.zero, ObjectIcons.GetSprites("Jobs", "Thief").ToList(), null)
         {
             PlayerControlled = true
         };
@@ -33,8 +40,10 @@ public class GameManager : MonoBehaviour
     private void InitialiseEverything()
     {
         RNG.SetSeed(DateTime.Now.Millisecond);
+        ScriptingEngine.Initialise();
         ObjectIcons.Load();
         AbilityHandler.Initialise();
+        NeedHandler.Initialise();
         JobHandler.Initialise();
         CultureHandler.Initialise();
         MaterialHandler.Initialise();

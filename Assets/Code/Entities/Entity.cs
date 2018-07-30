@@ -3,6 +3,7 @@ using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.AI;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Jobs;
+using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Loaders;
 using JoyLib.Code.Physics;
@@ -29,8 +30,8 @@ namespace JoyLib.Code.Entities
 
         protected List<string> m_IdentifiedItems;
 
-        protected Dictionary<int, int> m_Relationships;
-        protected Dictionary<int, RelationshipStatus> m_Family;
+        protected Dictionary<long, int> m_Relationships;
+        protected Dictionary<long, RelationshipStatus> m_Family;
 
         protected JobType m_CurrentJob;
         protected Dictionary<string, int> m_JobLevels;
@@ -81,7 +82,7 @@ namespace JoyLib.Code.Entities
         /// <param name="level"></param>
         /// <param name="experience"></param>
         /// <param name="job"></param>
-        /// <param name="gender"></param>
+        /// <param name="sex"></param>
         /// <param name="sexuality"></param>
         /// <param name="position"></param>
         /// <param name="icons"></param>
@@ -94,11 +95,11 @@ namespace JoyLib.Code.Entities
         /// <param name="jobLevels"></param>
         /// <param name="world"></param>
         /// <param name="tileset"></param>
-        public Entity(EntityTemplate template, Dictionary<NeedIndex, EntityNeed> needs, int level, float experience, JobType job, Gender gender, Sexuality sexuality,
+        public Entity(EntityTemplate template, Dictionary<NeedIndex, EntityNeed> needs, int level, float experience, JobType job, Sex sex, Sexuality sexuality,
             Vector2Int position, List<Sprite> sprites, ItemInstance naturalWeapons, Dictionary<string, ItemInstance> equipment, 
-            List<ItemInstance> backpack, Dictionary<int, int> relationships, List<string> identifiedItems, Dictionary<int, RelationshipStatus> family,
+            List<ItemInstance> backpack, Dictionary<long, int> relationships, List<string> identifiedItems, Dictionary<long, RelationshipStatus> family,
             Dictionary<string, int> jobLevels, WorldInstance world, string tileset) : 
-            base(NameProvider.GetRandomName(template.CreatureType, gender), template.Statistics[StatisticIndex.Endurance] * 2, position, sprites, template.JoyType, true)
+            base(NameProvider.GetRandomName(template.CreatureType, sex), template.Statistics[StatisticIndex.Endurance] * 2, position, sprites, template.JoyType, true)
         {
             this.CreatureType = template.CreatureType;
 
@@ -131,7 +132,7 @@ namespace JoyLib.Code.Entities
             this.m_Equipment = equipment;
             this.m_Backpack = backpack;
             this.m_Relationships = relationships;
-            this.Gender = gender;
+            this.sex = sex;
             this.m_Family = family;
             this.m_VisionType = template.VisionType;
 
@@ -165,14 +166,14 @@ namespace JoyLib.Code.Entities
         /// <param name="needs"></param>
         /// <param name="level"></param>
         /// <param name="job"></param>
-        /// <param name="gender"></param>
+        /// <param name="sex"></param>
         /// <param name="sexuality"></param>
         /// <param name="position"></param>
         /// <param name="icons"></param>
         /// <param name="world"></param>
-        public Entity(EntityTemplate template, Dictionary<NeedIndex, EntityNeed> needs, int level, JobType job, Gender gender, Sexuality sexuality,
+        public Entity(EntityTemplate template, Dictionary<NeedIndex, EntityNeed> needs, int level, JobType job, Sex sex, Sexuality sexuality,
             Vector2Int position, List<Sprite> sprites, WorldInstance world) :
-            base(NameProvider.GetRandomName(template.CreatureType, gender), template.Statistics[StatisticIndex.Endurance] * 2, position, sprites, template.JoyType, true)
+            base(NameProvider.GetRandomName(template.CreatureType, sex), template.Statistics[StatisticIndex.Endurance] * 2, position, sprites, template.JoyType, true)
         {
             this.CreatureType = template.CreatureType;
 
@@ -204,9 +205,9 @@ namespace JoyLib.Code.Entities
             this.m_NaturalWeapons = NaturalWeaponHelper.MakeNaturalWeapon(template.Size);
             this.m_Equipment = new Dictionary<string, ItemInstance>();
             this.m_Backpack = new List<ItemInstance>();
-            this.m_Relationships = new Dictionary<int, int>();
-            this.Gender = gender;
-            this.m_Family = new Dictionary<int, RelationshipStatus>();
+            this.m_Relationships = new Dictionary<long, int>();
+            this.sex = sex;
+            this.m_Family = new Dictionary<long, RelationshipStatus>();
             this.m_VisionType = template.VisionType;
 
             this.m_Tileset = template.Tileset;
@@ -233,12 +234,12 @@ namespace JoyLib.Code.Entities
 
         /*
         public Entity(Dictionary<StatisticIndex, float> statistics, Dictionary<string, EntitySkill> skills, List<Ability> abilities,
-            Dictionary<NeedIndex, EntityNeed> needs, int level, float experience, JobType job, Gender gender, string creatureType,
+            Dictionary<NeedIndex, EntityNeed> needs, int level, float experience, JobType job, sex sex, string creatureType,
             Vector2Int position, string type, Texture2D[] icons, bool sentient, ItemInstance naturalWeapons,
             Dictionary<string, ItemInstance> equipment, List<ItemInstance> backpack, Dictionary<int, int> relationships,
             List<string> identifiedItems, Sexuality sexuality, Dictionary<int, RelationshipStatus> family,
             Dictionary<string, int> jobLevels, VisionType visionType, WorldInstance world, string tileset, bool initialise)
-            :this(statistics, skills, abilities, needs, level, experience, job, gender, creatureType, position, type, icons, sentient,
+            :this(statistics, skills, abilities, needs, level, experience, job, sex, creatureType, position, type, icons, sentient,
                  naturalWeapons, equipment, backpack, relationships, identifiedItems, sexuality, family, jobLevels, visionType, world, tileset)
         {
             if (initialise)
@@ -261,7 +262,7 @@ namespace JoyLib.Code.Entities
         public Entity DirectCopy()
         {
             Entity copy = Entity.Create(m_Size, m_Statistics, m_Skills, m_Abilities, m_Needs, m_Level, m_Experience,
-                m_CurrentJob, Gender, CreatureType, WorldPosition, BaseType, m_Icons.ToList(), m_Sentient, m_NaturalWeapons, 
+                m_CurrentJob, sex, CreatureType, WorldPosition, BaseType, m_Icons.ToList(), m_Sentient, m_NaturalWeapons, 
                 m_Equipment, m_Backpack, m_Relationships, m_IdentifiedItems, m_Sexuality, m_Family, m_JobLevels, m_VisionType, MyWorld,
                 m_Tileset);
             copy.GUID = GUIDManager.AssignGUID();
@@ -271,7 +272,7 @@ namespace JoyLib.Code.Entities
         public Entity CopyWithFullNeeds()
         {
             Entity copy = Entity.Create(m_Size, StatisticVarianceHelper.Get(this), m_Skills, m_Abilities, EntityNeed.GetFullRandomisedNeeds(), m_Level, m_Experience,
-                m_CurrentJob, s_Cultures[CreatureType].ChooseGender(), CreatureType, WorldPosition, BaseType, m_Icons.ToList(), m_Sentient, NaturalWeaponHelper.MakeNaturalWeapon(m_Size), 
+                m_CurrentJob, s_Cultures[CreatureType].Choosesex(), CreatureType, WorldPosition, BaseType, m_Icons.ToList(), m_Sentient, NaturalWeaponHelper.MakeNaturalWeapon(m_Size), 
                 new Dictionary<string, ItemInstance>(), new List<ItemInstance>(), new Dictionary<int, int>(), new List<string>(), s_Cultures[CreatureType].ChooseSexuality(),
                 new Dictionary<int, RelationshipStatus>(), m_JobLevels, m_VisionType, MyWorld, m_Tileset);
             copy.GUID = GUIDManager.AssignGUID();
@@ -281,7 +282,7 @@ namespace JoyLib.Code.Entities
         public Entity CopyWithBasicNeeds()
         {
             Entity copy = Entity.Create(m_Size, StatisticVarianceHelper.Get(this), m_Skills, m_Abilities, EntityNeed.GetBasicRandomisedNeeds(), m_Level, m_Experience,
-                m_CurrentJob, s_Cultures[CreatureType].ChooseGender(), CreatureType, WorldPosition, BaseType, m_Icons.ToList(), m_Sentient, NaturalWeaponHelper.MakeNaturalWeapon(m_Size), 
+                m_CurrentJob, s_Cultures[CreatureType].Choosesex(), CreatureType, WorldPosition, BaseType, m_Icons.ToList(), m_Sentient, NaturalWeaponHelper.MakeNaturalWeapon(m_Size), 
                 new Dictionary<string, ItemInstance>(), new List<ItemInstance>(), new Dictionary<int, int>(), new List<string>(), s_Cultures[CreatureType].ChooseSexuality(),
                 new Dictionary<int, RelationshipStatus>(), m_JobLevels, m_VisionType, MyWorld, m_Tileset);
             copy.GUID = GUIDManager.AssignGUID();
@@ -380,18 +381,6 @@ namespace JoyLib.Code.Entities
             m_Backpack.Remove(itemRef);
         }
         */
-
-        public void EquipItem(ItemInstance itemRef, string slotRef)
-        {
-            if (!m_Equipment.ContainsKey(slotRef))
-                return;
-
-            if (m_Equipment[slotRef] != null)
-                m_Backpack.Add(m_Equipment[slotRef]);
-
-            m_Equipment[slotRef] = itemRef;
-            m_Backpack.Remove(itemRef);
-        }
 
         public override void Update()
         {
@@ -576,11 +565,11 @@ namespace JoyLib.Code.Entities
             {
                 return true;
             }
-            else if(m_Sexuality == Sexuality.Heterosexual && (entityRef.Gender != Gender || entityRef.Gender == Gender.Neutral))
+            else if(m_Sexuality == Sexuality.Heterosexual && (entityRef.sex != sex || entityRef.sex == Sex.Neutral))
             {
                 return true;
             }
-            else if(m_Sexuality == Sexuality.Homosexual && (entityRef.Gender == Gender || entityRef.Gender == Gender.Neutral))
+            else if(m_Sexuality == Sexuality.Homosexual && (entityRef.sex == sex || entityRef.sex == Sex.Neutral))
             {
                 return true;
             }
@@ -623,20 +612,27 @@ namespace JoyLib.Code.Entities
             }
         }
 
-        public void RemoveEquipmentToBackpack(string slot)
-        {
-            if (m_Equipment.ContainsKey(slot))
-            {
-                m_Backpack.Add(m_Equipment[slot]);
-                m_Equipment[slot] = null;
-            }
-        }
-
         public void PlaceItemInWorld(ItemInstance item)
         {
             m_Backpack.Remove(item);
             item.Move(WorldPosition);
             MyWorld.AddObject(item);
+        }
+
+        public void EquipItem(ItemInstance itemRef, string slotRef)
+        {
+            if (!m_Equipment.ContainsKey(slotRef))
+            {
+                return;
+            }
+
+            if (m_Equipment[slotRef] != null)
+            {
+                m_Backpack.Add(m_Equipment[slotRef]);
+            }
+
+            m_Equipment[slotRef] = itemRef;
+            m_Backpack.Remove(itemRef);
         }
 
         public void UnequipItem(string slot)
@@ -648,22 +644,19 @@ namespace JoyLib.Code.Entities
             }
         }
 
-        public void InfluenceMe(int GUID, int value)
+        public void InfluenceMe(long GUID, int value)
         {
-            lock(m_Relationships)
+            if (m_Relationships.ContainsKey(GUID))
             {
-                if (m_Relationships.ContainsKey(GUID))
-                {
-                    m_Relationships[GUID] += value;
-                }
-                else
-                {
-                    PerformFirstImpression(GUID);
-                }
+                m_Relationships[GUID] += value;
+            }
+            else
+            {
+                PerformFirstImpression(GUID);
             }
         }
 
-        public int HasRelationship(int GUID)
+        public int HasRelationship(long GUID)
         {
             if (!m_Relationships.ContainsKey(GUID))
             {
@@ -672,14 +665,11 @@ namespace JoyLib.Code.Entities
             return m_Relationships[GUID];
         }
 
-        private void PerformFirstImpression(int GUID)
+        protected void PerformFirstImpression(long GUID)
         {
             Entity entity = MyWorld.GetEntityRecursive(GUID);
             int firstImpression = (int)((entity.Statistics[StatisticIndex.Personality] + entity.Statistics[StatisticIndex.Suavity] + entity.Statistics[StatisticIndex.Wit]) / 3);
-            lock(m_Relationships)
-            {
-                m_Relationships.Add(GUID, firstImpression);
-            }
+            m_Relationships.Add(GUID, firstImpression);
         }
 
         public void DecreaseMana(int value)
@@ -768,7 +758,7 @@ namespace JoyLib.Code.Entities
             m_HitPointsRemaining -= value;
         }
 
-        public void CalculateDerivatives()
+        protected void CalculateDerivatives()
         {
             int lastHP = m_HitPoints;
             int lastConc = m_Concentration;
@@ -803,6 +793,7 @@ namespace JoyLib.Code.Entities
             m_Needs[need].Fulfill(value);
             m_FulfillingNeed = need;
             m_FulfilmentCounter = minutes;
+            Debug.Log(JoyName + " is fulfilling need " + need.ToString());
         }
 
         public string CreatureType
@@ -811,13 +802,13 @@ namespace JoyLib.Code.Entities
             protected set;
         }
 
-        public Gender Gender
+        public Sex sex
         {
             get;
             protected set;
         }
 
-        public Dictionary<int, int> Relationships
+        public Dictionary<long, int> Relationships
         {
             get
             {
@@ -833,7 +824,7 @@ namespace JoyLib.Code.Entities
             }
         }
 
-        public Dictionary<int, RelationshipStatus> Family
+        public Dictionary<long, RelationshipStatus> Family
         {
             get
             {

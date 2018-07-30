@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Culture>
+  <CultureName>Naga Imperium</CultureName>
+  <CreatureName>Naga</CreatureName>
+
+  <Sexes>F,M</Sexes>
+
+  <Ruler>King</Ruler>
+  <Ruler>Queen</Ruler>
+
+  <Crime>Theft</Crime>
+  <Crime>Murder</Crime>
+  <Crime>Trespass</Crime>
+
+  <Sexuality>80,10,5,5</Sexuality>
+  
+  <FirstName Name="Aditi" Sex="F" />
+  <FirstName Name="Aditya" Sex="M" />
+  <FirstName Name="Agni" Sex="M" />
+  <FirstName Name="Ananta" Sex="N" />
+  <FirstName Name="Anil" Sex="M" />
+  <FirstName Name="Aniruddha" Sex="M" />
+  <FirstName Name="Arjuna" Sex="M" />
+  <FirstName Name="Aruna" Sex="M" />
+  <FirstName Name="Arundhati" Sex="F" />
+  <FirstName Name="Bala" Sex="N" />
+  <FirstName Name="Baladeva" Sex="M" />
+  <FirstName Name="Bharata" Sex="M" />
+  <FirstName Name="Bhaskara" Sex="M" />
+  <FirstName Name="Bhima" Sex="M" />
+  <FirstName Name="Bhumi" Sex="F" />
+  <FirstName Name="Brahma" Sex="M" />
+  <FirstName Name="Brijesha" Sex="M" />
+  <FirstName Name="Chandra" Sex="N" />
+  <FirstName Name="Damayanti" Sex="F" />
+  <FirstName Name="Damodara" Sex="M" />
+  <FirstName Name="Devaraja" Sex="M" />
+  <FirstName Name="Devi" Sex="F" />
+  <FirstName Name="Dilipa" Sex="M" />
+  <FirstName Name="Draupadi" Sex="F" />
+  <FirstName Name="Durga" Sex="F" />
+  <FirstName Name="Gauri" Sex="F" />
+  <FirstName Name="Girisha" Sex="M" />
+  <FirstName Name="Hari" Sex="M" />
+  <FirstName Name="Indira" Sex="F" />
+  <FirstName Name="Jaya" Sex="N" />
+  <FirstName Name="Jayanta" Sex="M" />
+  <FirstName Name="Jayanti" Sex="F" />
+  <FirstName Name="Kali" Sex="F" />
+  <FirstName Name="Kalyani" Sex="F" />
+  <FirstName Name="Kama" Sex="M" />
+  <FirstName Name="Kamala" Sex="N" />
+  <FirstName Name="Kanti" Sex="F" />
+  <FirstName Name="Kapila" Sex="M" />
+  <FirstName Name="Karna" Sex="M" />
+  <FirstName Name="Kumara" Sex="M" />
+  <FirstName Name="Kumari" Sex="F" />
+  <FirstName Name="Lakshmi" Sex="F" />
+  <FirstName Name="Lalita" Sex="N" />
+  <FirstName Name="Madhava" Sex="M" />
+  <FirstName Name="Madhavi" Sex="F" />
+  <FirstName Name="Mahesha" Sex="M" />
+  <FirstName Name="Mani" Sex="M" />
+  <FirstName Name="Manu" Sex="M" />
+  <FirstName Name="Maya" Sex="F" />
+  <FirstName Name="Mina" Sex="F" />
+  <FirstName Name="Mitra" Sex="N" />
+  <FirstName Name="Mohana" Sex="N" />
+  <FirstName Name="Mohini" Sex="F" />
+  <FirstName Name="Murali" Sex="M" />
+  <FirstName Name="Nala" Sex="M" />
+  <FirstName Name="Nanda" Sex="M" />
+  <FirstName Name="Padma" Sex="N" />
+  <FirstName Name="Padmavati" Sex="F" />
+  <FirstName Name="Partha" Sex="M" />
+  <FirstName Name="Parvati" Sex="F" />
+  <FirstName Name="Pramoda" Sex="M" />
+  <FirstName Name="Pritha" Sex="F" />
+  <FirstName Name="Priya" Sex="F" />
+  <FirstName Name="Radha" Sex="F" />
+  <FirstName Name="Raghu" Sex="M" />
+  <FirstName Name="Rajani" Sex="F" />
+  <FirstName Name="Rama" Sex="M" />
+  <FirstName Name="Rati" Sex="F" />
+  <FirstName Name="Ravi" Sex="M" />
+  <FirstName Name="Reva" Sex="F" />
+  <FirstName Name="Rukmini" Sex="F" />
+  <FirstName Name="Sachin" Sex="M" />
+  <FirstName Name="Sandhya" Sex="F" />
+  <FirstName Name="Sanjaya" Sex="M" />
+  <FirstName Name="Saraswati" Sex="F" />
+  <FirstName Name="Sati" Sex="F" />
+  <FirstName Name="Savitr" Sex="M" />
+  <FirstName Name="Savitri" Sex="F" />
+  <FirstName Name="Shailaja" Sex="F" />
+  <FirstName Name="Shakti" Sex="F" />
+  <FirstName Name="Shanta" Sex="F" />
+  <FirstName Name="Shantanu" Sex="M" />
+  <FirstName Name="Shri" Sex="F" />
+  <FirstName Name="Shyama" Sex="N" />
+  <FirstName Name="Sita" Sex="F" />
+  <FirstName Name="Skanda" Sex="M" />
+  <FirstName Name="Sumati" Sex="F" />
+  <FirstName Name="Sundara" Sex="M" />
+  <FirstName Name="Sunita" Sex="F" />
+  <FirstName Name="Surya" Sex="M" />
+  <FirstName Name="Sushila" Sex="N" />
+  <FirstName Name="Tara" Sex="F" />
+  <FirstName Name="Uma" Sex="F" />
+  <FirstName Name="Usha" Sex="F" />
+  <FirstName Name="Vasanta" Sex="M" />
+  <FirstName Name="Vasu" Sex="M" />
+  <FirstName Name="Vayu" Sex="M" />
+  <FirstName Name="Vijaya" Sex="N" />
+  <FirstName Name="Vikrama" Sex="M" />
+  <FirstName Name="Yama" Sex="M" />
+  <FirstName Name="Yami" Sex="F" />
+
+  <LastName Name="McNaga" />
+</Culture>

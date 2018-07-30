@@ -21,7 +21,7 @@ namespace JoyLib.Code.Graphics
             defaultSpriteDictionary.Add(new Tuple<string, Texture2D>("DEFAULT", defaultSprite));
             objectIcons.Add("DEFAULT", defaultSpriteDictionary);
 
-            string objectDataFolder = Directory.GetCurrentDirectory() + "//Data//Sprite Definitions";
+            string objectDataFolder = Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Sprite Definitions";
             string[] objectDataFiles = Directory.GetFiles(objectDataFolder, "*.xml", SearchOption.AllDirectories);
 
             Dictionary<string, Texture2D> sheets = new Dictionary<string, Texture2D>();

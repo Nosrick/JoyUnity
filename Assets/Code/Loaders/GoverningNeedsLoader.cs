@@ -12,7 +12,7 @@ namespace JoyLib.Code.Loaders
         {
             Dictionary<string, List<NeedIndex>> governingNeeds = new Dictionary<string, List<NeedIndex>>();
 
-            XmlReader reader = XmlReader.Create(Directory.GetCurrentDirectory() + "/Data/SkillCoefficients.xml");
+            XmlReader reader = XmlReader.Create(Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "SkillCoefficients.xml");
 
             while (reader.Read())
             {

@@ -14,7 +14,7 @@ namespace JoyLib.Code.Loaders
         {
             List<EntityTemplate> entities = new List<EntityTemplate>();
 
-            string directory = Directory.GetCurrentDirectory() + "/Data/Entities";
+            string directory = Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Entities";
             string[] files = Directory.GetFiles(directory, "*.xml", SearchOption.AllDirectories);
 
             Dictionary<string, CultureType> cultures = CultureLoader.LoadCultures();

@@ -1,5 +1,5 @@
-﻿using JoyLib.Code.Helpers;
-using System;
+﻿using System;
+using System.IO;
 
 namespace JoyLib.Code.Entities.Items
 {
@@ -14,7 +14,23 @@ namespace JoyLib.Code.Entities.Items
             this.Category = category;
             this.SpawnWeighting = spawnRef;
             this.Value = valueRef;
-            this.InteractionFile = interactionFileRef;
+            this.InteractionFileName = interactionFileRef;
+            if (InteractionFileName != null && InteractionFileName != "")
+            {
+                using (FileStream fileStream = new FileStream(Directory.GetCurrentDirectory() + GlobalConstants.SCRIPTS_FOLDER + InteractionFileName + ".txt", FileMode.Open))
+                {
+                    byte[] bytes = new byte[fileStream.Length];
+                    for (int i = 0; i < fileStream.Length;)
+                    {
+                        i += fileStream.Read(bytes, 0, bytes.Length);
+                    }
+
+                    InteractionFileContents = System.Text.Encoding.Default.GetString(bytes);
+
+                    fileStream.Close();
+                }
+            }
+
             this.Description = description;
             this.UnidentifiedDescription = unidentifiedDescriptionRef;
             this.UnidentifiedName = unidentifiedNameRef;
@@ -25,11 +41,6 @@ namespace JoyLib.Code.Entities.Items
             this.GoverningSkill = governingSkillRef;
             this.ActionString = actionStringRef;
             this.LightLevel = lightLevel;
-
-            if (this.InteractionFile != null)
-            {
-                m_ClassName = FileNameExtractor.ExtractName(InteractionFile);
-            }
         }
 
         public int GetHitPoints()
@@ -43,7 +54,22 @@ namespace JoyLib.Code.Entities.Items
             protected set;
         }
 
-        public string InteractionFile
+        public string InteractionFilePath
+        {
+            get
+            {
+                return "Assets/Resources/MoonSharp/Scripts/" + InteractionFileName + ".txt";
+                //return Directory.GetCurrentDirectory() + "/Data/Scripts/Items/" + InteractionFile + ".txt";
+            }
+        }
+
+        public string InteractionFileName
+        {
+            get;
+            protected set;
+        }
+
+        public string InteractionFileContents
         {
             get;
             protected set;

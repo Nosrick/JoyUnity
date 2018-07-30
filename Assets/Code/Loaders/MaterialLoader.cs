@@ -12,7 +12,7 @@ namespace JoyLib.Code.Loaders
         {
             List<ItemMaterial> materials = new List<ItemMaterial>();
 
-            string folderPath = Directory.GetCurrentDirectory() + "/Data/Materials";
+            string folderPath = Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Materials";
             string[] files = Directory.GetFiles(folderPath, "*.xml", SearchOption.AllDirectories);
 
             for (int i = 0; i < files.Length; i++)

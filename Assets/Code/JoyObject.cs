@@ -33,6 +33,7 @@ public class JoyObject
     public JoyObject(string name, int hitPoints, Vector2Int position, List<Sprite> sprites, string baseType, bool isAnimated, bool isWall = false, bool isDestructible = true)
     {
         this.JoyName = name;
+        this.GUID = GUIDManager.AssignGUID();
 
         this.m_HitPoints = hitPoints;
 
@@ -128,7 +129,7 @@ public class JoyObject
         }
     }
 
-    public int GUID
+    public long GUID
     {
         get;
         protected set;

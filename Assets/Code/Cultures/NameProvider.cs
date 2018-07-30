@@ -19,11 +19,11 @@ namespace JoyLib.Code.Cultures
             }
         }
 
-        public static string GetRandomName(string creatureType, Gender gender)
+        public static string GetRandomName(string creatureType, Sex sex)
         {
             if (s_Cultures.ContainsKey(creatureType))
             {
-                return s_Cultures[creatureType].GetRandomName(gender);
+                return s_Cultures[creatureType].GetRandomName(sex);
             }
 
             return "Alex";

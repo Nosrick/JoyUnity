@@ -2,7 +2,7 @@
 using JoyLib.Code.Conversation.Subengines;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Abilities;
-using JoyLib.Code.Entities.AI;
+using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.IO;
 using JoyLib.Code.Physics;
@@ -10,7 +10,6 @@ using JoyLib.Code.Quests;
 using JoyLib.Code.States.Gameplay;
 using JoyLib.Code.World;
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace JoyLib.Code.States
@@ -198,14 +197,28 @@ namespace JoyLib.Code.States
                 if (m_ActiveWorld.Parent != null && player.WorldPosition == m_ActiveWorld.SpawnPoint && !player.HasMoved)
                 {
                     ChangeWorld(m_ActiveWorld.Parent, m_ActiveWorld.GetTransitionPointForParent());
+                    return;
                 }
 
                 //Going down a level
                 else if (m_ActiveWorld.Areas.ContainsKey(player.WorldPosition) && !player.HasMoved)
                 { 
                     ChangeWorld(m_ActiveWorld.Areas[player.WorldPosition], m_ActiveWorld.Areas[player.WorldPosition].SpawnPoint);
+                    return;
                 }
-                return;
+
+                PhysicsResult physicsResult = PhysicsManager.IsCollision(player.WorldPosition, player.WorldPosition, m_ActiveWorld);
+                if (physicsResult == PhysicsResult.ObjectCollision)
+                {
+                    //Get the item picked up
+                    ItemInstance pickUp = m_ActiveWorld.PickUpObject(player);
+
+                    //And try to destroy the corresponding GameObject
+                    if (pickUp != null)
+                    {
+                        GameObject.Destroy(GameObject.Find(pickUp.JoyName + ":" + pickUp.GUID));
+                    }
+                }
             }
             Vector2Int newPlayerPoint = m_ActiveWorld.Player.WorldPosition;
 
@@ -321,14 +334,6 @@ namespace JoyLib.Code.States
             {
                 Tick();
                 return;
-            }
-            else if(Input.GetKeyDown(KeyCode.Return))
-            {
-                PhysicsResult physicsResult = PhysicsManager.IsCollision(player.WorldPosition, newPlayerPoint, m_ActiveWorld);
-                if (physicsResult == PhysicsResult.ObjectCollision)
-                {
-                    m_ActiveWorld.PickUpObject(player);
-                }
             }
 
             if (hasMoved)

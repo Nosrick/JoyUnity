@@ -14,7 +14,7 @@ namespace JoyLib.Code.Loaders
         {
             List<JobType> returnTypes = new List<JobType>();
 
-            string directory = Directory.GetCurrentDirectory() + "/Data/Jobs";
+            string directory = Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Jobs";
             string[] files = Directory.GetFiles(directory, "*.xml", SearchOption.AllDirectories);
 
             for (int i = 0; i < files.Length; i++)

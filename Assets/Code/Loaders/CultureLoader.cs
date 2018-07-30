@@ -13,8 +13,8 @@ namespace JoyLib.Code.Loaders
     {
         public static Dictionary<string, CultureType> LoadCultures()
         {
-            string folderPath = Directory.GetCurrentDirectory() + "/Data/Cultures";
-            string[] files = Directory.GetFiles(folderPath);
+            string folderPath = Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Cultures";
+            string[] files = Directory.GetFiles(folderPath, "*.xml");
 
             Dictionary<string, CultureType> cultures = new Dictionary<string, CultureType>();
 
@@ -25,7 +25,7 @@ namespace JoyLib.Code.Loaders
                 List<string> rulers = new List<string>();
                 List<string> crimes = new List<string>();
                 List<NameData> nameData = new List<NameData>();
-                List<Gender> genders = new List<Gender>();
+                List<Sex> sexs = new List<Sex>();
                 string cultureName = "DEFAULT CULTURE";
                 string inhabitants = "DEFAULT CREATURE";
                 Dictionary<Sexuality, int> sexualities = new Dictionary<Sexuality, int>();
@@ -62,36 +62,42 @@ namespace JoyLib.Code.Loaders
                     if (reader.Name.Equals("FirstName"))
                     {
                         string nameRef = reader.GetAttribute("Name");
-                        string genderString = reader.GetAttribute("Gender");
-                        Gender gender;
+                        string sexString = reader.GetAttribute("Sex");
+                        Sex sex;
 
-                        if (genderString.Equals("M"))
-                            gender = Gender.Male;
-                        else if (genderString.Equals("F"))
-                            gender = Gender.Female;
+                        if (sexString.Equals("M"))
+                        {
+                            sex = Sex.Male;
+                        }
+                        else if (sexString.Equals("F"))
+                        {
+                            sex = Sex.Female;
+                        }
                         else
-                            gender = Gender.Neutral;
+                        {
+                            sex = Sex.Neutral;
+                        }
 
-                        nameData.Add(new NameData(nameRef, false, gender));
+                        nameData.Add(new NameData(nameRef, false, sex));
                     }
 
-                    if (reader.Name.Equals("Genders"))
+                    if (reader.Name.Equals("Sexes"))
                     {
-                        string genderString = reader.ReadElementContentAsString();
-                        string[] genderStrings = genderString.Split(',');
-                        for (int j = 0; j < genderStrings.Length; j++)
+                        string sexString = reader.ReadElementContentAsString();
+                        string[] sexStrings = sexString.Split(',');
+                        for (int j = 0; j < sexStrings.Length; j++)
                         {
-                            if (genderStrings[j].Equals("F"))
+                            if (sexStrings[j].Equals("F"))
                             {
-                                genders.Add(Gender.Female);
+                                sexs.Add(Sex.Female);
                             }
-                            else if (genderStrings[j].Equals("M"))
+                            else if (sexStrings[j].Equals("M"))
                             {
-                                genders.Add(Gender.Male);
+                                sexs.Add(Sex.Male);
                             }
                             else
                             {
-                                genders.Add(Gender.Neutral);
+                                sexs.Add(Sex.Neutral);
                             }
                         }
                     }
@@ -99,7 +105,7 @@ namespace JoyLib.Code.Loaders
                     if (reader.Name.Equals("LastName"))
                     {
                         string nameRef = reader.GetAttribute("Name");
-                        nameData.Add(new NameData(nameRef, true, Gender.Neutral));
+                        nameData.Add(new NameData(nameRef, true, Sex.Neutral));
                     }
 
                     if(reader.Name.Equals("Sexuality"))
@@ -119,7 +125,7 @@ namespace JoyLib.Code.Loaders
                 }
 
                 reader.Close();
-                cultures.Add(inhabitants, new CultureType(cultureName, rulers, crimes, nameData, inhabitants, genders, 
+                cultures.Add(inhabitants, new CultureType(cultureName, rulers, crimes, nameData, inhabitants, sexs, 
                     sexualities, statVariance));
             }
 

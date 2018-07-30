@@ -51,7 +51,7 @@ namespace JoyLib.Code.Loaders.Items
                         }
                         else if (reader.Name.Equals("Effect"))
                         {
-                            item.interactionFile = Directory.GetCurrentDirectory() + "//Data//Scripts//Items//Food//" + reader.ReadElementContentAsString();
+                            item.interactionFile = reader.ReadElementContentAsString();
                         }
                         else if (reader.Name.Equals("SpawnWeight"))
                         {

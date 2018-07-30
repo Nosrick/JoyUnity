@@ -10,33 +10,33 @@ namespace JoyLib.Code.Cultures
         private List<string> m_RulerTypes;
         private List<string> m_Crimes;
         private List<NameData> m_NameData;
-        private List<Gender> m_Genders;
+        private List<Sex> m_sexs;
         private Dictionary<Sexuality, int> m_SexualityPrevelence;
         private int m_StatVariance;
 
         public CultureType(string nameRef, List<string> rulersRef, List<string> crimesRef, List<NameData> namesRef,
-            string inhabitantsNameRef, List<Gender> gendersRef, Dictionary<Sexuality, int> sexualityRef, int statVariance)
+            string inhabitantsNameRef, List<Sex> sexsRef, Dictionary<Sexuality, int> sexualityRef, int statVariance)
         {
             cultureName = nameRef;
             m_RulerTypes = rulersRef;
             m_Crimes = crimesRef;
             m_NameData = namesRef;
             inhabitants = inhabitantsNameRef;
-            m_Genders = gendersRef;
+            m_sexs = sexsRef;
             m_SexualityPrevelence = sexualityRef;
             m_StatVariance = statVariance;
         }
 
-        public string GetRandomName(Gender genderRef)
+        public string GetRandomName(Sex sexRef)
         {
-            List<NameData> validFirstNames = m_NameData.Where(x => x.gender == genderRef || x.gender == Gender.Neutral && (x.isSurname == false)).ToList();
+            List<NameData> validFirstNames = m_NameData.Where(x => x.sex == sexRef || x.sex == Sex.Neutral && (x.isSurname == false)).ToList();
             List<NameData> validLastNames = m_NameData.Where(x => x.isSurname).ToList();
             return validFirstNames[RNG.Roll(0, validFirstNames.Count - 1)].name + " " + validLastNames[RNG.Roll(0, validLastNames.Count - 1)].name;
         }
 
-        public Gender ChooseGender()
+        public Sex Choosesex()
         {
-            return genders[RNG.Roll(0, genders.Count - 1)];
+            return sexs[RNG.Roll(0, sexs.Count - 1)];
         }
 
         public Sexuality ChooseSexuality()
@@ -59,11 +59,11 @@ namespace JoyLib.Code.Cultures
             return RNG.Roll(-m_StatVariance, m_StatVariance);
         }
 
-        public List<Gender> genders
+        public List<Sex> sexs
         {
             get
             {
-                return m_Genders;
+                return m_sexs;
             }
         }
 

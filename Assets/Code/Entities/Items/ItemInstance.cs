@@ -1,8 +1,11 @@
 ﻿using JoyLib.Code.Graphics;
 using JoyLib.Code.Managers;
+using JoyLib.Code.Scripting;
+using MoonSharp.Interpreter;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities.Items
@@ -11,12 +14,12 @@ namespace JoyLib.Code.Entities.Items
     public class ItemInstance : JoyObject
     {
         protected bool m_Identified;
-        protected int m_OwnerGUID;
+        protected long m_OwnerGUID;
 
         protected List<ItemInstance> m_Contents;
         protected BaseItemType m_Type;
 
-        public ItemInstance(BaseItemType type, Vector2Int position, bool identified) :
+        public ItemInstance(BaseItemType type, Vector2Int position, bool identified, Assembly interactionFile = null) :
             base(type.UnidentifiedName, type.GetHitPoints(), position, ObjectIcons.GetSprites(type.Category, type.UnidentifiedName), type.Category, false)
         {            
             this.m_Type = type;
@@ -61,27 +64,29 @@ namespace JoyLib.Code.Entities.Items
 
             m_Contents = contents;
         }
+        */
 
         public void Interact(Entity user)
         {
-            if (m_InteractionFile == null)
-                return;
+            //PythonEngine.ExecuteClassFunction(m_InteractionFile, m_ClassName, "Interact", new dynamic[] { user, this });
 
-            PythonEngine.ExecuteClassFunction(m_InteractionFile, m_ClassName, "Interact", new dynamic[] { user, this });
-            if(!identified)
+            dynamic[] arguments = { new MoonEntity(user), new MoonItem(this) };
+            ScriptingEngine.RunScript(ItemType.InteractionFileContents, ItemType.InteractionFileName, "Interact", arguments);
+
+            if(!Identified)
             {
                 IdentifyMe();
-                user.AddIdentifiedItem(name);
+                user.AddIdentifiedItem(DisplayName);
             }
-            for(int i = 0; i < user.backpack.Count; i++)
+            //Identify any identical items the user is carrying
+            for(int i = 0; i < user.Backpack.Count; i++)
             {
-                if(user.backpack[i].name.Equals(name) && !user.backpack[i].identified)
+                if(user.Backpack[i].DisplayName.Equals(DisplayName) && !user.Backpack[i].Identified)
                 {
-                    user.backpack[i].IdentifyMe();
+                    user.Backpack[i].IdentifyMe();
                 }
             }
         }
-        */
 
         public void IdentifyMe()
         {
@@ -105,7 +110,7 @@ namespace JoyLib.Code.Entities.Items
             return null;
         }
 
-        public int OwnerGUID
+        public long OwnerGUID
         {
             get
             {

@@ -6,13 +6,13 @@ namespace JoyLib.Code.Cultures
     {
         public string name;
         public bool isSurname;
-        public Gender gender;
+        public Sex sex;
 
-        public NameData(string nameRef, bool isSurnameRef, Gender genderRef)
+        public NameData(string nameRef, bool isSurnameRef, Sex sexRef)
         {
             name = nameRef;
             isSurname = isSurnameRef;
-            gender = genderRef;
+            sex = sexRef;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Jobs;
+using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Physics;
@@ -51,7 +52,7 @@ namespace JoyLib.Code.World.Generators.Interiors
                     Dictionary<string, int> jobLevels = new Dictionary<string, int>();
                     jobLevels.Add(jobType.name, 1);
 
-                    newEntity = new Entity(templates[entityIndex], EntityNeed.GetFullRandomisedNeeds(), 1, jobType, culture.ChooseGender(), culture.ChooseSexuality(),
+                    newEntity = new Entity(templates[entityIndex], EntityNeed.GetFullRandomisedNeeds(), 1, jobType, culture.Choosesex(), culture.ChooseSexuality(),
                         new Vector2Int(-1, -1), ObjectIcons.GetSprites(templates[entityIndex].Tileset, templates[entityIndex].CreatureType).ToList(), null);
                 }
                 else
@@ -63,7 +64,7 @@ namespace JoyLib.Code.World.Generators.Interiors
                     Dictionary<string, int> jobLevels = new Dictionary<string, int>();
                     jobLevels.Add(jobType.name, 1);
 
-                    newEntity = new Entity(templates[entityIndex], EntityNeed.GetBasicRandomisedNeeds(), 1, jobType, culture.ChooseGender(), culture.ChooseSexuality(),
+                    newEntity = new Entity(templates[entityIndex], EntityNeed.GetBasicRandomisedNeeds(), 1, jobType, culture.Choosesex(), culture.ChooseSexuality(),
                         new Vector2Int(-1, -1), ObjectIcons.GetSprites(templates[entityIndex].Tileset, templates[entityIndex].CreatureType).ToList(), null);
                 }
                 newEntity.Move(availablePoints[pointIndex]);

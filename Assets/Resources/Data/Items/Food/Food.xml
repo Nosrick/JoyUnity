@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Items>
+  <Category>Food</Category>
+  
+  <IdentifiedItem>
+    <Name>Apple</Name>
+    <Description>Said to keep the doctor away. Juicy and fresh!</Description>
+    <Value>5</Value>
+    <Effect></Effect>
+    <SpawnWeight>30</SpawnWeight>
+    <Materials>Food</Materials>
+    <Size>36</Size>
+  </IdentifiedItem>
+</Items>

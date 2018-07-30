@@ -8,14 +8,14 @@ namespace JoyLib.Code.Quests
 {
     public static class QuestTracker
     {
-        private static Dictionary<int, List<Quest>> s_EntityQuests;
+        private static Dictionary<long, List<Quest>> s_EntityQuests;
 
         public static void Initialise()
         {
-            s_EntityQuests = new Dictionary<int, List<Quest>>();
+            s_EntityQuests = new Dictionary<long, List<Quest>>();
         }
 
-        public static List<Quest> GetQuestsForEntity(int GUID)
+        public static List<Quest> GetQuestsForEntity(long GUID)
         {
             if (s_EntityQuests.ContainsKey(GUID))
                 return s_EntityQuests[GUID];
@@ -23,7 +23,7 @@ namespace JoyLib.Code.Quests
                 return new List<Quest>();
         }
 
-        public static Quest GetPrimaryQuestForEntity(int GUID)
+        public static Quest GetPrimaryQuestForEntity(long GUID)
         {
             if (s_EntityQuests.ContainsKey(GUID) && s_EntityQuests[GUID].Count > 0)
                 return s_EntityQuests[GUID][0];
@@ -31,7 +31,7 @@ namespace JoyLib.Code.Quests
                 return null;
         }
 
-        public static void AddQuest(int GUID, Quest quest)
+        public static void AddQuest(long GUID, Quest quest)
         {
             if (s_EntityQuests.ContainsKey(GUID))
                 s_EntityQuests[GUID].Add(quest);

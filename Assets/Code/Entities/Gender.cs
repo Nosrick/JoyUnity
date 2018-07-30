@@ -1,6 +1,6 @@
 ﻿namespace JoyLib.Code.Entities
 {
-    public enum Gender
+    public enum Sex
     {
         Female,
         Male,

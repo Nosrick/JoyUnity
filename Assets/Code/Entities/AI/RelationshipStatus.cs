@@ -4,6 +4,7 @@
     {
         Spouse,
         Child,
-        Relation
+        Relation,
+        Unrelated
     }
 }

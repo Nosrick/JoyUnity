@@ -1,6 +1,7 @@
 ﻿using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Jobs;
+using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Loaders;
 using System;
@@ -16,7 +17,7 @@ namespace JoyLib.Code.States
 
         protected List<JobType> m_Jobs;
         protected int m_JobIndex;
-        protected int m_GenderIndex;
+        protected int m_sexIndex;
 
         protected Entity m_Player;
 
@@ -32,7 +33,7 @@ namespace JoyLib.Code.States
                 m_PlayerStatistics.Add(index, 30);
             }
             m_JobIndex = 0;
-            m_GenderIndex = 0;
+            m_sexIndex = 0;
         }
 
         public override void Start()
@@ -103,10 +104,10 @@ namespace JoyLib.Code.States
             m_JobIndex %= m_Jobs.Count;
         }
 
-        private void ToggleGender(object sender, EventArgs eventArgs)
+        private void Togglesex(object sender, EventArgs eventArgs)
         {
-            m_GenderIndex += 1;
-            m_GenderIndex %= 3;
+            m_sexIndex += 1;
+            m_sexIndex %= 3;
         }
 
         private string GetJobDescription()
@@ -117,12 +118,12 @@ namespace JoyLib.Code.States
 
         private void NextState(object sender, EventArgs eventArgs)
         {
-            Gender m_PlayerGender = (Gender)m_GenderIndex;
+            Sex m_Playersex = (Sex)m_sexIndex;
 
             Dictionary<NeedIndex, EntityNeed> needs = EntityNeed.GetFullRandomisedNeeds();
 
             EntityTemplate humanTemplate = EntityTemplateHandler.Get("Human");
-            m_Player = new Entity(humanTemplate, needs, 1, m_Jobs[m_JobIndex], m_PlayerGender, Sexuality.Bisexual, new UnityEngine.Vector2Int(-1, -1),
+            m_Player = new Entity(humanTemplate, needs, 1, m_Jobs[m_JobIndex], m_Playersex, Sexuality.Bisexual, new UnityEngine.Vector2Int(-1, -1),
                 ObjectIcons.GetSprites("Jobs", m_Jobs[m_JobIndex].name).ToList(), null);
 
             m_Player.PlayerControlled = true;

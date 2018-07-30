@@ -1,21 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace JoyLib.Code.Managers
 {
     public static class GUIDManager
     {
-        private static int m_GUIDCounter = 0;
+        private static long m_GUIDCounter = 0;
 
-        private static List<int> m_RecycleList = new List<int>();
+        private static List<long> m_RecycleList = new List<long>();
 
-        public static int AssignGUID()
+        public static long AssignGUID()
         {
             if (m_RecycleList.Count > 0)
             {
-                int GUID = m_RecycleList[0];
+                long GUID = m_RecycleList[0];
                 m_RecycleList.RemoveAt(0);
                 return GUID;
             }
@@ -23,7 +20,7 @@ namespace JoyLib.Code.Managers
             return m_GUIDCounter;
         }
 
-        public static void ReleaseGUID(int GUIDRef)
+        public static void ReleaseGUID(long GUIDRef)
         {
             m_RecycleList.Add(GUIDRef);
         }

@@ -36,7 +36,7 @@ namespace JoyLib.Code.World
         protected static DateTime s_DateTime;
 
         protected string m_Name;
-        protected int m_GUID;
+        protected long m_GUID;
 
         /// <summary>
         /// A template for adding stuff to later. A blank WorldInstance.
@@ -297,22 +297,25 @@ namespace JoyLib.Code.World
             List<NeedAIData> data = new List<NeedAIData>();
 
             if (entityRef.Vision.GetLength(0) == 1)
+            {
                 return data;
+            }
 
             //Special cases
             //Ownable objects
-            if(objectType.Equals("Ownable"))
+            if (objectType == "Any")
             {
-                for(int i = 0; i < m_Objects.Count; i++)
+                for (int i = 0; i < m_Objects.Count; i++)
                 {
-                    if (m_Objects[i].IsWall)
-                        continue;
-
                     if (!entityRef.Vision[m_Objects[i].WorldPosition.x, m_Objects[i].WorldPosition.y])
+                    {
                         continue;
+                    }
 
                     if (!m_Objects[i].GetType().Equals(typeof(ItemInstance)))
+                    {
                         continue;
+                    }
 
                     NeedAIData tempData = new NeedAIData();
                     tempData.intent = intentRef;
@@ -320,17 +323,19 @@ namespace JoyLib.Code.World
                     data.Add(tempData);
                 }
             }
-
-            for(int i = 0; i < m_Objects.Count; i++)
+            else
             {
-                if(entityRef.Vision[m_Objects[i].WorldPosition.x, m_Objects[i].WorldPosition.y])
+                for (int i = 0; i < m_Objects.Count; i++)
                 {
-                    if (m_Objects[i].BaseType.Equals(objectType))
+                    if (entityRef.Vision[m_Objects[i].WorldPosition.x, m_Objects[i].WorldPosition.y])
                     {
-                        NeedAIData tempData = new NeedAIData();
-                        tempData.intent = intentRef;
-                        tempData.target = m_Objects[i];
-                        data.Add(tempData);
+                        if (m_Objects[i].BaseType.Equals(objectType))
+                        {
+                            NeedAIData tempData = new NeedAIData();
+                            tempData.intent = intentRef;
+                            tempData.target = m_Objects[i];
+                            data.Add(tempData);
+                        }
                     }
                 }
             }
@@ -338,13 +343,21 @@ namespace JoyLib.Code.World
             return data;
         }
 
-        public List<NeedAIData> SearchForEntities(Entity searcher, string entityTypeRef, Intent intentRef)
+        /// <summary>
+        /// TODO: REDO THIS.
+        /// Searches for entities in various ways
+        /// </summary>
+        /// <param name="searcher"></param>
+        /// <param name="entityTypeRef"></param>
+        /// <param name="intentRef"></param>
+        /// <returns></returns>
+        public List<NeedAIData> SearchForEntities(Entity searcher, string entityTypeRef, Intent intentRef, EntityTypeSearch entityTypeSearch = EntityTypeSearch.Any, EntitySentienceSearch entitySentienceSearch = EntitySentienceSearch.Matching)
         {
             List<NeedAIData> data = new List<NeedAIData>();
 
             //Special cases
             //Non-sentient entities
-            if (entityTypeRef.Equals("Entities-ns"))
+            if (entitySentienceSearch == EntitySentienceSearch.NonSentient)
             {
                 List<Entity> entities = m_Entities.Where(x => x.Sentient == false).ToList();
 
@@ -362,7 +375,7 @@ namespace JoyLib.Code.World
             }
 
             //Sentient entities
-            else if (entityTypeRef.Equals("Entities-s"))
+            else if (entitySentienceSearch == EntitySentienceSearch.Sentient)
             {
                 List<Entity> entities = m_Entities.Where(x => x.Sentient).ToList();
 
@@ -380,7 +393,7 @@ namespace JoyLib.Code.World
             }
 
             //All entities
-            else if(entityTypeRef.Equals("Entities"))
+            else if(entitySentienceSearch == EntitySentienceSearch.Any)
             {
                 List<NeedAIData> dataList = new List<NeedAIData>();
                 for(int i = 0; i < m_Entities.Count; i++)
@@ -396,33 +409,34 @@ namespace JoyLib.Code.World
                 return dataList;
             }
 
-            else
+            //Matching sentience
+            else if(entitySentienceSearch == EntitySentienceSearch.Matching)
             {
-                for (int i = 0; i < m_Entities.Count; i++)
+                List<NeedAIData> dataList = new List<NeedAIData>();
+                List<Entity> matchingEntities = m_Entities.Where(x => x.Sentient == searcher.Sentient).ToList();
+                for (int i = 0; i < matchingEntities.Count; i++)
                 {
-                    if (searcher.Vision[m_Entities[i].WorldPosition.x, m_Entities[i].WorldPosition.y])
+                    Vector2Int position = matchingEntities[i].WorldPosition;
+                    if(searcher.Vision[position.x, position.y] && searcher.GUID != matchingEntities[i].GUID)
                     {
-                        if ((m_Entities[i].BaseType.Equals(entityTypeRef) ||
-                            m_Entities[i].CreatureType.Equals(entityTypeRef)) &&
-                            searcher.GUID != Entities[i].GUID)
-                        {
-                            NeedAIData tempData = new NeedAIData();
-                            tempData.intent = intentRef;
-                            tempData.target = Entities[i];
-                            data.Add(tempData);
-                        }
+                        NeedAIData tempData = new NeedAIData();
+                        tempData.intent = intentRef;
+                        tempData.target = matchingEntities[i];
+                        dataList.Add(tempData);
                     }
                 }
-                return data;
+                return dataList;
             }
+
+            return data;
         }
 
-        public NeedAIData SearchForEntities(Entity entityRef, List<int> GUIDs, Intent intentRef)
+        public NeedAIData SearchForEntities(Entity entityRef, List<long> GUIDs, Intent intentRef)
         {
             NeedAIData data = new NeedAIData();
             data.intent = intentRef;
 
-            Dictionary<int, Entity> chosenEntities = m_Entities.Where(x => GUIDs.Contains(x.GUID)).ToDictionary(x => x.GUID, x => x);
+            Dictionary<long, Entity> chosenEntities = m_Entities.Where(x => GUIDs.Contains(x.GUID)).ToDictionary(x => x.GUID, x => x);
             List<Entity> visibleEntities = new List<Entity>();
 
             foreach(Entity entity in chosenEntities.Values)
@@ -447,13 +461,13 @@ namespace JoyLib.Code.World
             List<Entity> validPartners = new List<Entity>();
             if (entityRef.Sexuality == Sexuality.Heterosexual)
             {
-                validPartners = m_Entities.Where(x => x.Gender != entityRef.Gender && x.Sentient == entityRef.Sentient &&
+                validPartners = m_Entities.Where(x => x.sex != entityRef.sex && x.Sentient == entityRef.Sentient &&
                 (x.Sexuality == Sexuality.Heterosexual || x.Sexuality == Sexuality.Bisexual) && x.CreatureType.Equals(entityRef.CreatureType) &&
                 x.Needs[NeedIndex.Sex].contributingHappiness == false).ToList();
             }
             else if(entityRef.Sexuality == Sexuality.Homosexual)
             {
-                validPartners = m_Entities.Where(x => x.Gender == entityRef.Gender && x.Sentient == entityRef.Sentient &&
+                validPartners = m_Entities.Where(x => x.sex == entityRef.sex && x.Sentient == entityRef.Sentient &&
                 (x.Sexuality == Sexuality.Homosexual || x.Sexuality == Sexuality.Bisexual) && x.CreatureType.Equals(entityRef.CreatureType) &&
                 x.Needs[NeedIndex.Sex].contributingHappiness == false).ToList();
             }
@@ -566,18 +580,22 @@ namespace JoyLib.Code.World
             left.Move(tempPosition);
         }
 
-        public void PickUpObject(Entity entityRef)
+        public ItemInstance PickUpObject(Entity entityRef)
         {
             ItemInstance item = (ItemInstance)GetObject(entityRef.WorldPosition);
             if (item != null)
             {
                 item.OwnerGUID = entityRef.GUID;
                 entityRef.AddItem(item);
-                lock (m_Objects)
-                {
-                    m_Objects.Remove(item);
-                }
+                m_Objects.Remove(item);
+
+                //FOR TESTING PURPOSES
+                item.Interact(entityRef);
+
+                return item;
             }
+
+            return null;
         }
 
         public void TradeObjects(Entity leftEntity, ItemInstance leftItem, Entity rightEntity, ItemInstance rightItem)
@@ -734,7 +752,7 @@ namespace JoyLib.Code.World
             return null;
         }
 
-        public Entity GetEntity(int GUID)
+        public Entity GetEntity(long GUID)
         {
             for(int i = 0; i < m_Entities.Count; i++)
             {
@@ -747,7 +765,7 @@ namespace JoyLib.Code.World
             return null;
         }
 
-        public Entity GetEntityRecursive(int GUID)
+        public Entity GetEntityRecursive(long GUID)
         {
             for(int i = 0; i < m_Entities.Count; i++)
             {
@@ -770,7 +788,7 @@ namespace JoyLib.Code.World
             return null;
         }
 
-        public WorldInstance GetWorldOfEntity(int GUID)
+        public WorldInstance GetWorldOfEntity(long GUID)
         {
             for(int i = 0; i < m_Entities.Count; i++)
             {
@@ -997,7 +1015,7 @@ namespace JoyLib.Code.World
             }
         }
 
-        public int GUID
+        public long GUID
         {
             get
             {
@@ -1047,5 +1065,21 @@ namespace JoyLib.Code.World
                 return m_Light;
             }
         }
+    }
+
+    public enum EntitySentienceSearch
+    {
+        Sentient,
+        NonSentient,
+        Any,
+        Matching
+    }
+
+    public enum EntityTypeSearch
+    {
+        MatchingAll,
+        MatchingBaseType,
+        NoMatch,
+        Any
     }
 }

@@ -1,8 +1,6 @@
-﻿using JoyLib.Code.Loaders;
-using System;
+﻿using JoyLib.Code.Entities.Needs;
+using JoyLib.Code.Loaders;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace JoyLib.Code.Entities
 {

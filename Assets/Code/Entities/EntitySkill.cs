@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using JoyLib.Code.Entities.Needs;
+using System.Collections.Generic;
 
 namespace JoyLib.Code.Entities
 {
