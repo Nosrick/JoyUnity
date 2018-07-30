@@ -25,8 +25,6 @@ public class GameManager : MonoBehaviour
     {
         InitialiseEverything();
 
-        string data = File.ReadAllText(Directory.GetCurrentDirectory() + GlobalConstants.SCRIPTS_FOLDER + "test.txt");
-
         m_StateManager = new StateManager();
 
         Entity thief = new Entity(EntityTemplateHandler.Get("Human"), EntityNeed.GetFullRandomisedNeeds(), 1, JobHandler.Get("Thief"), Sex.Neutral, Sexuality.Bisexual, Vector2Int.zero, ObjectIcons.GetSprites("Jobs", "Thief").ToList(), null)

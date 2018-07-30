@@ -1,5 +1,4 @@
 function Interact(entity, item)
-	entity:FulfillNeed("Drink", item.Value * 3)
+	entity:FulfillNeed("Drink", item.Value)
 	entity:RemoveItemFromBackpack(item)
-	return true
 end

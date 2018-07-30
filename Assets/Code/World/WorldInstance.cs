@@ -589,9 +589,6 @@ namespace JoyLib.Code.World
                 entityRef.AddItem(item);
                 m_Objects.Remove(item);
 
-                //FOR TESTING PURPOSES
-                item.Interact(entityRef);
-
                 return item;
             }
 

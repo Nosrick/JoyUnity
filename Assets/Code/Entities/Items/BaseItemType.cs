@@ -17,18 +17,7 @@ namespace JoyLib.Code.Entities.Items
             this.InteractionFileName = interactionFileRef;
             if (InteractionFileName != null && InteractionFileName != "")
             {
-                using (FileStream fileStream = new FileStream(Directory.GetCurrentDirectory() + GlobalConstants.SCRIPTS_FOLDER + InteractionFileName + ".txt", FileMode.Open))
-                {
-                    byte[] bytes = new byte[fileStream.Length];
-                    for (int i = 0; i < fileStream.Length;)
-                    {
-                        i += fileStream.Read(bytes, 0, bytes.Length);
-                    }
-
-                    InteractionFileContents = System.Text.Encoding.Default.GetString(bytes);
-
-                    fileStream.Close();
-                }
+                InteractionFileContents = File.ReadAllText(Directory.GetCurrentDirectory() + InteractionFilePath);
             }
 
             this.Description = description;
@@ -58,8 +47,7 @@ namespace JoyLib.Code.Entities.Items
         {
             get
             {
-                return "Assets/Resources/MoonSharp/Scripts/" + InteractionFileName + ".txt";
-                //return Directory.GetCurrentDirectory() + "/Data/Scripts/Items/" + InteractionFile + ".txt";
+                return GlobalConstants.SCRIPTS_FOLDER + "Items/" + InteractionFileName + ".lua";
             }
         }
 
