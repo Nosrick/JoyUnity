@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities.AI.LOS
@@ -69,6 +70,11 @@ namespace JoyLib.Code.Entities.AI.LOS
         public bool IsObstacle(int x, int y)
         {
             return m_Walls.Contains(new Vector2Int(x, y));
+        }
+
+        public int Radius(int deltaX, int deltaY)
+        {
+            return (int)Math.Round(Math.Sqrt(deltaX * deltaX + deltaY * deltaY));
         }
 
         public bool[,] Vision

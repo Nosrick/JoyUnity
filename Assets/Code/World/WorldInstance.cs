@@ -619,6 +619,12 @@ namespace JoyLib.Code.World
             permissive.Do(entityRef.WorldPosition, new Vector2Int(vision.GetLength(0), vision.GetLength(1)), entityRef.VisionMod, this.Walls.Keys.ToList());
             vision = permissive.Vision;
 
+            /*
+            FOVShadowCasting shadowCasting = new FOVShadowCasting();
+            shadowCasting.Do(new Vector2Int(m_Tiles.GetLength(0), m_Tiles.GetLength(1)), entityRef.WorldPosition, entityRef.VisionMod, this.Walls.Keys.ToList());
+            vision = shadowCasting.Vision;
+            */
+
             if (entityRef.PlayerControlled)
             {
                 lock (m_Discovered)

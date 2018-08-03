@@ -7,8 +7,12 @@ namespace JoyLib.Code.Entities.AI.LOS
     {
         private FOVBoard m_Board;
 
+        private int m_SightMod;
+
         public void Do(Vector2Int origin, Vector2Int dimensions, int sightMod, List<Vector2Int> walls)
         {
+            m_SightMod = sightMod;
+
             m_Board = new FOVBoard(dimensions.x, dimensions.y, walls);
 
             m_Board.Visible(origin.x, origin.y);
@@ -113,7 +117,7 @@ namespace JoyLib.Code.Entities.AI.LOS
             }
         }
 
-        private void VisitCoord(bool[,] visited, Vector2Int origin, Vector2Int increment, Vector2Int d, int viewIndex, List<View> activeViews)
+        private void VisitCoord(bool[,] visited, Vector2Int origin, Vector2Int increment, Vector2Int dimension, int viewIndex, List<View> activeViews)
         {
             Vector2Int topLeft = new Vector2Int(increment.x, increment.y + 1);
             Vector2Int bottomRight = new Vector2Int(increment.x + 1, increment.y);
@@ -130,10 +134,10 @@ namespace JoyLib.Code.Entities.AI.LOS
 
             bool isBlocked = false;
 
-            int realX = increment.x * d.x;
-            int realY = increment.y * d.y;
+            int realX = increment.x * dimension.x;
+            int realY = increment.y * dimension.y;
 
-            if(m_Board.Visited(realX + origin.x, realY + origin.y) == false)
+            if(m_Board.Visited(realX + origin.x, realY + origin.y) == false && m_Board.Radius(realX, realY) < m_SightMod)
             {
                 m_Board.Visible(realX + origin.x, realY + origin.y);
             }
