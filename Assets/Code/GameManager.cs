@@ -1,5 +1,4 @@
 ﻿using Joy.Code.Managers;
-using JoyLib.Code;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Abilities;
@@ -10,9 +9,8 @@ using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.States;
-using MoonSharp.Interpreter;
+using JoyLib.Code.Unity.GUI;
 using System;
-using System.IO;
 using System.Linq;
 using UnityEngine;
 
@@ -33,6 +31,8 @@ public class GameManager : MonoBehaviour
         };
 
         m_StateManager.ChangeState(new WorldCreationState(thief));
+
+        GameObject.Find("NeedsText").GetComponent<GUINeedsAlert>().SetPlayer(thief);
     }
 
     private void InitialiseEverything()

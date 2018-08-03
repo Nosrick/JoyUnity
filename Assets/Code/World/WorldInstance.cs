@@ -1,5 +1,6 @@
 ﻿using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.AI;
+using JoyLib.Code.Entities.AI.LOS;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Managers;
@@ -613,7 +614,11 @@ namespace JoyLib.Code.World
         public bool[,] GetVision(Entity entityRef)
         {
             bool[,] vision = new bool[m_Tiles.GetLength(0), m_Tiles.GetLength(1)];
-            vision = DiscoverTiles(entityRef.WorldPosition, entityRef, vision);
+
+            FOVPermissive permissive = new FOVPermissive();
+            permissive.Do(entityRef.WorldPosition, new Vector2Int(vision.GetLength(0), vision.GetLength(1)), entityRef.VisionMod, this.Walls.Keys.ToList());
+            vision = permissive.Vision;
+
             if (entityRef.PlayerControlled)
             {
                 lock (m_Discovered)
@@ -621,6 +626,9 @@ namespace JoyLib.Code.World
                     m_Discovered = DiscoverTiles(entityRef.WorldPosition, entityRef, m_Discovered);
                 }
             }
+
+            //vision = DiscoverTiles(entityRef.WorldPosition, entityRef, vision);
+
             return vision;
         }
 
@@ -628,7 +636,7 @@ namespace JoyLib.Code.World
         {
             bool[,] vision = visionRef;
 
-            int entityPerception = entityRef.Statistics[StatisticIndex.Perception].Value + Entity.MINIMUM_VISION_DISTANCE;
+            int entityPerception = entityRef.Statistics[StatisticIndex.Perception].Value + GlobalConstants.MINIMUM_VISION_DISTANCE;
             for(int i = 0; i < 360; i++)
             {
                 float x = (float)Math.Cos(i * 0.01745f);
@@ -675,7 +683,7 @@ namespace JoyLib.Code.World
         {
             bool[,] vision = visionRef;
 
-            float entityPerceptionMod = entityRef.Statistics[StatisticIndex.Perception].Value + Entity.MINIMUM_VISION_DISTANCE;
+            float entityPerceptionMod = entityRef.Statistics[StatisticIndex.Perception].Value + GlobalConstants.MINIMUM_VISION_DISTANCE;
             
             Dictionary<Vector2Int, JoyObject> walls = m_Objects.Where(x => x.IsWall).ToDictionary(x => x.WorldPosition, x => x);
 

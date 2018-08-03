@@ -16,7 +16,7 @@ namespace JoyLib.Code.Scripting
             UserData.RegisterProxyType<MoonItem, ItemInstance>(p => new MoonItem(p));
         }
 
-        public static dynamic RunScript(string code, string className, string functionName, params object[] arguments)
+        public static DynValue RunScript(string code, string className, string functionName, params object[] arguments)
         {
             try
             {
@@ -41,7 +41,7 @@ namespace JoyLib.Code.Scripting
             }
         }
 
-        public static dynamic RunScriptFromFile(string fileName, string className, string functionName, params dynamic[] arguments)
+        public static DynValue RunScriptFromFile(string fileName, string className, string functionName, params object[] arguments)
         {
             try
             {

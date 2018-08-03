@@ -72,8 +72,6 @@ namespace JoyLib.Code.Entities
         protected const int NEED_FULFILMENT_COUNTER = 5;
         protected const int REGEN_TICK_TIME = 10;
 
-        public const int MINIMUM_VISION_DISTANCE = 5;
-
         public const int ATTACK_THRESHOLD = -50;
 
         protected static Dictionary<string, CultureType> s_Cultures = CultureLoader.LoadCultures();
@@ -1085,6 +1083,13 @@ namespace JoyLib.Code.Entities
             get
             {
                 return m_Equipment.Keys.ToList();
+            }
+        }
+        public int VisionMod
+        {
+            get
+            {
+                return m_Statistics[StatisticIndex.Perception].Value + GlobalConstants.MINIMUM_VISION_DISTANCE;
             }
         }
     }

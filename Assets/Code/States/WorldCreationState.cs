@@ -71,7 +71,7 @@ namespace JoyLib.Code.States
             //Begin the first floor of the Naga Pits
             List<string> dungeonTypes = new List<string>();
             dungeonTypes.Add("Naga");
-            dungeonTypes.Add("Slime");
+            dungeonTypes.Add("Dungeon Slime");
 
             WorldInstance dungeon = DungeonGenerator.GenerateDungeon("Naga Pits", WORLD_SIZE, 3, dungeonTypes.ToArray());
 

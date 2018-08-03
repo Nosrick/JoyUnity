@@ -42,17 +42,17 @@ TagManager:
     uniqueID: 0
     locked: 0
   - name: Terrain
-    uniqueID: 1120430391
-    locked: 0
-  - name: Walls
-    uniqueID: 26241253
+    uniqueID: 2322335089
     locked: 0
   - name: Objects
-    uniqueID: 3401644641
+    uniqueID: 180740759
+    locked: 0
+  - name: Walls
+    uniqueID: 368102917
     locked: 0
   - name: Entities
-    uniqueID: 3339809639
+    uniqueID: 27417553
     locked: 0
   - name: Fog of War
-    uniqueID: 4192967451
+    uniqueID: 3800769887
     locked: 0
