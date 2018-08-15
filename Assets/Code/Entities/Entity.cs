@@ -2,6 +2,7 @@
 using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.AI;
+using JoyLib.Code.Entities.AI.LOS;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Jobs;
 using JoyLib.Code.Entities.Needs;
@@ -67,6 +68,8 @@ namespace JoyLib.Code.Entities
         protected Pathfinder m_Pathfinder;
         
         protected Queue<Vector2Int> m_PathfindingData;
+
+        protected IFOVHandler m_FOVHandler;
 
         protected const int XP_PER_LEVEL = 100;
         protected const int NEED_FULFILMENT_COUNTER = 5;
@@ -134,7 +137,7 @@ namespace JoyLib.Code.Entities
             this.m_Equipment = equipment;
             this.m_Backpack = backpack;
             this.m_Relationships = relationships;
-            this.sex = sex;
+            this.Sex = sex;
             this.m_Family = family;
             this.m_VisionType = template.VisionType;
 
@@ -153,6 +156,8 @@ namespace JoyLib.Code.Entities
             this.RegenTicker = RNG.Roll(0, REGEN_TICK_TIME - 1);
 
             this.MyWorld = world;
+
+            SetFOVHandler();
         }
 
         /// <summary>
@@ -203,7 +208,7 @@ namespace JoyLib.Code.Entities
             this.m_Equipment = new Dictionary<string, ItemInstance>();
             this.m_Backpack = new List<ItemInstance>();
             this.m_Relationships = new Dictionary<long, int>();
-            this.sex = sex;
+            this.Sex = sex;
             this.m_Family = new Dictionary<long, RelationshipStatus>();
             this.m_VisionType = template.VisionType;
 
@@ -222,6 +227,16 @@ namespace JoyLib.Code.Entities
             this.RegenTicker = RNG.Roll(0, REGEN_TICK_TIME - 1);
 
             this.MyWorld = world;
+
+            SetFOVHandler();
+        }
+
+        private void SetFOVHandler()
+        {
+            //m_FOVHandler = new FOVShadowCasting();
+            //m_FOVHandler = new FOVPermissive();
+            //m_FOVHandler = new FOVRecursiveShadowcasting();
+            m_FOVHandler = new FOVDirty();
         }
 
         /*
@@ -381,7 +396,16 @@ namespace JoyLib.Code.Entities
 
         public void UpdateMe()
         {
-            m_Vision = MyWorld.GetVision(this);
+            if (this.MyWorld.IsDirty)
+            {
+                FOVBasicBoard board = (FOVBasicBoard)m_FOVHandler.Do(this.WorldPosition, this.MyWorld.Dimensions, this.VisionMod, this.MyWorld.Walls.Keys.ToList());
+                m_Vision = board.Vision;
+            }
+            else
+            {
+                FOVBasicBoard board = (FOVBasicBoard)m_FOVHandler.Do(this.WorldPosition, this.VisionMod);
+                m_Vision = board.Vision;
+            }
 
             HasMoved = false;
 
@@ -543,11 +567,11 @@ namespace JoyLib.Code.Entities
             {
                 return true;
             }
-            else if(m_Sexuality == Sexuality.Heterosexual && (entityRef.sex != sex || entityRef.sex == Sex.Neutral))
+            else if(m_Sexuality == Sexuality.Heterosexual && (entityRef.Sex != Sex || entityRef.Sex == Sex.Neutral))
             {
                 return true;
             }
-            else if(m_Sexuality == Sexuality.Homosexual && (entityRef.sex == sex || entityRef.sex == Sex.Neutral))
+            else if(m_Sexuality == Sexuality.Homosexual && (entityRef.Sex == Sex || entityRef.Sex == Sex.Neutral))
             {
                 return true;
             }
@@ -780,7 +804,7 @@ namespace JoyLib.Code.Entities
             protected set;
         }
 
-        public Sex sex
+        public Sex Sex
         {
             get;
             protected set;

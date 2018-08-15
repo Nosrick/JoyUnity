@@ -1,20 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities.AI.LOS
 {
-    public class FOVShadowCasting
+    public class FOVShadowCasting : IFOVHandler
     {
-        private FOVBoard m_Board;
+        private FOVBasicBoard m_Board;
 
         private readonly Vector2Int[] DIAGONALS = { new Vector2Int(1, -1), new Vector2Int(1, 1), new Vector2Int(-1, 1), new Vector2Int(-1, -1) };
 
-        public void Do(Vector2Int dimensions, Vector2Int origin, int sightMod, List<Vector2Int> walls)
+        public IFOVBoard Do(Vector2Int origin, int sightMod)
         {
-            m_Board = new FOVBoard(dimensions.x, dimensions.y, walls);
+            m_Board.ClearBoard();
+
+            m_Board.Visible(origin.x, origin.y);
+            foreach (Vector2Int direction in DIAGONALS)
+            {
+                CastLight(origin, sightMod, 1, 1, 0, 0, direction.x, direction.y, 0);
+                CastLight(origin, sightMod, 1, 1, 0, direction.x, 0, 0, direction.y);
+            }
+
+            return m_Board;
+        }
+
+        public IFOVBoard Do(Vector2Int origin, Vector2Int dimensions, int sightMod, List<Vector2Int> walls)
+        {
+            m_Board = new FOVBasicBoard(dimensions.x, dimensions.y, walls);
 
             m_Board.Visible(origin.x, origin.y);
             foreach(Vector2Int direction in DIAGONALS)
@@ -22,6 +34,8 @@ namespace JoyLib.Code.Entities.AI.LOS
                 CastLight(origin, sightMod, 1, 1, 0, 0, direction.x, direction.y, 0);
                 CastLight(origin, sightMod, 1, 1, 0, direction.x, 0, 0, direction.y);
             }
+
+            return m_Board;
         }
 
         private void CastLight(Vector2Int origin, int sightMod, int row, int start, int end, int xx, int xy, int yx, int yy)
@@ -60,7 +74,7 @@ namespace JoyLib.Code.Entities.AI.LOS
 
                     if (blocked)
                     {
-                        if(m_Board.IsBlocked(currentX, currentY))
+                        if(m_Board.IsObstacle(currentX, currentY))
                         {
                             newStart = (int)rightSlope;
                             continue;
@@ -73,7 +87,7 @@ namespace JoyLib.Code.Entities.AI.LOS
                     }
                     else
                     {
-                        if(m_Board.IsBlocked(currentX, currentY) && distance < sightMod)
+                        if(m_Board.IsObstacle(currentX, currentY) && distance < sightMod)
                         {
                             blocked = true;
                             CastLight(origin, sightMod, distance + 1, start, (int)leftSlope, xx, xy, yx, yy);
@@ -83,7 +97,6 @@ namespace JoyLib.Code.Entities.AI.LOS
                 }
             }
         }
-
 
         public bool[,] Vision
         {

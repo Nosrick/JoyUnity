@@ -215,7 +215,7 @@ namespace JoyLib.Code.Scripting
 
         public Sex GetSex()
         {
-            return m_AssociatedEntity.sex;
+            return m_AssociatedEntity.Sex;
         }
 
         public Sexuality GetSexuality()

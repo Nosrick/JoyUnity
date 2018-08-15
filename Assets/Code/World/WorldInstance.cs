@@ -19,6 +19,8 @@ namespace JoyLib.Code.World
         protected bool[,] m_Discovered;
         protected int m_PlayerIndex;
 
+        protected Vector2Int m_Dimensions;
+
         protected readonly WorldType m_Type;
 
         //Worlds and where to access them
@@ -47,6 +49,8 @@ namespace JoyLib.Code.World
         /// <param name="name"></param>
         public WorldInstance(WorldTile[,] tiles, WorldType type, string name)
         {
+            m_Dimensions = new Vector2Int(tiles.GetLength(0), tiles.GetLength(1));
+
             this.Name = name;
             this.m_Type = type;
             m_Tiles = tiles;
@@ -237,6 +241,7 @@ namespace JoyLib.Code.World
             {
                 m_Objects.Add(objectRef);
             }
+            IsDirty = true;
         }
 
         public void RemoveObject(Vector2Int positionRef)
@@ -246,6 +251,7 @@ namespace JoyLib.Code.World
                 if (m_Objects[i].WorldPosition == positionRef)
                 {
                     m_Objects.RemoveAt(i);
+                    IsDirty = true;
                     return;
                 }
             }
@@ -284,6 +290,8 @@ namespace JoyLib.Code.World
             {
                 entity.UpdateMe();
             }
+
+            IsDirty = false;
         }
 
         /// <summary>
@@ -462,13 +470,13 @@ namespace JoyLib.Code.World
             List<Entity> validPartners = new List<Entity>();
             if (entityRef.Sexuality == Sexuality.Heterosexual)
             {
-                validPartners = m_Entities.Where(x => x.sex != entityRef.sex && x.Sentient == entityRef.Sentient &&
+                validPartners = m_Entities.Where(x => x.Sex != entityRef.Sex && x.Sentient == entityRef.Sentient &&
                 (x.Sexuality == Sexuality.Heterosexual || x.Sexuality == Sexuality.Bisexual) && x.CreatureType.Equals(entityRef.CreatureType) &&
                 x.Needs[NeedIndex.Sex].contributingHappiness == false).ToList();
             }
             else if(entityRef.Sexuality == Sexuality.Homosexual)
             {
-                validPartners = m_Entities.Where(x => x.sex == entityRef.sex && x.Sentient == entityRef.Sentient &&
+                validPartners = m_Entities.Where(x => x.Sex == entityRef.Sex && x.Sentient == entityRef.Sentient &&
                 (x.Sexuality == Sexuality.Homosexual || x.Sexuality == Sexuality.Bisexual) && x.CreatureType.Equals(entityRef.CreatureType) &&
                 x.Needs[NeedIndex.Sex].contributingHappiness == false).ToList();
             }
@@ -611,33 +619,6 @@ namespace JoyLib.Code.World
             }
         }
 
-        public bool[,] GetVision(Entity entityRef)
-        {
-            bool[,] vision = new bool[m_Tiles.GetLength(0), m_Tiles.GetLength(1)];
-
-            FOVPermissive permissive = new FOVPermissive();
-            permissive.Do(entityRef.WorldPosition, new Vector2Int(vision.GetLength(0), vision.GetLength(1)), entityRef.VisionMod, this.Walls.Keys.ToList());
-            vision = permissive.Vision;
-
-            /*
-            FOVShadowCasting shadowCasting = new FOVShadowCasting();
-            shadowCasting.Do(new Vector2Int(m_Tiles.GetLength(0), m_Tiles.GetLength(1)), entityRef.WorldPosition, entityRef.VisionMod, this.Walls.Keys.ToList());
-            vision = shadowCasting.Vision;
-            */
-
-            if (entityRef.PlayerControlled)
-            {
-                lock (m_Discovered)
-                {
-                    m_Discovered = DiscoverTiles(entityRef.WorldPosition, entityRef, m_Discovered);
-                }
-            }
-
-            //vision = DiscoverTiles(entityRef.WorldPosition, entityRef, vision);
-
-            return vision;
-        }
-
         protected bool[,] DiscoverTiles(Vector2Int pointRef, Entity entityRef, bool[,] visionRef)
         {
             bool[,] vision = visionRef;
@@ -736,6 +717,7 @@ namespace JoyLib.Code.World
         {
             m_Entities.Add(entityRef);
             CalculatePlayerIndex();
+            IsDirty = true;
         }
 
         public void RemoveEntity(Vector2Int positionRef)
@@ -749,6 +731,7 @@ namespace JoyLib.Code.World
                 }
             }
             CalculatePlayerIndex();
+            IsDirty = true;
         }
 
         public Entity GetEntity(Vector2Int positionRef)
@@ -1055,7 +1038,9 @@ namespace JoyLib.Code.World
             get
             {
                 if (!m_Entities.Any(x => x.PlayerControlled))
+                {
                     return null;
+                }
 
                 return m_Entities[m_PlayerIndex];
             }
@@ -1075,6 +1060,20 @@ namespace JoyLib.Code.World
             {
                 return m_Light;
             }
+        }
+
+        public Vector2Int Dimensions
+        {
+            get
+            {
+                return m_Dimensions;
+            }
+        }
+
+        public bool IsDirty
+        {
+            get;
+            protected set;
         }
     }
 

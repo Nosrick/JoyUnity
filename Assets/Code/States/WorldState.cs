@@ -57,7 +57,7 @@ namespace JoyLib.Code.States
         public override void Start()
         {
             base.Start();
-            m_ActiveWorld.Player.Vision = m_ActiveWorld.GetVision(m_ActiveWorld.Player);
+            m_ActiveWorld.Player.UpdateMe();
             m_GameplayFlags = GameplayFlags.Moving;
             RumourMill.GenerateRumours(m_ActiveWorld);
 
@@ -98,7 +98,7 @@ namespace JoyLib.Code.States
             player = m_ActiveWorld.Player;
 
             player.Move(spawnPoint);
-            player.Vision = m_ActiveWorld.GetVision(player);
+            player.UpdateMe();
 
             m_GameplayFlags = GameplayFlags.Moving;
             RumourMill.GenerateRumours(m_ActiveWorld);
@@ -378,9 +378,11 @@ namespace JoyLib.Code.States
                 }
                 else
                 {
-                    player.Move(newPlayerPoint);
-                    player.Vision = m_ActiveWorld.GetVision(player);
-                    Tick();
+                    if (newPlayerPoint.x >= 0 && newPlayerPoint.x < m_ActiveWorld.Tiles.GetLength(0) && newPlayerPoint.y >= 0 && newPlayerPoint.y < m_ActiveWorld.Tiles.GetLength(1))
+                    {
+                        player.Move(newPlayerPoint);
+                        Tick();
+                    }
                 }
             }
             else if (m_GameplayFlags == GameplayFlags.Targeting)
@@ -475,13 +477,13 @@ namespace JoyLib.Code.States
         protected void DrawObjects()
         {
             Entity player = m_ActiveWorld.Player;
-
+            bool[,] vision = player.Vision;
             for(int i = 0; i < m_FogOfWarHolder.transform.childCount; i++)
             {
                 GameObject fog = m_FogOfWarHolder.transform.GetChild(i).gameObject;
                 Vector2Int position = new Vector2Int((int)fog.transform.position.x, (int)fog.transform.position.y);
 
-                bool visible = player.Vision[position.x, position.y];
+                bool visible = vision[position.x, position.y];
                 int lightLevel;
                 if(visible)
                 {

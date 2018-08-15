@@ -3,17 +3,15 @@ using UnityEngine;
 
 namespace JoyLib.Code.Entities.AI.LOS
 {
-    public class FOVPermissive
+    public class FOVPermissive : IFOVHandler
     {
-        private FOVBoard m_Board;
+        private FOVBasicBoard m_Board;
 
         private int m_SightMod;
 
-        public void Do(Vector2Int origin, Vector2Int dimensions, int sightMod, List<Vector2Int> walls)
+        public IFOVBoard Do(Vector2Int origin, int sightMod)
         {
-            m_SightMod = sightMod;
-
-            m_Board = new FOVBoard(dimensions.x, dimensions.y, walls);
+            m_Board.ClearBoard();
 
             m_Board.Visible(origin.x, origin.y);
 
@@ -28,9 +26,9 @@ namespace JoyLib.Code.Entities.AI.LOS
                 xMin = sightMod;
             }
 
-            if (dimensions.x - origin.x - 1 < sightMod)
+            if (m_Board.Width - origin.x - 1 < sightMod)
             {
-                xMax = dimensions.x - origin.x - 1;
+                xMax = m_Board.Width - origin.x - 1;
             }
             else
             {
@@ -39,16 +37,16 @@ namespace JoyLib.Code.Entities.AI.LOS
 
             if (origin.y < sightMod)
             {
-                yMin = sightMod;
+                yMin = origin.y;
             }
             else
             {
                 yMin = sightMod;
             }
 
-            if (dimensions.y - origin.y - 1 < sightMod)
+            if (m_Board.Height - origin.y - 1 < sightMod)
             {
-                yMax = dimensions.y - origin.y - 1;
+                yMax = m_Board.Height - origin.y - 1;
             }
             else
             {
@@ -66,9 +64,72 @@ namespace JoyLib.Code.Entities.AI.LOS
 
             //Northwest
             CheckQuadrant(m_Board.Vision, origin, new Vector2Int(-1, 1), new Vector2Int(xMin, yMax));
+
+            return m_Board;
         }
 
-        private void CheckQuadrant(bool[,] visited, Vector2Int origin, Vector2Int d, Vector2Int extents)
+        public IFOVBoard Do(Vector2Int origin, Vector2Int dimensions, int sightMod, List<Vector2Int> walls)
+        {
+            m_SightMod = sightMod;
+
+            m_Board = new FOVBasicBoard(dimensions.x, dimensions.y, walls);
+
+            m_Board.Visible(origin.x, origin.y);
+
+            int xMin, xMax, yMin, yMax;
+
+            if (origin.x < sightMod)
+            {
+                xMin = origin.x;
+            }
+            else
+            {
+                xMin = sightMod;
+            }
+
+            if (m_Board.Width - origin.x - 1 < sightMod)
+            {
+                xMax = m_Board.Width - origin.x - 1;
+            }
+            else
+            {
+                xMax = sightMod;
+            }
+
+            if (origin.y < sightMod)
+            {
+                yMin = origin.y;
+            }
+            else
+            {
+                yMin = sightMod;
+            }
+
+            if (m_Board.Height - origin.y - 1 < sightMod)
+            {
+                yMax = m_Board.Height - origin.y - 1;
+            }
+            else
+            {
+                yMax = sightMod;
+            }
+
+            //Northeast quadrant
+            CheckQuadrant(m_Board.Vision, origin, new Vector2Int(1, 1), new Vector2Int(xMax, yMax));
+
+            //Southeast
+            CheckQuadrant(m_Board.Vision, origin, new Vector2Int(1, -1), new Vector2Int(xMax, yMin));
+
+            //Southwest
+            CheckQuadrant(m_Board.Vision, origin, new Vector2Int(-1, -1), new Vector2Int(xMin, yMin));
+
+            //Northwest
+            CheckQuadrant(m_Board.Vision, origin, new Vector2Int(-1, 1), new Vector2Int(xMin, yMax));
+
+            return m_Board;
+        }
+
+        private void CheckQuadrant(bool[,] visited, Vector2Int origin, Vector2Int dimension, Vector2Int extents)
         {
             Line shallowLine = new Line(0, 1, extents.x, 0);
             Line steepLine = new Line(1, 0, 0, extents.y);
@@ -108,7 +169,7 @@ namespace JoyLib.Code.Entities.AI.LOS
                     int x = i - j;
                     int y = j;
 
-                    VisitCoord(m_Board.Vision, origin, new Vector2Int(x, y), d, viewIndex, activeViews);
+                    VisitCoord(origin, new Vector2Int(x, y), dimension, viewIndex, activeViews);
 
                     j += 1;
                 }
@@ -117,10 +178,10 @@ namespace JoyLib.Code.Entities.AI.LOS
             }
         }
 
-        private void VisitCoord(bool[,] visited, Vector2Int origin, Vector2Int increment, Vector2Int dimension, int viewIndex, List<View> activeViews)
+        private void VisitCoord(Vector2Int origin, Vector2Int current, Vector2Int dimension, int viewIndex, List<View> activeViews)
         {
-            Vector2Int topLeft = new Vector2Int(increment.x, increment.y + 1);
-            Vector2Int bottomRight = new Vector2Int(increment.x + 1, increment.y);
+            Vector2Int topLeft = new Vector2Int(current.x, current.y + 1);
+            Vector2Int bottomRight = new Vector2Int(current.x + 1, current.y);
 
             while(viewIndex < activeViews.Count && activeViews[viewIndex].SteepLine.BelowOrCollinear(bottomRight.x, bottomRight.y))
             {
@@ -134,15 +195,21 @@ namespace JoyLib.Code.Entities.AI.LOS
 
             bool isBlocked = false;
 
-            int realX = increment.x * dimension.x;
-            int realY = increment.y * dimension.y;
+            int realX = current.x * dimension.x;
+            int realY = current.y * dimension.y;
 
-            if(m_Board.Visited(realX + origin.x, realY + origin.y) == false && m_Board.Radius(realX, realY) < m_SightMod)
+            if(origin.x + realX < 0 || origin.x + realX >= m_Board.Width || origin.y + realY < 0 || origin.y + realY >= m_Board.Height)
+            {
+                activeViews.RemoveAt(viewIndex);
+                return;
+            }
+
+            if(m_Board.Visited(realX + origin.x, realY + origin.y) == false && m_Board.Radius(realX, realY) <= m_SightMod)
             {
                 m_Board.Visible(realX + origin.x, realY + origin.y);
             }
 
-            isBlocked = m_Board.IsBlocked(realX + origin.x, realY + origin.y);
+            isBlocked = m_Board.IsObstacle(realX + origin.x, realY + origin.y);
             if(isBlocked == false)
             {
                 return;
@@ -223,7 +290,7 @@ namespace JoyLib.Code.Entities.AI.LOS
             Line shallowLine = activeViews[viewIndex].ShallowLine;
             Line steepLine = activeViews[viewIndex].SteepLine;
 
-            if(shallowLine.LineCollinear(steepLine) && (shallowLine.Collinear(0, 1) || shallowLine.Collinear(0, 1)))
+            if(shallowLine.LineCollinear(steepLine) && (shallowLine.Collinear(0, 1) || shallowLine.Collinear(1, 0)))
             {
                 activeViews.RemoveAt(viewIndex);
                 return false;
