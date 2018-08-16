@@ -13,7 +13,7 @@
 	
 	--If we've found a drink, drink it
 	if chosenDrink != nil then
-		chosenDrink:Interact(entity)
+		entity:InteractWithItem(chosenDrink)
 		entity:RemoveItemFromBackpack(chosenDrink)
 		return
 	end
@@ -33,8 +33,14 @@
 	
 	--If there's a drink nearby, go find it
 	if chosenDrink != nil then
-		entity:Seek(chosenDrink)
-		return
+		if chosenDrink:GetPosition().Equals(entity:GetPosition()) == true then
+			entity:InteractWithItem(chosenDrink)
+			entity:RemoveItemFromWorld(chosenDrink)
+			return
+		else
+			entity:Seek(chosenDrink, "Drink")
+			return
+		end
 	end
 	
 	--If there isn't a drink nearby, wander

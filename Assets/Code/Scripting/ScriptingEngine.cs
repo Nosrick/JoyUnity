@@ -14,6 +14,7 @@ namespace JoyLib.Code.Scripting
             UserData.RegisterProxyType<MoonEntity, Entity>(p => new MoonEntity(p));
             UserData.RegisterProxyType<MoonItem, ItemInstance>(p => new MoonItem(p));
             UserData.RegisterProxyType<MoonCulture, CultureType>(p => new MoonCulture(p));
+            UserData.RegisterType(typeof(MoonVector2Int));
         }
 
         public static DynValue RunScript(string code, string className, string functionName, params object[] arguments)
@@ -27,6 +28,7 @@ namespace JoyLib.Code.Scripting
                 script.Globals["MoonEntity"] = UserData.CreateStatic<Entity>();
                 script.Globals["MoonItem"] = UserData.CreateStatic<ItemInstance>();
                 script.Globals["MoonCulture"] = UserData.CreateStatic<CultureType>();
+                script.Globals["MoonVector"] = UserData.CreateStatic<MoonVector2Int>();
 
                 script.DoString(code);
                 DynValue function = script.Globals.Get(functionName);

@@ -13,7 +13,7 @@ function FindFulfillmentObject(entity)
 	
 	--If we've found food, eat it
 	if chosenFood != nil then
-		chosenFood:Interact(entity)
+		entity:InteractWithItem(chosenFood)
 		entity:RemoveItemFromBackpack(chosenFood)
 		return
 	end
@@ -33,8 +33,13 @@ function FindFulfillmentObject(entity)
 	
 	--If there's food nearby, go find it
 	if chosenFood != nil then
-		entity:Seek(chosenFood)
-		return
+		if chosenFood:GetPosition().Equals(entity:GetPosition()) == true then
+			entity:InteractWithItem(chosenFood)
+			entity:RemoveItemFromWorld(chosenFood)
+		else
+			entity:Seek(chosenFood, "Hunger")
+			return
+		end
 	end
 	
 	--If there isn't food nearby, wander

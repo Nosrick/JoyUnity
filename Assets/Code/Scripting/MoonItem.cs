@@ -14,12 +14,9 @@ namespace JoyLib.Code.Scripting
         }
 
         [MoonSharpHidden]
-        public ItemInstance ItemInstance
+        public ItemInstance GetItemInstance()
         {
-            get
-            {
-                return m_Item;
-            }
+            return m_Item;
         }
 
         public int Value

@@ -22,7 +22,7 @@ function FindFulfillmentObject(entity)
 		end
 		
 		if chosenPartner != nil then
-			entity:Seek(chosenPartner)
+			entity:Seek(chosenPartner, "Sex")
 		end
 	end
 	

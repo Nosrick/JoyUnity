@@ -49,13 +49,30 @@ namespace JoyLib.Code.Scripting
 
         public void RemoveItemFromBackpack(MoonItem item)
         {
-            m_AssociatedEntity.RemoveItemFromBackpack(item.ItemInstance);
-            Debug.Log(item.ItemInstance.DisplayName + " removed from " + this.m_AssociatedEntity.JoyName + " backpack.");
+            m_AssociatedEntity.RemoveItemFromBackpack(item.GetItemInstance());
+            Debug.Log(item.GetItemInstance().DisplayName + " removed from " + this.m_AssociatedEntity.JoyName + "'s backpack.");
         }
 
         public void AddItemToBackpack(MoonItem item)
         {
-            m_AssociatedEntity.AddItem(item.ItemInstance);
+            m_AssociatedEntity.AddItem(item.GetItemInstance());
+        }
+
+        public void InteractWithItem(MoonItem item)
+        {
+            item.GetItemInstance().Interact(this.m_AssociatedEntity);
+            Debug.Log(m_AssociatedEntity.JoyName + " interacted with " + item.GetName() + " at " + m_AssociatedEntity.WorldPosition.ToString());
+        }
+
+        public void RemoveItemFromWorld(MoonItem item)
+        {
+            m_AssociatedEntity.MyWorld.RemoveObject(item.GetAssociatedObject().WorldPosition);
+            Debug.Log(m_AssociatedEntity.JoyName + " removed " + item.GetName() + " from world at " + item.GetAssociatedObject().WorldPosition.ToString());
+        }
+
+        public void RemoveItemFromWorld(int x, int y)
+        {
+            m_AssociatedEntity.MyWorld.RemoveObject(new Vector2Int(x, y));
         }
 
         public List<MoonItem> SearchBackpack(string itemType)
@@ -95,6 +112,8 @@ namespace JoyLib.Code.Scripting
         {
             List<MoonEntity> entities = m_AssociatedEntity.MyWorld.SearchForEntities(this, type, sentience);
 
+            Debug.Log(m_AssociatedEntity.JoyName + " is searching for entities of type " + type + " of sentience " + sentience);
+
             return entities;
         }
 
@@ -102,18 +121,23 @@ namespace JoyLib.Code.Scripting
         {
             List<MoonEntity> mates = m_AssociatedEntity.MyWorld.SearchForMate(this.m_AssociatedEntity);
 
+            Debug.Log(m_AssociatedEntity.JoyName + " is searching for mates");
+
             return mates;
         }
 
-        public void Seek(MoonObject moonObject)
+        public void Seek(MoonObject moonObject, string need)
         {
             NeedAIData needAIData = new NeedAIData();
             needAIData.intent = Intent.Interact;
             needAIData.searching = false;
             needAIData.target = moonObject.GetAssociatedObject();
-            needAIData.targetPoint = moonObject.GetPosition();
+            needAIData.targetPoint = new Vector2Int(-1, -1);
+            needAIData.need = (NeedIndex)Enum.Parse(typeof(NeedIndex), need, true);
 
             m_AssociatedEntity.CurrentTarget = needAIData;
+
+            Debug.Log(m_AssociatedEntity.JoyName + " is seeking " + needAIData.target.JoyName);
         }
 
         public void Wander()
@@ -123,11 +147,13 @@ namespace JoyLib.Code.Scripting
             needAIData.searching = true;
 
             m_AssociatedEntity.CurrentTarget = needAIData;
+
+            Debug.Log(m_AssociatedEntity.JoyName + " is wandering");
         }
 
         public void EquipItem(MoonItem item, string slot)
         {
-            m_AssociatedEntity.EquipItem(item.ItemInstance, slot);
+            m_AssociatedEntity.EquipItem(item.GetItemInstance(), slot);
         }
 
         public void UnequipItem(string slot)

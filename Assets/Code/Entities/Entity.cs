@@ -405,53 +405,31 @@ namespace JoyLib.Code.Entities
                 //Otherwise, carry on with what you're doing
                 else
                 {
-                    //If we've not arrived at our target
-                    if (WorldPosition != CurrentTarget.targetPoint || (CurrentTarget.target != null && AdjacencyHelper.IsAdjacent(WorldPosition, CurrentTarget.target.WorldPosition) == true))
+                    if(WorldPosition == CurrentTarget.targetPoint || (CurrentTarget.target != null && WorldPosition == CurrentTarget.target.WorldPosition))
                     {
-                        //Move to target
-                        MoveToTarget(CurrentTarget);
-                    }
-                    else
-                    {
-                        //If we've arrived at the target point
-                        if(CurrentTarget.targetPoint != new Vector2Int(-1, -1))
-                        {
-                            try
-                            {
-                                //We're interacting with an object here
-                                ItemInstance item = (ItemInstance)MyWorld.GetObject(CurrentTarget.targetPoint);
-                                if (item != null)
-                                {
-                                    if (CurrentTarget.intent == Intent.Interact)
-                                    {
-                                        MyWorld.PickUpObject(this);
-                                    }
-                                    else if(CurrentTarget.intent == Intent.Attack)
-                                    {
-                                        CombatEngine.SwingWeapon(this, item);
-                                    }
-                                }
-                            }
-                            catch(Exception e)
-                            {
-                                Debug.LogError(e.Message);
-                                Debug.LogError(e.StackTrace);
-                            }
-                        }
                         //If we have a target
-                        else if(CurrentTarget.target != null)
+                        if (CurrentTarget.target != null)
                         {
                             //We're interacting with an entity here
                             if (CurrentTarget.intent == Intent.Interact)
                             {
                                 //TODO: WRITE AN ENTITY INTERACTION
+                                EntityNeed need = this.Needs[CurrentTarget.need];
+
+                                Debug.Log("Running LUA script: FindFulfillmentObject (" + need.name + ") requested by: " + this.JoyName);
+                                ScriptingEngine.RunScript(need.InteractionFileContents, need.name, "FindFulfillmentObject", new object[] { new MoonEntity(this) });
                             }
-                            else if(CurrentTarget.intent == Intent.Attack)
+                            else if (CurrentTarget.intent == Intent.Attack)
                             {
                                 CombatEngine.SwingWeapon(this, CurrentTarget.target);
                             }
                         }
-                        
+                    }
+                    //If we've not arrived at our target
+                    else if (WorldPosition != CurrentTarget.targetPoint || (CurrentTarget.target != null && AdjacencyHelper.IsAdjacent(WorldPosition, CurrentTarget.target.WorldPosition) == false))
+                    {
+                        //Move to target
+                        MoveToTarget(CurrentTarget);
                     }
                 }
             }
@@ -625,7 +603,7 @@ namespace JoyLib.Code.Entities
 
         protected void PerformFirstImpression(long GUID)
         {
-            Entity entity = MyWorld.GetEntityRecursive(GUID);
+            Entity entity = EntityHandler.Get(GUID);
             int firstImpression = (entity.Statistics[StatisticIndex.Personality].Value + entity.Statistics[StatisticIndex.Suavity].Value + entity.Statistics[StatisticIndex.Wit].Value);
             m_Relationships.Add(GUID, firstImpression);
         }

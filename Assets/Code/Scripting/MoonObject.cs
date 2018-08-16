@@ -34,9 +34,9 @@ namespace JoyLib.Code.Scripting
             return m_AssociatedObject.IsWall;
         }
 
-        public Vector2Int GetPosition()
+        public MoonVector2Int GetPosition()
         {
-            return m_AssociatedObject.WorldPosition;
+            return new MoonVector2Int(m_AssociatedObject.WorldPosition);
         }
 
         public string GetName()

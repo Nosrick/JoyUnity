@@ -11,7 +11,7 @@ function FindFulfillmentObject(entity)
 	end
 	
 	if chosenBed != nil then
-		entity:Seek(chosenBed)
+		entity:Seek(chosenBed, "Sleep")
 		return
 	end
 	

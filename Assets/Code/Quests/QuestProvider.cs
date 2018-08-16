@@ -138,7 +138,7 @@ namespace JoyLib.Code.Quests
             List<WorldInstance> worlds = overworldRef.GetWorlds(overworldRef);
             WorldInstance target = overworldRef;
 
-            WorldInstance currentWorld = overworldRef.GetWorldOfEntity(provider.GUID);
+            WorldInstance currentWorld = provider.MyWorld;
 
             while (true)
             {

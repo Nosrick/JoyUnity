@@ -42,6 +42,11 @@ namespace JoyLib.Code.World
         protected string m_Name;
         protected long m_GUID;
 
+        protected GameObject m_FogOfWarHolder;
+        protected GameObject m_WallHolder;
+        protected GameObject m_ObjectHolder;
+        protected GameObject m_EntityHolder;
+
         /// <summary>
         /// A template for adding stuff to later. A blank WorldInstance.
         /// </summary>
@@ -62,6 +67,11 @@ namespace JoyLib.Code.World
             GUID = GUIDManager.AssignGUID();
             m_Discovered = new bool[m_Tiles.GetLength(0), m_Tiles.GetLength(1)];
             m_Light = new int[m_Tiles.GetLength(0), m_Tiles.GetLength(1)];
+
+            m_FogOfWarHolder = GameObject.Find("WorldFog");
+            m_WallHolder = GameObject.Find("WorldWalls");
+            m_ObjectHolder = GameObject.Find("WorldObjects");
+            m_EntityHolder = GameObject.Find("WorldEntities");
         }
 
         /// <summary>
@@ -87,6 +97,11 @@ namespace JoyLib.Code.World
             m_Discovered = new bool[m_Tiles.GetLength(0), m_Tiles.GetLength(1)];
             CalculatePlayerIndex();
             m_Light = new int[m_Tiles.GetLength(0), m_Tiles.GetLength(1)];
+
+            m_FogOfWarHolder = GameObject.Find("WorldFog");
+            m_WallHolder = GameObject.Find("WorldWalls");
+            m_ObjectHolder = GameObject.Find("WorldObjects");
+            m_EntityHolder = GameObject.Find("WorldEntities");
         }
 
         public void SetDateTime(DateTime dateTime)
@@ -247,13 +262,25 @@ namespace JoyLib.Code.World
 
         public void RemoveObject(Vector2Int positionRef)
         {
+            long objectGUID = -1;
             for (int i = 0; i < m_Objects.Count; i++)
             {
                 if (m_Objects[i].WorldPosition == positionRef)
                 {
+                    objectGUID = m_Objects[i].GUID;
                     m_Objects.RemoveAt(i);
                     IsDirty = true;
-                    return;
+                    break;
+                }
+            }
+
+            for(int i = 0; i < m_ObjectHolder.transform.childCount; i++)
+            {
+                GameObject temp = m_ObjectHolder.transform.GetChild(i).gameObject;
+                if(temp.name.Contains(objectGUID.ToString()))
+                {
+                    GameObject.Destroy(temp);
+                    break;
                 }
             }
         }
@@ -725,21 +752,38 @@ namespace JoyLib.Code.World
         public void AddEntity(Entity entityRef)
         {
             m_Entities.Add(entityRef);
+
+            //Initialise a new GameObject here at some point
+
             CalculatePlayerIndex();
             IsDirty = true;
         }
 
         public void RemoveEntity(Vector2Int positionRef)
         {
+            long entityGUID = -1;
             for (int i = 0; i < m_Entities.Count; i++)
             {
                 if (m_Entities[i].WorldPosition.Equals(positionRef))
                 {
+                    entityGUID = m_Entities[i].GUID;
                     m_Entities.RemoveAt(i);
                     break;
                 }
             }
             CalculatePlayerIndex();
+            EntityHandler.Remove(entityGUID);
+            
+            for (int i = 0; i < m_EntityHolder.transform.childCount; i++)
+            {
+                GameObject temp = m_EntityHolder.transform.GetChild(i).gameObject;
+                if(temp.name.Contains(entityGUID.ToString()))
+                {
+                    GameObject.Destroy(temp);
+                    break;
+                }
+            }
+
             IsDirty = true;
         }
 
@@ -752,65 +796,6 @@ namespace JoyLib.Code.World
                     return m_Entities[i];
                 }
             }
-            return null;
-        }
-
-        public Entity GetEntity(long GUID)
-        {
-            for(int i = 0; i < m_Entities.Count; i++)
-            {
-                if(m_Entities[i].GUID == GUID)
-                {
-                    return m_Entities[i];
-                }
-            }
-
-            return null;
-        }
-
-        public Entity GetEntityRecursive(long GUID)
-        {
-            for(int i = 0; i < m_Entities.Count; i++)
-            {
-                if(m_Entities[i].GUID == GUID)
-                {
-                    return m_Entities[i];
-                }
-            }
-
-            List<WorldInstance> worlds = m_Areas.Values.ToList();
-            for(int i = 0; i < worlds.Count; i++)
-            {
-                Entity entity = worlds[i].GetEntityRecursive(GUID);
-                if(entity != null)
-                {
-                    return entity;
-                }
-            }
-
-            return null;
-        }
-
-        public WorldInstance GetWorldOfEntity(long GUID)
-        {
-            for(int i = 0; i < m_Entities.Count; i++)
-            {
-                if(m_Entities[i].GUID == GUID)
-                {
-                    return this;
-                }
-            }
-
-            List<WorldInstance> worlds = m_Areas.Values.ToList();
-            for(int i = 0; i < worlds.Count; i++)
-            {
-                WorldInstance world = worlds[i].GetWorldOfEntity(GUID);
-                if(world != null)
-                {
-                    return world;
-                }
-            }
-
             return null;
         }
 

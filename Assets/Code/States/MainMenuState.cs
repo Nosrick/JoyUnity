@@ -49,7 +49,7 @@ namespace JoyLib.Code.States
             WorldInstance overworld = WorldSerialiser.Deserialise("Everse");
             Done = true;
 
-            WorldInstance playerWorld = overworld.GetWorldOfEntity(overworld.Player.GUID);
+            WorldInstance playerWorld = overworld.Player.MyWorld;
             m_NextState = new WorldState(overworld, playerWorld, Gameplay.GameplayFlags.Moving);
         }
 
