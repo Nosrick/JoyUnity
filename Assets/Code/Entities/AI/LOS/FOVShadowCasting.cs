@@ -38,9 +38,9 @@ namespace JoyLib.Code.Entities.AI.LOS
             return m_Board;
         }
 
-        private void CastLight(Vector2Int origin, int sightMod, int row, int start, int end, int xx, int xy, int yx, int yy)
+        private void CastLight(Vector2Int origin, int sightMod, int row, float start, float end, int xx, int xy, int yx, int yy)
         {
-            int newStart = 0;
+            float newStart = 0.0f;
             if(start < end)
             {
                 return;
@@ -76,7 +76,7 @@ namespace JoyLib.Code.Entities.AI.LOS
                     {
                         if(m_Board.IsObstacle(currentX, currentY))
                         {
-                            newStart = (int)rightSlope;
+                            newStart = rightSlope;
                             continue;
                         }
                         else
@@ -91,7 +91,7 @@ namespace JoyLib.Code.Entities.AI.LOS
                         {
                             blocked = true;
                             CastLight(origin, sightMod, distance + 1, start, (int)leftSlope, xx, xy, yx, yy);
-                            newStart = (int)rightSlope;
+                            newStart = rightSlope;
                         }
                     }
                 }

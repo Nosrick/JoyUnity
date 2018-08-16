@@ -234,10 +234,10 @@ namespace JoyLib.Code.Entities
 
         private void SetFOVHandler()
         {
-            //m_FOVHandler = new FOVShadowCasting();
+            m_FOVHandler = new FOVShadowCasting();
             //m_FOVHandler = new FOVPermissive();
             //m_FOVHandler = new FOVRecursiveShadowcasting();
-            m_FOVHandler = new FOVDirty();
+            //m_FOVHandler = new FOVDirty();
         }
 
         private void SetCurrentTarget()

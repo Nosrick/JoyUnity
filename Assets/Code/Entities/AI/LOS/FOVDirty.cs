@@ -13,7 +13,7 @@ namespace JoyLib.Code.Entities.AI.LOS
     {
         private FOVBasicBoard m_Board;
 
-        private const int GRANULARITY = 2;
+        private const int GRANULARITY = 4;
 
         public IFOVBoard Do(Vector2Int origin, int sightMod)
         {
