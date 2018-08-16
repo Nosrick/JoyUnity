@@ -3,12 +3,12 @@ using MoonSharp.Interpreter;
 
 namespace JoyLib.Code.Scripting
 {
-    public class MoonItem
+    public class MoonItem : MoonObject
     {
         protected ItemInstance m_Item;
 
         [MoonSharpHidden]
-        public MoonItem(ItemInstance item)
+        public MoonItem(ItemInstance item) : base(item)
         {
             m_Item = item;
         }

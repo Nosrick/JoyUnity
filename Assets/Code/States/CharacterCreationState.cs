@@ -123,7 +123,7 @@ namespace JoyLib.Code.States
             Dictionary<NeedIndex, EntityNeed> needs = EntityNeed.GetFullRandomisedNeeds();
 
             EntityTemplate humanTemplate = EntityTemplateHandler.Get("Human");
-            m_Player = new Entity(humanTemplate, needs, 1, m_Jobs[m_JobIndex], m_Playersex, Sexuality.Bisexual, new UnityEngine.Vector2Int(-1, -1),
+            m_Player = EntityHandler.Create(humanTemplate, needs, 1, m_Jobs[m_JobIndex], m_Playersex, Sexuality.Bisexual, new UnityEngine.Vector2Int(-1, -1),
                 ObjectIcons.GetSprites("Jobs", m_Jobs[m_JobIndex].name).ToList(), null);
 
             m_Player.PlayerControlled = true;

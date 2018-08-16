@@ -1,6 +1,4 @@
-﻿Drink = {}
-
-function Drink.FindFulfillmentObject(entity)
+﻿function FindFulfillmentObject(entity)
 	local targets = entity:SearchBackpack("Drinks")
 	local bestDrink = 0
 	local chosenDrink = nil
@@ -21,12 +19,12 @@ function Drink.FindFulfillmentObject(entity)
 	end
 	
 	--If we don't find a drink in our pack, then we need to find one on the ground
-	targets = entity:SearchSurroundingsForObject("Drinks")
+	targets = entity:SearchForObject("Drinks")
 	bestDrink = 0
 	chosenDrink = nil		
 		
 	--target is a MoonItem
-	for key, target in ipairs(drinks) do
+	for key, target in ipairs(targets) do
 		if target.Value > bestDrink then
 			bestDrink = target.Value
 			chosenDrink = target
@@ -42,5 +40,3 @@ function Drink.FindFulfillmentObject(entity)
 	--If there isn't a drink nearby, wander
 	entity:Wander()
 end
-
-return Drink

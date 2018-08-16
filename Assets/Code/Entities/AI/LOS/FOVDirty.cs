@@ -76,6 +76,12 @@ namespace JoyLib.Code.Entities.AI.LOS
             }
         }
 
+        /// <summary>
+        /// Uses (mildly permissive) Bresenham LOS to calculate LOS
+        /// </summary>
+        /// <param name="origin">The viewer's position</param>
+        /// <param name="target">The target position</param>
+        /// <returns>The path (or lack thereof) to the target</returns>
         public LinkedList<Vector2Int> HasLOS(Vector2Int origin, Vector2Int target)
         {
             LinkedList<Vector2Int> path = new LinkedList<Vector2Int>();
@@ -165,14 +171,6 @@ namespace JoyLib.Code.Entities.AI.LOS
                 }
             }
             return path;
-        }
-
-        public bool[,] Vision
-        {
-            get
-            {
-                return m_Board.Vision;
-            }
         }
     }
 }

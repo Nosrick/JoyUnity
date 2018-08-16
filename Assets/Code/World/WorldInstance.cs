@@ -4,6 +4,7 @@ using JoyLib.Code.Entities.AI.LOS;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Managers;
+using JoyLib.Code.Scripting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -288,10 +289,7 @@ namespace JoyLib.Code.World
 
             foreach (Entity entity in m_Entities)
             {
-                if (entity.PlayerControlled)
-                {
-                    entity.UpdateMe();
-                }
+                 entity.UpdateMe();
             }
 
             IsDirty = false;
@@ -363,9 +361,18 @@ namespace JoyLib.Code.World
         /// <param name="entityTypeRef"></param>
         /// <param name="intentRef"></param>
         /// <returns></returns>
-        public List<NeedAIData> SearchForEntities(Entity searcher, string entityTypeRef, Intent intentRef, EntityTypeSearch entityTypeSearch = EntityTypeSearch.Any, EntitySentienceSearch entitySentienceSearch = EntitySentienceSearch.Matching)
+        public List<MoonEntity> SearchForEntities(MoonEntity searcher, string entityTypeSearchString, string entitySentienceSearchString)
         {
-            List<NeedAIData> data = new List<NeedAIData>();
+            EntitySentienceSearch entitySentienceSearch = EntitySentienceSearch.Matching;
+            try
+            {
+                entitySentienceSearch = (EntitySentienceSearch)Enum.Parse(typeof(EntitySentienceSearch), entitySentienceSearchString, true);
+            }
+            catch(Exception e)
+            {
+                Debug.LogError(e.Message);
+                Debug.LogError(e.StackTrace);
+            }
 
             //Special cases
             //Non-sentient entities
@@ -373,17 +380,15 @@ namespace JoyLib.Code.World
             {
                 List<Entity> entities = m_Entities.Where(x => x.Sentient == false).ToList();
 
+                List<MoonEntity> moonEntities = new List<MoonEntity>();
                 for (int i = 0; i < entities.Count; i++)
                 {
-                    if (searcher.Vision[entities[i].WorldPosition.x, entities[i].WorldPosition.y] && searcher.GUID != entities[i].GUID)
+                    if (searcher.CanSee(entities[i].WorldPosition.x, entities[i].WorldPosition.y) && searcher.GUID() != entities[i].GUID)
                     {
-                        NeedAIData tempData = new NeedAIData();
-                        tempData.intent = intentRef;
-                        tempData.target = entities[i];
-                        data.Add(tempData);
+                        moonEntities.Add(new MoonEntity(entities[i]));
                     }
                 }
-                return data;
+                return moonEntities;
             }
 
             //Sentient entities
@@ -391,56 +396,53 @@ namespace JoyLib.Code.World
             {
                 List<Entity> entities = m_Entities.Where(x => x.Sentient).ToList();
 
+                List<MoonEntity> moonEntities = new List<MoonEntity>();
                 for (int i = 0; i < entities.Count; i++)
                 {
-                    if (searcher.Vision[entities[i].WorldPosition.x, entities[i].WorldPosition.y] && searcher.GUID != entities[i].GUID)
+                    if (searcher.CanSee(entities[i].WorldPosition.x, entities[i].WorldPosition.y) && searcher.GUID() != entities[i].GUID)
                     {
-                        NeedAIData tempData = new NeedAIData();
-                        tempData.intent = intentRef;
-                        tempData.target = entities[i];
-                        data.Add(tempData);
+                        moonEntities.Add(new MoonEntity(entities[i]));
                     }
                 }
-                return data;
+                return moonEntities;
             }
 
             //All entities
             else if(entitySentienceSearch == EntitySentienceSearch.Any)
             {
                 List<NeedAIData> dataList = new List<NeedAIData>();
+
+                List<MoonEntity> moonEntities = new List<MoonEntity>();
                 for(int i = 0; i < m_Entities.Count; i++)
                 {
-                    if(searcher.Vision[m_Entities[i].WorldPosition.x, m_Entities[i].WorldPosition.y] && searcher.GUID != m_Entities[i].GUID)
+                    if(searcher.CanSee(m_Entities[i].WorldPosition.x, m_Entities[i].WorldPosition.y) && searcher.GUID() != m_Entities[i].GUID)
                     {
-                        NeedAIData tempData = new NeedAIData();
-                        tempData.intent = intentRef;
-                        tempData.target = m_Entities[i];
-                        dataList.Add(tempData);
+                        moonEntities.Add(new MoonEntity(m_Entities[i]));
                     }
                 }
-                return dataList;
+                return moonEntities;
             }
 
             //Matching sentience
             else if(entitySentienceSearch == EntitySentienceSearch.Matching)
             {
-                List<NeedAIData> dataList = new List<NeedAIData>();
-                List<Entity> matchingEntities = m_Entities.Where(x => x.Sentient == searcher.Sentient).ToList();
+                List<Entity> matchingEntities = m_Entities.Where(x => x.Sentient == searcher.GetSentient()).ToList();
+
+                List<MoonEntity> moonEntities = new List<MoonEntity>();
                 for (int i = 0; i < matchingEntities.Count; i++)
                 {
                     Vector2Int position = matchingEntities[i].WorldPosition;
-                    if(searcher.Vision[position.x, position.y] && searcher.GUID != matchingEntities[i].GUID)
+                    if(searcher.CanSee(position.x, position.y) && searcher.GUID() != matchingEntities[i].GUID)
                     {
-                        NeedAIData tempData = new NeedAIData();
-                        tempData.intent = intentRef;
-                        tempData.target = matchingEntities[i];
-                        dataList.Add(tempData);
+                        moonEntities.Add(new MoonEntity(matchingEntities[i]));
                     }
                 }
-                return dataList;
+                return moonEntities;
             }
-
-            return data;
+            else
+            {
+                return new List<MoonEntity>();
+            }
         }
 
         public NeedAIData SearchForEntities(Entity entityRef, List<long> GUIDs, Intent intentRef)
@@ -465,11 +467,8 @@ namespace JoyLib.Code.World
             return data;
         }
 
-        public NeedAIData SearchForMate(Entity entityRef)
+        public List<MoonEntity> SearchForMate(Entity entityRef)
         {
-            NeedAIData data = new NeedAIData();
-            data.intent = Intent.Interact;
-
             List<Entity> validPartners = new List<Entity>();
             if (entityRef.Sexuality == Sexuality.Heterosexual)
             {
@@ -494,15 +493,22 @@ namespace JoyLib.Code.World
             for(int i = 0; i < validPartners.Count; i++)
             {
                 if (validPartners[i].GUID == entityRef.GUID)
+                {
                     continue;
+                }
 
                 if (entityRef.Vision[validPartners[i].WorldPosition.x, validPartners[i].WorldPosition.y])
+                {
                     visiblePartners.Add(validPartners[i]);
+                }
             }
-            if (visiblePartners.Count > 0)
-                data.target = visiblePartners[RNG.Roll(0, visiblePartners.Count - 1)];
 
-            return data;
+            List<MoonEntity> moonPartners = new List<MoonEntity>();
+            foreach(Entity entity in visiblePartners)
+            {
+                moonPartners.Add(new MoonEntity(entity));
+            }
+            return moonPartners;
         }
 
         public Entity GetRandomSentient()

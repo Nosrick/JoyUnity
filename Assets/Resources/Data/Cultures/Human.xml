@@ -13,6 +13,8 @@
   <Crime>Trespass</Crime>
 
   <Sexuality>80,10,5,5</Sexuality>
+  
+  <RelationshipType>Both</RelationshipType>
 
   <FirstName Name="Alex" Sex="N" />
 

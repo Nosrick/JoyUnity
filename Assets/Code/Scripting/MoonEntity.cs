@@ -8,21 +8,31 @@ using UnityEngine;
 
 namespace JoyLib.Code.Scripting
 {
-    public class MoonEntity
+    public class MoonEntity : MoonObject
     {
         protected Entity m_AssociatedEntity;
 
         public const int NEED_FULFILMENT_DEFAULT = 3;
 
         [MoonSharpHidden]
-        public MoonEntity(Entity associatedEntity)
+        public MoonEntity(Entity associatedEntity) : base(associatedEntity)
         {
             m_AssociatedEntity = associatedEntity;
         }
 
+        public long GUID()
+        {
+            return m_AssociatedEntity.GUID;
+        }
+
+        public bool CanSee(int x, int y)
+        {
+            return m_AssociatedEntity.Vision[x, y];
+        }
+
         public void FulfillNeed(string need, int value, int minutes = NEED_FULFILMENT_DEFAULT)
         {
-            NeedIndex needIndex = (NeedIndex)Enum.Parse(typeof(NeedIndex), need);
+            NeedIndex needIndex = (NeedIndex)Enum.Parse(typeof(NeedIndex), need, true);
 
             m_AssociatedEntity.FulfillNeed(needIndex, value, minutes);
         }
@@ -68,7 +78,7 @@ namespace JoyLib.Code.Scripting
             return moonItems;
         }
 
-        public List<MoonItem> SearchSurroundingsForObject(string type)
+        public List<MoonItem> SearchForObject(string type)
         {
             List<NeedAIData> items = m_AssociatedEntity.MyWorld.SearchForObjects(m_AssociatedEntity, type, Intent.Interact);
 
@@ -81,13 +91,27 @@ namespace JoyLib.Code.Scripting
             return moonItems;
         }
 
-        public void Seek(JoyObject joyObject)
+        public List<MoonEntity> SearchForEntity(string type, string sentience)
+        {
+            List<MoonEntity> entities = m_AssociatedEntity.MyWorld.SearchForEntities(this, type, sentience);
+
+            return entities;
+        }
+
+        public List<MoonEntity> SearchForMate()
+        {
+            List<MoonEntity> mates = m_AssociatedEntity.MyWorld.SearchForMate(this.m_AssociatedEntity);
+
+            return mates;
+        }
+
+        public void Seek(MoonObject moonObject)
         {
             NeedAIData needAIData = new NeedAIData();
             needAIData.intent = Intent.Interact;
             needAIData.searching = false;
-            needAIData.target = joyObject;
-            needAIData.targetPoint = joyObject.WorldPosition;
+            needAIData.target = moonObject.GetAssociatedObject();
+            needAIData.targetPoint = moonObject.GetPosition();
 
             m_AssociatedEntity.CurrentTarget = needAIData;
         }
@@ -186,16 +210,6 @@ namespace JoyLib.Code.Scripting
             m_AssociatedEntity.DirectDamage(value);
         }
 
-        public int GetHitPoints()
-        {
-            return m_AssociatedEntity.HitPoints;
-        }
-
-        public int GetHitPointsRemaining()
-        {
-            return m_AssociatedEntity.HitPointsRemaining;
-        }
-
         public MoonItem GetEquipment(string slot)
         {
             ItemInstance item = m_AssociatedEntity.GetEquipment(slot);
@@ -223,15 +237,43 @@ namespace JoyLib.Code.Scripting
             return m_AssociatedEntity.Sexuality;
         }
 
-        public RelationshipStatus IsFamily(int GUID)
+        public List<MoonEntity> GetRelationships()
+        {
+            List<MoonEntity> relationships = new List<MoonEntity>();
+            foreach(KeyValuePair<long, int> pair in m_AssociatedEntity.Relationships)
+            {
+                Entity entity = EntityHandler.Get(pair.Key);
+                MoonEntity moon = new MoonEntity(entity);
+                relationships.Add(moon);
+            }
+
+            return relationships;
+        }
+
+        public MoonEntity GetSpouse()
+        {
+            Dictionary<long, RelationshipStatus> relationships = m_AssociatedEntity.Family;
+
+            foreach(KeyValuePair<long, RelationshipStatus> relationship in relationships)
+            {
+                if(relationship.Value == RelationshipStatus.Spouse)
+                {
+                    return new MoonEntity(EntityHandler.Get(relationship.Key));
+                }
+            }
+
+            return null;
+        }
+
+        public string IsFamily(long GUID)
         {
             if(m_AssociatedEntity.Family.ContainsKey(GUID))
             {
-                return m_AssociatedEntity.Family[GUID];
+                return m_AssociatedEntity.Family[GUID].ToString();
             }
             else
             {
-                return RelationshipStatus.Unrelated;
+                return RelationshipStatus.Unrelated.ToString();
             }
         }
         
@@ -273,6 +315,11 @@ namespace JoyLib.Code.Scripting
         public int GetSize()
         {
             return m_AssociatedEntity.Size;
+        }
+
+        public MoonCulture GetCulture()
+        {
+            return new MoonCulture(m_AssociatedEntity.Culture);
         }
     }
 }

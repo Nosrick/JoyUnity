@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml;
+using UnityEngine;
 
 namespace JoyLib.Code.Loaders
 {
@@ -30,6 +31,7 @@ namespace JoyLib.Code.Loaders
                 string inhabitants = "DEFAULT CREATURE";
                 Dictionary<Sexuality, int> sexualities = new Dictionary<Sexuality, int>();
                 int statVariance = 0;
+                RelationshipType relationshipType = RelationshipType.Monoamorous;
 
                 while (reader.Read())
                 {
@@ -122,11 +124,24 @@ namespace JoyLib.Code.Loaders
                     {
                         statVariance = reader.ReadElementContentAsInt(); 
                     }
+
+                    if(reader.Name.Equals("RelationshipType"))
+                    {
+                        try
+                        {
+                            relationshipType = (RelationshipType)Enum.Parse(typeof(RelationshipType), reader.ReadElementContentAsString(), true);
+                        }
+                        catch(Exception e)
+                        {
+                            Debug.LogError(e.Message);
+                            Debug.LogError(e.StackTrace);
+                        }
+                    }
                 }
 
                 reader.Close();
                 cultures.Add(inhabitants, new CultureType(cultureName, rulers, crimes, nameData, inhabitants, sexs, 
-                    sexualities, statVariance));
+                    sexualities, statVariance, relationshipType));
             }
 
             return cultures;

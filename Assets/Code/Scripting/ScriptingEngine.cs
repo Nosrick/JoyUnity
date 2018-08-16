@@ -1,9 +1,8 @@
-﻿using JoyLib.Code.Entities;
+﻿using JoyLib.Code.Cultures;
+using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
 using MoonSharp.Interpreter;
-using MoonSharp.Interpreter.Loaders;
 using System;
-using System.IO;
 using UnityEngine;
 
 namespace JoyLib.Code.Scripting
@@ -14,6 +13,7 @@ namespace JoyLib.Code.Scripting
         {
             UserData.RegisterProxyType<MoonEntity, Entity>(p => new MoonEntity(p));
             UserData.RegisterProxyType<MoonItem, ItemInstance>(p => new MoonItem(p));
+            UserData.RegisterProxyType<MoonCulture, CultureType>(p => new MoonCulture(p));
         }
 
         public static DynValue RunScript(string code, string className, string functionName, params object[] arguments)
@@ -26,6 +26,7 @@ namespace JoyLib.Code.Scripting
 
                 script.Globals["MoonEntity"] = UserData.CreateStatic<Entity>();
                 script.Globals["MoonItem"] = UserData.CreateStatic<ItemInstance>();
+                script.Globals["MoonCulture"] = UserData.CreateStatic<CultureType>();
 
                 script.DoString(code);
                 DynValue function = script.Globals.Get(functionName);
@@ -51,6 +52,7 @@ namespace JoyLib.Code.Scripting
 
                 script.Globals["MoonEntity"] = UserData.CreateStatic<Entity>();
                 script.Globals["MoonItem"] = UserData.CreateStatic<ItemInstance>();
+                script.Globals["MoonCulture"] = UserData.CreateStatic<CultureType>();
 
                 //DynValue result = script.DoString(code);
                 DynValue result = Script.RunFile(fileName);

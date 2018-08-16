@@ -8,6 +8,8 @@
   <Ruler>Great Slime</Ruler>
 
   <Sexuality>0,0,95,5</Sexuality>
+  
+  <RelationshipType>Polyamorous</RelationshipType>
 
   <FirstName Name="Glorp" Sex="N" />
   <FirstName Name="Blip" Sex="N" />

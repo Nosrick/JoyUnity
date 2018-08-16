@@ -157,6 +157,7 @@ namespace JoyLib.Code.Entities
             this.MyWorld = world;
 
             SetFOVHandler();
+            SetCurrentTarget();
         }
 
         /// <summary>
@@ -228,6 +229,7 @@ namespace JoyLib.Code.Entities
             this.MyWorld = world;
 
             SetFOVHandler();
+            SetCurrentTarget();
         }
 
         private void SetFOVHandler()
@@ -238,63 +240,14 @@ namespace JoyLib.Code.Entities
             m_FOVHandler = new FOVDirty();
         }
 
-        /*
-        public Entity(Dictionary<StatisticIndex, float> statistics, Dictionary<string, EntitySkill> skills, List<Ability> abilities,
-            Dictionary<NeedIndex, EntityNeed> needs, int level, float experience, JobType job, sex sex, string creatureType,
-            Vector2Int position, string type, Texture2D[] icons, bool sentient, ItemInstance naturalWeapons,
-            Dictionary<string, ItemInstance> equipment, List<ItemInstance> backpack, Dictionary<int, int> relationships,
-            List<string> identifiedItems, Sexuality sexuality, Dictionary<int, RelationshipStatus> family,
-            Dictionary<string, int> jobLevels, VisionType visionType, WorldInstance world, string tileset, bool initialise)
-            :this(statistics, skills, abilities, needs, level, experience, job, sex, creatureType, position, type, icons, sentient,
-                 naturalWeapons, equipment, backpack, relationships, identifiedItems, sexuality, family, jobLevels, visionType, world, tileset)
+        private void SetCurrentTarget()
         {
-            if (initialise)
-            {
-                Initialise();
-                LevelUp();
-            }
+            m_CurrentTarget.idle = true;
+            m_CurrentTarget.intent = Intent.Interact;
+            m_CurrentTarget.searching = false;
+            m_CurrentTarget.target = null;
+            m_CurrentTarget.targetPoint = Vector2Int.zero;
         }
-
-        protected void Initialise()
-        {
-            List<string> keys = new List<string>(m_Skills.Keys);
-            foreach(string key in keys)
-            {
-                if (m_CurrentJob.skillGrowths.ContainsKey(key))
-                    m_Skills[key].AddExperience(500);
-            }
-        }
-
-        public Entity DirectCopy()
-        {
-            Entity copy = Entity.Create(m_Size, m_Statistics, m_Skills, m_Abilities, m_Needs, m_Level, m_Experience,
-                m_CurrentJob, sex, CreatureType, WorldPosition, BaseType, m_Icons.ToList(), m_Sentient, m_NaturalWeapons, 
-                m_Equipment, m_Backpack, m_Relationships, m_IdentifiedItems, m_Sexuality, m_Family, m_JobLevels, m_VisionType, MyWorld,
-                m_Tileset);
-            copy.GUID = GUIDManager.AssignGUID();
-            return copy;
-        }
-
-        public Entity CopyWithFullNeeds()
-        {
-            Entity copy = Entity.Create(m_Size, StatisticVarianceHelper.Get(this), m_Skills, m_Abilities, EntityNeed.GetFullRandomisedNeeds(), m_Level, m_Experience,
-                m_CurrentJob, s_Cultures[CreatureType].Choosesex(), CreatureType, WorldPosition, BaseType, m_Icons.ToList(), m_Sentient, NaturalWeaponHelper.MakeNaturalWeapon(m_Size), 
-                new Dictionary<string, ItemInstance>(), new List<ItemInstance>(), new Dictionary<int, int>(), new List<string>(), s_Cultures[CreatureType].ChooseSexuality(),
-                new Dictionary<int, RelationshipStatus>(), m_JobLevels, m_VisionType, MyWorld, m_Tileset);
-            copy.GUID = GUIDManager.AssignGUID();
-            return copy;
-        }
-
-        public Entity CopyWithBasicNeeds()
-        {
-            Entity copy = Entity.Create(m_Size, StatisticVarianceHelper.Get(this), m_Skills, m_Abilities, EntityNeed.GetBasicRandomisedNeeds(), m_Level, m_Experience,
-                m_CurrentJob, s_Cultures[CreatureType].Choosesex(), CreatureType, WorldPosition, BaseType, m_Icons.ToList(), m_Sentient, NaturalWeaponHelper.MakeNaturalWeapon(m_Size), 
-                new Dictionary<string, ItemInstance>(), new List<ItemInstance>(), new Dictionary<int, int>(), new List<string>(), s_Cultures[CreatureType].ChooseSexuality(),
-                new Dictionary<int, RelationshipStatus>(), m_JobLevels, m_VisionType, MyWorld, m_Tileset);
-            copy.GUID = GUIDManager.AssignGUID();
-            return copy;
-        }
-        */
 
         /*
         public Entity CreateChild(Entity parentRef)
@@ -411,8 +364,10 @@ namespace JoyLib.Code.Entities
             if (!PlayerControlled)
             {
                 //Attack immediate threats
-                List<NeedAIData> targets = MyWorld.SearchForEntities(this, "Any", Intent.Attack, EntityTypeSearch.Any, EntitySentienceSearch.Any);
-                List<NeedAIData> validTargets = targets.Where(x => this.HasRelationship(x.target.GUID) < ATTACK_THRESHOLD).ToList();
+                /*
+                 * REDO THIS TO BE IN LUA
+                //List<NeedAIData> targets = MyWorld.SearchForEntities(this, "Any", Intent.Attack, EntityTypeSearch.Any, EntitySentienceSearch.Any);
+                //List<NeedAIData> validTargets = targets.Where(x => this.HasRelationship(x.target.GUID) < ATTACK_THRESHOLD).ToList();
                 if(validTargets.Count > 0 && CurrentTarget.target == null)
                 {
                     //TODO: Write a threat assessment system
@@ -423,6 +378,7 @@ namespace JoyLib.Code.Entities
                     CurrentTarget = data;
                     m_PathfindingData = m_Pathfinder.FindPath(this.WorldPosition, CurrentTarget.target.WorldPosition, this.MyWorld);
                 }
+                */
 
                 //If you're idle
                 if (CurrentTarget.idle == true)
@@ -439,7 +395,8 @@ namespace JoyLib.Code.Entities
                             continue;
                         }
 
-                        ScriptingEngine.RunScript(need.InteractionFileContents, need.name, "SeekFulfillmentObject", new object[] { new MoonEntity(this) });
+                        Debug.Log("Running LUA script: FindFulfillmentObject (" + need.name + ") requested by: " + this.JoyName);
+                        ScriptingEngine.RunScript(need.InteractionFileContents, need.name, "FindFulfillmentObject", new object[] { new MoonEntity(this) });
                         idle = false;
                         break;
                     }

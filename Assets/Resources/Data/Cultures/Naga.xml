@@ -117,4 +117,6 @@
   <FirstName Name="Yami" Sex="F" />
 
   <LastName Name="McNaga" />
+  
+  <RelationshipType>Monoamorous</RelationshipType>
 </Culture>
