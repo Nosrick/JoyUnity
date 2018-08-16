@@ -478,14 +478,14 @@ namespace JoyLib.Code.States
         {
             Entity player = m_ActiveWorld.Player;
             bool[,] vision = player.Vision;
-            for(int i = 0; i < m_FogOfWarHolder.transform.childCount; i++)
+            for (int i = 0; i < m_FogOfWarHolder.transform.childCount; i++)
             {
                 GameObject fog = m_FogOfWarHolder.transform.GetChild(i).gameObject;
                 Vector2Int position = new Vector2Int((int)fog.transform.position.x, (int)fog.transform.position.y);
 
                 bool visible = vision[position.x, position.y];
                 int lightLevel;
-                if(visible)
+                if (visible)
                 {
                     lightLevel = 16;
                 }

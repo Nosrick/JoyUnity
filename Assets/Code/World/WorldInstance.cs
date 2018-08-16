@@ -288,7 +288,10 @@ namespace JoyLib.Code.World
 
             foreach (Entity entity in m_Entities)
             {
-                entity.UpdateMe();
+                if (entity.PlayerControlled)
+                {
+                    entity.UpdateMe();
+                }
             }
 
             IsDirty = false;

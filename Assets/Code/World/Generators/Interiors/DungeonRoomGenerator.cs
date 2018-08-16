@@ -13,7 +13,7 @@ namespace JoyLib.Code.World.Generators.Interiors
 
         private const int MIN_ROOM_SIZE = 5;
         private const int MAX_ROOM_SIZE = 11;
-        private const int MIN_MAP_SIZE = 25;
+        private const int MIN_MAP_SIZE = 19;
 
         private readonly int m_Size;
         private readonly GeneratorTileType[,] m_Tiles;
