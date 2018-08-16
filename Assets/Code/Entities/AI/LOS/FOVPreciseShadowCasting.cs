@@ -22,6 +22,11 @@ namespace JoyLib.Code.Entities.AI.LOS
             return m_Board;
         }
 
+        public LinkedList<Vector2Int> HasLOS(Vector2Int origin, Vector2Int target)
+        {
+            throw new System.NotImplementedException();
+        }
+
         private bool CheckVisibility(Vector2Int start, Vector2Int end, bool blocking)
         {
             if(start.x > end.x)

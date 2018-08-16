@@ -1,5 +1,4 @@
-﻿using JoyLib.Code.Helpers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -59,16 +58,17 @@ namespace JoyLib.Code.Entities.AI.LOS
             for (int i = 0; i <= perception; i++)
             {
                 Vector2Int position = new Vector2Int((int)oX, (int)oY);
-
+                
                 if (m_Board.Contains(position.x, position.y) == false)
                 {
-                    return;
+                    continue;
                 }
-                
+
                 m_Board.Visible(position.x, position.y);
+
                 if (m_Board.IsObstacle(position.x, position.y) == true)
                 {
-                    return;
+                    continue;
                 }
 
                 oX += x;
@@ -80,74 +80,89 @@ namespace JoyLib.Code.Entities.AI.LOS
         {
             LinkedList<Vector2Int> path = new LinkedList<Vector2Int>();
 
-            bool steep = Mathf.Abs(target.y - origin.y) > Mathf.Abs(target.x - origin.x);
-            if(steep == true)
+            List<Vector2Int> targets = new List<Vector2Int>(3);
+            Vector2 leftTemp = new Vector2(target.y, -target.x);
+            leftTemp.Normalize();
+            Vector2 rightTemp = -leftTemp;
+            Vector2Int left = new Vector2Int((int)(target.x * leftTemp.x), (int)(target.y * leftTemp.y));
+            Vector2Int right = new Vector2Int((int)(target.x * rightTemp.x), (int)(target.y * rightTemp.y));
+
+            targets.Add(target);
+            targets.Add(left);
+            targets.Add(right);
+
+            for(int i = 0; i < targets.Count; i++)
             {
-                //Swap the X and Y co-ords for the two vectors
-                int tempX = origin.x;
-                int tempY = origin.y;
-                origin.x = tempY;
-                origin.y = tempX;
-
-                tempX = target.x;
-                tempY = target.y;
-                target.x = tempY;
-                target.y = tempX;
-            }
-
-            //If the origin is further along the X axis than the target,
-            //swap the two vectors
-            bool swapped = false;
-            if (origin.x > target.x)
-            {
-                int tempX = origin.x;
-                origin.x = target.x;
-                target.x = tempX;
-
-                int tempY = origin.y;
-                origin.y = target.y;
-                target.y = tempY;
-                swapped = true;
-            }
-
-            int dX = target.x - origin.x;
-            int dY = Math.Abs(target.y - origin.y);
-
-            int error = dX / 2;
-
-            //If the origin Y is less than the target Y, we're taking positive steps
-            //otherwise, negative steps
-            int yStep = origin.y < target.y ? 1 : -1;
-            int y = origin.y;
-
-            for(int x = origin.x; x < target.x; x++)
-            {
-                Vector2Int coord = Vector2Int.zero;
-                if(steep == true)
+                Vector2Int point = targets[i];
+                bool steep = Mathf.Abs(point.y - origin.y) > Mathf.Abs(point.x - origin.x);
+                if (steep == true)
                 {
-                    coord = new Vector2Int(y, x);
-                }
-                else
-                {
-                    coord = new Vector2Int(x, y);
-                }
-                path.AddLast(coord);
-                error -= Mathf.Abs(dY);
-                if(error < 0)
-                {
-                    y += yStep;
-                    error += dX;
-                }
-            }
+                    //Swap the X and Y co-ords for the two vectors
+                    int tempX = origin.x;
+                    int tempY = origin.y;
+                    origin.x = tempY;
+                    origin.y = tempX;
 
-            if(swapped == true)
-            {
-                LinkedList<Vector2Int> reversed = new LinkedList<Vector2Int>();
-                foreach(Vector2Int node in path)
-                {
-                    reversed.AddFirst(node);
+                    tempX = point.x;
+                    tempY = point.y;
+                    point.x = tempY;
+                    point.y = tempX;
                 }
-                path = reversed;
+
+                //If the origin is further along the X axis than the target,
+                //swap the two vectors
+                bool swapped = false;
+                if (origin.x > point.x)
+                {
+                    int tempX = origin.x;
+                    origin.x = point.x;
+                    target.x = tempX;
+
+                    int tempY = origin.y;
+                    origin.y = point.y;
+                    point.y = tempY;
+                    swapped = true;
+                }
+
+                int dX = point.x - origin.x;
+                int dY = Math.Abs(point.y - origin.y);
+
+                int error = dX / 2;
+
+                //If the origin Y is less than the target Y, we're taking positive steps
+                //otherwise, negative steps
+                int yStep = origin.y < point.y ? 1 : -1;
+                int y = origin.y;
+
+                for (int x = origin.x; x < point.x; x++)
+                {
+                    Vector2Int coord = Vector2Int.zero;
+                    if (steep == true)
+                    {
+                        coord = new Vector2Int(y, x);
+                    }
+                    else
+                    {
+                        coord = new Vector2Int(x, y);
+                    }
+                    path.AddLast(coord);
+                    error -= Mathf.Abs(dY);
+                    if (error < 0)
+                    {
+                        y += yStep;
+                        error += dX;
+                    }
+                }
+
+                if (swapped == true)
+                {
+                    LinkedList<Vector2Int> reversed = new LinkedList<Vector2Int>();
+                    foreach (Vector2Int node in path)
+                    {
+                        reversed.AddFirst(node);
+                    }
+                    path = reversed;
+                }
             }
             return path;
         }

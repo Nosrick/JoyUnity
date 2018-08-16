@@ -166,6 +166,11 @@ namespace JoyLib.Code.Entities.AI.LOS
                 Go(origin, recursion + 1, visionDistance, theta1, theta2);
             }
         }
+
+        public LinkedList<Vector2Int> HasLOS(Vector2Int origin, Vector2Int target)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class ArcPoint : IComparable

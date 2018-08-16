@@ -98,6 +98,11 @@ namespace JoyLib.Code.Entities.AI.LOS
             }
         }
 
+        public LinkedList<Vector2Int> HasLOS(Vector2Int origin, Vector2Int target)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool[,] Vision
         {
             get
