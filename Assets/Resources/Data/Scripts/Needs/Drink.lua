@@ -1,4 +1,4 @@
-﻿function FindFulfillmentObject(entity)
+﻿function FindFulfilmentObject(entity)
 	local targets = entity:SearchBackpack("Drinks")
 	local bestDrink = 0
 	local chosenDrink = nil
@@ -45,4 +45,7 @@
 	
 	--If there isn't a drink nearby, wander
 	entity:Wander()
+end
+
+function Tick(entity)
 end

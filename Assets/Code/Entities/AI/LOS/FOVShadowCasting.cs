@@ -90,7 +90,7 @@ namespace JoyLib.Code.Entities.AI.LOS
                         if(m_Board.IsObstacle(currentX, currentY) && distance < sightMod)
                         {
                             blocked = true;
-                            CastLight(origin, sightMod, distance + 1, start, (int)leftSlope, xx, xy, yx, yy);
+                            CastLight(origin, sightMod, distance + 1, start, leftSlope, xx, xy, yx, yy);
                             newStart = rightSlope;
                         }
                     }

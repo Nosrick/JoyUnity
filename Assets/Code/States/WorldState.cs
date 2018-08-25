@@ -30,18 +30,26 @@ namespace JoyLib.Code.States
         protected double m_TickTimer;
 
         protected GameObject m_FogOfWarHolder;
+        protected GameObject m_EntitiesHolder;
+
+        protected GameObject m_NeedsGUIPrefab;
+        protected GameObject m_InventoryGUIPrefab;
+
+        protected GameObject m_NeedsGUIInstance;
+        protected GameObject m_InventoryGUIInstance;
 
         public WorldState(WorldInstance overworldRef, WorldInstance activeWorldRef, GameplayFlags flagsRef) : base()
         {
             m_ActiveWorld = activeWorldRef;
             m_GameplayFlags = flagsRef;
             m_Overworld = overworldRef;
-            SetUpUi();
-
-            //MusicHandler.Play("DashRoog");
 
             m_Camera = GameObject.Find("Main Camera").GetComponent<Camera>();
             m_FogOfWarHolder = GameObject.Find("WorldFog");
+            m_EntitiesHolder = GameObject.Find("WorldEntities");
+
+            m_NeedsGUIPrefab = Resources.Load<GameObject>("Prefabs/GUI/Needs/GUIPlayingState");
+            m_InventoryGUIPrefab = Resources.Load<GameObject>("Prefabs/GUI/Inventory/GUIInventory");
         }
 
         public override void LoadContent()
@@ -52,6 +60,9 @@ namespace JoyLib.Code.States
         protected override void SetUpUi()
         {
             base.SetUpUi();
+
+            //m_NeedsGUIInstance = GameObject.Instantiate(m_NeedsGUIPrefab);
+            
         }
 
         public override void Start()
@@ -62,6 +73,7 @@ namespace JoyLib.Code.States
             RumourMill.GenerateRumours(m_ActiveWorld);
 
             SetEntityWorld(overworld);
+            SetUpUi();
         }
 
         public override void Stop()
@@ -367,6 +379,14 @@ namespace JoyLib.Code.States
                                 m_ActiveWorld.RemoveEntity(newPlayerPoint);
 
                                 //Find a way to remove the GameObject
+                                for(int i = 0; i < m_EntitiesHolder.transform.childCount; i++)
+                                {
+                                    if(m_EntitiesHolder.transform.GetChild(i).name.Contains(tempEntity.GUID.ToString()))
+                                    {
+                                        GameObject.Destroy(m_EntitiesHolder.transform.GetChild(i).gameObject);
+                                        break;
+                                    }
+                                }
                             }
                         }
                     }

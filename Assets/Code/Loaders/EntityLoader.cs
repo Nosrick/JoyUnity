@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
+using UnityEngine;
 
 namespace JoyLib.Code.Loaders
 {
@@ -33,6 +34,7 @@ namespace JoyLib.Code.Loaders
                     Dictionary<StatisticIndex, EntityStatistic> statistics;
                     Dictionary<string, EntitySkill> skills;
                     List<Ability> abilities;
+                    List<string> slots;
                     VisionType visionType;
 
                     while (reader.Read())
@@ -55,7 +57,7 @@ namespace JoyLib.Code.Loaders
                             size = 1;
                             statistics = new Dictionary<StatisticIndex, EntityStatistic>(9);
                             skills = new Dictionary<string, EntitySkill>();
-                            
+                            slots = new List<string>();
 
                             abilities = new List<Ability>();
                             visionType = VisionType.Diurnal;
@@ -105,9 +107,21 @@ namespace JoyLib.Code.Loaders
                                 {
                                     size = reader.ReadElementContentAsInt();
                                 }
+                                else if(reader.Name.Equals("Slots"))
+                                {
+                                    slots = new List<string>();
+                                    do
+                                    {
+                                        reader.Read();
+                                        if (reader.Name.Equals("Slot"))
+                                        {
+                                            slots.Add(reader.ReadElementContentAsString());
+                                        }
+                                    } while (!reader.Name.Equals("Slots") && reader.NodeType != XmlNodeType.EndElement);
+                                }
                             } while (!reader.Name.Equals("Entity") && reader.NodeType != XmlNodeType.EndElement);
 
-                            entities.Add(new EntityTemplate(statistics, skills, abilities, size, sentient, visionType, creatureType, type, tileset));
+                            entities.Add(new EntityTemplate(statistics, skills, abilities, slots, size, sentient, visionType, creatureType, type, tileset));
                         }
                     }
 
@@ -115,8 +129,8 @@ namespace JoyLib.Code.Loaders
                 }
                 catch (Exception e)
                 {
-                    Console.Out.WriteLine(e.Message);
-                    Console.Out.WriteLine(e.StackTrace);
+                    Debug.LogError(e.Message);
+                    Debug.LogError(e.StackTrace);
                 }
             }
 

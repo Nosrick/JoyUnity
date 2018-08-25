@@ -16,6 +16,23 @@
     <Statistic Name="Personality" Value="4" />
     <Statistic Name="Suavity" Value="5" />
     <Statistic Name="Wit" Value="3" />
+	
+	<Slots>
+		<Slot>Head</Slot>
+		<Slot>Neck</Slot>
+		<Slot>Shoulders</Slot>
+		<Slot>Torso</Slot>
+		<Slot>Waist</Slot>
+		<Slot>Tail</Slot>
+		<Slot>Hand1</Slot>
+		<Slot>Hand2</Slot>
+		<Slot>Ring1</Slot>
+		<Slot>Ring2</Slot>
+		<Slot>Ranged</Slot>
+		<Slot>Ammo</Slot>
+		<Slot>Job Pin</Slot>
+		<Slot>Throw</Slot>
+	</Slots>
   </Entity>
 
   <Entity>
@@ -34,5 +51,9 @@
     <Statistic Name="Personality" Value="1" />
     <Statistic Name="Suavity" Value="1" />
     <Statistic Name="Wit" Value="1" />
+	
+		<Slots>
+			<Slot>Torso</Slot>
+		</Slots>
   </Entity>
 </Entities>

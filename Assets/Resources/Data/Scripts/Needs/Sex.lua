@@ -1,4 +1,4 @@
-function FindFulfillmentObject(entity)
+function FindFulfilmentObject(entity)
 	local spouse = entity:GetSpouse()
 	
 	--If we have a spouse, seek them out
@@ -28,4 +28,7 @@ function FindFulfillmentObject(entity)
 	
 	--If we can't find anyone, wander
 	entity:Wander()
+end
+
+function Tick(entity)
 end

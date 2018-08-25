@@ -8,12 +8,18 @@ namespace JoyLib.Code.World.Generators.Interiors
 {
     public static class DungeonItemPlacer
     {
-        public static List<ItemInstance> PlaceItems(WorldInstance worldRef)
+        /// <summary>
+        /// Places items in the dungeon
+        /// </summary>
+        /// <param name="worldRef">The world in which to place the items</param>
+        /// <param name="prosperity">The prosperity of the world, the lower the better</param>
+        /// <returns>The items placed</returns>
+        public static List<ItemInstance> PlaceItems(WorldInstance worldRef, int prosperity = 50)
         {
             List<ItemInstance> placedItems = new List<ItemInstance>();
 
             int dungeonArea = worldRef.Tiles.GetLength(0) * worldRef.Tiles.GetLength(1);
-            int itemsToPlace = dungeonArea / 50;
+            int itemsToPlace = dungeonArea / prosperity;
 
             List<Vector2Int> unavailablePoints = new List<Vector2Int>();
             foreach(JoyObject wall in worldRef.Walls.Values)

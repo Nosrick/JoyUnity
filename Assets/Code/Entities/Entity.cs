@@ -74,7 +74,9 @@ namespace JoyLib.Code.Entities
         protected const int NEED_FULFILMENT_COUNTER = 5;
         protected const int REGEN_TICK_TIME = 10;
 
-        public const int ATTACK_THRESHOLD = -50;
+        protected const int ATTACK_THRESHOLD = -50;
+
+        protected readonly Vector2Int NO_TARGET = new Vector2Int(-1, -1);
 
         protected static Dictionary<string, CultureType> s_Cultures = CultureLoader.LoadCultures();
 
@@ -246,7 +248,7 @@ namespace JoyLib.Code.Entities
             m_CurrentTarget.intent = Intent.Interact;
             m_CurrentTarget.searching = false;
             m_CurrentTarget.target = null;
-            m_CurrentTarget.targetPoint = Vector2Int.zero;
+            m_CurrentTarget.targetPoint = NO_TARGET;
         }
 
         /*
@@ -272,11 +274,13 @@ namespace JoyLib.Code.Entities
                 m_ComposureRemaining = Math.Min(m_Composure, m_ComposureRemaining + 1);
                 m_ManaRemaining = Math.Min(m_Mana, m_ManaRemaining + 1);
                 RegenTicker = 0;
-            }
 
-            foreach(EntityNeed need in m_Needs.Values)
-            {
-                need.Tick();
+                foreach(EntityNeed need in m_Needs.Values)
+                {
+                    need.Tick();
+                    Debug.Log("Running LUA script: Tick (" + need.name + ") requested by: " + this.JoyName);
+                    ScriptingEngine.RunScript(need.InteractionFileContents, need.name, "Tick", new object[] { new MoonEntity(this) });
+                }
             }
 
             UpdateMe();
@@ -395,8 +399,8 @@ namespace JoyLib.Code.Entities
                             continue;
                         }
 
-                        Debug.Log("Running LUA script: FindFulfillmentObject (" + need.name + ") requested by: " + this.JoyName);
-                        ScriptingEngine.RunScript(need.InteractionFileContents, need.name, "FindFulfillmentObject", new object[] { new MoonEntity(this) });
+                        Debug.Log("Running LUA script: FindFulfilmentObject (" + need.name + ") requested by: " + this.JoyName);
+                        ScriptingEngine.RunScript(need.InteractionFileContents, need.name, "FindFulfilmentObject", new object[] { new MoonEntity(this) });
                         idle = false;
                         break;
                     }
@@ -416,8 +420,8 @@ namespace JoyLib.Code.Entities
                                 //TODO: WRITE AN ENTITY INTERACTION
                                 EntityNeed need = this.Needs[CurrentTarget.need];
 
-                                Debug.Log("Running LUA script: FindFulfillmentObject (" + need.name + ") requested by: " + this.JoyName);
-                                ScriptingEngine.RunScript(need.InteractionFileContents, need.name, "FindFulfillmentObject", new object[] { new MoonEntity(this) });
+                                Debug.Log("Running LUA script: FindFulfilmentObject (" + need.name + ") requested by: " + this.JoyName);
+                                ScriptingEngine.RunScript(need.InteractionFileContents, need.name, "FindFulfilmentObject", new object[] { new MoonEntity(this) });
                             }
                             else if (CurrentTarget.intent == Intent.Attack)
                             {

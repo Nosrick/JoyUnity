@@ -12,6 +12,7 @@ public class JoyObject
     
     protected Vector2Int m_WorldPosition;
 
+    [NonSerialized]
     protected Sprite[] m_Icons;
 
     protected int m_LastIcon;

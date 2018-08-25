@@ -1,4 +1,4 @@
-function FindFulfillmentObject(entity)
+function FindFulfilmentObject(entity)
 	local targets = entity:SearchForObject("Furniture")
 	local bestBed = 0
 	local chosenBed = nil
@@ -16,4 +16,7 @@ function FindFulfillmentObject(entity)
 	end
 	
 	entity:FulfillNeed("Sleep", 16, 420)
+end
+
+function Tick(entity)
 end

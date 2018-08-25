@@ -28,6 +28,7 @@
   <!--Speech Skills-->
   <Coefficient Skill="Mercantile" Confidence="0.07" Property="0.03" />
   <Coefficient Skill="Persuasion" Confidence="0.05" Friendship="0.05" />
+  <Coefficient Skill="Intimidate" Confidence="0.07" Health="0.03" />
   <Coefficient Skill="Bluff" Confidence="0.1" />
   
   <!--Stealth Skills-->

@@ -316,7 +316,7 @@ namespace JoyLib.Code.World
 
             foreach (Entity entity in m_Entities)
             {
-                 entity.UpdateMe();
+                 entity.Tick();
             }
 
             IsDirty = false;
