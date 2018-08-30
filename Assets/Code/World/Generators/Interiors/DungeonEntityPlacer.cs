@@ -5,6 +5,7 @@ using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Physics;
+using JoyLib.Code.States;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -52,7 +53,7 @@ namespace JoyLib.Code.World.Generators.Interiors
                     Dictionary<string, int> jobLevels = new Dictionary<string, int>();
                     jobLevels.Add(jobType.name, 1);
 
-                    newEntity = EntityHandler.Create(templates[entityIndex], EntityNeed.GetFullRandomisedNeeds(), 1, jobType, culture.ChooseSex(), culture.ChooseSexuality(),
+                    newEntity = WorldState.EntityHandler.Create(templates[entityIndex], EntityNeed.GetFullRandomisedNeeds(), 1, jobType, culture.ChooseSex(), culture.ChooseSexuality(),
                         new Vector2Int(-1, -1), ObjectIcons.GetSprites(templates[entityIndex].Tileset, templates[entityIndex].CreatureType).ToList(), null);
                 }
                 else
@@ -64,7 +65,7 @@ namespace JoyLib.Code.World.Generators.Interiors
                     Dictionary<string, int> jobLevels = new Dictionary<string, int>();
                     jobLevels.Add(jobType.name, 1);
 
-                    newEntity = EntityHandler.Create(templates[entityIndex], EntityNeed.GetBasicRandomisedNeeds(), 1, jobType, culture.ChooseSex(), culture.ChooseSexuality(),
+                    newEntity = WorldState.EntityHandler.Create(templates[entityIndex], EntityNeed.GetBasicRandomisedNeeds(), 1, jobType, culture.ChooseSex(), culture.ChooseSexuality(),
                         new Vector2Int(-1, -1), ObjectIcons.GetSprites(templates[entityIndex].Tileset, templates[entityIndex].CreatureType).ToList(), null);
                 }
                 newEntity.Move(availablePoints[pointIndex]);

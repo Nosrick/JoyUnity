@@ -3,6 +3,7 @@ using JoyLib.Code.Helpers;
 using System;
 using System.Collections.Generic;
 using JoyLib.Code.Managers;
+using System.Linq;
 
 [Serializable]
 public class JoyObject
@@ -127,6 +128,14 @@ public class JoyObject
         get
         {
             return m_Icons[ChosenIcon];
+        }
+    }
+
+    public List<Sprite> Icons
+    {
+        get
+        {
+            return m_Icons.ToList();
         }
     }
 

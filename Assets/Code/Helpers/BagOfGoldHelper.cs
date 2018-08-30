@@ -1,4 +1,5 @@
 ﻿using JoyLib.Code.Entities.Items;
+using JoyLib.Code.States;
 
 namespace JoyLib.Code.Helpers
 {
@@ -6,11 +7,11 @@ namespace JoyLib.Code.Helpers
     {
         public static ItemInstance GetBagOfGold(int count)
         {
-            BaseItemType bagType = ItemHandler.GetSpecificItem("Leather bag");
-            ItemInstance bag = new ItemInstance(bagType, new UnityEngine.Vector2Int(-1, -1), true);
+            ItemInstance bag = WorldState.ItemHandler.CreateSpecificType("Leather bag", "Leather bag");
             for (int i = 0; i < count; i++)
             {
-                bag.PutItem(ItemProvider.RandomItemOfType("Currency", true));
+                ItemInstance coin = WorldState.ItemHandler.CreateRandomItemOfType("Currency", true);
+                bag.PutItem(coin.GUID);
             }
 
             return bag;

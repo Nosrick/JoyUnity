@@ -1,11 +1,10 @@
 ﻿using JoyLib.Code.Graphics;
 using JoyLib.Code.Managers;
 using JoyLib.Code.Scripting;
-using MoonSharp.Interpreter;
+using JoyLib.Code.States;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities.Items
@@ -16,10 +15,12 @@ namespace JoyLib.Code.Entities.Items
         protected bool m_Identified;
         protected long m_OwnerGUID;
 
-        protected List<ItemInstance> m_Contents;
+        protected List<long> m_Contents;
         protected BaseItemType m_Type;
 
-        public ItemInstance(BaseItemType type, Vector2Int position, bool identified, Assembly interactionFile = null) :
+        protected string m_InteractionFile;
+
+        public ItemInstance(BaseItemType type, Vector2Int position, bool identified, string interactionFile = null) :
             base(type.UnidentifiedName, type.GetHitPoints(), position, ObjectIcons.GetSprites(type.Category, type.UnidentifiedName), type.Category, false)
         {            
             this.m_Type = type;
@@ -31,7 +32,25 @@ namespace JoyLib.Code.Entities.Items
             this.Identified = identified;
             //chosenIcon = RNG.Roll(0, m_Icons.Length - 1);
 
-            this.m_Contents = new List<ItemInstance>();
+            this.m_Contents = new List<long>();
+
+            m_InteractionFile = interactionFile;
+        }
+
+        public ItemInstance(ItemInstance item) :
+            base(item.ItemType.UnidentifiedName, item.ItemType.GetHitPoints(), item.WorldPosition, item.Icons, item.BaseType, item.IsAnimated, false, false)
+        {
+            this.m_Type = item.ItemType;
+            this.Move(item.WorldPosition);
+
+            this.m_HitPoints = item.ItemType.GetHitPoints();
+            this.m_HitPointsRemaining = this.m_HitPoints;
+            this.GUID = GUIDManager.AssignGUID();
+            this.Identified = item.Identified;
+
+            this.m_Contents = item.m_Contents;
+
+            m_InteractionFile = item.m_InteractionFile;
         }
 
         /*
@@ -93,16 +112,16 @@ namespace JoyLib.Code.Entities.Items
             Identified = true;
         }
 
-        public void PutItem(ItemInstance item)
+        public void PutItem(long item)
         {
             m_Contents.Add(item);
         }
 
-        public ItemInstance TakeItem(int index)
+        public ItemInstance TakeMyItem(int index)
         {
             if(index > 0 && index < m_Contents.Count)
             {
-                ItemInstance item = m_Contents[index];
+                ItemInstance item = WorldState.ItemHandler.GetInstance(m_Contents[index]);
                 m_Contents.RemoveAt(index);
                 return item;
             }
@@ -204,10 +223,10 @@ namespace JoyLib.Code.Entities.Items
             get
             {
                 float weight = m_Type.Weight;
-
-                for(int i = 0; i < m_Contents.Count; i++)
+                List<ItemInstance> contents = Contents;
+                for(int i = 0; i < contents.Count; i++)
                 {
-                    weight += m_Contents[i].ItemType.Weight;
+                    weight += contents[i].ItemType.Weight;
                 }
 
                 return weight;
@@ -226,7 +245,12 @@ namespace JoyLib.Code.Entities.Items
         {
             get
             {
-                return m_Contents.ToList();
+                List<ItemInstance> contents = new List<ItemInstance>();
+                foreach(long GUID in m_Contents)
+                {
+                    contents.Add(WorldState.ItemHandler.GetInstance(GUID));
+                }
+                return contents;
             }
         }
 

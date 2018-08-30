@@ -11,6 +11,7 @@ using JoyLib.Code.Loaders;
 using JoyLib.Code.Physics;
 using JoyLib.Code.Quests;
 using JoyLib.Code.Scripting;
+using JoyLib.Code.States;
 using JoyLib.Code.World;
 using System;
 using System.Collections.Generic;
@@ -108,6 +109,7 @@ namespace JoyLib.Code.Entities
             base(NameProvider.GetRandomName(template.CreatureType, sex), template.Statistics[StatisticIndex.Endurance].Value * 2, position, sprites, template.JoyType, true)
         {
             this.CreatureType = template.CreatureType;
+            this.Slots = template.Slots;
 
             this.m_Size = template.Size;
 
@@ -182,6 +184,7 @@ namespace JoyLib.Code.Entities
             this.CreatureType = template.CreatureType;
 
             this.m_Size = template.Size;
+            this.Slots = template.Slots;
 
             this.m_JobLevels = new Dictionary<string, int>();
             this.m_Sexuality = sexuality;
@@ -607,7 +610,7 @@ namespace JoyLib.Code.Entities
 
         protected void PerformFirstImpression(long GUID)
         {
-            Entity entity = EntityHandler.Get(GUID);
+            Entity entity = WorldState.EntityHandler.Get(GUID);
             int firstImpression = (entity.Statistics[StatisticIndex.Personality].Value + entity.Statistics[StatisticIndex.Suavity].Value + entity.Statistics[StatisticIndex.Wit].Value);
             m_Relationships.Add(GUID, firstImpression);
         }
@@ -1042,10 +1045,8 @@ namespace JoyLib.Code.Entities
 
         public List<string> Slots
         {
-            get
-            {
-                return m_Equipment.Keys.ToList();
-            }
+            get;
+            protected set;
         }
         public int VisionMod
         {

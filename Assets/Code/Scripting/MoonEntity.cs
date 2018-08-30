@@ -1,6 +1,7 @@
 ﻿using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.AI;
 using JoyLib.Code.Entities.Items;
+using JoyLib.Code.States;
 using MoonSharp.Interpreter;
 using System;
 using System.Collections.Generic;
@@ -268,7 +269,7 @@ namespace JoyLib.Code.Scripting
             List<MoonEntity> relationships = new List<MoonEntity>();
             foreach(KeyValuePair<long, int> pair in m_AssociatedEntity.Relationships)
             {
-                Entity entity = EntityHandler.Get(pair.Key);
+                Entity entity = WorldState.EntityHandler.Get(pair.Key);
                 MoonEntity moon = new MoonEntity(entity);
                 relationships.Add(moon);
             }
@@ -284,7 +285,7 @@ namespace JoyLib.Code.Scripting
             {
                 if(relationship.Value == RelationshipStatus.Spouse)
                 {
-                    return new MoonEntity(EntityHandler.Get(relationship.Key));
+                    return new MoonEntity(WorldState.EntityHandler.Get(relationship.Key));
                 }
             }
 

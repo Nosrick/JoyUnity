@@ -5,6 +5,7 @@ using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Managers;
 using JoyLib.Code.Scripting;
+using JoyLib.Code.States;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -772,7 +773,7 @@ namespace JoyLib.Code.World
                 }
             }
             CalculatePlayerIndex();
-            EntityHandler.Remove(entityGUID);
+            WorldState.EntityHandler.Remove(entityGUID);
             
             for (int i = 0; i < m_EntityHolder.transform.childCount; i++)
             {

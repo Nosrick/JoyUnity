@@ -8,6 +8,8 @@ using JoyLib.Code.IO;
 using JoyLib.Code.Physics;
 using JoyLib.Code.Quests;
 using JoyLib.Code.States.Gameplay;
+using JoyLib.Code.Unity.GUI;
+using JoyLib.Code.Unity.GUI.Inventory;
 using JoyLib.Code.World;
 using System;
 using UnityEngine;
@@ -32,11 +34,11 @@ namespace JoyLib.Code.States
         protected GameObject m_FogOfWarHolder;
         protected GameObject m_EntitiesHolder;
 
-        protected GameObject m_NeedsGUIPrefab;
-        protected GameObject m_InventoryGUIPrefab;
+        protected static GUIManager s_GUIManager;
+        protected bool m_InventoryOpen;
 
-        protected GameObject m_NeedsGUIInstance;
-        protected GameObject m_InventoryGUIInstance;
+        protected static LiveEntityHandler s_EntityHandler = new LiveEntityHandler();
+        protected static LiveItemHandler s_ItemHandler = new LiveItemHandler();
 
         public WorldState(WorldInstance overworldRef, WorldInstance activeWorldRef, GameplayFlags flagsRef) : base()
         {
@@ -48,8 +50,7 @@ namespace JoyLib.Code.States
             m_FogOfWarHolder = GameObject.Find("WorldFog");
             m_EntitiesHolder = GameObject.Find("WorldEntities");
 
-            m_NeedsGUIPrefab = Resources.Load<GameObject>("Prefabs/GUI/Needs/GUIPlayingState");
-            m_InventoryGUIPrefab = Resources.Load<GameObject>("Prefabs/GUI/Inventory/GUIInventory");
+            m_InventoryOpen = false;
         }
 
         public override void LoadContent()
@@ -61,8 +62,17 @@ namespace JoyLib.Code.States
         {
             base.SetUpUi();
 
-            //m_NeedsGUIInstance = GameObject.Instantiate(m_NeedsGUIPrefab);
-            
+            if (s_GUIManager == null)
+            {
+                GameObject needsGUIPrefab = GameObject.Find("NeedsPanel");
+                GameObject inventoryGUIPrefab = GameObject.Find("GUIInventory");
+
+                s_GUIManager = new GUIManager();
+                s_GUIManager.AddGUI(needsGUIPrefab);
+                s_GUIManager.AddGUI(inventoryGUIPrefab);
+            }
+
+            s_GUIManager.OpenGUI("NeedsPanel");
         }
 
         public override void Start()
@@ -73,6 +83,15 @@ namespace JoyLib.Code.States
             RumourMill.GenerateRumours(m_ActiveWorld);
 
             SetEntityWorld(overworld);
+
+            if (s_GUIManager == null)
+            {
+                GameObject obj = GameObject.Find("GUIInventory");
+                JoyInventoryManager manager = obj.GetComponent<JoyInventoryManager>();
+                manager.SetPlayer(m_ActiveWorld.Player);
+                manager.DoSlots();
+            }
+
             SetUpUi();
         }
 
@@ -347,6 +366,18 @@ namespace JoyLib.Code.States
                 Tick();
                 return;
             }
+            else if(Input.GetKeyDown(KeyCode.I))
+            {
+                m_InventoryOpen = !m_InventoryOpen;
+                if (m_InventoryOpen == false)
+                {
+                    s_GUIManager.OpenGUI("NeedsPanel");
+                }
+                else
+                {
+                    s_GUIManager.OpenGUI("GUIInventory");
+                }
+            }
 
             if (hasMoved)
             {
@@ -575,6 +606,22 @@ namespace JoyLib.Code.States
         {
             get;
             set;
+        }
+
+        public static LiveEntityHandler EntityHandler
+        {
+            get
+            {
+                return s_EntityHandler;
+            }
+        }
+
+        public static LiveItemHandler ItemHandler
+        {
+            get
+            {
+                return s_ItemHandler;
+            }
         }
     }
 }
