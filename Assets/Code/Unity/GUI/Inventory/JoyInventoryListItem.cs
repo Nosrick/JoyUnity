@@ -1,12 +1,13 @@
-﻿using UnityEngine;
+﻿using JoyLib.Code.Entities.Items;
+using UnityEngine;
 
 namespace JoyLib.Code.Unity.GUI.Inventory
 {
     public class JoyInventoryListItem : MonoBehaviour
     {
-        private JoyInventoryItem m_InventoryItem;
+        private ItemInstance m_InventoryItem;
 
-        public JoyInventoryItem Item
+        public ItemInstance Item
         {
             get
             {
@@ -15,7 +16,8 @@ namespace JoyLib.Code.Unity.GUI.Inventory
             set
             {
                 m_InventoryItem = value;
-                ItemName = m_InventoryItem.name;
+                ItemName = m_InventoryItem.DisplayName;
+                GetComponent<SpriteRenderer>().sprite = m_InventoryItem.Icon;
             }
         }
 

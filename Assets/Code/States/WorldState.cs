@@ -89,7 +89,7 @@ namespace JoyLib.Code.States
                 GameObject obj = GameObject.Find("GUIInventory");
                 JoyInventoryManager manager = obj.GetComponent<JoyInventoryManager>();
                 manager.SetPlayer(m_ActiveWorld.Player);
-                manager.DoSlots();
+                manager.DoAll();
             }
 
             SetUpUi();

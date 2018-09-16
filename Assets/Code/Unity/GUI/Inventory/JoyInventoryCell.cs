@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using JoyLib.Code.Entities.Items;
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -9,15 +7,16 @@ namespace JoyLib.Code.Unity.GUI.Inventory
 {
     public class JoyInventoryCell : MonoBehaviour, IDropHandler
     {
-        private JoyInventoryItem m_InventoryItem;
+        private ItemInstance m_InventoryItem;
         private string m_SlotName;
 
-        public bool SetItem(JoyInventoryItem item)
+        public bool SetItem(ItemInstance item)
         {
-            if(item.Item.ItemType.Slot == m_SlotName)
+            if(item.ItemType.Slot == m_SlotName)
             {
                 m_InventoryItem = item;
-                item.transform.position = m_InventoryItem.transform.position;
+                m_SlotName = m_InventoryItem.ItemType.Slot;
+                GetComponent<SpriteRenderer>().sprite = m_InventoryItem.Icon;
                 return true;
             }
 
