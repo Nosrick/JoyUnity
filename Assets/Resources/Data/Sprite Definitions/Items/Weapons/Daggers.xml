@@ -3,15 +3,15 @@
   <TilesetName>Weapons</TilesetName>
   <Sheet>ShortWep</Sheet>
 
-  <ItemIcon Name="Dagger" Position="0,0" />
-  <ItemIcon Name="Dagger" Position="1,0" />
-  <ItemIcon Name="Dagger" Position="2,0" />
-  <ItemIcon Name="Dagger" Position="3,0" />
-  <ItemIcon Name="Dagger" Position="4,0" />
-  <ItemIcon Name="Dagger" Position="5,0" />
-  <ItemIcon Name="Dagger" Position="6,0" />
-  <ItemIcon Name="Dagger" Position="7,0" />
+  <ItemIcon Name="Dagger" Position="0,4" />
+  <ItemIcon Name="Dagger" Position="1,4" />
+  <ItemIcon Name="Dagger" Position="2,4" />
+  <ItemIcon Name="Dagger" Position="3,4" />
+  <ItemIcon Name="Dagger" Position="4,4" />
+  <ItemIcon Name="Dagger" Position="5,4" />
+  <ItemIcon Name="Dagger" Position="6,4" />
+  <ItemIcon Name="Dagger" Position="7,4" />
 
-  <ItemIcon Name="Dagger" Position="0,1" />
-  <ItemIcon Name="Dagger" Position="1,1" />
+  <ItemIcon Name="Dagger" Position="0,3" />
+  <ItemIcon Name="Dagger" Position="1,3" />
 </Objects>

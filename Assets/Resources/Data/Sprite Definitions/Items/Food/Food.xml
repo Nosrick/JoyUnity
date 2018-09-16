@@ -3,5 +3,5 @@
   <TilesetName>Food</TilesetName>
   <Sheet>Food</Sheet>
 
-  <ItemIcon Name="Apple" Position="0,2" />
+  <ItemIcon Name="Apple" Position="0,3" />
 </Objects>

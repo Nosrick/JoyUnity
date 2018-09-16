@@ -3,8 +3,8 @@
   <TilesetName>Potions</TilesetName>
   <Sheet>Potion</Sheet>
   
-  <ItemIcon Name="Red Potion" Position="0,0" />
-  <ItemIcon Name="Pink Potion" Position="1,0" />
-  <ItemIcon Name="Orange Potion" Position="2,0" />
-  <ItemIcon Name="Yellow Potion" Position="3,0" />
+  <ItemIcon Name="Red Potion" Position="0,4" />
+  <ItemIcon Name="Pink Potion" Position="1,4" />
+  <ItemIcon Name="Orange Potion" Position="2,4" />
+  <ItemIcon Name="Yellow Potion" Position="3,4" />
 </Objects>
