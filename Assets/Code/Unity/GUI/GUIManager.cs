@@ -5,30 +5,30 @@ namespace JoyLib.Code.Unity.GUI
 {
     public class GUIManager
     {
-        private List<GameObject> m_GUIs;
-        private GameObject m_ActiveGUI;
+        private List<Tuple<GameObject, bool>> m_GUIs;
+        private Tuple<GameObject, bool> m_ActiveGUI;
 
         public GUIManager()
         {
-            m_GUIs = new List<GameObject>();
+            m_GUIs = new List<Tuple<GameObject, bool>>();
             m_ActiveGUI = null;
         }
 
-        public void AddGUI(GameObject gui)
+        public void AddGUI(GameObject gui, bool removesControl = true)
         {
             gui.SetActive(false);
-            m_GUIs.Add(gui);
+            m_GUIs.Add(new Tuple<GameObject, bool>(gui, removesControl));
         }
 
         public void OpenGUI(string name)
         {
-            foreach(GameObject gui in m_GUIs)
+            foreach(Tuple<GameObject, bool> gui in m_GUIs)
             {
-                if(gui.name == name)
+                if(gui.First.name == name)
                 {
                     CloseGUI();
                     m_ActiveGUI = gui;
-                    m_ActiveGUI.SetActive(true);
+                    m_ActiveGUI.First.SetActive(true);
                     break;
                 }
             }
@@ -38,9 +38,14 @@ namespace JoyLib.Code.Unity.GUI
         {
             if(m_ActiveGUI != null)
             {
-                m_ActiveGUI.SetActive(false);
+                m_ActiveGUI.First.SetActive(false);
                 m_ActiveGUI = null;
             }
+        }
+
+        public bool RemovesControl()
+        {
+            return m_ActiveGUI.Second;
         }
     }
 }

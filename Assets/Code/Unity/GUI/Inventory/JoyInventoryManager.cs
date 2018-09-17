@@ -21,6 +21,9 @@ namespace JoyLib.Code.Unity.GUI.Inventory
         //The GameObject representing the cursor
         private GameObject m_Cursor;
 
+        //The GameObject for the item description object
+        private TextMeshProUGUI m_ItemDescription;
+
         //The GameObject representing the inventory storage object
         private GameObject m_Inventory;
 
@@ -29,10 +32,13 @@ namespace JoyLib.Code.Unity.GUI.Inventory
 
         //Indexy stuff for selecting
         private int m_Index = 0;
+        private bool m_OnButtons = false;
 
         private const int SLOT_SCALE = 3;
         private const int INVENTORY_SCALE = 5;
         private const int QUAD_SCALE = 25;
+
+        private const int NO_ITEM = -1;
 
         public void Start()
         {
@@ -44,6 +50,7 @@ namespace JoyLib.Code.Unity.GUI.Inventory
             m_Cursor = GameObject.Find("InventoryCursor");
             m_Inventory = GameObject.Find("Inventory");
             m_Canvas = GameObject.Find("GUICanvas").GetComponent<Canvas>();
+            m_ItemDescription = GameObject.Find("ItemDescription").GetComponent<TextMeshProUGUI>();
 
             float quadHeight = Camera.main.orthographicSize * 2.0f;
             float quadWidth = quadHeight * Screen.width / Screen.height;
@@ -61,7 +68,6 @@ namespace JoyLib.Code.Unity.GUI.Inventory
 
         public void Update()
         {
-
             bool cursorMoved = false;
             if(Input.GetKeyDown(KeyCode.Keypad2))
             {
@@ -83,12 +89,44 @@ namespace JoyLib.Code.Unity.GUI.Inventory
 
             if(cursorMoved == true)
             {
-                RectTransform highlighted = m_Inventory.transform.GetChild(m_Index).GetComponent<RectTransform>();
-
-                float canvasScale = m_Canvas.scaleFactor;
-
-                m_Cursor.transform.position = new Vector3(highlighted.transform.position.x + (highlighted.rect.xMin * highlighted.localToWorldMatrix.m00 * canvasScale), highlighted.transform.position.y, highlighted.transform.position.z);
+                SetCursorIndex(m_Index);
+                SetItemDescription(m_Index);
             }
+
+            if(Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Return) && m_Cursor.activeInHierarchy)
+            {
+                if (m_OnButtons == false)
+                {
+                    CreateButtons();
+                }
+            }
+        }
+
+        private void CreateButtons()
+        {
+
+        }
+
+        private void SetCursorIndex(int index)
+        {
+            RectTransform highlighted = m_Inventory.transform.GetChild(index).GetComponent<RectTransform>();
+
+            float canvasScale = m_Canvas.scaleFactor;
+
+            m_Cursor.transform.position = new Vector3(highlighted.transform.position.x + (highlighted.rect.xMin * highlighted.localToWorldMatrix.m00 * canvasScale), highlighted.transform.position.y, highlighted.transform.position.z);
+        }
+
+        private void SetItemDescription(int index)
+        {
+            if(index == NO_ITEM)
+            {
+                m_ItemDescription.text = "";
+                return;
+            }
+
+            ItemInstance item = m_Inventory.transform.GetChild(index).GetChild(0).GetComponent<JoyInventoryListItem>().Item;
+
+            m_ItemDescription.text = item.DisplayName + "\n\r" + item.DisplayDescription + "\n\r" + item.WeightString + "\n\r" + item.ItemType.MaterialDescription + "\n\r" + item.ContentString + "\n\r" + item.ConditionString;
         }
 
         public void SetPlayer(Entity player)
@@ -162,6 +200,18 @@ namespace JoyLib.Code.Unity.GUI.Inventory
                 gameObject.transform.localScale = new Vector3(INVENTORY_SCALE, INVENTORY_SCALE, INVENTORY_SCALE);
 
                 i += 1;
+            }
+
+            if(m_Inventory.transform.childCount > 0)
+            {
+                m_Cursor.SetActive(true);
+                SetCursorIndex(0);
+                SetItemDescription(0);
+            }
+            else
+            {
+                m_Cursor.SetActive(false);
+                SetItemDescription(NO_ITEM);
             }
 
             Debug.Log("Finished setting up inventory.");

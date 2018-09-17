@@ -68,8 +68,8 @@ namespace JoyLib.Code.States
                 GameObject inventoryGUIPrefab = GameObject.Find("GUIInventory");
 
                 s_GUIManager = new GUIManager();
-                s_GUIManager.AddGUI(needsGUIPrefab);
-                s_GUIManager.AddGUI(inventoryGUIPrefab);
+                s_GUIManager.AddGUI(needsGUIPrefab, false);
+                s_GUIManager.AddGUI(inventoryGUIPrefab, true);
             }
 
             s_GUIManager.OpenGUI("NeedsPanel");
@@ -222,6 +222,24 @@ namespace JoyLib.Code.States
             }
             */
 
+            if (Input.GetKeyDown(KeyCode.I))
+            {
+                m_InventoryOpen = !m_InventoryOpen;
+                if (m_InventoryOpen == false)
+                {
+                    s_GUIManager.OpenGUI("NeedsPanel");
+                }
+                else
+                {
+                    s_GUIManager.OpenGUI("GUIInventory");
+                }
+            }
+
+            if (s_GUIManager.RemovesControl())
+            {
+                return;
+            }
+
             if (Input.GetKeyDown(KeyCode.Return))
             {
                 //Going up a level
@@ -365,18 +383,6 @@ namespace JoyLib.Code.States
             {
                 Tick();
                 return;
-            }
-            else if(Input.GetKeyDown(KeyCode.I))
-            {
-                m_InventoryOpen = !m_InventoryOpen;
-                if (m_InventoryOpen == false)
-                {
-                    s_GUIManager.OpenGUI("NeedsPanel");
-                }
-                else
-                {
-                    s_GUIManager.OpenGUI("GUIInventory");
-                }
             }
 
             if (hasMoved)
