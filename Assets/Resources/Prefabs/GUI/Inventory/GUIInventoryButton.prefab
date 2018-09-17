@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4622393707356626}
   - component: {fileID: 212372575141336824}
   m_Layer: 0
-  m_Name: InventoryButton
+  m_Name: GUIInventoryButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

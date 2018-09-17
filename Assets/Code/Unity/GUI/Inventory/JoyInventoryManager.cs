@@ -14,6 +14,7 @@ namespace JoyLib.Code.Unity.GUI.Inventory
         private GameObject m_SlotPrefab;
         private GameObject m_ListPrefab;
         private GameObject m_ItemPrefab;
+        private GameObject m_ButtonPrefab;
 
         //The quad representing the background
         private GameObject m_Background;
@@ -45,6 +46,7 @@ namespace JoyLib.Code.Unity.GUI.Inventory
             m_SlotPrefab = Resources.Load<GameObject>("Prefabs/GUI/Inventory/GUIInventorySlot");
             m_ListPrefab = Resources.Load<GameObject>("Prefabs/GUI/Inventory/GUIInventoryListItem");
             m_ItemPrefab = Resources.Load<GameObject>("Prefabs/GUI/Inventory/GUIInventoryItem");
+            m_ButtonPrefab = Resources.Load<GameObject>("Prefabs/GUI/Inventory/GUIInventoryButton");
 
             m_Background = GameObject.Find("InventoryBackgroundQuad");
             m_Cursor = GameObject.Find("InventoryCursor");
@@ -126,7 +128,7 @@ namespace JoyLib.Code.Unity.GUI.Inventory
 
             ItemInstance item = m_Inventory.transform.GetChild(index).GetChild(0).GetComponent<JoyInventoryListItem>().Item;
 
-            m_ItemDescription.text = item.DisplayName + "\n\r" + item.DisplayDescription + "\n\r" + item.WeightString + "\n\r" + item.ItemType.MaterialDescription + "\n\r" + item.ContentString + "\n\r" + item.ConditionString;
+            m_ItemDescription.text = item.DisplayName + "\n\r" + item.DisplayDescription + "\n\r" + item.SlotString + "\n\r" + item.WeightString + "\n\r" + item.ItemType.MaterialDescription + "\n\r" + item.ContentString + "\n\r" + item.ConditionString;
         }
 
         public void SetPlayer(Entity player)

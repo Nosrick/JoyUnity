@@ -196,6 +196,21 @@ namespace JoyLib.Code.Entities.Items
             }
         }
 
+        public string SlotString
+        {
+            get
+            {
+                if (this.ItemType.Slot == "None")
+                {
+                    return "This item can be thrown.";
+                }
+                else
+                {
+                    return "This is equipped to the " + this.ItemType.Slot + " slot.";
+                }
+            }
+        }
+
         public string DisplayName
         {
             get
