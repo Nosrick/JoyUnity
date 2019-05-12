@@ -24,7 +24,7 @@ namespace JoyLib.Code.Entities
     {
         protected Dictionary<StatisticIndex, EntityStatistic> m_Statistics;
         protected Dictionary<string, EntitySkill> m_Skills;
-        protected Dictionary<NeedIndex, EntityNeed> m_Needs;
+        protected Dictionary<string, AbstractNeed> m_Needs;
         protected List<Ability> m_Abilities;
         protected Dictionary<string, ItemInstance> m_Equipment;
         protected List<ItemInstance> m_Backpack;
@@ -58,7 +58,7 @@ namespace JoyLib.Code.Entities
         protected bool[,] m_Vision;
         protected VisionType m_VisionType;
 
-        protected NeedIndex m_FulfillingNeed;
+        protected string m_FulfillingNeed;
         protected int m_FulfilmentCounter;
 
         protected string m_Tileset;
@@ -102,7 +102,7 @@ namespace JoyLib.Code.Entities
         /// <param name="jobLevels"></param>
         /// <param name="world"></param>
         /// <param name="tileset"></param>
-        public Entity(EntityTemplate template, Dictionary<NeedIndex, EntityNeed> needs, int level, float experience, JobType job, Sex sex, Sexuality sexuality,
+        public Entity(EntityTemplate template, Dictionary<string, AbstractNeed> needs, int level, float experience, JobType job, Sex sex, Sexuality sexuality,
             Vector2Int position, List<Sprite> sprites, ItemInstance naturalWeapons, Dictionary<string, ItemInstance> equipment, 
             List<ItemInstance> backpack, Dictionary<long, int> relationships, List<string> identifiedItems, Dictionary<long, RelationshipStatus> family,
             Dictionary<string, int> jobLevels, WorldInstance world, string tileset) : 
@@ -153,7 +153,7 @@ namespace JoyLib.Code.Entities
             this.m_Pathfinder = new Pathfinder();
             this.m_PathfindingData = new Queue<Vector2Int>();
 
-            this.m_FulfillingNeed = (NeedIndex)(-1);
+            this.m_FulfillingNeed = "NONE";
             this.m_FulfilmentCounter = 0;
 
             this.RegenTicker = RNG.Roll(0, REGEN_TICK_TIME - 1);
@@ -177,7 +177,7 @@ namespace JoyLib.Code.Entities
         /// <param name="position"></param>
         /// <param name="icons"></param>
         /// <param name="world"></param>
-        public Entity(EntityTemplate template, Dictionary<NeedIndex, EntityNeed> needs, int level, JobType job, Sex sex, Sexuality sexuality,
+        public Entity(EntityTemplate template, Dictionary<string, AbstractNeed> needs, int level, JobType job, Sex sex, Sexuality sexuality,
             Vector2Int position, List<Sprite> sprites, WorldInstance world) :
             base(NameProvider.GetRandomName(template.CreatureType, sex), template.Statistics[StatisticIndex.Endurance].Value * 2, position, sprites, template.JoyType, true)
         {
@@ -226,7 +226,7 @@ namespace JoyLib.Code.Entities
             this.m_Pathfinder = new Pathfinder();
             this.m_PathfindingData = new Queue<Vector2Int>();
 
-            this.m_FulfillingNeed = (NeedIndex)(-1);
+            this.m_FulfillingNeed = "NONE";
             this.m_FulfilmentCounter = 0;
 
             this.RegenTicker = RNG.Roll(0, REGEN_TICK_TIME - 1);
@@ -278,12 +278,9 @@ namespace JoyLib.Code.Entities
                 m_ManaRemaining = Math.Min(m_Mana, m_ManaRemaining + 1);
                 RegenTicker = 0;
 
-                foreach(EntityNeed need in m_Needs.Values)
+                foreach(AbstractNeed need in m_Needs.Values)
                 {
                     need.Tick();
-                    //Debug.Log("Running LUA script: Tick (" + need.name + ") requested by: " + this.JoyName);
-                    //ScriptingEngine.RunScript(need.InteractionFileContents, need.name, "Tick", new object[] { new MoonEntity(this) });
-                    ScriptingEngine.Execute(need.name, "Tick", new object[] { this });
                 }
             }
 
@@ -392,11 +389,11 @@ namespace JoyLib.Code.Entities
                 if (CurrentTarget.idle == true)
                 {
                     //Let's find something to do
-                    List<EntityNeed> needs = m_Needs.Values.OrderByDescending(x => x.priority).ToList();
+                    List<AbstractNeed> needs = m_Needs.Values.OrderByDescending(x => x.priority).ToList();
                     //Act on first need
 
                     bool idle = true;
-                    foreach(EntityNeed need in needs)
+                    foreach(AbstractNeed need in needs)
                     {
                         if(need.contributingHappiness)
                         {
@@ -405,7 +402,7 @@ namespace JoyLib.Code.Entities
 
                         Debug.Log("Running LUA script: FindFulfilmentObject (" + need.name + ") requested by: " + this.JoyName);
                         //ScriptingEngine.RunScript(need.InteractionFileContents, need.name, "FindFulfilmentObject", new object[] { new MoonEntity(this) });
-                        ScriptingEngine.Execute(need.name, "FindFulfilmentObject", new object[] { this });
+                        need.FindFulfilmentObject(this);
                         idle = false;
                         break;
                     }
@@ -423,11 +420,9 @@ namespace JoyLib.Code.Entities
                             if (CurrentTarget.intent == Intent.Interact)
                             {
                                 //TODO: WRITE AN ENTITY INTERACTION
-                                EntityNeed need = this.Needs[CurrentTarget.need];
+                                AbstractNeed need = this.Needs[CurrentTarget.need];
 
-                                Debug.Log("Running LUA script: FindFulfilmentObject (" + need.name + ") requested by: " + this.JoyName);
-                                //ScriptingEngine.RunScript(need.InteractionFileContents, need.name, "FindFulfilmentObject", new object[] { new MoonEntity(this) });
-                                ScriptingEngine.Execute(need.name, "FindFulfilmentObject", new object[] { this });
+                                need.FindFulfilmentObject(this);
                             }
                             else if (CurrentTarget.intent == Intent.Attack)
                             {
@@ -550,17 +545,75 @@ namespace JoyLib.Code.Entities
             m_IdentifiedItems.Add(nameRef);
         }
 
-        public void RemoveItemFromBackpack(ItemInstance item)
+        public bool RemoveItemFromBackpack(ItemInstance item)
         {
-            m_Backpack.Remove(item);
+            if(m_Backpack.Contains(item))
+            {
+                m_Backpack.Remove(item);
+                return true;
+            }
+            return false;
         }
 
-        public void RemoveEquipment(string slot)
+        public bool RemoveItemFromPerson(ItemInstance item)
+        {
+            //Check slots first
+            foreach(string slot in this.Slots)
+            {
+                if(m_Equipment[slot].GUID == item.GUID)
+                {
+                    return RemoveEquipment(slot);
+                }
+            }
+            //Then the backpack
+            return RemoveItemFromBackpack(item);
+        }
+
+        public bool RemoveEquipment(string slot)
         {
             if (m_Equipment.ContainsKey(slot))
             {
                 m_Equipment[slot] = null;
+                return true;
             }
+            return false;
+        }
+
+        public List<ItemInstance> SearchBackpackForItemType(string itemType)
+        {
+            try
+            {
+                return Backpack.Where(item => item.BaseType == itemType).ToList();
+            }
+            catch(Exception ex)
+            {
+                return new List<ItemInstance>();
+            }
+        }
+
+        public void Seek(JoyObject obj, string need)
+        {
+            NeedAIData needAIData = new NeedAIData
+            {
+                intent = Intent.Interact,
+                searching = false,
+                target = obj,
+                targetPoint = new Vector2Int(-1, -1),
+                need = need
+            };
+
+            this.CurrentTarget = needAIData;
+        }
+
+        public void Wander()
+        {
+            NeedAIData needAIData = new NeedAIData
+            {
+                intent = Intent.Interact,
+                searching = true
+            };
+
+            this.CurrentTarget = needAIData;
         }
 
         public void PlaceItemInWorld(ItemInstance item)
@@ -739,7 +792,7 @@ namespace JoyLib.Code.Entities
             return null;
         }
 
-        public void FulfillNeed(NeedIndex need, int value, int minutes = NEED_FULFILMENT_COUNTER)
+        public void FulfillNeed(string need, int value, int minutes = NEED_FULFILMENT_COUNTER)
         {
             m_Needs[need].Fulfill(value);
             m_FulfillingNeed = need;
@@ -811,7 +864,7 @@ namespace JoyLib.Code.Entities
             }
         }
 
-        public Dictionary<NeedIndex, EntityNeed> Needs
+        public Dictionary<string, AbstractNeed> Needs
         {
             get
             {
@@ -901,7 +954,7 @@ namespace JoyLib.Code.Entities
             }
         }
 
-        public NeedIndex FulfillingNeed
+        public string FulfillingNeed
         {
             get
             {
@@ -921,7 +974,14 @@ namespace JoyLib.Code.Entities
         {
             get
             {
-                return 300 - Needs[NeedIndex.Sex].priority;
+                if(Needs.ContainsKey("Sex"))
+                {
+                    return 300 - Needs["Sex"].priority;
+                }
+                else
+                {
+                    return int.MaxValue;
+                }
             }
         }
 

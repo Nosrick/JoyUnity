@@ -1,10 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using UnityEngine;
 
 namespace JoyLib.Code.Scripting
 {
@@ -12,8 +14,8 @@ namespace JoyLib.Code.Scripting
     {
         private static Assembly s_ScriptDLL;
 
-        private static Dictionary<string, object> s_ScriptObjects;
-        private const string NAMESPACE = "JoyLib.Code.Entities.Abilities.";
+        private const string ABILITY_NAMESPACE = "JoyLib.Code.Entities.Abilities.";
+        private const string NEED_NAMESPACE = "JoyLib.Code.Entities.Needs.";
 
         public static bool Initialise()
         {
@@ -24,7 +26,8 @@ namespace JoyLib.Code.Scripting
                     return true;
                 }
 
-                string[] scriptFiles = Directory.GetFiles(GlobalConstants.SCRIPTS_FOLDER, "*.cs", SearchOption.AllDirectories);
+                string dir = Directory.GetCurrentDirectory() + "/" + GlobalConstants.SCRIPTS_FOLDER;
+                string[] scriptFiles = Directory.GetFiles(dir, "*.cs", SearchOption.AllDirectories);
 
                 List<SyntaxTree> builtFiles = new List<SyntaxTree>();
 
@@ -34,45 +37,69 @@ namespace JoyLib.Code.Scripting
                     SyntaxTree builtFile = CSharpSyntaxTree.ParseText(contents);
                     builtFiles.Add(builtFile);
                 }
-                Console.WriteLine("Loaded " + scriptFiles.Length + " script files.");
-                CSharpCompilation compilation = CSharpCompilation.Create("JoyScripts", builtFiles);
+                Debug.Log("Loaded " + scriptFiles.Length + " script files.");
+                List<MetadataReference> libs = new List<MetadataReference>
+                {
+                    MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
+                    MetadataReference.CreateFromFile(typeof(Entities.Entity).Assembly.Location)
+                };
+                CSharpCompilation compilation = CSharpCompilation.Create("JoyScripts", builtFiles, libs, 
+                    new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
 
                 MemoryStream memory = new MemoryStream();
                 EmitResult result = compilation.Emit(memory);
 
                 if(result.Success == false)
                 {
+                    foreach(var diagnostic in result.Diagnostics)
+                    {
+                        Debug.LogError(diagnostic.GetMessage());
+                    }
                     return false;
                 }
 
                 memory.Seek(0, SeekOrigin.Begin);
                 s_ScriptDLL = Assembly.Load(memory.ToArray());
 
-                s_ScriptObjects = new Dictionary<string, object>();
-                foreach(Type type in s_ScriptDLL.GetTypes())
-                {
-                    Object obj = Activator.CreateInstance(type);
-                    s_ScriptObjects.Add(type.Name, obj);
-                }
-
                 return true;
             }
             catch(Exception ex)
             {
+                Debug.LogError(ex.Message);
+                Debug.LogError(ex.StackTrace);
                 return false;
             }
         }
 
-        public static object Execute(string className, string functionName, params object[] objects)
+        public static Type FetchType(string typeName)
         {
-            if(s_ScriptObjects.ContainsKey(className))
+            try
             {
-                Object obj = s_ScriptObjects[className];
-                Type type = obj.GetType();
-                Object returnValue = type.InvokeMember(functionName, BindingFlags.Default | BindingFlags.InvokeMethod, null, obj, objects);
-                return returnValue;
+                return s_ScriptDLL.GetType(typeName, true, true);
             }
-            return null;
+            catch(Exception ex)
+            {
+                Debug.LogError(ex.Message);
+                Debug.LogError(ex.StackTrace);
+                return null;
+            }
+        }
+
+        public static List<Type> FetchTypeAndChildren(string typeName)
+        {
+            try
+            {
+                Type directType = s_ScriptDLL.GetType(typeName, true, true);
+                Type[] allTypes = s_ScriptDLL.GetTypes();
+                List<Type> children = allTypes.Where(type => directType.IsAssignableFrom(type)).ToList();
+                return children;
+            }
+            catch(Exception ex)
+            {
+                Debug.LogError(ex.Message);
+                Debug.LogError(ex.StackTrace);
+                return new List<Type>();
+            }
         }
     }
 }

@@ -93,7 +93,7 @@ namespace JoyLib.Code.Entities.Items
             //ScriptingEngine.RunScript(ItemType.InteractionFileContents, ItemType.InteractionFileName, "Interact", arguments);
 
             object[] arguments = { user, this };
-            ScriptingEngine.Execute(this.GetType().Name, "Interact", arguments);
+            ScriptingEngine.ExecuteAbility(this.ItemType.InteractionFileName, "Interact", arguments);
 
             if(!Identified)
             {

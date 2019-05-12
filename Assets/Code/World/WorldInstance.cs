@@ -261,16 +261,18 @@ namespace JoyLib.Code.World
             IsDirty = true;
         }
 
-        public void RemoveObject(Vector2Int positionRef)
+        public bool RemoveObject(Vector2Int positionRef, ItemInstance itemRef)
         {
-            long objectGUID = -1;
+            List<long> objectGUIDs = new List<long>();
+            bool removed = false;
             for (int i = 0; i < m_Objects.Count; i++)
             {
-                if (m_Objects[i].WorldPosition == positionRef)
+                if (m_Objects[i].WorldPosition == positionRef && itemRef.GUID == m_Objects[i].GUID)
                 {
-                    objectGUID = m_Objects[i].GUID;
+                    objectGUIDs.Add(m_Objects[i].GUID);
                     m_Objects.RemoveAt(i);
                     IsDirty = true;
+                    removed = true;
                     break;
                 }
             }
@@ -278,12 +280,17 @@ namespace JoyLib.Code.World
             for(int i = 0; i < m_ObjectHolder.transform.childCount; i++)
             {
                 GameObject temp = m_ObjectHolder.transform.GetChild(i).gameObject;
-                if(temp.name.Contains(objectGUID.ToString()))
+                for (int j = 0; j < objectGUIDs.Count; j++)
                 {
-                    GameObject.Destroy(temp);
-                    break;
+                    if (temp.name.Contains(objectGUIDs[j].ToString()))
+                    {
+                        GameObject.Destroy(temp);
+                        break;
+                    }
                 }
             }
+
+            return removed;
         }
 
         public JoyObject GetObject(Vector2Int WorldPosition)
@@ -502,19 +509,19 @@ namespace JoyLib.Code.World
             {
                 validPartners = m_Entities.Where(x => x.Sex != entityRef.Sex && x.Sentient == entityRef.Sentient &&
                 (x.Sexuality == Sexuality.Heterosexual || x.Sexuality == Sexuality.Bisexual) && x.CreatureType.Equals(entityRef.CreatureType) &&
-                x.Needs[NeedIndex.Sex].contributingHappiness == false).ToList();
+                x.Needs["Sex"].contributingHappiness == false).ToList();
             }
             else if(entityRef.Sexuality == Sexuality.Homosexual)
             {
                 validPartners = m_Entities.Where(x => x.Sex == entityRef.Sex && x.Sentient == entityRef.Sentient &&
                 (x.Sexuality == Sexuality.Homosexual || x.Sexuality == Sexuality.Bisexual) && x.CreatureType.Equals(entityRef.CreatureType) &&
-                x.Needs[NeedIndex.Sex].contributingHappiness == false).ToList();
+                x.Needs["Sex"].contributingHappiness == false).ToList();
             }
             else if(entityRef.Sexuality == Sexuality.Bisexual)
             {
                 validPartners = m_Entities.Where(x => x.Sentient == entityRef.Sentient &&
                 (x.Sexuality == Sexuality.Heterosexual || x.Sexuality == Sexuality.Bisexual) && x.CreatureType.Equals(entityRef.CreatureType) &&
-                x.Needs[NeedIndex.Sex].contributingHappiness == false).ToList();
+                x.Needs["Sex"].contributingHappiness == false).ToList();
             }
 
             List<Entity> visiblePartners = new List<Entity>();

@@ -6,11 +6,11 @@ namespace JoyLib.Code.Entities
 {
     public static class EntitySkillHandler
     {
-        private static Dictionary<string, List<NeedIndex>> s_GoverningNeeds = GoverningNeedsLoader.GetGoverningNeeds();
+        private static Dictionary<string, List<string>> s_GoverningNeeds = GoverningNeedsLoader.GetGoverningNeeds();
 
-        private static Dictionary<string, Dictionary<NeedIndex, float>> s_SkillCoefficients = SkillCoefficientLoader.LoadSkillCoefficients();
+        private static Dictionary<string, Dictionary<string, float>> s_SkillCoefficients = SkillCoefficientLoader.LoadSkillCoefficients();
         
-        public static Dictionary<string, EntitySkill> GetSkillBlock(Dictionary<NeedIndex, EntityNeed> governingNeeds)
+        public static Dictionary<string, EntitySkill> GetSkillBlock(Dictionary<string, AbstractNeed> governingNeeds)
         {
             Dictionary<string, EntitySkill> skills = new Dictionary<string, EntitySkill>();
             

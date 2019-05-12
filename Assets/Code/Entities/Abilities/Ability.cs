@@ -18,6 +18,16 @@ namespace JoyLib.Code.Entities.Abilities
 
         public const int PERMANENT_ABILITY = int.MinValue;
 
+        public Ability()
+        {
+            m_AbilityTrigger = AbilityTrigger.OnUse;
+            m_Target = AbilityTarget.Self;
+            m_Stacking = false;
+            m_Name = "DEFAULT ABILITY";
+            m_InternalName = "DEFAULT_ABILITY";
+
+        }
+
         public Ability(AbilityTrigger triggerRef, AbilityTarget targetRef, bool stackRef, string nameRef, string internalNameRef, string descriptionRef,
             int priorityRef, int counterRef, int magnitudeRef, int manaCost)
         {
@@ -36,8 +46,9 @@ namespace JoyLib.Code.Entities.Abilities
         }
 
         //When the entity attacks
-        public virtual void OnAttack(Entity attacker, Entity target)
+        public virtual bool OnAttack(Entity attacker, Entity target)
         {
+            return false;
         }
 
         //When the entity is hit
@@ -53,22 +64,23 @@ namespace JoyLib.Code.Entities.Abilities
         }
 
         //When the entity picks up an item
-        public virtual void OnPickup(Entity entity, ItemInstance item)
+        public virtual bool OnPickup(Entity entity, ItemInstance item)
         {
+            return false;
         }
 
         public virtual void OnTick(Entity entity)
         {
         }
 
-        public virtual void OnKill(Entity attacker, Entity target)
+        public virtual bool OnKill(Entity attacker, Entity target)
         {
+            return false;
         }
 
-        public virtual void Use(Entity user, JoyObject target)
+        public virtual bool Use(Entity user, JoyObject target)
         {
-            if (user.ManaRemaining < m_ManaCost)
-                return;
+            return false;
         }
 
         protected void CheckForRemoval()
