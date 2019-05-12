@@ -13,7 +13,7 @@ TagManager:
   - UI
   - 
   - 
-  - UI Text
+  - 
   - 
   - 
   - 
@@ -40,22 +40,4 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
-    locked: 0
-  - name: Terrain
-    uniqueID: 2322335089
-    locked: 0
-  - name: Objects
-    uniqueID: 180740759
-    locked: 0
-  - name: Walls
-    uniqueID: 368102917
-    locked: 0
-  - name: Entities
-    uniqueID: 27417553
-    locked: 0
-  - name: Fog of War
-    uniqueID: 3800769887
-    locked: 0
-  - name: GUI
-    uniqueID: 2647377889
     locked: 0

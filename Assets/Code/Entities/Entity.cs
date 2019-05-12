@@ -281,8 +281,9 @@ namespace JoyLib.Code.Entities
                 foreach(EntityNeed need in m_Needs.Values)
                 {
                     need.Tick();
-                    Debug.Log("Running LUA script: Tick (" + need.name + ") requested by: " + this.JoyName);
-                    ScriptingEngine.RunScript(need.InteractionFileContents, need.name, "Tick", new object[] { new MoonEntity(this) });
+                    //Debug.Log("Running LUA script: Tick (" + need.name + ") requested by: " + this.JoyName);
+                    //ScriptingEngine.RunScript(need.InteractionFileContents, need.name, "Tick", new object[] { new MoonEntity(this) });
+                    ScriptingEngine.Execute(need.name, "Tick", new object[] { this });
                 }
             }
 
@@ -403,7 +404,8 @@ namespace JoyLib.Code.Entities
                         }
 
                         Debug.Log("Running LUA script: FindFulfilmentObject (" + need.name + ") requested by: " + this.JoyName);
-                        ScriptingEngine.RunScript(need.InteractionFileContents, need.name, "FindFulfilmentObject", new object[] { new MoonEntity(this) });
+                        //ScriptingEngine.RunScript(need.InteractionFileContents, need.name, "FindFulfilmentObject", new object[] { new MoonEntity(this) });
+                        ScriptingEngine.Execute(need.name, "FindFulfilmentObject", new object[] { this });
                         idle = false;
                         break;
                     }
@@ -424,7 +426,8 @@ namespace JoyLib.Code.Entities
                                 EntityNeed need = this.Needs[CurrentTarget.need];
 
                                 Debug.Log("Running LUA script: FindFulfilmentObject (" + need.name + ") requested by: " + this.JoyName);
-                                ScriptingEngine.RunScript(need.InteractionFileContents, need.name, "FindFulfilmentObject", new object[] { new MoonEntity(this) });
+                                //ScriptingEngine.RunScript(need.InteractionFileContents, need.name, "FindFulfilmentObject", new object[] { new MoonEntity(this) });
+                                ScriptingEngine.Execute(need.name, "FindFulfilmentObject", new object[] { this });
                             }
                             else if (CurrentTarget.intent == Intent.Attack)
                             {
@@ -495,6 +498,11 @@ namespace JoyLib.Code.Entities
                     m_PathfindingData = m_Pathfinder.FindPath(WorldPosition, data.targetPoint, MyWorld);
                 }
             }
+        }
+
+        public bool CanSee(int x, int y)
+        {
+            return this.Vision[x, y];
         }
 
         public void SetPath(Queue<Vector2Int> pointsRef)

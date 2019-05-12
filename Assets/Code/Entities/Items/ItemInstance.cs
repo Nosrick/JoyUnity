@@ -89,8 +89,11 @@ namespace JoyLib.Code.Entities.Items
         {
             //PythonEngine.ExecuteClassFunction(m_InteractionFile, m_ClassName, "Interact", new dynamic[] { user, this });
 
-            object[] arguments = { new MoonEntity(user), new MoonItem(this) };
-            ScriptingEngine.RunScript(ItemType.InteractionFileContents, ItemType.InteractionFileName, "Interact", arguments);
+            //object[] arguments = { new MoonEntity(user), new MoonItem(this) };
+            //ScriptingEngine.RunScript(ItemType.InteractionFileContents, ItemType.InteractionFileName, "Interact", arguments);
+
+            object[] arguments = { user, this };
+            ScriptingEngine.Execute(this.GetType().Name, "Interact", arguments);
 
             if(!Identified)
             {
