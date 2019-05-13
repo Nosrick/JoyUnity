@@ -39,7 +39,7 @@ namespace JoyLib.Code.Entities.Abilities
             base.OnTick(entity);
         }
 
-        public override bool Use(Entity user, JoyObject target)
+        public override bool OnUse(Entity user, JoyObject target)
         {
             if(target.GetType() == typeof(ItemInstance))
             {

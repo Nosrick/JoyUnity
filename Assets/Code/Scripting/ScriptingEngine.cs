@@ -41,7 +41,8 @@ namespace JoyLib.Code.Scripting
                 List<MetadataReference> libs = new List<MetadataReference>
                 {
                     MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
-                    MetadataReference.CreateFromFile(typeof(Entities.Entity).Assembly.Location)
+                    MetadataReference.CreateFromFile(typeof(Entities.Entity).Assembly.Location),
+                    MetadataReference.CreateFromFile(typeof(Vector2Int).Assembly.Location)
                 };
                 CSharpCompilation compilation = CSharpCompilation.Create("JoyScripts", builtFiles, libs, 
                     new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
@@ -89,9 +90,26 @@ namespace JoyLib.Code.Scripting
         {
             try
             {
-                Type directType = s_ScriptDLL.GetType(typeName, true, true);
                 Type[] allTypes = s_ScriptDLL.GetTypes();
+
+                Type directType = allTypes.First(type => type.Name.Contains(typeName));
                 List<Type> children = allTypes.Where(type => directType.IsAssignableFrom(type)).ToList();
+                return children;
+            }
+            catch(Exception ex)
+            {
+                Debug.LogError(ex.Message);
+                Debug.LogError(ex.StackTrace);
+                return new List<Type>();
+            }
+        }
+
+        public static List<Type> FetchTypeOfParent(Type typeRef)
+        {
+            try
+            {
+                Type[] allTypes = s_ScriptDLL.GetTypes();
+                List<Type> children = allTypes.Where(type => typeRef.IsAssignableFrom(type)).ToList();
                 return children;
             }
             catch(Exception ex)

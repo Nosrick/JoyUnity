@@ -18,7 +18,7 @@ namespace JoyLib.Code.Entities.Needs
         {
         }
 
-        public override AbstractNeed Copy()
+        public override INeed Copy()
         {
             return new Hunger(this.m_Name, this.m_Decay, this.m_DecayCounter, this.m_DoesDecay, this.m_Priority, this.m_HappinessThreshold,
                 this.m_Value, this.m_MaximumValue, this.m_AverageForDay, this.m_AverageForWeek);
@@ -82,7 +82,7 @@ namespace JoyLib.Code.Entities.Needs
             return false;
         }
 
-        public override AbstractNeed Randomise()
+        public override INeed Randomise()
         {
             return new Hunger("Hunger", 60, 200, true, RNG.Roll(5, 24), 24, 12, 0, 0);
         }

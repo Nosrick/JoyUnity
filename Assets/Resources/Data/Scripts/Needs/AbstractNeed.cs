@@ -1,8 +1,9 @@
 ﻿using System;
+using UnityEngine;
 
 namespace JoyLib.Code.Entities.Needs
 {
-    public abstract class AbstractNeed
+    public abstract class AbstractNeed : INeed
     {
         protected string m_Name;
 
@@ -39,6 +40,7 @@ namespace JoyLib.Code.Entities.Needs
             m_Name = nameRef;
             m_Decay = decayRef;
             m_DecayCounter = decayCounterRef;
+            m_DoesDecay = doesDecayRef;
 
             m_Priority = priorityRef;
 
@@ -53,9 +55,9 @@ namespace JoyLib.Code.Entities.Needs
 
         public abstract bool FindFulfilmentObject(Entity actor);
 
-        public abstract AbstractNeed Copy();
+        public abstract INeed Copy();
 
-        public abstract AbstractNeed Randomise();
+        public abstract INeed Randomise();
 
         public virtual bool Initialise(string nameRef, int decayRef, int decayCounterRef, bool doesDecayRef, int priorityRef, int happinessThresholdRef,
             int valueRef, int maxValueRef, int averageForDayRef = 0, int averageForWeekRef = 0)
@@ -85,6 +87,7 @@ namespace JoyLib.Code.Entities.Needs
             {
                 m_DecayCounter = m_Decay;
                 Decay(1);
+                Debug.Log("TICK: " + this.m_Name);
                 return true;
             }
             return false;
@@ -99,6 +102,41 @@ namespace JoyLib.Code.Entities.Needs
         public virtual void Decay(int value)
         {
             m_Value = Math.Max(0, m_Value - value);
+        }
+
+        public string GetName()
+        {
+            return m_Name;
+        }
+
+        public int GetPriority()
+        {
+            return m_Priority;
+        }
+
+        public bool GetContributingHappiness()
+        {
+            return m_Value >= m_HappinessThreshold;
+        }
+
+        public int GetValue()
+        {
+            return m_Value;
+        }
+
+        public int GetAverageForDay()
+        {
+            return m_AverageForDay;
+        }
+
+        public int GetAverageForWeek()
+        {
+            return m_AverageForWeek;
+        }
+
+        public int GetAverageForMonth()
+        {
+            return 0;
         }
 
         /*
@@ -143,83 +181,5 @@ namespace JoyLib.Code.Entities.Needs
             return needs;
         }
         */
-
-        public string name
-        {
-            get
-            {
-                return m_Name;
-            }
-            protected set
-            {
-                m_Name = value;
-            }
-        }
-
-        public int value
-        {
-            get
-            {
-                return m_Value;
-            }
-            set
-            {
-                m_Value = value;
-            }
-        }
-
-        public int decay
-        {
-            get
-            {
-                return m_Decay;
-            }
-        }
-
-        public int happinessThreshold
-        {
-            get
-            {
-                return m_HappinessThreshold;
-            }
-        }
-
-        public bool contributingHappiness
-        {
-            get
-            {
-                return m_Value >= m_HappinessThreshold;
-            }
-        }
-
-        public int priority
-        {
-            get
-            {
-                return m_Priority;
-            }
-        }
-
-        public int averageForDay
-        {
-            get
-            {
-                return m_AverageForDay;
-            }
-        }
-
-        public int averageForWeek
-        {
-            get
-            {
-                return m_AverageForWeek;
-            }
-        }
-
-        public string InteractionFileContents
-        {
-            get;
-            protected set;
-        }
     }
 }

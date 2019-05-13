@@ -10,7 +10,7 @@ namespace JoyLib.Code.Entities
 
         private static Dictionary<string, Dictionary<string, float>> s_SkillCoefficients = SkillCoefficientLoader.LoadSkillCoefficients();
         
-        public static Dictionary<string, EntitySkill> GetSkillBlock(Dictionary<string, AbstractNeed> governingNeeds)
+        public static Dictionary<string, EntitySkill> GetSkillBlock(Dictionary<string, INeed> governingNeeds)
         {
             Dictionary<string, EntitySkill> skills = new Dictionary<string, EntitySkill>();
             

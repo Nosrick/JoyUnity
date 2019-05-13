@@ -11,6 +11,7 @@ using JoyLib.Code.Scripting;
 using JoyLib.Code.States;
 using JoyLib.Code.Unity.GUI;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -25,7 +26,12 @@ public class GameManager : MonoBehaviour
 
         m_StateManager = new StateManager();
 
-        Entity thief = WorldState.EntityHandler.Create(EntityTemplateHandler.Get("Human"), EntityNeed.GetFullRandomisedNeeds(), 1, JobHandler.Get("Thief"), Sex.Neutral, Sexuality.Bisexual, Vector2Int.zero, ObjectIcons.GetSprites("Jobs", "Thief"), null);
+        //REPLACE THIS WITH AN ACTUAL ENTITY CONSTRUCTOR
+        Dictionary<string, INeed> needs = new Dictionary<string, INeed>();
+        INeed hunger = NeedHandler.GetRandomised("Hunger");
+        needs.Add(hunger.GetName(), hunger);
+
+        Entity thief = WorldState.EntityHandler.Create(EntityTemplateHandler.Get("Human"), needs, 1, JobHandler.Get("Thief"), Sex.Neutral, Sexuality.Bisexual, Vector2Int.zero, ObjectIcons.GetSprites("Jobs", "Thief"), null);
         thief.PlayerControlled = true;
 
         m_StateManager.ChangeState(new WorldCreationState(thief));

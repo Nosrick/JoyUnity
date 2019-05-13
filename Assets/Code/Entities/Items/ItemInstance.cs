@@ -1,6 +1,6 @@
-﻿using JoyLib.Code.Graphics;
+﻿using JoyLib.Code.Entities.Abilities;
+using JoyLib.Code.Graphics;
 using JoyLib.Code.Managers;
-using JoyLib.Code.Scripting;
 using JoyLib.Code.States;
 using System;
 using System.Collections.Generic;
@@ -18,9 +18,9 @@ namespace JoyLib.Code.Entities.Items
         protected List<long> m_Contents;
         protected BaseItemType m_Type;
 
-        protected string m_InteractionFile;
+        protected Ability m_Ability;
 
-        public ItemInstance(BaseItemType type, Vector2Int position, bool identified, string interactionFile = null) :
+        public ItemInstance(BaseItemType type, Vector2Int position, bool identified, Ability abilityRef = null) :
             base(type.UnidentifiedName, type.GetHitPoints(), position, ObjectIcons.GetSprites(type.Category, type.UnidentifiedName), type.Category, false)
         {            
             this.m_Type = type;
@@ -34,7 +34,7 @@ namespace JoyLib.Code.Entities.Items
 
             this.m_Contents = new List<long>();
 
-            m_InteractionFile = interactionFile;
+            m_Ability = abilityRef;
         }
 
         public ItemInstance(ItemInstance item) :
@@ -50,7 +50,7 @@ namespace JoyLib.Code.Entities.Items
 
             this.m_Contents = item.m_Contents;
 
-            m_InteractionFile = item.m_InteractionFile;
+            m_Ability = item.m_Ability;
         }
 
         /*
@@ -92,8 +92,7 @@ namespace JoyLib.Code.Entities.Items
             //object[] arguments = { new MoonEntity(user), new MoonItem(this) };
             //ScriptingEngine.RunScript(ItemType.InteractionFileContents, ItemType.InteractionFileName, "Interact", arguments);
 
-            object[] arguments = { user, this };
-            ScriptingEngine.ExecuteAbility(this.ItemType.InteractionFileName, "Interact", arguments);
+            m_Ability.OnInteract(user);
 
             if(!Identified)
             {

@@ -78,7 +78,12 @@ namespace JoyLib.Code.Entities.Abilities
             return false;
         }
 
-        public virtual bool Use(Entity user, JoyObject target)
+        public virtual bool OnUse(Entity user, JoyObject target)
+        {
+            return false;
+        }
+
+        public virtual bool OnInteract(Entity user)
         {
             return false;
         }

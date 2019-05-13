@@ -120,7 +120,10 @@ namespace JoyLib.Code.States
         {
             Sex m_Playersex = (Sex)m_sexIndex;
 
-            Dictionary<NeedIndex, EntityNeed> needs = EntityNeed.GetFullRandomisedNeeds();
+            //REPLACE THIS WITH ENTITY CONSTRUCTOR
+            Dictionary<string, INeed> needs = new Dictionary<string, INeed>();
+            INeed hunger = NeedHandler.GetRandomised("Hunger");
+            needs.Add(hunger.GetName(), hunger);
 
             EntityTemplate humanTemplate = EntityTemplateHandler.Get("Human");
             m_Player = WorldState.EntityHandler.Create(humanTemplate, needs, 1, m_Jobs[m_JobIndex], m_Playersex, Sexuality.Bisexual, new UnityEngine.Vector2Int(-1, -1),

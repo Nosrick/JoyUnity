@@ -9,12 +9,12 @@ namespace JoyLib.Code.Entities
         protected float m_Experience;
 
         protected Dictionary<string, float> m_Coefficients;
-        protected Dictionary<string, AbstractNeed> m_GoverningNeeds;
+        protected Dictionary<string, INeed> m_GoverningNeeds;
 
         protected const int MAXIMUM_XP = 100;
 
         public EntitySkill(int value, int successThreshold, float experience, Dictionary<string, float> coefficients, 
-            Dictionary<string, AbstractNeed> governingNeeds)
+            Dictionary<string, INeed> governingNeeds)
         {
             m_Value = value;
             SuccessThreshold = successThreshold;
@@ -29,7 +29,7 @@ namespace JoyLib.Code.Entities
             m_Experience += value;
             foreach(string index in m_Coefficients.Keys)
             {
-                if (m_GoverningNeeds.ContainsKey(index) && m_GoverningNeeds[index].contributingHappiness)
+                if (m_GoverningNeeds.ContainsKey(index) && m_GoverningNeeds[index].GetContributingHappiness())
                 {
                     m_Experience += m_Coefficients[index] * value;
                 }
@@ -75,7 +75,7 @@ namespace JoyLib.Code.Entities
             }
         }
 
-        public Dictionary<string, AbstractNeed> governingNeeds
+        public Dictionary<string, INeed> governingNeeds
         {
             get
             {

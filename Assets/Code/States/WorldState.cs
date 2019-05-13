@@ -451,7 +451,7 @@ namespace JoyLib.Code.States
                         Entity tempEntity = m_ActiveWorld.GetEntity(player.TargetPoint);
                         if (tempEntity != null && Input.GetKeyDown(KeyCode.Return))
                         {
-                            player.TargetingAbility.Use(player, tempEntity);
+                            player.TargetingAbility.OnUse(player, tempEntity);
                             Tick();
                             m_GameplayFlags = GameplayFlags.Moving;
                         }
@@ -462,7 +462,7 @@ namespace JoyLib.Code.States
                     Entity tempEntity = m_ActiveWorld.GetEntity(player.TargetPoint);
                     if(tempEntity != null && Input.GetKeyDown(KeyCode.Return))
                     {
-                        player.TargetingAbility.Use(player, tempEntity);
+                        player.TargetingAbility.OnUse(player, tempEntity);
                         Tick();
                         m_GameplayFlags = GameplayFlags.Moving;
                     }

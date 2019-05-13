@@ -53,7 +53,12 @@ namespace JoyLib.Code.World.Generators.Interiors
                     Dictionary<string, int> jobLevels = new Dictionary<string, int>();
                     jobLevels.Add(jobType.name, 1);
 
-                    newEntity = WorldState.EntityHandler.Create(templates[entityIndex], EntityNeed.GetFullRandomisedNeeds(), 1, jobType, culture.ChooseSex(), culture.ChooseSexuality(),
+                    //REPLACE THIS WITH ENTITY CONSTRUCTOR
+                    Dictionary<string, INeed> needs = new Dictionary<string, INeed>();
+                    INeed hunger = NeedHandler.GetRandomised("Hunger");
+                    needs.Add(hunger.GetName(), hunger);
+
+                    newEntity = WorldState.EntityHandler.Create(templates[entityIndex], needs, 1, jobType, culture.ChooseSex(), culture.ChooseSexuality(),
                         new Vector2Int(-1, -1), ObjectIcons.GetSprites(templates[entityIndex].Tileset, templates[entityIndex].CreatureType).ToList(), null);
                 }
                 else
@@ -65,7 +70,12 @@ namespace JoyLib.Code.World.Generators.Interiors
                     Dictionary<string, int> jobLevels = new Dictionary<string, int>();
                     jobLevels.Add(jobType.name, 1);
 
-                    newEntity = WorldState.EntityHandler.Create(templates[entityIndex], EntityNeed.GetBasicRandomisedNeeds(), 1, jobType, culture.ChooseSex(), culture.ChooseSexuality(),
+                    //REPLACE THIS WITH ENTITY CONSTRUCTOR
+                    Dictionary<string, INeed> needs = new Dictionary<string, INeed>();
+                    INeed hunger = NeedHandler.GetRandomised("Hunger");
+                    needs.Add(hunger.GetName(), hunger);
+
+                    newEntity = WorldState.EntityHandler.Create(templates[entityIndex], needs, 1, jobType, culture.ChooseSex(), culture.ChooseSexuality(),
                         new Vector2Int(-1, -1), ObjectIcons.GetSprites(templates[entityIndex].Tileset, templates[entityIndex].CreatureType).ToList(), null);
                 }
                 newEntity.Move(availablePoints[pointIndex]);

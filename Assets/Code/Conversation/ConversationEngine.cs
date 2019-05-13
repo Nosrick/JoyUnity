@@ -1,11 +1,6 @@
 ﻿using JoyLib.Code.Conversation.Conversations;
-using JoyLib.Code.Conversation.Subengines;
 using JoyLib.Code.Entities;
-using JoyLib.Code.Helpers;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Xml;
 
 namespace JoyLib.Code.Conversation
 {
@@ -16,8 +11,10 @@ namespace JoyLib.Code.Conversation
         private static List<TopicData> s_PreviousTopics;
         private static Dictionary<int, BaseConversation> s_KeywordScripts;
         
+        //REDO THIS WHOLE DAMN THING
         public static List<TopicData> Converse(Entity instigator, Entity listener, int selectedItem = 0)
         {
+            /*
             instigator.FulfillNeed(NeedIndex.Friendship, listener.Statistics[StatisticIndex.Personality].Value, 0);
             listener.FulfillNeed(NeedIndex.Friendship, instigator.Statistics[StatisticIndex.Personality].Value, 0);
             instigator.InfluenceMe(listener.GUID, listener.Statistics[StatisticIndex.Personality].Value);
@@ -70,6 +67,8 @@ namespace JoyLib.Code.Conversation
                 s_PreviousTopics = s_CurrentTopics;
                 return s_CurrentTopics;
             }
+            */
+            return new List<TopicData>();
         }
 
         private static List<TopicData> TrimEmpty(List<TopicData> topics)

@@ -36,13 +36,6 @@ namespace JoyLib.Code.Entities.AI.LOS
                 return arc1 && arc2;
             }
 
-            int firstIndex = 0;
-            bool firstShadow = false;
-            while(firstIndex < m_Board.Vision.Length)
-            {
-                //int difference = 
-            }
-
             return false;
         }
 

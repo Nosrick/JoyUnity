@@ -24,7 +24,7 @@ namespace JoyLib.Code.Entities
     {
         protected Dictionary<StatisticIndex, EntityStatistic> m_Statistics;
         protected Dictionary<string, EntitySkill> m_Skills;
-        protected Dictionary<string, AbstractNeed> m_Needs;
+        protected Dictionary<string, INeed> m_Needs;
         protected List<Ability> m_Abilities;
         protected Dictionary<string, ItemInstance> m_Equipment;
         protected List<ItemInstance> m_Backpack;
@@ -102,7 +102,7 @@ namespace JoyLib.Code.Entities
         /// <param name="jobLevels"></param>
         /// <param name="world"></param>
         /// <param name="tileset"></param>
-        public Entity(EntityTemplate template, Dictionary<string, AbstractNeed> needs, int level, float experience, JobType job, Sex sex, Sexuality sexuality,
+        public Entity(EntityTemplate template, Dictionary<string, INeed> needs, int level, float experience, JobType job, Sex sex, Sexuality sexuality,
             Vector2Int position, List<Sprite> sprites, ItemInstance naturalWeapons, Dictionary<string, ItemInstance> equipment, 
             List<ItemInstance> backpack, Dictionary<long, int> relationships, List<string> identifiedItems, Dictionary<long, RelationshipStatus> family,
             Dictionary<string, int> jobLevels, WorldInstance world, string tileset) : 
@@ -177,7 +177,7 @@ namespace JoyLib.Code.Entities
         /// <param name="position"></param>
         /// <param name="icons"></param>
         /// <param name="world"></param>
-        public Entity(EntityTemplate template, Dictionary<string, AbstractNeed> needs, int level, JobType job, Sex sex, Sexuality sexuality,
+        public Entity(EntityTemplate template, Dictionary<string, INeed> needs, int level, JobType job, Sex sex, Sexuality sexuality,
             Vector2Int position, List<Sprite> sprites, WorldInstance world) :
             base(NameProvider.GetRandomName(template.CreatureType, sex), template.Statistics[StatisticIndex.Endurance].Value * 2, position, sprites, template.JoyType, true)
         {
@@ -278,7 +278,7 @@ namespace JoyLib.Code.Entities
                 m_ManaRemaining = Math.Min(m_Mana, m_ManaRemaining + 1);
                 RegenTicker = 0;
 
-                foreach(AbstractNeed need in m_Needs.Values)
+                foreach(INeed need in m_Needs.Values)
                 {
                     need.Tick();
                 }
@@ -389,19 +389,17 @@ namespace JoyLib.Code.Entities
                 if (CurrentTarget.idle == true)
                 {
                     //Let's find something to do
-                    List<AbstractNeed> needs = m_Needs.Values.OrderByDescending(x => x.priority).ToList();
+                    List<INeed> needs = m_Needs.Values.OrderByDescending(x => x.GetPriority()).ToList();
                     //Act on first need
 
                     bool idle = true;
-                    foreach(AbstractNeed need in needs)
+                    foreach(INeed need in needs)
                     {
-                        if(need.contributingHappiness)
+                        if(need.GetContributingHappiness())
                         {
                             continue;
                         }
-
-                        Debug.Log("Running LUA script: FindFulfilmentObject (" + need.name + ") requested by: " + this.JoyName);
-                        //ScriptingEngine.RunScript(need.InteractionFileContents, need.name, "FindFulfilmentObject", new object[] { new MoonEntity(this) });
+                        
                         need.FindFulfilmentObject(this);
                         idle = false;
                         break;
@@ -420,7 +418,7 @@ namespace JoyLib.Code.Entities
                             if (CurrentTarget.intent == Intent.Interact)
                             {
                                 //TODO: WRITE AN ENTITY INTERACTION
-                                AbstractNeed need = this.Needs[CurrentTarget.need];
+                                INeed need = this.Needs[CurrentTarget.need];
 
                                 need.FindFulfilmentObject(this);
                             }
@@ -864,7 +862,7 @@ namespace JoyLib.Code.Entities
             }
         }
 
-        public Dictionary<string, AbstractNeed> Needs
+        public Dictionary<string, INeed> Needs
         {
             get
             {
@@ -976,7 +974,7 @@ namespace JoyLib.Code.Entities
             {
                 if(Needs.ContainsKey("Sex"))
                 {
-                    return 300 - Needs["Sex"].priority;
+                    return 300 - Needs["Sex"].GetPriority();
                 }
                 else
                 {

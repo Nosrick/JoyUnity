@@ -13,7 +13,7 @@ namespace JoyLib.Code.Entities
         private Dictionary<long, Entity> m_Entities = new Dictionary<long, Entity>();
         private Entity m_Player;
 
-        public Entity Create(EntityTemplate template, Dictionary<string, AbstractNeed> needs, int level, JobType job, Sex sex, Sexuality sexuality,
+        public Entity Create(EntityTemplate template, Dictionary<string, INeed> needs, int level, JobType job, Sex sex, Sexuality sexuality,
             Vector2Int position, List<Sprite> sprites, WorldInstance world)
         {
             Entity entity = new Entity(template, needs, level, job, sex, sexuality, position, sprites, world);
@@ -28,7 +28,7 @@ namespace JoyLib.Code.Entities
             return entity;
         }
 
-        public Entity CreateLong(EntityTemplate template, Dictionary<string, AbstractNeed> needs, int level, float experience, JobType job, Sex sex, Sexuality sexuality,
+        public Entity CreateLong(EntityTemplate template, Dictionary<string, INeed> needs, int level, float experience, JobType job, Sex sex, Sexuality sexuality,
             Vector2Int position, List<Sprite> sprites, ItemInstance naturalWeapons, Dictionary<string, ItemInstance> equipment,
             List<ItemInstance> backpack, Dictionary<long, int> relationships, List<string> identifiedItems, Dictionary<long, RelationshipStatus> family,
             Dictionary<string, int> jobLevels, WorldInstance world, string tileset)

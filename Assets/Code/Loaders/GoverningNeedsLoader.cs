@@ -28,7 +28,6 @@ namespace JoyLib.Code.Loaders
                     List<string> needs = new List<string>();
                     for (int i = 1; i < reader.AttributeCount; i++)
                     {
-                        NeedIndex index;
                         reader.MoveToNextAttribute();
                         
                         needs.Add(reader.Name);

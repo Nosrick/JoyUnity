@@ -1,5 +1,4 @@
 ﻿using JoyLib.Code.Entities;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
@@ -7,9 +6,9 @@ namespace JoyLib.Code.Loaders
 {
     public static class SkillCoefficientLoader
     {
-        public static Dictionary<string, Dictionary<NeedIndex, float>> LoadSkillCoefficients()
+        public static Dictionary<string, Dictionary<string, float>> LoadSkillCoefficients()
         {
-            Dictionary<string, Dictionary<NeedIndex, float>> skillCoefficients = new Dictionary<string, Dictionary<NeedIndex, float>>();
+            Dictionary<string, Dictionary<string, float>> skillCoefficients = new Dictionary<string, Dictionary<string, float>>();
 
             XmlReader reader = XmlReader.Create(Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "SkillCoefficients.xml");
 
@@ -25,16 +24,14 @@ namespace JoyLib.Code.Loaders
                 {
                     string name = reader.GetAttribute("Skill");
                     reader.MoveToNextAttribute();
-                    Dictionary<NeedIndex, float> coefficients = new Dictionary<NeedIndex, float>();
+                    Dictionary<string, float> coefficients = new Dictionary<string, float>();
                     for (int i = 1; i < reader.AttributeCount; i++)
                     {
-                        NeedIndex index;
                         reader.MoveToNextAttribute();
-                        index = (NeedIndex)Enum.Parse(typeof(NeedIndex), reader.Name);
 
                         float coefficient = 0;
                         float.TryParse(reader.GetAttribute(i), out coefficient);
-                        coefficients.Add(index, coefficient);
+                        coefficients.Add(reader.Name, coefficient);
                     }
 
                     skillCoefficients.Add(name, coefficients);

@@ -6,7 +6,7 @@ namespace JoyLib.Code.Entities.Needs
 {
     public static class NeedHandler
     {
-        private static Dictionary<string, AbstractNeed> s_Needs;
+        private static Dictionary<string, INeed> s_Needs;
 
         public static bool Initialise()
         {
@@ -17,16 +17,16 @@ namespace JoyLib.Code.Entities.Needs
                     return true;
                 }
 
-                s_Needs = new Dictionary<string, AbstractNeed>();
+                s_Needs = new Dictionary<string, INeed>();
 
                 List<Type> needTypes = Scripting.ScriptingEngine.FetchTypeAndChildren("AbstractNeed");
 
                 foreach (Type type in needTypes)
                 {
-                    if (type == typeof(AbstractNeed) && type.IsAbstract == false)
+                    if (typeof(INeed).IsAssignableFrom(type) == true && type.IsAbstract == false)
                     {
-                        AbstractNeed newNeed = (AbstractNeed)Activator.CreateInstance(type);
-                        s_Needs.Add(newNeed.name, newNeed);
+                        INeed newNeed = (INeed)Activator.CreateInstance(type);
+                        s_Needs.Add(newNeed.GetName(), newNeed);
                     }
                     else
                     {
@@ -44,7 +44,7 @@ namespace JoyLib.Code.Entities.Needs
             }
         }
 
-        public static AbstractNeed Get(string name)
+        public static INeed Get(string name)
         {
             if(s_Needs.ContainsKey(name))
             {
@@ -53,7 +53,7 @@ namespace JoyLib.Code.Entities.Needs
             return null;
         }
 
-        public static AbstractNeed GetRandomised(string name)
+        public static INeed GetRandomised(string name)
         {
             if(s_Needs.ContainsKey(name))
             {

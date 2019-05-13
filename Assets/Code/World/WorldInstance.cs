@@ -509,19 +509,19 @@ namespace JoyLib.Code.World
             {
                 validPartners = m_Entities.Where(x => x.Sex != entityRef.Sex && x.Sentient == entityRef.Sentient &&
                 (x.Sexuality == Sexuality.Heterosexual || x.Sexuality == Sexuality.Bisexual) && x.CreatureType.Equals(entityRef.CreatureType) &&
-                x.Needs["Sex"].contributingHappiness == false).ToList();
+                x.Needs["Sex"].GetContributingHappiness() == false).ToList();
             }
             else if(entityRef.Sexuality == Sexuality.Homosexual)
             {
                 validPartners = m_Entities.Where(x => x.Sex == entityRef.Sex && x.Sentient == entityRef.Sentient &&
                 (x.Sexuality == Sexuality.Homosexual || x.Sexuality == Sexuality.Bisexual) && x.CreatureType.Equals(entityRef.CreatureType) &&
-                x.Needs["Sex"].contributingHappiness == false).ToList();
+                x.Needs["Sex"].GetContributingHappiness() == false).ToList();
             }
             else if(entityRef.Sexuality == Sexuality.Bisexual)
             {
                 validPartners = m_Entities.Where(x => x.Sentient == entityRef.Sentient &&
                 (x.Sexuality == Sexuality.Heterosexual || x.Sexuality == Sexuality.Bisexual) && x.CreatureType.Equals(entityRef.CreatureType) &&
-                x.Needs["Sex"].contributingHappiness == false).ToList();
+                x.Needs["Sex"].GetContributingHappiness() == false).ToList();
             }
 
             List<Entity> visiblePartners = new List<Entity>();
