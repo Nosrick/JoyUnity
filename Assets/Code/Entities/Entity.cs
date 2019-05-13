@@ -770,7 +770,7 @@ namespace JoyLib.Code.Entities
             m_HitPoints = (int)(m_Statistics[StatisticIndex.Endurance].Value * 2);
             m_Concentration = (int)(m_Statistics[StatisticIndex.Focus].Value * 2);
             m_Composure = (int)(m_Statistics[StatisticIndex.Wit].Value * 2);
-            m_Mana = (int)(m_Statistics[StatisticIndex.Focus].Value + m_Statistics[StatisticIndex.Endurance].Value + m_Statistics[StatisticIndex.Wit].Value) / 3;
+            m_Mana = (int)(m_Statistics[StatisticIndex.Focus].Value + m_Statistics[StatisticIndex.Endurance].Value + m_Statistics[StatisticIndex.Wit].Value);
 
             m_HitPointsRemaining += m_HitPoints - lastHP;
             m_ConcentrationRemaining += m_Concentration - lastConc;

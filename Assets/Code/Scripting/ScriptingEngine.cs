@@ -103,21 +103,5 @@ namespace JoyLib.Code.Scripting
                 return new List<Type>();
             }
         }
-
-        public static List<Type> FetchTypeOfParent(Type typeRef)
-        {
-            try
-            {
-                Type[] allTypes = s_ScriptDLL.GetTypes();
-                List<Type> children = allTypes.Where(type => typeRef.IsAssignableFrom(type)).ToList();
-                return children;
-            }
-            catch(Exception ex)
-            {
-                Debug.LogError(ex.Message);
-                Debug.LogError(ex.StackTrace);
-                return new List<Type>();
-            }
-        }
     }
 }
