@@ -43,7 +43,7 @@ namespace JoyLib.Code.Entities.Needs
             //If we've found food, eat it
             if(chosenFood != null)
             {
-                chosenFood.Interact(actor);
+                this.Interact(actor, chosenFood);
                 actor.RemoveItemFromBackpack(chosenFood);
                 return true;
             }
@@ -67,7 +67,7 @@ namespace JoyLib.Code.Entities.Needs
             {
                 if(chosenFood.WorldPosition.Equals(actor.WorldPosition))
                 {
-                    chosenFood.Interact(actor);
+                    this.Interact(actor, chosenFood);
                     actor.MyWorld.RemoveObject(chosenFood.WorldPosition, chosenFood);
                     return true;
                 }
@@ -75,11 +75,25 @@ namespace JoyLib.Code.Entities.Needs
                 {
                     actor.Seek(chosenFood, "Hunger");
                 }
-
-                actor.Wander();
             }
 
+            actor.Wander();
+
             return false;
+        }
+
+        public override bool Interact(Entity user, JoyObject obj)
+        {
+            ItemInstance item = obj as ItemInstance;
+
+            if(item == null)
+            {
+                return false;
+            }
+
+            item.Interact(user);
+
+            return true;
         }
 
         public override INeed Randomise()

@@ -1,10 +1,8 @@
 ﻿using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.AI;
-using JoyLib.Code.Entities.AI.LOS;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Managers;
-using JoyLib.Code.Scripting;
 using JoyLib.Code.States;
 using System;
 using System.Collections.Generic;
@@ -19,6 +17,7 @@ namespace JoyLib.Code.World
         protected WorldTile[,] m_Tiles;
         protected int[,] m_Light;
         protected bool[,] m_Discovered;
+        [NonSerialized]
         protected int m_PlayerIndex;
 
         protected Vector2Int m_Dimensions;
@@ -43,9 +42,13 @@ namespace JoyLib.Code.World
         protected string m_Name;
         protected long m_GUID;
 
+        [NonSerialized]
         protected GameObject m_FogOfWarHolder;
+        [NonSerialized]
         protected GameObject m_WallHolder;
+        [NonSerialized]
         protected GameObject m_ObjectHolder;
+        [NonSerialized]
         protected GameObject m_EntityHolder;
 
         /// <summary>
@@ -880,6 +883,12 @@ namespace JoyLib.Code.World
                     break;
             }
             return Sector.Centre;
+        }
+
+        public List<Vector2Int> GetVisibleWalls(Entity viewer)
+        {
+            List<Vector2Int> visibleWalls = this.Walls.Where(wall => viewer.CanSee(wall.Key)).ToDictionary(wall => wall.Key, wall => wall.Value).Keys.ToList();
+            return visibleWalls;
         }
 
         public WorldTile[,] Tiles

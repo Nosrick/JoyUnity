@@ -65,7 +65,7 @@ namespace JoyLib.Code.Entities
 
         protected NeedAIData m_CurrentTarget;
 
-        protected Pathfinder m_Pathfinder;
+        protected IPathfinder m_Pathfinder;
         
         protected Queue<Vector2Int> m_PathfindingData;
 
@@ -150,7 +150,7 @@ namespace JoyLib.Code.Entities
 
             this.m_Vision = new bool[1, 1];
 
-            this.m_Pathfinder = new Pathfinder();
+            this.m_Pathfinder = ScriptingEngine.GetProvidedPathFinder();
             this.m_PathfindingData = new Queue<Vector2Int>();
 
             this.m_FulfillingNeed = "NONE";
@@ -223,7 +223,7 @@ namespace JoyLib.Code.Entities
 
             this.m_Vision = new bool[1, 1];
 
-            this.m_Pathfinder = new Pathfinder();
+            this.m_Pathfinder = ScriptingEngine.GetProvidedPathFinder();
             this.m_PathfindingData = new Queue<Vector2Int>();
 
             this.m_FulfillingNeed = "NONE";
@@ -368,23 +368,6 @@ namespace JoyLib.Code.Entities
 
             if (!PlayerControlled)
             {
-                //Attack immediate threats
-                /*
-                 * REDO THIS TO BE IN LUA
-                //List<NeedAIData> targets = MyWorld.SearchForEntities(this, "Any", Intent.Attack, EntityTypeSearch.Any, EntitySentienceSearch.Any);
-                //List<NeedAIData> validTargets = targets.Where(x => this.HasRelationship(x.target.GUID) < ATTACK_THRESHOLD).ToList();
-                if(validTargets.Count > 0 && CurrentTarget.target == null)
-                {
-                    //TODO: Write a threat assessment system
-                    //For now, choose a random target and go after them
-                    int result = RNG.Roll(0, validTargets.Count - 1);
-                    NeedAIData data = validTargets[result];
-
-                    CurrentTarget = data;
-                    m_PathfindingData = m_Pathfinder.FindPath(this.WorldPosition, CurrentTarget.target.WorldPosition, this.MyWorld);
-                }
-                */
-
                 //If you're idle
                 if (CurrentTarget.idle == true)
                 {
@@ -406,33 +389,58 @@ namespace JoyLib.Code.Entities
                     }
                     m_CurrentTarget.idle = idle;
                 }
-                //Otherwise, carry on with what you're doing
-                else
+                
+                //If we're wandering, select a point we can see and wander there
+                if(CurrentTarget.searching && CurrentTarget.targetPoint == NO_TARGET)
                 {
-                    if(WorldPosition == CurrentTarget.targetPoint || (CurrentTarget.target != null && WorldPosition == CurrentTarget.target.WorldPosition))
+                    List<Vector2Int> visibleSpots = new List<Vector2Int>();
+                    List<Vector2Int> visibleWalls = MyWorld.GetVisibleWalls(this);
+                    //Check what we can see
+                    for(int x = 0; x < this.Vision.GetLength(0); x++)
                     {
-                        //If we have a target
-                        if (CurrentTarget.target != null)
+                        for(int y = 0; y < this.Vision.GetLength(0); y++)
                         {
-                            //We're interacting with an entity here
-                            if (CurrentTarget.intent == Intent.Interact)
+                            if(CanSee(x, y) && visibleWalls.Contains(new Vector2Int(x, y)) == false)
                             {
-                                //TODO: WRITE AN ENTITY INTERACTION
-                                INeed need = this.Needs[CurrentTarget.need];
-
-                                need.FindFulfilmentObject(this);
-                            }
-                            else if (CurrentTarget.intent == Intent.Attack)
-                            {
-                                CombatEngine.SwingWeapon(this, CurrentTarget.target);
+                                visibleSpots.Add(new Vector2Int(x, y));
                             }
                         }
                     }
-                    //If we've not arrived at our target
-                    else if (WorldPosition != CurrentTarget.targetPoint || (CurrentTarget.target != null && AdjacencyHelper.IsAdjacent(WorldPosition, CurrentTarget.target.WorldPosition) == false))
+
+                    //Pick a random spot to wander to
+                    int result = RNG.Roll(0, visibleSpots.Count - 1);
+                    m_CurrentTarget.targetPoint = visibleSpots[result];
+                }
+
+                //If we have somewhere to be, move there
+                if(WorldPosition != CurrentTarget.targetPoint || (CurrentTarget.target != null && AdjacencyHelper.IsAdjacent(WorldPosition, CurrentTarget.target.WorldPosition)))
+                {
+                    MoveToTarget(CurrentTarget);
+                }
+                //If we've arrived at our destination, then we do our thing
+                if(WorldPosition == CurrentTarget.targetPoint || (CurrentTarget.target != null && AdjacencyHelper.IsAdjacent(WorldPosition, CurrentTarget.target.WorldPosition)))
+                {
+                    //If we have a target
+                    if(CurrentTarget.target != null)
                     {
-                        //Move to target
-                        MoveToTarget(CurrentTarget);
+                        if(CurrentTarget.intent == Intent.Attack)
+                        {
+                            CombatEngine.SwingWeapon(this, CurrentTarget.target);
+                        }
+                        else if(CurrentTarget.intent == Intent.Interact)
+                        {
+                            INeed need = this.Needs[CurrentTarget.need];
+
+                            need.Interact(this, CurrentTarget.target);
+                        }
+                    }
+                    //If we do not, we were probably wandering
+                    else
+                    {
+                        if(CurrentTarget.searching == true)
+                        {
+                            m_CurrentTarget.targetPoint = NO_TARGET;
+                        }
                     }
                 }
             }
@@ -484,11 +492,11 @@ namespace JoyLib.Code.Entities
             {
                 if (data.target != null)
                 {
-                    m_PathfindingData = m_Pathfinder.FindPath(WorldPosition, data.target.WorldPosition, MyWorld);
+                    m_PathfindingData = m_Pathfinder.FindPath(WorldPosition, data.target.WorldPosition, MyWorld.GetVisibleWalls(this), GetFullVisionRect());
                 }
-                else if(data.targetPoint != Vector2Int.zero)
+                else if(data.targetPoint != NO_TARGET)
                 {
-                    m_PathfindingData = m_Pathfinder.FindPath(WorldPosition, data.targetPoint, MyWorld);
+                    m_PathfindingData = m_Pathfinder.FindPath(WorldPosition, data.targetPoint, MyWorld.GetVisibleWalls(this), GetFullVisionRect());
                 }
             }
         }
@@ -496,6 +504,23 @@ namespace JoyLib.Code.Entities
         public bool CanSee(int x, int y)
         {
             return this.Vision[x, y];
+        }
+
+        public bool CanSee(Vector2Int point)
+        {
+            return CanSee(point.x, point.y);
+        }
+
+        protected RectInt GetVisionRect()
+        {
+            RectInt visionRect = new RectInt(this.WorldPosition, new Vector2Int(this.VisionMod, this.VisionMod));
+            return visionRect;
+        }
+
+        protected RectInt GetFullVisionRect()
+        {
+            RectInt visionRect = new RectInt(0, 0, this.Vision.GetLength(0), this.Vision.GetLength(1));
+            return visionRect;
         }
 
         public void SetPath(Queue<Vector2Int> pointsRef)
@@ -607,8 +632,10 @@ namespace JoyLib.Code.Entities
         {
             NeedAIData needAIData = new NeedAIData
             {
+                idle = false,
                 intent = Intent.Interact,
-                searching = true
+                searching = true,
+                targetPoint = NO_TARGET
             };
 
             this.CurrentTarget = needAIData;

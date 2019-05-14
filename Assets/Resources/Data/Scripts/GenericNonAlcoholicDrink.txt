@@ -1,4 +1,0 @@
-function Interact(entity, item)
-	entity:FulfilNeed("Drink", item.Value)
-	entity:RemoveItemFromBackpack(item)
-end

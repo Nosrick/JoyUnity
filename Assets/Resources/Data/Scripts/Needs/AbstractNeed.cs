@@ -87,7 +87,6 @@ namespace JoyLib.Code.Entities.Needs
             {
                 m_DecayCounter = m_Decay;
                 Decay(1);
-                Debug.Log("TICK: " + this.m_Name);
                 return true;
             }
             return false;
@@ -138,6 +137,8 @@ namespace JoyLib.Code.Entities.Needs
         {
             return 0;
         }
+
+        public abstract bool Interact(Entity user, JoyObject obj);
 
         /*
         public static Dictionary<NeedIndex, EntityNeed> GetBasicRandomisedNeeds()

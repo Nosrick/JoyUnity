@@ -21,7 +21,8 @@ namespace JoyLib.Code.World.Generators.Interiors
             List<EntityTemplate> templates = EntityTemplateHandler.Templates;
             templates = templates.Where(x => entityTypes.Contains(x.CreatureType)).ToList();
 
-            int numberToPlace = (worldRef.Tiles.GetLength(0) * worldRef.Tiles.GetLength(1)) / 50;
+            //int numberToPlace = (worldRef.Tiles.GetLength(0) * worldRef.Tiles.GetLength(1)) / 50;
+            int numberToPlace = 1;
 
             List<Vector2Int> availablePoints = new List<Vector2Int>();
 

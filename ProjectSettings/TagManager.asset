@@ -41,3 +41,18 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Terrain
+    uniqueID: 1065435959
+    locked: 0
+  - name: Walls
+    uniqueID: 1481537887
+    locked: 0
+  - name: Objects
+    uniqueID: 591788177
+    locked: 0
+  - name: Entities
+    uniqueID: 3651814061
+    locked: 0
+  - name: Fog of War
+    uniqueID: 3821477495
+    locked: 0

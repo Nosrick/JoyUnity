@@ -1,3 +1,4 @@
+using JoyLib.Code.Entities.AI;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Tanis.Collections;
 using UnityEngine;
 
 namespace JoyLib.Code.Scripting
@@ -16,6 +18,8 @@ namespace JoyLib.Code.Scripting
 
         private const string ABILITY_NAMESPACE = "JoyLib.Code.Entities.Abilities.";
         private const string NEED_NAMESPACE = "JoyLib.Code.Entities.Needs.";
+
+        private static Type s_ProvidedPathfinder;
 
         public static bool Initialise()
         {
@@ -42,7 +46,8 @@ namespace JoyLib.Code.Scripting
                 {
                     MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
                     MetadataReference.CreateFromFile(typeof(Entities.Entity).Assembly.Location),
-                    MetadataReference.CreateFromFile(typeof(Vector2Int).Assembly.Location)
+                    MetadataReference.CreateFromFile(typeof(Vector2Int).Assembly.Location),
+                    MetadataReference.CreateFromFile(typeof(Queue<bool>).Assembly.Location)
                 };
                 CSharpCompilation compilation = CSharpCompilation.Create("JoyScripts", builtFiles, libs, 
                     new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
@@ -54,13 +59,16 @@ namespace JoyLib.Code.Scripting
                 {
                     foreach(var diagnostic in result.Diagnostics)
                     {
-                        Debug.LogError(diagnostic.GetMessage());
+                        Debug.Log(diagnostic.GetMessage());
+                        Debug.Log(diagnostic.Severity.ToString());
                     }
                     return false;
                 }
 
                 memory.Seek(0, SeekOrigin.Begin);
                 s_ScriptDLL = Assembly.Load(memory.ToArray());
+
+                s_ProvidedPathfinder = FetchType("CustomPathfinder");
 
                 return true;
             }
@@ -76,7 +84,10 @@ namespace JoyLib.Code.Scripting
         {
             try
             {
-                return s_ScriptDLL.GetType(typeName, true, true);
+                Type[] allTypes = s_ScriptDLL.GetTypes();
+
+                Type directType = allTypes.Single(type => type.Name.Equals(typeName));
+                return directType;
             }
             catch(Exception ex)
             {
@@ -92,7 +103,7 @@ namespace JoyLib.Code.Scripting
             {
                 Type[] allTypes = s_ScriptDLL.GetTypes();
 
-                Type directType = allTypes.First(type => type.Name.Contains(typeName));
+                Type directType = allTypes.Single(type => type.Name.Equals(typeName));
                 List<Type> children = allTypes.Where(type => directType.IsAssignableFrom(type)).ToList();
                 return children;
             }
@@ -102,6 +113,11 @@ namespace JoyLib.Code.Scripting
                 Debug.LogError(ex.StackTrace);
                 return new List<Type>();
             }
+        }
+
+        public static IPathfinder GetProvidedPathFinder()
+        {
+            return (IPathfinder)Activator.CreateInstance(s_ProvidedPathfinder);
         }
     }
 }

@@ -4,6 +4,8 @@
     {
         bool FindFulfilmentObject(Entity actor);
 
+        bool Interact(Entity user, JoyObject obj);
+
         INeed Copy();
 
         INeed Randomise();

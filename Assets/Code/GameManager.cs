@@ -42,6 +42,7 @@ public class GameManager : MonoBehaviour
     private void InitialiseEverything()
     {
         RNG.SetSeed(DateTime.Now.Millisecond);
+        ActionLog.OpenLog();
         if(ScriptingEngine.Initialise() == false)
         {
             Debug.Log("COULD NOT INITIALISE SCRIPTING ENGINE.");
