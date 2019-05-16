@@ -15,6 +15,7 @@ namespace JoyLib.Code.World
     public class WorldInstance
     {
         protected WorldTile[,] m_Tiles;
+        protected byte[,] m_Costs;
         protected int[,] m_Light;
         protected bool[,] m_Discovered;
         [NonSerialized]
@@ -72,6 +73,15 @@ namespace JoyLib.Code.World
             m_Discovered = new bool[m_Tiles.GetLength(0), m_Tiles.GetLength(1)];
             m_Light = new int[m_Tiles.GetLength(0), m_Tiles.GetLength(1)];
 
+            m_Costs = new byte[m_Tiles.GetLength(0), m_Tiles.GetLength(1)];
+            for (int x = 0; x < m_Costs.GetLength(0); x++)
+            {
+                for (int y = 0; y < m_Costs.GetLength(1); y++)
+                {
+                    m_Costs[x, y] = 1;
+                }
+            }
+
             m_FogOfWarHolder = GameObject.Find("WorldFog");
             m_WallHolder = GameObject.Find("WorldWalls");
             m_ObjectHolder = GameObject.Find("WorldObjects");
@@ -106,6 +116,20 @@ namespace JoyLib.Code.World
             m_WallHolder = GameObject.Find("WorldWalls");
             m_ObjectHolder = GameObject.Find("WorldObjects");
             m_EntityHolder = GameObject.Find("WorldEntities");
+
+            m_Costs = new byte[m_Tiles.GetLength(0), m_Tiles.GetLength(1)];
+            for(int x = 0; x < m_Costs.GetLength(0); x++)
+            {
+                for(int y = 0; y < m_Costs.GetLength(1); y++)
+                {
+                    m_Costs[x, y] = 1;
+                }
+            }
+
+            foreach(Vector2Int position in m_Walls.Keys)
+            {
+                m_Costs[position.x, position.y] = byte.MaxValue;
+            }
         }
 
         public void SetDateTime(DateTime dateTime)
@@ -255,13 +279,19 @@ namespace JoyLib.Code.World
         {
             if(objectRef.IsWall)
             {
-                m_Walls.Add(objectRef.WorldPosition, objectRef);
+                AddWall(objectRef);
             }
             else
             {
                 m_Objects.Add(objectRef);
             }
             IsDirty = true;
+        }
+
+        protected void AddWall(JoyObject wallRef)
+        {
+            m_Walls.Add(wallRef.WorldPosition, wallRef);
+            m_Costs[wallRef.WorldPosition.x, wallRef.WorldPosition.y] = byte.MaxValue;
         }
 
         public bool RemoveObject(Vector2Int positionRef, ItemInstance itemRef)
@@ -1085,6 +1115,14 @@ namespace JoyLib.Code.World
         {
             get;
             protected set;
+        }
+
+        public byte[,] Costs
+        {
+            get
+            {
+                return m_Costs;
+            }
         }
     }
 

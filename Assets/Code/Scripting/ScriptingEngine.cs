@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Tanis.Collections;
 using UnityEngine;
 
 namespace JoyLib.Code.Scripting
@@ -47,7 +46,8 @@ namespace JoyLib.Code.Scripting
                     MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
                     MetadataReference.CreateFromFile(typeof(Entities.Entity).Assembly.Location),
                     MetadataReference.CreateFromFile(typeof(Vector2Int).Assembly.Location),
-                    MetadataReference.CreateFromFile(typeof(Queue<bool>).Assembly.Location)
+                    MetadataReference.CreateFromFile(typeof(Queue<bool>).Assembly.Location),
+                    MetadataReference.CreateFromFile(typeof(System.Linq.IQueryable).Assembly.Location)
                 };
                 CSharpCompilation compilation = CSharpCompilation.Create("JoyScripts", builtFiles, libs, 
                     new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));

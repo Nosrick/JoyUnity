@@ -150,7 +150,7 @@ namespace JoyLib.Code.Entities
 
             this.m_Vision = new bool[1, 1];
 
-            this.m_Pathfinder = ScriptingEngine.GetProvidedPathFinder();
+            this.m_Pathfinder = new CustomPathfinder(); //ScriptingEngine.GetProvidedPathFinder();
             this.m_PathfindingData = new Queue<Vector2Int>();
 
             this.m_FulfillingNeed = "NONE";
@@ -223,7 +223,7 @@ namespace JoyLib.Code.Entities
 
             this.m_Vision = new bool[1, 1];
 
-            this.m_Pathfinder = ScriptingEngine.GetProvidedPathFinder();
+            this.m_Pathfinder = new CustomPathfinder(); //ScriptingEngine.GetProvidedPathFinder();
             this.m_PathfindingData = new Queue<Vector2Int>();
 
             this.m_FulfillingNeed = "NONE";
@@ -400,9 +400,10 @@ namespace JoyLib.Code.Entities
                     {
                         for(int y = 0; y < this.Vision.GetLength(0); y++)
                         {
-                            if(CanSee(x, y) && visibleWalls.Contains(new Vector2Int(x, y)) == false)
+                            Vector2Int newPos = new Vector2Int(x, y);
+                            if(CanSee(x, y) && visibleWalls.Contains(newPos) == false && WorldPosition != newPos)
                             {
-                                visibleSpots.Add(new Vector2Int(x, y));
+                                visibleSpots.Add(newPos);
                             }
                         }
                     }
@@ -492,11 +493,11 @@ namespace JoyLib.Code.Entities
             {
                 if (data.target != null)
                 {
-                    m_PathfindingData = m_Pathfinder.FindPath(WorldPosition, data.target.WorldPosition, MyWorld.GetVisibleWalls(this), GetFullVisionRect());
+                    m_PathfindingData = m_Pathfinder.FindPath(WorldPosition, data.target.WorldPosition, MyWorld.Costs, GetFullVisionRect());
                 }
                 else if(data.targetPoint != NO_TARGET)
                 {
-                    m_PathfindingData = m_Pathfinder.FindPath(WorldPosition, data.targetPoint, MyWorld.GetVisibleWalls(this), GetFullVisionRect());
+                    m_PathfindingData = m_Pathfinder.FindPath(WorldPosition, data.targetPoint, MyWorld.Costs, GetFullVisionRect());
                 }
             }
         }
