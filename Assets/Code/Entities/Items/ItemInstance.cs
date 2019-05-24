@@ -100,7 +100,7 @@ namespace JoyLib.Code.Entities.Items
                 user.AddIdentifiedItem(DisplayName);
             }
             //Identify any identical items the user is carrying
-            for(int i = 0; i < user.Backpack.Count; i++)
+            for(int i = 0; i < user.Backpack.Length; i++)
             {
                 if(user.Backpack[i].DisplayName.Equals(DisplayName) && !user.Backpack[i].Identified)
                 {
@@ -218,9 +218,21 @@ namespace JoyLib.Code.Entities.Items
             get
             {
                 if (Identified)
+                {
                     return this.JoyName;
+                }
                 else
+                {
                     return m_Type.UnidentifiedName;
+                }
+            }
+        }
+
+        public string IdentifiedName
+        {
+            get
+            {
+                return this.JoyName;
             }
         }
 
@@ -229,9 +241,13 @@ namespace JoyLib.Code.Entities.Items
             get
             {
                 if (Identified)
+                {
                     return m_Type.Description;
+                }
                 else
+                {
                     return m_Type.UnidentifiedDescription;
+                }
             }
         }
 

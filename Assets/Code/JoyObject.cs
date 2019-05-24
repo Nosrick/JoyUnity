@@ -6,7 +6,7 @@ using JoyLib.Code.Managers;
 using System.Linq;
 
 [Serializable]
-public class JoyObject
+public class JoyObject : IComparable
 {
     protected int m_HitPoints;
     protected int m_HitPointsRemaining;
@@ -116,6 +116,29 @@ public class JoyObject
             m_FramesSinceLastChange = 0;
         }
 	}
+
+    public int CompareTo(object obj)
+    {
+        if(obj == null)
+        {
+            return 1;
+        }
+
+        JoyObject joyObject = obj as JoyObject;
+        if(joyObject != null)
+        {
+            return this.GUID.CompareTo(joyObject.GUID);
+        }
+        else
+        {
+            throw new ArgumentException("Object is not a JoyObject");
+        }
+    }
+
+    public override string ToString()
+    {
+        return "{ " + this.JoyName + " : " + this.GUID + "}";
+    }
 
     public string BaseType
     {

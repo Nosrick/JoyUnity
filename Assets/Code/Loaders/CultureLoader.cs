@@ -1,5 +1,8 @@
 ﻿using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities;
+using JoyLib.Code.Entities.Relationships;
+using JoyLib.Code.Entities.Sexes;
+using JoyLib.Code.Scripting;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,12 +29,13 @@ namespace JoyLib.Code.Loaders
                 List<string> rulers = new List<string>();
                 List<string> crimes = new List<string>();
                 List<NameData> nameData = new List<NameData>();
-                List<Sex> sexs = new List<Sex>();
+                Dictionary<string, int> sexes = new Dictionary<string, int>();
                 string cultureName = "DEFAULT CULTURE";
-                string inhabitants = "DEFAULT CREATURE";
-                Dictionary<Sexuality, int> sexualities = new Dictionary<Sexuality, int>();
-                int statVariance = 0;
-                RelationshipType relationshipType = RelationshipType.Monoamorous;
+                List<string> inhabitants = new List<string>();
+                Dictionary<string, int> sexualities = new Dictionary<string, int>();
+                Dictionary<string, int> statVariances = new Dictionary<string, int>();
+                List<string> relationships = new List<string>();
+                Dictionary<string, int> jobPrevelence = new Dictionary<string, int>();
 
                 while (reader.Read())
                 {
@@ -48,7 +52,7 @@ namespace JoyLib.Code.Loaders
 
                     if (reader.Name.Equals("CreatureName"))
                     {
-                        inhabitants = reader.ReadElementContentAsString();
+                        inhabitants.Add(reader.ReadElementContentAsString());
                     }
 
                     if (reader.Name.Equals("Ruler"))
@@ -61,75 +65,144 @@ namespace JoyLib.Code.Loaders
                         crimes.Add(reader.ReadElementContentAsString());
                     }
 
-                    if (reader.Name.Equals("FirstName"))
+                    if(reader.Name.Equals("Job"))
                     {
-                        string nameRef = reader.GetAttribute("Name");
-                        string sexString = reader.GetAttribute("Sex");
-                        Sex sex;
+                        string name = "DEFAULT";
+                        int prevelence = 0;
 
-                        if (sexString.Equals("M"))
+                        while(reader.Read())
                         {
-                            sex = Sex.Male;
-                        }
-                        else if (sexString.Equals("F"))
-                        {
-                            sex = Sex.Female;
-                        }
-                        else
-                        {
-                            sex = Sex.Neutral;
+                            if(reader.Name.Equals("Job") && reader.NodeType == XmlNodeType.EndElement)
+                            {
+                                break;
+                            }
+                            else if(reader.Name.Equals("Name"))
+                            {
+                                name = reader.ReadElementContentAsString();
+                            }
+                            else if(reader.Name.Equals("Chance"))
+                            {
+                                prevelence = reader.ReadElementContentAsInt();
+                            }
                         }
 
-                        nameData.Add(new NameData(nameRef, false, sex));
-                    }
-
-                    if (reader.Name.Equals("Sexes"))
-                    {
-                        string sexString = reader.ReadElementContentAsString();
-                        string[] sexStrings = sexString.Split(',');
-                        for (int j = 0; j < sexStrings.Length; j++)
+                        if(jobPrevelence.ContainsKey(name) == false && prevelence > 0)
                         {
-                            if (sexStrings[j].Equals("F"))
-                            {
-                                sexs.Add(Sex.Female);
-                            }
-                            else if (sexStrings[j].Equals("M"))
-                            {
-                                sexs.Add(Sex.Male);
-                            }
-                            else
-                            {
-                                sexs.Add(Sex.Neutral);
-                            }
+                            jobPrevelence.Add(name, prevelence);
                         }
                     }
 
-                    if (reader.Name.Equals("LastName"))
+                    if (reader.Name.Equals("NameData"))
                     {
-                        string nameRef = reader.GetAttribute("Name");
-                        nameData.Add(new NameData(nameRef, true, Sex.Neutral));
+                        string nameRef = "DEFAULT";
+                        List<string> sexStrings = new List<string>();
+                        List<int> chain = new List<int>();
+
+                        while (reader.Read())
+                        {
+                            if(reader.Name.Equals("NameData") && reader.NodeType == XmlNodeType.EndElement)
+                            {
+                                break;
+                            }
+                            else if(reader.Name.Equals("Name"))
+                            {
+                                nameRef = reader.ReadElementContentAsString();
+                            }
+                            else if(reader.Name.Equals("Sex"))
+                            {
+                                sexStrings.Add(reader.ReadElementContentAsString());
+                            }
+                            else if(reader.Name.Equals("Chain"))
+                            {
+                                chain.Add(reader.ReadElementContentAsInt());
+                            }
+                        }
+
+                        nameData.Add(new NameData(nameRef, chain.ToArray(), sexStrings.ToArray()));
+                    }
+
+                    if (reader.Name.Equals("Sex"))
+                    {
+                        string sexName = "DEFAULT";
+                        int sexChance = 0;
+                        while(reader.Read())
+                        {
+                            if(reader.Name.Equals("Sex") && reader.NodeType == XmlNodeType.EndElement)
+                            {
+                                break;
+                            }
+
+                            if(reader.Name.Equals("Name"))
+                            {
+                                sexName = reader.ReadElementContentAsString();
+                            }
+                            else if(reader.Name.Equals("Chance"))
+                            {
+                                sexChance = reader.ReadElementContentAsInt();
+                            }
+                        }
+
+                        if(sexes.ContainsKey(sexName) == false && sexChance > 0)
+                        {
+                            sexes.Add(sexName, sexChance);
+                        }
                     }
 
                     if(reader.Name.Equals("Sexuality"))
                     {
-                        string sexualitiesRawString = reader.ReadElementContentAsString();
-                        string[] sexualitiesStrings = sexualitiesRawString.Split(',');
-                        sexualities.Add(Sexuality.Heterosexual, int.Parse(sexualitiesStrings[0]));
-                        sexualities.Add(Sexuality.Homosexual, int.Parse(sexualitiesStrings[1]));
-                        sexualities.Add(Sexuality.Bisexual, int.Parse(sexualitiesStrings[2]));
-                        sexualities.Add(Sexuality.Asexual, int.Parse(sexualitiesStrings[3]));
+                        string sexualityName = "DEFAULT";
+                        int sexualityChance = 5;
+                        while (reader.Read())
+                        {
+                            if(reader.Name.Equals("Sexuality") && reader.NodeType == XmlNodeType.EndElement)
+                            {
+                                break;
+                            }
+
+                            if(reader.Name.Equals("Name"))
+                            {
+                                sexualityName = reader.ReadElementContentAsString();
+                            }
+                            else if(reader.Name.Equals("Chance"))
+                            {
+                                sexualityChance = reader.ReadElementContentAsInt();
+                            }
+                        }
+
+                        sexualities.Add(sexualityName, sexualityChance);
                     }
 
                     if(reader.Name.Equals("StatVariance"))
                     {
-                        statVariance = reader.ReadElementContentAsInt(); 
+                        string statName = "DEFAULT";
+                        int variance = 0;
+                        while(reader.Read())
+                        {
+                            if(reader.NodeType == XmlNodeType.EndElement && reader.Name.Equals("StatVariance"))
+                            {
+                                break;
+                            }
+
+                            if(reader.Name.Equals("Statistic"))
+                            {
+                                statName = reader.ReadElementContentAsString();
+                            }
+                            else if(reader.Name.Equals("Variance"))
+                            {
+                                variance = reader.ReadElementContentAsInt();
+                            }
+                        }
+                        if(statVariances.ContainsKey(statName) == false)
+                        {
+                            statVariances.Add(statName, variance);
+                        }
                     }
 
                     if(reader.Name.Equals("RelationshipType"))
                     {
                         try
                         {
-                            relationshipType = (RelationshipType)Enum.Parse(typeof(RelationshipType), reader.ReadElementContentAsString(), true);
+                            relationships.Add(reader.ReadElementContentAsString());
                         }
                         catch(Exception e)
                         {
@@ -140,8 +213,8 @@ namespace JoyLib.Code.Loaders
                 }
 
                 reader.Close();
-                cultures.Add(inhabitants, new CultureType(cultureName, rulers, crimes, nameData, inhabitants, sexs, 
-                    sexualities, statVariance, relationshipType));
+                cultures.Add(cultureName, new CultureType(cultureName, rulers, crimes, nameData, jobPrevelence, inhabitants,
+                    sexualities, sexes, statVariances, relationships));
             }
 
             return cultures;

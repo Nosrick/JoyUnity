@@ -30,6 +30,7 @@ namespace JoyLib.Code.Entities.Needs
         //Average for the week
         //Calculated by adding value for the day every day, then dividing by 7 when the week is up
         protected int m_AverageForWeek;
+        protected int m_AverageForMonth;
 
         //Bonus to health for having no diseases
         protected const int CLEAN_BONUS = 50;
@@ -103,42 +104,87 @@ namespace JoyLib.Code.Entities.Needs
             m_Value = Math.Max(0, m_Value - value);
         }
 
-        public string GetName()
-        {
-            return m_Name;
-        }
-
-        public int GetPriority()
-        {
-            return m_Priority;
-        }
-
-        public bool GetContributingHappiness()
-        {
-            return m_Value >= m_HappinessThreshold;
-        }
-
-        public int GetValue()
-        {
-            return m_Value;
-        }
-
-        public int GetAverageForDay()
-        {
-            return m_AverageForDay;
-        }
-
-        public int GetAverageForWeek()
-        {
-            return m_AverageForWeek;
-        }
-
-        public int GetAverageForMonth()
-        {
-            return 0;
-        }
-
         public abstract bool Interact(Entity user, JoyObject obj);
+
+        public string Name
+        {
+            get
+            {
+                return m_Name;
+            }
+            protected set
+            {
+                m_Name = value;
+            }
+        }
+
+        public int Priority
+        {
+            get
+            {
+                return m_Priority;
+            }
+            protected set
+            {
+                m_Priority = value;
+            }
+        }
+
+        public bool ContributingHappiness
+        {
+            get
+            {
+                return m_Value >= m_HappinessThreshold;
+            }
+        }
+
+        public int Value
+        { 
+            get
+            {
+                return m_Value;
+            }
+            protected set
+            {
+                m_Value = value;
+            }
+        }
+
+        public int AverageForDay
+        {
+            get
+            {
+                return m_AverageForDay;
+            }
+            protected set
+            {
+                m_AverageForDay = value;
+            }
+        }
+
+        public int AverageForWeek
+        {
+            get
+            {
+                return m_AverageForWeek;
+            }
+            protected set
+            {
+                m_AverageForWeek = value;
+            }
+        }
+
+        public int AverageForMonth
+        {
+            get
+            {
+                return m_AverageForMonth;
+            }
+            protected set
+            {
+                m_AverageForMonth = value;
+            }
+        }
 
         /*
         public static Dictionary<NeedIndex, EntityNeed> GetBasicRandomisedNeeds()

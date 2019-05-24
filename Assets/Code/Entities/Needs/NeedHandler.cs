@@ -26,7 +26,7 @@ namespace JoyLib.Code.Entities.Needs
                     if (typeof(INeed).IsAssignableFrom(type) == true && type.IsAbstract == false)
                     {
                         INeed newNeed = (INeed)Activator.CreateInstance(type);
-                        s_Needs.Add(newNeed.GetName(), newNeed);
+                        s_Needs.Add(newNeed.Name, newNeed);
                     }
                     else
                     {

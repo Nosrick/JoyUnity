@@ -45,9 +45,9 @@ namespace JoyLib.Code.Unity.GUI
 
             foreach(INeed need in m_Player.Needs.Values)
             {
-                if(!need.GetContributingHappiness())
+                if(!need.ContributingHappiness)
                 {
-                    m_Text.text += "<color=yellow>" + need.GetName() + "</color>\r\n";
+                    m_Text.text += "<color=yellow>" + need.Name + "</color>\r\n";
                 }
             }
         }

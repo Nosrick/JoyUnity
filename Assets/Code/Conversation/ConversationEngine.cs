@@ -6,13 +6,12 @@ namespace JoyLib.Code.Conversation
 {
     public static class ConversationEngine
     {
-        private static List<TopicData> s_Topics;
-        private static List<TopicData> s_CurrentTopics;
-        private static List<TopicData> s_PreviousTopics;
-        private static Dictionary<int, BaseConversation> s_KeywordScripts;
+        private static List<ITopic> s_Topics;
+        private static List<ITopic> s_CurrentTopics;
+        private static List<ITopic> s_PreviousTopics;
         
         //REDO THIS WHOLE DAMN THING
-        public static List<TopicData> Converse(Entity instigator, Entity listener, int selectedItem = 0)
+        public static List<ITopic> Converse(Entity instigator, Entity listener, int selectedItem = 0)
         {
             /*
             instigator.FulfillNeed(NeedIndex.Friendship, listener.Statistics[StatisticIndex.Personality].Value, 0);
@@ -68,16 +67,16 @@ namespace JoyLib.Code.Conversation
                 return s_CurrentTopics;
             }
             */
-            return new List<TopicData>();
+            return new List<ITopic>();
         }
 
-        private static List<TopicData> TrimEmpty(List<TopicData> topics)
+        private static List<ITopic> TrimEmpty(List<ITopic> topics)
         {
-            List<TopicData> newTopics = new List<TopicData>(topics.Count);
+            List<ITopic> newTopics = new List<ITopic>(topics.Count);
 
             for(int i = 0; i < topics.Count; i++)
             {
-                if(topics[i].value != "")
+                if(string.IsNullOrWhiteSpace(topics[i].Words) == false)
                 {
                     newTopics.Add(topics[i]);
                 }
@@ -86,11 +85,11 @@ namespace JoyLib.Code.Conversation
             return newTopics;
         }
 
-        public static List<TopicData> Topics
+        public static List<ITopic> Topics
         {
             get
             {
-                return new List<TopicData>(s_CurrentTopics);
+                return new List<ITopic>(s_CurrentTopics);
             }
         }
     }

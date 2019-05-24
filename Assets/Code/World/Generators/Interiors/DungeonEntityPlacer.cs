@@ -47,7 +47,8 @@ namespace JoyLib.Code.World.Generators.Interiors
                 Entity newEntity = null;
                 if (templates[entityIndex].Sentient)
                 {
-                    CultureType culture = CultureHandler.Get(templates[entityIndex].CreatureType);
+                    List<CultureType> cultures = CultureHandler.GetByCreatureType(templates[entityIndex].CreatureType);
+                    CultureType culture = cultures[0];
 
                     JobType jobType = JobHandler.GetRandom();
 
@@ -57,14 +58,15 @@ namespace JoyLib.Code.World.Generators.Interiors
                     //REPLACE THIS WITH ENTITY CONSTRUCTOR
                     Dictionary<string, INeed> needs = new Dictionary<string, INeed>();
                     INeed hunger = NeedHandler.GetRandomised("Hunger");
-                    needs.Add(hunger.GetName(), hunger);
+                    needs.Add(hunger.Name, hunger);
 
                     newEntity = WorldState.EntityHandler.Create(templates[entityIndex], needs, 1, jobType, culture.ChooseSex(), culture.ChooseSexuality(),
                         new Vector2Int(-1, -1), ObjectIcons.GetSprites(templates[entityIndex].Tileset, templates[entityIndex].CreatureType).ToList(), null);
                 }
                 else
                 {
-                    CultureType culture = CultureHandler.Get(templates[entityIndex].CreatureType);
+                    List<CultureType> cultures = CultureHandler.GetByCreatureType(templates[entityIndex].CreatureType);
+                    CultureType culture = cultures[0];
 
                     JobType jobType = JobHandler.GetRandom();
 
@@ -74,7 +76,7 @@ namespace JoyLib.Code.World.Generators.Interiors
                     //REPLACE THIS WITH ENTITY CONSTRUCTOR
                     Dictionary<string, INeed> needs = new Dictionary<string, INeed>();
                     INeed hunger = NeedHandler.GetRandomised("Hunger");
-                    needs.Add(hunger.GetName(), hunger);
+                    needs.Add(hunger.Name, hunger);
 
                     newEntity = WorldState.EntityHandler.Create(templates[entityIndex], needs, 1, jobType, culture.ChooseSex(), culture.ChooseSexuality(),
                         new Vector2Int(-1, -1), ObjectIcons.GetSprites(templates[entityIndex].Tileset, templates[entityIndex].CreatureType).ToList(), null);

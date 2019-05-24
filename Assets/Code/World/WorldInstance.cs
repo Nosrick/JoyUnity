@@ -192,9 +192,10 @@ namespace JoyLib.Code.World
             for(int i = 0; i < entities.Count; i++)
             {
                 Entity entity = entities[i];
-                for(int j = 0; j < entity.Backpack.Count; j++)
+                ItemInstance[] backpack = entity.Backpack;
+                for(int j = 0; j < backpack.Length; j++)
                 {
-                    ItemInstance item = entity.Backpack[j];
+                    ItemInstance item = backpack[j];
                     item.Move(entity.WorldPosition);
 
                     int xMin, xMax;
@@ -535,6 +536,7 @@ namespace JoyLib.Code.World
             return data;
         }
 
+        /*
         public List<Entity> SearchForMate(Entity entityRef)
         {
             List<Entity> validPartners = new List<Entity>();
@@ -577,6 +579,22 @@ namespace JoyLib.Code.World
                 partners.Add(entity);
             }
             return partners;
+        }
+        */
+
+        public List<Entity> SearchForEntities(Predicate<Entity> searchCriteria)
+        {
+            List<Entity> searchEntities = new List<Entity>();
+
+            foreach(Entity entity in m_Entities)
+            {
+                if(searchCriteria.Invoke(entity))
+                {
+                    searchEntities.Add(entity);
+                }
+            }
+
+            return searchEntities;
         }
 
         public Entity GetRandomSentient()
@@ -700,7 +718,7 @@ namespace JoyLib.Code.World
         {
             bool[,] vision = visionRef;
 
-            int entityPerception = entityRef.Statistics[StatisticIndex.Perception].Value + GlobalConstants.MINIMUM_VISION_DISTANCE;
+            int entityPerception = entityRef.VisionMod;
             for(int i = 0; i < 360; i++)
             {
                 float x = (float)Math.Cos(i * 0.01745f);
@@ -747,7 +765,7 @@ namespace JoyLib.Code.World
         {
             bool[,] vision = visionRef;
 
-            float entityPerceptionMod = entityRef.Statistics[StatisticIndex.Perception].Value + GlobalConstants.MINIMUM_VISION_DISTANCE;
+            float entityPerceptionMod = entityRef.VisionMod;
             
             Dictionary<Vector2Int, JoyObject> walls = m_Objects.Where(x => x.IsWall).ToDictionary(x => x.WorldPosition, x => x);
 

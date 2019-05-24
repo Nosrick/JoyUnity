@@ -1,22 +1,68 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Culture>
-  <CultureName>Human Kingdom</CultureName>
-  <CreatureName>Human</CreatureName>
+	<CultureName>Human Kingdom</CultureName>
+	<CreatureName>Human</CreatureName>
 
-  <Sexes>F,M</Sexes>
+	<Sex>Female</Sex>
+	<Sex>Male</Sex>
 
-  <Ruler>King</Ruler>
-  <Ruler>Queen</Ruler>
+	<Ruler>King</Ruler>
+	<Ruler>Queen</Ruler>
 
-  <Crime>Theft</Crime>
-  <Crime>Murder</Crime>
-  <Crime>Trespass</Crime>
+	<Crime>Theft</Crime>
+	<Crime>Murder</Crime>
+	<Crime>Trespass</Crime>
+	<Crime>Rape</Crime>
 
-  <Sexuality>80,10,5,5</Sexuality>
-  
-  <RelationshipType>Both</RelationshipType>
+	<Sexuality>
+		<Name>Heterosexual</Name>
+		<Chance>70</Chance>
+	</Sexuality>
+	  
+	<Sexuality>
+		<Name>Bisexual</Name>
+		<Chance>10</Chance>
+	</Sexuality>
+	  
+	<Sexuality>
+		<Name>Homosexual</Name>
+		<Chance>10</Chance>
+	</Sexuality>
+	  
+	<Sexuality>
+		<Name>Asexual</Name>
+		<Chance>3</Chance>
+	</Sexuality>
+	  
+	<Sexuality>
+		<Name>Demisexual</Name>
+		<Chance>3</Chance>
+	</Sexuality>
+	
+	<Sex>
+		<Name>Male</Name>
+		<Chance>50</Chance>
+	</Sex>
+	
+	<Sex>
+		<Name>Female</Name>
+		<Chance>50</Chance>
+	</Sex>
+	  
+	<RelationshipType>Monoamorous</RelationshipType>
+	<RelationshipType>Polyamorous</RelationshipType>
 
-  <FirstName Name="Alex" Sex="N" />
+	<NameData>
+		<Name>Alex</Name>
+		<Sex>Male</Sex>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
 
-  <LastName Name="McHuman" />
+	<NameData>
+		<Name>McHuman</Name>
+		<Sex>Male</Sex>
+		<Sex>Female</Sex>
+		<Chain>1</Chain>
+	</NameData>
 </Culture>

@@ -124,9 +124,9 @@ namespace JoyLib.Code.Conversation.Subengines
         private static string GenerateTheft(Entity left, Entity right)
         {
             string itemName = "something";
-            if(left.Backpack.Count > 0)
+            if(left.Backpack.Length > 0)
             {
-                itemName = left.Backpack[RNG.Roll(0, left.Backpack.Count - 1)].JoyName;
+                itemName = left.Backpack[RNG.Roll(0, left.Backpack.Length - 1)].JoyName;
             }
             return "I heard " + left.JoyName + " stole " + itemName + " from " + right.JoyName + ".";
         }

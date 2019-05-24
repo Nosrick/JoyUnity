@@ -1,122 +1,684 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Culture>
-  <CultureName>Naga Imperium</CultureName>
-  <CreatureName>Naga</CreatureName>
+	<CultureName>Naga Imperium</CultureName>
+	<CreatureName>Naga</CreatureName>
 
-  <Sexes>F,M</Sexes>
+	<Sex>Male</Sex>
+	<Sex>Female</Sex>
 
-  <Ruler>King</Ruler>
-  <Ruler>Queen</Ruler>
+	<Ruler>King</Ruler>
+	<Ruler>Queen</Ruler>
 
-  <Crime>Theft</Crime>
-  <Crime>Murder</Crime>
-  <Crime>Trespass</Crime>
+	<Crime>Theft</Crime>
+	<Crime>Murder</Crime>
+	<Crime>Trespass</Crime>
+	<Crime>Rape</Crime>
 
-  <Sexuality>80,10,5,5</Sexuality>
-  
-  <FirstName Name="Aditi" Sex="F" />
-  <FirstName Name="Aditya" Sex="M" />
-  <FirstName Name="Agni" Sex="M" />
-  <FirstName Name="Ananta" Sex="N" />
-  <FirstName Name="Anil" Sex="M" />
-  <FirstName Name="Aniruddha" Sex="M" />
-  <FirstName Name="Arjuna" Sex="M" />
-  <FirstName Name="Aruna" Sex="M" />
-  <FirstName Name="Arundhati" Sex="F" />
-  <FirstName Name="Bala" Sex="N" />
-  <FirstName Name="Baladeva" Sex="M" />
-  <FirstName Name="Bharata" Sex="M" />
-  <FirstName Name="Bhaskara" Sex="M" />
-  <FirstName Name="Bhima" Sex="M" />
-  <FirstName Name="Bhumi" Sex="F" />
-  <FirstName Name="Brahma" Sex="M" />
-  <FirstName Name="Brijesha" Sex="M" />
-  <FirstName Name="Chandra" Sex="N" />
-  <FirstName Name="Damayanti" Sex="F" />
-  <FirstName Name="Damodara" Sex="M" />
-  <FirstName Name="Devaraja" Sex="M" />
-  <FirstName Name="Devi" Sex="F" />
-  <FirstName Name="Dilipa" Sex="M" />
-  <FirstName Name="Draupadi" Sex="F" />
-  <FirstName Name="Durga" Sex="F" />
-  <FirstName Name="Gauri" Sex="F" />
-  <FirstName Name="Girisha" Sex="M" />
-  <FirstName Name="Hari" Sex="M" />
-  <FirstName Name="Indira" Sex="F" />
-  <FirstName Name="Jaya" Sex="N" />
-  <FirstName Name="Jayanta" Sex="M" />
-  <FirstName Name="Jayanti" Sex="F" />
-  <FirstName Name="Kali" Sex="F" />
-  <FirstName Name="Kalyani" Sex="F" />
-  <FirstName Name="Kama" Sex="M" />
-  <FirstName Name="Kamala" Sex="N" />
-  <FirstName Name="Kanti" Sex="F" />
-  <FirstName Name="Kapila" Sex="M" />
-  <FirstName Name="Karna" Sex="M" />
-  <FirstName Name="Kumara" Sex="M" />
-  <FirstName Name="Kumari" Sex="F" />
-  <FirstName Name="Lakshmi" Sex="F" />
-  <FirstName Name="Lalita" Sex="N" />
-  <FirstName Name="Madhava" Sex="M" />
-  <FirstName Name="Madhavi" Sex="F" />
-  <FirstName Name="Mahesha" Sex="M" />
-  <FirstName Name="Mani" Sex="M" />
-  <FirstName Name="Manu" Sex="M" />
-  <FirstName Name="Maya" Sex="F" />
-  <FirstName Name="Mina" Sex="F" />
-  <FirstName Name="Mitra" Sex="N" />
-  <FirstName Name="Mohana" Sex="N" />
-  <FirstName Name="Mohini" Sex="F" />
-  <FirstName Name="Murali" Sex="M" />
-  <FirstName Name="Nala" Sex="M" />
-  <FirstName Name="Nanda" Sex="M" />
-  <FirstName Name="Padma" Sex="N" />
-  <FirstName Name="Padmavati" Sex="F" />
-  <FirstName Name="Partha" Sex="M" />
-  <FirstName Name="Parvati" Sex="F" />
-  <FirstName Name="Pramoda" Sex="M" />
-  <FirstName Name="Pritha" Sex="F" />
-  <FirstName Name="Priya" Sex="F" />
-  <FirstName Name="Radha" Sex="F" />
-  <FirstName Name="Raghu" Sex="M" />
-  <FirstName Name="Rajani" Sex="F" />
-  <FirstName Name="Rama" Sex="M" />
-  <FirstName Name="Rati" Sex="F" />
-  <FirstName Name="Ravi" Sex="M" />
-  <FirstName Name="Reva" Sex="F" />
-  <FirstName Name="Rukmini" Sex="F" />
-  <FirstName Name="Sachin" Sex="M" />
-  <FirstName Name="Sandhya" Sex="F" />
-  <FirstName Name="Sanjaya" Sex="M" />
-  <FirstName Name="Saraswati" Sex="F" />
-  <FirstName Name="Sati" Sex="F" />
-  <FirstName Name="Savitr" Sex="M" />
-  <FirstName Name="Savitri" Sex="F" />
-  <FirstName Name="Shailaja" Sex="F" />
-  <FirstName Name="Shakti" Sex="F" />
-  <FirstName Name="Shanta" Sex="F" />
-  <FirstName Name="Shantanu" Sex="M" />
-  <FirstName Name="Shri" Sex="F" />
-  <FirstName Name="Shyama" Sex="N" />
-  <FirstName Name="Sita" Sex="F" />
-  <FirstName Name="Skanda" Sex="M" />
-  <FirstName Name="Sumati" Sex="F" />
-  <FirstName Name="Sundara" Sex="M" />
-  <FirstName Name="Sunita" Sex="F" />
-  <FirstName Name="Surya" Sex="M" />
-  <FirstName Name="Sushila" Sex="N" />
-  <FirstName Name="Tara" Sex="F" />
-  <FirstName Name="Uma" Sex="F" />
-  <FirstName Name="Usha" Sex="F" />
-  <FirstName Name="Vasanta" Sex="M" />
-  <FirstName Name="Vasu" Sex="M" />
-  <FirstName Name="Vayu" Sex="M" />
-  <FirstName Name="Vijaya" Sex="N" />
-  <FirstName Name="Vikrama" Sex="M" />
-  <FirstName Name="Yama" Sex="M" />
-  <FirstName Name="Yami" Sex="F" />
+	<Sexuality>
+		<Name>Heterosexual</Name>
+		<Chance>70</Chance>
+	</Sexuality>
 
-  <LastName Name="McNaga" />
-  
-  <RelationshipType>Monoamorous</RelationshipType>
+	<Sexuality>
+		<Name>Bisexual</Name>
+		<Chance>10</Chance>
+	</Sexuality>
+
+	<Sexuality>
+		<Name>Homosexual</Name>
+		<Chance>10</Chance>
+	</Sexuality>
+
+	<Sexuality>
+		<Name>Asexual</Name>
+		<Chance>3</Chance>
+	</Sexuality>
+
+	<Sexuality>
+		<Name>Demisexual</Name>
+		<Chance>3</Chance>
+	</Sexuality>
+	
+	<Sex>
+		<Name>Male</Name>
+		<Chance>50</Chance>
+	</Sex>
+	
+	<Sex>
+		<Name>Female</Name>
+		<Chance>50</Chance>
+	</Sex>
+
+	<NameData>
+		<Name>Aditi</Name>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Aditya</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Agni</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Ananta</Name>
+		<Sex>Male</Sex>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Anil</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Aniruddha</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Arjuna</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Aruna</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Arundhati</Name>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Bala</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Baladeva</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Bharata</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Bhaskara</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Bhima</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Bhumi</Name>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Brahma</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Brijesha</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Chandra</Name>
+		<Sex>Male</Sex>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Damayanti</Name>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Damodara</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Devaraja</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Devi</Name>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Dilipa</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Draupadi</Name>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Durga</Name>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Gauri</Name>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Girisha</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Hari</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Indira</Name>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Jaya</Name>
+		<Sex>Male</Sex>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Jayanta</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Jayanti</Name>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Kali</Name>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Kalyani</Name>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Kama</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Kamala</Name>
+		<Sex>Male</Sex>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Kanti</Name>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Kapila</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Karna</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Kumara</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Kumari</Name>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Lakshmi</Name>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Lalita</Name>
+		<Sex>Male</Sex>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Madhava</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Madhavi</Name>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Mahesha</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Mani</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Manu</Name>
+		<Sex>Male</Sex>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Maya</Name>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Mina</Name>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Mitra</Name>
+		<Sex>Male</Sex>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Mohana</Name>
+		<Sex>Male</Sex>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Mohini</Name>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Murali</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Nala</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Nanda</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Padma</Name>
+		<Sex>Male</Sex>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Padmavati</Name>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Partha</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Parvati</Name>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Pramoda</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Pritha</Name>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+	
+	<NameData>
+		<Name>Priya</Name>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>Radha</Name>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+	
+	<NameData>
+		<Name>Raghu</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+	
+	<NameData>
+		<Name>Rajani</Name>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+	
+	<NameData>
+		<Name>Rama</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+	
+	<NameData>
+		<Name>Rama</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+	
+	<NameData>
+		<Name>Rati</Name>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+	
+	<NameData>
+		<Name>Ravi</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+	
+	<NameData>
+		<Name>Reva</Name>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+	
+	<NameData>
+		<Name>Rukmini</Name>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+	
+	<NameData>
+		<Name>Sachin</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+	
+	<NameData>
+		<Name>Sandhya</Name>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+	
+	<NameData>
+		<Name>Sanjaya</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+	
+	<NameData>
+		<Name>Saraswati</Name>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+	
+	<NameData>
+		<Name>Sati</Name>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+	
+	<NameData>
+		<Name>Savitr</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+	
+	<NameData>
+		<Name>Savitri</Name>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+	
+	<NameData>
+		<Name>Shailaja</Name>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+	
+	<NameData>
+		<Name>Shakti</Name>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+	
+	<NameData>
+		<Name>Shanta</Name>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+	
+	<NameData>
+		<Name>Shantanu</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+	
+	<NameData>
+		<Name>Shri</Name>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+	
+	<NameData>
+		<Name>Shyama</Name>
+		<Sex>Female</Sex>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+	
+	<NameData>
+		<Name>Sita</Name>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+	
+	<NameData>
+		<Name>Skanda</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+	
+	<NameData>
+		<Name>Sumati</Name>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+	
+	<NameData>
+		<Name>Sundara</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+	
+	<NameData>
+		<Name>Sunita</Name>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+	
+	<NameData>
+		<Name>Surya</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+	
+	<NameData>
+		<Name>Sushila</Name>
+		<Sex>Female</Sex>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+	
+	<NameData>
+		<Name>Tara</Name>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+	
+	<NameData>
+		<Name>Uma</Name>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+	
+	<NameData>
+		<Name>Usha</Name>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+	
+	<NameData>
+		<Name>Vasanta</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+	
+	<NameData>
+		<Name>Vasu</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+	
+	<NameData>
+		<Name>Vayu</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+	
+	<NameData>
+		<Name>Vijaya</Name>
+		<Sex>Male</Sex>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+	
+	<NameData>
+		<Name>Vikrama</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+	
+	<NameData>
+		<Name>Yama</Name>
+		<Sex>Male</Sex>
+		<Chain>0</Chain>
+	</NameData>
+	
+	<NameData>
+		<Name>Yami</Name>
+		<Sex>Female</Sex>
+		<Chain>0</Chain>
+	</NameData>
+
+	<NameData>
+		<Name>McNaga</Name>
+		<Sex>Male</Sex>
+		<Sex>Female</Sex>
+		<Chain>1</Chain>
+	</NameData>
+
+	<RelationshipType>Monoamorous</RelationshipType>
 </Culture>

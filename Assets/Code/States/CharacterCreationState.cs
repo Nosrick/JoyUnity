@@ -1,7 +1,10 @@
-﻿using JoyLib.Code.Entities;
+﻿using JoyLib.Code.Cultures;
+using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Jobs;
 using JoyLib.Code.Entities.Needs;
+using JoyLib.Code.Entities.Sexes;
+using JoyLib.Code.Entities.Sexuality;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Loaders;
 using System;
@@ -13,7 +16,7 @@ namespace JoyLib.Code.States
     public class CharacterCreationState : GameState
     {
         protected int m_PointsRemaining;
-        protected Dictionary<StatisticIndex, float> m_PlayerStatistics;
+        protected Dictionary<string, int> m_PlayerStatistics;
 
         protected List<JobType> m_Jobs;
         protected int m_JobIndex;
@@ -25,12 +28,12 @@ namespace JoyLib.Code.States
         {
             m_PointsRemaining = 12;
 
-            Array statisticIndices = Enum.GetValues(typeof(StatisticIndex));
-            m_PlayerStatistics = new Dictionary<StatisticIndex, float>(statisticIndices.Length);
+            string[] names = EntityStatistic.Names;
+            m_PlayerStatistics = new Dictionary<string, int>(names.Length);
 
-            foreach (StatisticIndex index in statisticIndices)
+            foreach (string index in names)
             {
-                m_PlayerStatistics.Add(index, 30);
+                m_PlayerStatistics.Add(index, 4);
             }
             m_JobIndex = 0;
             m_sexIndex = 0;
@@ -49,7 +52,6 @@ namespace JoyLib.Code.States
 
         private void UpdateUI()
         {
-            int numStats = Enum.GetNames(typeof(StatisticIndex)).Length;
         }
 
         public override void Draw()
@@ -74,7 +76,7 @@ namespace JoyLib.Code.States
             base.Update();
         }
 
-        private void DecrementStatistic(StatisticIndex index)
+        private void DecrementStatistic(string index)
         {
             if (m_PlayerStatistics[index] > 1)
             {
@@ -83,7 +85,7 @@ namespace JoyLib.Code.States
             }
         }
 
-        private void IncrementStatistic(StatisticIndex index)
+        private void IncrementStatistic(string index)
         {
             if (m_PlayerStatistics[index] < 10 && m_PointsRemaining > 0)
             {
@@ -118,15 +120,15 @@ namespace JoyLib.Code.States
 
         private void NextState(object sender, EventArgs eventArgs)
         {
-            Sex m_Playersex = (Sex)m_sexIndex;
-
             //REPLACE THIS WITH ENTITY CONSTRUCTOR
             Dictionary<string, INeed> needs = new Dictionary<string, INeed>();
             INeed hunger = NeedHandler.GetRandomised("Hunger");
-            needs.Add(hunger.GetName(), hunger);
+            needs.Add(hunger.Name, hunger);
 
             EntityTemplate humanTemplate = EntityTemplateHandler.Get("Human");
-            m_Player = WorldState.EntityHandler.Create(humanTemplate, needs, 1, m_Jobs[m_JobIndex], m_Playersex, Sexuality.Bisexual, new UnityEngine.Vector2Int(-1, -1),
+            CultureType culture = CultureHandler.GetByCultureName("Human");
+
+            m_Player = WorldState.EntityHandler.Create(humanTemplate, needs, 1, m_Jobs[m_JobIndex], culture.ChooseSex(), culture.ChooseSexuality(), new UnityEngine.Vector2Int(-1, -1),
                 ObjectIcons.GetSprites("Jobs", m_Jobs[m_JobIndex].name).ToList(), null);
 
             m_Player.PlayerControlled = true;

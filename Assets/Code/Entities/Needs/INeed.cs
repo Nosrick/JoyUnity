@@ -19,18 +19,39 @@
 
         void Decay(int value);
 
-        string GetName();
+        string Name
+        {
+            get;
+        }
 
-        int GetPriority();
+        int Priority
+        {
+            get;
+        }
 
-        bool GetContributingHappiness();
+        bool ContributingHappiness
+        {
+            get;
+        }
 
-        int GetValue();
+        int Value
+        {
+            get;
+        }
 
-        int GetAverageForDay();
+        int AverageForDay
+        {
+            get;
+        }
 
-        int GetAverageForWeek();
+        int AverageForWeek
+        {
+            get;
+        }
 
-        int GetAverageForMonth();
+        int AverageForMonth
+        {
+            get;
+        }
     }
 }

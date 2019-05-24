@@ -1,7 +1,7 @@
-﻿using JoyLib.Code.Entities;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Xml;
+
 namespace JoyLib.Code.Loaders
 {
     public static class SkillCoefficientLoader

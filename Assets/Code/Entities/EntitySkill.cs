@@ -29,7 +29,7 @@ namespace JoyLib.Code.Entities
             m_Experience += value;
             foreach(string index in m_Coefficients.Keys)
             {
-                if (m_GoverningNeeds.ContainsKey(index) && m_GoverningNeeds[index].GetContributingHappiness())
+                if (m_GoverningNeeds.ContainsKey(index) && m_GoverningNeeds[index].ContributingHappiness)
                 {
                     m_Experience += m_Coefficients[index] * value;
                 }
@@ -64,7 +64,7 @@ namespace JoyLib.Code.Entities
         public int SuccessThreshold
         {
             get;
-            set;
+            protected set;
         }
 
         public Dictionary<string, float> coefficients

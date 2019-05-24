@@ -3,6 +3,7 @@ using JoyLib.Code.Conversation.Subengines;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.Items;
+using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.IO;
 using JoyLib.Code.Physics;
@@ -12,6 +13,7 @@ using JoyLib.Code.Unity.GUI;
 using JoyLib.Code.Unity.GUI.Inventory;
 using JoyLib.Code.World;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace JoyLib.Code.States
@@ -410,7 +412,12 @@ namespace JoyLib.Code.States
                         if (tempEntity.GUID != player.GUID)
                         {
                             CombatEngine.SwingWeapon(player, tempEntity);
-                            tempEntity.InfluenceMe(player.GUID, -50);
+                            List<IRelationship> relationships = EntityRelationshipHandler.Get(new long[] { tempEntity.GUID, player.GUID });
+                            foreach(IRelationship relationship in relationships)
+                            {
+                                relationship.ModifyValueOfParticipant(player.GUID, tempEntity.GUID, -50);
+                            }
+
                             if (!tempEntity.Alive)
                             {
                                 m_ActiveWorld.RemoveEntity(newPlayerPoint);

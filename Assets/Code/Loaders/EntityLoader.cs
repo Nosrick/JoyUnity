@@ -18,8 +18,6 @@ namespace JoyLib.Code.Loaders
             string directory = Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Entities";
             string[] files = Directory.GetFiles(directory, "*.xml", SearchOption.AllDirectories);
 
-            Dictionary<string, CultureType> cultures = CultureLoader.LoadCultures();
-
             for (int i = 0; i < files.Length; i++)
             {
                 try
@@ -31,7 +29,7 @@ namespace JoyLib.Code.Loaders
                     string tileset;
                     bool sentient;
                     int size;
-                    Dictionary<StatisticIndex, EntityStatistic> statistics;
+                    Dictionary<string, EntityStatistic> statistics;
                     Dictionary<string, EntitySkill> skills;
                     List<Ability> abilities;
                     List<string> slots;
@@ -40,31 +38,37 @@ namespace JoyLib.Code.Loaders
                     while (reader.Read())
                     {
                         if (reader.Depth == 0 && reader.NodeType == XmlNodeType.Element && !reader.Name.Equals("Entities"))
+                        {
                             break;
+                        }
 
-                        if (reader.Depth == 1 && reader.NodeType == XmlNodeType.Element && !reader.Name.Equals("Entity"))
+                        else if (reader.Name.Equals(""))
+                        {
                             continue;
-
-                        if (reader.Name.Equals(""))
-                            continue;
-                        if (reader.Name.Equals("Entity") && reader.NodeType == XmlNodeType.Element)
+                        }
+                            
+                        else if (reader.Name.Equals("Entity") && reader.NodeType == XmlNodeType.Element)
                         {
 
                             type = "DEFAULT TYPE";
                             creatureType = "DEFAULT CREATURE TYPE";
                             tileset = "DEFAULT";
                             sentient = false;
-                            size = 1;
-                            statistics = new Dictionary<StatisticIndex, EntityStatistic>(9);
+                            size = 0;
+                            statistics = new Dictionary<string, EntityStatistic>();
                             skills = new Dictionary<string, EntitySkill>();
                             slots = new List<string>();
 
                             abilities = new List<Ability>();
                             visionType = VisionType.Diurnal;
 
-                            do
+                            while(reader.Read())
                             {
-                                reader.Read();
+                                if(reader.NodeType == XmlNodeType.EndElement && reader.Name.Equals("Entity"))
+                                {
+                                    break;
+                                }
+
                                 if (reader.Name.Equals("CreatureType"))
                                 {
                                     creatureType = reader.ReadElementContentAsString();
@@ -91,13 +95,34 @@ namespace JoyLib.Code.Loaders
                                 }
                                 else if (reader.Name.Equals("Statistic"))
                                 {
-                                    StatisticIndex statIndex;
-                                    statIndex = (StatisticIndex)Enum.Parse(typeof(StatisticIndex), reader.GetAttribute("Name"));
+                                    string statIndex = "DEFAULT";
+                                    int statValue = 4;
+                                    int successThreshold = 7;
+                                    while (reader.Read())
+                                    {
+                                        if (reader.NodeType == XmlNodeType.EndElement && reader.Name.Equals("Statistic"))
+                                        {
+                                            break;
+                                        }
+                                        else if (reader.Name.Equals(""))
+                                        {
+                                            continue;
+                                        }
+                                        else if (reader.Name.Equals("Name"))
+                                        {
+                                            statIndex = reader.ReadElementContentAsString();
+                                        }
+                                        else if (reader.Name.Equals("Value"))
+                                        {
+                                            statValue = reader.ReadElementContentAsInt();
+                                        }
+                                        else if(reader.Name.Equals("Threshold"))
+                                        {
+                                            successThreshold = reader.ReadElementContentAsInt();
+                                        }
+                                    }
 
-                                    int statValue;
-                                    int.TryParse(reader.GetAttribute("Value"), out statValue);
-
-                                    statistics.Add(statIndex, new EntityStatistic(statValue, GlobalConstants.DEFAULT_SUCCESS_THRESHOLD));
+                                    statistics.Add(statIndex, new EntityStatistic(statValue, successThreshold));
                                 }
                                 else if(reader.Name.Equals("VisionType"))
                                 {
@@ -110,16 +135,20 @@ namespace JoyLib.Code.Loaders
                                 else if(reader.Name.Equals("Slots"))
                                 {
                                     slots = new List<string>();
-                                    do
+                                    while(reader.Read())
                                     {
-                                        reader.Read();
-                                        if (reader.Name.Equals("Slot"))
+                                        if(reader.NodeType == XmlNodeType.EndElement && reader.Name.Equals("Slots"))
+                                        {
+                                            break;
+                                        }
+
+                                        else if (reader.Name.Equals("Slot"))
                                         {
                                             slots.Add(reader.ReadElementContentAsString());
                                         }
-                                    } while (!reader.Name.Equals("Slots") && reader.NodeType != XmlNodeType.EndElement);
+                                    }
                                 }
-                            } while (!reader.Name.Equals("Entity") && reader.NodeType != XmlNodeType.EndElement);
+                            }
 
                             entities.Add(new EntityTemplate(statistics, skills, abilities, slots, size, sentient, visionType, creatureType, type, tileset));
                         }

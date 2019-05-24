@@ -7,15 +7,44 @@
     <Tileset>Player</Tileset>
     <VisionType>Diurnal</VisionType>
 
-    <Statistic Name="Strength" Value="3" />
-    <Statistic Name="Agility" Value="3" />
-    <Statistic Name="Endurance" Value="4" />
-    <Statistic Name="Cognition" Value="3" />
-    <Statistic Name="Perception" Value="3" />
-    <Statistic Name="Focus" Value="3" />
-    <Statistic Name="Personality" Value="3" />
-    <Statistic Name="Suavity" Value="3" />
-    <Statistic Name="Wit" Value="3" />
+    <Statistic>
+		<Name>Strength</Name>
+		<Value>4</Value>
+	</Statistic>
+    <Statistic>
+		<Name>Agility</Name>
+		<Value>4</Value>
+	</Statistic>
+	<Statistic>
+		<Name>Endurance</Name>
+		<Value>5</Value>
+	</Statistic>
+	
+	<Statistic>
+		<Name>Cognition</Name>
+		<Value>4</Value>
+	</Statistic>
+	<Statistic>
+		<Name>Cunning</Name>
+		<Value>4</Value>
+	</Statistic>
+	<Statistic>
+		<Name>Focus</Name>
+		<Value>4</Value>
+	</Statistic>
+	
+	<Statistic>
+		<Name>Personality</Name>
+		<Value>4</Value>
+	</Statistic>
+	<Statistic>
+		<Name>Suavity</Name>
+		<Value>4</Value>
+	</Statistic>
+	<Statistic>
+		<Name>Wit</Name>
+		<Value>4</Value>
+	</Statistic>
 	
 	<Slots>
 		<Slot>Head</Slot>

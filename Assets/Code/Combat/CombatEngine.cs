@@ -58,7 +58,7 @@ namespace JoyLib.Code.Combat
                 return 0;
             }
 
-            int attackerToHit = RNG.RollSuccesses(attackerRef.Statistics[StatisticIndex.Agility].Value, attackerRef.Statistics[StatisticIndex.Agility].SuccessThreshold);
+            int attackerToHit = RNG.RollSuccesses(attackerRef.Statistics["Agility"].Value, attackerRef.Statistics["Agility"].SuccessThreshold);
             int attackerSkillBonus = 0;
             if (mainHand.ItemType.GoverningSkill != "None")
             {
@@ -77,7 +77,7 @@ namespace JoyLib.Code.Combat
             if (defenderRef.GetType().Equals(typeof(Entity)))
             {
                 Entity defender = (Entity)defenderRef;
-                int defenderDodge = RNG.RollSuccesses(attackerRef.Statistics[StatisticIndex.Agility].Value, attackerRef.Statistics[StatisticIndex.Agility].SuccessThreshold);
+                int defenderDodge = RNG.RollSuccesses(attackerRef.Statistics["Agility"].Value, attackerRef.Statistics["Agility"].SuccessThreshold);
                 int defenderEvasion = 0;
 
                 if (defender.Skills["Evasion"].value > 0)
@@ -98,7 +98,7 @@ namespace JoyLib.Code.Combat
                 }
             }
 
-            int totalDamage = attackerToHit + attackerSkillBonus + RNG.RollSuccesses(attackerRef.Statistics[StatisticIndex.Strength].Value, attackerRef.Statistics[StatisticIndex.Strength].SuccessThreshold);
+            int totalDamage = attackerToHit + attackerSkillBonus + RNG.RollSuccesses(attackerRef.Statistics["Strength"].Value, attackerRef.Statistics["Strength"].SuccessThreshold);
 
             if (log)
             {
