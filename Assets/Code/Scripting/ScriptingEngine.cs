@@ -86,7 +86,7 @@ namespace JoyLib.Code.Scripting
             {
                 Type[] allTypes = s_ScriptDLL.GetTypes();
 
-                Type directType = allTypes.Single(type => type.Name.Equals(typeName));
+                Type directType = allTypes.Single(type => type.Name.ToLower().Equals(typeName.ToLower()));
                 return directType;
             }
             catch(Exception ex)
