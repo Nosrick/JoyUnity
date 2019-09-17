@@ -12,14 +12,13 @@ namespace JoyLib.Code.Entities.Needs
 
         INeed Randomise();
 
-        bool Initialise(string nameRef, int decayRef, int decayCounterRef, bool doesDecayRef, int priorityRef, int happinessThresholdRef,
-            int valueRef, int maxValueRef, int averageForDayRef, int averageForWeekRef);
-
         bool Tick();
 
         int Fulfill(int value);
 
         int Decay(int value);
+
+        //Name and Value come from IBasicValue
 
         int Priority
         {
