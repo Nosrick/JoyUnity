@@ -14,6 +14,21 @@
 	<Crime>Trespass</Crime>
 	<Crime>Rape</Crime>
 
+	<Job>
+		<Name>Warrior</Name>
+		<Chance>50</Chance>
+	</Job>
+	
+	<Job>
+		<Name>Thief</Name>
+		<Chance>20</Chance>
+	</Job>
+	
+	<Job>
+		<Name>Hedge Wizard</Name>
+		<Chance>20</Chance>
+	</Job>
+
 	<Sexuality>
 		<Name>Heterosexual</Name>
 		<Chance>70</Chance>

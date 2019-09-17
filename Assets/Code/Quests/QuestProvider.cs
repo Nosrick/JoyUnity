@@ -2,6 +2,8 @@
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Helpers;
+using JoyLib.Code.Rollers;
+using JoyLib.Code.States;
 using JoyLib.Code.World;
 using System.Collections.Generic;
 using UnityEngine;
@@ -55,8 +57,7 @@ namespace JoyLib.Code.Quests
         {
             QuestAction action = QuestAction.Deliver;
 
-            int random = RNG.Roll(0, ItemHandler.GetFlatItemList().Count - 1);
-            ItemInstance deliveryItem = new ItemInstance(ItemHandler.GetFlatItemList()[random], new Vector2Int(-1, -1), true);
+            ItemInstance deliveryItem = null;
             ItemInstance[] backpack = provider.Backpack;
             if (backpack.Length > 0)
             {
@@ -65,6 +66,10 @@ namespace JoyLib.Code.Quests
                 deliveryItem = backpack[result];
             }
             Entity endPoint = overworldRef.GetRandomSentientWorldWide();
+            if(deliveryItem == null)
+            {
+                deliveryItem = WorldState.ItemHandler.CreateCompletelyRandomItem();
+            }
 
             QuestStep step = new QuestStep(action, new List<ItemInstance>() { deliveryItem }, new List<JoyObject>() { endPoint }, new List<WorldInstance>());
             return step;
@@ -127,7 +132,9 @@ namespace JoyLib.Code.Quests
             }
 
             if (breakout == 100)
+            {
                 return MakeExploreQuest(provider, overworldRef);
+            }
 
             QuestStep step = new QuestStep(action, new List<ItemInstance>() { target }, new List<JoyObject>() { provider }, new List<World.WorldInstance>());
             return step;

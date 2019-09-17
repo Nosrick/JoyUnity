@@ -1,26 +1,107 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Objects>
-  <TilesetName>Paving</TilesetName>
-  <Sheet>Floor</Sheet>
-  <ItemIcon Name="TopLeft" Position="0,35" />
-  <ItemIcon Name="TopMiddle" Position="1,35" />
-  <ItemIcon Name="TopRight" Position="2,35" />
-  
-  <ItemIcon Name="MiddleLeft" Position="0,34" />
-  <ItemIcon Name="MiddleMiddle" Position="1,34" />
-  <ItemIcon Name="MiddleRight" Position="2,34" />
-  
-  <ItemIcon Name="BottomLeft" Position="0,33" />
-  <ItemIcon Name="BottomMiddle" Position="1,33" />
-  <ItemIcon Name="BottomRight" Position="2,33" />
-  
-  <ItemIcon Name="VerticalTop" Position="3,35" />
-  <ItemIcon Name="VerticalMiddle" Position="3,34" />
-  <ItemIcon Name="VerticalBottom" Position="3,33" />
-  
-  <ItemIcon Name="SoloFloor" Position="5,35" />
-  
-  <ItemIcon Name="HorizontalLeft" Position="4,34" />
-  <ItemIcon Name="HorizontalMiddle" Position="5,34" />
-  <ItemIcon Name="HorizontalRight" Position="6,34" />
+	<TilesetName>Paving</TilesetName>
+	<Sheet>Floor</Sheet>
+	
+	<Icon>
+		<Name>TopLeft</Name>
+		<X>0</X>
+		<Y>35</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>TopMiddle</Name>
+		<X>1</X>
+		<Y>35</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>TopRight</Name>
+		<X>2</X>
+		<Y>35</Y>
+		<Data>Default</Data>
+	</Icon>
+	
+	<Icon>
+		<Name>MiddleLeft</Name>
+		<X>0</X>
+		<Y>34</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>MiddleMiddle</Name>
+		<X>1</X>
+		<Y>34</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>MiddleRight</Name>
+		<X>2</X>
+		<Y>34</Y>
+		<Data>Default</Data>
+	</Icon>
+	
+	<Icon>
+		<Name>BottomLeft</Name>
+		<X>0</X>
+		<Y>33</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>BottomMiddle</Name>
+		<X>1</X>
+		<Y>33</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>BottomRight</Name>
+		<X>2</X>
+		<Y>33</Y>
+		<Data>Default</Data>
+	</Icon>
+	
+	<Icon>
+		<Name>VerticalTop</Name>
+		<X>3</X>
+		<Y>35</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>VerticalMiddle</Name>
+		<X>3</X>
+		<Y>34</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>VerticalBottom</Name>
+		<X>3</X>
+		<Y>33</Y>
+		<Data>Default</Data>
+	</Icon>
+	
+	<Icon>
+		<Name>SoloFloor</Name>
+		<X>5</X>
+		<Y>35</Y>
+		<Data>Default</Data>
+	</Icon>
+	
+	<Icon>
+		<Name>HorizontalLeft</Name>
+		<X>4</X>
+		<Y>34</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>HorizontalMiddle</Name>
+		<X>5</X>
+		<Y>34</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>HorizontalRight</Name>
+		<X>6</X>
+		<Y>34</Y>
+		<Data>Default</Data>
+	</Icon>
 </Objects>

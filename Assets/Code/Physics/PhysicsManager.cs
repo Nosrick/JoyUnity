@@ -1,6 +1,5 @@
 ﻿using JoyLib.Code.Entities;
 using JoyLib.Code.World;
-using System.Linq;
 using UnityEngine;
 
 namespace JoyLib.Code.Physics
@@ -13,7 +12,9 @@ namespace JoyLib.Code.Physics
             if (tempEntity != null && from != to)
             {
                 if(tempEntity.WorldPosition != from)
+                {
                     return PhysicsResult.EntityCollision;
+                }
             }
 
             if (worldRef.Walls.ContainsKey(to))

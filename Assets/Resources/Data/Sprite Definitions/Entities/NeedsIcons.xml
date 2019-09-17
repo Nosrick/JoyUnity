@@ -1,21 +1,81 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Objects>
-  <TilesetName>Needs</TilesetName>
-  <Sheet>Needs</Sheet>
+	<TilesetName>Needs</TilesetName>
+	<Sheet>Needs</Sheet>
 
-  <ItemIcon Name="Food" Position="0,0" />
-  <ItemIcon Name="Drink" Position="1,0" />
-  <ItemIcon Name="Sex" Position="2,0" />
-  <ItemIcon Name="Sleep" Position="3,0" />
-
-  <ItemIcon Name="Health" Position="4,0" />
-  <ItemIcon Name="Employment" Position="5,0" />
-  <ItemIcon Name="Property" Position="6,0" />
-
-  <ItemIcon Name="Friendship" Position="7,0" />
-  <ItemIcon Name="Family" Position="8,0" />
-  <ItemIcon Name="Morality" Position="9,0" />
-
-  <ItemIcon Name="Confidence" Position="10,0" />
-  <ItemIcon Name="Respect" Position="11,0" />
+	<Icon>
+		<Name>Food</Name>
+		<X>0</X>
+		<Y>0</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>Drink</Name>
+		<X>1</X>
+		<Y>0</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>Sex</Name>
+		<X>2</X>
+		<Y>0</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>Sleep</Name>
+		<X>3</X>
+		<Y>0</Y>
+		<Data>Default</Data>
+	</Icon>
+	
+	<Icon>
+		<Name>Health</Name>
+		<X>4</X>
+		<Y>0</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>Employment</Name>
+		<X>5</X>
+		<Y>0</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>Property</Name>
+		<X>6</X>
+		<Y>0</Y>
+		<Data>Default</Data>
+	</Icon>
+	
+	<Icon>
+		<Name>Friendship</Name>
+		<X>7</X>
+		<Y>0</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>Family</Name>
+		<X>8</X>
+		<Y>0</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>Morality</Name>
+		<X>9</X>
+		<Y>0</Y>
+		<Data>Default</Data>
+	</Icon>
+	
+	<Icon>
+		<Name>Confidence</Name>
+		<X>10</X>
+		<Y>0</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>Respect</Name>
+		<X>11</X>
+		<Y>0</Y>
+		<Data>Default</Data>
+	</Icon>
 </Objects>

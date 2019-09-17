@@ -43,7 +43,7 @@ namespace JoyLib.Code.Unity.GUI
                 return;
             }
 
-            foreach(INeed need in m_Player.Needs.Values)
+            foreach(INeed need in m_Player.Needs.Collection)
             {
                 if(!need.ContributingHappiness)
                 {

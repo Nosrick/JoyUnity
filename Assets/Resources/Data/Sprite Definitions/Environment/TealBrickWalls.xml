@@ -1,22 +1,88 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Objects>
-  <TilesetName>Walls</TilesetName>
-  <Sheet>Wall</Sheet>
-  <ItemIcon Name="TopLeft" Position="0,47" />
-  <ItemIcon Name="TopRight" Position="2,47" />
-  <ItemIcon Name="BottomLeft" Position="0,45" />
-  <ItemIcon Name="BottomRight" Position="2,45" />
-  
-  <ItemIcon Name="HorizontalWall" Position="1,47" />
-  <ItemIcon Name="VerticalWall" Position="0,46" />
-  
-  <ItemIcon Name="TopT" Position="4,47" />
-  <ItemIcon Name="LeftT" Position="3,46" />
-  <ItemIcon Name="RightT" Position="5,46" />
-  <ItemIcon Name="BottomT" Position="4,45" />
-  
-  <ItemIcon Name="Cross" Position="4,46" />
-
-  <ItemIcon Name="SoloWall" Position="1,46" />
-  <ItemIcon Name="Surround" Position="3,47" />
+	<TilesetName>Walls</TilesetName>
+	<Sheet>Wall</Sheet>
+	
+	<Icon>
+		<Name>TopLeft</Name>
+		<X>0</X>
+		<Y>47</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>TopRight</Name>
+		<X>2</X>
+		<Y>47</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>BottomLeft</Name>
+		<X>0</X>
+		<Y>45</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>BottomRight</Name>
+		<X>2</X>
+		<Y>45</Y>
+		<Data>Default</Data>
+	</Icon>
+	
+	<Icon>
+		<Name>HorizontalWall</Name>
+		<X>1</X>
+		<Y>47</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>VerticalWall</Name>
+		<X>0</X>
+		<Y>46</Y>
+		<Data>Default</Data>
+	</Icon>
+	
+	<Icon>
+		<Name>TopT</Name>
+		<X>4</X>
+		<Y>47</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>LeftT</Name>
+		<X>3</X>
+		<Y>46</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>RightT</Name>
+		<X>5</X>
+		<Y>46</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>BottomT</Name>
+		<X>4</X>
+		<Y>45</Y>
+		<Data>Default</Data>
+	</Icon>
+	
+	<Icon>
+		<Name>Cross</Name>
+		<X>4</X>
+		<Y>46</Y>
+		<Data>Default</Data>
+	</Icon>
+	
+	<Icon>
+		<Name>SoloWall</Name>
+		<X>1</X>
+		<Y>46</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>Surround</Name>
+		<X>3</X>
+		<Y>47</Y>
+		<Data>Default</Data>
+	</Icon>
 </Objects>

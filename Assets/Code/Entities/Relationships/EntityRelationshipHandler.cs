@@ -65,7 +65,7 @@ namespace JoyLib.Code.Entities.Relationships
             foreach(KeyValuePair<string, IRelationship> pair in s_Relationships)
             {
                 Tuple<int, int> match = CompareHash(hash, pair.Key);
-                float percentage = ((float)match.First / match.Second);
+                float percentage = ((float)match.Item1 / match.Item2);
                 bool tagsMatch = false;
                 if (tags != null)
                 {

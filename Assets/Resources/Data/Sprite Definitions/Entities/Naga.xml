@@ -1,8 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Objects>
-  <TilesetName>Reptiles</TilesetName>
-  <Sheet>Reptile0</Sheet>
-  <Sheet>Reptile1</Sheet>
+	<TilesetName>Naga</TilesetName>
+	<Sheet>Reptile0</Sheet>
+	<Sheet>Reptile1</Sheet>
 
-  <ItemIcon Name="Naga" Position="1,6" />
+	<Icon>
+		<Name>Orange Naga</Name>
+		<X>1</X>
+		<Y>6</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>Black Naga</Name>
+		<X>3</X>
+		<Y>6</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>Yellow Naga</Name>
+		<X>5</X>
+		<Y>6</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>Silver Naga</Name>
+		<X>7</X>
+		<Y>6</Y>
+		<Data>Default</Data>
+	</Icon>
+	
 </Objects>

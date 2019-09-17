@@ -21,6 +21,11 @@
 		<Name>Neutral</Name>
 		<Chance>100</Chance>
 	</Sex>
+	
+	<Job>
+		<Name>Warrior</Name>
+		<Chance>10</Chance>
+	</Job>
 
 	<RelationshipType>Polyamorous</RelationshipType>
 

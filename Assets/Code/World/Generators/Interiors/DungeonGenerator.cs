@@ -22,7 +22,7 @@ namespace JoyLib.Code.World.Generators.Interiors
             for (int i = 1; i <= levels; i++)
             {
                 WorldTile[,] tiles = interiorGenerator.GenerateWorldSpace(size);
-                WorldInstance worldInstance = new WorldInstance(tiles, WorldType.Interior, name + " " + i);
+                WorldInstance worldInstance = new WorldInstance(tiles, new string[] { "interior" }, name + " " + i);
 
                 List<JoyObject> walls = interiorGenerator.GenerateWalls(tiles);
                 foreach(JoyObject wall in walls)

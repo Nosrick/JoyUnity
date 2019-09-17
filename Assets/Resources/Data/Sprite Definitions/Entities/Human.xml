@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Objects>
+	<TilesetName>Human</TilesetName>
+	<Sheet>Player0</Sheet>
+	<Sheet>Player1</Sheet>
+	
+	<Icon>
+		<Name>Warrior</Name>
+		<X>1</X>
+		<Y>11</Y>
+		<Data>Warrior</Data>
+	</Icon>
+	<Icon>
+		<Name>Hedge Wizard</Name>
+		<X>6</X>
+		<Y>11</Y>
+		<Data>Hedge Wizard</Data>
+	</Icon>
+	<Icon>
+		<Name>Thief</Name>
+		<X>7</X>
+		<Y>10</Y>
+		<Data>Thief</Data>
+	</Icon>
+	
+	<Icon>
+		<Name>Human</Name>
+		<X>0</X>
+		<Y>11</Y>
+		<Data>Default</Data>
+	</Icon>
+</Objects>

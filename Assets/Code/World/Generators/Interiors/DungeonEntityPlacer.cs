@@ -1,10 +1,12 @@
-﻿using JoyLib.Code.Cultures;
+﻿using JoyLib.Code.Collections;
+using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Jobs;
 using JoyLib.Code.Entities.Needs;
+using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
-using JoyLib.Code.Helpers;
 using JoyLib.Code.Physics;
+using JoyLib.Code.Rollers;
 using JoyLib.Code.States;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,11 +20,11 @@ namespace JoyLib.Code.World.Generators.Interiors
         {
             List<Entity> entities = new List<Entity>();
 
-            List<EntityTemplate> templates = EntityTemplateHandler.Templates;
-            templates = templates.Where(x => entityTypes.Contains(x.CreatureType)).ToList();
+            EntityTemplate[] templates = EntityTemplateHandler.Templates;
+            templates = templates.Where(x => entityTypes.Contains(x.CreatureType)).ToArray();
 
-            //int numberToPlace = (worldRef.Tiles.GetLength(0) * worldRef.Tiles.GetLength(1)) / 50;
-            int numberToPlace = 1;
+            int numberToPlace = (worldRef.Tiles.GetLength(0) * worldRef.Tiles.GetLength(1)) / 50;
+            //int numberToPlace = 1;
 
             List<Vector2Int> availablePoints = new List<Vector2Int>();
 
@@ -42,7 +44,7 @@ namespace JoyLib.Code.World.Generators.Interiors
             {
                 int pointIndex = RNG.Roll(0, availablePoints.Count - 1);
 
-                int entityIndex = RNG.Roll(0, templates.Count - 1);
+                int entityIndex = RNG.Roll(0, templates.Length - 1);
 
                 Entity newEntity = null;
                 if (templates[entityIndex].Sentient)
@@ -50,36 +52,40 @@ namespace JoyLib.Code.World.Generators.Interiors
                     List<CultureType> cultures = CultureHandler.GetByCreatureType(templates[entityIndex].CreatureType);
                     CultureType culture = cultures[0];
 
-                    JobType jobType = JobHandler.GetRandom();
+                    JobType jobType = culture.ChooseJob();
 
                     Dictionary<string, int> jobLevels = new Dictionary<string, int>();
-                    jobLevels.Add(jobType.name, 1);
+                    jobLevels.Add(jobType.Name, 1);
 
                     //REPLACE THIS WITH ENTITY CONSTRUCTOR
-                    Dictionary<string, INeed> needs = new Dictionary<string, INeed>();
-                    INeed hunger = NeedHandler.GetRandomised("Hunger");
-                    needs.Add(hunger.Name, hunger);
+                    BasicValueContainer<INeed> needs = new BasicValueContainer<INeed>();
+                    needs.Add(NeedHandler.GetRandomised("hunger"));
 
-                    newEntity = WorldState.EntityHandler.Create(templates[entityIndex], needs, 1, jobType, culture.ChooseSex(), culture.ChooseSexuality(),
-                        new Vector2Int(-1, -1), ObjectIcons.GetSprites(templates[entityIndex].Tileset, templates[entityIndex].CreatureType).ToList(), null);
+                    IGrowingValue level = new ConcreteGrowingValue("level", 1, 100, 0, GlobalConstants.DEFAULT_SUCCESS_THRESHOLD,
+                        new StandardRoller(), new NonUniqueDictionary<INeed, float>());
+
+                    newEntity = WorldState.EntityHandler.Create(templates[entityIndex], needs, level, jobType, culture.ChooseSex(), culture.ChooseSexuality(),
+                        new Vector2Int(-1, -1), ObjectIconHandler.GetSprites(templates[entityIndex].Tileset, templates[entityIndex].CreatureType), null);
                 }
                 else
                 {
                     List<CultureType> cultures = CultureHandler.GetByCreatureType(templates[entityIndex].CreatureType);
                     CultureType culture = cultures[0];
 
-                    JobType jobType = JobHandler.GetRandom();
+                    JobType jobType = culture.ChooseJob();
 
                     Dictionary<string, int> jobLevels = new Dictionary<string, int>();
-                    jobLevels.Add(jobType.name, 1);
+                    jobLevels.Add(jobType.Name, 1);
 
                     //REPLACE THIS WITH ENTITY CONSTRUCTOR
-                    Dictionary<string, INeed> needs = new Dictionary<string, INeed>();
-                    INeed hunger = NeedHandler.GetRandomised("Hunger");
-                    needs.Add(hunger.Name, hunger);
+                    BasicValueContainer<INeed> needs = new BasicValueContainer<INeed>();
+                    needs.Add(NeedHandler.GetRandomised("hunger"));
 
-                    newEntity = WorldState.EntityHandler.Create(templates[entityIndex], needs, 1, jobType, culture.ChooseSex(), culture.ChooseSexuality(),
-                        new Vector2Int(-1, -1), ObjectIcons.GetSprites(templates[entityIndex].Tileset, templates[entityIndex].CreatureType).ToList(), null);
+                    IGrowingValue level = new ConcreteGrowingValue("level", 1, 100, 0, GlobalConstants.DEFAULT_SUCCESS_THRESHOLD,
+                        new StandardRoller(), new NonUniqueDictionary<INeed, float>());
+
+                    newEntity = WorldState.EntityHandler.Create(templates[entityIndex], needs, level, jobType, culture.ChooseSex(), culture.ChooseSexuality(),
+                        new Vector2Int(-1, -1), ObjectIconHandler.GetSprites(templates[entityIndex].Tileset, templates[entityIndex].CreatureType), null);
                 }
                 newEntity.Move(availablePoints[pointIndex]);
                 newEntity.MyWorld = worldRef;

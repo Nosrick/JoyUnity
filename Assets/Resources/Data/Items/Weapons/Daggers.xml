@@ -1,21 +1,92 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Items>
-  <ActionWord>stabs</ActionWord>
-  <Category>Weapons</Category>
-  
-  <IdentifiedItem>
-    <Name>Dagger</Name>
-    <Description>A short, bladed weapon that is easily concealed and good for stabbing.</Description>
-    <Value>15</Value>
-    <Skill>Blades</Skill>
-    <SpawnWeight>20</SpawnWeight>
-    <Materials>Iron,Steel,Bronze,Glass,Bone</Materials>
-    <Size>60</Size>
-    <Slot>Hands</Slot>
-  </IdentifiedItem>
+	<ActionWord>stabs</ActionWord>
 
-  <UnidentifiedItem>
-    <Name>Dagger</Name>
-    <Description>A short, bladed weapon that is easily concealed and good for stabbing.</Description>
-  </UnidentifiedItem>
+	<IdentifiedItem>
+		<Name>Dagger</Name>
+		<Description>A short, bladed weapon that is easily concealed and good for stabbing.</Description>
+		<Value>15</Value>
+		<Skill>Blades</Skill>
+		<SpawnWeight>10</SpawnWeight>
+		<Material>Iron</Material>
+		<Material>Steel</Material>
+		<Material>Bronze</Material>
+		<Material>Glass</Material>
+		<Material>Bone</Material>
+		<Size>60</Size>
+		<Slot>Hand</Slot>
+		<Tag>Weapon</Tag>
+		<Tag>Dagger</Tag>
+		<Tag>One Handed</Tag>
+		<Tileset>Weapons</Tileset>
+	</IdentifiedItem>
+
+	<UnidentifiedItem>
+		<Name>Dagger</Name>
+		<Description>A short, bladed weapon that is easily concealed and good for stabbing.</Description>
+	</UnidentifiedItem>
+
+	<Filename>ShortWep</Filename>
+	<Tileset>Weapons</Tileset>
+	<Icon>
+		<Name>Dagger</Name>
+		<X>0</X>
+		<Y>4</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>Dagger</Name>
+		<X>1</X>
+		<Y>4</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>Dagger</Name>
+		<X>2</X>
+		<Y>4</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>Dagger</Name>
+		<X>3</X>
+		<Y>4</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>Dagger</Name>
+		<X>4</X>
+		<Y>4</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>Dagger</Name>
+		<X>5</X>
+		<Y>4</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>Dagger</Name>
+		<X>6</X>
+		<Y>4</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>Dagger</Name>
+		<X>7</X>
+		<Y>4</Y>
+		<Data>Default</Data>
+	</Icon>
+
+	<Icon>
+		<Name>Dagger</Name>
+		<X>0</X>
+		<Y>3</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>Dagger</Name>
+		<X>1</X>
+		<Y>3</Y>
+		<Data>Default</Data>
+	</Icon>
 </Items>

@@ -1,31 +1,37 @@
-﻿namespace JoyLib.Code.Entities.Items
+﻿using JoyLib.Code.Entities.Abilities;
+
+namespace JoyLib.Code.Entities.Items
 {
     public struct IdentifiedItem
     {
         public string name;
-        public string category;
         public string description;
         public int value;
-        public string interactionFile;
+        public IAbility[] abilities;
         public int weighting;
+        public int lightLevel;
         public string skill;
         public string[] materials;
+        public string[] tags;
         public float size;
-        public string slot;
+        public string[] slots;
+        public string spriteSheet;
 
-        public IdentifiedItem(string nameRef, string categoryRef, string descriptionRef, int valueRef, string fileRef, int weightingRef,
-            string skillRef, string[] materialsRef, float sizeRef, string slotRef)
+        public IdentifiedItem(string nameRef, string[] tagsRef, string descriptionRef, int valueRef, IAbility[] abilitiesRef, int weightingRef,
+            string skillRef, string[] materialsRef, float sizeRef, string[] slotsRef, string spriteSheetRef, int lightLevelRef = 0)
         {
             name = nameRef;
-            category = categoryRef;
+            tags = tagsRef;
             description = descriptionRef;
             value = valueRef;
-            interactionFile = fileRef;
+            abilities = abilitiesRef;
             weighting = weightingRef;
             skill = skillRef;
             materials = materialsRef;
             size = sizeRef;
-            slot = slotRef;
+            slots = slotsRef;
+            spriteSheet = spriteSheetRef;
+            lightLevel = lightLevelRef;
         }
     }
 

@@ -97,21 +97,40 @@ namespace JoyLib.Code.Scripting
             }
         }
 
-        public static List<Type> FetchTypeAndChildren(string typeName)
+        public static Type[] FetchTypeAndChildren(string typeName)
         {
             try
             {
                 Type[] allTypes = s_ScriptDLL.GetTypes();
 
-                Type directType = allTypes.Single(type => type.Name.Equals(typeName));
-                List<Type> children = allTypes.Where(type => directType.IsAssignableFrom(type)).ToList();
-                return children;
+                Type directType = null;
+                foreach(Type type in allTypes)
+                {
+                    if(type.Name.Equals(typeName))
+                    {
+                        directType = type;
+                        break;
+                    }
+                }
+
+                List<Type> children = new List<Type>();
+                if(directType != null)
+                {
+                    children = allTypes.Where(type => directType.IsAssignableFrom(type)).ToList();
+                }
+                else
+                {
+                    directType = Type.GetType(typeName, true, true);
+                    children = allTypes.Where(type => directType.IsAssignableFrom(type)).ToList();
+                }
+                
+                return children.ToArray();
             }
             catch(Exception ex)
             {
                 Debug.LogError(ex.Message);
                 Debug.LogError(ex.StackTrace);
-                return new List<Type>();
+                return new Type[0];
             }
         }
 

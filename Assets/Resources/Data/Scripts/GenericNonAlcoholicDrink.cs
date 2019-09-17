@@ -1,50 +1,103 @@
 ﻿using JoyLib.Code.Entities.Items;
+using JoyLib.Code.Entities.Statistics;
+using System;
 
 namespace JoyLib.Code.Entities.Abilities
 {
-    public class GenericNonAlcoholicDrink : Ability
+    public class GenericNonAlcoholicDrink : AbstractAbility
     {
-        public GenericNonAlcoholicDrink(AbilityTrigger triggerRef, AbilityTarget targetRef, bool stackRef, string nameRef, string internalNameRef, string descriptionRef, int priorityRef, int counterRef, int magnitudeRef, int manaCost) : 
-            base(triggerRef, targetRef, stackRef, nameRef, internalNameRef, descriptionRef, priorityRef, counterRef, magnitudeRef, manaCost)
+        public GenericNonAlcoholicDrink()
         {
+            this.Name = "Drink";
+            this.InternalName = "GenericNonAlcoholicDrink";
+            this.Description = "Quench your thirst with a cool refreshment.";
+            this.Stacking = false;
+            this.Counter = 1;
+            this.Magnitude = 1;
+            this.Priority = 1;
+            this.Permanent = false;
+            this.Costs = new Tuple<IBasicValue, int>[0];
+            this.AbilityTrigger = AbilityTrigger.OnUse;
+            this.TargetType = AbilityTarget.Self;
+        }
+
+        public GenericNonAlcoholicDrink(string name, string internalName, string description, bool stacking, int counter, int magnitude,
+            int priority, bool permanent, Tuple<IBasicValue, int>[] costs, AbilityTrigger trigger, AbilityTarget target) : 
+            base(name, internalName, description, stacking, counter, magnitude, priority, permanent, costs, trigger, target)
+        {
+        }
+
+        public override bool OnAdd(Entity entity)
+        {
+            return false;
         }
 
         public override bool OnAttack(Entity attacker, Entity target)
         {
-            return base.OnAttack(attacker, target);
+            return false;
         }
 
-        public override int OnHeal(Entity receiver, int healing)
+        public override int OnHeal(Entity receiver, Entity healer, int healing)
         {
-            return base.OnHeal(receiver, healing);
+            return healing;
         }
 
-        public override bool OnKill(Entity attacker, Entity target)
+        public override bool OnInteract(Entity actor, JoyObject observer)
         {
-            return base.OnKill(attacker, target);
+            return false;
+        }
+
+        public override bool OnReduceToZero(Entity attacker, Entity target, IDerivedValue value)
+        {
+            return false;
+        }
+
+        public override bool OnDisable(Entity attacker, Entity target, IDerivedValue value)
+        {
+            return false;
         }
 
         public override bool OnPickup(Entity entity, ItemInstance item)
         {
-            return base.OnPickup(entity, item);
+            return false;
+        }
+
+        public override bool OnRemove(Entity entity)
+        {
+            return false;
+        }
+
+        public override int OnCheckRollModifyDice(int dicePool, params IBasicValue[] values)
+        {
+            return dicePool;
+        }
+
+        public override int OnCheckRollModifyThreshold(int successThreshold, params IBasicValue[] values)
+        {
+            return successThreshold;
+        }
+
+        public override int OnCheckSuccess(int successes, params IBasicValue[] values)
+        {
+            return successes;
         }
 
         public override int OnTakeHit(Entity attacker, Entity defender, int damage)
         {
-            return base.OnTakeHit(attacker, defender, damage);
+            return damage;
         }
 
-        public override void OnTick(Entity entity)
+        public override bool OnTick(Entity entity)
         {
-            base.OnTick(entity);
+            return false;
         }
 
         public override bool OnUse(Entity user, JoyObject target)
         {
-            if(target.GetType() == typeof(ItemInstance))
+            ItemInstance item = target as ItemInstance;
+            if(item != null)
             {
-                ItemInstance item = (ItemInstance)target;
-                user.FulfillNeed("Thirst", item.ItemType.Value, 1);
+                user.FulfillNeed("thirst", item.ItemType.Value, 1);
                 user.RemoveItemFromPerson(item);
                 return true;
             }

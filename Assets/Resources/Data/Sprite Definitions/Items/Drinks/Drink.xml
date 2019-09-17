@@ -3,7 +3,22 @@
   <TilesetName>Drinks</TilesetName>
   <Sheet>Drinks</Sheet>
 
-  <ItemIcon Name="Cider" Position="0,0" />
-  <ItemIcon Name="Water" Position="1,0" />
-  <ItemIcon Name="Wine" Position="2,0" />
+  <Icon>
+	<Name>Cider</Name>
+	<X>0</X>
+	<Y>0</Y>
+	<Data>Cider</Data>
+  </Icon>
+  <Icon>
+	<Name>Water</Name>
+	<X>1</X>
+	<Y>0</Y>
+	<Data>Water</Data>
+  </Icon>
+  <Icon>
+	<Name>Wine</Name>
+	<X>2</X>
+	<Y>0</Y>
+	<Data>Wine</Data>
+  </Icon>
 </Objects>

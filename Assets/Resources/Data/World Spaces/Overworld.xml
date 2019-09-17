@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Filename>Overworld</Filename>
+<Tileset>Overworld</Tileset>
+
+<Icon>
+	<Name>Grassland</Name>
+	<X>8</X>
+	<Y>31</Y>
+	<Data>Default</Data>
+</Icon>

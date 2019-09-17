@@ -1,7 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Objects>
-  <TilesetName>Misc</TilesetName>
-  <Sheet>Light</Sheet>
-
-  <ItemIcon Name="Lantern" Position="3,0" />
+	<TilesetName>Misc</TilesetName>
+	<Sheet>Light</Sheet>
+	
+	<Icon>
+		<Name>Lantern</Name>
+		<X>3</X>
+		<Y>0</Y>
+		<Data>Default</Data>
+	</Icon>
 </Objects>

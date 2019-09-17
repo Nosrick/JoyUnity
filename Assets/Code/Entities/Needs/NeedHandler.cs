@@ -19,7 +19,7 @@ namespace JoyLib.Code.Entities.Needs
 
                 s_Needs = new Dictionary<string, INeed>();
 
-                List<Type> needTypes = Scripting.ScriptingEngine.FetchTypeAndChildren("AbstractNeed");
+                Type[] needTypes = Scripting.ScriptingEngine.FetchTypeAndChildren("AbstractNeed");
 
                 foreach (Type type in needTypes)
                 {

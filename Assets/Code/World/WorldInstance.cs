@@ -3,6 +3,7 @@ using JoyLib.Code.Entities.AI;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Managers;
+using JoyLib.Code.Rollers;
 using JoyLib.Code.States;
 using System;
 using System.Collections.Generic;
@@ -18,12 +19,13 @@ namespace JoyLib.Code.World
         protected byte[,] m_Costs;
         protected int[,] m_Light;
         protected bool[,] m_Discovered;
+
         [NonSerialized]
         protected int m_PlayerIndex;
 
-        protected Vector2Int m_Dimensions;
+        protected readonly Vector2Int m_Dimensions;
 
-        protected readonly WorldType m_Type;
+        protected readonly string[] m_Tags;
 
         //Worlds and where to access them
         protected Dictionary<Vector2Int, WorldInstance> m_Areas;
@@ -56,14 +58,14 @@ namespace JoyLib.Code.World
         /// A template for adding stuff to later. A blank WorldInstance.
         /// </summary>
         /// <param name="tiles"></param>
-        /// <param name="type"></param>
+        /// <param name="tags"></param>
         /// <param name="name"></param>
-        public WorldInstance(WorldTile[,] tiles, WorldType type, string name)
+        public WorldInstance(WorldTile[,] tiles, string[] tags, string name)
         {
             m_Dimensions = new Vector2Int(tiles.GetLength(0), tiles.GetLength(1));
 
             this.Name = name;
-            this.m_Type = type;
+            this.m_Tags = tags;
             m_Tiles = tiles;
             m_Areas = new Dictionary<Vector2Int, WorldInstance>();
             m_Entities = new List<Entity>();
@@ -95,13 +97,13 @@ namespace JoyLib.Code.World
         /// <param name="areas"></param>
         /// <param name="entities"></param>
         /// <param name="objects"></param>
-        /// <param name="type"></param>
+        /// <param name="tags"></param>
         /// <param name="name"></param>
         public WorldInstance(WorldTile[,] tiles, Dictionary<Vector2Int, WorldInstance> areas, List<Entity> entities,
-            List<JoyObject> objects, Dictionary<Vector2Int, JoyObject> walls, WorldType type, string name)
+            List<JoyObject> objects, Dictionary<Vector2Int, JoyObject> walls, string[] tags, string name)
         {
             this.Name = name;
-            this.m_Type = type;
+            this.m_Tags = tags;
             m_Tiles = tiles;
             m_Areas = areas;
             m_Entities = entities;
@@ -342,7 +344,7 @@ namespace JoyLib.Code.World
         public void Tick()
         {
             DateTime oldTime = s_DateTime;
-            if (WorldType != WorldType.Overworld)
+            if (HasTag("overworld"))
             {
                 s_DateTime = s_DateTime.AddSeconds(6.0);
             }
@@ -371,7 +373,7 @@ namespace JoyLib.Code.World
         /// <param name="objectType"></param>
         /// <param name="intentRef"></param>
         /// <returns></returns>
-        public List<NeedAIData> SearchForObjects(Entity entityRef, string objectType, Intent intentRef)
+        public List<NeedAIData> SearchForObjects(Entity entityRef, string[] tags, Intent intentRef)
         {
             List<NeedAIData> data = new List<NeedAIData>();
 
@@ -380,42 +382,23 @@ namespace JoyLib.Code.World
                 return data;
             }
 
-            //Special cases
-            //Ownable objects
-            if (objectType == "Any")
+            List<JoyObject> inSight = m_Objects.Where(obj => entityRef.CanSee(obj.WorldPosition) == true).ToList();
+            foreach(JoyObject obj in inSight)
             {
-                for (int i = 0; i < m_Objects.Count; i++)
+                int matches = 0;
+                for(int i = 0; i < tags.Length; i++)
                 {
-                    if (!entityRef.Vision[m_Objects[i].WorldPosition.x, m_Objects[i].WorldPosition.y])
+                    if(obj.HasTag(tags[i]))
                     {
-                        continue;
+                        matches++;
                     }
-
-                    if (!m_Objects[i].GetType().Equals(typeof(ItemInstance)))
-                    {
-                        continue;
-                    }
-
+                }
+                if(matches == tags.Length || (tags.Length < obj.TotalTags && matches > 0))
+                {
                     NeedAIData tempData = new NeedAIData();
                     tempData.intent = intentRef;
-                    tempData.target = m_Objects[i];
+                    tempData.target = obj;
                     data.Add(tempData);
-                }
-            }
-            else
-            {
-                for (int i = 0; i < m_Objects.Count; i++)
-                {
-                    if (entityRef.Vision[m_Objects[i].WorldPosition.x, m_Objects[i].WorldPosition.y])
-                    {
-                        if (m_Objects[i].BaseType.Equals(objectType))
-                        {
-                            NeedAIData tempData = new NeedAIData();
-                            tempData.intent = intentRef;
-                            tempData.target = m_Objects[i];
-                            data.Add(tempData);
-                        }
-                    }
                 }
             }
 
@@ -761,6 +744,7 @@ namespace JoyLib.Code.World
             return vision;
         }
 
+        /*
         protected bool[,] DiscoverTilesOLD(Vector2Int pointRef, Entity entityRef, bool[,] visionRef)
         {
             bool[,] vision = visionRef;
@@ -807,6 +791,7 @@ namespace JoyLib.Code.World
 
             return vision;
         }
+        */
 
         public void AddEntity(Entity entityRef)
         {
@@ -959,12 +944,20 @@ namespace JoyLib.Code.World
             }
         }
 
-        public Dictionary<Vector2Int, JoyObject> GetObjectsOfType(string type)
+        public Dictionary<Vector2Int, JoyObject> GetObjectsOfType(string[] tags)
         {
             Dictionary<Vector2Int, JoyObject> objects = new Dictionary<Vector2Int, JoyObject>();
             foreach (JoyObject joyObject in m_Objects)
             {
-                if (joyObject.BaseType.Equals(type))
+                int matches = 0;
+                foreach(string tag in tags)
+                {
+                    if(joyObject.HasTag(tag))
+                    {
+                        matches++;
+                    }
+                }
+                if(matches == tags.Length || (tags.Length < joyObject.TotalTags && matches > 0))
                 {
                     objects.Add(joyObject.WorldPosition, joyObject);
                 }
@@ -980,7 +973,7 @@ namespace JoyLib.Code.World
 
         public string GetLocalAreaInfo(Entity entityRef)
         {
-            if (m_Type == WorldType.Interior)
+            if (HasTag("interior"))
             {
                 int result = RNG.Roll(0, 100);
                 if (result <= 50)
@@ -989,9 +982,13 @@ namespace JoyLib.Code.World
                     numberOfLevels = WorldConversationDataHelper.GetNumberOfFloors(numberOfLevels, this);
 
                     if (numberOfLevels == 1)
+                    {
                         return "This place only has " + numberOfLevels + " floor to it.";
+                    }
                     else
+                    {
                         return "This place has at least " + numberOfLevels + " floors.";
+                    }
                 }
                 else if (result > 50)
                 {
@@ -1010,6 +1007,11 @@ namespace JoyLib.Code.World
             }
 
             return "I don't know much about this place, sorry.";
+        }
+
+        public bool HasTag(string tag)
+        {
+            return m_Tags.Contains(tag.ToLower());
         }
         
         public Dictionary<Vector2Int, WorldInstance> Areas
@@ -1102,14 +1104,6 @@ namespace JoyLib.Code.World
                 }
 
                 return m_Entities[m_PlayerIndex];
-            }
-        }
-
-        public WorldType WorldType
-        {
-            get
-            {
-                return m_Type;
             }
         }
         

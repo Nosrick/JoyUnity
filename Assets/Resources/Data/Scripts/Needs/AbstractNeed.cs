@@ -93,18 +93,29 @@ namespace JoyLib.Code.Entities.Needs
             return false;
         }
 
-        public virtual void Fulfill(int value)
+        public virtual int Fulfill(int value)
         {
-            m_Value = Math.Min(m_MaximumValue, m_Value + value);
-            m_Value = Math.Max(0, m_Value);
+            return ModifyValue(value);
         }
 
-        public virtual void Decay(int value)
+        public virtual int Decay(int value)
         {
-            m_Value = Math.Max(0, m_Value - value);
+            return ModifyValue(-value);
+        }
+
+        public int ModifyValue(int value)
+        {
+            m_Value = Math.Max(0, Math.Min(m_MaximumValue, m_Value + value));
+            return m_Value;
         }
 
         public abstract bool Interact(Entity user, JoyObject obj);
+
+        public int SetValue(int value)
+        {
+            m_Value = Math.Max(0, Math.Min(m_MaximumValue, value));
+            return m_Value;
+        }
 
         public string Name
         {

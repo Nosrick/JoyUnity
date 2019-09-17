@@ -1,4 +1,6 @@
 ﻿using Joy.Code.Managers;
+using JoyLib.Code;
+using JoyLib.Code.Collections;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Abilities;
@@ -7,14 +9,15 @@ using JoyLib.Code.Entities.Jobs;
 using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Sexes;
 using JoyLib.Code.Entities.Sexuality;
+using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
+using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.States;
 using JoyLib.Code.Unity.GUI;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -29,19 +32,34 @@ public class GameManager : MonoBehaviour
         m_StateManager = new StateManager();
 
         //REPLACE THIS WITH AN ACTUAL ENTITY CONSTRUCTOR
-        Dictionary<string, INeed> needs = new Dictionary<string, INeed>();
+        BasicValueContainer<INeed> needs = new BasicValueContainer<INeed>();
         INeed hunger = NeedHandler.GetRandomised("Hunger");
-        needs.Add(hunger.Name, hunger);
+        needs.Add(hunger);
 
         List<CultureType> cultures = CultureHandler.GetByCreatureType("Human");
         CultureType culture = cultures[0];
+        EntityTemplate human = EntityTemplateHandler.Get("human");
+        JobType jobType = culture.ChooseJob();
 
-        Entity thief = WorldState.EntityHandler.Create(EntityTemplateHandler.Get("Human"), needs, 1, JobHandler.Get("Thief"), culture.ChooseSex(), culture.ChooseSexuality(), Vector2Int.zero, ObjectIcons.GetSprites("Jobs", "Thief"), null, new List<CultureType>() { culture });
-        thief.PlayerControlled = true;
+        IGrowingValue level = new ConcreteGrowingValue("level", 1, 100, 0, GlobalConstants.DEFAULT_SUCCESS_THRESHOLD,
+                                                        new StandardRoller(), new NonUniqueDictionary<INeed, float>());
 
-        m_StateManager.ChangeState(new WorldCreationState(thief));
+        Entity player = WorldState.EntityHandler.Create(
+            human, 
+            needs, 
+            level, 
+            jobType, 
+            culture.ChooseSex(), 
+            culture.ChooseSexuality(), 
+            Vector2Int.zero, 
+            ObjectIconHandler.GetSprites(human.Tileset, jobType.Name), 
+            null, 
+            new List<CultureType>() { culture });
+        player.PlayerControlled = true;
 
-        GameObject.Find("NeedsText").GetComponent<GUINeedsAlert>().SetPlayer(thief);
+        m_StateManager.ChangeState(new WorldCreationState(player));
+
+        GameObject.Find("NeedsText").GetComponent<GUINeedsAlert>().SetPlayer(player);
     }
 
     private void InitialiseEverything()
@@ -49,15 +67,13 @@ public class GameManager : MonoBehaviour
         RNG.SetSeed(DateTime.Now.Millisecond);
         ActionLog.OpenLog();
 
-        EntityStatistic.LoadStatistics();
-
         if (ScriptingEngine.Initialise() == false)
         {
             Debug.Log("COULD NOT INITIALISE SCRIPTING ENGINE.");
             Destroy(this);
             return;
         }
-        ObjectIcons.Load();
+        ObjectIconHandler.Load();
         NeedHandler.Initialise();
         AbilityHandler.Initialise();
         JobHandler.Initialise();
@@ -65,8 +81,8 @@ public class GameManager : MonoBehaviour
         EntityBioSexHandler.Load(CultureHandler.Cultures);
         EntitySexualityHandler.Load(CultureHandler.Cultures);
         MaterialHandler.Initialise();
-        ItemHandler.LoadItems();
         EntityTemplateHandler.Initialise();
+        LiveItemHandler.Initialise();
     }
 	
 	// Update is called once per frame

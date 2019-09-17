@@ -1,13 +1,7 @@
 ﻿using JoyLib.Code.Cultures;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Relationships;
-using JoyLib.Code.Entities.Sexes;
-using JoyLib.Code.Scripting;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Xml;
 using UnityEngine;
 

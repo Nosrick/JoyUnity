@@ -1,6 +1,8 @@
-﻿namespace JoyLib.Code.Entities.Needs
+﻿using JoyLib.Code.Entities.Statistics;
+
+namespace JoyLib.Code.Entities.Needs
 {
-    public interface INeed
+    public interface INeed : IBasicValue
     {
         bool FindFulfilmentObject(Entity actor);
 
@@ -15,14 +17,9 @@
 
         bool Tick();
 
-        void Fulfill(int value);
+        int Fulfill(int value);
 
-        void Decay(int value);
-
-        string Name
-        {
-            get;
-        }
+        int Decay(int value);
 
         int Priority
         {
@@ -30,11 +27,6 @@
         }
 
         bool ContributingHappiness
-        {
-            get;
-        }
-
-        int Value
         {
             get;
         }

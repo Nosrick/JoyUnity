@@ -1,5 +1,6 @@
 ﻿using JoyLib.Code.Entities;
-using JoyLib.Code.Helpers;
+using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Rollers;
 using JoyLib.Code.World;
 using System.Collections.Generic;
 
@@ -7,6 +8,7 @@ namespace JoyLib.Code.Conversation.Subengines
 {
     public static class RumourMill
     {
+        /*
         private static List<string> s_Rumours;
 
         public static void GenerateRumours(WorldInstance worldRef)
@@ -130,5 +132,6 @@ namespace JoyLib.Code.Conversation.Subengines
             }
             return "I heard " + left.JoyName + " stole " + itemName + " from " + right.JoyName + ".";
         }
+        */
     }
 }

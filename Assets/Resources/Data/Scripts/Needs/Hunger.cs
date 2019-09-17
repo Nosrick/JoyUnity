@@ -1,5 +1,6 @@
 ﻿using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Helpers;
+using JoyLib.Code.Rollers;
 using System.Collections.Generic;
 
 namespace JoyLib.Code.Entities.Needs
@@ -26,7 +27,7 @@ namespace JoyLib.Code.Entities.Needs
 
         public override bool FindFulfilmentObject(Entity actor)
         {
-            List<ItemInstance> targets = actor.SearchBackpackForItemType("Food");
+            ItemInstance[] targets = actor.SearchBackpackForItemType(new string[] { "food" });
             int bestFood = 0;
             ItemInstance chosenFood = null;
 
@@ -49,7 +50,7 @@ namespace JoyLib.Code.Entities.Needs
             }
 
             //Search the floor
-            List<AI.NeedAIData> intents = actor.MyWorld.SearchForObjects(actor, "Food", AI.Intent.Interact);
+            List<AI.NeedAIData> intents = actor.MyWorld.SearchForObjects(actor, new string[] { "food" }, AI.Intent.Interact);
             foreach(AI.NeedAIData intent in intents)
             {
                 if(intent.target.GetType() == typeof(ItemInstance))

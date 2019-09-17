@@ -1,5 +1,7 @@
 ﻿using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Helpers;
+using JoyLib.Code.Rollers;
+using JoyLib.Code.States;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -36,7 +38,7 @@ namespace JoyLib.Code.World.Generators.Interiors
                     point = new Vector2Int(RNG.Roll(1, worldRef.Tiles.GetLength(0) - 1), RNG.Roll(1, worldRef.Tiles.GetLength(1) - 1));
                 }
 
-                ItemInstance item = ItemProvider.RandomItem(false);
+                ItemInstance item = WorldState.ItemHandler.CreateCompletelyRandomItem();
                 item.Move(point);
                 placedItems.Add(item);
             }

@@ -6,15 +6,11 @@ namespace JoyLib.Code.Helpers
     public static class TemporaryWeaponMaker
     {
         //Meant for making things like magic blasts that will never actually appear in the world.
-        public static ItemInstance Make(int number, int faces, string actionString, string skill)
+        public static ItemInstance Make(int size, string actionString, string skill, string materialName = "magic", params string[] tags)
         {
-            int division = 50;
-            int size = number * division;
-            float weight = (float)faces / number;
+            ItemMaterial material = new ItemMaterial(materialName, 1, 0, 0, 0.0f);
 
-            ItemMaterial material = new ItemMaterial("", 1, 0, weight);
-
-            BaseItemType tempItem = new BaseItemType("", "", "", "Temporary weapon", "Temporary weapon", "None", size, material, "Weapon", skill, actionString, null, 0, 0, 0);
+            BaseItemType tempItem = new BaseItemType(tags, "", "Temporary weapon", "Temporary weapon", "Temporary weapon", new string[] { "None" }, size, material, skill, actionString, 0, 0, "None");
 
             return new ItemInstance(tempItem, new Vector2Int(-1, -1), true);
         }

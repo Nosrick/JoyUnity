@@ -1,24 +1,89 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Job>
-  <Description>The quintessential thief. Average in most respects, but excels at stealth, pickpocketing and lockpicking.</Description>
-  
-  <Statistic Name="Strength" Growth="0.5" />
-  <Statistic Name="Agility" Growth="1" />
-  <Statistic Name="Endurance" Growth="0.6" />
-  <Statistic Name="Cognition" Growth="0.6" />
-  <Statistic Name="Perception" Growth="0.7" />
-  <Statistic Name="Focus" Growth="0.4" />
-  <Statistic Name="Personality" Growth="0.5" />
-  <Statistic Name="Suavity" Growth="0.5" />
-  <Statistic Name="Wit" Growth="0.5" />
+<Jobs>
+	<Job>
+		<Name>Thief</Name>
 
-  <Skill Name="Blades" Growth="55" />
-  <Skill Name="Evasion" Growth="60" />
-  <Skill Name="Light Armour" Growth="50" />
-  <Skill Name="Crossbows" Growth="50" />
-  <Skill Name="Mercantile" Growth="30" />
-  <Skill Name="Bluff" Growth="50" />
-  <Skill Name="Stealth" Growth="70" />
-  <Skill Name="Lockpicking" Growth="70" />
-  <Skill Name="Pickpocketing" Growth="70" />
-</Job>
+		<Description>The quintessential thief. Average in most respects, but excels at stealth, pickpocketing and lockpicking.</Description>
+
+		<Statistic>
+			<Name>Strength</Name>
+			<Growth>0.4</Growth>
+		</Statistic>
+		<Statistic>
+			<Name>Agility</Name>
+			<Growth>0.7</Growth>
+		</Statistic>
+		<Statistic>
+			<Name>Endurance</Name>
+			<Growth>0.4</Growth>
+		</Statistic>
+
+		<Statistic>
+			<Name>Cognition</Name>
+			<Growth>0.4</Growth>
+		</Statistic>
+		<Statistic>
+			<Name>Cunning</Name>
+			<Growth>0.5</Growth>
+		</Statistic>
+		<Statistic>
+			<Name>Focus</Name>
+			<Growth>0.4</Growth>
+		</Statistic>
+
+		<Statistic>
+			<Name>Personality</Name>
+			<Growth>0.5</Growth>
+		</Statistic>
+		<Statistic>
+			<Name>Suavity</Name>
+			<Growth>0.5</Growth>
+		</Statistic>
+		<Statistic>
+			<Name>Wit</Name>
+			<Growth>0.5</Growth>
+		</Statistic>
+
+		<Skill>
+			<Name>Light Blades</Name>
+			<Growth>30</Growth>
+		</Skill>
+		<Skill>
+			<Name>Evasion</Name>
+			<Growth>40</Growth>
+		</Skill>
+		<Skill>
+			<Name>Crossbows</Name>
+			<Growth>30</Growth>
+		</Skill>
+		<Skill>
+			<Name>Mercantile</Name>
+			<Growth>30</Growth>
+		</Skill>
+		<Skill>
+			<Name>Deception</Name>
+			<Growth>40</Growth>
+		</Skill>
+		<Skill>
+			<Name>Stealth</Name>
+			<Growth>50</Growth>
+		</Skill>
+		<Skill>
+			<Name>Lockpicking</Name>
+			<Growth>50</Growth>
+		</Skill>
+		<Skill>
+			<Name>Pickpocketing</Name>
+			<Growth>50</Growth>
+		</Skill>
+
+		<Ability>
+			<Name>LightArmour</Name>
+			<Level>1</Level>
+		</Ability>
+		<Ability>
+			<Name>Feint</Name>
+			<Level>1</Level>
+		</Ability>
+	</Job>
+</Jobs>

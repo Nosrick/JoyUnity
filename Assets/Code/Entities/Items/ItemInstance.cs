@@ -1,4 +1,5 @@
 ﻿using JoyLib.Code.Entities.Abilities;
+using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Managers;
 using JoyLib.Code.States;
@@ -18,16 +19,18 @@ namespace JoyLib.Code.Entities.Items
         protected List<long> m_Contents;
         protected BaseItemType m_Type;
 
-        protected Ability m_Ability;
+        protected IAbility m_Ability;
 
-        public ItemInstance(BaseItemType type, Vector2Int position, bool identified, Ability abilityRef = null) :
-            base(type.UnidentifiedName, type.GetHitPoints(), position, ObjectIcons.GetSprites(type.Category, type.UnidentifiedName), type.Category, false)
+        public ItemInstance(BaseItemType type, Vector2Int position, bool identified, IAbility abilityRef = null) :
+            base(type.UnidentifiedName, 
+                EntityDerivedValue.GetDefaultForItem(
+                    type.Material.Bonus,
+                    type.Weight),
+                position, type.SpriteSheet, ObjectIconHandler.GetSprites(type.SpriteSheet, type.UnidentifiedName), type.Tags)
         {            
             this.m_Type = type;
             this.Move(position);
 
-            this.m_HitPoints = type.GetHitPoints();
-            this.m_HitPointsRemaining = this.m_HitPoints;
             this.GUID = GUIDManager.AssignGUID();
             this.Identified = identified;
             //chosenIcon = RNG.Roll(0, m_Icons.Length - 1);
@@ -38,19 +41,8 @@ namespace JoyLib.Code.Entities.Items
         }
 
         public ItemInstance(ItemInstance item) :
-            base(item.ItemType.UnidentifiedName, item.ItemType.GetHitPoints(), item.WorldPosition, item.Icons, item.BaseType, item.IsAnimated, false, false)
+            this(item.ItemType, item.WorldPosition, item.Identified, item.m_Ability)
         {
-            this.m_Type = item.ItemType;
-            this.Move(item.WorldPosition);
-
-            this.m_HitPoints = item.ItemType.GetHitPoints();
-            this.m_HitPointsRemaining = this.m_HitPoints;
-            this.GUID = GUIDManager.AssignGUID();
-            this.Identified = item.Identified;
-
-            this.m_Contents = item.m_Contents;
-
-            m_Ability = item.m_Ability;
         }
 
         /*
@@ -92,7 +84,7 @@ namespace JoyLib.Code.Entities.Items
             //object[] arguments = { new MoonEntity(user), new MoonItem(this) };
             //ScriptingEngine.RunScript(ItemType.InteractionFileContents, ItemType.InteractionFileName, "Interact", arguments);
 
-            m_Ability.OnInteract(user);
+            m_Ability.OnInteract(user, this);
 
             if(!Identified)
             {
@@ -167,7 +159,7 @@ namespace JoyLib.Code.Entities.Items
         {
             get
             {
-                return (int)(m_Type.Material.bonus * (float)(HitPointsRemaining / HitPoints));
+                return (int)(m_Type.Material.Bonus * (float)(HitPointsRemaining / HitPoints));
             }
         }
 
@@ -202,13 +194,14 @@ namespace JoyLib.Code.Entities.Items
         {
             get
             {
-                if (this.ItemType.Slot == "None")
+                if (this.ItemType.Slots.Contains("None"))
                 {
                     return "This item can be thrown.";
                 }
                 else
                 {
-                    return "This is equipped to the " + this.ItemType.Slot + " slot.";
+                    ;
+                    return "This is equipped to " + string.Join(", ", this.ItemType.Slots);
                 }
             }
         }
@@ -331,6 +324,14 @@ namespace JoyLib.Code.Entities.Items
             get
             {
                 return m_Type;
+            }
+        }
+
+        public int Value
+        {
+            get
+            {
+                return (int)(m_Type.Value * m_Type.Material.ValueMod);
             }
         }
     }

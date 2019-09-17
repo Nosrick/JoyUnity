@@ -82,7 +82,6 @@ namespace JoyLib.Code.States
             base.Start();
             m_ActiveWorld.Player.UpdateMe();
             m_GameplayFlags = GameplayFlags.Moving;
-            RumourMill.GenerateRumours(m_ActiveWorld);
 
             SetEntityWorld(overworld);
 
@@ -134,7 +133,6 @@ namespace JoyLib.Code.States
             player.UpdateMe();
 
             m_GameplayFlags = GameplayFlags.Moving;
-            RumourMill.GenerateRumours(m_ActiveWorld);
 
             QuestTracker.PerformExploration(player, newWorld);
             Tick();
@@ -411,7 +409,8 @@ namespace JoyLib.Code.States
                     {
                         if (tempEntity.GUID != player.GUID)
                         {
-                            CombatEngine.SwingWeapon(player, tempEntity);
+                            //TODO: REDO COMBAT ENGINE
+                            //CombatEngine.SwingWeapon(player, tempEntity);
                             List<IRelationship> relationships = EntityRelationshipHandler.Get(new long[] { tempEntity.GUID, player.GUID });
                             foreach(IRelationship relationship in relationships)
                             {
@@ -451,7 +450,7 @@ namespace JoyLib.Code.States
             }
             else if (m_GameplayFlags == GameplayFlags.Targeting)
             {
-                if (player.TargetingAbility.targetType == AbilityTarget.Adjacent)
+                if (player.TargetingAbility.TargetType == AbilityTarget.Adjacent)
                 {
                     if (AdjacencyHelper.IsAdjacent(player.WorldPosition, player.TargetPoint))
                     {
@@ -464,7 +463,7 @@ namespace JoyLib.Code.States
                         }
                     }
                 }
-                else if (player.TargetingAbility.targetType == AbilityTarget.Ranged)
+                else if (player.TargetingAbility.TargetType == AbilityTarget.Ranged)
                 {
                     Entity tempEntity = m_ActiveWorld.GetEntity(player.TargetPoint);
                     if(tempEntity != null && Input.GetKeyDown(KeyCode.Return))
@@ -483,7 +482,7 @@ namespace JoyLib.Code.States
             m_Camera.transform.position = new Vector3(player.WorldPosition.x, player.WorldPosition.y, m_Camera.transform.position.z);
         }
 
-        public static void HandBack(Ability abilityRef)
+        public static void HandBack(AbstractAbility abilityRef)
         {
             /*
             s_GameplayFlags = GameplayFlags.Targeting;
