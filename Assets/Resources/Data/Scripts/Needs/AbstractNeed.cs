@@ -60,26 +60,6 @@ namespace JoyLib.Code.Entities.Needs
 
         public abstract INeed Randomise();
 
-        public virtual bool Initialise(string nameRef, int decayRef, int decayCounterRef, bool doesDecayRef, int priorityRef, int happinessThresholdRef,
-            int valueRef, int maxValueRef, int averageForDayRef = 0, int averageForWeekRef = 0)
-        {
-            m_Name = nameRef;
-            m_Decay = decayRef;
-            m_DecayCounter = decayCounterRef;
-
-            m_Priority = priorityRef;
-
-            m_HappinessThreshold = happinessThresholdRef;
-
-            m_Value = valueRef;
-            m_MaximumValue = maxValueRef;
-
-            m_AverageForDay = averageForDayRef;
-            m_AverageForWeek = averageForWeekRef;
-
-            return true;
-        }
-
         //This will be called once per in-game minute
         public virtual bool Tick()
         {
@@ -150,7 +130,7 @@ namespace JoyLib.Code.Entities.Needs
         }
 
         public int Value
-        { 
+        {
             get
             {
                 return m_Value;
