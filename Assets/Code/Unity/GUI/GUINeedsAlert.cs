@@ -43,11 +43,11 @@ namespace JoyLib.Code.Unity.GUI
                 return;
             }
 
-            foreach(EntityNeed need in m_Player.Needs.Values)
+            foreach(INeed need in m_Player.Needs.Collection)
             {
-                if(!need.contributingHappiness)
+                if(!need.ContributingHappiness)
                 {
-                    m_Text.text += "<color=yellow>" + need.name + "</color>\r\n";
+                    m_Text.text += "<color=yellow>" + need.Name + "</color>\r\n";
                 }
             }
         }

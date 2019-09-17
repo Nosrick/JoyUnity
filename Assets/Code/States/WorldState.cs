@@ -3,6 +3,7 @@ using JoyLib.Code.Conversation.Subengines;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.Items;
+using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.IO;
 using JoyLib.Code.Physics;
@@ -12,6 +13,7 @@ using JoyLib.Code.Unity.GUI;
 using JoyLib.Code.Unity.GUI.Inventory;
 using JoyLib.Code.World;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace JoyLib.Code.States
@@ -80,7 +82,6 @@ namespace JoyLib.Code.States
             base.Start();
             m_ActiveWorld.Player.UpdateMe();
             m_GameplayFlags = GameplayFlags.Moving;
-            RumourMill.GenerateRumours(m_ActiveWorld);
 
             SetEntityWorld(overworld);
 
@@ -132,7 +133,6 @@ namespace JoyLib.Code.States
             player.UpdateMe();
 
             m_GameplayFlags = GameplayFlags.Moving;
-            RumourMill.GenerateRumours(m_ActiveWorld);
 
             QuestTracker.PerformExploration(player, newWorld);
             Tick();
@@ -409,8 +409,14 @@ namespace JoyLib.Code.States
                     {
                         if (tempEntity.GUID != player.GUID)
                         {
-                            CombatEngine.SwingWeapon(player, tempEntity);
-                            tempEntity.InfluenceMe(player.GUID, -50);
+                            //TODO: REDO COMBAT ENGINE
+                            //CombatEngine.SwingWeapon(player, tempEntity);
+                            List<IRelationship> relationships = EntityRelationshipHandler.Get(new long[] { tempEntity.GUID, player.GUID });
+                            foreach(IRelationship relationship in relationships)
+                            {
+                                relationship.ModifyValueOfParticipant(player.GUID, tempEntity.GUID, -50);
+                            }
+
                             if (!tempEntity.Alive)
                             {
                                 m_ActiveWorld.RemoveEntity(newPlayerPoint);
@@ -444,25 +450,25 @@ namespace JoyLib.Code.States
             }
             else if (m_GameplayFlags == GameplayFlags.Targeting)
             {
-                if (player.TargetingAbility.targetType == AbilityTarget.Adjacent)
+                if (player.TargetingAbility.TargetType == AbilityTarget.Adjacent)
                 {
                     if (AdjacencyHelper.IsAdjacent(player.WorldPosition, player.TargetPoint))
                     {
                         Entity tempEntity = m_ActiveWorld.GetEntity(player.TargetPoint);
                         if (tempEntity != null && Input.GetKeyDown(KeyCode.Return))
                         {
-                            player.TargetingAbility.Use(player, tempEntity);
+                            player.TargetingAbility.OnUse(player, tempEntity);
                             Tick();
                             m_GameplayFlags = GameplayFlags.Moving;
                         }
                     }
                 }
-                else if (player.TargetingAbility.targetType == AbilityTarget.Ranged)
+                else if (player.TargetingAbility.TargetType == AbilityTarget.Ranged)
                 {
                     Entity tempEntity = m_ActiveWorld.GetEntity(player.TargetPoint);
                     if(tempEntity != null && Input.GetKeyDown(KeyCode.Return))
                     {
-                        player.TargetingAbility.Use(player, tempEntity);
+                        player.TargetingAbility.OnUse(player, tempEntity);
                         Tick();
                         m_GameplayFlags = GameplayFlags.Moving;
                     }
@@ -476,7 +482,7 @@ namespace JoyLib.Code.States
             m_Camera.transform.position = new Vector3(player.WorldPosition.x, player.WorldPosition.y, m_Camera.transform.position.z);
         }
 
-        public static void HandBack(Ability abilityRef)
+        public static void HandBack(AbstractAbility abilityRef)
         {
             /*
             s_GameplayFlags = GameplayFlags.Targeting;

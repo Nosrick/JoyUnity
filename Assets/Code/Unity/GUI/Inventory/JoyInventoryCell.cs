@@ -12,10 +12,9 @@ namespace JoyLib.Code.Unity.GUI.Inventory
 
         public bool SetItem(ItemInstance item)
         {
-            if(item.ItemType.Slot == m_SlotName)
+            if(item.ItemType.HasSlot(m_SlotName))
             {
                 m_InventoryItem = item;
-                m_SlotName = m_InventoryItem.ItemType.Slot;
                 GetComponent<SpriteRenderer>().sprite = m_InventoryItem.Icon;
                 return true;
             }

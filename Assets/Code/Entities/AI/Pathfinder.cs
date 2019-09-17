@@ -1,4 +1,4 @@
-﻿using JoyLib.Code.States;
+using JoyLib.Code.States;
 using JoyLib.Code.World;
 using System;
 using System.Collections;

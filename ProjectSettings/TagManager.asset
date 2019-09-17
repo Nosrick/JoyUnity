@@ -13,7 +13,7 @@ TagManager:
   - UI
   - 
   - 
-  - UI Text
+  - 
   - 
   - 
   - 
@@ -42,20 +42,17 @@ TagManager:
     uniqueID: 0
     locked: 0
   - name: Terrain
-    uniqueID: 2322335089
-    locked: 0
-  - name: Objects
-    uniqueID: 180740759
+    uniqueID: 1065435959
     locked: 0
   - name: Walls
-    uniqueID: 368102917
+    uniqueID: 1481537887
+    locked: 0
+  - name: Objects
+    uniqueID: 591788177
     locked: 0
   - name: Entities
-    uniqueID: 27417553
+    uniqueID: 3651814061
     locked: 0
   - name: Fog of War
-    uniqueID: 3800769887
-    locked: 0
-  - name: GUI
-    uniqueID: 2647377889
+    uniqueID: 3821477495
     locked: 0

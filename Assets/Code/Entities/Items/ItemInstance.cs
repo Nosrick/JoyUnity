@@ -1,6 +1,7 @@
-﻿using JoyLib.Code.Graphics;
+﻿using JoyLib.Code.Entities.Abilities;
+using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Graphics;
 using JoyLib.Code.Managers;
-using JoyLib.Code.Scripting;
 using JoyLib.Code.States;
 using System;
 using System.Collections.Generic;
@@ -18,39 +19,30 @@ namespace JoyLib.Code.Entities.Items
         protected List<long> m_Contents;
         protected BaseItemType m_Type;
 
-        protected string m_InteractionFile;
+        protected IAbility m_Ability;
 
-        public ItemInstance(BaseItemType type, Vector2Int position, bool identified, string interactionFile = null) :
-            base(type.UnidentifiedName, type.GetHitPoints(), position, ObjectIcons.GetSprites(type.Category, type.UnidentifiedName), type.Category, false)
+        public ItemInstance(BaseItemType type, Vector2Int position, bool identified, IAbility abilityRef = null) :
+            base(type.UnidentifiedName, 
+                EntityDerivedValue.GetDefaultForItem(
+                    type.Material.Bonus,
+                    type.Weight),
+                position, type.SpriteSheet, ObjectIconHandler.GetSprites(type.SpriteSheet, type.UnidentifiedName), type.Tags)
         {            
             this.m_Type = type;
             this.Move(position);
 
-            this.m_HitPoints = type.GetHitPoints();
-            this.m_HitPointsRemaining = this.m_HitPoints;
             this.GUID = GUIDManager.AssignGUID();
             this.Identified = identified;
             //chosenIcon = RNG.Roll(0, m_Icons.Length - 1);
 
             this.m_Contents = new List<long>();
 
-            m_InteractionFile = interactionFile;
+            m_Ability = abilityRef;
         }
 
         public ItemInstance(ItemInstance item) :
-            base(item.ItemType.UnidentifiedName, item.ItemType.GetHitPoints(), item.WorldPosition, item.Icons, item.BaseType, item.IsAnimated, false, false)
+            this(item.ItemType, item.WorldPosition, item.Identified, item.m_Ability)
         {
-            this.m_Type = item.ItemType;
-            this.Move(item.WorldPosition);
-
-            this.m_HitPoints = item.ItemType.GetHitPoints();
-            this.m_HitPointsRemaining = this.m_HitPoints;
-            this.GUID = GUIDManager.AssignGUID();
-            this.Identified = item.Identified;
-
-            this.m_Contents = item.m_Contents;
-
-            m_InteractionFile = item.m_InteractionFile;
         }
 
         /*
@@ -89,8 +81,10 @@ namespace JoyLib.Code.Entities.Items
         {
             //PythonEngine.ExecuteClassFunction(m_InteractionFile, m_ClassName, "Interact", new dynamic[] { user, this });
 
-            object[] arguments = { new MoonEntity(user), new MoonItem(this) };
-            ScriptingEngine.RunScript(ItemType.InteractionFileContents, ItemType.InteractionFileName, "Interact", arguments);
+            //object[] arguments = { new MoonEntity(user), new MoonItem(this) };
+            //ScriptingEngine.RunScript(ItemType.InteractionFileContents, ItemType.InteractionFileName, "Interact", arguments);
+
+            m_Ability.OnInteract(user, this);
 
             if(!Identified)
             {
@@ -98,7 +92,7 @@ namespace JoyLib.Code.Entities.Items
                 user.AddIdentifiedItem(DisplayName);
             }
             //Identify any identical items the user is carrying
-            for(int i = 0; i < user.Backpack.Count; i++)
+            for(int i = 0; i < user.Backpack.Length; i++)
             {
                 if(user.Backpack[i].DisplayName.Equals(DisplayName) && !user.Backpack[i].Identified)
                 {
@@ -165,7 +159,7 @@ namespace JoyLib.Code.Entities.Items
         {
             get
             {
-                return (int)(m_Type.Material.bonus * (float)(HitPointsRemaining / HitPoints));
+                return (int)(m_Type.Material.Bonus * (float)(HitPointsRemaining / HitPoints));
             }
         }
 
@@ -200,13 +194,14 @@ namespace JoyLib.Code.Entities.Items
         {
             get
             {
-                if (this.ItemType.Slot == "None")
+                if (this.ItemType.Slots.Contains("None"))
                 {
                     return "This item can be thrown.";
                 }
                 else
                 {
-                    return "This is equipped to the " + this.ItemType.Slot + " slot.";
+                    ;
+                    return "This is equipped to " + string.Join(", ", this.ItemType.Slots);
                 }
             }
         }
@@ -216,9 +211,21 @@ namespace JoyLib.Code.Entities.Items
             get
             {
                 if (Identified)
+                {
                     return this.JoyName;
+                }
                 else
+                {
                     return m_Type.UnidentifiedName;
+                }
+            }
+        }
+
+        public string IdentifiedName
+        {
+            get
+            {
+                return this.JoyName;
             }
         }
 
@@ -227,9 +234,13 @@ namespace JoyLib.Code.Entities.Items
             get
             {
                 if (Identified)
+                {
                     return m_Type.Description;
+                }
                 else
+                {
                     return m_Type.UnidentifiedDescription;
+                }
             }
         }
 
@@ -313,6 +324,14 @@ namespace JoyLib.Code.Entities.Items
             get
             {
                 return m_Type;
+            }
+        }
+
+        public int Value
+        {
+            get
+            {
+                return (int)(m_Type.Value * m_Type.Material.ValueMod);
             }
         }
     }

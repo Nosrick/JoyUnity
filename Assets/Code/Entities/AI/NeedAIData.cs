@@ -9,6 +9,6 @@ namespace JoyLib.Code.Entities.AI
         public bool searching;
         public Intent intent;
         public bool idle;
-        public NeedIndex need;
+        public string need;
     }
 }

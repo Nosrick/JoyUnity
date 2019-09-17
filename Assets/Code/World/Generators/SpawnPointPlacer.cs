@@ -1,5 +1,6 @@
 ﻿using JoyLib.Code.Entities.AI;
 using JoyLib.Code.Helpers;
+using JoyLib.Code.Rollers;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -74,7 +75,7 @@ namespace JoyLib.Code.World.Generators
 
         private bool CanReachPoint(Vector2Int fromRef, Vector2Int toRef, WorldInstance worldRef)
         {
-            Dictionary<Vector2Int, JoyObject> walls = worldRef.GetObjectsOfType("Wall");
+            Dictionary<Vector2Int, JoyObject> walls = worldRef.GetObjectsOfType(new string[] { "wall" });
             bool[,] blocked = new bool[worldRef.Tiles.GetLength(0), worldRef.Tiles.GetLength(1)];
 
             for (int i = 0; i < blocked.GetLength(0); i++)

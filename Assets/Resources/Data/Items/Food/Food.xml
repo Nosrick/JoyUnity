@@ -1,14 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Items>
-  <Category>Food</Category>
-  
-  <IdentifiedItem>
-    <Name>Apple</Name>
-    <Description>Said to keep the doctor away. Juicy and fresh!</Description>
-    <Value>5</Value>
-    <Effect></Effect>
-    <SpawnWeight>30</SpawnWeight>
-    <Materials>Food</Materials>
-    <Size>36</Size>
-  </IdentifiedItem>
+	<Category>Food</Category>
+
+	<IdentifiedItem>
+		<Name>Apple</Name>
+		<Description>Said to keep the doctor away. Juicy and fresh!</Description>
+		<Value>5</Value>
+		<Effect></Effect>
+		<SpawnWeight>30</SpawnWeight>
+		<Material>Food</Material>
+		<Size>36</Size>
+		<Tag>Food</Tag>
+		<Tag>Fruit</Tag>
+		<Tileset>Food</Tileset>
+	</IdentifiedItem>
+	
+	<Filename>Food</Filename>
+	<Tileset>Food</Tileset>
+	
+	<Icon>
+		<Name>Apple</Name>
+		<X>0</X>
+		<Y>3</Y>
+		<Data>Apple</Data>
+	</Icon>
 </Items>

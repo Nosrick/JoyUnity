@@ -1,12 +1,58 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Items>
-  <Category>Currency</Category>
-  <IdentifiedItem>
-    <Name>Copper coin</Name>
-    <Description>A coin made from copper, from a local mint.</Description>
-    <Value>1</Value>
-    <Materials>Copper</Materials>
-    <Size>1</Size>
-    <SpawnWeight>50</SpawnWeight>
-  </IdentifiedItem>
+	<IdentifiedItem>
+		<Name>Copper coin</Name>
+		<Description>A coin made from copper, from a local mint.</Description>
+		<Value>1</Value>
+		<Material>Copper</Material>
+		<Size>1</Size>
+		<SpawnWeight>50</SpawnWeight>
+		<Tag>Currency</Tag>
+		<Tileset>Currency</Tileset>
+	</IdentifiedItem>
+	
+	<IdentifiedItem>
+		<Name>Silver coin</Name>
+		<Description>A coin made from shiny silver, from a local mint.</Description>
+		<Value>10</Value>
+		<Material>Silver</Material>
+		<Size>1</Size>
+		<SpawnWeight>30</SpawnWeight>
+		<Tag>Currency</Tag>
+		<Tileset>Currency</Tileset>
+	</IdentifiedItem>
+	
+	<IdentifiedItem>
+		<Name>Gold coin</Name>
+		<Description>A valuable gold coin, from a local mint.</Description>
+		<Value>100</Value>
+		<Material>Gold</Material>
+		<Size>1</Size>
+		<SpawnWeight>5</SpawnWeight>
+		<Tag>Currency</Tag>
+		<Tileset>Currency</Tileset>
+	</IdentifiedItem>
+	
+	<Filename>Money</Filename>
+	<Tileset>Currency</Tileset>
+	<Icon>
+		<Name>Copper Coin</Name>
+		<X>3</X>
+		<Y>5</Y>
+		<Data>Default</Data>
+	</Icon>
+	
+	<Icon>
+		<Name>Silver Coin</Name>
+		<X>4</X>
+		<Y>5</Y>
+		<Data>Default</Data>
+	</Icon>
+	
+	<Icon>
+		<Name>Gold Coin</Name>
+		<X>2</X>
+		<Y>4</Y>
+		<Data>Default</Data>
+	</Icon>
 </Items>

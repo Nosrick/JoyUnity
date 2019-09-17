@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace JoyLib.Code.Unity.GUI
@@ -24,11 +25,11 @@ namespace JoyLib.Code.Unity.GUI
         {
             foreach(Tuple<GameObject, bool> gui in m_GUIs)
             {
-                if(gui.First.name == name)
+                if(gui.Item1.name == name)
                 {
                     CloseGUI();
                     m_ActiveGUI = gui;
-                    m_ActiveGUI.First.SetActive(true);
+                    m_ActiveGUI.Item1.SetActive(true);
                     break;
                 }
             }
@@ -38,14 +39,14 @@ namespace JoyLib.Code.Unity.GUI
         {
             if(m_ActiveGUI != null)
             {
-                m_ActiveGUI.First.SetActive(false);
+                m_ActiveGUI.Item1.SetActive(false);
                 m_ActiveGUI = null;
             }
         }
 
         public bool RemovesControl()
         {
-            return m_ActiveGUI.Second;
+            return m_ActiveGUI.Item2;
         }
     }
 }

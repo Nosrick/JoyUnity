@@ -1,23 +1,19 @@
 ﻿using JoyLib.Code.Conversation.Conversations;
-using JoyLib.Code.Conversation.Subengines;
 using JoyLib.Code.Entities;
-using JoyLib.Code.Helpers;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Xml;
 
 namespace JoyLib.Code.Conversation
 {
     public static class ConversationEngine
     {
-        private static List<TopicData> s_Topics;
-        private static List<TopicData> s_CurrentTopics;
-        private static List<TopicData> s_PreviousTopics;
-        private static Dictionary<int, BaseConversation> s_KeywordScripts;
+        private static List<ITopic> s_Topics;
+        private static List<ITopic> s_CurrentTopics;
+        private static List<ITopic> s_PreviousTopics;
         
-        public static List<TopicData> Converse(Entity instigator, Entity listener, int selectedItem = 0)
+        //REDO THIS WHOLE DAMN THING
+        public static List<ITopic> Converse(Entity instigator, Entity listener, int selectedItem = 0)
         {
+            /*
             instigator.FulfillNeed(NeedIndex.Friendship, listener.Statistics[StatisticIndex.Personality].Value, 0);
             listener.FulfillNeed(NeedIndex.Friendship, instigator.Statistics[StatisticIndex.Personality].Value, 0);
             instigator.InfluenceMe(listener.GUID, listener.Statistics[StatisticIndex.Personality].Value);
@@ -70,15 +66,17 @@ namespace JoyLib.Code.Conversation
                 s_PreviousTopics = s_CurrentTopics;
                 return s_CurrentTopics;
             }
+            */
+            return new List<ITopic>();
         }
 
-        private static List<TopicData> TrimEmpty(List<TopicData> topics)
+        private static List<ITopic> TrimEmpty(List<ITopic> topics)
         {
-            List<TopicData> newTopics = new List<TopicData>(topics.Count);
+            List<ITopic> newTopics = new List<ITopic>(topics.Count);
 
             for(int i = 0; i < topics.Count; i++)
             {
-                if(topics[i].value != "")
+                if(string.IsNullOrWhiteSpace(topics[i].Words) == false)
                 {
                     newTopics.Add(topics[i]);
                 }
@@ -87,11 +85,11 @@ namespace JoyLib.Code.Conversation
             return newTopics;
         }
 
-        public static List<TopicData> Topics
+        public static List<ITopic> Topics
         {
             get
             {
-                return new List<TopicData>(s_CurrentTopics);
+                return new List<ITopic>(s_CurrentTopics);
             }
         }
     }

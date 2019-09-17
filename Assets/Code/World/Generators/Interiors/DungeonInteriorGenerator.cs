@@ -1,4 +1,5 @@
-﻿using JoyLib.Code.Graphics;
+﻿using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Graphics;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -42,6 +43,7 @@ namespace JoyLib.Code.World.Generators.Interiors
         public List<JoyObject> GenerateWalls(WorldTile[,] worldTiles)
         {
             List<JoyObject> walls = new List<JoyObject>();
+            Sprite[] sprites = ObjectIconHandler.GetSprites("Walls", "Surround");
 
             for (int i = 0; i < m_UntreatedTiles.GetLength(0); i++)
             {
@@ -51,7 +53,7 @@ namespace JoyLib.Code.World.Generators.Interiors
                         m_UntreatedTiles[i, j] == GeneratorTileType.Wall ||
                         m_UntreatedTiles[i, j] == GeneratorTileType.None)
                     {
-                        walls.Add(new JoyObject("Surround", 1, new Vector2Int(i, j), ObjectIcons.GetSprites("Walls", "Surround"), "Wall", false, true));
+                        walls.Add(new JoyObject("Surround", EntityDerivedValue.GetDefaultForItem(1, 1), new Vector2Int(i, j), "Walls", sprites, new string[] { "wall" }));
                     }
                 }
             }

@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-
-namespace JoyLib.Code.Helpers
+﻿namespace JoyLib.Code.Helpers
 {
-    public static class Algorithms
+    public static class AlgorithmsElf
     {
         public static void Swap<T>(ref T left, ref T right)
         {
@@ -10,6 +8,11 @@ namespace JoyLib.Code.Helpers
             temp = left;
             left = right;
             right = temp;
+        }
+
+        public static int Difference(int left, int right)
+        {
+            return left - right;
         }
     }
 }

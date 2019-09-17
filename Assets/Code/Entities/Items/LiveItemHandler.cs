@@ -1,74 +1,183 @@
-﻿using JoyLib.Code.Helpers;
-using JoyLib.Code.Loaders.Items;
+﻿using JoyLib.Code.Entities.Abilities;
+using JoyLib.Code.Graphics;
+using JoyLib.Code.Helpers;
+using JoyLib.Code.Rollers;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Xml;
+using System.Xml.Linq;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities.Items
 {
     public class LiveItemHandler
     {
-        private Dictionary<long, ItemInstance> m_LiveItems = new Dictionary<long, ItemInstance>();
+        private Dictionary<long, ItemInstance> m_LiveItems;
 
-        private static Dictionary<string, List<BaseItemType>> s_ItemDatabase = new Dictionary<string, List<BaseItemType>>();
+        private static List<BaseItemType> s_ItemDatabase;
 
-        public static void LoadItems()
+        public LiveItemHandler()
         {
-            List<BaseItemType> items = ItemLoader.LoadItems();
-            while (items.Count > 0)
-            {
-                List<BaseItemType> types = items.Where(x => x.Category == items[0].Category).ToList();
-                string baseType = types[0].Category;
-                s_ItemDatabase.Add(baseType, types);
-
-                List<BaseItemType> itemsToRemove = new List<BaseItemType>();
-                for (int i = 0; i < items.Count; i++)
-                {
-                    if (items[i].Category == baseType)
-                    {
-                        itemsToRemove.Add(items[i]);
-                    }
-                }
-
-                for (int i = 0; i < itemsToRemove.Count; i++)
-                {
-                    items.Remove(itemsToRemove[i]);
-                }
-            }
+            m_LiveItems = new Dictionary<long, ItemInstance>();
         }
 
-        public ItemInstance CreateRandomItemOfType(string type, bool identified = false)
+        public static bool Initialise()
         {
-            if(s_ItemDatabase.ContainsKey(type))
+            if(s_ItemDatabase != null)
             {
-                int result = RNG.Roll(0, s_ItemDatabase[type].Count - 1);
-                List<BaseItemType> items = s_ItemDatabase[type];
-                BaseItemType itemType = items[result];
+                return true;
+            }
 
-                ItemInstance newItem = new ItemInstance(itemType, new Vector2Int(-1, -1), identified);
+            s_ItemDatabase = LoadItems();
+            return true;
+        }
 
-                m_LiveItems.Add(newItem.GUID, newItem);
-                return newItem;
+        public static List<BaseItemType> LoadItems()
+        {
+            List<BaseItemType> items = new List<BaseItemType>();
+            
+            string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Items", "*.xml", SearchOption.AllDirectories);
+
+            foreach(string file in files)
+            { 
+                XElement doc = XElement.Load(file);
+
+                List<IdentifiedItem> identifiedItems = (from item in doc.Elements("IdentifiedItem")
+                                                        select new IdentifiedItem()
+                                                        {
+                                                            name = item.Element("Name").GetAs<string>(),
+                                                            description = item.Element("Description").GetAs<string>(),
+                                                            value = item.Element("Value").GetAs<int>(),
+                                                            size = item.Element("Size").GetAs<int>(),
+                                                            spriteSheet = item.Element("Tileset").GetAs<string>(),
+                                                            skill = item.Element("Skill").DefaultIfEmpty("None"),
+                                                            slots = item.Elements("Slot").Select(slot => slot.GetAs<string>().ToLower()).DefaultIfEmpty("none").ToArray(),
+                                                            materials = item.Elements("Material").Select(material => material.GetAs<string>()).ToArray(),
+                                                            tags = item.Elements("Tag").Select(tag => tag.GetAs<string>().ToLower()).ToArray(),
+                                                            weighting = item.Element("SpawnWeighting").GetAs<int>(),
+                                                            abilities = item.Elements("Ability").Select(ability => AbilityHandler.GetAbility(ability.GetAs<string>())).ToArray(),
+                                                            lightLevel = item.Element("LightLevel").GetAs<int>()
+
+                                                        }).ToList();
+
+                List<UnidentifiedItem> unidentifiedItems = (from item in doc.Elements("UnidentifiedItem")
+                                                            select new UnidentifiedItem()
+                                                            {
+                                                                name = item.Element("Name").GetAs<string>(),
+                                                                description = item.Element("Description").GetAs<string>()
+                                                            }).ToList();
+
+                List<IconData> iconData = (from item in doc.Elements("Icon")
+                                           select new IconData()
+                                           {
+                                               name = item.Element("Name").GetAs<string>(),
+                                               data = item.Element("Data").GetAs<string>(),
+                                               frames = item.Element("Frames").GetAs<int>(),
+                                               position = new Vector2Int(item.Element("X").GetAs<int>(), item.Element("Y").GetAs<int>())
+                                           }).ToList();
+
+                string fileName = doc.Element("Filename").GetAs<string>();
+                string tileSet = doc.Element("Tileset").GetAs<string>();
+                string actionWord = doc.Element("ActionWord").DefaultIfEmpty("strikes");
+
+                ObjectIconHandler.AddIcons(fileName, tileSet, iconData.ToArray());
+
+                for (int j = 0; j < identifiedItems.Count; j++)
+                {
+                    UnidentifiedItem chosenDescription = new UnidentifiedItem(identifiedItems[j].name, identifiedItems[j].description);
+
+                    if (unidentifiedItems.Count != 0)
+                    {
+                        int index = RNG.Roll(0, unidentifiedItems.Count - 1);
+                        chosenDescription = unidentifiedItems[index];
+                        unidentifiedItems.RemoveAt(index);
+                    }
+
+                    for (int k = 0; k < identifiedItems[j].materials.Length; k++)
+                    {
+
+                        items.Add(new BaseItemType(identifiedItems[j].tags, identifiedItems[j].description, chosenDescription.description, chosenDescription.name,
+                            identifiedItems[j].name, identifiedItems[j].slots, identifiedItems[j].size,
+                            MaterialHandler.GetMaterial(identifiedItems[j].materials[k]), identifiedItems[j].skill, actionWord,
+                            identifiedItems[j].value, identifiedItems[j].weighting, identifiedItems[j].spriteSheet, identifiedItems[j].lightLevel));
+                    }
+                }
+            }
+
+            return items;
+        }
+
+        protected BaseItemType[] FindItemsOfType(string[] tags)
+        {
+            List<BaseItemType> matchingTypes = new List<BaseItemType>();
+            foreach (BaseItemType itemType in s_ItemDatabase)
+            {
+                int matches = 0;
+                for (int i = 0; i < tags.Length; i++)
+                {
+                    if (itemType.Tags.Contains(tags[i]))
+                    {
+                        matches++;
+                    }
+                }
+                if (matches == tags.Length || (tags.Length < itemType.Tags.Length && matches > 0))
+                {
+                    matchingTypes.Add(itemType);
+                }
+            }
+            return matchingTypes.ToArray();
+        }
+
+        public ItemInstance CreateRandomItemOfType(string[] tags, bool identified = false)
+        {
+            BaseItemType[] matchingTypes = FindItemsOfType(tags);
+            if(matchingTypes.Length > 0)
+            {
+                int result = RNG.Roll(0, matchingTypes.Length - 1);
+                BaseItemType itemType = matchingTypes[result];
+
+                ItemInstance itemInstance = new ItemInstance(itemType, new Vector2Int(-1, -1), identified);
+                m_LiveItems.Add(itemInstance.GUID, itemInstance);
+
+                return itemInstance;
             }
 
             return null;
         }
 
-        public ItemInstance CreateSpecificType(string baseType, string specificType, bool identified = false)
+        public ItemInstance CreateSpecificType(string name, string[] tags, bool identified = false)
         {
-            if(s_ItemDatabase.ContainsKey(baseType))
+            string lowerName = name.ToLowerInvariant();
+            BaseItemType[] matchingTypes = FindItemsOfType(tags);
+            List<BaseItemType> secondRound = new List<BaseItemType>();
+            foreach(BaseItemType itemType in matchingTypes)
             {
-                foreach(BaseItemType type in s_ItemDatabase[baseType])
+                if(identified == false)
                 {
-                    if(type.UnidentifiedName == specificType)
+                    if(itemType.UnidentifiedName.ToLowerInvariant() == lowerName)
                     {
-                        ItemInstance newItem = new ItemInstance(type, new Vector2Int(-1, -1), identified);
-
-                        m_LiveItems.Add(newItem.GUID, newItem);
-                        return newItem;
+                        secondRound.Add(itemType);
+                    }
+                }
+                else
+                {
+                    if(itemType.IdentifiedName == lowerName)
+                    {
+                        secondRound.Add(itemType);
                     }
                 }
             }
+            if(secondRound.Count > 0)
+            {
+                int result = RNG.Roll(0, secondRound.Count - 1);
+                BaseItemType type = secondRound[result];
+                ItemInstance itemInstance = new ItemInstance(type, new Vector2Int(-1, -1), identified);
+                m_LiveItems.Add(itemInstance.GUID, itemInstance);
+                return itemInstance;
+            }
+
             return null;
         }
 
@@ -80,6 +189,36 @@ namespace JoyLib.Code.Entities.Items
             }
 
             return null;
+        }
+
+        public ItemInstance CreateCompletelyRandomItem(bool identified = false, bool withAbility = false)
+        {
+            try
+            {
+                int result = RNG.Roll(0, s_ItemDatabase.Count - 1);
+                BaseItemType itemType = s_ItemDatabase[result];
+                ItemInstance itemInstance = new ItemInstance(itemType, new Vector2Int(-1, -1), identified);
+                m_LiveItems.Add(itemInstance.GUID, itemInstance);
+                return itemInstance;
+            }
+            catch(Exception e)
+            {
+                ActionLog.WriteToLog("ERROR CREATING ITEM");
+                ActionLog.WriteToLog(e.Message);
+                ActionLog.WriteToLog(e.StackTrace);
+                return null;
+            }
+        }
+
+        public class ItemCreationException : Exception
+        {
+            public BaseItemType ItemType;
+
+            public ItemCreationException(BaseItemType itemType, string message) : 
+                base(message)
+            {
+                ItemType = itemType;
+            }
         }
     }
 }

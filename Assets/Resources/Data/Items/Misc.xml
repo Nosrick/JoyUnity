@@ -1,13 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Items>
-  <Category>Misc</Category>
-  <IdentifiedItem>
-    <Name>Lantern</Name>
-    <Description>A metal cylinder with an opening in it to let light out from the fire within.</Description>
-    <Value>50</Value>
-    <Materials>Copper</Materials>
-    <Size>150</Size>
-    <LightLevel>10</LightLevel>
-    <SpawnWeight>2</SpawnWeight>
-  </IdentifiedItem>
+	<IdentifiedItem>
+		<Name>Lantern</Name>
+		<Description>A metal cylinder with an opening in it to let light out from the fire within.</Description>
+		<Value>50</Value>
+		<Material>Copper</Material>
+		<Material>Iron</Material>
+		<Size>150</Size>
+		<LightLevel>10</LightLevel>
+		<SpawnWeight>2</SpawnWeight>
+		<Tag>Light Source</Tag>
+		<Tileset>Light Source</Tileset>
+	</IdentifiedItem>
+	
+	<Filename>Light</Filename>
+	<Tileset>Light Source</Tileset>
+	<Icon>
+		<Name>Lantern</Name>
+		<X>3</X>
+		<Y>0</Y>
+		<Data>Default</Data>
+	</Icon>
 </Items>

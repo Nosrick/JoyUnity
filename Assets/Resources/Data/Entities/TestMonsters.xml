@@ -2,58 +2,188 @@
 <Entities>
   <Entity>
     <CreatureType>Naga</CreatureType>
-    <Sentient>Yes</Sentient>
     <Type>Naga</Type>
-    <Tileset>Reptiles</Tileset>
-    <VisionType>Nocturnal</VisionType>
 
-    <Statistic Name="Strength" Value="3" />
-    <Statistic Name="Agility" Value="6" />
-    <Statistic Name="Endurance" Value="4" />
-    <Statistic Name="Cognition" Value="5" />
-    <Statistic Name="Perception" Value="6" />
-    <Statistic Name="Focus" Value="3" />
-    <Statistic Name="Personality" Value="4" />
-    <Statistic Name="Suavity" Value="5" />
-    <Statistic Name="Wit" Value="3" />
-	
-	<Slots>
-		<Slot>Head</Slot>
-		<Slot>Neck</Slot>
-		<Slot>Shoulders</Slot>
-		<Slot>Torso</Slot>
-		<Slot>Waist</Slot>
-		<Slot>Tail</Slot>
-		<Slot>Hand1</Slot>
-		<Slot>Hand2</Slot>
-		<Slot>Ring1</Slot>
-		<Slot>Ring2</Slot>
-		<Slot>Ranged</Slot>
-		<Slot>Ammo</Slot>
-		<Slot>Job Pin</Slot>
-		<Slot>Throw</Slot>
-	</Slots>
+	<Statistic>
+		<Name>Strength</Name>
+		<Value>4</Value>
+	</Statistic>
+    <Statistic>
+		<Name>Agility</Name>
+		<Value>5</Value>
+	</Statistic>
+	<Statistic>
+		<Name>Endurance</Name>
+		<Value>4</Value>
+	</Statistic>
+
+	<Statistic>
+		<Name>Cognition</Name>
+		<Value>5</Value>
+	</Statistic>
+	<Statistic>
+		<Name>Cunning</Name>
+		<Value>5</Value>
+	</Statistic>
+	<Statistic>
+		<Name>Focus</Name>
+		<Value>4</Value>
+	</Statistic>
+
+	<Statistic>
+		<Name>Personality</Name>
+		<Value>4</Value>
+	</Statistic>
+	<Statistic>
+		<Name>Suavity</Name>
+		<Value>4</Value>
+	</Statistic>
+	<Statistic>
+		<Name>Wit</Name>
+		<Value>4</Value>
+	</Statistic>
+
+	<Tag>Living</Tag>
+	<Tag>Sentient</Tag>
+	<Tag>Animated</Tag>
+	<Tag>Nocturnal</Tag>
+
+  <Need>Hunger</Need>
+
+	<Slot>Head</Slot>
+	<Slot>Neck</Slot>
+	<Slot>Shoulders</Slot>
+	<Slot>Torso</Slot>
+	<Slot>Waist</Slot>
+	<Slot>Tail</Slot>
+	<Slot>Hand</Slot>
+	<Slot>Hand</Slot>
+	<Slot>Ring</Slot>
+	<Slot>Ring</Slot>
+	<Slot>Ranged</Slot>
+	<Slot>Ammo</Slot>
+	<Slot>Job Pin</Slot>
+	<Slot>Throw</Slot>
+
+	<Filename>Reptile0</Filename>
+	<Tileset>Naga</Tileset>
+
+	<Icon>
+		<Name>Orange Naga</Name>
+		<X>1</X>
+		<Y>6</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>Black Naga</Name>
+		<X>3</X>
+		<Y>6</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>Yellow Naga</Name>
+		<X>5</X>
+		<Y>6</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>Silver Naga</Name>
+		<X>7</X>
+		<Y>6</Y>
+		<Data>Default</Data>
+	</Icon>
+
   </Entity>
 
   <Entity>
     <CreatureType>Dungeon Slime</CreatureType>
-    <Sentient>No</Sentient>
     <Type>Slime</Type>
-    <Tileset>Slime</Tileset>
-    <VisionType>Nocturnal</VisionType>
 
-    <Statistic Name="Strength" Value="3" />
-    <Statistic Name="Agility" Value="2" />
-    <Statistic Name="Endurance" Value="6" />
-    <Statistic Name="Cognition" Value="1" />
-    <Statistic Name="Perception" Value ="2" />
-    <Statistic Name="Focus" Value="2" />
-    <Statistic Name="Personality" Value="1" />
-    <Statistic Name="Suavity" Value="1" />
-    <Statistic Name="Wit" Value="1" />
-	
-		<Slots>
-			<Slot>Torso</Slot>
-		</Slots>
+	<Statistic>
+		<Name>Strength</Name>
+		<Value>4</Value>
+	</Statistic>
+    <Statistic>
+		<Name>Agility</Name>
+		<Value>2</Value>
+	</Statistic>
+	<Statistic>
+		<Name>Endurance</Name>
+		<Value>6</Value>
+	</Statistic>
+
+	<Statistic>
+		<Name>Cognition</Name>
+		<Value>1</Value>
+	</Statistic>
+	<Statistic>
+		<Name>Cunning</Name>
+		<Value>2</Value>
+	</Statistic>
+	<Statistic>
+		<Name>Focus</Name>
+		<Value>2</Value>
+	</Statistic>
+
+	<Statistic>
+		<Name>Personality</Name>
+		<Value>1</Value>
+	</Statistic>
+	<Statistic>
+		<Name>Suavity</Name>
+		<Value>1</Value>
+	</Statistic>
+	<Statistic>
+		<Name>Wit</Name>
+		<Value>1</Value>
+	</Statistic>
+
+	<Tag>Living</Tag>
+	<Tag>Animated</Tag>
+	<Tag>Nocturnal</Tag>
+
+  <Need>Hunger</Need>
+
+	<Slot>Torso</Slot>
+
+	<Filename>Slime0</Filename>
+	<Tileset>Slime</Tileset>
+
+	<Icon>
+		<Name>Blue Slime</Name>
+		<X>0</X>
+		<Y>4</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>Brown Slime</Name>
+		<X>1</X>
+		<Y>4</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>White Slime</Name>
+		<X>2</X>
+		<Y>4</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>Green Slime</Name>
+		<X>3</X>
+		<Y>4</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>Orange Slime</Name>
+		<X>4</X>
+		<Y>4</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>Purple Slime</Name>
+		<X>5</X>
+		<Y>4</Y>
+		<Data>Default</Data>
+	</Icon>
   </Entity>
 </Entities>

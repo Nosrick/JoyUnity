@@ -1,20 +1,24 @@
-﻿using UnityEngine;
-using JoyLib.Code.Helpers;
+﻿using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Graphics;
+using JoyLib.Code.Managers;
+using JoyLib.Code.Rollers;
 using System;
 using System.Collections.Generic;
-using JoyLib.Code.Managers;
 using System.Linq;
+using UnityEngine;
 
 [Serializable]
-public class JoyObject
+public class JoyObject : IComparable
 {
-    protected int m_HitPoints;
-    protected int m_HitPointsRemaining;
-    
+    protected BasicValueContainer<IDerivedValue> m_DerivedValues;
     protected Vector2Int m_WorldPosition;
 
     [NonSerialized]
     protected Sprite[] m_Icons;
+
+    protected List<string> m_Tags;
+
+    protected string m_Tileset;
 
     protected int m_LastIcon;
 
@@ -32,27 +36,25 @@ public class JoyObject
     /// <param name="baseType"></param>
     /// <param name="isAnimated"></param>
     /// <param name="isWall"></param>
-    public JoyObject(string name, int hitPoints, Vector2Int position, List<Sprite> sprites, string baseType, bool isAnimated, bool isWall = false, bool isDestructible = true)
+    public JoyObject(string name, BasicValueContainer<IDerivedValue> derivedValues, Vector2Int position, string tileSet, Sprite[] sprites, params string[] tags)
     {
         this.JoyName = name;
         this.GUID = GUIDManager.AssignGUID();
 
-        this.m_HitPoints = hitPoints;
+        this.m_DerivedValues = derivedValues;
+
+        this.m_Tileset = tileSet;
+        this.m_Tags = tags.ToList();
 
         this.m_WorldPosition = position;
         this.Move(this.m_WorldPosition);
 
-        this.m_Icons = sprites.ToArray();
-
-        this.BaseType = baseType;
-        this.IsAnimated = isAnimated;
-        this.IsWall = isWall;
-        this.IsDestructible = isDestructible;
+        this.m_Icons = sprites;
 
         //If it's not animated, select a random icon to represent it
         if (!this.IsAnimated && sprites != null)
         {
-            this.ChosenIcon = RNG.Roll(0, sprites.Count - 1);
+            this.ChosenIcon = RNG.Roll(0, sprites.Length - 1);
         }
         else
         {
@@ -68,35 +70,58 @@ public class JoyObject
         GUIDManager.ReleaseGUID(this.GUID);
     }
 
+    public bool AddTag(string tag)
+    {
+        string tagLower = tag.ToLowerInvariant();
+        if(m_Tags.Contains(tagLower) == false)
+        {
+            m_Tags.Add(tagLower);
+            return true;
+        }
+        return false;
+    }
+
+    public bool RemoveTag(string tag)
+    {
+        string tagLower = tag.ToLowerInvariant();
+        if(m_Tags.Contains(tagLower) == true)
+        {
+            m_Tags.Remove(tagLower);
+            return true;
+        }
+        return false;
+    }
+
+    public bool HasTag(string tag)
+    {
+        return m_Tags.Contains(tag.ToLowerInvariant());
+    }
+
     public void Move(Vector2Int newPosition)
     {
         m_WorldPosition = newPosition;
     }
 
-    public virtual void DamageMe(int value)
+    public virtual int DamageMe(int value, string index = "hitpoints")
     {
-        m_HitPointsRemaining = System.Math.Max(0, m_HitPointsRemaining - value);
+        return m_DerivedValues[index].ModifyValue(value);
     }
 
-    public virtual void HealMe(int value)
+    public virtual int HealMe(int value, string index = "hitpoints")
     {
-        m_HitPointsRemaining = System.Math.Min(m_HitPoints, m_HitPointsRemaining + value);
+        return m_DerivedValues[index].ModifyValue(value);
     }
 
-    public void SetIcons(Texture2D[] textures)
+    //Used for deserialisation
+    public void SetIcons(string tileSet, string tileName)
     {
-        m_Icons = new Sprite[textures.Length];
-        for(int i = 0; i < textures.Length; i++)
-        {
-            m_Icons[i] = Sprite.Create(textures[i], new Rect(0, 0, 16, 16), Vector2.zero, 16);
-        }
+        m_Icons = ObjectIconHandler.GetSprites(tileSet, tileName);
     }
 
-    // Use this for initialization
-    void Start ()
+    public void SetIcons(Sprite[] sprites)
     {
-		
-	}
+        m_Icons = sprites;
+    }
 
     // Update is called once per frame
     public virtual void Update ()
@@ -117,10 +142,27 @@ public class JoyObject
         }
 	}
 
-    public string BaseType
+    public int CompareTo(object obj)
     {
-        get;
-        protected set;
+        if(obj == null)
+        {
+            return 1;
+        }
+
+        JoyObject joyObject = obj as JoyObject;
+        if(joyObject != null)
+        {
+            return this.GUID.CompareTo(joyObject.GUID);
+        }
+        else
+        {
+            throw new ArgumentException("Object is not a JoyObject");
+        }
+    }
+
+    public override string ToString()
+    {
+        return "{ " + this.JoyName + " : " + this.GUID + "}";
     }
     
     public Sprite Icon
@@ -131,11 +173,11 @@ public class JoyObject
         }
     }
 
-    public List<Sprite> Icons
+    public Sprite[] Icons
     {
         get
         {
-            return m_Icons.ToList();
+            return m_Icons;
         }
     }
 
@@ -155,7 +197,7 @@ public class JoyObject
     {
         get
         {
-            return m_HitPointsRemaining;
+            return m_DerivedValues["hitpoints"].Value;
         }
     }
 
@@ -163,7 +205,15 @@ public class JoyObject
     {
         get
         {
-            return m_HitPoints;
+            return m_DerivedValues["hitpoints"].Maximum;
+        }
+    }
+
+    public bool Conscious
+    {
+        get
+        {
+            return HitPointsRemaining > 0;
         }
     }
 
@@ -171,7 +221,7 @@ public class JoyObject
     {
         get
         {
-            return m_HitPointsRemaining > 0;
+            return HitPointsRemaining > (HitPoints * (-1));
         }
     }
 
@@ -185,8 +235,10 @@ public class JoyObject
 
     public bool IsAnimated
     {
-        get;
-        protected set;
+        get
+        {
+            return m_Tags.Contains("animated");
+        }
     }
 
     protected int ChosenIcon
@@ -197,13 +249,33 @@ public class JoyObject
 
     public bool IsWall
     {
-        get;
-        protected set;
+        get
+        {
+            return m_Tags.Contains("wall");
+        }
     }
 
     public bool IsDestructible
     {
-        get;
-        protected set;
+        get
+        {
+            return m_Tags.Contains("invulnerable") == false;
+        }
+    }
+
+    public int TotalTags
+    {
+        get
+        {
+            return m_Tags.Count;
+        }
+    }
+
+    public string Tileset
+    {
+        get
+        {
+            return m_Tileset;
+        }
     }
 }

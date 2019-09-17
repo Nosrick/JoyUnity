@@ -1,4 +1,5 @@
-﻿using JoyLib.Code.Combat;
+﻿using JoyLib.Code.Collections;
+using JoyLib.Code.Combat;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.AI;
@@ -6,12 +7,15 @@ using JoyLib.Code.Entities.AI.LOS;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Jobs;
 using JoyLib.Code.Entities.Needs;
+using JoyLib.Code.Entities.Sexes;
+using JoyLib.Code.Entities.Sexuality;
+using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Entities.Statistics.Formulas;
 using JoyLib.Code.Helpers;
-using JoyLib.Code.Loaders;
 using JoyLib.Code.Physics;
 using JoyLib.Code.Quests;
+using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
-using JoyLib.Code.States;
 using JoyLib.Code.World;
 using System;
 using System.Collections.Generic;
@@ -22,50 +26,37 @@ namespace JoyLib.Code.Entities
 {
     public class Entity : JoyObject
     {
-        protected Dictionary<StatisticIndex, EntityStatistic> m_Statistics;
-        protected Dictionary<string, EntitySkill> m_Skills;
-        protected Dictionary<NeedIndex, EntityNeed> m_Needs;
-        protected List<Ability> m_Abilities;
-        protected Dictionary<string, ItemInstance> m_Equipment;
+        protected BasicValueContainer<IRollableValue> m_Statistics;
+        protected BasicValueContainer<IGrowingValue> m_Skills;
+        protected BasicValueContainer<INeed> m_Needs;
+        protected List<IAbility> m_Abilities;
+        protected NonUniqueDictionary<string, ItemInstance> m_Equipment;
         protected List<ItemInstance> m_Backpack;
         protected ItemInstance m_NaturalWeapons;
-        protected Sexuality m_Sexuality;
+        protected ISexuality m_Sexuality;
 
         protected List<string> m_IdentifiedItems;
-
-        protected Dictionary<long, int> m_Relationships;
-        protected Dictionary<long, RelationshipStatus> m_Family;
 
         protected JobType m_CurrentJob;
         protected Dictionary<string, int> m_JobLevels;
 
+        protected List<string> m_Slots;
+
+        protected List<CultureType> m_Cultures;
+
         protected int m_Size;
 
-        protected int m_Level;
-        protected float m_Experience;
-
-        protected int m_Mana;
-        protected int m_ManaRemaining;
-
-        protected int m_Composure;
-        protected int m_ComposureRemaining;
-
-        protected int m_Concentration;
-        protected int m_ConcentrationRemaining;
-
-        protected bool m_Sentient;
+        protected IGrowingValue m_Level;
 
         protected bool[,] m_Vision;
-        protected VisionType m_VisionType;
+        protected string m_VisionType;
 
-        protected NeedIndex m_FulfillingNeed;
+        protected string m_FulfillingNeed;
         protected int m_FulfilmentCounter;
-
-        protected string m_Tileset;
 
         protected NeedAIData m_CurrentTarget;
 
-        protected Pathfinder m_Pathfinder;
+        protected IPathfinder m_Pathfinder;
         
         protected Queue<Vector2Int> m_PathfindingData;
 
@@ -77,9 +68,7 @@ namespace JoyLib.Code.Entities
 
         protected const int ATTACK_THRESHOLD = -50;
 
-        protected readonly Vector2Int NO_TARGET = new Vector2Int(-1, -1);
-
-        protected static Dictionary<string, CultureType> s_Cultures = CultureLoader.LoadCultures();
+        protected static readonly Vector2Int NO_TARGET = new Vector2Int(-1, -1);
 
         /// <summary>
         /// Create an entity with job levels, equipment, family, etc
@@ -102,14 +91,18 @@ namespace JoyLib.Code.Entities
         /// <param name="jobLevels"></param>
         /// <param name="world"></param>
         /// <param name="tileset"></param>
-        public Entity(EntityTemplate template, Dictionary<NeedIndex, EntityNeed> needs, int level, float experience, JobType job, Sex sex, Sexuality sexuality,
-            Vector2Int position, List<Sprite> sprites, ItemInstance naturalWeapons, Dictionary<string, ItemInstance> equipment, 
-            List<ItemInstance> backpack, Dictionary<long, int> relationships, List<string> identifiedItems, Dictionary<long, RelationshipStatus> family,
-            Dictionary<string, int> jobLevels, WorldInstance world, string tileset) : 
-            base(NameProvider.GetRandomName(template.CreatureType, sex), template.Statistics[StatisticIndex.Endurance].Value * 2, position, sprites, template.JoyType, true)
+        public Entity(EntityTemplate template, BasicValueContainer<INeed> needs, List<CultureType> cultures, IGrowingValue level, float experience, JobType job, IBioSex sex, ISexuality sexuality,
+            Vector2Int position, Sprite[] sprites, ItemInstance naturalWeapons, NonUniqueDictionary<string, ItemInstance> equipment, 
+            List<ItemInstance> backpack, List<string> identifiedItems, Dictionary<string, int> jobLevels, 
+            WorldInstance world) : 
+            base("", EntityDerivedValue.GetDefault(
+                template.Statistics[EntityStatistic.ENDURANCE], 
+                template.Statistics[EntityStatistic.FOCUS], 
+                template.Statistics[EntityStatistic.WIT]), 
+                position, template.Tileset, sprites, template.Tags)
         {
             this.CreatureType = template.CreatureType;
-            this.Slots = template.Slots;
+            this.m_Slots = template.Slots.ToList();
 
             this.m_Size = template.Size;
 
@@ -118,47 +111,50 @@ namespace JoyLib.Code.Entities
             this.m_IdentifiedItems = identifiedItems;
             this.m_Statistics = template.Statistics;
 
-            if (template.Skills.Count == 0)
+            if (template.Skills.Collection.Count == 0)
             {
-                this.m_Skills = EntitySkillHandler.GetSkillBlock(needs);
+                this.m_Skills = EntitySkillHandler.GetDefaultSkillBlock(needs);
             }
             else
             {
                 this.m_Skills = template.Skills;
             }
             this.m_Needs = needs;
-            this.m_Abilities = template.Abilities;
+            this.m_Abilities = template.Abilities.ToList();
             this.m_Level = level;
-            for(int i = 1; i < level; i++)
+            for(int i = 1; i < level.Value; i++)
             {
                 this.LevelUp();
             }
-            this.m_Experience = experience;
             this.m_CurrentJob = job;
-            this.m_Sentient = template.Sentient;
+
+            if(template.Sentient)
+            {
+                this.AddTag("sentient");
+            }
+
             this.m_NaturalWeapons = naturalWeapons;
             this.m_Equipment = equipment;
             this.m_Backpack = backpack;
-            this.m_Relationships = relationships;
             this.Sex = sex;
-            this.m_Family = family;
             this.m_VisionType = template.VisionType;
 
-            this.m_Tileset = tileset;
+            this.m_Cultures = cultures;
 
             this.CalculateDerivatives();
 
             this.m_Vision = new bool[1, 1];
 
-            this.m_Pathfinder = new Pathfinder();
+            this.m_Pathfinder = ScriptingEngine.GetProvidedPathFinder();
             this.m_PathfindingData = new Queue<Vector2Int>();
 
-            this.m_FulfillingNeed = (NeedIndex)(-1);
+            this.m_FulfillingNeed = "NONE";
             this.m_FulfilmentCounter = 0;
 
             this.RegenTicker = RNG.Roll(0, REGEN_TICK_TIME - 1);
 
             this.MyWorld = world;
+            this.JoyName = this.GetNameFromMultipleCultures();
 
             SetFOVHandler();
             SetCurrentTarget();
@@ -177,67 +173,26 @@ namespace JoyLib.Code.Entities
         /// <param name="position"></param>
         /// <param name="icons"></param>
         /// <param name="world"></param>
-        public Entity(EntityTemplate template, Dictionary<NeedIndex, EntityNeed> needs, int level, JobType job, Sex sex, Sexuality sexuality,
-            Vector2Int position, List<Sprite> sprites, WorldInstance world) :
-            base(NameProvider.GetRandomName(template.CreatureType, sex), template.Statistics[StatisticIndex.Endurance].Value * 2, position, sprites, template.JoyType, true)
+        public Entity(EntityTemplate template, BasicValueContainer<INeed> needs, List<CultureType> cultures, IGrowingValue level, JobType job, IBioSex sex, ISexuality sexuality,
+            Vector2Int position, Sprite[] sprites, WorldInstance world) :
+            this(template, needs, cultures, level, 0, job, sex, sexuality, position, sprites, 
+                NaturalWeaponHelper.MakeNaturalWeapon(template.Size), new NonUniqueDictionary<string, ItemInstance>(), 
+                new List<ItemInstance>(), new List<string>(), new Dictionary<string, int>(), world)
         {
-            this.CreatureType = template.CreatureType;
-
-            this.m_Size = template.Size;
-            this.Slots = template.Slots;
-
-            this.m_JobLevels = new Dictionary<string, int>();
-            this.m_Sexuality = sexuality;
-            this.m_IdentifiedItems = new List<string>();
-            this.m_Statistics = template.Statistics;
-
-            if (template.Skills.Count == 0)
-            {
-                this.m_Skills = EntitySkillHandler.GetSkillBlock(needs);
-            }
-            else
-            {
-                this.m_Skills = template.Skills;
-            }
-            this.m_Needs = needs;
-            this.m_Abilities = template.Abilities;
-            this.m_Level = level;
-            for (int i = 1; i < level; i++)
-            {
-                this.LevelUp();
-            }
-            this.m_Experience = 0;
-            this.m_CurrentJob = job;
-            this.m_Sentient = template.Sentient;
-            this.m_NaturalWeapons = NaturalWeaponHelper.MakeNaturalWeapon(template.Size);
-            this.m_Equipment = new Dictionary<string, ItemInstance>();
-            this.m_Backpack = new List<ItemInstance>();
-            this.m_Relationships = new Dictionary<long, int>();
-            this.Sex = sex;
-            this.m_Family = new Dictionary<long, RelationshipStatus>();
-            this.m_VisionType = template.VisionType;
-
-            this.m_Tileset = template.Tileset;
-
-            this.CalculateDerivatives();
-
-            this.m_Vision = new bool[1, 1];
-
-            this.m_Pathfinder = new Pathfinder();
-            this.m_PathfindingData = new Queue<Vector2Int>();
-
-            this.m_FulfillingNeed = (NeedIndex)(-1);
-            this.m_FulfilmentCounter = 0;
-
-            this.RegenTicker = RNG.Roll(0, REGEN_TICK_TIME - 1);
-
-            this.MyWorld = world;
-
-            SetFOVHandler();
-            SetCurrentTarget();
         }
 
-        private void SetFOVHandler()
+        protected string GetNameFromMultipleCultures()
+        {
+            string name = "";
+            for(int i = 0; i < m_Cultures.Count; i++)
+            {
+                name += m_Cultures[i].GetNameForChain(i, this.Sex.Name) + " ";
+            }
+            name.TrimEnd();
+            return name;
+        }
+
+        protected void SetFOVHandler()
         {
             m_FOVHandler = new FOVShadowCasting();
             //m_FOVHandler = new FOVPermissive();
@@ -245,7 +200,7 @@ namespace JoyLib.Code.Entities
             //m_FOVHandler = new FOVDirty();
         }
 
-        private void SetCurrentTarget()
+        protected void SetCurrentTarget()
         {
             m_CurrentTarget.idle = true;
             m_CurrentTarget.intent = Intent.Interact;
@@ -272,17 +227,16 @@ namespace JoyLib.Code.Entities
             RegenTicker += 1;
             if(RegenTicker == REGEN_TICK_TIME)
             {
-                m_HitPointsRemaining = Math.Min(m_HitPoints, m_HitPointsRemaining + 1);
-                m_ConcentrationRemaining = Math.Min(m_Concentration, m_ConcentrationRemaining + 1);
-                m_ComposureRemaining = Math.Min(m_Composure, m_ComposureRemaining + 1);
-                m_ManaRemaining = Math.Min(m_Mana, m_ManaRemaining + 1);
+                m_DerivedValues[EntityDerivedValue.HITPOINTS].ModifyValue(1);
+                m_DerivedValues[EntityDerivedValue.CONCENTRATION].ModifyValue(1);
+                m_DerivedValues[EntityDerivedValue.COMPOSURE].ModifyValue(1);
+                m_DerivedValues[EntityDerivedValue.MANA].ModifyValue(1);
+                
                 RegenTicker = 0;
 
-                foreach(EntityNeed need in m_Needs.Values)
+                foreach(INeed need in m_Needs.Collection)
                 {
                     need.Tick();
-                    Debug.Log("Running LUA script: Tick (" + need.name + ") requested by: " + this.JoyName);
-                    ScriptingEngine.RunScript(need.InteractionFileContents, need.name, "Tick", new object[] { new MoonEntity(this) });
                 }
             }
 
@@ -305,48 +259,71 @@ namespace JoyLib.Code.Entities
             QuestTracker.AddQuest(GUID, quest);
         }
 
-        /*
-        public void EquipItem(ItemInstance itemRef)
+        public Tuple<string, int>[] GetData(string[] tags)
         {
-            if (!m_Equipment.ContainsKey(itemRef.slot) && !itemRef.slot.Equals("Hands"))
-                return;
+            List<Tuple<string, int>> data = new List<Tuple<string, int>>();
 
-            if(itemRef.slot.Equals("Hands"))
+            //Check statistics
+            foreach(string tag in tags)
             {
-                if (m_Equipment["Hand1"] == null)
+                if(m_Statistics.Has(tag))
                 {
-                    m_Equipment["Hand1"] = itemRef;
+                    data.Add(new Tuple<string, int>(tag, m_Statistics[tag].Value));
                 }
-                else if (m_Equipment["Hand2"] == null)
+            }
+
+            //Check skills
+            foreach(string tag in tags)
+            {
+                if(m_Skills.Has(tag))
                 {
-                    m_Equipment["Hand2"] = itemRef;
+                    data.Add(new Tuple<string, int>(tag, m_Skills[tag].Value));
                 }
-                else if (m_Equipment["Hand1"] != null && m_Equipment["Hand2"] != null)
+            }
+
+            //Check needs
+            foreach(string tag in tags)
+            {
+                if(m_Needs.Has(tag))
                 {
-                    if (itemRef.weight <= m_Equipment["Hand2"].weight)
+                    data.Add(new Tuple<string, int>(tag, m_Needs[tag].Value));
+                }
+            }
+
+            //Check equipment
+            List<ItemInstance> items = m_Equipment.Values;
+
+            foreach (string tag in tags)
+            {
+                int result = m_Equipment.KeyCount(tag);
+                if(result > 0)
+                {
+                    data.Add(new Tuple<string, int>(tag, result));
+                }
+
+                foreach(ItemInstance item in items)
+                {
+                    if (item.HasTag(tag))
                     {
-                        m_Backpack.Add(m_Equipment["Hand2"]);
-                        m_Equipment["Hand2"] = itemRef;
-                    }
-                    else
-                    {
-                        m_Backpack.Add(m_Equipment["Hand1"]);
-                        m_Equipment["Hand1"] = itemRef;
+                        data.Add(new Tuple<string, int>(tag, 1));
                     }
                 }
             }
-            else if(m_Equipment[itemRef.slot] != null)
+
+            //Check backpack
+            foreach(ItemInstance item in m_Backpack)
             {
-                m_Backpack.Add(m_Equipment[itemRef.slot]);
-                m_Equipment[itemRef.slot] = itemRef;
+                foreach(string tag in tags)
+                {
+                    if(tag.Equals(item.IdentifiedName) || tag.Equals(item.ItemType))
+                    {
+                        data.Add(new Tuple<string, int>(tag, 1));
+                    }
+                }
             }
-            else if(m_Equipment[itemRef.slot] == null)
-            {
-                m_Equipment[itemRef.slot] = itemRef;
-            }
-            m_Backpack.Remove(itemRef);
+
+            return data.ToArray();
         }
-        */
 
         public override void Update()
         {
@@ -370,73 +347,83 @@ namespace JoyLib.Code.Entities
 
             if (!PlayerControlled)
             {
-                //Attack immediate threats
-                /*
-                 * REDO THIS TO BE IN LUA
-                //List<NeedAIData> targets = MyWorld.SearchForEntities(this, "Any", Intent.Attack, EntityTypeSearch.Any, EntitySentienceSearch.Any);
-                //List<NeedAIData> validTargets = targets.Where(x => this.HasRelationship(x.target.GUID) < ATTACK_THRESHOLD).ToList();
-                if(validTargets.Count > 0 && CurrentTarget.target == null)
-                {
-                    //TODO: Write a threat assessment system
-                    //For now, choose a random target and go after them
-                    int result = RNG.Roll(0, validTargets.Count - 1);
-                    NeedAIData data = validTargets[result];
-
-                    CurrentTarget = data;
-                    m_PathfindingData = m_Pathfinder.FindPath(this.WorldPosition, CurrentTarget.target.WorldPosition, this.MyWorld);
-                }
-                */
-
                 //If you're idle
                 if (CurrentTarget.idle == true)
                 {
                     //Let's find something to do
-                    List<EntityNeed> needs = m_Needs.Values.OrderByDescending(x => x.priority).ToList();
+                    List<INeed> needs = m_Needs.Collection.OrderByDescending(x => x.Priority).ToList();
                     //Act on first need
 
                     bool idle = true;
-                    foreach(EntityNeed need in needs)
+                    foreach(INeed need in needs)
                     {
-                        if(need.contributingHappiness)
+                        if(need.ContributingHappiness)
                         {
                             continue;
                         }
-
-                        Debug.Log("Running LUA script: FindFulfilmentObject (" + need.name + ") requested by: " + this.JoyName);
-                        ScriptingEngine.RunScript(need.InteractionFileContents, need.name, "FindFulfilmentObject", new object[] { new MoonEntity(this) });
+                        
+                        need.FindFulfilmentObject(this);
                         idle = false;
                         break;
                     }
                     m_CurrentTarget.idle = idle;
                 }
-                //Otherwise, carry on with what you're doing
-                else
+                
+                //If we're wandering, select a point we can see and wander there
+                if(CurrentTarget.searching && CurrentTarget.targetPoint == NO_TARGET)
                 {
-                    if(WorldPosition == CurrentTarget.targetPoint || (CurrentTarget.target != null && WorldPosition == CurrentTarget.target.WorldPosition))
+                    List<Vector2Int> visibleSpots = new List<Vector2Int>();
+                    List<Vector2Int> visibleWalls = MyWorld.GetVisibleWalls(this);
+                    //Check what we can see
+                    for(int x = 0; x < this.Vision.GetLength(0); x++)
                     {
-                        //If we have a target
-                        if (CurrentTarget.target != null)
+                        for(int y = 0; y < this.Vision.GetLength(0); y++)
                         {
-                            //We're interacting with an entity here
-                            if (CurrentTarget.intent == Intent.Interact)
+                            Vector2Int newPos = new Vector2Int(x, y);
+                            if(CanSee(x, y) && visibleWalls.Contains(newPos) == false && WorldPosition != newPos)
                             {
-                                //TODO: WRITE AN ENTITY INTERACTION
-                                EntityNeed need = this.Needs[CurrentTarget.need];
-
-                                Debug.Log("Running LUA script: FindFulfilmentObject (" + need.name + ") requested by: " + this.JoyName);
-                                ScriptingEngine.RunScript(need.InteractionFileContents, need.name, "FindFulfilmentObject", new object[] { new MoonEntity(this) });
-                            }
-                            else if (CurrentTarget.intent == Intent.Attack)
-                            {
-                                CombatEngine.SwingWeapon(this, CurrentTarget.target);
+                                visibleSpots.Add(newPos);
                             }
                         }
                     }
-                    //If we've not arrived at our target
-                    else if (WorldPosition != CurrentTarget.targetPoint || (CurrentTarget.target != null && AdjacencyHelper.IsAdjacent(WorldPosition, CurrentTarget.target.WorldPosition) == false))
+
+                    //Pick a random spot to wander to
+                    int result = RNG.Roll(0, visibleSpots.Count - 1);
+                    m_CurrentTarget.targetPoint = visibleSpots[result];
+                }
+
+                //If we have somewhere to be, move there
+                if(WorldPosition != CurrentTarget.targetPoint || (CurrentTarget.target != null && AdjacencyHelper.IsAdjacent(WorldPosition, CurrentTarget.target.WorldPosition)))
+                {
+                    MoveToTarget(CurrentTarget);
+                }
+                //If we've arrived at our destination, then we do our thing
+                if(WorldPosition == CurrentTarget.targetPoint || (CurrentTarget.target != null && AdjacencyHelper.IsAdjacent(WorldPosition, CurrentTarget.target.WorldPosition)))
+                {
+                    //If we have a target
+                    if(CurrentTarget.target != null)
                     {
-                        //Move to target
-                        MoveToTarget(CurrentTarget);
+                        if(CurrentTarget.intent == Intent.Attack)
+                        {
+                            //CombatEngine.SwingWeapon(this, CurrentTarget.target);
+                        }
+                        else if(CurrentTarget.intent == Intent.Interact)
+                        {
+                            INeed need = this.Needs[CurrentTarget.need];
+
+                            need.Interact(this, CurrentTarget.target);
+                        }
+                    }
+                    //If we do not, we were probably wandering
+                    else
+                    {
+                        if(CurrentTarget.searching == true)
+                        {
+                            m_CurrentTarget.targetPoint = NO_TARGET;
+
+                            //Set idle to true so we look for stuff when we arrive
+                            m_CurrentTarget.idle = true;
+                        }
                     }
                 }
             }
@@ -446,7 +433,7 @@ namespace JoyLib.Code.Entities
                 {
                     Vector2Int nextPoint = m_PathfindingData.Peek();
                     PhysicsResult physicsResult = PhysicsManager.IsCollision(WorldPosition, nextPoint, MyWorld);
-                    if(physicsResult != PhysicsResult.EntityCollision)
+                    if(physicsResult != PhysicsResult.EntityCollision && physicsResult != PhysicsResult.WallCollision)
                     {
                         m_PathfindingData.Dequeue();
                         Move(nextPoint);
@@ -488,13 +475,35 @@ namespace JoyLib.Code.Entities
             {
                 if (data.target != null)
                 {
-                    m_PathfindingData = m_Pathfinder.FindPath(WorldPosition, data.target.WorldPosition, MyWorld);
+                    m_PathfindingData = m_Pathfinder.FindPath(WorldPosition, data.target.WorldPosition, MyWorld.Costs, GetFullVisionRect());
                 }
-                else if(data.targetPoint != Vector2Int.zero)
+                else if(data.targetPoint != NO_TARGET)
                 {
-                    m_PathfindingData = m_Pathfinder.FindPath(WorldPosition, data.targetPoint, MyWorld);
+                    m_PathfindingData = m_Pathfinder.FindPath(WorldPosition, data.targetPoint, MyWorld.Costs, GetFullVisionRect());
                 }
             }
+        }
+
+        public bool CanSee(int x, int y)
+        {
+            return this.Vision[x, y];
+        }
+
+        public bool CanSee(Vector2Int point)
+        {
+            return CanSee(point.x, point.y);
+        }
+
+        protected RectInt GetVisionRect()
+        {
+            RectInt visionRect = new RectInt(this.WorldPosition, new Vector2Int(this.VisionMod, this.VisionMod));
+            return visionRect;
+        }
+
+        protected RectInt GetFullVisionRect()
+        {
+            RectInt visionRect = new RectInt(0, 0, this.Vision.GetLength(0), this.Vision.GetLength(1));
+            return visionRect;
         }
 
         public void SetPath(Queue<Vector2Int> pointsRef)
@@ -504,20 +513,7 @@ namespace JoyLib.Code.Entities
 
         public bool IsViableMate(Entity entityRef)
         {
-            if(m_Sexuality == Sexuality.Bisexual)
-            {
-                return true;
-            }
-            else if(m_Sexuality == Sexuality.Heterosexual && (entityRef.Sex != Sex || entityRef.Sex == Sex.Neutral))
-            {
-                return true;
-            }
-            else if(m_Sexuality == Sexuality.Homosexual && (entityRef.Sex == Sex || entityRef.Sex == Sex.Neutral))
-            {
-                return true;
-            }
-
-            return false;
+            return m_Sexuality.WillMateWith(this, entityRef);
         }
 
         public void AddItem(ItemInstance itemRef)
@@ -542,17 +538,109 @@ namespace JoyLib.Code.Entities
             m_IdentifiedItems.Add(nameRef);
         }
 
-        public void RemoveItemFromBackpack(ItemInstance item)
+        public bool RemoveItemFromBackpack(ItemInstance item)
         {
-            m_Backpack.Remove(item);
+            if(m_Backpack.Contains(item))
+            {
+                m_Backpack.Remove(item);
+                return true;
+            }
+            return false;
         }
 
-        public void RemoveEquipment(string slot)
+        public bool RemoveItemFromPerson(ItemInstance item)
         {
-            if (m_Equipment.ContainsKey(slot))
+            //Check slots first
+            foreach (Tuple<string, ItemInstance> tuple in m_Equipment)
             {
-                m_Equipment[slot] = null;
+                if(tuple.Item2 == null)
+                {
+                    continue;
+                }
+
+                foreach (string slot in this.Slots)
+                {
+                    if (tuple.Item2.GUID == item.GUID)
+                    {
+                        return RemoveEquipment(slot);
+                    }
+                }
             }
+            //Then the backpack
+            return RemoveItemFromBackpack(item);
+        }
+
+        public bool RemoveEquipment(string slot, ItemInstance item = null)
+        {
+            foreach (Tuple<string, ItemInstance> tuple in m_Equipment)
+            {
+                if(tuple.Item1.Equals(slot) && (item != null && tuple.Item2.GUID == item.GUID))
+                {
+                    m_Equipment.Add(slot, null);
+                    m_Equipment.Remove(tuple.Item1, tuple.Item2);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public ItemInstance[] SearchBackpackForItemType(string[] tags)
+        {
+            try
+            {
+                List<ItemInstance> matchingItems = new List<ItemInstance>();
+                foreach(ItemInstance item in m_Backpack)
+                {
+                    int matches = 0;
+                    foreach(string tag in tags)
+                    {
+                        if(item.HasTag(tag))
+                        {
+                            matches++;
+                        }
+                    }
+                    if(matches == tags.Length || (tags.Length < item.TotalTags && matches > 0))
+                    {
+                        matchingItems.Add(item);
+                    }
+                }
+
+                return matchingItems.ToArray();
+            }
+            catch(Exception ex)
+            {
+                ActionLog.WriteToLog("ERROR WHEN SEARCHING BACKPACK OF " + this.ToString());
+                ActionLog.WriteToLog(ex.Message);
+                ActionLog.WriteToLog(ex.StackTrace);
+                return new List<ItemInstance>().ToArray();
+            }
+        }
+
+        public void Seek(JoyObject obj, string need)
+        {
+            NeedAIData needAIData = new NeedAIData
+            {
+                intent = Intent.Interact,
+                searching = false,
+                target = obj,
+                targetPoint = new Vector2Int(-1, -1),
+                need = need
+            };
+
+            this.CurrentTarget = needAIData;
+        }
+
+        public void Wander()
+        {
+            NeedAIData needAIData = new NeedAIData
+            {
+                idle = false,
+                intent = Intent.Interact,
+                searching = true,
+                targetPoint = NO_TARGET
+            };
+
+            this.CurrentTarget = needAIData;
         }
 
         public void PlaceItemInWorld(ItemInstance item)
@@ -562,116 +650,113 @@ namespace JoyLib.Code.Entities
             MyWorld.AddObject(item);
         }
 
-        public void EquipItem(ItemInstance itemRef, string slotRef)
+        public bool EquipItem(string slotRef, ItemInstance itemRef)
         {
-            if (!m_Equipment.ContainsKey(slotRef))
+            bool contains = false;
+            Tuple<string, ItemInstance> firstEmptySlot = null;
+            foreach(Tuple<string, ItemInstance> tuple in m_Equipment)
             {
-                return;
+                if(tuple.Item1.Equals(slotRef))
+                {
+                    contains = true;
+                    if (tuple.Item2 == null)
+                    {
+                        firstEmptySlot = tuple;
+                    }
+                    break;
+                }
             }
 
-            if (m_Equipment[slotRef] != null)
+            if(contains == false)
             {
-                m_Backpack.Add(m_Equipment[slotRef]);
+                return false;
             }
 
-            m_Equipment[slotRef] = itemRef;
+            if (firstEmptySlot != null)
+            {
+                m_Backpack.Add(firstEmptySlot.Item2);
+            }
+            
+            m_Equipment.Remove(firstEmptySlot.Item1, firstEmptySlot.Item2);
+            m_Equipment.Add(firstEmptySlot.Item1, itemRef);
             m_Backpack.Remove(itemRef);
+            return true;
         }
 
-        public void UnequipItem(string slot)
+        public bool UnequipItem(string slot)
         {
-            if (m_Equipment.ContainsKey(slot))
+            foreach(Tuple<string, ItemInstance> tuple in m_Equipment)
             {
-                AddItem(m_Equipment[slot]);
-                m_Equipment[slot] = null;
+                if(tuple.Item1.Equals(slot))
+                {
+                    AddItem(tuple.Item2);
+                    //TODO: Make this better
+                    m_Equipment.Remove(tuple.Item1, tuple.Item2);
+                    m_Equipment.Add(tuple.Item1, null);
+                    return true;
+                }
             }
-        }
-
-        public void InfluenceMe(long GUID, int value)
-        {
-            if (m_Relationships.ContainsKey(GUID))
-            {
-                m_Relationships[GUID] += value;
-            }
-            else
-            {
-                PerformFirstImpression(GUID);
-            }
-        }
-
-        public int HasRelationship(long GUID)
-        {
-            if (!m_Relationships.ContainsKey(GUID))
-            {
-                PerformFirstImpression(GUID);
-            }
-            return m_Relationships[GUID];
-        }
-
-        protected void PerformFirstImpression(long GUID)
-        {
-            Entity entity = WorldState.EntityHandler.Get(GUID);
-            int firstImpression = (entity.Statistics[StatisticIndex.Personality].Value + entity.Statistics[StatisticIndex.Suavity].Value + entity.Statistics[StatisticIndex.Wit].Value);
-            m_Relationships.Add(GUID, firstImpression);
+            return false;
         }
 
         public void DecreaseMana(int value)
         {
-            m_ManaRemaining = Math.Max(0, m_ManaRemaining - value);
+            m_DerivedValues[EntityDerivedValue.MANA].ModifyValue(-value);
         }
 
         public void IncreaseMana(int value)
         {
-            m_ManaRemaining = Math.Min(m_Mana, m_ManaRemaining + value);
+            m_DerivedValues[EntityDerivedValue.MANA].ModifyValue(value);
         }
 
         public void DecreaseComposure(int value)
         {
-            m_ComposureRemaining = Math.Max(0, m_ComposureRemaining - value);
+            m_DerivedValues[EntityDerivedValue.COMPOSURE].ModifyValue(-value);
         }
 
         public void IncreaseComposure(int value)
         {
-            m_ComposureRemaining = Math.Min(m_Composure, m_ComposureRemaining + value);
+            m_DerivedValues[EntityDerivedValue.COMPOSURE].ModifyValue(value);
         }
 
         public void DecreaseConcentration(int value)
         {
-            m_ConcentrationRemaining = Math.Max(0, m_ConcentrationRemaining - value);
+            m_DerivedValues[EntityDerivedValue.CONCENTRATION].ModifyValue(-value);
         }
 
         public void IncreaseConcentration(int value)
         {
-            m_ConcentrationRemaining = Math.Min(m_Concentration, m_ConcentrationRemaining + value);
+            m_DerivedValues[EntityDerivedValue.CONCENTRATION].ModifyValue(value);
         }
 
         public void AddExperience(float value)
         {
-            m_Experience += value;
+            float previousXP = m_Level.Experience;
 
-            if (m_Experience >= (XP_PER_LEVEL * m_Level))
+            if (previousXP < m_Level.AddExperience(value))
             {
-                m_Level += 1;
                 LevelUp();
             }
         }
 
         public void LevelUp()
         {
-            if(m_JobLevels.ContainsKey(m_CurrentJob.name))
+            if(m_JobLevels.ContainsKey(m_CurrentJob.Name))
             {
-                m_JobLevels[m_CurrentJob.name] += 1;
+                m_JobLevels[m_CurrentJob.Name] += 1;
             }
             else
             {
-                m_JobLevels.Add(m_CurrentJob.name, 1);
+                m_JobLevels.Add(m_CurrentJob.Name, 1);
             }
 
-            foreach(Tuple<int, Ability> abilityTuple in m_CurrentJob.abilities)
+            IAbility[] newAbilities  = m_CurrentJob.GetAbilitiesForLevel(m_Level.Value);
+
+            foreach(IAbility ability in newAbilities)
             {
-                if(m_JobLevels[m_CurrentJob.name] == abilityTuple.First)
+                if(m_Abilities.Contains(ability) == false)
                 {
-                    m_Abilities.Add(abilityTuple.Second);
+                    m_Abilities.Add(ability);
                 }
             }
 
@@ -682,12 +767,12 @@ namespace JoyLib.Code.Entities
         {
             int damage = value;
 
-            foreach(Ability ability in m_Abilities)
+            foreach(IAbility ability in m_Abilities)
             {
                 if (damage == 0)
                     return;
 
-                if(ability.m_AbilityTrigger == AbilityTrigger.OnTakeHit)
+                if(ability.AbilityTrigger == AbilityTrigger.OnTakeHit)
                 {
                     damage = ability.OnTakeHit(source, this, damage);
                 }
@@ -696,47 +781,73 @@ namespace JoyLib.Code.Entities
             base.DamageMe(damage);
         }
 
-        public void DirectDamage(int value)
+        public void DirectDVModification(int value, string index = EntityDerivedValue.HITPOINTS)
         {
-            m_HitPointsRemaining -= value;
+            m_DerivedValues[index].ModifyValue(value);
         }
 
         protected void CalculateDerivatives()
         {
-            int lastHP = m_HitPoints;
-            int lastConc = m_Concentration;
-            int lastComp = m_Composure;
-            int lastMana = m_Mana;
+            IDerivedValue hitpoints = m_DerivedValues[EntityDerivedValue.HITPOINTS];
+            int lastHP = hitpoints.Value;
 
-            m_HitPoints = (int)(m_Statistics[StatisticIndex.Endurance].Value * 2);
-            m_Concentration = (int)(m_Statistics[StatisticIndex.Focus].Value * 2);
-            m_Composure = (int)(m_Statistics[StatisticIndex.Wit].Value * 2);
-            m_Mana = (int)(m_Statistics[StatisticIndex.Focus].Value + m_Statistics[StatisticIndex.Endurance].Value + m_Statistics[StatisticIndex.Wit].Value) / 3;
+            IDerivedValue concentration = m_DerivedValues[EntityDerivedValue.CONCENTRATION];
+            int lastConc = concentration.Value;
 
-            m_HitPointsRemaining += m_HitPoints - lastHP;
-            m_ConcentrationRemaining += m_Concentration - lastConc;
-            m_ComposureRemaining += m_Composure - lastComp;
-            m_ManaRemaining += m_Mana - lastMana;
+            IDerivedValue composure = m_DerivedValues[EntityDerivedValue.COMPOSURE];
+            int lastComp = composure.Value;
+
+            IDerivedValue mana = m_DerivedValues[EntityDerivedValue.MANA];
+            int lastMana = mana.Value;
+
+            IValueFormula valueFormula = new BasicDerivedValueFormula();
+            IValueFormula manaFormula = new ManaFormula();
+
+            hitpoints.SetMaximum(valueFormula.Calculate(
+                new IBasicValue[] { m_Statistics[EntityStatistic.ENDURANCE] }));
+
+            concentration.SetMaximum(valueFormula.Calculate(
+                new IBasicValue[] { m_Statistics[EntityStatistic.FOCUS] }));
+
+            composure.SetMaximum(valueFormula.Calculate(
+                new IBasicValue[] { m_Statistics[EntityStatistic.WIT] }));
+
+            mana.SetMaximum(valueFormula.Calculate(
+                new IBasicValue[] { m_Statistics[EntityStatistic.ENDURANCE],
+                                    m_Statistics[EntityStatistic.FOCUS],
+                                    m_Statistics[EntityStatistic.WIT] }));
+
+            hitpoints.ModifyValue(hitpoints.Maximum - lastHP);
+            concentration.ModifyValue(concentration.Maximum - lastConc);
+            composure.ModifyValue(composure.Maximum - lastComp);
+            mana.ModifyValue(mana.Maximum - lastMana);
         }
 
         public ItemInstance GetEquipment(string slotRef)
         {
-            if (m_Equipment.ContainsKey(slotRef))
+            foreach(Tuple<string, ItemInstance> tuple in m_Equipment)
             {
-                if((slotRef.Equals("Hand1") || slotRef.Equals("Hand2")) && m_Equipment[slotRef] == null)
-                    return m_NaturalWeapons;
+                if(tuple.Item1.Equals(slotRef))
+                {
+                    if(slotRef.StartsWith("Hand") && tuple.Item2 == null)
+                    {
+                        return m_NaturalWeapons;
+                    }
+                }
                 else
-                    return m_Equipment[slotRef];
+                {
+                    return tuple.Item2;
+                }
             }
             return null;
         }
 
-        public void FulfillNeed(NeedIndex need, int value, int minutes = NEED_FULFILMENT_COUNTER)
+        public void FulfillNeed(string need, int value, int minutes = NEED_FULFILMENT_COUNTER)
         {
             m_Needs[need].Fulfill(value);
             m_FulfillingNeed = need;
             m_FulfilmentCounter = minutes;
-            Debug.Log(JoyName + " is fulfilling need " + need.ToString());
+            ActionLog.AddText(this.ToString() + " is fulfilling need " + need);
         }
 
         public string CreatureType
@@ -745,7 +856,7 @@ namespace JoyLib.Code.Entities
             protected set;
         }
 
-        public Sex Sex
+        public IBioSex Sex
         {
             get;
             protected set;
@@ -763,31 +874,15 @@ namespace JoyLib.Code.Entities
             }
         }
 
-        public Dictionary<long, int> Relationships
+        public List<Tuple<string, ItemInstance>> Equipment
         {
             get
             {
-                return m_Relationships;
+                return new List<Tuple<string, ItemInstance>>(m_Equipment);
             }
         }
 
-        public Dictionary<string, ItemInstance> Equipment
-        {
-            get
-            {
-                return m_Equipment;
-            }
-        }
-
-        public Dictionary<long, RelationshipStatus> Family
-        {
-            get
-            {
-                return m_Family;
-            }
-        }
-
-        public Dictionary<StatisticIndex, EntityStatistic> Statistics
+        public BasicValueContainer<IRollableValue> Statistics
         {
             get
             {
@@ -795,7 +890,7 @@ namespace JoyLib.Code.Entities
             }
         }
 
-        public Dictionary<string, EntitySkill> Skills
+        public BasicValueContainer<IGrowingValue> Skills
         {
             get
             {
@@ -803,7 +898,7 @@ namespace JoyLib.Code.Entities
             }
         }
 
-        public Dictionary<NeedIndex, EntityNeed> Needs
+        public BasicValueContainer<INeed> Needs
         {
             get
             {
@@ -811,11 +906,11 @@ namespace JoyLib.Code.Entities
             }
         }
 
-        public List<Ability> Abilities
+        public IAbility[] Abilities
         {
             get
             {
-                return m_Abilities;
+                return m_Abilities.ToArray();
             }
         }
 
@@ -823,7 +918,7 @@ namespace JoyLib.Code.Entities
         {
             get
             {
-                return m_CurrentJob.name;
+                return m_CurrentJob.Name;
             }
         }
 
@@ -831,7 +926,7 @@ namespace JoyLib.Code.Entities
         {
             get
             {
-                return m_Sentient;
+                return m_Tags.Contains("sentient");
             }
         }
 
@@ -861,21 +956,19 @@ namespace JoyLib.Code.Entities
             set;
         }
 
-        public List<ItemInstance> Backpack
+        public ItemInstance[] Backpack
         {
             get
             {
-                return m_Backpack;
+                return m_Backpack.ToArray();
             }
         }
 
-        public List<string> IdentifiedItems
+        public string[] IdentifiedItems
         {
             get
             {
-                List<string> returnItems = new List<string>();
-                returnItems.AddRange(m_IdentifiedItems);
-                return returnItems;
+                return m_IdentifiedItems.ToArray();
             }
         }
 
@@ -893,7 +986,7 @@ namespace JoyLib.Code.Entities
             }
         }
 
-        public NeedIndex FulfillingNeed
+        public string FulfillingNeed
         {
             get
             {
@@ -901,7 +994,7 @@ namespace JoyLib.Code.Entities
             }
         }
 
-        public Sexuality Sexuality
+        public ISexuality Sexuality
         {
             get
             {
@@ -909,15 +1002,7 @@ namespace JoyLib.Code.Entities
             }
         }
 
-        public int MatingThreshold
-        {
-            get
-            {
-                return 300 - Needs[NeedIndex.Sex].priority;
-            }
-        }
-
-        public Ability TargetingAbility
+        public AbstractAbility TargetingAbility
         {
             get;
             set;
@@ -927,7 +1012,7 @@ namespace JoyLib.Code.Entities
         {
             get
             {
-                return m_Mana;
+                return m_DerivedValues[EntityDerivedValue.MANA].Maximum;
             }
         }
 
@@ -935,7 +1020,7 @@ namespace JoyLib.Code.Entities
         {
             get
             {
-                return m_ManaRemaining;
+                return m_DerivedValues[EntityDerivedValue.MANA].Value;
             }
         }
 
@@ -943,7 +1028,7 @@ namespace JoyLib.Code.Entities
         {
             get
             {
-                return m_ComposureRemaining;
+                return m_DerivedValues[EntityDerivedValue.COMPOSURE].Value;
             }
         }
 
@@ -951,7 +1036,7 @@ namespace JoyLib.Code.Entities
         {
             get
             {
-                return m_Composure;
+                return m_DerivedValues[EntityDerivedValue.COMPOSURE].Maximum;
             }
         }
 
@@ -959,7 +1044,7 @@ namespace JoyLib.Code.Entities
         {
             get
             {
-                return m_Concentration;
+                return m_DerivedValues[EntityDerivedValue.CONCENTRATION].Maximum;
             }
         }
 
@@ -967,7 +1052,7 @@ namespace JoyLib.Code.Entities
         {
             get
             {
-                return m_ConcentrationRemaining;
+                return m_DerivedValues[EntityDerivedValue.CONCENTRATION].Value;
             }
         }
 
@@ -987,7 +1072,7 @@ namespace JoyLib.Code.Entities
         {
             get
             {
-                return m_Level;
+                return m_Level.Value;
             }
         }
 
@@ -997,15 +1082,15 @@ namespace JoyLib.Code.Entities
             set;
         }
 
-        public CultureType Culture
+        public CultureType[] Cultures
         {
             get
             {
-                return s_Cultures[CreatureType];
+                return m_Cultures.ToArray();
             }
         }
 
-        public VisionType VisionType
+        public string VisionType
         {
             get
             {
@@ -1017,14 +1102,6 @@ namespace JoyLib.Code.Entities
         {
             get;
             set;
-        }
-
-        public string Tileset
-        {
-            get
-            {
-                return m_Tileset;
-            }
         }
 
         public JobType Job
@@ -1043,16 +1120,18 @@ namespace JoyLib.Code.Entities
             }
         }
 
-        public List<string> Slots
+        public string[] Slots
         {
-            get;
-            protected set;
+            get
+            {
+                return m_Slots.ToArray();
+            }
         }
         public int VisionMod
         {
             get
             {
-                return m_Statistics[StatisticIndex.Perception].Value + GlobalConstants.MINIMUM_VISION_DISTANCE;
+                return m_Statistics[EntityStatistic.CUNNING].Value + GlobalConstants.MINIMUM_VISION_DISTANCE;
             }
         }
     }

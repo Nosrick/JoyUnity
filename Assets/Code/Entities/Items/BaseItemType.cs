@@ -1,69 +1,79 @@
 ﻿using System;
-using System.IO;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace JoyLib.Code.Entities.Items
 {
     public class BaseItemType
     {
         protected string m_ClassName;
+        protected List<string> m_Tags;
 
-        public BaseItemType(string category, string description, string unidentifiedDescriptionRef, string unidentifiedNameRef, string identifiedNameRef, 
-            string slotRef, float size, ItemMaterial material, string typeRef, string governingSkillRef, string actionStringRef, 
-            string interactionFileRef, int valueRef, int spawnRef, int lightLevel = 0)
+        public BaseItemType(string[] tags, string description, string unidentifiedDescriptionRef, string unidentifiedNameRef, string identifiedNameRef, 
+            string[] slotsRef, float size, ItemMaterial material, string governingSkillRef, string actionStringRef, 
+            int valueRef, int spawnRef, string spriteSheet, int lightLevel = 0)
         {
-            this.Category = category;
+            m_Tags = tags.ToList();
+            
             this.SpawnWeighting = spawnRef;
             this.Value = valueRef;
-            this.InteractionFileName = interactionFileRef;
-            if (InteractionFileName != null && InteractionFileName != "")
-            {
-                InteractionFileContents = File.ReadAllText(Directory.GetCurrentDirectory() + InteractionFilePath);
-            }
 
+            this.IdentifiedName = identifiedNameRef;
             this.Description = description;
             this.UnidentifiedDescription = unidentifiedDescriptionRef;
             this.UnidentifiedName = unidentifiedNameRef;
             this.Size = size;
             this.Material = material;
-            this.Weight = this.Size * this.Material.weight;
-            this.Slot = slotRef;
+            this.Weight = this.Size * this.Material.Density;
+            this.Slots = slotsRef;
             this.GoverningSkill = governingSkillRef;
             this.ActionString = actionStringRef;
             this.LightLevel = lightLevel;
+            this.SpriteSheet = spriteSheet;
+        }
+
+        public bool AddTag(string tag)
+        {
+            if(m_Tags.Contains(tag) == false)
+            {
+                m_Tags.Add(tag);
+                return true;
+            }
+            return false;
+        }
+
+        public bool RemoveTag(string tag)
+        {
+            if(m_Tags.Contains(tag) == true)
+            {
+                m_Tags.Remove(tag);
+                return true;
+            }
+            return false;
+        }
+
+        public bool HasTag(string tag)
+        {
+            return m_Tags.Contains(tag);
+        }
+
+        public bool HasSlot(string slot)
+        {
+            return Slots.Contains(slot);
         }
 
         public int GetHitPoints()
         {
-            return (int)(Math.Max(1, Size * Material.hardness));
-        }
-
-        public string Category
-        {
-            get;
-            protected set;
-        }
-
-        public string InteractionFilePath
-        {
-            get
-            {
-                return GlobalConstants.SCRIPTS_FOLDER + "Items/" + InteractionFileName + ".lua";
-            }
-        }
-
-        public string InteractionFileName
-        {
-            get;
-            protected set;
-        }
-
-        public string InteractionFileContents
-        {
-            get;
-            protected set;
+            return (int)(Math.Max(1, Size * Material.Hardness));
         }
 
         public string Description
+        {
+            get;
+            protected set;
+        }
+
+        public string IdentifiedName
         {
             get;
             protected set;
@@ -99,7 +109,7 @@ namespace JoyLib.Code.Entities.Items
             protected set;
         }
 
-        public string Slot
+        public string[] Slots
         {
             get;
             protected set;
@@ -109,7 +119,7 @@ namespace JoyLib.Code.Entities.Items
         {
             get
             {
-                return Material.bonus;
+                return Material.Bonus;
             }
         }
 
@@ -117,7 +127,7 @@ namespace JoyLib.Code.Entities.Items
         {
             get
             {
-                return Material.bonus;
+                return Material.Bonus;
             }
         }
 
@@ -131,7 +141,7 @@ namespace JoyLib.Code.Entities.Items
         {
             get
             {
-                return "It is made of " + Material.name + ".";
+                return "It is made of " + Material.Name + ".";
             }
         }
 
@@ -168,6 +178,20 @@ namespace JoyLib.Code.Entities.Items
         }
 
         public int LightLevel
+        {
+            get;
+            protected set;
+        }
+
+        public string[] Tags
+        {
+            get
+            {
+                return m_Tags.ToArray();
+            }
+        }
+
+        public string SpriteSheet
         {
             get;
             protected set;

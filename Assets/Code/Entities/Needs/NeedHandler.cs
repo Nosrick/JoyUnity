@@ -1,38 +1,65 @@
-﻿using JoyLib.Code.Helpers;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
+using UnityEngine;
 
 namespace JoyLib.Code.Entities.Needs
 {
     public static class NeedHandler
     {
-        private static Dictionary<string, string> s_InteractionFileContents;
+        private static Dictionary<string, INeed> s_Needs;
 
-        public static void Initialise()
+        public static bool Initialise()
         {
-            if (s_InteractionFileContents != null)
+            try
             {
-                return;
+                if (s_Needs != null)
+                {
+                    return true;
+                }
+
+                s_Needs = new Dictionary<string, INeed>();
+
+                Type[] needTypes = Scripting.ScriptingEngine.FetchTypeAndChildren("AbstractNeed");
+
+                foreach (Type type in needTypes)
+                {
+                    if (typeof(INeed).IsAssignableFrom(type) == true && type.IsAbstract == false)
+                    {
+                        INeed newNeed = (INeed)Activator.CreateInstance(type);
+                        s_Needs.Add(newNeed.Name, newNeed);
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+
+                return true;
             }
-
-            s_InteractionFileContents = new Dictionary<string, string>();
-
-            string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + GlobalConstants.SCRIPTS_FOLDER + "Needs", "*.lua");
-            foreach(string file in files)
+            catch(Exception ex)
             {
-                string name = FileNameExtractor.ExtractName(file, 3);
-                string contents = File.ReadAllText(file);
-                s_InteractionFileContents.Add(name, contents);
+                Debug.LogError(ex.Message);
+                Debug.LogError(ex.StackTrace);
+                return false;
             }
         }
 
-        public static string Get(string name)
+        public static INeed Get(string name)
         {
-            if(s_InteractionFileContents.ContainsKey(name))
+            if(s_Needs.ContainsKey(name))
             {
-                return s_InteractionFileContents[name];
+                return s_Needs[name].Copy();
             }
-            return "";
+            return null;
+        }
+
+        public static INeed GetRandomised(string name)
+        {
+            if(s_Needs.ContainsKey(name))
+            {
+                return s_Needs[name].Randomise();
+            }
+            return null;
         }
     }
 }

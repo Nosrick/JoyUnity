@@ -1,10 +1,9 @@
 ﻿using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.AI;
-using JoyLib.Code.Entities.AI.LOS;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Managers;
-using JoyLib.Code.Scripting;
+using JoyLib.Code.Rollers;
 using JoyLib.Code.States;
 using System;
 using System.Collections.Generic;
@@ -17,13 +16,16 @@ namespace JoyLib.Code.World
     public class WorldInstance
     {
         protected WorldTile[,] m_Tiles;
+        protected byte[,] m_Costs;
         protected int[,] m_Light;
         protected bool[,] m_Discovered;
+
+        [NonSerialized]
         protected int m_PlayerIndex;
 
-        protected Vector2Int m_Dimensions;
+        protected readonly Vector2Int m_Dimensions;
 
-        protected readonly WorldType m_Type;
+        protected readonly string[] m_Tags;
 
         //Worlds and where to access them
         protected Dictionary<Vector2Int, WorldInstance> m_Areas;
@@ -43,23 +45,27 @@ namespace JoyLib.Code.World
         protected string m_Name;
         protected long m_GUID;
 
+        [NonSerialized]
         protected GameObject m_FogOfWarHolder;
+        [NonSerialized]
         protected GameObject m_WallHolder;
+        [NonSerialized]
         protected GameObject m_ObjectHolder;
+        [NonSerialized]
         protected GameObject m_EntityHolder;
 
         /// <summary>
         /// A template for adding stuff to later. A blank WorldInstance.
         /// </summary>
         /// <param name="tiles"></param>
-        /// <param name="type"></param>
+        /// <param name="tags"></param>
         /// <param name="name"></param>
-        public WorldInstance(WorldTile[,] tiles, WorldType type, string name)
+        public WorldInstance(WorldTile[,] tiles, string[] tags, string name)
         {
             m_Dimensions = new Vector2Int(tiles.GetLength(0), tiles.GetLength(1));
 
             this.Name = name;
-            this.m_Type = type;
+            this.m_Tags = tags;
             m_Tiles = tiles;
             m_Areas = new Dictionary<Vector2Int, WorldInstance>();
             m_Entities = new List<Entity>();
@@ -68,6 +74,15 @@ namespace JoyLib.Code.World
             GUID = GUIDManager.AssignGUID();
             m_Discovered = new bool[m_Tiles.GetLength(0), m_Tiles.GetLength(1)];
             m_Light = new int[m_Tiles.GetLength(0), m_Tiles.GetLength(1)];
+
+            m_Costs = new byte[m_Tiles.GetLength(0), m_Tiles.GetLength(1)];
+            for (int x = 0; x < m_Costs.GetLength(0); x++)
+            {
+                for (int y = 0; y < m_Costs.GetLength(1); y++)
+                {
+                    m_Costs[x, y] = 1;
+                }
+            }
 
             m_FogOfWarHolder = GameObject.Find("WorldFog");
             m_WallHolder = GameObject.Find("WorldWalls");
@@ -82,13 +97,13 @@ namespace JoyLib.Code.World
         /// <param name="areas"></param>
         /// <param name="entities"></param>
         /// <param name="objects"></param>
-        /// <param name="type"></param>
+        /// <param name="tags"></param>
         /// <param name="name"></param>
         public WorldInstance(WorldTile[,] tiles, Dictionary<Vector2Int, WorldInstance> areas, List<Entity> entities,
-            List<JoyObject> objects, Dictionary<Vector2Int, JoyObject> walls, WorldType type, string name)
+            List<JoyObject> objects, Dictionary<Vector2Int, JoyObject> walls, string[] tags, string name)
         {
             this.Name = name;
-            this.m_Type = type;
+            this.m_Tags = tags;
             m_Tiles = tiles;
             m_Areas = areas;
             m_Entities = entities;
@@ -103,6 +118,20 @@ namespace JoyLib.Code.World
             m_WallHolder = GameObject.Find("WorldWalls");
             m_ObjectHolder = GameObject.Find("WorldObjects");
             m_EntityHolder = GameObject.Find("WorldEntities");
+
+            m_Costs = new byte[m_Tiles.GetLength(0), m_Tiles.GetLength(1)];
+            for(int x = 0; x < m_Costs.GetLength(0); x++)
+            {
+                for(int y = 0; y < m_Costs.GetLength(1); y++)
+                {
+                    m_Costs[x, y] = 1;
+                }
+            }
+
+            foreach(Vector2Int position in m_Walls.Keys)
+            {
+                m_Costs[position.x, position.y] = byte.MaxValue;
+            }
         }
 
         public void SetDateTime(DateTime dateTime)
@@ -165,9 +194,10 @@ namespace JoyLib.Code.World
             for(int i = 0; i < entities.Count; i++)
             {
                 Entity entity = entities[i];
-                for(int j = 0; j < entity.Backpack.Count; j++)
+                ItemInstance[] backpack = entity.Backpack;
+                for(int j = 0; j < backpack.Length; j++)
                 {
-                    ItemInstance item = entity.Backpack[j];
+                    ItemInstance item = backpack[j];
                     item.Move(entity.WorldPosition);
 
                     int xMin, xMax;
@@ -252,7 +282,7 @@ namespace JoyLib.Code.World
         {
             if(objectRef.IsWall)
             {
-                m_Walls.Add(objectRef.WorldPosition, objectRef);
+                AddWall(objectRef);
             }
             else
             {
@@ -261,16 +291,24 @@ namespace JoyLib.Code.World
             IsDirty = true;
         }
 
-        public void RemoveObject(Vector2Int positionRef)
+        protected void AddWall(JoyObject wallRef)
         {
-            long objectGUID = -1;
+            m_Walls.Add(wallRef.WorldPosition, wallRef);
+            m_Costs[wallRef.WorldPosition.x, wallRef.WorldPosition.y] = byte.MaxValue;
+        }
+
+        public bool RemoveObject(Vector2Int positionRef, ItemInstance itemRef)
+        {
+            List<long> objectGUIDs = new List<long>();
+            bool removed = false;
             for (int i = 0; i < m_Objects.Count; i++)
             {
-                if (m_Objects[i].WorldPosition == positionRef)
+                if (m_Objects[i].WorldPosition == positionRef && itemRef.GUID == m_Objects[i].GUID)
                 {
-                    objectGUID = m_Objects[i].GUID;
+                    objectGUIDs.Add(m_Objects[i].GUID);
                     m_Objects.RemoveAt(i);
                     IsDirty = true;
+                    removed = true;
                     break;
                 }
             }
@@ -278,12 +316,17 @@ namespace JoyLib.Code.World
             for(int i = 0; i < m_ObjectHolder.transform.childCount; i++)
             {
                 GameObject temp = m_ObjectHolder.transform.GetChild(i).gameObject;
-                if(temp.name.Contains(objectGUID.ToString()))
+                for (int j = 0; j < objectGUIDs.Count; j++)
                 {
-                    GameObject.Destroy(temp);
-                    break;
+                    if (temp.name.Contains(objectGUIDs[j].ToString()))
+                    {
+                        GameObject.Destroy(temp);
+                        break;
+                    }
                 }
             }
+
+            return removed;
         }
 
         public JoyObject GetObject(Vector2Int WorldPosition)
@@ -301,7 +344,7 @@ namespace JoyLib.Code.World
         public void Tick()
         {
             DateTime oldTime = s_DateTime;
-            if (WorldType != WorldType.Overworld)
+            if (HasTag("overworld"))
             {
                 s_DateTime = s_DateTime.AddSeconds(6.0);
             }
@@ -330,7 +373,7 @@ namespace JoyLib.Code.World
         /// <param name="objectType"></param>
         /// <param name="intentRef"></param>
         /// <returns></returns>
-        public List<NeedAIData> SearchForObjects(Entity entityRef, string objectType, Intent intentRef)
+        public List<NeedAIData> SearchForObjects(Entity entityRef, string[] tags, Intent intentRef)
         {
             List<NeedAIData> data = new List<NeedAIData>();
 
@@ -339,42 +382,23 @@ namespace JoyLib.Code.World
                 return data;
             }
 
-            //Special cases
-            //Ownable objects
-            if (objectType == "Any")
+            List<JoyObject> inSight = m_Objects.Where(obj => entityRef.CanSee(obj.WorldPosition) == true).ToList();
+            foreach(JoyObject obj in inSight)
             {
-                for (int i = 0; i < m_Objects.Count; i++)
+                int matches = 0;
+                for(int i = 0; i < tags.Length; i++)
                 {
-                    if (!entityRef.Vision[m_Objects[i].WorldPosition.x, m_Objects[i].WorldPosition.y])
+                    if(obj.HasTag(tags[i]))
                     {
-                        continue;
+                        matches++;
                     }
-
-                    if (!m_Objects[i].GetType().Equals(typeof(ItemInstance)))
-                    {
-                        continue;
-                    }
-
+                }
+                if(matches == tags.Length || (tags.Length < obj.TotalTags && matches > 0))
+                {
                     NeedAIData tempData = new NeedAIData();
                     tempData.intent = intentRef;
-                    tempData.target = m_Objects[i];
+                    tempData.target = obj;
                     data.Add(tempData);
-                }
-            }
-            else
-            {
-                for (int i = 0; i < m_Objects.Count; i++)
-                {
-                    if (entityRef.Vision[m_Objects[i].WorldPosition.x, m_Objects[i].WorldPosition.y])
-                    {
-                        if (m_Objects[i].BaseType.Equals(objectType))
-                        {
-                            NeedAIData tempData = new NeedAIData();
-                            tempData.intent = intentRef;
-                            tempData.target = m_Objects[i];
-                            data.Add(tempData);
-                        }
-                    }
                 }
             }
 
@@ -389,7 +413,7 @@ namespace JoyLib.Code.World
         /// <param name="entityTypeRef"></param>
         /// <param name="intentRef"></param>
         /// <returns></returns>
-        public List<MoonEntity> SearchForEntities(MoonEntity searcher, string entityTypeSearchString, string entitySentienceSearchString)
+        public List<Entity> SearchForEntities(Entity searcher, string entityTypeSearchString, string entitySentienceSearchString)
         {
             EntitySentienceSearch entitySentienceSearch = EntitySentienceSearch.Matching;
             try
@@ -408,15 +432,15 @@ namespace JoyLib.Code.World
             {
                 List<Entity> entities = m_Entities.Where(x => x.Sentient == false).ToList();
 
-                List<MoonEntity> moonEntities = new List<MoonEntity>();
+                List<Entity> returnEntities = new List<Entity>();
                 for (int i = 0; i < entities.Count; i++)
                 {
-                    if (searcher.CanSee(entities[i].WorldPosition.x, entities[i].WorldPosition.y) && searcher.GUID() != entities[i].GUID)
+                    if (searcher.CanSee(entities[i].WorldPosition.x, entities[i].WorldPosition.y) && searcher.GUID != entities[i].GUID)
                     {
-                        moonEntities.Add(new MoonEntity(entities[i]));
+                        returnEntities.Add(entities[i]);
                     }
                 }
-                return moonEntities;
+                return returnEntities;
             }
 
             //Sentient entities
@@ -424,15 +448,15 @@ namespace JoyLib.Code.World
             {
                 List<Entity> entities = m_Entities.Where(x => x.Sentient).ToList();
 
-                List<MoonEntity> moonEntities = new List<MoonEntity>();
+                List<Entity> returnEntities = new List<Entity>();
                 for (int i = 0; i < entities.Count; i++)
                 {
-                    if (searcher.CanSee(entities[i].WorldPosition.x, entities[i].WorldPosition.y) && searcher.GUID() != entities[i].GUID)
+                    if (searcher.CanSee(entities[i].WorldPosition.x, entities[i].WorldPosition.y) && searcher.GUID != entities[i].GUID)
                     {
-                        moonEntities.Add(new MoonEntity(entities[i]));
+                        returnEntities.Add(entities[i]);
                     }
                 }
-                return moonEntities;
+                return returnEntities;
             }
 
             //All entities
@@ -440,36 +464,36 @@ namespace JoyLib.Code.World
             {
                 List<NeedAIData> dataList = new List<NeedAIData>();
 
-                List<MoonEntity> moonEntities = new List<MoonEntity>();
+                List<Entity> returnEntity = new List<Entity>();
                 for(int i = 0; i < m_Entities.Count; i++)
                 {
-                    if(searcher.CanSee(m_Entities[i].WorldPosition.x, m_Entities[i].WorldPosition.y) && searcher.GUID() != m_Entities[i].GUID)
+                    if(searcher.CanSee(m_Entities[i].WorldPosition.x, m_Entities[i].WorldPosition.y) && searcher.GUID != m_Entities[i].GUID)
                     {
-                        moonEntities.Add(new MoonEntity(m_Entities[i]));
+                        returnEntity.Add(m_Entities[i]);
                     }
                 }
-                return moonEntities;
+                return returnEntity;
             }
 
             //Matching sentience
             else if(entitySentienceSearch == EntitySentienceSearch.Matching)
             {
-                List<Entity> matchingEntities = m_Entities.Where(x => x.Sentient == searcher.GetSentient()).ToList();
+                List<Entity> matchingEntities = m_Entities.Where(x => x.Sentient == searcher.Sentient).ToList();
 
-                List<MoonEntity> moonEntities = new List<MoonEntity>();
+                List<Entity> returnEntities = new List<Entity>();
                 for (int i = 0; i < matchingEntities.Count; i++)
                 {
                     Vector2Int position = matchingEntities[i].WorldPosition;
-                    if(searcher.CanSee(position.x, position.y) && searcher.GUID() != matchingEntities[i].GUID)
+                    if(searcher.CanSee(position.x, position.y) && searcher.GUID != matchingEntities[i].GUID)
                     {
-                        moonEntities.Add(new MoonEntity(matchingEntities[i]));
+                        returnEntities.Add(matchingEntities[i]);
                     }
                 }
-                return moonEntities;
+                return returnEntities;
             }
             else
             {
-                return new List<MoonEntity>();
+                return new List<Entity>();
             }
         }
 
@@ -495,26 +519,27 @@ namespace JoyLib.Code.World
             return data;
         }
 
-        public List<MoonEntity> SearchForMate(Entity entityRef)
+        /*
+        public List<Entity> SearchForMate(Entity entityRef)
         {
             List<Entity> validPartners = new List<Entity>();
             if (entityRef.Sexuality == Sexuality.Heterosexual)
             {
                 validPartners = m_Entities.Where(x => x.Sex != entityRef.Sex && x.Sentient == entityRef.Sentient &&
                 (x.Sexuality == Sexuality.Heterosexual || x.Sexuality == Sexuality.Bisexual) && x.CreatureType.Equals(entityRef.CreatureType) &&
-                x.Needs[NeedIndex.Sex].contributingHappiness == false).ToList();
+                x.Needs["Sex"].GetContributingHappiness() == false).ToList();
             }
             else if(entityRef.Sexuality == Sexuality.Homosexual)
             {
                 validPartners = m_Entities.Where(x => x.Sex == entityRef.Sex && x.Sentient == entityRef.Sentient &&
                 (x.Sexuality == Sexuality.Homosexual || x.Sexuality == Sexuality.Bisexual) && x.CreatureType.Equals(entityRef.CreatureType) &&
-                x.Needs[NeedIndex.Sex].contributingHappiness == false).ToList();
+                x.Needs["Sex"].GetContributingHappiness() == false).ToList();
             }
             else if(entityRef.Sexuality == Sexuality.Bisexual)
             {
                 validPartners = m_Entities.Where(x => x.Sentient == entityRef.Sentient &&
                 (x.Sexuality == Sexuality.Heterosexual || x.Sexuality == Sexuality.Bisexual) && x.CreatureType.Equals(entityRef.CreatureType) &&
-                x.Needs[NeedIndex.Sex].contributingHappiness == false).ToList();
+                x.Needs["Sex"].GetContributingHappiness() == false).ToList();
             }
 
             List<Entity> visiblePartners = new List<Entity>();
@@ -531,12 +556,28 @@ namespace JoyLib.Code.World
                 }
             }
 
-            List<MoonEntity> moonPartners = new List<MoonEntity>();
+            List<Entity> partners = new List<Entity>();
             foreach(Entity entity in visiblePartners)
             {
-                moonPartners.Add(new MoonEntity(entity));
+                partners.Add(entity);
             }
-            return moonPartners;
+            return partners;
+        }
+        */
+
+        public List<Entity> SearchForEntities(Predicate<Entity> searchCriteria)
+        {
+            List<Entity> searchEntities = new List<Entity>();
+
+            foreach(Entity entity in m_Entities)
+            {
+                if(searchCriteria.Invoke(entity))
+                {
+                    searchEntities.Add(entity);
+                }
+            }
+
+            return searchEntities;
         }
 
         public Entity GetRandomSentient()
@@ -660,7 +701,7 @@ namespace JoyLib.Code.World
         {
             bool[,] vision = visionRef;
 
-            int entityPerception = entityRef.Statistics[StatisticIndex.Perception].Value + GlobalConstants.MINIMUM_VISION_DISTANCE;
+            int entityPerception = entityRef.VisionMod;
             for(int i = 0; i < 360; i++)
             {
                 float x = (float)Math.Cos(i * 0.01745f);
@@ -703,11 +744,12 @@ namespace JoyLib.Code.World
             return vision;
         }
 
+        /*
         protected bool[,] DiscoverTilesOLD(Vector2Int pointRef, Entity entityRef, bool[,] visionRef)
         {
             bool[,] vision = visionRef;
 
-            float entityPerceptionMod = entityRef.Statistics[StatisticIndex.Perception].Value + GlobalConstants.MINIMUM_VISION_DISTANCE;
+            float entityPerceptionMod = entityRef.VisionMod;
             
             Dictionary<Vector2Int, JoyObject> walls = m_Objects.Where(x => x.IsWall).ToDictionary(x => x.WorldPosition, x => x);
 
@@ -749,6 +791,7 @@ namespace JoyLib.Code.World
 
             return vision;
         }
+        */
 
         public void AddEntity(Entity entityRef)
         {
@@ -875,6 +918,12 @@ namespace JoyLib.Code.World
             return Sector.Centre;
         }
 
+        public List<Vector2Int> GetVisibleWalls(Entity viewer)
+        {
+            List<Vector2Int> visibleWalls = this.Walls.Where(wall => viewer.CanSee(wall.Key)).ToDictionary(wall => wall.Key, wall => wall.Value).Keys.ToList();
+            return visibleWalls;
+        }
+
         public WorldTile[,] Tiles
         {
             get
@@ -895,12 +944,20 @@ namespace JoyLib.Code.World
             }
         }
 
-        public Dictionary<Vector2Int, JoyObject> GetObjectsOfType(string type)
+        public Dictionary<Vector2Int, JoyObject> GetObjectsOfType(string[] tags)
         {
             Dictionary<Vector2Int, JoyObject> objects = new Dictionary<Vector2Int, JoyObject>();
             foreach (JoyObject joyObject in m_Objects)
             {
-                if (joyObject.BaseType.Equals(type))
+                int matches = 0;
+                foreach(string tag in tags)
+                {
+                    if(joyObject.HasTag(tag))
+                    {
+                        matches++;
+                    }
+                }
+                if(matches == tags.Length || (tags.Length < joyObject.TotalTags && matches > 0))
                 {
                     objects.Add(joyObject.WorldPosition, joyObject);
                 }
@@ -916,7 +973,7 @@ namespace JoyLib.Code.World
 
         public string GetLocalAreaInfo(Entity entityRef)
         {
-            if (m_Type == WorldType.Interior)
+            if (HasTag("interior"))
             {
                 int result = RNG.Roll(0, 100);
                 if (result <= 50)
@@ -925,9 +982,13 @@ namespace JoyLib.Code.World
                     numberOfLevels = WorldConversationDataHelper.GetNumberOfFloors(numberOfLevels, this);
 
                     if (numberOfLevels == 1)
+                    {
                         return "This place only has " + numberOfLevels + " floor to it.";
+                    }
                     else
+                    {
                         return "This place has at least " + numberOfLevels + " floors.";
+                    }
                 }
                 else if (result > 50)
                 {
@@ -946,6 +1007,11 @@ namespace JoyLib.Code.World
             }
 
             return "I don't know much about this place, sorry.";
+        }
+
+        public bool HasTag(string tag)
+        {
+            return m_Tags.Contains(tag.ToLower());
         }
         
         public Dictionary<Vector2Int, WorldInstance> Areas
@@ -1040,14 +1106,6 @@ namespace JoyLib.Code.World
                 return m_Entities[m_PlayerIndex];
             }
         }
-
-        public WorldType WorldType
-        {
-            get
-            {
-                return m_Type;
-            }
-        }
         
         public int[,] LightLevels
         {
@@ -1069,6 +1127,14 @@ namespace JoyLib.Code.World
         {
             get;
             protected set;
+        }
+
+        public byte[,] Costs
+        {
+            get
+            {
+                return m_Costs;
+            }
         }
     }
 

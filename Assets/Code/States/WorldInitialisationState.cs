@@ -1,6 +1,6 @@
-﻿using JobLib.Code.Unity;
-using JoyLib.Code.Entities;
+﻿using JoyLib.Code.Entities;
 using JoyLib.Code.Graphics;
+using JoyLib.Code.Unity;
 using JoyLib.Code.World;
 using UnityEngine;
 
@@ -40,7 +40,7 @@ namespace JoyLib.Code.States
                 GameObject upstairs = GameObject.Instantiate(sprite);
                 upstairs.transform.position = new Vector3(m_ActiveWorld.SpawnPoint.x, m_ActiveWorld.SpawnPoint.y, 0.0f);
                 upstairs.GetComponent<SpriteRenderer>().sortingLayerName = "Walls";
-                upstairs.GetComponent<SpriteRenderer>().sprite = ObjectIcons.GetSprite("Stairs", "UpStairs0");
+                upstairs.GetComponent<SpriteRenderer>().sprite = ObjectIconHandler.GetSprite("Stairs", "UpStairs0");
                 upstairs.transform.parent = objectHolder.transform;
             }
 
@@ -50,7 +50,7 @@ namespace JoyLib.Code.States
                 GameObject downstairs = GameObject.Instantiate(sprite);
                 downstairs.transform.position = new Vector3(position.x, position.y, 0.0f);
                 downstairs.GetComponent<SpriteRenderer>().sortingLayerName = "Walls";
-                downstairs.GetComponent<SpriteRenderer>().sprite = ObjectIcons.GetSprite("Stairs", "DownStairs0");
+                downstairs.GetComponent<SpriteRenderer>().sprite = ObjectIconHandler.GetSprite("Stairs", "DownStairs0");
                 downstairs.transform.parent = objectHolder.transform;
             }
 
@@ -66,11 +66,11 @@ namespace JoyLib.Code.States
                     switch(m_ActiveWorld.Tiles[i, j])
                     {
                         case WorldTile.Paving:
-                            gameObject.GetComponent<SpriteRenderer>().sprite = ObjectIcons.GetSprite("Paving", "MiddleMiddle0");
+                            gameObject.GetComponent<SpriteRenderer>().sprite = ObjectIconHandler.GetSprite("Paving", "MiddleMiddle0");
                             break;
 
                         case WorldTile.Plains:
-                            gameObject.GetComponent<SpriteRenderer>().sprite = ObjectIcons.GetSprite("Plains", "MiddleMiddle0");
+                            gameObject.GetComponent<SpriteRenderer>().sprite = ObjectIconHandler.GetSprite("Plains", "MiddleMiddle0");
                             break;
                     }
                     
@@ -81,7 +81,7 @@ namespace JoyLib.Code.States
                     GameObject fogOfWar = GameObject.Instantiate(sprite);
                     fogOfWar.transform.position = new Vector3(i, j);
                     fogOfWar.GetComponent<SpriteRenderer>().sortingLayerName = "Fog of War";
-                    fogOfWar.GetComponent<SpriteRenderer>().sprite = ObjectIcons.GetSprite("Obscure", "Obscure0");
+                    fogOfWar.GetComponent<SpriteRenderer>().sprite = ObjectIconHandler.GetSprite("Obscure", "Obscure0");
                     fogOfWar.transform.parent = fogOfWarHolder.transform;
                     fogOfWar.name = "Fog of War";
                 }

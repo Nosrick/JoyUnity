@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Items>
-  <Category>Potions</Category>
   <ActionWord>splashes</ActionWord>
   
   <IdentifiedItem>
@@ -10,6 +9,9 @@
     <Effect></Effect>
     <SpawnWeight>5</SpawnWeight>
     <Materials>Glass</Materials>
+	<Tag>Potion</Tag>
+	<Tag>Healing</Tag>
+	<Tileset>Potions</Tileset>
   </IdentifiedItem>
   
   <UnidentifiedItem>
@@ -31,4 +33,32 @@
     <Name>Yellow Potion</Name>
     <Description>Shimmering golden nectar swirls around this bottle.</Description>
   </UnidentifiedItem>
+  
+  <Filename>Potion</Filename>
+  <Tileset>Potions</Tileset>
+  
+  <Icon>
+	<Name>Red Potion</Name>
+	<X>0</X>
+	<Y>4</Y>
+	<Data>Default</Data>
+  </Icon>
+  <Icon>
+	<Name>Pink Potion</Name>
+	<X>1</X>
+	<Y>4</Y>
+	<Data>Default</Data>
+  </Icon>
+  <Icon>
+	<Name>Orange Potion</Name>
+	<X>2</X>
+	<Y>4</Y>
+	<Data>Default</Data>
+  </Icon>
+  <Icon>
+	<Name>Yellow Potion</Name>
+	<X>3</X>
+	<Y>4</Y>
+	<Data>Default</Data>
+  </Icon>
 </Items>

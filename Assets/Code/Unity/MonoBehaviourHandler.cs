@@ -1,7 +1,7 @@
 ﻿using JoyLib.Code.Entities.Items;
 using UnityEngine;
 
-namespace JobLib.Code.Unity
+namespace JoyLib.Code.Unity
 {
     public class MonoBehaviourHandler : MonoBehaviour
     {

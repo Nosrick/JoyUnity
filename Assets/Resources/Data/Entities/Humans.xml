@@ -2,37 +2,98 @@
 <Entities>
   <Entity>
     <CreatureType>Human</CreatureType>
-    <Sentient>Yes</Sentient>
     <Type>Humanoid</Type>
-    <Tileset>Player</Tileset>
-    <VisionType>Diurnal</VisionType>
 
-    <Statistic Name="Strength" Value="3" />
-    <Statistic Name="Agility" Value="3" />
-    <Statistic Name="Endurance" Value="4" />
-    <Statistic Name="Cognition" Value="3" />
-    <Statistic Name="Perception" Value="3" />
-    <Statistic Name="Focus" Value="3" />
-    <Statistic Name="Personality" Value="3" />
-    <Statistic Name="Suavity" Value="3" />
-    <Statistic Name="Wit" Value="3" />
-	
-	<Slots>
-		<Slot>Head</Slot>
-		<Slot>Neck</Slot>
-		<Slot>Shoulders</Slot>
-		<Slot>Torso</Slot>
-		<Slot>Waist</Slot>
-		<Slot>Legs</Slot>
-		<Slot>Feet</Slot>
-		<Slot>Hand1</Slot>
-		<Slot>Hand2</Slot>
-		<Slot>Ring1</Slot>
-		<Slot>Ring2</Slot>
-		<Slot>Ranged</Slot>
-		<Slot>Ammo</Slot>
-		<Slot>Job Pin</Slot>
-		<Slot>Throw</Slot>
-	</Slots>
+    <Statistic>
+		<Name>Strength</Name>
+		<Value>4</Value>
+	</Statistic>
+    <Statistic>
+		<Name>Agility</Name>
+		<Value>4</Value>
+	</Statistic>
+	<Statistic>
+		<Name>Endurance</Name>
+		<Value>5</Value>
+	</Statistic>
+
+	<Statistic>
+		<Name>Cognition</Name>
+		<Value>4</Value>
+	</Statistic>
+	<Statistic>
+		<Name>Cunning</Name>
+		<Value>4</Value>
+	</Statistic>
+	<Statistic>
+		<Name>Focus</Name>
+		<Value>4</Value>
+	</Statistic>
+
+	<Statistic>
+		<Name>Personality</Name>
+		<Value>4</Value>
+	</Statistic>
+	<Statistic>
+		<Name>Suavity</Name>
+		<Value>4</Value>
+	</Statistic>
+	<Statistic>
+		<Name>Wit</Name>
+		<Value>4</Value>
+	</Statistic>
+
+	<Tag>Living</Tag>
+	<Tag>Sentient</Tag>
+	<Tag>Animated</Tag>
+	<Tag>Diurnal</Tag>
+
+  <Need>Hunger</Need>
+
+	<Slot>Head</Slot>
+	<Slot>Neck</Slot>
+	<Slot>Shoulders</Slot>
+	<Slot>Torso</Slot>
+	<Slot>Waist</Slot>
+	<Slot>Legs</Slot>
+	<Slot>Feet</Slot>
+	<Slot>Hand</Slot>
+	<Slot>Hand</Slot>
+	<Slot>Ring</Slot>
+	<Slot>Ring</Slot>
+	<Slot>Ranged</Slot>
+	<Slot>Ammo</Slot>
+	<Slot>Job Pin</Slot>
+	<Slot>Throw</Slot>
+
+	<Filename>Player0</Filename>
+	<Tileset>Human</Tileset>
+
+	<Icon>
+		<Name>Warrior</Name>
+		<X>1</X>
+		<Y>11</Y>
+		<Data>Warrior</Data>
+	</Icon>
+	<Icon>
+		<Name>Hedge Wizard</Name>
+		<X>6</X>
+		<Y>11</Y>
+		<Data>Hedge Wizard</Data>
+	</Icon>
+	<Icon>
+		<Name>Thief</Name>
+		<X>7</X>
+		<Y>10</Y>
+		<Data>Thief</Data>
+	</Icon>
+
+	<Icon>
+		<Name>Human</Name>
+		<X>0</X>
+		<Y>11</Y>
+		<Data>Default</Data>
+	</Icon>
+
   </Entity>
 </Entities>

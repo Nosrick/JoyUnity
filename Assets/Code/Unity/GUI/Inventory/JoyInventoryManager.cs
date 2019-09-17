@@ -74,7 +74,7 @@ namespace JoyLib.Code.Unity.GUI.Inventory
             if(Input.GetKeyDown(KeyCode.Keypad2))
             {
                 m_Index += 1;
-                m_Index %= m_Player.Backpack.Count;
+                m_Index %= m_Player.Backpack.Length;
 
                 cursorMoved = true;
             }
@@ -83,7 +83,7 @@ namespace JoyLib.Code.Unity.GUI.Inventory
                 m_Index -= 1;
                 if(m_Index == -1)
                 {
-                    m_Index = m_Player.Backpack.Count - 1;
+                    m_Index = m_Player.Backpack.Length - 1;
                 }
 
                 cursorMoved = true;

@@ -47,7 +47,7 @@ namespace JoyLib.Code.States
             OverworldGenerator overworldGen = new OverworldGenerator();
 
             //Generate the basic overworld
-            m_World = new WorldInstance(overworldGen.GenerateWorldSpace(WORLD_SIZE), WorldType.Overworld, "Everse");
+            m_World = new WorldInstance(overworldGen.GenerateWorldSpace(WORLD_SIZE), new string[] { "overworld", "exterior" }, "Everse");
 
             //Set the date and time for 1/1/1555, 12:00pm
             m_World.SetDateTime(new DateTime(1555, 1, 1, 12, 0, 0));
@@ -77,7 +77,8 @@ namespace JoyLib.Code.States
             m_World.AddArea(transitionPoint, dungeon);
             Done = true;
 
-            m_Player.AddItem(new ItemInstance(ItemHandler.GetSpecificItem("Lantern"), new Vector2Int(-1, -1), true));
+            ItemInstance lightSource = WorldState.ItemHandler.CreateRandomItemOfType(new string[] { "light source" });
+            m_Player.AddItem(new ItemInstance(lightSource));
             m_World.Tick();
         }
 

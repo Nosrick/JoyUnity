@@ -1,5 +1,6 @@
 ﻿using JoyLib.Code.Entities.Abilities;
-using System.Collections.Generic;
+using JoyLib.Code.Entities.Statistics;
+using System.Linq;
 
 namespace JoyLib.Code.Entities
 {
@@ -8,20 +9,20 @@ namespace JoyLib.Code.Entities
         protected readonly string m_CreatureType;
         protected readonly string m_Type;
 
-        protected readonly Dictionary<StatisticIndex, EntityStatistic> m_Statistics;
-        protected readonly Dictionary<string, EntitySkill> m_Skills;
-        protected readonly List<Ability> m_Abilities;
-        protected readonly List<string> m_Slots;
+        protected readonly BasicValueContainer<IRollableValue> m_Statistics;
+        protected readonly BasicValueContainer<IGrowingValue> m_Skills;
+        protected readonly IAbility[] m_Abilities;
+        protected readonly string[] m_Slots;
+        protected readonly string[] m_Tags;
         
         protected readonly int m_Size;
 
         protected readonly bool m_Sentient;
-        protected readonly VisionType m_VisionType;
 
         protected readonly string m_Tileset;
 
-        public EntityTemplate(Dictionary<StatisticIndex, EntityStatistic> statistics, Dictionary<string, EntitySkill> skills, List<Ability> abilities, List<string> slots,
-            int size, bool sentient, VisionType visionType, string creatureType, string type, string tileset)
+        public EntityTemplate(BasicValueContainer<IRollableValue> statistics, BasicValueContainer<IGrowingValue> skills, IAbility[] abilities,
+            string[] slots, int size, string visionType, string creatureType, string type, string tileset, string[] tags)
         {
             m_Statistics = statistics;
             m_Skills = skills;
@@ -30,17 +31,31 @@ namespace JoyLib.Code.Entities
 
             m_Size = size;
 
-            m_Sentient = sentient;
+            m_Sentient = tags.Contains("sentient");
 
-            m_VisionType = visionType;
+            VisionType = visionType;
 
             m_CreatureType = creatureType;
             m_Type = type;
 
             m_Tileset = tileset;
+
+            m_Tags = new string[tags.Length];
+            for(int i = 0; i < tags.Length; i++)
+            {
+                m_Tags[i] = tags[i].ToLower();
+            }
         }
 
-        public List<string> Slots
+        public string[] Tags
+        {
+            get
+            {
+                return m_Tags;
+            }
+        }
+
+        public string[] Slots
         {
             get
             {
@@ -48,7 +63,7 @@ namespace JoyLib.Code.Entities
             }
         }
 
-        public Dictionary<StatisticIndex, EntityStatistic> Statistics
+        public BasicValueContainer<IRollableValue> Statistics
         {
             get
             {
@@ -56,7 +71,7 @@ namespace JoyLib.Code.Entities
             }
         }
 
-        public Dictionary<string, EntitySkill> Skills
+        public BasicValueContainer<IGrowingValue> Skills
         {
             get
             {
@@ -64,7 +79,7 @@ namespace JoyLib.Code.Entities
             }
         }
 
-        public List<Ability> Abilities
+        public IAbility[] Abilities
         {
             get
             {
@@ -88,12 +103,10 @@ namespace JoyLib.Code.Entities
             }
         }
 
-        public VisionType VisionType
+        public string VisionType
         {
-            get
-            {
-                return m_VisionType;
-            }
+            get;
+            protected set;
         }
 
         public string CreatureType

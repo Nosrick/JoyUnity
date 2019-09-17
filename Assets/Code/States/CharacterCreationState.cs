@@ -1,23 +1,24 @@
-﻿using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Items;
+﻿using JoyLib.Code.Collections;
+using JoyLib.Code.Cultures;
+using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Jobs;
 using JoyLib.Code.Entities.Needs;
+using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
-using JoyLib.Code.Loaders;
+using JoyLib.Code.Rollers;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace JoyLib.Code.States
 {
     public class CharacterCreationState : GameState
     {
         protected int m_PointsRemaining;
-        protected Dictionary<StatisticIndex, float> m_PlayerStatistics;
+        protected Dictionary<string, int> m_PlayerStatistics;
 
         protected List<JobType> m_Jobs;
         protected int m_JobIndex;
-        protected int m_sexIndex;
+        protected int m_SexIndex;
 
         protected Entity m_Player;
 
@@ -25,15 +26,15 @@ namespace JoyLib.Code.States
         {
             m_PointsRemaining = 12;
 
-            Array statisticIndices = Enum.GetValues(typeof(StatisticIndex));
-            m_PlayerStatistics = new Dictionary<StatisticIndex, float>(statisticIndices.Length);
+            string[] names = EntityStatistic.NAMES;
+            m_PlayerStatistics = new Dictionary<string, int>(names.Length);
 
-            foreach (StatisticIndex index in statisticIndices)
+            foreach (string index in names)
             {
-                m_PlayerStatistics.Add(index, 30);
+                m_PlayerStatistics.Add(index, 4);
             }
             m_JobIndex = 0;
-            m_sexIndex = 0;
+            m_SexIndex = 0;
         }
 
         public override void Start()
@@ -49,7 +50,6 @@ namespace JoyLib.Code.States
 
         private void UpdateUI()
         {
-            int numStats = Enum.GetNames(typeof(StatisticIndex)).Length;
         }
 
         public override void Draw()
@@ -74,7 +74,7 @@ namespace JoyLib.Code.States
             base.Update();
         }
 
-        private void DecrementStatistic(StatisticIndex index)
+        private void DecrementStatistic(string index)
         {
             if (m_PlayerStatistics[index] > 1)
             {
@@ -83,7 +83,7 @@ namespace JoyLib.Code.States
             }
         }
 
-        private void IncrementStatistic(StatisticIndex index)
+        private void IncrementStatistic(string index)
         {
             if (m_PlayerStatistics[index] < 10 && m_PointsRemaining > 0)
             {
@@ -106,29 +106,33 @@ namespace JoyLib.Code.States
 
         private void Togglesex(object sender, EventArgs eventArgs)
         {
-            m_sexIndex += 1;
-            m_sexIndex %= 3;
+            m_SexIndex += 1;
+            m_SexIndex %= 3;
         }
 
         private string GetJobDescription()
         {
-            string jobDescription = m_Jobs[m_JobIndex].name + "\r\n" + m_Jobs[m_JobIndex].description + "\r\n";
+            string jobDescription = m_Jobs[m_JobIndex].Name + "\r\n" + m_Jobs[m_JobIndex].Description + "\r\n";
             return jobDescription;
         }
 
         private void NextState(object sender, EventArgs eventArgs)
         {
-            Sex m_Playersex = (Sex)m_sexIndex;
-
-            Dictionary<NeedIndex, EntityNeed> needs = EntityNeed.GetFullRandomisedNeeds();
-
             EntityTemplate humanTemplate = EntityTemplateHandler.Get("Human");
-            m_Player = WorldState.EntityHandler.Create(humanTemplate, needs, 1, m_Jobs[m_JobIndex], m_Playersex, Sexuality.Bisexual, new UnityEngine.Vector2Int(-1, -1),
-                ObjectIcons.GetSprites("Jobs", m_Jobs[m_JobIndex].name).ToList(), null);
+            CultureType culture = CultureHandler.GetByCultureName("Human");
+      
+            BasicValueContainer<INeed> needs = new BasicValueContainer<INeed>();
+            needs.Add(NeedHandler.GetRandomised("hunger"));
+
+            IGrowingValue level = new ConcreteGrowingValue("level", 1, 100, 0, GlobalConstants.DEFAULT_SUCCESS_THRESHOLD,
+                new StandardRoller(), new NonUniqueDictionary<INeed, float>());
+
+            m_Player = WorldState.EntityHandler.Create(humanTemplate, needs, level, m_Jobs[m_JobIndex], culture.ChooseSex(), culture.ChooseSexuality(), new UnityEngine.Vector2Int(-1, -1),
+                ObjectIconHandler.GetSprites("Human", m_Jobs[m_JobIndex].Name), null);
 
             m_Player.PlayerControlled = true;
 
-            m_Player.AddItem(new ItemInstance(ItemHandler.GetSpecificItem("Lantern"), new UnityEngine.Vector2Int(-1, -1), true));
+            m_Player.AddItem(WorldState.ItemHandler.CreateRandomItemOfType(new string[] { "light source" }, true));
         }
 
         public override GameState GetNextState()

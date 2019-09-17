@@ -1,10 +1,11 @@
 ﻿using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
+using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Helpers;
+using JoyLib.Code.Rollers;
 using JoyLib.Code.States;
 using JoyLib.Code.World;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace JoyLib.Code.Quests
@@ -46,7 +47,7 @@ namespace JoyLib.Code.Quests
         private static List<ItemInstance> GetRewards(Entity questor, Entity provider, List<QuestStep> steps)
         {
             List<ItemInstance> rewards = new List<ItemInstance>();
-            int reward = ((steps.Count * 100) + (provider.HasRelationship(questor.GUID) * (questor.Statistics[StatisticIndex.Personality].Value)));
+            int reward = ((steps.Count * 100) + (EntityRelationshipHandler.GetHighestRelationshipValue(provider, questor)));
             rewards.Add(BagOfGoldHelper.GetBagOfGold(reward));
 
             return rewards;
@@ -56,17 +57,21 @@ namespace JoyLib.Code.Quests
         {
             QuestAction action = QuestAction.Deliver;
 
-            int random = RNG.Roll(0, ItemHandler.GetFlatItemList().Count - 1);
-            ItemInstance deliveryItem = new ItemInstance(ItemHandler.GetFlatItemList()[random], new Vector2Int(-1, -1), true);
-            if (provider.Backpack.Count > 0)
+            ItemInstance deliveryItem = null;
+            ItemInstance[] backpack = provider.Backpack;
+            if (backpack.Length > 0)
             {
-                int result = RNG.Roll(0, provider.Backpack.Count - 1);
+                int result = RNG.Roll(0, backpack.Length - 1);
 
-                deliveryItem = provider.Backpack[result];
+                deliveryItem = backpack[result];
             }
             Entity endPoint = overworldRef.GetRandomSentientWorldWide();
+            if(deliveryItem == null)
+            {
+                deliveryItem = WorldState.ItemHandler.CreateCompletelyRandomItem();
+            }
 
-            QuestStep step = new QuestStep(action, new List<ItemInstance>() { deliveryItem }, new List<JoyObject>() { endPoint }, new List<World.WorldInstance>());
+            QuestStep step = new QuestStep(action, new List<ItemInstance>() { deliveryItem }, new List<JoyObject>() { endPoint }, new List<WorldInstance>());
             return step;
         }
 
@@ -83,10 +88,11 @@ namespace JoyLib.Code.Quests
                 while(breakout < 100)
                 {
                     Entity holder = overworldRef.GetRandomSentientWorldWide();
-                    if (holder.Backpack.Count > 0)
+                    ItemInstance[] backpack = holder.Backpack;
+                    if (backpack.Length > 0)
                     {
-                        result = RNG.Roll(0, holder.Backpack.Count - 1);
-                        target = holder.Backpack[result];
+                        result = RNG.Roll(0, backpack.Length - 1);
+                        target = backpack[result];
                         break;
                     }
                     breakout += 1;
@@ -115,17 +121,20 @@ namespace JoyLib.Code.Quests
             while(breakout < 100)
             {
                 Entity holder = overworldRef.GetRandomSentientWorldWide();
-                if(holder.Backpack.Count > 0)
+                ItemInstance[] backpack = holder.Backpack;
+                if(backpack.Length > 0)
                 {
-                    int result = RNG.Roll(0, holder.Backpack.Count - 1);
-                    target = holder.Backpack[result];
+                    int result = RNG.Roll(0, backpack.Length - 1);
+                    target = backpack[result];
                     break;
                 }
                 breakout += 1;
             }
 
             if (breakout == 100)
+            {
                 return MakeExploreQuest(provider, overworldRef);
+            }
 
             QuestStep step = new QuestStep(action, new List<ItemInstance>() { target }, new List<JoyObject>() { provider }, new List<World.WorldInstance>());
             return step;
@@ -144,7 +153,9 @@ namespace JoyLib.Code.Quests
             {
                 target = worlds[RNG.Roll(0, worlds.Count - 1)];
                 if (target.GUID != currentWorld.GUID && target.GUID != overworldRef.GUID)
+                {
                     break;
+                }
             }
 
             QuestStep step = new QuestStep(action, new List<ItemInstance>(), new List<JoyObject>(), new List<WorldInstance>() { target });

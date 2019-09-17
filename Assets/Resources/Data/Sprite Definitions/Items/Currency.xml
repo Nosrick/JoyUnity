@@ -1,7 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Objects>
-  <TilesetName>Currency</TilesetName>
-  <Sheet>Money</Sheet>
+	<TilesetName>Currency</TilesetName>
+	<Sheet>Money</Sheet>
 
-  <ItemIcon Name="Copper coin" Position="3,5" />
+	<Icon>
+		<Name>Copper Coin</Name>
+		<X>3</X>
+		<Y>5</Y>
+		<Data>Default</Data>
+	</Icon>
 </Objects>

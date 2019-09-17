@@ -1,27 +1,28 @@
-﻿using JoyLib.Code.Entities;
+﻿using JoyLib.Code.Conversation.Conversations;
+using JoyLib.Code.Entities;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Xml;
 
 namespace JoyLib.Code.Conversation.Subengines
 {
     public static class GreetingEngine
     {
         //Each greeting will have a ConversationCondition associated with it
-        private static List<Tuple<string, ConversationCondition>> m_Greetings;
+        private static List<ITopic> s_Greetings;
 
-        public static void LoadGreetings()
+        public static bool LoadGreetings()
         {
-            if (m_Greetings != null)
-                return;
+            if (s_Greetings != null)
+            {
+                return true;
+            }
 
-            m_Greetings = new List<Tuple<string, ConversationCondition>>();
+            s_Greetings = new List<ITopic>();
 
+            /*
             XmlReader reader = XmlReader.Create(Directory.GetCurrentDirectory() + "//Data//Conversation//Greetings//Greetings.xml");
 
             string greeting = "DEFAULT GREETING";
-            ConversationCondition condition = new ConversationCondition("=", 0);
 
             while (reader.Read())
             {
@@ -56,34 +57,33 @@ namespace JoyLib.Code.Conversation.Subengines
 
                     condition = new ConversationCondition(conditionString, conditionValue);
 
-                    m_Greetings.Add(new Tuple<string, ConversationCondition>(greeting, condition));
+                    s_Greetings.Add(new Tuple<string, ConversationCondition>(greeting, condition));
                 }
             }
 
             reader.Close();
+            */
+
+            return true;
         }
 
-        public static string Converse(Entity instigator, Entity listener)
+        public static ITopic Converse(Entity instigator, Entity listener)
         {
-            List<Tuple<string, ConversationCondition>> validResponses = new List<Tuple<string, ConversationCondition>>();
-            foreach (Tuple<string, ConversationCondition> tuple in m_Greetings)
+            List<ITopic> validResponses = new List<ITopic>();
+            foreach (ITopic topic in s_Greetings)
             {
-                if (tuple.Second.FulfillsCondition(listener.HasRelationship(instigator.GUID)))
+                string[] conditions = topic.GetConditionTags();
+                Tuple<string, int>[] data = instigator.GetData(conditions);
+
+                if (topic.PassesConditions(data))
                 {
-                    validResponses.Add(tuple);
+                    validResponses.Add(topic);
                 }
             }
-            int index = 0;
-            int highestValue = 0;
-            for(int i = 0; i < validResponses.Count; i++)
-            {
-                if (validResponses[i].Second.value > highestValue)
-                {
-                    highestValue = validResponses[i].Second.value;
-                    index = i;
-                }
-            }
-            return validResponses[index].First;
+
+            //Sort by priority
+            validResponses.Sort(new TopicComparer());
+            return validResponses[0];
         }
     }
 }
