@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
 
         //REPLACE THIS WITH AN ACTUAL ENTITY CONSTRUCTOR
         BasicValueContainer<INeed> needs = new BasicValueContainer<INeed>();
-        INeed hunger = NeedHandler.GetRandomised("Hunger");
+        INeed hunger = NeedHandler.GetRandomised("hunger");
         needs.Add(hunger);
 
         List<CultureType> cultures = CultureHandler.GetByCreatureType("Human");

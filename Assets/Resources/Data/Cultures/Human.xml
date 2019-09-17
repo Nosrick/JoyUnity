@@ -3,16 +3,16 @@
 	<CultureName>Human Kingdom</CultureName>
 	<CreatureName>Human</CreatureName>
 
-	<Sex>Female</Sex>
-	<Sex>Male</Sex>
+	<Sex>female</Sex>
+	<Sex>male</Sex>
 
 	<Ruler>King</Ruler>
 	<Ruler>Queen</Ruler>
 
-	<Crime>Theft</Crime>
-	<Crime>Murder</Crime>
-	<Crime>Trespass</Crime>
-	<Crime>Rape</Crime>
+	<Crime>theft</Crime>
+	<Crime>murder</Crime>
+	<Crime>trespass</Crime>
+	<Crime>rape</Crime>
 	
 	<Job>
 		<Name>Warrior</Name>
