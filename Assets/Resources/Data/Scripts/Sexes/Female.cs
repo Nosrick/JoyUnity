@@ -16,7 +16,7 @@ namespace JoyLib.Code.Entities.Sexes
         {
             get
             {
-                return "Female";
+                return "female";
             }
         }
 

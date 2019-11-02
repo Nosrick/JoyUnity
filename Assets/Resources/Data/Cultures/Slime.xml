@@ -1,55 +1,55 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Culture>
-	<CultureName>Slime Conglomerate</CultureName>
-	<CreatureName>Dungeon Slime</CreatureName>
+<Cultures>
+	<Culture>
+		<CultureName>slime conglomerate</CultureName>
+		<Inhabitant>dungeon slime</Inhabitant>
 
-	<Sex>Neutral</Sex>
+		<Ruler>great slime</Ruler>
 
-	<Ruler>Great Slime</Ruler>
+		<Sexuality>
+			<Name>bisexual</Name>
+			<Chance>95</Chance>
+		</Sexuality>
 
-	<Sexuality>
-		<Name>Bisexual</Name>
-		<Chance>95</Chance>
-	</Sexuality>
+		<Sexuality>
+			<Name>asexual</Name>
+			<Chance>5</Chance>
+		</Sexuality>
 
-	<Sexuality>
-		<Name>Asexual</Name>
-		<Chance>5</Chance>
-	</Sexuality>
-	
-	<Sex>
-		<Name>Neutral</Name>
-		<Chance>100</Chance>
-	</Sex>
-	
-	<Job>
-		<Name>Warrior</Name>
-		<Chance>10</Chance>
-	</Job>
+		<Sex>
+			<Name>neutral</Name>
+			<Chance>100</Chance>
+		</Sex>
 
-	<RelationshipType>Polyamorous</RelationshipType>
+		<Job>
+			<Name>warrior</Name>
+			<Chance>10</Chance>
+		</Job>
 
-	<NameData>
-		<Name>Glorp</Name>
-		<Sex>Neutral</Sex>
-		<Chain>0</Chain>
-	</NameData>
-	
-	<NameData>
-		<Name>Blip</Name>
-		<Sex>Neutral</Sex>
-		<Chain>0</Chain>
-	</NameData>
-	
-	<NameData>
-		<Name>Slorp</Name>
-		<Sex>Neutral</Sex>
-		<Chain>0</Chain>
-	</NameData>
-	
-	<NameData>
-		<Name>Glurg</Name>
-		<Sex>Neutral</Sex>
-		<Chain>0</Chain>
-	</NameData>
-</Culture>
+		<RelationshipType>polyamorous</RelationshipType>
+
+		<NameData>
+			<Name>Glorp</Name>
+			<Sex>Neutral</Sex>
+			<Chain>0</Chain>
+		</NameData>
+
+		<NameData>
+			<Name>Blip</Name>
+			<Sex>Neutral</Sex>
+			<Chain>0</Chain>
+		</NameData>
+
+		<NameData>
+			<Name>Slorp</Name>
+			<Sex>Neutral</Sex>
+			<Chain>0</Chain>
+		</NameData>
+
+		<NameData>
+			<Name>Glurg</Name>
+			<Sex>Neutral</Sex>
+			<Chain>0</Chain>
+		</NameData>
+	</Culture>
+</Cultures>

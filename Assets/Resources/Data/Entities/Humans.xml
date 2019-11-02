@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Entities>
   <Entity>
-    <CreatureType>Human</CreatureType>
-    <Type>Humanoid</Type>
+    <CreatureType>human</CreatureType>
+    <Type>humanoid</Type>
 
     <Statistic>
 		<Name>Strength</Name>

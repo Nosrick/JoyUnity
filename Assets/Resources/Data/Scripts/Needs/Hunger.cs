@@ -7,22 +7,51 @@ namespace JoyLib.Code.Entities.Needs
 {
     public class Hunger : AbstractNeed
     {
-        public Hunger() : base("Hunger", 0, 1, true, 1, 1, 1, 1)
+        private readonly static string s_Name = "hunger";
+
+        public Hunger() : base(s_Name, 0, 1, true, 1, 1, 1, 1)
         {
 
         }
 
-        public Hunger(string nameRef, int decayRef, int decayCounterRef, bool doesDecayRef, int priorityRef, 
-            int happinessThresholdRef, int valueRef, int maxValueRef, int averageForDayRef = 0, int averageForWeekRef = 0) : 
-            base(nameRef, decayRef, decayCounterRef, doesDecayRef, priorityRef, 
-                happinessThresholdRef, valueRef, maxValueRef, averageForDayRef, averageForWeekRef)
+        public Hunger(
+            string nameRef, 
+            int decayRef, 
+            int decayCounterRef, 
+            bool doesDecayRef, 
+            int priorityRef, 
+            int happinessThresholdRef, 
+            int valueRef, 
+            int maxValueRef, 
+            int averageForDayRef = 0, 
+            int averageForWeekRef = 0) : 
+
+            base(nameRef, 
+                decayRef, 
+                decayCounterRef, 
+                doesDecayRef, 
+                priorityRef, 
+                happinessThresholdRef, 
+                valueRef, 
+                maxValueRef, 
+                averageForDayRef, 
+                averageForWeekRef)
         {
         }
 
         public override INeed Copy()
         {
-            return new Hunger(this.m_Name, this.m_Decay, this.m_DecayCounter, this.m_DoesDecay, this.m_Priority, this.m_HappinessThreshold,
-                this.m_Value, this.m_MaximumValue, this.m_AverageForDay, this.m_AverageForWeek);
+            return new Hunger(
+                this.m_Name,
+                this.m_Decay, 
+                this.m_DecayCounter, 
+                this.m_DoesDecay, 
+                this.m_Priority, 
+                this.m_HappinessThreshold,
+                this.m_Value, 
+                this.m_MaximumValue, 
+                this.m_AverageForDay, 
+                this.m_AverageForWeek);
         }
 
         public override bool FindFulfilmentObject(Entity actor)
@@ -74,7 +103,7 @@ namespace JoyLib.Code.Entities.Needs
                 }
                 else
                 {
-                    actor.Seek(chosenFood, "Hunger");
+                    actor.Seek(chosenFood, this.m_Name);
                 }
             }
 
@@ -85,9 +114,7 @@ namespace JoyLib.Code.Entities.Needs
 
         public override bool Interact(Entity user, JoyObject obj)
         {
-            ItemInstance item = obj as ItemInstance;
-
-            if(item == null)
+            if (!(obj is ItemInstance item))
             {
                 return false;
             }
@@ -99,7 +126,7 @@ namespace JoyLib.Code.Entities.Needs
 
         public override INeed Randomise()
         {
-            return new Hunger("Hunger", 60, 200, true, RNG.Roll(5, 24), 24, 12, 0, 0);
+            return new Hunger(this.m_Name, 200, 200, true, 12, RNG.Roll(5, 24), 24, 0, 0);
         }
     }
 }

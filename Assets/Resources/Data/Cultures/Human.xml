@@ -1,83 +1,82 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Culture>
-	<CultureName>Human Kingdom</CultureName>
-	<CreatureName>Human</CreatureName>
+<Cultures>
+	<Culture>
+		<CultureName>human kingdom</CultureName>
+		<Inhabitant>human</Inhabitant>
 
-	<Sex>female</Sex>
-	<Sex>male</Sex>
+		<Ruler>king</Ruler>
+		<Ruler>queen</Ruler>
 
-	<Ruler>King</Ruler>
-	<Ruler>Queen</Ruler>
+		<Crime>theft</Crime>
+		<Crime>murder</Crime>
+		<Crime>trespass</Crime>
+		<Crime>rape</Crime>
 
-	<Crime>theft</Crime>
-	<Crime>murder</Crime>
-	<Crime>trespass</Crime>
-	<Crime>rape</Crime>
-	
-	<Job>
-		<Name>Warrior</Name>
-		<Chance>50</Chance>
-	</Job>
-	
-	<Job>
-		<Name>Thief</Name>
-		<Chance>20</Chance>
-	</Job>
-	
-	<Job>
-		<Name>Hedge Wizard</Name>
-		<Chance>10</Chance>
-	</Job>
+		<Job>
+			<Name>warrior</Name>
+			<Chance>50</Chance>
+		</Job>
 
-	<Sexuality>
-		<Name>Heterosexual</Name>
-		<Chance>70</Chance>
-	</Sexuality>
-	  
-	<Sexuality>
-		<Name>Bisexual</Name>
-		<Chance>10</Chance>
-	</Sexuality>
-	  
-	<Sexuality>
-		<Name>Homosexual</Name>
-		<Chance>10</Chance>
-	</Sexuality>
-	  
-	<Sexuality>
-		<Name>Asexual</Name>
-		<Chance>3</Chance>
-	</Sexuality>
-	  
-	<Sexuality>
-		<Name>Demisexual</Name>
-		<Chance>3</Chance>
-	</Sexuality>
-	
-	<Sex>
-		<Name>Male</Name>
-		<Chance>50</Chance>
-	</Sex>
-	
-	<Sex>
-		<Name>Female</Name>
-		<Chance>50</Chance>
-	</Sex>
-	  
-	<RelationshipType>Monoamorous</RelationshipType>
-	<RelationshipType>Polyamorous</RelationshipType>
+		<Job>
+			<Name>thief</Name>
+			<Chance>20</Chance>
+		</Job>
 
-	<NameData>
-		<Name>Alex</Name>
-		<Sex>Male</Sex>
-		<Sex>Female</Sex>
-		<Chain>0</Chain>
-	</NameData>
+		<Job>
+			<Name>hedge wizard</Name>
+			<Chance>10</Chance>
+		</Job>
 
-	<NameData>
-		<Name>McHuman</Name>
-		<Sex>Male</Sex>
-		<Sex>Female</Sex>
-		<Chain>1</Chain>
-	</NameData>
-</Culture>
+		<Sexuality>
+			<Name>heterosexual</Name>
+			<Chance>70</Chance>
+		</Sexuality>
+
+		<Sexuality>
+			<Name>bisexual</Name>
+			<Chance>10</Chance>
+		</Sexuality>
+
+		<Sexuality>
+			<Name>homosexual</Name>
+			<Chance>10</Chance>
+		</Sexuality>
+
+		<Sexuality>
+			<Name>asexual</Name>
+			<Chance>3</Chance>
+		</Sexuality>
+
+		<Sexuality>
+			<Name>demisexual</Name>
+			<Chance>3</Chance>
+		</Sexuality>
+
+		<Sex>
+			<Name>male</Name>
+			<Chance>50</Chance>
+		</Sex>
+
+		<Sex>
+			<Name>female</Name>
+			<Chance>50</Chance>
+		</Sex>
+
+		<RelationshipType>monoamorous</RelationshipType>
+		<RelationshipType>polyamorous</RelationshipType>
+
+		<NameData>
+			<Name>Alex</Name>
+			<Sex>Male</Sex>
+			<Sex>Female</Sex>
+			<Chain>0</Chain>
+		</NameData>
+
+		<NameData>
+			<Name>McHuman</Name>
+			<Sex>Male</Sex>
+			<Sex>Female</Sex>
+			<Chain>1</Chain>
+		</NameData>
+	</Culture>
+</Cultures>
