@@ -1,9 +1,10 @@
 ﻿using JoyLib.Code.Cultures;
+using JoyLib.Code.Helpers;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Xml;
-using UnityEngine;
+using System.Linq;
+using System.Xml.Linq;
 
 namespace JoyLib.Code.Loaders
 {
@@ -16,199 +17,72 @@ namespace JoyLib.Code.Loaders
 
             Dictionary<string, CultureType> cultures = new Dictionary<string, CultureType>();
 
-            for (int i = 0; i < files.Length; i++)
+            foreach (string file in files)
             {
-                XmlReader reader = XmlReader.Create(files[i]);
+                XElement element = XElement.Load(file);
 
-                List<string> rulers = new List<string>();
-                List<string> crimes = new List<string>();
-                List<NameData> nameData = new List<NameData>();
-                Dictionary<string, int> sexes = new Dictionary<string, int>();
-                string cultureName = "DEFAULT CULTURE";
-                List<string> inhabitants = new List<string>();
-                Dictionary<string, int> sexualities = new Dictionary<string, int>();
-                Dictionary<string, int> statVariances = new Dictionary<string, int>();
-                List<string> relationships = new List<string>();
-                Dictionary<string, int> jobPrevelence = new Dictionary<string, int>();
-
-                while (reader.Read())
+                foreach (XElement culture in element.Elements("Culture"))
                 {
-                    if (reader.Depth == 0 && reader.NodeType == XmlNodeType.Element && !reader.Name.Equals("Culture"))
-                        break;
+                    List<string> rulers = (from ruler in culture.Elements("Ruler")
+                                           select ruler.GetAs<string>().ToLower()).ToList();
 
-                    if (reader.Name.Equals(""))
-                        continue;
+                    List<string> crimes = (from crime in culture.Elements("Crime")
+                                           select crime.GetAs<string>().ToLower()).ToList();
 
-                    if (reader.Name.Equals("CultureName"))
-                    {
-                        cultureName = reader.ReadElementContentAsString();
-                    }
+                    List<string> inhabitants = (from inhabitant in culture.Elements("Inhabitant")
+                                                select inhabitant.GetAs<string>().ToLower()).ToList();
 
-                    if (reader.Name.Equals("CreatureName"))
-                    {
-                        inhabitants.Add(reader.ReadElementContentAsString());
-                    }
+                    List<string> relationships = (from relationship in culture.Elements("RelationshipType")
+                                                  select relationship.GetAs<string>().ToLower()).ToList();
 
-                    if (reader.Name.Equals("Ruler"))
-                    {
-                        rulers.Add(reader.ReadElementContentAsString());
-                    }
+                    List<NameData> nameDataList = (from nameData in culture.Elements("NameData")
+                                                   select new NameData(
+                                                       nameData.Element("Name").GetAs<string>().ToLower(),
+                                                       nameData.Elements("Chain").Select(x => x.GetAs<int>()).ToArray(),
+                                                       nameData.Elements("Sex").Select(x => x.GetAs<string>().ToLower()).ToArray()
+                                                       )).ToList();
 
-                    if (reader.Name.Equals("Crime"))
-                    {
-                        crimes.Add(reader.ReadElementContentAsString());
-                    }
+                    Dictionary<string, int> sexualitiesDictionary = (from sexualities in culture.Elements("Sexuality")
+                                                                     select new KeyValuePair<string, int>(
+                                                                         sexualities.Element("Name").GetAs<string>().ToLower(),
+                                                                         sexualities.Element("Chance").GetAs<int>()
+                                                                         )).ToDictionary(x => x.Key, x => x.Value);
 
-                    if(reader.Name.Equals("Job"))
-                    {
-                        string name = "DEFAULT";
-                        int prevelence = 0;
+                    Dictionary<string, int> sexesDictionary = (from sexes in culture.Elements("Sex")
+                                                               select new KeyValuePair<string, int>(
+                                                                   sexes.Element("Name").GetAs<string>().ToLower(),
+                                                                   sexes.Element("Chance").GetAs<int>()))
+                                                                   .ToDictionary(x => x.Key, x => x.Value);
 
-                        while(reader.Read())
-                        {
-                            if(reader.Name.Equals("Job") && reader.NodeType == XmlNodeType.EndElement)
-                            {
-                                break;
-                            }
-                            else if(reader.Name.Equals("Name"))
-                            {
-                                name = reader.ReadElementContentAsString();
-                            }
-                            else if(reader.Name.Equals("Chance"))
-                            {
-                                prevelence = reader.ReadElementContentAsInt();
-                            }
-                        }
+                    Dictionary<string, Tuple<int, int>> statVarianceDictionary = (from statVariances in culture.Elements("StatVariance")
+                                                                                  select new KeyValuePair<string, Tuple<int, int>>(
+                                                                                      statVariances.Element("Name").GetAs<string>().ToLower(),
+                                                                                      new Tuple<int, int>(
+                                                                                          statVariances.Element("Chance").GetAs<int>(),
+                                                                                          statVariances.Element("Magnitude").GetAs<int>())))
+                                                                                          .ToDictionary(x => x.Key, x => x.Value);
 
-                        if(jobPrevelence.ContainsKey(name) == false && prevelence > 0)
-                        {
-                            jobPrevelence.Add(name, prevelence);
-                        }
-                    }
+                    Dictionary<string, int> jobPrevelenceDictionary = (from jobPrevelence in culture.Elements("Job")
+                                                                       select new KeyValuePair<string, int>(
+                                                                           jobPrevelence.Element("Name").GetAs<string>().ToLower(),
+                                                                           jobPrevelence.Element("Chance").GetAs<int>()))
+                                                                           .ToDictionary(x => x.Key, x => x.Value);
 
-                    if (reader.Name.Equals("NameData"))
-                    {
-                        string nameRef = "DEFAULT";
-                        List<string> sexStrings = new List<string>();
-                        List<int> chain = new List<int>();
+                    string cultureName = culture.Element("CultureName").GetAs<string>();
 
-                        while (reader.Read())
-                        {
-                            if(reader.Name.Equals("NameData") && reader.NodeType == XmlNodeType.EndElement)
-                            {
-                                break;
-                            }
-                            else if(reader.Name.Equals("Name"))
-                            {
-                                nameRef = reader.ReadElementContentAsString();
-                            }
-                            else if(reader.Name.Equals("Sex"))
-                            {
-                                sexStrings.Add(reader.ReadElementContentAsString());
-                            }
-                            else if(reader.Name.Equals("Chain"))
-                            {
-                                chain.Add(reader.ReadElementContentAsInt());
-                            }
-                        }
-
-                        nameData.Add(new NameData(nameRef, chain.ToArray(), sexStrings.ToArray()));
-                    }
-
-                    if (reader.Name.Equals("Sex"))
-                    {
-                        string sexName = "DEFAULT";
-                        int sexChance = 0;
-                        while(reader.Read())
-                        {
-                            if(reader.Name.Equals("Sex") && reader.NodeType == XmlNodeType.EndElement)
-                            {
-                                break;
-                            }
-
-                            if(reader.Name.Equals("Name"))
-                            {
-                                sexName = reader.ReadElementContentAsString();
-                            }
-                            else if(reader.Name.Equals("Chance"))
-                            {
-                                sexChance = reader.ReadElementContentAsInt();
-                            }
-                        }
-
-                        if(sexes.ContainsKey(sexName) == false && sexChance > 0)
-                        {
-                            sexes.Add(sexName, sexChance);
-                        }
-                    }
-
-                    if(reader.Name.Equals("Sexuality"))
-                    {
-                        string sexualityName = "DEFAULT";
-                        int sexualityChance = 5;
-                        while (reader.Read())
-                        {
-                            if(reader.Name.Equals("Sexuality") && reader.NodeType == XmlNodeType.EndElement)
-                            {
-                                break;
-                            }
-
-                            if(reader.Name.Equals("Name"))
-                            {
-                                sexualityName = reader.ReadElementContentAsString();
-                            }
-                            else if(reader.Name.Equals("Chance"))
-                            {
-                                sexualityChance = reader.ReadElementContentAsInt();
-                            }
-                        }
-
-                        sexualities.Add(sexualityName, sexualityChance);
-                    }
-
-                    if(reader.Name.Equals("StatVariance"))
-                    {
-                        string statName = "DEFAULT";
-                        int variance = 0;
-                        while(reader.Read())
-                        {
-                            if(reader.NodeType == XmlNodeType.EndElement && reader.Name.Equals("StatVariance"))
-                            {
-                                break;
-                            }
-
-                            if(reader.Name.Equals("Statistic"))
-                            {
-                                statName = reader.ReadElementContentAsString();
-                            }
-                            else if(reader.Name.Equals("Variance"))
-                            {
-                                variance = reader.ReadElementContentAsInt();
-                            }
-                        }
-                        if(statVariances.ContainsKey(statName) == false)
-                        {
-                            statVariances.Add(statName, variance);
-                        }
-                    }
-
-                    if(reader.Name.Equals("RelationshipType"))
-                    {
-                        try
-                        {
-                            relationships.Add(reader.ReadElementContentAsString());
-                        }
-                        catch(Exception e)
-                        {
-                            Debug.LogError(e.Message);
-                            Debug.LogError(e.StackTrace);
-                        }
-                    }
+                    cultures.Add(cultureName,
+                        new CultureType(
+                            cultureName,
+                            rulers,
+                            crimes,
+                            nameDataList,
+                            jobPrevelenceDictionary,
+                            inhabitants,
+                            sexualitiesDictionary,
+                            sexesDictionary,
+                            statVarianceDictionary,
+                            relationships));
                 }
-
-                reader.Close();
-                cultures.Add(cultureName, new CultureType(cultureName, rulers, crimes, nameData, jobPrevelence, inhabitants,
-                    sexualities, sexes, statVariances, relationships));
             }
 
             return cultures;

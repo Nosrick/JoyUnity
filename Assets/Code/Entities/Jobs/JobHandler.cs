@@ -55,14 +55,14 @@ namespace JoyLib.Code.Entities.Jobs
                     {
                         Dictionary<string, float> statGrowths = (from growth in jobElement.Elements("Statistic")
                                                                  select new KeyValuePair<string, float>(
-                                                                     growth.Element("Name").DefaultIfEmpty("DEFAULT"),
-                                                                     growth.Element("Growth").DefaultIfEmpty(0.0f)))
+                                                                     growth.Element("Name").GetAs<string>().ToLower(),
+                                                                     growth.Element("Growth").GetAs<float>()))
                                                                      .ToDictionary(x => x.Key, x => x.Value);
 
                         Dictionary<string, int> skillGrowths = (from growth in jobElement.Elements("Skill")
                                                                 select new KeyValuePair<string, int>(
-                                                                    growth.Element("Name").DefaultIfEmpty("DEFAULT"),
-                                                                    growth.Element("Growth").DefaultIfEmpty(0)))
+                                                                    growth.Element("Name").GetAs<string>().ToLower(),
+                                                                    growth.Element("Growth").GetAs<int>()))
                                                                     .ToDictionary(x => x.Key, x => x.Value);
 
                         NonUniqueDictionary<int, IAbility> abilities = new NonUniqueDictionary<int, IAbility>();
@@ -72,9 +72,9 @@ namespace JoyLib.Code.Entities.Jobs
 
                             List<Tuple<int, IAbility>> listAbilities = (from ability in jobElement.Elements("Ability")
                                                                         select new Tuple<int, IAbility>(
-                                                                            ability.Element("Level").DefaultIfEmpty(1),
+                                                                            ability.Element("Level").GetAs<int>(),
                                                                             AbilityHandler.GetAbility(
-                                                                                ability.Element("Name").DefaultIfEmpty("DEFAULT")))).ToList();
+                                                                                ability.Element("Name").GetAs<string>().ToLower()))).ToList();
 
                             foreach (Tuple<int, IAbility> ability in listAbilities)
                             {
@@ -89,8 +89,8 @@ namespace JoyLib.Code.Entities.Jobs
                         }
                                                                         
 
-                        string name = jobElement.Element("Name").DefaultIfEmpty("DEFAULT");
-                        string description = jobElement.Element("Description").DefaultIfEmpty("NO DESCRIPTION");
+                        string name = jobElement.Element("Name").GetAs<string>().ToLower();
+                        string description = jobElement.Element("Description").DefaultIfEmpty("NO DESCRIPTION PROVIDED.").ToLower();
 
                         jobTypes.Add(new JobType(name, description, statGrowths, skillGrowths, abilities));
                     }

@@ -50,7 +50,7 @@ namespace JoyLib.Code.Entities
                         BasicValueContainer<IRollableValue> statisticContainer = new BasicValueContainer<IRollableValue>(statFudge);
 
                         List<INeed> needs = (from need in entity.Elements("Need")
-                                             select NeedHandler.GetRandomised(need.DefaultIfEmpty("DEFAULT"))).ToList();
+                                             select NeedHandler.GetRandomised(need.DefaultIfEmpty("DEFAULT").ToLower())).ToList();
                         BasicValueContainer<INeed> needContainer = new BasicValueContainer<INeed>(needs);
 
                         List<EntitySkill> skills = (from skill in entity.Elements("Skill")

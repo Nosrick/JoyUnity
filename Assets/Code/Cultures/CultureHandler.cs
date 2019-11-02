@@ -31,7 +31,7 @@ namespace JoyLib.Code.Cultures
         {
             try
             {
-                Dictionary<string, CultureType> cultures = s_Cultures.Where(culture => culture.Value.Inhabitants.Contains(type)).ToDictionary(pair => pair.Key, pair => pair.Value);
+                Dictionary<string, CultureType> cultures = s_Cultures.Where(culture => culture.Value.Inhabitants.Contains(type.ToLowerInvariant())).ToDictionary(pair => pair.Key, pair => pair.Value);
                 return cultures.Values.ToList();
             }
             catch(Exception e)

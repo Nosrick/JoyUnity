@@ -46,49 +46,39 @@ namespace JoyLib.Code.World.Generators.Interiors
 
                 int entityIndex = RNG.Roll(0, templates.Length - 1);
 
-                Entity newEntity = null;
-                if (templates[entityIndex].Sentient)
-                {
-                    List<CultureType> cultures = CultureHandler.GetByCreatureType(templates[entityIndex].CreatureType);
-                    CultureType culture = cultures[0];
+                List<CultureType> cultures = CultureHandler.GetByCreatureType(templates[entityIndex].CreatureType);
+                CultureType culture = cultures[0];
 
-                    JobType jobType = culture.ChooseJob();
+                JobType jobType = culture.ChooseJob();
 
-                    Dictionary<string, int> jobLevels = new Dictionary<string, int>();
-                    jobLevels.Add(jobType.Name, 1);
+                Dictionary<string, int> jobLevels = new Dictionary<string, int>();
+                jobLevels.Add(jobType.Name, 1);
 
-                    //REPLACE THIS WITH ENTITY CONSTRUCTOR
-                    BasicValueContainer<INeed> needs = new BasicValueContainer<INeed>();
-                    needs.Add(NeedHandler.GetRandomised("hunger"));
+                //REPLACE THIS WITH ENTITY CONSTRUCTOR
+                BasicValueContainer<INeed> needs = new BasicValueContainer<INeed>();
+                needs.Add(NeedHandler.GetRandomised("hunger"));
 
-                    IGrowingValue level = new ConcreteGrowingValue("level", 1, 100, 0, GlobalConstants.DEFAULT_SUCCESS_THRESHOLD,
-                        new StandardRoller(), new NonUniqueDictionary<INeed, float>());
+                IGrowingValue level = new ConcreteGrowingValue(
+                    "level", 
+                    1, 
+                    100, 
+                    0, 
+                    GlobalConstants.DEFAULT_SUCCESS_THRESHOLD,
+                    new StandardRoller(), 
+                    new NonUniqueDictionary<INeed, float>());
 
-                    newEntity = WorldState.EntityHandler.Create(templates[entityIndex], needs, level, jobType, culture.ChooseSex(), culture.ChooseSexuality(),
-                        new Vector2Int(-1, -1), ObjectIconHandler.GetSprites(templates[entityIndex].Tileset, templates[entityIndex].CreatureType), null);
-                }
-                else
-                {
-                    List<CultureType> cultures = CultureHandler.GetByCreatureType(templates[entityIndex].CreatureType);
-                    CultureType culture = cultures[0];
+                Entity newEntity = WorldState.EntityHandler.Create(
+                    templates[entityIndex], 
+                    needs, 
+                    level, 
+                    jobType, 
+                    culture.ChooseSex(), 
+                    culture.ChooseSexuality(),
+                    availablePoints[pointIndex], 
+                    ObjectIconHandler.GetSprites(templates[entityIndex].Tileset, 
+                    templates[entityIndex].CreatureType), 
+                    worldRef);
 
-                    JobType jobType = culture.ChooseJob();
-
-                    Dictionary<string, int> jobLevels = new Dictionary<string, int>();
-                    jobLevels.Add(jobType.Name, 1);
-
-                    //REPLACE THIS WITH ENTITY CONSTRUCTOR
-                    BasicValueContainer<INeed> needs = new BasicValueContainer<INeed>();
-                    needs.Add(NeedHandler.GetRandomised("hunger"));
-
-                    IGrowingValue level = new ConcreteGrowingValue("level", 1, 100, 0, GlobalConstants.DEFAULT_SUCCESS_THRESHOLD,
-                        new StandardRoller(), new NonUniqueDictionary<INeed, float>());
-
-                    newEntity = WorldState.EntityHandler.Create(templates[entityIndex], needs, level, jobType, culture.ChooseSex(), culture.ChooseSexuality(),
-                        new Vector2Int(-1, -1), ObjectIconHandler.GetSprites(templates[entityIndex].Tileset, templates[entityIndex].CreatureType), null);
-                }
-                newEntity.Move(availablePoints[pointIndex]);
-                newEntity.MyWorld = worldRef;
                 entities.Add(newEntity);
 
                 availablePoints.RemoveAt(pointIndex);

@@ -38,6 +38,11 @@ namespace JoyLib.Code.Entities
             return skills;
         }
 
+        public static NonUniqueDictionary<INeed, float> GetCoefficients()
+        {
+            return new NonUniqueDictionary<INeed, float>();
+        }
+
         /// <summary>
         /// Takes in the needs and skill name and spits out a Dictionary for the skill
         /// </summary>
@@ -56,8 +61,17 @@ namespace JoyLib.Code.Entities
                     {
                         foreach(Tuple<string, float> tuple in s_SkillCoefficients[key])
                         {
-                            INeed need = container[tuple.Item1];
-                            coefficients.Add(need, tuple.Item2);
+                            try
+                            {
+                                INeed need = container[tuple.Item1];
+                                coefficients.Add(need, tuple.Item2);
+                            }
+                            catch (Exception e)
+                            {
+                                ActionLog.WriteToLog(
+                                    "Suppressing Exception when trying to add Skill Coefficient. Skill is "
+                                    + skillName + ", with need name " + tuple.Item1);
+                            }
                         }
                     }
                 }

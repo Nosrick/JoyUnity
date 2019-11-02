@@ -3,6 +3,7 @@ using JoyLib.Code.Entities.Sexes;
 using JoyLib.Code.Entities.Sexuality;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Rollers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,14 +16,16 @@ namespace JoyLib.Code.Cultures
         protected List<NameData> m_NameData;
         protected Dictionary<string, int> m_SexPrevelence;
         protected Dictionary<string, int> m_SexualityPrevelence;
-        protected Dictionary<string, int> m_StatVariance;
+
+        //The first number is the chance, the second is the actual number it can vary by
+        protected Dictionary<string, Tuple<int, int>> m_StatVariance;
         protected List<string> m_RelationshipTypes;
         Dictionary<string, int> m_JobPrevelence;
         List<string> m_Inhabitants;
 
         public CultureType(string nameRef, List<string> rulersRef, List<string> crimesRef, List<NameData> namesRef, 
             Dictionary<string, int> jobRef, List<string> inhabitantsNameRef, Dictionary<string, int> sexualityPrevelenceRef, 
-            Dictionary<string, int> sexPrevelence, Dictionary<string, int> statVariance, List<string> relationshipTypes)
+            Dictionary<string, int> sexPrevelence, Dictionary<string, Tuple<int, int>> statVariance, List<string> relationshipTypes)
         {
             CultureName = nameRef;
             m_RulerTypes = rulersRef;
@@ -72,7 +75,7 @@ namespace JoyLib.Code.Cultures
 
         public string GetNameForChain(int chain, string sex)
         {
-            NameData[] names = m_NameData.Where(x => x.chain.Contains(chain) && x.sexes.Contains(sex)).ToArray();
+            NameData[] names = m_NameData.Where(x => x.chain.Contains(chain) && x.sexes.Contains(sex.ToLower())).ToArray();
 
             int result = RNG.Roll(0, names.Length - 1);
             return names[result].name;
@@ -145,7 +148,10 @@ namespace JoyLib.Code.Cultures
         {
             if(m_StatVariance.ContainsKey(statistic))
             {
-                return RNG.Roll(-m_StatVariance[statistic], m_StatVariance[statistic]);
+                if(RNG.Roll(1, 100) < m_StatVariance[statistic].Item1)
+                {
+                    return RNG.Roll(-m_StatVariance[statistic].Item2, m_StatVariance[statistic].Item2);
+                }
             }
             return 0;
         }

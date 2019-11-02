@@ -186,7 +186,8 @@ namespace JoyLib.Code.Entities
             string name = "";
             for(int i = 0; i < m_Cultures.Count; i++)
             {
-                name += m_Cultures[i].GetNameForChain(i, this.Sex.Name) + " ";
+                CultureType random = m_Cultures[RNG.Roll(0, m_Cultures.Count - 1)];
+                name += random.GetNameForChain(i, this.Sex.Name) + " ";
             }
             name.TrimEnd();
             return name;
