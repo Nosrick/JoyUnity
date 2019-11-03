@@ -1,20 +1,23 @@
-﻿using JoyLib.Code.Helpers;
-using JoyLib.Code.Rollers;
+﻿using JoyLib.Code.Rollers;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Xml;
 using UnityEngine;
 
 namespace JoyLib.Code.Graphics
 {
-    public static class ObjectIconHandler
+    public class ObjectIconHandler
     {
-        public const int SPRITE_SIZE = 16;
+        private static readonly Lazy<ObjectIconHandler> lazy = new Lazy<ObjectIconHandler>(() => new ObjectIconHandler(16));
+        public static ObjectIconHandler instance = lazy.Value;
 
-        public static bool Load()
+        public ObjectIconHandler(int spriteSize) 
+        {
+            this.SpriteSize = spriteSize;
+        }
+
+        public bool Load()
         {
             if(Icons != null)
             {
@@ -32,7 +35,12 @@ namespace JoyLib.Code.Graphics
                 name = "DEFAULT",
                 position = Vector2Int.zero,
                 texture = defaultSprite,
-                sprite = Sprite.Create(defaultSprite, new Rect(0, 0, SPRITE_SIZE, SPRITE_SIZE), Vector2.zero, SPRITE_SIZE)
+                sprite = Sprite.Create(defaultSprite, new Rect(0,
+                                                               0,
+                                                               this.SpriteSize,
+                                                               this.SpriteSize), 
+                                                               Vector2.zero, 
+                                                               this.SpriteSize)
             };
             defaultIconData.Add(iconData);
 
@@ -141,14 +149,14 @@ namespace JoyLib.Code.Graphics
             */
         }
 
-        public static bool AddIcons(string filename, string tileSet, IconData[] data)
+        public bool AddIcons(string filename, string tileSet, IconData[] data)
         {
             Texture2D sheet = Resources.Load<Texture2D>("Sprites/" + filename);
             for(int i = 0; i < data.Length; i++)
             {
                 if(data[i].frames > 1)
                 {
-                    List<Tuple<Texture2D, Sprite>> tuples = MakeSpritesFromOneSheet(sheet, data[i].frames, data[i].position);
+                    List<Tuple<Texture2D, Sprite>> tuples = MakeSpritesFromOneSheet(sheet, data[i].frames, data[i].position, this.SpriteSize);
                     for (int j = 0; j < tuples.Count; j++)
                     {
                         Tuple<Texture2D, Sprite> tuple = tuples[j];
@@ -173,7 +181,7 @@ namespace JoyLib.Code.Graphics
                 }
                 else
                 {
-                    Tuple<Texture2D, Sprite> tuple = MakeSprite(sheet, data[i].position);
+                    Tuple<Texture2D, Sprite> tuple = MakeSprite(sheet, data[i].position, this.SpriteSize);
                     IconData iconData = new IconData()
                     {
                         name = data[i].name,
@@ -197,7 +205,7 @@ namespace JoyLib.Code.Graphics
             return true;
         }
 
-        private static Tuple<Texture2D, Sprite> MakeSprite(Texture2D sheet, Vector2Int point, int spriteSize = SPRITE_SIZE)
+        private Tuple<Texture2D, Sprite> MakeSprite(Texture2D sheet, Vector2Int point, int spriteSize)
         {
             Color[] imageData = sheet.GetPixels();
 
@@ -213,7 +221,7 @@ namespace JoyLib.Code.Graphics
         }
 
         //This assumes using a single sheet laid out in a horizontal row
-        private static List<Tuple<Texture2D, Sprite>> MakeSpritesFromOneSheet(Texture2D sheet, int frames, Vector2Int startPoint, int spriteSize = SPRITE_SIZE)
+        private List<Tuple<Texture2D, Sprite>> MakeSpritesFromOneSheet(Texture2D sheet, int frames, Vector2Int startPoint, int spriteSize)
         {
             Color[] imageData = sheet.GetPixels();
 
@@ -235,7 +243,7 @@ namespace JoyLib.Code.Graphics
             return tuples;
         }
 
-        private static Color[] GetImageData(Color[] colourData, int textureWidth, Rect rectangle)
+        private Color[] GetImageData(Color[] colourData, int textureWidth, Rect rectangle)
         {
             int width, height;
             width = (int)rectangle.width;
@@ -253,7 +261,7 @@ namespace JoyLib.Code.Graphics
             return color;
         }
 
-        public static Texture2D[] GetIcons(string tileSet, string tileName)
+        public Texture2D[] GetIcons(string tileSet, string tileName)
         {
             List<Texture2D> icons = new List<Texture2D>();
             if(Icons.ContainsKey(tileSet))
@@ -275,7 +283,7 @@ namespace JoyLib.Code.Graphics
             return icons.ToArray();
         }
 
-        private static IconData[] GetDefaultIconSet(string tileSet)
+        private IconData[] GetDefaultIconSet(string tileSet)
         {
             if(tileSet != null && Icons.ContainsKey(tileSet))
             {
@@ -292,7 +300,7 @@ namespace JoyLib.Code.Graphics
             }
         }
 
-        public static Sprite GetSprite(string tileSet, string tileName)
+        public Sprite GetSprite(string tileSet, string tileName)
         {
             if(Icons.ContainsKey(tileSet))
             {
@@ -306,7 +314,7 @@ namespace JoyLib.Code.Graphics
             return icons[0].sprite;
         }
 
-        public static Sprite[] GetSprites(string tileSet, string tileName)
+        public Sprite[] GetSprites(string tileSet, string tileName)
         {
             List<Sprite> sprites = new List<Sprite>();
             if(tileSet != null && Icons.ContainsKey(tileSet))
@@ -331,10 +339,16 @@ namespace JoyLib.Code.Graphics
         }
 
         //First key is tileset name, second key is tile name
-        private static Dictionary<string, List<IconData>> Icons
+        private Dictionary<string, List<IconData>> Icons
         {
             get;
             set;
+        }
+
+        public int SpriteSize
+        {
+            get;
+            protected set;
         }
     }
 

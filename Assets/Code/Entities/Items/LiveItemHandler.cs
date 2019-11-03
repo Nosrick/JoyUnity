@@ -82,7 +82,7 @@ namespace JoyLib.Code.Entities.Items
                 string tileSet = doc.Element("Tileset").GetAs<string>();
                 string actionWord = doc.Element("ActionWord").DefaultIfEmpty("strikes");
 
-                ObjectIconHandler.AddIcons(fileName, tileSet, iconData.ToArray());
+                ObjectIconHandler.instance.AddIcons(fileName, tileSet, iconData.ToArray());
 
                 for (int j = 0; j < identifiedItems.Count; j++)
                 {

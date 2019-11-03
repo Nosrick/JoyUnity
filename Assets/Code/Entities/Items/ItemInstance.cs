@@ -26,7 +26,7 @@ namespace JoyLib.Code.Entities.Items
                 EntityDerivedValue.GetDefaultForItem(
                     type.Material.Bonus,
                     type.Weight),
-                position, type.SpriteSheet, ObjectIconHandler.GetSprites(type.SpriteSheet, type.UnidentifiedName), type.Tags)
+                position, type.SpriteSheet, ObjectIconHandler.instance.GetSprites(type.SpriteSheet, type.UnidentifiedName), type.Tags)
         {            
             this.m_Type = type;
             this.Move(position);

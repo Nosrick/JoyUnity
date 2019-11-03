@@ -128,7 +128,7 @@ namespace JoyLib.Code.States
                 new StandardRoller(), new NonUniqueDictionary<INeed, float>());
 
             m_Player = WorldState.EntityHandler.Create(humanTemplate, needs, level, m_Jobs[m_JobIndex], culture.ChooseSex(), culture.ChooseSexuality(), new UnityEngine.Vector2Int(-1, -1),
-                ObjectIconHandler.GetSprites("Human", m_Jobs[m_JobIndex].Name), null);
+                ObjectIconHandler.instance.GetSprites("Human", m_Jobs[m_JobIndex].Name), null);
 
             m_Player.PlayerControlled = true;
 

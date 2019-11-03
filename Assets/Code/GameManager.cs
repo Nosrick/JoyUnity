@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour
             culture.ChooseSex(), 
             culture.ChooseSexuality(), 
             Vector2Int.zero, 
-            ObjectIconHandler.GetSprites(human.Tileset, jobType.Name), 
+            ObjectIconHandler.instance.GetSprites(human.Tileset, jobType.Name), 
             null, 
             new List<CultureType>() { culture });
         player.PlayerControlled = true;
@@ -73,7 +73,7 @@ public class GameManager : MonoBehaviour
             Destroy(this);
             return;
         }
-        ObjectIconHandler.Load();
+        ObjectIconHandler.instance.Load();
         NeedHandler.Initialise();
         AbilityHandler.Initialise();
         JobHandler.Initialise();

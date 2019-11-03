@@ -40,7 +40,7 @@ namespace JoyLib.Code.Entities
             CultureType dominantCulture = creatureCultures[result];
 
             Entity entity = new Entity(template, needs, creatureCultures, level, dominantCulture.ChooseJob(), dominantCulture.ChooseSex(), 
-                dominantCulture.ChooseSexuality(), position, ObjectIconHandler.GetSprites(template.Tileset, template.CreatureType), world);
+                dominantCulture.ChooseSexuality(), position, ObjectIconHandler.instance.GetSprites(template.Tileset, template.CreatureType), world);
 
             m_Entities.Add(entity.GUID, entity);
 

@@ -43,7 +43,7 @@ namespace JoyLib.Code.World.Generators.Interiors
         public List<JoyObject> GenerateWalls(WorldTile[,] worldTiles)
         {
             List<JoyObject> walls = new List<JoyObject>();
-            Sprite[] sprites = ObjectIconHandler.GetSprites("Walls", "Surround");
+            Sprite[] sprites = ObjectIconHandler.instance.GetSprites("Walls", "Surround");
 
             for (int i = 0; i < m_UntreatedTiles.GetLength(0); i++)
             {

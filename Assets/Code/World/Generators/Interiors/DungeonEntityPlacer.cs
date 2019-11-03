@@ -75,7 +75,7 @@ namespace JoyLib.Code.World.Generators.Interiors
                     culture.ChooseSex(), 
                     culture.ChooseSexuality(),
                     availablePoints[pointIndex], 
-                    ObjectIconHandler.GetSprites(templates[entityIndex].Tileset, 
+                    ObjectIconHandler.instance.GetSprites(templates[entityIndex].Tileset, 
                     templates[entityIndex].CreatureType), 
                     worldRef);
 

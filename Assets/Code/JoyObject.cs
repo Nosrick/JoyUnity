@@ -115,7 +115,7 @@ public class JoyObject : IComparable
     //Used for deserialisation
     public void SetIcons(string tileSet, string tileName)
     {
-        m_Icons = ObjectIconHandler.GetSprites(tileSet, tileName);
+        m_Icons = ObjectIconHandler.instance.GetSprites(tileSet, tileName);
     }
 
     public void SetIcons(Sprite[] sprites)

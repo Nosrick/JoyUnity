@@ -94,7 +94,10 @@ namespace JoyLib.Code.World
                 worldInfo.inhabitants = inhabitants.ToArray();
                 s_WorldInfo.Add(worldInfo);
 
-                ObjectIconHandler.AddIcons(filename, worldInfo.tileset, iconDatas.ToArray());
+                ObjectIconHandler.instance.AddIcons(
+                    filename, 
+                    worldInfo.tileset, 
+                    iconDatas.ToArray());
             }
 
             return true;
