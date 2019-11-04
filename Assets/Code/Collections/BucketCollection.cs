@@ -24,23 +24,30 @@ namespace JoyLib.Code.Collections
             m_KeyValues = new Dictionary<K, List<T>>(collection.m_KeyValues);
         }
 
-        public KeyValuePair<K, List<T>> Add(K key, T value)
+        public bool Add(K key, T value)
         {
-            foreach(KeyValuePair<K, List<T>> pair in m_KeyValues)
+            if(m_KeyValues.ContainsKey(key))
             {
-                if(pair.Key.Equals(key))
-                {
-                    pair.Value.Add(value);
-                    return pair;
-                }
+                m_KeyValues[key].Add(value);
+                return true;
             }
 
             List<T> newList = new List<T>();
             newList.Add(value);
-            KeyValuePair<K, List<T>> newPair = new KeyValuePair<K, List<T>>(key, newList);
             m_KeyValues.Add(key, newList);
+            return true;
+        }
 
-            return newPair;
+        public bool AddRange(K key, IEnumerable<T> collection)
+        {
+            if(m_KeyValues.ContainsKey(key))
+            {
+                m_KeyValues[key].AddRange(collection);
+                return true;
+            }
+
+            m_KeyValues.Add(key, new List<T>(collection));
+            return true;
         }
 
         public bool Remove(K key)

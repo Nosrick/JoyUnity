@@ -29,9 +29,7 @@ namespace JoyLib.Code.Entities.Items
                 position, type.SpriteSheet, ObjectIconHandler.instance.GetSprites(type.SpriteSheet, type.UnidentifiedName), type.Tags)
         {            
             this.m_Type = type;
-            this.Move(position);
-
-            this.GUID = GUIDManager.AssignGUID();
+            
             this.Identified = identified;
             //chosenIcon = RNG.Roll(0, m_Icons.Length - 1);
 

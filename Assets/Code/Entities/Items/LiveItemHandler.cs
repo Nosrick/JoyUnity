@@ -193,21 +193,11 @@ namespace JoyLib.Code.Entities.Items
 
         public ItemInstance CreateCompletelyRandomItem(bool identified = false, bool withAbility = false)
         {
-            try
-            {
-                int result = RNG.Roll(0, s_ItemDatabase.Count - 1);
-                BaseItemType itemType = s_ItemDatabase[result];
-                ItemInstance itemInstance = new ItemInstance(itemType, new Vector2Int(-1, -1), identified);
-                m_LiveItems.Add(itemInstance.GUID, itemInstance);
-                return itemInstance;
-            }
-            catch(Exception e)
-            {
-                ActionLog.WriteToLog("ERROR CREATING ITEM");
-                ActionLog.WriteToLog(e.Message);
-                ActionLog.WriteToLog(e.StackTrace);
-                return null;
-            }
+            int result = RNG.Roll(0, s_ItemDatabase.Count - 1);
+            BaseItemType itemType = s_ItemDatabase[result];
+            ItemInstance itemInstance = new ItemInstance(itemType, new Vector2Int(-1, -1), identified);
+            m_LiveItems.Add(itemInstance.GUID, itemInstance);
+            return itemInstance;
         }
 
         public class ItemCreationException : Exception

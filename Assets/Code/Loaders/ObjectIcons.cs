@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
+using JoyLib.Code.Collections;
 
 namespace JoyLib.Code.Graphics
 {
@@ -24,8 +25,7 @@ namespace JoyLib.Code.Graphics
                 return true;
             }
 
-            Icons = new Dictionary<string, List<IconData>>();
-            
+            Icons = new BucketCollection<IconData, string>();
             Texture2D defaultSprite = Resources.Load<Texture2D>("Sprites/default");
 
             List<IconData> defaultIconData = new List<IconData>();
@@ -42,111 +42,10 @@ namespace JoyLib.Code.Graphics
                                                                Vector2.zero, 
                                                                this.SpriteSize)
             };
-            defaultIconData.Add(iconData);
 
-            Icons.Add("DEFAULT", defaultIconData);
+            Icons.Add(iconData, "DEFAULT");
 
             return true;
-            /*
-            string[] objectDataFiles = Directory.GetFiles(Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Sprite Definitions", "*.xml", SearchOption.AllDirectories);
-
-            Dictionary<string, Texture2D> sheets = new Dictionary<string, Texture2D>();
-
-            for (int i = 0; i < objectDataFiles.GetLength(0); i++)
-            {
-                List<IconData> tilesetIcons = new List<IconData>();
-                string tilesetName = "DEFAULT TILESET";
-
-                XmlReader reader = XmlReader.Create(objectDataFiles[i]);
-
-                while (reader.Read())
-                {
-                    if (reader.Depth == 0 && reader.NodeType == XmlNodeType.Element && !reader.Name.Equals("Objects"))
-                        break;
-
-                    if (reader.Name.Equals(""))
-                        continue;
-
-                    if (reader.Name.Equals("TilesetName"))
-                        tilesetName = reader.ReadElementContentAsString();
-
-                    if (reader.Name.Equals("Sheet"))
-                    {
-                        try
-                        {
-                            string sheetName = reader.ReadElementContentAsString();
-                            string fileName = sheetName;// + ".png";
-                            sheets.Add(sheetName, Resources.Load<Texture2D>("Sprites/" + fileName));
-                        }
-                        catch (Exception e)
-                        {
-                            Console.Out.WriteLine(e.Message);
-                            Console.Out.WriteLine(e.StackTrace);
-                        }
-                    }
-
-                    if (reader.Name.Equals("Icon"))
-                    {
-                        string name = "DEFAULT";
-                        int x = -1;
-                        int y = -1;
-                        string data = "DEFAULT";
-
-                        do
-                        {
-                            reader.Read();
-
-                            if (reader.Name.Equals("Name"))
-                            {
-                                name = reader.ReadElementContentAsString();
-                            }
-                            else if (reader.Name.Equals("X"))
-                            {
-                                x = reader.ReadElementContentAsInt();
-                            }
-                            else if (reader.Name.Equals("Y"))
-                            {
-                                y = reader.ReadElementContentAsInt();
-                            }
-                            else if (reader.Name.Equals("Data"))
-                            {
-                                data = reader.ReadElementContentAsString();
-                            }
-                        } while (reader.Name.Equals("Icon") == false && reader.NodeType != XmlNodeType.EndElement);
-
-                        int j = 0;
-                        foreach(KeyValuePair<string, Texture2D> sheetPair in sheets)
-                        {
-                            
-                            //subTexture.SetData<Color>(imagePiece);
-
-                            iconData = new IconData()
-                            {
-                                name = name + j,
-                                data = data,
-                                position = new Vector2Int(x, y),
-                                texture = subTexture,
-                                sprite = sprite
-                            };
-
-                            tilesetIcons.Add(iconData);
-                            j += 1;
-                        }
-                    }
-                }
-                if (!Icons.ContainsKey(tilesetName))
-                {
-                    Icons.Add(tilesetName, tilesetIcons);
-                }
-                else
-                {
-                    Icons[tilesetName].AddRange(tilesetIcons);
-                }
-                sheets.Clear();
-
-                reader.Close();
-            }
-            */
         }
 
         public bool AddIcons(string filename, string tileSet, IconData[] data)
@@ -169,13 +68,13 @@ namespace JoyLib.Code.Graphics
                             sprite = tuple.Item2
                         };
 
-                        if(Icons.ContainsKey(tileSet))
+                        if(Icons.ContainsValue(tileSet))
                         {
-                            Icons[tileSet].Add(iconData);
+                            Icons[iconData].Add(tileSet);
                         }
                         else
                         {
-                            Icons.Add(tileSet, new List<IconData>() { iconData });
+                            Icons.Add(iconData, tileSet);
                         }
                     }
                 }
@@ -191,13 +90,13 @@ namespace JoyLib.Code.Graphics
                         sprite = tuple.Item2
                     };
 
-                    if(Icons.ContainsKey(tileSet))
+                    if(Icons.ContainsValue(tileSet))
                     {
-                        Icons[tileSet].Add(iconData);
+                        Icons[iconData].Add(tileSet);
                     }
                     else
                     {
-                        Icons.Add(tileSet, new List<IconData>() { iconData });
+                        Icons.Add(iconData, tileSet);
                     }
                 }
             }
@@ -264,7 +163,7 @@ namespace JoyLib.Code.Graphics
         public Texture2D[] GetIcons(string tileSet, string tileName)
         {
             List<Texture2D> icons = new List<Texture2D>();
-            if(Icons.ContainsKey(tileSet))
+            if(Icons.ContainsValue(tileSet))
             {
                 List<IconData> textures = Icons[tileSet].FindAll(x => x.name.StartsWith(tileName) || x.data.StartsWith(tileName));
 
@@ -285,24 +184,43 @@ namespace JoyLib.Code.Graphics
 
         private IconData[] GetDefaultIconSet(string tileSet)
         {
-            if(tileSet != null && Icons.ContainsKey(tileSet))
+            if(tileSet != null && Icons.ContainsValue(tileSet))
             {
                 IconData[] icons = Icons[tileSet].Where(x => x.data.ToLower() == "default").ToArray();
+                if(icons.Length == 0)
+                {
+                    return ReturnDefaultArray();
+                }
                 int result = RNG.Roll(0, icons.Length - 1);
                 string[] nameToFind = Regex.Split(icons[result].name, @"^[^\d]+");
                 icons = icons.Where(x => x.name.StartsWith(nameToFind[0])).ToArray();
+                if(icons.Length == 0)
+                {
+                    return ReturnDefaultArray();
+                }
                 return icons;
             }
             else
             {
-                List<IconData> defaultIcon = Icons["DEFAULT"];
-                return new IconData[] { defaultIcon[0] };
+                return ReturnDefaultArray();
             }
+        }
+
+        public IconData[] ReturnDefaultArray()
+        {
+            IconData[] defaultIcon = Icons["DEFAULT"].ToArray();
+            return defaultIcon;
+        }
+
+        public IconData ReturnDefaultIcon()
+        {
+            IconData[] defaultIcon = Icons["DEFAULT"].ToArray();
+            return defaultIcon[0];
         }
 
         public Sprite GetSprite(string tileSet, string tileName)
         {
-            if(Icons.ContainsKey(tileSet))
+            if(Icons.ContainsValue(tileSet))
             {
                 if(Icons[tileSet].Any(x => x.name.StartsWith(tileName)))
                 {
@@ -317,7 +235,7 @@ namespace JoyLib.Code.Graphics
         public Sprite[] GetSprites(string tileSet, string tileName)
         {
             List<Sprite> sprites = new List<Sprite>();
-            if(tileSet != null && Icons.ContainsKey(tileSet))
+            if(tileSet != null && Icons.ContainsValue(tileSet))
             {
                 List<IconData> find = Icons[tileSet].FindAll(x => x.name.StartsWith(tileName) || x.data.StartsWith(tileName));
                 foreach(IconData found in find)
@@ -337,9 +255,7 @@ namespace JoyLib.Code.Graphics
 
             return sprites.ToArray();
         }
-
-        //First key is tileset name, second key is tile name
-        private Dictionary<string, List<IconData>> Icons
+        private BucketCollection<IconData, string> Icons
         {
             get;
             set;
