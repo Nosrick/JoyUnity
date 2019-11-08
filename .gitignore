@@ -21,16 +21,9 @@
 sysinfo.txt
 
 log
-.vs/JoyUnity/v15/Server/sqlite3/storage.ide
-.vs/JoyUnity/v15/Server/sqlite3/storage.ide
-.vs/JoyUnity/v15/Server/sqlite3/storage.ide-shm
-.vs/JoyUnity/v15/Server/sqlite3/storage.ide-wal
-.vs/JoyUnity/v15/Server/sqlite3/storage.ide
-.vs/JoyUnity/v15/Server/sqlite3/storage.ide-shm
-.vs/JoyUnity/v15/Server/sqlite3/storage.ide-wal
-.vscode/launch.json
-.vscode/settings.json
-JoyTest/obj/Debug/JoyTest.csprojAssemblyReference.cache
-Logs/Packages-Update.log
-Packages/manifest.json
-ProjectSettings/ProjectVersion.txt
+.vscode/*
+.vs/*
+JoyTest/*
+Logs/*
+Packages/*
+ProjectSettings/*
