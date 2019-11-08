@@ -68,7 +68,7 @@ namespace JoyLib.Code.Graphics
                             sprite = tuple.Item2
                         };
 
-                        if(Icons.ContainsValue(tileSet))
+                        if(Icons.ContainsKey(iconData))
                         {
                             Icons[iconData].Add(tileSet);
                         }
@@ -90,7 +90,7 @@ namespace JoyLib.Code.Graphics
                         sprite = tuple.Item2
                     };
 
-                    if(Icons.ContainsValue(tileSet))
+                    if(Icons.ContainsKey(iconData))
                     {
                         Icons[iconData].Add(tileSet);
                     }

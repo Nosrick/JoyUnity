@@ -1,120 +1,88 @@
-﻿using JoyLib.Code.Graphics;
+﻿using System.Xml.Linq;
+using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Xml;
 
 namespace JoyLib.Code.World
 {
-    public static class WorldInfoHandler
+    public class WorldInfoHandler
     {
-        private static List<WorldInfo> s_WorldInfo;
+        private static readonly Lazy<WorldInfoHandler> lazy = new Lazy<WorldInfoHandler>(() => new WorldInfoHandler());
 
-        public static bool Load()
+        public static WorldInfoHandler instance = lazy.Value;
+
+        private List<WorldInfo> m_WorldInfo;
+
+        public bool Load()
         {
-            if(s_WorldInfo != null)
+            if (m_WorldInfo != null)
             {
                 return true;
             }
 
             string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "World Spaces", "*.xml", SearchOption.AllDirectories);
-            s_WorldInfo = new List<WorldInfo>();
+            m_WorldInfo = new List<WorldInfo>();
 
-            foreach(string file in files)
+            foreach (string file in files)
             {
-                XmlReader reader = XmlReader.Create(file);
+                XElement doc = XElement.Load(file);
 
-                List<IconData> iconDatas = new List<IconData>();
-
-                WorldInfo worldInfo = new WorldInfo();
-                List<string> inhabitants = new List<string>();
-                IconData iconData = new IconData();
-                int x = -1;
-                int y = -1;
-                string filename = "";
-
-                while(reader.Read())
+                foreach (XElement worldInfo in doc.Elements("WorldInfo"))
                 {
-                    if(reader.Name.Equals(""))
+                    WorldInfo info = new WorldInfo()
                     {
-                        continue;
-                    }
-                    else if(reader.Name.Equals("Inhabitant"))
+                        name = worldInfo.Element("Name").GetAs<string>().ToLower(),
+                        inhabitants = worldInfo.Elements("Inhabitant")
+                            .Select(x => x.GetAs<string>().ToLower())
+                            .ToArray(),
+                        tileset = worldInfo.Element("Tileset").GetAs<string>().ToLower()
+                    };
+
+                    //This is optional
+                    string filename = worldInfo.Element("Filename").DefaultIfEmpty("NULL");
+
+                    List<IconData> iconData = new List<IconData>();
+                    foreach (XElement icon in worldInfo.Elements("Icon"))
                     {
-                        inhabitants.Add(reader.ReadElementContentAsString());
-                    }
-                    else if(reader.Name.Equals("Filename"))
-                    {
-                        filename = reader.ReadElementContentAsString();
-                    }
-                    else if(reader.Name.Equals("Tileset"))
-                    {
-                        worldInfo.tileset = reader.ReadElementContentAsString();
-                    }
-                    else if(reader.Name.Equals("Name"))
-                    {
-                        worldInfo.name = reader.ReadElementContentAsString();
-                    }
-                    else if(reader.Name.Equals("Icon"))
-                    {
-                        while(reader.Read())
+                        IconData newIcon = new IconData()
                         {
-                            if(reader.Name.Equals("Icon") && reader.NodeType == XmlNodeType.EndElement)
-                            {
-                                break;
-                            }
-                            else if(reader.Name.Equals("Name"))
-                            {
-                                iconData.name = reader.ReadElementContentAsString();
-                            }
-                            else if(reader.Name.Equals("Data"))
-                            {
-                                iconData.data = reader.ReadElementContentAsString();
-                            }
-                            else if(reader.Name.Equals("X"))
-                            {
-                                x = reader.ReadElementContentAsInt();
-                            }
-                            else if(reader.Name.Equals("Y"))
-                            {
-                                y = reader.ReadElementContentAsInt();
-                            }
-                            else if(reader.Name.Equals("Frames"))
-                            {
-                                iconData.frames = reader.ReadElementContentAsInt();
-                            }
-                        }
-                        iconData.position = new UnityEngine.Vector2Int(x, y);
-                        iconDatas.Add(iconData);
+                            name = icon.Element("Name").GetAs<string>().ToLower(),
+                            position = new UnityEngine.Vector2Int(
+                                icon.Element("X").GetAs<int>(),
+                                icon.Element("Y").GetAs<int>()),
+                            data = icon.Element("Data").DefaultIfEmpty("default").ToLower()
+                        };
+
+                        iconData.Add(newIcon);
                     }
+
+                    m_WorldInfo.Add(info);
+
+                    ObjectIconHandler.instance.AddIcons(
+                        filename,
+                        info.tileset,
+                        iconData.ToArray());
                 }
-
-                worldInfo.inhabitants = inhabitants.ToArray();
-                s_WorldInfo.Add(worldInfo);
-
-                ObjectIconHandler.instance.AddIcons(
-                    filename, 
-                    worldInfo.tileset, 
-                    iconDatas.ToArray());
             }
 
             return true;
         }
 
-        public static WorldInfo[] GetWorldInfo(string name)
+        public WorldInfo[] GetWorldInfo(string name)
         {
             try
             {
-                return s_WorldInfo.Where(info => info.name.StartsWith(name)).ToArray();
+                return m_WorldInfo.Where(info => info.name.StartsWith(name.ToLower())).ToArray();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 ActionLog.WriteToLog("ERROR GETTING WORLD INFO");
                 ActionLog.WriteToLog(e.Message);
                 ActionLog.WriteToLog(e.StackTrace);
-                return new WorldInfo[0];
+                throw new InvalidOperationException("Error getting world info for " + name.ToLower());
             }
         }
     }

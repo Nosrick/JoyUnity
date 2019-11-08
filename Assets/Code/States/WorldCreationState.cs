@@ -67,11 +67,9 @@ namespace JoyLib.Code.States
             m_World.AddEntity(m_Player);
 
             //Begin the first floor of the Naga Pits
-            List<string> dungeonTypes = new List<string>();
-            dungeonTypes.Add("naga");
-            dungeonTypes.Add("dungeon slime");
+            WorldInfo worldInfo = WorldInfoHandler.instance.GetWorldInfo("naga pits")[0];
 
-            WorldInstance dungeon = DungeonGenerator.GenerateDungeon("Naga Pits", WORLD_SIZE, 3, dungeonTypes.ToArray());
+            WorldInstance dungeon = DungeonGenerator.GenerateDungeon(worldInfo.name, WORLD_SIZE, 3, worldInfo.inhabitants);
 
             Vector2Int transitionPoint = spawnPlacer.PlaceTransitionPoint(m_World);
             m_World.AddArea(transitionPoint, dungeon);

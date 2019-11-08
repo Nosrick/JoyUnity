@@ -7,61 +7,60 @@ namespace JoyLib.Code.Collections
 {
     public class BucketCollection<K, T> : IEnumerable<KeyValuePair<K, List<T>>>
     {
-        protected Dictionary<K, List<T>> m_KeyValues;
+        protected List<KeyValuePair<K, List<T>>> m_KeyValues;
 
         public BucketCollection()
         {
-            m_KeyValues = new Dictionary<K, List<T>>();
+            m_KeyValues = new List<KeyValuePair<K, List<T>>>();
         }
 
         public BucketCollection(int capacity)
         {
-            m_KeyValues = new Dictionary<K, List<T>>(capacity);
+            m_KeyValues = new List<KeyValuePair<K, List<T>>>(capacity);
         }
 
         public BucketCollection(BucketCollection<K, T> collection)
         {
-            m_KeyValues = new Dictionary<K, List<T>>(collection.m_KeyValues);
+            m_KeyValues = new List<KeyValuePair<K, List<T>>>(collection.m_KeyValues);
         }
 
         public bool Add(K key, T value)
         {
-            if(m_KeyValues.ContainsKey(key))
+            if (m_KeyValues.Any(x => x.Key.Equals(key)))
             {
-                m_KeyValues[key].Add(value);
+                m_KeyValues.First(x => x.Key.Equals(key)).Value.Add(value);
                 return true;
             }
 
             List<T> newList = new List<T>();
             newList.Add(value);
-            m_KeyValues.Add(key, newList);
+            m_KeyValues.Add(new KeyValuePair<K, List<T>>(key, newList));
             return true;
         }
 
         public bool AddRange(K key, IEnumerable<T> collection)
         {
-            if(m_KeyValues.ContainsKey(key))
+            if (m_KeyValues.Any(x => x.Key.Equals(key)))
             {
-                m_KeyValues[key].AddRange(collection);
+                m_KeyValues.First(x => x.Key.Equals(key)).Value.AddRange(collection);
                 return true;
             }
 
-            m_KeyValues.Add(key, new List<T>(collection));
+            m_KeyValues.Add(new KeyValuePair<K, List<T>>(key, new List<T>(collection)));
             return true;
         }
 
         public bool Remove(K key)
         {
-            foreach(KeyValuePair<K, List<T>> pair in m_KeyValues)
+            try
             {
-                if(pair.Key.Equals(key))
-                {
-                    m_KeyValues.Remove(key);
-                    return true;
-                }
+                m_KeyValues.Remove(m_KeyValues.First(x => x.Key.Equals(key)));
+                return true;
             }
-
-            return false;
+            catch
+            {
+                return false;
+            }
         }
 
         public int RemoveForValue(T value)
@@ -69,9 +68,9 @@ namespace JoyLib.Code.Collections
             Dictionary<K, List<T>> removals = m_KeyValues.Where(x => x.Value.Equals(value))
                                                 .ToDictionary(x => x.Key, x => x.Value);
 
-            foreach(K key in removals.Keys)
+            foreach (K key in removals.Keys)
             {
-                m_KeyValues.Remove(key);
+                Remove(key);
             }
 
             return removals.Count;
@@ -94,7 +93,7 @@ namespace JoyLib.Code.Collections
 
         public void OrderBy(Func<KeyValuePair<K, List<T>>, object> func)
         {
-            m_KeyValues = m_KeyValues.OrderBy(func).ToDictionary(x => x.Key, x => x.Value);
+            m_KeyValues = m_KeyValues.OrderBy(func).ToList();
         }
 
         public List<T> this[K key]
@@ -117,9 +116,9 @@ namespace JoyLib.Code.Collections
         {
             List<T> values = new List<T>();
 
-            foreach(KeyValuePair<K, List<T>> tuple in m_KeyValues)
+            foreach (KeyValuePair<K, List<T>> tuple in m_KeyValues)
             {
-                if(tuple.Key.Equals(key))
+                if (tuple.Key.Equals(key))
                 {
                     values.AddRange(tuple.Value);
                 }
@@ -132,9 +131,9 @@ namespace JoyLib.Code.Collections
         {
             List<K> keys = new List<K>();
 
-            foreach(KeyValuePair<K, List<T>> tuple in m_KeyValues)
+            foreach (KeyValuePair<K, List<T>> tuple in m_KeyValues)
             {
-                if(tuple.Value.Contains(value))
+                if (tuple.Value.Contains(value))
                 {
                     keys.Add(tuple.Key);
                 }
@@ -167,7 +166,7 @@ namespace JoyLib.Code.Collections
             {
                 List<T> values = new List<T>();
 
-                foreach(K key in Keys)
+                foreach (K key in Keys)
                 {
                     values.AddRange(FetchValuesForKey(key));
                 }

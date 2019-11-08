@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<Filename>Overworld</Filename>
-<Tileset>Overworld</Tileset>
+<World>
+	<WorldInfo>
+		<Filename>Floor</Filename>
+		
+		<Tileset>Plains</Tileset>
+		<Name>Plains</Name>
 
-<Icon>
-	<Name>Grassland</Name>
-	<X>8</X>
-	<Y>31</Y>
-	<Data>Default</Data>
-</Icon>
+		<Icon>
+			<Name>MiddleMiddle</Name>
+			<X>8</X>
+			<Y>31</Y>
+			<Data>Default</Data>
+		</Icon>
+	</WorldInfo>
+</World>

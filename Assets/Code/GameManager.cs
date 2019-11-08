@@ -16,6 +16,7 @@ using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.States;
 using JoyLib.Code.Unity.GUI;
+using JoyLib.Code.World;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -74,6 +75,7 @@ public class GameManager : MonoBehaviour
             return;
         }
         ObjectIconHandler.instance.Load();
+        WorldInfoHandler.instance.Load();
         NeedHandler.Initialise();
         AbilityHandler.Initialise();
         JobHandler.Initialise();
