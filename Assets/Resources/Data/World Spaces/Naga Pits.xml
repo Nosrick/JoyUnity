@@ -1,94 +1,198 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <World>
 	<WorldInfo>
-		<Filename>Wall</Filename>
+		<Filename>environments/naga pits</Filename>
 
 		<Tileset>Naga Pits</Tileset>
 		<Name>Naga Pits</Name>
 		
 		<Inhabitant>Naga</Inhabitant>
 
+		<Tag>Interior</Tag>
+
 		<Icon>
-			<Name>TopLeft</Name>
+			<Name>TopLeftWall</Name>
 			<X>0</X>
-			<Y>47</Y>
-			<Data>Default</Data>
+			<Y>2</Y>
+			<Data>Wall</Data>
 		</Icon>
 		<Icon>
-			<Name>TopRight</Name>
+			<Name>TopRightWall</Name>
 			<X>2</X>
-			<Y>47</Y>
-			<Data>Default</Data>
+			<Y>2</Y>
+			<Data>Wall</Data>
 		</Icon>
 		<Icon>
-			<Name>BottomLeft</Name>
+			<Name>BottomLeftWall</Name>
 			<X>0</X>
-			<Y>45</Y>
-			<Data>Default</Data>
+			<Y>0</Y>
+			<Data>Wall</Data>
 		</Icon>
 		<Icon>
-			<Name>BottomRight</Name>
+			<Name>BottomRightWall</Name>
 			<X>2</X>
-			<Y>45</Y>
-			<Data>Default</Data>
+			<Y>0</Y>
+			<Data>Wall</Data>
 		</Icon>
 
 		<Icon>
 			<Name>HorizontalWall</Name>
-			<X>1</X>
-			<Y>47</Y>
-			<Data>Default</Data>
+			<X>0</X>
+			<Y>1</Y>
+			<Data>Wall</Data>
 		</Icon>
 		<Icon>
 			<Name>VerticalWall</Name>
-			<X>0</X>
-			<Y>46</Y>
-			<Data>Default</Data>
+			<X>1</X>
+			<Y>2</Y>
+			<Data>Wall</Data>
 		</Icon>
 
 		<Icon>
-			<Name>TopT</Name>
+			<Name>TopTWall</Name>
 			<X>4</X>
-			<Y>47</Y>
-			<Data>Default</Data>
+			<Y>2</Y>
+			<Data>Wall</Data>
 		</Icon>
 		<Icon>
-			<Name>LeftT</Name>
+			<Name>LeftTWall</Name>
 			<X>3</X>
-			<Y>46</Y>
-			<Data>Default</Data>
+			<Y>1</Y>
+			<Data>Wall</Data>
 		</Icon>
 		<Icon>
-			<Name>RightT</Name>
+			<Name>RightTWall</Name>
 			<X>5</X>
-			<Y>46</Y>
-			<Data>Default</Data>
+			<Y>1</Y>
+			<Data>Wall</Data>
 		</Icon>
 		<Icon>
-			<Name>BottomT</Name>
+			<Name>BottomTWall</Name>
 			<X>4</X>
-			<Y>45</Y>
-			<Data>Default</Data>
+			<Y>0</Y>
+			<Data>Wall</Data>
 		</Icon>
 
 		<Icon>
-			<Name>Cross</Name>
+			<Name>CrossWall</Name>
 			<X>4</X>
-			<Y>46</Y>
-			<Data>Default</Data>
+			<Y>1</Y>
+			<Data>Wall</Data>
 		</Icon>
 
 		<Icon>
 			<Name>SoloWall</Name>
 			<X>1</X>
-			<Y>46</Y>
+			<Y>1</Y>
+			<Data>Wall</Data>
+		</Icon>
+		<Icon>
+			<Name>SurroundWall</Name>
+			<X>3</X>
+			<Y>2</Y>
+			<Data>Wall</Data>
+			<Data>Default</Data>
+		</Icon>
+
+		<Icon>
+			<Name>TopLeftFloor</Name>
+			<X>0</X>
+			<Y>5</Y>
+			<Data>Floor</Data>
+		</Icon>
+		<Icon>
+			<Name>TopRightFloor</Name>
+			<X>2</X>
+			<Y>5</Y>
+			<Data>Floor</Data>
+		</Icon>
+		<Icon>
+			<Name>BottomLeftFloor</Name>
+			<X>0</X>
+			<Y>3</Y>
+			<Data>Floor</Data>
+		</Icon>
+		<Icon>
+			<Name>BottomRightFloor</Name>
+			<X>2</X>
+			<Y>3</Y>
+			<Data>Floor</Data>
+		</Icon>
+
+		<Icon>
+			<Name>TopTFloor</Name>
+			<X>1</X>
+			<Y>5</Y>
+			<Data>Floor</Data>
+		</Icon>
+		<Icon>
+			<Name>RightTFloor</Name>
+			<X>2</X>
+			<Y>4</Y>
+			<Data>Floor</Data>
+		</Icon>
+		<Icon>
+			<Name>BottomTFloor</Name>
+			<X>1</X>
+			<Y>3</Y>
+			<Data>Floor</Data>
+		</Icon>
+		<Icon>
+			<Name>LeftTFloor</Name>
+			<X>0</X>
+			<Y>4</Y>
+			<Data>Floor</Data>
+		</Icon>
+
+		<Icon>
+			<Name>SurroundFloor</Name>
+			<X>1</X>
+			<Y>4</Y>
+			<Data>Floor</Data>
 			<Data>Default</Data>
 		</Icon>
 		<Icon>
-			<Name>Surround</Name>
+			<Name>TopFloor</Name>
 			<X>3</X>
-			<Y>47</Y>
-			<Data>Default</Data>
+			<Y>5</Y>
+			<Data>Floor</Data>
+		</Icon>
+		<Icon>
+			<Name>VerticalFloor</Name>
+			<X>3</X>
+			<Y>4</Y>
+			<Data>Floor</Data>
+		</Icon>
+		<Icon>
+			<Name>BottomFloor</Name>
+			<X>3</X>
+			<Y>3</Y>
+			<Data>Floor</Data>
+		</Icon>
+		<Icon>
+			<Name>LeftFloor</Name>
+			<X>4</X>
+			<Y>4</Y>
+			<Data>Floor</Data>
+		</Icon>
+		<Icon>
+			<Name>HorizontalFloor</Name>
+			<X>5</X>
+			<Y>4</Y>
+			<Data>Floor</Data>
+		</Icon>
+		<Icon>
+			<Name>RightFloor</Name>
+			<X>6</X>
+			<Y>4</Y>
+			<Data>Floor</Data>
+		</Icon>
+
+		<Icon>
+			<Name>SoloFloor</Name>
+			<X>5</X>
+			<Y>5</Y>
+			<Data>Floor</Data>
 		</Icon>
 	</WorldInfo>
 </World>

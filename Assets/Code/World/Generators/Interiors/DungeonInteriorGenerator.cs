@@ -2,6 +2,7 @@
 using JoyLib.Code.Graphics;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 namespace JoyLib.Code.World.Generators.Interiors
 {
@@ -9,8 +10,9 @@ namespace JoyLib.Code.World.Generators.Interiors
     {
         private GeneratorTileType[,] m_UntreatedTiles;
 
-        public WorldTile[,] GenerateWorldSpace(int sizeRef)
+        public WorldTile[,] GenerateWorldSpace(int sizeRef, string tileSet)
         {
+            TileSet = tileSet;
             WorldTile[,] tiles = new WorldTile[sizeRef, sizeRef];
 
             DungeonRoomGenerator roomGen = new DungeonRoomGenerator(sizeRef);
@@ -29,11 +31,14 @@ namespace JoyLib.Code.World.Generators.Interiors
         {
             WorldTile[,] tiles = new WorldTile[m_UntreatedTiles.GetLength(0), m_UntreatedTiles.GetLength(1)];
 
+            WorldTile[] templates = StandardWorldTiles.instance.GetByTileSet(TileSet).ToArray();
+
             for (int i = 0; i < tiles.GetLength(0); i++)
             {
                 for (int j = 0; j < tiles.GetLength(1); j++)
                 {
-                    tiles[i, j] = WorldTile.Paving;
+                    //TODO: Redo this!
+                    tiles[i, j] = templates[0];
                 }
             }
 
@@ -43,7 +48,7 @@ namespace JoyLib.Code.World.Generators.Interiors
         public List<JoyObject> GenerateWalls(WorldTile[,] worldTiles)
         {
             List<JoyObject> walls = new List<JoyObject>();
-            Sprite[] sprites = ObjectIconHandler.instance.GetSprites("Walls", "Surround");
+            Sprite[] sprites = ObjectIconHandler.instance.GetSprites(TileSet, "surroundwall");
 
             for (int i = 0; i < m_UntreatedTiles.GetLength(0); i++)
             {
@@ -53,7 +58,7 @@ namespace JoyLib.Code.World.Generators.Interiors
                         m_UntreatedTiles[i, j] == GeneratorTileType.Wall ||
                         m_UntreatedTiles[i, j] == GeneratorTileType.None)
                     {
-                        walls.Add(new JoyObject("Surround", EntityDerivedValue.GetDefaultForItem(1, 1), new Vector2Int(i, j), "Walls", sprites, new string[] { "wall" }));
+                        walls.Add(new JoyObject("Surround", EntityDerivedValue.GetDefaultForItem(1, 1), new Vector2Int(i, j), TileSet, sprites, new string[] { "wall", "interior" }));
                     }
                 }
             }
@@ -63,6 +68,12 @@ namespace JoyLib.Code.World.Generators.Interiors
 
         public void GenerateTileObjects(WorldTile[,] worldTiles)
         {
+        }
+
+        protected string TileSet
+        {
+            get;
+            set;
         }
     }
 }

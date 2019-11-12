@@ -165,7 +165,7 @@ namespace JoyLib.Code.Graphics
             List<Texture2D> icons = new List<Texture2D>();
             if(Icons.ContainsValue(tileSet))
             {
-                List<IconData> textures = Icons[tileSet].FindAll(x => x.name.StartsWith(tileName) || x.data.StartsWith(tileName));
+                List<IconData> textures = Icons[tileSet].FindAll(x => x.name.StartsWith(tileName.ToLower()) || x.data.StartsWith(tileName.ToLower()));
 
                 if(textures.Count == 0)
                 {
@@ -184,9 +184,10 @@ namespace JoyLib.Code.Graphics
 
         private IconData[] GetDefaultIconSet(string tileSet)
         {
-            if(tileSet != null && Icons.ContainsValue(tileSet))
+            string lowerTileSet = tileSet.ToLower();
+            if(tileSet != null && Icons.ContainsValue(lowerTileSet))
             {
-                IconData[] icons = Icons[tileSet].Where(x => x.data.ToLower() == "default").ToArray();
+                IconData[] icons = Icons[lowerTileSet].Where(x => x.data.ToLower() == "default").ToArray();
                 if(icons.Length == 0)
                 {
                     return ReturnDefaultArray();
@@ -220,24 +221,31 @@ namespace JoyLib.Code.Graphics
 
         public Sprite GetSprite(string tileSet, string tileName)
         {
-            if(Icons.ContainsValue(tileSet))
+            string lowerTileSet, lowerTileName;
+            lowerTileName = tileName.ToLower();
+            lowerTileSet = tileSet.ToLower();
+            if(Icons.ContainsValue(lowerTileSet))
             {
-                if(Icons[tileSet].Any(x => x.name.StartsWith(tileName)))
+                if(Icons.Any(x => x.Key.name.Equals(lowerTileName) && x.Value.Contains(lowerTileSet)))
                 {
-                    return Icons[tileSet].First(x => x.name.StartsWith(tileName)).sprite;
+                    return Icons.First(x => x.Key.name.StartsWith(lowerTileName) && x.Value.Contains(lowerTileSet)).Key.sprite;
                 }
             }
 
-            IconData[] icons = GetDefaultIconSet(tileSet);
+            IconData[] icons = GetDefaultIconSet(lowerTileSet);
             return icons[0].sprite;
         }
 
         public Sprite[] GetSprites(string tileSet, string tileName)
         {
+            string lowerTileSet, lowerTileName;
+            lowerTileSet = tileSet.ToLower();
+            lowerTileName = tileName.ToLower();
             List<Sprite> sprites = new List<Sprite>();
-            if(tileSet != null && Icons.ContainsValue(tileSet))
+            if(lowerTileSet != null && Icons.ContainsValue(lowerTileSet))
             {
-                List<IconData> find = Icons[tileSet].FindAll(x => x.name.StartsWith(tileName) || x.data.StartsWith(tileName));
+                List<IconData> find = Icons[lowerTileSet].FindAll(x => x.name.StartsWith(lowerTileName) 
+                                                                    || x.data.StartsWith(lowerTileName));
                 foreach(IconData found in find)
                 {
                     sprites.Add(found.sprite);
@@ -246,7 +254,7 @@ namespace JoyLib.Code.Graphics
 
             if(sprites.Count == 0)
             {
-                IconData[] icons = GetDefaultIconSet(tileSet);
+                IconData[] icons = GetDefaultIconSet(lowerTileSet);
                 foreach (IconData icon in icons)
                 {
                     sprites.Add(icon.sprite);

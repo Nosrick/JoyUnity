@@ -6,6 +6,8 @@
 		<Tileset>Plains</Tileset>
 		<Name>Plains</Name>
 
+		<Tag>Exterior</Tag>
+
 		<Icon>
 			<Name>MiddleMiddle</Name>
 			<X>8</X>

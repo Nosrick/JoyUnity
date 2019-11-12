@@ -33,11 +33,6 @@ namespace JoyLib.Code.World.Generators.Interiors
                 m_Size = MIN_MAP_SIZE;
             }
 
-            if (m_Size % 2 == 0)
-            {
-                m_Size += 1;
-            }
-
             m_Tiles = new GeneratorTileType[m_Size, m_Size];
             m_NumberOfRooms = CalculateRooms();
             m_NumberRoomsPlaced = 0;

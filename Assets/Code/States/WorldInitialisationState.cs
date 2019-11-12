@@ -63,17 +63,11 @@ namespace JoyLib.Code.States
                     GameObject gameObject = GameObject.Instantiate(sprite);
                     gameObject.transform.position = new Vector3(i, j);
                     gameObject.GetComponent<SpriteRenderer>().sortingLayerName = "Terrain";
-                    switch(m_ActiveWorld.Tiles[i, j])
-                    {
-                        case WorldTile.Paving:
-                            gameObject.GetComponent<SpriteRenderer>().sprite = ObjectIconHandler.instance.GetSprite("Paving", "MiddleMiddle0");
-                            break;
 
-                        case WorldTile.Plains:
-                            gameObject.GetComponent<SpriteRenderer>().sprite = ObjectIconHandler.instance.GetSprite("Plains", "MiddleMiddle0");
-                            break;
-                    }
-                    
+                    gameObject.GetComponent<SpriteRenderer>().sprite = 
+                        ObjectIconHandler.instance.GetSprite(m_ActiveWorld.Tiles[i, j].TileSet, 
+                                                             //TODO: This will eventually be a tile direction selection algorithm
+                                                             "solofloor");      
                     gameObject.transform.parent = objectHolder.transform;
 
                     //Make the fog of war

@@ -6,23 +6,20 @@ namespace JoyLib.Code.World.Generators.Interiors
 {
     public static class DungeonGenerator
     {
-        public static WorldInstance GenerateDungeon(string name, int size, int levels, params string[] dungeonTypes)
+        public static WorldInstance GenerateDungeon(WorldInfo worldInfo, int size, int levels)
         {
             DungeonInteriorGenerator interiorGenerator = new DungeonInteriorGenerator();
             SpawnPointPlacer spawnPointPlacer = new SpawnPointPlacer();
 
             List<string> entitiesToPlace = new List<string>();
-            if (dungeonTypes != null)
-            {
-                entitiesToPlace.AddRange(dungeonTypes);
-            }
+            entitiesToPlace.AddRange(worldInfo.inhabitants);
 
             WorldInstance root = null;
             WorldInstance current = null;
             for (int i = 1; i <= levels; i++)
             {
-                WorldTile[,] tiles = interiorGenerator.GenerateWorldSpace(size);
-                WorldInstance worldInstance = new WorldInstance(tiles, new string[] { "interior" }, name + " " + i);
+                WorldTile[,] tiles = interiorGenerator.GenerateWorldSpace(size, worldInfo.tileset);
+                WorldInstance worldInstance = new WorldInstance(tiles, worldInfo.tags, worldInfo.name + " " + i);
 
                 List<JoyObject> walls = interiorGenerator.GenerateWalls(tiles);
                 foreach(JoyObject wall in walls)

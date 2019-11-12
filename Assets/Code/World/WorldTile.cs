@@ -1,19 +1,46 @@
-﻿namespace JoyLib.Code.World
+﻿using System.Collections.Generic;
+
+namespace JoyLib.Code.World
 {
-    public enum WorldTile
+    public class WorldTile
     {
-        Plains,
-        Forest,
-        Mountains,
-        Hills,
-        Desert,
-        Wasteland,
-        Tundra,
-        Volcanic,
-        Ocean,
-        River,
-        Lake,
-        Beach,
-        Paving
+        protected HashSet<string> m_Tags;
+
+        public WorldTile(string tileName, string tileSet, IEnumerable<string> tags)
+        {
+            TileName = tileName;
+            TileSet = tileSet;
+            m_Tags = new HashSet<string>(tags);
+        }
+
+        public bool AddTag(string tag)
+        {
+            return m_Tags.Add(tag);
+        }
+
+        public bool RemoveTag(string tag)
+        {
+            return m_Tags.Remove(tag);
+        }
+
+        public HashSet<string> Tags
+        {
+            get
+            {
+                return new HashSet<string>(m_Tags);
+            }
+        }
+
+        public string TileName
+        {
+            get;
+            protected set;
+        }
+
+        public string TileSet
+        {
+            get;
+            protected set;
+        }
     }
 }

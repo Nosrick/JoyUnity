@@ -55,6 +55,7 @@ namespace JoyLib.Code.Unity
             }
             this.name = m_JoyObject.JoyName + ":" + m_JoyObject.GUID;
             this.transform.position = new Vector3(m_JoyObject.WorldPosition.x, m_JoyObject.WorldPosition.y, 0.0f);
+            m_SpriteRenderer.sprite = joyObject.Icon;
         }
 
         public JoyObject MyJoyObject

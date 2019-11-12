@@ -38,7 +38,10 @@ namespace JoyLib.Code.World
                         inhabitants = worldInfo.Elements("Inhabitant")
                             .Select(x => x.GetAs<string>().ToLower())
                             .ToArray(),
-                        tileset = worldInfo.Element("Tileset").GetAs<string>().ToLower()
+                        tileset = worldInfo.Element("Tileset").GetAs<string>().ToLower(),
+                        tags = worldInfo.Elements("Tag")
+                            .Select(x => x.GetAs<string>().ToLower())
+                            .ToArray()
                     };
 
                     //This is optional
@@ -53,7 +56,7 @@ namespace JoyLib.Code.World
                             position = new UnityEngine.Vector2Int(
                                 icon.Element("X").GetAs<int>(),
                                 icon.Element("Y").GetAs<int>()),
-                            data = icon.Element("Data").DefaultIfEmpty("default").ToLower()
+                            data = icon.Element("Data").DefaultIfEmpty("").ToLower()
                         };
 
                         iconData.Add(newIcon);
@@ -65,6 +68,12 @@ namespace JoyLib.Code.World
                         filename,
                         info.tileset,
                         iconData.ToArray());
+
+                    StandardWorldTiles.instance.AddType(
+                        new WorldTile(
+                            info.name,
+                            info.tileset,
+                            info.tags));
                 }
             }
 
@@ -92,5 +101,7 @@ namespace JoyLib.Code.World
         public string name;
         public string[] inhabitants;
         public string tileset;
+
+        public string[] tags;
     }
 }
