@@ -2,54 +2,90 @@
 <Cultures>
 	<Culture>
 		<CultureName>slime conglomerate</CultureName>
-		<Inhabitant>dungeon slime</Inhabitant>
 
-		<Ruler>great slime</Ruler>
+		<Inhabitants>
+			<Inhabitant>dungeon slime</Inhabitant>
+		</Inhabitants>
 
-		<Sexuality>
-			<Name>bisexual</Name>
-			<Chance>95</Chance>
-		</Sexuality>
+		<Rulers>
+			<Ruler>great slime</Ruler>
+		</Rulers>
 
-		<Sexuality>
-			<Name>asexual</Name>
-			<Chance>5</Chance>
-		</Sexuality>
+		<Crimes>
+		</Crimes>
 
-		<Sex>
-			<Name>neutral</Name>
-			<Chance>100</Chance>
-		</Sex>
+		<TileSet>
+		</TileSet>
 
-		<Job>
-			<Name>warrior</Name>
-			<Chance>10</Chance>
-		</Job>
+		<Sexualities>
+			<Sexuality>
+				<Name>bisexual</Name>
+				<Chance>95</Chance>
+			</Sexuality>
 
-		<RelationshipType>polyamorous</RelationshipType>
+			<Sexuality>
+				<Name>asexual</Name>
+				<Chance>5</Chance>
+			</Sexuality>
+		</Sexualities>
 
-		<NameData>
-			<Name>Glorp</Name>
-			<Sex>Neutral</Sex>
-			<Chain>0</Chain>
-		</NameData>
+		<Sexes>
+			<Sex>
+				<Name>neutral</Name>
+				<Chance>100</Chance>
+			</Sex>
+		</Sexes>
 
-		<NameData>
-			<Name>Blip</Name>
-			<Sex>Neutral</Sex>
-			<Chain>0</Chain>
-		</NameData>
+		<Jobs>
+			<Job>
+				<Name>warrior</Name>
+				<Chance>10</Chance>
+			</Job>
+		</Jobs>
 
-		<NameData>
-			<Name>Slorp</Name>
-			<Sex>Neutral</Sex>
-			<Chain>0</Chain>
-		</NameData>
+		<Relationships>
+			<RelationshipType>polyamorous</RelationshipType>
+		</Relationships>
 
-		<NameData>
-			<Name>Glurg</Name>
-			<Sex>Neutral</Sex>
-			<Chain>0</Chain>
-		</NameData>
+		<Statistics>
+		</Statistics>
+
+		<Names>
+			<NameData>
+				<Name>Glorp</Name>
+				<Sex>Neutral</Sex>
+				<Chain>0</Chain>
+			</NameData>
+
+			<NameData>
+				<Name>Blip</Name>
+				<Sex>Neutral</Sex>
+				<Chain>0</Chain>
+			</NameData>
+
+			<NameData>
+				<Name>Slorp</Name>
+				<Sex>Neutral</Sex>
+				<Chain>0</Chain>
+			</NameData>
+
+			<NameData>
+				<Name>Glurg</Name>
+				<Sex>Neutral</Sex>
+				<Chain>0</Chain>
+			</NameData>
+
+			<NameData>
+				<Name>The</Name>
+				<Sex>Neutral</Sex>
+				<Chain>1</Chain>
+			</NameData>
+
+			<NameData>
+				<Name>Slimy</Name>
+				<Sex>Neutral</Sex>
+				<Chain>2</Chain>
+			</NameData>
+		</Names>
 	</Culture>
 </Cultures>

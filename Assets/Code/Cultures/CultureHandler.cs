@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using System.Xml.Linq;
+using JoyLib.Code.Graphics;
 
 namespace JoyLib.Code.Cultures
 {
@@ -31,52 +32,81 @@ namespace JoyLib.Code.Cultures
 
                 foreach (XElement culture in element.Elements("Culture"))
                 {
-                    List<string> rulers = (from ruler in culture.Elements("Ruler")
+                    List<string> rulers = (from ruler in culture.Element("Rulers")
+                                            .Elements("Ruler")
                                            select ruler.GetAs<string>().ToLower()).ToList();
 
-                    List<string> crimes = (from crime in culture.Elements("Crime")
+                    List<string> crimes = (from crime in culture.Element("Crimes")
+                                                    .Elements("Crime")
                                            select crime.GetAs<string>().ToLower()).ToList();
 
-                    List<string> inhabitants = (from inhabitant in culture.Elements("Inhabitant")
+                    List<string> inhabitants = (from inhabitant in culture.Element("Inhabitants")
+                                                    .Elements("Inhabitant")
                                                 select inhabitant.GetAs<string>().ToLower()).ToList();
 
-                    List<string> relationships = (from relationship in culture.Elements("RelationshipType")
+                    List<string> relationships = (from relationship in culture.Element("Relationships")
+                                                    .Elements("RelationshipType")
                                                   select relationship.GetAs<string>().ToLower()).ToList();
 
-                    List<NameData> nameDataList = (from nameData in culture.Elements("NameData")
+                    List<NameData> nameDataList = (from nameData in culture.Element("Names")
+                                                    .Elements("NameData")
                                                    select new NameData(
-                                                       nameData.Element("Name").GetAs<string>().ToLower(),
-                                                       nameData.Elements("Chain").Select(x => x.GetAs<int>()).ToArray(),
-                                                       nameData.Elements("Sex").Select(x => x.GetAs<string>().ToLower()).ToArray()
-                                                       )).ToList();
+                                                      nameData.Element("Name").GetAs<string>().ToLower(),
+                                                      nameData.Elements("Chain").Select(x => x.GetAs<int>()).ToArray(),
+                                                      nameData.Elements("Sex").Select(x => x.GetAs<string>().ToLower()).ToArray()
+                                                      )).ToList();
 
-                    Dictionary<string, int> sexualitiesDictionary = (from sexualities in culture.Elements("Sexuality")
+                    Dictionary<string, int> sexualitiesDictionary = (from sexualities in culture.Element("Sexualities")
+                                                                        .Elements("Sexuality")
                                                                      select new KeyValuePair<string, int>(
-                                                                         sexualities.Element("Name").GetAs<string>().ToLower(),
-                                                                         sexualities.Element("Chance").GetAs<int>()
-                                                                         )).ToDictionary(x => x.Key, x => x.Value);
+                                                                      sexualities.Element("Name").GetAs<string>().ToLower(),
+                                                                      sexualities.Element("Chance").GetAs<int>()
+                                                                      )).ToDictionary(x => x.Key, x => x.Value);
 
-                    Dictionary<string, int> sexesDictionary = (from sexes in culture.Elements("Sex")
+                    Dictionary<string, int> sexesDictionary = (from sexes in culture.Element("Sexes")
+                                                                    .Elements("Sex")
                                                                select new KeyValuePair<string, int>(
-                                                                   sexes.Element("Name").GetAs<string>().ToLower(),
-                                                                   sexes.Element("Chance").GetAs<int>()))
+                                                              sexes.Element("Name").GetAs<string>().ToLower(),
+                                                              sexes.Element("Chance").GetAs<int>()))
                                                                    .ToDictionary(x => x.Key, x => x.Value);
 
-                    Dictionary<string, Tuple<int, int>> statVarianceDictionary = (from statVariances in culture.Elements("StatVariance")
+                    Dictionary<string, Tuple<int, int>> statVarianceDictionary = (from statVariances in culture.Element("Statistics")
+                                                                                    .Elements("StatVariance")
                                                                                   select new KeyValuePair<string, Tuple<int, int>>(
-                                                                                      statVariances.Element("Name").GetAs<string>().ToLower(),
-                                                                                      new Tuple<int, int>(
-                                                                                          statVariances.Element("Chance").GetAs<int>(),
-                                                                                          statVariances.Element("Magnitude").GetAs<int>())))
+                                                                                    statVariances.Element("Name").GetAs<string>().ToLower(),
+                                                                                    new Tuple<int, int>(
+                                                                                        statVariances.Element("Chance").GetAs<int>(),
+                                                                                        statVariances.Element("Magnitude").GetAs<int>())))
                                                                                           .ToDictionary(x => x.Key, x => x.Value);
 
-                    Dictionary<string, int> jobPrevelenceDictionary = (from jobPrevelence in culture.Elements("Job")
+                    Dictionary<string, int> jobPrevelenceDictionary = (from jobPrevelence in culture.Element("Jobs")
+                                                                            .Elements("Job")
                                                                        select new KeyValuePair<string, int>(
-                                                                           jobPrevelence.Element("Name").GetAs<string>().ToLower(),
-                                                                           jobPrevelence.Element("Chance").GetAs<int>()))
+                                                                      jobPrevelence.Element("Name").GetAs<string>().ToLower(),
+                                                                      jobPrevelence.Element("Chance").GetAs<int>()))
                                                                            .ToDictionary(x => x.Key, x => x.Value);
 
                     string cultureName = culture.Element("CultureName").GetAs<string>();
+
+                    string tileSet = culture.Element("TileSet").Element("Name").DefaultIfEmpty("");
+                    string filename = culture.Element("TileSet").Element("Filename").DefaultIfEmpty("");
+
+                    if (tileSet.Length > 0)
+                    {
+                        IconData[] icons = (from cultureIcons in culture.Element("TileSet").Elements("Icon")
+                                            select new IconData()
+                                            {
+                                                name = cultureIcons.Element("Name").GetAs<string>(),
+                                                data = cultureIcons.Element("Data").DefaultIfEmpty(""),
+                                                frames = cultureIcons.Element("Frames").GetAs<int>(),
+                                                position = new UnityEngine.Vector2Int(
+                                                    cultureIcons.Element("X").GetAs<int>(),
+                                                    cultureIcons.Element("Y").GetAs<int>())
+                                            }).ToArray();
+
+                        ObjectIconHandler.instance.AddIcons(
+                            filename, tileSet, icons);
+                    }
 
                     cultures.Add(cultureName,
                         new CultureType(
@@ -98,7 +128,7 @@ namespace JoyLib.Code.Cultures
 
         public static CultureType GetByCultureName(string name)
         {
-            if(s_Cultures.ContainsKey(name))
+            if (s_Cultures.ContainsKey(name))
             {
                 return s_Cultures[name];
             }
@@ -113,10 +143,10 @@ namespace JoyLib.Code.Cultures
                 Dictionary<string, CultureType> cultures = s_Cultures.Where(culture => culture.Value.Inhabitants.Contains(type.ToLowerInvariant())).ToDictionary(pair => pair.Key, pair => pair.Value);
                 return cultures.Values.ToList();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 ActionLog.WriteToLog("Could not find a culture for creature type " + type);
-                return new List<CultureType>();
+                throw new InvalidOperationException("Could not find a culture for creature type " + type, e);
             }
         }
 

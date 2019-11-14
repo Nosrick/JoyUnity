@@ -2,81 +2,122 @@
 <Cultures>
 	<Culture>
 		<CultureName>human kingdom</CultureName>
-		<Inhabitant>human</Inhabitant>
 
-		<Ruler>king</Ruler>
-		<Ruler>queen</Ruler>
+		<Inhabitants>
+			<Inhabitant>human</Inhabitant>
+		</Inhabitants>
 
-		<Crime>theft</Crime>
-		<Crime>murder</Crime>
-		<Crime>trespass</Crime>
-		<Crime>rape</Crime>
+		<Rulers>
+			<Ruler>king</Ruler>
+			<Ruler>queen</Ruler>
+		</Rulers>
 
-		<Job>
-			<Name>warrior</Name>
-			<Chance>50</Chance>
-		</Job>
+		<Crimes>
+			<Crime>theft</Crime>
+			<Crime>murder</Crime>
+			<Crime>trespass</Crime>
+			<Crime>rape</Crime>
+		</Crimes>
 
-		<Job>
-			<Name>thief</Name>
-			<Chance>20</Chance>
-		</Job>
+		<Jobs>
+			<Job>
+				<Name>warrior</Name>
+				<Chance>50</Chance>
+			</Job>
 
-		<Job>
-			<Name>hedge wizard</Name>
-			<Chance>10</Chance>
-		</Job>
+			<Job>
+				<Name>thief</Name>
+				<Chance>20</Chance>
+			</Job>
 
-		<Sexuality>
-			<Name>heterosexual</Name>
-			<Chance>70</Chance>
-		</Sexuality>
+			<Job>
+				<Name>hedge wizard</Name>
+				<Chance>10</Chance>
+			</Job>
+		</Jobs>
 
-		<Sexuality>
-			<Name>bisexual</Name>
-			<Chance>10</Chance>
-		</Sexuality>
+		<Sexualities>
+			<Sexuality>
+				<Name>heterosexual</Name>
+				<Chance>70</Chance>
+			</Sexuality>
 
-		<Sexuality>
-			<Name>homosexual</Name>
-			<Chance>10</Chance>
-		</Sexuality>
+			<Sexuality>
+				<Name>bisexual</Name>
+				<Chance>10</Chance>
+			</Sexuality>
 
-		<Sexuality>
-			<Name>asexual</Name>
-			<Chance>3</Chance>
-		</Sexuality>
+			<Sexuality>
+				<Name>homosexual</Name>
+				<Chance>10</Chance>
+			</Sexuality>
 
-		<Sexuality>
-			<Name>demisexual</Name>
-			<Chance>3</Chance>
-		</Sexuality>
+			<Sexuality>
+				<Name>asexual</Name>
+				<Chance>3</Chance>
+			</Sexuality>
+		</Sexualities>
 
-		<Sex>
-			<Name>male</Name>
-			<Chance>50</Chance>
-		</Sex>
+		<Sexes>
+			<Sex>
+				<Name>male</Name>
+				<Chance>50</Chance>
+			</Sex>
 
-		<Sex>
-			<Name>female</Name>
-			<Chance>50</Chance>
-		</Sex>
+			<Sex>
+				<Name>female</Name>
+				<Chance>50</Chance>
+			</Sex>
+		</Sexes>
 
-		<RelationshipType>monoamorous</RelationshipType>
-		<RelationshipType>polyamorous</RelationshipType>
+		<Relationships>
+			<RelationshipType>monoamorous</RelationshipType>
+			<RelationshipType>polyamorous</RelationshipType>
+		</Relationships>
 
-		<NameData>
-			<Name>Alex</Name>
-			<Sex>Male</Sex>
-			<Sex>Female</Sex>
-			<Chain>0</Chain>
-		</NameData>
+		<Names>
+			<NameData>
+				<Name>Alex</Name>
+				<Sex>Male</Sex>
+				<Sex>Female</Sex>
+				<Chain>0</Chain>
+			</NameData>
 
-		<NameData>
-			<Name>McHuman</Name>
-			<Sex>Male</Sex>
-			<Sex>Female</Sex>
-			<Chain>1</Chain>
-		</NameData>
+			<NameData>
+				<Name>McHuman</Name>
+				<Sex>Male</Sex>
+				<Sex>Female</Sex>
+				<Chain>1</Chain>
+			</NameData>
+		</Names>
+
+		<Statistics>
+		</Statistics>
+
+		<TileSet>
+			<Name>human</Name>
+			<Filename>cultures/human</Filename>
+
+			<Icon>
+				<Name>warrior</Name>
+				<Frames>2</Frames>
+				<X>2</X>
+				<Y>1</Y>
+			</Icon>
+
+			<Icon>
+				<Name>thief</Name>
+				<Frames>2</Frames>
+				<X>10</X>
+				<Y>0</Y>
+			</Icon>
+
+			<Icon>
+				<Name>hedge wizard</Name>
+				<Frames>2</Frames>
+				<X>12</X>
+				<Y>1</Y>
+			</Icon>
+		</TileSet>
 	</Culture>
 </Cultures>
