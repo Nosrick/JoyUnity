@@ -183,14 +183,21 @@ namespace JoyLib.Code.Entities
 
         protected string GetNameFromMultipleCultures()
         {
-            string name = "";
-            for(int i = 0; i < m_Cultures.Count; i++)
+            List<string> nameList = new List<string>();
+            int maxNames = m_Cultures.SelectMany(x => x.NameData)
+                                    .SelectMany(y => y.chain)
+                                    .Max(z => z);
+            for(int i = 0; i <= maxNames; i++)
             {
                 CultureType random = m_Cultures[RNG.Roll(0, m_Cultures.Count - 1)];
-                name += random.GetNameForChain(i, this.Sex.Name) + " ";
+                while(random.NameData.SelectMany(x => x.chain).Max(y => y) < maxNames)
+                {
+                    random = m_Cultures[RNG.Roll(0, m_Cultures.Count - 1)];
+                }
+
+                nameList.Add(random.GetNameForChain(i, this.Sex.Name));
             }
-            name.TrimEnd();
-            return name;
+            return String.Join(" ", nameList);
         }
 
         protected void SetFOVHandler()

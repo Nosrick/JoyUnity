@@ -209,5 +209,13 @@ namespace JoyLib.Code.Cultures
                 return m_SexualityPrevelence.Keys.ToArray();
             }
         }
+
+        public NameData[] NameData
+        {
+            get
+            {
+                return m_NameData.ToArray();
+            }
+        }
     }
 }
