@@ -27,6 +27,16 @@
 		</Statistics>
 
 		<TileSet>
+			<Name>naga</Name>
+			<Filename>cultures/naga</Filename>
+		
+			<Icon>
+				<Name>naga</Name>
+				<Data>default</Data>
+				<Frames>2</Frames>
+				<X>0</X>
+				<Y>0</Y>
+			</Icon>
 		</TileSet>
 
 		<Jobs>

@@ -15,6 +15,16 @@
 		</Crimes>
 
 		<TileSet>
+			<Name>slime</Name>
+			<Filename>cultures/slime</Filename>
+			
+			<Icon>
+				<Name>droplet slime</Name>
+				<Data>default</Data>
+				<Frames>2</Frames>
+				<X>0</X>
+				<Y>3</Y>
+			</Icon>
 		</TileSet>
 
 		<Sexualities>
