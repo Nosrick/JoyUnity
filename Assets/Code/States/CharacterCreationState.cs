@@ -127,8 +127,10 @@ namespace JoyLib.Code.States
             IGrowingValue level = new ConcreteGrowingValue("level", 1, 100, 0, GlobalConstants.DEFAULT_SUCCESS_THRESHOLD,
                 new StandardRoller(), new NonUniqueDictionary<INeed, float>());
 
-            m_Player = WorldState.EntityHandler.Create(humanTemplate, needs, level, m_Jobs[m_JobIndex], culture.ChooseSex(), culture.ChooseSexuality(), new UnityEngine.Vector2Int(-1, -1),
-                ObjectIconHandler.instance.GetSprites("Human", m_Jobs[m_JobIndex].Name), null);
+            JobType randomJob = culture.ChooseJob();
+
+            m_Player = WorldState.EntityHandler.Create(humanTemplate, needs, level, randomJob, culture.ChooseSex(), culture.ChooseSexuality(), new UnityEngine.Vector2Int(-1, -1),
+                ObjectIconHandler.instance.GetSprites("Human", randomJob.Name), null);
 
             m_Player.PlayerControlled = true;
 

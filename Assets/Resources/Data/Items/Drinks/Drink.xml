@@ -38,25 +38,24 @@
 		<Tileset>Drinks</Tileset>
 	</IdentifiedItem>
 	
+	<TileSet>
 	<Filename>Drinks</Filename>
-	<Tileset>Drinks</Tileset>
+	<Name>Drinks</Name>
 
 	<Icon>
 		<Name>Cider</Name>
 		<X>0</X>
 		<Y>0</Y>
-		<Data>Cider</Data>
 	</Icon>
 	<Icon>
 		<Name>Water</Name>
 		<X>1</X>
 		<Y>0</Y>
-		<Data>Water</Data>
 	</Icon>
 	<Icon>
 		<Name>Wine</Name>
 		<X>2</X>
 		<Y>0</Y>
-		<Data>Wine</Data>
 	</Icon>
+	</TileSet>
 </Items>

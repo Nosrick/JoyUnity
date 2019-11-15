@@ -25,7 +25,7 @@ namespace JoyLib.Code.Entities.Items
 
         public static bool Initialise()
         {
-            if(s_ItemDatabase != null)
+            if (s_ItemDatabase != null)
             {
                 return true;
             }
@@ -37,27 +37,27 @@ namespace JoyLib.Code.Entities.Items
         public static List<BaseItemType> LoadItems()
         {
             List<BaseItemType> items = new List<BaseItemType>();
-            
+
             string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Items", "*.xml", SearchOption.AllDirectories);
 
-            foreach(string file in files)
-            { 
+            foreach (string file in files)
+            {
                 XElement doc = XElement.Load(file);
 
                 List<IdentifiedItem> identifiedItems = (from item in doc.Elements("IdentifiedItem")
                                                         select new IdentifiedItem()
                                                         {
-                                                            name = item.Element("Name").GetAs<string>(),
-                                                            description = item.Element("Description").GetAs<string>(),
+                                                            name = item.Element("Name").GetAs<string>().ToLower(),
+                                                            description = item.Element("Description").GetAs<string>().ToLower(),
                                                             value = item.Element("Value").GetAs<int>(),
                                                             size = item.Element("Size").GetAs<int>(),
-                                                            spriteSheet = item.Element("Tileset").GetAs<string>(),
-                                                            skill = item.Element("Skill").DefaultIfEmpty("None"),
-                                                            slots = item.Elements("Slot").Select(slot => slot.GetAs<string>().ToLower()).DefaultIfEmpty("none").ToArray(),
-                                                            materials = item.Elements("Material").Select(material => material.GetAs<string>()).ToArray(),
+                                                            spriteSheet = item.Element("Tileset").GetAs<string>().ToLower(),
+                                                            skill = item.Element("Skill").DefaultIfEmpty("none").ToLower(),
+                                                            slots = item.Elements("Slot").Select(slot => slot.DefaultIfEmpty("none").ToLower()).ToArray(),
+                                                            materials = item.Elements("Material").Select(material => material.GetAs<string>().ToLower()).ToArray(),
                                                             tags = item.Elements("Tag").Select(tag => tag.GetAs<string>().ToLower()).ToArray(),
                                                             weighting = item.Element("SpawnWeighting").GetAs<int>(),
-                                                            abilities = item.Elements("Ability").Select(ability => AbilityHandler.GetAbility(ability.GetAs<string>())).ToArray(),
+                                                            abilities = item.Elements("Ability").Select(ability => AbilityHandler.GetAbility(ability.GetAs<string>().ToLower())).ToArray(),
                                                             lightLevel = item.Element("LightLevel").GetAs<int>()
 
                                                         }).ToList();
@@ -65,24 +65,31 @@ namespace JoyLib.Code.Entities.Items
                 List<UnidentifiedItem> unidentifiedItems = (from item in doc.Elements("UnidentifiedItem")
                                                             select new UnidentifiedItem()
                                                             {
-                                                                name = item.Element("Name").GetAs<string>(),
-                                                                description = item.Element("Description").GetAs<string>()
+                                                                name = item.Element("Name").GetAs<string>().ToLower(),
+                                                                description = item.Element("Description").GetAs<string>().ToLower()
                                                             }).ToList();
 
-                List<IconData> iconData = (from item in doc.Elements("Icon")
-                                           select new IconData()
-                                           {
-                                               name = item.Element("Name").GetAs<string>(),
-                                               data = item.Element("Data").GetAs<string>(),
-                                               frames = item.Element("Frames").GetAs<int>(),
-                                               position = new Vector2Int(item.Element("X").GetAs<int>(), item.Element("Y").GetAs<int>())
-                                           }).ToList();
+                string tileSet = doc.Element("TileSet").Element("Name").GetAs<string>().ToLower();
 
-                string fileName = doc.Element("Filename").GetAs<string>();
-                string tileSet = doc.Element("Tileset").GetAs<string>();
-                string actionWord = doc.Element("ActionWord").DefaultIfEmpty("strikes");
+                string fileName = doc.Element("TileSet").Element("Filename").DefaultIfEmpty("");
 
-                ObjectIconHandler.instance.AddIcons(fileName, tileSet, iconData.ToArray());
+                if (fileName.Length > 0)
+                {
+                    List<IconData> iconData = (from item in doc.Element("TileSet").Elements("Icon")
+                                               select new IconData()
+                                               {
+                                                   name = item.Element("Name").GetAs<string>().ToLower(),
+                                                   data = item.Element("Data").DefaultIfEmpty("").ToLower(),
+                                                   frames = item.Element("Frames").DefaultIfEmpty(1),
+                                                   position = new Vector2Int(item.Element("X").GetAs<int>(), item.Element("Y").GetAs<int>())
+                                               }).ToList();
+
+                    ObjectIconHandler.instance.AddIcons(fileName, tileSet, iconData.ToArray());
+                }
+
+
+                string actionWord = doc.Element("ActionWord").DefaultIfEmpty("strikes").ToLower();
+
 
                 for (int j = 0; j < identifiedItems.Count; j++)
                 {
@@ -133,7 +140,7 @@ namespace JoyLib.Code.Entities.Items
         public ItemInstance CreateRandomItemOfType(string[] tags, bool identified = false)
         {
             BaseItemType[] matchingTypes = FindItemsOfType(tags);
-            if(matchingTypes.Length > 0)
+            if (matchingTypes.Length > 0)
             {
                 int result = RNG.Roll(0, matchingTypes.Length - 1);
                 BaseItemType itemType = matchingTypes[result];
@@ -152,24 +159,24 @@ namespace JoyLib.Code.Entities.Items
             string lowerName = name.ToLowerInvariant();
             BaseItemType[] matchingTypes = FindItemsOfType(tags);
             List<BaseItemType> secondRound = new List<BaseItemType>();
-            foreach(BaseItemType itemType in matchingTypes)
+            foreach (BaseItemType itemType in matchingTypes)
             {
-                if(identified == false)
+                if (identified == false)
                 {
-                    if(itemType.UnidentifiedName.ToLowerInvariant() == lowerName)
+                    if (itemType.UnidentifiedName.ToLowerInvariant() == lowerName)
                     {
                         secondRound.Add(itemType);
                     }
                 }
                 else
                 {
-                    if(itemType.IdentifiedName == lowerName)
+                    if (itemType.IdentifiedName == lowerName)
                     {
                         secondRound.Add(itemType);
                     }
                 }
             }
-            if(secondRound.Count > 0)
+            if (secondRound.Count > 0)
             {
                 int result = RNG.Roll(0, secondRound.Count - 1);
                 BaseItemType type = secondRound[result];
@@ -183,7 +190,7 @@ namespace JoyLib.Code.Entities.Items
 
         public ItemInstance GetInstance(long GUID)
         {
-            if(m_LiveItems.ContainsKey(GUID))
+            if (m_LiveItems.ContainsKey(GUID))
             {
                 return m_LiveItems[GUID];
             }
@@ -204,7 +211,7 @@ namespace JoyLib.Code.Entities.Items
         {
             public BaseItemType ItemType;
 
-            public ItemCreationException(BaseItemType itemType, string message) : 
+            public ItemCreationException(BaseItemType itemType, string message) :
                 base(message)
             {
                 ItemType = itemType;

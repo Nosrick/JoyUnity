@@ -38,7 +38,7 @@ namespace JoyLib.Code.Entities
             return skills;
         }
 
-        public static NonUniqueDictionary<INeed, float> GetCoefficients()
+        public static NonUniqueDictionary<INeed, float> GetEmptyCoefficients()
         {
             return new NonUniqueDictionary<INeed, float>();
         }

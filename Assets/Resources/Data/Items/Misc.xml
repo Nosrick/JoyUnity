@@ -12,13 +12,15 @@
 		<Tag>Light Source</Tag>
 		<Tileset>Light Source</Tileset>
 	</IdentifiedItem>
-	
-	<Filename>Light</Filename>
-	<Tileset>Light Source</Tileset>
-	<Icon>
-		<Name>Lantern</Name>
-		<X>3</X>
-		<Y>0</Y>
-		<Data>Default</Data>
-	</Icon>
+
+	<TileSet>
+		<Filename>Light</Filename>
+		<Name>Light Source</Name>
+		<Icon>
+			<Name>Lantern</Name>
+			<X>3</X>
+			<Y>0</Y>
+			<Data>Default</Data>
+		</Icon>
+	</TileSet>
 </Items>

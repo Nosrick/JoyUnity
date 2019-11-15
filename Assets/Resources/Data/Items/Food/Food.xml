@@ -14,14 +14,16 @@
 		<Tag>Fruit</Tag>
 		<Tileset>Food</Tileset>
 	</IdentifiedItem>
-	
-	<Filename>Food</Filename>
-	<Tileset>Food</Tileset>
-	
-	<Icon>
-		<Name>Apple</Name>
-		<X>0</X>
-		<Y>3</Y>
-		<Data>Apple</Data>
-	</Icon>
+
+	<TileSet>
+		<Filename>Food</Filename>
+		<Name>Food</Name>
+
+		<Icon>
+			<Name>Apple</Name>
+			<X>0</X>
+			<Y>3</Y>
+			<Data>Apple</Data>
+		</Icon>
+	</TileSet>
 </Items>

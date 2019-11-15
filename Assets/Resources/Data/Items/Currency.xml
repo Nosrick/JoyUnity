@@ -10,7 +10,7 @@
 		<Tag>Currency</Tag>
 		<Tileset>Currency</Tileset>
 	</IdentifiedItem>
-	
+
 	<IdentifiedItem>
 		<Name>Silver coin</Name>
 		<Description>A coin made from shiny silver, from a local mint.</Description>
@@ -21,7 +21,7 @@
 		<Tag>Currency</Tag>
 		<Tileset>Currency</Tileset>
 	</IdentifiedItem>
-	
+
 	<IdentifiedItem>
 		<Name>Gold coin</Name>
 		<Description>A valuable gold coin, from a local mint.</Description>
@@ -32,27 +32,29 @@
 		<Tag>Currency</Tag>
 		<Tileset>Currency</Tileset>
 	</IdentifiedItem>
-	
-	<Filename>Money</Filename>
-	<Tileset>Currency</Tileset>
-	<Icon>
-		<Name>Copper Coin</Name>
-		<X>3</X>
-		<Y>5</Y>
-		<Data>Default</Data>
-	</Icon>
-	
-	<Icon>
-		<Name>Silver Coin</Name>
-		<X>4</X>
-		<Y>5</Y>
-		<Data>Default</Data>
-	</Icon>
-	
-	<Icon>
-		<Name>Gold Coin</Name>
-		<X>2</X>
-		<Y>4</Y>
-		<Data>Default</Data>
-	</Icon>
+
+	<TileSet>
+		<Filename>Money</Filename>
+		<Name>Currency</Name>
+		<Icon>
+			<Name>Copper Coin</Name>
+			<X>3</X>
+			<Y>5</Y>
+			<Data>Default</Data>
+		</Icon>
+
+		<Icon>
+			<Name>Silver Coin</Name>
+			<X>4</X>
+			<Y>5</Y>
+			<Data>Default</Data>
+		</Icon>
+
+		<Icon>
+			<Name>Gold Coin</Name>
+			<X>2</X>
+			<Y>4</Y>
+			<Data>Default</Data>
+		</Icon>
+	</TileSet>
 </Items>
