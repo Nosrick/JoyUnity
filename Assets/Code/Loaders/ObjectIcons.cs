@@ -128,7 +128,7 @@ namespace JoyLib.Code.Graphics
 
             for(int i = 0; i < frames; i++)
             {
-                Rect sourceRectangle = new Rect(startPoint.x + (spriteSize * i), startPoint.y * spriteSize, spriteSize, spriteSize);
+                Rect sourceRectangle = new Rect(startPoint.x * spriteSize + (i * spriteSize), startPoint.y * spriteSize, spriteSize, spriteSize);
 
                 Color[] imagePiece = GetImageData(imageData, sheet.width, sourceRectangle);
                 Texture2D subTexture = new Texture2D(spriteSize, spriteSize, TextureFormat.RGBA32, false, false);
