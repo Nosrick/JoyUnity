@@ -1,4 +1,5 @@
-﻿using JoyLib.Code.Entities;
+﻿using System.Collections.Generic;
+using JoyLib.Code.Entities;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Unity;
 using JoyLib.Code.World;
@@ -40,18 +41,21 @@ namespace JoyLib.Code.States
                 GameObject upstairs = GameObject.Instantiate(sprite);
                 upstairs.transform.position = new Vector3(m_ActiveWorld.SpawnPoint.x, m_ActiveWorld.SpawnPoint.y, 0.0f);
                 upstairs.GetComponent<SpriteRenderer>().sortingLayerName = "Walls";
-                upstairs.GetComponent<SpriteRenderer>().sprite = ObjectIconHandler.instance.GetSprite("Stairs", "UpStairs0");
+                upstairs.GetComponent<SpriteRenderer>().sprite = ObjectIconHandler.instance.GetSprite("Stairs", "UpStairs");
                 upstairs.transform.parent = objectHolder.transform;
+                upstairs.transform.name = m_ActiveWorld.Parent.Name + " stairs";
             }
 
             //Make each downstairs
-            foreach(Vector2Int position in m_ActiveWorld.Areas.Keys)
+            foreach(KeyValuePair<Vector2Int, WorldInstance> pair in m_ActiveWorld.Areas)
             {
+                Vector2Int position = pair.Key;
                 GameObject downstairs = GameObject.Instantiate(sprite);
                 downstairs.transform.position = new Vector3(position.x, position.y, 0.0f);
                 downstairs.GetComponent<SpriteRenderer>().sortingLayerName = "Walls";
-                downstairs.GetComponent<SpriteRenderer>().sprite = ObjectIconHandler.instance.GetSprite("Stairs", "DownStairs0");
+                downstairs.GetComponent<SpriteRenderer>().sprite = ObjectIconHandler.instance.GetSprite("Stairs", "DownStairs");
                 downstairs.transform.parent = objectHolder.transform;
+                downstairs.transform.name = pair.Value.Name + " stairs";
             }
 
             //Make the floors and the fog of war

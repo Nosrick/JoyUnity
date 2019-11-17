@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<World>
+	<WorldInfo>
+		<Filename>environments/stairs</Filename>
+		
+		<Tileset>stairs</Tileset>
+		<Name>stairs</Name>
+
+		<Tag>stairs</Tag>
+
+		<Icon>
+			<Name>upstairs</Name>
+			<X>0</X>
+			<Y>0</Y>
+		</Icon>
+
+        <Icon>
+            <Name>downstairs</Name>
+            <X>1</X>
+            <Y>0</Y>
+        </Icon>
+	</WorldInfo>
+</World>
