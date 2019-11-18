@@ -1,5 +1,4 @@
 ﻿using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Helpers;
 using JoyLib.Code.Rollers;
 using System.Collections.Generic;
 
@@ -79,17 +78,18 @@ namespace JoyLib.Code.Entities.Needs
             }
 
             //Search the floor
-            List<AI.NeedAIData> intents = actor.MyWorld.SearchForObjects(actor, new string[] { "food" }, AI.Intent.Interact);
-            foreach(AI.NeedAIData intent in intents)
+            IEnumerable<JoyObject> objects = actor.MyWorld.SearchForObjects(actor, new string[] { "food" });
+            foreach(JoyObject obj in objects)
             {
-                if(intent.target.GetType() == typeof(ItemInstance))
+                if(!(obj is ItemInstance item))
                 {
-                    ItemInstance tempItem = (ItemInstance)intent.target;
-                    if(tempItem.ItemType.Value > bestFood)
-                    {
-                        bestFood = tempItem.ItemType.Value;
-                        chosenFood = tempItem;
-                    }
+                    continue;
+                }
+
+                if(item.ItemType.Value > bestFood)
+                {
+                    bestFood = item.ItemType.Value;
+                    chosenFood = item;
                 }
             }
 

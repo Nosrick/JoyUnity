@@ -1,6 +1,7 @@
 ﻿using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Statistics;
 using System;
+using System.Collections.Generic;
 
 namespace JoyLib.Code.Entities.Abilities
 {
@@ -97,7 +98,7 @@ namespace JoyLib.Code.Entities.Abilities
             ItemInstance item = target as ItemInstance;
             if(item != null)
             {
-                user.FulfillNeed("thirst", item.ItemType.Value, 1);
+                user.FulfillNeed("thirst", item.ItemType.Value, new JoyObject[] { item }, 1);
                 user.RemoveItemFromPerson(item);
                 return true;
             }

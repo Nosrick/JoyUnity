@@ -78,17 +78,18 @@ namespace JoyLib.Code.Entities.Needs
             }
 
             //Search the floor
-            List<AI.NeedAIData> intents = actor.MyWorld.SearchForObjects(actor, new string[] { type }, AI.Intent.Interact);
-            foreach (AI.NeedAIData intent in intents)
+            IEnumerable<JoyObject> objects = actor.MyWorld.SearchForObjects(actor, new string[] { type });
+            foreach (JoyObject obj in objects)
             {
-                if (intent.target.GetType() == typeof(ItemInstance))
+                if (!(obj is ItemInstance item))
                 {
-                    ItemInstance tempItem = (ItemInstance)intent.target;
-                    if (tempItem.ItemType.Value > bestDrink)
-                    {
-                        bestDrink = tempItem.ItemType.Value;
-                        chosenDrink = tempItem;
-                    }
+                    continue;
+                }
+
+                if (item.ItemType.Value > bestDrink)
+                {
+                    bestDrink = item.ItemType.Value;
+                    chosenDrink = item;
                 }
             }
 

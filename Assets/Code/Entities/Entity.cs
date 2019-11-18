@@ -51,13 +51,12 @@ namespace JoyLib.Code.Entities
         protected bool[,] m_Vision;
         protected string m_VisionType;
 
-        protected string m_FulfillingNeed;
-        protected int m_FulfilmentCounter;
+        protected FulfillmentData m_FulfillmentData;
 
         protected NeedAIData m_CurrentTarget;
 
         protected IPathfinder m_Pathfinder;
-        
+
         protected Queue<Vector2Int> m_PathfindingData;
 
         protected IFOVHandler m_FOVHandler;
@@ -91,15 +90,32 @@ namespace JoyLib.Code.Entities
         /// <param name="jobLevels"></param>
         /// <param name="world"></param>
         /// <param name="tileset"></param>
-        public Entity(EntityTemplate template, BasicValueContainer<INeed> needs, List<CultureType> cultures, IGrowingValue level, float experience, JobType job, IBioSex sex, ISexuality sexuality,
-            Vector2Int position, Sprite[] sprites, ItemInstance naturalWeapons, NonUniqueDictionary<string, ItemInstance> equipment, 
-            List<ItemInstance> backpack, List<string> identifiedItems, Dictionary<string, int> jobLevels, 
-            WorldInstance world) : 
-            base("", EntityDerivedValue.GetDefault(
-                template.Statistics[EntityStatistic.ENDURANCE], 
-                template.Statistics[EntityStatistic.FOCUS], 
-                template.Statistics[EntityStatistic.WIT]), 
-                position, template.Tileset, sprites, template.Tags)
+        public Entity(
+            EntityTemplate template,
+            BasicValueContainer<INeed> needs,
+            List<CultureType> cultures,
+            IGrowingValue level,
+            float experience,
+            JobType job,
+            IBioSex sex,
+            ISexuality sexuality,
+            Vector2Int position,
+            Sprite[] sprites,
+            ItemInstance naturalWeapons,
+            NonUniqueDictionary<string, ItemInstance> equipment,
+            List<ItemInstance> backpack,
+            List<string> identifiedItems,
+            Dictionary<string, int> jobLevels,
+            WorldInstance world) :
+            base("",
+                EntityDerivedValue.GetDefault(
+                    template.Statistics[EntityStatistic.ENDURANCE],
+                    template.Statistics[EntityStatistic.FOCUS],
+                    template.Statistics[EntityStatistic.WIT]),
+                position,
+                template.Tileset,
+                sprites,
+                template.Tags)
         {
             this.CreatureType = template.CreatureType;
             this.m_Slots = template.Slots.ToList();
@@ -122,15 +138,19 @@ namespace JoyLib.Code.Entities
             this.m_Needs = needs;
             this.m_Abilities = template.Abilities.ToList();
             this.m_Level = level;
-            for(int i = 1; i < level.Value; i++)
+            for (int i = 1; i < level.Value; i++)
             {
                 this.LevelUp();
             }
             this.m_CurrentJob = job;
 
-            if(template.Sentient)
+            if (template.Sentient)
             {
                 this.AddTag("sentient");
+            }
+            else
+            {
+                this.AddTag("non-sentient");
             }
 
             this.m_NaturalWeapons = naturalWeapons;
@@ -148,8 +168,10 @@ namespace JoyLib.Code.Entities
             this.m_Pathfinder = ScriptingEngine.GetProvidedPathFinder();
             this.m_PathfindingData = new Queue<Vector2Int>();
 
-            this.m_FulfillingNeed = "NONE";
-            this.m_FulfilmentCounter = 0;
+            this.m_FulfillmentData = new FulfillmentData(
+                "none",
+                0,
+                new JoyObject[0]);
 
             this.RegenTicker = RNG.Roll(0, REGEN_TICK_TIME - 1);
 
@@ -175,8 +197,8 @@ namespace JoyLib.Code.Entities
         /// <param name="world"></param>
         public Entity(EntityTemplate template, BasicValueContainer<INeed> needs, List<CultureType> cultures, IGrowingValue level, JobType job, IBioSex sex, ISexuality sexuality,
             Vector2Int position, Sprite[] sprites, WorldInstance world) :
-            this(template, needs, cultures, level, 0, job, sex, sexuality, position, sprites, 
-                NaturalWeaponHelper.MakeNaturalWeapon(template.Size), new NonUniqueDictionary<string, ItemInstance>(), 
+            this(template, needs, cultures, level, 0, job, sex, sexuality, position, sprites,
+                NaturalWeaponHelper.MakeNaturalWeapon(template.Size), new NonUniqueDictionary<string, ItemInstance>(),
                 new List<ItemInstance>(), new List<string>(), new Dictionary<string, int>(), world)
         {
         }
@@ -187,10 +209,10 @@ namespace JoyLib.Code.Entities
             int maxNames = m_Cultures.SelectMany(x => x.NameData)
                                     .SelectMany(y => y.chain)
                                     .Max(z => z);
-            for(int i = 0; i <= maxNames; i++)
+            for (int i = 0; i <= maxNames; i++)
             {
                 CultureType random = m_Cultures[RNG.Roll(0, m_Cultures.Count - 1)];
-                while(random.NameData.SelectMany(x => x.chain).Max(y => y) < maxNames)
+                while (random.NameData.SelectMany(x => x.chain).Max(y => y) < maxNames)
                 {
                     random = m_Cultures[RNG.Roll(0, m_Cultures.Count - 1)];
                 }
@@ -227,22 +249,22 @@ namespace JoyLib.Code.Entities
 
         public void Tick()
         {
-            if (m_FulfilmentCounter > 0)
+            if (m_FulfillmentData.Counter > 0)
             {
-                m_FulfilmentCounter -= 1;
+                m_FulfillmentData.DecrementCounter();
             }
 
             RegenTicker += 1;
-            if(RegenTicker == REGEN_TICK_TIME)
+            if (RegenTicker == REGEN_TICK_TIME)
             {
                 m_DerivedValues[EntityDerivedValue.HITPOINTS].ModifyValue(1);
                 m_DerivedValues[EntityDerivedValue.CONCENTRATION].ModifyValue(1);
                 m_DerivedValues[EntityDerivedValue.COMPOSURE].ModifyValue(1);
                 m_DerivedValues[EntityDerivedValue.MANA].ModifyValue(1);
-                
+
                 RegenTicker = 0;
 
-                foreach(INeed need in m_Needs.Collection)
+                foreach (INeed need in m_Needs.Collection)
                 {
                     need.Tick();
                 }
@@ -254,11 +276,11 @@ namespace JoyLib.Code.Entities
         public void AddQuest(Quest quest)
         {
             List<QuestStep> steps = quest.steps;
-            for(int i = 0; i < steps.Count; i++)
+            for (int i = 0; i < steps.Count; i++)
             {
-                if(steps[i].action == QuestAction.Deliver && steps[i].objects.Count != 0)
+                if (steps[i].action == QuestAction.Deliver && steps[i].objects.Count != 0)
                 {
-                    for(int j = 0; j < steps[i].objects.Count; j++)
+                    for (int j = 0; j < steps[i].objects.Count; j++)
                     {
                         AddItem(steps[i].objects[j]);
                     }
@@ -272,27 +294,27 @@ namespace JoyLib.Code.Entities
             List<Tuple<string, int>> data = new List<Tuple<string, int>>();
 
             //Check statistics
-            foreach(string tag in tags)
+            foreach (string tag in tags)
             {
-                if(m_Statistics.Has(tag))
+                if (m_Statistics.Has(tag))
                 {
                     data.Add(new Tuple<string, int>(tag, m_Statistics[tag].Value));
                 }
             }
 
             //Check skills
-            foreach(string tag in tags)
+            foreach (string tag in tags)
             {
-                if(m_Skills.Has(tag))
+                if (m_Skills.Has(tag))
                 {
                     data.Add(new Tuple<string, int>(tag, m_Skills[tag].Value));
                 }
             }
 
             //Check needs
-            foreach(string tag in tags)
+            foreach (string tag in tags)
             {
-                if(m_Needs.Has(tag))
+                if (m_Needs.Has(tag))
                 {
                     data.Add(new Tuple<string, int>(tag, m_Needs[tag].Value));
                 }
@@ -304,12 +326,12 @@ namespace JoyLib.Code.Entities
             foreach (string tag in tags)
             {
                 int result = m_Equipment.KeyCount(tag);
-                if(result > 0)
+                if (result > 0)
                 {
                     data.Add(new Tuple<string, int>(tag, result));
                 }
 
-                foreach(ItemInstance item in items)
+                foreach (ItemInstance item in items)
                 {
                     if (item.HasTag(tag))
                     {
@@ -319,11 +341,11 @@ namespace JoyLib.Code.Entities
             }
 
             //Check backpack
-            foreach(ItemInstance item in m_Backpack)
+            foreach (ItemInstance item in m_Backpack)
             {
-                foreach(string tag in tags)
+                foreach (string tag in tags)
                 {
-                    if(tag.Equals(item.IdentifiedName) || tag.Equals(item.ItemType))
+                    if (tag.Equals(item.IdentifiedName) || tag.Equals(item.ItemType))
                     {
                         data.Add(new Tuple<string, int>(tag, 1));
                     }
@@ -363,32 +385,32 @@ namespace JoyLib.Code.Entities
                     //Act on first need
 
                     bool idle = true;
-                    foreach(INeed need in needs)
+                    foreach (INeed need in needs)
                     {
-                        if(need.ContributingHappiness)
+                        if (need.ContributingHappiness)
                         {
                             continue;
                         }
-                        
+
                         need.FindFulfilmentObject(this);
                         idle = false;
                         break;
                     }
                     m_CurrentTarget.idle = idle;
                 }
-                
+
                 //If we're wandering, select a point we can see and wander there
-                if(CurrentTarget.searching && CurrentTarget.targetPoint == NO_TARGET)
+                if (CurrentTarget.searching && CurrentTarget.targetPoint == NO_TARGET)
                 {
                     List<Vector2Int> visibleSpots = new List<Vector2Int>();
                     List<Vector2Int> visibleWalls = MyWorld.GetVisibleWalls(this);
                     //Check what we can see
-                    for(int x = 0; x < this.Vision.GetLength(0); x++)
+                    for (int x = 0; x < this.Vision.GetLength(0); x++)
                     {
-                        for(int y = 0; y < this.Vision.GetLength(0); y++)
+                        for (int y = 0; y < this.Vision.GetLength(0); y++)
                         {
                             Vector2Int newPos = new Vector2Int(x, y);
-                            if(CanSee(x, y) && visibleWalls.Contains(newPos) == false && WorldPosition != newPos)
+                            if (CanSee(x, y) && visibleWalls.Contains(newPos) == false && WorldPosition != newPos)
                             {
                                 visibleSpots.Add(newPos);
                             }
@@ -401,21 +423,21 @@ namespace JoyLib.Code.Entities
                 }
 
                 //If we have somewhere to be, move there
-                if(WorldPosition != CurrentTarget.targetPoint || (CurrentTarget.target != null && AdjacencyHelper.IsAdjacent(WorldPosition, CurrentTarget.target.WorldPosition)))
+                if (WorldPosition != CurrentTarget.targetPoint || (CurrentTarget.target != null && AdjacencyHelper.IsAdjacent(WorldPosition, CurrentTarget.target.WorldPosition)))
                 {
                     MoveToTarget(CurrentTarget);
                 }
                 //If we've arrived at our destination, then we do our thing
-                if(WorldPosition == CurrentTarget.targetPoint || (CurrentTarget.target != null && AdjacencyHelper.IsAdjacent(WorldPosition, CurrentTarget.target.WorldPosition)))
+                if (WorldPosition == CurrentTarget.targetPoint || (CurrentTarget.target != null && AdjacencyHelper.IsAdjacent(WorldPosition, CurrentTarget.target.WorldPosition)))
                 {
                     //If we have a target
-                    if(CurrentTarget.target != null)
+                    if (CurrentTarget.target != null)
                     {
-                        if(CurrentTarget.intent == Intent.Attack)
+                        if (CurrentTarget.intent == Intent.Attack)
                         {
                             //CombatEngine.SwingWeapon(this, CurrentTarget.target);
                         }
-                        else if(CurrentTarget.intent == Intent.Interact)
+                        else if (CurrentTarget.intent == Intent.Interact)
                         {
                             INeed need = this.Needs[CurrentTarget.need];
 
@@ -425,7 +447,7 @@ namespace JoyLib.Code.Entities
                     //If we do not, we were probably wandering
                     else
                     {
-                        if(CurrentTarget.searching == true)
+                        if (CurrentTarget.searching == true)
                         {
                             m_CurrentTarget.targetPoint = NO_TARGET;
 
@@ -441,13 +463,13 @@ namespace JoyLib.Code.Entities
                 {
                     Vector2Int nextPoint = m_PathfindingData.Peek();
                     PhysicsResult physicsResult = PhysicsManager.IsCollision(WorldPosition, nextPoint, MyWorld);
-                    if(physicsResult != PhysicsResult.EntityCollision && physicsResult != PhysicsResult.WallCollision)
+                    if (physicsResult != PhysicsResult.EntityCollision && physicsResult != PhysicsResult.WallCollision)
                     {
                         m_PathfindingData.Dequeue();
                         Move(nextPoint);
                         HasMoved = true;
                     }
-                    else if(physicsResult == PhysicsResult.EntityCollision)
+                    else if (physicsResult == PhysicsResult.EntityCollision)
                     {
                         MyWorld.SwapPosition(this, MyWorld.GetEntity(nextPoint));
 
@@ -485,7 +507,7 @@ namespace JoyLib.Code.Entities
                 {
                     m_PathfindingData = m_Pathfinder.FindPath(WorldPosition, data.target.WorldPosition, MyWorld.Costs, GetFullVisionRect());
                 }
-                else if(data.targetPoint != NO_TARGET)
+                else if (data.targetPoint != NO_TARGET)
                 {
                     m_PathfindingData = m_Pathfinder.FindPath(WorldPosition, data.targetPoint, MyWorld.Costs, GetFullVisionRect());
                 }
@@ -527,7 +549,7 @@ namespace JoyLib.Code.Entities
         public void AddItem(ItemInstance itemRef)
         {
             ItemInstance item = itemRef;
-            if(item == null)
+            if (item == null)
             {
                 return;
             }
@@ -548,7 +570,7 @@ namespace JoyLib.Code.Entities
 
         public bool RemoveItemFromBackpack(ItemInstance item)
         {
-            if(m_Backpack.Contains(item))
+            if (m_Backpack.Contains(item))
             {
                 m_Backpack.Remove(item);
                 return true;
@@ -561,7 +583,7 @@ namespace JoyLib.Code.Entities
             //Check slots first
             foreach (Tuple<string, ItemInstance> tuple in m_Equipment)
             {
-                if(tuple.Item2 == null)
+                if (tuple.Item2 == null)
                 {
                     continue;
                 }
@@ -582,7 +604,7 @@ namespace JoyLib.Code.Entities
         {
             foreach (Tuple<string, ItemInstance> tuple in m_Equipment)
             {
-                if(tuple.Item1.Equals(slot) && (item != null && tuple.Item2.GUID == item.GUID))
+                if (tuple.Item1.Equals(slot) && (item != null && tuple.Item2.GUID == item.GUID))
                 {
                     m_Equipment.Add(slot, null);
                     m_Equipment.Remove(tuple.Item1, tuple.Item2);
@@ -597,17 +619,17 @@ namespace JoyLib.Code.Entities
             try
             {
                 List<ItemInstance> matchingItems = new List<ItemInstance>();
-                foreach(ItemInstance item in m_Backpack)
+                foreach (ItemInstance item in m_Backpack)
                 {
                     int matches = 0;
-                    foreach(string tag in tags)
+                    foreach (string tag in tags)
                     {
-                        if(item.HasTag(tag))
+                        if (item.HasTag(tag))
                         {
                             matches++;
                         }
                     }
-                    if(matches == tags.Length || (tags.Length < item.TotalTags && matches > 0))
+                    if (matches == tags.Length || (tags.Length < item.TotalTags && matches > 0))
                     {
                         matchingItems.Add(item);
                     }
@@ -615,7 +637,7 @@ namespace JoyLib.Code.Entities
 
                 return matchingItems.ToArray();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ActionLog.WriteToLog("ERROR WHEN SEARCHING BACKPACK OF " + this.ToString());
                 ActionLog.WriteToLog(ex.Message);
@@ -632,7 +654,7 @@ namespace JoyLib.Code.Entities
                 searching = false,
                 target = obj,
                 targetPoint = new Vector2Int(-1, -1),
-                need = need
+                need = need.ToLower()
             };
 
             this.CurrentTarget = needAIData;
@@ -662,9 +684,9 @@ namespace JoyLib.Code.Entities
         {
             bool contains = false;
             Tuple<string, ItemInstance> firstEmptySlot = null;
-            foreach(Tuple<string, ItemInstance> tuple in m_Equipment)
+            foreach (Tuple<string, ItemInstance> tuple in m_Equipment)
             {
-                if(tuple.Item1.Equals(slotRef))
+                if (tuple.Item1.Equals(slotRef))
                 {
                     contains = true;
                     if (tuple.Item2 == null)
@@ -675,7 +697,7 @@ namespace JoyLib.Code.Entities
                 }
             }
 
-            if(contains == false)
+            if (contains == false)
             {
                 return false;
             }
@@ -684,7 +706,7 @@ namespace JoyLib.Code.Entities
             {
                 m_Backpack.Add(firstEmptySlot.Item2);
             }
-            
+
             m_Equipment.Remove(firstEmptySlot.Item1, firstEmptySlot.Item2);
             m_Equipment.Add(firstEmptySlot.Item1, itemRef);
             m_Backpack.Remove(itemRef);
@@ -693,9 +715,9 @@ namespace JoyLib.Code.Entities
 
         public bool UnequipItem(string slot)
         {
-            foreach(Tuple<string, ItemInstance> tuple in m_Equipment)
+            foreach (Tuple<string, ItemInstance> tuple in m_Equipment)
             {
-                if(tuple.Item1.Equals(slot))
+                if (tuple.Item1.Equals(slot))
                 {
                     AddItem(tuple.Item2);
                     //TODO: Make this better
@@ -749,7 +771,7 @@ namespace JoyLib.Code.Entities
 
         public void LevelUp()
         {
-            if(m_JobLevels.ContainsKey(m_CurrentJob.Name))
+            if (m_JobLevels.ContainsKey(m_CurrentJob.Name))
             {
                 m_JobLevels[m_CurrentJob.Name] += 1;
             }
@@ -758,11 +780,11 @@ namespace JoyLib.Code.Entities
                 m_JobLevels.Add(m_CurrentJob.Name, 1);
             }
 
-            IAbility[] newAbilities  = m_CurrentJob.GetAbilitiesForLevel(m_Level.Value);
+            IAbility[] newAbilities = m_CurrentJob.GetAbilitiesForLevel(m_Level.Value);
 
-            foreach(IAbility ability in newAbilities)
+            foreach (IAbility ability in newAbilities)
             {
-                if(m_Abilities.Contains(ability) == false)
+                if (m_Abilities.Contains(ability) == false)
                 {
                     m_Abilities.Add(ability);
                 }
@@ -775,12 +797,12 @@ namespace JoyLib.Code.Entities
         {
             int damage = value;
 
-            foreach(IAbility ability in m_Abilities)
+            foreach (IAbility ability in m_Abilities)
             {
                 if (damage == 0)
                     return;
 
-                if(ability.AbilityTrigger == AbilityTrigger.OnTakeHit)
+                if (ability.AbilityTrigger == AbilityTrigger.OnTakeHit)
                 {
                     damage = ability.OnTakeHit(source, this, damage);
                 }
@@ -833,11 +855,11 @@ namespace JoyLib.Code.Entities
 
         public ItemInstance GetEquipment(string slotRef)
         {
-            foreach(Tuple<string, ItemInstance> tuple in m_Equipment)
+            foreach (Tuple<string, ItemInstance> tuple in m_Equipment)
             {
-                if(tuple.Item1.Equals(slotRef))
+                if (tuple.Item1.Equals(slotRef))
                 {
-                    if(slotRef.StartsWith("Hand") && tuple.Item2 == null)
+                    if (slotRef.StartsWith("Hand") && tuple.Item2 == null)
                     {
                         return m_NaturalWeapons;
                     }
@@ -850,11 +872,11 @@ namespace JoyLib.Code.Entities
             return null;
         }
 
-        public void FulfillNeed(string need, int value, int minutes = NEED_FULFILMENT_COUNTER)
+        public void FulfillNeed(string need, int value, JoyObject[] targets, int minutes = NEED_FULFILMENT_COUNTER)
         {
             m_Needs[need].Fulfill(value);
-            m_FulfillingNeed = need;
-            m_FulfilmentCounter = minutes;
+
+            m_FulfillmentData = new FulfillmentData(need, minutes, targets);
             ActionLog.AddText(this.ToString() + " is fulfilling need " + need);
         }
 
@@ -945,7 +967,7 @@ namespace JoyLib.Code.Entities
                 return m_Size;
             }
         }
-        
+
         public bool[,] Vision
         {
             get
@@ -986,19 +1008,11 @@ namespace JoyLib.Code.Entities
             protected set;
         }
 
-        public int FulfilmentCounter
+        public FulfillmentData FulfillmentData
         {
             get
             {
-                return m_FulfilmentCounter;
-            }
-        }
-
-        public string FulfillingNeed
-        {
-            get
-            {
-                return m_FulfillingNeed;
+                return m_FulfillmentData;
             }
         }
 
@@ -1105,7 +1119,7 @@ namespace JoyLib.Code.Entities
                 return m_VisionType;
             }
         }
-        
+
         public WorldInstance MyWorld
         {
             get;

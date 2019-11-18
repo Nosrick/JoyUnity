@@ -373,9 +373,9 @@ namespace JoyLib.Code.World
         /// <param name="objectType"></param>
         /// <param name="intentRef"></param>
         /// <returns></returns>
-        public List<NeedAIData> SearchForObjects(Entity entityRef, string[] tags, Intent intentRef)
+        public IEnumerable<JoyObject> SearchForObjects(Entity entityRef, IEnumerable<string> tags)
         {
-            List<NeedAIData> data = new List<NeedAIData>();
+            List<JoyObject> data = new List<JoyObject>();
 
             if (entityRef.Vision.GetLength(0) == 1)
             {
@@ -385,193 +385,30 @@ namespace JoyLib.Code.World
             List<JoyObject> inSight = m_Objects.Where(obj => entityRef.CanSee(obj.WorldPosition) == true).ToList();
             foreach(JoyObject obj in inSight)
             {
-                int matches = 0;
-                for(int i = 0; i < tags.Length; i++)
+                IEnumerable<string> intersect = obj.Tags.Intersect(tags);
+                if(intersect.SequenceEqual(tags))
                 {
-                    if(obj.HasTag(tags[i]))
-                    {
-                        matches++;
-                    }
-                }
-                if(matches == tags.Length || (tags.Length < obj.TotalTags && matches > 0))
-                {
-                    NeedAIData tempData = new NeedAIData();
-                    tempData.intent = intentRef;
-                    tempData.target = obj;
-                    data.Add(tempData);
+                    data.Add(obj);
                 }
             }
 
             return data;
         }
 
-        /// <summary>
-        /// TODO: REDO THIS.
-        /// Searches for entities in various ways
-        /// </summary>
-        /// <param name="searcher"></param>
-        /// <param name="entityTypeRef"></param>
-        /// <param name="intentRef"></param>
-        /// <returns></returns>
-        public List<Entity> SearchForEntities(Entity searcher, string entityTypeSearchString, string entitySentienceSearchString)
-        {
-            EntitySentienceSearch entitySentienceSearch = EntitySentienceSearch.Matching;
-            try
-            {
-                entitySentienceSearch = (EntitySentienceSearch)Enum.Parse(typeof(EntitySentienceSearch), entitySentienceSearchString, true);
-            }
-            catch(Exception e)
-            {
-                Debug.LogError(e.Message);
-                Debug.LogError(e.StackTrace);
-            }
-
-            //Special cases
-            //Non-sentient entities
-            if (entitySentienceSearch == EntitySentienceSearch.NonSentient)
-            {
-                List<Entity> entities = m_Entities.Where(x => x.Sentient == false).ToList();
-
-                List<Entity> returnEntities = new List<Entity>();
-                for (int i = 0; i < entities.Count; i++)
-                {
-                    if (searcher.CanSee(entities[i].WorldPosition.x, entities[i].WorldPosition.y) && searcher.GUID != entities[i].GUID)
-                    {
-                        returnEntities.Add(entities[i]);
-                    }
-                }
-                return returnEntities;
-            }
-
-            //Sentient entities
-            else if (entitySentienceSearch == EntitySentienceSearch.Sentient)
-            {
-                List<Entity> entities = m_Entities.Where(x => x.Sentient).ToList();
-
-                List<Entity> returnEntities = new List<Entity>();
-                for (int i = 0; i < entities.Count; i++)
-                {
-                    if (searcher.CanSee(entities[i].WorldPosition.x, entities[i].WorldPosition.y) && searcher.GUID != entities[i].GUID)
-                    {
-                        returnEntities.Add(entities[i]);
-                    }
-                }
-                return returnEntities;
-            }
-
-            //All entities
-            else if(entitySentienceSearch == EntitySentienceSearch.Any)
-            {
-                List<NeedAIData> dataList = new List<NeedAIData>();
-
-                List<Entity> returnEntity = new List<Entity>();
-                for(int i = 0; i < m_Entities.Count; i++)
-                {
-                    if(searcher.CanSee(m_Entities[i].WorldPosition.x, m_Entities[i].WorldPosition.y) && searcher.GUID != m_Entities[i].GUID)
-                    {
-                        returnEntity.Add(m_Entities[i]);
-                    }
-                }
-                return returnEntity;
-            }
-
-            //Matching sentience
-            else if(entitySentienceSearch == EntitySentienceSearch.Matching)
-            {
-                List<Entity> matchingEntities = m_Entities.Where(x => x.Sentient == searcher.Sentient).ToList();
-
-                List<Entity> returnEntities = new List<Entity>();
-                for (int i = 0; i < matchingEntities.Count; i++)
-                {
-                    Vector2Int position = matchingEntities[i].WorldPosition;
-                    if(searcher.CanSee(position.x, position.y) && searcher.GUID != matchingEntities[i].GUID)
-                    {
-                        returnEntities.Add(matchingEntities[i]);
-                    }
-                }
-                return returnEntities;
-            }
-            else
-            {
-                return new List<Entity>();
-            }
-        }
-
-        public NeedAIData SearchForEntities(Entity entityRef, List<long> GUIDs, Intent intentRef)
-        {
-            NeedAIData data = new NeedAIData();
-            data.intent = intentRef;
-
-            Dictionary<long, Entity> chosenEntities = m_Entities.Where(x => GUIDs.Contains(x.GUID)).ToDictionary(x => x.GUID, x => x);
-            List<Entity> visibleEntities = new List<Entity>();
-
-            foreach(Entity entity in chosenEntities.Values)
-            {
-                if(entityRef.Vision[entity.WorldPosition.x, entity.WorldPosition.y] && entity.GUID != entityRef.GUID)
-                {
-                    visibleEntities.Add(entity);
-                }
-            }
-            if (visibleEntities.Count > 0)
-            {
-                data.target = visibleEntities[RNG.Roll(0, visibleEntities.Count - 1)];
-            }
-            return data;
-        }
-
-        /*
-        public List<Entity> SearchForMate(Entity entityRef)
-        {
-            List<Entity> validPartners = new List<Entity>();
-            if (entityRef.Sexuality == Sexuality.Heterosexual)
-            {
-                validPartners = m_Entities.Where(x => x.Sex != entityRef.Sex && x.Sentient == entityRef.Sentient &&
-                (x.Sexuality == Sexuality.Heterosexual || x.Sexuality == Sexuality.Bisexual) && x.CreatureType.Equals(entityRef.CreatureType) &&
-                x.Needs["Sex"].GetContributingHappiness() == false).ToList();
-            }
-            else if(entityRef.Sexuality == Sexuality.Homosexual)
-            {
-                validPartners = m_Entities.Where(x => x.Sex == entityRef.Sex && x.Sentient == entityRef.Sentient &&
-                (x.Sexuality == Sexuality.Homosexual || x.Sexuality == Sexuality.Bisexual) && x.CreatureType.Equals(entityRef.CreatureType) &&
-                x.Needs["Sex"].GetContributingHappiness() == false).ToList();
-            }
-            else if(entityRef.Sexuality == Sexuality.Bisexual)
-            {
-                validPartners = m_Entities.Where(x => x.Sentient == entityRef.Sentient &&
-                (x.Sexuality == Sexuality.Heterosexual || x.Sexuality == Sexuality.Bisexual) && x.CreatureType.Equals(entityRef.CreatureType) &&
-                x.Needs["Sex"].GetContributingHappiness() == false).ToList();
-            }
-
-            List<Entity> visiblePartners = new List<Entity>();
-            for(int i = 0; i < validPartners.Count; i++)
-            {
-                if (validPartners[i].GUID == entityRef.GUID)
-                {
-                    continue;
-                }
-
-                if (entityRef.Vision[validPartners[i].WorldPosition.x, validPartners[i].WorldPosition.y])
-                {
-                    visiblePartners.Add(validPartners[i]);
-                }
-            }
-
-            List<Entity> partners = new List<Entity>();
-            foreach(Entity entity in visiblePartners)
-            {
-                partners.Add(entity);
-            }
-            return partners;
-        }
-        */
-
-        public List<Entity> SearchForEntities(Predicate<Entity> searchCriteria)
+        public IEnumerable<Entity> SearchForEntities(Entity actor, IEnumerable<string> searchCriteria)
         {
             List<Entity> searchEntities = new List<Entity>();
 
             foreach(Entity entity in m_Entities)
             {
-                if(searchCriteria.Invoke(entity))
+                if(!actor.CanSee(entity.WorldPosition))
+                {
+                    continue;
+                }
+
+                IEnumerable<Tuple<string, int>> data = entity.GetData(searchCriteria.ToArray());
+                IEnumerable<string> tags = data.Select(x => x.Item1);
+                if(tags.SequenceEqual(searchCriteria))
                 {
                     searchEntities.Add(entity);
                 }

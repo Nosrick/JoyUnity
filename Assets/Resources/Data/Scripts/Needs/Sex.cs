@@ -1,9 +1,9 @@
-﻿using JoyLib.Code.Rollers;
-using System;
+﻿using System.Linq;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using JoyLib.Code.Rollers;
+using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Entities.Relationships;
+using System;
 
 namespace JoyLib.Code.Entities.Needs
 {
@@ -57,7 +57,43 @@ namespace JoyLib.Code.Entities.Needs
 
         public override bool FindFulfilmentObject(Entity actor)
         {
-            throw new NotImplementedException();
+            IEnumerable<string> tags = actor.Tags.Where(x => x.Contains("sentient"));
+
+            List<Entity> possibleMates = actor.MyWorld.SearchForEntities(actor, tags).ToList();
+
+            if (possibleMates.Count == 0)
+            {
+                return false;
+            }
+
+            Entity bestMate = null;
+            int bestRelationship = actor.Sexuality.MatingThreshold;
+            foreach (Entity mate in possibleMates)
+            {
+                List<long> participants = new List<long>();
+                participants.Add(actor.GUID);
+                participants.Add(mate.GUID);
+                string[] relationshipTags = new string[] { "sexual" };
+                List<IRelationship> relationships = EntityRelationshipHandler.Get(participants.ToArray(), relationshipTags);
+
+                foreach (IRelationship relationship in relationships)
+                {
+                    int thisRelationship = relationship.GetRelationshipValue(actor.GUID, mate.GUID);
+                    if (thisRelationship >= bestRelationship)
+                    {
+                        bestRelationship = thisRelationship;
+                        bestMate = mate;
+                    }
+                }
+            }
+
+            if (bestMate != null)
+            {
+                actor.Seek(bestMate, "sex");
+                return true;
+            }
+
+            return false;
         }
 
         public override bool Interact(Entity user, JoyObject obj)
@@ -67,9 +103,66 @@ namespace JoyLib.Code.Entities.Needs
                 return false;
             }
 
-            //partner
+            if (user.Sexuality.WillMateWith(user, partner))
+            {
+                int satisfaction = CalculateSatisfaction(
+                    new Entity[] { user, partner },
+                    new string[] {
+                        EntityStatistic.ENDURANCE,
+                        EntityStatistic.INTELLECT,
+                        EntityStatistic.PERSONALITY });
+
+                int time = RNG.Roll(5, 30);
+
+
+                if (user.FulfillmentData.Name.Equals(this.Name))
+                {
+                    if (user.FulfillmentData.Name.Equals(this.Name))
+                    {
+                        HashSet<JoyObject> newTargets = new HashSet<JoyObject>(user.FulfillmentData.Targets);
+                        newTargets.Add(partner);
+                        user.FulfillNeed(this.Name, satisfaction, newTargets.ToArray(), time);
+                    }
+                }
+                else
+                {
+                    user.FulfillNeed(this.Name, satisfaction, new JoyObject[] { partner }, time);
+                }
+
+                if (partner.FulfillmentData.Name.Equals(this.Name))
+                {
+                    HashSet<JoyObject> newTargets = new HashSet<JoyObject>(partner.FulfillmentData.Targets);
+                    newTargets.Add(user);
+                    partner.FulfillNeed(this.Name, satisfaction, newTargets.ToArray(), time);
+                }
+                else
+                {
+                    partner.FulfillNeed(this.Name, satisfaction, new JoyObject[] { user }, time);
+                }
+            }
 
             return true;
+        }
+
+        protected int CalculateSatisfaction(IEnumerable<Entity> participants, IEnumerable<string> tags)
+        {
+            int satisfaction = 0;
+            int total = 0;
+            foreach (Entity participant in participants)
+            {
+                Tuple<string, int>[] data = participant.GetData(tags.ToArray());
+                int subTotal = 0;
+                foreach (Tuple<string, int> tuple in data)
+                {
+                    subTotal += tuple.Item2;
+                }
+                subTotal /= data.Length;
+                total += subTotal;
+            }
+
+            satisfaction = total / participants.Count();
+
+            return satisfaction;
         }
 
         public override INeed Randomise()

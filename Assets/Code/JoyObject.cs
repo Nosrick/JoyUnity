@@ -278,4 +278,12 @@ public class JoyObject : IComparable
             return m_Tileset;
         }
     }
+
+    public List<string> Tags
+    {
+        get
+        {
+            return new List<string>(m_Tags);
+        }
+    }
 }

@@ -4,8 +4,6 @@
     {
         bool WillMateWith(Entity me, Entity them);
 
-        bool FindMate(Entity me);
-
         string Name
         {
             get;
