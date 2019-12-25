@@ -1,2 +1,0 @@
-C:\Users\ASUS\Projects\JoyUnity\JoyTest\obj\Debug\JoyTest.csprojAssemblyReference.cache
-C:\Users\ASUS\Projects\JoyUnity\JoyTest\obj\Debug\JoyTest.csproj.CoreCompileInputs.cache

@@ -1024,7 +1024,7 @@ namespace JoyLib.Code.Entities
             }
         }
 
-        public AbstractAbility TargetingAbility
+        public IAbility TargetingAbility
         {
             get;
             set;

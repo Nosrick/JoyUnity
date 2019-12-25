@@ -482,7 +482,7 @@ namespace JoyLib.Code.States
             m_Camera.transform.position = new Vector3(player.WorldPosition.x, player.WorldPosition.y, m_Camera.transform.position.z);
         }
 
-        public static void HandBack(AbstractAbility abilityRef)
+        public static void HandBack(IAbility abilityRef)
         {
             /*
             s_GameplayFlags = GameplayFlags.Targeting;
