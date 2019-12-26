@@ -4,20 +4,24 @@ using UnityEngine;
 
 namespace JoyLib.Code.Entities.Needs
 {
-    public static class NeedHandler
+    public class NeedHandler
     {
-        private static Dictionary<string, INeed> s_Needs;
+        private static readonly Lazy<NeedHandler> lazy = new Lazy<NeedHandler>(() => new NeedHandler());
 
-        public static bool Initialise()
+        public static NeedHandler instance => lazy.Value;
+
+        private Dictionary<string, INeed> m_Needs;
+
+        public bool Initialise()
         {
             try
             {
-                if (s_Needs != null)
+                if (m_Needs != null)
                 {
                     return true;
                 }
 
-                s_Needs = new Dictionary<string, INeed>();
+                m_Needs = new Dictionary<string, INeed>();
 
                 Type[] needTypes = Scripting.ScriptingEngine.FetchTypeAndChildren("AbstractNeed");
 
@@ -26,7 +30,7 @@ namespace JoyLib.Code.Entities.Needs
                     if (typeof(INeed).IsAssignableFrom(type) == true && type.IsAbstract == false)
                     {
                         INeed newNeed = (INeed)Activator.CreateInstance(type);
-                        s_Needs.Add(newNeed.Name, newNeed);
+                        m_Needs.Add(newNeed.Name, newNeed);
                     }
                     else
                     {
@@ -44,20 +48,20 @@ namespace JoyLib.Code.Entities.Needs
             }
         }
 
-        public static INeed Get(string name)
+        public INeed Get(string name)
         {
-            if(s_Needs.ContainsKey(name))
+            if(m_Needs.ContainsKey(name))
             {
-                return s_Needs[name].Copy();
+                return m_Needs[name].Copy();
             }
             return null;
         }
 
-        public static INeed GetRandomised(string name)
+        public INeed GetRandomised(string name)
         {
-            if(s_Needs.ContainsKey(name))
+            if(m_Needs.ContainsKey(name))
             {
-                return s_Needs[name].Randomise();
+                return m_Needs[name].Randomise();
             }
             return null;
         }

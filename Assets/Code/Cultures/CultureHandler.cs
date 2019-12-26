@@ -8,18 +8,22 @@ using JoyLib.Code.Graphics;
 
 namespace JoyLib.Code.Cultures
 {
-    public static class CultureHandler
+    public class CultureHandler
     {
-        private static Dictionary<string, CultureType> s_Cultures;
+        private static readonly Lazy<CultureHandler> lazy = new Lazy<CultureHandler>(() => new CultureHandler());
 
-        public static void Initialise()
+        public static CultureHandler instance => lazy.Value;
+        
+        private Dictionary<string, CultureType> m_Cultures;
+
+        public void Initialise()
         {
-            s_Cultures = new Dictionary<string, CultureType>();
+            m_Cultures = new Dictionary<string, CultureType>();
 
-            s_Cultures = LoadCultures();
+            m_Cultures = LoadCultures();
         }
 
-        private static Dictionary<string, CultureType> LoadCultures()
+        private Dictionary<string, CultureType> LoadCultures()
         {
             string folderPath = Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Cultures";
             string[] files = Directory.GetFiles(folderPath, "*.xml");
@@ -126,21 +130,21 @@ namespace JoyLib.Code.Cultures
             return cultures;
         }
 
-        public static CultureType GetByCultureName(string name)
+        public CultureType GetByCultureName(string name)
         {
-            if (s_Cultures.ContainsKey(name))
+            if (m_Cultures.ContainsKey(name))
             {
-                return s_Cultures[name];
+                return m_Cultures[name];
             }
 
             return null;
         }
 
-        public static List<CultureType> GetByCreatureType(string type)
+        public List<CultureType> GetByCreatureType(string type)
         {
             try
             {
-                Dictionary<string, CultureType> cultures = s_Cultures.Where(culture => culture.Value.Inhabitants.Contains(type.ToLowerInvariant())).ToDictionary(pair => pair.Key, pair => pair.Value);
+                Dictionary<string, CultureType> cultures = m_Cultures.Where(culture => culture.Value.Inhabitants.Contains(type.ToLowerInvariant())).ToDictionary(pair => pair.Key, pair => pair.Value);
                 return cultures.Values.ToList();
             }
             catch (Exception e)
@@ -150,11 +154,11 @@ namespace JoyLib.Code.Cultures
             }
         }
 
-        public static CultureType[] Cultures
+        public CultureType[] Cultures
         {
             get
             {
-                return s_Cultures.Values.ToArray();
+                return m_Cultures.Values.ToArray();
             }
         }
     }

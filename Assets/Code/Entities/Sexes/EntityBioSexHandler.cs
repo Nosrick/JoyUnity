@@ -5,29 +5,33 @@ using System.Collections.Generic;
 
 namespace JoyLib.Code.Entities.Sexes
 {
-    public static class EntityBioSexHandler
+    public class EntityBioSexHandler
     {
-        private static Dictionary<string, Type> s_Sexes;
+        private static readonly Lazy<EntityBioSexHandler> lazy = new Lazy<EntityBioSexHandler>(() => new EntityBioSexHandler());
 
-        public static bool Load(CultureType[] cultures)
+        public static EntityBioSexHandler instance => lazy.Value;
+
+        private Dictionary<string, Type> m_Sexes;
+
+        public bool Load(CultureType[] cultures)
         {
-            if(s_Sexes != null)
+            if(m_Sexes != null)
             {
                 return true;
             }
 
-            s_Sexes = new Dictionary<string, Type>();
+            m_Sexes = new Dictionary<string, Type>();
 
             foreach(CultureType culture in cultures)
             {
                 foreach (string sex in culture.Sexes)
                 {
-                    if(s_Sexes.ContainsKey(sex) == false)
+                    if(m_Sexes.ContainsKey(sex) == false)
                     {
                         Type type = ScriptingEngine.FetchType(sex);
                         if(type != null)
                         {
-                            s_Sexes.Add(sex, type);
+                            m_Sexes.Add(sex, type);
                         }
                     }
                 }
@@ -36,16 +40,16 @@ namespace JoyLib.Code.Entities.Sexes
             return true;
         }
 
-        public static IBioSex Get(string name)
+        public IBioSex Get(string name)
         {
-            if(s_Sexes == null)
+            if(m_Sexes == null)
             {
                 return null;
             }
 
-            if(s_Sexes.ContainsKey(name))
+            if(m_Sexes.ContainsKey(name))
             {
-                IBioSex sex = (IBioSex)Activator.CreateInstance(s_Sexes[name]);
+                IBioSex sex = (IBioSex)Activator.CreateInstance(m_Sexes[name]);
                 return sex;
             }
             return null;

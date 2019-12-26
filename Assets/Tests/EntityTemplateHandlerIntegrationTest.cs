@@ -9,10 +9,10 @@ namespace JoyTest
         public void LoadTypes_ShouldHaveValidData()
         {
             //given
-            EntityTemplateHandler.Initialise();
+            EntityTemplateHandler.instance.Initialise();
 
             //when
-            EntityTemplate[] entityTemplates = EntityTemplateHandler.Templates;
+            EntityTemplate[] entityTemplates = EntityTemplateHandler.instance.Templates;
 
             //then
             foreach(EntityTemplate template in entityTemplates)

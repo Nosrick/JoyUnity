@@ -95,7 +95,7 @@ namespace JoyLib.Code.Cultures
                 soFar += pair.Value;
                 if (result < soFar)
                 {
-                    return EntityBioSexHandler.Get(pair.Key);
+                    return EntityBioSexHandler.instance.Get(pair.Key);
                 }
             }
             return null;

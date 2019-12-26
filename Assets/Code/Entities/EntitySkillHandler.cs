@@ -11,15 +11,23 @@ using System.Xml.Linq;
 
 namespace JoyLib.Code.Entities
 {
-    public static class EntitySkillHandler
+    public class EntitySkillHandler
     {
-        private static Dictionary<string, List<Tuple<string, float>>> s_SkillCoefficients = LoadSkillCoefficients();
+        private static readonly Lazy<EntitySkillHandler> lazy = new Lazy<EntitySkillHandler>(() => new EntitySkillHandler());
+
+        public static EntitySkillHandler instance => lazy.Value;
+
+        private Dictionary<string, List<Tuple<string, float>>> m_SkillCoefficients;
         
-        public static BasicValueContainer<IGrowingValue> GetDefaultSkillBlock(BasicValueContainer<INeed> needs)
+        public EntitySkillHandler() {
+            m_SkillCoefficients = LoadSkillCoefficients();
+        }
+
+        public BasicValueContainer<IGrowingValue> GetDefaultSkillBlock(BasicValueContainer<INeed> needs)
         {
             BasicValueContainer<IGrowingValue> skills = new BasicValueContainer<IGrowingValue>();
             
-            foreach(string key in s_SkillCoefficients.Keys)
+            foreach(string key in m_SkillCoefficients.Keys)
             {
                 NonUniqueDictionary<INeed, float> coefficients = GetCoefficients(needs, key);
 
@@ -38,7 +46,7 @@ namespace JoyLib.Code.Entities
             return skills;
         }
 
-        public static NonUniqueDictionary<INeed, float> GetEmptyCoefficients()
+        public NonUniqueDictionary<INeed, float> GetEmptyCoefficients()
         {
             return new NonUniqueDictionary<INeed, float>();
         }
@@ -49,17 +57,17 @@ namespace JoyLib.Code.Entities
         /// <param name="container">Container of the entity's needs</param>
         /// <param name="skillName">The name of the skill in question</param>
         /// <returns></returns>
-        public static NonUniqueDictionary<INeed, float> GetCoefficients(BasicValueContainer<INeed> container, string skillName)
+        public NonUniqueDictionary<INeed, float> GetCoefficients(BasicValueContainer<INeed> container, string skillName)
         {
-            if(s_SkillCoefficients.ContainsKey(skillName))
+            if(m_SkillCoefficients.ContainsKey(skillName))
             {
                 NonUniqueDictionary<INeed, float> coefficients = new NonUniqueDictionary<INeed, float>();
 
-                foreach(string key in s_SkillCoefficients.Keys)
+                foreach(string key in m_SkillCoefficients.Keys)
                 {
                     if(key == skillName)
                     {
-                        foreach(Tuple<string, float> tuple in s_SkillCoefficients[key])
+                        foreach(Tuple<string, float> tuple in m_SkillCoefficients[key])
                         {
                             try
                             {
@@ -81,7 +89,7 @@ namespace JoyLib.Code.Entities
             throw new InvalidOperationException("Attempted to get coefficients for non-existent skill " + skillName);
         }
 
-        private static Dictionary<string, List<Tuple<string, float>>> LoadSkillCoefficients()
+        private Dictionary<string, List<Tuple<string, float>>> LoadSkillCoefficients()
         {
             Dictionary<string, List<Tuple<string, float>>> skillCoefficients = new Dictionary<string, List<Tuple<string, float>>>();
 

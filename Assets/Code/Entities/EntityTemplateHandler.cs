@@ -11,22 +11,26 @@ using System.Xml.Linq;
 
 namespace JoyLib.Code.Entities
 {
-    public static class EntityTemplateHandler
+    public class EntityTemplateHandler
     {
-        private static List<EntityTemplate> s_Templates;
+        private static readonly Lazy<EntityTemplateHandler> lazy = new Lazy<EntityTemplateHandler>(() => new EntityTemplateHandler());
 
-        public static bool Initialise()
+        public static EntityTemplateHandler instance => lazy.Value;
+
+        private List<EntityTemplate> m_Templates;
+
+        public bool Initialise()
         {
-            if(s_Templates != null)
+            if(m_Templates != null)
             {
                 return true;
             }
 
-            s_Templates = LoadTypes();
+            m_Templates = LoadTypes();
             return true;
         }
 
-        private static List<EntityTemplate> LoadTypes()
+        private List<EntityTemplate> LoadTypes()
         {
             List<EntityTemplate> entities = new List<EntityTemplate>();
             
@@ -50,7 +54,7 @@ namespace JoyLib.Code.Entities
                         BasicValueContainer<IRollableValue> statisticContainer = new BasicValueContainer<IRollableValue>(statFudge);
 
                         List<INeed> needs = (from need in entity.Elements("Need")
-                                             select NeedHandler.GetRandomised(need.DefaultIfEmpty("DEFAULT").ToLower())).ToList();
+                                             select NeedHandler.instance.GetRandomised(need.DefaultIfEmpty("DEFAULT").ToLower())).ToList();
                         BasicValueContainer<INeed> needContainer = new BasicValueContainer<INeed>(needs);
 
                         List<EntitySkill> skills = (from skill in entity.Elements("Skill")
@@ -58,7 +62,7 @@ namespace JoyLib.Code.Entities
                                                                   skill.Element("Value").DefaultIfEmpty(0),
                                                                   skill.Element("Threshold").DefaultIfEmpty(7),
                                                                   skill.Element("Experience").DefaultIfEmpty(0),
-                                                                  EntitySkillHandler.GetCoefficients(needContainer, skill.Element("Name").DefaultIfEmpty("DEFAULT")), new StandardRoller())).ToList();
+                                                                  EntitySkillHandler.instance.GetCoefficients(needContainer, skill.Element("Name").DefaultIfEmpty("DEFAULT")), new StandardRoller())).ToList();
 
                         //TODO: FIX THIS NASTY CAST
                         List<IGrowingValue> skillFudge = new List<IGrowingValue>(skills);
@@ -78,7 +82,7 @@ namespace JoyLib.Code.Entities
                                               select slot.DefaultIfEmpty("NULL").ToLower()).ToList();
 
                         List<IAbility> abilities = (from ability in entity.Elements("Ability")
-                                                    select AbilityHandler.GetAbility(ability.DefaultIfEmpty("DEFAULT"))).ToList();
+                                                    select AbilityHandler.instance.GetAbility(ability.DefaultIfEmpty("DEFAULT"))).ToList();
 
                         entities.Add(new EntityTemplate(statisticContainer, skillContainer, abilities.ToArray(), slots.ToArray(),
                             size, visionType, creatureType, type, tileset, tags.ToArray()));
@@ -95,21 +99,21 @@ namespace JoyLib.Code.Entities
             return entities;
         }
 
-        public static EntityTemplate Get(string type)
+        public EntityTemplate Get(string type)
         {
-            if(s_Templates.Any(x => x.CreatureType == type))
+            if(m_Templates.Any(x => x.CreatureType == type))
             {
-                return s_Templates.First(x => x.CreatureType == type);
+                return m_Templates.First(x => x.CreatureType == type);
             }
 
             return null;
         }
 
-        public static EntityTemplate[] Templates
+        public EntityTemplate[] Templates
         {
             get
             {
-                return s_Templates.ToArray();
+                return m_Templates.ToArray();
             }
         }
     }

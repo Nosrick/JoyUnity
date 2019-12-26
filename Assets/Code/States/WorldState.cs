@@ -411,7 +411,7 @@ namespace JoyLib.Code.States
                         {
                             //TODO: REDO COMBAT ENGINE
                             //CombatEngine.SwingWeapon(player, tempEntity);
-                            List<IRelationship> relationships = EntityRelationshipHandler.Get(new long[] { tempEntity.GUID, player.GUID });
+                            List<IRelationship> relationships = EntityRelationshipHandler.instance.Get(new long[] { tempEntity.GUID, player.GUID });
                             foreach(IRelationship relationship in relationships)
                             {
                                 relationship.ModifyValueOfParticipant(player.GUID, tempEntity.GUID, -50);

@@ -57,7 +57,7 @@ namespace JoyLib.Code.Entities.Items
                                                             materials = item.Elements("Material").Select(material => material.GetAs<string>().ToLower()).ToArray(),
                                                             tags = item.Elements("Tag").Select(tag => tag.GetAs<string>().ToLower()).ToArray(),
                                                             weighting = item.Element("SpawnWeighting").GetAs<int>(),
-                                                            abilities = item.Elements("Ability").Select(ability => AbilityHandler.GetAbility(ability.GetAs<string>().ToLower())).ToArray(),
+                                                            abilities = item.Elements("Ability").Select(ability => AbilityHandler.instance.GetAbility(ability.GetAs<string>().ToLower())).ToArray(),
                                                             lightLevel = item.Element("LightLevel").GetAs<int>()
 
                                                         }).ToList();

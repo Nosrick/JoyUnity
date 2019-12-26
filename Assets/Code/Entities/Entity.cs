@@ -129,7 +129,7 @@ namespace JoyLib.Code.Entities
 
             if (template.Skills.Collection.Count == 0)
             {
-                this.m_Skills = EntitySkillHandler.GetDefaultSkillBlock(needs);
+                this.m_Skills = EntitySkillHandler.instance.GetDefaultSkillBlock(needs);
             }
             else
             {

@@ -73,7 +73,7 @@ namespace JoyLib.Code.Entities.Jobs
                             List<Tuple<int, IAbility>> listAbilities = (from ability in jobElement.Elements("Ability")
                                                                         select new Tuple<int, IAbility>(
                                                                             ability.Element("Level").GetAs<int>(),
-                                                                            AbilityHandler.GetAbility(
+                                                                            AbilityHandler.instance.GetAbility(
                                                                                 ability.Element("Name").GetAs<string>().ToLower()))).ToList();
 
                             foreach (Tuple<int, IAbility> ability in listAbilities)

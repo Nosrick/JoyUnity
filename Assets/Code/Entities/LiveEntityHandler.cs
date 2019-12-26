@@ -9,14 +9,18 @@ using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.World;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 namespace JoyLib.Code.Entities
 {
     public class LiveEntityHandler
     {
+        private static readonly Lazy<LiveEntityHandler> lazy = new Lazy<LiveEntityHandler>(() => new LiveEntityHandler());
+
+        public static LiveEntityHandler instance => lazy.Value;
+
         private Dictionary<long, Entity> m_Entities = new Dictionary<long, Entity>();
         private Entity m_Player;
 
@@ -29,12 +33,12 @@ namespace JoyLib.Code.Entities
             }
             else
             {
-                List<CultureType> cultureTypes = CultureHandler.GetByCreatureType(template.CreatureType);
+                List<CultureType> cultureTypes = CultureHandler.instance.GetByCreatureType(template.CreatureType);
                 creatureCultures.AddRange(cultureTypes);
             }
 
             BasicValueContainer<INeed> needs = new BasicValueContainer<INeed>();
-            needs.Add(NeedHandler.GetRandomised("hunger"));
+            needs.Add(NeedHandler.instance.GetRandomised("hunger"));
 
             int result = RNG.Roll(0, creatureCultures.Count - 1);
             CultureType dominantCulture = creatureCultures[result];
@@ -62,7 +66,7 @@ namespace JoyLib.Code.Entities
             }
             else
             {
-                List<CultureType> cultureTypes = CultureHandler.GetByCreatureType(template.CreatureType);
+                List<CultureType> cultureTypes = CultureHandler.instance.GetByCreatureType(template.CreatureType);
                 creatureCultures.AddRange(cultureTypes);
             }
 
@@ -90,7 +94,7 @@ namespace JoyLib.Code.Entities
             }
             else
             {
-                List<CultureType> cultureTypes = CultureHandler.GetByCreatureType(template.CreatureType);
+                List<CultureType> cultureTypes = CultureHandler.instance.GetByCreatureType(template.CreatureType);
                 creatureCultures.AddRange(cultureTypes);
             }
 

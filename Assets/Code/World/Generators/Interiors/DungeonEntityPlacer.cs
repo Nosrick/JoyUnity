@@ -20,7 +20,7 @@ namespace JoyLib.Code.World.Generators.Interiors
         {
             List<Entity> entities = new List<Entity>();
 
-            EntityTemplate[] templates = EntityTemplateHandler.Templates;
+            EntityTemplate[] templates = EntityTemplateHandler.instance.Templates;
             templates = templates.Where(x => entityTypes.Contains(x.CreatureType)).ToArray();
 
             int numberToPlace = (worldRef.Tiles.GetLength(0) * worldRef.Tiles.GetLength(1)) / 50;
@@ -46,7 +46,7 @@ namespace JoyLib.Code.World.Generators.Interiors
 
                 int entityIndex = RNG.Roll(0, templates.Length - 1);
 
-                List<CultureType> cultures = CultureHandler.GetByCreatureType(templates[entityIndex].CreatureType);
+                List<CultureType> cultures = CultureHandler.instance.GetByCreatureType(templates[entityIndex].CreatureType);
                 CultureType culture = cultures[0];
 
                 JobType jobType = culture.ChooseJob();
@@ -56,7 +56,7 @@ namespace JoyLib.Code.World.Generators.Interiors
 
                 //REPLACE THIS WITH ENTITY CONSTRUCTOR
                 BasicValueContainer<INeed> needs = new BasicValueContainer<INeed>();
-                needs.Add(NeedHandler.GetRandomised("hunger"));
+                needs.Add(NeedHandler.instance.GetRandomised("hunger"));
 
                 IGrowingValue level = new ConcreteGrowingValue(
                     "level", 

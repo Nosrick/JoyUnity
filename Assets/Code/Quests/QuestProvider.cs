@@ -47,7 +47,7 @@ namespace JoyLib.Code.Quests
         private static List<ItemInstance> GetRewards(Entity questor, Entity provider, List<QuestStep> steps)
         {
             List<ItemInstance> rewards = new List<ItemInstance>();
-            int reward = ((steps.Count * 100) + (EntityRelationshipHandler.GetHighestRelationshipValue(provider, questor)));
+            int reward = ((steps.Count * 100) + (EntityRelationshipHandler.instance.GetHighestRelationshipValue(provider, questor)));
             rewards.Add(BagOfGoldHelper.GetBagOfGold(reward));
 
             return rewards;

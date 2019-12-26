@@ -34,12 +34,12 @@ public class GameManager : MonoBehaviour
 
         //REPLACE THIS WITH AN ACTUAL ENTITY CONSTRUCTOR
         BasicValueContainer<INeed> needs = new BasicValueContainer<INeed>();
-        INeed testingNeed = NeedHandler.GetRandomised("thirst");
+        INeed testingNeed = NeedHandler.instance.GetRandomised("thirst");
         needs.Add(testingNeed);
 
-        List<CultureType> cultures = CultureHandler.GetByCreatureType("Human");
+        List<CultureType> cultures = CultureHandler.instance.GetByCreatureType("Human");
         CultureType culture = cultures[0];
-        EntityTemplate human = EntityTemplateHandler.Get("human");
+        EntityTemplate human = EntityTemplateHandler.instance.Get("human");
         JobType jobType = culture.ChooseJob();
 
         IGrowingValue level = new ConcreteGrowingValue("level", 1, 100, 0, GlobalConstants.DEFAULT_SUCCESS_THRESHOLD,
@@ -76,14 +76,14 @@ public class GameManager : MonoBehaviour
         }
         ObjectIconHandler.instance.Load();
         WorldInfoHandler.instance.Load();
-        NeedHandler.Initialise();
-        AbilityHandler.Initialise();
+        NeedHandler.instance.Initialise();
+        AbilityHandler.instance.Initialise();
         JobHandler.Initialise();
-        CultureHandler.Initialise();
-        EntityBioSexHandler.Load(CultureHandler.Cultures);
-        EntitySexualityHandler.Load(CultureHandler.Cultures);
+        CultureHandler.instance.Initialise();
+        EntityBioSexHandler.instance.Load(CultureHandler.instance.Cultures);
+        EntitySexualityHandler.Load(CultureHandler.instance.Cultures);
         MaterialHandler.Initialise();
-        EntityTemplateHandler.Initialise();
+        EntityTemplateHandler.instance.Initialise();
         LiveItemHandler.Initialise();
     }
 	

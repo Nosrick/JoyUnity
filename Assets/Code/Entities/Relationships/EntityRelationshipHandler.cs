@@ -4,33 +4,37 @@ using System.Linq;
 
 namespace JoyLib.Code.Entities.Relationships
 {
-    public static class EntityRelationshipHandler
+    public class EntityRelationshipHandler
     {
-        private static Dictionary<string, Type> s_RelationshipTypes;
-        private static Dictionary<string, IRelationship> s_Relationships;
+        private static readonly Lazy<EntityRelationshipHandler> lazy = new Lazy<EntityRelationshipHandler>(() => new EntityRelationshipHandler());
 
-        public static bool Initialise()
+        public static EntityRelationshipHandler instance => lazy.Value;
+
+        private Dictionary<string, Type> m_RelationshipTypes;
+        private Dictionary<string, IRelationship> m_Relationships;
+
+        public bool Initialise()
         {
-            if(s_RelationshipTypes != null)
+            if(m_RelationshipTypes != null)
             {
                 return true;
             }
 
-            s_RelationshipTypes = new Dictionary<string, Type>();
-            s_Relationships = new Dictionary<string, IRelationship>();
+            m_RelationshipTypes = new Dictionary<string, Type>();
+            m_Relationships = new Dictionary<string, IRelationship>();
 
             return true;
         }
 
-        public static bool AddRelationshipType(Type relationshipType)
+        public bool AddRelationshipType(Type relationshipType)
         {
             if(relationshipType.IsAssignableFrom(typeof(IRelationship)))
             {
                 IRelationship relationship = (IRelationship)Activator.CreateInstance(relationshipType);
 
-                if (s_RelationshipTypes.ContainsKey(relationship.Name) == false)
+                if (m_RelationshipTypes.ContainsKey(relationship.Name) == false)
                 {
-                    s_RelationshipTypes.Add(relationship.Name, relationshipType);
+                    m_RelationshipTypes.Add(relationship.Name, relationshipType);
                     return true;
                 }
 
@@ -38,23 +42,23 @@ namespace JoyLib.Code.Entities.Relationships
             return false;
         }
 
-        public static IRelationship CreateRelationship(Entity[] participants, string type = "Friendship")
+        public IRelationship CreateRelationship(Entity[] participants, string type = "Friendship")
         {
-            if(s_RelationshipTypes.ContainsKey(type))
+            if(m_RelationshipTypes.ContainsKey(type))
             {
-                IRelationship newRelationship = (IRelationship)Activator.CreateInstance(s_RelationshipTypes[type]);
+                IRelationship newRelationship = (IRelationship)Activator.CreateInstance(m_RelationshipTypes[type]);
                 foreach(Entity participant in participants)
                 {
                     newRelationship.AddParticipant(participant);
                 }
 
-                s_Relationships.Add(newRelationship.GenerateHash(), newRelationship);
+                m_Relationships.Add(newRelationship.GenerateHash(), newRelationship);
                 return newRelationship;
             }
             return null;
         }
 
-        public static List<IRelationship> Get(long[] participants, string[] tags = null)
+        public List<IRelationship> Get(long[] participants, string[] tags = null)
         {
             string hash = GenerateHash(participants);
 
@@ -62,7 +66,7 @@ namespace JoyLib.Code.Entities.Relationships
             
             float bestPercentage = 0.0f;
             IRelationship bestRelationship = null;
-            foreach(KeyValuePair<string, IRelationship> pair in s_Relationships)
+            foreach(KeyValuePair<string, IRelationship> pair in m_Relationships)
             {
                 Tuple<int, int> match = CompareHash(hash, pair.Key);
                 float percentage = ((float)match.Item1 / match.Item2);
@@ -104,7 +108,7 @@ namespace JoyLib.Code.Entities.Relationships
             return relationships;
         }
 
-        public static int GetHighestRelationshipValue(JoyObject speaker, JoyObject listener, string[] tags = null)
+        public int GetHighestRelationshipValue(JoyObject speaker, JoyObject listener, string[] tags = null)
         {
             long[] participants = new long[] { speaker.GUID, listener.GUID };
             List<IRelationship> relationships = Get(participants, tags);
@@ -122,7 +126,7 @@ namespace JoyLib.Code.Entities.Relationships
             return highestValue;
         }
 
-        private static string GenerateHash(long[] participants)
+        private string GenerateHash(long[] participants)
         {
             string hash = "";
             List<long> sortedList = new List<long>(participants);
@@ -135,7 +139,7 @@ namespace JoyLib.Code.Entities.Relationships
             return hash;
         }
 
-        private static Tuple<int, int> CompareHash(string left, string right)
+        private Tuple<int, int> CompareHash(string left, string right)
         {
             string[] leftStrings = left.Split(':');
             string[] rightStrings = right.Split(':');

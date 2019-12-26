@@ -118,11 +118,11 @@ namespace JoyLib.Code.States
 
         private void NextState(object sender, EventArgs eventArgs)
         {
-            EntityTemplate humanTemplate = EntityTemplateHandler.Get("Human");
-            CultureType culture = CultureHandler.GetByCultureName("Human");
+            EntityTemplate humanTemplate = EntityTemplateHandler.instance.Get("Human");
+            CultureType culture = CultureHandler.instance.GetByCultureName("Human");
       
             BasicValueContainer<INeed> needs = new BasicValueContainer<INeed>();
-            needs.Add(NeedHandler.GetRandomised("hunger"));
+            needs.Add(NeedHandler.instance.GetRandomised("hunger"));
 
             IGrowingValue level = new ConcreteGrowingValue("level", 1, 100, 0, GlobalConstants.DEFAULT_SUCCESS_THRESHOLD,
                 new StandardRoller(), new NonUniqueDictionary<INeed, float>());
