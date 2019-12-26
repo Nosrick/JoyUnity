@@ -2,7 +2,7 @@
 {
     public static class GlobalConstants
     {
-        public const string DATA_FOLDER = "/Assets/Resources/Data/";
+        public const string DATA_FOLDER = "/Data/";
         public const string SCRIPTS_FOLDER = DATA_FOLDER + "Scripts/";
         public const string NEEDS_FOLDER = SCRIPTS_FOLDER + "Needs/";
 

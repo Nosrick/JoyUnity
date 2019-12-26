@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Objects>
+	<TilesetName>Plains</TilesetName>
+	<Sheet>Floor</Sheet>
+
+	<Icon>
+		<Name>TopLeft</Name>
+		<X>7</X>
+		<Y>32</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>TopMiddle</Name>
+		<X>8</X>
+		<Y>32</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>TopRight</Name>
+		<X>9</X>
+		<Y>32</Y>
+		<Data>Default</Data>
+	</Icon>
+	
+	<Icon>
+		<Name>MiddleLeft</Name>
+		<X>7</X>
+		<Y>31</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>MiddleMiddle</Name>
+		<X>8</X>
+		<Y>31</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>MiddleRight</Name>
+		<X>9</X>
+		<Y>31</Y>
+		<Data>Default</Data>
+	</Icon>
+	
+	<Icon>
+		<Name>BottomLeft</Name>
+		<X>7</X>
+		<Y>30</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>BottomMiddle</Name>
+		<X>8</X>
+		<Y>30</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>BottomRight</Name>
+		<X>9</X>
+		<Y>30</Y>
+		<Data>Default</Data>
+	</Icon>
+	
+	<Icon>
+		<Name>VerticalTop</Name>
+		<X>10</X>
+		<Y>32</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>VerticalMiddle</Name>
+		<X>10</X>
+		<Y>31</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>VerticalBottom</Name>
+		<X>10</X>
+		<Y>30</Y>
+		<Data>Default</Data>
+	</Icon>
+	
+	<Icon>
+		<Name>SoloFloor</Name>
+		<X>12</X>
+		<Y>32</Y>
+		<Data>Default</Data>
+	</Icon>
+	
+	<Icon>
+		<Name>HorizontalLeft</Name>
+		<X>11</X>
+		<Y>31</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>HorizontalMiddle</Name>
+		<X>12</X>
+		<Y>31</Y>
+		<Data>Default</Data>
+	</Icon>
+	<Icon>
+		<Name>HorizontalRight</Name>
+		<X>13</X>
+		<Y>31</Y>
+		<Data>Default</Data>
+	</Icon>
+</Objects>

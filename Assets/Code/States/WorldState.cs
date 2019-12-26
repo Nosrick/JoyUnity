@@ -88,8 +88,8 @@ namespace JoyLib.Code.States
             if (s_GUIManager == null)
             {
                 GameObject obj = GameObject.Find("GUIInventory");
-                JoyInventoryManager manager = obj.GetComponent<JoyInventoryManager>();
-                manager.SetPlayer(m_ActiveWorld.Player);
+                //JoyInventoryManager manager = obj.GetComponent<JoyInventoryManager>();
+                //manager.SetPlayer(m_ActiveWorld.Player);
                 //manager.DoAll();
             }
 

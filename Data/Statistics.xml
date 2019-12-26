@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Statistics>
+	<Statistic>Strength</Statistic>
+	<Statistic>Agility</Statistic>
+	<Statistic>Endurance</Statistic>
+	
+	<Statistic>Cognition</Statistic>
+	<Statistic>Cunning</Statistic>
+	<Statistic>Focus</Statistic>
+	
+	<Statistic>Personality</Statistic>
+	<Statistic>Suavity</Statistic>
+	<Statistic>Wit</Statistic>
+</Statistics>
