@@ -23,7 +23,5 @@ sysinfo.txt
 log
 /.vscode/*
 /.vs/*
-/JoyTest/*
 /Logs/*
-/Packages/*
 /ProjectSettings/*
