@@ -8,5 +8,10 @@ namespace JoyLib.Code.Scripting
         {
             get;
         }
+
+        string ActionString
+        {
+            get;
+        }
     }
 }

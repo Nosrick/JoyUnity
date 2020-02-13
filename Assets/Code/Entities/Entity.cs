@@ -880,7 +880,11 @@ namespace JoyLib.Code.Entities
             ActionLog.AddText(this.ToString() + " is fulfilling need " + need);
         }
 
-        public bool PerformAction()
+        public bool PerformAction(IJoyAction action, JoyObject[] participants, string[] tags = null, params object[] args)
+        {
+            ActionLog.WriteToLog(this.JoyName + "is performing " + action.ActionString);
+            return action.Execute(participants, tags, args);
+        }
 
         public string CreatureType
         {
