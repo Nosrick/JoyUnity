@@ -1,19 +1,37 @@
-﻿using JoyLib.Code.Entities.Sexuality;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using JoyLib.Code.Entities.Sexuality;
 using JoyLib.Code.Entities;
-using JoyLib.Code.Collections;
+using JoyLib.Code.Entities.Relationships;
+using JoyLib.Code.Scripting;
 using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Rollers;
 using JoyLib.Code.Entities.Jobs;
-using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities.Sexes;
+using JoyLib.Code.Entities.Items;
+using JoyLib.Code.Graphics;
 using NUnit.Framework;
+using Moq;
 using UnityEngine;
 
 namespace JoyTest
 {
     public class SexualityTest
     {
+        private ScriptingEngine scriptingEngine;
+        private EntityTemplateHandler templateHandler;
+
+        private MaterialHandler materialHandler;
+
+        private JobHandler jobHandler;
+
+        private ObjectIconHandler objectIconHandler;
+
+        private EntityRelationshipHandler entityRelationshipHandler;
+
+
+
         private Entity heteroMaleHuman;
         private Entity heteroFemaleHuman;
 
@@ -23,43 +41,50 @@ namespace JoyTest
         private Entity homoFemaleHumanLeft;
         private Entity homoFemaleHumanRight;
 
-        private Entity biRandomHuman;
+        private Entity biMaleHuman;
+        private Entity biFemaleHuman;
+
+        [SetUp]
+        public void SetUp()
+        {
+            scriptingEngine = new ScriptingEngine();
+            templateHandler = new EntityTemplateHandler();
+            jobHandler = new JobHandler();
+            materialHandler = new MaterialHandler();
+            objectIconHandler = new ObjectIconHandler(16);
+            entityRelationshipHandler = new EntityRelationshipHandler();
+        }
 
         [SetUp]
         public void SetUpHumans()
         {
-            CultureHandler.instance.Initialise();
-            CultureType[] cultures = CultureHandler.instance.Cultures;
-            EntityBioSexHandler.instance.Load(cultures);
-            EntitySexualityHandler.Load(cultures);
+            Mock<IBioSex> female = new Mock<IBioSex>();
+            Mock<IBioSex> male = new Mock<IBioSex>();
 
-            IBioSex female = EntityBioSexHandler.instance.Get("female");
-            IBioSex male = EntityBioSexHandler.instance.Get("male");
+            male.Setup(sex => sex.Name).Returns("male");
+            female.Setup(sex => sex.Name).Returns("female");
 
-            ISexuality heterosexual = EntitySexualityHandler.Get("heterosexual");
-            ISexuality homosexual = EntitySexualityHandler.Get("homosexual");
-            ISexuality bisexual = EntitySexualityHandler.Get("bisexual");
+            System.Type[] types = scriptingEngine.FetchTypeAndChildren(typeof(ISexuality));
+            Dictionary<string, System.Type> keyedTypes = new Dictionary<string, System.Type>(types.Length);
+            keyedTypes = types.ToDictionary(k => k.Name, e => e);
 
-            BasicValueContainer<INeed> emptyContainer = new BasicValueContainer<INeed>();
+            ISexuality heterosexual = (ISexuality)Activator.CreateInstance(keyedTypes.Single(p => p.Key.ToLower().Equals("heterosexual")).Value);
+            ISexuality homosexual = (ISexuality)Activator.CreateInstance(keyedTypes.Single(p => p.Key.ToLower().Equals("homosexual")).Value);
+            ISexuality bisexual = (ISexuality)Activator.CreateInstance(keyedTypes.Single(p => p.Key.ToLower().Equals("bisexual")).Value);
 
-            ConcreteGrowingValue level = new ConcreteGrowingValue(
-                    "level",
-                    1,
-                    0,
-                    0,
-                    7,
-                    new StandardRoller(),
-                    new NonUniqueDictionary<INeed, float>());
+            Mock<BasicValueContainer<INeed>> emptyContainer = new Mock<BasicValueContainer<INeed>>();
 
-            EntityTemplateHandler.instance.Initialise();
+            Mock<IGrowingValue> level = new Mock<IGrowingValue>();
             EntityTemplate humanTemplate = EntityTemplateHandler.instance.Get("human");
+
+            JobType job = JobHandler.instance.GetRandom();
 
             heteroFemaleHuman = LiveEntityHandler.instance.Create(
                 humanTemplate,
-                emptyContainer,
-                level,
-                JobHandler.GetRandom(),
-                female,
+                emptyContainer.Object,
+                level.Object,
+                job,
+                female.Object,
                 heterosexual,
                 Vector2Int.zero,
                 null,
@@ -68,10 +93,10 @@ namespace JoyTest
 
             heteroMaleHuman = LiveEntityHandler.instance.Create(
                 humanTemplate,
-                emptyContainer,
-                level,
-                JobHandler.GetRandom(),
-                male,
+                emptyContainer.Object,
+                level.Object,
+                job,
+                male.Object,
                 heterosexual,
                 Vector2Int.zero,
                 null,
@@ -80,10 +105,10 @@ namespace JoyTest
 
             homoMaleHumanLeft = LiveEntityHandler.instance.Create(
                 humanTemplate,
-                emptyContainer,
-                level,
-                JobHandler.GetRandom(),
-                male,
+                emptyContainer.Object,
+                level.Object,
+                job,
+                male.Object,
                 homosexual,
                 Vector2Int.zero,
                 null,
@@ -92,21 +117,47 @@ namespace JoyTest
 
             homoMaleHumanRight = LiveEntityHandler.instance.Create(
                 humanTemplate,
-                emptyContainer,
-                level,
-                JobHandler.GetRandom(),
-                male,
+                emptyContainer.Object,
+                level.Object,
+                job,
+                male.Object,
                 homosexual,
                 Vector2Int.zero,
                 null,
                 null,
                 null);
+
+            biMaleHuman = LiveEntityHandler.instance.Create(
+                humanTemplate,
+                emptyContainer.Object,
+                level.Object,
+                job,
+                male.Object,
+                bisexual,
+                Vector2Int.zero,
+                null,
+                null,
+                null);
+            
+            biFemaleHuman = LiveEntityHandler.instance.Create(
+                humanTemplate,
+                emptyContainer.Object,
+                level.Object,
+                job,
+                female.Object,
+                bisexual,
+                Vector2Int.zero,
+                null,
+                null,
+                null);
+
+            
         }
 
         [Test]
         public void Heterosexual_WillMateWith_AcceptsHeteroPartners()
         {
-
+            Assert.IsTrue(heteroFemaleHuman.Sexuality.WillMateWith(heteroFemaleHuman, heteroMaleHuman));
         }
     }
 }

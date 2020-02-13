@@ -10,33 +10,37 @@ using System.Xml.Linq;
 
 namespace JoyLib.Code.Entities.Jobs
 {
-    public static class JobHandler
+    public class JobHandler
     {
-        private static List<JobType> s_Jobs;
+        private static readonly Lazy<JobHandler> lazy = new Lazy<JobHandler>(() => new JobHandler());
 
-        public static void Initialise()
+        public static JobHandler instance => lazy.Value;
+
+        private List<JobType> m_Jobs;
+
+        public JobHandler()
         {
-            s_Jobs = new List<JobType>();
+            m_Jobs = new List<JobType>();
 
-            s_Jobs = LoadTypes();
+            m_Jobs = LoadTypes();
         }
 
-        public static JobType Get(string jobName)
+        public JobType Get(string jobName)
         {
-            if (s_Jobs.Any(x => x.Name == jobName))
+            if (m_Jobs.Any(x => x.Name == jobName))
             {
-                return s_Jobs.First(x => x.Name == jobName);
+                return m_Jobs.First(x => x.Name == jobName);
             }
 
             return null;
         }
 
-        public static JobType GetRandom()
+        public JobType GetRandom()
         {
-            return s_Jobs[RNG.Roll(0, s_Jobs.Count - 1)];
+            return m_Jobs[RNG.instance.Roll(0, m_Jobs.Count - 1)];
         }
 
-        private static List<JobType> LoadTypes()
+        private List<JobType> LoadTypes()
         {
             List<JobType> jobTypes = new List<JobType>();
 
@@ -81,7 +85,7 @@ namespace JoyLib.Code.Entities.Jobs
                                 abilities.Add(ability.Item1, ability.Item2);
                             }
                         }
-                        catch(InvalidOperationException e)
+                        catch(Exception e)
                         {
                             ActionLog.WriteToLog("ERROR LOADING ABILITIES FOR JOB, FILE " + file);
                             ActionLog.WriteToLog(e.Message);
@@ -104,6 +108,14 @@ namespace JoyLib.Code.Entities.Jobs
             }
 
             return jobTypes;
+        }
+
+        public JobType[] Jobs
+        {
+            get
+            {
+                return m_Jobs.ToArray();
+            }
         }
     }
 }

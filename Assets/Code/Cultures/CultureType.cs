@@ -65,7 +65,7 @@ namespace JoyLib.Code.Cultures
 
             foreach(List<string> names in allViablesNames.Values)
             {
-                returnName += names[RNG.Roll(0, names.Count - 1)] + " ";
+                returnName += names[RNG.instance.Roll(0, names.Count - 1)] + " ";
             }
             returnName = returnName.TrimEnd();
 
@@ -76,7 +76,7 @@ namespace JoyLib.Code.Cultures
         {
             NameData[] names = m_NameData.Where(x => x.chain.Contains(chain) && x.sexes.Contains(sex.ToLower())).ToArray();
 
-            int result = RNG.Roll(0, names.Length - 1);
+            int result = RNG.instance.Roll(0, names.Length - 1);
             return names[result].name;
         }
 
@@ -88,7 +88,7 @@ namespace JoyLib.Code.Cultures
                 totalSex += value;
             }
 
-            int result = RNG.Roll(0, totalSex - 1);
+            int result = RNG.instance.Roll(0, totalSex - 1);
             int soFar = 0;
             foreach(KeyValuePair<string, int> pair in m_SexPrevelence)
             {
@@ -109,7 +109,7 @@ namespace JoyLib.Code.Cultures
             {
                 totalSex += value;
             }
-            int result = RNG.Roll(0, totalSex - 1);
+            int result = RNG.instance.Roll(0, totalSex - 1);
 
             foreach (KeyValuePair<string, int> pair in m_SexualityPrevelence)
             {
@@ -130,14 +130,14 @@ namespace JoyLib.Code.Cultures
             {
                 totalJob += value;
             }
-            int result = RNG.Roll(0, totalJob - 1);
+            int result = RNG.instance.Roll(0, totalJob - 1);
 
             foreach(KeyValuePair<string, int> pair in m_JobPrevelence)
             {
                 soFar += pair.Value;
                 if(result < soFar)
                 {
-                    return JobHandler.Get(pair.Key);
+                    return JobHandler.instance.Get(pair.Key);
                 }
             }
             return null;
@@ -147,9 +147,9 @@ namespace JoyLib.Code.Cultures
         {
             if(m_StatVariance.ContainsKey(statistic))
             {
-                if(RNG.Roll(1, 100) < m_StatVariance[statistic].Item1)
+                if(RNG.instance.Roll(1, 100) < m_StatVariance[statistic].Item1)
                 {
-                    return RNG.Roll(-m_StatVariance[statistic].Item2, m_StatVariance[statistic].Item2);
+                    return RNG.instance.Roll(-m_StatVariance[statistic].Item2, m_StatVariance[statistic].Item2);
                 }
             }
             return 0;

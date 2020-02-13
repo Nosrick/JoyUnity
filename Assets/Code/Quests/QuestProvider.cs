@@ -16,11 +16,11 @@ namespace JoyLib.Code.Quests
         {
             List<QuestStep> steps = new List<QuestStep>();
 
-            //int numberOfSteps = RNG.Roll(1, 4);
+            //int numberOfSteps = RNG.instance.Roll(1, 4);
             int numberOfSteps = 1;
             for (int i = 0; i < numberOfSteps; i++)
             {
-                int result = RNG.Roll(0, 3);
+                int result = RNG.instance.Roll(0, 3);
                 switch (result)
                 {
                     case (int)QuestAction.Deliver:
@@ -61,7 +61,7 @@ namespace JoyLib.Code.Quests
             ItemInstance[] backpack = provider.Backpack;
             if (backpack.Length > 0)
             {
-                int result = RNG.Roll(0, backpack.Length - 1);
+                int result = RNG.instance.Roll(0, backpack.Length - 1);
 
                 deliveryItem = backpack[result];
             }
@@ -79,7 +79,7 @@ namespace JoyLib.Code.Quests
         {
             QuestAction action = QuestAction.Destroy;
 
-            int result = RNG.Roll(0, 1);
+            int result = RNG.instance.Roll(0, 1);
             JoyObject target = null;
             if(result == 0)
             {
@@ -91,7 +91,7 @@ namespace JoyLib.Code.Quests
                     ItemInstance[] backpack = holder.Backpack;
                     if (backpack.Length > 0)
                     {
-                        result = RNG.Roll(0, backpack.Length - 1);
+                        result = RNG.instance.Roll(0, backpack.Length - 1);
                         target = backpack[result];
                         break;
                     }
@@ -124,7 +124,7 @@ namespace JoyLib.Code.Quests
                 ItemInstance[] backpack = holder.Backpack;
                 if(backpack.Length > 0)
                 {
-                    int result = RNG.Roll(0, backpack.Length - 1);
+                    int result = RNG.instance.Roll(0, backpack.Length - 1);
                     target = backpack[result];
                     break;
                 }
@@ -151,7 +151,7 @@ namespace JoyLib.Code.Quests
 
             while (true)
             {
-                target = worlds[RNG.Roll(0, worlds.Count - 1)];
+                target = worlds[RNG.instance.Roll(0, worlds.Count - 1)];
                 if (target.GUID != currentWorld.GUID && target.GUID != overworldRef.GUID)
                 {
                     break;

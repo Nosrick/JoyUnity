@@ -47,13 +47,13 @@ namespace JoyLib.Code.World.Generators.Interiors
             while (m_NumberRoomsPlaced <= m_NumberOfRooms && loopCounter < LOOP_BREAK)
             {
                 Vector2Int topLeft = new Vector2Int();
-                topLeft.x = RNG.Roll(1, m_Size - 1);
+                topLeft.x = RNG.instance.Roll(1, m_Size - 1);
                 if (topLeft.x % 2 == 1)
                 {
                     topLeft.x += 1;
                 }
 
-                topLeft.y = RNG.Roll(1, m_Size - 1);
+                topLeft.y = RNG.instance.Roll(1, m_Size - 1);
                 if (topLeft.y % 2 == 1)
                 {
                     topLeft.y += 1;
@@ -92,8 +92,8 @@ namespace JoyLib.Code.World.Generators.Interiors
                 if (m_NumberOfRooms == m_NumberRoomsPlaced)
                     return false;
 
-                Vector2Int bottomRight = new Vector2Int(topLeft.x + RNG.Roll(MIN_ROOM_SIZE, MAX_ROOM_SIZE),
-                                                topLeft.y + RNG.Roll(MIN_ROOM_SIZE, MAX_ROOM_SIZE));
+                Vector2Int bottomRight = new Vector2Int(topLeft.x + RNG.instance.Roll(MIN_ROOM_SIZE, MAX_ROOM_SIZE),
+                                                topLeft.y + RNG.instance.Roll(MIN_ROOM_SIZE, MAX_ROOM_SIZE));
 
                 if (!ValidateRoom(topLeft, bottomRight))
                     return false;
@@ -146,7 +146,7 @@ namespace JoyLib.Code.World.Generators.Interiors
 
             for (int i = 0; i < doors; i++)
             {
-                int index = RNG.Roll(0, validDoors.Count - 1);
+                int index = RNG.instance.Roll(0, validDoors.Count - 1);
 
                 Vector2Int point = new Vector2Int(validDoors[index].x, validDoors[index].y);
 
@@ -178,7 +178,7 @@ namespace JoyLib.Code.World.Generators.Interiors
             int roomArea = (int)(room.width * room.height);
             int maxDoors = (int)Math.Sqrt(roomArea);
 
-            return RNG.Roll(1, maxDoors);
+            return RNG.instance.Roll(1, maxDoors);
         }
 
         private bool CheckForRoom(Vector2Int topLeft, Vector2Int bottomRight)
@@ -240,7 +240,7 @@ namespace JoyLib.Code.World.Generators.Interiors
             if (validPoints.Count == 0)
                 return new Vector2Int(m_Tiles.GetLength(0) / 2, m_Tiles.GetLength(1) / 2);
 
-            int index = RNG.Roll(0, validPoints.Count - 1);
+            int index = RNG.instance.Roll(0, validPoints.Count - 1);
             return validPoints[index];
         }
     }

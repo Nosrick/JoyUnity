@@ -183,13 +183,13 @@ namespace JoyLib.Code.Entities.Needs
             Dictionary<NeedIndex, EntityNeed> needs = new Dictionary<NeedIndex, EntityNeed>();
 
             //Add tier 1 needs
-            needs.Add(NeedIndex.Hunger, new EntityNeed(60, 200, true, RNG.Roll(5, 24),
+            needs.Add(NeedIndex.Hunger, new EntityNeed(60, 200, true, RNG.instance.Roll(5, 24),
                 24, 12, 0, 0, "Hunger"));
-            needs.Add(NeedIndex.Drink, new EntityNeed(50, 200, true, RNG.Roll(5, 20),
+            needs.Add(NeedIndex.Drink, new EntityNeed(50, 200, true, RNG.instance.Roll(5, 20),
                 20, 10, 0, 0, "Drink"));
             needs.Add(NeedIndex.Sleep, new EntityNeed(60, 200, true, 12, 24, 8, 0, 0, "Sleep"));
-            needs.Add(NeedIndex.Sex, new EntityNeed(240, RNG.Roll(10, 240), true, RNG.Roll(50, 200),
-                240, RNG.Roll(0, 240), 0, 0, "Sex"));
+            needs.Add(NeedIndex.Sex, new EntityNeed(240, RNG.instance.Roll(10, 240), true, RNG.instance.Roll(50, 200),
+                240, RNG.instance.Roll(0, 240), 0, 0, "Sex"));
 
             return needs;
         }
@@ -202,19 +202,19 @@ namespace JoyLib.Code.Entities.Needs
             //Health is an aggregate of food, drink and sleep, and gets a flat bonus of 50 for having no diseases
             int health = ((needs[NeedIndex.Hunger].value + needs[NeedIndex.Drink].value + needs[NeedIndex.Sleep].value) / 3) + CLEAN_BONUS;
 
-            needs.Add(NeedIndex.Health, new EntityNeed(0, RNG.Roll(50, 150), false, health, 300, RNG.Roll(100, 200), 0, 0, "Health"));
-            needs.Add(NeedIndex.Employment, new EntityNeed(RNG.Roll(200, 400), RNG.Roll(10, 150), true, 0, 300, RNG.Roll(50, 200), 0, 0, "Employment"));
-            needs.Add(NeedIndex.Property, new EntityNeed(0, RNG.Roll(10, 150), false, 0, 300, RNG.Roll(50, 250), 0, 0, "Property"));
+            needs.Add(NeedIndex.Health, new EntityNeed(0, RNG.instance.Roll(50, 150), false, health, 300, RNG.instance.Roll(100, 200), 0, 0, "Health"));
+            needs.Add(NeedIndex.Employment, new EntityNeed(RNG.instance.Roll(200, 400), RNG.instance.Roll(10, 150), true, 0, 300, RNG.instance.Roll(50, 200), 0, 0, "Employment"));
+            needs.Add(NeedIndex.Property, new EntityNeed(0, RNG.instance.Roll(10, 150), false, 0, 300, RNG.instance.Roll(50, 250), 0, 0, "Property"));
 
             //Add tier 3 needs
-            needs.Add(NeedIndex.Friendship, new EntityNeed(RNG.Roll(24, 72), RNG.Roll(10, 150), true, 0, 300, RNG.Roll(10, 200), 0, 0, "Friendship"));
-            needs.Add(NeedIndex.Family, new EntityNeed(0, RNG.Roll(10, 50), false, 0, 300, 100, 0, 0, "Family"));
-            needs.Add(NeedIndex.Morality, new EntityNeed(0, RNG.Roll(0, 150), false, 150, 300, 150, 0, 0, "Morality"));
+            needs.Add(NeedIndex.Friendship, new EntityNeed(RNG.instance.Roll(24, 72), RNG.instance.Roll(10, 150), true, 0, 300, RNG.instance.Roll(10, 200), 0, 0, "Friendship"));
+            needs.Add(NeedIndex.Family, new EntityNeed(0, RNG.instance.Roll(10, 50), false, 0, 300, 100, 0, 0, "Family"));
+            needs.Add(NeedIndex.Morality, new EntityNeed(0, RNG.instance.Roll(0, 150), false, 150, 300, 150, 0, 0, "Morality"));
 
             //Add tier 4 needs
-            needs.Add(NeedIndex.Respect, new EntityNeed(0, RNG.Roll(10, 150), false, 0, int.MaxValue, RNG.Roll(10, 200), 0, 0, "Respect"));
+            needs.Add(NeedIndex.Respect, new EntityNeed(0, RNG.instance.Roll(10, 150), false, 0, int.MaxValue, RNG.instance.Roll(10, 200), 0, 0, "Respect"));
             int confidence = needs.Sum(x => x.Value.value) / needs.Count;
-            needs.Add(NeedIndex.Confidence, new EntityNeed(RNG.Roll(24, 148), RNG.Roll(50, 150), true, confidence, 300, RNG.Roll(50, 200), 0, 0, "Confidence"));
+            needs.Add(NeedIndex.Confidence, new EntityNeed(RNG.instance.Roll(24, 148), RNG.instance.Roll(50, 150), true, confidence, 300, RNG.instance.Roll(50, 200), 0, 0, "Confidence"));
 
             return needs;
         }

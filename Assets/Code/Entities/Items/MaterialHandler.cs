@@ -1,27 +1,32 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Xml;
+using System;
 
 namespace JoyLib.Code.Entities.Items
 {
-    public static class MaterialHandler
+    public class MaterialHandler
     {
-        private static Dictionary<string, ItemMaterial> s_Materials;
+        private static readonly Lazy<MaterialHandler> lazy = new Lazy<MaterialHandler>(() => new MaterialHandler());
 
-        public static void Initialise()
+        public static MaterialHandler instance => lazy.Value;
+
+        private static Dictionary<string, ItemMaterial> m_Materials;
+
+        public MaterialHandler()
         {
             List<ItemMaterial> flatList = LoadMaterials();
-            s_Materials = new Dictionary<string, ItemMaterial>(flatList.Count);
+            m_Materials = new Dictionary<string, ItemMaterial>(flatList.Count);
 
             foreach(ItemMaterial material in flatList)
             {
-                s_Materials.Add(material.Name, material);
+                m_Materials.Add(material.Name, material);
             }
 
-            s_Materials.Add("DEFAULT MATERIAL", new ItemMaterial("DEFAULT MATERIAL", 0.1f, 0, 1.0f, 0.0f));
+            m_Materials.Add("DEFAULT MATERIAL", new ItemMaterial("DEFAULT MATERIAL", 0.1f, 0, 1.0f, 0.0f));
         }
 
-        public static List<ItemMaterial> LoadMaterials()
+        public List<ItemMaterial> LoadMaterials()
         {
             List<ItemMaterial> materials = new List<ItemMaterial>();
             
@@ -79,12 +84,12 @@ namespace JoyLib.Code.Entities.Items
             return materials;
         }
 
-        public static ItemMaterial GetMaterial(string nameRef)
+        public ItemMaterial GetMaterial(string nameRef)
         {
-            if (s_Materials.ContainsKey(nameRef))
-                return s_Materials[nameRef];
+            if (m_Materials.ContainsKey(nameRef))
+                return m_Materials[nameRef];
 
-            return s_Materials["DEFAULT MATERIAL"];
+            return m_Materials["DEFAULT MATERIAL"];
         }
     }
 }

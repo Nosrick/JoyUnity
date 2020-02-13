@@ -48,7 +48,7 @@
 	<Tag>Animated</Tag>
 	<Tag>Diurnal</Tag>
 
-  <Need>Hunger</Need>
+  	<Need>Hunger</Need>
 
 	<Slot>Head</Slot>
 	<Slot>Neck</Slot>

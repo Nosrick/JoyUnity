@@ -19,15 +19,9 @@ namespace JoyLib.Code.Entities
 
         private List<EntityTemplate> m_Templates;
 
-        public bool Initialise()
+        public EntityTemplateHandler()
         {
-            if(m_Templates != null)
-            {
-                return true;
-            }
-
             m_Templates = LoadTypes();
-            return true;
         }
 
         private List<EntityTemplate> LoadTypes()
@@ -81,8 +75,19 @@ namespace JoyLib.Code.Entities
                         List<string> slots = (from slot in entity.Elements("Slot")
                                               select slot.DefaultIfEmpty("NULL").ToLower()).ToList();
 
-                        List<IAbility> abilities = (from ability in entity.Elements("Ability")
+                        List<IAbility> abilities = new List<IAbility>();
+                        try
+                        {
+                            abilities = (from ability in entity.Elements("Ability")
                                                     select AbilityHandler.instance.GetAbility(ability.DefaultIfEmpty("DEFAULT"))).ToList();
+                        }
+                        catch(Exception e)
+                        {
+                            ActionLog.WriteToLog("ERROR LOADING ABILITY FOR ENTITY TEMPLATE " + file);
+                            ActionLog.WriteToLog(e.Message);
+                            ActionLog.WriteToLog(e.StackTrace);
+                        }
+                        
 
                         entities.Add(new EntityTemplate(statisticContainer, skillContainer, abilities.ToArray(), slots.ToArray(),
                             size, visionType, creatureType, type, tileset, tags.ToArray()));

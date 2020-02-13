@@ -31,7 +31,7 @@ namespace JoyLib.Code.Entities.Sexuality
         {
             List<long> participants = new List<long>() { me.GUID, them.GUID };
             List<string> tags = new List<string>() { "sexual", "romantic" };
-            List<IRelationship> relationships = EntityRelationshipHandler.Get(participants.ToArray(), tags.ToArray());
+            List<IRelationship> relationships = EntityRelationshipHandler.instance.Get(participants.ToArray(), tags.ToArray());
 
             foreach (IRelationship relationship in relationships)
             {

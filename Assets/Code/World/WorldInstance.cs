@@ -421,7 +421,7 @@ namespace JoyLib.Code.World
         {
             List<Entity> sentients = m_Entities.Where(x => x.Sentient).ToList();
             if (sentients.Count > 0)
-                return sentients[RNG.Roll(0, sentients.Count - 1)];
+                return sentients[RNG.instance.Roll(0, sentients.Count - 1)];
             else
                 return null;
         }
@@ -429,11 +429,11 @@ namespace JoyLib.Code.World
         public Entity GetRandomSentientWorldWide()
         {
             List<WorldInstance> worlds = GetWorlds(GetOverworld());
-            int result = RNG.Roll(0, worlds.Count - 1);
+            int result = RNG.instance.Roll(0, worlds.Count - 1);
             Entity entity = worlds[result].GetRandomSentient();
             while (entity == null)
             {
-                result = RNG.Roll(0, worlds.Count - 1);
+                result = RNG.instance.Roll(0, worlds.Count - 1);
                 entity = worlds[result].GetRandomSentient();
             }
             return entity;
@@ -812,7 +812,7 @@ namespace JoyLib.Code.World
         {
             if (HasTag("interior"))
             {
-                int result = RNG.Roll(0, 100);
+                int result = RNG.instance.Roll(0, 100);
                 if (result <= 50)
                 {
                     int numberOfLevels = 1;

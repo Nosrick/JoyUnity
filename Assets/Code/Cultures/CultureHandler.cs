@@ -16,7 +16,7 @@ namespace JoyLib.Code.Cultures
         
         private Dictionary<string, CultureType> m_Cultures;
 
-        public void Initialise()
+        public CultureHandler()
         {
             m_Cultures = new Dictionary<string, CultureType>();
 

@@ -65,25 +65,13 @@ public class GameManager : MonoBehaviour
 
     private void InitialiseEverything()
     {
-        RNG.SetSeed(DateTime.Now.Millisecond);
+        RNG.instance.SetSeed(DateTime.Now.Millisecond);
         ActionLog.OpenLog();
-
-        if (ScriptingEngine.Initialise() == false)
-        {
-            Debug.Log("COULD NOT INITIALISE SCRIPTING ENGINE.");
-            Destroy(this);
-            return;
-        }
         ObjectIconHandler.instance.Load();
         WorldInfoHandler.instance.Load();
-        NeedHandler.instance.Initialise();
         AbilityHandler.instance.Initialise();
-        JobHandler.Initialise();
-        CultureHandler.instance.Initialise();
         EntityBioSexHandler.instance.Load(CultureHandler.instance.Cultures);
         EntitySexualityHandler.Load(CultureHandler.instance.Cultures);
-        MaterialHandler.Initialise();
-        EntityTemplateHandler.instance.Initialise();
         LiveItemHandler.Initialise();
     }
 	

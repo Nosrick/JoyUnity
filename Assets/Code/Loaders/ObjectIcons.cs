@@ -16,6 +16,8 @@ namespace JoyLib.Code.Graphics
         public ObjectIconHandler(int spriteSize) 
         {
             this.SpriteSize = spriteSize;
+
+            Load();
         }
 
         public bool Load()
@@ -24,8 +26,8 @@ namespace JoyLib.Code.Graphics
             {
                 return true;
             }
-
             Icons = new BucketCollection<IconData, string>();
+
             Texture2D defaultSprite = Resources.Load<Texture2D>("Sprites/default");
 
             List<IconData> defaultIconData = new List<IconData>();
@@ -192,7 +194,7 @@ namespace JoyLib.Code.Graphics
                 {
                     return ReturnDefaultArray();
                 }
-                int result = RNG.Roll(0, icons.Length - 1);
+                int result = RNG.instance.Roll(0, icons.Length - 1);
                 string[] nameToFind = Regex.Split(icons[result].name, @"^[^\d]+");
                 icons = icons.Where(x => x.name.StartsWith(nameToFind[0])).ToArray();
                 if(icons.Length == 0)
@@ -217,6 +219,12 @@ namespace JoyLib.Code.Graphics
         {
             IconData[] defaultIcon = Icons["DEFAULT"].ToArray();
             return defaultIcon[0];
+        }
+
+        public Sprite[] GetDefaultSprites()
+        {
+            Sprite[] defaultSprites = Icons["DEFAULT"].Select(x => x.sprite).ToArray();
+            return defaultSprites;
         }
 
         public Sprite GetSprite(string tileSet, string tileName)

@@ -2,20 +2,29 @@
 
 namespace JoyLib.Code.Rollers
 {
-    public static class RNG
+    public class RNG
     {
-        private static int s_Seed = 0;
-        private static Random s_Roller;
+        private static readonly Lazy<RNG> lazy = new Lazy<RNG>(() => new RNG());
+
+        public static RNG instance => lazy.Value;
+
+        private int m_Seed = 0;
+        private Random m_Roller;
+
+        public RNG()
+        {
+            m_Roller = new Random();
+        }
 
         /// <summary>
-        /// Returns a random number between the two specified numbers. Inclusive.
+        /// Returns a random number between the two specified numbers.
         /// </summary>
-        /// <param name="lower"></param>
-        /// <param name="upper"></param>
+        /// <param name="lower">Inclusive.</param>
+        /// <param name="upper">Exclusive.</param>
         /// <returns></returns>
-        public static int Roll(int lower, int upper)
+        public int Roll(int lower, int upper)
         {
-            return s_Roller.Next(lower, upper + 1);
+            return m_Roller.Next(lower, upper);
         }
 
         /// <summary>
@@ -24,7 +33,7 @@ namespace JoyLib.Code.Rollers
         /// <param name="number">The number of d10s to roll.</param>
         /// <param name="threshold">The threshold at which success happens. Inclusive.</param>
         /// <returns>The number of successes.</returns>
-        public static int RollSuccesses(int number, int threshold)
+        public int RollSuccesses(int number, int threshold)
         {
             int successes = 0;
             for(int i = 0; i < number; i++)
@@ -37,10 +46,10 @@ namespace JoyLib.Code.Rollers
             return successes;
         }
 
-        public static void SetSeed(int seed)
+        public void SetSeed(int seed)
         {
-            s_Seed = seed;
-            s_Roller = new Random(s_Seed);
+            m_Seed = seed;
+            m_Roller = new Random(m_Seed);
         }
     }
 }

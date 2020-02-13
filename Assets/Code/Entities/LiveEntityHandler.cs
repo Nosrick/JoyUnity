@@ -40,7 +40,7 @@ namespace JoyLib.Code.Entities
             BasicValueContainer<INeed> needs = new BasicValueContainer<INeed>();
             needs.Add(NeedHandler.instance.GetRandomised("hunger"));
 
-            int result = RNG.Roll(0, creatureCultures.Count - 1);
+            int result = RNG.instance.Roll(0, creatureCultures.Count - 1);
             CultureType dominantCulture = creatureCultures[result];
 
             Entity entity = new Entity(template, needs, creatureCultures, level, dominantCulture.ChooseJob(), dominantCulture.ChooseSex(), 

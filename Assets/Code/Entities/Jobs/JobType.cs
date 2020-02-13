@@ -2,6 +2,7 @@
 using JoyLib.Code.Entities.Abilities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace JoyLib.Code.Entities.Jobs
 {
@@ -64,6 +65,22 @@ namespace JoyLib.Code.Entities.Jobs
         {
             get;
             private set;
+        }
+
+        public Dictionary<string, float> StatisticGrowths
+        {
+            get
+            {
+                return m_StatisticGrowths.ToDictionary(k => k.Key, v => v.Value);
+            }
+        }
+
+        public Dictionary<string, int> SkillGrowths
+        {
+            get
+            {
+                return m_SkillGrowths.ToDictionary(k => k.Key, v => v.Value);
+            }
         }
     }
 }

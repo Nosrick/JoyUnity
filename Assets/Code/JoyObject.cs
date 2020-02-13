@@ -54,7 +54,7 @@ public class JoyObject : IComparable
         //If it's not animated, select a random icon to represent it
         if (!this.IsAnimated && sprites != null)
         {
-            this.ChosenIcon = RNG.Roll(0, sprites.Length - 1);
+            this.ChosenIcon = RNG.instance.Roll(0, sprites.Length - 1);
         }
         else
         {

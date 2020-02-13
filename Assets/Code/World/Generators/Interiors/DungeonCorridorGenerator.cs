@@ -43,7 +43,7 @@ namespace JoyLib.Code.World.Generators.Interiors
                                 HasFlag(m_Tiles[j, k], GeneratorTileType.Entrance))
                                 continue;
 
-                            Tunnel(new Vector2Int(j, k), (FacingDirection)(RNG.Roll(0, 4) * 2));
+                            Tunnel(new Vector2Int(j, k), (FacingDirection)(RNG.instance.Roll(0, 4) * 2));
                         }
                     }
                 }
@@ -159,15 +159,15 @@ namespace JoyLib.Code.World.Generators.Interiors
 
         private FacingDirection ChooseTunnelDirection(FacingDirection lastDirection)
         {
-            int roll = RNG.Roll(0, 100);
+            int roll = RNG.instance.Roll(0, 100);
 
             if (roll >= m_CorridorBend)
                 return lastDirection;
 
-            roll = RNG.Roll(0, 3) * 2;
+            roll = RNG.instance.Roll(0, 3) * 2;
             while (roll == (int)lastDirection)
             {
-                roll = RNG.Roll(0, 3) * 2;
+                roll = RNG.instance.Roll(0, 3) * 2;
             }
             return (FacingDirection)roll;
         }

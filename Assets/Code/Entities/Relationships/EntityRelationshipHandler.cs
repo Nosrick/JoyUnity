@@ -13,17 +13,10 @@ namespace JoyLib.Code.Entities.Relationships
         private Dictionary<string, Type> m_RelationshipTypes;
         private Dictionary<string, IRelationship> m_Relationships;
 
-        public bool Initialise()
+        public EntityRelationshipHandler()
         {
-            if(m_RelationshipTypes != null)
-            {
-                return true;
-            }
-
             m_RelationshipTypes = new Dictionary<string, Type>();
             m_Relationships = new Dictionary<string, IRelationship>();
-
-            return true;
         }
 
         public bool AddRelationshipType(Type relationshipType)
@@ -102,7 +95,10 @@ namespace JoyLib.Code.Entities.Relationships
 
             if((int)bestPercentage != 100)
             {
-                relationships.Add(bestRelationship);
+                if(bestRelationship != null)
+                {
+                    relationships.Add(bestRelationship);
+                }
             }
 
             return relationships;

@@ -50,12 +50,12 @@ namespace JoyLib.Code.Conversation.Subengines
 
         public static string FetchRumour()
         {
-            return s_Rumours[RNG.Roll(0, s_Rumours.Count - 1)];
+            return s_Rumours[RNG.instance.Roll(0, s_Rumours.Count - 1)];
         }
 
         public static string CreateRumour(WorldInstance worldRef)
         {
-            int result = RNG.Roll(0, 100);
+            int result = RNG.instance.Roll(0, 100);
 
             if(result >= 0 && result < 25)
             {
@@ -82,7 +82,7 @@ namespace JoyLib.Code.Conversation.Subengines
             List<string> skills = new List<string>();
 
             //Choose either best skills or worst skills
-            int result = RNG.Roll(0, 1);
+            int result = RNG.instance.Roll(0, 1);
             if(result == 0)
             {
                 int worstSkill = int.MaxValue;
@@ -94,7 +94,7 @@ namespace JoyLib.Code.Conversation.Subengines
                         skills.Add(skillPair.Key);
                     }
                 }
-                return "I heard " + entityRef.JoyName + " is terrible at " + skills[RNG.Roll(0, skills.Count - 1)] + ", how embarrassing!";
+                return "I heard " + entityRef.JoyName + " is terrible at " + skills[RNG.instance.Roll(0, skills.Count - 1)] + ", how embarrassing!";
             }
             else
             {
@@ -107,7 +107,7 @@ namespace JoyLib.Code.Conversation.Subengines
                         skills.Add(skillPair.Key);
                     }
                 }
-                return entityRef.JoyName + " is really good at " + skills[RNG.Roll(0, skills.Count - 1)] + ", I'm pretty envious.";
+                return entityRef.JoyName + " is really good at " + skills[RNG.instance.Roll(0, skills.Count - 1)] + ", I'm pretty envious.";
             }
         }
 
@@ -128,7 +128,7 @@ namespace JoyLib.Code.Conversation.Subengines
             string itemName = "something";
             if(left.Backpack.Length > 0)
             {
-                itemName = left.Backpack[RNG.Roll(0, left.Backpack.Length - 1)].JoyName;
+                itemName = left.Backpack[RNG.instance.Roll(0, left.Backpack.Length - 1)].JoyName;
             }
             return "I heard " + left.JoyName + " stole " + itemName + " from " + right.JoyName + ".";
         }

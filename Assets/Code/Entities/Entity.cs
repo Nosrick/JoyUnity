@@ -165,7 +165,7 @@ namespace JoyLib.Code.Entities
 
             this.m_Vision = new bool[1, 1];
 
-            this.m_Pathfinder = ScriptingEngine.GetProvidedPathFinder();
+            this.m_Pathfinder = ScriptingEngine.instance.GetProvidedPathFinder();
             this.m_PathfindingData = new Queue<Vector2Int>();
 
             this.m_FulfillmentData = new FulfillmentData(
@@ -173,7 +173,7 @@ namespace JoyLib.Code.Entities
                 0,
                 new JoyObject[0]);
 
-            this.RegenTicker = RNG.Roll(0, REGEN_TICK_TIME - 1);
+            this.RegenTicker = RNG.instance.Roll(0, REGEN_TICK_TIME - 1);
 
             this.MyWorld = world;
             this.JoyName = this.GetNameFromMultipleCultures();
@@ -211,10 +211,10 @@ namespace JoyLib.Code.Entities
                                     .Max(z => z);
             for (int i = 0; i <= maxNames; i++)
             {
-                CultureType random = m_Cultures[RNG.Roll(0, m_Cultures.Count - 1)];
+                CultureType random = m_Cultures[RNG.instance.Roll(0, m_Cultures.Count - 1)];
                 while (random.NameData.SelectMany(x => x.chain).Max(y => y) < maxNames)
                 {
-                    random = m_Cultures[RNG.Roll(0, m_Cultures.Count - 1)];
+                    random = m_Cultures[RNG.instance.Roll(0, m_Cultures.Count - 1)];
                 }
 
                 nameList.Add(random.GetNameForChain(i, this.Sex.Name));
@@ -418,7 +418,7 @@ namespace JoyLib.Code.Entities
                     }
 
                     //Pick a random spot to wander to
-                    int result = RNG.Roll(0, visibleSpots.Count - 1);
+                    int result = RNG.instance.Roll(0, visibleSpots.Count - 1);
                     m_CurrentTarget.targetPoint = visibleSpots[result];
                 }
 
@@ -879,6 +879,8 @@ namespace JoyLib.Code.Entities
             m_FulfillmentData = new FulfillmentData(need, minutes, targets);
             ActionLog.AddText(this.ToString() + " is fulfilling need " + need);
         }
+
+        public bool PerformAction()
 
         public string CreatureType
         {

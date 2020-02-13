@@ -42,9 +42,9 @@ namespace JoyLib.Code.World.Generators.Interiors
 
             for (int i = 0; i < numberToPlace; i++)
             {
-                int pointIndex = RNG.Roll(0, availablePoints.Count - 1);
+                int pointIndex = RNG.instance.Roll(0, availablePoints.Count - 1);
 
-                int entityIndex = RNG.Roll(0, templates.Length - 1);
+                int entityIndex = RNG.instance.Roll(0, templates.Length - 1);
 
                 List<CultureType> cultures = CultureHandler.instance.GetByCreatureType(templates[entityIndex].CreatureType);
                 CultureType culture = cultures[0];

@@ -97,7 +97,7 @@ namespace JoyLib.Code.Entities.Items
 
                     if (unidentifiedItems.Count != 0)
                     {
-                        int index = RNG.Roll(0, unidentifiedItems.Count - 1);
+                        int index = RNG.instance.Roll(0, unidentifiedItems.Count - 1);
                         chosenDescription = unidentifiedItems[index];
                         unidentifiedItems.RemoveAt(index);
                     }
@@ -107,7 +107,7 @@ namespace JoyLib.Code.Entities.Items
 
                         items.Add(new BaseItemType(identifiedItems[j].tags, identifiedItems[j].description, chosenDescription.description, chosenDescription.name,
                             identifiedItems[j].name, identifiedItems[j].slots, identifiedItems[j].size,
-                            MaterialHandler.GetMaterial(identifiedItems[j].materials[k]), identifiedItems[j].skill, actionWord,
+                            MaterialHandler.instance.GetMaterial(identifiedItems[j].materials[k]), identifiedItems[j].skill, actionWord,
                             identifiedItems[j].value, identifiedItems[j].weighting, identifiedItems[j].spriteSheet, identifiedItems[j].lightLevel));
                     }
                 }
@@ -142,10 +142,15 @@ namespace JoyLib.Code.Entities.Items
             BaseItemType[] matchingTypes = FindItemsOfType(tags);
             if (matchingTypes.Length > 0)
             {
-                int result = RNG.Roll(0, matchingTypes.Length - 1);
+                int result = RNG.instance.Roll(0, matchingTypes.Length - 1);
                 BaseItemType itemType = matchingTypes[result];
 
-                ItemInstance itemInstance = new ItemInstance(itemType, new Vector2Int(-1, -1), identified);
+                ItemInstance itemInstance = new ItemInstance(itemType, 
+                                                            new Vector2Int(-1, -1), 
+                                                            identified, 
+                                                            ObjectIconHandler.instance.GetSprites(
+                                                                itemType.SpriteSheet,
+                                                                itemType.UnidentifiedName));
                 m_LiveItems.Add(itemInstance.GUID, itemInstance);
 
                 return itemInstance;
@@ -178,9 +183,14 @@ namespace JoyLib.Code.Entities.Items
             }
             if (secondRound.Count > 0)
             {
-                int result = RNG.Roll(0, secondRound.Count - 1);
+                int result = RNG.instance.Roll(0, secondRound.Count - 1);
                 BaseItemType type = secondRound[result];
-                ItemInstance itemInstance = new ItemInstance(type, new Vector2Int(-1, -1), identified);
+                ItemInstance itemInstance = new ItemInstance(type, 
+                                                            new Vector2Int(-1, -1), 
+                                                            identified,
+                                                            ObjectIconHandler.instance.GetSprites(
+                                                                type.SpriteSheet,
+                                                                type.UnidentifiedName));
                 m_LiveItems.Add(itemInstance.GUID, itemInstance);
                 return itemInstance;
             }
@@ -200,9 +210,14 @@ namespace JoyLib.Code.Entities.Items
 
         public ItemInstance CreateCompletelyRandomItem(bool identified = false, bool withAbility = false)
         {
-            int result = RNG.Roll(0, s_ItemDatabase.Count - 1);
+            int result = RNG.instance.Roll(0, s_ItemDatabase.Count - 1);
             BaseItemType itemType = s_ItemDatabase[result];
-            ItemInstance itemInstance = new ItemInstance(itemType, new Vector2Int(-1, -1), identified);
+            ItemInstance itemInstance = new ItemInstance(itemType, 
+                                                        new Vector2Int(-1, -1), 
+                                                        identified,
+                                                        ObjectIconHandler.instance.GetSprites(
+                                                            itemType.SpriteSheet,
+                                                            itemType.UnidentifiedName));
             m_LiveItems.Add(itemInstance.GUID, itemInstance);
             return itemInstance;
         }

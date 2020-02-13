@@ -16,7 +16,7 @@ namespace JoyLib.Code.Entities.Abilities
         private void Load()
         {
             m_Abilities = new List<IAbility>();
-            Type[] types = ScriptingEngine.FetchTypeAndChildren("AbstractAbility");
+            Type[] types = ScriptingEngine.instance.FetchTypeAndChildren("AbstractAbility");
             foreach (Type type in types)
             {
                 if (type.IsAbstract == false && type.IsInterface == false)

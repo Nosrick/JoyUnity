@@ -58,7 +58,7 @@ namespace JoyLib.Code.Rollers
 
             for (int i = 0; i < newNumber; i++)
             {
-                int result = RNG.Roll(1, 10);
+                int result = RNG.instance.Roll(1, 10);
 
                 if (result == 1)
                 {

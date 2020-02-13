@@ -74,7 +74,7 @@ namespace JoyLib.Code.Entities.Needs
                 participants.Add(actor.GUID);
                 participants.Add(mate.GUID);
                 string[] relationshipTags = new string[] { "sexual" };
-                List<IRelationship> relationships = EntityRelationshipHandler.Get(participants.ToArray(), relationshipTags);
+                List<IRelationship> relationships = EntityRelationshipHandler.instance.Get(participants.ToArray(), relationshipTags);
 
                 foreach (IRelationship relationship in relationships)
                 {
@@ -112,7 +112,7 @@ namespace JoyLib.Code.Entities.Needs
                         EntityStatistic.INTELLECT,
                         EntityStatistic.PERSONALITY });
 
-                int time = RNG.Roll(5, 30);
+                int time = RNG.instance.Roll(5, 30);
 
 
                 if (user.FulfillmentData.Name.Equals(this.Name))
@@ -167,8 +167,8 @@ namespace JoyLib.Code.Entities.Needs
 
         public override INeed Randomise()
         {
-            int decay = RNG.Roll(200, 600);
-            return new Sex(this.m_Name, decay, decay, true, 12, RNG.Roll(5, 24), 24, 0, 0);
+            int decay = RNG.instance.Roll(200, 600);
+            return new Sex(this.m_Name, decay, decay, true, 12, RNG.instance.Roll(5, 24), 24, 0, 0);
         }
     }
 }

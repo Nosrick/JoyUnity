@@ -12,18 +12,13 @@ namespace JoyLib.Code.Entities.Needs
 
         private Dictionary<string, INeed> m_Needs;
 
-        public bool Initialise()
+        public NeedHandler()
         {
             try
             {
-                if (m_Needs != null)
-                {
-                    return true;
-                }
-
                 m_Needs = new Dictionary<string, INeed>();
 
-                Type[] needTypes = Scripting.ScriptingEngine.FetchTypeAndChildren("AbstractNeed");
+                Type[] needTypes = Scripting.ScriptingEngine.instance.FetchTypeAndChildren(typeof(INeed));
 
                 foreach (Type type in needTypes)
                 {
@@ -37,14 +32,11 @@ namespace JoyLib.Code.Entities.Needs
                         continue;
                     }
                 }
-
-                return true;
             }
             catch(Exception ex)
             {
                 Debug.LogError(ex.Message);
                 Debug.LogError(ex.StackTrace);
-                return false;
             }
         }
 
@@ -54,7 +46,7 @@ namespace JoyLib.Code.Entities.Needs
             {
                 return m_Needs[name].Copy();
             }
-            return null;
+            throw new InvalidOperationException("Need not found, looking for " + name);
         }
 
         public INeed GetRandomised(string name)
@@ -63,7 +55,7 @@ namespace JoyLib.Code.Entities.Needs
             {
                 return m_Needs[name].Randomise();
             }
-            return null;
+            throw new InvalidOperationException("Need not found, looking for " + name);
         }
     }
 }

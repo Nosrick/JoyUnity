@@ -1,4 +1,5 @@
 ﻿using JoyLib.Code.Entities.Items;
+using JoyLib.Code.Graphics;
 using UnityEngine;
 
 namespace JoyLib.Code.Helpers
@@ -12,7 +13,7 @@ namespace JoyLib.Code.Helpers
 
             BaseItemType tempItem = new BaseItemType(tags, "", "Temporary weapon", "Temporary weapon", "Temporary weapon", new string[] { "None" }, size, material, skill, actionString, 0, 0, "None");
 
-            return new ItemInstance(tempItem, new Vector2Int(-1, -1), true);
+            return new ItemInstance(tempItem, new Vector2Int(-1, -1), true, ObjectIconHandler.instance.GetDefaultSprites());
         }
     }
 }

@@ -21,26 +21,40 @@ namespace JoyLib.Code.Entities.Items
 
         protected IAbility m_Ability;
 
-        public ItemInstance(BaseItemType type, Vector2Int position, bool identified, IAbility abilityRef = null) :
+        public ItemInstance(BaseItemType type, Vector2Int position, bool identified, Sprite[] sprites, IAbility abilityRef = null) :
             base(type.UnidentifiedName, 
                 EntityDerivedValue.GetDefaultForItem(
                     type.Material.Bonus,
                     type.Weight),
-                position, type.SpriteSheet, ObjectIconHandler.instance.GetSprites(type.SpriteSheet, type.UnidentifiedName), type.Tags)
+                position, 
+                type.SpriteSheet, 
+                sprites, 
+                type.Tags)
         {            
             this.m_Type = type;
             
             this.Identified = identified;
-            //chosenIcon = RNG.Roll(0, m_Icons.Length - 1);
+            //chosenIcon = RNG.instance.Roll(0, m_Icons.Length - 1);
 
             this.m_Contents = new List<long>();
 
             m_Ability = abilityRef;
         }
 
-        public ItemInstance(ItemInstance item) :
-            this(item.ItemType, item.WorldPosition, item.Identified, item.m_Ability)
+        public ItemInstance(ItemInstance copy) :
+            base(copy.m_Type.UnidentifiedName,
+            EntityDerivedValue.GetDefaultForItem(
+                copy.m_Type.Material.Bonus,
+                copy.m_Type.Weight),
+                copy.WorldPosition,
+                copy.m_Type.SpriteSheet,
+                copy.m_Icons,
+                copy.m_Type.Tags)
         {
+            this.m_Type = copy.m_Type;
+            this.Identified = copy.Identified;
+            this.m_Contents = copy.m_Contents;
+            this.m_Ability = copy.m_Ability;
         }
 
         /*
@@ -53,7 +67,7 @@ namespace JoyLib.Code.Entities.Items
             GUIDManager.ReleaseGUID(GUID);
             GUID = GUIDManager.AssignGUID();
             this.identified = identified;
-            chosenIcon = RNG.Roll(0, m_Icons.Length - 1);
+            chosenIcon = RNG.instance.Roll(0, m_Icons.Length - 1);
 
             m_Contents = new List<ItemInstance>();
         }
@@ -69,7 +83,7 @@ namespace JoyLib.Code.Entities.Items
             GUIDManager.ReleaseGUID(GUID);
             GUID = GUIDManager.AssignGUID();
             this.identified = identified;
-            chosenIcon = RNG.Roll(0, m_Icons.Length - 1);
+            chosenIcon = RNG.instance.Roll(0, m_Icons.Length - 1);
 
             m_Contents = contents;
         }

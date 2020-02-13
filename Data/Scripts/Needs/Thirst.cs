@@ -126,7 +126,7 @@ namespace JoyLib.Code.Entities.Needs
 
         public override INeed Randomise()
         {
-            return new Thirst(this.m_Name, 200, 200, true, 12, RNG.Roll(5, 24), 24, 0, 0);
+            return new Thirst(this.m_Name, 200, 200, true, 12, RNG.instance.Roll(5, 24), 24, 0, 0);
         }
     }
 }

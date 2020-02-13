@@ -24,7 +24,7 @@ namespace JoyLib.Code.Entities.Sexuality
                 {
                     if(s_Sexualities.ContainsKey(sexuality) == false)
                     {
-                        Type type = ScriptingEngine.FetchType(sexuality);
+                        Type type = ScriptingEngine.instance.FetchType(sexuality);
                         if(type != null)
                         {
                             s_Sexualities.Add(sexuality, type);

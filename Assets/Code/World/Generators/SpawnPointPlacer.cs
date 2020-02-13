@@ -13,15 +13,15 @@ namespace JoyLib.Code.World.Generators
         {
             int x, y;
 
-            x = RNG.Roll(1, worldRef.Tiles.GetLength(0) - 1);
-            y = RNG.Roll(1, worldRef.Tiles.GetLength(1) - 1);
+            x = RNG.instance.Roll(1, worldRef.Tiles.GetLength(0) - 1);
+            y = RNG.instance.Roll(1, worldRef.Tiles.GetLength(1) - 1);
 
             Vector2Int point = new Vector2Int(x, y);
 
             while (worldRef.Walls.Keys.Any(l => l.Equals(point)))
             {
-                x = RNG.Roll(1, worldRef.Tiles.GetLength(0) - 1);
-                y = RNG.Roll(1, worldRef.Tiles.GetLength(1) - 1);
+                x = RNG.instance.Roll(1, worldRef.Tiles.GetLength(0) - 1);
+                y = RNG.instance.Roll(1, worldRef.Tiles.GetLength(1) - 1);
                 point = new Vector2Int(x, y);
             }
 
@@ -33,8 +33,8 @@ namespace JoyLib.Code.World.Generators
             int breakout = (worldRef.Tiles.GetLength(0) * worldRef.Tiles.GetLength(1)) / 4;
             int x, y;
 
-            x = RNG.Roll(1, worldRef.Tiles.GetLength(0) - 1);
-            y = RNG.Roll(1, worldRef.Tiles.GetLength(1) - 1);
+            x = RNG.instance.Roll(1, worldRef.Tiles.GetLength(0) - 1);
+            y = RNG.instance.Roll(1, worldRef.Tiles.GetLength(1) - 1);
 
             Vector2Int point = new Vector2Int(x, y);
 
@@ -43,8 +43,8 @@ namespace JoyLib.Code.World.Generators
                 (point.x != worldRef.SpawnPoint.x && point.y != worldRef.SpawnPoint.y ||
                 count < breakout))
             {
-                x = RNG.Roll(1, worldRef.Tiles.GetLength(0) - 1);
-                y = RNG.Roll(1, worldRef.Tiles.GetLength(1) - 1);
+                x = RNG.instance.Roll(1, worldRef.Tiles.GetLength(0) - 1);
+                y = RNG.instance.Roll(1, worldRef.Tiles.GetLength(1) - 1);
                 point = new Vector2Int(x, y);
                 count += 1;
             }
@@ -63,8 +63,8 @@ namespace JoyLib.Code.World.Generators
                 (point.x != worldRef.SpawnPoint.x && point.y != worldRef.SpawnPoint.y ||
                 count < breakout))
                 {
-                    x = RNG.Roll(1, worldRef.Tiles.GetLength(0) - 1);
-                    y = RNG.Roll(1, worldRef.Tiles.GetLength(1) - 1);
+                    x = RNG.instance.Roll(1, worldRef.Tiles.GetLength(0) - 1);
+                    y = RNG.instance.Roll(1, worldRef.Tiles.GetLength(1) - 1);
                     point = new Vector2Int(x, y);
                     count += 1;
                 }
