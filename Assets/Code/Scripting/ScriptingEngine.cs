@@ -8,27 +8,27 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
+using JoyLib.Code.Helpers;
 
 namespace JoyLib.Code.Scripting
 {
-    public static class ScriptingEngine
+    public class ScriptingEngine
     {
-        private static Assembly s_ScriptDLL;
+        private static readonly Lazy<ScriptingEngine> lazy = new Lazy<ScriptingEngine>(() => new ScriptingEngine());
+
+        public static ScriptingEngine instance => lazy.Value;
+
+        private Assembly m_ScriptDLL;
 
         private const string ABILITY_NAMESPACE = "JoyLib.Code.Entities.Abilities.";
         private const string NEED_NAMESPACE = "JoyLib.Code.Entities.Needs.";
 
-        private static Type s_ProvidedPathfinder;
+        private Type m_ProvidedPathfinder;
 
-        public static bool Initialise()
+        public ScriptingEngine()
         {
             try
             {
-                if(s_ScriptDLL != null)
-                {
-                    return true;
-                }
-
                 string dir = Directory.GetCurrentDirectory() + "/" + GlobalConstants.SCRIPTS_FOLDER;
                 string[] scriptFiles = Directory.GetFiles(dir, "*.cs", SearchOption.AllDirectories);
 
@@ -62,29 +62,25 @@ namespace JoyLib.Code.Scripting
                         Debug.Log(diagnostic.GetMessage());
                         Debug.Log(diagnostic.Severity.ToString());
                     }
-                    return false;
                 }
 
                 memory.Seek(0, SeekOrigin.Begin);
-                s_ScriptDLL = Assembly.Load(memory.ToArray());
+                m_ScriptDLL = Assembly.Load(memory.ToArray());
 
-                s_ProvidedPathfinder = FetchType("CustomPathfinder");
-
-                return true;
+                m_ProvidedPathfinder = FetchType("CustomPathfinder");
             }
             catch(Exception ex)
             {
                 Debug.LogError(ex.Message);
                 Debug.LogError(ex.StackTrace);
-                return false;
             }
         }
 
-        public static Type FetchType(string typeName)
+        public Type FetchType(string typeName)
         {
             try
             {
-                Type[] allTypes = s_ScriptDLL.GetTypes();
+                Type[] allTypes = m_ScriptDLL.GetTypes();
 
                 Type directType = allTypes.Single(type => type.Name.ToLower().Equals(typeName.ToLower()));
                 return directType;
@@ -93,15 +89,15 @@ namespace JoyLib.Code.Scripting
             {
                 Debug.LogError(ex.Message);
                 Debug.LogError(ex.StackTrace);
-                return null;
+                throw new InvalidOperationException("Error when searching for type, " + typeName);
             }
         }
 
-        public static Type[] FetchTypeAndChildren(string typeName)
+        public Type[] FetchTypeAndChildren(string typeName)
         {
             try
             {
-                Type[] allTypes = s_ScriptDLL.GetTypes();
+                Type[] allTypes = m_ScriptDLL.GetTypes();
 
                 Type directType = null;
                 foreach(Type type in allTypes)
@@ -130,13 +126,47 @@ namespace JoyLib.Code.Scripting
             {
                 Debug.LogError(ex.Message);
                 Debug.LogError(ex.StackTrace);
-                return new Type[0];
+                throw new InvalidOperationException("Error when searching for Type in ScriptingEngine, type name " + typeName);
             }
         }
 
-        public static IPathfinder GetProvidedPathFinder()
+        public Type[] FetchTypeAndChildren(Type type) 
         {
-            return (IPathfinder)Activator.CreateInstance(s_ProvidedPathfinder);
+            try
+            {
+                Type[] types = m_ScriptDLL.GetTypes().Where(t => type.IsAssignableFrom(t)).ToArray();
+
+                return types;
+            }
+            catch(Exception e)
+            {
+                Debug.LogError(e.Message);
+                Debug.LogError(e.StackTrace);
+                throw new InvalidOperationException("Error when searching for Type in ScriptingEngine, " + type.FullName);
+            }
+        }
+
+        public IJoyAction FetchAction(string actionName)
+        {
+            try
+            {
+                Type[] allTypes = m_ScriptDLL.GetTypes();
+                Type type = allTypes.Single(type => type.Name.ToLower().Equals(actionName.ToLower()));
+
+                IJoyAction action = (IJoyAction)Activator.CreateInstance(type);
+                return action;
+            }
+            catch(Exception e)
+            {
+                ActionLog.WriteToLog(e.Message);
+                ActionLog.WriteToLog(e.StackTrace);
+                throw new InvalidOperationException("Error when finding action, no such action " + actionName);
+            }
+        }
+
+        public IPathfinder GetProvidedPathFinder()
+        {
+            return (IPathfinder)Activator.CreateInstance(m_ProvidedPathfinder);
         }
     }
 }
