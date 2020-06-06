@@ -239,14 +239,6 @@ namespace JoyLib.Code.Entities
             m_CurrentTarget.targetPoint = NO_TARGET;
         }
 
-        /*
-        public Entity CreateChild(Entity parentRef)
-        {
-            Dictionary<StatisticIndex, float> childStatistics = s_Cultures[creatureType]
-            Entity child = new Entity()
-        }
-        */
-
         public void Tick()
         {
             if (m_FulfillmentData.Counter > 0)

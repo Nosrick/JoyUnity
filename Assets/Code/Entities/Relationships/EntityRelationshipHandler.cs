@@ -1,4 +1,6 @@
-﻿using System;
+﻿using JoyLib.Code.Scripting;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -17,29 +19,27 @@ namespace JoyLib.Code.Entities.Relationships
         {
             m_RelationshipTypes = new Dictionary<string, Type>();
             m_Relationships = new Dictionary<string, IRelationship>();
+
+            Initialise();
         }
 
-        public bool AddRelationshipType(Type relationshipType)
+        public bool Initialise()
         {
-            if(relationshipType.IsAssignableFrom(typeof(IRelationship)))
+            Type[] types = ScriptingEngine.instance.FetchTypeAndChildren(typeof(IRelationship));
+            foreach(Type type in types)
             {
-                IRelationship relationship = (IRelationship)Activator.CreateInstance(relationshipType);
-
-                if (m_RelationshipTypes.ContainsKey(relationship.Name) == false)
-                {
-                    m_RelationshipTypes.Add(relationship.Name, relationshipType);
-                    return true;
-                }
-
+                m_RelationshipTypes.Add(type.Name.ToLower(), type);
             }
-            return false;
+
+            return true;
         }
 
-        public IRelationship CreateRelationship(Entity[] participants, string type = "Friendship")
+        public IRelationship CreateRelationship(Entity[] participants, string type = "friendship")
         {
-            if(m_RelationshipTypes.ContainsKey(type))
+            if(m_RelationshipTypes.ContainsKey(type.ToLower()))
             {
                 IRelationship newRelationship = (IRelationship)Activator.CreateInstance(m_RelationshipTypes[type]);
+                
                 foreach(Entity participant in participants)
                 {
                     newRelationship.AddParticipant(participant);

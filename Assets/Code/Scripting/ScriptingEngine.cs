@@ -151,7 +151,7 @@ namespace JoyLib.Code.Scripting
             try
             {
                 Type[] allTypes = m_ScriptDLL.GetTypes();
-                Type type = allTypes.Single(type => type.Name.ToLower().Equals(actionName.ToLower()));
+                Type type = allTypes.Single(t => t.Name.ToLower().Equals(actionName.ToLower()));
 
                 IJoyAction action = (IJoyAction)Activator.CreateInstance(type);
                 return action;

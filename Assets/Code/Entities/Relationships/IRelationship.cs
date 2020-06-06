@@ -19,6 +19,8 @@ namespace JoyLib.Code.Entities.Relationships
 
         int ModifyValueOfParticipant(long actor, long observer, int value);
 
+        int ModifyValueOfAllParticipants(int value);
+
         bool AddParticipant(JoyObject newParticipant);
         
         bool RemoveParticipant(long currentGUID);

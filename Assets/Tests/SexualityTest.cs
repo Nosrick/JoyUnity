@@ -62,7 +62,10 @@ namespace JoyTest
             Mock<IBioSex> male = new Mock<IBioSex>();
 
             male.Setup(sex => sex.Name).Returns("male");
+            male.Setup(sex => sex.CanBirth).Returns(false);
+
             female.Setup(sex => sex.Name).Returns("female");
+            female.Setup(sex => sex.CanBirth).Returns(true);
 
             System.Type[] types = scriptingEngine.FetchTypeAndChildren(typeof(ISexuality));
             Dictionary<string, System.Type> keyedTypes = new Dictionary<string, System.Type>(types.Length);
@@ -127,6 +130,30 @@ namespace JoyTest
                 null,
                 null);
 
+            homoFemaleHumanLeft = LiveEntityHandler.instance.Create(
+                humanTemplate,
+                emptyContainer.Object,
+                level.Object,
+                job,
+                female.Object,
+                homosexual,
+                Vector2Int.zero,
+                null,
+                null,
+                null);
+
+            homoFemaleHumanRight = LiveEntityHandler.instance.Create(
+                humanTemplate,
+                emptyContainer.Object,
+                level.Object,
+                job,
+                female.Object,
+                homosexual,
+                Vector2Int.zero,
+                null,
+                null,
+                null);
+
             biMaleHuman = LiveEntityHandler.instance.Create(
                 humanTemplate,
                 emptyContainer.Object,
@@ -151,13 +178,52 @@ namespace JoyTest
                 null,
                 null);
 
-            
+
+            JoyObject[] heteroCouple = new JoyObject[] { heteroFemaleHuman, heteroMaleHuman };
+            JoyObject[] homoFemaleCouple = new JoyObject[] { homoFemaleHumanLeft, homoFemaleHumanRight };
+            JoyObject[] homoMaleCouple = new JoyObject[] { homoMaleHumanLeft, homoMaleHumanRight };
+            EntityRelationshipHandler.instance.CreateRelationship(new Entity[] { heteroFemaleHuman, heteroMaleHuman }, "monogamousrelationship");
+            EntityRelationshipHandler.instance.CreateRelationship(new Entity[] { homoFemaleHumanLeft, homoFemaleHumanRight}, "monogamousrelationship");
+            EntityRelationshipHandler.instance.CreateRelationship(new Entity[] { homoMaleHumanLeft, homoMaleHumanRight }, "monogamousrelationship");
+            IJoyAction relationshipAction = ScriptingEngine.instance.FetchAction("modifyrelationshippointsaction");
+            heteroFemaleHuman.PerformAction(relationshipAction, 
+                                            heteroCouple,
+                                            new string[] { "sexual" },
+                                            new object[] { 500 });
+
+            homoFemaleHumanLeft.PerformAction(relationshipAction,
+                                                homoFemaleCouple,
+                                                new string[] { "sexual" },
+                                                new object[] { 500 });
+
+            homoMaleHumanLeft.PerformAction(relationshipAction,
+                                                homoMaleCouple,
+                                                new string[] { "sexual" },
+                                                new object[] { 500 });
         }
 
         [Test]
         public void Heterosexual_WillMateWith_AcceptsHeteroPartners()
         {
             Assert.IsTrue(heteroFemaleHuman.Sexuality.WillMateWith(heteroFemaleHuman, heteroMaleHuman));
+        }
+
+        [Test]
+        public void Heterosexual_WillMateWith_RejectsHomoPartners()
+        {
+            Assert.IsFalse(heteroFemaleHuman.Sexuality.WillMateWith(heteroFemaleHuman, homoFemaleHumanLeft));
+        }
+
+        [Test]
+        public void Homosexual_WillMateWith_AcceptsHomoPartners()
+        {
+            Assert.IsTrue(homoMaleHumanLeft.Sexuality.WillMateWith(homoMaleHumanLeft, homoMaleHumanRight));
+        }
+
+        [Test]
+        public void Homosexual_WillMateWith_RejectsHeteroPartners()
+        {
+            Assert.IsFalse(homoMaleHumanLeft.Sexuality.WillMateWith(homoMaleHumanLeft, homoFemaleHumanRight));
         }
     }
 }
