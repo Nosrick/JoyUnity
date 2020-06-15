@@ -61,13 +61,13 @@ namespace JoyLib.Code.Entities
 
         protected IFOVHandler m_FOVHandler;
 
+        protected static IJoyAction s_WanderAction = ScriptingEngine.instance.FetchAction("wanderaction");
+
         protected const int XP_PER_LEVEL = 100;
         protected const int NEED_FULFILMENT_COUNTER = 5;
         protected const int REGEN_TICK_TIME = 10;
 
         protected const int ATTACK_THRESHOLD = -50;
-
-        protected static readonly Vector2Int NO_TARGET = new Vector2Int(-1, -1);
 
         /// <summary>
         /// Create an entity with job levels, equipment, family, etc
@@ -236,7 +236,7 @@ namespace JoyLib.Code.Entities
             m_CurrentTarget.intent = Intent.Interact;
             m_CurrentTarget.searching = false;
             m_CurrentTarget.target = null;
-            m_CurrentTarget.targetPoint = NO_TARGET;
+            m_CurrentTarget.targetPoint = GlobalConstants.NO_TARGET;
         }
 
         public void Tick()
@@ -377,6 +377,7 @@ namespace JoyLib.Code.Entities
                     //Act on first need
 
                     bool idle = true;
+                    bool wander = false;
                     foreach (INeed need in needs)
                     {
                         if (need.ContributingHappiness)
@@ -388,11 +389,28 @@ namespace JoyLib.Code.Entities
                         idle = false;
                         break;
                     }
+
+                    if(idle == true)
+                    {
+                        int result = RNG.instance.Roll(0, 10);
+                        if (result < 5)
+                        {
+                            wander = true;
+                        }
+                    }
+
+                    if(wander == true)
+                    {
+                        s_WanderAction.Execute(
+                            new JoyObject[] { this },
+                            new string[] {});
+                    }
+
                     m_CurrentTarget.idle = idle;
                 }
 
                 //If we're wandering, select a point we can see and wander there
-                if (CurrentTarget.searching && CurrentTarget.targetPoint == NO_TARGET)
+                if (CurrentTarget.searching && CurrentTarget.targetPoint == GlobalConstants.NO_TARGET)
                 {
                     List<Vector2Int> visibleSpots = new List<Vector2Int>();
                     List<Vector2Int> visibleWalls = MyWorld.GetVisibleWalls(this);
@@ -441,7 +459,7 @@ namespace JoyLib.Code.Entities
                     {
                         if (CurrentTarget.searching == true)
                         {
-                            m_CurrentTarget.targetPoint = NO_TARGET;
+                            m_CurrentTarget.targetPoint = GlobalConstants.NO_TARGET;
 
                             //Set idle to true so we look for stuff when we arrive
                             m_CurrentTarget.idle = true;
@@ -499,7 +517,7 @@ namespace JoyLib.Code.Entities
                 {
                     m_PathfindingData = m_Pathfinder.FindPath(WorldPosition, data.target.WorldPosition, MyWorld.Costs, GetFullVisionRect());
                 }
-                else if (data.targetPoint != NO_TARGET)
+                else if (data.targetPoint != GlobalConstants.NO_TARGET)
                 {
                     m_PathfindingData = m_Pathfinder.FindPath(WorldPosition, data.targetPoint, MyWorld.Costs, GetFullVisionRect());
                 }
@@ -636,33 +654,6 @@ namespace JoyLib.Code.Entities
                 ActionLog.WriteToLog(ex.StackTrace);
                 return new List<ItemInstance>().ToArray();
             }
-        }
-
-        public void Seek(JoyObject obj, string need)
-        {
-            NeedAIData needAIData = new NeedAIData
-            {
-                intent = Intent.Interact,
-                searching = false,
-                target = obj,
-                targetPoint = new Vector2Int(-1, -1),
-                need = need.ToLower()
-            };
-
-            this.CurrentTarget = needAIData;
-        }
-
-        public void Wander()
-        {
-            NeedAIData needAIData = new NeedAIData
-            {
-                idle = false,
-                intent = Intent.Interact,
-                searching = true,
-                targetPoint = NO_TARGET
-            };
-
-            this.CurrentTarget = needAIData;
         }
 
         public void PlaceItemInWorld(ItemInstance item)

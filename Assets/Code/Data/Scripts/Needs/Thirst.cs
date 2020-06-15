@@ -6,9 +6,24 @@ namespace JoyLib.Code.Entities.Needs
 {
     public class Thirst : AbstractNeed
     {
-        public Thirst() : base("thirst", 0, 1, true, 1, 1, 1, 1)
+        private readonly static string s_Name = "thirst";
+        
+        public Thirst() : 
+            base("thirst", 
+                    0, 
+                    1, 
+                    true, 
+                    1, 
+                    1, 
+                    1, 
+                    1, 
+                    new string[]{ 
+                        "seekaction", 
+                        "wanderaction" 
+                    }
+                )
         {
-
+            
         }
 
         public Thirst(string nameRef, 
@@ -30,6 +45,10 @@ namespace JoyLib.Code.Entities.Needs
                 happinessThresholdRef,
                 valueRef,
                 maxValueRef,
+                new string[] {
+                    "seekaction",
+                    "wanderaction"
+                },
                 averageForDayRef,
                 averageForWeekRef)
         {
@@ -103,11 +122,17 @@ namespace JoyLib.Code.Entities.Needs
                 }
                 else
                 {
-                    actor.Seek(chosenDrink, this.m_Name);
+                    m_CachedActions["seekaction"].Execute(
+                        new JoyObject[]{ actor, chosenDrink }, 
+                        new string[]{ "need", "thirst", "seek" },
+                        new object[] { "thirst" });
+                    return true;
                 }
             }
 
-            actor.Wander();
+            m_CachedActions["wanderaction"].Execute(
+                new JoyObject[] { actor },
+                new string[] { "need", "thirst", "wander" });
 
             return false;
         }

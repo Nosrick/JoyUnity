@@ -1,4 +1,6 @@
-﻿namespace JoyLib.Code
+﻿using UnityEngine;
+
+namespace JoyLib.Code
 {
     public static class GlobalConstants
     {
@@ -10,5 +12,7 @@
         public const int DEFAULT_SUCCESS_THRESHOLD = 7;
 
         public const int MINIMUM_VISION_DISTANCE = 3;
+
+        public static readonly Vector2Int NO_TARGET = new Vector2Int(-1, -1);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Rollers;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace JoyLib.Code.Entities.Needs
 {
@@ -8,9 +9,20 @@ namespace JoyLib.Code.Entities.Needs
     {
         private readonly static string s_Name = "hunger";
 
-        public Hunger() : base(s_Name, 0, 1, true, 1, 1, 1, 1)
+        public Hunger() : 
+            base(
+                s_Name, 
+                0, 
+                1, 
+                true, 
+                1, 
+                1, 
+                1, 
+                1,
+                new string[] { 
+                    "seekaction",
+                    "wanderaction"})
         {
-
         }
 
         public Hunger(
@@ -33,6 +45,10 @@ namespace JoyLib.Code.Entities.Needs
                 happinessThresholdRef, 
                 valueRef, 
                 maxValueRef, 
+                new string[] {
+                    "seekaction",
+                    "wanderaction"
+                },
                 averageForDayRef, 
                 averageForWeekRef)
         {
@@ -103,11 +119,17 @@ namespace JoyLib.Code.Entities.Needs
                 }
                 else
                 {
-                    actor.Seek(chosenFood, this.m_Name);
+                    m_CachedActions["seekaction"].Execute(
+                        new JoyObject[]{ actor },
+                        new string[] { "seek", "need", "hunger" },
+                        new object[] { chosenFood });
+                    return true;
                 }
             }
 
-            actor.Wander();
+            m_CachedActions["wanderaction"].Execute(
+                new JoyObject[]{ actor },
+                new string[] { "wander", "need", "hunger" });
 
             return false;
         }

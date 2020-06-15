@@ -11,7 +11,17 @@ namespace JoyLib.Code.Entities.Needs
     {
         private readonly static string s_Name = "sex";
 
-        public Sex() : base(s_Name, 0, 1, true, 1, 1, 1, 1)
+        public Sex() : 
+            base(
+                s_Name, 
+                0, 
+                1, 
+                true, 
+                1, 
+                1, 
+                1, 
+                1, 
+                new string[] { "seekaction" })
         {
 
         }
@@ -35,6 +45,7 @@ namespace JoyLib.Code.Entities.Needs
                 happinessThresholdRef,
                 valueRef,
                 maxValueRef,
+                new string[] { "seek" },
                 averageForDayRef,
                 averageForWeekRef)
         {
@@ -89,7 +100,10 @@ namespace JoyLib.Code.Entities.Needs
 
             if (bestMate != null)
             {
-                actor.Seek(bestMate, "sex");
+                m_CachedActions["seekaction"].Execute(
+                    new JoyObject[] { actor },
+                    new string[] { "need", "seek", "sex" },
+                    new object[] { bestMate });
                 return true;
             }
 
@@ -113,7 +127,6 @@ namespace JoyLib.Code.Entities.Needs
                         EntityStatistic.PERSONALITY });
 
                 int time = RNG.instance.Roll(5, 30);
-
 
                 if (user.FulfillmentData.Name.Equals(this.Name))
                 {

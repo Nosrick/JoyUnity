@@ -1,10 +1,14 @@
 ﻿using System;
 using UnityEngine;
+using JoyLib.Code.Scripting;
+using System.Collections.Generic;
 
 namespace JoyLib.Code.Entities.Needs
 {
     public abstract class AbstractNeed : INeed
     {
+        protected Dictionary<string, IJoyAction> m_CachedActions;
+
         protected string m_Name;
 
         //How quickly the need decays
@@ -36,8 +40,10 @@ namespace JoyLib.Code.Entities.Needs
         protected const int CLEAN_BONUS = 50;
 
         public AbstractNeed(string nameRef, int decayRef, int decayCounterRef, bool doesDecayRef, int priorityRef, int happinessThresholdRef,
-            int valueRef, int maxValueRef, int averageForDayRef = 0, int averageForWeekRef = 0)
+            int valueRef, int maxValueRef, string[] actions, int averageForDayRef = 0, int averageForWeekRef = 0)
         {
+            m_CachedActions = new Dictionary<string, IJoyAction>(actions.Length);
+
             m_Name = nameRef;
             m_Decay = decayRef;
             m_DecayCounter = decayCounterRef;
@@ -52,6 +58,11 @@ namespace JoyLib.Code.Entities.Needs
 
             m_AverageForDay = averageForDayRef;
             m_AverageForWeek = averageForWeekRef;
+
+            foreach(string action in actions)
+            {
+                m_CachedActions.Add(action, ScriptingEngine.instance.FetchAction(action));
+            }
         }
 
         public abstract bool FindFulfilmentObject(Entity actor);

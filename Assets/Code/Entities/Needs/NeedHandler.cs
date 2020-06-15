@@ -22,7 +22,7 @@ namespace JoyLib.Code.Entities.Needs
 
                 foreach (Type type in needTypes)
                 {
-                    if (typeof(INeed).IsAssignableFrom(type) == true && type.IsAbstract == false)
+                    if ((typeof(INeed)).IsAssignableFrom(type) == true && type.IsAbstract == false)
                     {
                         INeed newNeed = (INeed)Activator.CreateInstance(type);
                         m_Needs.Add(newNeed.Name, newNeed);
@@ -37,6 +37,7 @@ namespace JoyLib.Code.Entities.Needs
             {
                 Debug.LogError(ex.Message);
                 Debug.LogError(ex.StackTrace);
+                Debug.LogError(ex.InnerException.StackTrace);
             }
         }
 
