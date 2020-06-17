@@ -510,7 +510,7 @@ namespace JoyLib.Code.World
             if (item != null)
             {
                 item.OwnerGUID = entityRef.GUID;
-                entityRef.AddItem(item);
+                entityRef.AddContents(item);
                 m_Objects.Remove(item);
 
                 return item;
@@ -524,13 +524,13 @@ namespace JoyLib.Code.World
             if(leftItem != null)
             {
                 leftEntity.RemoveItemFromBackpack(leftItem);
-                rightEntity.AddItem(leftItem);
+                rightEntity.AddContents(leftItem);
             }
 
             if(rightItem != null)
             {
                 rightEntity.RemoveItemFromBackpack(rightItem);
-                leftEntity.AddItem(rightItem);
+                leftEntity.AddContents(rightItem);
             }
         }
 

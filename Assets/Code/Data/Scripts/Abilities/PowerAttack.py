@@ -22,5 +22,5 @@ class PowerAttack(AbstractAbility.AbstractAbility):
         userWeapon = user.GetEquipment("Hand1")
         totalDamage = CombatEngine.SwingWeapon(user, target, userWeapon, False) * 2
         target.DamageMe(totalDamage)
-        ActionLog.LogDamage(totalDamage, user, target, userWeapon)
+        ActionLog.instance.AddText(totalDamage, user, target, userWeapon)
         user.DecreaseMana(self.manaCost)

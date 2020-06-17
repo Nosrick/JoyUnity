@@ -14,23 +14,29 @@ namespace JoyLib.Code.Entities.Items
 {
     public class LiveItemHandler
     {
+        private static readonly Lazy<LiveItemHandler> lazy = new Lazy<LiveItemHandler>(() => new LiveItemHandler());
+
+        public static LiveItemHandler instance = lazy.Value;
+
         private Dictionary<long, ItemInstance> m_LiveItems;
 
-        private static List<BaseItemType> s_ItemDatabase;
+        private List<BaseItemType> m_ItemDatabase;
 
         public LiveItemHandler()
         {
             m_LiveItems = new Dictionary<long, ItemInstance>();
+
+            Initialise();
         }
 
-        public static bool Initialise()
+        public bool Initialise()
         {
-            if (s_ItemDatabase != null)
+            if (m_ItemDatabase != null)
             {
                 return true;
             }
 
-            s_ItemDatabase = LoadItems();
+            m_ItemDatabase = LoadItems();
             return true;
         }
 
@@ -119,7 +125,7 @@ namespace JoyLib.Code.Entities.Items
         protected BaseItemType[] FindItemsOfType(string[] tags)
         {
             List<BaseItemType> matchingTypes = new List<BaseItemType>();
-            foreach (BaseItemType itemType in s_ItemDatabase)
+            foreach (BaseItemType itemType in m_ItemDatabase)
             {
                 int matches = 0;
                 for (int i = 0; i < tags.Length; i++)
@@ -210,8 +216,8 @@ namespace JoyLib.Code.Entities.Items
 
         public ItemInstance CreateCompletelyRandomItem(bool identified = false, bool withAbility = false)
         {
-            int result = RNG.instance.Roll(0, s_ItemDatabase.Count - 1);
-            BaseItemType itemType = s_ItemDatabase[result];
+            int result = RNG.instance.Roll(0, m_ItemDatabase.Count - 1);
+            BaseItemType itemType = m_ItemDatabase[result];
             ItemInstance itemInstance = new ItemInstance(itemType, 
                                                         new Vector2Int(-1, -1), 
                                                         identified,

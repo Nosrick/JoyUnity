@@ -24,7 +24,7 @@ using UnityEngine;
 
 namespace JoyLib.Code.Entities
 {
-    public class Entity : JoyObject
+    public class Entity : JoyObject, IItemContainer
     {
         protected BasicValueContainer<IRollableValue> m_Statistics;
         protected BasicValueContainer<IGrowingValue> m_Skills;
@@ -114,6 +114,7 @@ namespace JoyLib.Code.Entities
                     template.Statistics[EntityStatistic.WIT]),
                 position,
                 template.Tileset,
+                new string[] { "fulfillneedaction" },
                 sprites,
                 template.Tags)
         {
@@ -274,7 +275,7 @@ namespace JoyLib.Code.Entities
                 {
                     for (int j = 0; j < steps[i].objects.Count; j++)
                     {
-                        AddItem(steps[i].objects[j]);
+                        AddContents(steps[i].objects[j]);
                     }
                 }
             }
@@ -393,7 +394,7 @@ namespace JoyLib.Code.Entities
                     if(idle == true)
                     {
                         int result = RNG.instance.Roll(0, 10);
-                        if (result < 5)
+                        if (result < 1)
                         {
                             wander = true;
                         }
@@ -556,23 +557,6 @@ namespace JoyLib.Code.Entities
             return m_Sexuality.WillMateWith(this, entityRef);
         }
 
-        public void AddItem(ItemInstance itemRef)
-        {
-            ItemInstance item = itemRef;
-            if (item == null)
-            {
-                return;
-            }
-
-            if (m_IdentifiedItems.Contains(item.JoyName))
-            {
-                item.IdentifyMe();
-                m_IdentifiedItems.Add(item.JoyName);
-            }
-
-            m_Backpack.Add(item);
-        }
-
         public void AddIdentifiedItem(string nameRef)
         {
             m_IdentifiedItems.Add(nameRef);
@@ -649,9 +633,9 @@ namespace JoyLib.Code.Entities
             }
             catch (Exception ex)
             {
-                ActionLog.WriteToLog("ERROR WHEN SEARCHING BACKPACK OF " + this.ToString());
-                ActionLog.WriteToLog(ex.Message);
-                ActionLog.WriteToLog(ex.StackTrace);
+                ActionLog.instance.AddText("ERROR WHEN SEARCHING BACKPACK OF " + this.ToString());
+                ActionLog.instance.AddText(ex.Message);
+                ActionLog.instance.AddText(ex.StackTrace);
                 return new List<ItemInstance>().ToArray();
             }
         }
@@ -702,7 +686,7 @@ namespace JoyLib.Code.Entities
             {
                 if (tuple.Item1.Equals(slot))
                 {
-                    AddItem(tuple.Item2);
+                    AddContents(tuple.Item2);
                     //TODO: Make this better
                     m_Equipment.Remove(tuple.Item1, tuple.Item2);
                     m_Equipment.Add(tuple.Item1, null);
@@ -855,18 +839,32 @@ namespace JoyLib.Code.Entities
             return null;
         }
 
-        public void FulfillNeed(string need, int value, JoyObject[] targets, int minutes = NEED_FULFILMENT_COUNTER)
-        {
-            m_Needs[need].Fulfill(value);
-
-            m_FulfillmentData = new FulfillmentData(need, minutes, targets);
-            ActionLog.AddText(this.ToString() + " is fulfilling need " + need);
-        }
-
         public bool PerformAction(IJoyAction action, JoyObject[] participants, string[] tags = null, params object[] args)
         {
-            ActionLog.WriteToLog(this.JoyName + "is performing " + action.ActionString);
+            ActionLog.instance.AddText(this.JoyName + "is performing " + action.ActionString);
             return action.Execute(participants, tags, args);
+        }
+
+        public List<ItemInstance> GetContents()
+        {
+            return m_Backpack;
+        }
+
+        public bool AddContents(JoyObject actor)
+        {
+            if(!(actor is ItemInstance item))
+            {
+                return false;
+            }
+
+            if (m_IdentifiedItems.Contains(item.JoyName))
+            {
+                item.IdentifyMe();
+                m_IdentifiedItems.Add(item.JoyName);
+            }
+
+            m_Backpack.Add(item);
+            return true;
         }
 
         public string CreatureType
@@ -1002,6 +1000,10 @@ namespace JoyLib.Code.Entities
             get
             {
                 return m_FulfillmentData;
+            }
+            set
+            {
+                m_FulfillmentData = value;
             }
         }
 

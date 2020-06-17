@@ -149,7 +149,7 @@ namespace JoyLib.Code.Cultures
             }
             catch (Exception e)
             {
-                ActionLog.WriteToLog("Could not find a culture for creature type " + type);
+                ActionLog.instance.AddText("Could not find a culture for creature type " + type);
                 throw new InvalidOperationException("Could not find a culture for creature type " + type, e);
             }
         }

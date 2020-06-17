@@ -83,9 +83,9 @@ namespace JoyLib.Code.Entities
                         }
                         catch(Exception e)
                         {
-                            ActionLog.WriteToLog("ERROR LOADING ABILITY FOR ENTITY TEMPLATE " + file);
-                            ActionLog.WriteToLog(e.Message);
-                            ActionLog.WriteToLog(e.StackTrace);
+                            ActionLog.instance.AddText("ERROR LOADING ABILITY FOR ENTITY TEMPLATE " + file);
+                            ActionLog.instance.AddText(e.Message);
+                            ActionLog.instance.AddText(e.StackTrace);
                         }
                         
 
@@ -95,9 +95,9 @@ namespace JoyLib.Code.Entities
                 }
                 catch (Exception e)
                 {
-                    ActionLog.WriteToLog("ERROR LOADING ENTITY TEMPLATES, FILE " + file);
-                    ActionLog.WriteToLog(e.Message);
-                    ActionLog.WriteToLog(e.StackTrace);
+                    ActionLog.instance.AddText("ERROR LOADING ENTITY TEMPLATES, FILE " + file);
+                    ActionLog.instance.AddText(e.Message);
+                    ActionLog.instance.AddText(e.StackTrace);
                 }
             }
 

@@ -45,7 +45,7 @@ namespace JoyLib.Code.Quests
         {
             for (int i = 0; i < quest.rewards.Count; i++)
             {
-                questor.AddItem(quest.rewards[i]);
+                questor.AddContents(quest.rewards[i]);
             }
             questor.AddExperience(quest.step * 10);
 

@@ -66,13 +66,11 @@ public class GameManager : MonoBehaviour
     private void InitialiseEverything()
     {
         RNG.instance.SetSeed(DateTime.Now.Millisecond);
-        ActionLog.OpenLog();
         ObjectIconHandler.instance.Load();
         WorldInfoHandler.instance.Load();
         AbilityHandler.instance.Initialise();
         EntityBioSexHandler.instance.Load(CultureHandler.instance.Cultures);
         EntitySexualityHandler.Load(CultureHandler.instance.Cultures);
-        LiveItemHandler.Initialise();
     }
 	
 	// Update is called once per frame

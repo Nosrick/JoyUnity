@@ -132,7 +132,7 @@ namespace JoyLib.Code.States
 
             m_Player.PlayerControlled = true;
 
-            m_Player.AddItem(WorldState.ItemHandler.CreateRandomItemOfType(new string[] { "light source" }, true));
+            m_Player.AddContents(WorldState.ItemHandler.CreateRandomItemOfType(new string[] { "light source" }, true));
         }
 
         public override GameState GetNextState()

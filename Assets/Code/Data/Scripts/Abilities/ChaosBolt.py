@@ -23,5 +23,5 @@ class ChaosBolt(AbstractAbility.AbstractAbility):
         tempWeapon = TemporaryWeaponMaker.Make(1, user.skills["Chaos Magic"].value * 3, "blasts", "Chaos Magic")
         totalDamage = CombatEngine.SwingWeapon(user, target, tempWeapon, False)
         target.DamageMe(totalDamage)
-        ActionLog.LogDamage(totalDamage, user, target, tempWeapon)
+        ActionLog.instance.AddText(totalDamage, user, target, tempWeapon)
         user.DecreaseMana(self.manaCost)

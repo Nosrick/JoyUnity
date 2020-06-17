@@ -87,9 +87,9 @@ namespace JoyLib.Code.Entities.Jobs
                         }
                         catch(Exception e)
                         {
-                            ActionLog.WriteToLog("ERROR LOADING ABILITIES FOR JOB, FILE " + file);
-                            ActionLog.WriteToLog(e.Message);
-                            ActionLog.WriteToLog(e.StackTrace);
+                            ActionLog.instance.AddText("ERROR LOADING ABILITIES FOR JOB, FILE " + file);
+                            ActionLog.instance.AddText(e.Message);
+                            ActionLog.instance.AddText(e.StackTrace);
                         }
                                                                         
 
@@ -101,9 +101,9 @@ namespace JoyLib.Code.Entities.Jobs
                 }
                 catch(Exception e)
                 {
-                    ActionLog.WriteToLog("ERROR LOADING JOBS, FILE " + file);
-                    ActionLog.WriteToLog(e.Message);
-                    ActionLog.WriteToLog(e.StackTrace);
+                    ActionLog.instance.AddText("ERROR LOADING JOBS, FILE " + file);
+                    ActionLog.instance.AddText(e.Message);
+                    ActionLog.instance.AddText(e.StackTrace);
                 }
             }
 

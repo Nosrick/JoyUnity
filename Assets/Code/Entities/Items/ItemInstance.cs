@@ -11,7 +11,7 @@ using UnityEngine;
 namespace JoyLib.Code.Entities.Items
 {
     [Serializable]
-    public class ItemInstance : JoyObject
+    public class ItemInstance : JoyObject, IItemContainer
     {
         protected bool m_Identified;
         protected long m_OwnerGUID;
@@ -28,6 +28,7 @@ namespace JoyLib.Code.Entities.Items
                     type.Weight),
                 position, 
                 type.SpriteSheet, 
+                new string[] {},
                 sprites, 
                 type.Tags)
         {            
@@ -48,6 +49,7 @@ namespace JoyLib.Code.Entities.Items
                 copy.m_Type.Weight),
                 copy.WorldPosition,
                 copy.m_Type.SpriteSheet,
+                copy.m_CachedActions.ToArray(),
                 copy.m_Icons,
                 copy.m_Type.Tags)
         {
@@ -133,6 +135,25 @@ namespace JoyLib.Code.Entities.Items
             }
 
             return null;
+        }
+
+        public List<ItemInstance> GetContents()
+        {
+            List<ItemInstance> contents = new List<ItemInstance>(m_Contents.Count);
+
+            foreach(long id in m_Contents)
+            {
+                contents.Add(LiveItemHandler.instance.GetInstance(id));
+            }
+
+            return contents;
+        }
+
+        public bool AddContents(JoyObject actor)
+        {
+            m_Contents.Add(actor.GUID);
+
+            return true;
         }
 
         public long OwnerGUID

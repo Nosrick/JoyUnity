@@ -158,8 +158,8 @@ namespace JoyLib.Code.Scripting
             }
             catch(Exception e)
             {
-                ActionLog.WriteToLog(e.Message);
-                ActionLog.WriteToLog(e.StackTrace);
+                ActionLog.instance.AddText(e.Message);
+                ActionLog.instance.AddText(e.StackTrace);
                 throw new InvalidOperationException("Error when finding action, no such action " + actionName);
             }
         }

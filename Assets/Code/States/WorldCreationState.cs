@@ -76,7 +76,7 @@ namespace JoyLib.Code.States
             Done = true;
 
             ItemInstance lightSource = WorldState.ItemHandler.CreateRandomItemOfType(new string[] { "light source" });
-            m_Player.AddItem(new ItemInstance(lightSource));
+            m_Player.AddContents(new ItemInstance(lightSource));
             m_World.Tick();
         }
 

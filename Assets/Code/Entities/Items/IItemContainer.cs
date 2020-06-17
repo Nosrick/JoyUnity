@@ -5,5 +5,7 @@ namespace JoyLib.Code.Entities.Items
     public interface IItemContainer
     {
         List<ItemInstance> GetContents();
+
+        bool AddContents(JoyObject actor);
     }
 }

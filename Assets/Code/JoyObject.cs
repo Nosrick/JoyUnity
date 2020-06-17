@@ -2,6 +2,7 @@
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Managers;
 using JoyLib.Code.Rollers;
+using JoyLib.Code.Scripting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,8 @@ public class JoyObject : IComparable
 
     protected int m_FramesSinceLastChange;
 
+    protected List<IJoyAction> m_CachedActions;
+
     protected const int FRAMES_PER_SECOND = 30;
 
     /// <summary>
@@ -36,7 +39,56 @@ public class JoyObject : IComparable
     /// <param name="baseType"></param>
     /// <param name="isAnimated"></param>
     /// <param name="isWall"></param>
-    public JoyObject(string name, BasicValueContainer<IDerivedValue> derivedValues, Vector2Int position, string tileSet, Sprite[] sprites, params string[] tags)
+    public JoyObject(
+        string name, 
+        BasicValueContainer<IDerivedValue> derivedValues, 
+        Vector2Int position, 
+        string tileSet, 
+        string[] actions,
+        Sprite[] sprites, 
+        params string[] tags)
+    {
+        this.m_CachedActions = new List<IJoyAction>();
+        this.JoyName = name;
+        this.GUID = GUIDManager.AssignGUID();
+
+        this.m_DerivedValues = derivedValues;
+
+        this.m_Tileset = tileSet;
+        this.m_Tags = tags.ToList();
+
+        this.m_WorldPosition = position;
+        this.Move(this.m_WorldPosition);
+
+        this.m_Icons = sprites;
+
+        //If it's not animated, select a random icon to represent it
+        if (!this.IsAnimated && sprites != null)
+        {
+            this.ChosenIcon = RNG.instance.Roll(0, sprites.Length - 1);
+        }
+        else
+        {
+            this.ChosenIcon = 0;
+        }
+
+        this.m_LastIcon = 0;
+        this.m_FramesSinceLastChange = 0;
+
+        foreach(string action in actions)
+        {
+            m_CachedActions.Add(ScriptingEngine.instance.FetchAction(action));
+        }
+    }
+
+    public JoyObject(
+        string name, 
+        BasicValueContainer<IDerivedValue> derivedValues, 
+        Vector2Int position, 
+        string tileSet, 
+        IJoyAction[] actions,
+        Sprite[] sprites, 
+        params string[] tags)
     {
         this.JoyName = name;
         this.GUID = GUIDManager.AssignGUID();
@@ -63,6 +115,8 @@ public class JoyObject : IComparable
 
         this.m_LastIcon = 0;
         this.m_FramesSinceLastChange = 0;
+
+        this.m_CachedActions = new List<IJoyAction>(actions);
     }
 
     ~JoyObject()

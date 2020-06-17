@@ -88,9 +88,9 @@ namespace JoyLib.Code.World
             }
             catch (Exception e)
             {
-                ActionLog.WriteToLog("ERROR GETTING WORLD INFO");
-                ActionLog.WriteToLog(e.Message);
-                ActionLog.WriteToLog(e.StackTrace);
+                ActionLog.instance.AddText("ERROR GETTING WORLD INFO");
+                ActionLog.instance.AddText(e.Message);
+                ActionLog.instance.AddText(e.StackTrace);
                 throw new InvalidOperationException("Error getting world info for " + name.ToLower());
             }
         }

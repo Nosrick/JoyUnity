@@ -9,26 +9,35 @@ using System.Threading;
 
 namespace JoyLib.Code.Helpers
 {
-    public static class ActionLog
+    public class ActionLog
     {
-        private static Queue<string> m_Log = new Queue<string>(10);
+        private static Lazy<ActionLog> lazy = new Lazy<ActionLog>(() => new ActionLog());
 
-        private static BlockingCollection<string> s_Queue = new BlockingCollection<string>();
-        private static Thread s_LogProcess;
+        public static ActionLog instance = lazy.Value;
+
+        private Queue<string> m_Log = new Queue<string>(10);
+
+        private BlockingCollection<string> m_Queue = new BlockingCollection<string>();
+        private Thread m_LogProcess;
 
         private const int LINES_TO_KEEP = 10;
 
         private const string FILENAME = "log";
 
-        private static StreamWriter s_LogFile;
+        private StreamWriter s_LogFile;
 
-        public static bool OpenLog()
+        public ActionLog()
+        {
+            OpenLog();
+        }
+
+        public bool OpenLog()
         {
             try
             {
                 File.Delete(FILENAME);
-                s_LogProcess = new Thread(new ThreadStart(ServiceQueue));
-                s_LogProcess.Start();
+                m_LogProcess = new Thread(new ThreadStart(ServiceQueue));
+                m_LogProcess.Start();
                 WriteToLog("Log Process Started");
                 return true;
             }
@@ -41,23 +50,28 @@ namespace JoyLib.Code.Helpers
             }
         }
 
-        public static void WriteToLog(string addition)
+        private void WriteToLog(string addition)
         {
-            s_Queue.Add(addition + "\n");
+            m_Queue.Add(addition + "\n");
         }
 
-        public static void ServiceQueue()
+        public void LogAction(Entity actor, string actionString)
+        {
+            AddText(actor.JoyName + " is " + actionString);
+        }
+
+        public void ServiceQueue()
         {
             while(true)
             {
-                foreach(string message in s_Queue.GetConsumingEnumerable())
+                foreach(string message in m_Queue.GetConsumingEnumerable())
                 {
                     File.AppendAllText(FILENAME, message);
                 }
             }
         }
 
-        public static void AddText(string stringToAdd, LogType logType = LogType.Information)
+        public void AddText(string stringToAdd, LogType logType = LogType.Information)
         {
             if (logType == LogType.Information || (logType == LogType.Debug && Debugger.IsAttached))
             {
@@ -71,13 +85,13 @@ namespace JoyLib.Code.Helpers
             }
         }
 
-        public static void LogDamage(int damage, Entity attacker, Entity defender, ItemInstance weapon)
+        public void LogDamage(int damage, Entity attacker, Entity defender, ItemInstance weapon)
         {
             string damageString = attacker.JoyName + " " + weapon.ItemType.ActionString + " " + defender.JoyName + " for " + damage + ".";
             AddText(damageString);
         }
 
-        public static Queue<string> Log
+        public Queue<string> Log
         {
             get
             {

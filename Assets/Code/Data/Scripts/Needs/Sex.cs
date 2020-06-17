@@ -21,7 +21,11 @@ namespace JoyLib.Code.Entities.Needs
                 1, 
                 1, 
                 1, 
-                new string[] { "seekaction" })
+                new string[] { 
+                    "seekaction",
+                    "wanderaction",
+                    "fulfillneedaction"
+                })
         {
 
         }
@@ -45,7 +49,11 @@ namespace JoyLib.Code.Entities.Needs
                 happinessThresholdRef,
                 valueRef,
                 maxValueRef,
-                new string[] { "seek" },
+                new string[] { 
+                    "seekaction",
+                    "wanderaction",
+                    "fulfillneedaction"
+                 },
                 averageForDayRef,
                 averageForWeekRef)
         {
@@ -106,8 +114,14 @@ namespace JoyLib.Code.Entities.Needs
                     new object[] { bestMate });
                 return true;
             }
-
-            return false;
+            else
+            {
+                m_CachedActions["wanderaction"].Execute(
+                    new JoyObject[] { actor },
+                    new string[] { "need", "wander", "sex" },
+                    new object[] {});
+                return true;
+            }
         }
 
         public override bool Interact(Entity user, JoyObject obj)
@@ -123,34 +137,29 @@ namespace JoyLib.Code.Entities.Needs
                     new Entity[] { user, partner },
                     new string[] {
                         EntityStatistic.ENDURANCE,
-                        EntityStatistic.INTELLECT,
+                        EntityStatistic.CUNNING,
                         EntityStatistic.PERSONALITY });
 
                 int time = RNG.instance.Roll(5, 30);
 
-                if (user.FulfillmentData.Name.Equals(this.Name))
+                if (user.FulfillmentData.Name.Equals(this.Name) && 
+                partner.FulfillmentData.Name.Equals(this.Name))
                 {
-                    if (user.FulfillmentData.Name.Equals(this.Name))
-                    {
-                        HashSet<JoyObject> newTargets = new HashSet<JoyObject>(user.FulfillmentData.Targets);
-                        newTargets.Add(partner);
-                        user.FulfillNeed(this.Name, satisfaction, newTargets.ToArray(), time);
-                    }
-                }
-                else
-                {
-                    user.FulfillNeed(this.Name, satisfaction, new JoyObject[] { partner }, time);
-                }
+                    HashSet<JoyObject> userParticipants = new HashSet<JoyObject>(user.FulfillmentData.Targets);
+                    userParticipants.Add(user);
+                    userParticipants.Add(partner);
+                    m_CachedActions["fulfillneedaction"].Execute(
+                        userParticipants.ToArray(),
+                        new string[] { "sex", "need", "fulfill" },
+                        new object[] { this.Name, satisfaction, time });
 
-                if (partner.FulfillmentData.Name.Equals(this.Name))
-                {
-                    HashSet<JoyObject> newTargets = new HashSet<JoyObject>(partner.FulfillmentData.Targets);
-                    newTargets.Add(user);
-                    partner.FulfillNeed(this.Name, satisfaction, newTargets.ToArray(), time);
-                }
-                else
-                {
-                    partner.FulfillNeed(this.Name, satisfaction, new JoyObject[] { user }, time);
+                    HashSet<JoyObject> partnerParticipants = new HashSet<JoyObject>(partner.FulfillmentData.Targets);
+                    partnerParticipants.Add(partner);
+                    partnerParticipants.Add(user);
+                    m_CachedActions["fulfillneedaction"].Execute(
+                        partnerParticipants.ToArray(),
+                        new string[] { "sex", "need", "fulfill" },
+                        new object[] { this.Name, satisfaction, time });
                 }
             }
 

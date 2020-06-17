@@ -2,18 +2,33 @@
 using JoyLib.Code.Entities.Statistics;
 using System;
 using System.Linq;
+using System.Collections.Generic;
+using JoyLib.Code.Scripting;
 
 namespace JoyLib.Code.Entities.Abilities
 {
     public abstract class AbstractAbility : IAbility
     {
+        protected readonly Dictionary<string, IJoyAction> m_CachedActions;
+
         public AbstractAbility()
         {
-
         }
 
-        public AbstractAbility(string name, string internalName, string description, bool stacking, int counter, int magnitude,
-            int priority, bool permanent, Tuple<IBasicValue, int>[] costs, AbilityTrigger trigger, AbilityTarget target, params string[] tags)
+        public AbstractAbility(
+            string name, 
+            string internalName, 
+            string description, 
+            bool stacking, 
+            int counter, 
+            int magnitude,
+            int priority, 
+            bool permanent, 
+            string[] actions,
+            Tuple<IBasicValue, int>[] costs, 
+            AbilityTrigger trigger, 
+            AbilityTarget target, 
+            params string[] tags)
         {
             this.Name = name;
             this.InternalName = internalName;
@@ -27,6 +42,13 @@ namespace JoyLib.Code.Entities.Abilities
             this.AbilityTrigger = trigger;
             this.TargetType = target;
             this.Tags = tags;
+
+            this.m_CachedActions = new Dictionary<string, IJoyAction>(actions.Length);
+
+            foreach(string action in actions)
+            {
+                this.m_CachedActions.Add(action, ScriptingEngine.instance.FetchAction(action));
+            }
         }
 
         //When the entity attacks, before any resolution occurs
