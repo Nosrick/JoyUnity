@@ -3,23 +3,21 @@ using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Rollers;
+using JoyLib.Code.Collections;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using UnityEngine;
 
 namespace JoyLib.Code.Entities
 {
-    public class EntityTemplateHandler
+    public class EntityTemplateHandler : MonoBehaviour
     {
-        private static readonly Lazy<EntityTemplateHandler> lazy = new Lazy<EntityTemplateHandler>(() => new EntityTemplateHandler());
-
-        public static EntityTemplateHandler instance => lazy.Value;
-
         private List<EntityTemplate> m_Templates;
 
-        public EntityTemplateHandler()
+        public void Awake()
         {
             m_Templates = LoadTypes();
         }
@@ -27,6 +25,9 @@ namespace JoyLib.Code.Entities
         private List<EntityTemplate> LoadTypes()
         {
             List<EntityTemplate> entities = new List<EntityTemplate>();
+
+            NeedHandler needHandler = GameObject.Find("GameManager")
+                                        .GetComponent<NeedHandler>();
             
             string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Entities", "*.xml", SearchOption.AllDirectories);
 
@@ -48,7 +49,7 @@ namespace JoyLib.Code.Entities
                         BasicValueContainer<IRollableValue> statisticContainer = new BasicValueContainer<IRollableValue>(statFudge);
 
                         List<INeed> needs = (from need in entity.Elements("Need")
-                                             select NeedHandler.instance.GetRandomised(need.DefaultIfEmpty("DEFAULT").ToLower())).ToList();
+                                             select needHandler.GetRandomised(need.DefaultIfEmpty("DEFAULT").ToLower())).ToList();
                         BasicValueContainer<INeed> needContainer = new BasicValueContainer<INeed>(needs);
 
                         List<EntitySkill> skills = (from skill in entity.Elements("Skill")

@@ -8,15 +8,20 @@ using UnityEngine;
 
 namespace JoyLib.Code.World.Generators.Interiors
 {
-    public static class DungeonItemPlacer
+    public class DungeonItemPlacer
     {
+        protected static ItemFactory s_ItemFactory = new ItemFactory();
+
+        protected static LiveItemHandler s_ItemHandler = GameObject.Find("GameManager")
+                                                            .GetComponent<LiveItemHandler>();
+
         /// <summary>
         /// Places items in the dungeon
         /// </summary>
         /// <param name="worldRef">The world in which to place the items</param>
         /// <param name="prosperity">The prosperity of the world, the lower the better</param>
         /// <returns>The items placed</returns>
-        public static List<ItemInstance> PlaceItems(WorldInstance worldRef, int prosperity = 50)
+        public List<ItemInstance> PlaceItems(WorldInstance worldRef, int prosperity = 50)
         {
             List<ItemInstance> placedItems = new List<ItemInstance>();
 
@@ -38,7 +43,8 @@ namespace JoyLib.Code.World.Generators.Interiors
                     point = new Vector2Int(RNG.instance.Roll(1, worldRef.Tiles.GetLength(0) - 1), RNG.instance.Roll(1, worldRef.Tiles.GetLength(1) - 1));
                 }
 
-                ItemInstance item = WorldState.ItemHandler.CreateCompletelyRandomItem();
+                ItemInstance item = s_ItemFactory.CreateCompletelyRandomItem();
+                s_ItemHandler.AddItem(item);
                 item.Move(point);
                 placedItems.Add(item);
             }

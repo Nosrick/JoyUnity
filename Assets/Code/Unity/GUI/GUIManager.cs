@@ -48,5 +48,18 @@ namespace JoyLib.Code.Unity.GUI
         {
             return m_ActiveGUI.Item2;
         }
+
+        public GameObject GetGUI(string name)
+        {
+            foreach(Tuple<GameObject, bool> gui in m_GUIs)
+            {
+                if(gui.Item1.name.Equals(name))
+                {
+                    return gui.Item1;
+                }
+            }
+
+            throw new InvalidOperationException("Could not find GUI by name " + name);
+        }
     }
 }

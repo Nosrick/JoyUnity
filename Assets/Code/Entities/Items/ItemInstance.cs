@@ -21,6 +21,8 @@ namespace JoyLib.Code.Entities.Items
 
         protected IAbility m_Ability;
 
+        protected static LiveItemHandler s_ItemHandler = GameObject.Find("WorldObjects").GetComponent<LiveItemHandler>();
+
         public ItemInstance(BaseItemType type, Vector2Int position, bool identified, Sprite[] sprites, IAbility abilityRef = null) :
             base(type.UnidentifiedName, 
                 EntityDerivedValue.GetDefaultForItem(
@@ -129,7 +131,7 @@ namespace JoyLib.Code.Entities.Items
         {
             if(index > 0 && index < m_Contents.Count)
             {
-                ItemInstance item = WorldState.ItemHandler.GetInstance(m_Contents[index]);
+                ItemInstance item = s_ItemHandler.GetInstance(m_Contents[index]);
                 m_Contents.RemoveAt(index);
                 return item;
             }
@@ -143,7 +145,7 @@ namespace JoyLib.Code.Entities.Items
 
             foreach(long id in m_Contents)
             {
-                contents.Add(LiveItemHandler.instance.GetInstance(id));
+                contents.Add(s_ItemHandler.GetInstance(id));
             }
 
             return contents;
@@ -307,7 +309,7 @@ namespace JoyLib.Code.Entities.Items
                 List<ItemInstance> contents = new List<ItemInstance>();
                 foreach(long GUID in m_Contents)
                 {
-                    contents.Add(WorldState.ItemHandler.GetInstance(GUID));
+                    contents.Add(s_ItemHandler.GetInstance(GUID));
                 }
                 return contents;
             }

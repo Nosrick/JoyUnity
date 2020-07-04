@@ -12,9 +12,12 @@ namespace JoyLib.Code.States
 {
     public class WorldCreationState : GameState
     {
-        private Entity m_Player;
+        protected Entity m_Player;
 
-        private WorldInstance m_World;
+        protected WorldInstance m_World;
+
+        protected WorldInfoHandler m_WorldInfoHandler = GameObject.Find("GameManager")
+                                                            .GetComponent<WorldInfoHandler>();
 
         protected const int SIMULATION_TICKS = 600;
 
@@ -67,7 +70,7 @@ namespace JoyLib.Code.States
             m_World.AddEntity(m_Player);
 
             //Begin the first floor of the Naga Pits
-            WorldInfo worldInfo = WorldInfoHandler.instance.GetWorldInfo("naga pits")[0];
+            WorldInfo worldInfo = m_WorldInfoHandler.GetWorldInfo("naga pits")[0];
 
             WorldInstance dungeon = DungeonGenerator.GenerateDungeon(worldInfo, WORLD_SIZE, 3);
 
@@ -75,7 +78,8 @@ namespace JoyLib.Code.States
             m_World.AddArea(transitionPoint, dungeon);
             Done = true;
 
-            ItemInstance lightSource = WorldState.ItemHandler.CreateRandomItemOfType(new string[] { "light source" });
+            ItemFactory itemFactory = new ItemFactory();
+            ItemInstance lightSource = itemFactory.CreateRandomItemOfType(new string[] { "light source" });
             m_Player.AddContents(new ItemInstance(lightSource));
             m_World.Tick();
         }

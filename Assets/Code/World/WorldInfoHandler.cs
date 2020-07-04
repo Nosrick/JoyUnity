@@ -5,16 +5,23 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using UnityEngine;
 
 namespace JoyLib.Code.World
 {
-    public class WorldInfoHandler
+    public class WorldInfoHandler : MonoBehaviour
     {
-        private static readonly Lazy<WorldInfoHandler> lazy = new Lazy<WorldInfoHandler>(() => new WorldInfoHandler());
-
-        public static WorldInfoHandler instance = lazy.Value;
+        protected ObjectIconHandler m_ObjectIcons;
 
         private List<WorldInfo> m_WorldInfo;
+
+        public void Awake()
+        {
+            m_ObjectIcons = GameObject.Find("GameManager")
+                                .GetComponent<ObjectIconHandler>();
+
+            Load();
+        }
 
         public bool Load()
         {
@@ -64,7 +71,7 @@ namespace JoyLib.Code.World
 
                     m_WorldInfo.Add(info);
 
-                    ObjectIconHandler.instance.AddIcons(
+                    m_ObjectIcons.AddIcons(
                         filename,
                         info.tileset,
                         iconData.ToArray());

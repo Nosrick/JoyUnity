@@ -8,7 +8,10 @@ namespace JoyLib.Code.World.Generators.Interiors
 {
     public class DungeonInteriorGenerator : IWorldSpaceGenerator
     {
-        private GeneratorTileType[,] m_UntreatedTiles;
+        protected GeneratorTileType[,] m_UntreatedTiles;
+
+        protected static ObjectIconHandler s_ObjectIcons = GameObject.Find("GameManager")
+                                                            .GetComponent<ObjectIconHandler>();
 
         public WorldTile[,] GenerateWorldSpace(int sizeRef, string tileSet)
         {
@@ -48,7 +51,7 @@ namespace JoyLib.Code.World.Generators.Interiors
         public List<JoyObject> GenerateWalls(WorldTile[,] worldTiles)
         {
             List<JoyObject> walls = new List<JoyObject>();
-            Sprite[] sprites = ObjectIconHandler.instance.GetSprites(TileSet, "surroundwall");
+            Sprite[] sprites = s_ObjectIcons.GetSprites(TileSet, "surroundwall");
 
             for (int i = 0; i < m_UntreatedTiles.GetLength(0); i++)
             {

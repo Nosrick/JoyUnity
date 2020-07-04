@@ -1,5 +1,6 @@
 ﻿using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Collections;
 using System.Linq;
 
 namespace JoyLib.Code.Entities

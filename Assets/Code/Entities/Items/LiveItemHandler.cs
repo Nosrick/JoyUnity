@@ -6,41 +6,35 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Xml;
 using System.Xml.Linq;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities.Items
 {
-    public class LiveItemHandler
+    public class LiveItemHandler : MonoBehaviour
     {
-        private static readonly Lazy<LiveItemHandler> lazy = new Lazy<LiveItemHandler>(() => new LiveItemHandler());
-
-        public static LiveItemHandler instance = lazy.Value;
-
         private Dictionary<long, ItemInstance> m_LiveItems;
 
         private List<BaseItemType> m_ItemDatabase;
 
-        public LiveItemHandler()
-        {
-            m_LiveItems = new Dictionary<long, ItemInstance>();
+        private ObjectIconHandler m_ObjectIcons;
 
+        public void Awake()
+        {
             Initialise();
         }
 
-        public bool Initialise()
+        protected void Initialise()
         {
-            if (m_ItemDatabase != null)
-            {
-                return true;
-            }
+            m_LiveItems = new Dictionary<long, ItemInstance>();
+
+            m_ObjectIcons = GameObject.Find("GameManager")
+                                .GetComponent<ObjectIconHandler>();
 
             m_ItemDatabase = LoadItems();
-            return true;
         }
 
-        public static List<BaseItemType> LoadItems()
+        protected List<BaseItemType> LoadItems()
         {
             List<BaseItemType> items = new List<BaseItemType>();
 
@@ -90,7 +84,7 @@ namespace JoyLib.Code.Entities.Items
                                                    position = new Vector2Int(item.Element("X").GetAs<int>(), item.Element("Y").GetAs<int>())
                                                }).ToList();
 
-                    ObjectIconHandler.instance.AddIcons(fileName, tileSet, iconData.ToArray());
+                    m_ObjectIcons.AddIcons(fileName, tileSet, iconData.ToArray());
                 }
 
 
@@ -122,10 +116,10 @@ namespace JoyLib.Code.Entities.Items
             return items;
         }
 
-        protected BaseItemType[] FindItemsOfType(string[] tags)
+        public BaseItemType[] FindItemsOfType(string[] tags)
         {
             List<BaseItemType> matchingTypes = new List<BaseItemType>();
-            foreach (BaseItemType itemType in m_ItemDatabase)
+            foreach (BaseItemType itemType in ItemDatabase)
             {
                 int matches = 0;
                 for (int i = 0; i < tags.Length; i++)
@@ -143,99 +137,63 @@ namespace JoyLib.Code.Entities.Items
             return matchingTypes.ToArray();
         }
 
-        public ItemInstance CreateRandomItemOfType(string[] tags, bool identified = false)
-        {
-            BaseItemType[] matchingTypes = FindItemsOfType(tags);
-            if (matchingTypes.Length > 0)
-            {
-                int result = RNG.instance.Roll(0, matchingTypes.Length - 1);
-                BaseItemType itemType = matchingTypes[result];
-
-                ItemInstance itemInstance = new ItemInstance(itemType, 
-                                                            new Vector2Int(-1, -1), 
-                                                            identified, 
-                                                            ObjectIconHandler.instance.GetSprites(
-                                                                itemType.SpriteSheet,
-                                                                itemType.UnidentifiedName));
-                m_LiveItems.Add(itemInstance.GUID, itemInstance);
-
-                return itemInstance;
-            }
-
-            return null;
-        }
-
-        public ItemInstance CreateSpecificType(string name, string[] tags, bool identified = false)
-        {
-            string lowerName = name.ToLowerInvariant();
-            BaseItemType[] matchingTypes = FindItemsOfType(tags);
-            List<BaseItemType> secondRound = new List<BaseItemType>();
-            foreach (BaseItemType itemType in matchingTypes)
-            {
-                if (identified == false)
-                {
-                    if (itemType.UnidentifiedName.ToLowerInvariant() == lowerName)
-                    {
-                        secondRound.Add(itemType);
-                    }
-                }
-                else
-                {
-                    if (itemType.IdentifiedName == lowerName)
-                    {
-                        secondRound.Add(itemType);
-                    }
-                }
-            }
-            if (secondRound.Count > 0)
-            {
-                int result = RNG.instance.Roll(0, secondRound.Count - 1);
-                BaseItemType type = secondRound[result];
-                ItemInstance itemInstance = new ItemInstance(type, 
-                                                            new Vector2Int(-1, -1), 
-                                                            identified,
-                                                            ObjectIconHandler.instance.GetSprites(
-                                                                type.SpriteSheet,
-                                                                type.UnidentifiedName));
-                m_LiveItems.Add(itemInstance.GUID, itemInstance);
-                return itemInstance;
-            }
-
-            return null;
-        }
+        
 
         public ItemInstance GetInstance(long GUID)
         {
-            if (m_LiveItems.ContainsKey(GUID))
+            if (LiveItems.ContainsKey(GUID))
             {
-                return m_LiveItems[GUID];
+                return LiveItems[GUID];
             }
 
             return null;
         }
 
-        public ItemInstance CreateCompletelyRandomItem(bool identified = false, bool withAbility = false)
+        public bool AddItem(ItemInstance item)
         {
-            int result = RNG.instance.Roll(0, m_ItemDatabase.Count - 1);
-            BaseItemType itemType = m_ItemDatabase[result];
-            ItemInstance itemInstance = new ItemInstance(itemType, 
-                                                        new Vector2Int(-1, -1), 
-                                                        identified,
-                                                        ObjectIconHandler.instance.GetSprites(
-                                                            itemType.SpriteSheet,
-                                                            itemType.UnidentifiedName));
-            m_LiveItems.Add(itemInstance.GUID, itemInstance);
-            return itemInstance;
+            if(LiveItems.ContainsKey(item.GUID))
+            {
+                return false;
+            }
+
+            LiveItems.Add(item.GUID, item);
+            return true;
         }
 
-        public class ItemCreationException : Exception
+        public bool RemoveItem(long GUID)
         {
-            public BaseItemType ItemType;
-
-            public ItemCreationException(BaseItemType itemType, string message) :
-                base(message)
+            if(LiveItems.ContainsKey(GUID))
             {
-                ItemType = itemType;
+                LiveItems.Remove(GUID);
+                return true;
+            }
+
+            return false;
+        }
+
+        public List<BaseItemType> ItemDatabase
+        {
+            get
+            {
+                if(m_ItemDatabase is null)
+                {
+                    Initialise();
+                }
+
+                return new List<BaseItemType>(m_ItemDatabase);
+            }
+        }
+
+        protected Dictionary<long, ItemInstance> LiveItems
+        {
+            get
+            {
+                if(m_LiveItems is null)
+                {
+                    Initialise();
+                }
+
+                return m_LiveItems;
             }
         }
     }

@@ -5,18 +5,15 @@ using System.Linq;
 using System.IO;
 using System.Xml.Linq;
 using JoyLib.Code.Graphics;
+using UnityEngine;
 
 namespace JoyLib.Code.Cultures
 {
-    public class CultureHandler
-    {
-        private static readonly Lazy<CultureHandler> lazy = new Lazy<CultureHandler>(() => new CultureHandler());
+    public class CultureHandler : MonoBehaviour
+    {        
+        protected Dictionary<string, CultureType> m_Cultures;
 
-        public static CultureHandler instance => lazy.Value;
-        
-        private Dictionary<string, CultureType> m_Cultures;
-
-        public CultureHandler()
+        public void Awake()
         {
             m_Cultures = new Dictionary<string, CultureType>();
 
@@ -27,6 +24,9 @@ namespace JoyLib.Code.Cultures
         {
             string folderPath = Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Cultures";
             string[] files = Directory.GetFiles(folderPath, "*.xml");
+
+            ObjectIconHandler objectIcons = GameObject.Find("GameManager")
+                                                .GetComponent<ObjectIconHandler>();
 
             Dictionary<string, CultureType> cultures = new Dictionary<string, CultureType>();
 
@@ -108,7 +108,7 @@ namespace JoyLib.Code.Cultures
                                                     cultureIcons.Element("Y").GetAs<int>())
                                             }).ToArray();
 
-                        ObjectIconHandler.instance.AddIcons(
+                        objectIcons.AddIcons(
                             filename, tileSet, icons);
                     }
 

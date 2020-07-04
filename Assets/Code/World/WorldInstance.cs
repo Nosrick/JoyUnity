@@ -54,6 +54,10 @@ namespace JoyLib.Code.World
         [NonSerialized]
         protected GameObject m_EntityHolder;
 
+        [NonSerialized]
+        protected static LiveEntityHandler s_EntityHandler = GameObject.Find("GameManager")
+                                                                .GetComponent<LiveEntityHandler>();
+
         /// <summary>
         /// A template for adding stuff to later. A blank WorldInstance.
         /// </summary>
@@ -653,7 +657,7 @@ namespace JoyLib.Code.World
                 }
             }
             CalculatePlayerIndex();
-            WorldState.EntityHandler.Remove(entityGUID);
+            s_EntityHandler.Remove(entityGUID);
             
             for (int i = 0; i < m_EntityHolder.transform.childCount; i++)
             {

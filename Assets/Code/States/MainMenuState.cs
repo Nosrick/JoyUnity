@@ -6,7 +6,9 @@ namespace JoyLib.Code.States
 {
     class MainMenuState : GameState
     {
-        private GameState m_NextState;
+        protected GameState m_NextState;
+
+        protected WorldSerialiser m_WorldSerialiser = new WorldSerialiser();
 
         public MainMenuState() :
             base()
@@ -46,7 +48,7 @@ namespace JoyLib.Code.States
 
         private void ContinueGame(object sender, EventArgs eventArgs)
         {
-            WorldInstance overworld = WorldSerialiser.Deserialise("Everse");
+            WorldInstance overworld = m_WorldSerialiser.Deserialise("Everse");
             Done = true;
 
             WorldInstance playerWorld = overworld.Player.MyWorld;

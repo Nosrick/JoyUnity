@@ -10,9 +10,18 @@ using UnityEngine;
 
 namespace JoyLib.Code.Quests
 {
-    public static class QuestProvider
+    public class QuestProvider : MonoBehaviour
     {
-        public static Quest MakeRandomQuest(Entity questor, Entity provider, WorldInstance overworldRef)
+        protected BagOfGoldHelper m_BagOfGoldHelper;
+        
+        protected ItemFactory m_ItemFactory;
+
+        public void Start()
+        {
+            m_BagOfGoldHelper = new BagOfGoldHelper();
+        }
+
+        public Quest MakeRandomQuest(Entity questor, Entity provider, WorldInstance overworldRef)
         {
             List<QuestStep> steps = new List<QuestStep>();
 
@@ -44,16 +53,16 @@ namespace JoyLib.Code.Quests
             return new Quest(steps, QuestMorality.Neutral, GetRewards(questor, provider, steps));
         }
 
-        private static List<ItemInstance> GetRewards(Entity questor, Entity provider, List<QuestStep> steps)
+        private List<ItemInstance> GetRewards(Entity questor, Entity provider, List<QuestStep> steps)
         {
             List<ItemInstance> rewards = new List<ItemInstance>();
             int reward = ((steps.Count * 100) + (EntityRelationshipHandler.instance.GetHighestRelationshipValue(provider, questor)));
-            rewards.Add(BagOfGoldHelper.GetBagOfGold(reward));
+            rewards.Add(m_BagOfGoldHelper.GetBagOfGold(reward));
 
             return rewards;
         }
 
-        public static QuestStep MakeDeliveryQuest(Entity provider, WorldInstance overworldRef)
+        public QuestStep MakeDeliveryQuest(Entity provider, WorldInstance overworldRef)
         {
             QuestAction action = QuestAction.Deliver;
 
@@ -68,14 +77,14 @@ namespace JoyLib.Code.Quests
             Entity endPoint = overworldRef.GetRandomSentientWorldWide();
             if(deliveryItem == null)
             {
-                deliveryItem = WorldState.ItemHandler.CreateCompletelyRandomItem();
+                deliveryItem = m_ItemFactory.CreateCompletelyRandomItem();
             }
 
             QuestStep step = new QuestStep(action, new List<ItemInstance>() { deliveryItem }, new List<JoyObject>() { endPoint }, new List<WorldInstance>());
             return step;
         }
 
-        public static QuestStep MakeDestroyQuest(Entity provider, WorldInstance overworldRef)
+        public QuestStep MakeDestroyQuest(Entity provider, WorldInstance overworldRef)
         {
             QuestAction action = QuestAction.Destroy;
 
@@ -112,7 +121,7 @@ namespace JoyLib.Code.Quests
             return step;
         }
 
-        public static QuestStep MakeRetrieveQuest(Entity provider, WorldInstance overworldRef)
+        public QuestStep MakeRetrieveQuest(Entity provider, WorldInstance overworldRef)
         {
             QuestAction action = QuestAction.Retrieve;
 
@@ -140,7 +149,7 @@ namespace JoyLib.Code.Quests
             return step;
         }
 
-        public static QuestStep MakeExploreQuest(Entity provider, WorldInstance overworldRef)
+        public QuestStep MakeExploreQuest(Entity provider, WorldInstance overworldRef)
         {
             QuestAction action = QuestAction.Explore;
 

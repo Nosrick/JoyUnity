@@ -1,4 +1,5 @@
 ﻿using JoyLib.Code.Entities.Statistics.Formulas;
+using JoyLib.Code.Collections;
 using System;
 
 namespace JoyLib.Code.Entities.Statistics

@@ -61,6 +61,8 @@ namespace JoyLib.Code.Entities
 
         protected IFOVHandler m_FOVHandler;
 
+        protected static NaturalWeaponHelper s_NaturalWeaponHelper = new NaturalWeaponHelper();
+
         protected static IJoyAction s_WanderAction = ScriptingEngine.instance.FetchAction("wanderaction");
 
         protected const int XP_PER_LEVEL = 100;
@@ -199,7 +201,7 @@ namespace JoyLib.Code.Entities
         public Entity(EntityTemplate template, BasicValueContainer<INeed> needs, List<CultureType> cultures, IGrowingValue level, JobType job, IBioSex sex, ISexuality sexuality,
             Vector2Int position, Sprite[] sprites, WorldInstance world) :
             this(template, needs, cultures, level, 0, job, sex, sexuality, position, sprites,
-                NaturalWeaponHelper.MakeNaturalWeapon(template.Size), new NonUniqueDictionary<string, ItemInstance>(),
+                s_NaturalWeaponHelper.MakeNaturalWeapon(template.Size), new NonUniqueDictionary<string, ItemInstance>(),
                 new List<ItemInstance>(), new List<string>(), new Dictionary<string, int>(), world)
         {
         }

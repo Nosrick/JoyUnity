@@ -10,6 +10,8 @@ namespace JoyLib.Code.World.Generators.Interiors
         {
             DungeonInteriorGenerator interiorGenerator = new DungeonInteriorGenerator();
             SpawnPointPlacer spawnPointPlacer = new SpawnPointPlacer();
+            DungeonItemPlacer itemPlacer = new DungeonItemPlacer();
+            DungeonEntityPlacer entityPlacer = new DungeonEntityPlacer();
 
             List<string> entitiesToPlace = new List<string>();
             entitiesToPlace.AddRange(worldInfo.inhabitants);
@@ -27,13 +29,13 @@ namespace JoyLib.Code.World.Generators.Interiors
                     worldInstance.AddObject(wall);
                 }
 
-                List<ItemInstance> items = DungeonItemPlacer.PlaceItems(worldInstance);
+                List<ItemInstance> items = itemPlacer.PlaceItems(worldInstance);
                 foreach(ItemInstance item in items)
                 {
                     worldInstance.AddObject(item);
                 }
 
-                List<Entity> entities = DungeonEntityPlacer.PlaceEntities(worldInstance, entitiesToPlace);
+                List<Entity> entities = entityPlacer.PlaceEntities(worldInstance, entitiesToPlace);
                 foreach(Entity entity in entities)
                 {
                     worldInstance.AddEntity(entity);

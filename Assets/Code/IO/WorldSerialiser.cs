@@ -9,9 +9,12 @@ using UnityEngine;
 
 namespace JoyLib.Code.IO
 {
-    public static class WorldSerialiser
+    public class WorldSerialiser
     {
-        public static void Serialise(WorldInstance world)
+        protected static ObjectIconHandler s_ObjectIcons = GameObject.Find("GameManager")
+                                                            .GetComponent<ObjectIconHandler>();
+
+        public void Serialise(WorldInstance world)
         {
             try
             {
@@ -41,7 +44,7 @@ namespace JoyLib.Code.IO
             }
         }
 
-        public static WorldInstance Deserialise(string worldName)
+        public WorldInstance Deserialise(string worldName)
         {
             StreamReader reader = new StreamReader(Directory.GetCurrentDirectory() + "/save/" + worldName + "/sav.dat");
             string worldString = reader.ReadToEnd();
@@ -54,7 +57,7 @@ namespace JoyLib.Code.IO
             return world;
         }
 
-        private static void LinkWorlds(WorldInstance parent)
+        private void LinkWorlds(WorldInstance parent)
         {
             foreach (WorldInstance world in parent.Areas.Values)
             {
@@ -63,7 +66,7 @@ namespace JoyLib.Code.IO
             }
         }
 
-        private static void EntityWorldKnowledge(WorldInstance parent)
+        private void EntityWorldKnowledge(WorldInstance parent)
         {
             foreach (Entity entity in parent.Entities)
             {
@@ -76,16 +79,16 @@ namespace JoyLib.Code.IO
             }
         }
         
-        private static void AssignIcons(WorldInstance parent)
+        private void AssignIcons(WorldInstance parent)
         {
             foreach(JoyObject obj in parent.Objects)
             {
-                obj.SetIcons(ObjectIconHandler.instance.GetSprites(obj.Tileset, obj.JoyName));
+                obj.SetIcons(s_ObjectIcons.GetSprites(obj.Tileset, obj.JoyName));
             }
 
             foreach(Entity entity in parent.Entities)
             {
-                entity.SetIcons(ObjectIconHandler.instance.GetSprites(entity.Tileset, entity.CreatureType));
+                entity.SetIcons(s_ObjectIcons.GetSprites(entity.Tileset, entity.CreatureType));
             }
 
             foreach(WorldInstance world in parent.Areas.Values)

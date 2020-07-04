@@ -4,19 +4,20 @@ using UnityEngine;
 
 namespace JoyLib.Code.Entities.Needs
 {
-    public class NeedHandler
+    public class NeedHandler : MonoBehaviour
     {
-        private static readonly Lazy<NeedHandler> lazy = new Lazy<NeedHandler>(() => new NeedHandler());
-
-        public static NeedHandler instance => lazy.Value;
-
         private Dictionary<string, INeed> m_Needs;
 
-        public NeedHandler()
+        public void Awake()
+        {
+            m_Needs = Initialise();
+        }
+
+        public static Dictionary<string, INeed> Initialise()
         {
             try
             {
-                m_Needs = new Dictionary<string, INeed>();
+                Dictionary<string, INeed> needs = new Dictionary<string, INeed>();
 
                 Type[] needTypes = Scripting.ScriptingEngine.instance.FetchTypeAndChildren(typeof(INeed));
 
@@ -25,24 +26,31 @@ namespace JoyLib.Code.Entities.Needs
                     if ((typeof(INeed)).IsAssignableFrom(type) == true && type.IsAbstract == false)
                     {
                         INeed newNeed = (INeed)Activator.CreateInstance(type);
-                        m_Needs.Add(newNeed.Name, newNeed);
+                        needs.Add(newNeed.Name, newNeed);
                     }
                     else
                     {
                         continue;
                     }
                 }
+                return needs;
             }
             catch(Exception ex)
             {
                 Debug.LogError(ex.Message);
                 Debug.LogError(ex.StackTrace);
                 Debug.LogError(ex.InnerException.StackTrace);
+                return new Dictionary<string, INeed>();
             }
         }
 
         public INeed Get(string name)
         {
+            if(m_Needs is null)
+            {
+                m_Needs = Initialise();
+            }
+
             if(m_Needs.ContainsKey(name))
             {
                 return m_Needs[name].Copy();
@@ -52,6 +60,11 @@ namespace JoyLib.Code.Entities.Needs
 
         public INeed GetRandomised(string name)
         {
+            if(m_Needs is null)
+            {
+                m_Needs = Initialise();
+            }
+
             if(m_Needs.ContainsKey(name))
             {
                 return m_Needs[name].Randomise();

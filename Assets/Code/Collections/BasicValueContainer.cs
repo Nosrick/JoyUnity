@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using JoyLib.Code.Entities.Statistics;
 
-namespace JoyLib.Code.Entities.Statistics
+namespace JoyLib.Code.Collections
 {
     public class BasicValueContainer<T> where T : IBasicValue
     {

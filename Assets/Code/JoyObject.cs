@@ -5,6 +5,7 @@ using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using System;
 using System.Collections.Generic;
+using JoyLib.Code.Collections;
 using System.Linq;
 using UnityEngine;
 
@@ -167,11 +168,6 @@ public class JoyObject : IComparable
     }
 
     //Used for deserialisation
-    public void SetIcons(string tileSet, string tileName)
-    {
-        m_Icons = ObjectIconHandler.instance.GetSprites(tileSet, tileName);
-    }
-
     public void SetIcons(Sprite[] sprites)
     {
         m_Icons = sprites;

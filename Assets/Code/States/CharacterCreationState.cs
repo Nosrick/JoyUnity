@@ -4,10 +4,12 @@ using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Jobs;
 using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Rollers;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace JoyLib.Code.States
 {
@@ -21,6 +23,18 @@ namespace JoyLib.Code.States
         protected int m_SexIndex;
 
         protected Entity m_Player;
+
+        protected ObjectIconHandler m_ObjectIcons = GameObject.Find("GameManager")
+                                                        .GetComponent<ObjectIconHandler>();
+
+        protected CultureHandler m_CultureHandler = GameObject.Find("GameManager")
+                                                        .GetComponent<CultureHandler>();
+
+        protected NeedHandler m_NeedHandler = GameObject.Find("GameManager")
+                                                        .GetComponent<NeedHandler>();
+
+        protected EntityTemplateHandler m_EntityTemplateHandler = GameObject.Find("GameManager")
+                                                        .GetComponent<EntityTemplateHandler>();
 
         public CharacterCreationState() : base()
         {
@@ -118,21 +132,24 @@ namespace JoyLib.Code.States
 
         private void NextState(object sender, EventArgs eventArgs)
         {
-            EntityTemplate humanTemplate = EntityTemplateHandler.instance.Get("Human");
-            CultureType culture = CultureHandler.instance.GetByCultureName("Human");
+            EntityTemplate humanTemplate = m_EntityTemplateHandler.Get("Human");
+            CultureType culture = m_CultureHandler.GetByCultureName("Human");
       
             BasicValueContainer<INeed> needs = new BasicValueContainer<INeed>();
-            needs.Add(NeedHandler.instance.GetRandomised("hunger"));
+            needs.Add(m_NeedHandler.GetRandomised("hunger"));
 
             IGrowingValue level = new ConcreteGrowingValue("level", 1, 100, 0, GlobalConstants.DEFAULT_SUCCESS_THRESHOLD,
                 new StandardRoller(), new NonUniqueDictionary<INeed, float>());
 
-            m_Player = WorldState.EntityHandler.Create(humanTemplate, needs, level, m_Jobs[m_JobIndex], culture.ChooseSex(), culture.ChooseSexuality(), new UnityEngine.Vector2Int(-1, -1),
-                ObjectIconHandler.instance.GetSprites("Human", m_Jobs[m_JobIndex].Name), null);
+            EntityFactory entityFactory = new EntityFactory();
+
+            m_Player = entityFactory.Create(humanTemplate, needs, level, m_Jobs[m_JobIndex], culture.ChooseSex(), culture.ChooseSexuality(), new UnityEngine.Vector2Int(-1, -1),
+                m_ObjectIcons.GetSprites("Human", m_Jobs[m_JobIndex].Name), null);
 
             m_Player.PlayerControlled = true;
 
-            m_Player.AddContents(WorldState.ItemHandler.CreateRandomItemOfType(new string[] { "light source" }, true));
+            ItemFactory itemFactory = new ItemFactory();
+            m_Player.AddContents(itemFactory.CreateRandomItemOfType(new string[] { "light source" }, true));
         }
 
         public override GameState GetNextState()

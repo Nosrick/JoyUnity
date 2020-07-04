@@ -10,11 +10,11 @@ using JoyLib.Code.Physics;
 using JoyLib.Code.Quests;
 using JoyLib.Code.States.Gameplay;
 using JoyLib.Code.Unity.GUI;
-using JoyLib.Code.Unity.GUI.Inventory;
 using JoyLib.Code.World;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 namespace JoyLib.Code.States
 {
@@ -25,6 +25,8 @@ namespace JoyLib.Code.States
         protected WorldInstance m_Overworld;
 
         protected GameplayFlags m_GameplayFlags;
+
+        protected TextMeshProUGUI m_NeedsPanel;
 
         protected Camera m_Camera;
 
@@ -39,11 +41,12 @@ namespace JoyLib.Code.States
         protected static GUIManager s_GUIManager;
         protected bool m_InventoryOpen;
 
-        protected static LiveEntityHandler s_EntityHandler = new LiveEntityHandler();
-        protected static LiveItemHandler s_ItemHandler = new LiveItemHandler();
+        protected WorldSerialiser m_WorldSerialiser;
 
         public WorldState(WorldInstance overworldRef, WorldInstance activeWorldRef, GameplayFlags flagsRef) : base()
         {
+            m_WorldSerialiser = new WorldSerialiser();
+
             m_ActiveWorld = activeWorldRef;
             m_GameplayFlags = flagsRef;
             m_Overworld = overworldRef;
@@ -99,7 +102,7 @@ namespace JoyLib.Code.States
         public override void Stop()
         {
             base.Stop();
-            WorldSerialiser.Serialise(m_Overworld);
+            m_WorldSerialiser.Serialise(m_Overworld);
         }
 
         protected void SetEntityWorld(WorldInstance world)
@@ -514,6 +517,9 @@ namespace JoyLib.Code.States
         public override void OnGui()
         {
             base.OnGui();
+
+            GameObject needsText = s_GUIManager.GetGUI("NeedsText");
+            needsText.GetComponent<TextMeshProUGUI>();
         }
 
         public override void Draw()
@@ -618,22 +624,6 @@ namespace JoyLib.Code.States
         {
             get;
             set;
-        }
-
-        public static LiveEntityHandler EntityHandler
-        {
-            get
-            {
-                return s_EntityHandler;
-            }
-        }
-
-        public static LiveItemHandler ItemHandler
-        {
-            get
-            {
-                return s_ItemHandler;
-            }
         }
     }
 }
