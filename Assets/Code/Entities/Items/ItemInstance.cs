@@ -21,7 +21,7 @@ namespace JoyLib.Code.Entities.Items
 
         protected IAbility m_Ability;
 
-        protected static LiveItemHandler s_ItemHandler = GameObject.Find("WorldObjects").GetComponent<LiveItemHandler>();
+        protected static LiveItemHandler s_ItemHandler;
 
         public ItemInstance(BaseItemType type, Vector2Int position, bool identified, Sprite[] sprites, IAbility abilityRef = null) :
             base(type.UnidentifiedName, 
@@ -33,7 +33,9 @@ namespace JoyLib.Code.Entities.Items
                 new string[] {},
                 sprites, 
                 type.Tags)
-        {            
+        {        
+            FindItemHandler();
+                
             this.m_Type = type;
             
             this.Identified = identified;
@@ -55,6 +57,8 @@ namespace JoyLib.Code.Entities.Items
                 copy.m_Icons,
                 copy.m_Type.Tags)
         {
+            FindItemHandler();
+
             this.m_Type = copy.m_Type;
             this.Identified = copy.Identified;
             this.m_Contents = copy.m_Contents;
@@ -92,6 +96,15 @@ namespace JoyLib.Code.Entities.Items
             m_Contents = contents;
         }
         */
+
+        protected void FindItemHandler()
+        {
+            if(s_ItemHandler is null)
+            {
+                s_ItemHandler = GameObject.Find("GameManager")
+                                    .GetComponent<LiveItemHandler>();
+            }
+        }
 
         public void Interact(Entity user)
         {

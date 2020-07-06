@@ -28,7 +28,7 @@ namespace JoyLib.Code.Graphics
 
         public bool Load()
         {
-            if(Icons != null)
+            if(!(Icons is null))
             {
                 return true;
             }

@@ -72,7 +72,7 @@ public class GameManager : MonoBehaviour
 
         m_StateManager.ChangeState(new WorldCreationState(player));
 
-        GameObject.Find("NeedsText").GetComponent<GUINeedsAlert>().SetPlayer(player);
+        //GameObject.Find("NeedsText").GetComponent<GUINeedsAlert>().SetPlayer(player);
     }
 
     private void InitialiseEverything()

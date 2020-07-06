@@ -20,8 +20,8 @@ namespace Tests
         {
             container = new GameObject("GameManager");
             
-            target = container.AddComponent<EntityTemplateHandler>();
             needHandler = container.AddComponent<NeedHandler>();
+            target = container.AddComponent<EntityTemplateHandler>();
         }
 
         [UnityTest]

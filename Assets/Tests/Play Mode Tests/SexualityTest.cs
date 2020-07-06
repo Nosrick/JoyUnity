@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities.Sexuality;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Relationships;
+using JoyLib.Code.Graphics;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Statistics;
@@ -29,6 +31,10 @@ namespace Tests
         private JobHandler jobHandler;
 
         private EntityRelationshipHandler entityRelationshipHandler;
+
+        private CultureHandler cultureHandler;
+
+        private ObjectIconHandler objectIconHandler;
 
         private EntityFactory entityFactory;
 
@@ -57,6 +63,8 @@ namespace Tests
 
             needHandler = container.AddComponent<NeedHandler>();
             templateHandler = container.AddComponent<EntityTemplateHandler>();
+            objectIconHandler = container.AddComponent<ObjectIconHandler>();
+            cultureHandler = container.AddComponent<CultureHandler>();
 
             jobHandler = new JobHandler();
             materialHandler = new MaterialHandler();
