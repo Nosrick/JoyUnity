@@ -9,15 +9,19 @@ namespace JoyLib.Code.Helpers
         public static int GetNumberOfFloors(int floorsSoFar, WorldInstance worldToCheck)
         {
             if (worldToCheck.Areas.Count > 0)
+            {
                 foreach (WorldInstance world in worldToCheck.Areas.Values)
+                {
                     return GetNumberOfFloors(floorsSoFar + 1, world);
-
+                }
+            }
+                
             return floorsSoFar;
         }
 
-        public static int GetNumberOfCreatures(Entity entityRef, WorldInstance worldToCheck)
+        public static int GetNumberOfCreatures(string entityType, WorldInstance worldToCheck)
         {
-            return worldToCheck.Entities.Count(x => x.CreatureType.Equals(entityRef.CreatureType));
+            return worldToCheck.Entities.Count(x => x.CreatureType.Equals(entityType));
         }
     }
 }

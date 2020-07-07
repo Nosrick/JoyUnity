@@ -1,5 +1,4 @@
 ﻿using System;
-using UnityEngine;
 using JoyLib.Code.Scripting;
 using System.Collections.Generic;
 
@@ -7,9 +6,9 @@ namespace JoyLib.Code.Entities.Needs
 {
     public abstract class AbstractNeed : INeed
     {
-        protected Dictionary<string, IJoyAction> m_CachedActions;
+        protected readonly static string s_Name = "abstractneed";
 
-        protected string m_Name;
+        protected Dictionary<string, IJoyAction> m_CachedActions;
 
         //How quickly the need decays
         //The higher the number, the slower it decays
@@ -39,12 +38,10 @@ namespace JoyLib.Code.Entities.Needs
         //Bonus to health for having no diseases
         protected const int CLEAN_BONUS = 50;
 
-        public AbstractNeed(string nameRef, int decayRef, int decayCounterRef, bool doesDecayRef, int priorityRef, int happinessThresholdRef,
+        public AbstractNeed(int decayRef, int decayCounterRef, bool doesDecayRef, int priorityRef, int happinessThresholdRef,
             int valueRef, int maxValueRef, string[] actions, int averageForDayRef = 0, int averageForWeekRef = 0)
         {
             m_CachedActions = new Dictionary<string, IJoyAction>(actions.Length);
-
-            m_Name = nameRef;
             m_Decay = decayRef;
             m_DecayCounter = decayCounterRef;
             m_DoesDecay = doesDecayRef;
@@ -108,15 +105,11 @@ namespace JoyLib.Code.Entities.Needs
             return m_Value;
         }
 
-        public string Name
+        public virtual string Name
         {
             get
             {
-                return m_Name;
-            }
-            protected set
-            {
-                m_Name = value;
+                return s_Name;
             }
         }
 

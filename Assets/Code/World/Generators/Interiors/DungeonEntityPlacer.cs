@@ -12,12 +12,21 @@ namespace JoyLib.Code.World.Generators.Interiors
 {
     public class DungeonEntityPlacer
     {
-        protected static LiveEntityHandler s_EntityHandler = GameObject.Find("GameManager")
-                                                                .GetComponent<LiveEntityHandler>();
-        protected static EntityTemplateHandler s_EntityTemplateHandler = GameObject.Find("GameManager")
-                                                                .GetComponent<EntityTemplateHandler>();
+        protected static GameObject s_GameManager;
+        protected static LiveEntityHandler s_EntityHandler;
+        protected static EntityTemplateHandler s_EntityTemplateHandler;
+
+        protected static PhysicsManager s_PhysicsManager;
 
         protected static EntityFactory s_EntityFactory = new EntityFactory();
+
+        public DungeonEntityPlacer()
+        {
+            s_GameManager = GameObject.Find("GameManager");
+            s_EntityHandler = s_GameManager.GetComponent<LiveEntityHandler>();
+            s_EntityTemplateHandler = s_GameManager.GetComponent<EntityTemplateHandler>();
+            s_PhysicsManager = s_GameManager.GetComponent<PhysicsManager>();
+        }
 
         public List<Entity> PlaceEntities(WorldInstance worldRef, List<string> entityTypes)
         {
@@ -36,7 +45,7 @@ namespace JoyLib.Code.World.Generators.Interiors
                 for (int j = 0; j < worldRef.Tiles.GetLength(1); j++)
                 {
                     Vector2Int point = new Vector2Int(i, j);
-                    if (PhysicsManager.IsCollision(point, point, worldRef) == PhysicsResult.None && point != worldRef.SpawnPoint)
+                    if (s_PhysicsManager.IsCollision(point, point, worldRef) == PhysicsResult.None && point != worldRef.SpawnPoint)
                     {
                         availablePoints.Add(point);
                     }

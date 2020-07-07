@@ -4,16 +4,16 @@ using JoyLib.Code.Rollers;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Entities.Relationships;
 using System;
+using UnityEngine;
 
 namespace JoyLib.Code.Entities.Needs
 {
     public class Sex : AbstractNeed
     {
-        private readonly static string s_Name = "sex";
+        private static EntityRelationshipHandler s_EntityRelationshipHandler;
 
         public Sex() : 
             base(
-                s_Name, 
                 0, 
                 1, 
                 true, 
@@ -27,10 +27,10 @@ namespace JoyLib.Code.Entities.Needs
                     "fulfillneedaction"
                 })
         {
-
+            Initialise();
         }
 
-        public Sex(string nameRef,
+        public Sex(
             int decayRef,
             int decayCounterRef,
             bool doesDecayRef,
@@ -41,7 +41,7 @@ namespace JoyLib.Code.Entities.Needs
             int averageForDayRef = 0,
             int averageForWeekRef = 0) :
 
-            base(nameRef,
+            base(
                 decayRef,
                 decayCounterRef,
                 doesDecayRef,
@@ -57,12 +57,21 @@ namespace JoyLib.Code.Entities.Needs
                 averageForDayRef,
                 averageForWeekRef)
         {
+            Initialise();
+        }
+
+        protected void Initialise()
+        {
+            
+            if(s_EntityRelationshipHandler is null)
+            {
+                s_EntityRelationshipHandler = GameObject.Find("GameManager").GetComponent<EntityRelationshipHandler>();
+            }
         }
 
         public override INeed Copy()
         {
             return new Sex(
-                this.m_Name,
                 this.m_Decay,
                 this.m_DecayCounter,
                 this.m_DoesDecay,
@@ -93,7 +102,7 @@ namespace JoyLib.Code.Entities.Needs
                 participants.Add(actor.GUID);
                 participants.Add(mate.GUID);
                 string[] relationshipTags = new string[] { "sexual" };
-                List<IRelationship> relationships = EntityRelationshipHandler.instance.Get(participants.ToArray(), relationshipTags);
+                IRelationship[] relationships = s_EntityRelationshipHandler.Get(participants.ToArray(), relationshipTags);
 
                 foreach (IRelationship relationship in relationships)
                 {
@@ -131,7 +140,10 @@ namespace JoyLib.Code.Entities.Needs
                 return false;
             }
 
-            if (user.Sexuality.WillMateWith(user, partner))
+            if (user.Sexuality.WillMateWith(user, partner, 
+                s_EntityRelationshipHandler.Get(
+                    new long[] { user.GUID, partner.GUID },
+                    new string[] { "sexual" })))
             {
                 int satisfaction = CalculateSatisfaction(
                     new Entity[] { user, partner },
@@ -190,7 +202,15 @@ namespace JoyLib.Code.Entities.Needs
         public override INeed Randomise()
         {
             int decay = RNG.instance.Roll(200, 600);
-            return new Sex(this.m_Name, decay, decay, true, 12, RNG.instance.Roll(5, 24), 24, 0, 0);
+            return new Sex(decay, decay, true, 12, RNG.instance.Roll(5, 24), 24, 0, 0);
+        }
+
+        public override string Name
+        {
+            get
+            {
+                return "sex";
+            }
         }
     }
 }

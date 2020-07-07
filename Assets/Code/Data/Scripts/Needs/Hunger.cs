@@ -6,11 +6,8 @@ namespace JoyLib.Code.Entities.Needs
 {
     public class Hunger : AbstractNeed
     {
-        private readonly static string s_Name = "hunger";
-
         public Hunger() : 
             base(
-                s_Name, 
                 0, 
                 1, 
                 true, 
@@ -25,7 +22,6 @@ namespace JoyLib.Code.Entities.Needs
         }
 
         public Hunger(
-            string nameRef, 
             int decayRef, 
             int decayCounterRef, 
             bool doesDecayRef, 
@@ -36,7 +32,7 @@ namespace JoyLib.Code.Entities.Needs
             int averageForDayRef = 0, 
             int averageForWeekRef = 0) : 
 
-            base(nameRef, 
+            base(
                 decayRef, 
                 decayCounterRef, 
                 doesDecayRef, 
@@ -56,7 +52,6 @@ namespace JoyLib.Code.Entities.Needs
         public override INeed Copy()
         {
             return new Hunger(
-                this.m_Name,
                 this.m_Decay, 
                 this.m_DecayCounter, 
                 this.m_DoesDecay, 
@@ -147,7 +142,15 @@ namespace JoyLib.Code.Entities.Needs
 
         public override INeed Randomise()
         {
-            return new Hunger(this.m_Name, 200, 200, true, 12, RNG.instance.Roll(5, 24), 24, 0, 0);
+            return new Hunger(200, 200, true, 12, RNG.instance.Roll(5, 24), 24, 0, 0);
+        }
+
+        public override string Name
+        {
+            get
+            {
+                return "hunger";
+            }
         }
     }
 }

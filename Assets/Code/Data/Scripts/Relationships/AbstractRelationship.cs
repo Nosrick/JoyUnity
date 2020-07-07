@@ -147,14 +147,23 @@ namespace JoyLib.Code.Entities.Relationships
             return false;
         }
 
-        public string GenerateHash()
+        public long GenerateHash(long[] participants)
         {
-            string hash = "";
-            foreach(long GUID in m_Participants.Keys)
+            long hash = 0;
+
+            long s1 = 1;
+            long s2 = 0;
+
+            int hashMagic = 65521;
+
+            List<long> sortedList = new List<long>(participants);
+            sortedList.Sort();
+            foreach(long GUID in sortedList)
             {
-                hash += GUID + ":";
+                s1 = (s1 + GUID) % hashMagic;
+                s2 = (s2 + s1) % hashMagic;
             }
-            hash = hash.Substring(0, hash.Length - 1);
+            hash = (s2 << 16) | s1;
             return hash;
         }
 

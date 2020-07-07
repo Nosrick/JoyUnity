@@ -1,4 +1,6 @@
-﻿namespace JoyLib.Code.Entities.Sexuality
+﻿using JoyLib.Code.Entities.Relationships;
+
+namespace JoyLib.Code.Entities.Sexuality
 {
     public class Asexual : AbstractSexuality
     {
@@ -26,7 +28,7 @@
             }
         }
 
-        public override bool WillMateWith(Entity me, Entity them)
+        public override bool WillMateWith(Entity me, Entity them, IRelationship[] relationships)
         {
             return false;
         }

@@ -1,10 +1,9 @@
 using JoyLib.Code.Entities.Relationships;
-using System.Linq;
 using System.Collections.Generic;
 
 namespace JoyLib.Code.Scripting.Actions
 {
-    class ModifyRelationshipPointsAction : IJoyAction
+    public class ModifyRelationshipPointsAction : IJoyAction
     {
         public string Name
         {
@@ -26,8 +25,11 @@ namespace JoyLib.Code.Scripting.Actions
         {
             int relationshipMod = (int)args[0];
 
-            long[] guids = participants.Select(x => x.GUID).ToArray();
-            List<IRelationship> relationships = EntityRelationshipHandler.instance.Get(guids, tags);
+            List<IRelationship> relationships = new List<IRelationship>();
+            for(int index = 1; index < args.Length; index++)
+            {
+                relationships.Add((IRelationship)args[index]);
+            }
 
             if(relationships.Count > 0)
             {

@@ -1,6 +1,8 @@
-﻿namespace JoyLib.Code.Combat
+﻿using UnityEngine;
+
+namespace JoyLib.Code.Combat
 {
-    public static class CombatEngine
+    public class CombatEngine : MonoBehaviour
     {
     }
 }

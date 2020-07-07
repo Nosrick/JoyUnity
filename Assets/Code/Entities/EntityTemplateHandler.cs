@@ -10,6 +10,8 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using UnityEngine;
+using JoyLib.Code.Entities.AI.LOS.Providers;
+using JoyLib.Code.Scripting;
 
 namespace JoyLib.Code.Entities
 {
@@ -67,7 +69,8 @@ namespace JoyLib.Code.Entities
 
                         string creatureType = entity.Element("CreatureType").DefaultIfEmpty("DEFAULT").ToLower();
                         string type = entity.Element("Type").DefaultIfEmpty("DEFAULT").ToLower();
-                        string visionType = entity.Element("VisionType").DefaultIfEmpty("Diurnal").ToLower();
+                        string visionType = entity.Element("VisionType").DefaultIfEmpty("DiurnalVisionProvider").ToLower();
+                        IVision vision = (IVision)ScriptingEngine.instance.FetchAndInitialise(visionType);
                         string tileset = entity.Element("Tileset").DefaultIfEmpty("DEFAULT").ToLower();
 
                         int size = entity.Element("Size").DefaultIfEmpty<int>(0);
@@ -99,7 +102,7 @@ namespace JoyLib.Code.Entities
                                             abilities.ToArray(), 
                                             slots.ToArray(),
                                             size, 
-                                            visionType, 
+                                            vision, 
                                             creatureType, 
                                             type, 
                                             tileset, 

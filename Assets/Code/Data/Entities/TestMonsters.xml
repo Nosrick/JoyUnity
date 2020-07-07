@@ -65,6 +65,8 @@
 	<Slot>Job Pin</Slot>
 	<Slot>Throw</Slot>
 
+	<Need>thirst</Need>
+
 	<Filename>Reptile0</Filename>
 	<Tileset>Naga</Tileset>
 
@@ -142,7 +144,8 @@
 	<Tag>Animated</Tag>
 	<Tag>Nocturnal</Tag>
 
-  <Need>Hunger</Need>
+  	<Need>hunger</Need>
+	<Need>thirst</Need>
 
 	<Slot>Torso</Slot>
 

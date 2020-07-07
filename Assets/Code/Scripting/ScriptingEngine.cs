@@ -20,10 +20,10 @@ namespace JoyLib.Code.Scripting
 
         private Assembly m_ScriptDLL;
 
+        private Type[] m_Types;
+
         private const string ABILITY_NAMESPACE = "JoyLib.Code.Entities.Abilities.";
         private const string NEED_NAMESPACE = "JoyLib.Code.Entities.Needs.";
-
-        private Type m_ProvidedPathfinder;
 
         public ScriptingEngine()
         {
@@ -67,7 +67,7 @@ namespace JoyLib.Code.Scripting
                 memory.Seek(0, SeekOrigin.Begin);
                 m_ScriptDLL = Assembly.Load(memory.ToArray());
 
-                m_ProvidedPathfinder = FetchType("CustomPathfinder");
+                m_Types = m_ScriptDLL.GetTypes();
             }
             catch(Exception ex)
             {
@@ -80,9 +80,7 @@ namespace JoyLib.Code.Scripting
         {
             try
             {
-                Type[] allTypes = m_ScriptDLL.GetTypes();
-
-                Type directType = allTypes.Single(type => type.Name.ToLower().Equals(typeName.ToLower()));
+                Type directType = m_Types.Single(type => type.Name.ToLower().Equals(typeName.ToLower()));
                 return directType;
             }
             catch(Exception ex)
@@ -93,31 +91,37 @@ namespace JoyLib.Code.Scripting
             }
         }
 
+        public object FetchAndInitialise(string typeName)
+        {
+            try
+            {
+                Type directType = m_Types.First(type => type.Name.ToLower().Equals(typeName.ToLower()));
+
+                return Activator.CreateInstance(directType);
+            }
+            catch(Exception ex)
+            {
+                Debug.LogError(ex.Message);
+                Debug.LogError(ex.StackTrace);
+                throw new InvalidOperationException("Error when searching for Type in ScriptingEngine, type name " + typeName);
+            }
+        }
+
         public Type[] FetchTypeAndChildren(string typeName)
         {
             try
             {
-                Type[] allTypes = m_ScriptDLL.GetTypes();
-
-                Type directType = null;
-                foreach(Type type in allTypes)
-                {
-                    if(type.Name.Equals(typeName))
-                    {
-                        directType = type;
-                        break;
-                    }
-                }
+                Type directType = m_Types.First(type => type.Name.ToLower().Equals(typeName.ToLower()));
 
                 List<Type> children = new List<Type>();
                 if(directType != null)
                 {
-                    children = allTypes.Where(type => directType.IsAssignableFrom(type)).ToList();
+                    children = m_Types.Where(type => directType.IsAssignableFrom(type)).ToList();
                 }
                 else
                 {
                     directType = Type.GetType(typeName, true, true);
-                    children = allTypes.Where(type => directType.IsAssignableFrom(type)).ToList();
+                    children = m_Types.Where(type => directType.IsAssignableFrom(type)).ToList();
                 }
                 
                 return children.ToArray();
@@ -134,7 +138,7 @@ namespace JoyLib.Code.Scripting
         {
             try
             {
-                Type[] types = m_ScriptDLL.GetTypes().Where(t => type.IsAssignableFrom(t)).ToArray();
+                Type[] types = m_Types.Where(t => type.IsAssignableFrom(t)).ToArray();
 
                 return types;
             }
@@ -150,8 +154,7 @@ namespace JoyLib.Code.Scripting
         {
             try
             {
-                Type[] allTypes = m_ScriptDLL.GetTypes();
-                Type type = allTypes.Single(t => t.Name.ToLower().Equals(actionName.ToLower()));
+                Type type = m_Types.Single(t => t.Name.ToLower().Equals(actionName.ToLower()));
 
                 IJoyAction action = (IJoyAction)Activator.CreateInstance(type);
                 return action;
@@ -162,11 +165,6 @@ namespace JoyLib.Code.Scripting
                 ActionLog.instance.AddText(e.StackTrace);
                 throw new InvalidOperationException("Error when finding action, no such action " + actionName);
             }
-        }
-
-        public IPathfinder GetProvidedPathFinder()
-        {
-            return (IPathfinder)Activator.CreateInstance(m_ProvidedPathfinder);
         }
     }
 }

@@ -11,23 +11,36 @@ namespace JoyLib.Code.Entities.Sexuality
     {
         protected Dictionary<string, ISexuality> m_Sexualities;
 
-        public bool Load(CultureType[] cultures)
+        protected CultureHandler m_CultureHandler;
+
+        public void Awake()
         {
-            if(m_Sexualities != null)
+            Initialise();
+        }
+
+        public void Initialise()
+        {
+            m_CultureHandler = GameObject.Find("GameManager").GetComponent<CultureHandler>();
+            Load(m_CultureHandler.Cultures);
+        }
+
+        protected bool Load(CultureType[] cultures)
+        {
+            if (m_Sexualities != null)
             {
                 return true;
             }
 
             m_Sexualities = new Dictionary<string, ISexuality>();
 
-            foreach(CultureType culture in cultures)
+            foreach (CultureType culture in cultures)
             {
-                foreach(string sexuality in culture.Sexualities)
+                foreach (string sexuality in culture.Sexualities)
                 {
-                    if(m_Sexualities.ContainsKey(sexuality) == false)
+                    if (m_Sexualities.ContainsKey(sexuality) == false)
                     {
                         Type type = ScriptingEngine.instance.FetchType(sexuality);
-                        if(!(type is null))
+                        if (!(type is null))
                         {
                             ISexuality sexualityInstance = (ISexuality)Activator.CreateInstance(type);
                             m_Sexualities.Add(sexuality, sexualityInstance);
@@ -35,18 +48,17 @@ namespace JoyLib.Code.Entities.Sexuality
                     }
                 }
             }
-            
+
             return true;
         }
 
         public ISexuality Get(string sexuality)
         {
-            if(m_Sexualities == null)
+            if (m_Sexualities is null)
             {
-                return null;
             }
 
-            if(m_Sexualities.ContainsKey(sexuality))
+            if (m_Sexualities.ContainsKey(sexuality))
             {
                 return m_Sexualities[sexuality];
             }
@@ -57,6 +69,11 @@ namespace JoyLib.Code.Entities.Sexuality
         {
             get
             {
+                if (m_Sexualities is null)
+                {
+                    Initialise();
+                }
+
                 return m_Sexualities.Values.ToArray();
             }
         }

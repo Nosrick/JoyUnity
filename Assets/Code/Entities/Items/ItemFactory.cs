@@ -7,11 +7,21 @@ namespace JoyLib.Code.Entities.Items
 {
     public class ItemFactory
     {
-        protected static LiveItemHandler s_ItemHandler = GameObject.Find("GameManager")
-                                                            .GetComponent<LiveItemHandler>();
+        protected static GameObject s_GameManager;
 
-        protected static ObjectIconHandler s_ObjectIcons = GameObject.Find("GameManager")
-                                                            .GetComponent<ObjectIconHandler>();
+        protected static LiveItemHandler s_ItemHandler;
+
+        protected static ObjectIconHandler s_ObjectIcons;
+
+        public ItemFactory()
+        {
+            if(s_GameManager is null)
+            {
+                s_GameManager = GameObject.Find("GameManager");
+                s_ObjectIcons = GameObject.Find("GameManager").GetComponent<ObjectIconHandler>();
+                s_ItemHandler = GameObject.Find("GameManager").GetComponent<LiveItemHandler>();
+            }
+        }
 
         public ItemInstance CreateRandomItemOfType(string[] tags, bool identified = false)
         {

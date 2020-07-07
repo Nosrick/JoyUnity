@@ -71,9 +71,9 @@ namespace Tests
             templateHandler = container.AddComponent<EntityTemplateHandler>();
             cultureHandler = container.AddComponent<CultureHandler>();
             needHandler = container.AddComponent<NeedHandler>();
+            entityRelationshipHandler = container.AddComponent<EntityRelationshipHandler>();
+            materialHandler = container.AddComponent<MaterialHandler>();
 
-            materialHandler = new MaterialHandler();
-            entityRelationshipHandler = new EntityRelationshipHandler();
             entityFactory = new EntityFactory();
         }
 
@@ -185,11 +185,11 @@ namespace Tests
             Entity[] biCoupleLeft = new Entity[] { biFemaleHuman, homoFemaleHumanLeft };
             Entity[] biCoupleRight = new Entity[] { biFemaleHuman, biMaleHuman };
 
-            EntityRelationshipHandler.instance.CreateRelationshipWithValue(heteroCouple, "monogamousrelationship", 500);
-            EntityRelationshipHandler.instance.CreateRelationshipWithValue(homoFemaleCouple, "monogamousrelationship", 500);
-            EntityRelationshipHandler.instance.CreateRelationshipWithValue(homoMaleCouple, "monogamousrelationship", 500);
-            EntityRelationshipHandler.instance.CreateRelationshipWithValue(biCoupleLeft, "monogamousrelationship", 500);
-            EntityRelationshipHandler.instance.CreateRelationshipWithValue(biCoupleRight, "monogamousrelationship", 500);
+            entityRelationshipHandler.CreateRelationshipWithValue(heteroCouple, "monogamousrelationship", 500);
+            entityRelationshipHandler.CreateRelationshipWithValue(homoFemaleCouple, "monogamousrelationship", 500);
+            entityRelationshipHandler.CreateRelationshipWithValue(homoMaleCouple, "monogamousrelationship", 500);
+            entityRelationshipHandler.CreateRelationshipWithValue(biCoupleLeft, "monogamousrelationship", 500);
+            entityRelationshipHandler.CreateRelationshipWithValue(biCoupleRight, "monogamousrelationship", 500);
             IJoyAction relationshipAction = ScriptingEngine.instance.FetchAction("modifyrelationshippointsaction");
             relationshipAction.Execute(
                 heteroCouple,
@@ -220,7 +220,9 @@ namespace Tests
         [UnityTest]
         public IEnumerator Heterosexual_WillMateWith_AcceptsHeteroPartners()
         {
-            Assert.IsTrue(heterosexual.WillMateWith(heteroFemaleHuman, heteroMaleHuman));
+            long[] participants = new long[] { heteroFemaleHuman.GUID, heteroMaleHuman.GUID };
+            IRelationship[] relationships = entityRelationshipHandler.Get(participants);
+            Assert.IsTrue(heterosexual.WillMateWith(heteroFemaleHuman, heteroMaleHuman, relationships));
 
             GameObject.Destroy(container);
 
@@ -230,7 +232,9 @@ namespace Tests
         [UnityTest]
         public IEnumerator Heterosexual_WillMateWith_RejectsHomoPartners()
         {
-            Assert.IsFalse(heterosexual.WillMateWith(heteroFemaleHuman, homoFemaleHumanLeft));
+            long[] participants = new long[] { heteroFemaleHuman.GUID, homoFemaleHumanLeft.GUID };
+            IRelationship[] relationships = entityRelationshipHandler.Get(participants);
+            Assert.IsFalse(heterosexual.WillMateWith(heteroFemaleHuman, homoFemaleHumanLeft, relationships));
 
             GameObject.DestroyImmediate(container);
 
@@ -240,7 +244,9 @@ namespace Tests
         [UnityTest]
         public IEnumerator Homosexual_WillMateWith_AcceptsHomoPartners()
         {
-            Assert.IsTrue(homosexual.WillMateWith(homoMaleHumanLeft, homoMaleHumanRight));
+            long[] participants = new long[] { homoMaleHumanLeft.GUID, homoMaleHumanRight.GUID };
+            IRelationship[] relationships = entityRelationshipHandler.Get(participants);
+            Assert.IsTrue(homosexual.WillMateWith(homoMaleHumanLeft, homoMaleHumanRight, relationships));
 
             GameObject.DestroyImmediate(container);
 
@@ -250,7 +256,9 @@ namespace Tests
         [UnityTest]
         public IEnumerator Homosexual_WillMateWith_RejectsHeteroPartners()
         {
-            Assert.IsFalse(homosexual.WillMateWith(homoMaleHumanLeft, homoFemaleHumanRight));
+            long[] participants = new long[] { homoFemaleHumanLeft.GUID, homoFemaleHumanRight.GUID };
+            IRelationship[] relationships = entityRelationshipHandler.Get(participants);
+            Assert.IsFalse(homosexual.WillMateWith(homoMaleHumanLeft, homoFemaleHumanRight, relationships));
 
             GameObject.DestroyImmediate(container);
 
@@ -260,7 +268,9 @@ namespace Tests
         [UnityTest]
         public IEnumerator Bisexual_WillMateWith_WillAcceptHomoPartners()
         {
-            Assert.IsTrue(bisexual.WillMateWith(biFemaleHuman, homoFemaleHumanLeft));
+            long[] participants = new long[] { biFemaleHuman.GUID, homoFemaleHumanLeft.GUID };
+            IRelationship[] relationships = entityRelationshipHandler.Get(participants);
+            Assert.IsTrue(bisexual.WillMateWith(biFemaleHuman, homoFemaleHumanLeft, relationships));
 
             GameObject.DestroyImmediate(container);
 
@@ -270,7 +280,9 @@ namespace Tests
         [UnityTest]
         public IEnumerator Bisexual_WillMateWith_WillAcceptHeteroPartners()
         {
-            Assert.IsTrue(bisexual.WillMateWith(biFemaleHuman, biMaleHuman));
+            long[] participants = new long[] { biFemaleHuman.GUID, biMaleHuman.GUID };
+            IRelationship[] relationships = entityRelationshipHandler.Get(participants);
+            Assert.IsTrue(bisexual.WillMateWith(biFemaleHuman, biMaleHuman, relationships));
 
             GameObject.DestroyImmediate(container);
 

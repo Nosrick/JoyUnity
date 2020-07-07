@@ -43,6 +43,10 @@ namespace JoyLib.Code.States
 
         protected WorldSerialiser m_WorldSerialiser;
 
+        protected GameObject m_GameManager;
+        protected PhysicsManager m_PhysicsManager;
+        protected EntityRelationshipHandler m_RelationshipHandler;
+
         public WorldState(WorldInstance overworldRef, WorldInstance activeWorldRef, GameplayFlags flagsRef) : base()
         {
             m_WorldSerialiser = new WorldSerialiser();
@@ -54,6 +58,10 @@ namespace JoyLib.Code.States
             m_Camera = GameObject.Find("Main Camera").GetComponent<Camera>();
             m_FogOfWarHolder = GameObject.Find("WorldFog");
             m_EntitiesHolder = GameObject.Find("WorldEntities");
+
+            m_GameManager = GameObject.Find("GameManager");
+            m_PhysicsManager = m_GameManager.GetComponent<PhysicsManager>();
+            m_RelationshipHandler = m_GameManager.GetComponent<EntityRelationshipHandler>();
 
             m_InventoryOpen = false;
         }
@@ -259,7 +267,7 @@ namespace JoyLib.Code.States
                     return;
                 }
 
-                PhysicsResult physicsResult = PhysicsManager.IsCollision(player.WorldPosition, player.WorldPosition, m_ActiveWorld);
+                PhysicsResult physicsResult = m_PhysicsManager.IsCollision(player.WorldPosition, player.WorldPosition, m_ActiveWorld);
                 if (physicsResult == PhysicsResult.ObjectCollision)
                 {
                     //Get the item picked up
@@ -390,7 +398,7 @@ namespace JoyLib.Code.States
 
             if (hasMoved)
             {
-                PhysicsResult physicsResult = PhysicsManager.IsCollision(player.WorldPosition, newPlayerPoint, m_ActiveWorld);
+                PhysicsResult physicsResult = m_PhysicsManager.IsCollision(player.WorldPosition, newPlayerPoint, m_ActiveWorld);
 
                 if (physicsResult == PhysicsResult.EntityCollision)
                 {
@@ -414,7 +422,7 @@ namespace JoyLib.Code.States
                         {
                             //TODO: REDO COMBAT ENGINE
                             //CombatEngine.SwingWeapon(player, tempEntity);
-                            List<IRelationship> relationships = EntityRelationshipHandler.instance.Get(new long[] { tempEntity.GUID, player.GUID });
+                            IRelationship[] relationships = m_RelationshipHandler.Get(new long[] { tempEntity.GUID, player.GUID });
                             foreach(IRelationship relationship in relationships)
                             {
                                 relationship.ModifyValueOfParticipant(player.GUID, tempEntity.GUID, -50);

@@ -1,6 +1,6 @@
 ﻿using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Entities.Needs;
+using JoyLib.Code.Entities.AI.LOS.Providers;
 using JoyLib.Code.Collections;
 using System.Linq;
 
@@ -31,7 +31,7 @@ namespace JoyLib.Code.Entities
             IAbility[] abilities,
             string[] slots, 
             int size, 
-            string visionType, 
+            IVision visionType, 
             string creatureType, 
             string type, 
             string tileset, 
@@ -125,7 +125,7 @@ namespace JoyLib.Code.Entities
             }
         }
 
-        public string VisionType
+        public IVision VisionType
         {
             get;
             protected set;

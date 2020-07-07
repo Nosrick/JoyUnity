@@ -4,6 +4,7 @@ namespace JoyLib.Code.Entities.Needs
 {
     public interface INeed : IBasicValue
     {
+
         bool FindFulfilmentObject(Entity actor);
 
         bool Interact(Entity user, JoyObject obj);

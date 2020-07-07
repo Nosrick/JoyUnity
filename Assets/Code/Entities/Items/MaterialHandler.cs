@@ -2,18 +2,20 @@
 using System.IO;
 using System.Xml;
 using System;
+using UnityEngine;
 
 namespace JoyLib.Code.Entities.Items
 {
-    public class MaterialHandler
+    public class MaterialHandler : MonoBehaviour
     {
-        private static readonly Lazy<MaterialHandler> lazy = new Lazy<MaterialHandler>(() => new MaterialHandler());
+        private Dictionary<string, ItemMaterial> m_Materials;
 
-        public static MaterialHandler instance => lazy.Value;
+        public void Awake()
+        {
+            Initialise();
+        }
 
-        private static Dictionary<string, ItemMaterial> m_Materials;
-
-        public MaterialHandler()
+        public void Initialise()
         {
             List<ItemMaterial> flatList = LoadMaterials();
             m_Materials = new Dictionary<string, ItemMaterial>(flatList.Count);
@@ -86,6 +88,11 @@ namespace JoyLib.Code.Entities.Items
 
         public ItemMaterial GetMaterial(string nameRef)
         {
+            if(m_Materials is null)
+            {
+                Initialise();
+            }
+
             if (m_Materials.ContainsKey(nameRef))
                 return m_Materials[nameRef];
 

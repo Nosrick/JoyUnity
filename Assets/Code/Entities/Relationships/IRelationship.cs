@@ -25,7 +25,7 @@ namespace JoyLib.Code.Entities.Relationships
         
         bool RemoveParticipant(long currentGUID);
 
-        string GenerateHash();
+        long GenerateHash(long[] participants);
 
         string Name
         {

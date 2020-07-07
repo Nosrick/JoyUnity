@@ -54,7 +54,7 @@ public class JoyObject : IComparable
     {
         this.m_CachedActions = new List<IJoyAction>();
         this.JoyName = name;
-        this.GUID = GUIDManager.AssignGUID();
+        this.GUID = GUIDManager.Instance.AssignGUID();
 
         this.m_DerivedValues = derivedValues;
 
@@ -95,7 +95,7 @@ public class JoyObject : IComparable
         params string[] tags)
     {
         this.JoyName = name;
-        this.GUID = GUIDManager.AssignGUID();
+        this.GUID = GUIDManager.Instance.AssignGUID();
 
         this.m_DerivedValues = derivedValues;
 
@@ -125,7 +125,7 @@ public class JoyObject : IComparable
 
     ~JoyObject()
     {
-        GUIDManager.ReleaseGUID(this.GUID);
+        GUIDManager.Instance.ReleaseGUID(this.GUID);
     }
 
     public bool AddTag(string tag)

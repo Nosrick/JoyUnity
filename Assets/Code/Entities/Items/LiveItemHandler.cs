@@ -13,11 +13,15 @@ namespace JoyLib.Code.Entities.Items
 {
     public class LiveItemHandler : MonoBehaviour
     {
-        private Dictionary<long, ItemInstance> m_LiveItems;
+        protected Dictionary<long, ItemInstance> m_LiveItems;
 
-        private List<BaseItemType> m_ItemDatabase;
+        protected List<BaseItemType> m_ItemDatabase;
 
-        private ObjectIconHandler m_ObjectIcons;
+        protected GameObject m_GameManager;
+
+        protected ObjectIconHandler m_ObjectIcons;
+
+        protected MaterialHandler m_MaterialHandler;
 
         public void Awake()
         {
@@ -28,8 +32,9 @@ namespace JoyLib.Code.Entities.Items
         {
             m_LiveItems = new Dictionary<long, ItemInstance>();
 
-            m_ObjectIcons = GameObject.Find("GameManager")
-                                .GetComponent<ObjectIconHandler>();
+            m_GameManager = GameObject.Find("GameManager");
+            m_ObjectIcons = m_GameManager.GetComponent<ObjectIconHandler>();
+            m_MaterialHandler = m_GameManager.GetComponent<MaterialHandler>();
 
             m_ItemDatabase = LoadItems();
         }
@@ -107,7 +112,7 @@ namespace JoyLib.Code.Entities.Items
 
                         items.Add(new BaseItemType(identifiedItems[j].tags, identifiedItems[j].description, chosenDescription.description, chosenDescription.name,
                             identifiedItems[j].name, identifiedItems[j].slots, identifiedItems[j].size,
-                            MaterialHandler.instance.GetMaterial(identifiedItems[j].materials[k]), identifiedItems[j].skill, actionWord,
+                            m_MaterialHandler.GetMaterial(identifiedItems[j].materials[k]), identifiedItems[j].skill, actionWord,
                             identifiedItems[j].value, identifiedItems[j].weighting, identifiedItems[j].spriteSheet, identifiedItems[j].lightLevel));
                     }
                 }

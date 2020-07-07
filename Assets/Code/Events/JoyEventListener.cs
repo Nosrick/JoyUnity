@@ -20,7 +20,7 @@ namespace JoyLib.Code.Events
             m_JoyEvent.UnregisterListener(this);
         }
 
-        public virtual void OnEventRaised()
+        public virtual void OnEventRaised(params object[] args)
         {
             m_Response.Invoke();
         }

@@ -6,38 +6,36 @@ namespace JoyLib.Code.Entities.Needs
 {
     public class Thirst : AbstractNeed
     {
-        private readonly static string s_Name = "thirst";
-        
-        public Thirst() : 
-            base("thirst", 
-                    0, 
-                    1, 
-                    true, 
-                    1, 
-                    1, 
-                    1, 
-                    1, 
-                    new string[]{ 
-                        "seekaction", 
-                        "wanderaction" 
+        public Thirst() :
+            base(
+                    0,
+                    1,
+                    true,
+                    1,
+                    1,
+                    1,
+                    1,
+                    new string[]{
+                        "seekaction",
+                        "wanderaction"
                     }
                 )
         {
-            
+
         }
 
-        public Thirst(string nameRef, 
-            int decayRef, 
-            int decayCounterRef, 
-            bool doesDecayRef, 
-            int priorityRef, 
+        public Thirst(
+            int decayRef,
+            int decayCounterRef,
+            bool doesDecayRef,
+            int priorityRef,
             int happinessThresholdRef,
-            int valueRef, 
-            int maxValueRef, 
-            int averageForDayRef = 0, 
-            int averageForWeekRef = 0) : 
+            int valueRef,
+            int maxValueRef,
+            int averageForDayRef = 0,
+            int averageForWeekRef = 0) :
 
-            base(nameRef,
+            base(
                 decayRef,
                 decayCounterRef,
                 doesDecayRef,
@@ -58,7 +56,6 @@ namespace JoyLib.Code.Entities.Needs
         public override INeed Copy()
         {
             return new Thirst(
-                this.m_Name,
                 this.m_Decay,
                 this.m_DecayCounter,
                 this.m_DoesDecay,
@@ -123,8 +120,8 @@ namespace JoyLib.Code.Entities.Needs
                 else
                 {
                     m_CachedActions["seekaction"].Execute(
-                        new JoyObject[]{ actor, chosenDrink }, 
-                        new string[]{ "need", "thirst", "seek" },
+                        new JoyObject[] { actor, chosenDrink },
+                        new string[] { "need", "thirst", "seek" },
                         new object[] { "thirst" });
                     return true;
                 }
@@ -151,7 +148,15 @@ namespace JoyLib.Code.Entities.Needs
 
         public override INeed Randomise()
         {
-            return new Thirst(this.m_Name, 200, 200, true, 12, RNG.instance.Roll(5, 24), 24, 0, 0);
+            return new Thirst(200, 200, true, 12, RNG.instance.Roll(5, 24), 24, 0, 0);
+        }
+
+        public override string Name
+        {
+            get
+            {
+                return "thirst";
+            }
         }
     }
 }

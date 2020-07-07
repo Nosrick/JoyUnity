@@ -1,8 +1,10 @@
-﻿namespace JoyLib.Code.Entities.Sexuality
+﻿using JoyLib.Code.Entities.Relationships;
+
+namespace JoyLib.Code.Entities.Sexuality
 {
     public interface ISexuality
     {
-        bool WillMateWith(Entity me, Entity them);
+        bool WillMateWith(Entity me, Entity them, IRelationship[] relationships);
 
         string Name
         {

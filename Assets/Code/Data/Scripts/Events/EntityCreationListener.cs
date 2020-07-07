@@ -7,19 +7,14 @@ namespace JoyLib.Code.Events
     {
         private LiveEntityHandler m_EntityHandler;
 
-        public void Start()
+        public void Awake()
         {
-            m_EntityHandler = GameObject.Find("WorldEntities").GetComponent<LiveEntityHandler>();
+            m_EntityHandler = GameObject.Find("GameManager").GetComponent<LiveEntityHandler>();
         }
 
-        public override void OnEventRaised()
+        public override void OnEventRaised(params object[] args)
         {
-            if(!(m_JoyEvent is EntityCreatedEvent createdEvent))
-            {
-                return;
-            }
-
-            m_EntityHandler.AddEntity(createdEvent.Created);
+            m_EntityHandler.AddEntity((Entity)args[0]);
         }
     }
 }

@@ -1,14 +1,17 @@
 ﻿using System.Collections.Generic;
+using System;
 
 namespace JoyLib.Code.Managers
 {
-    public static class GUIDManager
+    public class GUIDManager
     {
-        private static long m_GUIDCounter = 0;
+        private static Lazy<GUIDManager> lazy = new Lazy<GUIDManager>(() => new GUIDManager());
 
-        private static List<long> m_RecycleList = new List<long>();
+        private long m_GUIDCounter = 0;
 
-        public static long AssignGUID()
+        private List<long> m_RecycleList = new List<long>();
+
+        public long AssignGUID()
         {
             if (m_RecycleList.Count > 0)
             {
@@ -20,9 +23,17 @@ namespace JoyLib.Code.Managers
             return m_GUIDCounter;
         }
 
-        public static void ReleaseGUID(long GUIDRef)
+        public void ReleaseGUID(long GUIDRef)
         {
             m_RecycleList.Add(GUIDRef);
+        }
+
+        public static GUIDManager Instance
+        {
+            get
+            {
+                return lazy.Value;
+            }
         }
     }
 }

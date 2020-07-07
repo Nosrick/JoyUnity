@@ -6,7 +6,7 @@ namespace JoyLib.Code.Events
     {
         protected List<JoyEventListener> m_Listeners = new List<JoyEventListener>();
 
-        public void Raise()
+        public void Raise(params object[] args)
         {
             for (int i = m_Listeners.Count - 1; i >= 0; i--)
             {

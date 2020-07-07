@@ -75,7 +75,7 @@ namespace JoyLib.Code.World
             m_Entities = new List<Entity>();
             m_Objects = new List<JoyObject>();
             m_Walls = new Dictionary<Vector2Int, JoyObject>();
-            GUID = GUIDManager.AssignGUID();
+            GUID = GUIDManager.Instance.AssignGUID();
             m_Discovered = new bool[m_Tiles.GetLength(0), m_Tiles.GetLength(1)];
             m_Light = new int[m_Tiles.GetLength(0), m_Tiles.GetLength(1)];
 
@@ -113,7 +113,7 @@ namespace JoyLib.Code.World
             m_Entities = entities;
             m_Objects = objects;
             m_Walls = walls;
-            GUID = GUIDManager.AssignGUID();
+            GUID = GUIDManager.Instance.AssignGUID();
             m_Discovered = new bool[m_Tiles.GetLength(0), m_Tiles.GetLength(1)];
             CalculatePlayerIndex();
             m_Light = new int[m_Tiles.GetLength(0), m_Tiles.GetLength(1)];
@@ -386,7 +386,7 @@ namespace JoyLib.Code.World
                 return data;
             }
 
-            List<JoyObject> inSight = m_Objects.Where(obj => entityRef.CanSee(obj.WorldPosition) == true).ToList();
+            List<JoyObject> inSight = m_Objects.Where(obj => entityRef.VisionProvider.CanSee(entityRef, this, obj.WorldPosition) == true).ToList();
             foreach(JoyObject obj in inSight)
             {
                 IEnumerable<string> intersect = obj.Tags.Intersect(tags);
@@ -405,7 +405,7 @@ namespace JoyLib.Code.World
 
             foreach(Entity entity in m_Entities)
             {
-                if(!actor.CanSee(entity.WorldPosition))
+                if(!actor.VisionProvider.CanSee(actor, this, entity.WorldPosition))
                 {
                     continue;
                 }
@@ -761,7 +761,7 @@ namespace JoyLib.Code.World
 
         public List<Vector2Int> GetVisibleWalls(Entity viewer)
         {
-            List<Vector2Int> visibleWalls = this.Walls.Where(wall => viewer.CanSee(wall.Key)).ToDictionary(wall => wall.Key, wall => wall.Value).Keys.ToList();
+            List<Vector2Int> visibleWalls = this.Walls.Where(wall => viewer.VisionProvider.CanSee(viewer, this, wall.Key)).ToDictionary(wall => wall.Key, wall => wall.Value).Keys.ToList();
             return visibleWalls;
         }
 
@@ -833,7 +833,7 @@ namespace JoyLib.Code.World
                 }
                 else if (result > 50)
                 {
-                    int exactNumber = WorldConversationDataHelper.GetNumberOfCreatures(entityRef, this);
+                    int exactNumber = WorldConversationDataHelper.GetNumberOfCreatures(entityRef.CreatureType, this);
                     int roughNumber = 0;
                     if (exactNumber % 10 < 6)
                     {

@@ -3,7 +3,6 @@ using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Rollers;
-using JoyLib.Code.States;
 using JoyLib.Code.World;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,14 +10,20 @@ using UnityEngine;
 namespace JoyLib.Code.Quests
 {
     public class QuestProvider : MonoBehaviour
-    {
-        protected BagOfGoldHelper m_BagOfGoldHelper;
-        
+    {        
         protected ItemFactory m_ItemFactory;
 
-        public void Start()
+        protected EntityRelationshipHandler m_EntityRelationshipHandler;
+
+        public void Awake()
         {
-            m_BagOfGoldHelper = new BagOfGoldHelper();
+            Initialise();
+        }
+
+        protected void Initialise()
+        {
+            m_ItemFactory = new ItemFactory();
+            m_EntityRelationshipHandler = GameObject.Find("GameManager").GetComponent<EntityRelationshipHandler>();
         }
 
         public Quest MakeRandomQuest(Entity questor, Entity provider, WorldInstance overworldRef)
@@ -56,8 +61,8 @@ namespace JoyLib.Code.Quests
         private List<ItemInstance> GetRewards(Entity questor, Entity provider, List<QuestStep> steps)
         {
             List<ItemInstance> rewards = new List<ItemInstance>();
-            int reward = ((steps.Count * 100) + (EntityRelationshipHandler.instance.GetHighestRelationshipValue(provider, questor)));
-            rewards.Add(m_BagOfGoldHelper.GetBagOfGold(reward));
+            int reward = ((steps.Count * 100) + (m_EntityRelationshipHandler.GetHighestRelationshipValue(provider, questor)));
+            rewards.Add(BagOfGoldHelper.GetBagOfGold(reward));
 
             return rewards;
         }

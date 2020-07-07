@@ -111,6 +111,11 @@ namespace JoyLib.Code.Entities.Jobs
         {
             get
             {
+                if(m_Jobs is null)
+                {
+                    m_Jobs = LoadTypes();
+                }
+
                 return m_Jobs.ToArray();
             }
         }

@@ -1,18 +1,18 @@
 ﻿using JoyLib.Code.Collections;
-using JoyLib.Code.Combat;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.AI;
-using JoyLib.Code.Entities.AI.LOS;
+using JoyLib.Code.Entities.AI.LOS.Providers;
+using JoyLib.Code.Entities.AI.Drivers;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Jobs;
 using JoyLib.Code.Entities.Needs;
+using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Entities.Sexes;
 using JoyLib.Code.Entities.Sexuality;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Entities.Statistics.Formulas;
 using JoyLib.Code.Helpers;
-using JoyLib.Code.Physics;
 using JoyLib.Code.Quests;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
@@ -47,23 +47,17 @@ namespace JoyLib.Code.Entities
         protected int m_Size;
 
         protected IGrowingValue m_Level;
-
-        protected bool[,] m_Vision;
-        protected string m_VisionType;
+        protected IVision m_VisionProvider;
 
         protected FulfillmentData m_FulfillmentData;
 
         protected NeedAIData m_CurrentTarget;
 
+        protected IDriver m_Driver;
+
         protected IPathfinder m_Pathfinder;
 
         protected Queue<Vector2Int> m_PathfindingData;
-
-        protected IFOVHandler m_FOVHandler;
-
-        protected static NaturalWeaponHelper s_NaturalWeaponHelper = new NaturalWeaponHelper();
-
-        protected static IJoyAction s_WanderAction = ScriptingEngine.instance.FetchAction("wanderaction");
 
         protected const int XP_PER_LEVEL = 100;
         protected const int NEED_FULFILMENT_COUNTER = 5;
@@ -157,15 +151,15 @@ namespace JoyLib.Code.Entities
             this.m_Equipment = equipment;
             this.m_Backpack = backpack;
             this.Sex = sex;
-            this.m_VisionType = template.VisionType;
+            this.m_VisionProvider = template.VisionType;
 
             this.m_Cultures = cultures;
 
             this.CalculateDerivatives();
 
-            this.m_Vision = new bool[1, 1];
+            this.m_VisionProvider = template.VisionType;
 
-            this.m_Pathfinder = ScriptingEngine.instance.GetProvidedPathFinder();
+            this.m_Pathfinder = (IPathfinder)ScriptingEngine.instance.FetchAndInitialise("custompathfinder");
             this.m_PathfindingData = new Queue<Vector2Int>();
 
             this.m_FulfillmentData = new FulfillmentData(
@@ -178,7 +172,6 @@ namespace JoyLib.Code.Entities
             this.MyWorld = world;
             this.JoyName = this.GetNameFromMultipleCultures();
 
-            SetFOVHandler();
             SetCurrentTarget();
         }
 
@@ -198,7 +191,7 @@ namespace JoyLib.Code.Entities
         public Entity(EntityTemplate template, BasicValueContainer<INeed> needs, List<CultureType> cultures, IGrowingValue level, JobType job, IBioSex sex, ISexuality sexuality,
             Vector2Int position, Sprite[] sprites, WorldInstance world) :
             this(template, needs, cultures, level, 0, job, sex, sexuality, position, sprites,
-                s_NaturalWeaponHelper.MakeNaturalWeapon(template.Size), new NonUniqueDictionary<string, ItemInstance>(),
+                NaturalWeaponHelper.MakeNaturalWeapon(template.Size), new NonUniqueDictionary<string, ItemInstance>(),
                 new List<ItemInstance>(), new List<string>(), new Dictionary<string, int>(), world)
         {
         }
@@ -220,14 +213,6 @@ namespace JoyLib.Code.Entities
                 nameList.Add(random.GetNameForChain(i, this.Sex.Name));
             }
             return String.Join(" ", nameList);
-        }
-
-        protected void SetFOVHandler()
-        {
-            m_FOVHandler = new FOVShadowCasting();
-            //m_FOVHandler = new FOVPermissive();
-            //m_FOVHandler = new FOVRecursiveShadowcasting();
-            //m_FOVHandler = new FOVDirty();
         }
 
         protected void SetCurrentTarget()
@@ -354,196 +339,10 @@ namespace JoyLib.Code.Entities
 
         public void UpdateMe()
         {
-            if (this.MyWorld.IsDirty)
-            {
-                FOVBasicBoard board = (FOVBasicBoard)m_FOVHandler.Do(this.WorldPosition, this.MyWorld.Dimensions, this.VisionMod, this.MyWorld.Walls.Keys.ToList());
-                m_Vision = board.Vision;
-            }
-            else
-            {
-                FOVBasicBoard board = (FOVBasicBoard)m_FOVHandler.Do(this.WorldPosition, this.VisionMod);
-                m_Vision = board.Vision;
-            }
-
             HasMoved = false;
 
-            if (!PlayerControlled)
-            {
-                //If you're idle
-                if (CurrentTarget.idle == true)
-                {
-                    //Let's find something to do
-                    List<INeed> needs = m_Needs.Collection.OrderByDescending(x => x.Priority).ToList();
-                    //Act on first need
-
-                    bool idle = true;
-                    bool wander = false;
-                    foreach (INeed need in needs)
-                    {
-                        if (need.ContributingHappiness)
-                        {
-                            continue;
-                        }
-
-                        need.FindFulfilmentObject(this);
-                        idle = false;
-                        break;
-                    }
-
-                    if(idle == true)
-                    {
-                        int result = RNG.instance.Roll(0, 10);
-                        if (result < 1)
-                        {
-                            wander = true;
-                        }
-                    }
-
-                    if(wander == true)
-                    {
-                        s_WanderAction.Execute(
-                            new JoyObject[] { this },
-                            new string[] {});
-                    }
-
-                    m_CurrentTarget.idle = idle;
-                }
-
-                //If we're wandering, select a point we can see and wander there
-                if (CurrentTarget.searching && CurrentTarget.targetPoint == GlobalConstants.NO_TARGET)
-                {
-                    List<Vector2Int> visibleSpots = new List<Vector2Int>();
-                    List<Vector2Int> visibleWalls = MyWorld.GetVisibleWalls(this);
-                    //Check what we can see
-                    for (int x = 0; x < this.Vision.GetLength(0); x++)
-                    {
-                        for (int y = 0; y < this.Vision.GetLength(0); y++)
-                        {
-                            Vector2Int newPos = new Vector2Int(x, y);
-                            if (CanSee(x, y) && visibleWalls.Contains(newPos) == false && WorldPosition != newPos)
-                            {
-                                visibleSpots.Add(newPos);
-                            }
-                        }
-                    }
-
-                    //Pick a random spot to wander to
-                    int result = RNG.instance.Roll(0, visibleSpots.Count - 1);
-                    m_CurrentTarget.targetPoint = visibleSpots[result];
-                }
-
-                //If we have somewhere to be, move there
-                if (WorldPosition != CurrentTarget.targetPoint || (CurrentTarget.target != null && AdjacencyHelper.IsAdjacent(WorldPosition, CurrentTarget.target.WorldPosition)))
-                {
-                    MoveToTarget(CurrentTarget);
-                }
-                //If we've arrived at our destination, then we do our thing
-                if (WorldPosition == CurrentTarget.targetPoint || (CurrentTarget.target != null && AdjacencyHelper.IsAdjacent(WorldPosition, CurrentTarget.target.WorldPosition)))
-                {
-                    //If we have a target
-                    if (CurrentTarget.target != null)
-                    {
-                        if (CurrentTarget.intent == Intent.Attack)
-                        {
-                            //CombatEngine.SwingWeapon(this, CurrentTarget.target);
-                        }
-                        else if (CurrentTarget.intent == Intent.Interact)
-                        {
-                            INeed need = this.Needs[CurrentTarget.need];
-
-                            need.Interact(this, CurrentTarget.target);
-                        }
-                    }
-                    //If we do not, we were probably wandering
-                    else
-                    {
-                        if (CurrentTarget.searching == true)
-                        {
-                            m_CurrentTarget.targetPoint = GlobalConstants.NO_TARGET;
-
-                            //Set idle to true so we look for stuff when we arrive
-                            m_CurrentTarget.idle = true;
-                        }
-                    }
-                }
-            }
-            else
-            {
-                if (!HasMoved && m_PathfindingData.Count > 0)
-                {
-                    Vector2Int nextPoint = m_PathfindingData.Peek();
-                    PhysicsResult physicsResult = PhysicsManager.IsCollision(WorldPosition, nextPoint, MyWorld);
-                    if (physicsResult != PhysicsResult.EntityCollision && physicsResult != PhysicsResult.WallCollision)
-                    {
-                        m_PathfindingData.Dequeue();
-                        Move(nextPoint);
-                        HasMoved = true;
-                    }
-                    else if (physicsResult == PhysicsResult.EntityCollision)
-                    {
-                        MyWorld.SwapPosition(this, MyWorld.GetEntity(nextPoint));
-
-                        m_PathfindingData.Dequeue();
-                        Move(nextPoint);
-                        HasMoved = true;
-                    }
-                }
-            }
-        }
-
-        private void MoveToTarget(NeedAIData data)
-        {
-            if (!HasMoved && m_PathfindingData.Count > 0)
-            {
-                Vector2Int nextPoint = m_PathfindingData.Peek();
-                PhysicsResult physicsResult = PhysicsManager.IsCollision(WorldPosition, nextPoint, MyWorld);
-                if (physicsResult != PhysicsResult.EntityCollision)
-                {
-                    m_PathfindingData.Dequeue();
-                    Move(nextPoint);
-                    HasMoved = true;
-                }
-                else if (physicsResult == PhysicsResult.EntityCollision)
-                {
-                    MyWorld.SwapPosition(this, MyWorld.GetEntity(nextPoint));
-                    m_PathfindingData.Dequeue();
-                    Move(nextPoint);
-                    HasMoved = true;
-                }
-            }
-            else if (m_PathfindingData.Count == 0)
-            {
-                if (data.target != null)
-                {
-                    m_PathfindingData = m_Pathfinder.FindPath(WorldPosition, data.target.WorldPosition, MyWorld.Costs, GetFullVisionRect());
-                }
-                else if (data.targetPoint != GlobalConstants.NO_TARGET)
-                {
-                    m_PathfindingData = m_Pathfinder.FindPath(WorldPosition, data.targetPoint, MyWorld.Costs, GetFullVisionRect());
-                }
-            }
-        }
-
-        public bool CanSee(int x, int y)
-        {
-            return this.Vision[x, y];
-        }
-
-        public bool CanSee(Vector2Int point)
-        {
-            return CanSee(point.x, point.y);
-        }
-
-        protected RectInt GetVisionRect()
-        {
-            RectInt visionRect = new RectInt(this.WorldPosition, new Vector2Int(this.VisionMod, this.VisionMod));
-            return visionRect;
-        }
-
-        protected RectInt GetFullVisionRect()
-        {
-            RectInt visionRect = new RectInt(0, 0, this.Vision.GetLength(0), this.Vision.GetLength(1));
-            return visionRect;
+            VisionProvider.Update(this, this.MyWorld);
+            m_Driver.Locomotion(this);
         }
 
         public void SetPath(Queue<Vector2Int> pointsRef)
@@ -551,9 +350,9 @@ namespace JoyLib.Code.Entities
             m_PathfindingData = pointsRef;
         }
 
-        public bool IsViableMate(Entity entityRef)
+        public bool IsViableMate(Entity entityRef, IRelationship[] relationships)
         {
-            return m_Sexuality.WillMateWith(this, entityRef);
+            return m_Sexuality.WillMateWith(this, entityRef, relationships);
         }
 
         public void AddIdentifiedItem(string nameRef)
@@ -958,11 +757,7 @@ namespace JoyLib.Code.Entities
         {
             get
             {
-                return m_Vision;
-            }
-            set
-            {
-                m_Vision = value;
+                return m_VisionProvider.Vision;
             }
         }
 
@@ -991,7 +786,7 @@ namespace JoyLib.Code.Entities
         public bool HasMoved
         {
             get;
-            protected set;
+            set;
         }
 
         public FulfillmentData FulfillmentData
@@ -1102,11 +897,11 @@ namespace JoyLib.Code.Entities
             }
         }
 
-        public string VisionType
+        public IVision VisionProvider
         {
             get
             {
-                return m_VisionType;
+                return m_VisionProvider;
             }
         }
 
@@ -1144,6 +939,26 @@ namespace JoyLib.Code.Entities
             get
             {
                 return m_Statistics[EntityStatistic.CUNNING].Value + GlobalConstants.MINIMUM_VISION_DISTANCE;
+            }
+        }
+
+        public Queue<Vector2Int> PathfindingData
+        {
+            get
+            {
+                return m_PathfindingData;
+            }
+            set
+            {
+                m_PathfindingData = value;
+            }
+        }
+
+        public IPathfinder Pathfinder
+        {
+            get
+            {
+                return m_Pathfinder;
             }
         }
     }

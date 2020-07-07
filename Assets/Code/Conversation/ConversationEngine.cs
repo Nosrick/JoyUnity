@@ -1,14 +1,24 @@
 ﻿using JoyLib.Code.Conversation.Conversations;
 using JoyLib.Code.Entities;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace JoyLib.Code.Conversation
 {
-    public static class ConversationEngine
+    public class ConversationEngine : MonoBehaviour
     {
-        private static List<ITopic> s_Topics;
-        private static List<ITopic> s_CurrentTopics;
-        private static List<ITopic> s_PreviousTopics;
+        private List<ITopic> m_Topics;
+        private List<ITopic> m_CurrentTopics;
+        private List<ITopic> m_PreviousTopics;
+
+        public void Awake()
+        {
+            m_CurrentTopics = new List<ITopic>();
+
+            m_PreviousTopics = new List<ITopic>();
+
+            m_Topics = new List<ITopic>();
+        }
         
         //REDO THIS WHOLE DAMN THING
         public static List<ITopic> Converse(Entity instigator, Entity listener, int selectedItem = 0)
@@ -70,7 +80,7 @@ namespace JoyLib.Code.Conversation
             return new List<ITopic>();
         }
 
-        private static List<ITopic> TrimEmpty(List<ITopic> topics)
+        private List<ITopic> TrimEmpty(List<ITopic> topics)
         {
             List<ITopic> newTopics = new List<ITopic>(topics.Count);
 
@@ -85,11 +95,11 @@ namespace JoyLib.Code.Conversation
             return newTopics;
         }
 
-        public static List<ITopic> Topics
+        public ITopic[] Topics
         {
             get
             {
-                return new List<ITopic>(s_CurrentTopics);
+                return m_CurrentTopics.ToArray();
             }
         }
     }

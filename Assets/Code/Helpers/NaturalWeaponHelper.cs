@@ -4,15 +4,30 @@ using UnityEngine;
 
 namespace JoyLib.Code.Helpers
 {
-    public class NaturalWeaponHelper
+    public static class NaturalWeaponHelper
     {
-        private static ObjectIconHandler s_ObjectIcons = GameObject.Find("GameManager")
-                                                            .GetComponent<ObjectIconHandler>();
+        private static GameObject s_GameManager;
+
+        private static ObjectIconHandler s_ObjectIcons;
+
+        private static MaterialHandler s_MaterialHandler;
+
+        private static void Initialise()
+        {
+            s_GameManager = GameObject.Find("GameManager");
+            s_ObjectIcons = s_GameManager.GetComponent<ObjectIconHandler>();
+            s_MaterialHandler = s_GameManager.GetComponent<MaterialHandler>();
+        }
 
         //TODO: THIS NEEDS TO BE REWRITTEN ENTIRELY TO SUPPORT NEW SIZE MECHANICS
-        public ItemInstance MakeNaturalWeapon(int wielderSize, string material = "Flesh", params string[] tags)
+        public static ItemInstance MakeNaturalWeapon(int wielderSize, string material = "flesh", params string[] tags)
         {
-            ItemMaterial itemMaterial = MaterialHandler.instance.GetMaterial(material);
+            if(s_GameManager is null)
+            {
+                Initialise();
+            }
+
+            ItemMaterial itemMaterial = s_MaterialHandler.GetMaterial(material);
             BaseItemType baseItem = new BaseItemType(tags, "A claw, fist or psuedopod.", "A claw, fist or psuedopod.", "Natural Weapon", "Natural Weapon", new string[] { "Hand" }, 
                 (wielderSize + 1) * 40.0f, itemMaterial, "Martial Arts", "strikes", 0, 0, "None");
 
