@@ -48,7 +48,27 @@ namespace JoyLib.Code.Entities.Relationships
                 m_Relationships.Add(newRelationship.GenerateHash(), newRelationship);
                 return newRelationship;
             }
-            return null;
+
+            throw new InvalidOperationException("Relationship type " + type + " not found.");
+        }
+
+        public IRelationship CreateRelationshipWithValue(Entity[] participants, string type, int value)
+        {
+            if(m_RelationshipTypes.ContainsKey(type.ToLower()))
+            {
+                IRelationship newRelationship = (IRelationship)Activator.CreateInstance(m_RelationshipTypes[type]);
+
+                foreach(Entity participant in participants)
+                {
+                    newRelationship.AddParticipant(participant);
+                }
+
+                newRelationship.ModifyValueOfAllParticipants(value);
+                m_Relationships.Add(newRelationship.GenerateHash(), newRelationship);
+                return newRelationship;
+            }
+
+            throw new InvalidOperationException("Relationship type " + type + " not found.");
         }
 
         public List<IRelationship> Get(long[] participants, string[] tags = null)

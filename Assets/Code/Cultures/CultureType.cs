@@ -22,6 +22,9 @@ namespace JoyLib.Code.Cultures
         Dictionary<string, int> m_JobPrevelence;
         List<string> m_Inhabitants;
 
+        public CultureType()
+        {}
+
         public CultureType(string nameRef, List<string> rulersRef, List<string> crimesRef, List<NameData> namesRef, 
             Dictionary<string, int> jobRef, List<string> inhabitantsNameRef, Dictionary<string, int> sexualityPrevelenceRef, 
             Dictionary<string, int> sexPrevelence, Dictionary<string, Tuple<int, int>> statVariance, List<string> relationshipTypes)
@@ -80,7 +83,7 @@ namespace JoyLib.Code.Cultures
             return names[result].name;
         }
 
-        public IBioSex ChooseSex()
+        public IBioSex ChooseSex(IBioSex[] sexes)
         {
             int totalSex = 0;
             foreach(int value in m_SexPrevelence.Values)
@@ -95,13 +98,13 @@ namespace JoyLib.Code.Cultures
                 soFar += pair.Value;
                 if (result < soFar)
                 {
-                    return EntityBioSexHandler.instance.Get(pair.Key);
+                    return sexes.First(sex => sex.Name.Equals(pair.Key));
                 }
             }
             return null;
         }
 
-        public ISexuality ChooseSexuality()
+        public ISexuality ChooseSexuality(ISexuality[] sexualities)
         {
             int soFar = 0;
             int totalSex = 0;
@@ -116,13 +119,13 @@ namespace JoyLib.Code.Cultures
                 soFar += pair.Value;
                 if(result < soFar)
                 {
-                    return EntitySexualityHandler.Get(pair.Key);
+                    return sexualities.First(sexuality => sexuality.Equals(pair.Key));
                 }
             }
             return null;
         }
 
-        public JobType ChooseJob()
+        public JobType ChooseJob(JobType[] jobs)
         {
             int soFar = 0;
             int totalJob = 0;
@@ -137,7 +140,7 @@ namespace JoyLib.Code.Cultures
                 soFar += pair.Value;
                 if(result < soFar)
                 {
-                    return JobHandler.instance.Get(pair.Key);
+                    return jobs.First(job => job.Name.Equals(pair.Key));
                 }
             }
             return null;

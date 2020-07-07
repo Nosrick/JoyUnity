@@ -71,6 +71,9 @@ namespace JoyLib.Code.Entities
 
         protected const int ATTACK_THRESHOLD = -50;
 
+        public Entity()
+        {}
+
         /// <summary>
         /// Create an entity with job levels, equipment, family, etc
         /// </summary>
@@ -130,14 +133,8 @@ namespace JoyLib.Code.Entities
             this.m_IdentifiedItems = identifiedItems;
             this.m_Statistics = template.Statistics;
 
-            if (template.Skills.Collection.Count == 0)
-            {
-                this.m_Skills = EntitySkillHandler.instance.GetDefaultSkillBlock(needs);
-            }
-            else
-            {
-                this.m_Skills = template.Skills;
-            }
+            this.m_Skills = template.Skills;
+
             this.m_Needs = needs;
             this.m_Abilities = template.Abilities.ToList();
             this.m_Level = level;

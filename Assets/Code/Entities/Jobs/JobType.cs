@@ -12,6 +12,10 @@ namespace JoyLib.Code.Entities.Jobs
         protected Dictionary<string, float> m_StatisticGrowths;
         protected Dictionary<string, int> m_SkillGrowths;
 
+        public JobType()
+        {
+        }
+
         public JobType(string name, string description, Dictionary<string, float> statGrowths, Dictionary<string, int> skillGrowths,
             NonUniqueDictionary<int, IAbility> abilities)
         {

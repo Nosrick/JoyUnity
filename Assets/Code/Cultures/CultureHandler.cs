@@ -132,6 +132,11 @@ namespace JoyLib.Code.Cultures
 
         public CultureType GetByCultureName(string name)
         {
+            if(m_Cultures is null)
+            {
+                LoadCultures();
+            }
+            
             if (m_Cultures.ContainsKey(name))
             {
                 return m_Cultures[name];
@@ -142,6 +147,11 @@ namespace JoyLib.Code.Cultures
 
         public List<CultureType> GetByCreatureType(string type)
         {
+            if(m_Cultures is null)
+            {
+                LoadCultures();
+            }
+
             try
             {
                 Dictionary<string, CultureType> cultures = m_Cultures.Where(culture => culture.Value.Inhabitants.Contains(type.ToLowerInvariant())).ToDictionary(pair => pair.Key, pair => pair.Value);

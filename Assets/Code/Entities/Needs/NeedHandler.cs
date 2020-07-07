@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities.Needs
@@ -70,6 +71,14 @@ namespace JoyLib.Code.Entities.Needs
                 return m_Needs[name].Randomise();
             }
             throw new InvalidOperationException("Need not found, looking for " + name);
+        }
+
+        public string[] NeedNames
+        {
+            get
+            {
+                return m_Needs.Keys.ToArray();
+            }
         }
     }
 }

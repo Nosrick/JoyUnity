@@ -26,8 +26,11 @@ namespace JoyLib.Code.Entities
         {
             List<EntityTemplate> entities = new List<EntityTemplate>();
 
-            NeedHandler needHandler = GameObject.Find("GameManager")
-                                        .GetComponent<NeedHandler>();
+            GameObject gameManager = GameObject.Find("GameManager");
+
+            NeedHandler needHandler = gameManager.GetComponent<NeedHandler>();
+
+            EntitySkillHandler skillHandler = gameManager.GetComponent<EntitySkillHandler>();
             
             string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Entities", "*.xml", SearchOption.AllDirectories);
 
@@ -48,16 +51,15 @@ namespace JoyLib.Code.Entities
                         List<IRollableValue> statFudge = new List<IRollableValue>(statistics);
                         BasicValueContainer<IRollableValue> statisticContainer = new BasicValueContainer<IRollableValue>(statFudge);
 
-                        List<INeed> needs = (from need in entity.Elements("Need")
-                                             select needHandler.GetRandomised(need.DefaultIfEmpty("DEFAULT").ToLower())).ToList();
-                        BasicValueContainer<INeed> needContainer = new BasicValueContainer<INeed>(needs);
+                        List<string> needs = (from need in entity.Elements("Need")
+                                                select need.DefaultIfEmpty("DEFAULT").ToLower()).ToList();
 
                         List<EntitySkill> skills = (from skill in entity.Elements("Skill")
                                                                   select new EntitySkill(skill.Element("Name").DefaultIfEmpty("DEFAULT").ToLower(),
                                                                   skill.Element("Value").DefaultIfEmpty(0),
                                                                   skill.Element("Threshold").DefaultIfEmpty(7),
                                                                   skill.Element("Experience").DefaultIfEmpty(0),
-                                                                  EntitySkillHandler.instance.GetCoefficients(needContainer, skill.Element("Name").DefaultIfEmpty("DEFAULT")), new StandardRoller())).ToList();
+                                                                  skillHandler.GetCoefficients(needs, skill.Element("Name").DefaultIfEmpty("DEFAULT")), new StandardRoller())).ToList();
 
                         //TODO: FIX THIS NASTY CAST
                         List<IGrowingValue> skillFudge = new List<IGrowingValue>(skills);
@@ -90,8 +92,18 @@ namespace JoyLib.Code.Entities
                         }
                         
 
-                        entities.Add(new EntityTemplate(statisticContainer, skillContainer, abilities.ToArray(), slots.ToArray(),
-                            size, visionType, creatureType, type, tileset, tags.ToArray()));
+                        entities.Add(new EntityTemplate(
+                                            statisticContainer, 
+                                            skillContainer,
+                                            needs.ToArray(), 
+                                            abilities.ToArray(), 
+                                            slots.ToArray(),
+                                            size, 
+                                            visionType, 
+                                            creatureType, 
+                                            type, 
+                                            tileset, 
+                                            tags.ToArray()));
                     }
                 }
                 catch (Exception e)

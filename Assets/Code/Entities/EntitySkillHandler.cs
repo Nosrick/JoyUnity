@@ -8,16 +8,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using UnityEngine;
 
 namespace JoyLib.Code.Entities
 {
-    public class EntitySkillHandler
+    public class EntitySkillHandler : MonoBehaviour
     {
-        private static readonly Lazy<EntitySkillHandler> lazy = new Lazy<EntitySkillHandler>(() => new EntitySkillHandler());
-
-        public static EntitySkillHandler instance => lazy.Value;
-
         private Dictionary<string, List<Tuple<string, float>>> m_SkillCoefficients;
+
+        protected static NeedHandler s_NeedHandler = GameObject.Find("GameManager")
+                                                        .GetComponent<NeedHandler>();
         
         public EntitySkillHandler() {
             m_SkillCoefficients = LoadSkillCoefficients();
@@ -26,7 +26,7 @@ namespace JoyLib.Code.Entities
         public BasicValueContainer<IGrowingValue> GetDefaultSkillBlock(BasicValueContainer<INeed> needs)
         {
             BasicValueContainer<IGrowingValue> skills = new BasicValueContainer<IGrowingValue>();
-            
+
             foreach(string key in m_SkillCoefficients.Keys)
             {
                 NonUniqueDictionary<INeed, float> coefficients = GetCoefficients(needs, key);
@@ -36,7 +36,7 @@ namespace JoyLib.Code.Entities
                 {
                     if(needs.Has(coefficient.Item1.Name))
                     {
-                        governingNeeds.Add(needs[coefficient.Item1.Name], coefficient.Item2);
+                        governingNeeds.Add(coefficient.Item1, coefficient.Item2);
                     }
                 }
 
@@ -50,14 +50,25 @@ namespace JoyLib.Code.Entities
         {
             return new NonUniqueDictionary<INeed, float>();
         }
+        public NonUniqueDictionary<INeed, float> GetCoefficients(List<string> needNames, string skillName)
+        {
+            BasicValueContainer<INeed> needs = new BasicValueContainer<INeed>();
+            foreach(string needName in needNames)
+            {
+                needs.Add(s_NeedHandler.Get(needName));
+            }
+
+            return GetCoefficients(needs, skillName);
+        }
+
 
         /// <summary>
-        /// Takes in the needs and skill name and spits out a Dictionary for the skill
+        /// Takes in the needs and skill name and spits out a NonUniqueDictionary for the skill
         /// </summary>
         /// <param name="container">Container of the entity's needs</param>
         /// <param name="skillName">The name of the skill in question</param>
         /// <returns></returns>
-        public NonUniqueDictionary<INeed, float> GetCoefficients(BasicValueContainer<INeed> container, string skillName)
+        public NonUniqueDictionary<INeed, float> GetCoefficients(BasicValueContainer<INeed> needs, string skillName)
         {
             if(m_SkillCoefficients.ContainsKey(skillName))
             {
@@ -71,7 +82,7 @@ namespace JoyLib.Code.Entities
                         {
                             try
                             {
-                                INeed need = container[tuple.Item1];
+                                INeed need = needs[tuple.Item1];
                                 coefficients.Add(need, tuple.Item2);
                             }
                             catch (Exception e)

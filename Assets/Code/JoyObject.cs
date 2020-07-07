@@ -30,6 +30,9 @@ public class JoyObject : IComparable
 
     protected const int FRAMES_PER_SECOND = 30;
 
+    public JoyObject()
+    {}
+
     /// <summary>
     /// Creation of a JoyObject (MonoBehaviour) using a List of Sprites
     /// </summary>

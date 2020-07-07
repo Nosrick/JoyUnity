@@ -7,18 +7,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using UnityEngine;
 
 namespace JoyLib.Code.Entities.Jobs
 {
-    public class JobHandler
+    public class JobHandler : MonoBehaviour
     {
-        private static readonly Lazy<JobHandler> lazy = new Lazy<JobHandler>(() => new JobHandler());
-
-        public static JobHandler instance => lazy.Value;
-
         private List<JobType> m_Jobs;
 
-        public JobHandler()
+        public void Awake()
         {
             m_Jobs = new List<JobType>();
 

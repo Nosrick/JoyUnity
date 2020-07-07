@@ -24,18 +24,6 @@ namespace JoyLib.Code.States
 
         protected Entity m_Player;
 
-        protected ObjectIconHandler m_ObjectIcons = GameObject.Find("GameManager")
-                                                        .GetComponent<ObjectIconHandler>();
-
-        protected CultureHandler m_CultureHandler = GameObject.Find("GameManager")
-                                                        .GetComponent<CultureHandler>();
-
-        protected NeedHandler m_NeedHandler = GameObject.Find("GameManager")
-                                                        .GetComponent<NeedHandler>();
-
-        protected EntityTemplateHandler m_EntityTemplateHandler = GameObject.Find("GameManager")
-                                                        .GetComponent<EntityTemplateHandler>();
-
         public CharacterCreationState() : base()
         {
             m_PointsRemaining = 12;
@@ -74,7 +62,7 @@ namespace JoyLib.Code.States
         public override void OnGui()
         {
             base.OnGui();
-            
+
             UpdateUI();
         }
 
@@ -132,19 +120,25 @@ namespace JoyLib.Code.States
 
         private void NextState(object sender, EventArgs eventArgs)
         {
-            EntityTemplate humanTemplate = m_EntityTemplateHandler.Get("Human");
-            CultureType culture = m_CultureHandler.GetByCultureName("Human");
-      
-            BasicValueContainer<INeed> needs = new BasicValueContainer<INeed>();
-            needs.Add(m_NeedHandler.GetRandomised("hunger"));
+            GameObject gameManager = GameObject.Find("GameManager");
+
+            EntityTemplateHandler templateHandler = gameManager.GetComponent<EntityTemplateHandler>(); 
+
+            EntityTemplate humanTemplate = templateHandler.Get("Human");
 
             IGrowingValue level = new ConcreteGrowingValue("level", 1, 100, 0, GlobalConstants.DEFAULT_SUCCESS_THRESHOLD,
                 new StandardRoller(), new NonUniqueDictionary<INeed, float>());
 
             EntityFactory entityFactory = new EntityFactory();
 
-            m_Player = entityFactory.Create(humanTemplate, needs, level, m_Jobs[m_JobIndex], culture.ChooseSex(), culture.ChooseSexuality(), new UnityEngine.Vector2Int(-1, -1),
-                m_ObjectIcons.GetSprites("Human", m_Jobs[m_JobIndex].Name), null);
+            m_Player = entityFactory.CreateFromTemplate(
+                humanTemplate,
+                level,
+                new UnityEngine.Vector2Int(-1, -1),
+                null,
+                null,
+                null,
+                m_Jobs[m_JobIndex]);
 
             m_Player.PlayerControlled = true;
 

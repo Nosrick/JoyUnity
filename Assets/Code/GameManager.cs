@@ -4,19 +4,14 @@ using JoyLib.Code.Collections;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Abilities;
-using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Jobs;
 using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Sexes;
 using JoyLib.Code.Entities.Sexuality;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
-using JoyLib.Code.Helpers;
 using JoyLib.Code.Rollers;
-using JoyLib.Code.Scripting;
 using JoyLib.Code.States;
-using JoyLib.Code.Unity.GUI;
-using JoyLib.Code.World;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,18 +20,15 @@ public class GameManager : MonoBehaviour
 {
     protected StateManager m_StateManager;
 
-    protected ObjectIconHandler m_ObjectIcons;
-
-    protected CultureHandler m_CultureHandler;
-
-    protected EntityTemplateHandler m_EntityTemplateHandler;
-
 	// Use this for initialization
 	void Start ()
     {
-        m_ObjectIcons = this.GetComponent<ObjectIconHandler>();
-        m_CultureHandler = this.GetComponent<CultureHandler>();
-        m_EntityTemplateHandler = this.GetComponent<EntityTemplateHandler>();
+        ObjectIconHandler objectIcons = this.GetComponent<ObjectIconHandler>();
+        CultureHandler cultureHandler = this.GetComponent<CultureHandler>();
+        EntityTemplateHandler entityTemplateHandler = this.GetComponent<EntityTemplateHandler>();
+        EntityBioSexHandler bioSexHandler = this.GetComponent<EntityBioSexHandler>();
+        EntitySexualityHandler sexualityHandler = this.GetComponent<EntitySexualityHandler>();
+        JobHandler jobHandler = this.GetComponent<JobHandler>();
 
         InitialiseEverything();
 
@@ -48,26 +40,24 @@ public class GameManager : MonoBehaviour
         INeed testingNeed = needHandler.GetRandomised("thirst");
         needs.Add(testingNeed);
 
-        List<CultureType> cultures = m_CultureHandler.GetByCreatureType("Human");
+        List<CultureType> cultures = cultureHandler.GetByCreatureType("Human");
         CultureType culture = cultures[0];
-        EntityTemplate human = m_EntityTemplateHandler.Get("human");
-        JobType jobType = culture.ChooseJob();
+        EntityTemplate human = entityTemplateHandler.Get("human");
+        JobType jobType = culture.ChooseJob(jobHandler.Jobs);
 
         IGrowingValue level = new ConcreteGrowingValue("level", 1, 100, 0, GlobalConstants.DEFAULT_SUCCESS_THRESHOLD,
                                                         new StandardRoller(), new NonUniqueDictionary<INeed, float>());
 
         EntityFactory entityFactory = new EntityFactory();
-        Entity player = entityFactory.Create(
+        Entity player = entityFactory.CreateFromTemplate(
             human, 
-            needs, 
             level, 
-            jobType, 
-            culture.ChooseSex(), 
-            culture.ChooseSexuality(), 
             Vector2Int.zero, 
-            m_ObjectIcons.GetSprites(human.Tileset, jobType.Name), 
-            null, 
-            new List<CultureType>() { culture });
+            new List<CultureType>() { culture },
+            culture.ChooseSex(bioSexHandler.Sexes), 
+            culture.ChooseSexuality(sexualityHandler.Sexualities), 
+            jobType, 
+            objectIcons.GetSprites(human.Tileset, jobType.Name));
         player.PlayerControlled = true;
 
         m_StateManager.ChangeState(new WorldCreationState(player));
@@ -79,8 +69,6 @@ public class GameManager : MonoBehaviour
     {
         RNG.instance.SetSeed(DateTime.Now.Millisecond);
         AbilityHandler.instance.Initialise();
-        EntityBioSexHandler.instance.Load(m_CultureHandler.Cultures);
-        EntitySexualityHandler.Load(m_CultureHandler.Cultures);
     }
 	
 	// Update is called once per frame

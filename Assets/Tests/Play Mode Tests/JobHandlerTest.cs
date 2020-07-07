@@ -1,5 +1,6 @@
 using JoyLib.Code.Entities.Jobs;
 using NUnit.Framework;
+using UnityEngine;
 
 namespace Tests
 {
@@ -7,10 +8,14 @@ namespace Tests
     {
         private JobHandler target;
 
+        private GameObject gameManager;
+
         [SetUp]
         public void SetUp()
         {
-            target = new JobHandler();
+            gameManager = new GameObject("GameManager");
+
+            target = gameManager.AddComponent<JobHandler>();
         }
 
         [Test]
@@ -19,7 +24,7 @@ namespace Tests
             //given
 
             //when
-            JobType[] jobs = JobHandler.instance.Jobs;
+            JobType[] jobs = target.Jobs;
 
             //then
             Assert.That(jobs, Is.Not.Empty);
@@ -29,6 +34,8 @@ namespace Tests
                 Assert.That(job.StatisticGrowths, Is.Not.Empty);
                 Assert.IsNotEmpty(job.Name);
             }
+
+            GameObject.DestroyImmediate(gameManager);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Collections;
 using System.Linq;
 
@@ -12,6 +13,7 @@ namespace JoyLib.Code.Entities
 
         protected readonly BasicValueContainer<IRollableValue> m_Statistics;
         protected readonly BasicValueContainer<IGrowingValue> m_Skills;
+        protected readonly string[] m_Needs;
         protected readonly IAbility[] m_Abilities;
         protected readonly string[] m_Slots;
         protected readonly string[] m_Tags;
@@ -22,13 +24,24 @@ namespace JoyLib.Code.Entities
 
         protected readonly string m_Tileset;
 
-        public EntityTemplate(BasicValueContainer<IRollableValue> statistics, BasicValueContainer<IGrowingValue> skills, IAbility[] abilities,
-            string[] slots, int size, string visionType, string creatureType, string type, string tileset, string[] tags)
+        public EntityTemplate(
+            BasicValueContainer<IRollableValue> statistics, 
+            BasicValueContainer<IGrowingValue> skills, 
+            string[] needs,
+            IAbility[] abilities,
+            string[] slots, 
+            int size, 
+            string visionType, 
+            string creatureType, 
+            string type, 
+            string tileset, 
+            string[] tags)
         {
             m_Statistics = statistics;
             m_Skills = skills;
             m_Abilities = abilities;
             m_Slots = slots;
+            m_Needs = needs;
 
             m_Size = size;
 
@@ -77,6 +90,14 @@ namespace JoyLib.Code.Entities
             get
             {
                 return m_Skills;
+            }
+        }
+
+        public string[] Needs
+        {
+            get
+            {
+                return m_Needs;
             }
         }
 

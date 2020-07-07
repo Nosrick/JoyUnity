@@ -1,33 +1,36 @@
 ﻿using JoyLib.Code.Cultures;
 using JoyLib.Code.Scripting;
 using System;
+using System.Linq;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace JoyLib.Code.Entities.Sexuality
 {
-    public static class EntitySexualityHandler
+    public class EntitySexualityHandler : MonoBehaviour
     {
-        private static Dictionary<string, Type> s_Sexualities;
+        protected Dictionary<string, ISexuality> m_Sexualities;
 
-        public static bool Load(CultureType[] cultures)
+        public bool Load(CultureType[] cultures)
         {
-            if(s_Sexualities != null)
+            if(m_Sexualities != null)
             {
                 return true;
             }
 
-            s_Sexualities = new Dictionary<string, Type>();
+            m_Sexualities = new Dictionary<string, ISexuality>();
 
             foreach(CultureType culture in cultures)
             {
                 foreach(string sexuality in culture.Sexualities)
                 {
-                    if(s_Sexualities.ContainsKey(sexuality) == false)
+                    if(m_Sexualities.ContainsKey(sexuality) == false)
                     {
                         Type type = ScriptingEngine.instance.FetchType(sexuality);
-                        if(type != null)
+                        if(!(type is null))
                         {
-                            s_Sexualities.Add(sexuality, type);
+                            ISexuality sexualityInstance = (ISexuality)Activator.CreateInstance(type);
+                            m_Sexualities.Add(sexuality, sexualityInstance);
                         }
                     }
                 }
@@ -36,19 +39,26 @@ namespace JoyLib.Code.Entities.Sexuality
             return true;
         }
 
-        public static ISexuality Get(string sexuality)
+        public ISexuality Get(string sexuality)
         {
-            if(s_Sexualities == null)
+            if(m_Sexualities == null)
             {
                 return null;
             }
 
-            if(s_Sexualities.ContainsKey(sexuality))
+            if(m_Sexualities.ContainsKey(sexuality))
             {
-                ISexuality returnSexuality = (ISexuality)Activator.CreateInstance(s_Sexualities[sexuality]);
-                return returnSexuality;
+                return m_Sexualities[sexuality];
             }
             return null;
+        }
+
+        public ISexuality[] Sexualities
+        {
+            get
+            {
+                return m_Sexualities.Values.ToArray();
+            }
         }
     }
 }

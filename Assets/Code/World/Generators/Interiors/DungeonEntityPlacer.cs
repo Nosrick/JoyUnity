@@ -1,10 +1,7 @@
 ﻿using JoyLib.Code.Collections;
-using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Jobs;
 using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Graphics;
 using JoyLib.Code.Physics;
 using JoyLib.Code.Rollers;
 using System.Collections.Generic;
@@ -15,18 +12,8 @@ namespace JoyLib.Code.World.Generators.Interiors
 {
     public class DungeonEntityPlacer
     {
-        protected static NeedHandler s_NeedHandler = GameObject.Find("GameManager")
-                                                                .GetComponent<NeedHandler>();
-
         protected static LiveEntityHandler s_EntityHandler = GameObject.Find("GameManager")
                                                                 .GetComponent<LiveEntityHandler>();
-
-        protected static ObjectIconHandler s_ObjectIcons = GameObject.Find("GameManager")
-                                                                .GetComponent<ObjectIconHandler>();
-
-        protected static CultureHandler s_CultureHandler = GameObject.Find("GameManager")
-                                                                .GetComponent<CultureHandler>();
-
         protected static EntityTemplateHandler s_EntityTemplateHandler = GameObject.Find("GameManager")
                                                                 .GetComponent<EntityTemplateHandler>();
 
@@ -62,18 +49,6 @@ namespace JoyLib.Code.World.Generators.Interiors
 
                 int entityIndex = RNG.instance.Roll(0, templates.Length - 1);
 
-                List<CultureType> cultures = s_CultureHandler.GetByCreatureType(templates[entityIndex].CreatureType);
-                CultureType culture = cultures[0];
-
-                JobType jobType = culture.ChooseJob();
-
-                Dictionary<string, int> jobLevels = new Dictionary<string, int>();
-                jobLevels.Add(jobType.Name, 1);
-
-                //REPLACE THIS WITH ENTITY CONSTRUCTOR
-                BasicValueContainer<INeed> needs = new BasicValueContainer<INeed>();
-                needs.Add(s_NeedHandler.GetRandomised("hunger"));
-
                 IGrowingValue level = new ConcreteGrowingValue(
                     "level", 
                     1, 
@@ -83,16 +58,15 @@ namespace JoyLib.Code.World.Generators.Interiors
                     new StandardRoller(), 
                     new NonUniqueDictionary<INeed, float>());
 
-                Entity newEntity = s_EntityFactory.Create(
+                Entity newEntity = s_EntityFactory.CreateFromTemplate(
                     templates[entityIndex], 
-                    needs, 
                     level, 
-                    jobType, 
-                    culture.ChooseSex(), 
-                    culture.ChooseSexuality(),
-                    availablePoints[pointIndex], 
-                    s_ObjectIcons.GetSprites(templates[entityIndex].Tileset, 
-                    templates[entityIndex].CreatureType), 
+                    availablePoints[pointIndex],
+                    null,
+                    null,
+                    null,
+                    null, 
+                    null,
                     worldRef);
 
                 s_EntityHandler.AddEntity(newEntity);

@@ -5,7 +5,7 @@ using JoyLib.Code.Entities.Statistics;
 
 namespace JoyLib.Code.Collections
 {
-    public class BasicValueContainer<T> where T : IBasicValue
+    public class BasicValueContainer<T> : IEnumerable<T> where T : IBasicValue
     {
         private Dictionary<string, T> m_Values;
 
@@ -66,6 +66,16 @@ namespace JoyLib.Code.Collections
             throw new InvalidOperationException("Attempted to access " + this.GetType().Name + ".GetRawValue() with parameter of " + name);
         }
 
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return m_Values.Values.GetEnumerator();
+        }
+
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        {
+            return m_Values.Values.GetEnumerator();
+        }
+
         public T this[string index]
         {
             get
@@ -79,6 +89,14 @@ namespace JoyLib.Code.Collections
             get
             {
                 return m_Values.Values.ToList();
+            }
+        }
+
+        public List<string> Names
+        {
+            get
+            {
+                return m_Values.Keys.ToList();
             }
         }
     }

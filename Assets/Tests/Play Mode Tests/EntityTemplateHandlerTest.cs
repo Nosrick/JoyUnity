@@ -45,7 +45,7 @@ namespace Tests
                 Assert.False(template.Tileset == "DEFAULT");
             }
 
-            Object.Destroy(container);
+            Object.DestroyImmediate(container);
         }
     }
 }
