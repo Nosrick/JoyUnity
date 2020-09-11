@@ -13,8 +13,8 @@ namespace JoyLib.Code.Entities.AI.LOS
             RectInt dimensions,
             Vector2Int[] walls);
 
-        bool HasVisibility(Entity viewer, WorldInstance world, Vector2Int point);
-        bool HasVisibility(Entity viewer, WorldInstance world, int x, int y);
+        bool HasVisibility(Entity viewer, WorldInstance world, Vector2Int point, bool[,] vision);
+        bool HasVisibility(Entity viewer, WorldInstance world, int x, int y, bool[,] vision);
         LinkedList<Vector2Int> HasLOS(Vector2Int origin, Vector2Int target);
     }
 }

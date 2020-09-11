@@ -13,6 +13,15 @@ namespace JoyLib.Code.Entities.Sexes
 
         public void Awake()
         {
+            if(m_Sexes is null)
+            {
+                Initialise();
+            }
+        }
+
+        private void Initialise()
+        {
+            
             CultureHandler cultureHandler = GameObject.Find("GameManager")
                                             .GetComponent<CultureHandler>();
 
@@ -65,6 +74,10 @@ namespace JoyLib.Code.Entities.Sexes
         {
             get
             {
+                if(m_Sexes is null)
+                {
+                    Initialise();
+                }
                 return m_Sexes.Values.ToArray();
             }
         }

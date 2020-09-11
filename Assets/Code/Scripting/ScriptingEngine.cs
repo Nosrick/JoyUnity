@@ -80,7 +80,7 @@ namespace JoyLib.Code.Scripting
         {
             try
             {
-                Type directType = m_Types.Single(type => type.Name.ToLower().Equals(typeName.ToLower()));
+                Type directType = m_Types.Single(type => type.Name.Equals(typeName, StringComparison.OrdinalIgnoreCase));
                 return directType;
             }
             catch(Exception ex)
@@ -95,7 +95,7 @@ namespace JoyLib.Code.Scripting
         {
             try
             {
-                Type directType = m_Types.First(type => type.Name.ToLower().Equals(typeName.ToLower()));
+                Type directType = m_Types.First(type => type.Name.Equals(typeName, StringComparison.OrdinalIgnoreCase));
 
                 return Activator.CreateInstance(directType);
             }
@@ -111,7 +111,7 @@ namespace JoyLib.Code.Scripting
         {
             try
             {
-                Type directType = m_Types.First(type => type.Name.ToLower().Equals(typeName.ToLower()));
+                Type directType = m_Types.First(type => type.Name.Equals(typeName, StringComparison.OrdinalIgnoreCase));
 
                 List<Type> children = new List<Type>();
                 if(directType != null)
@@ -154,7 +154,7 @@ namespace JoyLib.Code.Scripting
         {
             try
             {
-                Type type = m_Types.Single(t => t.Name.ToLower().Equals(actionName.ToLower()));
+                Type type = m_Types.Single(t => t.Name.Equals(actionName, StringComparison.OrdinalIgnoreCase));
 
                 IJoyAction action = (IJoyAction)Activator.CreateInstance(type);
                 return action;

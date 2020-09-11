@@ -95,12 +95,9 @@ namespace JoyLib.Code.Entities.AI.LOS
             return (x >= 0 && x < m_Width && y >= 0 && y < m_Height);
         }
 
-        public bool[,] Vision
+        public bool[,] GetVision()
         {
-            get
-            {
-                return m_Visible;
-            }
+            return m_Visible;
         }
 
         public int Width

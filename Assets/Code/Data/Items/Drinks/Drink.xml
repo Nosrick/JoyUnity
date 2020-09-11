@@ -8,8 +8,8 @@
 		<SpawnWeight>30</SpawnWeight>
 		<Material>Glass</Material>
 		<Size>50</Size>
-		<Tag>Drink</Tag>
-		<Tag>Alcohol</Tag>
+		<Tag>drink</Tag>
+		<Tag>alcohol</Tag>
 		<Tileset>Drinks</Tileset>
 	</IdentifiedItem>
 
@@ -21,7 +21,7 @@
 		<SpawnWeight>30</SpawnWeight>
 		<Material>Leather</Material>
 		<Size>50</Size>
-		<Tag>Drink</Tag>
+		<Tag>drink</Tag>
 		<Tileset>Drinks</Tileset>
 	</IdentifiedItem>
 
@@ -33,8 +33,8 @@
 		<SpawnWeight>30</SpawnWeight>
 		<Material>Glass</Material>
 		<Size>100</Size>
-		<Tag>Drink</Tag>
-		<Tag>Alcohol</Tag>
+		<Tag>drink</Tag>
+		<Tag>alcohol</Tag>
 		<Tileset>Drinks</Tileset>
 	</IdentifiedItem>
 	

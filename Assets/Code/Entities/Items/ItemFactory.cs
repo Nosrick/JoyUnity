@@ -45,21 +45,20 @@ namespace JoyLib.Code.Entities.Items
 
         public ItemInstance CreateSpecificType(string name, string[] tags, bool identified = false)
         {
-            string lowerName = name.ToLowerInvariant();
             BaseItemType[] matchingTypes = s_ItemHandler.FindItemsOfType(tags);
             List<BaseItemType> secondRound = new List<BaseItemType>();
             foreach (BaseItemType itemType in matchingTypes)
             {
                 if (identified == false)
                 {
-                    if (itemType.UnidentifiedName.ToLowerInvariant() == lowerName)
+                    if (itemType.UnidentifiedName.Equals(name, System.StringComparison.OrdinalIgnoreCase))
                     {
                         secondRound.Add(itemType);
                     }
                 }
                 else
                 {
-                    if (itemType.IdentifiedName == lowerName)
+                    if (itemType.IdentifiedName.Equals(name, System.StringComparison.OrdinalIgnoreCase))
                     {
                         secondRound.Add(itemType);
                     }
@@ -78,7 +77,7 @@ namespace JoyLib.Code.Entities.Items
                 return itemInstance;
             }
 
-            throw new ItemTypeNotFoundException(lowerName, "Could not find an item type by the name of " + lowerName);
+            throw new ItemTypeNotFoundException(name, "Could not find an item type by the name of " + name);
         }
 
         public ItemInstance CreateCompletelyRandomItem(bool identified = false, bool withAbility = false)

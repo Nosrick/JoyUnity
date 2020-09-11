@@ -9,8 +9,8 @@
     <Effect></Effect>
     <SpawnWeight>5</SpawnWeight>
     <Materials>Glass</Materials>
-    <Tag>Potion</Tag>
-    <Tag>Healing</Tag>
+    <Tag>potion</Tag>
+    <Tag>healing</Tag>
     <Tileset>Potions</Tileset>
   </IdentifiedItem>
 

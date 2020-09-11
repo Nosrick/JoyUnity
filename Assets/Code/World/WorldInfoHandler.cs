@@ -41,13 +41,13 @@ namespace JoyLib.Code.World
                 {
                     WorldInfo info = new WorldInfo()
                     {
-                        name = worldInfo.Element("Name").GetAs<string>().ToLower(),
+                        name = worldInfo.Element("Name").GetAs<string>(),
                         inhabitants = worldInfo.Elements("Inhabitant")
-                            .Select(x => x.GetAs<string>().ToLower())
+                            .Select(x => x.GetAs<string>())
                             .ToArray(),
-                        tileset = worldInfo.Element("Tileset").GetAs<string>().ToLower(),
+                        tileset = worldInfo.Element("Tileset").GetAs<string>(),
                         tags = worldInfo.Elements("Tag")
-                            .Select(x => x.GetAs<string>().ToLower())
+                            .Select(x => x.GetAs<string>())
                             .ToArray()
                     };
 
@@ -59,11 +59,11 @@ namespace JoyLib.Code.World
                     {
                         IconData newIcon = new IconData()
                         {
-                            name = icon.Element("Name").GetAs<string>().ToLower(),
+                            name = icon.Element("Name").GetAs<string>(),
                             position = new UnityEngine.Vector2Int(
                                 icon.Element("X").GetAs<int>(),
                                 icon.Element("Y").GetAs<int>()),
-                            data = icon.Element("Data").DefaultIfEmpty("").ToLower()
+                            data = icon.Element("Data").DefaultIfEmpty("")
                         };
 
                         iconData.Add(newIcon);
@@ -91,14 +91,14 @@ namespace JoyLib.Code.World
         {
             try
             {
-                return m_WorldInfo.Where(info => info.name.StartsWith(name.ToLower())).ToArray();
+                return m_WorldInfo.Where(info => info.name.StartsWith(name, StringComparison.OrdinalIgnoreCase)).ToArray();
             }
             catch (Exception e)
             {
                 ActionLog.instance.AddText("ERROR GETTING WORLD INFO");
                 ActionLog.instance.AddText(e.Message);
                 ActionLog.instance.AddText(e.StackTrace);
-                throw new InvalidOperationException("Error getting world info for " + name.ToLower());
+                throw new InvalidOperationException("Error getting world info for " + name);
             }
         }
     }

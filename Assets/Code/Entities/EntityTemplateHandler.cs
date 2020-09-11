@@ -45,7 +45,7 @@ namespace JoyLib.Code.Entities
                     foreach(XElement entity in doc.Elements("Entity"))
                     {
                         List<EntityStatistic> statistics = (from stat in entity.Elements("Statistic")
-                                                                          select new EntityStatistic(stat.Element("Name").DefaultIfEmpty("DEFAULT").ToLower(), 
+                                                                          select new EntityStatistic(stat.Element("Name").DefaultIfEmpty("DEFAULT"), 
                                                                           stat.Element("Value").DefaultIfEmpty(4), 
                                                                           stat.Element("Threshold").DefaultIfEmpty(7), new StandardRoller())).ToList();
 
@@ -54,10 +54,10 @@ namespace JoyLib.Code.Entities
                         BasicValueContainer<IRollableValue> statisticContainer = new BasicValueContainer<IRollableValue>(statFudge);
 
                         List<string> needs = (from need in entity.Elements("Need")
-                                                select need.DefaultIfEmpty("DEFAULT").ToLower()).ToList();
+                                                select need.DefaultIfEmpty("DEFAULT")).ToList();
 
                         List<EntitySkill> skills = (from skill in entity.Elements("Skill")
-                                                                  select new EntitySkill(skill.Element("Name").DefaultIfEmpty("DEFAULT").ToLower(),
+                                                                  select new EntitySkill(skill.Element("Name").DefaultIfEmpty("DEFAULT"),
                                                                   skill.Element("Value").DefaultIfEmpty(0),
                                                                   skill.Element("Threshold").DefaultIfEmpty(7),
                                                                   skill.Element("Experience").DefaultIfEmpty(0),
@@ -67,19 +67,19 @@ namespace JoyLib.Code.Entities
                         List<IGrowingValue> skillFudge = new List<IGrowingValue>(skills);
                         BasicValueContainer<IGrowingValue> skillContainer = new BasicValueContainer<IGrowingValue>(skillFudge);
 
-                        string creatureType = entity.Element("CreatureType").DefaultIfEmpty("DEFAULT").ToLower();
-                        string type = entity.Element("Type").DefaultIfEmpty("DEFAULT").ToLower();
-                        string visionType = entity.Element("VisionType").DefaultIfEmpty("DiurnalVisionProvider").ToLower();
+                        string creatureType = entity.Element("CreatureType").DefaultIfEmpty("DEFAULT");
+                        string type = entity.Element("Type").DefaultIfEmpty("DEFAULT");
+                        string visionType = entity.Element("VisionType").DefaultIfEmpty("DiurnalVisionProvider");
                         IVision vision = (IVision)ScriptingEngine.instance.FetchAndInitialise(visionType);
-                        string tileset = entity.Element("Tileset").DefaultIfEmpty("DEFAULT").ToLower();
+                        string tileset = entity.Element("Tileset").DefaultIfEmpty("DEFAULT");
 
                         int size = entity.Element("Size").DefaultIfEmpty<int>(0);
 
                         List<string> tags = (from tag in entity.Elements("Tag")
-                                             select tag.DefaultIfEmpty("NULL").ToLower()).ToList();
+                                             select tag.DefaultIfEmpty("NULL")).ToList();
 
                         List<string> slots = (from slot in entity.Elements("Slot")
-                                              select slot.DefaultIfEmpty("NULL").ToLower()).ToList();
+                                              select slot.DefaultIfEmpty("NULL")).ToList();
 
                         List<IAbility> abilities = new List<IAbility>();
                         try

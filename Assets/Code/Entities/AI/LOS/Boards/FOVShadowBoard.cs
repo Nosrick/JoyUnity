@@ -96,24 +96,21 @@ namespace JoyLib.Code.Entities.AI.LOS
             return (x >= 0 && x < m_Width && y >= 0 && y < m_Height);
         }
 
-        public bool[,] Vision
+        public bool[,] GetVision()
         {
-            get
+            bool[,] vision = new bool[m_Width, m_Height];
+            for(int i = 0; i < m_Visible.GetLength(0); i++)
             {
-                bool[,] vision = new bool[m_Width, m_Height];
-                for(int i = 0; i < m_Visible.GetLength(0); i++)
+                for(int j = 0; j < m_Visible.GetLength(1); j++)
                 {
-                    for(int j = 0; j < m_Visible.GetLength(1); j++)
+                    if(m_Visible[i,j] > 0)
                     {
-                        if(m_Visible[i,j] > 0)
-                        {
-                            vision[i, j] = true;
-                        }
+                        vision[i, j] = true;
                     }
                 }
-
-                return vision;
             }
+
+            return vision;
         }
     }
 }

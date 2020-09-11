@@ -5,10 +5,12 @@
     <Name>Leather bag</Name>
     <Description>A leather bag, used to store things.</Description>
     <Value>5</Value>
-    <Material>Leather</Material>
+    <Material>leather</Material>
     <Size>100</Size>
     <Tileset>Containers</Tileset>
   </IdentifiedItem>
+
+  <Tag>container</Tag>
 
   <TileSet>
     <Filename>Chest0</Filename>

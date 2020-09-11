@@ -560,7 +560,17 @@ namespace JoyLib.Code.States
                 GameObject fog = m_FogOfWarHolder.transform.GetChild(i).gameObject;
                 Vector2Int position = new Vector2Int((int)fog.transform.position.x, (int)fog.transform.position.y);
 
-                bool visible = vision[position.x, position.y];
+                Vector2Int adjustedPosition = new Vector2Int(
+                    position.x - vision.GetLength(0), 
+                    position.y - vision.GetLength(1));
+
+                if(adjustedPosition.x < 0 || adjustedPosition.y < 0
+                    || adjustedPosition.x >= vision.GetLength(0) || adjustedPosition.y >= vision.GetLength(1))
+                {
+                    continue;
+                }
+
+                bool visible = vision[adjustedPosition.x, adjustedPosition.y];
                 int lightLevel;
                 if (visible)
                 {

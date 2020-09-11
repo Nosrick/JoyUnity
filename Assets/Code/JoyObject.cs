@@ -1,5 +1,5 @@
 ﻿using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Graphics;
+using JoyLib.Code;
 using JoyLib.Code.Managers;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
@@ -130,10 +130,9 @@ public class JoyObject : IComparable
 
     public bool AddTag(string tag)
     {
-        string tagLower = tag.ToLowerInvariant();
-        if(m_Tags.Contains(tagLower) == false)
+        if(m_Tags.Contains(tag, GlobalConstants.STRING_COMPARER) == false)
         {
-            m_Tags.Add(tagLower);
+            m_Tags.Add(tag);
             return true;
         }
         return false;
@@ -141,10 +140,9 @@ public class JoyObject : IComparable
 
     public bool RemoveTag(string tag)
     {
-        string tagLower = tag.ToLowerInvariant();
-        if(m_Tags.Contains(tagLower) == true)
+        if(m_Tags.Contains(tag, GlobalConstants.STRING_COMPARER) == true)
         {
-            m_Tags.Remove(tagLower);
+            m_Tags.Remove(tag);
             return true;
         }
         return false;
@@ -152,7 +150,7 @@ public class JoyObject : IComparable
 
     public bool HasTag(string tag)
     {
-        return m_Tags.Contains(tag.ToLowerInvariant());
+        return m_Tags.Contains(tag, GlobalConstants.STRING_COMPARER);
     }
 
     public void Move(Vector2Int newPosition)

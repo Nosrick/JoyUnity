@@ -6,14 +6,14 @@ namespace JoyLib.Code.Entities.AI.LOS
 {
     public abstract class AbstractFOVHandler : IFOVHandler
     {
-        public virtual bool HasVisibility(Entity viewer, WorldInstance world, Vector2Int point)
+        public virtual bool HasVisibility(Entity viewer, WorldInstance world, Vector2Int point, bool[,] vision)
         {
-            return viewer.VisionProvider.HasVisibility(viewer, world, point);
+            return viewer.VisionProvider.HasVisibility(viewer, world, point, vision);
         }
 
-        public virtual bool HasVisibility(Entity viewer, WorldInstance world, int x, int y)
+        public virtual bool HasVisibility(Entity viewer, WorldInstance world, int x, int y, bool[,] vision)
         {
-            return viewer.VisionProvider.HasVisibility(viewer, world, x, y);
+            return viewer.VisionProvider.HasVisibility(viewer, world, x, y, vision);
         }
 
         public virtual IFOVBoard Do(Entity viewer, WorldInstance world, Vector2Int origin, RectInt dimensions, Vector2Int[] walls)

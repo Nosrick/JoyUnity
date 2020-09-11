@@ -9,7 +9,7 @@
 		<Size>150</Size>
 		<LightLevel>10</LightLevel>
 		<SpawnWeight>2</SpawnWeight>
-		<Tag>Light Source</Tag>
+		<Tag>light source</Tag>
 		<Tileset>Light Source</Tileset>
 	</IdentifiedItem>
 

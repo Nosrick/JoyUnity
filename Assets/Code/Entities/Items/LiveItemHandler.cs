@@ -25,7 +25,10 @@ namespace JoyLib.Code.Entities.Items
 
         public void Awake()
         {
-            Initialise();
+            if (m_ItemDatabase is null)
+            {
+                Initialise();
+            }
         }
 
         protected void Initialise()
@@ -52,17 +55,17 @@ namespace JoyLib.Code.Entities.Items
                 List<IdentifiedItem> identifiedItems = (from item in doc.Elements("IdentifiedItem")
                                                         select new IdentifiedItem()
                                                         {
-                                                            name = item.Element("Name").GetAs<string>().ToLower(),
-                                                            description = item.Element("Description").GetAs<string>().ToLower(),
+                                                            name = item.Element("Name").GetAs<string>(),
+                                                            description = item.Element("Description").GetAs<string>(),
                                                             value = item.Element("Value").GetAs<int>(),
                                                             size = item.Element("Size").GetAs<int>(),
-                                                            spriteSheet = item.Element("Tileset").GetAs<string>().ToLower(),
-                                                            skill = item.Element("Skill").DefaultIfEmpty("none").ToLower(),
-                                                            slots = item.Elements("Slot").Select(slot => slot.DefaultIfEmpty("none").ToLower()).ToArray(),
-                                                            materials = item.Elements("Material").Select(material => material.GetAs<string>().ToLower()).ToArray(),
-                                                            tags = item.Elements("Tag").Select(tag => tag.GetAs<string>().ToLower()).ToArray(),
+                                                            spriteSheet = item.Element("Tileset").GetAs<string>(),
+                                                            skill = item.Element("Skill").DefaultIfEmpty("none"),
+                                                            slots = item.Elements("Slot").Select(slot => slot.DefaultIfEmpty("none")).ToArray(),
+                                                            materials = item.Elements("Material").Select(material => material.GetAs<string>()).ToArray(),
+                                                            tags = item.Elements("Tag").Select(tag => tag.GetAs<string>()).ToArray(),
                                                             weighting = item.Element("SpawnWeighting").GetAs<int>(),
-                                                            abilities = item.Elements("Ability").Select(ability => AbilityHandler.instance.GetAbility(ability.GetAs<string>().ToLower())).ToArray(),
+                                                            abilities = item.Elements("Ability").Select(ability => AbilityHandler.instance.GetAbility(ability.GetAs<string>())).ToArray(),
                                                             lightLevel = item.Element("LightLevel").GetAs<int>()
 
                                                         }).ToList();
@@ -70,11 +73,11 @@ namespace JoyLib.Code.Entities.Items
                 List<UnidentifiedItem> unidentifiedItems = (from item in doc.Elements("UnidentifiedItem")
                                                             select new UnidentifiedItem()
                                                             {
-                                                                name = item.Element("Name").GetAs<string>().ToLower(),
-                                                                description = item.Element("Description").GetAs<string>().ToLower()
+                                                                name = item.Element("Name").GetAs<string>(),
+                                                                description = item.Element("Description").GetAs<string>()
                                                             }).ToList();
 
-                string tileSet = doc.Element("TileSet").Element("Name").GetAs<string>().ToLower();
+                string tileSet = doc.Element("TileSet").Element("Name").GetAs<string>();
 
                 string fileName = doc.Element("TileSet").Element("Filename").DefaultIfEmpty("");
 
@@ -83,8 +86,8 @@ namespace JoyLib.Code.Entities.Items
                     List<IconData> iconData = (from item in doc.Element("TileSet").Elements("Icon")
                                                select new IconData()
                                                {
-                                                   name = item.Element("Name").GetAs<string>().ToLower(),
-                                                   data = item.Element("Data").DefaultIfEmpty("").ToLower(),
+                                                   name = item.Element("Name").GetAs<string>(),
+                                                   data = item.Element("Data").DefaultIfEmpty(""),
                                                    frames = item.Element("Frames").DefaultIfEmpty(1),
                                                    position = new Vector2Int(item.Element("X").GetAs<int>(), item.Element("Y").GetAs<int>())
                                                }).ToList();
@@ -93,7 +96,7 @@ namespace JoyLib.Code.Entities.Items
                 }
 
 
-                string actionWord = doc.Element("ActionWord").DefaultIfEmpty("strikes").ToLower();
+                string actionWord = doc.Element("ActionWord").DefaultIfEmpty("strikes");
 
 
                 for (int j = 0; j < identifiedItems.Count; j++)
@@ -142,7 +145,7 @@ namespace JoyLib.Code.Entities.Items
             return matchingTypes.ToArray();
         }
 
-        
+
 
         public ItemInstance GetInstance(long GUID)
         {
@@ -156,7 +159,7 @@ namespace JoyLib.Code.Entities.Items
 
         public bool AddItem(ItemInstance item)
         {
-            if(LiveItems.ContainsKey(item.GUID))
+            if (LiveItems.ContainsKey(item.GUID))
             {
                 return false;
             }
@@ -167,7 +170,7 @@ namespace JoyLib.Code.Entities.Items
 
         public bool RemoveItem(long GUID)
         {
-            if(LiveItems.ContainsKey(GUID))
+            if (LiveItems.ContainsKey(GUID))
             {
                 LiveItems.Remove(GUID);
                 return true;
@@ -180,7 +183,7 @@ namespace JoyLib.Code.Entities.Items
         {
             get
             {
-                if(m_ItemDatabase is null)
+                if (m_ItemDatabase is null)
                 {
                     Initialise();
                 }
@@ -193,7 +196,7 @@ namespace JoyLib.Code.Entities.Items
         {
             get
             {
-                if(m_LiveItems is null)
+                if (m_LiveItems is null)
                 {
                     Initialise();
                 }

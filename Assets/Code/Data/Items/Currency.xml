@@ -7,7 +7,7 @@
 		<Material>Copper</Material>
 		<Size>1</Size>
 		<SpawnWeight>50</SpawnWeight>
-		<Tag>Currency</Tag>
+		<Tag>currency</Tag>
 		<Tileset>Currency</Tileset>
 	</IdentifiedItem>
 
@@ -18,7 +18,7 @@
 		<Material>Silver</Material>
 		<Size>1</Size>
 		<SpawnWeight>30</SpawnWeight>
-		<Tag>Currency</Tag>
+		<Tag>currency</Tag>
 		<Tileset>Currency</Tileset>
 	</IdentifiedItem>
 
@@ -29,7 +29,7 @@
 		<Material>Gold</Material>
 		<Size>1</Size>
 		<SpawnWeight>5</SpawnWeight>
-		<Tag>Currency</Tag>
+		<Tag>currency</Tag>
 		<Tileset>Currency</Tileset>
 	</IdentifiedItem>
 
@@ -40,21 +40,21 @@
 			<Name>Copper Coin</Name>
 			<X>3</X>
 			<Y>5</Y>
-			<Data>Default</Data>
+			<Data>default</Data>
 		</Icon>
 
 		<Icon>
 			<Name>Silver Coin</Name>
 			<X>4</X>
 			<Y>5</Y>
-			<Data>Default</Data>
+			<Data>default</Data>
 		</Icon>
 
 		<Icon>
 			<Name>Gold Coin</Name>
 			<X>2</X>
 			<Y>4</Y>
-			<Data>Default</Data>
+			<Data>default</Data>
 		</Icon>
 	</TileSet>
 </Items>

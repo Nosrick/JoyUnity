@@ -105,7 +105,8 @@ namespace JoyLib.Code.Entities
             List<ItemInstance> backpack,
             List<string> identifiedItems,
             Dictionary<string, int> jobLevels,
-            WorldInstance world) :
+            WorldInstance world,
+            IDriver driver) :
             base("",
                 EntityDerivedValue.GetDefault(
                     template.Statistics[EntityStatistic.ENDURANCE],
@@ -157,8 +158,6 @@ namespace JoyLib.Code.Entities
 
             this.CalculateDerivatives();
 
-            this.m_VisionProvider = template.VisionType;
-
             this.m_Pathfinder = (IPathfinder)ScriptingEngine.instance.FetchAndInitialise("custompathfinder");
             this.m_PathfindingData = new Queue<Vector2Int>();
 
@@ -171,6 +170,8 @@ namespace JoyLib.Code.Entities
 
             this.MyWorld = world;
             this.JoyName = this.GetNameFromMultipleCultures();
+
+            this.m_Driver = driver;
 
             SetCurrentTarget();
         }
@@ -189,10 +190,10 @@ namespace JoyLib.Code.Entities
         /// <param name="icons"></param>
         /// <param name="world"></param>
         public Entity(EntityTemplate template, BasicValueContainer<INeed> needs, List<CultureType> cultures, IGrowingValue level, JobType job, IBioSex sex, ISexuality sexuality,
-            Vector2Int position, Sprite[] sprites, WorldInstance world) :
+            Vector2Int position, Sprite[] sprites, WorldInstance world, IDriver driver) :
             this(template, needs, cultures, level, 0, job, sex, sexuality, position, sprites,
                 NaturalWeaponHelper.MakeNaturalWeapon(template.Size), new NonUniqueDictionary<string, ItemInstance>(),
-                new List<ItemInstance>(), new List<string>(), new Dictionary<string, int>(), world)
+                new List<ItemInstance>(), new List<string>(), new Dictionary<string, int>(), world, driver)
         {
         }
 

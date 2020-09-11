@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 
 namespace JoyLib.Code
 {
@@ -14,5 +15,7 @@ namespace JoyLib.Code
         public const int MINIMUM_VISION_DISTANCE = 3;
 
         public static readonly Vector2Int NO_TARGET = new Vector2Int(-1, -1);
+
+        public static readonly StringComparer STRING_COMPARER = StringComparer.OrdinalIgnoreCase;
     }
 }

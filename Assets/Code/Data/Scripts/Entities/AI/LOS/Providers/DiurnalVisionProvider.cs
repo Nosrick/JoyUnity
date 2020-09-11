@@ -1,5 +1,6 @@
 using JoyLib.Code.World;
 using UnityEngine;
+using System.Linq;
 
 namespace JoyLib.Code.Entities.AI.LOS.Providers
 {
@@ -17,7 +18,9 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
 
         public DiurnalVisionProvider() :
             base(new FOVShadowCasting())
-        { }
+        {
+
+        }
 
         public override void Update(Entity viewer, WorldInstance world)
         {
@@ -25,20 +28,20 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
                                     viewer,
                                     world,
                                     viewer.WorldPosition,
-                                    viewer.VisionProvider.GetVisionRect(viewer),
-                                    viewer.VisionProvider.GetVisibleWalls(viewer, world));
+                                    GetVisionRect(viewer),
+                                    GetVisibleWalls(viewer, world));
 
-            Vision = Board.Vision;
+            Vision = Board.GetVision();
         }
 
-        public override bool HasVisibility(Entity viewer, WorldInstance world, int x, int y)
+        public override bool HasVisibility(Entity viewer, WorldInstance world, int x, int y, bool[,] vision)
         {
-            return Vision[x, y] && world.LightLevels[x, y] > MinimumLightLevel;
+            return vision[x, y] && world.LightLevels[x, y] > MinimumLightLevel;
         }
 
-        public override bool HasVisibility(Entity viewer, WorldInstance world, Vector2Int point)
+        public override bool HasVisibility(Entity viewer, WorldInstance world, Vector2Int point, bool[,] vision)
         {
-            return HasVisibility(viewer, world, point.x, point.y);
+            return HasVisibility(viewer, world, point.x, point.y, vision);
         }
     }
 }

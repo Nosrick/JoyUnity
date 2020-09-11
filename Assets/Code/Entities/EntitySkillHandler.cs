@@ -16,10 +16,11 @@ namespace JoyLib.Code.Entities
     {
         private Dictionary<string, List<Tuple<string, float>>> m_SkillCoefficients;
 
-        protected static NeedHandler s_NeedHandler = GameObject.Find("GameManager")
-                                                        .GetComponent<NeedHandler>();
+        protected static NeedHandler s_NeedHandler;
         
-        public EntitySkillHandler() {
+        public void Awake() 
+        {
+            s_NeedHandler = GameObject.Find("GameManager").GetComponent<NeedHandler>();
             m_SkillCoefficients = LoadSkillCoefficients();
         }
 
@@ -110,10 +111,10 @@ namespace JoyLib.Code.Entities
             {
                 List<Tuple<string, float>> coefficients = (from coefficient in skill.Elements("Coefficient")
                                                            select new Tuple<string, float>(
-                                                               coefficient.Element("Name").DefaultIfEmpty("DEFAULT").ToLower(),
+                                                               coefficient.Element("Name").DefaultIfEmpty("DEFAULT"),
                                                                coefficient.Element("Value").DefaultIfEmpty(0.0f))).ToList();
 
-                skillCoefficients.Add(skill.Element("Name").DefaultIfEmpty("DEFAULT").ToLower(), coefficients);
+                skillCoefficients.Add(skill.Element("Name").DefaultIfEmpty("DEFAULT"), coefficients);
             }
 
             return skillCoefficients;

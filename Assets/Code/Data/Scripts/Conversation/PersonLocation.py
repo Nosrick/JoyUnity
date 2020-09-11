@@ -24,7 +24,7 @@ class PersonLocation:
             subjectGender = "they're"
             if(subject.gender == Gender.Male):
                 subjectGender = "he's"
-            elif(subject.gender == Gender.Female):
+            elif(subject.gender == Gender.female):
                 subjectGender = "she's"
 
             if(WorldState.playerWorld.GUID == world.GUID):

@@ -38,46 +38,46 @@ namespace JoyLib.Code.Cultures
                 {
                     List<string> rulers = (from ruler in culture.Element("Rulers")
                                             .Elements("Ruler")
-                                           select ruler.GetAs<string>().ToLower()).ToList();
+                                           select ruler.GetAs<string>()).ToList();
 
                     List<string> crimes = (from crime in culture.Element("Crimes")
                                                     .Elements("Crime")
-                                           select crime.GetAs<string>().ToLower()).ToList();
+                                           select crime.GetAs<string>()).ToList();
 
                     List<string> inhabitants = (from inhabitant in culture.Element("Inhabitants")
                                                     .Elements("Inhabitant")
-                                                select inhabitant.GetAs<string>().ToLower()).ToList();
+                                                select inhabitant.GetAs<string>()).ToList();
 
                     List<string> relationships = (from relationship in culture.Element("Relationships")
                                                     .Elements("RelationshipType")
-                                                  select relationship.GetAs<string>().ToLower()).ToList();
+                                                  select relationship.GetAs<string>()).ToList();
 
                     List<NameData> nameDataList = (from nameData in culture.Element("Names")
                                                     .Elements("NameData")
                                                    select new NameData(
-                                                      nameData.Element("Name").GetAs<string>().ToLower(),
+                                                      nameData.Element("Name").GetAs<string>(),
                                                       nameData.Elements("Chain").Select(x => x.GetAs<int>()).ToArray(),
-                                                      nameData.Elements("Sex").Select(x => x.GetAs<string>().ToLower()).ToArray()
+                                                      nameData.Elements("Sex").Select(x => x.GetAs<string>()).ToArray()
                                                       )).ToList();
 
                     Dictionary<string, int> sexualitiesDictionary = (from sexualities in culture.Element("Sexualities")
                                                                         .Elements("Sexuality")
                                                                      select new KeyValuePair<string, int>(
-                                                                      sexualities.Element("Name").GetAs<string>().ToLower(),
+                                                                      sexualities.Element("Name").GetAs<string>(),
                                                                       sexualities.Element("Chance").GetAs<int>()
                                                                       )).ToDictionary(x => x.Key, x => x.Value);
 
                     Dictionary<string, int> sexesDictionary = (from sexes in culture.Element("Sexes")
                                                                     .Elements("Sex")
                                                                select new KeyValuePair<string, int>(
-                                                              sexes.Element("Name").GetAs<string>().ToLower(),
+                                                              sexes.Element("Name").GetAs<string>(),
                                                               sexes.Element("Chance").GetAs<int>()))
                                                                    .ToDictionary(x => x.Key, x => x.Value);
 
                     Dictionary<string, Tuple<int, int>> statVarianceDictionary = (from statVariances in culture.Element("Statistics")
                                                                                     .Elements("StatVariance")
                                                                                   select new KeyValuePair<string, Tuple<int, int>>(
-                                                                                    statVariances.Element("Name").GetAs<string>().ToLower(),
+                                                                                    statVariances.Element("Name").GetAs<string>(),
                                                                                     new Tuple<int, int>(
                                                                                         statVariances.Element("Chance").GetAs<int>(),
                                                                                         statVariances.Element("Magnitude").GetAs<int>())))
@@ -86,7 +86,7 @@ namespace JoyLib.Code.Cultures
                     Dictionary<string, int> jobPrevelenceDictionary = (from jobPrevelence in culture.Element("Jobs")
                                                                             .Elements("Job")
                                                                        select new KeyValuePair<string, int>(
-                                                                      jobPrevelence.Element("Name").GetAs<string>().ToLower(),
+                                                                      jobPrevelence.Element("Name").GetAs<string>(),
                                                                       jobPrevelence.Element("Chance").GetAs<int>()))
                                                                            .ToDictionary(x => x.Key, x => x.Value);
 
@@ -154,7 +154,10 @@ namespace JoyLib.Code.Cultures
 
             try
             {
-                Dictionary<string, CultureType> cultures = m_Cultures.Where(culture => culture.Value.Inhabitants.Contains(type.ToLowerInvariant())).ToDictionary(pair => pair.Key, pair => pair.Value);
+                Dictionary<string, CultureType> cultures = m_Cultures.Where(
+                    culture => culture.Value.Inhabitants.Contains(
+                        type, GlobalConstants.STRING_COMPARER))
+                    .ToDictionary(pair => pair.Key, pair => pair.Value);
                 return cultures.Values.ToList();
             }
             catch (Exception e)
@@ -168,6 +171,10 @@ namespace JoyLib.Code.Cultures
         {
             get
             {
+                if(m_Cultures is null)
+                {
+                    m_Cultures = LoadCultures();
+                }
                 return m_Cultures.Values.ToArray();
             }
         }

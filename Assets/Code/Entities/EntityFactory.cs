@@ -10,6 +10,7 @@ using JoyLib.Code.Entities.Jobs;
 using JoyLib.Code.Entities.Sexes;
 using JoyLib.Code.Entities.Sexuality;
 using JoyLib.Code.Entities.Items;
+using JoyLib.Code.Entities.AI.Drivers;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities
@@ -53,13 +54,15 @@ namespace JoyLib.Code.Entities
             ISexuality sexuality = null,
             JobType job = null,
             Sprite[] sprites = null,
-            WorldInstance world = null)
+            WorldInstance world = null,
+            IDriver driver = null)
         {
             JobType selectedJob = job;
             IBioSex selectedSex = sex;
             ISexuality selectedSexuality = sexuality;
             Sprite[] selectedSprites = sprites;
             List<CultureType> creatureCultures = new List<CultureType>();
+            IDriver selectedDriver = driver;
             if (!(cultures is null))
             {
                 creatureCultures.AddRange(cultures);
@@ -101,6 +104,11 @@ namespace JoyLib.Code.Entities
                 selectedSprites = s_ObjectIcons.GetSprites(template.Tileset, template.JoyType);
             }
 
+            if(selectedDriver is null)
+            {
+                selectedDriver = new StandardDriver();
+            }
+
             Entity entity = new Entity(
                 template, 
                 needs, 
@@ -111,7 +119,8 @@ namespace JoyLib.Code.Entities
                 selectedSexuality, 
                 position, 
                 selectedSprites, 
-                world);
+                world,
+                selectedDriver);
 
             return entity;
         }
@@ -132,7 +141,8 @@ namespace JoyLib.Code.Entities
             List<string> identifiedItems,
             Dictionary<string, int> jobLevels,
             WorldInstance world,
-            List<CultureType> cultures = null)
+            List<CultureType> cultures = null,
+            IDriver driver = null)
         {
             List<CultureType> creatureCultures = new List<CultureType>();
             if (cultures != null)
@@ -143,6 +153,12 @@ namespace JoyLib.Code.Entities
             {
                 List<CultureType> cultureTypes = s_CultureHandler.GetByCreatureType(template.CreatureType);
                 creatureCultures.AddRange(cultureTypes);
+            }
+
+            IDriver selectedDriver = driver;
+            if(selectedDriver is null)
+            {
+                selectedDriver = new StandardDriver();
             }
 
             Entity entity = new Entity(
@@ -161,7 +177,8 @@ namespace JoyLib.Code.Entities
                 backpack, 
                 identifiedItems, 
                 jobLevels, 
-                world);
+                world,
+                selectedDriver);
 
             return entity;
         }

@@ -24,22 +24,22 @@ namespace JoyLib.Code.World
 
         public IEnumerable<WorldTile> GetByTileSet(string tileSet)
         {
-            return m_StandardTypes.Where(x => x.TileSet.Equals(tileSet.ToLower()));
+            return m_StandardTypes.Where(x => x.TileSet.Equals(tileSet, StringComparison.OrdinalIgnoreCase));
         }
 
         public IEnumerable<WorldTile> GetByTileName(string tileName)
         {
-            return m_StandardTypes.Where(x => x.TileName.Equals(tileName.ToLower()));
+            return m_StandardTypes.Where(x => x.TileName.Equals(tileName, StringComparison.OrdinalIgnoreCase));
         }
 
         public WorldTile GetSpecificTile(string tileSet, string tileName)
         {
-            return m_StandardTypes.First(x => x.TileSet.Equals(tileSet.ToLower()) && x.TileName.Equals(tileName.ToLower()));
+            return m_StandardTypes.First(x => x.TileSet.Equals(tileSet, StringComparison.OrdinalIgnoreCase) && x.TileName.Equals(tileName, StringComparison.OrdinalIgnoreCase));
         }
         
         public IEnumerable<WorldTile> GetByTag(string tag)
         {
-            return m_StandardTypes.Where(x => x.Tags.Contains(tag.ToLower()));
+            return m_StandardTypes.Where(x => x.Tags.Contains(tag));
         }
 
         public IEnumerable<WorldTile> GetByTags(IEnumerable<string> tags)

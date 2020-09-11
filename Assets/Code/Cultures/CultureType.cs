@@ -77,7 +77,7 @@ namespace JoyLib.Code.Cultures
 
         public string GetNameForChain(int chain, string sex)
         {
-            NameData[] names = m_NameData.Where(x => x.chain.Contains(chain) && x.sexes.Contains(sex.ToLower())).ToArray();
+            NameData[] names = m_NameData.Where(x => x.chain.Contains(chain) && x.sexes.Contains(sex, GlobalConstants.STRING_COMPARER)).ToArray();
 
             int result = RNG.instance.Roll(0, names.Length - 1);
             return names[result].name;
@@ -119,7 +119,7 @@ namespace JoyLib.Code.Cultures
                 soFar += pair.Value;
                 if(result < soFar)
                 {
-                    return sexualities.First(sexuality => sexuality.Equals(pair.Key));
+                    return sexualities.First(sexuality => sexuality.Name.Equals(pair.Key, StringComparison.OrdinalIgnoreCase));
                 }
             }
             return null;
@@ -140,7 +140,7 @@ namespace JoyLib.Code.Cultures
                 soFar += pair.Value;
                 if(result < soFar)
                 {
-                    return jobs.First(job => job.Name.Equals(pair.Key));
+                    return jobs.First(job => job.Name.Equals(pair.Key, StringComparison.OrdinalIgnoreCase));
                 }
             }
             return null;

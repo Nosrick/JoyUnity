@@ -78,15 +78,15 @@
 		<Names>
 			<NameData>
 				<Name>Alex</Name>
-				<Sex>Male</Sex>
-				<Sex>Female</Sex>
+				<Sex>male</Sex>
+				<Sex>female</Sex>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>McHuman</Name>
-				<Sex>Male</Sex>
-				<Sex>Female</Sex>
+				<Sex>male</Sex>
+				<Sex>female</Sex>
 				<Chain>1</Chain>
 			</NameData>
 		</Names>

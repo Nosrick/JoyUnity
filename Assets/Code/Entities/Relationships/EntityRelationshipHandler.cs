@@ -27,7 +27,7 @@ namespace JoyLib.Code.Entities.Relationships
             Type[] types = ScriptingEngine.instance.FetchTypeAndChildren(typeof(IRelationship));
             foreach(Type type in types)
             {
-                m_RelationshipTypes.Add(type.Name.ToLower(), type);
+                m_RelationshipTypes.Add(type.Name, type);
             }
 
             return true;
@@ -35,7 +35,7 @@ namespace JoyLib.Code.Entities.Relationships
 
         public IRelationship CreateRelationship(Entity[] participants, string type = "friendship")
         {
-            if(m_RelationshipTypes.ContainsKey(type.ToLower()))
+            if(m_RelationshipTypes.ContainsKey(type))
             {
                 IRelationship newRelationship = (IRelationship)Activator.CreateInstance(m_RelationshipTypes[type]);
                 
@@ -55,7 +55,7 @@ namespace JoyLib.Code.Entities.Relationships
 
         public IRelationship CreateRelationshipWithValue(Entity[] participants, string type, int value)
         {
-            if(m_RelationshipTypes.ContainsKey(type.ToLower()))
+            if(m_RelationshipTypes.ContainsKey(type))
             {
                 IRelationship newRelationship = (IRelationship)Activator.CreateInstance(m_RelationshipTypes[type]);
 

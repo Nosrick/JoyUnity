@@ -5,7 +5,7 @@ using JoyLib.Code.World;
 
 namespace JoyLib.Code.Entities.AI.LOS.Providers
 {
-    public class AbstractVisionProvider : IVision
+    public abstract class AbstractVisionProvider : IVision
     {
         public string Name => "abstractvisionprovider";
 
@@ -26,12 +26,12 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
             return m_Vision[point.x, point.y];
         }
 
-        public virtual bool HasVisibility(Entity viewer, WorldInstance world, int x, int y)
+        public virtual bool HasVisibility(Entity viewer, WorldInstance world, int x, int y, bool[,] vision)
         {
             return CanSee(viewer, world, x, y);
         }
 
-        public virtual bool HasVisibility(Entity viewer, WorldInstance world, Vector2Int point)
+        public virtual bool HasVisibility(Entity viewer, WorldInstance world, Vector2Int point, bool[,] vision)
         {
             return CanSee(viewer, world, point.x, point.y);
         }
@@ -52,7 +52,7 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
 
         public virtual RectInt GetVisionRect(Entity viewer)
         {
-            RectInt visionRect = new RectInt(viewer.WorldPosition, new Vector2Int(viewer.VisionMod, viewer.VisionMod));
+            RectInt visionRect = new RectInt(viewer.WorldPosition, new Vector2Int(viewer.VisionMod * 2 + 1, viewer.VisionMod * 2 + 1));
             return visionRect;
         }
 
@@ -73,7 +73,7 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
             set;
         }
 
-        protected FOVBasicBoard Board
+        protected IFOVBoard Board
         {
             get;
             set;

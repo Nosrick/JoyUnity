@@ -9,6 +9,7 @@ using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Sexes;
 using JoyLib.Code.Entities.Sexuality;
 using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Entities.AI.Drivers;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.States;
@@ -57,7 +58,9 @@ public class GameManager : MonoBehaviour
             culture.ChooseSex(bioSexHandler.Sexes), 
             culture.ChooseSexuality(sexualityHandler.Sexualities), 
             jobType, 
-            objectIcons.GetSprites(human.Tileset, jobType.Name));
+            objectIcons.GetSprites(human.Tileset, jobType.Name),
+            null,
+            new PlayerDriver());
         player.PlayerControlled = true;
 
         m_StateManager.ChangeState(new WorldCreationState(player));

@@ -57,16 +57,16 @@ namespace JoyLib.Code.Entities.AI.LOS
             }
 
             //Northeast quadrant
-            CheckQuadrant(m_Board.Vision, origin, new Vector2Int(1, 1), new Vector2Int(xMax, yMax));
+            CheckQuadrant(m_Board.GetVision(), origin, new Vector2Int(1, 1), new Vector2Int(xMax, yMax));
 
             //Southeast
-            CheckQuadrant(m_Board.Vision, origin, new Vector2Int(1, -1), new Vector2Int(xMax, yMin));
+            CheckQuadrant(m_Board.GetVision(), origin, new Vector2Int(1, -1), new Vector2Int(xMax, yMin));
 
             //Southwest
-            CheckQuadrant(m_Board.Vision, origin, new Vector2Int(-1, -1), new Vector2Int(xMin, yMin));
+            CheckQuadrant(m_Board.GetVision(), origin, new Vector2Int(-1, -1), new Vector2Int(xMin, yMin));
 
             //Northwest
-            CheckQuadrant(m_Board.Vision, origin, new Vector2Int(-1, 1), new Vector2Int(xMin, yMax));
+            CheckQuadrant(m_Board.GetVision(), origin, new Vector2Int(-1, 1), new Vector2Int(xMin, yMax));
 
             return m_Board;
         }
@@ -250,7 +250,7 @@ namespace JoyLib.Code.Entities.AI.LOS
         {
             get
             {
-                return m_Board.Vision;
+                return m_Board.GetVision();
             }
         }
 

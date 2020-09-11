@@ -45,7 +45,7 @@ namespace JoyLib.Code.Entities.AI.LOS
                     float leftSlope = (deltaX - 0.5f) / (deltaY + 0.5f);
                     float rightSlope = (deltaX + 0.5f) / (deltaY - 0.5f);
 
-                    if (!(currentX >= 0 && currentY >= 0 && currentX < m_Board.Vision.GetLength(0) && currentY < m_Board.Vision.GetLength(1)) || start < rightSlope)
+                    if (!(currentX >= 0 && currentY >= 0 && currentX < m_Board.GetVision().GetLength(0) && currentY < m_Board.GetVision().GetLength(1)) || start < rightSlope)
                     {
                         continue;
                     }
@@ -56,7 +56,7 @@ namespace JoyLib.Code.Entities.AI.LOS
 
                     if (Math.Sqrt(deltaX * deltaX + deltaY * deltaY) <= sightMod)
                     {
-                        if(viewer.VisionProvider.HasVisibility(viewer, world, currentX, currentY))
+                        if(viewer.VisionProvider.HasVisibility(viewer, world, currentX, currentY, m_Board.GetVision()))
                         {
                             m_Board.Visible(currentX, currentY);
                         }
@@ -97,7 +97,7 @@ namespace JoyLib.Code.Entities.AI.LOS
         {
             get
             {
-                return m_Board.Vision;
+                return m_Board.GetVision();
             }
         }
     }

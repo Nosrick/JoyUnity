@@ -15,9 +15,9 @@
 		<Material>Bone</Material>
 		<Size>60</Size>
 		<Slot>Hand</Slot>
-		<Tag>Weapon</Tag>
-		<Tag>Dagger</Tag>
-		<Tag>One Handed</Tag>
+		<Tag>weapon</Tag>
+		<Tag>dagger</Tag>
+		<Tag>one handed</Tag>
 		<Tileset>Weapons</Tileset>
 	</IdentifiedItem>
 

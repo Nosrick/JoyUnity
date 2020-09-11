@@ -10,7 +10,7 @@ namespace JoyLib.Code.Entities.Sexuality
         {
             get
             {
-                return "Heterosexual";
+                return "heterosexual";
             }
         }
 

@@ -63,37 +63,37 @@
 		<Names>
 			<NameData>
 				<Name>Glorp</Name>
-				<Sex>Neutral</Sex>
+				<Sex>neutral</Sex>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Blip</Name>
-				<Sex>Neutral</Sex>
+				<Sex>neutral</Sex>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Slorp</Name>
-				<Sex>Neutral</Sex>
+				<Sex>neutral</Sex>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Glurg</Name>
-				<Sex>Neutral</Sex>
+				<Sex>neutral</Sex>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>The</Name>
-				<Sex>Neutral</Sex>
+				<Sex>neutral</Sex>
 				<Chain>1</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Slimy</Name>
-				<Sex>Neutral</Sex>
+				<Sex>neutral</Sex>
 				<Chain>2</Chain>
 			</NameData>
 		</Names>

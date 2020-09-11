@@ -57,7 +57,7 @@ namespace JoyLib.Code.Entities
             m_Tags = new string[tags.Length];
             for(int i = 0; i < tags.Length; i++)
             {
-                m_Tags[i] = tags[i].ToLower();
+                m_Tags[i] = tags[i];
             }
         }
 

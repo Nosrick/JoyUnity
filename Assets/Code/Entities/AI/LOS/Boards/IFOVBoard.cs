@@ -1,7 +1,11 @@
-﻿namespace JoyLib.Code.Entities.AI.LOS
+﻿using JoyLib.Code.Entities.AI.LOS.Providers;
+
+namespace JoyLib.Code.Entities.AI.LOS
 {
     public interface IFOVBoard
     {
+        bool[,] GetVision();
+
         bool Contains(int x, int y);
 
         void ClearBoard();

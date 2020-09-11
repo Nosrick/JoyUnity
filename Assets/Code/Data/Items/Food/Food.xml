@@ -10,8 +10,8 @@
 		<SpawnWeight>30</SpawnWeight>
 		<Material>Food</Material>
 		<Size>36</Size>
-		<Tag>Food</Tag>
-		<Tag>Fruit</Tag>
+		<Tag>food</Tag>
+		<Tag>fruit</Tag>
 		<Tileset>Food</Tileset>
 	</IdentifiedItem>
 
