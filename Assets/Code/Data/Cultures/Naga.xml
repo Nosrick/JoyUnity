@@ -28,12 +28,12 @@
 
 		<TileSet>
 			<Name>naga</Name>
-			<Filename>cultures/naga</Filename>
 		
 			<Icon>
 				<Name>naga</Name>
 				<Data>default</Data>
 				<Frames>2</Frames>
+				<Filename>cultures/naga</Filename>
 				<X>0</X>
 				<Y>0</Y>
 			</Icon>

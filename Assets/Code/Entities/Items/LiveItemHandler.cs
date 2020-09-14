@@ -89,10 +89,10 @@ namespace JoyLib.Code.Entities.Items
                                                    name = item.Element("Name").GetAs<string>(),
                                                    data = item.Element("Data").DefaultIfEmpty(""),
                                                    frames = item.Element("Frames").DefaultIfEmpty(1),
-                                                   position = new Vector2Int(item.Element("X").GetAs<int>(), item.Element("Y").GetAs<int>())
+                                                   filename = fileName
                                                }).ToList();
 
-                    m_ObjectIcons.AddIcons(fileName, tileSet, iconData.ToArray());
+                    m_ObjectIcons.AddIcons(tileSet, iconData.ToArray());
                 }
 
 

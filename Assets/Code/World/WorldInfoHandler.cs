@@ -60,10 +60,8 @@ namespace JoyLib.Code.World
                         IconData newIcon = new IconData()
                         {
                             name = icon.Element("Name").GetAs<string>(),
-                            position = new UnityEngine.Vector2Int(
-                                icon.Element("X").GetAs<int>(),
-                                icon.Element("Y").GetAs<int>()),
-                            data = icon.Element("Data").DefaultIfEmpty("")
+                            data = icon.Element("Data").DefaultIfEmpty(""),
+                            filename = filename
                         };
 
                         iconData.Add(newIcon);
@@ -72,7 +70,6 @@ namespace JoyLib.Code.World
                     m_WorldInfo.Add(info);
 
                     m_ObjectIcons.AddIcons(
-                        filename,
                         info.tileset,
                         iconData.ToArray());
 

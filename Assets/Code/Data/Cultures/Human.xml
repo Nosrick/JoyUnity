@@ -96,27 +96,23 @@
 
 		<TileSet>
 			<Name>human</Name>
-			<Filename>cultures/human</Filename>
 
 			<Icon>
 				<Name>warrior</Name>
 				<Frames>2</Frames>
-				<X>2</X>
-				<Y>1</Y>
+				<Filename>cultures/human/warrior</Filename>
 			</Icon>
 
 			<Icon>
 				<Name>thief</Name>
 				<Frames>2</Frames>
-				<X>10</X>
-				<Y>0</Y>
+				<Filename>cultures/human/thief</Filename>
 			</Icon>
 
 			<Icon>
 				<Name>hedge wizard</Name>
 				<Frames>2</Frames>
-				<X>12</X>
-				<Y>1</Y>
+				<Filename>cultures/human/hedge_wizard</Filename>
 			</Icon>
 		</TileSet>
 	</Culture>

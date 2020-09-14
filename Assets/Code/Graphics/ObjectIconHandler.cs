@@ -40,14 +40,14 @@ namespace JoyLib.Code.Graphics
             {
                 data = "DEFAULT",
                 name = "DEFAULT",
-                position = Vector2Int.zero,
                 texture = loadedSprite,
                 sprite = Sprite.Create(loadedSprite, new Rect(0,
                                                                0,
                                                                this.SpriteSize,
                                                                this.SpriteSize), 
                                                                Vector2.zero, 
-                                                               this.SpriteSize)
+                                                               this.SpriteSize),
+                filename = "Sprites/default"
             };
 
             Icons.Add(iconData, "DEFAULT");
@@ -58,14 +58,14 @@ namespace JoyLib.Code.Graphics
             {
                 data = "obscure",
                 name = "obscure",
-                position = Vector2Int.zero,
                 texture = loadedSprite,
                 sprite = Sprite.Create(loadedSprite, new Rect(0,
                                                                 0,
                                                                 this.SpriteSize,
                                                                 this.SpriteSize),
                                                                 Vector2.zero,
-                                                                this.SpriteSize)
+                                                                this.SpriteSize),
+                filename = "Sprites/obscure"
             };
 
             Icons.Add(iconData, "obscure");
@@ -73,13 +73,40 @@ namespace JoyLib.Code.Graphics
             return true;
         }
 
-        public bool AddIcons(string filename, string tileSet, IconData[] data)
+        public bool AddIcons(string tileSet, IconData[] data)
         {
             if(Icons is null)
             {
                 Load();
             }
+            
+            for(int i = 0; i < data.Length; i++)
+            {
+                for (int j = 0; j < data[i].frames; j++)
+                {
+                    Sprite sheet = Resources.Load<Sprite>("Sprites/" + data[i].filename);
 
+                    IconData icon = new IconData()
+                    {
+                        name = data[i].name,
+                        data = data[i].data,
+                        texture = sheet.texture,
+                        sprite = sheet,
+                        filename = data[i].filename
+                    };
+
+                    if (Icons.ContainsKey(icon))
+                    {
+                        Icons[icon].Add(tileSet);
+                    }
+                    else
+                    {
+                        Icons.Add(icon, tileSet);
+                    }
+                }
+            }
+
+            /*
             Texture2D sheet = Resources.Load<Texture2D>("Sprites/" + filename);
             for(int i = 0; i < data.Length; i++)
             {
@@ -130,6 +157,7 @@ namespace JoyLib.Code.Graphics
                     }
                 }
             }
+            */
 
             return true;
         }
@@ -330,8 +358,8 @@ namespace JoyLib.Code.Graphics
         public string name;
         public string data;
         public int frames;
-        public Vector2Int position;
         public Texture2D texture;
         public Sprite sprite;
+        public string filename;
     }
 }

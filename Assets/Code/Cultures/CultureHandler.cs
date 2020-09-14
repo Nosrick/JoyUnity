@@ -93,7 +93,7 @@ namespace JoyLib.Code.Cultures
                     string cultureName = culture.Element("CultureName").GetAs<string>();
 
                     string tileSet = culture.Element("TileSet").Element("Name").DefaultIfEmpty("");
-                    string filename = culture.Element("TileSet").Element("Filename").DefaultIfEmpty("");
+                    //string filename = culture.Element("TileSet").Element("Filename").DefaultIfEmpty("");
 
                     if (tileSet.Length > 0)
                     {
@@ -103,13 +103,10 @@ namespace JoyLib.Code.Cultures
                                                 name = cultureIcons.Element("Name").GetAs<string>(),
                                                 data = cultureIcons.Element("Data").DefaultIfEmpty(""),
                                                 frames = cultureIcons.Element("Frames").GetAs<int>(),
-                                                position = new UnityEngine.Vector2Int(
-                                                    cultureIcons.Element("X").GetAs<int>(),
-                                                    cultureIcons.Element("Y").GetAs<int>())
+                                                filename = cultureIcons.Element("Filename").GetAs<string>()
                                             }).ToArray();
 
-                        objectIcons.AddIcons(
-                            filename, tileSet, icons);
+                        objectIcons.AddIcons(tileSet, icons);
                     }
 
                     cultures.Add(cultureName,
