@@ -74,7 +74,7 @@ namespace JoyLib.Code.States
                     gameObject.GetComponent<SpriteRenderer>().sprite = 
                         m_ObjectIcons.GetSprite(m_ActiveWorld.Tiles[i, j].TileSet, 
                                                              //TODO: This will eventually be a tile direction selection algorithm
-                                                             "solofloor");      
+                                                             "middlemiddle");      
                     gameObject.transform.parent = objectHolder.transform;
 
                     //Make the fog of war
@@ -82,7 +82,7 @@ namespace JoyLib.Code.States
                     GameObject fogOfWar = GameObject.Instantiate(sprite);
                     fogOfWar.transform.position = new Vector3(i, j);
                     fogOfWar.GetComponent<SpriteRenderer>().sortingLayerName = "Fog of War";
-                    fogOfWar.GetComponent<SpriteRenderer>().sprite = m_ObjectIcons.GetSprite("Obscure", "Obscure0");
+                    fogOfWar.GetComponent<SpriteRenderer>().sprite = m_ObjectIcons.GetSprite("Obscure", "Obscure");
                     fogOfWar.transform.parent = fogOfWarHolder.transform;
                     fogOfWar.name = "Fog of War";
                 }

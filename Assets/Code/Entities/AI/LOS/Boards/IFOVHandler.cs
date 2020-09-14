@@ -9,7 +9,6 @@ namespace JoyLib.Code.Entities.AI.LOS
         IFOVBoard Do(
             Entity viewer, 
             WorldInstance world, 
-            Vector2Int origin, 
             RectInt dimensions,
             Vector2Int[] walls);
 

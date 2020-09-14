@@ -8,13 +8,7 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
     {
         public new string Name => "diurnalvision";
 
-        public int MinimumLightLevel
-        {
-            get
-            {
-                return 5;
-            }
-        }
+        private static int MinimumLightLevel => 5;
 
         public DiurnalVisionProvider() :
             base(new FOVShadowCasting())
@@ -27,7 +21,6 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
             Board = (FOVBasicBoard)Algorithm.Do(
                                     viewer,
                                     world,
-                                    viewer.WorldPosition,
                                     GetVisionRect(viewer),
                                     GetVisibleWalls(viewer, world));
 
@@ -36,7 +29,8 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
 
         public override bool HasVisibility(Entity viewer, WorldInstance world, int x, int y, bool[,] vision)
         {
-            return vision[x, y] && world.LightLevels[x, y] > MinimumLightLevel;
+            //TODO: Fix this once lighting calculations are back in
+            return true;/* && world.LightLevels[x, y] > MinimumLightLevel;*/
         }
 
         public override bool HasVisibility(Entity viewer, WorldInstance world, Vector2Int point, bool[,] vision)

@@ -4,9 +4,9 @@ namespace JoyLib.Code.Helpers
 {
     public static class LightLevelHelper
     {
-        private static float MAX_LIGHT = 16.0f;
+        private const float MAX_LIGHT = 16.0f;
 
-        public static float Normalise(int light)
+        private static float Normalise(int light)
         {
             return light / MAX_LIGHT;
         }

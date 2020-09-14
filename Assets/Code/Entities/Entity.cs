@@ -890,21 +890,9 @@ namespace JoyLib.Code.Entities
             set;
         }
 
-        public CultureType[] Cultures
-        {
-            get
-            {
-                return m_Cultures.ToArray();
-            }
-        }
+        public CultureType[] Cultures => m_Cultures.ToArray();
 
-        public IVision VisionProvider
-        {
-            get
-            {
-                return m_VisionProvider;
-            }
-        }
+        public IVision VisionProvider => m_VisionProvider;
 
         public WorldInstance MyWorld
         {

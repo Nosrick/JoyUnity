@@ -34,16 +34,15 @@ namespace JoyLib.Code.Graphics
             }
             Icons = new BucketCollection<IconData, string>();
 
-            Texture2D defaultSprite = Resources.Load<Texture2D>("Sprites/default");
+            Texture2D loadedSprite = Resources.Load<Texture2D>("Sprites/default");
 
-            List<IconData> defaultIconData = new List<IconData>();
             IconData iconData = new IconData()
             {
                 data = "DEFAULT",
                 name = "DEFAULT",
                 position = Vector2Int.zero,
-                texture = defaultSprite,
-                sprite = Sprite.Create(defaultSprite, new Rect(0,
+                texture = loadedSprite,
+                sprite = Sprite.Create(loadedSprite, new Rect(0,
                                                                0,
                                                                this.SpriteSize,
                                                                this.SpriteSize), 
@@ -52,6 +51,24 @@ namespace JoyLib.Code.Graphics
             };
 
             Icons.Add(iconData, "DEFAULT");
+
+            loadedSprite = Resources.Load<Texture2D>("Sprites/obscure");
+
+            iconData = new IconData()
+            {
+                data = "obscure",
+                name = "obscure",
+                position = Vector2Int.zero,
+                texture = loadedSprite,
+                sprite = Sprite.Create(loadedSprite, new Rect(0,
+                                                                0,
+                                                                this.SpriteSize,
+                                                                this.SpriteSize),
+                                                                Vector2.zero,
+                                                                this.SpriteSize)
+            };
+
+            Icons.Add(iconData, "obscure");
 
             return true;
         }
@@ -241,14 +258,20 @@ namespace JoyLib.Code.Graphics
 
         public Sprite GetSprite(string tileSet, string tileName)
         {
-            if(Icons.ContainsValue(tileSet))
+            List<KeyValuePair<IconData, List<string>>> data = Icons.Where(x => x.Value.Contains(tileSet, GlobalConstants.STRING_COMPARER)).ToList();
+            List<IconData> query = new List<IconData>();
+
+            foreach(KeyValuePair<IconData, List<string>> pair in data)
             {
-                if(Icons.Any(x => x.Key.name.Equals(tileName, StringComparison.OrdinalIgnoreCase) && x.Value.Contains(tileSet)))
-                {
-                    return Icons.First(x => x.Key.name.StartsWith(tileName, StringComparison.OrdinalIgnoreCase) && x.Value.Contains(tileSet)).Key.sprite;
-                }
+                query.Add(pair.Key);
             }
 
+            if(query.Count > 0)
+            {
+                return query.First(x => x.name.Equals(tileName, StringComparison.OrdinalIgnoreCase) 
+                || x.data.Equals(tileName, StringComparison.OrdinalIgnoreCase)).sprite;
+            }
+            
             IconData[] icons = GetDefaultIconSet(tileSet);
             return icons[0].sprite;
         }
@@ -256,14 +279,20 @@ namespace JoyLib.Code.Graphics
         public Sprite[] GetSprites(string tileSet, string tileName)
         {
             List<Sprite> sprites = new List<Sprite>();
-            if(tileSet != null && Icons.ContainsValue(tileSet))
+
+            List<KeyValuePair<IconData, List<string>>> data = Icons.Where(x => x.Value.Contains(tileSet, GlobalConstants.STRING_COMPARER)).ToList();
+            List<IconData> query = new List<IconData>();
+
+            foreach(KeyValuePair<IconData, List<string>> pair in data)
             {
-                List<IconData> find = Icons[tileSet].FindAll(x => x.name.StartsWith(tileName, StringComparison.OrdinalIgnoreCase) 
+                query.Add(pair.Key);
+            }
+
+            List<IconData> find = query.FindAll(x => x.name.StartsWith(tileName, StringComparison.OrdinalIgnoreCase) 
                                                                     || x.data.StartsWith(tileName, StringComparison.OrdinalIgnoreCase));
-                foreach(IconData found in find)
-                {
-                    sprites.Add(found.sprite);
-                }
+            foreach(IconData found in find)
+            {
+                sprites.Add(found.sprite);
             }
 
             if(sprites.Count == 0)

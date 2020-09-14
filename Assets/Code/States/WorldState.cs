@@ -1,6 +1,4 @@
-﻿using JoyLib.Code.Combat;
-using JoyLib.Code.Conversation.Subengines;
-using JoyLib.Code.Entities;
+﻿using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Relationships;
@@ -12,7 +10,6 @@ using JoyLib.Code.States.Gameplay;
 using JoyLib.Code.Unity.GUI;
 using JoyLib.Code.World;
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
@@ -41,7 +38,7 @@ namespace JoyLib.Code.States
         protected static GUIManager s_GUIManager;
         protected bool m_InventoryOpen;
 
-        protected WorldSerialiser m_WorldSerialiser;
+        protected readonly WorldSerialiser m_WorldSerialiser;
 
         protected GameObject m_GameManager;
         protected PhysicsManager m_PhysicsManager;
@@ -559,27 +556,20 @@ namespace JoyLib.Code.States
             {
                 GameObject fog = m_FogOfWarHolder.transform.GetChild(i).gameObject;
                 Vector2Int position = new Vector2Int((int)fog.transform.position.x, (int)fog.transform.position.y);
+                Vector2Int playerVisionMod = new Vector2Int(player.VisionMod, player.VisionMod);
 
-                Vector2Int adjustedPosition = new Vector2Int(
-                    position.x - vision.GetLength(0), 
-                    position.y - vision.GetLength(1));
+                Vector2Int adjustedPosition = position - player.WorldPosition + playerVisionMod;
+                int lightLevel;
 
                 if(adjustedPosition.x < 0 || adjustedPosition.y < 0
                     || adjustedPosition.x >= vision.GetLength(0) || adjustedPosition.y >= vision.GetLength(1))
                 {
+                    fog.GetComponent<SpriteRenderer>().color = LightLevelHelper.GetColour(0);
                     continue;
                 }
 
                 bool visible = vision[adjustedPosition.x, adjustedPosition.y];
-                int lightLevel;
-                if (visible)
-                {
-                    lightLevel = 16;
-                }
-                else
-                {
-                    lightLevel = 0;
-                }
+                lightLevel = visible ? 16 : 0;
 
                 fog.GetComponent<SpriteRenderer>().color = LightLevelHelper.GetColour(lightLevel);
             }

@@ -11,10 +11,11 @@ namespace JoyLib.Code.Entities.AI.LOS
 
         private readonly Vector2Int[] DIAGONALS = { new Vector2Int(1, -1), new Vector2Int(1, 1), new Vector2Int(-1, 1), new Vector2Int(-1, -1) };
 
-        public override IFOVBoard Do(Entity viewer, WorldInstance world, Vector2Int origin, RectInt dimensions, Vector2Int[] walls)
+        public override IFOVBoard Do(Entity viewer, WorldInstance world, RectInt dimensions, Vector2Int[] walls)
         {
             m_Board = new FOVBasicBoard(dimensions.width, dimensions.height, walls);
 
+            Vector2Int origin = new Vector2Int(dimensions.width / 2, dimensions.height / 2);
             m_Board.Visible(origin.x, origin.y);
             foreach(Vector2Int direction in DIAGONALS)
             {
@@ -49,7 +50,8 @@ namespace JoyLib.Code.Entities.AI.LOS
                     {
                         continue;
                     }
-                    else if (end > leftSlope)
+
+                    if (end > leftSlope)
                     {
                         break;
                     }
@@ -67,7 +69,6 @@ namespace JoyLib.Code.Entities.AI.LOS
                         if(m_Board.IsObstacle(currentX, currentY))
                         {
                             newStart = rightSlope;
-                            continue;
                         }
                         else
                         {
@@ -77,12 +78,14 @@ namespace JoyLib.Code.Entities.AI.LOS
                     }
                     else
                     {
-                        if(m_Board.IsObstacle(currentX, currentY) && distance < sightMod)
+                        if (!m_Board.IsObstacle(currentX, currentY) || distance >= sightMod)
                         {
-                            blocked = true;
-                            CastLight(viewer, world, origin, sightMod, distance + 1, start, leftSlope, xx, xy, yx, yy);
-                            newStart = rightSlope;
+                            continue;
                         }
+                        
+                        blocked = true;
+                        CastLight(viewer, world, origin, sightMod, distance + 1, start, leftSlope, xx, xy, yx, yy);
+                        newStart = rightSlope;
                     }
                 }
             }
@@ -93,12 +96,6 @@ namespace JoyLib.Code.Entities.AI.LOS
             throw new NotImplementedException();
         }
 
-        public bool[,] Vision
-        {
-            get
-            {
-                return m_Board.GetVision();
-            }
-        }
+        public bool[,] Vision => m_Board.GetVision();
     }
 }
