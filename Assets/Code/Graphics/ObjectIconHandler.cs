@@ -82,7 +82,8 @@ namespace JoyLib.Code.Graphics
             
             for(int i = 0; i < data.Length; i++)
             {
-                for (int j = 0; j < data[i].frames; j++)
+                int jIndex = data[i].frames > 0 ? data[i].frames : 1; 
+                for (int j = 0; j < jIndex; j++)
                 {
                     Sprite sheet = Resources.Load<Sprite>("Sprites/" + data[i].filename);
 

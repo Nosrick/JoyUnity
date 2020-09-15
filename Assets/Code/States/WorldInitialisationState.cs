@@ -41,11 +41,11 @@ namespace JoyLib.Code.States
             //Make the upstairs
             if (m_ActiveWorld.GUID != m_Overworld.GUID)
             {
-                GameObject upstairs = GameObject.Instantiate(sprite);
+                GameObject upstairs = GameObject.Instantiate(sprite, objectHolder.transform, true);
                 upstairs.transform.position = new Vector3(m_ActiveWorld.SpawnPoint.x, m_ActiveWorld.SpawnPoint.y, 0.0f);
-                upstairs.GetComponent<SpriteRenderer>().sortingLayerName = "Walls";
-                upstairs.GetComponent<SpriteRenderer>().sprite = m_ObjectIcons.GetSprite("Stairs", "UpStairs");
-                upstairs.transform.parent = objectHolder.transform;
+                SpriteRenderer spriteRenderer = upstairs.GetComponent<SpriteRenderer>();
+                spriteRenderer.sortingLayerName = "Walls";
+                spriteRenderer.sprite = m_ObjectIcons.GetSprite("Stairs", "UpStairs");
                 upstairs.transform.name = m_ActiveWorld.Parent.Name + " stairs";
             }
 
@@ -53,11 +53,11 @@ namespace JoyLib.Code.States
             foreach(KeyValuePair<Vector2Int, WorldInstance> pair in m_ActiveWorld.Areas)
             {
                 Vector2Int position = pair.Key;
-                GameObject downstairs = GameObject.Instantiate(sprite);
+                GameObject downstairs = GameObject.Instantiate(sprite, objectHolder.transform, true);
                 downstairs.transform.position = new Vector3(position.x, position.y, 0.0f);
-                downstairs.GetComponent<SpriteRenderer>().sortingLayerName = "Walls";
-                downstairs.GetComponent<SpriteRenderer>().sprite = m_ObjectIcons.GetSprite("Stairs", "DownStairs");
-                downstairs.transform.parent = objectHolder.transform;
+                SpriteRenderer spriteRenderer = downstairs.GetComponent<SpriteRenderer>();
+                spriteRenderer.sortingLayerName = "Walls";
+                spriteRenderer.sprite = m_ObjectIcons.GetSprite("Stairs", "DownStairs");
                 downstairs.transform.name = pair.Value.Name + " stairs";
             }
 
@@ -67,23 +67,22 @@ namespace JoyLib.Code.States
                 for(int j = 0; j < m_ActiveWorld.Tiles.GetLength(1); j++)
                 {
                     //Make the floor
-                    GameObject gameObject = GameObject.Instantiate(sprite);
+                    GameObject gameObject = GameObject.Instantiate(sprite, objectHolder.transform, true);
                     gameObject.transform.position = new Vector3(i, j);
-                    gameObject.GetComponent<SpriteRenderer>().sortingLayerName = "Terrain";
-
-                    gameObject.GetComponent<SpriteRenderer>().sprite = 
+                    SpriteRenderer goSpriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+                    goSpriteRenderer.sortingLayerName = "Terrain";
+                    goSpriteRenderer.sprite = 
                         m_ObjectIcons.GetSprite(m_ActiveWorld.Tiles[i, j].TileSet, 
                                                              //TODO: This will eventually be a tile direction selection algorithm
-                                                             "middlemiddle");      
-                    gameObject.transform.parent = objectHolder.transform;
+                                                             "middlemiddle");
 
                     //Make the fog of war
                     //TODO: MAKE THIS VIABLE
-                    GameObject fogOfWar = GameObject.Instantiate(sprite);
+                    GameObject fogOfWar = GameObject.Instantiate(sprite, fogOfWarHolder.transform, true);
                     fogOfWar.transform.position = new Vector3(i, j);
-                    fogOfWar.GetComponent<SpriteRenderer>().sortingLayerName = "Fog of War";
-                    fogOfWar.GetComponent<SpriteRenderer>().sprite = m_ObjectIcons.GetSprite("Obscure", "Obscure");
-                    fogOfWar.transform.parent = fogOfWarHolder.transform;
+                    SpriteRenderer fogSpriteRenderer = fogOfWar.GetComponent<SpriteRenderer>();
+                    fogSpriteRenderer.sortingLayerName = "Fog of War";
+                    fogSpriteRenderer.sprite = m_ObjectIcons.GetSprite("Obscure", "Obscure");
                     fogOfWar.name = "Fog of War";
                 }
             }
@@ -91,30 +90,28 @@ namespace JoyLib.Code.States
             //Create the objects
             foreach (JoyObject obj in m_ActiveWorld.Objects)
             {
-                MonoBehaviourHandler newObject = GameObject.Instantiate(prefab);
+                MonoBehaviourHandler newObject = GameObject.Instantiate(prefab, objectHolder.transform, true);
                 newObject.AttachJoyObject(obj);
-                newObject.transform.parent = objectHolder.transform;
             }
 
             //Create the walls
             foreach(JoyObject wall in m_ActiveWorld.Walls.Values)
             {
-                MonoBehaviourHandler newObject = GameObject.Instantiate(prefab);
+                MonoBehaviourHandler newObject = GameObject.Instantiate(prefab, wallHolder.transform, true);
                 newObject.AttachJoyObject(wall);
-                newObject.transform.parent = wallHolder.transform;
             }
 
             //Create the entities
             foreach(Entity entity in m_ActiveWorld.Entities)
             {
-                MonoBehaviourHandler newEntity = GameObject.Instantiate(prefab);
+                MonoBehaviourHandler newEntity = GameObject.Instantiate(prefab, entityHolder.transform, true);
                 newEntity.AttachJoyObject(entity);
-                newEntity.transform.parent = entityHolder.transform;
             }
 
             Camera camera = GameObject.Find("Main Camera").GetComponent<Camera>();
             Entity player = m_ActiveWorld.Player;
-            camera.transform.position = new Vector3(player.WorldPosition.x, player.WorldPosition.y, camera.transform.position.z);
+            Transform transform = camera.transform;
+            transform.position = new Vector3(player.WorldPosition.x, player.WorldPosition.y, transform.position.z);
 
             Done = true;
         }

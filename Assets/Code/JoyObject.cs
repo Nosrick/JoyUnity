@@ -184,14 +184,16 @@ public class JoyObject : IComparable
             return;
         }
 
-        if(m_FramesSinceLastChange == FRAMES_PER_SECOND)
+        if (m_FramesSinceLastChange != FRAMES_PER_SECOND)
         {
-            ChosenIcon += 1;
-            ChosenIcon %= m_Icons.Length;
-
-            m_FramesSinceLastChange = 0;
+            return;
         }
-	}
+        
+        ChosenIcon += 1;
+        ChosenIcon %= m_Icons.Length;
+
+        m_FramesSinceLastChange = 0;
+    }
 
     public int CompareTo(object obj)
     {
