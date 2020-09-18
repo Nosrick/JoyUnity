@@ -52,40 +52,42 @@ public class JoyObject : IComparable
         Sprite[] sprites, 
         params string[] tags)
     {
-        this.m_CachedActions = new List<IJoyAction>();
-        this.JoyName = name;
-        this.GUID = GUIDManager.Instance.AssignGUID();
-
-        this.m_DerivedValues = derivedValues;
-
-        this.m_Tileset = tileSet;
-        this.m_Tags = tags.ToList();
-
-        this.m_WorldPosition = position;
-        this.Move(this.m_WorldPosition);
-
-        this.m_Icons = sprites;
-
-        //If it's not animated, select a random icon to represent it
-        if (!this.IsAnimated && sprites != null)
-        {
-            this.ChosenIcon = RNG.instance.Roll(0, sprites.Length - 1);
-        }
-        else
-        {
-            this.ChosenIcon = 0;
-        }
-
-        this.m_LastIcon = 0;
-        this.m_FramesSinceLastChange = 0;
-
+        List<IJoyAction> tempActions = new List<IJoyAction>(); 
         foreach(string action in actions)
         {
-            m_CachedActions.Add(ScriptingEngine.instance.FetchAction(action));
+            tempActions.Add(ScriptingEngine.instance.FetchAction(action));
         }
+        
+        Initialise(
+            name,
+            derivedValues,
+            position,
+            tileSet,
+            tempActions.ToArray(),
+            sprites,
+            tags);
     }
 
     public JoyObject(
+        string name, 
+        BasicValueContainer<IDerivedValue> derivedValues, 
+        Vector2Int position, 
+        string tileSet, 
+        IJoyAction[] actions,
+        Sprite[] sprites, 
+        params string[] tags)
+    {
+        Initialise(
+            name,
+            derivedValues,
+            position,
+            tileSet,
+            actions,
+            sprites,
+            tags);
+    }
+
+    private void Initialise(
         string name, 
         BasicValueContainer<IDerivedValue> derivedValues, 
         Vector2Int position, 
@@ -106,6 +108,11 @@ public class JoyObject : IComparable
         this.Move(this.m_WorldPosition);
 
         this.m_Icons = sprites;
+
+        if (tags.Contains("animated", GlobalConstants.STRING_COMPARER))
+        {
+            this.IsAnimated = true;
+        }
 
         //If it's not animated, select a random icon to represent it
         if (!this.IsAnimated && sprites != null)
@@ -202,8 +209,7 @@ public class JoyObject : IComparable
             return 1;
         }
 
-        JoyObject joyObject = obj as JoyObject;
-        if(joyObject != null)
+        if(obj is JoyObject joyObject)
         {
             return this.GUID.CompareTo(joyObject.GUID);
         }
@@ -288,10 +294,8 @@ public class JoyObject : IComparable
 
     public bool IsAnimated
     {
-        get
-        {
-            return m_Tags.Contains("animated");
-        }
+        get;
+        private set;
     }
 
     protected int ChosenIcon

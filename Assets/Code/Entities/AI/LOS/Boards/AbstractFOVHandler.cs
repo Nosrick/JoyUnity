@@ -16,7 +16,7 @@ namespace JoyLib.Code.Entities.AI.LOS
             return viewer.VisionProvider.HasVisibility(viewer, world, x, y, vision);
         }
 
-        public virtual IFOVBoard Do(Entity viewer, WorldInstance world, RectInt dimensions, Vector2Int[] walls)
+        public virtual IFOVBoard Do(Entity viewer, WorldInstance world, Vector2Int dimensions, Vector2Int[] walls)
         {
             throw new System.NotImplementedException("Someone forgot to implement Do()");
         }

@@ -18,12 +18,16 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
 
         public virtual bool CanSee(Entity viewer, WorldInstance world, int x, int y)
         {
+            if (m_Vision is null)
+            {
+                Debug.Log("VISION IS NULL");
+            }
             return m_Vision[x, y];
         }
 
         public virtual bool CanSee(Entity viewer, WorldInstance world, Vector2Int point)
         {
-            return m_Vision[point.x, point.y];
+            return CanSee(viewer, world, point.x, point.y);
         }
 
         public virtual bool HasVisibility(Entity viewer, WorldInstance world, int x, int y, bool[,] vision)
@@ -70,7 +74,6 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
         protected IFOVHandler Algorithm
         {
             get;
-            set;
         }
 
         protected IFOVBoard Board

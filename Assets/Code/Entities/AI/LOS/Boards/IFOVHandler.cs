@@ -9,7 +9,7 @@ namespace JoyLib.Code.Entities.AI.LOS
         IFOVBoard Do(
             Entity viewer, 
             WorldInstance world, 
-            RectInt dimensions,
+            Vector2Int dimensions,
             Vector2Int[] walls);
 
         bool HasVisibility(Entity viewer, WorldInstance world, Vector2Int point, bool[,] vision);

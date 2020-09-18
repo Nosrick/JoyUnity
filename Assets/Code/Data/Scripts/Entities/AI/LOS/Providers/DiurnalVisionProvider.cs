@@ -18,10 +18,22 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
 
         public override void Update(Entity viewer, WorldInstance world)
         {
+            if (viewer is null)
+            {
+                Debug.Log("VIEWER IS NULL");
+            }
+
+            if (world is null)
+            {
+                Debug.Log("WORLD IS NULL");
+            }
+            
+            Vision = new bool[world.Dimensions.x, world.Dimensions.y];
+            
             Board = (FOVBasicBoard)Algorithm.Do(
                                     viewer,
                                     world,
-                                    GetVisionRect(viewer),
+                                    world.Dimensions,
                                     GetVisibleWalls(viewer, world));
 
             Vision = Board.GetVision();

@@ -555,21 +555,11 @@ namespace JoyLib.Code.States
             for (int i = 0; i < m_FogOfWarHolder.transform.childCount; i++)
             {
                 GameObject fog = m_FogOfWarHolder.transform.GetChild(i).gameObject;
-                Vector2Int position = new Vector2Int((int)fog.transform.position.x, (int)fog.transform.position.y);
-                Vector2Int playerVisionMod = new Vector2Int(player.VisionMod, player.VisionMod);
+                var transformPosition = fog.transform.position;
+                Vector2Int position = new Vector2Int((int)transformPosition.x, (int)transformPosition.y);
 
-                Vector2Int adjustedPosition = position - player.WorldPosition + playerVisionMod;
-                int lightLevel;
-
-                if(adjustedPosition.x < 0 || adjustedPosition.y < 0
-                    || adjustedPosition.x >= vision.GetLength(0) || adjustedPosition.y >= vision.GetLength(1))
-                {
-                    fog.GetComponent<SpriteRenderer>().color = LightLevelHelper.GetColour(0);
-                    continue;
-                }
-
-                bool visible = vision[adjustedPosition.x, adjustedPosition.y];
-                lightLevel = visible ? 16 : 0;
+                bool visible = vision[position.x, position.y];
+                int lightLevel = visible ? 16 : 0;
 
                 fog.GetComponent<SpriteRenderer>().color = LightLevelHelper.GetColour(lightLevel);
             }

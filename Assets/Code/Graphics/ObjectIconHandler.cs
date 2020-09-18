@@ -79,20 +79,19 @@ namespace JoyLib.Code.Graphics
             {
                 Load();
             }
-            
-            for(int i = 0; i < data.Length; i++)
+
+            for (int i = 0; i < data.Length; i++)
             {
-                int jIndex = data[i].frames > 0 ? data[i].frames : 1; 
+                int jIndex = data[i].frames > 0 ? data[i].frames : 1;
+                Sprite[] sheets = Resources.LoadAll<Sprite>("Sprites/" + data[i].filename);
                 for (int j = 0; j < jIndex; j++)
                 {
-                    Sprite sheet = Resources.Load<Sprite>("Sprites/" + data[i].filename);
-
                     IconData icon = new IconData()
                     {
                         name = data[i].name,
                         data = data[i].data,
-                        texture = sheet.texture,
-                        sprite = sheet,
+                        texture = sheets[j].texture,
+                        sprite = sheets[j],
                         filename = data[i].filename
                     };
 
@@ -106,59 +105,6 @@ namespace JoyLib.Code.Graphics
                     }
                 }
             }
-
-            /*
-            Texture2D sheet = Resources.Load<Texture2D>("Sprites/" + filename);
-            for(int i = 0; i < data.Length; i++)
-            {
-                if(data[i].frames > 1)
-                {
-                    List<Tuple<Texture2D, Sprite>> tuples = MakeSpritesFromOneSheet(sheet, data[i].frames, data[i].position, this.SpriteSize);
-                    for (int j = 0; j < tuples.Count; j++)
-                    {
-                        Tuple<Texture2D, Sprite> tuple = tuples[j];
-                        IconData iconData = new IconData()
-                        {
-                            name = data[i].name + j.ToString(),
-                            data = data[i].data,
-                            position = data[i].position,
-                            texture = tuple.Item1,
-                            sprite = tuple.Item2
-                        };
-
-                        if(Icons.ContainsKey(iconData))
-                        {
-                            Icons[iconData].Add(tileSet);
-                        }
-                        else
-                        {
-                            Icons.Add(iconData, tileSet);
-                        }
-                    }
-                }
-                else
-                {
-                    Tuple<Texture2D, Sprite> tuple = MakeSprite(sheet, data[i].position, this.SpriteSize);
-                    IconData iconData = new IconData()
-                    {
-                        name = data[i].name,
-                        data = data[i].data,
-                        position = data[i].position,
-                        texture = tuple.Item1,
-                        sprite = tuple.Item2
-                    };
-
-                    if(Icons.ContainsKey(iconData))
-                    {
-                        Icons[iconData].Add(tileSet);
-                    }
-                    else
-                    {
-                        Icons.Add(iconData, tileSet);
-                    }
-                }
-            }
-            */
 
             return true;
         }

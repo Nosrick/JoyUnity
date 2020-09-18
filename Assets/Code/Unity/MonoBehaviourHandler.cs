@@ -10,12 +10,14 @@ namespace JoyLib.Code.Unity
 
         public void Update()
         {
-            if(m_JoyObject != null)
+            if (m_JoyObject == null)
             {
-                m_JoyObject.Update();
-                m_SpriteRenderer.sprite = m_JoyObject.Icon;
-                this.transform.position = new Vector3(m_JoyObject.WorldPosition.x, m_JoyObject.WorldPosition.y);
+                return;
             }
+            
+            m_JoyObject.Update();
+            m_SpriteRenderer.sprite = m_JoyObject.Icon;
+            this.transform.position = new Vector3(m_JoyObject.WorldPosition.x, m_JoyObject.WorldPosition.y);
         }
 
         public void Start()

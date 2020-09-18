@@ -11,16 +11,16 @@ namespace JoyLib.Code.Entities.AI.LOS
 
         private readonly Vector2Int[] DIAGONALS = { new Vector2Int(1, -1), new Vector2Int(1, 1), new Vector2Int(-1, 1), new Vector2Int(-1, -1) };
 
-        public override IFOVBoard Do(Entity viewer, WorldInstance world, RectInt dimensions, Vector2Int[] walls)
+        public override IFOVBoard Do(Entity viewer, WorldInstance world, Vector2Int dimensions, Vector2Int[] walls)
         {
-            m_Board = new FOVBasicBoard(dimensions.width, dimensions.height, walls);
-
-            Vector2Int origin = new Vector2Int(dimensions.width / 2, dimensions.height / 2);
-            m_Board.Visible(origin.x, origin.y);
+            Vector2Int viewerPos = viewer.WorldPosition;
+            
+            m_Board = new FOVBasicBoard(dimensions.x, dimensions.y, walls);
+            m_Board.Visible(viewerPos.x, viewerPos.y);
             foreach(Vector2Int direction in DIAGONALS)
             {
-                CastLight(viewer, world, origin, viewer.VisionMod, 1, 1, 0, 0, direction.x, direction.y, 0);
-                CastLight(viewer, world, origin, viewer.VisionMod, 1, 1, 0, direction.x, 0, 0, direction.y);
+                CastLight(viewer, world, viewerPos, viewer.VisionMod, 1, 1, 0, 0, direction.x, direction.y, 0);
+                CastLight(viewer, world, viewerPos, viewer.VisionMod, 1, 1, 0, direction.x, 0, 0, direction.y);
             }
 
             return m_Board;

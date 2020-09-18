@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities.AI.LOS
@@ -19,6 +20,7 @@ namespace JoyLib.Code.Entities.AI.LOS
 
             m_Visited = new bool[width, height];
             m_Visible = new bool[width, height];
+            
             m_Walls = new bool[width, height];
             foreach(Vector2Int point in walls)
             {

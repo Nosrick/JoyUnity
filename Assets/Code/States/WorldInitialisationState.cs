@@ -74,7 +74,7 @@ namespace JoyLib.Code.States
                     goSpriteRenderer.sprite = 
                         m_ObjectIcons.GetSprite(m_ActiveWorld.Tiles[i, j].TileSet, 
                                                              //TODO: This will eventually be a tile direction selection algorithm
-                                                             "middlemiddle");
+                                                             "surroundfloor");
 
                     //Make the fog of war
                     //TODO: MAKE THIS VIABLE
