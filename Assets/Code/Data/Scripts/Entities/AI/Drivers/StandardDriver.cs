@@ -20,7 +20,7 @@ namespace JoyLib.Code.Entities.AI.Drivers
         {
             if(s_PhysicsManager is null)
             {
-                GameObject.Find("GameManager").GetComponent<PhysicsManager>();
+                s_PhysicsManager = GameObject.Find("GameManager").GetComponent<PhysicsManager>();
             }
         }
 
