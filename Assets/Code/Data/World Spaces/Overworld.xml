@@ -10,8 +10,7 @@
 
 		<Icon>
 			<Name>SurroundFloor</Name>
-			<X>8</X>
-			<Y>31</Y>
+			<Position>103</Position>
 			<Data>Default</Data>
 		</Icon>
 	</WorldInfo>

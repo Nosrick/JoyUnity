@@ -90,9 +90,10 @@ namespace JoyLib.Code.Graphics
                     {
                         name = data[i].name,
                         data = data[i].data,
-                        texture = sheets[j].texture,
-                        sprite = sheets[j],
-                        filename = data[i].filename
+                        texture = sheets[data[i].position].texture,
+                        sprite = sheets[data[i].position],
+                        filename = data[i].filename,
+                        position = data[i].position
                     };
 
                     if (Icons.ContainsKey(icon))
@@ -308,5 +309,6 @@ namespace JoyLib.Code.Graphics
         public Texture2D texture;
         public Sprite sprite;
         public string filename;
+        public int position;
     }
 }

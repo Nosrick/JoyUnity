@@ -10,14 +10,12 @@
 
 		<Icon>
 			<Name>upstairs</Name>
-			<X>0</X>
-			<Y>0</Y>
+			<Position>0</Position>
 		</Icon>
 
         <Icon>
             <Name>downstairs</Name>
-            <X>1</X>
-            <Y>0</Y>
+            <Position>1</Position>
         </Icon>
 	</WorldInfo>
 </World>

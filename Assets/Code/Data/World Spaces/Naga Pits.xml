@@ -13,186 +13,157 @@
 
 		<Icon>
 			<Name>TopLeftWall</Name>
-			<X>0</X>
-			<Y>2</Y>
+			<Position>16</Position>
 			<Data>Wall</Data>
 		</Icon>
 		<Icon>
 			<Name>TopRightWall</Name>
-			<X>2</X>
-			<Y>2</Y>
+			<Position>18</Position>
 			<Data>Wall</Data>
 		</Icon>
 		<Icon>
 			<Name>BottomLeftWall</Name>
-			<X>0</X>
-			<Y>0</Y>
+			<Position>26</Position>
 			<Data>Wall</Data>
 		</Icon>
 		<Icon>
 			<Name>BottomRightWall</Name>
-			<X>2</X>
-			<Y>0</Y>
+			<Position>27</Position>
 			<Data>Wall</Data>
 		</Icon>
 
 		<Icon>
 			<Name>HorizontalWall</Name>
-			<X>0</X>
-			<Y>1</Y>
+			<Position>17</Position>
 			<Data>Wall</Data>
 		</Icon>
 		<Icon>
 			<Name>VerticalWall</Name>
-			<X>1</X>
-			<Y>2</Y>
+			<Position>21</Position>
 			<Data>Wall</Data>
 		</Icon>
 
 		<Icon>
 			<Name>TopTWall</Name>
-			<X>4</X>
-			<Y>2</Y>
+			<Position>20</Position>
 			<Data>Wall</Data>
 		</Icon>
 		<Icon>
 			<Name>LeftTWall</Name>
-			<X>3</X>
-			<Y>1</Y>
+			<Position>23</Position>
 			<Data>Wall</Data>
 		</Icon>
 		<Icon>
 			<Name>RightTWall</Name>
-			<X>5</X>
-			<Y>1</Y>
+			<Position>25</Position>
 			<Data>Wall</Data>
 		</Icon>
 		<Icon>
 			<Name>BottomTWall</Name>
-			<X>4</X>
-			<Y>0</Y>
+			<Position>28</Position>
 			<Data>Wall</Data>
 		</Icon>
 
 		<Icon>
 			<Name>CrossWall</Name>
-			<X>4</X>
-			<Y>1</Y>
+			<Position>24</Position>
 			<Data>Wall</Data>
 		</Icon>
 
 		<Icon>
-			<Name>SoloWall</Name>
-			<X>1</X>
-			<Y>1</Y>
+			<Name>BottomWall</Name>
+			<Position>22</Position>
 			<Data>Wall</Data>
 		</Icon>
 		<Icon>
 			<Name>SurroundWall</Name>
-			<X>3</X>
-			<Y>2</Y>
+			<Position>19</Position>
 			<Data>Wall</Data>
 			<Data>Default</Data>
 		</Icon>
 
 		<Icon>
 			<Name>TopLeftFloor</Name>
-			<X>0</X>
-			<Y>5</Y>
+			<Position>0</Position>
 			<Data>Floor</Data>
 		</Icon>
 		<Icon>
 			<Name>TopRightFloor</Name>
-			<X>2</X>
-			<Y>5</Y>
+			<Position>2</Position>
 			<Data>Floor</Data>
 		</Icon>
 		<Icon>
 			<Name>BottomLeftFloor</Name>
-			<X>0</X>
-			<Y>3</Y>
+			<Position>12</Position>
 			<Data>Floor</Data>
 		</Icon>
 		<Icon>
 			<Name>BottomRightFloor</Name>
-			<X>2</X>
-			<Y>3</Y>
+			<Position>14</Position>
 			<Data>Floor</Data>
 		</Icon>
 
 		<Icon>
 			<Name>TopTFloor</Name>
-			<X>1</X>
-			<Y>5</Y>
+			<Position>1</Position>
 			<Data>Floor</Data>
 		</Icon>
 		<Icon>
 			<Name>RightTFloor</Name>
-			<X>2</X>
-			<Y>4</Y>
+			<Position>7</Position>
 			<Data>Floor</Data>
 		</Icon>
 		<Icon>
 			<Name>BottomTFloor</Name>
-			<X>1</X>
-			<Y>3</Y>
+			<Position>13</Position>
 			<Data>Floor</Data>
 		</Icon>
 		<Icon>
 			<Name>LeftTFloor</Name>
-			<X>0</X>
-			<Y>4</Y>
+			<Position>5</Position>
 			<Data>Floor</Data>
 		</Icon>
 
 		<Icon>
 			<Name>SurroundFloor</Name>
-			<X>1</X>
-			<Y>4</Y>
+			<Position>6</Position>
 			<Data>Floor</Data>
 			<Data>Default</Data>
 		</Icon>
 		<Icon>
 			<Name>TopFloor</Name>
-			<X>3</X>
-			<Y>5</Y>
+			<Position>3</Position>
 			<Data>Floor</Data>
 		</Icon>
 		<Icon>
 			<Name>VerticalFloor</Name>
-			<X>3</X>
-			<Y>4</Y>
+			<Position>8</Position>
 			<Data>Floor</Data>
 		</Icon>
 		<Icon>
 			<Name>BottomFloor</Name>
-			<X>3</X>
-			<Y>3</Y>
+			<Position>15</Position>
 			<Data>Floor</Data>
 		</Icon>
 		<Icon>
 			<Name>LeftFloor</Name>
-			<X>4</X>
-			<Y>4</Y>
+			<Position>9</Position>
 			<Data>Floor</Data>
 		</Icon>
 		<Icon>
 			<Name>HorizontalFloor</Name>
-			<X>5</X>
-			<Y>4</Y>
+			<Position>10</Position>
 			<Data>Floor</Data>
 		</Icon>
 		<Icon>
 			<Name>RightFloor</Name>
-			<X>6</X>
-			<Y>4</Y>
+			<Position>11</Position>
 			<Data>Floor</Data>
 		</Icon>
 
 		<Icon>
 			<Name>SoloFloor</Name>
-			<X>5</X>
-			<Y>5</Y>
+			<Position>4</Position>
 			<Data>Floor</Data>
 		</Icon>
 	</WorldInfo>

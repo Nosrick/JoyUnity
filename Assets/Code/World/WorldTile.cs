@@ -34,13 +34,11 @@ namespace JoyLib.Code.World
         public string TileName
         {
             get;
-            protected set;
         }
 
         public string TileSet
         {
             get;
-            protected set;
         }
     }
 }

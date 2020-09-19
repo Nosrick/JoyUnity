@@ -61,7 +61,8 @@ namespace JoyLib.Code.World
                         {
                             name = icon.Element("Name").GetAs<string>(),
                             data = icon.Element("Data").DefaultIfEmpty(""),
-                            filename = filename
+                            filename = filename,
+                            position = icon.Element("Position").GetAs<int>()
                         };
 
                         iconData.Add(newIcon);
