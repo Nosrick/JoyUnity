@@ -44,6 +44,9 @@ namespace JoyLib.Code.States
         protected PhysicsManager m_PhysicsManager;
         protected EntityRelationshipHandler m_RelationshipHandler;
 
+        private const string NEEDSRECT = "NeedsRect";
+        private const string INVENTORY = "GUIInventory";
+
         public WorldState(WorldInstance overworldRef, WorldInstance activeWorldRef, GameplayFlags flagsRef) : base()
         {
             m_WorldSerialiser = new WorldSerialiser();
@@ -74,15 +77,15 @@ namespace JoyLib.Code.States
 
             if (s_GUIManager == null)
             {
-                GameObject needsGUIPrefab = GameObject.Find("NeedsPanel");
-                GameObject inventoryGUIPrefab = GameObject.Find("GUIInventory");
+                GameObject needsGUIPrefab = GameObject.Find(NEEDSRECT);
+                GameObject inventoryGUIPrefab = GameObject.Find(INVENTORY);
 
                 s_GUIManager = new GUIManager();
                 s_GUIManager.AddGUI(needsGUIPrefab, false);
                 s_GUIManager.AddGUI(inventoryGUIPrefab, true);
             }
 
-            s_GUIManager.OpenGUI("NeedsPanel");
+            s_GUIManager.OpenGUI(NEEDSRECT);
         }
 
         public override void Start()
@@ -92,14 +95,6 @@ namespace JoyLib.Code.States
             m_GameplayFlags = GameplayFlags.Moving;
 
             SetEntityWorld(overworld);
-
-            if (s_GUIManager == null)
-            {
-                GameObject obj = GameObject.Find("GUIInventory");
-                //JoyInventoryManager manager = obj.GetComponent<JoyInventoryManager>();
-                //manager.SetPlayer(m_ActiveWorld.Player);
-                //manager.DoAll();
-            }
 
             SetUpUi();
         }
@@ -235,11 +230,11 @@ namespace JoyLib.Code.States
                 m_InventoryOpen = !m_InventoryOpen;
                 if (m_InventoryOpen == false)
                 {
-                    s_GUIManager.OpenGUI("NeedsPanel");
+                    s_GUIManager.OpenGUI(NEEDSRECT);
                 }
                 else
                 {
-                    s_GUIManager.OpenGUI("GUIInventory");
+                    s_GUIManager.OpenGUI(INVENTORY);
                 }
             }
 

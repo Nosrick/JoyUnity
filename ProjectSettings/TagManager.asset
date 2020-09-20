@@ -56,3 +56,6 @@ TagManager:
   - name: Fog of War
     uniqueID: 3821477495
     locked: 0
+  - name: GUI
+    uniqueID: 2897952949
+    locked: 0
