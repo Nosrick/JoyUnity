@@ -90,8 +90,8 @@ namespace JoyLib.Code.Graphics
                     {
                         name = data[i].name,
                         data = data[i].data,
-                        texture = sheets[data[i].position].texture,
-                        sprite = sheets[data[i].position],
+                        texture = sheets[data[i].position + j].texture,
+                        sprite = sheets[data[i].position + j],
                         filename = data[i].filename,
                         position = data[i].position
                     };
