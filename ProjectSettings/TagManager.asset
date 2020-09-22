@@ -3,7 +3,15 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Slot
+  - Panel
+  - Slots
+  - EquipmentSystem
+  - Canvas
+  - EventSystem
+  - MainInventory
+  - DraggingItem
   layers:
   - Default
   - TransparentFX
