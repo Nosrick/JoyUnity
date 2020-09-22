@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using InventoryMaster.Scripts.Inventory;
 
 namespace JoyLib.Code.Unity.GUI
 {
@@ -44,20 +42,6 @@ namespace JoyLib.Code.Unity.GUI
                 m_ActiveGUI.Item1.SetActive(false);
                 m_ActiveGUI = null;
             }
-        }
-
-        public void OpenInventory()
-        {
-            GameObject inventoryGUI = m_GUIs.First(gui => gui.Item1.name.Equals("GUIInventory", StringComparison.OrdinalIgnoreCase)).Item1;
-            Inventory inventory = inventoryGUI.GetComponentInChildren<Inventory>(true);
-            inventory.openInventory();
-        }
-
-        public void CloseInventory()
-        {
-            GameObject inventoryGUI = m_GUIs.First(gui => gui.Item1.name.Equals("GUIInventory", StringComparison.OrdinalIgnoreCase)).Item1;
-            Inventory inventory = inventoryGUI.GetComponentInChildren<Inventory>();
-            inventory.closeInventory();
         }
 
         public bool RemovesControl()

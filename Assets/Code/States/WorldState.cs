@@ -234,7 +234,7 @@ namespace JoyLib.Code.States
                 }
                 else
                 {
-                    s_GUIManager.OpenInventory();
+                    s_GUIManager.OpenGUI(INVENTORY);
                 }
             }
 

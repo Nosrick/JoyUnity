@@ -1,0 +1,3767 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8762047117642356416
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf7f9e29820f8a147a86cabe5302fe36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  m_ComponentName: ThirdPersonController
+  m_Enable: 1
+--- !u!114 &-8379497163947798139
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70d90645fbcdbd3469da7eae9314d324, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+--- !u!114 &-8071481386469185231
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4abab319188bac4a8515c585b13ba9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  name: Spells
+  m_Cooldown: 1
+--- !u!114 &-8000310283351947838
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28fccac83a2fa2245991bffe45a6cdd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_GroupName: Spells
+  m_Items:
+  - {fileID: -150911175800106094}
+  - {fileID: -2135557494069984175}
+  m_Amounts: 0100000001000000
+  m_RandomProperty:
+  - 0
+  - 0
+--- !u!114 &-7469841131843966699
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf7f9e29820f8a147a86cabe5302fe36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  m_ComponentName: ThirdPersonController
+  m_Enable: 0
+--- !u!114 &-6978522501982146749
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9868b5c93a999c49a887bf923f0c4c5, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  duration: 1
+--- !u!114 &-6048850130854335002
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a78acd5557204d499bcf3420fd4ee78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Id: 07046059-4d5f-45d7-bbbf-5b7912bf8134
+  m_ItemName: Lohra
+  m_Icon: {fileID: 825313862262482097, guid: ed1162d009219214ab9e282868df2b6d, type: 3}
+  m_Prefab: {fileID: 0}
+  m_Description: Be careful outside the town in the first map.
+  m_Category: {fileID: -4438128496724216829}
+  m_PossibleRarity: []
+  m_BuyPrice: 0
+  m_BuyCurrency: {fileID: 114267867974962262}
+  m_SellPrice: 0
+  m_SellCurrency: {fileID: 114267867974962262}
+  m_Stack: 1
+  m_MaxStack: 1
+  m_IsDroppable: 1
+  m_DropSound: {fileID: 0}
+  m_OverridePrefab: {fileID: 0}
+  m_IsCraftable: 0
+  m_CraftingDuration: 2
+  m_CraftingAnimatorState: Blacksmithy
+  ingredients: []
+  properties: []
+  m_UseCategoryCooldown: 1
+  m_Cooldown: 1
+  actions:
+  - {fileID: 3859398857322783130}
+  - {fileID: 1370980595865408863}
+  - {fileID: -282124300109517087}
+  - {fileID: 3706489091375648919}
+  - {fileID: 8794363263262026607}
+  - {fileID: 6063410875040066040}
+--- !u!114 &-5984305467605448014
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dbc1d01e7a4e1248a75fdc58b8d8494, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  m_ComponentName: StatsHandler
+  m_MethodName: CanApplyDamage
+  m_Arguments:
+  - m_BoolValue: 0
+    m_IntValue: 0
+    m_FloatValue: 0
+    m_StringValue: Mana
+    m_Vector2Value: {x: 0, y: 0}
+    m_Vector3Value: {x: 0, y: 0, z: 0}
+    m_ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    m_ObjectValue: {fileID: 0}
+    m_ArgumentType: 4
+  - m_BoolValue: 0
+    m_IntValue: 0
+    m_FloatValue: 4
+    m_StringValue: 
+    m_Vector2Value: {x: 0, y: 0}
+    m_Vector3Value: {x: 0, y: 0, z: 0}
+    m_ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    m_ObjectValue: {fileID: 0}
+    m_ArgumentType: 3
+  m_FailureNotification:
+    title: 
+    text: I don't have enough mana!
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+--- !u!114 &-5593961171387982357
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dbc1d01e7a4e1248a75fdc58b8d8494, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  m_ComponentName: StatsHandler
+  m_MethodName: ApplyDamage
+  m_Arguments:
+  - m_BoolValue: 0
+    m_IntValue: 0
+    m_FloatValue: 0
+    m_StringValue: Mana
+    m_Vector2Value: {x: 0, y: 0}
+    m_Vector3Value: {x: 0, y: 0, z: 0}
+    m_ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    m_ObjectValue: {fileID: 0}
+    m_ArgumentType: 4
+  - m_BoolValue: 0
+    m_IntValue: 0
+    m_FloatValue: 5
+    m_StringValue: 
+    m_Vector2Value: {x: 0, y: 0}
+    m_Vector3Value: {x: 0, y: 0, z: 0}
+    m_ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    m_ObjectValue: {fileID: 0}
+    m_ArgumentType: 3
+  m_FailureNotification:
+    title: 
+    text: 
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+--- !u!114 &-5538743383721989502
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73a16e989d1d0974a84c21ec865aa84e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  methodName: SetIK
+  m_Argument:
+    m_BoolValue: 1
+    m_IntValue: 0
+    m_FloatValue: 0
+    m_StringValue: 
+    m_Vector2Value: {x: 0, y: 0}
+    m_Vector3Value: {x: 0, y: 0, z: 0}
+    m_ColorValue: {r: 1, g: 1, b: 1, a: 1}
+    m_ObjectValue: {fileID: 0}
+    m_ArgumentType: 1
+  m_Options: 1
+--- !u!114 &-4713816334987367779
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9868b5c93a999c49a887bf923f0c4c5, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  duration: 1.2
+--- !u!114 &-4438128496724216829
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4abab319188bac4a8515c585b13ba9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  name: Teleporter
+  m_Cooldown: 1
+--- !u!114 &-4215744585878101633
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40c8a156bd44a4045b462c35e6a19777, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  m_GlobalCooldown: 1
+--- !u!114 &-4009855652979203909
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a78acd5557204d499bcf3420fd4ee78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Id: 08ccfdf8-7007-4ce8-80e9-c7614f351595
+  m_ItemName: Seraphina
+  m_Icon: {fileID: -8583486841737024011, guid: ed1162d009219214ab9e282868df2b6d, type: 3}
+  m_Prefab: {fileID: 0}
+  m_Description: Town in the second map.
+  m_Category: {fileID: 114723465593855074}
+  m_PossibleRarity: []
+  m_BuyPrice: 0
+  m_BuyCurrency: {fileID: 114267867974962262}
+  m_SellPrice: 0
+  m_SellCurrency: {fileID: 114267867974962262}
+  m_Stack: 1
+  m_MaxStack: 1
+  m_IsDroppable: 1
+  m_DropSound: {fileID: 0}
+  m_OverridePrefab: {fileID: 0}
+  m_IsCraftable: 0
+  m_CraftingDuration: 2
+  m_CraftingAnimatorState: Blacksmithy
+  ingredients: []
+  properties: []
+  m_UseCategoryCooldown: 1
+  m_Cooldown: 1
+  actions:
+  - {fileID: -7469841131843966699}
+  - {fileID: -4215744585878101633}
+  - {fileID: 1919206352339739971}
+  - {fileID: 1582602185323503560}
+  - {fileID: 2476073303803809898}
+  - {fileID: 8746018131140654165}
+--- !u!114 &-3648566784845000877
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73a16e989d1d0974a84c21ec865aa84e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  methodName: SetIK
+  m_Argument:
+    m_BoolValue: 1
+    m_IntValue: 0
+    m_FloatValue: 0
+    m_StringValue: 
+    m_Vector2Value: {x: 0, y: 0}
+    m_Vector3Value: {x: 0, y: 0, z: 0}
+    m_ColorValue: {r: 1, g: 1, b: 1, a: 1}
+    m_ObjectValue: {fileID: 0}
+    m_ArgumentType: 1
+  m_Options: 1
+--- !u!114 &-3541442642934565730
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf7f9e29820f8a147a86cabe5302fe36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  m_ComponentName: ThirdPersonController
+  m_Enable: 0
+--- !u!114 &-3109704542487164154
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28fccac83a2fa2245991bffe45a6cdd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_GroupName: Teleporter
+  m_Items:
+  - {fileID: 9062223127565793768}
+  - {fileID: -6048850130854335002}
+  - {fileID: -4009855652979203909}
+  m_Amounts: 010000000100000001000000
+  m_RandomProperty:
+  - 0
+  - 0
+  - 0
+--- !u!114 &-2996370577244072642
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9868b5c93a999c49a887bf923f0c4c5, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  duration: 1.2
+--- !u!114 &-2520681275021113395
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73a16e989d1d0974a84c21ec865aa84e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  methodName: SetIK
+  m_Argument:
+    m_BoolValue: 0
+    m_IntValue: 0
+    m_FloatValue: 0
+    m_StringValue: 
+    m_Vector2Value: {x: 0, y: 0}
+    m_Vector3Value: {x: 0, y: 0, z: 0}
+    m_ColorValue: {r: 1, g: 1, b: 1, a: 1}
+    m_ObjectValue: {fileID: 0}
+    m_ArgumentType: 1
+  m_Options: 1
+--- !u!114 &-2475309877512208557
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0a9264eac0dc0c43af8a758f22bb06a, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  m_AnimatorState: Arcane Ball
+  m_TransitionDuration: 0.2
+--- !u!114 &-2313407420529098914
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9868b5c93a999c49a887bf923f0c4c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  duration: 1.2
+--- !u!114 &-2135557494069984175
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a78acd5557204d499bcf3420fd4ee78, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  m_Id: 5bf4d465-0a9f-4bae-b804-60cbc81d48b5
+  m_ItemName: Arcane Ball
+  m_Icon: {fileID: 21300000, guid: ec24783658f55204083d307b3f27395e, type: 3}
+  m_Prefab: {fileID: 100014, guid: d6f72918cc3dd004584674be2b246697, type: 3}
+  m_Description: Cast a magical arcane ball.
+  m_Category: {fileID: -8071481386469185231}
+  m_PossibleRarity: []
+  m_BuyPrice: 0
+  m_BuyCurrency: {fileID: 114267867974962262}
+  m_SellPrice: 0
+  m_SellCurrency: {fileID: 114267867974962262}
+  m_Stack: 1
+  m_MaxStack: 1
+  m_IsDroppable: 0
+  m_DropSound: {fileID: 0}
+  m_OverridePrefab: {fileID: 0}
+  m_IsCraftable: 0
+  m_CraftingDuration: 2
+  m_CraftingAnimatorState: Blacksmithy
+  ingredients: []
+  properties: []
+  m_UseCategoryCooldown: 0
+  m_Cooldown: 3
+  actions:
+  - {fileID: -5984305467605448014}
+  - {fileID: 8783320085134206800}
+  - {fileID: 8399277053461018542}
+  - {fileID: -2520681275021113395}
+  - {fileID: -8379497163947798139}
+  - {fileID: -2475309877512208557}
+  - {fileID: -2996370577244072642}
+  - {fileID: 5093639832428044731}
+  - {fileID: -4713816334987367779}
+  - {fileID: -3648566784845000877}
+--- !u!114 &-982391084937717269
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73a16e989d1d0974a84c21ec865aa84e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  methodName: SetIK
+  m_Argument:
+    m_BoolValue: 0
+    m_IntValue: 0
+    m_FloatValue: 0
+    m_StringValue: 
+    m_Vector2Value: {x: 0, y: 0}
+    m_Vector3Value: {x: 0, y: 0, z: 0}
+    m_ColorValue: {r: 1, g: 1, b: 1, a: 1}
+    m_ObjectValue: {fileID: 0}
+    m_ArgumentType: 1
+  m_Options: 1
+--- !u!114 &-561233975748808833
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9868b5c93a999c49a887bf923f0c4c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  duration: 1
+--- !u!114 &-282124300109517087
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9868b5c93a999c49a887bf923f0c4c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  duration: 1
+--- !u!114 &-150911175800106094
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a78acd5557204d499bcf3420fd4ee78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Id: 5bf4d465-0a9f-4bae-b804-60cbc81d48b5
+  m_ItemName: Healing
+  m_Icon: {fileID: 21300000, guid: 4fb083f2779c6a54b83359c8e1f645ae, type: 3}
+  m_Prefab: {fileID: 100010, guid: 1b80c9f94defa634487a6d9f6e386f6a, type: 3}
+  m_Description: Restores your health by 13 points.
+  m_Category: {fileID: -8071481386469185231}
+  m_PossibleRarity: []
+  m_BuyPrice: 0
+  m_BuyCurrency: {fileID: 114267867974962262}
+  m_SellPrice: 0
+  m_SellCurrency: {fileID: 114267867974962262}
+  m_Stack: 1
+  m_MaxStack: 1
+  m_IsDroppable: 0
+  m_DropSound: {fileID: 0}
+  m_OverridePrefab: {fileID: 0}
+  m_IsCraftable: 0
+  m_CraftingDuration: 2
+  m_CraftingAnimatorState: Blacksmithy
+  ingredients: []
+  properties: []
+  m_UseCategoryCooldown: 0
+  m_Cooldown: 5
+  actions:
+  - {fileID: 3828677479724367388}
+  - {fileID: -5593961171387982357}
+  - {fileID: 8861356179281947782}
+  - {fileID: -982391084937717269}
+  - {fileID: 5862134302464580756}
+  - {fileID: 8278040875160407173}
+  - {fileID: 8676138203776071900}
+  - {fileID: 6880570540234359293}
+  - {fileID: -2313407420529098914}
+  - {fileID: -5538743383721989502}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 138669a60fd8dc345859b20ddc2ad589, type: 3}
+  m_Name: Fantasy ItemDatabase
+  m_EditorClassIdentifier: 
+  items:
+  - {fileID: 114599350459394656}
+  - {fileID: 114785342795678536}
+  - {fileID: 114277333231593414}
+  - {fileID: 114106902558356676}
+  - {fileID: 114400187329190588}
+  - {fileID: 114602721455084702}
+  - {fileID: 114126671102914250}
+  - {fileID: 114366776466503370}
+  - {fileID: 114733209641389708}
+  - {fileID: 114386931520196918}
+  - {fileID: 114880669092416044}
+  - {fileID: 114469367719831298}
+  - {fileID: -150911175800106094}
+  - {fileID: -2135557494069984175}
+  - {fileID: 9062223127565793768}
+  - {fileID: -6048850130854335002}
+  - {fileID: -4009855652979203909}
+  currencies:
+  - {fileID: 114267867974962262}
+  - {fileID: 114153631947672132}
+  - {fileID: 114837728913287972}
+  raritys:
+  - {fileID: 114768975821728476}
+  - {fileID: 114335059100891282}
+  - {fileID: 114685724034972164}
+  - {fileID: 114666726509044716}
+  categories:
+  - {fileID: 114723465593855074}
+  - {fileID: 114501039702446988}
+  - {fileID: 114266743763884732}
+  - {fileID: 114135407248369770}
+  - {fileID: 114001807698821460}
+  - {fileID: 114477255015190934}
+  - {fileID: -8071481386469185231}
+  - {fileID: -4438128496724216829}
+  equipments:
+  - {fileID: 114236047186042762}
+  - {fileID: 114425538521893000}
+  - {fileID: 114479721169337420}
+  - {fileID: 114214608128568004}
+  - {fileID: 114182084388362390}
+  - {fileID: 114509172395672000}
+  - {fileID: 114673757768415324}
+  - {fileID: 114616812171177490}
+  - {fileID: 114707470069734932}
+  - {fileID: 114913274920015176}
+  itemGroups:
+  - {fileID: 114068113804856440}
+  - {fileID: 114560801940219110}
+  - {fileID: -8000310283351947838}
+  - {fileID: -3109704542487164154}
+  settings:
+  - {fileID: 114673604025517358}
+  - {fileID: 114067371324049834}
+  - {fileID: 114841075050639780}
+  - {fileID: 114150905110874902}
+  - {fileID: 114565418940822606}
+--- !u!114 &114001807698821460
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4abab319188bac4a8515c585b13ba9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  name: Tool
+  m_Cooldown: 1
+--- !u!114 &114030944749780664
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cbd5d5f0ea7cc242a40a29d4bd5e6d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  isOpen: 1
+  window: Equipment
+  motion: Bow
+  state: 1
+--- !u!114 &114038937148395034
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 276288bc674866e47beb9dbd5ea6adc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  isOpen: 1
+  cooldown: 0
+  globalCooldown: 0
+--- !u!114 &114041309157223098
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86391989c053cf446a1842ca7d822980, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  isOpen: 1
+--- !u!114 &114057405593129510
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3180c15fdbb2b7d4a9ecc7c45b3ff98f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  isOpen: 1
+  firstContainer: other
+  secondContainer: Inventory
+--- !u!114 &114067371324049834
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1d0d5578788bb14ba70b8a002ce205b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unstackEvent: 3
+  unstackKeyCode: 304
+--- !u!114 &114068113804856440
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28fccac83a2fa2245991bffe45a6cdd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_GroupName: Blacksmithy
+  m_Items:
+  - {fileID: 114785342795678536}
+  - {fileID: 114277333231593414}
+  - {fileID: 114400187329190588}
+  - {fileID: 114602721455084702}
+  - {fileID: 114106902558356676}
+  - {fileID: 114733209641389708}
+  m_Amounts: 010000000100000001000000010000000100000001000000
+  m_RandomProperty:
+  - 0.2
+  - 0.2
+  - 0.2
+  - 0.2
+  - 0.2
+  - 0
+--- !u!114 &114106902558356676
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6132cc3558d117f4bbad4651b2dbdba7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Id: 7f88be02-e6ca-4ec2-b89f-4f5febd3dcf5
+  m_ItemName: Hammer
+  m_Icon: {fileID: 21300000, guid: f6293f20fd85aa143bead12afd67ebbb, type: 3}
+  m_Prefab: {fileID: 5445779230513671954, guid: f82bc419a6e172a44bd05e66d42408dc,
+    type: 3}
+  m_Description: Hammer is used to craft items.
+  m_Category: {fileID: 114001807698821460}
+  m_PossibleRarity: []
+  m_BuyPrice: 6
+  m_BuyCurrency: {fileID: 114267867974962262}
+  m_SellPrice: 4
+  m_SellCurrency: {fileID: 114267867974962262}
+  m_Stack: 1
+  m_MaxStack: 1
+  m_IsDroppable: 1
+  m_DropSound: {fileID: 0}
+  m_OverridePrefab: {fileID: 0}
+  m_IsCraftable: 1
+  m_CraftingDuration: 3
+  m_CraftingAnimatorState: Blacksmithy
+  ingredients:
+  - item: {fileID: 114126671102914250}
+    amount: 1
+  - item: {fileID: 114366776466503370}
+    amount: 1
+  properties: []
+  m_UseCategoryCooldown: 1
+  m_Cooldown: 1
+  actions: []
+  m_Region:
+  - {fileID: 114509172395672000}
+--- !u!114 &114115989212123980
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 276288bc674866e47beb9dbd5ea6adc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  isOpen: 1
+  cooldown: 0.3
+  globalCooldown: 0.1
+--- !u!114 &114121643452009402
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3180c15fdbb2b7d4a9ecc7c45b3ff98f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  isOpen: 1
+  firstContainer: Equipment
+  secondContainer: Inventory
+--- !u!114 &114126671102914250
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e14be5e3e6cf2204293682bf65bce5dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Id: 7104b05e-6d4e-4447-87bd-aad3db602483
+  m_ItemName: Wood
+  m_Icon: {fileID: 21300000, guid: b69b1ca52acfaed43b07c602653a71fd, type: 3}
+  m_Prefab: {fileID: 8050120179880737813, guid: 9c7a32b2c2e150b4a9f6d6d8974a9f40,
+    type: 3}
+  m_Description: Resource for crafting items.
+  m_Category: {fileID: 114477255015190934}
+  m_PossibleRarity: []
+  m_BuyPrice: 3
+  m_BuyCurrency: {fileID: 114267867974962262}
+  m_SellPrice: 2
+  m_SellCurrency: {fileID: 114267867974962262}
+  m_Stack: 1
+  m_MaxStack: 60
+  m_IsDroppable: 1
+  m_DropSound: {fileID: 0}
+  m_OverridePrefab: {fileID: 0}
+  m_IsCraftable: 0
+  m_CraftingDuration: 2
+  m_CraftingAnimatorState: Blacksmithy
+  ingredients: []
+  properties: []
+--- !u!114 &114126677393938592
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d75ad62c39bcb4544a7ae046cdfd8b59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  contextMenuName: ContextMenu
+  tooltipName: Tooltip
+  stackName: Stack
+  notificationName: Notification
+--- !u!114 &114129996756985586
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d69d605e9e980f04ca2e582b4c604e18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  isOpen: 1
+  duration: 2.9
+--- !u!114 &114132923965740764
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 276288bc674866e47beb9dbd5ea6adc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  isOpen: 1
+  cooldown: 2
+  globalCooldown: 1
+--- !u!114 &114135407248369770
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4abab319188bac4a8515c585b13ba9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  name: Weapon
+  m_Cooldown: 1
+--- !u!114 &114149493934886810
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d69d605e9e980f04ca2e582b4c604e18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  isOpen: 1
+  duration: 0.3
+--- !u!114 &114150905110874902
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cefcd19cdc9839d449772c4dce1503f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  autoSave: 1
+  savingKey: Player
+  savingRate: 10
+  provider: 0
+--- !u!114 &114153631947672132
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9b8ce84b90caa548ba4d29381f5d494, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Id: 3ab54e42-a79e-43d1-a07d-e0fbe98e4da5
+  m_ItemName: Silver
+  m_Icon: {fileID: 21300000, guid: 4d9c85175f3dfa0408f65c38dbdf69b4, type: 3}
+  m_Prefab: {fileID: 0}
+  m_Description: 
+  m_Category: {fileID: 0}
+  m_PossibleRarity: []
+  m_BuyPrice: 0
+  m_BuyCurrency: {fileID: 0}
+  m_SellPrice: 0
+  m_SellCurrency: {fileID: 0}
+  m_Stack: 0
+  m_MaxStack: 1
+  m_IsDroppable: 1
+  m_DropSound: {fileID: 0}
+  m_OverridePrefab: {fileID: 0}
+  m_IsCraftable: 0
+  m_CraftingDuration: 2
+  m_CraftingAnimatorState: Blacksmithy
+  ingredients: []
+  properties: []
+  currencyConversions:
+  - factor: 100
+    currency: {fileID: 114267867974962262}
+  - factor: 0.01
+    currency: {fileID: 114837728913287972}
+--- !u!114 &114174976689665944
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd5ffdcb9647091419d882a0ac058245, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  isOpen: 1
+--- !u!114 &114181993943710014
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f89524f2e5e685a4d9d6582546ea7faf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114182084388362390
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8f5f34ef39fbec438e689ea49ddb023, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  name: Ring
+--- !u!114 &114186064166516254
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d69d605e9e980f04ca2e582b4c604e18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  isOpen: 1
+  duration: 0.3
+--- !u!114 &114207943691169346
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbd963504bd9a7b4c9e0dcf955c6ab13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  m_WindowName: Crafting
+  m_Item: {fileID: 114599350459394656}
+--- !u!114 &114214608128568004
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8f5f34ef39fbec438e689ea49ddb023, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  name: Amulet
+--- !u!114 &114218340676141982
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9470009a2483fc642becec583997f53b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114236047186042762
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8f5f34ef39fbec438e689ea49ddb023, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  name: Head
+--- !u!114 &114261407933759292
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d69d605e9e980f04ca2e582b4c604e18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  isOpen: 1
+  duration: 2
+  time: 0
+--- !u!114 &114263592362413214
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c2050b9f1803884484267b8f9ee3a35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  isOpen: 1
+  amount: 1
+--- !u!114 &114266049753539804
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c2050b9f1803884484267b8f9ee3a35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  isOpen: 1
+  amount: 1
+--- !u!114 &114266743763884732
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4abab319188bac4a8515c585b13ba9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  name: Armor
+  m_Cooldown: 1
+--- !u!114 &114267867974962262
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9b8ce84b90caa548ba4d29381f5d494, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Id: e558a93c-b67f-478f-b363-8a58b51ae9b4
+  m_ItemName: Copper
+  m_Icon: {fileID: 21300000, guid: c11ca993f17417d40bc0966f07565d84, type: 3}
+  m_Prefab: {fileID: 0}
+  m_Description: 
+  m_Category: {fileID: 0}
+  m_PossibleRarity: []
+  m_BuyPrice: 0
+  m_BuyCurrency: {fileID: 0}
+  m_SellPrice: 0
+  m_SellCurrency: {fileID: 0}
+  m_Stack: 0
+  m_MaxStack: 1
+  m_IsDroppable: 1
+  m_DropSound: {fileID: 0}
+  m_OverridePrefab: {fileID: 0}
+  m_IsCraftable: 0
+  m_CraftingDuration: 2
+  m_CraftingAnimatorState: Blacksmithy
+  ingredients: []
+  properties: []
+  currencyConversions:
+  - factor: 0.01
+    currency: {fileID: 114153631947672132}
+--- !u!114 &114274688505377816
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40c8a156bd44a4045b462c35e6a19777, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  m_GlobalCooldown: 0.5
+--- !u!114 &114277333231593414
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6132cc3558d117f4bbad4651b2dbdba7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Id: 77eb276e-4388-4545-9fe6-b513438e9719
+  m_ItemName: Shield
+  m_Icon: {fileID: 21300000, guid: b97c91e8b348f3f4ebdc11f5c82182cd, type: 3}
+  m_Prefab: {fileID: 6955947972541771316, guid: caa4712265fb87f48917ca9e4be3350a,
+    type: 3}
+  m_Description: A wooden shield.
+  m_Category: {fileID: 114266743763884732}
+  m_PossibleRarity:
+  - {fileID: 114768975821728476}
+  - {fileID: 114335059100891282}
+  - {fileID: 114685724034972164}
+  - {fileID: 114666726509044716}
+  m_BuyPrice: 19
+  m_BuyCurrency: {fileID: 114267867974962262}
+  m_SellPrice: 17
+  m_SellCurrency: {fileID: 114267867974962262}
+  m_Stack: 1
+  m_MaxStack: 1
+  m_IsDroppable: 1
+  m_DropSound: {fileID: 0}
+  m_OverridePrefab: {fileID: 0}
+  m_IsCraftable: 1
+  m_CraftingDuration: 5
+  m_CraftingAnimatorState: Blacksmithy
+  ingredients:
+  - item: {fileID: 114126671102914250}
+    amount: 3
+  - item: {fileID: 114366776466503370}
+    amount: 1
+  - item: {fileID: 114733209641389708}
+    amount: 2
+  properties:
+  - name: Armor
+    typeIndex: 5
+    stringValue: 
+    intValue: 32
+    floatValue: 0
+    colorValue: {r: 0, g: 0, b: 0, a: 0}
+    boolValue: 0
+    objectReferenceValue: {fileID: 0}
+    vector2Value: {x: 0, y: 0}
+    vector3Value: {x: 0, y: 0, z: 0}
+    show: 1
+    color: {r: 0.9150943, g: 0.4803712, b: 0, a: 1}
+  - name: Vitality
+    typeIndex: 5
+    stringValue: 
+    intValue: 10
+    floatValue: 0
+    colorValue: {r: 0, g: 0, b: 0, a: 0}
+    boolValue: 0
+    objectReferenceValue: {fileID: 0}
+    vector2Value: {x: 0, y: 0}
+    vector3Value: {x: 0, y: 0, z: 0}
+    show: 1
+    color: {r: 1, g: 0.99517125, b: 0, a: 1}
+  - name: Strength
+    typeIndex: 5
+    stringValue: 
+    intValue: 5
+    floatValue: 0
+    colorValue: {r: 0, g: 0, b: 0, a: 0}
+    boolValue: 0
+    objectReferenceValue: {fileID: 0}
+    vector2Value: {x: 0, y: 0}
+    vector3Value: {x: 0, y: 0, z: 0}
+    show: 1
+    color: {r: 1, g: 0, b: 0, a: 1}
+  m_UseCategoryCooldown: 1
+  m_Cooldown: 1
+  actions: []
+  m_Region:
+  - {fileID: 114673757768415324}
+--- !u!114 &114277407619089524
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3180c15fdbb2b7d4a9ecc7c45b3ff98f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  isOpen: 1
+  firstContainer: Equipment
+  secondContainer: Inventory
+--- !u!114 &114292531390767918
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5120acff45ecfb3479bd07c5b2cfded0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  isOpen: 1
+  m_Item: {fileID: 0}
+  container: Inventory
+  amount: 1
+--- !u!114 &114314301198174194
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3180c15fdbb2b7d4a9ecc7c45b3ff98f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 0
+  isOpen: 1
+  firstContainer: Equipment
+  secondContainer: Inventory
+--- !u!114 &114326013607070868
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5120acff45ecfb3479bd07c5b2cfded0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  isOpen: 1
+  m_Item: {fileID: 114599350459394656}
+  container: Blacksmithy
+  amount: 1
+--- !u!114 &114335059100891282
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2bd508013dff080478b54adc05db11e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  name: Common
+  color: {r: 1, g: 1, b: 1, a: 1}
+  chance: 80
+  multiplier: 1.3
+--- !u!114 &114347240779232154
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65af8fd75040a304b907de296827799e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114352852989268888
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1d0d5578788bb14ba70b8a002ce205b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unstackEvent: -1
+  unstackKeyCode: 304
+--- !u!114 &114366776466503370
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e14be5e3e6cf2204293682bf65bce5dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Id: e893343b-3f8d-430c-85af-5a9ef62ed18c
+  m_ItemName: Iron
+  m_Icon: {fileID: 21300000, guid: 3e4fcc84a0ac95b429c56452575f6021, type: 3}
+  m_Prefab: {fileID: 8122114857979880778, guid: 9ca50f633f494d14fb4aef0e7f958c7c,
+    type: 3}
+  m_Description: Resource for crafting items.
+  m_Category: {fileID: 114477255015190934}
+  m_PossibleRarity: []
+  m_BuyPrice: 5
+  m_BuyCurrency: {fileID: 114267867974962262}
+  m_SellPrice: 3
+  m_SellCurrency: {fileID: 114267867974962262}
+  m_Stack: 1
+  m_MaxStack: 60
+  m_IsDroppable: 1
+  m_DropSound: {fileID: 0}
+  m_OverridePrefab: {fileID: 0}
+  m_IsCraftable: 0
+  m_CraftingDuration: 2
+  m_CraftingAnimatorState: Blacksmithy
+  ingredients: []
+  properties: []
+--- !u!114 &114371722077822890
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f86c5ea970e99374ca82527deeaa9f76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114380090987369986
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3180c15fdbb2b7d4a9ecc7c45b3ff98f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  isOpen: 1
+  firstContainer: Equipment
+  secondContainer: edrter
+--- !u!114 &114386931520196918
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a78acd5557204d499bcf3420fd4ee78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Id: 71139cc0-8276-4974-ab21-d551b4c013dd
+  m_ItemName: Health Potion
+  m_Icon: {fileID: 21300000, guid: fb38af54312632d47bc615bfe636f9a4, type: 3}
+  m_Prefab: {fileID: 7185777887056126559, guid: 7129d33baee5a304fa5a78de1cd04f6a,
+    type: 3}
+  m_Description: Restores your health by 10 points.
+  m_Category: {fileID: 114501039702446988}
+  m_PossibleRarity: []
+  m_BuyPrice: 3
+  m_BuyCurrency: {fileID: 114267867974962262}
+  m_SellPrice: 2
+  m_SellCurrency: {fileID: 114267867974962262}
+  m_Stack: 1
+  m_MaxStack: 60
+  m_IsDroppable: 1
+  m_DropSound: {fileID: 0}
+  m_OverridePrefab: {fileID: 0}
+  m_IsCraftable: 0
+  m_CraftingDuration: 2
+  m_CraftingAnimatorState: Blacksmithy
+  ingredients: []
+  properties: []
+  m_UseCategoryCooldown: 1
+  m_Cooldown: 1
+  actions:
+  - {fileID: 114786169500277464}
+  - {fileID: 114779815097158386}
+  - {fileID: 114274688505377816}
+  - {fileID: 114745020949786178}
+--- !u!114 &114397289768917062
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3872ca8d5c2640d40b898af499332431, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  containerFull:
+    title: 
+    text: Your {0} is full!
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  failedRestriction:
+    title: 
+    text: '{0} can''t be added to {1}.'
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  missingItem:
+    title: 
+    text: This action requires {0}.
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  inCooldown:
+    title: 
+    text: '{0} is in cooldown for {1} seconds!'
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  selectItem:
+    title: 
+    text: Select an item you would like to craft.
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  alreadyCrafting:
+    title: 
+    text: You are already crafting.
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  craftedItem:
+    title: 
+    text: Successfully crafted {0}
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  missingIngredient:
+    title: 
+    text: You don't have all ingredients to craft this item!
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  soldItem:
+    title: 
+    text: Sold {0} for {1}.
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  boughtItem:
+    title: 
+    text: Bought {0} for {1}.
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  noCurrencyToBuy:
+    title: 
+    text: You don't have enough coins.
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  toFarAway:
+    title: 
+    text: This is to far away!
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  inUse:
+    title: 
+    text: My life is already fairly busy.
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  empty:
+    title: 
+    text: There is nothing to be found here.
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+--- !u!114 &114400187329190588
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6132cc3558d117f4bbad4651b2dbdba7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Id: deaf6164-418d-4a18-bc10-d1cb6580f1e4
+  m_ItemName: Axe
+  m_Icon: {fileID: 21300000, guid: 81e9ec1d21e1f8f43a06e7e75c17fc37, type: 3}
+  m_Prefab: {fileID: 7757701744868425547, guid: 6a881db9233fb0748ad9709b178e05e2,
+    type: 3}
+  m_Description: An axe can be used to cut trees.
+  m_Category: {fileID: 114001807698821460}
+  m_PossibleRarity: []
+  m_BuyPrice: 8
+  m_BuyCurrency: {fileID: 114267867974962262}
+  m_SellPrice: 6
+  m_SellCurrency: {fileID: 114267867974962262}
+  m_Stack: 1
+  m_MaxStack: 1
+  m_IsDroppable: 1
+  m_DropSound: {fileID: 0}
+  m_OverridePrefab: {fileID: 0}
+  m_IsCraftable: 1
+  m_CraftingDuration: 3
+  m_CraftingAnimatorState: Blacksmithy
+  ingredients:
+  - item: {fileID: 114126671102914250}
+    amount: 1
+  - item: {fileID: 114366776466503370}
+    amount: 1
+  properties: []
+  m_UseCategoryCooldown: 1
+  m_Cooldown: 1
+  actions: []
+  m_Region:
+  - {fileID: 114509172395672000}
+--- !u!114 &114400774235664906
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3180c15fdbb2b7d4a9ecc7c45b3ff98f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  isOpen: 1
+  firstContainer: Equipment
+  secondContainer: Inventory
+--- !u!114 &114425538521893000
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8f5f34ef39fbec438e689ea49ddb023, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  name: Shoulders
+--- !u!114 &114437304209366642
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e404bb8ea2845ea46a56f38976556b6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  logLevel: 2
+  playerTag: Player
+  maxDropDistance: 1.2
+  unstackItems: 304
+  contextMenu: ContextMenu
+  tooltip: Tooltip
+  stack: Stack
+  infoMessage: Notification
+  containerFull:
+    title: 
+    text: Your {0} is full!
+    color:
+      r: 1
+      g: 1
+      b: 1
+      a: 1
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  inCooldown:
+    title: 
+    text: '{0} is in cooldown for {1} seconds!'
+    color:
+      r: 1
+      g: 1
+      b: 1
+      a: 1
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  craftedItem:
+    title: 
+    text: Successfully crafted {0}
+    color:
+      r: 1
+      g: 1
+      b: 1
+      a: 1
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  missingIngredient:
+    title: 
+    text: You don't have all ingredients to craft this item!
+    color:
+      r: 1
+      g: 1
+      b: 1
+      a: 1
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  toFarAway:
+    title: 
+    text: This is to far away!
+    color:
+      r: 1
+      g: 1
+      b: 1
+      a: 1
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  missingItem:
+    title: 
+    text: This action requires {0}!
+    color:
+      r: 1
+      g: 1
+      b: 1
+      a: 1
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  soldItem:
+    title: 
+    text: Sold {0} for {1}.
+    color:
+      r: 1
+      g: 1
+      b: 1
+      a: 1
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  noCurrency:
+    title: 
+    text: You don't have enough coins.
+    color:
+      r: 1
+      g: 1
+      b: 1
+      a: 1
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  selectItem:
+    title: 
+    text: Select an item fitrst.
+    color:
+      r: 1
+      g: 1
+      b: 1
+      a: 1
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  emptyResource:
+    title: 
+    text: You may need to wait before this {0} has anything to gather!
+    color:
+      r: 1
+      g: 1
+      b: 1
+      a: 1
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  gameSaved:
+    title: 
+    text: '[System] Game Saved...'
+    color:
+      r: 0.9811321
+      g: 0.36167258
+      b: 0
+      a: 1
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  gameLoaded:
+    title: 
+    text: '[System] Game Loaded...'
+    color:
+      r: 0.9843137
+      g: 0.3647059
+      b: 0
+      a: 1
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  autoSave: 0
+  savingKey: Player
+  savingRate: 20
+  provider: 0
+  serverAddress: http://zerano-unity3d.com/Unity/ItemSystem/PHP/
+  saveScript: save.php
+  loadScript: load.php
+--- !u!114 &114469367719831298
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e14be5e3e6cf2204293682bf65bce5dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Id: 5607774a-5409-412d-916a-54ed6692f441
+  m_ItemName: Arrow
+  m_Icon: {fileID: 21300000, guid: e50febd6717db2b43a8fa67d1259fa02, type: 3}
+  m_Prefab: {fileID: 8838616929701194134, guid: 406b98225cd8404479b032b2508644f5,
+    type: 3}
+  m_Description: Arrows are required to use a bow.
+  m_Category: {fileID: 114477255015190934}
+  m_PossibleRarity: []
+  m_BuyPrice: 1
+  m_BuyCurrency: {fileID: 114267867974962262}
+  m_SellPrice: 1
+  m_SellCurrency: {fileID: 114267867974962262}
+  m_Stack: 1
+  m_MaxStack: 60
+  m_IsDroppable: 1
+  m_DropSound: {fileID: 0}
+  m_OverridePrefab: {fileID: 0}
+  m_IsCraftable: 1
+  m_CraftingDuration: 2
+  m_CraftingAnimatorState: Blacksmithy
+  ingredients:
+  - item: {fileID: 114126671102914250}
+    amount: 1
+  properties: []
+--- !u!114 &114477255015190934
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4abab319188bac4a8515c585b13ba9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  name: Material
+  m_Cooldown: 1
+--- !u!114 &114479721169337420
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8f5f34ef39fbec438e689ea49ddb023, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  name: Torso
+--- !u!114 &114491136052604768
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c2050b9f1803884484267b8f9ee3a35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  isOpen: 1
+  amount: 1
+--- !u!114 &114501039702446988
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4abab319188bac4a8515c585b13ba9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  name: Consumable
+  m_Cooldown: 1
+--- !u!114 &114509172395672000
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8f5f34ef39fbec438e689ea49ddb023, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  name: Right Hand
+--- !u!114 &114511093401437812
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3180c15fdbb2b7d4a9ecc7c45b3ff98f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  isOpen: 1
+  firstContainer: Equipment
+  secondContainer: Inventory
+--- !u!114 &114528003039804190
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 276288bc674866e47beb9dbd5ea6adc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  isOpen: 1
+  cooldown: 0.3
+  globalCooldown: 0.1
+--- !u!114 &114541751954387670
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d69d605e9e980f04ca2e582b4c604e18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  isOpen: 1
+  duration: 0.3
+--- !u!114 &114545633988109936
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d69d605e9e980f04ca2e582b4c604e18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  isOpen: 1
+  duration: 0
+--- !u!114 &114549842478025930
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d0af1ac7424eb045b37d04e0aad1191, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  isOpen: 1
+  statName: Health
+  damage: -10
+--- !u!114 &114560801940219110
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28fccac83a2fa2245991bffe45a6cdd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_GroupName: Vendor
+  m_Items:
+  - {fileID: 114785342795678536}
+  - {fileID: 114277333231593414}
+  - {fileID: 114599350459394656}
+  - {fileID: 114106902558356676}
+  - {fileID: 114400187329190588}
+  - {fileID: 114602721455084702}
+  - {fileID: 114469367719831298}
+  - {fileID: 114733209641389708}
+  - {fileID: 114366776466503370}
+  - {fileID: 114126671102914250}
+  m_Amounts: 01000000010000000100000001000000010000000100000001000000010000000100000001000000
+  m_RandomProperty:
+  - 0.1
+  - 0.1
+  - 0.1
+  - 0.1
+  - 0.1
+  - 0.1
+  - 0
+  - 0
+  - 0
+  - 0
+--- !u!114 &114563653366372374
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d69d605e9e980f04ca2e582b4c604e18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  isOpen: 1
+  duration: 2
+  time: 0
+--- !u!114 &114565418940822606
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d75ad62c39bcb4544a7ae046cdfd8b59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  contextMenuName: ContextMenu
+  tooltipName: Tooltip
+  stackName: Stack
+  notificationName: Notification
+--- !u!114 &114593420776864748
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6469e743e77e229418490ff47fda9ae8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 0
+  item: {fileID: 0}
+  m_Template: {fileID: 0}
+--- !u!114 &114599350459394656
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6132cc3558d117f4bbad4651b2dbdba7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Id: d498fc18-b018-47fb-a353-5f61052108a4
+  m_ItemName: Bow
+  m_Icon: {fileID: 21300000, guid: 5d7061fc7da05ce44add317708ec7215, type: 3}
+  m_Prefab: {fileID: 8054533140301882152, guid: 439347daebb9d4c49bc0207cc598caa0,
+    type: 3}
+  m_Description: Use a bow to attack enemies from range.
+  m_Category: {fileID: 114135407248369770}
+  m_PossibleRarity:
+  - {fileID: 114768975821728476}
+  - {fileID: 114335059100891282}
+  - {fileID: 114685724034972164}
+  - {fileID: 114666726509044716}
+  m_BuyPrice: 21
+  m_BuyCurrency: {fileID: 114267867974962262}
+  m_SellPrice: 18
+  m_SellCurrency: {fileID: 114267867974962262}
+  m_Stack: 1
+  m_MaxStack: 1
+  m_IsDroppable: 1
+  m_DropSound: {fileID: 0}
+  m_OverridePrefab: {fileID: 0}
+  m_IsCraftable: 1
+  m_CraftingDuration: 5
+  m_CraftingAnimatorState: Blacksmithy
+  ingredients:
+  - item: {fileID: 114126671102914250}
+    amount: 4
+  properties:
+  - name: Magic Attack
+    typeIndex: 3
+    stringValue: 
+    intValue: 0
+    floatValue: -0.65
+    colorValue: {r: 0, g: 0, b: 0, a: 0}
+    boolValue: 0
+    objectReferenceValue: {fileID: 0}
+    vector2Value: {x: 0, y: 0}
+    vector3Value: {x: 0, y: 0, z: 0}
+    show: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - name: Meele Attack
+    typeIndex: 3
+    stringValue: 
+    intValue: 10
+    floatValue: -0.3
+    colorValue: {r: 0, g: 0, b: 0, a: 0}
+    boolValue: 0
+    objectReferenceValue: {fileID: 0}
+    vector2Value: {x: 0, y: 0}
+    vector3Value: {x: 0, y: 0, z: 0}
+    show: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - name: Min Damage
+    typeIndex: 5
+    stringValue: 
+    intValue: 21
+    floatValue: 0
+    colorValue: {r: 0, g: 0, b: 0, a: 0}
+    boolValue: 0
+    objectReferenceValue: {fileID: 0}
+    vector2Value: {x: 0, y: 0}
+    vector3Value: {x: 0, y: 0, z: 0}
+    show: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - name: Max Damage
+    typeIndex: 5
+    stringValue: 
+    intValue: 27
+    floatValue: 0
+    colorValue: {r: 0, g: 0, b: 0, a: 0}
+    boolValue: 0
+    objectReferenceValue: {fileID: 0}
+    vector2Value: {x: 0, y: 0}
+    vector3Value: {x: 0, y: 0, z: 0}
+    show: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - name: Damage
+    typeIndex: 6
+    stringValue: 
+    intValue: 22
+    floatValue: 0
+    colorValue: {r: 0, g: 0, b: 0, a: 0}
+    boolValue: 0
+    objectReferenceValue: {fileID: 0}
+    vector2Value: {x: 21, y: 27}
+    vector3Value: {x: 0, y: 0, z: 0}
+    show: 1
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - name: Strength
+    typeIndex: 5
+    stringValue: 
+    intValue: 6
+    floatValue: 0
+    colorValue: {r: 0, g: 0, b: 0, a: 0}
+    boolValue: 0
+    objectReferenceValue: {fileID: 0}
+    vector2Value: {x: 0, y: 0}
+    vector3Value: {x: 0, y: 0, z: 0}
+    show: 1
+    color: {r: 1, g: 0, b: 0, a: 1}
+  - name: Dexterity
+    typeIndex: 5
+    stringValue: 
+    intValue: 10
+    floatValue: 0
+    colorValue: {r: 0, g: 0, b: 0, a: 0}
+    boolValue: 0
+    objectReferenceValue: {fileID: 0}
+    vector2Value: {x: 0, y: 0}
+    vector3Value: {x: 0, y: 0, z: 0}
+    show: 1
+    color: {r: 0, g: 0.764151, b: 0.15606005, a: 1}
+  m_UseCategoryCooldown: 1
+  m_Cooldown: 1
+  actions: []
+  m_Region:
+  - {fileID: 114673757768415324}
+  - {fileID: 114509172395672000}
+--- !u!114 &114602721455084702
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6132cc3558d117f4bbad4651b2dbdba7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Id: cacbc413-2b42-4006-8a72-17f51df5d864
+  m_ItemName: Pickaxe
+  m_Icon: {fileID: 21300000, guid: 575a1e2821f78e24bb70f3ba24d83bde, type: 3}
+  m_Prefab: {fileID: 2446829401942333329, guid: f8834d5f45c6f6c40906a029b73145c6,
+    type: 3}
+  m_Description: A pickaxe can be used to mine.
+  m_Category: {fileID: 114001807698821460}
+  m_PossibleRarity: []
+  m_BuyPrice: 12
+  m_BuyCurrency: {fileID: 114267867974962262}
+  m_SellPrice: 9
+  m_SellCurrency: {fileID: 114267867974962262}
+  m_Stack: 1
+  m_MaxStack: 1
+  m_IsDroppable: 1
+  m_DropSound: {fileID: 0}
+  m_OverridePrefab: {fileID: 0}
+  m_IsCraftable: 1
+  m_CraftingDuration: 5
+  m_CraftingAnimatorState: Blacksmithy
+  ingredients:
+  - item: {fileID: 114366776466503370}
+    amount: 1
+  - item: {fileID: 114126671102914250}
+    amount: 2
+  properties: []
+  m_UseCategoryCooldown: 1
+  m_Cooldown: 1
+  actions: []
+  m_Region:
+  - {fileID: 114509172395672000}
+--- !u!114 &114603745727356860
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3180c15fdbb2b7d4a9ecc7c45b3ff98f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  isOpen: 1
+  firstContainer: Equipment
+  secondContainer: Inventory
+--- !u!114 &114616812171177490
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8f5f34ef39fbec438e689ea49ddb023, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  name: Legs
+--- !u!114 &114622297721094556
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d75ad62c39bcb4544a7ae046cdfd8b59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  contextMenuName: ContextMenu
+  tooltipName: Tooltip
+  stackName: Stack
+  notificationName: Notification
+--- !u!114 &114649411704845968
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3180c15fdbb2b7d4a9ecc7c45b3ff98f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  isOpen: 1
+  firstContainer: Equipment
+  secondContainer: Inventory
+--- !u!114 &114662385965018018
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 276288bc674866e47beb9dbd5ea6adc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  isOpen: 1
+  cooldown: 2
+  globalCooldown: 1
+--- !u!114 &114666726509044716
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2bd508013dff080478b54adc05db11e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  name: Legendary
+  color: {r: 1, g: 0.48286825, b: 0, a: 1}
+  chance: 60
+  multiplier: 2
+--- !u!114 &114667426582483850
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 035109327c9c52e44ad6bd713e982698, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114673604025517358
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a031a30894f085742887ec331ba7d697, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerTag: Player
+  maxDropDistance: 1
+  debugMessages: 1
+  showAllComponents: 0
+--- !u!114 &114673757768415324
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8f5f34ef39fbec438e689ea49ddb023, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  name: Left Hand
+--- !u!114 &114685724034972164
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2bd508013dff080478b54adc05db11e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  name: Rare
+  color: {r: 0.7744908, g: 0.3443396, b: 1, a: 1}
+  chance: 70
+  multiplier: 1.5
+--- !u!114 &114707470069734932
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8f5f34ef39fbec438e689ea49ddb023, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  name: Feet
+--- !u!114 &114710042973316330
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbd963504bd9a7b4c9e0dcf955c6ab13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  m_WindowName: Inventory
+  m_Item: {fileID: 0}
+--- !u!114 &114719439476986792
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3180c15fdbb2b7d4a9ecc7c45b3ff98f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  isOpen: 1
+  firstContainer: Equipment
+  secondContainer: Inventory
+--- !u!114 &114723465593855074
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4abab319188bac4a8515c585b13ba9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  name: None
+  m_Cooldown: 1
+--- !u!114 &114727124337129046
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cefcd19cdc9839d449772c4dce1503f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  autoSave: 0
+  savingKey: Player
+  savingRate: 60
+  provider: 0
+--- !u!114 &114733209641389708
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e14be5e3e6cf2204293682bf65bce5dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Id: 77052a30-3511-4faf-bbf6-12ab39f5d855
+  m_ItemName: Nail
+  m_Icon: {fileID: 21300000, guid: e5cec7d40f0b3224b8ff49b5c174ed93, type: 3}
+  m_Prefab: {fileID: 8526908806523285250, guid: 1961bb04f2536f846a015e7023bb8217,
+    type: 3}
+  m_Description: Resource for crafting items.
+  m_Category: {fileID: 114477255015190934}
+  m_PossibleRarity: []
+  m_BuyPrice: 6
+  m_BuyCurrency: {fileID: 114267867974962262}
+  m_SellPrice: 4
+  m_SellCurrency: {fileID: 114267867974962262}
+  m_Stack: 1
+  m_MaxStack: 60
+  m_IsDroppable: 1
+  m_DropSound: {fileID: 0}
+  m_OverridePrefab: {fileID: 0}
+  m_IsCraftable: 1
+  m_CraftingDuration: 3
+  m_CraftingAnimatorState: Blacksmithy
+  ingredients:
+  - item: {fileID: 114366776466503370}
+    amount: 1
+  properties: []
+--- !u!114 &114742379741368492
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a031a30894f085742887ec331ba7d697, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerTag: Player
+  maxDropDistance: 3
+  debugMessages: 1
+  showAllComponents: 0
+--- !u!114 &114745020949786178
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9868b5c93a999c49a887bf923f0c4c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  duration: 1
+--- !u!114 &114768975821728476
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2bd508013dff080478b54adc05db11e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  name: Junk
+  color: {r: 0.6886792, g: 0.6886792, b: 0.6886792, a: 1}
+  chance: 100
+  multiplier: 1
+--- !u!114 &114779815097158386
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5af5614452345804a91e9d00d4a508df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  m_Amount: 1
+--- !u!114 &114785342795678536
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6132cc3558d117f4bbad4651b2dbdba7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Id: de6b9e9e-9c60-4ba8-a61c-3a6d7a0e5e65
+  m_ItemName: Rusty Sword
+  m_Icon: {fileID: 21300000, guid: 5fd50594014b70e48bd6993443d46b32, type: 3}
+  m_Prefab: {fileID: 7505499703950806449, guid: 8d1205197ce57bf48b0d586eccfd9e61,
+    type: 3}
+  m_Description: One handed weapon.
+  m_Category: {fileID: 114135407248369770}
+  m_PossibleRarity:
+  - {fileID: 114768975821728476}
+  - {fileID: 114335059100891282}
+  - {fileID: 114685724034972164}
+  m_BuyPrice: 18
+  m_BuyCurrency: {fileID: 114267867974962262}
+  m_SellPrice: 15
+  m_SellCurrency: {fileID: 114267867974962262}
+  m_Stack: 1
+  m_MaxStack: 1
+  m_IsDroppable: 1
+  m_DropSound: {fileID: 0}
+  m_OverridePrefab: {fileID: 0}
+  m_IsCraftable: 1
+  m_CraftingDuration: 3
+  m_CraftingAnimatorState: Blacksmithy
+  ingredients:
+  - item: {fileID: 114366776466503370}
+    amount: 3
+  properties:
+  - name: Ranged Attack
+    typeIndex: 3
+    stringValue: 
+    intValue: 5
+    floatValue: -0.9
+    colorValue: {r: 0, g: 0, b: 0, a: 0}
+    boolValue: 0
+    objectReferenceValue: {fileID: 0}
+    vector2Value: {x: 0, y: 0}
+    vector3Value: {x: 0, y: 0, z: 0}
+    show: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - name: Magic Attack
+    typeIndex: 3
+    stringValue: 
+    intValue: 0
+    floatValue: -0.3
+    colorValue: {r: 0, g: 0, b: 0, a: 0}
+    boolValue: 0
+    objectReferenceValue: {fileID: 0}
+    vector2Value: {x: 0, y: 0}
+    vector3Value: {x: 0, y: 0, z: 0}
+    show: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - name: Min Damage
+    typeIndex: 5
+    stringValue: 
+    intValue: 32
+    floatValue: 0
+    colorValue: {r: 0, g: 0, b: 0, a: 0}
+    boolValue: 0
+    objectReferenceValue: {fileID: 0}
+    vector2Value: {x: 0, y: 0}
+    vector3Value: {x: 0, y: 0, z: 0}
+    show: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - name: Max Damage
+    typeIndex: 5
+    stringValue: 
+    intValue: 39
+    floatValue: 0
+    colorValue: {r: 0, g: 0, b: 0, a: 0}
+    boolValue: 0
+    objectReferenceValue: {fileID: 0}
+    vector2Value: {x: 0, y: 0}
+    vector3Value: {x: 0, y: 0, z: 0}
+    show: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - name: Damage
+    typeIndex: 6
+    stringValue: 
+    intValue: 22
+    floatValue: 0
+    colorValue: {r: 0, g: 0, b: 0, a: 0}
+    boolValue: 0
+    objectReferenceValue: {fileID: 0}
+    vector2Value: {x: 32, y: 39}
+    vector3Value: {x: 0, y: 0, z: 0}
+    show: 1
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - name: Strength
+    typeIndex: 5
+    stringValue: 
+    intValue: 13
+    floatValue: 0
+    colorValue: {r: 0, g: 0, b: 0, a: 0}
+    boolValue: 0
+    objectReferenceValue: {fileID: 0}
+    vector2Value: {x: 0, y: 0}
+    vector3Value: {x: 0, y: 0, z: 0}
+    show: 1
+    color: {r: 1, g: 0, b: 0, a: 1}
+  - name: Dexterity
+    typeIndex: 5
+    stringValue: 
+    intValue: 5
+    floatValue: 0
+    colorValue: {r: 0, g: 0, b: 0, a: 0}
+    boolValue: 0
+    objectReferenceValue: {fileID: 0}
+    vector2Value: {x: 0, y: 0}
+    vector3Value: {x: 0, y: 0, z: 0}
+    show: 1
+    color: {r: 0, g: 0.764151, b: 0.15606005, a: 1}
+  m_UseCategoryCooldown: 1
+  m_Cooldown: 1
+  actions: []
+  m_Region:
+  - {fileID: 114509172395672000}
+--- !u!114 &114786169500277464
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dbc1d01e7a4e1248a75fdc58b8d8494, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  m_ComponentName: StatsHandler
+  m_MethodName: ApplyDamage
+  m_Arguments:
+  - m_BoolValue: 0
+    m_IntValue: 0
+    m_FloatValue: 0
+    m_StringValue: Health
+    m_Vector2Value: {x: 0, y: 0}
+    m_Vector3Value: {x: 0, y: 0, z: 0}
+    m_ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    m_ObjectValue: {fileID: 0}
+    m_ArgumentType: 4
+  - m_BoolValue: 0
+    m_IntValue: 0
+    m_FloatValue: -10
+    m_StringValue: 
+    m_Vector2Value: {x: 0, y: 0}
+    m_Vector3Value: {x: 0, y: 0, z: 0}
+    m_ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    m_ObjectValue: {fileID: 0}
+    m_ArgumentType: 3
+  m_FailureNotification:
+    title: 
+    text: 
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+--- !u!114 &114790036055993272
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a031a30894f085742887ec331ba7d697, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerTag: Player
+  maxDropDistance: 3
+  debugMessages: 1
+  showAllComponents: 0
+--- !u!114 &114837728913287972
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9b8ce84b90caa548ba4d29381f5d494, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Id: 0d1cc315-7f58-4f30-a344-863a5f05e37a
+  m_ItemName: Gold
+  m_Icon: {fileID: 21300000, guid: 1da9f2b04608b044eb7f66ef739e8303, type: 3}
+  m_Prefab: {fileID: 0}
+  m_Description: 
+  m_Category: {fileID: 0}
+  m_PossibleRarity: []
+  m_BuyPrice: 0
+  m_BuyCurrency: {fileID: 0}
+  m_SellPrice: 0
+  m_SellCurrency: {fileID: 0}
+  m_Stack: 1
+  m_MaxStack: 1
+  m_IsDroppable: 1
+  m_DropSound: {fileID: 0}
+  m_OverridePrefab: {fileID: 0}
+  m_IsCraftable: 0
+  m_CraftingDuration: 2
+  m_CraftingAnimatorState: Blacksmithy
+  ingredients: []
+  properties: []
+  currencyConversions:
+  - factor: 100
+    currency: {fileID: 114153631947672132}
+--- !u!114 &114841075050639780
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3872ca8d5c2640d40b898af499332431, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  containerFull:
+    title: 
+    text: '{0} is full!'
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  failedRestriction:
+    title: 
+    text: '{0} can''t be added to {1}.'
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  missingItem:
+    title: 
+    text: This action requires {0}.
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  inCooldown:
+    title: 
+    text: '{0} is in cooldown for {1} seconds!'
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  selectItem:
+    title: 
+    text: Select an item you would like to craft.
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  alreadyCrafting:
+    title: 
+    text: You are already crafting.
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  craftedItem:
+    title: 
+    text: Successfully crafted {0}
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  missingIngredient:
+    title: 
+    text: You don't have all ingredients to craft this item!
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  soldItem:
+    title: 
+    text: Sold {0} for {1}.
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  boughtItem:
+    title: 
+    text: Bought {0} for {1}.
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  noCurrencyToBuy:
+    title: 
+    text: You don't have enough coins.
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  toFarAway:
+    title: 
+    text: This is to far away!
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  inUse:
+    title: 
+    text: My life is already fairly busy.
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  empty:
+    title: 
+    text: There is nothing to be found here.
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+--- !u!114 &114845342164520942
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 276288bc674866e47beb9dbd5ea6adc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  isOpen: 1
+  cooldown: 0.3
+  globalCooldown: 0.1
+--- !u!114 &114853224922505068
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd5ffdcb9647091419d882a0ac058245, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  isOpen: 1
+--- !u!114 &114876192979010032
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9868b5c93a999c49a887bf923f0c4c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  duration: 5
+--- !u!114 &114876582654517772
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3180c15fdbb2b7d4a9ecc7c45b3ff98f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 0
+  isOpen: 1
+  firstContainer: Equipment
+  secondContainer: Inventory
+--- !u!114 &114880669092416044
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a78acd5557204d499bcf3420fd4ee78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Id: 152288af-0366-4252-a6e3-792bda51b22a
+  m_ItemName: 'Recipe: Bow'
+  m_Icon: {fileID: 21300000, guid: db427fab3e94daf4caa704d9314a77a1, type: 3}
+  m_Prefab: {fileID: 8586804418029938465, guid: bf4366d8a00ec44418140c9fb529068e,
+    type: 3}
+  m_Description: This recipe teaches you to craft a bow.
+  m_Category: {fileID: 114723465593855074}
+  m_PossibleRarity: []
+  m_BuyPrice: 22
+  m_BuyCurrency: {fileID: 114267867974962262}
+  m_SellPrice: 19
+  m_SellCurrency: {fileID: 114267867974962262}
+  m_Stack: 1
+  m_MaxStack: 1
+  m_IsDroppable: 1
+  m_DropSound: {fileID: 0}
+  m_OverridePrefab: {fileID: 0}
+  m_IsCraftable: 0
+  m_CraftingDuration: 2
+  m_CraftingAnimatorState: Blacksmithy
+  ingredients: []
+  properties: []
+  m_UseCategoryCooldown: 0
+  m_Cooldown: 5
+  actions:
+  - {fileID: 114974404802699816}
+  - {fileID: 114876192979010032}
+  - {fileID: 114207943691169346}
+  - {fileID: 114902685890161980}
+--- !u!114 &114902685890161980
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5af5614452345804a91e9d00d4a508df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  m_Amount: 1
+--- !u!114 &114913274920015176
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8f5f34ef39fbec438e689ea49ddb023, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  name: Placeholder
+--- !u!114 &114956692170151098
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6469e743e77e229418490ff47fda9ae8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 0
+  item: {fileID: 0}
+  m_Template: {fileID: 0}
+--- !u!114 &114960022153242386
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bed8514e4ce6bef4787fbee9d1cc3af6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114969143573971670
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cbd5d5f0ea7cc242a40a29d4bd5e6d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  isOpen: 1
+  window: Inventory
+  motion: Bow
+  state: 0
+--- !u!114 &114974404802699816
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40c8a156bd44a4045b462c35e6a19777, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  m_GlobalCooldown: 5
+--- !u!114 &114981016297292628
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5441bf9a8ee16644299d7ad6c4755771, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &794124807548022607
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf7f9e29820f8a147a86cabe5302fe36, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  m_ComponentName: ThirdPersonController
+  m_Enable: 0
+--- !u!114 &1370980595865408863
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40c8a156bd44a4045b462c35e6a19777, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  m_GlobalCooldown: 1
+--- !u!114 &1582602185323503560
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b88bf83f1c55c6648a3ee7ea8a6396f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  m_Scene: Map2
+--- !u!114 &1919206352339739971
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9868b5c93a999c49a887bf923f0c4c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  duration: 1
+--- !u!114 &2181786797253005592
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b88bf83f1c55c6648a3ee7ea8a6396f6, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  m_Scene: Map2
+--- !u!114 &2476073303803809898
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d65d427b2dcc6304daec0d0aa7291274, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  m_Position: {x: -3.45, y: 0.018, z: 3.96}
+--- !u!114 &3706489091375648919
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b88bf83f1c55c6648a3ee7ea8a6396f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  m_Scene: Main Scene
+--- !u!114 &3770611314155398944
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf7f9e29820f8a147a86cabe5302fe36, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  m_ComponentName: ThirdPersonController
+  m_Enable: 1
+--- !u!114 &3828677479724367388
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dbc1d01e7a4e1248a75fdc58b8d8494, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  m_ComponentName: StatsHandler
+  m_MethodName: CanApplyDamage
+  m_Arguments:
+  - m_BoolValue: 0
+    m_IntValue: 0
+    m_FloatValue: 0
+    m_StringValue: Mana
+    m_Vector2Value: {x: 0, y: 0}
+    m_Vector3Value: {x: 0, y: 0, z: 0}
+    m_ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    m_ObjectValue: {fileID: 0}
+    m_ArgumentType: 4
+  - m_BoolValue: 0
+    m_IntValue: 0
+    m_FloatValue: 5
+    m_StringValue: 
+    m_Vector2Value: {x: 0, y: 0}
+    m_Vector3Value: {x: 0, y: 0, z: 0}
+    m_ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    m_ObjectValue: {fileID: 0}
+    m_ArgumentType: 3
+  m_FailureNotification:
+    title: 
+    text: I don't have enough mana!
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+--- !u!114 &3859398857322783130
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf7f9e29820f8a147a86cabe5302fe36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  m_ComponentName: ThirdPersonController
+  m_Enable: 0
+--- !u!114 &5093639832428044731
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8e73fdf63e3d354a9543e40c708fedb, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  m_Original: {fileID: 100014, guid: d6f72918cc3dd004584674be2b246697, type: 3}
+  m_BoneName: Spawnpoint
+  m_IgnorePlayerCollision: 1
+--- !u!114 &5862134302464580756
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0a9264eac0dc0c43af8a758f22bb06a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  m_AnimatorState: Healing
+  m_TransitionDuration: 0.2
+--- !u!114 &6063410875040066040
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf7f9e29820f8a147a86cabe5302fe36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  m_ComponentName: ThirdPersonController
+  m_Enable: 1
+--- !u!114 &6880570540234359293
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dbc1d01e7a4e1248a75fdc58b8d8494, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  m_ComponentName: StatsHandler
+  m_MethodName: ApplyDamage
+  m_Arguments:
+  - m_BoolValue: 0
+    m_IntValue: 0
+    m_FloatValue: 0
+    m_StringValue: Health
+    m_Vector2Value: {x: 0, y: 0}
+    m_Vector3Value: {x: 0, y: 0, z: 0}
+    m_ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    m_ObjectValue: {fileID: 0}
+    m_ArgumentType: 4
+  - m_BoolValue: 0
+    m_IntValue: 0
+    m_FloatValue: -13
+    m_StringValue: 
+    m_Vector2Value: {x: 0, y: 0}
+    m_Vector3Value: {x: 0, y: 0, z: 0}
+    m_ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    m_ObjectValue: {fileID: 0}
+    m_ArgumentType: 3
+  m_FailureNotification:
+    title: 
+    text: 
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+--- !u!114 &7427034493348207150
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d65d427b2dcc6304daec0d0aa7291274, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  m_Position: {x: -3.45, y: 0.018, z: 10.92}
+--- !u!114 &7498244760429633518
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b88bf83f1c55c6648a3ee7ea8a6396f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  m_Scene: Main Scene
+--- !u!114 &7844857088280246764
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d65d427b2dcc6304daec0d0aa7291274, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  m_Position: {x: -3.45, y: 0.018, z: 3.96}
+--- !u!114 &7904039987128658395
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40c8a156bd44a4045b462c35e6a19777, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  m_GlobalCooldown: 1
+--- !u!114 &8278040875160407173
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9868b5c93a999c49a887bf923f0c4c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  duration: 0.5
+--- !u!114 &8399277053461018542
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40c8a156bd44a4045b462c35e6a19777, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  m_GlobalCooldown: 3
+--- !u!114 &8556494109995898035
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40c8a156bd44a4045b462c35e6a19777, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  m_GlobalCooldown: 1
+--- !u!114 &8676138203776071900
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8e73fdf63e3d354a9543e40c708fedb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  m_Original: {fileID: 100010, guid: 1b80c9f94defa634487a6d9f6e386f6a, type: 3}
+  m_BoneName: 
+  m_IgnorePlayerCollision: 1
+--- !u!114 &8746018131140654165
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf7f9e29820f8a147a86cabe5302fe36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  m_ComponentName: ThirdPersonController
+  m_Enable: 1
+--- !u!114 &8783320085134206800
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dbc1d01e7a4e1248a75fdc58b8d8494, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  m_ComponentName: StatsHandler
+  m_MethodName: ApplyDamage
+  m_Arguments:
+  - m_BoolValue: 0
+    m_IntValue: 0
+    m_FloatValue: 0
+    m_StringValue: Mana
+    m_Vector2Value: {x: 0, y: 0}
+    m_Vector3Value: {x: 0, y: 0, z: 0}
+    m_ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    m_ObjectValue: {fileID: 0}
+    m_ArgumentType: 4
+  - m_BoolValue: 0
+    m_IntValue: 0
+    m_FloatValue: 4
+    m_StringValue: 
+    m_Vector2Value: {x: 0, y: 0}
+    m_Vector3Value: {x: 0, y: 0, z: 0}
+    m_ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    m_ObjectValue: {fileID: 0}
+    m_ArgumentType: 3
+  m_FailureNotification:
+    title: 
+    text: 
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+--- !u!114 &8794363263262026607
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d65d427b2dcc6304daec0d0aa7291274, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  m_Position: {x: 20.65, y: 0.018, z: -21.71}
+--- !u!114 &8861356179281947782
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40c8a156bd44a4045b462c35e6a19777, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabled: 1
+  item: {fileID: 0}
+  m_GlobalCooldown: 5
+--- !u!114 &9062223127565793768
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a78acd5557204d499bcf3420fd4ee78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Id: 55fc7dcb-4995-4046-8c76-700f8d888b79
+  m_ItemName: Furia
+  m_Icon: {fileID: 6292824489877327052, guid: ed1162d009219214ab9e282868df2b6d, type: 3}
+  m_Prefab: {fileID: 0}
+  m_Description: Furia is the town in the first map.
+  m_Category: {fileID: -4438128496724216829}
+  m_PossibleRarity: []
+  m_BuyPrice: 0
+  m_BuyCurrency: {fileID: 114267867974962262}
+  m_SellPrice: 0
+  m_SellCurrency: {fileID: 114267867974962262}
+  m_Stack: 1
+  m_MaxStack: 1
+  m_IsDroppable: 1
+  m_DropSound: {fileID: 0}
+  m_OverridePrefab: {fileID: 0}
+  m_IsCraftable: 0
+  m_CraftingDuration: 2
+  m_CraftingAnimatorState: Blacksmithy
+  ingredients: []
+  properties: []
+  m_UseCategoryCooldown: 1
+  m_Cooldown: 1
+  actions:
+  - {fileID: -3541442642934565730}
+  - {fileID: 8556494109995898035}
+  - {fileID: -561233975748808833}
+  - {fileID: 7498244760429633518}
+  - {fileID: 7427034493348207150}
+  - {fileID: -8762047117642356416}
