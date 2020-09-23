@@ -336,11 +336,5 @@ public class JoyObject : IComparable
         }
     }
 
-    public List<string> Tags
-    {
-        get
-        {
-            return new List<string>(m_Tags);
-        }
-    }
+    public string[] Tags => m_Tags.ToArray();
 }

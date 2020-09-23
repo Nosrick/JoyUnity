@@ -50,7 +50,7 @@ public class GameManager : MonoBehaviour
                                                         new StandardRoller(), new NonUniqueDictionary<INeed, float>());
 
         EntityFactory entityFactory = new EntityFactory();
-        Entity player = entityFactory.CreateFromTemplate(
+        Entity temp = entityFactory.CreateFromTemplate(
             human, 
             level, 
             Vector2Int.zero, 
@@ -61,6 +61,9 @@ public class GameManager : MonoBehaviour
             objectIcons.GetSprites(human.Tileset, jobType.Name),
             null,
             new PlayerDriver());
+        
+        EntityPlayer player = new EntityPlayer(temp);
+        
         player.PlayerControlled = true;
 
         m_StateManager.ChangeState(new WorldCreationState(player));

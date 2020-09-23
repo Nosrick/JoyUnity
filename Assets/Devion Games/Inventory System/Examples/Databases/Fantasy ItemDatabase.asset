@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: 9062223127565793768}
   m_ComponentName: ThirdPersonController
   m_Enable: 1
 --- !u!114 &-8379497163947798139
@@ -29,7 +29,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: -2135557494069984175}
 --- !u!114 &-8071481386469185231
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -77,7 +77,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: -4009855652979203909}
   m_ComponentName: ThirdPersonController
   m_Enable: 0
 --- !u!114 &-6978522501982146749
@@ -150,7 +150,7 @@ MonoBehaviour:
   m_Name: (Clone)
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: -2135557494069984175}
   m_ComponentName: StatsHandler
   m_MethodName: CanApplyDamage
   m_Arguments:
@@ -193,7 +193,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: -150911175800106094}
   m_ComponentName: StatsHandler
   m_MethodName: ApplyDamage
   m_Arguments:
@@ -236,7 +236,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: -150911175800106094}
   methodName: SetIK
   m_Argument:
     m_BoolValue: 1
@@ -262,7 +262,7 @@ MonoBehaviour:
   m_Name: (Clone)
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: -2135557494069984175}
   duration: 1.2
 --- !u!114 &-4438128496724216829
 MonoBehaviour:
@@ -291,7 +291,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: -4009855652979203909}
   m_GlobalCooldown: 1
 --- !u!114 &-4009855652979203909
 MonoBehaviour:
@@ -348,7 +348,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: -2135557494069984175}
   methodName: SetIK
   m_Argument:
     m_BoolValue: 1
@@ -374,7 +374,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: 9062223127565793768}
   m_ComponentName: ThirdPersonController
   m_Enable: 0
 --- !u!114 &-3109704542487164154
@@ -412,7 +412,7 @@ MonoBehaviour:
   m_Name: (Clone)
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: -2135557494069984175}
   duration: 1.2
 --- !u!114 &-2520681275021113395
 MonoBehaviour:
@@ -427,7 +427,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: -2135557494069984175}
   methodName: SetIK
   m_Argument:
     m_BoolValue: 0
@@ -453,7 +453,7 @@ MonoBehaviour:
   m_Name: (Clone)
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: -2135557494069984175}
   m_AnimatorState: Arcane Ball
   m_TransitionDuration: 0.2
 --- !u!114 &-2313407420529098914
@@ -469,7 +469,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: -150911175800106094}
   duration: 1.2
 --- !u!114 &-2135557494069984175
 MonoBehaviour:
@@ -530,7 +530,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: -150911175800106094}
   methodName: SetIK
   m_Argument:
     m_BoolValue: 0
@@ -556,7 +556,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: 9062223127565793768}
   duration: 1
 --- !u!114 &-282124300109517087
 MonoBehaviour:
@@ -571,7 +571,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: -6048850130854335002}
   duration: 1
 --- !u!114 &-150911175800106094
 MonoBehaviour:
@@ -1114,7 +1114,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: 114880669092416044}
   m_WindowName: Crafting
   m_Item: {fileID: 114599350459394656}
 --- !u!114 &114214608128568004
@@ -1264,7 +1264,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: 114386931520196918}
   m_GlobalCooldown: 0.5
 --- !u!114 &114277333231593414
 MonoBehaviour:
@@ -2658,7 +2658,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: 114386931520196918}
   duration: 1
 --- !u!114 &114768975821728476
 MonoBehaviour:
@@ -2689,7 +2689,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: 114386931520196918}
   m_Amount: 1
 --- !u!114 &114785342795678536
 MonoBehaviour:
@@ -2832,7 +2832,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: 114386931520196918}
   m_ComponentName: StatsHandler
   m_MethodName: ApplyDamage
   m_Arguments:
@@ -3081,7 +3081,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: 114880669092416044}
   duration: 5
 --- !u!114 &114876582654517772
 MonoBehaviour:
@@ -3153,7 +3153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: 114880669092416044}
   m_Amount: 1
 --- !u!114 &114913274920015176
 MonoBehaviour:
@@ -3225,7 +3225,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: 114880669092416044}
   m_GlobalCooldown: 5
 --- !u!114 &114981016297292628
 MonoBehaviour:
@@ -3268,7 +3268,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: -6048850130854335002}
   m_GlobalCooldown: 1
 --- !u!114 &1582602185323503560
 MonoBehaviour:
@@ -3283,7 +3283,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: -4009855652979203909}
   m_Scene: Map2
 --- !u!114 &1919206352339739971
 MonoBehaviour:
@@ -3298,7 +3298,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: -4009855652979203909}
   duration: 1
 --- !u!114 &2181786797253005592
 MonoBehaviour:
@@ -3328,7 +3328,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: -4009855652979203909}
   m_Position: {x: -3.45, y: 0.018, z: 3.96}
 --- !u!114 &3706489091375648919
 MonoBehaviour:
@@ -3343,7 +3343,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: -6048850130854335002}
   m_Scene: Main Scene
 --- !u!114 &3770611314155398944
 MonoBehaviour:
@@ -3374,7 +3374,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: -150911175800106094}
   m_ComponentName: StatsHandler
   m_MethodName: CanApplyDamage
   m_Arguments:
@@ -3417,7 +3417,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: -6048850130854335002}
   m_ComponentName: ThirdPersonController
   m_Enable: 0
 --- !u!114 &5093639832428044731
@@ -3433,7 +3433,7 @@ MonoBehaviour:
   m_Name: (Clone)
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: -2135557494069984175}
   m_Original: {fileID: 100014, guid: d6f72918cc3dd004584674be2b246697, type: 3}
   m_BoneName: Spawnpoint
   m_IgnorePlayerCollision: 1
@@ -3450,7 +3450,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: -150911175800106094}
   m_AnimatorState: Healing
   m_TransitionDuration: 0.2
 --- !u!114 &6063410875040066040
@@ -3466,7 +3466,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: -6048850130854335002}
   m_ComponentName: ThirdPersonController
   m_Enable: 1
 --- !u!114 &6880570540234359293
@@ -3482,7 +3482,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: -150911175800106094}
   m_ComponentName: StatsHandler
   m_MethodName: ApplyDamage
   m_Arguments:
@@ -3525,7 +3525,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: 9062223127565793768}
   m_Position: {x: -3.45, y: 0.018, z: 10.92}
 --- !u!114 &7498244760429633518
 MonoBehaviour:
@@ -3540,7 +3540,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: 9062223127565793768}
   m_Scene: Main Scene
 --- !u!114 &7844857088280246764
 MonoBehaviour:
@@ -3585,7 +3585,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: -150911175800106094}
   duration: 0.5
 --- !u!114 &8399277053461018542
 MonoBehaviour:
@@ -3600,7 +3600,7 @@ MonoBehaviour:
   m_Name: (Clone)
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: -2135557494069984175}
   m_GlobalCooldown: 3
 --- !u!114 &8556494109995898035
 MonoBehaviour:
@@ -3615,7 +3615,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: 9062223127565793768}
   m_GlobalCooldown: 1
 --- !u!114 &8676138203776071900
 MonoBehaviour:
@@ -3630,7 +3630,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: -150911175800106094}
   m_Original: {fileID: 100010, guid: 1b80c9f94defa634487a6d9f6e386f6a, type: 3}
   m_BoneName: 
   m_IgnorePlayerCollision: 1
@@ -3647,7 +3647,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: -4009855652979203909}
   m_ComponentName: ThirdPersonController
   m_Enable: 1
 --- !u!114 &8783320085134206800
@@ -3663,7 +3663,7 @@ MonoBehaviour:
   m_Name: (Clone)
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: -2135557494069984175}
   m_ComponentName: StatsHandler
   m_MethodName: ApplyDamage
   m_Arguments:
@@ -3706,7 +3706,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: -6048850130854335002}
   m_Position: {x: 20.65, y: 0.018, z: -21.71}
 --- !u!114 &8861356179281947782
 MonoBehaviour:
@@ -3721,7 +3721,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enabled: 1
-  item: {fileID: 0}
+  item: {fileID: -150911175800106094}
   m_GlobalCooldown: 5
 --- !u!114 &9062223127565793768
 MonoBehaviour:

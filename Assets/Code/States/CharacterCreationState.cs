@@ -22,7 +22,7 @@ namespace JoyLib.Code.States
         protected int m_JobIndex;
         protected int m_SexIndex;
 
-        protected Entity m_Player;
+        protected EntityPlayer m_Player;
 
         public CharacterCreationState() : base()
         {
@@ -131,7 +131,7 @@ namespace JoyLib.Code.States
 
             EntityFactory entityFactory = new EntityFactory();
 
-            m_Player = entityFactory.CreateFromTemplate(
+            Entity temp = entityFactory.CreateFromTemplate(
                 humanTemplate,
                 level,
                 new UnityEngine.Vector2Int(-1, -1),
@@ -139,6 +139,8 @@ namespace JoyLib.Code.States
                 null,
                 null,
                 m_Jobs[m_JobIndex]);
+            
+            m_Player = new EntityPlayer(temp);
 
             m_Player.PlayerControlled = true;
 

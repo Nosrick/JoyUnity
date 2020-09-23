@@ -1,4 +1,5 @@
-﻿using JoyLib.Code.Entities.Items;
+﻿using DevionGames.InventorySystem;
+using JoyLib.Code.Entities.Items;
 using UnityEngine;
 
 namespace JoyLib.Code.Unity
@@ -24,7 +25,7 @@ namespace JoyLib.Code.Unity
         {
         }
 
-        public void AttachJoyObject(JoyObject joyObject)
+        public virtual void AttachJoyObject(JoyObject joyObject)
         {
             m_JoyObject = joyObject;
             m_SpriteRenderer = this.GetComponent<SpriteRenderer>();

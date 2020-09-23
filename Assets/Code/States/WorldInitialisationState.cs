@@ -36,6 +36,7 @@ namespace JoyLib.Code.States
             GameObject wallHolder = GameObject.Find("WorldWalls");
 
             MonoBehaviourHandler prefab = Resources.Load<MonoBehaviourHandler>("Prefabs/MonoBehaviourHandler");
+            MonoBehaviourHandler itemPrefab = Resources.Load<MonoBehaviourHandler>("Prefabs/ItemInstance");
             GameObject sprite = Resources.Load<GameObject>("Prefabs/Sprite");
 
             //Make the upstairs
@@ -90,7 +91,7 @@ namespace JoyLib.Code.States
             //Create the objects
             foreach (JoyObject obj in m_ActiveWorld.Objects)
             {
-                MonoBehaviourHandler newObject = GameObject.Instantiate(prefab, objectHolder.transform, true);
+                MonoBehaviourHandler newObject = GameObject.Instantiate(itemPrefab, objectHolder.transform, true);
                 newObject.AttachJoyObject(obj);
             }
 
@@ -106,6 +107,14 @@ namespace JoyLib.Code.States
             {
                 MonoBehaviourHandler newEntity = GameObject.Instantiate(prefab, entityHolder.transform, true);
                 newEntity.AttachJoyObject(entity);
+
+                if (newEntity.MyJoyObject is Entity tempEntity)
+                {
+                    if (tempEntity.PlayerControlled)
+                    {
+                        newEntity.tag = "Player";
+                    }
+                }
             }
 
             Camera camera = GameObject.Find("Main Camera").GetComponent<Camera>();

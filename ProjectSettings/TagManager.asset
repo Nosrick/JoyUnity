@@ -7,11 +7,12 @@ TagManager:
   - Slot
   - Panel
   - Slots
-  - EquipmentSystem
-  - Canvas
   - EventSystem
-  - MainInventory
-  - DraggingItem
+  - Item
+  - ItemIcon
+  - explosion
+  - missile
+  - ground
   layers:
   - Default
   - TransparentFX

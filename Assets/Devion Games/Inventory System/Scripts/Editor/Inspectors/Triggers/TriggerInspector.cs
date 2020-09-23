@@ -9,7 +9,6 @@ using System;
 using System.Linq;
 using System.IO;
 using System.Reflection;
-using NUnit.Framework;
 
 namespace DevionGames.InventorySystem
 {

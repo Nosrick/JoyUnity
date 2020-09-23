@@ -1,7 +1,10 @@
+using System;
 using UnityEngine;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Graphics;
 using System.Collections.Generic;
+using System.Linq;
+using DevionGames.InventorySystem;
 
 namespace JoyLib.Code.Entities.Items
 {
@@ -28,7 +31,7 @@ namespace JoyLib.Code.Entities.Items
             BaseItemType[] matchingTypes = s_ItemHandler.FindItemsOfType(tags);
             if (matchingTypes.Length > 0)
             {
-                int result = RNG.instance.Roll(0, matchingTypes.Length - 1);
+                int result = RNG.instance.Roll(0, matchingTypes.Length);
                 BaseItemType itemType = matchingTypes[result];
 
                 ItemInstance itemInstance = new ItemInstance(itemType, 
@@ -36,7 +39,8 @@ namespace JoyLib.Code.Entities.Items
                                                             identified, 
                                                             s_ObjectIcons.GetSprites(
                                                                 itemType.SpriteSheet,
-                                                                itemType.UnidentifiedName));
+                                                                itemType.UnidentifiedName),
+                                                            FetchItemSO(matchingTypes[result]));
                 return itemInstance;
             }
 
@@ -66,14 +70,15 @@ namespace JoyLib.Code.Entities.Items
             }
             if (secondRound.Count > 0)
             {
-                int result = RNG.instance.Roll(0, secondRound.Count - 1);
+                int result = RNG.instance.Roll(0, secondRound.Count);
                 BaseItemType type = secondRound[result];
                 ItemInstance itemInstance = new ItemInstance(type, 
                                                             new Vector2Int(-1, -1), 
                                                             identified,
                                                             s_ObjectIcons.GetSprites(
                                                                 type.SpriteSheet,
-                                                                type.UnidentifiedName));
+                                                                type.UnidentifiedName),
+                                                            FetchItemSO(type));
                 return itemInstance;
             }
 
@@ -84,15 +89,25 @@ namespace JoyLib.Code.Entities.Items
         {
             List<BaseItemType> itemDatabase = s_ItemHandler.ItemDatabase;
 
-            int result = RNG.instance.Roll(0, itemDatabase.Count - 1);
+            int result = RNG.instance.Roll(0, itemDatabase.Count);
             BaseItemType itemType = itemDatabase[result];
             ItemInstance itemInstance = new ItemInstance(itemType, 
                                                         new Vector2Int(-1, -1), 
                                                         identified,
                                                         s_ObjectIcons.GetSprites(
                                                             itemType.SpriteSheet,
-                                                            itemType.UnidentifiedName));
+                                                            itemType.UnidentifiedName),
+                                                        FetchItemSO(itemType));
             return itemInstance;
+        }
+
+        private Item FetchItemSO(BaseItemType itemType)
+        {
+            Item[] items = InventoryManager.Database.items
+                .Where(item => item.Name.Equals(itemType.IdentifiedName, StringComparison.OrdinalIgnoreCase)).ToArray();
+
+            int result = RNG.instance.Roll(0, items.Length);
+            return items[result];
         }
     }
 }

@@ -38,7 +38,7 @@ namespace JoyLib.Code.Helpers
                 0, 
                 "None");
 
-            return new ItemInstance(tempItem, new Vector2Int(-1, -1), true, s_ObjectIcons.GetDefaultSprites());
+            return new ItemInstance(tempItem, new Vector2Int(-1, -1), true, s_ObjectIcons.GetDefaultSprites(), null);
         }
     }
 }

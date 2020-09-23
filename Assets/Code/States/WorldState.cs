@@ -259,6 +259,7 @@ namespace JoyLib.Code.States
                     return;
                 }
 
+                /*
                 PhysicsResult physicsResult = m_PhysicsManager.IsCollision(player.WorldPosition, player.WorldPosition, m_ActiveWorld);
                 if (physicsResult == PhysicsResult.ObjectCollision)
                 {
@@ -271,6 +272,7 @@ namespace JoyLib.Code.States
                         GameObject.Destroy(GameObject.Find(pickUp.JoyName + ":" + pickUp.GUID));
                     }
                 }
+                */
             }
             Vector2Int newPlayerPoint = m_ActiveWorld.Player.WorldPosition;
 

@@ -12,7 +12,7 @@ namespace JoyLib.Code.States
 {
     public class WorldCreationState : GameState
     {
-        protected Entity m_Player;
+        protected EntityPlayer m_Player;
 
         protected WorldInstance m_World;
 
@@ -23,7 +23,7 @@ namespace JoyLib.Code.States
 
         protected const int WORLD_SIZE = 20;
 
-        public WorldCreationState(Entity playerRef) : base()
+        public WorldCreationState(EntityPlayer playerRef) : base()
         {
             m_Player = playerRef;
         }

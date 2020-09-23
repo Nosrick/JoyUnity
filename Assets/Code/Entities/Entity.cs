@@ -197,6 +197,64 @@ namespace JoyLib.Code.Entities
         {
         }
 
+        protected Entity(Entity copy) :
+            base(
+                copy.JoyName,
+                copy.m_DerivedValues,
+                copy.WorldPosition,
+                copy.Tileset,
+                copy.m_CachedActions.ToArray(),
+                copy.Icons,
+                copy.Tags.ToArray())
+        {
+            this.CreatureType = copy.CreatureType;
+            this.m_Slots = copy.m_Slots;
+
+            this.m_Size = copy.Size;
+
+            this.m_JobLevels = copy.JobLevels;
+            this.m_Sexuality = copy.Sexuality;
+            this.m_IdentifiedItems = copy.m_IdentifiedItems;
+            this.m_Statistics = copy.Statistics;
+
+            this.m_Skills = copy.Skills;
+
+            this.m_Needs = copy.Needs;
+            this.m_Abilities = copy.m_Abilities;
+            this.m_Level = copy.m_Level;
+            for (int i = 1; i < this.m_Level.Value; i++)
+            {
+                this.LevelUp();
+            }
+            this.m_CurrentJob = copy.Job;
+
+            this.m_NaturalWeapons = copy.m_NaturalWeapons;
+            this.m_Equipment = copy.m_Equipment;
+            this.m_Backpack = copy.m_Backpack;
+            this.Sex = copy.Sex;
+            this.m_VisionProvider = copy.m_VisionProvider;
+
+            this.m_Cultures = copy.m_Cultures;
+
+            this.CalculateDerivatives();
+
+            this.m_Pathfinder = (IPathfinder)ScriptingEngine.instance.FetchAndInitialise("custompathfinder");
+            this.m_PathfindingData = new Queue<Vector2Int>();
+
+            this.m_FulfillmentData = new FulfillmentData(
+                "none",
+                0,
+                new JoyObject[0]);
+
+            this.RegenTicker = RNG.instance.Roll(0, REGEN_TICK_TIME - 1);
+
+            this.MyWorld = copy.MyWorld;
+
+            this.m_Driver = copy.m_Driver;
+
+            SetCurrentTarget();
+        }
+
         protected string GetNameFromMultipleCultures()
         {
             List<string> nameList = new List<string>();
@@ -361,7 +419,7 @@ namespace JoyLib.Code.Entities
             m_IdentifiedItems.Add(nameRef);
         }
 
-        public bool RemoveItemFromBackpack(ItemInstance item)
+        public virtual bool RemoveItemFromBackpack(ItemInstance item)
         {
             if (m_Backpack.Contains(item))
             {
@@ -371,7 +429,7 @@ namespace JoyLib.Code.Entities
             return false;
         }
 
-        public bool RemoveItemFromPerson(ItemInstance item)
+        public virtual bool RemoveItemFromPerson(ItemInstance item)
         {
             //Check slots first
             foreach (Tuple<string, ItemInstance> tuple in m_Equipment)
@@ -393,7 +451,7 @@ namespace JoyLib.Code.Entities
             return RemoveItemFromBackpack(item);
         }
 
-        public bool RemoveEquipment(string slot, ItemInstance item = null)
+        public virtual bool RemoveEquipment(string slot, ItemInstance item = null)
         {
             foreach (Tuple<string, ItemInstance> tuple in m_Equipment)
             {
@@ -446,7 +504,7 @@ namespace JoyLib.Code.Entities
             MyWorld.AddObject(item);
         }
 
-        public bool EquipItem(string slotRef, ItemInstance itemRef)
+        public virtual bool EquipItem(string slotRef, ItemInstance itemRef)
         {
             bool contains = false;
             Tuple<string, ItemInstance> firstEmptySlot = null;
@@ -479,7 +537,7 @@ namespace JoyLib.Code.Entities
             return true;
         }
 
-        public bool UnequipItem(string slot)
+        public virtual bool UnequipItem(string slot)
         {
             foreach (Tuple<string, ItemInstance> tuple in m_Equipment)
             {
@@ -649,7 +707,7 @@ namespace JoyLib.Code.Entities
             return m_Backpack;
         }
 
-        public bool AddContents(JoyObject actor)
+        public virtual bool AddContents(JoyObject actor)
         {
             if(!(actor is ItemInstance item))
             {

@@ -2,12 +2,12 @@
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Rollers;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using UnityEngine;
+using DevionGames.InventorySystem;
 
 namespace JoyLib.Code.Entities.Items
 {
@@ -44,6 +44,8 @@ namespace JoyLib.Code.Entities.Items
 
         protected List<BaseItemType> LoadItems()
         {
+            InventoryManager.Database.items.Clear();
+            
             List<BaseItemType> items = new List<BaseItemType>();
 
             string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Items", "*.xml", SearchOption.AllDirectories);
@@ -112,11 +114,20 @@ namespace JoyLib.Code.Entities.Items
 
                     for (int k = 0; k < identifiedItems[j].materials.Length; k++)
                     {
-
-                        items.Add(new BaseItemType(identifiedItems[j].tags, identifiedItems[j].description, chosenDescription.description, chosenDescription.name,
+                        BaseItemType baseItemType = new BaseItemType(identifiedItems[j].tags,
+                            identifiedItems[j].description, chosenDescription.description, chosenDescription.name,
                             identifiedItems[j].name, identifiedItems[j].slots, identifiedItems[j].size,
-                            m_MaterialHandler.GetMaterial(identifiedItems[j].materials[k]), identifiedItems[j].skill, actionWord,
-                            identifiedItems[j].value, identifiedItems[j].weighting, identifiedItems[j].spriteSheet, identifiedItems[j].lightLevel));
+                            m_MaterialHandler.GetMaterial(identifiedItems[j].materials[k]), identifiedItems[j].skill,
+                            actionWord,
+                            identifiedItems[j].value, identifiedItems[j].weighting, identifiedItems[j].spriteSheet,
+                            identifiedItems[j].lightLevel);
+                        items.Add(baseItemType);
+
+                        Item itemSO = ScriptableObject.CreateInstance<Item>();
+                        itemSO.Name = baseItemType.IdentifiedName;
+                        itemSO.Icon = m_ObjectIcons.GetSprite(baseItemType.SpriteSheet, baseItemType.IdentifiedName);
+
+                        InventoryManager.Database.items.Add(itemSO);
                     }
                 }
             }
