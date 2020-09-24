@@ -10,12 +10,13 @@ GameObject:
   m_Component:
   - component: {fileID: 4794871474551134}
   - component: {fileID: 212276263493951536}
-  - component: {fileID: 114844001802182120}
-  - component: {fileID: -4628703351231793259}
-  - component: {fileID: -1224627726761987987}
-  - component: {fileID: -602002112557705458}
+  - component: {fileID: -7515236653226157045}
+  - component: {fileID: 4354684559669362448}
+  - component: {fileID: -8787154815911901543}
+  - component: {fileID: 8556510415420998115}
+  - component: {fileID: -2900014830802684281}
   m_Layer: 0
-  m_Name: MonoBehaviourHandler
+  m_Name: ItemInstance
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -85,7 +86,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &114844001802182120
+--- !u!114 &-7515236653226157045
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -94,26 +95,28 @@ MonoBehaviour:
   m_GameObject: {fileID: 1949383421893784}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b293211d3fbaaa42a3398b4f274cfe6, type: 3}
+  m_Script: {fileID: 11500000, guid: 7a578807b5ff04846a860847f5fc60d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!58 &-4628703351231793259
-CircleCollider2D:
+--- !u!114 &4354684559669362448
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1949383421893784}
   m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.3
---- !u!50 &-1224627726761987987
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68165cdf1896c89479a91b2478670c0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  items: []
+  amounts: 
+  randomProperty: []
+  onChange:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!50 &-8787154815911901543
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 0
@@ -134,22 +137,41 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!95 &-602002112557705458
-Animator:
-  serializedVersion: 3
+--- !u!114 &8556510415420998115
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1949383421893784}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dafdf741c875fb54ca278d6908cfbeee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  delegates: []
+  useDistance: 0.5
+  triggerType: 2
+  key: 102
+  useCustomCursor: 0
+  m_CursorSprite: {fileID: 0}
+  m_CursorSize: {x: 32, y: 32}
+  m_CursorAnimatorState: Cursor
+  m_LockContainersWhenUsed: 0
+  actions:
+  - {fileID: -2900014830802684281}
+--- !u!114 &-2900014830802684281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1949383421893784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 745d6f6696876144fb2cd605de0544dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_WindowName: InventoryCanvas
+  m_DestroyWhenEmpty: 1
+  m_Amount: -1

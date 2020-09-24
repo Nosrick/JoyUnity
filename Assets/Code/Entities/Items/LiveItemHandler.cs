@@ -23,6 +23,8 @@ namespace JoyLib.Code.Entities.Items
 
         protected MaterialHandler m_MaterialHandler;
 
+        protected static GameObject s_ItemPrefab; 
+
         public void Awake()
         {
             if (m_ItemDatabase is null)
@@ -38,6 +40,8 @@ namespace JoyLib.Code.Entities.Items
             m_GameManager = GameObject.Find("GameManager");
             m_ObjectIcons = m_GameManager.GetComponent<ObjectIconHandler>();
             m_MaterialHandler = m_GameManager.GetComponent<MaterialHandler>();
+
+            s_ItemPrefab = Resources.Load<GameObject>("Prefabs/ItemInstance");
 
             m_ItemDatabase = LoadItems();
         }
@@ -126,6 +130,7 @@ namespace JoyLib.Code.Entities.Items
                         Item itemSO = ScriptableObject.CreateInstance<Item>();
                         itemSO.Name = baseItemType.IdentifiedName;
                         itemSO.Icon = m_ObjectIcons.GetSprite(baseItemType.SpriteSheet, baseItemType.IdentifiedName);
+                        itemSO.Prefab = s_ItemPrefab;
 
                         InventoryManager.Database.items.Add(itemSO);
                     }

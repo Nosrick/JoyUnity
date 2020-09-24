@@ -1,5 +1,4 @@
-﻿using DevionGames.InventorySystem;
-using JoyLib.Code.Entities.Items;
+﻿using JoyLib.Code.Entities.Items;
 using UnityEngine;
 
 namespace JoyLib.Code.Unity

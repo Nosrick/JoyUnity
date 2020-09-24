@@ -1,26 +1,25 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using DevionGames.InventorySystem;
+﻿using DevionGames.InventorySystem;
 using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Unity;
-using UnityEngine;
 
-public class ItemBehaviourHandler : MonoBehaviourHandler
+namespace JoyLib.Code.Unity
 {
-    protected ItemCollection m_Items;
-
-    public void Awake()
+    public class ItemBehaviourHandler : MonoBehaviourHandler
     {
-        m_Items = this.GetComponent<ItemCollection>();
-    }
-    
-    public override void AttachJoyObject(JoyObject joyObject)
-    {
-        base.AttachJoyObject(joyObject);
+        protected ItemCollection m_Items;
 
-        if (joyObject is ItemInstance itemInstance)
+        public void Awake()
         {
-            m_Items.Add(itemInstance.Item);
+            m_Items = this.GetComponent<ItemCollection>();
+        }
+    
+        public override void AttachJoyObject(JoyObject joyObject)
+        {
+            base.AttachJoyObject(joyObject);
+
+            if (joyObject is ItemInstance itemInstance)
+            {
+                m_Items.Add(itemInstance.Item);
+            }
         }
     }
 }

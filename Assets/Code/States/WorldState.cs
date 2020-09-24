@@ -7,9 +7,9 @@ using JoyLib.Code.IO;
 using JoyLib.Code.Physics;
 using JoyLib.Code.Quests;
 using JoyLib.Code.States.Gameplay;
-using JoyLib.Code.Unity.GUI;
 using JoyLib.Code.World;
 using System;
+using JoyLib.Code.Unity.GUI;
 using UnityEngine;
 using TMPro;
 
