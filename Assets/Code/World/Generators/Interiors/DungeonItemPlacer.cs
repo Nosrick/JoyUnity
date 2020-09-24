@@ -26,7 +26,7 @@ namespace JoyLib.Code.World.Generators.Interiors
             List<ItemInstance> placedItems = new List<ItemInstance>();
 
             int dungeonArea = worldRef.Tiles.GetLength(0) * worldRef.Tiles.GetLength(1);
-            int itemsToPlace = 1; //dungeonArea / prosperity;
+            int itemsToPlace = dungeonArea / prosperity;
 
             List<Vector2Int> unavailablePoints = new List<Vector2Int>();
             foreach(JoyObject wall in worldRef.Walls.Values)

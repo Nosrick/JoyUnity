@@ -80,7 +80,7 @@ namespace JoyLib.Code.States
 
             ItemFactory itemFactory = new ItemFactory();
             ItemInstance lightSource = itemFactory.CreateRandomItemOfType(new string[] { "light source" });
-            m_Player.AddContents(new ItemInstance(lightSource));
+            m_Player.AddContents(lightSource);
             m_World.Tick();
         }
 

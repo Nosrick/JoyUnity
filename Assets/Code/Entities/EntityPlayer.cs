@@ -1,4 +1,5 @@
 ﻿using DevionGames.InventorySystem;
+using DevionGames.UIWidgets;
 using JoyLib.Code.Entities.Items;
 using UnityEngine;
 
@@ -6,14 +7,14 @@ namespace JoyLib.Code.Entities
 {
     public class EntityPlayer : Entity
     {
-        protected static ItemCollection m_Inventory;
+        protected static ItemContainer m_Inventory;
 
         public EntityPlayer(Entity baseEntity) :
             base(baseEntity)
         {
             if (m_Inventory is null)
             {
-                m_Inventory = GameObject.Find("InventoryCanvas").GetComponent<ItemCollection>();
+                m_Inventory = WidgetUtility.Find<ItemContainer>("InventoryCanvas");
             }
         }
         
@@ -22,15 +23,13 @@ namespace JoyLib.Code.Entities
             return base.EquipItem(slotRef, itemRef);
         }
 
-        /*
         public override bool AddContents(JoyObject actor)
         {
-        if(actor is ItemInstance item)
-        {
-            m_Inventory.Add(item.Item);
+            if(actor is ItemInstance item)
+            {
+                m_Inventory.StackOrAdd(item.Item);
+            }
+            return base.AddContents(actor);
         }
-        return base.AddContents(actor);
-        }
-            */
     }
 }
