@@ -9,6 +9,7 @@ using JoyLib.Code.Graphics;
 using JoyLib.Code.Rollers;
 using System;
 using System.Collections.Generic;
+using JoyLib.Code.Unity.GUI;
 using UnityEngine;
 
 namespace JoyLib.Code.States

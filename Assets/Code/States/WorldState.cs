@@ -86,6 +86,9 @@ namespace JoyLib.Code.States
             }
 
             s_GUIManager.OpenGUI(NEEDSRECT);
+            
+            EquipmentHandler equipmentHandler = GameObject.Find("EquipmentCanvas").GetComponent<EquipmentHandler>();
+            equipmentHandler.SetPlayer(m_ActiveWorld.Player);
         }
 
         public override void Start()
