@@ -1366,9 +1366,9 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1621958133}
   - {fileID: 1293420870}
   - {fileID: 1705349404}
+  - {fileID: 1621958133}
   - {fileID: 950311962}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -6538,7 +6538,7 @@ RectTransform:
   m_Children:
   - {fileID: 1117747294}
   m_Father: {fileID: 205221783}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -6603,7 +6603,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 99
   m_TargetDisplay: 0
 --- !u!114 &1293420874
 MonoBehaviour:
@@ -8245,7 +8245,7 @@ RectTransform:
   m_Children:
   - {fileID: 220384646}
   m_Father: {fileID: 205221783}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -9055,7 +9055,7 @@ RectTransform:
   m_Children:
   - {fileID: 2036211358}
   m_Father: {fileID: 205221783}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -9120,7 +9120,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!114 &1705349408
 MonoBehaviour:

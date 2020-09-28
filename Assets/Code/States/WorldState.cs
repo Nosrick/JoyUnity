@@ -36,7 +36,6 @@ namespace JoyLib.Code.States
         protected GameObject m_EntitiesHolder;
 
         protected static GUIManager s_GUIManager;
-        protected bool m_InventoryOpen;
 
         protected readonly WorldSerialiser m_WorldSerialiser;
 
@@ -46,6 +45,7 @@ namespace JoyLib.Code.States
 
         private const string NEEDSRECT = "NeedsRect";
         private const string INVENTORY = "GUIInventory";
+        private const string EQUIPMENT = "GUIEquipment";
 
         public WorldState(WorldInstance overworldRef, WorldInstance activeWorldRef, GameplayFlags flagsRef) : base()
         {
@@ -62,8 +62,6 @@ namespace JoyLib.Code.States
             m_GameManager = GameObject.Find("GameManager");
             m_PhysicsManager = m_GameManager.GetComponent<PhysicsManager>();
             m_RelationshipHandler = m_GameManager.GetComponent<EntityRelationshipHandler>();
-
-            m_InventoryOpen = false;
         }
 
         public override void LoadContent()
@@ -79,12 +77,15 @@ namespace JoyLib.Code.States
             {
                 GameObject needsGUIPrefab = GameObject.Find(NEEDSRECT);
                 GameObject inventoryGUIPrefab = GameObject.Find(INVENTORY);
+                GameObject equipmentGUIPrefab = GameObject.Find(EQUIPMENT);
 
                 s_GUIManager = new GUIManager();
-                s_GUIManager.AddGUI(needsGUIPrefab, false);
-                s_GUIManager.AddGUI(inventoryGUIPrefab, true);
+                s_GUIManager.AddGUI(needsGUIPrefab, false, false);
+                s_GUIManager.AddGUI(inventoryGUIPrefab, true, false);
+                s_GUIManager.AddGUI(equipmentGUIPrefab, true, false);
             }
 
+            s_GUIManager.CloseAllOtherGUIs();
             s_GUIManager.OpenGUI(NEEDSRECT);
             
             EquipmentHandler equipmentHandler = GameObject.Find("EquipmentCanvas").GetComponent<EquipmentHandler>();
@@ -230,15 +231,11 @@ namespace JoyLib.Code.States
 
             if (Input.GetKeyDown(KeyCode.I))
             {
-                m_InventoryOpen = !m_InventoryOpen;
-                if (m_InventoryOpen == false)
-                {
-                    s_GUIManager.OpenGUI(NEEDSRECT);
-                }
-                else
-                {
-                    s_GUIManager.OpenGUI(INVENTORY);
-                }
+                s_GUIManager.ToggleGUI(INVENTORY);
+            }
+            else if (Input.GetKeyDown(KeyCode.E))
+            {
+                s_GUIManager.ToggleGUI(EQUIPMENT);
             }
 
             if (s_GUIManager.RemovesControl())

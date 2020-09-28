@@ -1,65 +1,92 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace JoyLib.Code.Unity.GUI
 {
     public class GUIManager
     {
-        private List<Tuple<GameObject, bool>> m_GUIs;
-        private Tuple<GameObject, bool> m_ActiveGUI;
+        private List<GUIData> m_GUIs;
+        private List<GUIData> m_ActiveGUIs;
 
         public GUIManager()
         {
-            m_GUIs = new List<Tuple<GameObject, bool>>();
-            m_ActiveGUI = null;
+            m_GUIs = new List<GUIData>();
+            m_ActiveGUIs = new List<GUIData>();
         }
 
-        public void AddGUI(GameObject gui, bool removesControl = true)
+        public void AddGUI(
+            GameObject gui, 
+            bool removesControl = true,
+            bool closesOthers = false)
         {
             gui.SetActive(false);
-            m_GUIs.Add(new Tuple<GameObject, bool>(gui, removesControl));
+            GUIData data = gui.AddComponent<GUIData>();
+            data.Initialise(removesControl, closesOthers);
+            m_GUIs.Add(data);
+        }
+
+        public void ToggleGUI(string name)
+        {
+            if (m_ActiveGUIs.Any(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+            {
+                GUIData[] toToggle = m_ActiveGUIs.Where(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase)).ToArray();
+                foreach (GUIData data in toToggle)
+                {
+                    CloseGUI(data.name);
+                }
+            }
+            else
+            {
+                OpenGUI(name);
+            }
         }
 
         public void OpenGUI(string name)
         {
-            foreach(Tuple<GameObject, bool> gui in m_GUIs)
+            GUIData toOpen = m_GUIs.First(gui => 
+                    gui.name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            
+            m_ActiveGUIs.Add(toOpen);
+            toOpen.gameObject.SetActive(true);
+
+            if (toOpen.ClosesOthers)
             {
-                if(gui.Item1.name == name)
-                {
-                    CloseGUI();
-                    m_ActiveGUI = gui;
-                    m_ActiveGUI.Item1.SetActive(true);
-                    break;
-                }
+                CloseGUI(name);
             }
         }
 
-        public void CloseGUI()
+        public void CloseGUI(string activeName)
         {
-            if(m_ActiveGUI != null)
+            GUIData toClose = m_ActiveGUIs
+                .First(gui => gui.name.Equals(activeName, StringComparison.OrdinalIgnoreCase));
+            
+            toClose.gameObject.SetActive(false);
+            m_ActiveGUIs.Remove(toClose);
+        }
+
+        public void CloseAllOtherGUIs(string activeName = "")
+        {
+            GUIData[] toClose = m_ActiveGUIs
+                .Where(gui => gui.name.Equals(activeName, StringComparison.OrdinalIgnoreCase)).ToArray();
+
+            foreach (GUIData data in toClose)
             {
-                m_ActiveGUI.Item1.SetActive(false);
-                m_ActiveGUI = null;
+                data.gameObject.SetActive(false);
+                m_ActiveGUIs.Remove(data);
             }
         }
 
         public bool RemovesControl()
         {
-            return m_ActiveGUI.Item2;
+            GUIData[] data = m_ActiveGUIs.Where(gui => gui.RemovesControl).ToArray();
+            return data.Length > 0;
         }
 
         public GameObject GetGUI(string name)
         {
-            foreach(Tuple<GameObject, bool> gui in m_GUIs)
-            {
-                if(gui.Item1.name.Equals(name))
-                {
-                    return gui.Item1;
-                }
-            }
-
-            throw new InvalidOperationException("Could not find GUI by name " + name);
+            return m_GUIs.First(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase)).gameObject;
         }
     }
 }
