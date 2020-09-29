@@ -118,7 +118,7 @@ namespace DevionGames.InventorySystem
                     InventorySystemEditor.Database = InventoryManager.Database;
                 }
 
-                ItemDatabase[] databases = UnityEditorUtility.FindAssets<ItemDatabase>();
+                ItemDatabase[] databases = EditorTools.FindAssets<ItemDatabase>();
 
                 for (int i = 0; i < databases.Length; i++)
                 {

@@ -138,6 +138,11 @@ namespace DevionGames.Graphs
             }
         }
 
+        protected T MouseOverNode()
+        {
+            return GetNodeAtPosition(Event.current.mousePosition / this.m_GraphZoom - this.m_GraphOffset) ;
+        }
+
         protected T GetNodeAtPosition(Vector2 position)
         {
             for (int i = 0; i < this.m_Selection.Count; i++)
@@ -275,7 +280,6 @@ namespace DevionGames.Graphs
 
                         currentEvent.Use();
                     }
-                    //}
                     break;
                 case EventType.MouseDrag:
                     if (this.m_DragGraph)
@@ -294,24 +298,25 @@ namespace DevionGames.Graphs
             }
         }
 
-        private void AutoScrollGraph(float speed)
+
+        protected virtual void AutoScrollGraph(float speed, float offset = 15f)
         {
             Vector2 delta = Vector2.zero;
             Vector2 mousePosition = Event.current.mousePosition;
-            if (mousePosition.y < 15f)
+            if (mousePosition.y < offset)
             {
                 delta.y += speed;
             }
-            else if (mousePosition.y > this.m_GraphViewArea.height - 15f)
+            else if (mousePosition.y > this.m_GraphViewArea.height - offset)
             {
                 delta.y -= speed;
             }
 
-            if (mousePosition.x < 15f)
+            if (mousePosition.x < offset)
             {
                 delta.x += speed;
             }
-            else if (mousePosition.x > this.m_GraphViewArea.width - 15f)
+            else if (mousePosition.x > this.m_GraphViewArea.width - offset)
             {
                 delta.x -= speed;
             }
@@ -361,6 +366,7 @@ namespace DevionGames.Graphs
                     if (!m_Selection.Contains(node))
                     {
                         m_Selection.Add(node);
+                        OnSelectNode(node);
                     }
                     else
                     {
@@ -371,6 +377,7 @@ namespace DevionGames.Graphs
                 {
                     m_Selection.Clear();
                     m_Selection.Add(node);
+                    OnSelectNode(node);
                 }
                 return true;
             }
@@ -397,6 +404,7 @@ namespace DevionGames.Graphs
                 if (!m_Selection.Contains(node))
                 {
                     m_Selection.Add(node);
+                    OnSelectNode(node);
                 }
             }
         }
@@ -416,6 +424,7 @@ namespace DevionGames.Graphs
 
                             this.m_Selection.Clear();
                             this.m_Selection.Add(node);
+                            OnSelectNode(node);
                             Event.current.Use();
                             return;
                         }
@@ -442,9 +451,16 @@ namespace DevionGames.Graphs
                 case EventType.MouseDrag:
                     if (this.m_SelectionMode == SelectionMode.Pick || this.m_SelectionMode == SelectionMode.Rect)
                     {
-                        this.m_SelectionMode = SelectionMode.Rect;
-                        Select(this.m_SelectionStartPosition / this.m_GraphZoom - this.m_GraphOffset, currentEvent.mousePosition / this.m_GraphZoom - this.m_GraphOffset);
-                        currentEvent.Use();
+                        Rect rect = new Rect(10f,this.m_GraphViewArea.y+10f,this.m_GraphViewArea.width-20f,this.m_GraphViewArea.height-20f);
+                        if (rect.Contains(currentEvent.mousePosition))
+                        {
+                            this.m_SelectionMode = SelectionMode.Rect;
+                            Select(this.m_SelectionStartPosition / this.m_GraphZoom - this.m_GraphOffset, currentEvent.mousePosition / this.m_GraphZoom - this.m_GraphOffset);
+                            currentEvent.Use();
+                        }
+                        else {
+                            this.m_SelectionMode = SelectionMode.None;
+                        }
                     }
                     break;
                 case EventType.Repaint:
@@ -457,6 +473,8 @@ namespace DevionGames.Graphs
                     break;
             }
         }
+
+        protected virtual void OnSelectNode(T node) { }
 
         private void Select(Vector2 start, Vector2 end)
         {

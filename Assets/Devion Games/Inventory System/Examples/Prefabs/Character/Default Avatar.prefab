@@ -3941,7 +3941,6 @@ GameObject:
   - component: {fileID: 6874675272001939285}
   - component: {fileID: 6874675272001939286}
   - component: {fileID: 6874675272001939290}
-  - component: {fileID: 6874675272001939291}
   - component: {fileID: 6874675272001939288}
   - component: {fileID: 2528819391161695290}
   m_Layer: 9
@@ -4219,25 +4218,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_WindowName: Equipment
   m_Bones:
-  - region: {fileID: 114236047186042762, guid: 1ae57b994efcab048a1bb130d4e11d83, type: 2}
+  - region: {fileID: -1474344929657048262, guid: 1ae57b994efcab048a1bb130d4e11d83,
+      type: 2}
     bone: {fileID: 0}
-  - region: {fileID: 114425538521893000, guid: 1ae57b994efcab048a1bb130d4e11d83, type: 2}
+  - region: {fileID: -327638963660831434, guid: 1ae57b994efcab048a1bb130d4e11d83,
+      type: 2}
     bone: {fileID: 0}
-  - region: {fileID: 114479721169337420, guid: 1ae57b994efcab048a1bb130d4e11d83, type: 2}
+  - region: {fileID: -8061578217545172497, guid: 1ae57b994efcab048a1bb130d4e11d83,
+      type: 2}
     bone: {fileID: 0}
-  - region: {fileID: 114214608128568004, guid: 1ae57b994efcab048a1bb130d4e11d83, type: 2}
+  - region: {fileID: 5786703032187707280, guid: 1ae57b994efcab048a1bb130d4e11d83,
+      type: 2}
     bone: {fileID: 0}
-  - region: {fileID: 114182084388362390, guid: 1ae57b994efcab048a1bb130d4e11d83, type: 2}
+  - region: {fileID: -6642204398173666289, guid: 1ae57b994efcab048a1bb130d4e11d83,
+      type: 2}
     bone: {fileID: 0}
-  - region: {fileID: 114509172395672000, guid: 1ae57b994efcab048a1bb130d4e11d83, type: 2}
+  - region: {fileID: 316844889573954113, guid: 1ae57b994efcab048a1bb130d4e11d83, type: 2}
     bone: {fileID: 6874675270066489701}
-  - region: {fileID: 114673757768415324, guid: 1ae57b994efcab048a1bb130d4e11d83, type: 2}
+  - region: {fileID: 5658350685615726283, guid: 1ae57b994efcab048a1bb130d4e11d83,
+      type: 2}
     bone: {fileID: 958938071983222595}
-  - region: {fileID: 114616812171177490, guid: 1ae57b994efcab048a1bb130d4e11d83, type: 2}
+  - region: {fileID: 7014612192586799646, guid: 1ae57b994efcab048a1bb130d4e11d83,
+      type: 2}
     bone: {fileID: 0}
-  - region: {fileID: 114707470069734932, guid: 1ae57b994efcab048a1bb130d4e11d83, type: 2}
+  - region: {fileID: 7481220999571344, guid: 1ae57b994efcab048a1bb130d4e11d83, type: 2}
     bone: {fileID: 0}
-  - region: {fileID: 114913274920015176, guid: 1ae57b994efcab048a1bb130d4e11d83, type: 2}
+  - region: {fileID: 3254584067454643436, guid: 1ae57b994efcab048a1bb130d4e11d83,
+      type: 2}
     bone: {fileID: 0}
   m_VisibleItems:
   - {fileID: 6874675272001939294}
@@ -4421,9 +4428,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47617ef9c17742a418ac1323b2041aac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item: {fileID: 114277333231593414, guid: 1ae57b994efcab048a1bb130d4e11d83, type: 2}
+  item: {fileID: -2060425377994505070, guid: 1ae57b994efcab048a1bb130d4e11d83, type: 2}
   attachments:
-  - region: {fileID: 114673757768415324, guid: 1ae57b994efcab048a1bb130d4e11d83, type: 2}
+  - region: {fileID: 5658350685615726283, guid: 1ae57b994efcab048a1bb130d4e11d83,
+      type: 2}
     prefab: {fileID: 6955947972541771316, guid: caa4712265fb87f48917ca9e4be3350a,
       type: 3}
     position: {x: -0.075, y: 0.024, z: -0}
@@ -4442,9 +4450,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 468d8cb38be4be14495aa74b82052186, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item: {fileID: 114785342795678536, guid: 1ae57b994efcab048a1bb130d4e11d83, type: 2}
+  item: {fileID: 960666660569578442, guid: 1ae57b994efcab048a1bb130d4e11d83, type: 2}
   attachments:
-  - region: {fileID: 114509172395672000, guid: 1ae57b994efcab048a1bb130d4e11d83, type: 2}
+  - region: {fileID: 316844889573954113, guid: 1ae57b994efcab048a1bb130d4e11d83, type: 2}
     prefab: {fileID: 7505499703950806449, guid: 8d1205197ce57bf48b0d586eccfd9e61,
       type: 3}
     position: {x: 0.0822, y: -0.0313, z: 0.0679}
@@ -4477,9 +4485,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99ade03ed65cb3d4bb295875358fe60c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item: {fileID: 114599350459394656, guid: 1ae57b994efcab048a1bb130d4e11d83, type: 2}
+  item: {fileID: -8967533827971111582, guid: 1ae57b994efcab048a1bb130d4e11d83, type: 2}
   attachments:
-  - region: {fileID: 114673757768415324, guid: 1ae57b994efcab048a1bb130d4e11d83, type: 2}
+  - region: {fileID: 5658350685615726283, guid: 1ae57b994efcab048a1bb130d4e11d83,
+      type: 2}
     prefab: {fileID: 8054533140301882152, guid: 439347daebb9d4c49bc0207cc598caa0,
       type: 3}
     position: {x: -0.026, y: -0.034, z: 0.004}
@@ -4508,7 +4517,7 @@ MonoBehaviour:
   m_ProjectileSpeed: 40
   m_FirePoint: {fileID: 6874675271434665002}
   m_ReloadPoint: {fileID: 6874675270890733043}
-  m_ProjectileItem: {fileID: 114469367719831298, guid: 1ae57b994efcab048a1bb130d4e11d83,
+  m_ProjectileItem: {fileID: 6234106693565876968, guid: 1ae57b994efcab048a1bb130d4e11d83,
     type: 2}
   m_ProjectileItemWindow: Inventory
 --- !u!114 &6874675272001939297
@@ -4523,9 +4532,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47617ef9c17742a418ac1323b2041aac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item: {fileID: 114106902558356676, guid: 1ae57b994efcab048a1bb130d4e11d83, type: 2}
+  item: {fileID: -447126039411374142, guid: 1ae57b994efcab048a1bb130d4e11d83, type: 2}
   attachments:
-  - region: {fileID: 114509172395672000, guid: 1ae57b994efcab048a1bb130d4e11d83, type: 2}
+  - region: {fileID: 316844889573954113, guid: 1ae57b994efcab048a1bb130d4e11d83, type: 2}
     prefab: {fileID: 5445779230513671954, guid: f82bc419a6e172a44bd05e66d42408dc,
       type: 3}
     position: {x: 0.0762, y: -0.0308, z: -0.1064}
@@ -4544,9 +4553,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47617ef9c17742a418ac1323b2041aac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item: {fileID: 114400187329190588, guid: 1ae57b994efcab048a1bb130d4e11d83, type: 2}
+  item: {fileID: -4474190543486091594, guid: 1ae57b994efcab048a1bb130d4e11d83, type: 2}
   attachments:
-  - region: {fileID: 114509172395672000, guid: 1ae57b994efcab048a1bb130d4e11d83, type: 2}
+  - region: {fileID: 316844889573954113, guid: 1ae57b994efcab048a1bb130d4e11d83, type: 2}
     prefab: {fileID: 7757701744868425547, guid: 6a881db9233fb0748ad9709b178e05e2,
       type: 3}
     position: {x: 0.0762, y: -0.0308, z: -0.1064}
@@ -4565,9 +4574,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47617ef9c17742a418ac1323b2041aac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item: {fileID: 114602721455084702, guid: 1ae57b994efcab048a1bb130d4e11d83, type: 2}
+  item: {fileID: 2409076057030828310, guid: 1ae57b994efcab048a1bb130d4e11d83, type: 2}
   attachments:
-  - region: {fileID: 114509172395672000, guid: 1ae57b994efcab048a1bb130d4e11d83, type: 2}
+  - region: {fileID: 316844889573954113, guid: 1ae57b994efcab048a1bb130d4e11d83, type: 2}
     prefab: {fileID: 2446829401942333329, guid: f8834d5f45c6f6c40906a029b73145c6,
       type: 3}
     position: {x: 0.0742, y: -0.0312, z: -0.1058}
@@ -4587,10 +4596,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   delegates: []
-  selectionType: 13
+  selectionType: 11
   m_SelectionDistance: 10
   m_SelectionKey: 102
-  m_RaycastOffset: {x: 0, y: 0, z: 0}
+  m_RaycastOffset: {x: 0, y: 1, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 1075
   deselectionType: 13
   m_DeselectionKey: 27
   m_DeselectionDistance: 10
@@ -4760,30 +4772,19 @@ MonoBehaviour:
   useDistance: 2
   triggerType: 2
   key: 111
-  useCustomCursor: 1
-  m_CursorSprite: {fileID: 21300000, guid: f6293f20fd85aa143bead12afd67ebbb, type: 3}
-  m_CursorSize: {x: 32, y: 32}
-  m_CursorAnimatorState: Cursor
-  m_LockContainersWhenUsed: 1
   actions:
-  - {fileID: 6874675272001939291}
+  - id: 0
   m_RequiredIngredientsWindow: Inventory
   m_ResultStorageWindow: Inventory
   m_CraftingProgressbar: CraftingProgress
---- !u!114 &6874675272001939291
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6874675272001939313}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1887934abdce8434a91f3b90d982607d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_WindowName: Crafting Global
-  m_DestroyWhenEmpty: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: ShowWindow, ns: DevionGames.InventorySystem, asm: Assembly-CSharp}
+      data:
+        m_Enabled: 1
+        m_WindowName: Crafting Global
+        m_DestroyWhenEmpty: 0
 --- !u!114 &6874675272001939288
 MonoBehaviour:
   m_ObjectHideFlags: 0

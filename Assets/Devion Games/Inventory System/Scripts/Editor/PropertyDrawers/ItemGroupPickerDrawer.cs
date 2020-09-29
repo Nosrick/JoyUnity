@@ -45,7 +45,7 @@ namespace DevionGames.InventorySystem{
             {
                 string searchString = "Search...";
                 UtilityInstanceWindow.ShowWindow("Item Group Picker", delegate () {
-                    searchString = UnityEditorUtility.SearchField(searchString);
+                    searchString = EditorTools.SearchField(searchString);
 
                     Color color = GUI.backgroundColor;
                     GUI.backgroundColor = current == null ? Color.green : color;

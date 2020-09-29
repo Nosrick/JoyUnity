@@ -88,7 +88,7 @@ namespace DevionGames.InventorySystem
 
         protected override void Update()
         {
-            if (this.m_Pause || UIUtility.IsPointerOverUI() || !this.m_CharacterAnimator.GetCurrentAnimatorStateInfo(0).IsTag("Default")) { return; }
+            if (this.m_Pause || UnityTools.IsPointerOverUI() || !this.m_CharacterAnimator.GetCurrentAnimatorStateInfo(0).IsTag("Default")) { return; }
 
  
             switch (this.m_ActivationType)

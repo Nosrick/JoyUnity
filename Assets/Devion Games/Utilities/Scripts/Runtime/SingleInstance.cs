@@ -17,7 +17,6 @@ namespace DevionGames
             {
                 DontDestroyOnLoad(this.gameObject);
                 SingleInstance.m_Instances[this.name] = gameObject;
-                Debug.Log("Single Instance: "+this.name+"!");
             }
             else
             {

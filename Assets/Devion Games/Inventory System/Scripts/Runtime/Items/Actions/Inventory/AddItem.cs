@@ -17,12 +17,12 @@ namespace DevionGames.InventorySystem.ItemActions
 
         public override ActionStatus OnUpdate()
         {
-            Item instance = Instantiate(this.m_Item);
+            Item instance = ScriptableObject.Instantiate(this.m_Item);
             if (this.m_Item.IsCraftable)
             {
                 for (int j = 0; j < this.m_Item.ingredients.Count; j++)
                 {
-                    instance.ingredients[j].item = Instantiate(this.m_Item.ingredients[j].item);
+                    instance.ingredients[j].item = ScriptableObject.Instantiate(this.m_Item.ingredients[j].item);
                     instance.ingredients[j].item.Stack = this.m_Item.ingredients[j].amount;
                 }
             }

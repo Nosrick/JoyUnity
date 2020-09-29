@@ -15,7 +15,7 @@ namespace DevionGames.InventorySystem
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
-            if (UnityEditorUtility.RightArrowButton(new GUIContent("Restrictions", "Slot restrictions")))
+            if (EditorTools.RightArrowButton(new GUIContent("Restrictions", "Slot restrictions")))
             {
                 AssetWindow.ShowWindow("Slot Restrictions", serializedObject.FindProperty("restrictions"));
             }

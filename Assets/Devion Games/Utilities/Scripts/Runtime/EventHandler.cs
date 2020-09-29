@@ -15,7 +15,7 @@ namespace DevionGames{
 
 		public static void Execute(string eventName)
 		{
-			Action mDelegate = EventHandler.GetDelegate(eventName) as Action;
+            System.Action mDelegate = EventHandler.GetDelegate(eventName) as System.Action;
 			if (mDelegate != null)
 			{
 				mDelegate();
@@ -24,7 +24,7 @@ namespace DevionGames{
 
 		public static void Execute(object obj, string eventName)
 		{
-			Action mDelegate = EventHandler.GetDelegate(obj, eventName) as Action;
+            System.Action mDelegate = EventHandler.GetDelegate(obj, eventName) as System.Action;
 			if (mDelegate != null)
 			{
 				mDelegate();
@@ -84,12 +84,12 @@ namespace DevionGames{
 			}
 		}
 		
-		public static void Register(string eventName, Action handler)
+		public static void Register(string eventName, System.Action handler)
 		{
 			EventHandler.Register(eventName, (Delegate)handler);
 		}
 
-		public static void Register(object obj, string eventName, Action handler)
+		public static void Register(object obj, string eventName, System.Action handler)
 		{
 			EventHandler.Register(obj,eventName, (Delegate)handler);
 		}
@@ -125,12 +125,12 @@ namespace DevionGames{
 			EventHandler.Register(obj,eventName, (Delegate)handler);
 		}
 
-		public static void Unregister(string eventName, Action handler)
+		public static void Unregister(string eventName, System.Action handler)
 		{
 			EventHandler.Unregister(eventName, (Delegate)handler);
 		}
 
-		public static void Unregister(object obj, string eventName, Action handler)
+		public static void Unregister(object obj, string eventName, System.Action handler)
 		{
 			EventHandler.Unregister(obj, eventName, (Delegate)handler);
 		}

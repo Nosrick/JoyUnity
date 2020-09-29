@@ -13,8 +13,7 @@ GameObject:
   - component: {fileID: -7515236653226157045}
   - component: {fileID: 4354684559669362448}
   - component: {fileID: -8787154815911901543}
-  - component: {fileID: 8556510415420998115}
-  - component: {fileID: -2900014830802684281}
+  - component: {fileID: 5989858818690563341}
   m_Layer: 0
   m_Name: ItemInstance
   m_TagString: Untagged
@@ -137,7 +136,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &8556510415420998115
+--- !u!114 &5989858818690563341
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -153,25 +152,14 @@ MonoBehaviour:
   useDistance: 0.5
   triggerType: 2
   key: 102
-  useCustomCursor: 0
-  m_CursorSprite: {fileID: 0}
-  m_CursorSize: {x: 32, y: 32}
-  m_CursorAnimatorState: Cursor
-  m_LockContainersWhenUsed: 0
   actions:
-  - {fileID: -2900014830802684281}
---- !u!114 &-2900014830802684281
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1949383421893784}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 745d6f6696876144fb2cd605de0544dd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_WindowName: InventoryCanvas
-  m_DestroyWhenEmpty: 1
-  m_Amount: -1
+  - id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: Pickup, ns: DevionGames.InventorySystem, asm: DevionGames}
+      data:
+        m_Enabled: 1
+        m_WindowName: InventoryCanvas
+        m_DestroyWhenEmpty: 1
+        m_Amount: -1

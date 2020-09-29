@@ -9,20 +9,20 @@ namespace DevionGames{
 	/// </summary>
 
 	public class UtilityWindow : EditorWindow {
-		private Action onClose;
-		private Action onGUI;
+		private System.Action onClose;
+		private System.Action onGUI;
 		private Vector2 scroll;
         private bool useScrollView;
 
-		public static UtilityWindow ShowWindow(string title, Action onGUI){
+		public static UtilityWindow ShowWindow(string title, System.Action onGUI){
 			return ShowWindow (title, new Vector2 (227,200), onGUI, null, true);
 		}
 		
-		public static UtilityWindow ShowWindow(string title,Vector2 size, Action onGUI){
+		public static UtilityWindow ShowWindow(string title,Vector2 size, System.Action onGUI){
 			return ShowWindow (title, size, onGUI, null, true);
 		}
 
-		public static UtilityWindow ShowWindow(string title,Vector2 size, Action onGUI,Action onClose, bool useScrollView){
+		public static UtilityWindow ShowWindow(string title,Vector2 size, System.Action onGUI, System.Action onClose, bool useScrollView){
             UtilityWindow window = ScriptableObject.CreateInstance<UtilityWindow>();
             window.hideFlags = HideFlags.HideAndDontSave;
             window.titleContent = new GUIContent(title);

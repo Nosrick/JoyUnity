@@ -14,6 +14,7 @@ namespace DevionGames
         private SerializedProperty m_SelectionDistance;
         private SerializedProperty m_SelectionKey;
         private SerializedProperty m_RaycastOffset;
+        private SerializedProperty m_LayerMask;
         private AnimBool m_RaycastOffsetOptions;
         private AnimBool m_SelectionKeyOptions;
 
@@ -31,7 +32,7 @@ namespace DevionGames
             this.m_SelectionDistance = serializedObject.FindProperty("m_SelectionDistance");
             this.m_SelectionKey = serializedObject.FindProperty("m_SelectionKey");
             this.m_RaycastOffset = serializedObject.FindProperty("m_RaycastOffset");
-
+            this.m_LayerMask = serializedObject.FindProperty("m_LayerMask");
             if (this.m_RaycastOffsetOptions == null)
             {
                 this.m_RaycastOffsetOptions = new AnimBool((target as SelectionHandler).selectionType.HasFlag<SelectionHandler.SelectionInputType>(SelectionHandler.SelectionInputType.Raycast));
@@ -63,6 +64,7 @@ namespace DevionGames
         {
             EditorGUILayout.PropertyField(this.m_SelectionType);
             EditorGUI.indentLevel += 1;
+            EditorGUILayout.PropertyField(this.m_LayerMask);
             EditorGUILayout.PropertyField(this.m_SelectionDistance);
 
             this.m_SelectionKeyOptions.target = (target as SelectionHandler).selectionType.HasFlag<SelectionHandler.SelectionInputType>(SelectionHandler.SelectionInputType.Key);

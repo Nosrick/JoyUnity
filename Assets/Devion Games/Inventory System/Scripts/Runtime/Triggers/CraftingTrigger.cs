@@ -70,8 +70,9 @@ namespace DevionGames.InventorySystem
             this.m_Progressbar = WidgetUtility.Find<Progressbar>(this.m_CraftingProgressbar);
         }
 
-        public override bool OverrideItemUse(Slot slot, Item item)
+        public override bool OverrideUse(Slot slot, Item item)
         {
+ 
             if (Trigger.currentUsedWindow == item.Container && !slot.MoveItem())
             {
                 this.m_AmountSpinner = Trigger.currentUsedWindow.GetComponentInChildren<Spinner>();
@@ -196,7 +197,7 @@ namespace DevionGames.InventorySystem
                 {
                     this.m_RequiredIngredientsContainer.RemoveItem(item.ingredients[i].item, item.ingredients[i].amount);
                 }
-                InventoryManager.Notifications.craftedItem.Show(UnityUtility.ColorString(craftedItem.Name, craftedItem.Rarity.Color));
+                InventoryManager.Notifications.craftedItem.Show(UnityTools.ColorString(craftedItem.Name, craftedItem.Rarity.Color));
                 ExecuteEvent<ITriggerCraftItem>(Execute, craftedItem);
             }
             else

@@ -48,14 +48,14 @@ namespace DevionGames.InventorySystem
 
         private Dictionary<Type, string[]> m_ClassProperties;
         protected string[] m_PropertiesToExcludeForChildClasses;
-        protected List<Action> m_DrawInspectors;
+        protected List<System.Action> m_DrawInspectors;
 
         protected virtual void OnEnable ()
 		{
             if (target == null){
                 return;
             }
-            this.m_DrawInspectors = new List<Action>();
+            this.m_DrawInspectors = new List<System.Action>();
             m_ClassProperties = new Dictionary<Type, string[]>();
 
             this.m_Script = serializedObject.FindProperty("m_Script");
@@ -143,15 +143,12 @@ namespace DevionGames.InventorySystem
 
 			this.m_IsDroppable = serializedObject.FindProperty ("m_IsDroppable");
 			this.m_ShowDropOptions = new AnimBool (this.m_IsDroppable.boolValue);
-			if (InventorySystemEditor.instance != null) {
-				this.m_ShowDropOptions.valueChanged.AddListener (new UnityAction (InventorySystemEditor.instance.Repaint));
-			}
+			this.m_ShowDropOptions.valueChanged.AddListener (new UnityAction (Repaint));
+			
             this.m_IsCraftable = serializedObject.FindProperty("m_IsCraftable");
             this.m_ShowCraftOptions = new AnimBool(this.m_IsCraftable.boolValue);
-            if (InventorySystemEditor.instance != null)
-            {
-                this.m_ShowCraftOptions.valueChanged.AddListener(new UnityAction(InventorySystemEditor.instance.Repaint));
-            }
+            this.m_ShowCraftOptions.valueChanged.AddListener(new UnityAction(Repaint));
+            
 
             this.m_IngredientList = new ReorderableList(serializedObject, this.m_Ingredients, true, true, true, true);
             this.m_IngredientList.drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) => {
@@ -197,12 +194,12 @@ namespace DevionGames.InventorySystem
             };
 
 
-            Type[] subInspectors = ReflectionUtility.BaseTypesAndSelf(GetType()).Where(x => x.IsSubclassOf(typeof(ItemInspector))).ToArray();
+            Type[] subInspectors = Utility.BaseTypesAndSelf(GetType()).Where(x => x.IsSubclassOf(typeof(ItemInspector))).ToArray();
             Array.Reverse(subInspectors);
             for (int i = 0; i < subInspectors.Length; i++)
             {
                 MethodInfo method = subInspectors[i].GetMethod("DrawInspector", BindingFlags.NonPublic | BindingFlags.Instance);
-                Type inspectedType = typeof(CustomEditor).GetField("m_InspectedType", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(subInspectors[i].GetAttribute<CustomEditor>()) as Type;
+                Type inspectedType = typeof(CustomEditor).GetField("m_InspectedType", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(subInspectors[i].GetCustomAttribute<CustomEditor>()) as Type;
                 FieldInfo[] fields = inspectedType.GetAllSerializedFields().Where(x => !x.HasAttribute(typeof(HideInInspector))).ToArray();
                 string[] classProperties = fields.Where(x => x.DeclaringType == inspectedType).Select(x => x.Name).ToArray();
                 if (!this.m_ClassProperties.ContainsKey(inspectedType))
@@ -231,6 +228,7 @@ namespace DevionGames.InventorySystem
            
         }
 
+        protected virtual void OnDisable() { }
 
         public override void OnInspectorGUI()
         {
@@ -432,7 +430,7 @@ namespace DevionGames.InventorySystem
                         {
                             Trigger trigger=prefab.AddComponent<Trigger>();
                             //trigger.actions.Add(prefab.AddComponent<CanPickup>());
-                            SetEnabled setEnabled = prefab.AddComponent<SetEnabled>();
+                            /*SetEnabled setEnabled = prefab.AddComponent<SetEnabled>();
                             SerializedObject setEnabledObject = new SerializedObject(setEnabled);
                             setEnabledObject.Update();
                             setEnabledObject.FindProperty("m_ComponentName").stringValue = "ThirdPersonController";
@@ -449,7 +447,7 @@ namespace DevionGames.InventorySystem
                             setEnabledObject.FindProperty("m_ComponentName").stringValue = "ThirdPersonController";
                             setEnabledObject.FindProperty("m_Enable").boolValue = true;
                             setEnabledObject.ApplyModifiedProperties();
-                            trigger.actions.Add(setEnabled);
+                            trigger.actions.Add(setEnabled);*/
 
                         }
 

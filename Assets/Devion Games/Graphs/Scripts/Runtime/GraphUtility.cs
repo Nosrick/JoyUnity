@@ -18,11 +18,28 @@ namespace DevionGames.Graphs
 		public static Node AddNode(Graph graph,System.Type type)
 		{
 			Node node = System.Activator.CreateInstance(type) as Node;
-			CreatePorts(node as FlowNode);
+			if (typeof(FlowNode).IsAssignableFrom(type))
+			{
+				CreatePorts(node as FlowNode);
+			}
+			node.name = NicifyVariableName(type.Name);
 			node.graph = graph;
 			graph.nodes.Add(node);
 			Save(graph);
 			return node;
+		}
+
+		private static string NicifyVariableName(string name) {
+			string result = "";
+			for (int i = 0; i < name.Length; i++)
+			{
+				if (char.IsUpper(name[i]) == true && i != 0)
+				{
+					result += " ";
+				}
+				result += name[i];
+			}
+			return result;
 		}
 
 		public static void RemoveNodes(Graph graph, FlowNode[] nodes)
@@ -36,6 +53,16 @@ namespace DevionGames.Graphs
 			Save(graph);
 		}
 
+		public static void RemoveNodes(Graph graph, Node[] nodes)
+		{
+			for (int i = 0; i < nodes.Length; i++)
+			{
+				Node node = nodes[i];
+			}
+			graph.nodes.RemoveAll(x => nodes.Any(y => y == x));
+			Save(graph);
+		}
+
 		private static void CreatePorts(FlowNode node)
 		{
 			FieldInfo[] fields = node.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
@@ -45,7 +72,7 @@ namespace DevionGames.Graphs
 				FieldInfo field = fields[i];
 				if (field.HasAttribute<InputAttribute>())
 				{
-					InputAttribute inputAttribute = field.GetAttribute<InputAttribute>();
+					InputAttribute inputAttribute = field.GetCustomAttribute<InputAttribute>();
 					Port port = new Port(node, field.Name,field.FieldType, PortCapacity.Single, PortDirection.Input);
 					port.drawPort = inputAttribute.port;
 					port.label = inputAttribute.label;
@@ -109,7 +136,6 @@ namespace DevionGames.Graphs
 			if (value != null && !dic.ContainsKey(key))
 			{
 				Type type = value.GetType();
-
 				if (typeof(UnityEngine.Object).IsAssignableFrom(type))
 				{
 					UnityEngine.Object unityObject = value as UnityEngine.Object;
@@ -157,6 +183,9 @@ namespace DevionGames.Graphs
 
 		public static void Load(Graph graph)
 		{
+			if (string.IsNullOrEmpty(graph.serializationData)){
+				return;
+			}
 			Dictionary<string, object> data = MiniJSON.Deserialize(graph.serializationData) as Dictionary<string, object>;
 			graph.nodes.Clear();
 			object obj;
@@ -180,10 +209,10 @@ namespace DevionGames.Graphs
 		private static Node DeserializeNode(Dictionary<string, object> data, List<UnityEngine.Object> objectReferences)
 		{
 			string typeString = (string)data["Type"];
-			Type type = TypeUtility.GetType(typeString);
+			Type type = Utility.GetType(typeString);
 			if (type == null && !string.IsNullOrEmpty(typeString))
 			{
-				type = TypeUtility.GetType(typeString);
+				type = Utility.GetType(typeString);
 			}
 			Node node = (Node)System.Activator.CreateInstance(type);
 			DeserializeFields(node, data, objectReferences);
@@ -206,6 +235,8 @@ namespace DevionGames.Graphs
 				}
 			}
 		}
+
+
 
 		private static object DeserializeValue(string key, object source, FieldInfo field, Type type, Dictionary<string, object> data, List<UnityEngine.Object> objectReferences)
 		{
@@ -238,24 +269,24 @@ namespace DevionGames.Graphs
 						 type == typeof(Quaternion) ||
 						 type == typeof(Color))
 				{
-
 					return value;
 				}
 				else if (typeof(IList).IsAssignableFrom(type))
 				{
 					Dictionary<string, object> dic = value as Dictionary<string, object>;
 
-					Type targetType = typeof(List<>).MakeGenericType(GetElementType(type));
+					Type targetType = typeof(List<>).MakeGenericType(Utility.GetElementType(type));
 					IList result = (IList)Activator.CreateInstance(targetType);
 					int count = dic.Count;
-					for (int i = 0; i < count; i++)
-					{
-						result.Add(DeserializeValue(i.ToString(), source, field, GetElementType(type), dic, objectReferences));
+					for (int i = 0; i < count; i++) {
+						Type elementType = Utility.GetElementType(type);
+			
+						result.Add(DeserializeValue(i.ToString(), source, field, elementType, dic, objectReferences));
 					}
 
 					if (type.IsArray)
 					{
-						Array array = Array.CreateInstance(GetElementType(type), count);
+						Array array = Array.CreateInstance(Utility.GetElementType(type), count);
 						result.CopyTo(array, 0);
 						return array;
 					}
@@ -263,21 +294,17 @@ namespace DevionGames.Graphs
 				}
 				else
 				{
+					Dictionary<string,object> dic= value as Dictionary<string,object>;
+					if (dic.ContainsKey("m_Type")) {
+						type = Utility.GetType((string)dic["m_Type"]);
+					}
 					object instance = Activator.CreateInstance(type);
+					
 					DeserializeFields(instance, value as Dictionary<string, object>, objectReferences);
 					return instance;
 				}
 			}
 			return null;
-		}
-
-		private static Type GetElementType(Type type)
-		{
-			Type[] interfaces = type.GetInterfaces();
-
-			return (from i in interfaces
-					where i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>)
-					select i.GetGenericArguments()[0]).FirstOrDefault();
 		}
 
 		public static object ConvertToArray(this IList collection)

@@ -50,7 +50,7 @@ namespace DevionGames.Graphs
             GUI.Label(new Rect(0f, 0f, base.position.width, base.position.height), GUIContent.none, Styles.background);
             GUILayout.Space(5f);
 
-            this.m_SearchString = UnityEditorUtility.SearchField(this.m_SearchString,true);
+            this.m_SearchString = EditorTools.SearchField(this.m_SearchString,true);
 
             GUIContent header = new GUIContent(!isSearching ? m_SelectedElement.label.text : "Search");
             Rect headerRect = GUILayoutUtility.GetRect(header, Styles.header);
@@ -103,8 +103,13 @@ namespace DevionGames.Graphs
                 GUIContent label = new GUIContent(element.label);
                 if (element.type != null)
                 {
-                    label.text = isSearching ? element.type.GetCategory().Split('/').Last() + "." + element.label.text : element.label.text;
-                    label.tooltip = element.type.GetTooltip();
+                    CategoryAttribute categoryAttribute = element.type.GetCustomAttribute<CategoryAttribute>();
+                    string category = categoryAttribute != null ? categoryAttribute.Category : string.Empty;
+
+                    label.text = isSearching ? category.Split('/').Last() + "." + element.label.text : element.label.text;
+                    TooltipAttribute tooltipAttribute = element.type.GetCustomAttribute<TooltipAttribute>();
+                    string tooltip = tooltipAttribute != null ? tooltipAttribute.tooltip : string.Empty;
+                    label.tooltip = tooltip;
 
                 }
 
@@ -127,8 +132,10 @@ namespace DevionGames.Graphs
                 if (element.type != null)
                 {
 
-                    string category = element.type.GetCategory().Split('/').Last();
-                    Texture2D icon = (Texture2D)EditorGUIUtility.ObjectContent(null, TypeUtility.GetType(category)).image;
+                    CategoryAttribute attribute = element.type.GetCustomAttribute<CategoryAttribute>();
+
+                    string category = attribute!=null?attribute.Category.Split('/').Last():string.Empty;
+                    Texture2D icon = (Texture2D)EditorGUIUtility.ObjectContent(null, Utility.GetType(category)).image;
 
 
                     if (icon != null)
@@ -147,14 +154,14 @@ namespace DevionGames.Graphs
         {
             
             NodeElement root = new NodeElement("Nodes", "");
-            Type[] types = AppDomain.CurrentDomain.GetAssemblies().SelectMany(assembly => assembly.GetTypes()).Where(type => typeof(Node).IsAssignableFrom(type) && !type.IsAbstract).ToArray();
+            Type[] types = AppDomain.CurrentDomain.GetAssemblies().SelectMany(assembly => assembly.GetTypes()).Where(type => typeof(Node).IsAssignableFrom(type) && !type.IsAbstract && !type.HasAttribute(typeof(ExcludeFromCreation))).ToArray();
             types = types.OrderBy(x => x.BaseType.Name).ToArray();
             foreach (Type type in types)
             {
                 if (typeof(EventNode).IsAssignableFrom(type) && this.m_Graph.nodes.Find(x=>x.GetType() == type) != null) {
                     continue;
                 }
-                NodeStyleAttribute nodeStyle = type.GetAttribute<NodeStyleAttribute>();
+                NodeStyleAttribute nodeStyle = type.GetCustomAttribute<NodeStyleAttribute>();
                 string category = string.Empty ;
                 if (nodeStyle != null) {
                     category = nodeStyle.category;

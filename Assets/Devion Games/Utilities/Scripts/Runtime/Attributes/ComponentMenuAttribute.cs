@@ -3,20 +3,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public sealed class ComponentMenu : Attribute
+namespace DevionGames
 {
-    private string m_ComponentMenu;
-
-    public string componentMenu
+    public sealed class ComponentMenu : Attribute
     {
-        get
+        private string m_ComponentMenu;
+
+        public string componentMenu
         {
-            return this.m_ComponentMenu;
+            get
+            {
+                return this.m_ComponentMenu;
+            }
         }
-    }
 
-    public ComponentMenu(string menuName)
-    {
-        this.m_ComponentMenu = menuName;
+        public ComponentMenu(string menuName)
+        {
+            this.m_ComponentMenu = menuName;
+        }
     }
 }

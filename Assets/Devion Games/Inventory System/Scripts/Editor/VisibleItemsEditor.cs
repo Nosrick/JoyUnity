@@ -36,7 +36,7 @@ namespace DevionGames.InventorySystem
             }
             window.m_HasPrefab = PrefabUtility.GetNearestPrefabInstanceRoot(window.m_Target) != null;
             window.m_Editors = new List<Editor>();
-            window.elementType = TypeUtility.GetType(elements.arrayElementType.Replace("PPtr<$", "").Replace(">", ""));
+            window.elementType = Utility.GetType(elements.arrayElementType.Replace("PPtr<$", "").Replace(">", ""));
             for (int i = 0; i < window.m_Targets.Length; i++)
             {
                 Editor editor = Editor.CreateEditor(window.m_Targets[i]);
@@ -82,11 +82,11 @@ namespace DevionGames.InventorySystem
 
         private void DrawElementList()
         {
-            GUIStyle selectButton = new GUIStyle("MeTransitionSelectHead")
+          /*  GUIStyle selectButton = new GUIStyle("MeTransitionSelectHead")
             {
                 alignment = TextAnchor.MiddleLeft
             };
-            selectButton.padding.left = 10;
+            selectButton.padding.left = 10;*/
 
             for (int i = 0; i < this.m_Targets.Length; i++)
             {
@@ -101,11 +101,11 @@ namespace DevionGames.InventorySystem
                 }
                 GUILayout.BeginHorizontal();
                 Color color = GUI.backgroundColor;
-                Rect rect = GUILayoutUtility.GetRect(new GUIContent((item != null ? item.Name : "Null")), selectButton, GUILayout.Height(25f));
+                Rect rect = GUILayoutUtility.GetRect(new GUIContent((item != null ? item.Name : "Null")), VisibleItemsEditor.m_Styles.elementButtonText, GUILayout.Height(25f));
                 rect.width -= 25f;
                 GUI.backgroundColor = (rect.Contains(Event.current.mousePosition) ? new Color(0, 1.0f, 0, 0.3f) : new Color(0, 0, 0, 0.0f));
 
-                if (GUI.Button(rect, (item != null ? item.Name : "Null"), selectButton))
+                if (GUI.Button(rect, (item != null ? item.Name : "Null"), VisibleItemsEditor.m_Styles.elementButtonText))
                 {
                     GUI.FocusControl("");
                     this.m_SelectedIndex = i;
@@ -221,6 +221,7 @@ namespace DevionGames.InventorySystem
             public GUIStyle leftArrow = "AC LeftArrow";
             public GUIStyle elementButton = new GUIStyle("MeTransitionSelectHead");
             public GUIStyle background = "grey_border";
+            public GUIStyle elementButtonText;
 
             public Styles()
             {
@@ -231,6 +232,16 @@ namespace DevionGames.InventorySystem
                 this.elementButton.alignment = TextAnchor.MiddleLeft;
                 this.elementButton.padding.left = 22;
                 this.elementButton.margin = new RectOffset(1, 1, 0, 0);
+
+                elementButtonText = new GUIStyle("MeTransitionSelectHead")
+                {
+                    alignment = TextAnchor.MiddleLeft,
+                    padding = new RectOffset(5, 0, 0, 0),
+                    overflow = new RectOffset(0, -1, 0, 0),
+                    richText = true
+                };
+                elementButtonText.normal.background = null;
+                elementButtonText.normal.textColor = EditorGUIUtility.isProSkin ? new Color(0.788f, 0.788f, 0.788f, 1f) : new Color(0.047f, 0.047f, 0.047f, 1f);
             }
         }
     }

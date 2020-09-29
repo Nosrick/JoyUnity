@@ -119,7 +119,7 @@ namespace DevionGames.InventorySystem
         private PlayerInfo m_PlayerInfo;
         public PlayerInfo PlayerInfo {
             get { 
-                if (this.m_PlayerInfo == null) { this.m_PlayerInfo = new PlayerInfo(); }
+                if (this.m_PlayerInfo == null) { this.m_PlayerInfo = new PlayerInfo(InventoryManager.DefaultSettings.playerTag); }
                 return this.m_PlayerInfo;
             }
         }
@@ -176,6 +176,7 @@ namespace DevionGames.InventorySystem
         }
  
         //TODO move to utility
+        [Obsolete("InventoryManager.GetBounds is obsolete Use UnityUtility.GetBounds")]
         public Bounds GetBounds(GameObject obj)
         {
             Bounds bounds = new Bounds();
@@ -334,6 +335,7 @@ namespace DevionGames.InventorySystem
             if (prefab != null)
             {
                 GameObject go = InventoryManager.Instantiate(prefab, position, rotation);
+                go.name = go.name.Replace("(Clone)","");
                 return go;
 
             }

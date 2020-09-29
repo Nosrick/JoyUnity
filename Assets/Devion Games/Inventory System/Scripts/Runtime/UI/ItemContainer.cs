@@ -684,7 +684,14 @@ namespace DevionGames.InventorySystem
                     {
                         slotsForItem[i].ObservedItem = null;
                     }
+                  
                     OnRemoveItem(item, item.Stack, slot);
+                    if (this.m_DynamicContainer)
+                    {
+                        DestroyImmediate(this.m_Slots[index].gameObject);
+                        RefreshSlots();
+                    }
+
                     return true;
                 }
             }
@@ -777,19 +784,27 @@ namespace DevionGames.InventorySystem
         public virtual bool RemoveItem(Item item)
         {
             if (item == null) { return false; }
+
             if (!UseReferences && this.m_Collection.Contains(item))
             {
                 //Remove item from the collection
                 this.m_Collection.Remove(item);
+
                 //Remove item from all slots
                 for (int i = 0; i < this.m_Slots.Count; i++)
                 {
                     if (this.m_Slots[i].ObservedItem == item)
                     {
                         this.m_Slots[i].ObservedItem = null;
-                        OnRemoveItem(item, item.Stack, this.m_Slots[i]);   
+                        OnRemoveItem(item, item.Stack, this.m_Slots[i]);
+                        if (this.m_DynamicContainer)
+                        {
+                            DestroyImmediate(this.m_Slots[i].gameObject);
+                            Debug.Log("Destroy");
+                        }
                     }
                 }
+                RefreshSlots();
                 return true;
             }
             else if (UseReferences)
@@ -907,24 +922,24 @@ namespace DevionGames.InventorySystem
         /// <summary>
         /// Returns an array of items of type this container is holding. 
         /// </summary>
-        public T[] GetItems<T>() where T : Item
+        public T[] GetItems<T>(bool inherit = false) where T : Item
         {
-            return GetItems(typeof(T)).Cast<T>().ToArray();
+            return GetItems(typeof(T), inherit).Cast<T>().ToArray();
         }
 
         /// <summary>
         /// Returns an array of items of type this container is holding. 
         /// </summary>
-        public Item[] GetItems(Type type)
+        public Item[] GetItems(Type type, bool inherit = false)
         {
             List<Item> items = new List<Item>();
             if (!this.m_UseReferences)
             {
-                items.AddRange(this.m_Collection.Where(x => x.GetType() == type));
+                items.AddRange(this.m_Collection.Where(x => (!inherit && x.GetType() == type) || (inherit && type.IsAssignableFrom(x.GetType()))));
             }
             else
             {
-                items.AddRange(this.m_Slots.Where(x => !x.IsEmpty && x.ObservedItem.GetType() == type).Select(y => y.ObservedItem));
+                items.AddRange(this.m_Slots.Where(x => !x.IsEmpty && ((!inherit && x.ObservedItem.GetType() == type) || (inherit && type.IsAssignableFrom(x.ObservedItem.GetType())) )).Select(y => y.ObservedItem));
             }
             return items.ToArray();
         }
@@ -1400,7 +1415,7 @@ namespace DevionGames.InventorySystem
             {
                 ItemContainer current = windows[j];
 
-                if ((allowStacking && current.StackOrAdd(item)) || (allowStacking && current.AddItem(item)))
+                if ((allowStacking && current.StackOrAdd(item)) || (!allowStacking && current.AddItem(item)))
                 {
                     return true;
                 }
@@ -1535,6 +1550,19 @@ namespace DevionGames.InventorySystem
 
         public void Lock(bool state) {
             this.m_IsLocked = state;
+        }
+
+        public void MoveTo(string windowName)
+        {
+            Item[] items = GetItems<Item>(true);
+            ItemContainer container = WidgetUtility.Find<ItemContainer>(windowName);
+            for (int i = 0; i < items.Length; i++)
+            {
+                if (container.AddItem(items[i])) {
+               
+                    RemoveItem(items[i]);
+                }
+            }
         }
 
         [System.Serializable]

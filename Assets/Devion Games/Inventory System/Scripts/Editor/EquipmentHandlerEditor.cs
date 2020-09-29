@@ -43,7 +43,7 @@ namespace DevionGames.InventorySystem
             }
             GUILayout.BeginVertical("grey_border");
             GUILayout.Space(6f);
-            searchString = UnityEditorUtility.SearchField(searchString);
+            searchString = EditorTools.SearchField(searchString);
             
 
             GUIStyle header = new GUIStyle("In BigTitle") {

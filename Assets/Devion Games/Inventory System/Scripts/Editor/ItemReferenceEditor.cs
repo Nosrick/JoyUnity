@@ -153,15 +153,14 @@ namespace DevionGames.InventorySystem
 
 				if (typeof(IList).IsAssignableFrom(fieldInfo.FieldType))
 				{
-					System.Type elementType = fieldInfo.FieldType.GetElementType();
-					if (elementType == null) { elementType = fieldInfo.FieldType.GetGenericArguments()[0]; }
-
+					System.Type elementType = Utility.GetElementType(fieldInfo.FieldType);
+					
 					if (ShouldReference(elementType))
 					{
 						//Debug.Log("INameable List: "+ source +" "+fieldInfo.Name + " (" + fieldInfo.FieldType + ")");
 						IList array = fieldInfo.GetValue(source) as IList;
 
-						System.Type targetType = typeof(List<>).MakeGenericType(GetElementType(fieldInfo.FieldType));
+						System.Type targetType = typeof(List<>).MakeGenericType(Utility.GetElementType(fieldInfo.FieldType));
 						IList items = (IList)Activator.CreateInstance(targetType);
 						for (int i = 0; i < array.Count; i++)
 						{
@@ -181,7 +180,7 @@ namespace DevionGames.InventorySystem
 						}
 						if (fieldInfo.FieldType.IsArray)
 						{
-							Array arr = Array.CreateInstance(GetElementType(fieldInfo.FieldType), items.Count);
+							Array arr = Array.CreateInstance(Utility.GetElementType(fieldInfo.FieldType), items.Count);
 							items.CopyTo(arr, 0);
 							items = arr;
 						}
@@ -238,15 +237,6 @@ namespace DevionGames.InventorySystem
 				typeof(ItemGroup).IsAssignableFrom(type);
 		}
 
-		private static System.Type GetElementType(System.Type type)
-		{
-			System.Type[] interfaces = type.GetInterfaces();
-
-			return (from i in interfaces
-					where i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>)
-					select i.GetGenericArguments()[0]).FirstOrDefault();
-		}
-
 		private void SelectPrefabsFolder()
 		{
 			GUILayout.BeginHorizontal();
@@ -267,11 +257,11 @@ namespace DevionGames.InventorySystem
 			if (GUILayout.Button(this.m_Database != null ? m_Database.name : "Null", EditorStyles.objectField))
 			{
 				string searchString = "Search...";
-				ItemDatabase[] databases = UnityEditorUtility.FindAssets<ItemDatabase>();
+				ItemDatabase[] databases = EditorTools.FindAssets<ItemDatabase>();
 
 				UtilityInstanceWindow.ShowWindow("Select Database", delegate ()
 				{
-					searchString = UnityEditorUtility.SearchField(searchString);
+					searchString = EditorTools.SearchField(searchString);
 
 					for (int i = 0; i < databases.Length; i++)
 					{

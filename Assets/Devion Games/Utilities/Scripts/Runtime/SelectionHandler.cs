@@ -19,6 +19,7 @@ namespace DevionGames
             }
         }
 
+       
         [EnumFlags]
         public SelectionInputType selectionType = SelectionInputType.LeftClick | SelectionInputType.Raycast;
         [SerializeField]
@@ -28,6 +29,8 @@ namespace DevionGames
         private KeyCode m_SelectionKey = KeyCode.F;
         [SerializeField]
         private Vector3 m_RaycastOffset= Vector3.zero;
+        [SerializeField]
+        private LayerMask m_LayerMask = Physics.DefaultRaycastLayers;
 
         [EnumFlags]
         public DeselectionInputType deselectionType = DeselectionInputType.LeftClick | DeselectionInputType.Key;
@@ -79,7 +82,7 @@ namespace DevionGames
             }
 
             //Deselection
-            if (!UIUtility.IsPointerOverUI())
+            if (!UnityTools.IsPointerOverUI())
             {
                 if (!selected && (Input.GetMouseButtonDown(0) && deselectionType.HasFlag<DeselectionInputType>(DeselectionInputType.LeftClick) ||
                     Input.GetMouseButtonDown(1) && deselectionType.HasFlag<DeselectionInputType>(DeselectionInputType.RightClick) ||
@@ -92,7 +95,8 @@ namespace DevionGames
 
         private bool TrySelect(Ray ray) {
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, float.PositiveInfinity))
+            
+            if (Physics.Raycast(ray, out hit, float.PositiveInfinity, this.m_LayerMask))
             {
                 if (Vector3.Distance(this.m_Transform.position, hit.transform.position) < this.m_SelectionDistance)
                 {

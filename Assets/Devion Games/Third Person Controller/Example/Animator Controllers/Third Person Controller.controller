@@ -3050,8 +3050,7 @@ AnimatorState:
   m_Speed: 2
   m_CycleOffset: 0
   m_Transitions: []
-  m_StateMachineBehaviours:
-  - {fileID: 8913389660639074485}
+  m_StateMachineBehaviours: []
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 1
   m_WriteDefaultValues: 1
@@ -3502,22 +3501,6 @@ MonoBehaviour:
   sound: {fileID: 8300000, guid: 84403b72b65b31d43841c7ce8ded074b, type: 3}
   volume: 1
   normalizedPlayTime: 0
---- !u!114 &8913389660639074485
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14805f33c198db541a70642906e57ae5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  condition: 1
-  sound: {fileID: 8300000, guid: 9ef5b527d90acaa428b516bbd9fc2cc4, type: 3}
-  volume: 0.39
-  normalizedPlayTime: 0.59
 --- !u!1109 &8942005515883008791
 AnimatorTransition:
   m_ObjectHideFlags: 1

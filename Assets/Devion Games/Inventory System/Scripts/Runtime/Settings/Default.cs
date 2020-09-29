@@ -15,8 +15,7 @@ namespace DevionGames.InventorySystem.Configuration
             }
         }
 
-      
-        [Tag]
+
         public string playerTag = "Player";
         public float maxDropDistance = 3f;
 

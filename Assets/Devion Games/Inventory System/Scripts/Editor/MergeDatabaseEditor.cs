@@ -102,7 +102,7 @@ namespace DevionGames.InventorySystem
 						//Debug.Log("INameable List: "+(source as INameable).Name+" "+fieldInfo.Name + " (" + fieldInfo.FieldType + ")");
 						IList array = fieldInfo.GetValue(source) as IList;
 
-                        System.Type targetType = typeof(List<>).MakeGenericType(GetElementType(fieldInfo.FieldType));
+                        System.Type targetType = typeof(List<>).MakeGenericType(Utility.GetElementType(fieldInfo.FieldType));
 						IList items = (IList)Activator.CreateInstance(targetType);
 						for (int i = 0; i < array.Count; i++)
 						{
@@ -111,7 +111,7 @@ namespace DevionGames.InventorySystem
 						}
 						if (fieldInfo.FieldType.IsArray)
 						{
-							Array arr = Array.CreateInstance(GetElementType(fieldInfo.FieldType), items.Count);
+							Array arr = Array.CreateInstance(Utility.GetElementType(fieldInfo.FieldType), items.Count);
 							items.CopyTo(arr, 0);
 							items=arr;
 						}
@@ -147,15 +147,6 @@ namespace DevionGames.InventorySystem
 			}
 		}
 
-		private static System.Type GetElementType(System.Type type)
-		{
-            System.Type[] interfaces = type.GetInterfaces();
-
-			return (from i in interfaces
-					where i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>)
-					select i.GetGenericArguments()[0]).FirstOrDefault();
-		}
-
 		private void MergeItems() {
 			List<Item> items = this.m_Source.items.Where(y => !this.m_Destination.items.Any(z => z.Name == y.Name)).ToList();
 			for (int i = 0; i < items.Count; i++)
@@ -166,7 +157,7 @@ namespace DevionGames.InventorySystem
 				AssetDatabase.SaveAssets();
 				AssetDatabase.Refresh();
 				this.m_Destination.items.Add(item);
-				if (item is UsableItem) {
+				/*if (item is UsableItem) {
 					List<ItemAction> actions = (item as UsableItem).actions;
 					for (int j = 0; j < actions.Count; j++) {
 						ItemAction action = ScriptableObject.Instantiate(actions[j]);
@@ -178,7 +169,7 @@ namespace DevionGames.InventorySystem
 						EditorUtility.SetDirty(item);
 					}
 
-				}
+				}*/
 
 				EditorUtility.SetDirty(this.m_Destination);
 			}
@@ -277,11 +268,11 @@ namespace DevionGames.InventorySystem
 			if (GUILayout.Button(current != null ? current.name : "Null", EditorStyles.objectField))
 			{
 				string searchString = "Search...";
-				ItemDatabase[] databases = UnityEditorUtility.FindAssets<ItemDatabase>();
+				ItemDatabase[] databases = EditorTools.FindAssets<ItemDatabase>();
 
 				UtilityInstanceWindow.ShowWindow("Select Database", delegate ()
 				{
-					searchString = UnityEditorUtility.SearchField(searchString);
+					searchString = EditorTools.SearchField(searchString);
 
 					for (int i = 0; i < databases.Length; i++)
 					{

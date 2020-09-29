@@ -101,10 +101,10 @@ namespace DevionGames.UIWidgets
 		private TweenRunner<Vector3Tween> m_ScaleTweenRunner;
         protected bool m_IsShowing;
 
-		
-		private void Awake ()
+
+        private void Awake ()
 		{
-            WidgetInputHandler.RegisterInput(this.m_KeyCode, this);
+			WidgetInputHandler.RegisterInput(this.m_KeyCode, this);
 			m_RectTransform = GetComponent<RectTransform> ();
 			m_CanvasGroup = GetComponent<CanvasGroup> ();
 			if (!IsVisible) {
@@ -255,6 +255,9 @@ namespace DevionGames.UIWidgets
 			m_RectTransform.SetAsLastSibling ();
 		}
 
+		protected virtual void OnDestroy() {
+			WidgetInputHandler.UnregisterInput(m_KeyCode, this);
+		}
 
 		[System.Serializable]
 		public class WidgetEvent:UnityEvent

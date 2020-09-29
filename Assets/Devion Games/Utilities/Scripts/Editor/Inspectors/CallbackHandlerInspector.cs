@@ -23,18 +23,18 @@ namespace DevionGames{
 
         private Dictionary<Type, string[]> m_ClassProperties;
         private string[] m_PropertiesToExcludeForChildClasses;
-        private List<Action> m_DrawInspectors;
+        private List<System.Action> m_DrawInspectors;
 
         protected virtual void OnEnable(){
-            this.m_DrawInspectors = new List<Action>();
+            this.m_DrawInspectors = new List<System.Action>();
             List<string> propertiesToExclude = new List<string>();
             m_ClassProperties = new Dictionary<Type, string[]>();
             propertiesToExclude.Add("m_Script");
-            Type[] subInspectors = ReflectionUtility.BaseTypesAndSelf(GetType()).Where(x=>x.IsSubclassOf(typeof(CallbackHandlerInspector))).ToArray();
+            Type[] subInspectors = Utility.BaseTypesAndSelf(GetType()).Where(x=>x.IsSubclassOf(typeof(CallbackHandlerInspector))).ToArray();
             Array.Reverse(subInspectors);
             for (int i = 0; i < subInspectors.Length; i++){
                 MethodInfo method = subInspectors[i].GetMethod("DrawInspector", BindingFlags.NonPublic | BindingFlags.Instance);
-                Type inspectedType = typeof(CustomEditor).GetField("m_InspectedType", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(subInspectors[i].GetAttribute<CustomEditor>()) as Type;
+                Type inspectedType = typeof(CustomEditor).GetField("m_InspectedType", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(subInspectors[i].GetCustomAttribute<CustomEditor>()) as Type;
                 FieldInfo[] fields = inspectedType.GetAllSerializedFields().Where(x => !x.HasAttribute(typeof(HideInInspector))).ToArray();
                 string[] classProperties = fields.Where(x => x.DeclaringType == inspectedType).Select(x => x.Name).ToArray();
                 if (!this.m_ClassProperties.ContainsKey(inspectedType)) {
@@ -78,10 +78,12 @@ namespace DevionGames{
             for (int i = 0; i < m_DrawInspectors.Count; i++) {
                 this.m_DrawInspectors[i].Invoke();
             }
+           
             DrawPropertiesExcluding(serializedObject,this.m_PropertiesToExcludeForChildClasses);
             TriggerGUI();
 			serializedObject.ApplyModifiedProperties();
 		}
+
 
         protected void DrawClassPropertiesExcluding(params string[] propertyToExclude) {
             string[] propertiesToDraw = new string[0];

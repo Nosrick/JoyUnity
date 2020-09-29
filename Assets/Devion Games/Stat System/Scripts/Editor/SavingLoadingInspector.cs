@@ -26,17 +26,13 @@ namespace DevionGames.StatSystem.Configuration
         {
             this.m_Script = serializedObject.FindProperty("m_Script");
             this.m_AutoSave = serializedObject.FindProperty("autoSave");
-            this.m_ShowSave = new AnimBool(this.m_AutoSave.boolValue);
-            if (StatSystemEditor.instance != null)
-            {
-                this.m_ShowSave.valueChanged.AddListener(new UnityAction(StatSystemEditor.instance.Repaint));
-            }
+            this.m_ShowSave = new AnimBool(this.m_AutoSave.boolValue); 
+            this.m_ShowSave.valueChanged.AddListener(new UnityAction(Repaint));
+            
             this.m_Provider = serializedObject.FindProperty("provider");
             this.m_ShowMySQL = new AnimBool(this.m_Provider.enumValueIndex == 1);
-            if (StatSystemEditor.instance != null)
-            {
-                this.m_ShowMySQL.valueChanged.AddListener(new UnityAction(StatSystemEditor.instance.Repaint));
-            }
+            this.m_ShowMySQL.valueChanged.AddListener(new UnityAction(Repaint));
+            
 
             this.m_SavingKey = serializedObject.FindProperty("savingKey");
             this.m_SavingRate = serializedObject.FindProperty("savingRate");

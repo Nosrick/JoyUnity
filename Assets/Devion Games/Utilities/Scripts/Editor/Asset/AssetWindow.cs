@@ -21,7 +21,7 @@ namespace DevionGames
         protected Type elementType {
             get {
                 if (this.m_ElementType == null) {
-                    this.m_ElementType = TypeUtility.GetType(this.m_ElementTypeName);
+                    this.m_ElementType = Utility.GetType(this.m_ElementTypeName);
                 }
                 return this.m_ElementType;
             }
@@ -52,7 +52,7 @@ namespace DevionGames
             }
             window.m_HasPrefab = PrefabUtility.GetNearestPrefabInstanceRoot(window.m_Target) != null;
             window.m_Editors = new List<Editor>();
-            window.elementType = TypeUtility.GetType(elements.arrayElementType.Replace("PPtr<$", "").Replace(">", ""));
+            window.elementType = Utility.GetType(elements.arrayElementType.Replace("PPtr<$", "").Replace(">", ""));
             for (int i = 0; i < window.m_Targets.Length; i++)
             {
                 Editor editor = Editor.CreateEditor(window.m_Targets[i]);
@@ -80,7 +80,7 @@ namespace DevionGames
                 UnityEngine.Object target = this.m_Targets[i];
                 Editor editor = this.m_Editors[i];
 
-                if (UnityEditorUtility.Titlebar(target, GetContextMenu(target)))
+                if (EditorTools.Titlebar(target, GetContextMenu(target)))
                 {
                     EditorGUI.indentLevel += 1;
                     editor.OnInspectorGUI();
@@ -124,7 +124,7 @@ namespace DevionGames
             buttonRect.x = position.width * 0.5f - buttonStyle.fixedWidth * 0.5f;
             if (GUI.Button(buttonRect, buttonContent, buttonStyle))
             {
-                AddAssetWindow.ShowWindow(buttonRect, elementType, AddAsset, CreateScript);
+                AddObjectWindow.ShowWindow(buttonRect, elementType, AddAsset, CreateScript);
             }
         }
 
@@ -216,7 +216,7 @@ namespace DevionGames
             {
                 using (StreamWriter outfile = new StreamWriter(path))
                 {
-                    MethodInfo[] methods = elementType.GetAllMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                    MethodInfo[] methods = elementType.GetAllMethods();
                     methods = methods.Where(x => x.IsAbstract).ToArray();
 
                     outfile.WriteLine("using UnityEngine;");
@@ -248,7 +248,7 @@ namespace DevionGames
                             parameterString = parameterString.Substring(1);
                         }
 
-                        outfile.WriteLine("\t"+(method.IsPublic?"public":"protected")+" override "+ UnityEditorUtility.CovertToAliasString(method.ReturnType) +" "+method.Name  +"("+parameterString+") {");
+                        outfile.WriteLine("\t"+(method.IsPublic?"public":"protected")+" override "+ EditorTools.CovertToAliasString(method.ReturnType) +" "+method.Name  +"("+parameterString+") {");
 
                         if (method.ReturnType == typeof(string))
                         {
@@ -270,11 +270,11 @@ namespace DevionGames
                         {
                             outfile.WriteLine("\t\treturn null;");
                         }
-                        else if (UnityUtility.IsInteger(method.ReturnType))
+                        else if (UnityTools.IsInteger(method.ReturnType))
                         {
                             outfile.WriteLine("\t\treturn 0;");
                         }
-                        else if (UnityUtility.IsFloat(method.ReturnType))
+                        else if (UnityTools.IsFloat(method.ReturnType))
                         {
                             outfile.WriteLine("\t\treturn 0.0f;");
                         }else if (method.ReturnType.IsEnum) {
@@ -297,8 +297,14 @@ namespace DevionGames
         {
              string scriptName = EditorPrefs.GetString("NewScriptToCreate");
              int windowID = EditorPrefs.GetInt("AssetWindowID");
+            if (string.IsNullOrEmpty(scriptName))
+            {
+                EditorPrefs.DeleteKey("NewScriptToCreate");
+                EditorPrefs.DeleteKey("AssetWindowID");
+                return;
+            }
 
-             Type type = TypeUtility.GetType(scriptName);
+            Type type = Utility.GetType(scriptName);
              if (!EditorApplication.isPlayingOrWillChangePlaymode && !string.IsNullOrEmpty(scriptName) && type != null)
              {
                 AssetWindow[] windows = Resources.FindObjectsOfTypeAll<AssetWindow>();

@@ -6,7 +6,7 @@ namespace DevionGames.InventorySystem
 {
     public class Trigger2D : Trigger
     {
-        public override bool CanUse(GameObject player)
+        public override bool CanUse()
         {
             //Return false if the trigger is already used
             if (InUse || (Trigger.currentUsedTrigger != null && Trigger.currentUsedTrigger.InUse))
@@ -21,25 +21,6 @@ namespace DevionGames.InventorySystem
                 InventoryManager.Notifications.toFarAway.Show();
                 return false;
             }
-
-          /*  Vector3 targetPosition = InventoryManager.current.GetBounds(gameObject).center;//transform.position;
-            Vector3 playerPosition = InventoryManager.current.PlayerInfo.transform.position;
-            Bounds bounds = InventoryManager.current.PlayerInfo.bounds;
-            playerPosition.y += bounds.center.y + bounds.extents.y;
-            Vector3 direction = targetPosition - playerPosition;
-
-            InventoryManager.current.PlayerInfo.collider2D.enabled = false;
-            RaycastHit hit;
-
-            bool raycast = Physics.Raycast(playerPosition, direction, out hit);
-            InventoryManager.current.PlayerInfo.collider2D.enabled = true;
-            if (raycast && hit.transform != transform && gameObject != InventoryManager.current.PlayerInfo.gameObject)
-            {
-                if (InventoryManager.DefaultSettings.debugMessages)
-                    Debug.Log("Can't use Trigger: " + transform.name + ". Raycast failed hit: " + hit.transform.name);
-                return false;
-            }*/
-            //Trigger can be used
             return true;
         }
 

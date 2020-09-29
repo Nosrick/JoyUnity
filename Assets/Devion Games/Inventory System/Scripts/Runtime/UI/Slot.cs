@@ -88,7 +88,7 @@ namespace DevionGames.InventorySystem
         {
             if (this.m_ItemName != null){
                 //Updates the text with item name and rarity color. If this slot is empty, sets the text to empty.
-                this.m_ItemName.text = (!IsEmpty ? UnityUtility.ColorString(ObservedItem.Name, ObservedItem.Rarity.Color) : string.Empty);
+                this.m_ItemName.text = (!IsEmpty ? UnityTools.ColorString(ObservedItem.Name, ObservedItem.Rarity.Color) : string.Empty);
             }
 
             if (this.m_Ícon != null){
@@ -120,7 +120,7 @@ namespace DevionGames.InventorySystem
             if (CanUse())
             {
                 //Check if there is an override item behavior on trigger.
-                if (Trigger.currentUsedTrigger != null && Trigger.currentUsedTrigger.OverrideItemUse(this, ObservedItem))
+                if ((Trigger.currentUsedTrigger as Trigger) != null && (Trigger.currentUsedTrigger as Trigger).OverrideUse(this, ObservedItem))
                 {
                     return;
                 }

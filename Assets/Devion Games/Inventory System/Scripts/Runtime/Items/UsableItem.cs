@@ -19,8 +19,8 @@ namespace DevionGames.InventorySystem
             }
         }
 
-        [SerializeField]
-        public List<ItemAction> actions = new List<ItemAction>();
+        [SerializeReference]
+        public List<Action> actions = new List<Action>();
 
         private Sequence m_ActionSequence;
         private IEnumerator m_ActionBehavior;
@@ -28,21 +28,27 @@ namespace DevionGames.InventorySystem
         protected override void OnEnable()
         {
             base.OnEnable();
-            actions.RemoveAll(x => x == null);
+           
             for (int i = 0; i < actions.Count; i++) {
-                ItemAction action = actions[i];
-                action.item = this;
+                if (actions[i] is ItemAction)
+                {
+                    ItemAction action = actions[i] as ItemAction;
+                    action.item = this;
+                }
             }
-            this.m_ActionSequence = new Sequence(actions.Cast<IAction>().ToArray());
+           
         }
 
         public override void Use()
         {
+            if(this.m_ActionSequence == null)
+                this.m_ActionSequence = new Sequence(InventoryManager.current.PlayerInfo.gameObject, InventoryManager.current.PlayerInfo, actions.Cast<IAction>().ToArray());
+
             if (this.m_ActionBehavior != null) {
-                CoroutineUtility.StopCoroutine(m_ActionBehavior);
+                UnityTools.StopCoroutine(m_ActionBehavior);
             }
             this.m_ActionBehavior = SequenceCoroutine();
-            CoroutineUtility.StartCoroutine(this.m_ActionBehavior);
+            UnityTools.StartCoroutine(this.m_ActionBehavior);
         }
 
         private IEnumerator SequenceCoroutine() {

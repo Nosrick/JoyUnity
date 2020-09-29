@@ -10,7 +10,7 @@ namespace DevionGames
 	public class ObjectProperty : INameable
 	{
 		[SerializeField]
-		private string name;
+		private string name= string.Empty;
 
 		public string Name {
 			get{ return this.name; }

@@ -100,9 +100,6 @@ namespace DevionGames.InventorySystem
                 //Calean prefab, not the best way, but keeps the project clean from duplicate prefabs.
                 Trigger trigger = gameObject.GetComponent<Trigger>();
                 if (trigger != null) {
-                    for (int i = 0; i < trigger.actions.Count; i++) {
-                        Destroy(trigger.actions[i]);
-                    }
                     Destroy(trigger);
                 }
                 IGenerator[] generators = gameObject.GetComponents<IGenerator>();

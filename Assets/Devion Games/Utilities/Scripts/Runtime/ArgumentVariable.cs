@@ -29,6 +29,7 @@ namespace DevionGames
 
         public ArgumentType ArgumentType {
             get { return this.m_ArgumentType; }
+            set { this.m_ArgumentType = value; }
         }
 
         public bool IsNone {

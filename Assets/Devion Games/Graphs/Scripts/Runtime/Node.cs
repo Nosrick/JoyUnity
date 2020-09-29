@@ -7,8 +7,10 @@ namespace DevionGames.Graphs
     [System.Serializable]
     public abstract class Node
     {
+        [HideInInspector]
         public string id;
         public string name;
+        [HideInInspector]
         public Vector2 position;
         [System.NonSerialized]
         public Graph graph;

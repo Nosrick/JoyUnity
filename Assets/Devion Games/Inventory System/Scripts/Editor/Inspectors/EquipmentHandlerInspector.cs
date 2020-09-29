@@ -80,7 +80,7 @@ namespace DevionGames.InventorySystem
             EditorGUILayout.PropertyField(this.m_WindowName);
             serializedObject.ApplyModifiedProperties();
 
-            if (UnityEditorUtility.RightArrowButton(new GUIContent("Bones"), GUILayout.Height(24f)))
+            if (EditorTools.RightArrowButton(new GUIContent("Bones"), GUILayout.Height(24f)))
             {
 
                 if (InventorySystemEditor.Database == null){
@@ -91,7 +91,7 @@ namespace DevionGames.InventorySystem
                 }
             }
 
-            if (UnityEditorUtility.RightArrowButton(new GUIContent("Items"), GUILayout.Height(24f)))
+            if (EditorTools.RightArrowButton(new GUIContent("Items"), GUILayout.Height(24f)))
             {
                 VisibleItemsEditor.ShowWindow("Items", serializedObject.FindProperty("m_VisibleItems"));
             }
@@ -119,10 +119,11 @@ namespace DevionGames.InventorySystem
                 {
                     bones.RemoveAll(x => x.region == secondNotFirst[i]);
                 }
-                EditorUtility.SetDirty(target);
-                PrefabUtility.RecordPrefabInstancePropertyModifications(target);
+             
+
                 SerializedProperty property = serializedObject.FindProperty("m_Bones");
                 serializedObject.Update();
+                EditorGUI.BeginChangeCheck();
                 for (int i = 0; i < property.arraySize; i++)
                 {
                     EditorGUILayout.BeginHorizontal();
@@ -131,8 +132,12 @@ namespace DevionGames.InventorySystem
                     EditorGUILayout.PropertyField(element.FindPropertyRelative("bone"), GUIContent.none);
                     EditorGUILayout.EndHorizontal();
                 }
-                serializedObject.ApplyModifiedProperties();
-                PrefabUtility.RecordPrefabInstancePropertyModifications(target);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    serializedObject.ApplyModifiedProperties();
+                    EditorUtility.SetDirty(target);
+                    PrefabUtility.RecordPrefabInstancePropertyModifications(target);
+                }
             });
         }
 

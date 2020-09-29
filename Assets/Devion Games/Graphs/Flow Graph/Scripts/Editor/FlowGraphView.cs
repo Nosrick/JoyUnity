@@ -138,7 +138,7 @@ namespace DevionGames.Graphs
 
         private void DrawNodeHeader(Rect rect, FlowNode node, bool selected)
         {
-            NodeStyleAttribute nodeStyle = node.GetType().GetAttribute<NodeStyleAttribute>();
+            NodeStyleAttribute nodeStyle = node.GetType().GetCustomAttribute<NodeStyleAttribute>();
             if (nodeStyle == null) { nodeStyle = new NodeStyleAttribute(true); }
             if (!nodeStyle.displayHeader){return;}
 
@@ -197,7 +197,7 @@ namespace DevionGames.Graphs
                     }
                 }
 
-                NodeStyleAttribute nodeStyle = node.GetType().GetAttribute<NodeStyleAttribute>();
+                NodeStyleAttribute nodeStyle = node.GetType().GetCustomAttribute<NodeStyleAttribute>();
                 if (nodeStyle == null) { nodeStyle = new NodeStyleAttribute(true); }
                 Texture2D icon = Resources.Load<Texture2D>(nodeStyle.iconPath);
                 if (!nodeStyle.displayHeader && icon != null)
@@ -247,7 +247,7 @@ namespace DevionGames.Graphs
             }
             else
             {
-                NodeStyleAttribute nodeStyle = port.node.GetType().GetAttribute<NodeStyleAttribute>();
+                NodeStyleAttribute nodeStyle = port.node.GetType().GetCustomAttribute<NodeStyleAttribute>();
                 int height = (nodeStyle != null && !nodeStyle.displayHeader) ? NODE_LINE_HEIGHT : NODE_HEADER_HEIGHT;
 
                 Vector2 outputPosition = new Vector2(rect.x + rect.width + NODE_PORT_OFFSET - NODE_PORT_SIZE, rect.y - NODE_PORT_SIZE * 0.5f) + new Vector2(0f, height * 0.5f);
@@ -258,7 +258,7 @@ namespace DevionGames.Graphs
 
 
         private Rect GetHeaderRect(FlowNode node, Vector2 offset) {
-            NodeStyleAttribute nodeStyle = node.GetType().GetAttribute<NodeStyleAttribute>();
+            NodeStyleAttribute nodeStyle = node.GetType().GetCustomAttribute<NodeStyleAttribute>();
             if (nodeStyle == null) { nodeStyle = new NodeStyleAttribute(true); }
             Texture2D icon = Resources.Load<Texture2D>(nodeStyle.iconPath);
 
@@ -329,7 +329,7 @@ namespace DevionGames.Graphs
 
         protected override Rect GetNodeRect(FlowNode node, Vector2 offset)
         {
-            NodeStyleAttribute nodeStyle = node.GetType().GetAttribute<NodeStyleAttribute>();
+            NodeStyleAttribute nodeStyle = node.GetType().GetCustomAttribute<NodeStyleAttribute>();
             if (nodeStyle == null) { nodeStyle = new NodeStyleAttribute(true); }
             Texture2D icon = Resources.Load<Texture2D>(nodeStyle.iconPath);
 

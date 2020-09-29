@@ -82,7 +82,7 @@ namespace DevionGames.InventorySystem
             base.Start();
             this.m_ParentScrollRect = GetComponentInParent<ScrollRect>();
             if (this.m_Key != null){
-                this.m_Key.text = UnityUtility.KeyToCaption(this.m_UseKey);
+                this.m_Key.text = UnityTools.KeyToCaption(this.m_UseKey);
             }
         }
 
@@ -150,7 +150,7 @@ namespace DevionGames.InventorySystem
             }
             if (InventoryManager.UI.tooltip != null && ObservedItem != null)
             {
-                InventoryManager.UI.tooltip.Show(UnityUtility.ColorString(ObservedItem.Name, ObservedItem.Rarity.Color), ObservedItem.Description, ObservedItem.Icon, ObservedItem.GetPropertyInfo());
+                InventoryManager.UI.tooltip.Show(UnityTools.ColorString(ObservedItem.Name, ObservedItem.Rarity.Color), ObservedItem.Description, ObservedItem.Icon, ObservedItem.GetPropertyInfo());
             }
         }
 
@@ -274,7 +274,7 @@ namespace DevionGames.InventorySystem
         public virtual void OnEndDrag(PointerEventData eventData)
         {
             RaycastHit hit;
-            if (!UIUtility.IsPointerOverUI() && Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
+            if (!UnityTools.IsPointerOverUI() && Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
             {
                 if (Container.CanDropItems)
                 {
@@ -324,7 +324,7 @@ namespace DevionGames.InventorySystem
                 }
 
                 //Cast a ray from mouse postion to ground
-                if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit) && !UIUtility.IsPointerOverUI())
+                if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit) && !UnityTools.IsPointerOverUI())
                 {
                     //Clamp the drop distance to max drop distance defined in setting.
                     Vector3 worldPos = hit.point;
@@ -346,6 +346,7 @@ namespace DevionGames.InventorySystem
 
                 //Instantiate the prefab at position
                 GameObject go = InventoryManager.Instantiate(prefab, position + Vector3.up * 0.3f, Quaternion.identity);
+                go.name = go.name.Replace("(Clone)","");
                 //Reset the item collection of the prefab with this item
                 ItemCollection collection = go.GetComponent<ItemCollection>();
                 if (collection != null)
@@ -408,7 +409,7 @@ namespace DevionGames.InventorySystem
             if (CanUse())
             {
                 //Check if there is an override item behavior on trigger.
-                if (Trigger.currentUsedTrigger != null && Trigger.currentUsedTrigger.OverrideItemUse(this, ObservedItem))
+                if ((Trigger.currentUsedTrigger as Trigger) != null && (Trigger.currentUsedTrigger as Trigger).OverrideUse(this, ObservedItem))
                 {
                     return;
                 }

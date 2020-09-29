@@ -2,7 +2,7 @@
     "name": "Inventory System",
     "id": "com.deviongames.inventory",
         "assetPath":"Assets/Devion Games/Inventory System",
-    "version": "2.0.7",
+    "version": "2.0.8",
     "unityVersion": "2019.4.10",
     "assetStore": "",
     "downloadPath": "https://deviongames.com/modules/InventorySystem.unitypackage",
@@ -13,7 +13,8 @@
     "dependencies": 
     [
         "com.deviongames.utilities",
-        "com.deviongames.ui"
+        "com.deviongames.ui",
+        "com.deviongames.triggers"
     ],
     "changelogs": 
     [
@@ -244,6 +245,25 @@
                 "Min. Required Unity Version 2019.4.10",
                 "Sounds(Footsteps, Swimming, Arrow...)",
                 "Fixed Pickup items"
+            ]
+        },
+        {
+            "version": "2.0.8",
+            "changes": 
+            [
+                "This version has been havily refactored, please make a backup of your project! I recommend to delete the Devion Games folder and reimport all packages. If you read this after updating and you get errors, please remove the whole Devion Games folder and reimport it.",
+                "Combined TriggerActions and ItemActions",
+                "TriggerAction and ItemAction extend not longer from MonoBehavior/ScriptableObject but from simple class Action. This requires you to redo your item and trigger behaviors! To keep your database working, please remove all item actions and trigger actions from database, prefabs and scene game objects and redo them after update.",
+                "Improved Action appearence",
+                "Splitted Trigger component into BaseTrigger > BehaviorTrigger > Trigger...",
+                "Removed Display Cursor option from Trigger  and added DisplayTrigger as an optional component",
+                "Added Display Name as an optional component: This will display Game Objects name.",
+                "Removed (Clone) suffix when item prefabs are instantiated.",
+                "ItemContainer.GetItems<T>() except a bool for inherited items -> items that inherit from T will be included if inherit is set to true",
+                "Seperated UI into 2 child canvases: General, Main",
+                "Fixed RemoveItem with Dynamic Container option was not removing slot",
+                "Fixed WidgetInputHandler when switching scenes",
+                "Added minimalistic example scene Clean with just the inventory"
             ]
         }
     ]

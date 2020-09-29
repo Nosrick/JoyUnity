@@ -15,40 +15,59 @@ namespace DevionGames.InventorySystem
     [CustomEditor(typeof(UsableItem), true)]
     public class UsableItemInspector : ItemInspector
     {
-        private List<Editor> m_Editors = new List<Editor>();
-        private SerializedProperty m_Actions;
         private SerializedProperty m_UseCategoryCooldown;
         private SerializedProperty m_Cooldown;
         protected AnimBool m_ShowCategoryCooldownOptions;
 
-        private static ItemAction m_CopyItemAction;
+        private GameObject m_GameObject;
+        private int m_ComponentInstanceID;
+        private UnityEngine.Object m_Target;
+        private IList m_List;
+        private string m_FieldName;
+        private string m_ElementTypeName;
+        private Type m_ElementType;
+        private static object m_ObjectToCopy;
+
+        private SerializedProperty m_Actions;
 
         protected override void OnEnable()
         {
             base.OnEnable();
-            if (target == null) {
-                return;
-            }
-            this.m_Actions = serializedObject.FindProperty("actions");
-            for (int i = this.m_Editors.Count - 1; i >= 0; i--)
-            {
-                DestroyImmediate(this.m_Editors[i]);
-            }
-            this.m_Editors.Clear();
-            for (int i = 0; i < this.m_Actions.arraySize; i++)
-            {
-                Editor editor = Editor.CreateEditor(this.m_Actions.GetArrayElementAtIndex(i).objectReferenceValue);
-               m_Editors.Add(editor);
-            }
-            ArrayUtility.Add(ref this.m_PropertiesToExcludeForChildClasses, this.m_Actions.propertyPath);
+
+            ArrayUtility.Add(ref this.m_PropertiesToExcludeForChildClasses, serializedObject.FindProperty("actions").propertyPath);
             this.m_UseCategoryCooldown = serializedObject.FindProperty("m_UseCategoryCooldown");
             this.m_Cooldown = serializedObject.FindProperty("m_Cooldown");
             this.m_ShowCategoryCooldownOptions = new AnimBool(!this.m_UseCategoryCooldown.boolValue);
-            if (InventorySystemEditor.instance != null)
+
+            this.m_ShowCategoryCooldownOptions.valueChanged.AddListener(new UnityAction(this.Repaint));
+            
+            this.m_Target = target;
+            this.m_List = (target as UsableItem).actions;
+            this.m_ElementType = Utility.GetElementType(this.m_List.GetType());
+            this.m_ElementTypeName = this.m_ElementType.FullName;
+            FieldInfo[] fields = this.m_Target.GetType().GetSerializedFields();
+            for (int i = 0; i < fields.Length; i++)
             {
-                this.m_ShowCategoryCooldownOptions.valueChanged.AddListener(new UnityAction(InventorySystemEditor.instance.Repaint));
+                object temp = fields[i].GetValue(this.m_Target);
+                if (temp == this.m_List)
+                    this.m_FieldName = fields[i].Name;
             }
+            m_Actions = serializedObject.FindProperty("actions");
+
+
+            AssemblyReloadEvents.beforeAssemblyReload += OnBeforeAssemblyReload;
+            AssemblyReloadEvents.afterAssemblyReload += OnAfterAssemblyReload;
+            EditorApplication.playModeStateChanged += OnPlaymodeStateChange;
+
         }
+
+        protected override void OnDisable() {
+            AssemblyReloadEvents.beforeAssemblyReload -= OnBeforeAssemblyReload;
+            AssemblyReloadEvents.afterAssemblyReload -= OnAfterAssemblyReload;
+            EditorApplication.playModeStateChanged -= OnPlaymodeStateChange;
+        }
+
+
 
         public override void OnInspectorGUI()
         {
@@ -77,269 +96,230 @@ namespace DevionGames.InventorySystem
             EditorGUILayout.EndFadeGroup();
         }
 
+
         private void ActionGUI() {
+           
             GUILayout.Space(10f);
-            UsableItem item = (UsableItem)target;
-            if (this.m_Actions.arraySize > 0)
-                GUILayout.Label("Use Actions:", EditorStyles.boldLabel);
 
-            for (int i = 0; i < item.actions.Count; i++)
+            for (int i = 0; i < this.m_List.Count; i++)
             {
-                ItemAction target = item.actions[i];
-                Editor editor = this.m_Editors[i];
+                object value = this.m_List[i];
+                EditorGUI.BeginChangeCheck();
+                if (this.m_Target != null)
+                    Undo.RecordObject(this.m_Target, "Inspector");
 
-                if (UnityEditorUtility.Titlebar(target, GetContextMenu(item, target)))
+
+                if (EditorTools.Titlebar(value, ElementContextMenu(this.m_List, i)))
                 {
                     EditorGUI.indentLevel += 1;
-                    editor.OnInspectorGUI();
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Script", EditorTools.FindMonoScript(value.GetType()), typeof(MonoScript), true);
+                    EditorGUI.EndDisabledGroup();
+                    SerializedProperty element = this.m_Actions.GetArrayElementAtIndex(i);
+                    if (HasCustomPropertyDrawer(value.GetType()))
+                    {
+                        EditorGUILayout.PropertyField(element, true);
+                    }
+                    else
+                    {
+                         while (element.NextVisible(true))
+                         {
+                             if (element.propertyPath.Contains("actions.Array.data[" + i + "]") && !element.propertyPath.Replace("actions.Array.data[" + i + "].", "").Contains(".") )
+                             {
+
+                                if (this.m_List[i].GetType().GetSerializedField(element.propertyPath.Split('.').Last()).FieldType == typeof(TargetType))
+                                {
+                                    element.enumValueIndex = 1;
+                                    EditorGUI.BeginDisabledGroup(true);
+                                    EditorGUILayout.PropertyField(element, true);
+                                    EditorGUI.EndDisabledGroup();
+                                }
+                                else
+                                {
+
+                                    EditorGUILayout.PropertyField(element, true);
+                                }
+                             }
+                         }
+                    }
+
                     EditorGUI.indentLevel -= 1;
                 }
+                if (EditorGUI.EndChangeCheck())
+                    EditorUtility.SetDirty(this.m_Target);
             }
+            GUILayout.FlexibleSpace();
+            DoAddButton();
+            GUILayout.Space(10f);
 
-            GUIStyle buttonStyle = new GUIStyle("AC Button");
-            Rect buttonRect = GUILayoutUtility.GetRect(new GUIContent("Add Behavior"), buttonStyle, GUILayout.ExpandWidth(true));
-            buttonRect.x = buttonRect.width * 0.5f - buttonStyle.fixedWidth * 0.5f;
-            buttonRect.width = buttonStyle.fixedWidth;
-            if (GUI.Button(buttonRect, "Add Action", buttonStyle))
-            {
-                AddAssetWindow.ShowWindow(buttonRect, typeof(ItemAction), AddAsset, CreateScript);
-            }
         }
 
-        private void AddAsset(Type type)
+        private bool HasCustomPropertyDrawer(Type type) {
+            foreach (Type typesDerivedFrom in TypeCache.GetTypesDerivedFrom<GUIDrawer>())
+            {
+                object[] customAttributes = typesDerivedFrom.GetCustomAttributes<CustomPropertyDrawer>();
+                for (int i = 0; i < (int)customAttributes.Length; i++)
+                {
+                    CustomPropertyDrawer customPropertyDrawer = (CustomPropertyDrawer)customAttributes[i];
+                    FieldInfo field=customPropertyDrawer.GetType().GetField("m_Type",BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                    Type type1 =(Type) field.GetValue(customPropertyDrawer);
+                    if (type == type1)
+                        return true;
+                }
+            }
+                    
+            return false;
+        }
+
+        private void Add(Type type)
         {
-            ItemAction action = (ItemAction)ScriptableObject.CreateInstance(type);
-            action.hideFlags = HideFlags.HideInHierarchy;
-            AssetDatabase.AddObjectToAsset(action, target);
-            AssetDatabase.SaveAssets();
-
-            Editor editor = Editor.CreateEditor(action);
-            this.m_Editors.Add(editor);
-
+            object value = System.Activator.CreateInstance(type);
             serializedObject.Update();
             this.m_Actions.arraySize++;
-            this.m_Actions.GetArrayElementAtIndex(this.m_Actions.arraySize - 1).objectReferenceValue = action;
+            this.m_Actions.GetArrayElementAtIndex(this.m_Actions.arraySize - 1).managedReferenceValue = value;
             serializedObject.ApplyModifiedProperties();
-
         }
 
         private void CreateScript(string scriptName)
         {
-            scriptName = scriptName.Replace(" ", "_");
-            scriptName = scriptName.Replace("-", "_");
-            string path = "Assets/" + scriptName + ".cs";
-            Type elementType = typeof(ItemAction);
-            if (File.Exists(path) == false)
-            {
-                using (StreamWriter outfile = new StreamWriter(path))
-                {
-                    MethodInfo[] methods = elementType.GetAllMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-                    methods = methods.Where(x => x.IsAbstract).ToArray();
-
-                    outfile.WriteLine("using UnityEngine;");
-                    outfile.WriteLine("using System.Collections;");
-                    outfile.WriteLine("");
-
-                    outfile.WriteLine("namespace " + elementType.Namespace + "{");
-
-                    if (!typeof(Component).IsAssignableFrom(elementType))
-                    {
-                        outfile.WriteLine("\t[System.Serializable]");
-                    }
-                    outfile.WriteLine("\tpublic class " + scriptName + " : " + elementType.Name + "{");
-                    for (int i = 0; i < methods.Length; i++)
-                    {
-                        MethodInfo method = methods[i];
-                        ParameterInfo[] parameters = method.GetParameters();
-                        string parameterString = string.Empty;
-                        for (int j = 0; j < parameters.Length; j++)
-                        {
-                            string typeName = parameters[j].ParameterType.Name;
-                            string parameterName = string.Empty;
-                            if (Char.IsLower(typeName, 0))
-                            {
-                                parameterName = "_" + typeName;
-                            }
-                            else
-                            {
-                                parameterName = char.ToLowerInvariant(typeName[0]) + typeName.Substring(1);
-                            }
-                            parameterString += ", " + typeName + " " + parameterName;
-                        }
-
-                        if (!string.IsNullOrEmpty(parameterString))
-                        {
-                            parameterString = parameterString.Substring(1);
-                        }
-
-                        outfile.WriteLine("\t\t" + (method.IsPublic ? "public" : "protected") + " override " + UnityEditorUtility.CovertToAliasString(method.ReturnType) + " " + method.Name + "(" + parameterString + ") {");
-
-                        if (method.ReturnType == typeof(string))
-                        {
-                            outfile.WriteLine("\t\t\treturn string.Empty;");
-                        }
-                        else if (method.ReturnType == typeof(bool))
-                        {
-                            outfile.WriteLine("\t\t\treturn true;");
-                        }
-                        else if (method.ReturnType == typeof(Vector2))
-                        {
-                            outfile.WriteLine("\t\t\treturn Vector2.zero;");
-                        }
-                        else if (method.ReturnType == typeof(Vector3))
-                        {
-                            outfile.WriteLine("\t\t\treturn Vector3.zero;");
-                        }
-                        else if (!method.ReturnType.IsValueType || method.ReturnType.IsGenericType && method.ReturnType.GetGenericTypeDefinition() == typeof(Nullable<>))
-                        {
-                            outfile.WriteLine("\t\t\treturn null;");
-                        }
-                        else if (UnityUtility.IsInteger(method.ReturnType))
-                        {
-                            outfile.WriteLine("\t\t\treturn 0;");
-                        }
-                        else if (UnityUtility.IsFloat(method.ReturnType))
-                        {
-                            outfile.WriteLine("\t\t\treturn 0.0f;");
-                        }
-                        else if (method.ReturnType.IsEnum)
-                        {
-                            outfile.WriteLine("\t\t\treturn " + method.ReturnType.Name + "." + Enum.GetNames(method.ReturnType)[0] + ";");
-                        }
-
-                        outfile.WriteLine("\t\t}");
-                        outfile.WriteLine("");
-                    }
-                    outfile.WriteLine("\t}");
-                    outfile.WriteLine("}");
-                }
-            }
-            AssetDatabase.Refresh();
-            EditorPrefs.SetString("NewScriptToCreate", scriptName);
-            EditorPrefs.SetInt("AssetWindowID", GetInstanceID());
+          
         }
 
-        [UnityEditor.Callbacks.DidReloadScripts]
-        private static void OnScriptsReloaded()
+        private void DoAddButton()
         {
-            string scriptName = EditorPrefs.GetString("NewScriptToCreate");
-            int windowID = EditorPrefs.GetInt("AssetWindowID");
-
-            Type type = TypeUtility.GetType(scriptName);
-            if (!EditorApplication.isPlayingOrWillChangePlaymode && !string.IsNullOrEmpty(scriptName) && type != null)
+            GUIStyle buttonStyle = new GUIStyle("AC Button");
+            GUIContent buttonContent = new GUIContent("Add " + this.m_ElementType.Name);
+            Rect buttonRect = GUILayoutUtility.GetRect(buttonContent, buttonStyle, GUILayout.ExpandWidth(true));
+            buttonRect.x = buttonRect.width * 0.5f - buttonStyle.fixedWidth * 0.5f;
+            buttonRect.width = buttonStyle.fixedWidth;
+            if (GUI.Button(buttonRect, buttonContent, buttonStyle))
             {
-                UsableItemInspector[] windows = Resources.FindObjectsOfTypeAll<UsableItemInspector>();
-                UsableItemInspector window = windows.Where(x => x.GetInstanceID() == windowID).FirstOrDefault();
-                if (window != null)
-                {
-                    window.AddAsset(type);
-                }
-
+                AddObjectWindow.ShowWindow(buttonRect, this.m_ElementType, Add, CreateScript);
             }
-            EditorPrefs.DeleteKey("NewScriptToCreate");
-            EditorPrefs.DeleteKey("AssetWindowID");
         }
 
-        private GenericMenu GetContextMenu(UsableItem item, ItemAction target)
+        private void OnPlaymodeStateChange(PlayModeStateChange stateChange)
         {
-            
+            Reload();
+        }
+
+        public void OnBeforeAssemblyReload()
+        {
+            /*this.m_ElementTypeName = this.m_ElementType.Name;
+            FieldInfo[] fields = this.m_Target.GetType().GetSerializedFields();
+            for (int i = 0; i < fields.Length; i++)
+            {
+                object temp = fields[i].GetValue(this.m_Target);
+                if (temp == this.m_List)
+                    this.m_FieldName = fields[i].Name;
+            }*/
+            if (this.m_Target is Component)
+            {
+                this.m_GameObject = (this.m_Target as Component).gameObject;
+                this.m_ComponentInstanceID = (this.m_Target as Component).GetInstanceID();
+            }
+        }
+
+
+        public void OnAfterAssemblyReload()
+        {
+            Reload();
+        }
+
+        private GenericMenu ElementContextMenu(IList list, int index)
+        {
             GenericMenu menu = new GenericMenu();
-            int index = item.actions.IndexOf(target);
+
             menu.AddItem(new GUIContent("Reset"), false, delegate {
-                Type type = target.GetType();
-                DestroyImmediate(this.m_Editors[index]);
-                DestroyImmediate(target, true);
-
-                ItemAction action = (ItemAction)ScriptableObject.CreateInstance(type);
-                action.hideFlags = HideFlags.HideInHierarchy;
-                AssetDatabase.AddObjectToAsset(action, item);
-                AssetDatabase.SaveAssets();
-
-                Editor editor = Editor.CreateEditor(action);
-                this.m_Editors[index]=editor;
-
-
-                serializedObject.Update();
-                this.m_Actions.GetArrayElementAtIndex(index).objectReferenceValue = action;
-                serializedObject.ApplyModifiedProperties();
-
-                
+                object value = System.Activator.CreateInstance(list[index].GetType());
+                list[index] = value;
             });
-
             menu.AddSeparator(string.Empty);
-            menu.AddItem(new GUIContent("Remove"), false, delegate {
-                DestroyImmediate(this.m_Editors[index]);
-                this.m_Editors.RemoveAt(index);
-                DestroyImmediate(target, true);
-  
-                serializedObject.Update();
-                this.m_Actions.GetArrayElementAtIndex(index).objectReferenceValue = null;
-                this.m_Actions.DeleteArrayElementAtIndex(index);
-                serializedObject.ApplyModifiedProperties();
-            });
-
-            menu.AddItem(new GUIContent("Copy"), false, delegate {
-                m_CopyItemAction = target;
-            });
-
-            if (m_CopyItemAction != null && m_CopyItemAction.GetType() == target.GetType())
-            {
-                menu.AddItem(new GUIContent("Paste"), false, delegate {
-
-                   
-                });
-            }
-            else
-            {
-                menu.AddDisabledItem(new GUIContent("Paste"));
-            }
+            menu.AddItem(new GUIContent("Remove " + this.m_ElementType.Name), false, delegate { list.RemoveAt(index); });
 
             if (index > 0)
             {
-                menu.AddItem(new GUIContent("Move Up"), false, delegate
-                {
-                    Editor editor = this.m_Editors[index];
-                    this.m_Editors.RemoveAt(index);
-                    this.m_Editors.Insert(index - 1, editor);
-
-                    serializedObject.Update();
-                    this.m_Actions.MoveArrayElement(index, index - 1);
-                    serializedObject.ApplyModifiedProperties();
-                   
+                menu.AddItem(new GUIContent("Move Up"), false, delegate {
+                    object value = list[index];
+                    list.RemoveAt(index);
+                    list.Insert(index - 1, value);
                 });
             }
             else
             {
                 menu.AddDisabledItem(new GUIContent("Move Up"));
             }
-            if (index < this.m_Actions.arraySize - 1)
+
+            if (index < list.Count - 1)
             {
                 menu.AddItem(new GUIContent("Move Down"), false, delegate
                 {
-                   
-                    Editor editor = this.m_Editors[index];
-                    this.m_Editors.RemoveAt(index);
-                    this.m_Editors.Insert(index + 1, editor);
-
-                    serializedObject.Update();
-                    this.m_Actions.MoveArrayElement(index, index + 1);
-                    serializedObject.ApplyModifiedProperties();
-                   
+                    object value = list[index];
+                    list.RemoveAt(index);
+                    list.Insert(index + 1, value);
                 });
             }
             else
             {
                 menu.AddDisabledItem(new GUIContent("Move Down"));
             }
+
+            menu.AddItem(new GUIContent("Copy " + this.m_ElementType.Name), false, delegate {
+                object value = list[index];
+                m_ObjectToCopy = value;
+            });
+
+            if (m_ObjectToCopy != null)
+            {
+                menu.AddItem(new GUIContent("Paste " + this.m_ElementType.Name + " As New"), false, delegate {
+                    object instance = System.Activator.CreateInstance(m_ObjectToCopy.GetType());
+                    FieldInfo[] fields = instance.GetType().GetSerializedFields();
+                    for (int i = 0; i < fields.Length; i++)
+                    {
+                        object value = fields[i].GetValue(m_ObjectToCopy);
+                        fields[i].SetValue(instance, value);
+                    }
+                    list.Insert(index + 1, instance);
+                });
+
+                if (list[index].GetType() == m_ObjectToCopy.GetType())
+                {
+                    menu.AddItem(new GUIContent("Paste " + this.m_ElementType.Name + " Values"), false, delegate
+                    {
+                        object instance = this.m_List[index];
+                        FieldInfo[] fields = instance.GetType().GetSerializedFields();
+                        for (int i = 0; i < fields.Length; i++)
+                        {
+                            object value = fields[i].GetValue(m_ObjectToCopy);
+                            fields[i].SetValue(instance, value);
+                        }
+                    });
+                }
+                else
+                {
+                    menu.AddDisabledItem(new GUIContent("Paste " + this.m_ElementType.Name + " Values"));
+                }
+            }
+
+            MonoScript script = EditorTools.FindMonoScript(list[index].GetType());
+            if (script != null)
+            {
+                menu.AddSeparator(string.Empty);
+                menu.AddItem(new GUIContent("Edit Script"), false, delegate { AssetDatabase.OpenAsset(script); });
+            }
             return menu;
         }
 
-        private void OnDestroy()
+        private void Reload()
         {
-            for (int i = this.m_Editors.Count - 1; i >= 0; i--)
+            if (this.m_GameObject != null)
             {
-                DestroyImmediate(this.m_Editors[i]);
+                Component[] components = this.m_GameObject.GetComponents(typeof(Component));
+                this.m_Target = Array.Find(components, x => x.GetInstanceID() == this.m_ComponentInstanceID);
             }
-        }
+
+            this.m_ElementType = Utility.GetType(this.m_ElementTypeName);
+            this.m_List = this.m_Target.GetType().GetSerializedField(this.m_FieldName).GetValue(this.m_Target) as IList;
+        }   
     }
 }

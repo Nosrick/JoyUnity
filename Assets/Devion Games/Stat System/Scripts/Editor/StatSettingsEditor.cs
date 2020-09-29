@@ -61,7 +61,7 @@ namespace DevionGames.StatSystem.Configuration
 
         protected override void DoSearchGUI()
         {
-            string[] searchResult = UnityEditorUtility.SearchField(searchString, searchFilter, searchFilters, GUILayout.Width(sidebarRect.width - 20));
+            string[] searchResult = EditorTools.SearchField(searchString, searchFilter, searchFilters, GUILayout.Width(sidebarRect.width - 20));
             searchFilter = searchResult[0];
             searchString = searchResult[1];
         }

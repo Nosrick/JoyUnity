@@ -9,16 +9,17 @@ namespace DevionGames.InventorySystem.Restrictions
         [CategoryPicker(true)]
         [SerializeField]
         private DevionGames.InventorySystem.Category[] m_Categories = null;
-
+        [SerializeField]
+        private bool invert = false;
         public override bool CanAddItem(Item item)
         {
 
             for (int i = 0; i < this.m_Categories.Length; i++) {
-                if (item.Category.Name == m_Categories[i].Name) {
-                    return true;
+                if (item.Category != null && item.Category.Name == m_Categories[i].Name) {
+                    return !invert;
                 }
             }
-            return false;
+            return invert;
         }
     }
 }

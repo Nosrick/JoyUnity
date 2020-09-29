@@ -402,7 +402,7 @@ namespace DevionGames
 
         private void Awake()
         {
-			Physics.queriesHitTriggers = false;
+			//Physics.queriesHitTriggers = false;
 			if (this.m_DontDestroyOnLoad)
 			{
 				DontDestroyOnLoad(gameObject);
@@ -465,7 +465,7 @@ namespace DevionGames
 				return;
 			}
 
-			if ((Input.GetMouseButtonDown (0) || Input.GetMouseButtonDown (1)) && EventSystem.current != null && UIUtility.IsPointerOverUI ()) {
+			if ((Input.GetMouseButtonDown (0) || Input.GetMouseButtonDown (1)) && EventSystem.current != null && UnityTools.IsPointerOverUI ()) {
 				this.m_GUIClick = true;
 			}
 
@@ -714,7 +714,7 @@ namespace DevionGames
 			}
 				
 			if (Physics.SphereCast (this.m_Transform.position + this.m_Transform.up * this.m_CapsuleCollider.radius * 2f, this.m_CapsuleCollider.radius, -this.m_Transform.up, out this.m_GroundHit, this.m_CapsuleCollider.radius * 2f + this.m_SkinWidth, this.m_GroundLayer)) {
-				if (!this.m_Stepping && Physics.Raycast (this.m_Transform.position + this.m_CapsuleCollider.center, -this.m_Transform.up, out this.m_GroundHit, this.m_CapsuleCollider.height * 0.5f + this.m_SkinWidth * 0.9f, this.m_GroundLayer)) {
+				if (!this.m_Stepping && Physics.Raycast (this.m_Transform.position + this.m_CapsuleCollider.center, -this.m_Transform.up, out this.m_GroundHit, this.m_CapsuleCollider.height * 0.5f + this.m_SkinWidth * 0.9f, this.m_GroundLayer, QueryTriggerInteraction.Ignore)) {
 					this.m_Velocity = Vector3.ProjectOnPlane (this.m_Velocity, this.m_GroundHit.normal);
 				} else {
 					this.m_Velocity.y = this.m_Velocity.y - 6f * Time.fixedDeltaTime;
@@ -738,13 +738,13 @@ namespace DevionGames
 			this.m_Slope = -1f;
 			this.m_Stepping = false;
 
-			if (velocity.sqrMagnitude > 0.001f && Physics.Raycast (this.m_Transform.position + this.m_Transform.up * 0.1f, velocity.normalized, out hitInfo, this.m_CapsuleCollider.radius + 0.2f)) {
+			if (velocity.sqrMagnitude > 0.001f && Physics.Raycast (this.m_Transform.position + this.m_Transform.up * 0.1f, velocity.normalized, out hitInfo, this.m_CapsuleCollider.radius + 0.2f,this.m_GroundLayer, QueryTriggerInteraction.Ignore)) {
 				
 				float slope = Mathf.Acos (Mathf.Clamp (hitInfo.normal.y, -1f, 1f)) * Mathf.Rad2Deg;
 				if (slope > this.m_SlopeLimit) {
 					Vector3 direction = hitInfo.point - this.m_Transform.position;
 					direction.y = 0f;
-					Physics.Raycast ((hitInfo.point + (Vector3.up * this.m_StepOffset)) + (direction.normalized * 0.1f), Vector3.down, out hitInfo, this.m_StepOffset + 0.1f);
+					Physics.Raycast ((hitInfo.point + (Vector3.up * this.m_StepOffset)) + (direction.normalized * 0.1f), Vector3.down, out hitInfo, this.m_StepOffset + 0.1f,m_GroundLayer,QueryTriggerInteraction.Ignore);
 					if (Mathf.Acos (Mathf.Clamp (hitInfo.normal.y, -1f, 1f)) * Mathf.Rad2Deg > this.m_SlopeLimit) {
 						this.m_Velocity.x *= this.m_GroundDampening;
 						this.m_Velocity.z *= this.m_GroundDampening;
@@ -910,9 +910,9 @@ namespace DevionGames
 		{
 			System.Type type = original.GetType ();
 			Component copy = destination.AddComponent (type);
-			System.Reflection.FieldInfo[] fields = type.GetAllFields (System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+			System.Reflection.FieldInfo[] fields = type.GetAllSerializedFields ();
 			foreach (System.Reflection.FieldInfo field in fields) {
-				if (field.IsPrivate && field.GetCustomAttributes (typeof(SerializeField), true).Length == 0) {
+				if (field.IsPrivate && !field.HasAttribute<SerializeField> ()) {
 					continue;
 				}
 				field.SetValue (copy, field.GetValue (original));

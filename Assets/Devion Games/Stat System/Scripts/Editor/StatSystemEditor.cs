@@ -106,10 +106,10 @@ namespace DevionGames.StatSystem
 		private void SelectDatabase()
 		{
 			string searchString = "Search...";
-			StatConfigurations[] databases = UnityEditorUtility.FindAssets<StatConfigurations>();
+			StatConfigurations[] databases = EditorTools.FindAssets<StatConfigurations>();
 
 			UtilityInstanceWindow.ShowWindow("Select Stat Configurations", delegate () {
-				searchString = UnityEditorUtility.SearchField(searchString);
+				searchString = EditorTools.SearchField(searchString);
 
 				for (int i = 0; i < databases.Length; i++)
 				{
@@ -132,7 +132,7 @@ namespace DevionGames.StatSystem
 				GUI.backgroundColor = Color.green;
 				if (GUILayout.Button("Create"))
 				{
-					StatConfigurations db = AssetCreator.CreateAsset<StatConfigurations>(true);
+					StatConfigurations db = EditorTools.CreateAsset<StatConfigurations>(true);
 					if (db != null)
 					{
 						ArrayUtility.Add<StatConfigurations>(ref databases, db);

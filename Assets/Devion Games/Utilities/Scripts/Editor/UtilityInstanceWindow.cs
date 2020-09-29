@@ -9,19 +9,19 @@ namespace DevionGames{
 	/// </summary>
 	public class UtilityInstanceWindow : EditorWindow {
 		public static UtilityInstanceWindow instance;
-		private Action onClose;
-		private Action onGUI;
+		private System.Action onClose;
+		private System.Action onGUI;
 		private Vector2 scroll;
 
-		public static UtilityInstanceWindow ShowWindow(string title, Action onGUI){
+		public static UtilityInstanceWindow ShowWindow(string title, System.Action onGUI){
 			return ShowWindow (title, new Vector2 (227,200), onGUI, null);
 		}
 		
-		public static UtilityInstanceWindow ShowWindow(string title,Vector2 size, Action onGUI){
+		public static UtilityInstanceWindow ShowWindow(string title,Vector2 size, System.Action onGUI){
 			return ShowWindow (title, size, onGUI, null);
 		}
 
-		public static UtilityInstanceWindow ShowWindow(string title,Vector2 size, Action onGUI,Action onClose){
+		public static UtilityInstanceWindow ShowWindow(string title,Vector2 size, System.Action onGUI, System.Action onClose){
 			UtilityInstanceWindow window = EditorWindow.GetWindow<UtilityInstanceWindow>(true,title);
 			window.minSize = size;
 			window.onGUI = onGUI;

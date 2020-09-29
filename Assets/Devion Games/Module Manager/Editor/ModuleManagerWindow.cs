@@ -78,7 +78,9 @@ namespace DevionGames
             {
                 yield return w.SendWebRequest();
                 while (!w.isDone) { yield return null; }
+
                 ModuleItem[] items = JsonHelper.FromJson<ModuleItem>(w.downloadHandler.text);
+
                 for (int i = 0; i < items.Length; i++)
                 {
                     items[i].Initialize();

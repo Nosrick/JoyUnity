@@ -53,7 +53,7 @@ namespace DevionGames.Graphs
         public Type fieldType {
             get { 
                 if (this.m_FieldType == null) {
-                    this.m_FieldType = TypeUtility.GetType(this.m_FieldTypeName);
+                    this.m_FieldType = Utility.GetType(this.m_FieldTypeName);
                 }
                 return this.m_FieldType;
             }

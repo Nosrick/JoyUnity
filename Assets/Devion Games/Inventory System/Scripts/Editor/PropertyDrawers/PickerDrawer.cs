@@ -58,7 +58,7 @@ namespace DevionGames.InventorySystem
             {
                 if (current != null)
                 {
-                    ItemDatabase[] databases = UnityEditorUtility.FindAssets<ItemDatabase>();
+                    ItemDatabase[] databases = EditorTools.FindAssets<ItemDatabase>();
 
                     for (int i = 0; i < databases.Length; i++)
                     {
@@ -85,6 +85,7 @@ namespace DevionGames.InventorySystem
             if (typeof(IEnumerable).IsAssignableFrom(fieldType))
             {
                 int currentIndex = System.Convert.ToInt32(System.Text.RegularExpressions.Regex.Match(property.propertyPath, @"(\d+)(?!.*\d)").Value);
+
                 IEnumerable<T> array = (IEnumerable<T>)fieldInfo.GetValue(targetObject);
                 List<T> list = new List<T>(array);
                 if (list.Count - 1 < currentIndex)
@@ -166,7 +167,7 @@ namespace DevionGames.InventorySystem
 				if (GUI.Button (position, current != null ? current.Name : "Null", EditorStyles.objectField)) {
 					string searchString = "Search...";
 					UtilityInstanceWindow.ShowWindow (typeof(T).Name + " Picker ("+this.Database.name+")", delegate() {
-						searchString = UnityEditorUtility.SearchField (searchString);
+						searchString = EditorTools.SearchField (searchString);
 						for (int i = 0; i < Items.Count; i++) {
 							if (!string.IsNullOrEmpty (searchString) && !searchString.Equals ("Search...") && !Items [i].Name.ToLower ().Contains (searchString.ToLower ())) {
 								continue;

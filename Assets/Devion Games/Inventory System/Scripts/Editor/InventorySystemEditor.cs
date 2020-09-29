@@ -75,7 +75,10 @@ namespace DevionGames.InventorySystem
 
         private void Update()
         {
-			Repaint();
+			if (EditorWindow.mouseOverWindow == this)
+			{
+				Repaint();
+			}
         }
 
         private void OnDestroy()
@@ -114,29 +117,6 @@ namespace DevionGames.InventorySystem
 			if (GUILayout.Button(current != null ? current.name : "Null", EditorStyles.objectField))
 			{
 				SelectDatabase(onSelect);
-				/*string searchString = "Search...";
-				ItemDatabase[] databases = UnityEditorUtility.FindAssets<ItemDatabase>();
-
-				UtilityInstanceWindow.ShowWindow("Select Database", delegate ()
-				{
-					searchString = UnityEditorUtility.SearchField(searchString);
-
-					for (int i = 0; i < databases.Length; i++)
-					{
-						if (!string.IsNullOrEmpty(searchString) && !searchString.Equals("Search...") && !databases[i].name.Contains(searchString))
-						{
-							continue;
-						}
-						GUIStyle style = new GUIStyle("button");
-						style.wordWrap = true;
-						if (GUILayout.Button(AssetDatabase.GetAssetPath(databases[i]), style))
-						{
-							Database = databases[i];
-							onSelect.Invoke();
-							UtilityInstanceWindow.CloseWindow();
-						}
-					}
-				});*/
 			}
 		}
 
@@ -147,46 +127,15 @@ namespace DevionGames.InventorySystem
 				Show();
 				UtilityInstanceWindow.CloseWindow();
 			});
-			/*string searchString = "Search...";
-			ItemDatabase[] databases = UnityEditorUtility.FindAssets<ItemDatabase> ();
-
-			UtilityInstanceWindow.ShowWindow ("Select Database", delegate() {
-				searchString = UnityEditorUtility.SearchField (searchString);
-
-				for (int i = 0; i < databases.Length; i++) {
-					if (!string.IsNullOrEmpty (searchString) && !searchString.Equals ("Search...") && !databases [i].name.Contains (searchString)) {
-						continue;
-					}
-					GUIStyle style = new GUIStyle ("button");
-					style.wordWrap = true;
-					if (GUILayout.Button (AssetDatabase.GetAssetPath (databases [i]), style)) {
-						database = databases [i];
-						ResetChildEditors ();
-						Show ();
-						UtilityInstanceWindow.CloseWindow ();
-					}
-				}
-				GUILayout.FlexibleSpace ();
-				Color color = GUI.backgroundColor;
-				GUI.backgroundColor = Color.green;
-				if (GUILayout.Button ("Create")) {
-					ItemDatabase db = AssetCreator.CreateAsset<ItemDatabase> (true);
-					if (db != null) {
-						ArrayUtility.Add<ItemDatabase> (ref databases, db);
-					}
-				}
-				GUI.backgroundColor = color;
-			});*/
-
 		}
 
 		public static void SelectDatabase(UnityAction onSelect)
 		{
 			string searchString = "Search...";
-			ItemDatabase[] databases = UnityEditorUtility.FindAssets<ItemDatabase>();
+			ItemDatabase[] databases = EditorTools.FindAssets<ItemDatabase>();
 
 			UtilityInstanceWindow.ShowWindow("Select Database", delegate () {
-				searchString = UnityEditorUtility.SearchField(searchString);
+				searchString = EditorTools.SearchField(searchString);
 
 				for (int i = 0; i < databases.Length; i++)
 				{
@@ -207,7 +156,7 @@ namespace DevionGames.InventorySystem
 				GUI.backgroundColor = Color.green;
 				if (GUILayout.Button("Create"))
 				{
-					ItemDatabase db = AssetCreator.CreateAsset<ItemDatabase>(true);
+					ItemDatabase db = EditorTools.CreateAsset<ItemDatabase>(true);
 					if (db != null)
 					{
 						ArrayUtility.Add<ItemDatabase>(ref databases, db);

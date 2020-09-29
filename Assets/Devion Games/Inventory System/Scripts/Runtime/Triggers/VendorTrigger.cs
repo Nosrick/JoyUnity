@@ -94,7 +94,7 @@ namespace DevionGames.InventorySystem
             }
         }
 
-        public override bool OverrideItemUse(Slot slot, Item item)
+        public override bool OverrideUse(Slot slot, Item item)
         {
             if (slot.Container.CanSellItems)
             {

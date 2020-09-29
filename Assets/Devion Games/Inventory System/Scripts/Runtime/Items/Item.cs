@@ -269,7 +269,7 @@ namespace DevionGames.InventorySystem
 
 			if (property != null) {
 				object value = property.GetValue ();
-                if (UnityUtility.IsNumeric(value) && property.show)
+                if (UnityTools.IsNumeric(value) && property.show)
                 {
                     float cur = System.Convert.ToSingle(property.GetValue())*this.Rarity.Multiplier;
                     float percentage = cur * percent;
@@ -325,7 +325,7 @@ namespace DevionGames.InventorySystem
             {
                 if (property.show)
                 {
-                    propertyInfo.Add(new KeyValuePair<string, string>(UnityUtility.ColorString(property.Name,property.color),FormatPropertyValue(property)));
+                    propertyInfo.Add(new KeyValuePair<string, string>(UnityTools.ColorString(property.Name,property.color),FormatPropertyValue(property)));
                 }
             }
             return propertyInfo;
@@ -340,10 +340,10 @@ namespace DevionGames.InventorySystem
             }
             else
             {
-                propertyValue = ((UnityUtility.IsNumeric(property.GetValue()) && System.Convert.ToSingle(property.GetValue()) > 0f) ? "+" : "-");
-                propertyValue += (UnityUtility.IsNumeric(property.GetValue()) ? Mathf.Abs(System.Convert.ToSingle(property.GetValue())) : property.GetValue()).ToString();
+                propertyValue = ((UnityTools.IsNumeric(property.GetValue()) && System.Convert.ToSingle(property.GetValue()) > 0f) ? "+" : "-");
+                propertyValue += (UnityTools.IsNumeric(property.GetValue()) ? Mathf.Abs(System.Convert.ToSingle(property.GetValue())) : property.GetValue()).ToString();
             }
-            propertyValue = UnityUtility.ColorString(propertyValue, property.color);
+            propertyValue = UnityTools.ColorString(propertyValue, property.color);
             return propertyValue;
         }
 

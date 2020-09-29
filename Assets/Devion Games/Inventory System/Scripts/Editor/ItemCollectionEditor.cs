@@ -33,7 +33,7 @@ namespace DevionGames.InventorySystem
 
 		protected override void DoSearchGUI ()
 		{
-			string[] searchResult = UnityEditorUtility.SearchField (searchString, searchFilter, searchFilters);
+			string[] searchResult = EditorTools.SearchField (searchString, searchFilter, searchFilters);
 			searchFilter = searchResult [0];
 			searchString = string.IsNullOrEmpty(searchResult [1])?searchFilter:searchResult[1] ;
 		}
@@ -56,20 +56,6 @@ namespace DevionGames.InventorySystem
 			AssetDatabase.AddObjectToAsset(duplicate, target);
 			AssetDatabase.SaveAssets();
 			AssetDatabase.Refresh();
-
-			UsableItem usableItem = duplicate as UsableItem;
-			if (usableItem != null) {
-				for (int i = 0; i < usableItem.actions.Count; i++) {
-					ItemActions.ItemAction action= ScriptableObject.Instantiate(usableItem.actions[i]);
-					action.hideFlags = HideFlags.HideInHierarchy;
-					AssetDatabase.AddObjectToAsset(action, usableItem);
-					AssetDatabase.SaveAssets();
-					AssetDatabase.Refresh();
-					EditorUtility.SetDirty(usableItem);
-					usableItem.actions[i] = action;
-				}
-			}
-
 			Items.Add(duplicate);
 			selectedItem = duplicate;
 			EditorUtility.SetDirty(target);

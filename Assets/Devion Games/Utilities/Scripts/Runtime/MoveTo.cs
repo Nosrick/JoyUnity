@@ -6,7 +6,7 @@ namespace DevionGames
 {
     public class MoveTo : MonoBehaviour
     {
-        [Tag]
+
         [SerializeField]
         private string m_Tag="Player";
         [SerializeField]
