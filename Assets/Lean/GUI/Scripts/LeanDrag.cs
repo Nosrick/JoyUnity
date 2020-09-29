@@ -20,10 +20,10 @@ namespace Lean.Gui
 		public RectTransform Target { set { target = value; } get { return target; } } [SerializeField] private RectTransform target;
 
 		/// <summary>Should you be able to drag horizontally?</summary>
-		public bool Horizontal { set { horizontal = value; } get { return horizontal; } } [SerializeField] private bool horizontal = true;
+		public bool Horizontal { set { horizontal = value; } get { return horizontal; } } [SerializeField] protected bool horizontal = true;
 
 		/// <summary>Should you be able to drag vertically?</summary>
-		public bool Vertical { set { vertical = value; } get { return vertical; } } [SerializeField] private bool vertical = true;
+		public bool Vertical { set { vertical = value; } get { return vertical; } } [SerializeField] protected bool vertical = true;
 
 		/// <summary>This allows you to perform a transition when this element begins being dragged.
 		/// You can create a new transition GameObject by right clicking the transition name, and selecting <b>Create</b>.
@@ -59,7 +59,7 @@ namespace Lean.Gui
 		private Vector2 startOffset;
 
 		[System.NonSerialized]
-		private Vector2 currentPosition;
+		protected Vector2 currentPosition;
 
 		[System.NonSerialized]
 		private RectTransform cachedRectTransform;
@@ -199,7 +199,7 @@ namespace Lean.Gui
 			}
 		}
 
-		private bool MayDrag(PointerEventData eventData)
+		protected bool MayDrag(PointerEventData eventData)
 		{
 			return IsActive() && IsInteractable();// && eventData.button == PointerEventData.InputButton.Left;
 		}

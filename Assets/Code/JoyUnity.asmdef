@@ -3,7 +3,8 @@
     "references": [
         "Unity.TextMeshPro",
         "Unity.TextMeshPro.Editor",
-        "DevionGames"
+        "DevionGames",
+        "LeanGUI"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

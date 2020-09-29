@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DevionGames.InventorySystem;
 using JoyLib.Code.Entities;
+using Lean.Gui;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -63,6 +65,11 @@ namespace JoyLib.Code.Unity.GUI
                 ItemSlot slotScript = slotInstance.GetComponent<ItemSlot>();
                 slotScript.Container = m_EquipmentContainer;
             }
+
+            LeanConstrainAnchoredPosition[] constrains = this.gameObject.GetComponentsInChildren<LeanConstrainAnchoredPosition>(true);
+            GridLayoutGroup grid = this.gameObject.GetComponentInChildren<GridLayoutGroup>(true);
+            LeanConstrainAnchoredPosition constrain = constrains.First(gui => gui.name.Equals("EquipmentSlots"));
+            constrain.VerticalMax = (grid.transform.childCount * (grid.spacing.y + grid.cellSize.y)) / 2 ;
         }
     }
 }
