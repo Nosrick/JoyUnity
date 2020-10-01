@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4354684559669362448}
   - component: {fileID: -8787154815911901543}
   - component: {fileID: 5989858818690563341}
+  - component: {fileID: -3475327714081659612}
   m_Layer: 0
   m_Name: ItemInstance
   m_TagString: Untagged
@@ -163,3 +164,16 @@ MonoBehaviour:
         m_WindowName: InventoryCanvas
         m_DestroyWhenEmpty: 1
         m_Amount: -1
+--- !u!114 &-3475327714081659612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1949383421893784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b07e1223690277b41b6429079f960954, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  region: {fileID: 0}

@@ -3,11 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DevionGames.InventorySystem;
+using DevionGames.InventorySystem.Restrictions;
 using JoyLib.Code.Entities;
 using Lean.Gui;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using EquipmentRegion = DevionGames.InventorySystem.EquipmentRegion;
 
 namespace JoyLib.Code.Unity.GUI
 {
@@ -17,12 +19,12 @@ namespace JoyLib.Code.Unity.GUI
 
         private GameObject m_SlotPrefab;
         private GameObject m_Grid;
-        private ItemContainer m_EquipmentContainer;
+        private MutableItemContainer m_EquipmentContainer;
 
         public void Awake()
         {
             m_SlotPrefab = Resources.Load<GameObject>("Prefabs/GUI/Inventory/Equipment Slot");
-            m_EquipmentContainer = GameObject.Find("EquipmentCanvas").GetComponent<ItemContainer>();
+            m_EquipmentContainer = GameObject.Find("EquipmentCanvas").GetComponent<MutableItemContainer>();
             m_Grid = GameObject.Find("EquipmentSlots");
         }
 
@@ -38,14 +40,23 @@ namespace JoyLib.Code.Unity.GUI
         
         }
 
-        public void SetPlayer(Entity player)
+        public void SetPlayer(Entity player, bool clearSlots = false)
         {
             m_Player = player;
             CalculateSlots();
         }
 
-        private void CalculateSlots()
+        private void CalculateSlots(bool clearSlots = false)
         {
+            if (clearSlots)
+            {
+                m_EquipmentContainer.Slots.Clear();
+            }
+            else if (!clearSlots && m_EquipmentContainer.Slots.Count > 0)
+            {
+                return;
+            }
+            
             List<GameObject> children = new List<GameObject>();
             foreach (Transform child in m_Grid.transform)
             {
@@ -64,8 +75,15 @@ namespace JoyLib.Code.Unity.GUI
                 slotName.text = slots[i];
                 ItemSlot slotScript = slotInstance.GetComponent<ItemSlot>();
                 slotScript.Container = m_EquipmentContainer;
+                DevionGames.InventorySystem.Restrictions.EquipmentRegion region = slotInstance.GetComponent<DevionGames.InventorySystem.Restrictions.EquipmentRegion>();
+                DevionGames.InventorySystem.EquipmentRegion regionSO =
+                    ScriptableObject.CreateInstance<DevionGames.InventorySystem.EquipmentRegion>();
+                regionSO.Name = slots[i];
+                region.region = regionSO;
+                slotScript.restrictions.Add(region);
             }
 
+            m_EquipmentContainer.RefreshSlots();
             LeanConstrainAnchoredPosition[] constrains = this.gameObject.GetComponentsInChildren<LeanConstrainAnchoredPosition>(true);
             GridLayoutGroup grid = this.gameObject.GetComponentInChildren<GridLayoutGroup>(true);
             LeanConstrainAnchoredPosition constrain = constrains.First(gui => gui.name.Equals("EquipmentSlots"));

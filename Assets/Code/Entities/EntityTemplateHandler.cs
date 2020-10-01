@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using DevionGames.InventorySystem;
 using UnityEngine;
 using JoyLib.Code.Entities.AI.LOS.Providers;
 using JoyLib.Code.Scripting;
@@ -26,6 +27,8 @@ namespace JoyLib.Code.Entities
 
         private List<EntityTemplate> LoadTypes()
         {
+            InventoryManager.Database.equipments.Clear();
+            
             List<EntityTemplate> entities = new List<EntityTemplate>();
 
             GameObject gameManager = GameObject.Find("GameManager");
@@ -107,6 +110,8 @@ namespace JoyLib.Code.Entities
                                             type, 
                                             tileset, 
                                             tags.ToArray()));
+                        
+                        AddSlotsToDatabase(slots);
                     }
                 }
                 catch (Exception e)
@@ -128,6 +133,22 @@ namespace JoyLib.Code.Entities
             }
 
             return null;
+        }
+
+        protected void AddSlotsToDatabase(List<string> slots)
+        {
+            foreach (string slot in slots)
+            {
+                if (InventoryManager.Database.equipments.Any(equipmentSlot =>
+                    equipmentSlot.Name.Equals(slot, StringComparison.OrdinalIgnoreCase)))
+                {
+                    continue;
+                }
+
+                EquipmentRegion region = ScriptableObject.CreateInstance<EquipmentRegion>();
+                region.Name = slot;
+                InventoryManager.Database.equipments.Add(region);                
+            }
         }
 
         public EntityTemplate[] Templates

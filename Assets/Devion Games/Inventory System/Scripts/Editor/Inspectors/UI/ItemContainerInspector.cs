@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿
 using UnityEngine;
 using UnityEditor;
 using UnityEditorInternal;
@@ -7,8 +6,7 @@ using DevionGames.UIWidgets;
 using UnityEditor.AnimatedValues;
 using UnityEngine.Events;
 using UnityEngine.UI;
-using System.Reflection;
-using System.Linq;
+
 
 namespace DevionGames.InventorySystem
 {
@@ -91,6 +89,7 @@ namespace DevionGames.InventorySystem
             }
         }
 
+
         private void DrawInspector()
         {
             EditorGUILayout.PropertyField(this.m_UseButton);
@@ -105,7 +104,7 @@ namespace DevionGames.InventorySystem
             }
             EditorGUILayout.EndFadeGroup();
 
-            DrawClassPropertiesExcluding(this.m_PropertiesToExcludeForDefaultInspector);
+            DrawTypePropertiesExcluding(typeof(ItemContainer),this.m_PropertiesToExcludeForDefaultInspector);
 
             EditorGUILayout.PropertyField(this.m_MoveUsedItems);
             this.m_ShowMoveUsedItems.target = this.m_MoveUsedItems.boolValue;
@@ -119,6 +118,7 @@ namespace DevionGames.InventorySystem
                 GUILayout.EndHorizontal();
             }
             EditorGUILayout.EndFadeGroup();
+
         }
 
     }

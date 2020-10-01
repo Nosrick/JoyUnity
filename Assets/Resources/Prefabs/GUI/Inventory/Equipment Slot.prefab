@@ -469,6 +469,7 @@ GameObject:
   - component: {fileID: 8604156886097528882}
   - component: {fileID: 8604156886097528885}
   - component: {fileID: 8604156886097528884}
+  - component: {fileID: 5045158283623413625}
   m_Layer: 5
   m_Name: Equipment Slot
   m_TagString: Untagged
@@ -595,10 +596,24 @@ MonoBehaviour:
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 8604156885990248955}
   m_Stack: {fileID: 8604156884670249676}
-  restrictions: []
+  restrictions:
+  - {fileID: 5045158283623413625}
   m_UseKey: 324
   m_Key: {fileID: 0}
   m_CooldownOverlay: {fileID: 8604156884983650608}
   m_Description: {fileID: 0}
   m_Ingredients: {fileID: 0}
   m_BuyPrice: {fileID: 0}
+--- !u!114 &5045158283623413625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8604156886097528880}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b07e1223690277b41b6429079f960954, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  region: {fileID: 0}

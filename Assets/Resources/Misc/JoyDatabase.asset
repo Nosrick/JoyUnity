@@ -186,8 +186,23 @@ MonoBehaviour:
   - {fileID: 0}
   currencies: []
   raritys: []
-  categories: []
-  equipments: []
+  categories:
+  - {fileID: 8143064399196173701}
+  equipments:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   itemGroups: []
   settings:
   - {fileID: 6110375201548031402}
@@ -225,3 +240,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unstackEvent: 3
   unstackKeyCode: 304
+--- !u!114 &8143064399196173701
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4abab319188bac4a8515c585b13ba9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  name: Hand
+  m_Cooldown: 1

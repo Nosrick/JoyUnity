@@ -1,4 +1,5 @@
-﻿using JoyLib.Code.Entities.Abilities;
+﻿using System;
+using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Rollers;
@@ -8,6 +9,7 @@ using System.Linq;
 using System.Xml.Linq;
 using UnityEngine;
 using DevionGames.InventorySystem;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace JoyLib.Code.Entities.Items
 {
@@ -49,6 +51,7 @@ namespace JoyLib.Code.Entities.Items
         protected List<BaseItemType> LoadItems()
         {
             InventoryManager.Database.items.Clear();
+            InventoryManager.Database.equipments.Clear();
             
             List<BaseItemType> items = new List<BaseItemType>();
 
@@ -126,13 +129,34 @@ namespace JoyLib.Code.Entities.Items
                             identifiedItems[j].value, identifiedItems[j].weighting, identifiedItems[j].spriteSheet,
                             identifiedItems[j].lightLevel);
                         items.Add(baseItemType);
+                        
+                        if(baseItemType.Slots.Any(slot => slot.Equals("none", StringComparison.OrdinalIgnoreCase)))
+                        {
+                            Item itemSO = ScriptableObject.CreateInstance<Item>();
+                            itemSO.Name = baseItemType.IdentifiedName;
+                            itemSO.Icon = m_ObjectIcons.GetSprite(baseItemType.SpriteSheet, baseItemType.IdentifiedName);
+                            itemSO.Prefab = s_ItemPrefab;
 
-                        Item itemSO = ScriptableObject.CreateInstance<Item>();
-                        itemSO.Name = baseItemType.IdentifiedName;
-                        itemSO.Icon = m_ObjectIcons.GetSprite(baseItemType.SpriteSheet, baseItemType.IdentifiedName);
-                        itemSO.Prefab = s_ItemPrefab;
+                            InventoryManager.Database.items.Add(itemSO);
+                        }
+                        else
+                        {
+                            EquipmentItem itemSO = ScriptableObject.CreateInstance<EquipmentItem>();
+                            itemSO.Name = baseItemType.IdentifiedName;
+                            itemSO.Icon =
+                                m_ObjectIcons.GetSprite(baseItemType.SpriteSheet, baseItemType.IdentifiedName);
+                            itemSO.Prefab = s_ItemPrefab;
+                            List<EquipmentRegion> regions = new List<EquipmentRegion>();
+                            foreach (string slot in baseItemType.Slots)
+                            {
+                                EquipmentRegion region = ScriptableObject.CreateInstance<EquipmentRegion>();
+                                region.Name = slot;
+                                regions.Add(region);
+                            }
 
-                        InventoryManager.Database.items.Add(itemSO);
+                            itemSO.Region = regions;
+                            InventoryManager.Database.items.Add(itemSO);
+                        }
                     }
                 }
             }
