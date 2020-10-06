@@ -6969,7 +6969,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1293420869}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5bb22b138ec68f14884edf560442aaf5, type: 3}
+  m_Script: {fileID: 11500000, guid: b886057594c6471c9e3301af0910e0c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   delegates: []
@@ -6991,8 +6991,7 @@ MonoBehaviour:
   useButton: 2
   m_DynamicContainer: 0
   m_SlotParent: {fileID: 871055357}
-  m_SlotPrefab: {fileID: 7525791985769335908, guid: 45828e4d1e4be274ea39644bd0447ae2,
-    type: 3}
+  m_SlotPrefab: {fileID: 0}
   m_UseReferences: 0
   m_CanDragIn: 1
   m_CanDragOut: 1
@@ -7005,7 +7004,7 @@ MonoBehaviour:
   m_MoveUsedItem: 1
   moveItemConditions:
   - window: EquipmentCanvas
-    requiresVisibility: 1
+    requiresVisibility: 0
 --- !u!225 &1293420875
 CanvasGroup:
   m_ObjectHideFlags: 0
