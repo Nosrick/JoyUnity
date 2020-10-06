@@ -98,7 +98,8 @@ namespace JoyLib.Code.Entities.Items
                                                    name = item.Element("Name").GetAs<string>(),
                                                    data = item.Element("Data").DefaultIfEmpty(""),
                                                    frames = item.Element("Frames").DefaultIfEmpty(1),
-                                                   filename = fileName
+                                                   filename = fileName,
+                                                   position = item.Element("Position").GetAs<int>()
                                                }).ToList();
 
                     m_ObjectIcons.AddIcons(tileSet, iconData.ToArray());

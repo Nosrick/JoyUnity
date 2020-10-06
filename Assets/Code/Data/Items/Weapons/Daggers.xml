@@ -31,54 +31,43 @@
 		<Name>Weapons</Name>
 		<Icon>
 			<Name>Dagger</Name>
-			<X>0</X>
-			<Y>4</Y>
+			<Position>0</Position>
 		</Icon>
 		<Icon>
 			<Name>Dagger</Name>
-			<X>1</X>
-			<Y>4</Y>
+			<Position>1</Position>
 		</Icon>
 		<Icon>
 			<Name>Dagger</Name>
-			<X>2</X>
-			<Y>4</Y>
+			<Position>2</Position>
 		</Icon>
 		<Icon>
 			<Name>Dagger</Name>
-			<X>3</X>
-			<Y>4</Y>
+			<Position>3</Position>
 		</Icon>
 		<Icon>
 			<Name>Dagger</Name>
-			<X>4</X>
-			<Y>4</Y>
+			<Position>4</Position>
 		</Icon>
 		<Icon>
 			<Name>Dagger</Name>
-			<X>5</X>
-			<Y>4</Y>
+			<Position>5</Position>
 		</Icon>
 		<Icon>
 			<Name>Dagger</Name>
-			<X>6</X>
-			<Y>4</Y>
+			<Position>6</Position>
 		</Icon>
 		<Icon>
 			<Name>Dagger</Name>
-			<X>7</X>
-			<Y>4</Y>
-		</Icon>
-
-		<Icon>
-			<Name>Dagger</Name>
-			<X>0</X>
-			<Y>3</Y>
+			<Position>7</Position>
 		</Icon>
 		<Icon>
 			<Name>Dagger</Name>
-			<X>1</X>
-			<Y>3</Y>
+			<Position>8</Position>
+		</Icon>
+		<Icon>
+			<Name>Dagger</Name>
+			<Position>9</Position>
 		</Icon>
 	</TileSet>
 </Items>

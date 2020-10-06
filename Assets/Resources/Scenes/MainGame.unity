@@ -7001,7 +7001,7 @@ MonoBehaviour:
   m_CanUseItems: 1
   m_UseContextMenu: 0
   m_ShowTooltips: 0
-  m_MoveUsedItem: 1
+  m_MoveUsedItem: 0
   moveItemConditions:
   - window: EquipmentCanvas
     requiresVisibility: 0
@@ -9610,7 +9610,7 @@ MonoBehaviour:
   m_CanUseItems: 1
   m_UseContextMenu: 0
   m_ShowTooltips: 0
-  m_MoveUsedItem: 1
+  m_MoveUsedItem: 0
   moveItemConditions:
   - window: InventoryCanvas
     requiresVisibility: 0
