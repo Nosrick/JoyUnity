@@ -30,10 +30,6 @@ namespace JoyLib.Code.World.Generators.Interiors
                 }
 
                 List<ItemInstance> items = itemPlacer.PlaceItems(worldInstance);
-                foreach(ItemInstance item in items)
-                {
-                    worldInstance.AddObject(item);
-                }
 
                 List<Entity> entities = entityPlacer.PlaceEntities(worldInstance, entitiesToPlace);
                 foreach(Entity entity in entities)

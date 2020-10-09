@@ -1,5 +1,6 @@
 ﻿using DevionGames.InventorySystem;
 using JoyLib.Code.Entities.Items;
+using UnityEngine;
 
 namespace JoyLib.Code.Unity
 {
@@ -10,6 +11,10 @@ namespace JoyLib.Code.Unity
         public void Awake()
         {
             m_Items = this.GetComponent<ItemCollection>();
+            if (LiveItemHandler is null)
+            {
+                LiveItemHandler = GameObject.Find("GameManager").GetComponent<LiveItemHandler>();
+            }
         }
     
         public override void AttachJoyObject(JoyObject joyObject)
@@ -20,6 +25,12 @@ namespace JoyLib.Code.Unity
             {
                 m_Items.Add(itemInstance.Item);
             }
+        }
+
+        public static LiveItemHandler LiveItemHandler
+        {
+            get;
+            protected set;
         }
     }
 }

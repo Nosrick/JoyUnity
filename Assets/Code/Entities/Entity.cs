@@ -952,12 +952,6 @@ namespace JoyLib.Code.Entities
 
         public IVision VisionProvider => m_VisionProvider;
 
-        public WorldInstance MyWorld
-        {
-            get;
-            set;
-        }
-
         public JobType Job
         {
             get

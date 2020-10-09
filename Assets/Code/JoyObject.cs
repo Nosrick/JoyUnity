@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using JoyLib.Code.Collections;
 using System.Linq;
+using JoyLib.Code.World;
 using UnityEngine;
 
 [Serializable]
@@ -337,4 +338,10 @@ public class JoyObject : IComparable
     }
 
     public string[] Tags => m_Tags.ToArray();
+
+    public WorldInstance MyWorld
+    {
+        get;
+        set;
+    }
 }

@@ -206,6 +206,7 @@ namespace JoyLib.Code.Entities.Items
             }
 
             LiveItems.Add(item.GUID, item);
+            item.MyWorld.AddObject(item);
             return true;
         }
 
@@ -213,11 +214,22 @@ namespace JoyLib.Code.Entities.Items
         {
             if (LiveItems.ContainsKey(GUID))
             {
+                ItemInstance item = GetItem(GUID);
+                item.MyWorld.RemoveObject(item.WorldPosition, item);
                 LiveItems.Remove(GUID);
                 return true;
             }
 
             return false;
+        }
+
+        public ItemInstance GetItem(long GUID)
+        {
+            if (LiveItems.ContainsKey(GUID))
+            {
+                return LiveItems[GUID];
+            }
+            throw new InvalidOperationException("No item found with GUID " + GUID);
         }
 
         public List<BaseItemType> ItemDatabase

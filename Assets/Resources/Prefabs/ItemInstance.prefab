@@ -155,6 +155,7 @@ MonoBehaviour:
   key: 102
   actions:
   - id: 0
+  - id: 1
   references:
     version: 1
     00000000:
@@ -163,6 +164,13 @@ MonoBehaviour:
         m_Enabled: 1
         m_WindowName: InventoryCanvas
         m_DestroyWhenEmpty: 1
+        m_Amount: -1
+    00000001:
+      type: {class: JoyPickup, ns: JoyLib.Code.Unity, asm: JoyUnity}
+      data:
+        m_Enabled: 1
+        m_WindowName: InventoryCanvas
+        m_DestroyWhenEmpty: 0
         m_Amount: -1
 --- !u!114 &-3475327714081659612
 MonoBehaviour:

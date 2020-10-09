@@ -44,6 +44,7 @@ namespace JoyLib.Code.World.Generators.Interiors
                 }
 
                 ItemInstance item = s_ItemFactory.CreateCompletelyRandomItem();
+                item.MyWorld = worldRef;
                 s_ItemHandler.AddItem(item);
                 item.Move(point);
                 placedItems.Add(item);
