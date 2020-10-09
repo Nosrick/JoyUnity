@@ -11,13 +11,13 @@ namespace DevionGames.InventorySystem
     public class Pickup : Action
     {
         [SerializeField]
-        protected string m_WindowName = "Inventory";
+        private string m_WindowName = "Inventory";
         [SerializeField]
-        protected bool m_DestroyWhenEmpty = true;
+        private bool m_DestroyWhenEmpty = true;
         [SerializeField]
-        protected int m_Amount = -1;
+        private int m_Amount = -1;
 
-        protected ItemCollection m_ItemCollection;
+        private ItemCollection m_ItemCollection;
 
         public override void OnStart()
         {
@@ -36,7 +36,7 @@ namespace DevionGames.InventorySystem
             return PickupItems() ;
         }
 
-        protected virtual ActionStatus PickupItems()
+        protected virtual ActionStatus  PickupItems()
         {
             if (this.m_ItemCollection.Count == 0) {
                 InventoryManager.Notifications.empty.Show(gameObject.name.Replace("(Clone)", "").ToLower());

@@ -29,6 +29,9 @@ public class JoyObject : IComparable
 
     protected List<IJoyAction> m_CachedActions;
 
+    [NonSerialized]
+    protected WorldInstance m_MyWorld;
+
     protected const int FRAMES_PER_SECOND = 30;
 
     public JoyObject()
@@ -341,7 +344,7 @@ public class JoyObject : IComparable
 
     public WorldInstance MyWorld
     {
-        get;
-        set;
+        get => m_MyWorld;
+        set => m_MyWorld = value;
     }
 }

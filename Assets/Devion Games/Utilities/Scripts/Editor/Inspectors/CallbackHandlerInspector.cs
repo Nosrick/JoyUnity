@@ -13,17 +13,17 @@ using UnityEditorInternal;
 namespace DevionGames{
 	[CustomEditor(typeof(CallbackHandler), true)]
 	public class CallbackHandlerInspector : Editor {
-		protected GUIContent addButtonContent;
-		protected GUIContent[] eventCallbackTypes;
+		private GUIContent addButtonContent;
+		private GUIContent[] eventCallbackTypes;
 		protected SerializedProperty m_DelegatesProperty;
-		protected GUIContent eventCallbackName;
-		protected GUIContent iconToolbarMinus;
+		private GUIContent eventCallbackName;
+		private GUIContent iconToolbarMinus;
 
         protected SerializedProperty m_Script;
 
-        protected Dictionary<Type, string[]> m_ClassProperties;
-        protected string[] m_PropertiesToExcludeForChildClasses;
-        protected List<System.Action> m_DrawInspectors;
+        private Dictionary<Type, string[]> m_ClassProperties;
+        private string[] m_PropertiesToExcludeForChildClasses;
+        private List<System.Action> m_DrawInspectors;
 
         protected virtual void OnEnable(){
             this.m_DrawInspectors = new List<System.Action>();
@@ -32,23 +32,15 @@ namespace DevionGames{
             propertiesToExclude.Add("m_Script");
             Type[] subInspectors = Utility.BaseTypesAndSelf(GetType()).Where(x=>x.IsSubclassOf(typeof(CallbackHandlerInspector))).ToArray();
             Array.Reverse(subInspectors);
-
-
             for (int i = 0; i < subInspectors.Length; i++){
-
                 MethodInfo method = subInspectors[i].GetMethod("DrawInspector", BindingFlags.NonPublic | BindingFlags.Instance);
                 Type inspectedType = typeof(CustomEditor).GetField("m_InspectedType", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(subInspectors[i].GetCustomAttribute<CustomEditor>()) as Type;
                 FieldInfo[] fields = inspectedType.GetAllSerializedFields().Where(x => !x.HasAttribute(typeof(HideInInspector))).ToArray();
-
                 string[] classProperties = fields.Where(x => x.DeclaringType == inspectedType).Select(x => x.Name).ToArray();
-               
-
                 if (!this.m_ClassProperties.ContainsKey(inspectedType)) {
                     this.m_ClassProperties.Add(inspectedType, classProperties);
                 }
                 propertiesToExclude.AddRange(classProperties);
-
-
                 if (method != null) {
                     m_DrawInspectors.Add(delegate { method.Invoke(this, null); });
                 }else {
@@ -61,9 +53,8 @@ namespace DevionGames{
                     });
                 }
             }
-
             this.m_PropertiesToExcludeForChildClasses = propertiesToExclude.ToArray();
-           
+
             this.m_Script = base.serializedObject.FindProperty("m_Script");
             this.m_DelegatesProperty = base.serializedObject.FindProperty("delegates");
 			this.addButtonContent = new GUIContent ("Add New Callback");
@@ -93,35 +84,14 @@ namespace DevionGames{
 			serializedObject.ApplyModifiedProperties();
 		}
 
-        protected void DrawTypePropertiesExcluding(Type type, params string[] propertyToExclude)
-        {
-            string[] propertiesToDraw;
-            if (this.m_ClassProperties.TryGetValue(type, out propertiesToDraw))
-            {
-
-                for (int i = 0; i < propertiesToDraw.Length; i++)
-                {
-
-                    if (!propertyToExclude.Contains(propertiesToDraw[i]))
-                    {
-
-                        SerializedProperty property = serializedObject.FindProperty(propertiesToDraw[i]);
-                        EditorGUILayout.PropertyField(property);
-                    }
-
-                }
-            }
-        }
 
         protected void DrawClassPropertiesExcluding(params string[] propertyToExclude) {
             string[] propertiesToDraw = new string[0];
             if (this.m_ClassProperties.TryGetValue(target.GetType(), out propertiesToDraw)){
-            
-                for (int i = 0; i < propertiesToDraw.Length; i++) {
 
+                for (int i = 0; i < propertiesToDraw.Length; i++) {
                     if (!propertyToExclude.Contains(propertiesToDraw[i]))
                     {
-
                         SerializedProperty property = serializedObject.FindProperty(propertiesToDraw[i]);
                         EditorGUILayout.PropertyField(property);
                     }
