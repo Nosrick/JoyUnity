@@ -8,46 +8,6 @@ namespace JoyLib.Code.Unity
 {
     public class MutableItemContainer : ItemContainer
     {
-        public override bool CanAddItem(Item item, out Slot slot, bool createSlot = false)
-        {
-            slot = null;
-            if (item == null) { return true; }
-            List<Slot> requiredSlots = GetRequiredSlots(item);
-            if (requiredSlots.Count > 0)
-            {
-                for (int i = 0; i < requiredSlots.Count; i++)
-                {
-                    if (!(requiredSlots[i].IsEmpty && requiredSlots[i].CanAddItem(item)))
-                    {
-                        return false;
-                    }
-                }
-                slot = requiredSlots[0];
-                return true;
-            }
-            else
-            {
-                for (int i = 0; i < this.m_Slots.Count; i++)
-                {
-                    if (this.m_Slots[i].IsEmpty && this.m_Slots[i].CanAddItem(item))
-                    {
-                        slot = this.m_Slots[i];
-                        return true;
-                    }
-                }
-            }
-
-            if (this.m_DynamicContainer)
-            {
-                if (createSlot)
-                {
-                    slot = CreateSlot();
-                }
-                return true;
-            }
-            return false;
-        }
-        
         public override List<Slot> GetRequiredSlots(Item item)
         {
             List<Slot> slots = new List<Slot>();
