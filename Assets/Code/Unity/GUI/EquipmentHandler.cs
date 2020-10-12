@@ -24,7 +24,7 @@ namespace JoyLib.Code.Unity.GUI
         public void Awake()
         {
             m_SlotPrefab = Resources.Load<GameObject>("Prefabs/GUI/Inventory/Equipment Slot");
-            m_EquipmentContainer = GameObject.Find("EquipmentCanvas").GetComponent<MutableItemContainer>();
+            m_EquipmentContainer = GameObject.Find("Equipment").GetComponent<MutableItemContainer>();
             m_Grid = GameObject.Find("EquipmentSlots");
         }
 

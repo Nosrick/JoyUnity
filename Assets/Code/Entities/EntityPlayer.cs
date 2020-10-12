@@ -1,6 +1,7 @@
 ﻿using DevionGames.InventorySystem;
 using DevionGames.UIWidgets;
 using JoyLib.Code.Entities.Items;
+using JoyLib.Code.Unity;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities
@@ -14,7 +15,7 @@ namespace JoyLib.Code.Entities
         {
             if (m_Inventory is null)
             {
-                m_Inventory = WidgetUtility.Find<ItemContainer>("InventoryCanvas");
+                m_Inventory = WidgetUtility.Find<MutableItemContainer>("Inventory");
             }
         }
         

@@ -162,14 +162,14 @@ MonoBehaviour:
       type: {class: Pickup, ns: DevionGames.InventorySystem, asm: DevionGames}
       data:
         m_Enabled: 1
-        m_WindowName: InventoryCanvas
+        m_WindowName: Inventory
         m_DestroyWhenEmpty: 1
         m_Amount: -1
     00000001:
       type: {class: JoyPickup, ns: JoyLib.Code.Unity, asm: JoyUnity}
       data:
         m_Enabled: 1
-        m_WindowName: InventoryCanvas
+        m_WindowName: Inventory
         m_DestroyWhenEmpty: 0
         m_Amount: -1
 --- !u!114 &-3475327714081659612

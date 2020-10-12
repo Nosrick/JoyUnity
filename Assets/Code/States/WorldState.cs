@@ -9,9 +9,13 @@ using JoyLib.Code.Quests;
 using JoyLib.Code.States.Gameplay;
 using JoyLib.Code.World;
 using System;
+using DevionGames.InventorySystem;
+using DevionGames.UIWidgets;
+using JoyLib.Code.Unity;
 using JoyLib.Code.Unity.GUI;
 using UnityEngine;
 using TMPro;
+using EquipmentHandler = JoyLib.Code.Unity.GUI.EquipmentHandler;
 
 namespace JoyLib.Code.States
 {
@@ -44,8 +48,8 @@ namespace JoyLib.Code.States
         protected EntityRelationshipHandler m_RelationshipHandler;
 
         private const string NEEDSRECT = "NeedsRect";
-        private const string INVENTORY = "GUIInventory";
-        private const string EQUIPMENT = "GUIEquipment";
+        private const string INVENTORY = "Inventory";
+        private const string EQUIPMENT = "Equipment";
 
         public WorldState(WorldInstance overworldRef, WorldInstance activeWorldRef, GameplayFlags flagsRef) : base()
         {
@@ -87,8 +91,8 @@ namespace JoyLib.Code.States
 
             s_GUIManager.CloseAllOtherGUIs();
             s_GUIManager.OpenGUI(NEEDSRECT);
-            
-            EquipmentHandler equipmentHandler = GameObject.Find("EquipmentCanvas").GetComponent<EquipmentHandler>();
+
+            EquipmentHandler equipmentHandler = WidgetUtility.Find<MutableItemContainer>("Equipment").gameObject.GetComponent<EquipmentHandler>();
             equipmentHandler.SetPlayer(m_ActiveWorld.Player);
         }
 
