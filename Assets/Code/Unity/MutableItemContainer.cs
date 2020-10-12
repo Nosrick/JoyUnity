@@ -91,6 +91,6 @@ namespace JoyLib.Code.Unity
             return slots;
         }
 
-        public List<Slot> Slots => this.m_Slots;
+        public new List<Slot> Slots => this.m_Slots;
     }
 }
