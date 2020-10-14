@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace JoyLib.Code.Entities.Relationships
@@ -103,6 +104,20 @@ namespace JoyLib.Code.Entities.Relationships
             return 0;
         }
 
+        public int ModifyValueOfOtherParticipants(long actor, int value)
+        {
+            List<long> participantKeys = m_Values.Keys.ToList();
+            foreach (long guid in participantKeys)
+            {
+                if (guid != actor)
+                {
+                    m_Values[guid][actor] += value;
+                }
+            }
+
+            return value;
+        }
+
         public int ModifyValueOfAllParticipants(int value)
         {
             List<long> participantKeys = m_Values.Keys.ToList();
@@ -179,12 +194,8 @@ namespace JoyLib.Code.Entities.Relationships
             return 0;
         }
 
-        public virtual string Name
-        {
-            get
-            {
-                return "AbstractRelationship";
-            }
-        }
+        public virtual string Name => "AbstractRelationship";
+
+        public ReadOnlyCollection<string> Tags => m_Tags.AsReadOnly();
     }
 }

@@ -1,6 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Conversations>
-  <Line Value="Good to see you." Relationship="&gt;80" />
-  <Line Value="Hi there!" Relationship="&gt;49" />
-  <Line Value="Greetings, stranger." Relationship="&lt;50"/>
+  <Name>Greeting</Name>
+  <Line>
+    <Text>Good to see you.</Text>
+    <Condition>Relationship &gt; 80</Condition>
+    <Next>BaseTopics</Next>
+  </Line>
+  <Line>
+    <Text>Hi there!</Text>
+    <Condition>Relationship &gt; 49</Condition>
+    <Next>BaseTopics</Next>
+  </Line>
+  <Line>
+    <Text>Greetings, stranger.</Text>
+    <Condition>Relationship &lt; 50</Condition>
+    <Next>BaseTopics</Next>
+  </Line>
 </Conversations>

@@ -35,7 +35,7 @@ namespace JoyLib.Code.Conversation.Conversations
 
         bool PassesConditions(Tuple<string, int>[] values);
 
-        string Interact(Entity instigator, Entity listener);
+        ITopic[] Interact(Entity instigator, Entity listener);
     }
 
     public class TopicComparer : IComparer<ITopic>

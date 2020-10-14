@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace JoyLib.Code.Entities.Relationships
 {
@@ -19,6 +20,8 @@ namespace JoyLib.Code.Entities.Relationships
 
         int ModifyValueOfParticipant(long actor, long observer, int value);
 
+        int ModifyValueOfOtherParticipants(long actor, int value);
+
         int ModifyValueOfAllParticipants(int value);
 
         bool AddParticipant(JoyObject newParticipant);
@@ -28,6 +31,11 @@ namespace JoyLib.Code.Entities.Relationships
         long GenerateHash(long[] participants);
 
         string Name
+        {
+            get;
+        }
+
+        ReadOnlyCollection<string> Tags
         {
             get;
         }

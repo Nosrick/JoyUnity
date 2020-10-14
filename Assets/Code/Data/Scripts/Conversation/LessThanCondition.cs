@@ -1,32 +1,15 @@
 ﻿namespace JoyLib.Code.Conversation.Conversations
 {
-    public class LessThanCondition : ITopicCondition
+    public class LessThanCondition : AbstractCondition
     {
         public LessThanCondition(string criteria, int condition)
+        : base(criteria, "<", condition)
         {
-            this.Criteria = criteria;
-            this.Value = condition;
         }
 
-        public string Criteria
+        public override bool FulfillsCondition(int value)
         {
-            get;
-            protected set;
-        }
-
-        public int Value
-        {
-            get;
-            protected set;
-        }
-
-        public bool FulfillsCondition(int value)
-        {
-            if(value < Value)
-            {
-                return true;
-            }
-            return false;
+            return value < Value;
         }
     }
 }

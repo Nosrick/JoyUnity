@@ -1,9 +1,35 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Conversations>
-  <Line Value="Let's talk." ID="1" NextTopic="2" />
-  <Line Value="Can you tell me anything about this place?" ID="1" NextTopic="3" />
-  <Line Value="Do you have anything to trade?" ID="1" NextTopic="4" />
-  <Line Value="Is there anything I can do for you?" ID="1" NextTopic="90002" />
-  <Line Value="Fancy a quicky?" ID="1" NextTopic="90003" />
-  <Line Value="Would you do me the honour of becoming my spouse?" ID="1" NextTopic="90004" />
+  <Name>BaseTopics</Name>
+  <Line>
+    <Text>Let's talk.</Text>
+    <Processor>ChatterProcessor</Processor>
+    <Next>ChatterTopic</Next>
+  </Line>
+  <Line>
+    <Text>Can you tell me anything about this place?</Text>
+    <Processor>LocalAreaInfoProcessor</Processor>
+    <Next>LocalAreaInfo</Next>
+  </Line>
+  <Line>
+    <Text>Do you have anything to trade?</Text>
+    <Processor>TradeProcessor</Processor>
+    <Next>TradeDialogue</Next>
+  </Line>
+  <Line>
+    <Text>Is there anything I can do for you?</Text>
+    <Processor>TaskProcessor</Processor>
+    <Next>TaskDialogue</Next>
+  </Line>
+  <Line>
+    <Text>Fancy a quicky?</Text>
+    <Processor>SexProposalProcessor</Processor>
+    <Next>SexProposal</Next>
+  </Line>
+  <Line>
+    <Text>Would you do me the honour of becoming my spouse?</Text>
+    <Condition>Relationship = Romantic</Condition>
+    <Processor>MarriageProposalProcessor</Processor>
+    <Next>MarriageProposal</Next>
+  </Line>
 </Conversations>

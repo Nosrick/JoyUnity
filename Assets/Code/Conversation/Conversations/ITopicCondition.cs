@@ -12,6 +12,11 @@
             get;
         }
 
+        string Operand
+        {
+            get;
+        }
+
         bool FulfillsCondition(int value);
     }
 }

@@ -161,6 +161,21 @@ namespace JoyLib.Code.Entities.Relationships
             return highestValue;
         }
 
+        public IRelationship[] GetAllForObject(JoyObject actor)
+        {
+            return m_Relationships.Where(tuple => tuple.Item1.Equals(actor.GUID))
+                .Select(tuple => tuple.Item2)
+                .ToArray();
+        }
+
+        public bool IsFamily(JoyObject speaker, JoyObject listener)
+        {
+            long[] participants = new long[] { speaker.GUID, listener.GUID };
+            IRelationship[] relationships = Get(participants, new[] {"family"});
+
+            return relationships.Length > 0;
+        }
+
         public NonUniqueDictionary<long, IRelationship> Relationships
         {
             get

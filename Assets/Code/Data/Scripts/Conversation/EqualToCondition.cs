@@ -1,32 +1,15 @@
 ﻿namespace JoyLib.Code.Conversation.Conversations
 {
-    public class EqualToCondition : ITopicCondition
+    public class EqualToCondition : AbstractCondition
     {
         public EqualToCondition(string criteria, int value)
+        : base(criteria, "=", value)
         {
-            this.Criteria = criteria;
-            this.Value = value;
         }
 
-        public int Value
+        public override bool FulfillsCondition(int value)
         {
-            get;
-            protected set;
-        }
-
-        public string Criteria
-        {
-            get;
-            protected set;
-        }
-
-        public bool FulfillsCondition(int value)
-        {
-            if(value == Value)
-            {
-                return true;
-            }
-            return false;
+            return value == Value;
         }
     }
 }

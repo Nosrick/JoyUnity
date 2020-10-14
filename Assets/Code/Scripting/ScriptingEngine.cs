@@ -85,17 +85,17 @@ namespace JoyLib.Code.Scripting
             }
             catch(Exception ex)
             {
-                Debug.LogError(ex.Message);
-                Debug.LogError(ex.StackTrace);
+                Debug.LogWarning(ex.Message);
+                Debug.LogWarning(ex.StackTrace);
                 throw new InvalidOperationException("Error when searching for type, " + typeName);
             }
         }
 
-        public object FetchAndInitialise(string typeName)
+        public object FetchAndInitialise(string type)
         {
             try
             {
-                Type directType = m_Types.First(type => type.Name.Equals(typeName, StringComparison.OrdinalIgnoreCase));
+                Type directType = m_Types.First(t => t.Name.Equals(type, StringComparison.OrdinalIgnoreCase));
 
                 return Activator.CreateInstance(directType);
             }
@@ -103,7 +103,28 @@ namespace JoyLib.Code.Scripting
             {
                 Debug.LogError(ex.Message);
                 Debug.LogError(ex.StackTrace);
-                throw new InvalidOperationException("Error when searching for Type in ScriptingEngine, type name " + typeName);
+                throw new InvalidOperationException("Error when searching for Type in ScriptingEngine, type name " + type.ToString());
+            }
+        }
+
+        public T[] FetchAndInitialiseChildren<T>()
+        {
+            try
+            {
+                Type[] types = m_Types.Where(t => t.IsAssignableFrom(typeof(T))).ToArray();
+                List<T> children = new List<T>();
+                foreach (Type tempType in types)
+                {
+                    children.Add((T)Activator.CreateInstance(tempType));
+                }
+
+                return children.ToArray();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e.Message);
+                Debug.LogError(e.StackTrace);
+                throw new InvalidOperationException("Error when searching for Type in ScriptingEngine, " + typeof(T).Name);
             }
         }
 
@@ -122,6 +143,7 @@ namespace JoyLib.Code.Scripting
                 {
                     directType = Type.GetType(typeName, true, true);
                     children = m_Types.Where(type => directType.IsAssignableFrom(type)).ToList();
+                    children = children.Where(t => t.IsAbstract == false && t.IsInterface == false).ToList();
                 }
                 
                 return children.ToArray();
@@ -130,7 +152,7 @@ namespace JoyLib.Code.Scripting
             {
                 Debug.LogError(ex.Message);
                 Debug.LogError(ex.StackTrace);
-                throw new InvalidOperationException("Error when searching for Type in ScriptingEngine, type name " + typeName);
+                throw new InvalidOperationException("Error when searching for Type in ScriptingEngine, " + typeName);
             }
         }
 
@@ -139,6 +161,7 @@ namespace JoyLib.Code.Scripting
             try
             {
                 Type[] types = m_Types.Where(t => type.IsAssignableFrom(t)).ToArray();
+                types = types.Where(t => t.IsAbstract == false && t.IsInterface == false).ToArray();
 
                 return types;
             }
@@ -165,6 +188,17 @@ namespace JoyLib.Code.Scripting
                 ActionLog.instance.AddText(e.StackTrace);
                 throw new InvalidOperationException("Error when finding action, no such action " + actionName);
             }
+        }
+
+        public IJoyAction[] FetchActions(string[] actionNames)
+        {
+            List<IJoyAction> actions = new List<IJoyAction>();
+            foreach (string name in actionNames)
+            {
+                actions.Add(FetchAction(name));
+            }
+
+            return actions.ToArray();
         }
     }
 }

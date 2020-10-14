@@ -65,6 +65,8 @@ namespace JoyLib.Code.Entities
 
         protected const int ATTACK_THRESHOLD = -50;
 
+        protected static EntityRelationshipHandler s_RelationshipHandler;
+
         public Entity()
         {}
 
@@ -174,6 +176,11 @@ namespace JoyLib.Code.Entities
             this.m_Driver = driver;
 
             SetCurrentTarget();
+
+            if (s_RelationshipHandler is null)
+            {
+                s_RelationshipHandler = GameObject.Find("GameManager").GetComponent<EntityRelationshipHandler>();
+            }
         }
 
         /// <summary>
@@ -325,7 +332,7 @@ namespace JoyLib.Code.Entities
             QuestTracker.AddQuest(GUID, quest);
         }
 
-        public Tuple<string, int>[] GetData(string[] tags)
+        public Tuple<string, int>[] GetData(string[] tags, params object[] args)
         {
             List<Tuple<string, int>> data = new List<Tuple<string, int>>();
 
@@ -367,25 +374,67 @@ namespace JoyLib.Code.Entities
                     data.Add(new Tuple<string, int>(tag, result));
                 }
 
-                foreach (ItemInstance item in items)
+                result = items.Count(item => item.HasTag(tag));
+
+                if (result > 0)
                 {
-                    if (item.HasTag(tag))
-                    {
-                        data.Add(new Tuple<string, int>(tag, 1));
-                    }
+                    data.Add(new Tuple<string, int>(tag, result));
                 }
             }
 
             //Check backpack
-            foreach (ItemInstance item in m_Backpack)
+            foreach (string tag in tags)
             {
-                foreach (string tag in tags)
+                int identifiedNames = m_Backpack.Count(item => 
+                    item.IdentifiedName.Equals(tag, StringComparison.OrdinalIgnoreCase));
+                
+                int unidentifiedNames = m_Backpack.Count(item =>
+                    item.ItemType.UnidentifiedName.Equals(tag, StringComparison.OrdinalIgnoreCase));
+
+                if (identifiedNames > 0)
                 {
-                    if (tag.Equals(item.IdentifiedName) || tag.Equals(item.ItemType))
-                    {
-                        data.Add(new Tuple<string, int>(tag, 1));
-                    }
+                    data.Add(new Tuple<string, int>(tag, identifiedNames));
                 }
+
+                if (unidentifiedNames > 0)
+                {
+                    data.Add(new Tuple<string, int>(tag, unidentifiedNames));
+                }
+            }
+            
+            //Check job levels
+            foreach (string tag in tags)
+            {
+                KeyValuePair<string, int> jobLevel = new KeyValuePair<string, int>(tag, 0);
+                
+                try
+                {
+                    jobLevel = m_JobLevels.First(job => job.Key.Equals(tag, StringComparison.OrdinalIgnoreCase));
+                }
+                catch (Exception e)
+                {
+                    //suppress this
+                }
+                
+                data.Add(new Tuple<string, int>(jobLevel.Key, jobLevel.Value));
+            }
+
+            if (args[0] is JoyObject other)
+            {
+                //Check relationships
+                IRelationship[] relationships = s_RelationshipHandler.GetAllForObject(this);
+                foreach (IRelationship relationship in relationships)
+                {
+                    foreach (string tag in tags)
+                    {
+                        if (relationship.Tags.Contains(tag))
+                        {
+                            int relationshipValue = relationship.GetRelationshipValue(this.GUID, other.GUID);
+                            data.Add(new Tuple<string, int>(tag, relationshipValue));
+                            data.Add(new Tuple<string, int>("relationship", relationshipValue));
+                        }
+                    }
+                }                
             }
 
             return data.ToArray();
