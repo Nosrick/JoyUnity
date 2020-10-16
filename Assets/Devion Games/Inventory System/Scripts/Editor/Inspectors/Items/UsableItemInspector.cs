@@ -1,14 +1,12 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using DevionGames.InventorySystem.ItemActions;
 using System;
 using System.Linq;
-using System.IO;
 using System.Reflection;
 using UnityEditor.AnimatedValues;
 using UnityEngine.Events;
+using System.Collections.Generic;
 
 namespace DevionGames.InventorySystem
 {
@@ -33,6 +31,7 @@ namespace DevionGames.InventorySystem
         protected override void OnEnable()
         {
             base.OnEnable();
+            if (target == null) return;
 
             ArrayUtility.Add(ref this.m_PropertiesToExcludeForChildClasses, serializedObject.FindProperty("actions").propertyPath);
             this.m_UseCategoryCooldown = serializedObject.FindProperty("m_UseCategoryCooldown");
@@ -53,8 +52,16 @@ namespace DevionGames.InventorySystem
                     this.m_FieldName = fields[i].Name;
             }
             m_Actions = serializedObject.FindProperty("actions");
-
-
+            /*
+             * I can't apply any changes to managedReferenceValue if it is null
+             * for (int i = 0; i < this.m_Actions.arraySize; i++) {
+                SerializedProperty element = this.m_Actions.GetArrayElementAtIndex(i);
+                if (element.GetValue() == null) {
+             
+                    element.managedReferenceValue = new MissingAction();
+                    serializedObject.ApplyModifiedPropertiesWithoutUndo();
+                }
+            }*/
             AssemblyReloadEvents.beforeAssemblyReload += OnBeforeAssemblyReload;
             AssemblyReloadEvents.afterAssemblyReload += OnAfterAssemblyReload;
             EditorApplication.playModeStateChanged += OnPlaymodeStateChange;
@@ -67,24 +74,23 @@ namespace DevionGames.InventorySystem
             EditorApplication.playModeStateChanged -= OnPlaymodeStateChange;
         }
 
-
-
         public override void OnInspectorGUI()
         {
-            ScriptGUI();
-            serializedObject.Update();
-            DrawBaseInspector();
-            for (int i = 0; i < m_DrawInspectors.Count; i++)
-            {
+             ScriptGUI();
+             serializedObject.Update();
+             DrawBaseInspector();
+             for (int i = 0; i < m_DrawInspectors.Count; i++)
+             {
                 this.m_DrawInspectors[i].Invoke();
-            }
-         
-            DrawPropertiesExcluding(serializedObject, this.m_PropertiesToExcludeForChildClasses);
-            ActionGUI();
-            serializedObject.ApplyModifiedProperties();
+             }
+
+             DrawPropertiesExcluding(serializedObject, this.m_PropertiesToExcludeForChildClasses);
+             ActionGUI();
+             serializedObject.ApplyModifiedProperties();
         }
 
         private void DrawInspector() {
+
             EditorGUILayout.PropertyField(this.m_UseCategoryCooldown);
             this.m_ShowCategoryCooldownOptions.target = !this.m_UseCategoryCooldown.boolValue;
             if (EditorGUILayout.BeginFadeGroup(this.m_ShowCategoryCooldownOptions.faded))
@@ -100,49 +106,41 @@ namespace DevionGames.InventorySystem
         private void ActionGUI() {
            
             GUILayout.Space(10f);
+            for (int i = 0; i < this.m_Actions.arraySize; i++) {
+                SerializedProperty action = this.m_Actions.GetArrayElementAtIndex(i);
 
-            for (int i = 0; i < this.m_List.Count; i++)
-            {
                 object value = this.m_List[i];
                 EditorGUI.BeginChangeCheck();
                 if (this.m_Target != null)
-                    Undo.RecordObject(this.m_Target, "Inspector");
-
+                    Undo.RecordObject(this.m_Target, "Item Action");
 
                 if (EditorTools.Titlebar(value, ElementContextMenu(this.m_List, i)))
                 {
                     EditorGUI.indentLevel += 1;
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Script", EditorTools.FindMonoScript(value.GetType()), typeof(MonoScript), true);
+                    EditorGUILayout.ObjectField("Script", value != null ? EditorTools.FindMonoScript(value.GetType()) : null, typeof(MonoScript), true);
                     EditorGUI.EndDisabledGroup();
-                    SerializedProperty element = this.m_Actions.GetArrayElementAtIndex(i);
-                    if (HasCustomPropertyDrawer(value.GetType()))
+                    if (value == null)
                     {
-                        EditorGUILayout.PropertyField(element, true);
+                        EditorGUILayout.HelpBox("Managed reference values can't be removed or replaced. Only way to fix it is to recreate the renamed or deleted script file or delete and recreate the Item and rereference it in scenes. Unity throws an error: Unknown managed type referenced: [Assembly-CSharp] + Type which has been removed.", MessageType.Error);
+                    }
+                    if (EditorTools.HasCustomPropertyDrawer(value.GetType()))
+                    {
+                        EditorGUILayout.PropertyField(action, true);
                     }
                     else
                     {
-                         while (element.NextVisible(true))
-                         {
-                             if (element.propertyPath.Contains("actions.Array.data[" + i + "]") && !element.propertyPath.Replace("actions.Array.data[" + i + "].", "").Contains(".") )
-                             {
-
-                                if (this.m_List[i].GetType().GetSerializedField(element.propertyPath.Split('.').Last()).FieldType == typeof(TargetType))
-                                {
-                                    element.enumValueIndex = 1;
-                                    EditorGUI.BeginDisabledGroup(true);
-                                    EditorGUILayout.PropertyField(element, true);
-                                    EditorGUI.EndDisabledGroup();
-                                }
-                                else
-                                {
-
-                                    EditorGUILayout.PropertyField(element, true);
-                                }
-                             }
-                         }
+                        foreach (var child in action.EnumerateChildProperties())
+                        {
+                            //Need to find a better way to disable TargetType on Item, it should be always Player   
+                            EditorGUI.BeginDisabledGroup(child.name == "m_Target");
+                            EditorGUILayout.PropertyField(
+                                child,
+                                includeChildren: true
+                            );
+                            EditorGUI.EndDisabledGroup();
+                        }
                     }
-
                     EditorGUI.indentLevel -= 1;
                 }
                 if (EditorGUI.EndChangeCheck())
@@ -152,23 +150,6 @@ namespace DevionGames.InventorySystem
             DoAddButton();
             GUILayout.Space(10f);
 
-        }
-
-        private bool HasCustomPropertyDrawer(Type type) {
-            foreach (Type typesDerivedFrom in TypeCache.GetTypesDerivedFrom<GUIDrawer>())
-            {
-                object[] customAttributes = typesDerivedFrom.GetCustomAttributes<CustomPropertyDrawer>();
-                for (int i = 0; i < (int)customAttributes.Length; i++)
-                {
-                    CustomPropertyDrawer customPropertyDrawer = (CustomPropertyDrawer)customAttributes[i];
-                    FieldInfo field=customPropertyDrawer.GetType().GetField("m_Type",BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-                    Type type1 =(Type) field.GetValue(customPropertyDrawer);
-                    if (type == type1)
-                        return true;
-                }
-            }
-                    
-            return false;
         }
 
         private void Add(Type type)
@@ -205,14 +186,6 @@ namespace DevionGames.InventorySystem
 
         public void OnBeforeAssemblyReload()
         {
-            /*this.m_ElementTypeName = this.m_ElementType.Name;
-            FieldInfo[] fields = this.m_Target.GetType().GetSerializedFields();
-            for (int i = 0; i < fields.Length; i++)
-            {
-                object temp = fields[i].GetValue(this.m_Target);
-                if (temp == this.m_List)
-                    this.m_FieldName = fields[i].Name;
-            }*/
             if (this.m_Target is Component)
             {
                 this.m_GameObject = (this.m_Target as Component).gameObject;
@@ -228,14 +201,18 @@ namespace DevionGames.InventorySystem
 
         private GenericMenu ElementContextMenu(IList list, int index)
         {
+           
             GenericMenu menu = new GenericMenu();
-
+            if (list[index] == null) {
+                return menu;
+            }
             menu.AddItem(new GUIContent("Reset"), false, delegate {
+
                 object value = System.Activator.CreateInstance(list[index].GetType());
                 list[index] = value;
             });
             menu.AddSeparator(string.Empty);
-            menu.AddItem(new GUIContent("Remove " + this.m_ElementType.Name), false, delegate { list.RemoveAt(index); });
+            menu.AddItem(new GUIContent("Remove " + this.m_ElementType.Name), false, delegate { list.RemoveAt(index); EditorUtility.SetDirty(target); });
 
             if (index > 0)
             {
@@ -286,7 +263,7 @@ namespace DevionGames.InventorySystem
                 {
                     menu.AddItem(new GUIContent("Paste " + this.m_ElementType.Name + " Values"), false, delegate
                     {
-                        object instance = this.m_List[index];
+                        object instance = list[index];
                         FieldInfo[] fields = instance.GetType().GetSerializedFields();
                         for (int i = 0; i < fields.Length; i++)
                         {
@@ -301,11 +278,14 @@ namespace DevionGames.InventorySystem
                 }
             }
 
-            MonoScript script = EditorTools.FindMonoScript(list[index].GetType());
-            if (script != null)
+            if (list[index] != null)
             {
-                menu.AddSeparator(string.Empty);
-                menu.AddItem(new GUIContent("Edit Script"), false, delegate { AssetDatabase.OpenAsset(script); });
+                MonoScript script = EditorTools.FindMonoScript(list[index].GetType());
+                if (script != null)
+                {
+                    menu.AddSeparator(string.Empty);
+                    menu.AddItem(new GUIContent("Edit Script"), false, delegate { AssetDatabase.OpenAsset(script); });
+                }
             }
             return menu;
         }
@@ -320,6 +300,7 @@ namespace DevionGames.InventorySystem
 
             this.m_ElementType = Utility.GetType(this.m_ElementTypeName);
             this.m_List = this.m_Target.GetType().GetSerializedField(this.m_FieldName).GetValue(this.m_Target) as IList;
+           
         }   
     }
 }

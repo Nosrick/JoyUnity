@@ -2,7 +2,7 @@
 	"name": "Stat System",
 	"id": "com.deviongames.stats",
 	"assetPath":"Assets/Devion Games/Stat System",
-	"version": "1.0.5",
+	"version": "1.0.6",
 	"unityVersion": "2019.4.10",
 	"downloadPath": "https://deviongames.com/modules/StatSystem.unitypackage",
 	"author": "Konstantin Janson",
@@ -70,6 +70,14 @@
             [
                 "StatsRenderer not used anymore",
                 "Extended UIStat component, please update in your custom scenes"
+            ]
+        }, 
+        {
+            "version": "1.0.6",
+            "changes": 
+            [
+                "Stats Max Value = -1 defines unlimited",
+                "Fixed Formula string ports used in GetStatValue, GetStatCurrentValue not displaying stat name"
             ]
         }
     ]

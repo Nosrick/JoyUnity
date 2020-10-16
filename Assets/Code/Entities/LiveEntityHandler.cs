@@ -6,13 +6,8 @@ namespace JoyLib.Code.Entities
 {
     public class LiveEntityHandler : MonoBehaviour
     {
-
-        private Dictionary<long, Entity> m_Entities;
-        private Entity m_Player;
-
-        public void Awake()
-        {
-        }
+        protected Dictionary<long, Entity> m_Entities;
+        protected Entity m_Player;
 
         public bool AddEntity(Entity created)
         {

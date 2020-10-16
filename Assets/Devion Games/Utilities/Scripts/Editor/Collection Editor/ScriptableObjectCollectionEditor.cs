@@ -10,10 +10,16 @@ namespace DevionGames
 	/// <summary>
 	/// A collection class for ScriptableObjects.
 	/// </summary>
+	[System.Serializable]
 	public class ScriptableObjectCollectionEditor<T> : CollectionEditor<T> where T: ScriptableObject, INameable
 	{
 		[SerializeField]
 		protected List<T> items;
+		protected override List<T> Items
+		{
+			get{ return items; }
+		}
+
 		[SerializeField]
 		protected UnityEngine.Object target;
 
@@ -23,22 +29,14 @@ namespace DevionGames
 		{
 			this.target = target;
 			this.items = items;
-            sidebarRect.width = EditorPrefs.GetFloat("CollectionEditorSidebarWidth" + ToolbarName, sidebarRect.width);
-
         }
 
-		protected override List<T> Items {
-			get {
-				return items;
-			}
-		}
-
-		protected override bool MatchesSearch (T item, string search)
+		protected override bool MatchesSearch(T item, string search)
 		{
-			return item.Name.ToLower ().Contains (search.ToLower ()) || search == "Search...";
+			return (item.Name.ToLower().Contains(search.ToLower()) || search.ToLower() == item.GetType().Name.ToLower());
 		}
 
-        protected override void Create ()
+		protected override void Create ()
 		{
 			Type[] types = AppDomain.CurrentDomain.GetAssemblies ().SelectMany (assembly => assembly.GetTypes ()).Where (type => typeof(T).IsAssignableFrom (type) && type.IsClass && !type.IsAbstract).ToArray ();		
 			if (types.Length > 1) {
@@ -64,7 +62,8 @@ namespace DevionGames
 			AssetDatabase.SaveAssets ();
 			AssetDatabase.Refresh ();
 			Items.Add (item);
-			selectedItem = item;
+			Select(item);
+
 			EditorUtility.SetDirty (target);
 		}
 
@@ -75,7 +74,6 @@ namespace DevionGames
 				AssetDatabase.SaveAssets ();
 				AssetDatabase.Refresh ();
 				Items.Remove (item);
-                OnDestroy();
 				EditorUtility.SetDirty (target);
 			}
 		}
@@ -88,31 +86,54 @@ namespace DevionGames
 			AssetDatabase.SaveAssets();
 			AssetDatabase.Refresh();
 			Items.Add(duplicate);
-			selectedItem = duplicate;
+			Select(duplicate);
 			EditorUtility.SetDirty(target);
 		}
-       
-		protected override void DrawItem (T item)
-		{
-			if (item != null) {
-				if (editor == null || editor.target != item) {
-					if(editor != null)
-					ScriptableObject.DestroyImmediate(editor);
 
-					editor = Editor.CreateEditor (item);
-				}
+        protected override void Select(T item)
+        {
+            base.Select(item);
+			if (editor != null)
+				ScriptableObject.DestroyImmediate(editor);
+
+			editor = Editor.CreateEditor(item);
+		}
+
+        protected override void DrawItem (T item)
+		{
+			if (editor != null) {
 				editor.OnInspectorGUI ();
 			}
 		}
 
         public override void OnDestroy()
         {
-            ScriptableObject.DestroyImmediate(editor);
+			if(editor != null)
+				ScriptableObject.DestroyImmediate(editor);
         }
 
         protected override string GetSidebarLabel (T item)
 		{
 			return item.Name;
 		}
-	}
+
+        protected override void AddContextItem(GenericMenu menu)
+        {
+            base.AddContextItem(menu);
+			menu.AddItem(new GUIContent("Sort/A-Z"), false, delegate {
+				T selected = selectedItem;
+				Items.Sort(delegate (T a, T b) {return a.Name.CompareTo(b.Name); });
+				Select(selected);
+				});
+			menu.AddItem(new GUIContent("Sort/Type"), false, delegate {
+				T selected = selectedItem;
+				Items.Sort(delegate (T a, T b) {
+					return a.GetType().FullName.CompareTo(b.GetType().FullName);
+				});
+				Select(selected);
+			});
+		}
+
+
+    }
 }

@@ -5761,8 +5761,8 @@ MonoBehaviour:
   m_SlotParent: {fileID: 871055357}
   m_SlotPrefab: {fileID: 0}
   m_UseReferences: 0
-  m_CanDragIn: 1
-  m_CanDragOut: 1
+  m_CanDragIn: 0
+  m_CanDragOut: 0
   m_CanDropItems: 1
   m_CanReferenceItems: 1
   m_CanSellItems: 0
@@ -5773,6 +5773,7 @@ MonoBehaviour:
   moveItemConditions:
   - window: Equipment
     requiresVisibility: 0
+  restrictions: []
 --- !u!225 &1117747299
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -11291,8 +11292,8 @@ MonoBehaviour:
   m_SlotParent: {fileID: 1923560014}
   m_SlotPrefab: {fileID: 0}
   m_UseReferences: 0
-  m_CanDragIn: 1
-  m_CanDragOut: 1
+  m_CanDragIn: 0
+  m_CanDragOut: 0
   m_CanDropItems: 0
   m_CanReferenceItems: 1
   m_CanSellItems: 0
@@ -11303,6 +11304,7 @@ MonoBehaviour:
   moveItemConditions:
   - window: Inventory
     requiresVisibility: 0
+  restrictions: []
 --- !u!225 &2036211363
 CanvasGroup:
   m_ObjectHideFlags: 0

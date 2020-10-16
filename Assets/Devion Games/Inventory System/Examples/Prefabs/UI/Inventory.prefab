@@ -892,6 +892,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 2740522860982205917}
   m_Stack: {fileID: 2740522861059745464}
@@ -1026,6 +1027,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d19d2c4eff3cad489e4e29cb6a6f58e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 2740522860390046843}
   m_Stack: {fileID: 2740522861566036148}
@@ -1694,6 +1696,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d19d2c4eff3cad489e4e29cb6a6f58e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 2740522861639529567}
   m_Stack: {fileID: 2740522862357275652}
@@ -2284,6 +2287,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 2740522861460573021}
   m_Stack: {fileID: 2740522860871555867}
@@ -3345,6 +3349,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 2740522860273482780}
   m_Stack: {fileID: 2740522862231659018}
@@ -3938,6 +3943,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 2740522861353473672}
   m_Stack: {fileID: 2740522861069371530}
@@ -4076,6 +4082,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d19d2c4eff3cad489e4e29cb6a6f58e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 2740522860327227586}
   m_Stack: {fileID: 2740522860659834972}
@@ -4444,6 +4451,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 2740522860309663182}
   m_Stack: {fileID: 2740522860947192928}
@@ -4737,6 +4745,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 2740522861180520592}
   m_Stack: {fileID: 2740522860324601803}
@@ -5180,6 +5189,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 2740522860960313737}
   m_Stack: {fileID: 2740522860418296808}
@@ -5399,6 +5409,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 2740522862136547050}
   m_Stack: {fileID: 2740522862063867092}
@@ -5766,6 +5777,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 2740522860257942259}
   m_Stack: {fileID: 2740522861644837316}
@@ -6336,6 +6348,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 2740522860516169432}
   m_Stack: {fileID: 2740522862080330123}
@@ -7147,6 +7160,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 2740522860902101355}
   m_Stack: {fileID: 2740522860459876510}
@@ -7292,6 +7306,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 2740522861342686049}
   m_Stack: {fileID: 2740522860588756351}
@@ -7609,6 +7624,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 2740522860791529573}
   m_Stack: {fileID: 2740522862308411907}
@@ -8202,6 +8218,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 2740522861457327249}
   m_Stack: {fileID: 2740522860450015574}
@@ -8499,6 +8516,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 2740522860758873253}
   m_Stack: {fileID: 2740522861532574840}
@@ -8792,6 +8810,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 2740522860338261019}
   m_Stack: {fileID: 2740522861792934010}
@@ -9089,6 +9108,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 2740522860656463758}
   m_Stack: {fileID: 2740522861086601784}
@@ -9495,6 +9515,7 @@ GameObject:
   - component: {fileID: 2740522862135884628}
   - component: {fileID: 2740522862135884627}
   - component: {fileID: 2740522862135884629}
+  - component: {fileID: 6742175909009634933}
   m_Layer: 5
   m_Name: Inventory
   m_TagString: Untagged
@@ -9620,6 +9641,8 @@ MonoBehaviour:
     requiresVisibility: 1
   - window: Equipment
     requiresVisibility: 0
+  restrictions:
+  - {fileID: 6742175909009634933}
 --- !u!114 &2740522862135884629
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9650,6 +9673,22 @@ MonoBehaviour:
   onChange:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &6742175909009634933
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2740522862135884625}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7f10d0457b7b0541a4d7bdc91b96112, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Categories:
+  - {fileID: -3989543302354102894, guid: 1ae57b994efcab048a1bb130d4e11d83, type: 2}
+  - {fileID: 164684216256526245, guid: 1ae57b994efcab048a1bb130d4e11d83, type: 2}
+  invert: 1
 --- !u!1 &2740522862136547048
 GameObject:
   m_ObjectHideFlags: 0
@@ -9859,6 +9898,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 2740522860719630072}
   m_Stack: {fileID: 2740522861964642730}
@@ -10004,6 +10044,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 2740522861868245313}
   m_Stack: {fileID: 2740522860731758060}
@@ -10149,6 +10190,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 2740522861579527516}
   m_Stack: {fileID: 2740522860968913260}
@@ -10446,6 +10488,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 2740522861507490918}
   m_Stack: {fileID: 2740522860771432876}

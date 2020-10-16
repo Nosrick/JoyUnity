@@ -20,7 +20,6 @@ namespace DevionGames.UIWidgets
 		{
             base.OnEnable();
             this.canvasGroup = (target as UIWidget).GetComponent<CanvasGroup>();
-
         }
 
         protected virtual void OnSceneGUI()

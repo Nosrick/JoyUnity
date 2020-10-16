@@ -96,6 +96,10 @@ namespace DevionGames.Graphs
         {
             for (int i = 0; i < this.m_Ports.Count; i++)
             {
+                //Dirty fix for existing serialized graphs.
+                if (this.m_Ports[i].m_FieldTypeName == "String")
+                    this.m_Ports[i].m_FieldTypeName = "System.String";
+
                 this.m_Ports[i].node = this;
                 for (var j = 0; j < this.m_Ports[i].Connections.Count; j++)
                 {

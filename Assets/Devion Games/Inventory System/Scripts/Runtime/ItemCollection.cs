@@ -31,6 +31,29 @@ namespace DevionGames.InventorySystem
             //  if (items.Select(x => x == null).Count() > 0) { Debug.LogError("ItemCollection has Nullreference items: "+gameObject.name); }
            
             items = InventoryManager.CreateInstances(items.ToArray(), amounts.ToArray(), randomProperty.ToArray()).ToList();
+            for (int i = 0; i < items.Count; i++) {
+                Item current = items[i];
+                if (current.Stack > current.MaxStack) {
+                    //Split in smaller stacks
+                    int maxStacks = Mathf.FloorToInt((float)current.Stack / (float)current.MaxStack);
+                    int restStack = current.Stack - (current.MaxStack * maxStacks);
+                    for (int j = 0; j < maxStacks; j++) {
+                        Item instance = InventoryManager.CreateInstance(current);
+                        instance.Stack = instance.MaxStack;
+                        Add(instance);
+                    }
+                    if (restStack > 0)
+                    {
+                        current.Stack = restStack;
+                    }
+                    else {
+                        Remove(current);
+                    }
+                   
+                }
+            }
+            
+
             //Stack same currencies
             CombineCurrencies();
             ItemCollectionPopulator populator = GetComponent<ItemCollectionPopulator>();

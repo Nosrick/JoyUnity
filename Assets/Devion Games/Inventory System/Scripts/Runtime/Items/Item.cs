@@ -9,6 +9,7 @@ using DevionGames.UIWidgets;
 
 namespace DevionGames.InventorySystem
 {
+
 	[System.Serializable]
 	public class Item : ScriptableObject, INameable, IJsonSerializable
 	{
@@ -18,6 +19,7 @@ namespace DevionGames.InventorySystem
 
 		public string Id {
 			get{ return this.m_Id; }
+            set { this.m_Id = value; }
 		}
 
 		[SerializeField]

@@ -46,7 +46,7 @@ namespace DevionGames.StatSystem.Configuration
             this.items = items;
             this.searchFilters = searchFilters;
             this.searchFilters.Insert(0, "All");
-            this.searchString = "All";
+            this.m_SearchString = "All";
 
             Type[] types = AppDomain.CurrentDomain.GetAssemblies().SelectMany(assembly => assembly.GetTypes()).Where(type => typeof(Settings).IsAssignableFrom(type) && type.IsClass && !type.IsAbstract).ToArray();
 
@@ -61,9 +61,9 @@ namespace DevionGames.StatSystem.Configuration
 
         protected override void DoSearchGUI()
         {
-            string[] searchResult = EditorTools.SearchField(searchString, searchFilter, searchFilters, GUILayout.Width(sidebarRect.width - 20));
+            string[] searchResult = EditorTools.SearchField(this.m_SearchString, searchFilter, searchFilters, GUILayout.Width(m_SidebarRect.width - 20));
             searchFilter = searchResult[0];
-            searchString = searchResult[1];
+            m_SearchString = searchResult[1];
         }
 
         protected override bool MatchesSearch(Settings item, string search)

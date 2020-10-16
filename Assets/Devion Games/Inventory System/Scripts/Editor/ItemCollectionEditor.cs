@@ -6,6 +6,7 @@ using System.Linq;
 
 namespace DevionGames.InventorySystem
 {
+	[System.Serializable]
 	public class ItemCollectionEditor : ScriptableObjectCollectionEditor<Item>
 	{
 		[SerializeField]
@@ -27,20 +28,19 @@ namespace DevionGames.InventorySystem
 			this.items = items;
 			this.searchFilters = searchFilters;
 			this.searchFilters.Insert (0, "All");
-            this.searchString = "All";
-            sidebarRect.width = EditorPrefs.GetFloat("CollectionEditorSidebarWidth" + ToolbarName, sidebarRect.width);
+            this.m_SearchString = "All";
         }
 
-		protected override void DoSearchGUI ()
+        protected override void DoSearchGUI ()
 		{
-			string[] searchResult = EditorTools.SearchField (searchString, searchFilter, searchFilters);
+			string[] searchResult = EditorTools.SearchField (m_SearchString, searchFilter, searchFilters);
 			searchFilter = searchResult [0];
-			searchString = string.IsNullOrEmpty(searchResult [1])?searchFilter:searchResult[1] ;
+			m_SearchString = string.IsNullOrEmpty(searchResult [1])?searchFilter:searchResult[1] ;
 		}
 
 		protected override bool MatchesSearch (Item item, string search)
 		{
-			return (item.Name.ToLower ().Contains (search.ToLower ()) || searchString == searchFilter || search.ToLower() == item.GetType().Name.ToLower()) && (searchFilter == "All" || item.Category.Name == searchFilter);
+			return (item.Name.ToLower ().Contains (search.ToLower ()) || m_SearchString == searchFilter || search.ToLower() == item.GetType().Name.ToLower()) && (searchFilter == "All" || item.Category.Name == searchFilter);
 		}
 
 		protected override bool HasConfigurationErrors(Item item)
@@ -51,14 +51,27 @@ namespace DevionGames.InventorySystem
 
         protected override void Duplicate(Item item)
         {
-			Item duplicate = (Item)ScriptableObject.Instantiate(item);
+            Item duplicate = (Item)ScriptableObject.Instantiate(item);
+			duplicate.Id = System.Guid.NewGuid().ToString();
 			duplicate.hideFlags = HideFlags.HideInHierarchy;
 			AssetDatabase.AddObjectToAsset(duplicate, target);
 			AssetDatabase.SaveAssets();
 			AssetDatabase.Refresh();
 			Items.Add(duplicate);
-			selectedItem = duplicate;
 			EditorUtility.SetDirty(target);
+			Select(duplicate);
 		}
-    }
+
+		protected override void AddContextItem(GenericMenu menu)
+		{
+			base.AddContextItem(menu);
+			menu.AddItem(new GUIContent("Sort/Category"), false, delegate {
+				Item selected = selectedItem;
+				Items.Sort(delegate (Item a, Item b) {
+					return a.Category.Name.CompareTo(b.Category.Name); 
+				});
+				Select(selected);
+			});
+		}
+	}
 }

@@ -17,7 +17,7 @@ public class ItemContainerCallbackTester : MonoBehaviour
 
         container.OnAddItem += (Item item,Slot slot) =>
         {
-            Debug.Log("[" + Time.time + "]" + "OnAddItem: " + item.Name + " Amount: " + item.Stack + " Container: " + slot.Container.Name + " Slot: " + slot.Index);
+            Debug.Log("[" + Time.time + "]" + "OnAddItem: " + item.Name + " Amount: " + item.Stack + "Container: " + slot.Container.Name + " Slot: " + slot.Index);
         };
 
         container.OnFailedToAddItem += (Item item) =>

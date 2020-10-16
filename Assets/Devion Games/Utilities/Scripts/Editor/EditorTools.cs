@@ -138,6 +138,18 @@ namespace DevionGames{
             return result;
         }
 
+        public static bool RightArrowButton(Rect position, GUIContent content)
+        {
+            bool result = false;
+            if (GUI.Button(position,content, Styles.leftTextButton))
+            {
+                result = true;
+            }
+            position.x += position.width - 20f;
+            GUI.Label(position, Styles.rightArrow);
+            return result;
+        }
+
         public static void Seperator() {
             GUILayout.Label(GUIContent.none,Styles.seperator);
         }
@@ -239,19 +251,28 @@ namespace DevionGames{
        
         public static bool Titlebar(object target)
         {
-            return Titlebar(new GUIContent(ObjectNames.NicifyVariableName(target.GetType().Name)), target, null);
+            GUIContent title = new GUIContent("Missing Script");
+            if (target != null) {
+                title = new GUIContent(ObjectNames.NicifyVariableName(target.GetType().Name));
+            }
+            return Titlebar(title, target, null);
         }
 
         public static bool Titlebar(object target, GenericMenu menu)
         {
-            return Titlebar(new GUIContent(ObjectNames.NicifyVariableName(target.GetType().Name)), target, menu);
+            GUIContent title = new GUIContent("Missing Script");
+            if (target != null)
+            {
+                title = new GUIContent(ObjectNames.NicifyVariableName(target.GetType().Name));
+            }
+            return Titlebar(title, target, menu);
         }
 
         public static bool Titlebar(GUIContent content, object target, GenericMenu menu)
         {
 
             int controlID = EditorGUIUtility.GetControlID(FocusType.Passive);
-            
+
             Rect position = GUILayoutUtility.GetRect(GUIContent.none, Styles.inspectorTitle, GUILayout.ExpandWidth(true));
 
             if (Event.current.type == EventType.Repaint)
@@ -274,38 +295,42 @@ namespace DevionGames{
 
             Rect rect3 = new Rect(position.x + 16f, rect.y, 20f, 20f);
             Texture2D icon = EditorGUIUtility.FindTexture("cs Script Icon");
-            IconAttribute iconAttribute = target.GetType().GetCustomAttribute<IconAttribute>();
-            if (iconAttribute != null)
+            if (target != null)
             {
-                if (iconAttribute.type != null)
+                IconAttribute iconAttribute = target.GetType().GetCustomAttribute<IconAttribute>();
+                if (iconAttribute != null)
                 {
-                    icon = AssetPreview.GetMiniTypeThumbnail(iconAttribute.type);
-                }
-                else
-                {
-                    icon = Resources.Load<Texture2D>(iconAttribute.path);
+                    if (iconAttribute.type != null)
+                    {
+                        icon = AssetPreview.GetMiniTypeThumbnail(iconAttribute.type);
+                    }
+                    else
+                    {
+                        icon = Resources.Load<Texture2D>(iconAttribute.path);
+                    }
                 }
             }
-
             GUI.Label(new Rect(position.x + 13f, rect.y, 18f, 18f), icon);
             Rect rect5 = rect3;
             rect5.x = rect5.x + 16f;
-            if (typeof(MonoBehaviour).IsAssignableFrom(target.GetType()))
+            if (target != null)
             {
-                MonoBehaviour behaviour = target as MonoBehaviour;
-                behaviour.enabled = GUI.Toggle(rect5, behaviour.enabled, GUIContent.none);
-            }
-            else
-            {
-                FieldInfo enableField = target.GetType().GetSerializedField("m_Enabled");
-
-                if (enableField != null)
+                if (typeof(MonoBehaviour).IsAssignableFrom(target.GetType()))
                 {
-                    bool isEnabled = GUI.Toggle(rect5, (bool)enableField.GetValue(target), GUIContent.none);
-                    enableField.SetValue(target, isEnabled);
+                    MonoBehaviour behaviour = target as MonoBehaviour;
+                    behaviour.enabled = GUI.Toggle(rect5, behaviour.enabled, GUIContent.none);
+                }
+                else
+                {
+                    FieldInfo enableField = target.GetType().GetSerializedField("m_Enabled");
+
+                    if (enableField != null)
+                    {
+                        bool isEnabled = GUI.Toggle(rect5, (bool)enableField.GetValue(target), GUIContent.none);
+                        enableField.SetValue(target, isEnabled);
+                    }
                 }
             }
-
             if (menu != null && GUI.Button(rect1, EditorGUIUtility.FindTexture("d__Menu"), Styles.inspectorTitleText))
             {
                 menu.ShowAsContext();
@@ -317,7 +342,7 @@ namespace DevionGames{
                 menu.ShowAsContext();
             }
 
-            bool isFolded = EditorPrefs.GetBool("TitlebarFold" + target.GetHashCode().ToString(), true);
+            bool isFolded = EditorPrefs.GetBool("TitlebarFold" + (target != null?target.GetHashCode().ToString():""), true);
             if (eventType != EventType.MouseDown)
             {
                 if (eventType == EventType.Repaint)
@@ -330,7 +355,7 @@ namespace DevionGames{
             bool flag = DoToggleForward(position, controlID, isFolded, GUIContent.none, GUIStyle.none);
             if (flag != isFolded)
             {
-                EditorPrefs.SetBool("TitlebarFold" + target.GetHashCode().ToString(), flag);
+                EditorPrefs.SetBool("TitlebarFold" +(target != null ? target.GetHashCode().ToString() : ""), flag);
             }
             return flag;
         }
@@ -610,6 +635,43 @@ namespace DevionGames{
             return value;
         }
 
+        public static void SetValue(this SerializedProperty property, object value)
+        {
+            string propertyPath = property.propertyPath;
+            object container = property.serializedObject.targetObject;
+
+            int i = 0;
+            NextPropertyPath(propertyPath, ref i, out var deferredToken);
+            while (NextPropertyPath(propertyPath, ref i, out var token))
+            {
+                container = GetPropertyPathValue(container, deferredToken);
+                deferredToken = token;
+            }
+            SetPropertyPathValue(container, deferredToken, value);
+
+            EditorUtility.SetDirty(property.serializedObject.targetObject);
+            property.serializedObject.ApplyModifiedProperties();
+            var prefabStage = UnityEditor.Experimental.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage();
+            if (prefabStage != null)
+            {
+                UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(prefabStage.scene);
+            }
+        }
+
+        public static object GetParent(this SerializedProperty property) {
+            string propertyPath = property.propertyPath;
+            object container = property.serializedObject.targetObject;
+
+            int i = 0;
+            NextPropertyPath(propertyPath, ref i, out var deferredToken);
+            while (NextPropertyPath(propertyPath, ref i, out var token))
+            {
+                container = GetPropertyPathValue(container, deferredToken);
+                deferredToken = token;
+            }
+            return container;
+        }
+
         private static bool NextPropertyPath(string propertyPath, ref int index, out PropertyPath component)
         {
             component = new PropertyPath();
@@ -642,27 +704,55 @@ namespace DevionGames{
 
         private static object GetPropertyPathValue(object container, PropertyPath component)
         {
-            if (component.propertyName == null)
-                return ((IList)container)[component.elementIndex];
+            if (component.propertyName == null )
+            {
+
+                IList list = (IList)container;
+                if (list.Count - 1 < component.elementIndex)
+                {
+                    for (int i = list.Count - 1; i < component.elementIndex; i++)
+                    {
+                        list.Add(default);
+                    }
+                }
+                return list[component.elementIndex];
+            }
             else
-                return GetMemberValue(container, component.propertyName);
+            {
+                return GetFieldValue(container, component.propertyName);
+            }
         }
 
-        private static object GetMemberValue(object container, string name)
+        private static void SetPropertyPathValue(object container, PropertyPath component, object value)
+        {
+
+            if (component.propertyName == null)
+            {
+                ((IList)container)[component.elementIndex] = value;
+            }
+            else
+            {
+                SetFieldValue(container, component.propertyName, value);
+            }
+        }
+
+        private static object GetFieldValue(object container, string name)
         {
             if (container == null)
                 return null;
             var type = container.GetType();
-            var members = type.GetMember(name, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
-            for (int i = 0; i < members.Length; ++i)
-            {
-                if (members[i] is FieldInfo field)
-                    return field.GetValue(container);
-                else if (members[i] is PropertyInfo property)
-                    return property.GetValue(container);
-            }
-            return null;
+            FieldInfo field = type.GetSerializedField(name);
+            return field.GetValue(container);
         }
+
+        private static void SetFieldValue(object container, string name, object value)
+        {
+            var type = container.GetType();
+            FieldInfo field = type.GetSerializedField(name);
+            field.SetValue(container, value);
+        }
+
+
 
         public static EventType ReserveEvent(params Rect[] areas)
         {
@@ -678,25 +768,31 @@ namespace DevionGames{
         }
 
 
-        public static void PropertyElementField(SerializedProperty arrayProperty, int index) {
+        public static float PropertyElementField(SerializedProperty arrayProperty, int index, bool drawScript = true) {
+
+            float height = 0f;
 
             SerializedProperty element = arrayProperty.GetArrayElementAtIndex(index);
+            
             string propertyPath = arrayProperty.propertyPath;
             Type type = element.GetValue().GetType();
-            if (type != null) {
+            if (type != null && drawScript) {
                 MonoScript monoScript = FindMonoScript(type);
                 if (monoScript != null)
                 {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Script", monoScript, typeof(MonoScript), true);
                     EditorGUI.EndDisabledGroup();
+                    height += EditorGUIUtility.singleLineHeight;
                 }
             }
 
             
             if (HasCustomPropertyDrawer(type))
             {
+                height += EditorGUIUtility.standardVerticalSpacing;
                 EditorGUILayout.PropertyField(element, true);
+                height += EditorGUI.GetPropertyHeight(element, true);
             }
             else
             {
@@ -704,13 +800,103 @@ namespace DevionGames{
                 {
                     if (element.propertyPath.Contains(propertyPath + ".Array.data[" + index + "]") && !element.propertyPath.Replace(propertyPath + ".Array.data[" + index + "].", "").Contains("."))
                     {
+                        height += EditorGUIUtility.standardVerticalSpacing;
                         EditorGUILayout.PropertyField(element, true);
+                        height += EditorGUI.GetPropertyHeight(element, true);
                     }
                 }
             }
+            return height;
         }
 
-        private static bool HasCustomPropertyDrawer(Type type)
+        public static float PropertyElementField(Rect rect, SerializedProperty arrayProperty, int index, bool drawScript = true)
+        {
+
+            float height = 0f;
+
+            SerializedProperty element = arrayProperty.GetArrayElementAtIndex(index);
+            
+            string propertyPath = arrayProperty.propertyPath;
+            Type type = element.GetValue().GetType();
+            if (type != null && drawScript)
+            {
+                MonoScript monoScript = FindMonoScript(type);
+                if (monoScript != null)
+                {
+                    EditorGUI.BeginDisabledGroup(true);
+                    rect.height = EditorGUIUtility.singleLineHeight;
+                    height += rect.height;
+                    EditorGUI.ObjectField(rect,"Script", monoScript, typeof(MonoScript), true);
+                    EditorGUI.EndDisabledGroup();
+                   
+                }
+            }
+
+
+            if (HasCustomPropertyDrawer(type))
+            {
+                rect.y += EditorGUIUtility.standardVerticalSpacing+rect.height;
+                rect.height = EditorGUI.GetPropertyHeight(element, true);
+
+                height += EditorGUIUtility.standardVerticalSpacing+rect.height;
+                EditorGUI.PropertyField(rect,element, true);
+            }
+            else
+            {
+                while (element.NextVisible(true))
+                {
+                    if (element.propertyPath.Contains(propertyPath + ".Array.data[" + index + "]") && !element.propertyPath.Replace(propertyPath + ".Array.data[" + index + "].", "").Contains("."))
+                    {
+                        rect.y += EditorGUIUtility.standardVerticalSpacing+rect.height;
+                        rect.height = EditorGUI.GetPropertyHeight(element, true);
+                        height += EditorGUIUtility.standardVerticalSpacing + rect.height;
+                        EditorGUI.PropertyField(rect,element, true);
+                    }
+                }
+            }
+            return height;
+        }
+
+
+        public static float PropertyElementHeight(SerializedProperty arrayProperty, int index, bool drawScript = true)
+        {
+
+            float height = 0f;
+
+            SerializedProperty element = arrayProperty.GetArrayElementAtIndex(index);
+
+            string propertyPath = arrayProperty.propertyPath;
+            Type type = element.GetValue().GetType();
+            if (type != null && drawScript)
+            {
+                MonoScript monoScript = FindMonoScript(type);
+                if (monoScript != null)
+                {
+                    height += EditorGUIUtility.singleLineHeight;
+                }
+            }
+
+
+            if (HasCustomPropertyDrawer(type))
+            {
+                height += EditorGUIUtility.standardVerticalSpacing;
+                height += EditorGUI.GetPropertyHeight(element, true);
+            }
+            else
+            {
+                while (element.NextVisible(true))
+                {
+                    if (element.propertyPath.Contains(propertyPath + ".Array.data[" + index + "]") && !element.propertyPath.Replace(propertyPath + ".Array.data[" + index + "].", "").Contains("."))
+                    {
+                        height += EditorGUIUtility.standardVerticalSpacing;
+                        height += EditorGUI.GetPropertyHeight(element, true);
+                    }
+                }
+            }
+            return height;
+        }
+
+        public static bool HasCustomPropertyDrawer(Type type)
         {
             foreach (Type typesDerivedFrom in TypeCache.GetTypesDerivedFrom<GUIDrawer>())
             {
@@ -937,7 +1123,7 @@ namespace DevionGames{
             return value;
         }
 
-        public static object DrawFields(object obj)
+        public static object DrawFields(object obj, params GUILayoutOption[] options)
         {
             if (obj == null) { return null; }
 
@@ -975,7 +1161,7 @@ namespace DevionGames{
                 }
 
                 EditorGUI.BeginChangeCheck();
-                object val = EditorTools.DrawField(label, obj, value, field);
+                object val = EditorTools.DrawField(label, obj, value, field,options);
                 if (EditorGUI.EndChangeCheck())
                 {
                     field.SetValue(obj, val);
@@ -1000,6 +1186,10 @@ namespace DevionGames{
                 customDrawer.fieldInfo = field;
                 customDrawer.value = value;
                 customDrawer.OnGUI(label);
+                if (customDrawer.dirty) {
+                    GUI.changed = true;
+                    customDrawer.dirty = false;
+                }
                 return value;
             }
 
@@ -1017,7 +1207,11 @@ namespace DevionGames{
                 {
                     TextAreaAttribute attribute = field.GetCustomAttribute<TextAreaAttribute>();
                     EditorGUILayout.LabelField(label);
-                    return EditorGUILayout.TextArea((string)value, GUILayout.Height(attribute.minLines * EditorGUIUtility.singleLineHeight));
+                    List<GUILayoutOption> op = new List<GUILayoutOption>(options);
+                    op.Add(GUILayout.Height(attribute.minLines * EditorGUIUtility.singleLineHeight));
+                    GUIStyle style= new GUIStyle(EditorStyles.textArea);
+                    style.wordWrap = true;
+                    return EditorGUILayout.TextArea((string)value, style,op.ToArray());
                 }
                 else
                 {
@@ -1123,7 +1317,7 @@ namespace DevionGames{
 
                     for (int i = 0; i < list.Count; i++)
                     {
-                        list[i] = DrawField(new GUIContent("Element " + i), list, list[i], field);
+                        list[i] = DrawField(new GUIContent("Element " + i), list, list[i], field,options);
                     }
                     EditorTools.EndIndent();
                     return list;
@@ -1358,6 +1552,24 @@ namespace DevionGames{
             }
         }
 
+       
+        public static IEnumerable<SerializedProperty> EnumerateChildProperties(this SerializedProperty property)
+        {
+            var iterator = property.Copy();
+            var end = iterator.GetEndProperty();
+            if (iterator.NextVisible(enterChildren: true))
+            {
+                do
+                {
+                    if (SerializedProperty.EqualContents(iterator, end))
+                        yield break;
+
+                    yield return iterator;
+                }
+                while (iterator.NextVisible(enterChildren: false));
+            }
+        }
+
         public static object Duplicate(object source) {
             object duplicate = Activator.CreateInstance(source.GetType());
             FieldInfo[] fields = source.GetType().GetSerializedFields();
@@ -1372,6 +1584,13 @@ namespace DevionGames{
             public Type drawer;
 
             public Type type;
+        }
+
+        public static bool IsDocked(this EditorWindow window)
+        {
+            BindingFlags fullBinding = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static;
+            MethodInfo isDockedMethod = typeof(EditorWindow).GetProperty("docked", fullBinding).GetGetMethod(true);
+            return (bool)isDockedMethod.Invoke(window, null);
         }
 
         private static class Styles {

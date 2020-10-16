@@ -44,7 +44,7 @@ namespace DevionGames.InventorySystem
 
             for (int i = 0; i < this.m_Filters.Count; i++) {
                 if (this.m_Filters[i] is Category) {
-                    items = items.Where(x => x.Category.Name == (this.m_Filters[i] as Category).Name).ToList();
+                    items = items.Where(x => x.Category != null &&( x.Category.Name == (this.m_Filters[i] as Category).Name)).ToList();
                 }
                 if (this.m_Filters[i] is Rarity)
                 {

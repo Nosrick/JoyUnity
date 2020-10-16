@@ -10,64 +10,73 @@ namespace DevionGames{
 	/// <summary>
 	/// Base class for a collection of items.
 	/// </summary>
-	public abstract class CollectionEditor<T>: ICollectionEditor {
+	[System.Serializable]
+	public abstract class CollectionEditor<T> : ICollectionEditor {
 		private const  float LIST_MIN_WIDTH = 200f;
 		private const  float LIST_MAX_WIDTH = 400f;
 		private const float LIST_RESIZE_WIDTH = 10f;
 
+		protected Rect m_SidebarRect = new Rect(0,30,200,1000);
+		protected Vector2 m_ScrollPosition;
+		protected string m_SearchString=string.Empty;
+		protected Vector2 m_SidebarScrollPosition;
 
-		protected Rect sidebarRect = new Rect(0,30,200,1000);
-		protected Vector2 scrollPosition;
-		protected string searchString=string.Empty;
-		protected Vector2 sidebarScrollPosition;
+		private bool m_Drag;
+		private Rect m_DragRect = Rect.zero;
 
-		protected T selectedItem;
-		protected abstract List<T> Items {get;}
-        protected virtual bool CanAdd{
-            get { return true; }
-        }
-        protected virtual bool CanRemove
-        {
-            get { return true; }
-        }
-
-		protected virtual bool CanDuplicate
-		{
-			get { return true; }
+		protected int m_SelectedItemIndex;
+		protected T selectedItem {
+			get {
+				if (m_SelectedItemIndex > -1 && m_SelectedItemIndex < Items.Count) {
+					return Items[m_SelectedItemIndex];
+				}
+				return default;
+			}
 		}
 
-		public virtual string ToolbarName
-        {
-            get{
-                Type type = GetType();
-                if (type.IsGenericType)
-                {
-                    return ObjectNames.NicifyVariableName(type.GetGenericArguments()[0].Name);
-                }
-                else
-                {
-                    return ObjectNames.NicifyVariableName(type.Name.Replace("Editor", ""));
-                }
-            }
-        }
+		protected abstract List<T> Items {get;}
 
-        public void OnGUI(Rect position){
-			if (selectedItem == null)
-			{
-				int index = EditorPrefs.GetInt("CollectionEditorItemIndex", -1);
-				if (index != -1 && index < Items.Count)
-				{
-					Select(Items[index]);
-				}
-			}
-			DrawSidebar(new Rect(position.x, position.y, sidebarRect.width, position.height));
-			DrawContent(new Rect(sidebarRect.width, sidebarRect.y, position.width - sidebarRect.width, position.height));
+		protected virtual bool CanAdd => true;
+
+		protected virtual bool CanRemove => true;
+
+		protected virtual bool CanDuplicate => true;
+
+		public virtual string ToolbarName => GetType().IsGenericType ? 
+			ObjectNames.NicifyVariableName(GetType().GetGenericArguments()[0].Name) : 
+			ObjectNames.NicifyVariableName(GetType().Name.Replace("Editor", ""));
+
+		public virtual void OnEnable() {
+			string prefix = "CollectionEditor." + ToolbarName + ".";
+			this.m_SelectedItemIndex = EditorPrefs.GetInt(prefix + "m_SelectedItemIndex");
+			this.m_SidebarRect.width = EditorPrefs.GetFloat(prefix + "m_SidebarRect.width", LIST_MIN_WIDTH);
+			this.m_ScrollPosition.y = EditorPrefs.GetFloat(prefix + "m_Scrollposition.y");
+			this.m_SidebarScrollPosition.y = EditorPrefs.GetFloat(prefix + "m_SidebarScrollPosition.y");
+
+			if (this.m_SelectedItemIndex > -1 && this.m_SelectedItemIndex < Items.Count)
+				Select(Items[this.m_SelectedItemIndex]);
+		}
+		
+		public virtual void OnDisable() {
+			string prefix = "CollectionEditor." + ToolbarName + ".";
+			EditorPrefs.SetInt(prefix + "m_SelectedItemIndex",this.m_SelectedItemIndex);
+			EditorPrefs.SetFloat(prefix + "m_SidebarRect.width", this.m_SidebarRect.width);
+			EditorPrefs.SetFloat(prefix + "m_Scrollposition.y",this.m_ScrollPosition.y);
+			EditorPrefs.SetFloat(prefix + "m_SidebarScrollPosition.y",this.m_SidebarScrollPosition.y);
+		}
+
+		public virtual void OnDestroy() { Debug.Log("OnDestroy " + ToolbarName); }
+
+		public virtual void OnGUI(Rect position){
+			
+			DrawSidebar(new Rect(position.x, position.y, m_SidebarRect.width, position.height));
+			DrawContent(new Rect(m_SidebarRect.width, m_SidebarRect.y, position.width - m_SidebarRect.width, position.height));
 			ResizeSidebar();
 		}
 
 		private void DrawSidebar(Rect position) {
-			sidebarRect = position;
-			GUILayout.BeginArea(sidebarRect, "", Styles.leftPane);
+			m_SidebarRect = position;
+			GUILayout.BeginArea(m_SidebarRect, "", Styles.leftPane);
 			GUILayout.BeginHorizontal();
 			DoSearchGUI();
 
@@ -91,16 +100,17 @@ namespace DevionGames{
 			EditorGUILayout.Space();
 
 
-			sidebarScrollPosition = GUILayout.BeginScrollView(sidebarScrollPosition);
+			m_SidebarScrollPosition = GUILayout.BeginScrollView(m_SidebarScrollPosition);
 
+			List<Rect> rects = new List<Rect>();
 			for (int i = 0; i < Items.Count; i++)
 			{
 				T currentItem = Items[i];
-				if (!MatchesSearch(currentItem, searchString) && Event.current.type == EventType.Repaint)
+				if (!MatchesSearch(currentItem, m_SearchString) && Event.current.type == EventType.Repaint)
 				{
 					continue;
 				}
-
+				
 				using (var h = new EditorGUILayout.HorizontalScope(Styles.selectButton, GUILayout.Height(25)))
 				{
 					Color backgroundColor = GUI.backgroundColor;
@@ -123,7 +133,7 @@ namespace DevionGames{
 						GUI.backgroundColor = Styles.warningColor;
 					}
 
-
+					//Context Click
 					if (h.rect.Contains(Event.current.mousePosition) && Event.current.type == EventType.MouseDown && Event.current.button==1)
 					{
 						GenericMenu contextMenu = new GenericMenu();
@@ -144,34 +154,115 @@ namespace DevionGames{
 						}else {
 							contextMenu.AddDisabledItem(new GUIContent("Move Down"));
 						}
+
+						AddContextItem(contextMenu);
 						contextMenu.ShowAsContext();
 						Event.current.Use();
 					}
 
-					if (GUI.Button(h.rect, GUIContent.none, Styles.selectButton))
-					{
+					GUI.Label(h.rect, GUIContent.none, Styles.selectButton);
+					Rect rect = h.rect;
+					rect.width -= LIST_RESIZE_WIDTH * 0.5f;
+					if (rect.Contains(Event.current.mousePosition) && Event.current.type == EventType.MouseDown && Event.current.button == 0) {
 						GUI.FocusControl("");
-						selectedItem = currentItem;
-						EditorPrefs.SetInt("CollectionEditorItemIndex", i);
-						Select(selectedItem);
+						Select(currentItem);
+						Event.current.Use();
 					}
+
+
 					GUILayout.Label(ButtonLabel(i, currentItem), Styles.selectButtonText);
 					GUI.backgroundColor = backgroundColor;
 					Styles.selectButtonText.normal.textColor = textColor;
 					Styles.selectButtonText.fontStyle = FontStyle.Normal;
+					rects.Add(rect);
 				}
 			}
+
+			switch (Event.current.rawType)
+			{
+				case EventType.MouseUp:
+					if (this.m_Drag)
+					{
+						this.m_Drag = false;
+						for (int j = 0; j < rects.Count; j++)
+						{
+							Rect rect = rects[j];
+		
+							Rect rect1 = new Rect(rect.x, rect.y, rect.width, rect.height * 0.5f);
+							Rect rect2 = new Rect(rect.x, rect.y + rect.height * 0.5f, rect.width, rect.height * 0.5f);
+							int index = j;
+							if (index < this.m_SelectedItemIndex)
+								index += 1;
+							if (rect1.Contains(Event.current.mousePosition))
+							{
+								MoveItem(this.m_SelectedItemIndex, index-1);
+								Select(Items[index-1]);
+								break;
+							}
+							else if (rect2.Contains(Event.current.mousePosition))
+							{
+								MoveItem(this.m_SelectedItemIndex, index );
+								Select(Items[index]);
+								break;
+							}
+						}
+					}
+					break;
+				case EventType.MouseDrag:
+					for (int j = 0; j < rects.Count; j++)
+					{
+						if (rects[j].Contains(Event.current.mousePosition))
+						{
+							this.m_Drag = true;
+							break;
+						}
+					}
+					break;
+			}
+
+			for (int j = 0; j < rects.Count; j++)
+			{
+
+				Rect rect = rects[j];
+				Rect rect1 = new Rect(rect.x, rect.y, rect.width, rect.height * 0.5f);
+				Rect rect2 = new Rect(rect.x, rect.y + rect.height * 0.5f, rect.width, rect.height * 0.5f);
+
+				if (rect1.Contains(Event.current.mousePosition))
+				{
+					m_DragRect = rect;
+					m_DragRect.y = rect.y + 10f - 25f;
+					m_DragRect.x = rect.x + 5f;
+					break;
+				}
+				else if (rect2.Contains(Event.current.mousePosition))
+				{
+					m_DragRect = rect;
+					m_DragRect.y = rect.y + 10f;
+					m_DragRect.x = rect.x + 5f;
+
+					break;
+				}
+				else
+				{
+					m_DragRect = Rect.zero;
+				}
+			}
+
+			if (m_Drag){
+				GUI.Label(m_DragRect,GUIContent.none, Styles.dragInsertion);
+			}
+
 			GUILayout.EndScrollView();
 			GUILayout.EndArea();
 		}
 
+		protected virtual void AddContextItem(GenericMenu menu) { }
+
 		protected virtual void DrawContent(Rect position) {
 			
 			GUILayout.BeginArea(position, "", Styles.centerPane);
-			scrollPosition.y = EditorPrefs.GetFloat("CollectionEditorContentScrollY" + ToolbarName);
-			scrollPosition = GUILayout.BeginScrollView(scrollPosition, EditorStyles.inspectorDefaultMargins);
-			EditorPrefs.SetFloat("CollectionEditorContentScrollY"+ToolbarName, scrollPosition.y);
-			if (selectedItem != null && Items.Contains(selectedItem))
+			m_ScrollPosition = GUILayout.BeginScrollView(m_ScrollPosition, EditorStyles.inspectorDefaultMargins);
+			if (selectedItem != null)
 			{
 				DrawItem(selectedItem);
 			}
@@ -179,14 +270,17 @@ namespace DevionGames{
 			GUILayout.EndArea();
 		}
 
-        public virtual void OnDestroy() { }
-
 		/// <summary>
 		/// Select an item.
 		/// </summary>
 		/// <param name="item">Item.</param>
 		protected virtual void Select(T item){
-			selectedItem = item;
+			int index = Items.IndexOf(item);
+			if (this.m_SelectedItemIndex != index)
+			{
+				this.m_SelectedItemIndex = index;
+				this.m_ScrollPosition.y = 0f;
+			}
 		}
 
 		/// <summary>
@@ -222,7 +316,7 @@ namespace DevionGames{
 		protected virtual void MoveUp(T item) {
 			int oldIndex = Items.IndexOf(item);
 			MoveItem(oldIndex, oldIndex - 1);
-			EditorPrefs.SetInt("CollectionEditorItemIndex", oldIndex-1);
+			Select(Items[oldIndex - 1]);
 		}
 
 		/// <summary>
@@ -232,7 +326,7 @@ namespace DevionGames{
 		protected virtual void MoveDown(T item) {
 			int oldIndex = Items.IndexOf(item);
 			MoveItem(oldIndex, oldIndex + 1);
-			EditorPrefs.SetInt("CollectionEditorItemIndex", oldIndex + 1);
+			Select(Items[oldIndex + 1]);
 		}
 
 		protected virtual bool CanMove(T item, int newIndex) {
@@ -266,7 +360,6 @@ namespace DevionGames{
 			Items[newIndex] = tmp;
 		}
 
-
 		/// <summary>
 		/// Draws the item properties.
 		/// </summary>
@@ -293,11 +386,11 @@ namespace DevionGames{
 		protected abstract bool MatchesSearch (T item, string search);
 
 		protected virtual void DoSearchGUI(){
-			searchString = EditorTools.SearchField (searchString);
+			m_SearchString = EditorTools.SearchField (m_SearchString);
 		}
 
 		private void ResizeSidebar(){
-			Rect rect = new Rect (sidebarRect.width - LIST_RESIZE_WIDTH*0.5f, sidebarRect.y, LIST_RESIZE_WIDTH, sidebarRect.height);
+			Rect rect = new Rect (m_SidebarRect.width - LIST_RESIZE_WIDTH*0.5f, m_SidebarRect.y, LIST_RESIZE_WIDTH, m_SidebarRect.height);
 			EditorGUIUtility.AddCursorRect(rect, MouseCursor.ResizeHorizontal);
 			int controlID = GUIUtility.GetControlID(FocusType.Passive);
 			Event ev = Event.current;
@@ -318,9 +411,10 @@ namespace DevionGames{
 			case EventType.MouseDrag:
 				if (GUIUtility.hotControl == controlID)
 				{
-					sidebarRect.width=ev.mousePosition.x;
-					sidebarRect.width=Mathf.Clamp(sidebarRect.width,LIST_MIN_WIDTH,LIST_MAX_WIDTH);
-                    EditorPrefs.SetFloat("CollectionEditorSidebarWidth"+ToolbarName,sidebarRect.width);
+					this.m_Drag = false;
+					m_SidebarRect.width=ev.mousePosition.x;
+					m_SidebarRect.width=Mathf.Clamp(m_SidebarRect.width,LIST_MIN_WIDTH,LIST_MAX_WIDTH);
+                    EditorPrefs.SetFloat("CollectionEditorSidebarWidth"+ToolbarName,m_SidebarRect.width);
 					ev.Use();
 				}
 				break;
@@ -349,6 +443,8 @@ namespace DevionGames{
 			public static Color hoverColor;
 			public static Color activeColor;
 			public static Color warningColor;
+			public static GUIStyle dragInsertion;
+
 
 			private static GUISkin skin;
 
@@ -386,6 +482,7 @@ namespace DevionGames{
 				selectButtonText.normal.background = null;
 				selectButtonText.normal.textColor = EditorGUIUtility.isProSkin ? new Color(0.788f, 0.788f, 0.788f, 1f) : new Color(0.047f, 0.047f, 0.047f, 1f);
 				background = new GUIStyle("PopupCurveSwatchBackground");
+				dragInsertion = new GUIStyle("PR Insertion");
 			}
 		}
 	}

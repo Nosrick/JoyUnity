@@ -25,6 +25,7 @@ namespace DevionGames
         private Type m_ElementType;
         private static object m_ObjectToCopy;
         private Vector2 m_ScrollPosition;
+        private System.Action onChange;
 
         public static void ShowWindow(string title, SerializedObject serializedObject, SerializedProperty serializedProperty)
         {
@@ -38,6 +39,27 @@ namespace DevionGames
             window.ShowUtility();
         }
 
+        public static void ShowWindow(string title, IList list, System.Action onChange)
+        {
+            ObjectWindow[] objArray = Resources.FindObjectsOfTypeAll<ObjectWindow>();
+            ObjectWindow window = (objArray.Length <= 0 ? ScriptableObject.CreateInstance<ObjectWindow>() : objArray[0]);
+
+            window.hideFlags = HideFlags.HideAndDontSave;
+            window.minSize = new Vector2(260f, 200f);
+            window.titleContent = new GUIContent(title);
+
+            window.Initialize(list, onChange);
+            window.ShowUtility();
+        }
+        
+
+        private void Initialize(IList list, System.Action onChange)
+        {
+            this.m_List = list;
+            this.m_ElementType = Utility.GetElementType(this.m_List.GetType());
+            this.m_ElementTypeName = this.m_ElementType.Name;
+            this.onChange = onChange;
+        }
 
         private void Initialize(SerializedObject serializedObject, SerializedProperty serializedProperty) {
             this.m_SerializedObject = serializedObject;
@@ -61,6 +83,7 @@ namespace DevionGames
             AssemblyReloadEvents.beforeAssemblyReload += OnBeforeAssemblyReload;
             AssemblyReloadEvents.afterAssemblyReload += OnAfterAssemblyReload;
             EditorApplication.playModeStateChanged += OnPlaymodeStateChange;
+            Selection.selectionChanged += OnSelectionChange;
         }
 
         void OnDisable()
@@ -68,6 +91,7 @@ namespace DevionGames
             AssemblyReloadEvents.beforeAssemblyReload -= OnBeforeAssemblyReload;
             AssemblyReloadEvents.afterAssemblyReload -= OnAfterAssemblyReload;
             EditorApplication.playModeStateChanged -= OnPlaymodeStateChange;
+            Selection.selectionChanged -= OnSelectionChange;
         }
 
         private void Update()
@@ -79,7 +103,39 @@ namespace DevionGames
         {
             this.m_ScrollPosition = EditorGUILayout.BeginScrollView(this.m_ScrollPosition);
             GUILayout.Space(1f);
+            if (this.m_Target != null) {
+                DoSerializedPropertyGUI();
+            }else {
+                DoListGUI();
+            }
+            EditorGUILayout.EndScrollView();
+            GUILayout.FlexibleSpace();
+            DoAddButton();
+            GUILayout.Space(10f);
+        }
 
+        private void DoListGUI() {
+            EditorGUI.BeginChangeCheck();
+            for (int i = 0; i < this.m_List.Count; i++)
+            {
+                object value = this.m_List[i];
+                if (EditorTools.Titlebar(value, GetObjectMenu(i)))
+                {
+                    EditorGUI.indentLevel += 1;
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Script", EditorTools.FindMonoScript(value.GetType()), typeof(MonoScript), true);
+                    EditorGUI.EndDisabledGroup();
+                    EditorTools.DrawFields(value);
+                    EditorGUI.indentLevel -= 1;
+                }
+            }
+            if (EditorGUI.EndChangeCheck())
+            {
+                onChange.Invoke();
+            }
+        }
+
+        private void DoSerializedPropertyGUI() {
             this.m_SerializedObject.Update();
             for (int i = 0; i < this.m_List.Count; i++)
             {
@@ -95,18 +151,19 @@ namespace DevionGames
                     EditorGUILayout.ObjectField("Script", EditorTools.FindMonoScript(value.GetType()), typeof(MonoScript), true);
                     EditorGUI.EndDisabledGroup();
                     SerializedProperty element = this.m_SerializedProperty.GetArrayElementAtIndex(i);
-                    if (HasCustomPropertyDrawer(value.GetType()))
+                    if (EditorTools.HasCustomPropertyDrawer(value.GetType()))
                     {
                         EditorGUILayout.PropertyField(element, true);
                     }
                     else
                     {
-                        while (element.NextVisible(true))
+                        foreach (var child in element.EnumerateChildProperties())
                         {
-                            if (element.propertyPath.Contains(this.m_PropertyPath+".Array.data[" + i + "]") && !element.propertyPath.Replace(this.m_PropertyPath + ".Array.data[" + i + "].", "").Contains("."))
-                            {
-                                EditorGUILayout.PropertyField(element, true);
-                            }
+
+                            EditorGUILayout.PropertyField(
+                                child,
+                                includeChildren: true
+                            );
                         }
                     }
                     EditorGUI.indentLevel -= 1;
@@ -115,28 +172,6 @@ namespace DevionGames
                     EditorUtility.SetDirty(this.m_Target);
             }
             this.m_SerializedObject.ApplyModifiedProperties();
-            EditorGUILayout.EndScrollView();
-            GUILayout.FlexibleSpace();
-            DoAddButton();
-            GUILayout.Space(10f);
-        }
-
-        private bool HasCustomPropertyDrawer(Type type)
-        {
-            foreach (Type typesDerivedFrom in TypeCache.GetTypesDerivedFrom<GUIDrawer>())
-            {
-                object[] customAttributes = typesDerivedFrom.GetCustomAttributes<CustomPropertyDrawer>();
-                for (int i = 0; i < (int)customAttributes.Length; i++)
-                {
-                    CustomPropertyDrawer customPropertyDrawer = (CustomPropertyDrawer)customAttributes[i];
-                    FieldInfo field = customPropertyDrawer.GetType().GetField("m_Type", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-                    Type type1 = (Type)field.GetValue(customPropertyDrawer);
-                    if (type == type1)
-                        return true;
-                }
-            }
-
-            return false;
         }
 
         private void DoAddButton()
@@ -151,21 +186,28 @@ namespace DevionGames
                 AddObjectWindow.ShowWindow(buttonRect, this.m_ElementType, Add, CreateScript);
             }
         }
-
+    
         private void CreateScript(string scriptName)
         {
-
+            Debug.LogWarning("This is not implemented yet!");
         }
+
 
         private void Add(Type type)
         {
             object value = System.Activator.CreateInstance(type);
-            this.m_SerializedObject.Update();
-            this.m_SerializedProperty.arraySize++;
-            this.m_SerializedProperty.GetArrayElementAtIndex(this.m_SerializedProperty.arraySize - 1).managedReferenceValue = value;
-            this.m_SerializedObject.ApplyModifiedProperties();
-
+            if (this.m_Target != null)
+            {
+                this.m_SerializedObject.Update();
+                this.m_SerializedProperty.arraySize++;
+                this.m_SerializedProperty.GetArrayElementAtIndex(this.m_SerializedProperty.arraySize - 1).managedReferenceValue = value;
+                this.m_SerializedObject.ApplyModifiedProperties();
+            }else {
+                this.m_List.Add(value);
+                onChange.Invoke();
+            }
         }
+
 
         private GenericMenu GetObjectMenu(int index)
         {
@@ -174,9 +216,15 @@ namespace DevionGames
             {
                 object value = System.Activator.CreateInstance(this.m_List[index].GetType());
                 this.m_List[index] = value;
+                if (onChange != null)
+                    onChange.Invoke();
             });
             menu.AddSeparator(string.Empty);
-            menu.AddItem(new GUIContent("Remove " + this.m_ElementType.Name), false, delegate { this.m_List.RemoveAt(index); });
+            menu.AddItem(new GUIContent("Remove " + this.m_ElementType.Name), false, delegate { 
+                this.m_List.RemoveAt(index); 
+                if (onChange != null)
+                    onChange.Invoke();
+            });
 
             if (index > 0)
             {
@@ -185,6 +233,8 @@ namespace DevionGames
                     object value = this.m_List[index];
                     this.m_List.RemoveAt(index);
                     this.m_List.Insert(index - 1, value);
+                    if (onChange != null)
+                        onChange.Invoke();
                 });
             }
             else
@@ -199,6 +249,8 @@ namespace DevionGames
                     object value = this.m_List[index];
                     this.m_List.RemoveAt(index);
                     this.m_List.Insert(index + 1, value);
+                    if (onChange != null)
+                        onChange.Invoke();
                 });
             }
             else
@@ -210,6 +262,8 @@ namespace DevionGames
             {
                 object value = this.m_List[index];
                 ObjectWindow.m_ObjectToCopy = value;
+                if (onChange != null)
+                    onChange.Invoke();
             });
 
             if (ObjectWindow.m_ObjectToCopy != null)
@@ -224,6 +278,8 @@ namespace DevionGames
                         fields[i].SetValue(instance, value);
                     }
                     this.m_List.Insert(index + 1, instance);
+                    if (onChange != null)
+                        onChange.Invoke();
                 });
 
                 if (this.m_List[index].GetType() == ObjectWindow.m_ObjectToCopy.GetType())
@@ -237,6 +293,8 @@ namespace DevionGames
                             object value = fields[i].GetValue(ObjectWindow.m_ObjectToCopy);
                             fields[i].SetValue(instance, value);
                         }
+                        if (onChange != null)
+                            onChange.Invoke();
                     });
                 }
                 else
@@ -244,6 +302,7 @@ namespace DevionGames
                     menu.AddDisabledItem(new GUIContent("Paste " + this.m_ElementType.Name + " Values"));
                 }
             }
+
 
             MonoScript script = EditorTools.FindMonoScript(this.m_List[index].GetType());
             if (script != null)
@@ -270,7 +329,7 @@ namespace DevionGames
                 if (temp == this.m_List)
                     this.m_FieldName = fields[i].Name;
             }*/
-            if (this.m_Target is Component)
+            if (this.m_Target != null && this.m_Target is Component)
             {
                 this.m_GameObject = (this.m_Target as Component).gameObject;
                 this.m_ComponentInstanceID = (this.m_Target as Component).GetInstanceID();
@@ -282,8 +341,18 @@ namespace DevionGames
             Reload();
         }
 
+        private void OnSelectionChange()
+        {
+            Reload();
+        }
+
         private void Reload()
         {
+            if (this.m_Target == null){
+                Close();
+                return;
+            }
+
             if (this.m_GameObject != null)
             {
                 Component[] components = this.m_GameObject.GetComponents(typeof(Component));

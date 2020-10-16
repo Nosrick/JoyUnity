@@ -12,14 +12,49 @@ namespace DevionGames
         private string m_Name = "New Variable";
         public string Name { get => this.m_Name; set => this.m_Name = value; }
 
+		[TextArea]
 		[SerializeField]
-		private VariableType m_VariableType = 0;
+		private string m_Description=string.Empty;
 
-		public VariableType Type
+		public string Description { get => this.m_Description; set => this.m_Description = value; }
+
+		[SerializeField]
+		private NamedVariableType m_VariableType = 0;
+
+		public NamedVariableType VariableType
 		{
-			get
-			{
-				return this.m_VariableType;
+			get{return this.m_VariableType;}
+			set { this.m_VariableType = value; }
+		}
+
+		public Type ValueType {
+			get {
+				switch (VariableType)
+				{
+					case NamedVariableType.Bool:
+						return typeof(bool);
+					case NamedVariableType.Color:
+						return typeof(Color);
+					case NamedVariableType.Float:
+						return typeof(float);
+					case NamedVariableType.Int:
+						return typeof(int);
+					case NamedVariableType.Object:
+						return typeof(UnityEngine.Object);
+					case NamedVariableType.String:
+						return typeof(string);
+					case NamedVariableType.Vector2:
+						return typeof(Vector2);
+					case NamedVariableType.Vector3:
+						return typeof(Vector3);
+				}
+				return null;
+			}
+		}
+
+		public string[] VariableTypeNames {
+			get {
+				return new string[] {"Bool","Color","Float","Int", "Object", "String","Vector2", "Vector3"};
 			}
 		}
 
@@ -34,22 +69,22 @@ namespace DevionGames
 
 		public object GetValue()
 		{
-			switch (Type) {
-				case VariableType.Bool:
+			switch (VariableType) {
+				case NamedVariableType.Bool:
 					return boolValue;
-				case VariableType.Color:
+				case NamedVariableType.Color:
 					return colorValue;
-				case VariableType.Float:
+				case NamedVariableType.Float:
 					return floatValue;
-				case VariableType.Int:
+				case NamedVariableType.Int:
 					return intValue;
-				case VariableType.Object:
+				case NamedVariableType.Object:
 					return objectReferenceValue;
-				case VariableType.String:
+				case NamedVariableType.String:
 					return stringValue;
-				case VariableType.Vector2:
+				case NamedVariableType.Vector2:
 					return vector2Value;
-				case VariableType.Vector3:
+				case NamedVariableType.Vector3:
 					return vector3Value;
 			}
 			return null;
@@ -60,27 +95,27 @@ namespace DevionGames
 			
 			if (value is string)
 			{
-				m_VariableType = VariableType.String;
+				m_VariableType = NamedVariableType.String;
 				stringValue = (string)value;
 			}
 			else if (value is bool)
 			{
-				m_VariableType = VariableType.Bool;
+				m_VariableType = NamedVariableType.Bool;
 				boolValue = (bool)value;
 			}
 			else if (value is Color)
 			{
-				m_VariableType = VariableType.Color;
+				m_VariableType = NamedVariableType.Color;
 				colorValue = (Color)value;
 			}
 			else if (value is float || value is double)
 			{
-				m_VariableType = VariableType.Float;
+				m_VariableType = NamedVariableType.Float;
 				floatValue = System.Convert.ToSingle(value);
 			}
-			else if (typeof(UnityEngine.Object).IsAssignableFrom(value.GetType()))
+			else if (value == null || typeof(UnityEngine.Object).IsAssignableFrom(value.GetType()))
 			{
-				m_VariableType = VariableType.Object;
+				m_VariableType = NamedVariableType.Object;
 				objectReferenceValue = (UnityEngine.Object)value;
 			}
 			else if (value is int
@@ -92,17 +127,17 @@ namespace DevionGames
 					 || value is ushort
 					 || value is ulong)
 			{
-				m_VariableType = VariableType.Int;
+				m_VariableType = NamedVariableType.Int;
 				intValue = System.Convert.ToInt32(value);
 			}
 			else if (value is Vector2)
 			{
-				m_VariableType = VariableType.Vector2;
+				m_VariableType = NamedVariableType.Vector2;
 				vector2Value = (Vector2)value;
 			}
 			else if (value is Vector3)
 			{
-				m_VariableType = VariableType.Vector3;
+				m_VariableType = NamedVariableType.Vector3;
 				vector3Value = (Vector3)value;
 			}
 		}
@@ -113,36 +148,37 @@ namespace DevionGames
 			{
 				switch (m_VariableType)
 				{
-					case VariableType.Bool:
+					case NamedVariableType.Bool:
 						return "boolValue";
-					case VariableType.Color:
+					case NamedVariableType.Color:
 						return "colorValue";
-					case VariableType.Float:
+					case NamedVariableType.Float:
 						return "floatValue";
-					case VariableType.Int:
+					case NamedVariableType.Int:
 						return "intValue";
-					case VariableType.Object:
+					case NamedVariableType.Object:
 						return "objectReferenceValue";
-					case VariableType.String:
+					case NamedVariableType.String:
 						return "stringValue";
-					case VariableType.Vector2:
+					case NamedVariableType.Vector2:
 						return "vector2Value";
-					case VariableType.Vector3:
+					case NamedVariableType.Vector3:
 						return "vector3Value";
 				}
 				return string.Empty;
 			}
 		}
+	}
 
-		public enum VariableType : int { 
-			String = 0,
-			Bool = 2,
-			Color = 3,
-			Float = 4,
-			Object = 5,
-			Int = 6,
-			Vector2 = 7,
-			Vector3 = 8
-		}
+	public enum NamedVariableType : int
+	{
+		String = 0,
+		Bool = 2,
+		Color = 3,
+		Float = 4,
+		Object = 5,
+		Int = 6,
+		Vector2 = 7,
+		Vector3 = 8
 	}
 }

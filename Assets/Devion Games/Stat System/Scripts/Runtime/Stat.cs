@@ -38,8 +38,10 @@ namespace DevionGames.StatSystem
                 {
                     this.m_LastBaseValue = this.m_BaseValue;
                     this.m_Value = CalculateFinalValue();
-                    this.m_Value = Mathf.Clamp(this.m_Value, this.m_MinValue, this.m_MaxValue);
-                    this.CurrentValue = Mathf.Clamp(this.m_CurrentValue, this.m_MinValue, this.m_MaxValue);
+
+                    this.m_Value = Mathf.Clamp(this.m_Value, this.MinValue, this.MaxValue);
+                    this.CurrentValue = Mathf.Clamp(this.m_CurrentValue, this.MinValue, this.MaxValue);
+
                     this.m_Dirty = false;
                 }
                 return this.m_Value;
@@ -71,9 +73,15 @@ namespace DevionGames.StatSystem
         }
 
         [SerializeField]
-		private float m_MaxValue;
+		private float m_MaxValue = -1f;
 		public float MaxValue {
-			get{ return this.m_MaxValue; }
+			get{
+                if (this.m_MaxValue < 0f) {
+                    return float.PositiveInfinity;
+                }
+                return this.m_MaxValue; 
+            
+            }
 			set {this.m_MaxValue = value;}
 		}
 

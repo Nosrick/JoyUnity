@@ -7,6 +7,7 @@ using System;
 using DevionGames.UIWidgets;
 using DevionGames.InventorySystem.Configuration;
 using UnityEngine.Assertions;
+using UnityEngine.EventSystems;
 
 namespace DevionGames.InventorySystem
 {
@@ -147,8 +148,19 @@ namespace DevionGames.InventorySystem
 				return;
 			} else {
 				InventoryManager.m_Current = this;
-                if (InventoryManager.DefaultSettings.debugMessages)
-                    Debug.Log ("Inventory Manager initialized.");
+                if (EventSystem.current == null) {
+                    if (InventoryManager.DefaultSettings.debugMessages)
+                        Debug.Log("Missing EventSystem in scene. Auto creating!");
+                        new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule));
+                }
+
+                if (Camera.main != null && Camera.main.GetComponent<PhysicsRaycaster>() == null) {
+                    if (InventoryManager.DefaultSettings.debugMessages)
+                        Debug.Log("Missing PhysicsRaycaster on Main Camera. Auto adding!");
+                    PhysicsRaycaster physicsRaycaster = Camera.main.gameObject.AddComponent<PhysicsRaycaster>();
+                    physicsRaycaster.eventMask = Physics.DefaultRaycastLayers;
+                }
+           
                 m_PrefabCache = new Dictionary<string, GameObject>();
                 UnityEngine.SceneManagement.SceneManager.activeSceneChanged += ChangedActiveScene;
                 if (dontDestroyOnLoad) {
@@ -157,7 +169,9 @@ namespace DevionGames.InventorySystem
                 if (InventoryManager.SavingLoading.autoSave) {
                     StartCoroutine(RepeatSaving(InventoryManager.SavingLoading.savingRate));
                 }
-			}
+                if (InventoryManager.DefaultSettings.debugMessages)
+                    Debug.Log("Inventory Manager initialized.");
+            }
 		}
 
         private void Start()
@@ -368,6 +382,21 @@ namespace DevionGames.InventorySystem
             return CreateInstances(group.Items, group.Amounts, group.RandomProperty);
         }
 
+
+        public static Item CreateInstance(Item item)
+        {
+            Item instance = Instantiate(item);
+            if (item.IsCraftable)
+            {
+                for (int j = 0; j < item.ingredients.Count; j++)
+                {
+                    item.ingredients[j].item = Instantiate(item.ingredients[j].item);
+                    item.ingredients[j].item.Stack = item.ingredients[j].amount;
+                }
+            }
+
+            return instance;
+        }
 
         public static Item[] CreateInstances(Item[] items)
         {

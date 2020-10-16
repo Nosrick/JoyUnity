@@ -212,7 +212,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   autoSave: 1
   savingKey: Player
-  savingRate: 10
+  savingRate: 60
   provider: 0
 --- !u!114 &-8192587188366231400
 MonoBehaviour:
@@ -423,7 +423,8 @@ MonoBehaviour:
     type: 3}
   m_Description: An axe can be used to cut trees.
   m_Category: {fileID: -9040799555073544844}
-  m_PossibleRarity: []
+  m_PossibleRarity:
+  - {fileID: 4257271418691296376}
   m_BuyPrice: 8
   m_BuyCurrency: {fileID: -2811142919616601772}
   m_SellPrice: 6
@@ -500,6 +501,7 @@ MonoBehaviour:
     00000000:
       type: {class: InvokeNotify, ns: DevionGames.InventorySystem, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         m_Target: 1
         m_ComponentName: StatsHandler
@@ -534,6 +536,7 @@ MonoBehaviour:
     00000001:
       type: {class: Invoke, ns: DevionGames, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         m_Target: 1
         m_ComponentName: StatsHandler
@@ -560,12 +563,14 @@ MonoBehaviour:
     00000002:
       type: {class: Cooldown, ns: DevionGames.InventorySystem.ItemActions, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         item: {fileID: -4423743630002525559}
         m_GlobalCooldown: 5
     00000003:
       type: {class: SendMessage, ns: DevionGames, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         m_Target: 1
         methodName: SetIK
@@ -583,6 +588,7 @@ MonoBehaviour:
     00000004:
       type: {class: CrossFade, ns: DevionGames, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         m_Target: 1
         m_AnimatorState: Healing
@@ -590,11 +596,13 @@ MonoBehaviour:
     00000005:
       type: {class: Wait, ns: DevionGames, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         duration: 0.5
     00000006:
       type: {class: Instantiate, ns: DevionGames, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         m_Target: 1
         m_Original: {fileID: 100010, guid: 1b80c9f94defa634487a6d9f6e386f6a, type: 3}
@@ -604,6 +612,7 @@ MonoBehaviour:
     00000007:
       type: {class: Invoke, ns: DevionGames, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         m_Target: 1
         m_ComponentName: StatsHandler
@@ -630,11 +639,13 @@ MonoBehaviour:
     00000008:
       type: {class: Wait, ns: DevionGames, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         duration: 1.2
     00000009:
       type: {class: SendMessage, ns: DevionGames, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         m_Target: 1
         methodName: SetIK
@@ -743,6 +754,7 @@ MonoBehaviour:
     00000000:
       type: {class: SetEnabled, ns: DevionGames, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         m_Target: 1
         m_ComponentName: ThirdPersonController
@@ -750,32 +762,38 @@ MonoBehaviour:
     00000001:
       type: {class: Cooldown, ns: DevionGames.InventorySystem.ItemActions, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         item: {fileID: -2839999955813321745}
         m_GlobalCooldown: 1
     00000002:
       type: {class: Wait, ns: DevionGames, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         duration: 1
     00000003:
       type: {class: Save, ns: DevionGames.InventorySystem, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
     00000004:
       type: {class: LoadScene, ns: DevionGames, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         m_Scene: Main Scene
     00000005:
       type: {class: SetPosition, ns: DevionGames, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         m_Target: 1
         m_Position: {x: 20.65, y: 0.018, z: -21.71}
     00000006:
       type: {class: SetEnabled, ns: DevionGames, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         m_Target: 1
         m_ComponentName: ThirdPersonController
@@ -935,7 +953,8 @@ MonoBehaviour:
     type: 3}
   m_Description: Hammer is used to craft items.
   m_Category: {fileID: -9040799555073544844}
-  m_PossibleRarity: []
+  m_PossibleRarity:
+  - {fileID: 4257271418691296376}
   m_BuyPrice: 6
   m_BuyCurrency: {fileID: -2811142919616601772}
   m_SellPrice: 4
@@ -987,23 +1006,23 @@ MonoBehaviour:
   m_Name: Fantasy ItemDatabase
   m_EditorClassIdentifier: 
   items:
-  - {fileID: -8967533827971111582}
-  - {fileID: 960666660569578442}
   - {fileID: -2060425377994505070}
-  - {fileID: -447126039411374142}
-  - {fileID: -4474190543486091594}
-  - {fileID: 2409076057030828310}
-  - {fileID: -5663772737389988193}
-  - {fileID: 8763039942855579107}
-  - {fileID: 1063046599387310152}
   - {fileID: 8429455951140046941}
-  - {fileID: 3129509250564287029}
+  - {fileID: 1063046599387310152}
   - {fileID: 6234106693565876968}
+  - {fileID: 8763039942855579107}
+  - {fileID: -5663772737389988193}
+  - {fileID: 3129509250564287029}
   - {fileID: -4423743630002525559}
   - {fileID: 4447567160419299934}
-  - {fileID: 2033560685258441697}
   - {fileID: -2839999955813321745}
+  - {fileID: 2033560685258441697}
   - {fileID: 8692695060773013855}
+  - {fileID: 2409076057030828310}
+  - {fileID: -4474190543486091594}
+  - {fileID: -447126039411374142}
+  - {fileID: -8967533827971111582}
+  - {fileID: 960666660569578442}
   currencies:
   - {fileID: -2811142919616601772}
   - {fileID: -6442420119529586086}
@@ -1044,6 +1063,7 @@ MonoBehaviour:
   - {fileID: 9220062648813220349}
   - {fileID: -8216026199854185599}
   - {fileID: -4242386034172315359}
+  folders: []
 --- !u!114 &7481220999571344
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1328,6 +1348,7 @@ MonoBehaviour:
     00000000:
       type: {class: SetEnabled, ns: DevionGames, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         m_Target: 1
         m_ComponentName: ThirdPersonController
@@ -1335,32 +1356,38 @@ MonoBehaviour:
     00000001:
       type: {class: Cooldown, ns: DevionGames.InventorySystem.ItemActions, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         item: {fileID: 2033560685258441697}
         m_GlobalCooldown: 1
     00000002:
       type: {class: Wait, ns: DevionGames, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         duration: 1
     00000003:
       type: {class: Save, ns: DevionGames.InventorySystem, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
     00000004:
       type: {class: LoadScene, ns: DevionGames, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         m_Scene: Main Scene
     00000005:
       type: {class: SetPosition, ns: DevionGames, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         m_Target: 1
         m_Position: {x: -3.45, y: 0.018, z: 10.92}
     00000006:
       type: {class: SetEnabled, ns: DevionGames, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         m_Target: 1
         m_ComponentName: ThirdPersonController
@@ -1384,7 +1411,8 @@ MonoBehaviour:
     type: 3}
   m_Description: A pickaxe can be used to mine.
   m_Category: {fileID: -9040799555073544844}
-  m_PossibleRarity: []
+  m_PossibleRarity:
+  - {fileID: 4257271418691296376}
   m_BuyPrice: 12
   m_BuyCurrency: {fileID: -2811142919616601772}
   m_SellPrice: 9
@@ -1456,17 +1484,20 @@ MonoBehaviour:
     00000000:
       type: {class: Cooldown, ns: DevionGames.InventorySystem.ItemActions, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         item: {fileID: 3129509250564287029}
         m_GlobalCooldown: 5
     00000001:
       type: {class: Wait, ns: DevionGames, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         duration: 5
     00000002:
       type: {class: AddItem, ns: DevionGames.InventorySystem.ItemActions, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         item: {fileID: 3129509250564287029}
         m_WindowName: Crafting
@@ -1474,6 +1505,7 @@ MonoBehaviour:
     00000003:
       type: {class: ReduceStack, ns: DevionGames.InventorySystem.ItemActions, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         item: {fileID: 3129509250564287029}
         m_Amount: 1
@@ -1573,6 +1605,7 @@ MonoBehaviour:
     00000000:
       type: {class: InvokeNotify, ns: DevionGames.InventorySystem, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         m_Target: 1
         m_ComponentName: StatsHandler
@@ -1607,6 +1640,7 @@ MonoBehaviour:
     00000001:
       type: {class: Invoke, ns: DevionGames, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         m_Target: 1
         m_ComponentName: StatsHandler
@@ -1633,12 +1667,14 @@ MonoBehaviour:
     00000002:
       type: {class: Cooldown, ns: DevionGames.InventorySystem.ItemActions, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         item: {fileID: 4447567160419299934}
         m_GlobalCooldown: 3
     00000003:
       type: {class: SendMessage, ns: DevionGames, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         m_Target: 1
         methodName: SetIK
@@ -1656,11 +1692,13 @@ MonoBehaviour:
     00000004:
       type: {class: LookForward, ns: DevionGames, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         m_Target: 1
     00000005:
       type: {class: CrossFade, ns: DevionGames, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         m_Target: 1
         m_AnimatorState: Arcane Ball
@@ -1668,11 +1706,13 @@ MonoBehaviour:
     00000006:
       type: {class: Wait, ns: DevionGames, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         duration: 1.2
     00000007:
       type: {class: Instantiate, ns: DevionGames, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         m_Target: 1
         m_Original: {fileID: 100014, guid: d6f72918cc3dd004584674be2b246697, type: 3}
@@ -1682,11 +1722,13 @@ MonoBehaviour:
     00000008:
       type: {class: Wait, ns: DevionGames, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         duration: 1.2
     00000009:
       type: {class: SendMessage, ns: DevionGames, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         m_Target: 1
         methodName: SetIK
@@ -2066,6 +2108,7 @@ MonoBehaviour:
     00000000:
       type: {class: Invoke, ns: DevionGames, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         m_Target: 1
         m_ComponentName: StatsHandler
@@ -2092,18 +2135,21 @@ MonoBehaviour:
     00000001:
       type: {class: ReduceStack, ns: DevionGames.InventorySystem.ItemActions, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         item: {fileID: 8429455951140046941}
         m_Amount: 1
     00000002:
       type: {class: Cooldown, ns: DevionGames.InventorySystem.ItemActions, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         item: {fileID: 8429455951140046941}
         m_GlobalCooldown: 0.5
     00000003:
       type: {class: Wait, ns: DevionGames, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         duration: 1
 --- !u!114 &8692695060773013855
@@ -2154,6 +2200,7 @@ MonoBehaviour:
     00000000:
       type: {class: SetEnabled, ns: DevionGames, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         m_Target: 1
         m_ComponentName: ThirdPersonController
@@ -2161,32 +2208,38 @@ MonoBehaviour:
     00000001:
       type: {class: Cooldown, ns: DevionGames.InventorySystem.ItemActions, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         item: {fileID: 8692695060773013855}
         m_GlobalCooldown: 1
     00000002:
       type: {class: Wait, ns: DevionGames, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         duration: 1
     00000003:
       type: {class: Save, ns: DevionGames.InventorySystem, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
     00000004:
       type: {class: LoadScene, ns: DevionGames, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         m_Scene: Map2
     00000005:
       type: {class: SetPosition, ns: DevionGames, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         m_Target: 1
         m_Position: {x: -3.45, y: 0.018, z: 3.96}
     00000006:
       type: {class: SetEnabled, ns: DevionGames, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         m_Target: 1
         m_ComponentName: ThirdPersonController
@@ -2230,7 +2283,7 @@ MonoBehaviour:
   m_SellPrice: 3
   m_SellCurrency: {fileID: -2811142919616601772}
   m_Stack: 1
-  m_MaxStack: 60
+  m_MaxStack: 10
   m_IsDroppable: 1
   m_DropSound: {fileID: 0}
   m_OverridePrefab: {fileID: 0}

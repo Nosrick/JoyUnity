@@ -45,15 +45,6 @@ namespace DevionGames.InventorySystem
                     att.Instantiate(this.m_Handler);
                 }
             }
-
-            foreach (ObjectProperty property in item.GetProperties())
-            {
-                if (property.SerializedType == typeof(int) || property.SerializedType == typeof(float))
-                {
-                    float value = System.Convert.ToSingle(property.GetValue());
-                    SendMessage("AddModifier", new object[] { property.Name, value, (value <= 1f && value >= -1f) ? 1 : 0, item }, SendMessageOptions.DontRequireReceiver);
-                }
-            }
         }
 
         public virtual void OnItemUnEquip(Item item) {
@@ -63,13 +54,6 @@ namespace DevionGames.InventorySystem
                 if (att.gameObject != null)
                 {
                     att.gameObject.SetActive(false);
-                }
-            }
-            foreach (ObjectProperty property in item.GetProperties())
-            {
-                if (property.SerializedType == typeof(int) || property.SerializedType == typeof(float))
-                {
-                    SendMessage("RemoveModifiersFromSource", new object[] { property.Name, item }, SendMessageOptions.DontRequireReceiver);
                 }
             }
         }

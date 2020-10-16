@@ -1,10 +1,6 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
-using System.Linq;
 
 namespace DevionGames.InventorySystem
 {
@@ -35,8 +31,9 @@ namespace DevionGames.InventorySystem
 
 		public override void OnGUI (Rect position, SerializedProperty property, GUIContent label)
 		{
-		
-			T current= GetCurrent(property);
+			EditorGUI.BeginProperty(position, label, property);
+			T current = (T)property.GetValue();
+
             CheckForDatabase(current);
 
             if (Database == null || Items.Count == 0) {
@@ -51,6 +48,7 @@ namespace DevionGames.InventorySystem
 			}
 
 			DoSelection (position, property, label, current);
+			EditorGUI.EndProperty();
 		}
 
         protected void CheckForDatabase(T current) {
@@ -78,82 +76,6 @@ namespace DevionGames.InventorySystem
             }
         }
 
-        protected T GetCurrent(SerializedProperty property) {
-            T current;
-            Type fieldType = fieldInfo.FieldType;
-            object targetObject = GetParent(property);
-            if (typeof(IEnumerable).IsAssignableFrom(fieldType))
-            {
-                int currentIndex = System.Convert.ToInt32(System.Text.RegularExpressions.Regex.Match(property.propertyPath, @"(\d+)(?!.*\d)").Value);
-
-                IEnumerable<T> array = (IEnumerable<T>)fieldInfo.GetValue(targetObject);
-                List<T> list = new List<T>(array);
-                if (list.Count - 1 < currentIndex)
-                {
-                    for (int i = list.Count - 1; i < currentIndex; i++)
-                    {
-                        list.Add(default(T));
-                    }
-					if (fieldInfo.FieldType.IsArray)
-					{
-						fieldInfo.SetValue(targetObject, list.ToArray());
-					}
-					else
-					{
-						fieldInfo.SetValue(targetObject, list);
-					}
-                }
-                current = list[currentIndex];
-            }
-            else
-            {
-                current = property.objectReferenceValue as T;
-            }
-            return current;
-        }
-
-		public object GetParent (SerializedProperty prop)
-		{
-			var path = prop.propertyPath.Replace (".Array.data[", "[");
-			object obj = prop.serializedObject.targetObject;
-			var elements = path.Split ('.');
-			foreach (var element in elements.Take(elements.Length-1)) {
-				if (element.Contains ("[")) {
-					var elementName = element.Substring (0, element.IndexOf ("["));
-					var index = Convert.ToInt32 (element.Substring (element.IndexOf ("[")).Replace ("[", "").Replace ("]", ""));
-					obj = GetValue (obj, elementName, index);
-				} else {
-					obj = GetValue (obj, element);
-				}
-			}
-			return obj;
-		}
-
-		public object GetValue (object source, string name)
-		{
-			if (source == null)
-				return null;
-			var type = source.GetType ();
-			var f = type.GetSerializedField (name);
-			if (f == null) {
-				var p = type.GetProperty (name, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
-				if (p == null)
-					return null;
-				return p.GetValue (source, null);
-			}
-			return f.GetValue (source);
-		}
-
-		public object GetValue (object source, string name, int index)
-		{
-			var enumerable = GetValue (source, name) as IEnumerable;
-			var enm = enumerable.GetEnumerator ();
-			while (index-- >= 0)
-				enm.MoveNext ();
-
-			return enm.Current;
-		}
-
 		protected virtual void DoSelection (Rect position, SerializedProperty property, GUIContent label, T current)
 		{
 			
@@ -175,7 +97,8 @@ namespace DevionGames.InventorySystem
 							Color color = GUI.backgroundColor;
 							GUI.backgroundColor = current != null && current.Name == Items [i].Name ? Color.green : color;
 							if (GUILayout.Button (Items [i].Name)) {
-                                SetValue (Items [i], property);
+								property.SetValue(Items[i]);
+                             //   SetValue (Items [i], property);
                                 UtilityInstanceWindow.CloseWindow ();
 							}
 							GUI.backgroundColor = color;
@@ -186,30 +109,15 @@ namespace DevionGames.InventorySystem
 				int selectedIndex = Items.IndexOf (current);
 				selectedIndex = Mathf.Clamp (selectedIndex, 0, Items.Count);
 				// selectedIndex = EditorGUI.Popup(position, selectedIndex, Names);
-				selectedIndex = EditorGUI.Popup (position, System.Text.RegularExpressions.Regex.Replace (typeof(T).Name, "([a-z])_?([A-Z])", "$1 $2"), selectedIndex, Names);
-                SetValue (Items [selectedIndex], property);
+				int index = EditorGUI.Popup (position, System.Text.RegularExpressions.Regex.Replace (typeof(T).Name, "([a-z])_?([A-Z])", "$1 $2"), selectedIndex, Names);
+				if (selectedIndex != index)
+				{
+					property.SetValue(Items[index]);
+					
+				}
+               // SetValue (Items [selectedIndex], property);
 			}
 		}
-
-		protected void SetValue (T value, SerializedProperty property)
-		{
-			if (typeof(IEnumerable).IsAssignableFrom (fieldInfo.FieldType)) {
-				int currentIndex = System.Convert.ToInt32 (System.Text.RegularExpressions.Regex.Match (property.propertyPath, @"(\d+)(?!.*\d)").Value);
-				IList array = (IList)fieldInfo.GetValue (GetParent (property));
-				array [currentIndex] = value;
-				fieldInfo.SetValue (GetParent (property), array);
-			} else {
-                fieldInfo.SetValue(GetParent(property), value);
-			}
-
-            EditorUtility.SetDirty(property.serializedObject.targetObject);
-            var prefabStage = UnityEditor.Experimental.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage();
-            if (prefabStage != null)
-            {
-                UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(prefabStage.scene);
-            }
-        }
-
 
 		public override float GetPropertyHeight (SerializedProperty property, GUIContent label)
 		{

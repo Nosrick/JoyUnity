@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace DevionGames.InventorySystem
 {
-    public class Slot : MonoBehaviour
+    public class Slot : CallbackHandler
     {
         /// <summary>
         /// The text to display item name.
@@ -79,7 +79,45 @@ namespace DevionGames.InventorySystem
             set { this.m_Index = value; }
         }
 
-        protected virtual void Start() { }
+        public override string[] Callbacks {
+            get
+            {
+                List<string> callbacks = new List<string>();
+                callbacks.Add("OnAddItem");
+                callbacks.Add("OnRemoveItem");
+                callbacks.Add("OnUseItem");
+                return callbacks.ToArray();
+            }
+        }
+
+        protected virtual void Start() {
+
+            Container.OnAddItem += (Item item, Slot slot) => {
+                if (slot == this){
+                    ItemEventData eventData = new ItemEventData(item);
+                    eventData.slot = slot;
+                    Execute("OnAddItem", eventData);
+                }
+
+            };
+            Container.OnRemoveItem += (Item item, int amount, Slot slot) => {
+                if (slot == this){
+                    ItemEventData eventData = new ItemEventData(item);
+                    eventData.slot = slot;
+                    Execute("OnRemoveItem", eventData);
+                }
+
+            };
+            Container.OnUseItem += (Item item, Slot slot) => {
+                if (slot == this)
+                {
+                    ItemEventData eventData = new ItemEventData(item);
+                    eventData.slot = slot;
+                    Execute("OnUseItem", eventData);
+                }
+            };
+            
+        }
 
         /// <summary>
         /// Repaint slot visuals with item information
@@ -199,6 +237,8 @@ namespace DevionGames.InventorySystem
             }
             return true;
         }
+
+
 
     }
 }

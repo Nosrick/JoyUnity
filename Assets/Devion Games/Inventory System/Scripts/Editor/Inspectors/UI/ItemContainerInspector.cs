@@ -25,6 +25,9 @@ namespace DevionGames.InventorySystem
         private AnimBool m_ShowMoveUsedItems;
 
         private ReorderableList m_MoveItemConditionList;
+
+        private SerializedProperty m_Restrictions;
+
         private string[] m_PropertiesToExcludeForDefaultInspector;
 
         protected override void OnEnable()
@@ -72,13 +75,21 @@ namespace DevionGames.InventorySystem
                 EditorGUI.PropertyField(rect, element.FindPropertyRelative("requiresVisibility"), GUIContent.none);
             };
 
+            this.m_Restrictions = serializedObject.FindProperty("restrictions");
+           
+            for (int i = 0; i < this.m_Restrictions.arraySize; i++) {
+                this.m_Restrictions.GetArrayElementAtIndex(i).objectReferenceValue.hideFlags = HideFlags.HideInInspector;
+            }
+
+
             this.m_PropertiesToExcludeForDefaultInspector = new [] {
                 this.m_UseButton.propertyPath,
                 this.m_DynamicContainer.propertyPath,
                 this.m_SlotParent.propertyPath,
                 this.m_SlotPrefab.propertyPath,
                 this.m_MoveUsedItems.propertyPath,
-                this.m_MoveItemConditions.propertyPath
+                this.m_MoveItemConditions.propertyPath,
+                this.m_Restrictions.propertyPath
             };
         }
 
@@ -118,7 +129,10 @@ namespace DevionGames.InventorySystem
                 GUILayout.EndHorizontal();
             }
             EditorGUILayout.EndFadeGroup();
-
+            if (EditorTools.RightArrowButton(new GUIContent("Restrictions", "Container Restrictions")))
+            {
+                AssetWindow.ShowWindow("Container Restrictions", this.m_Restrictions);
+            }
         }
 
     }

@@ -2,7 +2,7 @@
     "name": "Graphs",
     "id": "com.deviongames.graphs",
     "assetPath":"Assets/Devion Games/Graphs",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "unityVersion": "2019.4.10",
     "downloadPath": "https://deviongames.com/modules/Graphs.unitypackage",
     "author": "Konstantin Janson",
@@ -32,6 +32,14 @@
             "changes": 
             [
                 "Extended GraphUtility"
+            ]
+        },
+        {
+            "version": "1.0.3",
+            "changes": 
+            [
+                "Updated Graph selection with SerializedProperty extension methods GetParent, GetValue, SetValue",
+                "Fixed string serialization"
             ]
         }
     ]

@@ -52,9 +52,9 @@ namespace DevionGames.InventorySystem
 
         protected virtual void OnEnable ()
 		{
-            if (target == null){
+            if (target == null)
                 return;
-            }
+
             this.m_DrawInspectors = new List<System.Action>();
             m_ClassProperties = new Dictionary<Type, string[]>();
 
@@ -237,7 +237,7 @@ namespace DevionGames.InventorySystem
             DrawBaseInspector();
             for (int i = 0; i < m_DrawInspectors.Count; i++)
             {
-                this.m_DrawInspectors[i].Invoke();
+               this.m_DrawInspectors[i].Invoke();
             }
             DrawPropertiesExcluding(serializedObject, this.m_PropertiesToExcludeForChildClasses);
             serializedObject.ApplyModifiedProperties();
@@ -387,7 +387,7 @@ namespace DevionGames.InventorySystem
             return selected.ToArray();
         }
 
-        protected void DrawClassPropertiesExcluding(params string[] propertyToExclude)
+        /*protected void DrawClassPropertiesExcluding(params string[] propertyToExclude)
         {
             string[] propertiesToDraw = new string[0];
             if (this.m_ClassProperties.TryGetValue(target.GetType(), out propertiesToDraw))
@@ -403,7 +403,7 @@ namespace DevionGames.InventorySystem
 
                 }
             }
-        }
+        }*/
 
         protected void ScriptGUI()
         {

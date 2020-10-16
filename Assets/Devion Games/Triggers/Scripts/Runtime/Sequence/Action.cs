@@ -7,6 +7,9 @@ namespace DevionGames
     [System.Serializable]
     public abstract class Action : IAction
     {
+        [HideInInspector]
+        [SerializeField]
+        private string m_Type;
 
         protected PlayerInfo playerInfo;
         protected GameObject gameObject;
@@ -20,6 +23,10 @@ namespace DevionGames
         }
 
         public bool isActiveAndEnabled { get { return enabled && gameObject.activeSelf; } }
+
+        public Action() {
+            this.m_Type = GetType().FullName;
+        }
 
         public void Initialize(GameObject gameObject, PlayerInfo playerInfo) {
             this.gameObject = gameObject;

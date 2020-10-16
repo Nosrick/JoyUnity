@@ -16,9 +16,20 @@ namespace DevionGames
             EditorGUI.BeginDisabledGroup(EditorApplication.isPlaying);
             if (EditorTools.RightArrowButton(new GUIContent("Edit Behavior", "Trigger use behavior"), GUILayout.Height(20f)))
             {
-                ObjectWindow.ShowWindow("Edit Behavior",serializedObject, serializedObject.FindProperty("actions"));
+                SerializedProperty actionList = serializedObject.FindProperty("actions");
+                for (int i = 0; i < actionList.arraySize; i++) {
+                    SerializedProperty element = actionList.GetArrayElementAtIndex(i);
+                    if (element.GetValue() == null) {
+                        serializedObject.Update();
+                        element.managedReferenceValue = new MissingAction();
+                        serializedObject.ApplyModifiedProperties();
+                    }
+                }
+                ObjectWindow.ShowWindow("Edit Behavior",serializedObject, actionList);
             }
             EditorGUI.EndDisabledGroup();
         }
+
+
     }
 }

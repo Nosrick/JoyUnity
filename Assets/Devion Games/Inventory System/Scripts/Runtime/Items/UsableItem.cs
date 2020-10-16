@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace DevionGames.InventorySystem
 {
-	[System.Serializable]
+    [System.Serializable]
 	public class UsableItem : Item
 	{
         [SerializeField]

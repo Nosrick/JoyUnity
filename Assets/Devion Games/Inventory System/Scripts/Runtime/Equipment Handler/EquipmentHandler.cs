@@ -78,6 +78,14 @@ namespace DevionGames.InventorySystem
 
         public void EquipItem(EquipmentItem item)
         {
+            foreach (ObjectProperty property in item.GetProperties())
+            {
+                if (property.SerializedType == typeof(int) || property.SerializedType == typeof(float))
+                {
+                    float value = System.Convert.ToSingle(property.GetValue());
+                    SendMessage("AddModifier", new object[] { property.Name, value, (value <= 1f && value >= -1f) ? 1 : 0, item }, SendMessageOptions.DontRequireReceiver);
+                }
+            }
             for (int i = 0; i < this.m_VisibleItems.Count; i++) {
                 VisibleItem visibleItem = this.m_VisibleItems[i];
                 if (visibleItem.item.Id == item.Id) {
@@ -89,6 +97,13 @@ namespace DevionGames.InventorySystem
 
         public void UnEquipItem(EquipmentItem item)
         {
+            foreach (ObjectProperty property in item.GetProperties())
+            {
+                if (property.SerializedType == typeof(int) || property.SerializedType == typeof(float))
+                {
+                    SendMessage("RemoveModifiersFromSource", new object[] { property.Name, item }, SendMessageOptions.DontRequireReceiver);
+                }
+            }
             for (int i = 0; i < this.m_VisibleItems.Count; i++)
             {
                 VisibleItem visibleItem = this.m_VisibleItems[i];

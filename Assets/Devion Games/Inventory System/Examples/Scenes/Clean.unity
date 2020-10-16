@@ -10362,11 +10362,13 @@ MonoBehaviour:
     00000000:
       type: {class: CanPickup, ns: DevionGames.InventorySystem, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         m_WindowName: Inventory
     00000001:
       type: {class: Pickup, ns: DevionGames.InventorySystem, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         m_WindowName: Inventory
         m_DestroyWhenEmpty: 1
@@ -13764,11 +13766,13 @@ MonoBehaviour:
     00000000:
       type: {class: CanPickup, ns: DevionGames.InventorySystem, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         m_WindowName: Inventory
     00000001:
       type: {class: Pickup, ns: DevionGames.InventorySystem, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         m_WindowName: Inventory
         m_DestroyWhenEmpty: 1
@@ -14047,11 +14051,13 @@ MonoBehaviour:
     00000000:
       type: {class: CanPickup, ns: DevionGames.InventorySystem, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         m_WindowName: Inventory
     00000001:
       type: {class: Pickup, ns: DevionGames.InventorySystem, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         m_WindowName: Inventory
         m_DestroyWhenEmpty: 1
@@ -14227,11 +14233,13 @@ MonoBehaviour:
     00000000:
       type: {class: CanPickup, ns: DevionGames.InventorySystem, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         m_WindowName: Inventory
     00000001:
       type: {class: Pickup, ns: DevionGames.InventorySystem, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         m_WindowName: Inventory
         m_DestroyWhenEmpty: 1
@@ -14341,11 +14349,13 @@ MonoBehaviour:
     00000000:
       type: {class: CanPickup, ns: DevionGames.InventorySystem, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         m_WindowName: Inventory
     00000001:
       type: {class: Pickup, ns: DevionGames.InventorySystem, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         m_WindowName: Inventory
         m_DestroyWhenEmpty: 1
@@ -14495,11 +14505,13 @@ MonoBehaviour:
     00000000:
       type: {class: CanPickup, ns: DevionGames.InventorySystem, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         m_WindowName: Inventory
     00000001:
       type: {class: Pickup, ns: DevionGames.InventorySystem, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         m_WindowName: Inventory
         m_DestroyWhenEmpty: 1

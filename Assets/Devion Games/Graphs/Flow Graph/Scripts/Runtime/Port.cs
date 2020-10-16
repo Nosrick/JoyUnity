@@ -76,8 +76,9 @@ namespace DevionGames.Graphs
             }
         }
 
+        //Changed to public because it was using not FullName, and need to change that. Will be switched back to private
         [SerializeField]
-        private string m_FieldTypeName;
+        public string m_FieldTypeName;
 
         public Port() {
             m_Connections = new List<Edge>();
@@ -90,7 +91,7 @@ namespace DevionGames.Graphs
             this.fieldName = fieldName;
             this.capacity = capacity;
             this.direction = direction;
-            this.m_FieldTypeName = fieldType.Name;
+            this.m_FieldTypeName = fieldType.FullName;
         }
 
         public virtual T GetValue<T>(T defaultValue = default)

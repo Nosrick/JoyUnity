@@ -15,7 +15,7 @@ namespace DevionGames.InventorySystem{
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            ItemGroup current = GetCurrent(property);
+            ItemGroup current = (ItemGroup)property.GetValue();//GetCurrent(property);
             CheckForDatabase(current);
 
             if (Database == null || Items.Count == 0)
@@ -51,7 +51,8 @@ namespace DevionGames.InventorySystem{
                     GUI.backgroundColor = current == null ? Color.green : color;
                     if (GUILayout.Button("Database"))
                     {
-                        SetValue(null, property);
+                        property.SetValue(null);
+                    //   SetValue(null, property);
                         UtilityInstanceWindow.CloseWindow();
                     }
                     GUI.backgroundColor = color;
@@ -66,7 +67,8 @@ namespace DevionGames.InventorySystem{
                         GUI.backgroundColor = current != null && current.Name == Items[i].Name ? Color.green : color;
                         if (GUILayout.Button(Items[i].Name))
                         {
-                            SetValue(Items[i], property);
+                            property.SetValue(Items[i]);
+                            //SetValue(Items[i], property);
                             UtilityInstanceWindow.CloseWindow();
                         }
                         GUI.backgroundColor = color;

@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 864753745464015934}
   - component: {fileID: 864753745464015931}
   - component: {fileID: 864753745464015938}
+  - component: {fileID: 1611634223}
   m_Layer: 8
   m_Name: Third Person Camera
   m_TagString: MainCamera
@@ -30,7 +31,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 864753745464015937}
-  m_LocalRotation: {x: 0.14143318, y: -1.6694369e-19, z: -0.000000016860147, w: 0.98994786}
+  m_LocalRotation: {x: 0.14143686, y: 0, z: 0, w: 0.9899473}
   m_LocalPosition: {x: 0, y: 2.96, z: -3.67}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -301,3 +302,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50330e38a8605404a8c5b29a00c5e3e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1611634223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 864753745464015937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abbe7ce45b455e74fa33e1b0943b3cb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 3379

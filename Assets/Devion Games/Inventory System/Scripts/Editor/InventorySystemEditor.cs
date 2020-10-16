@@ -60,7 +60,6 @@ namespace DevionGames.InventorySystem
                 }
                 return items;
 			}
-			
 		}
 
 		private void OnEnable ()
@@ -71,6 +70,14 @@ namespace DevionGames.InventorySystem
                 SelectDatabase();
             }
 			ResetChildEditors ();
+		}
+
+        private void OnDisable()
+        {
+			for (int i = 0; i < childEditors.Count; i++)
+			{
+				childEditors[i].OnDisable();
+			}
 		}
 
         private void Update()
@@ -91,14 +98,10 @@ namespace DevionGames.InventorySystem
                 }
             }
             instance = null;
-           // db = null;
         }
-
 
         private void OnGUI ()
 		{
-	
-
 			if (childEditors != null) {
 				EditorGUILayout.Space ();
 				GUILayout.BeginHorizontal ();
@@ -170,13 +173,6 @@ namespace DevionGames.InventorySystem
 		private void ResetChildEditors ()
 		{
 			if (database != null) {
-                if (childEditors != null)
-                {
-                    for (int i = 0; i < childEditors.Count; i++)
-                    {
-                        childEditors[i].OnDestroy();
-                    }
-                }
                 childEditors = new List<ICollectionEditor> ();
 				childEditors.Add (new ItemCollectionEditor (database, database.items, database.categories.Select (x => x.Name).ToList ()));
                 childEditors.Add(new ScriptableObjectCollectionEditor<Currency>(database, database.currencies));
@@ -185,6 +181,11 @@ namespace DevionGames.InventorySystem
 				childEditors.Add (new ScriptableObjectCollectionEditor<EquipmentRegion> (database, database.equipments));
                 childEditors.Add(new ScriptableObjectCollectionEditor<ItemGroup>(database, database.itemGroups));
                 childEditors.Add (new Configuration.ItemSettingsEditor (database,database.settings));
+
+				for (int i = 0; i < childEditors.Count; i++)
+				{
+					childEditors[i].OnEnable();
+				}
 			}
 		}
 	}

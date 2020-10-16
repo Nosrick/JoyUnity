@@ -341,6 +341,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1804167992}
   m_Stack: {fileID: 312241931}
@@ -1105,6 +1106,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 449895941}
   m_Stack: {fileID: 697540019}
@@ -1398,6 +1400,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1983212887}
   m_Stack: {fileID: 917815537}
@@ -2045,6 +2048,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 2043313570}
   m_Stack: {fileID: 1936299556}
@@ -2679,6 +2683,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 351457504}
   m_Stack: {fileID: 1866968174}
@@ -2923,6 +2928,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1644154474}
   m_Stack: {fileID: 228094978}
@@ -6171,6 +6177,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1732515595}
   m_Stack: {fileID: 318765869}
@@ -6393,6 +6400,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1649231643}
   m_Stack: {fileID: 1301762711}
@@ -7269,6 +7277,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 155080324}
   m_Stack: {fileID: 1352222003}
@@ -7409,6 +7418,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d19d2c4eff3cad489e4e29cb6a6f58e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 866840847}
   m_Stack: {fileID: 117509835}
@@ -7984,6 +7994,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 949043284}
   m_Stack: {fileID: 2147006195}
@@ -9875,6 +9886,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1347353940}
   m_Stack: {fileID: 575589881}
@@ -10240,6 +10252,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 189020460}
   m_Stack: {fileID: 743858916}
@@ -10734,6 +10747,7 @@ MonoBehaviour:
   m_ShowTooltips: 0
   m_MoveUsedItem: 0
   moveItemConditions: []
+  restrictions: []
 --- !u!225 &248683361
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -11039,6 +11053,7 @@ MonoBehaviour:
   m_ShowTooltips: 1
   m_MoveUsedItem: 0
   moveItemConditions: []
+  restrictions: []
 --- !u!225 &262011956
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -11193,6 +11208,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1240627778}
   m_Stack: {fileID: 522798710}
@@ -11338,6 +11354,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 664381127}
   m_Stack: {fileID: 784940831}
@@ -11647,6 +11664,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1663372654}
   m_Stack: {fileID: 1542749623}
@@ -11830,6 +11848,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1660740628}
   m_Stack: {fileID: 412410389}
@@ -12164,6 +12183,7 @@ MonoBehaviour:
   m_ShowTooltips: 0
   m_MoveUsedItem: 0
   moveItemConditions: []
+  restrictions: []
 --- !u!114 &312168725
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13331,6 +13351,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1558490736}
   m_Stack: {fileID: 1690427900}
@@ -13839,6 +13860,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1266025633}
   m_Stack: {fileID: 769801729}
@@ -14062,6 +14084,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates:
+  - eventID: OnAddItem
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 2069565624}
+          m_MethodName: set_enabled
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: OnRemoveItem
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 2069565624}
+          m_MethodName: set_enabled
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1679463136}
   m_Stack: {fileID: 1705333501}
@@ -14973,6 +15026,7 @@ GameObject:
   - component: {fileID: 379107561}
   - component: {fileID: 379107560}
   - component: {fileID: 379107559}
+  - component: {fileID: 379107564}
   m_Layer: 5
   m_Name: Equipment
   m_TagString: Untagged
@@ -15093,6 +15147,7 @@ MonoBehaviour:
   moveItemConditions:
   - window: Inventory
     requiresVisibility: 0
+  restrictions: []
 --- !u!225 &379107561
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -15142,6 +15197,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 379107557}
   m_CullTransparentMesh: 0
+--- !u!114 &379107564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 379107557}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0e0323e92b151a4fa92049637b6af9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &380214982
 GameObject:
   m_ObjectHideFlags: 0
@@ -16065,6 +16132,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 200132549}
   m_Stack: {fileID: 350085540}
@@ -16284,6 +16352,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1434417920}
   m_Stack: {fileID: 23109188}
@@ -16735,6 +16804,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 293689540}
   m_Stack: {fileID: 1472901462}
@@ -17463,6 +17533,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 1242716383}
   "m_\xCDcon": {fileID: 1550251240}
   m_Stack: {fileID: 0}
@@ -17808,6 +17879,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d19d2c4eff3cad489e4e29cb6a6f58e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 880091211}
   m_Stack: {fileID: 1886227491}
@@ -19255,6 +19327,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1208980152}
   m_Stack: {fileID: 1807203568}
@@ -19554,6 +19627,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 685354680}
   m_Stack: {fileID: 1554019779}
@@ -20260,6 +20334,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 871835810}
   m_Stack: {fileID: 959919779}
@@ -20405,6 +20480,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1636441796}
   m_Stack: {fileID: 2137429918}
@@ -20624,6 +20700,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 2007395634}
   m_Stack: {fileID: 685762170}
@@ -21231,6 +21308,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1814081607}
   m_Stack: {fileID: 1612076253}
@@ -21598,6 +21676,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1097883194}
   m_Stack: {fileID: 275779912}
@@ -21771,6 +21850,7 @@ MonoBehaviour:
   moveItemConditions:
   - window: Equipment
     requiresVisibility: 1
+  restrictions: []
 --- !u!225 &533562918
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -22929,6 +23009,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1421799431}
   m_Stack: {fileID: 1871488272}
@@ -23537,6 +23618,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 401320374}
   m_Stack: {fileID: 887113623}
@@ -24432,6 +24514,7 @@ MonoBehaviour:
   m_ShowTooltips: 0
   m_MoveUsedItem: 0
   moveItemConditions: []
+  restrictions: []
 --- !u!225 &601508447
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -24800,6 +24883,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates:
+  - eventID: OnAddItem
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1929304903}
+          m_MethodName: set_enabled
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: OnRemoveItem
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1929304903}
+          m_MethodName: set_enabled
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1723157273}
   m_Stack: {fileID: 966409709}
@@ -25448,6 +25562,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 221303530}
   "m_\xCDcon": {fileID: 0}
   m_Stack: {fileID: 0}
@@ -26451,6 +26566,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 421733050}
   m_Stack: {fileID: 954614090}
@@ -27278,6 +27394,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1194345061}
   m_Stack: {fileID: 1043204216}
@@ -27800,6 +27917,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 810164155}
   m_Stack: {fileID: 316988390}
@@ -28436,6 +28554,7 @@ MonoBehaviour:
   moveItemConditions:
   - window: Inventory
     requiresVisibility: 0
+  restrictions: []
 --- !u!225 &702761176
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -29298,6 +29417,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 655393312}
   m_Stack: {fileID: 1982564540}
@@ -30048,6 +30168,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 969826310}
   m_Stack: {fileID: 879210233}
@@ -30605,6 +30726,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 2137306410}
   m_Stack: {fileID: 1964861466}
@@ -30750,6 +30872,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1357815030}
   m_Stack: {fileID: 417735646}
@@ -30981,6 +31104,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates:
+  - eventID: OnAddItem
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1088751743}
+          m_MethodName: set_enabled
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: OnRemoveItem
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1088751743}
+          m_MethodName: set_enabled
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1071736159}
   m_Stack: {fileID: 1235106930}
@@ -31143,6 +31297,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 444063995}
   m_Stack: {fileID: 1153896430}
@@ -32098,6 +32253,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1427663219}
   m_Stack: {fileID: 1812849198}
@@ -32321,6 +32477,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1528568006}
   m_Stack: {fileID: 1614668386}
@@ -33177,6 +33334,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates:
+  - eventID: OnAddItem
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 33556155}
+          m_MethodName: set_enabled
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: OnRemoveItem
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 33556155}
+          m_MethodName: set_enabled
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 923082000}
   m_Stack: {fileID: 789521158}
@@ -33674,6 +33862,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 2062635444}
   "m_\xCDcon": {fileID: 1483740772}
   m_Stack: {fileID: 1238564708}
@@ -33896,6 +34085,7 @@ MonoBehaviour:
   m_ShowTooltips: 0
   m_MoveUsedItem: 0
   moveItemConditions: []
+  restrictions: []
 --- !u!114 &827506795
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34567,6 +34757,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1358358039}
   m_Stack: {fileID: 327608626}
@@ -35543,6 +35734,7 @@ MonoBehaviour:
   moveItemConditions:
   - window: Crafting Selection Global
     requiresVisibility: 0
+  restrictions: []
 --- !u!114 &873516128
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35794,6 +35986,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1640719964}
   m_Stack: {fileID: 629771822}
@@ -37822,6 +38015,7 @@ MonoBehaviour:
     00000000:
       type: {class: ShowWindow, ns: DevionGames.InventorySystem, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         m_WindowName: Teleporter
         m_DestroyWhenEmpty: 0
@@ -39879,6 +40073,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 794379260}
   "m_\xCDcon": {fileID: 971165417}
   m_Stack: {fileID: 650649429}
@@ -40299,6 +40494,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 354946230}
   m_Stack: {fileID: 1969540036}
@@ -41128,6 +41324,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d19d2c4eff3cad489e4e29cb6a6f58e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1909451254}
   m_Stack: {fileID: 1774664497}
@@ -42302,6 +42499,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 1820376256}
   "m_\xCDcon": {fileID: 2109302498}
   m_Stack: {fileID: 0}
@@ -42502,6 +42700,7 @@ MonoBehaviour:
   moveItemConditions:
   - window: Inventory
     requiresVisibility: 0
+  restrictions: []
 --- !u!225 &1051687579
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -42643,6 +42842,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 948134120}
   m_Stack: {fileID: 1452564685}
@@ -44615,6 +44815,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 220832381}
   m_Stack: {fileID: 1654225019}
@@ -45579,6 +45780,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 2076495474}
   m_Stack: {fileID: 1964066166}
@@ -46020,6 +46222,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1584833656}
   m_Stack: {fileID: 1237511149}
@@ -48450,6 +48653,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1756888493}
   m_Stack: {fileID: 1124998417}
@@ -49642,6 +49846,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates:
+  - eventID: OnAddItem
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 944914473}
+          m_MethodName: set_enabled
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: OnRemoveItem
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 944914473}
+          m_MethodName: set_enabled
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1844570039}
   m_Stack: {fileID: 1638024933}
@@ -49937,6 +50172,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 1434395133}
   "m_\xCDcon": {fileID: 1621062775}
   m_Stack: {fileID: 521158818}
@@ -50454,6 +50690,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1484051436}
   m_Stack: {fileID: 179786515}
@@ -50778,6 +51015,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 901479307}
   m_Stack: {fileID: 177125058}
@@ -52116,6 +52354,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 2114245455}
   m_Stack: {fileID: 951928887}
@@ -52578,6 +52817,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 524635150}
   m_Stack: {fileID: 1778462366}
@@ -52700,6 +52940,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 683849496}
   m_Stack: {fileID: 1700104107}
@@ -53318,6 +53559,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1634955099}
   m_Stack: {fileID: 1075689867}
@@ -53537,6 +53779,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 991707057}
   m_Stack: {fileID: 1389441978}
@@ -54177,6 +54420,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1062059195}
   m_Stack: {fileID: 538113976}
@@ -54768,6 +55012,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 70782410}
   m_Stack: {fileID: 1260448896}
@@ -55391,6 +55636,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1347279494}
   m_Stack: {fileID: 1804046635}
@@ -55941,6 +56187,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1112814510}
   m_Stack: {fileID: 238195979}
@@ -56287,6 +56534,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1182741425}
   m_Stack: {fileID: 977874248}
@@ -56812,6 +57060,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates:
+  - eventID: OnAddItem
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1995709408}
+          m_MethodName: set_enabled
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: OnRemoveItem
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1995709408}
+          m_MethodName: set_enabled
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 2082207692}
   m_Stack: {fileID: 1614266479}
@@ -57267,6 +57546,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1354926662}
   m_Stack: {fileID: 46863799}
@@ -57477,6 +57757,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 696615905}
   m_Stack: {fileID: 1380721021}
@@ -57622,6 +57903,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1559017382}
   m_Stack: {fileID: 367292295}
@@ -59706,6 +59988,7 @@ MonoBehaviour:
     00000000:
       type: {class: ShowWindow, ns: DevionGames.InventorySystem, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         m_WindowName: Teleporter
         m_DestroyWhenEmpty: 0
@@ -60736,6 +61019,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1932802029}
   m_Stack: {fileID: 1934709215}
@@ -60878,6 +61162,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 969080493}
   "m_\xCDcon": {fileID: 0}
   m_Stack: {fileID: 0}
@@ -61045,6 +61330,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1574339057}
   m_Stack: {fileID: 1552845432}
@@ -62472,6 +62758,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d19d2c4eff3cad489e4e29cb6a6f58e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1511413906}
   m_Stack: {fileID: 1071398893}
@@ -63143,6 +63430,7 @@ MonoBehaviour:
   moveItemConditions:
   - window: Inventory
     requiresVisibility: 0
+  restrictions: []
 --- !u!114 &1514207657
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63560,6 +63848,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1601583819}
   m_Stack: {fileID: 1063478188}
@@ -63700,6 +63989,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d19d2c4eff3cad489e4e29cb6a6f58e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 189947203}
   m_Stack: {fileID: 1160544528}
@@ -65072,6 +65362,41 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 957630519}
     m_Modifications:
+    - target: {fileID: 5157323341740066066, guid: cd90baa0cfea9e54d927f2efd1268c8c,
+        type: 3}
+      propertyPath: actions.Array.size
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5157323341740066066, guid: cd90baa0cfea9e54d927f2efd1268c8c,
+        type: 3}
+      propertyPath: actions.Array.data[10].requiredItems.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5157323341740066066, guid: cd90baa0cfea9e54d927f2efd1268c8c,
+        type: 3}
+      propertyPath: actions.Array.data[10]
+      value: Assembly-CSharp DevionGames.InventorySystem.HasGroupItem
+      objectReference: {fileID: 0}
+    - target: {fileID: 5157323341740066066, guid: cd90baa0cfea9e54d927f2efd1268c8c,
+        type: 3}
+      propertyPath: actions.Array.data[10].m_Type
+      value: DevionGames.InventorySystem.HasGroupItem
+      objectReference: {fileID: 0}
+    - target: {fileID: 5157323341740066066, guid: cd90baa0cfea9e54d927f2efd1268c8c,
+        type: 3}
+      propertyPath: actions.Array.data[10].m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5157323341740066066, guid: cd90baa0cfea9e54d927f2efd1268c8c,
+        type: 3}
+      propertyPath: actions.Array.data[10].m_RequiredGroupItem
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5157323341740066066, guid: cd90baa0cfea9e54d927f2efd1268c8c,
+        type: 3}
+      propertyPath: actions.Array.data[10].m_Window
+      value: Equipment
+      objectReference: {fileID: 0}
     - target: {fileID: 5157323341740066073, guid: cd90baa0cfea9e54d927f2efd1268c8c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -67661,6 +67986,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 60818455}
   "m_\xCDcon": {fileID: 743099455}
   m_Stack: {fileID: 0}
@@ -68377,6 +68703,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1753372937}
   m_Stack: {fileID: 1499062944}
@@ -69174,6 +69501,7 @@ MonoBehaviour:
   m_ShowTooltips: 0
   m_MoveUsedItem: 0
   moveItemConditions: []
+  restrictions: []
 --- !u!225 &1644856947
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -69302,7 +69630,7 @@ RectTransform:
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 14, y: 0}
-  m_Pivot: {x: 1, y: 0}
+  m_Pivot: {x: 1, y: 1}
 --- !u!114 &1647781347
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69344,7 +69672,7 @@ MonoBehaviour:
   m_Interactable: 1
   m_TargetGraphic: {fileID: 77891164}
   m_HandleRect: {fileID: 77891163}
-  m_Direction: 3
+  m_Direction: 2
   m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
@@ -70159,6 +70487,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1850755727}
   m_Stack: {fileID: 420633872}
@@ -70304,6 +70633,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 453716202}
   m_Stack: {fileID: 53045771}
@@ -71134,6 +71464,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1605809171}
   m_Stack: {fileID: 804226109}
@@ -71569,6 +71900,7 @@ MonoBehaviour:
   m_ShowTooltips: 0
   m_MoveUsedItem: 0
   moveItemConditions: []
+  restrictions: []
 --- !u!114 &1691058974
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -74605,6 +74937,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates:
+  - eventID: OnAddItem
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 575276809}
+          m_MethodName: set_enabled
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: OnRemoveItem
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 575276809}
+          m_MethodName: set_enabled
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 59723594}
   m_Stack: {fileID: 1975437516}
@@ -75569,6 +75932,7 @@ MonoBehaviour:
   m_ShowTooltips: 0
   m_MoveUsedItem: 0
   moveItemConditions: []
+  restrictions: []
 --- !u!225 &1785114914
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -75730,6 +76094,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1892477589}
   m_Stack: {fileID: 57458920}
@@ -75949,6 +76314,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 2147310852}
   m_Stack: {fileID: 1461014350}
@@ -76865,6 +77231,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1239749556}
   m_Stack: {fileID: 1858949975}
@@ -78386,6 +78753,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 526887824}
   m_Stack: {fileID: 145966884}
@@ -80415,6 +80783,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 1883636753}
   m_Stack: {fileID: 489184469}
@@ -82716,6 +83085,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d19d2c4eff3cad489e4e29cb6a6f58e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 913507750}
   m_Stack: {fileID: 1415754368}
@@ -82966,6 +83336,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 990504766}
   m_Stack: {fileID: 442546704}
@@ -83593,6 +83964,7 @@ MonoBehaviour:
   m_ShowTooltips: 0
   m_MoveUsedItem: 0
   moveItemConditions: []
+  restrictions: []
 --- !u!225 &1966254456
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -83925,6 +84297,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 21583939}
   m_Stack: {fileID: 1317388508}
@@ -84913,6 +85286,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates:
+  - eventID: OnAddItem
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 675733233}
+          m_MethodName: set_enabled
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: OnRemoveItem
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 675733233}
+          m_MethodName: set_enabled
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 419204546}
   m_Stack: {fileID: 341081878}
@@ -88032,6 +88436,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 744822470}
   m_Stack: {fileID: 1189341524}
@@ -89878,6 +90283,7 @@ MonoBehaviour:
   moveItemConditions:
   - window: Crafting Selection
     requiresVisibility: 0
+  restrictions: []
 --- !u!114 &2147319347
 MonoBehaviour:
   m_ObjectHideFlags: 0

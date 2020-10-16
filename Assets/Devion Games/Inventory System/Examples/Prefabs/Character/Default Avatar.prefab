@@ -4336,7 +4336,7 @@ MonoBehaviour:
   - m_Name: Health
     formula:
       serializationData: "{\n\t\"Nodes\":[{\n\t\t\"Type\":\"DevionGames.Graphs.GetStatValue\",\n\t\t\"id\":\"0bac0c90-aa1a-412a-b881-2c4ec26bb4db\",\n\t\t\"name\":\"Get
-        Stat Value\",\n\t\t\"position\":\"v2(-156,-66.5)\",\n\t\t\"m_Ports\":{\n\t\t\t\"0\":{\n\t\t\t\t\"fieldName\":\"stat\",\n\t\t\t\t\"drawPort\":false,\n\t\t\t\t\"label\":true,\n\t\t\t\t\"capacity\":\"Single\",\n\t\t\t\t\"direction\":\"Input\",\n\t\t\t\t\"m_Connections\":{\n\t\t\t\t\t\n\t\t\t\t},\n\t\t\t\t\"m_FieldTypeName\":\"String\"\n\t\t\t},\n\t\t\t\"1\":{\n\t\t\t\t\"fieldName\":\"statValue\",\n\t\t\t\t\"drawPort\":true,\n\t\t\t\t\"label\":true,\n\t\t\t\t\"capacity\":\"Multiple\",\n\t\t\t\t\"direction\":\"Output\",\n\t\t\t\t\"m_Connections\":{\n\t\t\t\t\t\"0\":{\n\t\t\t\t\t\t\"nodeId\":\"5126c09d-b102-49cd-9af0-bcdaaf22ab8d\",\n\t\t\t\t\t\t\"fieldName\":\"a\"\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"m_FieldTypeName\":\"Stat\"\n\t\t\t}\n\t\t},\n\t\t\"stat\":\"Vitality\"\n\t},{\n\t\t\"Type\":\"DevionGames.Graphs.Add\",\n\t\t\"id\":\"5126c09d-b102-49cd-9af0-bcdaaf22ab8d\",\n\t\t\"name\":\"Add\",\n\t\t\"position\":\"v2(24,-65.5)\",\n\t\t\"m_Ports\":{\n\t\t\t\"0\":{\n\t\t\t\t\"fieldName\":\"a\",\n\t\t\t\t\"drawPort\":true,\n\t\t\t\t\"label\":false,\n\t\t\t\t\"capacity\":\"Single\",\n\t\t\t\t\"direction\":\"Input\",\n\t\t\t\t\"m_Connections\":{\n\t\t\t\t\t\"0\":{\n\t\t\t\t\t\t\"nodeId\":\"0bac0c90-aa1a-412a-b881-2c4ec26bb4db\",\n\t\t\t\t\t\t\"fieldName\":\"statValue\"\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"m_FieldTypeName\":\"Single\"\n\t\t\t},\n\t\t\t\"1\":{\n\t\t\t\t\"fieldName\":\"b\",\n\t\t\t\t\"drawPort\":true,\n\t\t\t\t\"label\":false,\n\t\t\t\t\"capacity\":\"Single\",\n\t\t\t\t\"direction\":\"Input\",\n\t\t\t\t\"m_Connections\":{\n\t\t\t\t\t\n\t\t\t\t},\n\t\t\t\t\"m_FieldTypeName\":\"Single\"\n\t\t\t},\n\t\t\t\"2\":{\n\t\t\t\t\"fieldName\":\"output\",\n\t\t\t\t\"drawPort\":true,\n\t\t\t\t\"label\":true,\n\t\t\t\t\"capacity\":\"Multiple\",\n\t\t\t\t\"direction\":\"Output\",\n\t\t\t\t\"m_Connections\":{\n\t\t\t\t\t\"0\":{\n\t\t\t\t\t\t\"nodeId\":\"a6e96b1b-82f2-4371-8290-5c2a1a6b5fcf\",\n\t\t\t\t\t\t\"fieldName\":\"value\"\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"m_FieldTypeName\":\"Single\"\n\t\t\t}\n\t\t},\n\t\t\"a\":0,\n\t\t\"b\":50,\n\t\t\"output\":0\n\t},{\n\t\t\"Type\":\"DevionGames.StatSystem.StatResult\",\n\t\t\"id\":\"a6e96b1b-82f2-4371-8290-5c2a1a6b5fcf\",\n\t\t\"name\":\"Stat
+        Stat Value\",\n\t\t\"position\":\"v2(-148,-66.5)\",\n\t\t\"m_Ports\":{\n\t\t\t\"0\":{\n\t\t\t\t\"fieldName\":\"stat\",\n\t\t\t\t\"drawPort\":false,\n\t\t\t\t\"label\":true,\n\t\t\t\t\"capacity\":\"Single\",\n\t\t\t\t\"direction\":\"Input\",\n\t\t\t\t\"m_Connections\":{\n\t\t\t\t\t\n\t\t\t\t},\n\t\t\t\t\"m_FieldTypeName\":\"System.String\"\n\t\t\t},\n\t\t\t\"1\":{\n\t\t\t\t\"fieldName\":\"statValue\",\n\t\t\t\t\"drawPort\":true,\n\t\t\t\t\"label\":true,\n\t\t\t\t\"capacity\":\"Multiple\",\n\t\t\t\t\"direction\":\"Output\",\n\t\t\t\t\"m_Connections\":{\n\t\t\t\t\t\"0\":{\n\t\t\t\t\t\t\"nodeId\":\"5126c09d-b102-49cd-9af0-bcdaaf22ab8d\",\n\t\t\t\t\t\t\"fieldName\":\"a\"\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"m_FieldTypeName\":\"Stat\"\n\t\t\t}\n\t\t},\n\t\t\"stat\":\"Vitality\"\n\t},{\n\t\t\"Type\":\"DevionGames.Graphs.Add\",\n\t\t\"id\":\"5126c09d-b102-49cd-9af0-bcdaaf22ab8d\",\n\t\t\"name\":\"Add\",\n\t\t\"position\":\"v2(24,-65.5)\",\n\t\t\"m_Ports\":{\n\t\t\t\"0\":{\n\t\t\t\t\"fieldName\":\"a\",\n\t\t\t\t\"drawPort\":true,\n\t\t\t\t\"label\":false,\n\t\t\t\t\"capacity\":\"Single\",\n\t\t\t\t\"direction\":\"Input\",\n\t\t\t\t\"m_Connections\":{\n\t\t\t\t\t\"0\":{\n\t\t\t\t\t\t\"nodeId\":\"0bac0c90-aa1a-412a-b881-2c4ec26bb4db\",\n\t\t\t\t\t\t\"fieldName\":\"statValue\"\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"m_FieldTypeName\":\"Single\"\n\t\t\t},\n\t\t\t\"1\":{\n\t\t\t\t\"fieldName\":\"b\",\n\t\t\t\t\"drawPort\":true,\n\t\t\t\t\"label\":false,\n\t\t\t\t\"capacity\":\"Single\",\n\t\t\t\t\"direction\":\"Input\",\n\t\t\t\t\"m_Connections\":{\n\t\t\t\t\t\n\t\t\t\t},\n\t\t\t\t\"m_FieldTypeName\":\"Single\"\n\t\t\t},\n\t\t\t\"2\":{\n\t\t\t\t\"fieldName\":\"output\",\n\t\t\t\t\"drawPort\":true,\n\t\t\t\t\"label\":true,\n\t\t\t\t\"capacity\":\"Multiple\",\n\t\t\t\t\"direction\":\"Output\",\n\t\t\t\t\"m_Connections\":{\n\t\t\t\t\t\"0\":{\n\t\t\t\t\t\t\"nodeId\":\"a6e96b1b-82f2-4371-8290-5c2a1a6b5fcf\",\n\t\t\t\t\t\t\"fieldName\":\"value\"\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"m_FieldTypeName\":\"Single\"\n\t\t\t}\n\t\t},\n\t\t\"a\":0,\n\t\t\"b\":50,\n\t\t\"output\":0\n\t},{\n\t\t\"Type\":\"DevionGames.StatSystem.StatResult\",\n\t\t\"id\":\"a6e96b1b-82f2-4371-8290-5c2a1a6b5fcf\",\n\t\t\"name\":\"Stat
         Result\",\n\t\t\"position\":\"v2(175.25,-65.5)\",\n\t\t\"m_Ports\":{\n\t\t\t\"0\":{\n\t\t\t\t\"fieldName\":\"value\",\n\t\t\t\t\"drawPort\":true,\n\t\t\t\t\"label\":true,\n\t\t\t\t\"capacity\":\"Single\",\n\t\t\t\t\"direction\":\"Input\",\n\t\t\t\t\"m_Connections\":{\n\t\t\t\t\t\"0\":{\n\t\t\t\t\t\t\"nodeId\":\"5126c09d-b102-49cd-9af0-bcdaaf22ab8d\",\n\t\t\t\t\t\t\"fieldName\":\"output\"\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"m_FieldTypeName\":\"Single\"\n\t\t\t},\n\t\t\t\"1\":{\n\t\t\t\t\"fieldName\":\"delta\",\n\t\t\t\t\"drawPort\":true,\n\t\t\t\t\"label\":true,\n\t\t\t\t\"capacity\":\"Single\",\n\t\t\t\t\"direction\":\"Input\",\n\t\t\t\t\"m_Connections\":{\n\t\t\t\t\t\n\t\t\t\t},\n\t\t\t\t\"m_FieldTypeName\":\"Single\"\n\t\t\t}\n\t\t},\n\t\t\"value\":0,\n\t\t\"delta\":0\n\t}]\n}"
       serializedObjects: []
     m_MinValue: 0
@@ -4403,7 +4403,7 @@ MonoBehaviour:
         Result\",\n\t\t\"position\":\"v2(360.5893,48.1428528)\",\n\t\t\"m_Ports\":{\n\t\t\t\"0\":{\n\t\t\t\t\"fieldName\":\"value\",\n\t\t\t\t\"drawPort\":true,\n\t\t\t\t\"label\":true,\n\t\t\t\t\"capacity\":\"Single\",\n\t\t\t\t\"direction\":\"Input\",\n\t\t\t\t\"m_Connections\":{\n\t\t\t\t\t\"0\":{\n\t\t\t\t\t\t\"nodeId\":\"e6ed7e92-673c-43de-9479-3c8c86f4fd4f\",\n\t\t\t\t\t\t\"fieldName\":\"output\"\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"m_FieldTypeName\":\"Single\"\n\t\t\t},\n\t\t\t\"1\":{\n\t\t\t\t\"fieldName\":\"delta\",\n\t\t\t\t\"drawPort\":true,\n\t\t\t\t\"label\":true,\n\t\t\t\t\"capacity\":\"Single\",\n\t\t\t\t\"direction\":\"Input\",\n\t\t\t\t\"m_Connections\":{\n\t\t\t\t\t\"0\":{\n\t\t\t\t\t\t\"nodeId\":\"d00dabef-bb86-453e-8004-b620e6a60097\",\n\t\t\t\t\t\t\"fieldName\":\"output\"\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"m_FieldTypeName\":\"Single\"\n\t\t\t}\n\t\t},\n\t\t\"value\":0,\n\t\t\"delta\":0\n\t}]\n}"
       serializedObjects: []
     m_MinValue: 0
-    m_MaxValue: 9999999
+    m_MaxValue: -1
     m_Regenerate: 0
     m_Rate: 5
   - m_Name: Level
@@ -4413,7 +4413,7 @@ MonoBehaviour:
         Result\",\n\t\t\"position\":\"v2(515.95,-33.3966675)\",\n\t\t\"m_Ports\":{\n\t\t\t\"0\":{\n\t\t\t\t\"fieldName\":\"value\",\n\t\t\t\t\"drawPort\":true,\n\t\t\t\t\"label\":true,\n\t\t\t\t\"capacity\":\"Single\",\n\t\t\t\t\"direction\":\"Input\",\n\t\t\t\t\"m_Connections\":{\n\t\t\t\t\t\"0\":{\n\t\t\t\t\t\t\"nodeId\":\"80d2647d-e9eb-4617-83e6-d235641d8080\",\n\t\t\t\t\t\t\"fieldName\":\"output\"\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\t\"m_FieldTypeName\":\"Single\"\n\t\t\t},\n\t\t\t\"1\":{\n\t\t\t\t\"fieldName\":\"delta\",\n\t\t\t\t\"drawPort\":true,\n\t\t\t\t\"label\":true,\n\t\t\t\t\"capacity\":\"Single\",\n\t\t\t\t\"direction\":\"Input\",\n\t\t\t\t\"m_Connections\":{\n\t\t\t\t\t\n\t\t\t\t},\n\t\t\t\t\"m_FieldTypeName\":\"Single\"\n\t\t\t}\n\t\t},\n\t\t\"value\":0,\n\t\t\"delta\":0\n\t}]\n}"
       serializedObjects: []
     m_MinValue: 0
-    m_MaxValue: 9999999
+    m_MaxValue: -1
     m_Regenerate: 0
     m_Rate: 5
 --- !u!114 &6874675272001939294
@@ -4434,8 +4434,8 @@ MonoBehaviour:
       type: 2}
     prefab: {fileID: 6955947972541771316, guid: caa4712265fb87f48917ca9e4be3350a,
       type: 3}
-    position: {x: -0.075, y: 0.024, z: -0}
-    rotation: {x: 280.3581, y: 269.1028, z: 77.77078}
+    position: {x: -0.061514173, y: -0.05320115, z: 0.019554509}
+    rotation: {x: 289.5374, y: 227.52655, z: 122.63883}
     scale: {x: 1, y: 1, z: 1}
     gameObject: {fileID: 0}
 --- !u!114 &6874675272001939296
@@ -4782,6 +4782,7 @@ MonoBehaviour:
     00000000:
       type: {class: ShowWindow, ns: DevionGames.InventorySystem, asm: Assembly-CSharp}
       data:
+        m_Type: 
         m_Enabled: 1
         m_WindowName: Crafting Global
         m_DestroyWhenEmpty: 0

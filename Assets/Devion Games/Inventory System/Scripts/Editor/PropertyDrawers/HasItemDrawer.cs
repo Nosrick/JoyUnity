@@ -14,9 +14,11 @@ namespace DevionGames.InventorySystem
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
+
             ReorderableList m_RequiredItemList = null;
             if (!this.m_ListMap.TryGetValue(property.propertyPath, out m_RequiredItemList))
             {
+          
                 m_RequiredItems = property.FindPropertyRelative("requiredItems");
                 m_RequiredItemList = new ReorderableList(property.serializedObject, this.m_RequiredItems, true, true, true, true);
                 m_RequiredItemList.drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
@@ -40,11 +42,17 @@ namespace DevionGames.InventorySystem
                 {
                     EditorGUI.LabelField(rect, "Required Items(Item, Window)");
                 };
-                this.m_ListMap.Add(property.propertyPath,m_RequiredItemList);
+                this.m_ListMap.Add(property.propertyPath, m_RequiredItemList);
             }
             m_RequiredItemList.elementHeight = (InventorySystemEditor.Database != null && InventorySystemEditor.Database.items.Count > 0 || m_RequiredItemList.count == 0 ? 21 : (30 + EditorGUIUtility.singleLineHeight + 4));
-            m_RequiredItemList.DoLayoutList();
+            try
+            {
+                m_RequiredItemList.DoLayoutList();
+            }catch  {
+                this.m_ListMap.Remove(property.propertyPath);
+            }
             EditorGUILayout.Space();
+
         }
 
 

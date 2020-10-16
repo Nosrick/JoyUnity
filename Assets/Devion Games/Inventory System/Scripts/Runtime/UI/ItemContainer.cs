@@ -211,10 +211,14 @@ namespace DevionGames.InventorySystem
             protected set { this.m_MoveUsedItem = value; }
         }
 
+     
+
         /// <summary>
         /// Conditions for auto moving items when used
         /// </summary>
         public List<MoveItemCondition> moveItemConditions = new List<MoveItemCondition>();
+
+        public List<Restriction> restrictions = new List<Restriction>();
 
         protected List<Slot> m_Slots = new List<Slot>();
         /// <summary>
@@ -434,7 +438,7 @@ namespace DevionGames.InventorySystem
                 //Stack the item to slot and return true
                 slot.ObservedItem.Stack += item.Stack;
                 RemoveItemCompletely(item);
-                OnAddItem(slot.ObservedItem, slot);
+                OnAddItem(item, slot);
                 return true;
             }
             //Slot is empty and the item can be added to slot.
@@ -574,6 +578,7 @@ namespace DevionGames.InventorySystem
         {
             slot = null;
             if (item == null) { return true; }
+     
             List<Slot> requiredSlots = GetRequiredSlots(item);
             if (requiredSlots.Count > 0)
             {
@@ -1011,6 +1016,7 @@ namespace DevionGames.InventorySystem
                 Slot slot = this.m_Slots[i];
                 slot.Index = i;
                 slot.Container = this;
+                slot.restrictions.AddRange(restrictions);
             }
         }
 
@@ -1044,6 +1050,7 @@ namespace DevionGames.InventorySystem
                 this.m_Slots.Add(slot);
                 slot.Index = Slots.Count - 1;
                 slot.Container = this;
+                slot.restrictions.AddRange(restrictions);
                 return slot;
             }
             Debug.LogWarning("Please ensure that the slot prefab and slot parent is set in the inspector.");
@@ -1125,7 +1132,7 @@ namespace DevionGames.InventorySystem
                 {
                     current.Stack += item.Stack;
                     TryConvertCurrency(current as Currency);
-                    OnAddItem(current, current.Slot);
+                    OnAddItem(item, current.Slot);
                     return true;
                 }
             }
@@ -1264,7 +1271,7 @@ namespace DevionGames.InventorySystem
             OnRemoveItem += (Item item, int amount, Slot slot) => {
                 ItemEventData eventData = new ItemEventData(item);
                 eventData.slot = slot;
-                Execute("OnAddItem", eventData);
+                Execute("OnRemoveItem", eventData);
             };
             OnFailedToRemoveItem += (Item item, int amount) => {
                 ItemEventData eventData = new ItemEventData(item);

@@ -4,6 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using System.Linq;
 using System.Reflection;
+using System;
 
 namespace DevionGames.Graphs
 {
@@ -22,6 +23,7 @@ namespace DevionGames.Graphs
         private const int NODE_CONTENT_OFFSET = 10;
         private const int NODE_FIELD_HEIGHT = 18;
 
+        private Vector2 m_CreateNodePosition;
         private Port m_ConnectingPort;
 
 
@@ -388,6 +390,7 @@ namespace DevionGames.Graphs
             }
         }
 
+
         protected override void GraphContextMenu(Vector2 position)
         {
             GenericMenu menu = new GenericMenu();
@@ -395,7 +398,9 @@ namespace DevionGames.Graphs
             menu.AddItem(new GUIContent("Add Node"), false, delegate ()
             {
                 Vector2 pos = (position + this.m_GraphOffset) * this.m_GraphZoom + this.m_GraphViewArea.position;
-                AddNodeWindow.ShowWindow(new Rect(pos.x, pos.y, 230f, 21f), position, this.m_Graph);
+                this.m_CreateNodePosition = position;
+                AddObjectWindow.ShowWindow<FlowNode>(new Rect(pos.x - this.m_GraphViewArea.x, pos.y, 230f, 0f), AddNode, CreateNodeScript);
+               // AddNodeWindow.ShowWindow(new Rect(pos.x, pos.y, 230f, 21f), position, this.m_Graph);
             });
 
             if (!string.IsNullOrEmpty(this.m_Copy))
@@ -442,6 +447,14 @@ namespace DevionGames.Graphs
             });
             menu.ShowAsContext();
         }
+
+        private void AddNode(Type type)
+        {
+            Node node = GraphUtility.AddNode(this.m_Graph, type);
+            node.position = this.m_CreateNodePosition;
+        }
+
+        private void CreateNodeScript(string scriptName) { Debug.LogWarning("This is not implemented yet!"); }
 
         private void CopyNodes()
         {

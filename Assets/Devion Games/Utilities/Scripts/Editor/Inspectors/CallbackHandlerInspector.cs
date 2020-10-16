@@ -80,6 +80,9 @@ namespace DevionGames{
 			};
         }
 
+        protected virtual void OnDestroy() {
+        }
+
         public override void OnInspectorGUI ()
 		{
             ScriptGUI();

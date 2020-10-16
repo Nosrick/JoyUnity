@@ -96,6 +96,17 @@ namespace DevionGames
         {
             this.RegisterCallbacks();
             this.m_TriggerEvents = GetComponentsInChildren<ITriggerEventHandler>();
+            if (PlayerInfo.gameObject == null && useDistance != -1) {
+                useDistance = -1;
+                Debug.LogWarning("There is no Player in scene! Please set Use Distance to -1 to ignore range check in "+gameObject+".");
+               
+            }
+            if (PlayerInfo.gameObject == null && triggerType.HasFlag<TriggerInputType>(TriggerInputType.OnTriggerEnter))
+            {
+                Debug.LogWarning("OnTriggerEnter is only valid with a Player in scene. Please remove OnTriggerEnter in "+gameObject+".");
+                triggerType = TriggerInputType.OnClick;
+            }
+
             if (gameObject == PlayerInfo.gameObject || this.useDistance == -1) {
                 InRange = true;
             }

@@ -14,6 +14,7 @@ namespace DevionGames.InventorySystem{
         public List<ItemGroup> itemGroups = new List<ItemGroup>();
         public List<Configuration.Settings> settings = new List<Configuration.Settings>();
 
+		public List<string> folders = new List<string>();
 		public List<Item> allItems {
 			get {
 				List<Item> all = new List<Item>(items);

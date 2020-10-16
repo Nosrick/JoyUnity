@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace DevionGames
 {
+    //[UnityEngine.Scripting.APIUpdating.MovedFromAttribute(false,"DevionGames",null,"Log1")]
     [ComponentMenu("Debug/Log")]
     public class Log : Action
     {

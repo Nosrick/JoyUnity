@@ -30,7 +30,7 @@ namespace JoyLib.Code.Conversation
             }
         }
 
-        protected List<ITopic> LoadTopics()
+        public List<ITopic> LoadTopics()
         {
             List<ITopic> topics = new List<ITopic>();
 
