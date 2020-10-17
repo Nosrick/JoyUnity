@@ -10,6 +10,7 @@ using Castle.Core.Internal;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
+using JoyLib.Code.Unity.GUI;
 using UnityEngine;
 
 namespace JoyLib.Code.Conversation
@@ -20,6 +21,39 @@ namespace JoyLib.Code.Conversation
         protected List<ITopic> m_CurrentTopics;
         protected List<ITopic> m_PreviousTopics;
 
+        [SerializeField]
+        protected GameObject s_Window;
+
+        protected List<ConversationMenu> MenuList
+        {
+            get;
+            set;
+        }
+
+        protected GameObject Window
+        {
+            get => s_Window;
+            set => s_Window = value;
+        }
+
+        protected GameObject MenuItem
+        {
+            get;
+            set;
+        }
+
+        protected Entity Instigator
+        {
+            get;
+            set;
+        }
+
+        protected Entity Listener
+        {
+            get;
+            set;
+        }
+
         public void Awake()
         {
             if (m_Topics is null)
@@ -29,6 +63,12 @@ namespace JoyLib.Code.Conversation
                 m_CurrentTopics = new List<ITopic>();
 
                 m_PreviousTopics = new List<ITopic>();
+
+                Window = Window is null ? GameObject.Find("Conversation Window") : Window;
+
+                MenuItem = Window.transform.GetChild(0).gameObject;
+                
+                MenuList = new List<ConversationMenu>();
             }
         }
 
@@ -111,8 +151,14 @@ namespace JoyLib.Code.Conversation
 
             return topics;
         }
+
+        public void SetActors(Entity instigator, Entity listener)
+        {
+            Instigator = instigator;
+            Listener = listener;
+        }
         
-        public List<ITopic> Converse(Entity instigator, Entity listener, string topicID)
+        public List<ITopic> Converse(string topicID)
         {
             ITopic currentTopic;
             
@@ -130,9 +176,9 @@ namespace JoyLib.Code.Conversation
 
                     foreach (ITopicCondition condition in conditions)
                     {
-                        tuples.AddRange(listener.GetData(
+                        tuples.AddRange(Listener.GetData(
                             new [] {condition.Criteria}, 
-                            new object[] { listener }));
+                            new object[] { Listener }));
                     }
 
                     if(topic.PassesConditions(tuples.ToArray()))
@@ -148,7 +194,7 @@ namespace JoyLib.Code.Conversation
                 currentTopic = m_CurrentTopics.First(t => t.ID.Equals(topicID, StringComparison.OrdinalIgnoreCase));
             }
             
-            ITopic[] next = currentTopic.Interact(instigator, listener);
+            ITopic[] next = currentTopic.Interact(Instigator, Listener);
 
             validTopics = new List<ITopic>();
             foreach (ITopic topic in next)
@@ -158,9 +204,9 @@ namespace JoyLib.Code.Conversation
 
                 foreach (ITopicCondition condition in conditions)
                 {
-                    tuples.AddRange(listener.GetData(
+                    tuples.AddRange(Listener.GetData(
                         new [] {condition.Criteria}, 
-                        new object[] { listener }));
+                        new object[] { Listener }));
                 }
 
                 if(topic.PassesConditions(tuples.ToArray()))
@@ -171,7 +217,33 @@ namespace JoyLib.Code.Conversation
 
             validTopics = TrimEmpty(validTopics);
             
+            CreateMenuItems(validTopics.ToArray());
+            
             return validTopics;
+        }
+
+        protected void CreateMenuItems(ITopic[] topics)
+        {
+            if (topics.Length > MenuList.Count)
+            {
+                for (int i = MenuList.Count; i < topics.Length; i++)
+                {
+                    ConversationMenu child = GameObject.Instantiate(MenuItem, this.gameObject.transform).GetComponent<ConversationMenu>();
+                    MenuList.Add(child);
+                }
+            }
+            
+            for(int i = 0; i < topics.Length; i++)
+            {
+                MenuList[i].TopicID = topics[i].ID;
+                MenuList[i].SetText(topics[i].Words);
+                MenuList[i].gameObject.SetActive(true);
+            }
+
+            for (int i = topics.Length; i < MenuList.Count; i++)
+            {
+                MenuList[i].gameObject.SetActive(false);
+            }
         }
 
         protected List<ITopic> TrimEmpty(List<ITopic> topics)

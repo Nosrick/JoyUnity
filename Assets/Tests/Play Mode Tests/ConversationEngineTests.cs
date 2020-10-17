@@ -31,6 +31,7 @@ namespace Tests
         private ConversationEngine target;
 
         private GameObject gameManager;
+        private GameObject conversationWindow;
         
         private EntityTemplateHandler templateHandler;
 
@@ -54,6 +55,10 @@ namespace Tests
         {
             gameManager = new GameObject("GameManager");
             gameManager.AddComponent<InventoryManager>();
+
+            conversationWindow =
+                GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/GUI/Conversation/Conversation Window"));
+            conversationWindow.name = "Conversation Window";
 
             objectIconHandler = gameManager.AddComponent<ObjectIconHandler>();
             templateHandler = gameManager.AddComponent<EntityTemplateHandler>();
@@ -120,11 +125,13 @@ namespace Tests
         {
             int depth = 0;
             
-            List<ITopic> topics = target.Converse(instigator, listener, "Greeting");
+            target.SetActors(instigator, listener);
+            
+            List<ITopic> topics = target.Converse("Greeting");
             while (topics.IsNullOrEmpty() == false)
             {
                 int result = RNG.instance.Roll(0, topics.Count);
-                topics = target.Converse(instigator, listener, topics[result].ID);
+                topics = target.Converse(topics[result].ID);
 
                 depth += 1;
             }
