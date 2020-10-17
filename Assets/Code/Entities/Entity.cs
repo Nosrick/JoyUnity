@@ -141,14 +141,7 @@ namespace JoyLib.Code.Entities
             }
             this.m_CurrentJob = job;
 
-            if (template.Sentient)
-            {
-                this.AddTag("sentient");
-            }
-            else
-            {
-                this.AddTag("non-sentient");
-            }
+            this.m_Tags = template.Tags.ToList();
 
             this.m_NaturalWeapons = naturalWeapons;
             this.m_Equipment = equipment;
@@ -849,7 +842,7 @@ namespace JoyLib.Code.Entities
         {
             get
             {
-                return m_Tags.Contains("sentient");
+                return m_Tags.Any(tag => tag.Equals("sentient", StringComparison.OrdinalIgnoreCase));
             }
         }
 
