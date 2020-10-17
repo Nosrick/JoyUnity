@@ -1,4 +1,5 @@
-﻿using JoyLib.Code.Entities.Abilities;
+﻿using System;
+using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Entities.AI.LOS.Providers;
 using JoyLib.Code.Collections;
@@ -45,7 +46,7 @@ namespace JoyLib.Code.Entities
 
             m_Size = size;
 
-            m_Sentient = tags.Contains("sentient");
+            m_Sentient = tags.Any(tag => tag.Equals("sentient", StringComparison.OrdinalIgnoreCase));
 
             VisionType = visionType;
 
