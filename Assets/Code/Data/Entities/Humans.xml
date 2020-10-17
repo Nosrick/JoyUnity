@@ -49,6 +49,9 @@
 	<Tag>Diurnal</Tag>
 
   	<Need>hunger</Need>
+  	<Need>friendship</Need>
+  	<Need>thirst</Need>
+  	<Need>sex</Need>
 
 	<Slot>Head</Slot>
 	<Slot>Neck</Slot>

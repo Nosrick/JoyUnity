@@ -35,8 +35,12 @@ namespace DevionGames.InventorySystem
 		/// <value>The database.</value>
 		public static ItemDatabase Database {
 			get {
-				if (InventoryManager.current != null) {
-                    Assert.IsNotNull(InventoryManager.current.m_Database, "Please assign ItemDatabase to the Inventory Manager!");
+				if (!(InventoryManager.current is null)) {
+                    if (InventoryManager.current.m_Database is null)
+                    {
+                        InventoryManager.current.m_Database = ScriptableObject.CreateInstance<ItemDatabase>();
+                    }
+                    //Assert.IsNotNull(InventoryManager.current.m_Database, "Please assign ItemDatabase to the Inventory Manager!");
                     return InventoryManager.current.m_Database;
 				}
 				return null;
@@ -46,7 +50,7 @@ namespace DevionGames.InventorySystem
         private static Default m_DefaultSettings;
         public static Default DefaultSettings {
             get {
-                if (m_DefaultSettings== null)
+                if (m_DefaultSettings is null)
                 {
                     m_DefaultSettings = GetSetting<Default>();
                 }
@@ -106,12 +110,17 @@ namespace DevionGames.InventorySystem
             }
         }
 
-        private static T GetSetting<T>() where T: Configuration.Settings{
+        private static T GetSetting<T>() where T: Configuration.Settings {
             if (InventoryManager.Database != null)
             {
-                return (T)InventoryManager.Database.settings.Where(x => x.GetType() == typeof(T)).FirstOrDefault();
+                T result = (T)InventoryManager.Database.settings.Where(x => x.GetType() == typeof(T)).FirstOrDefault();
+                if (!(result is null))
+                {
+                    return result;
+                }
             }
-            return default(T);
+
+            return ScriptableObject.CreateInstance<T>();
         }
 
 
@@ -140,6 +149,7 @@ namespace DevionGames.InventorySystem
         /// </summary>
         private void Awake ()
 		{
+            
 			if (InventoryManager.m_Current != null) {
                 if(InventoryManager.DefaultSettings.debugMessages)
                     Debug.Log ("Multiple Inventory Manager in scene...this is not supported. Destroying instance!");

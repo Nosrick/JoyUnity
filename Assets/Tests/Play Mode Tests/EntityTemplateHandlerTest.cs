@@ -4,6 +4,7 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 using System.Collections;
+using DevionGames.InventorySystem;
 
 namespace Tests
 {
@@ -19,6 +20,7 @@ namespace Tests
         public void SetUp()
         {
             container = new GameObject("GameManager");
+            container.AddComponent<InventoryManager>();
             
             needHandler = container.AddComponent<NeedHandler>();
             target = container.AddComponent<EntityTemplateHandler>();

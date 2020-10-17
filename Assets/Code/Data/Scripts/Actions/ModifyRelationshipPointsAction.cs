@@ -47,7 +47,7 @@ namespace JoyLib.Code.Scripting.Actions
 
             IRelationship[] relationships = RelationshipHandler.Get(guids, tags);
 
-            bool doAll = args[1] is null ? false : (bool)args[1];
+            bool doAll = args.Length < 2 ? false : (bool)args[1];
 
             if(relationships.Length > 0)
             {

@@ -30,7 +30,7 @@ namespace JoyLib.Code.Scripting.Actions
 
             int counter = args[2] is null ? 0 : (int) args[2];
 
-            bool doAll = args[3] is null ? false : (bool) args[3];
+            bool doAll = args.Length < 4 ? false : (bool) args[3];
 
             JoyObject[] fellowActors = participants.Where(p => p.GUID != actor.GUID).ToArray();
             

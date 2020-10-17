@@ -33,7 +33,9 @@ namespace JoyLib.Code.Conversation.Conversations
 
             if (ConversationEngine is null)
             {
-                ConversationEngine = GameObject.Find("GameManager").GetComponent<ConversationEngine>();
+                GameObject gameManager = GameObject.Find("GameManager");
+                ConversationEngine = gameManager.GetComponent<ConversationEngine>();
+                RelationshipHandler = gameManager.GetComponent<EntityRelationshipHandler>();
             }
         }
 

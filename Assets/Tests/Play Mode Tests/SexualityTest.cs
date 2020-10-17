@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DevionGames.InventorySystem;
+using DevionGames.InventorySystem.Configuration;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities.Sexuality;
 using JoyLib.Code.Entities;
@@ -64,6 +66,7 @@ namespace Tests
         public void SetUp()
         {
             container = new GameObject("GameManager");
+            container.AddComponent<InventoryManager>();
 
             scriptingEngine = new ScriptingEngine();
 
@@ -100,8 +103,6 @@ namespace Tests
             heterosexual = (ISexuality)Activator.CreateInstance(keyedTypes.Single(p => p.Key.Equals("heterosexual", StringComparison.OrdinalIgnoreCase)).Value);
             homosexual = (ISexuality)Activator.CreateInstance(keyedTypes.Single(p => p.Key.Equals("homosexual", StringComparison.OrdinalIgnoreCase)).Value);
             bisexual = (ISexuality)Activator.CreateInstance(keyedTypes.Single(p => p.Key.Equals("bisexual", StringComparison.OrdinalIgnoreCase)).Value);
-
-            Mock<BasicValueContainer<INeed>> emptyContainer = new Mock<BasicValueContainer<INeed>>();
 
             Mock<IGrowingValue> level = new Mock<IGrowingValue>();
             EntityTemplate humanTemplate = templateHandler.Get("human");

@@ -55,9 +55,11 @@ namespace JoyLib.Code.Entities.Relationships
 
         public IRelationship CreateRelationshipWithValue(Entity[] participants, string type, int value)
         {
-            if(m_RelationshipTypes.ContainsKey(type))
+            if(m_RelationshipTypes.Any(t => t.Key.Equals(type, StringComparison.OrdinalIgnoreCase)))
             {
-                IRelationship newRelationship = (IRelationship)Activator.CreateInstance(m_RelationshipTypes[type]);
+                Type relationshipType =
+                    m_RelationshipTypes.First(t => t.Key.Equals(type, StringComparison.OrdinalIgnoreCase)).Value;
+                IRelationship newRelationship = (IRelationship)Activator.CreateInstance(relationshipType);
 
                 List<long> GUIDs = new List<long>();
                 foreach(Entity participant in participants)

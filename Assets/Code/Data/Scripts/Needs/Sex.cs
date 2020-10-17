@@ -10,7 +10,19 @@ namespace JoyLib.Code.Entities.Needs
 {
     public class Sex : AbstractNeed
     {
-        private static EntityRelationshipHandler s_EntityRelationshipHandler;
+        protected static EntityRelationshipHandler s_EntityRelationshipHandler;
+
+        protected const int DECAY_MIN = 200;
+        protected const int DECAY_MAX = 600;
+
+        protected const int PRIORITY = 12;
+
+        protected const int HAPPINESS_THRESHOLD_MIN = 5;
+        protected const int HAPPINESS_THRESHOLD_MAX = 24;
+        
+        protected const int MAX_VALUE_MIN = HAPPINESS_THRESHOLD_MAX;
+        protected const int MAX_VALUE_MAX = MAX_VALUE_MIN * 4;
+        
 
         public Sex() : 
             base(
@@ -62,7 +74,6 @@ namespace JoyLib.Code.Entities.Needs
 
         protected void Initialise()
         {
-            
             if(s_EntityRelationshipHandler is null)
             {
                 s_EntityRelationshipHandler = GameObject.Find("GameManager").GetComponent<EntityRelationshipHandler>();
@@ -201,16 +212,19 @@ namespace JoyLib.Code.Entities.Needs
 
         public override INeed Randomise()
         {
-            int decay = RNG.instance.Roll(200, 600);
-            return new Sex(decay, decay, true, 12, RNG.instance.Roll(5, 24), 24, 0, 0);
+            int decay = RNG.instance.Roll(DECAY_MIN, DECAY_MAX);
+            int decayCounter = RNG.instance.Roll(0, DECAY_MAX);
+            int maxValue = RNG.instance.Roll(MAX_VALUE_MIN, MAX_VALUE_MAX);
+            return new Sex(
+                decay, 
+                decayCounter, 
+                true, 
+                PRIORITY, 
+                RNG.instance.Roll(HAPPINESS_THRESHOLD_MIN, HAPPINESS_THRESHOLD_MAX), 
+                HAPPINESS_THRESHOLD_MAX, 
+                maxValue);
         }
 
-        public override string Name
-        {
-            get
-            {
-                return "sex";
-            }
-        }
+        public override string Name => "sex";
     }
 }

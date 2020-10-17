@@ -17,12 +17,6 @@
             return false;
         }
 
-        public override string Name
-        {
-            get
-            {
-                return "monogamous";
-            }
-        }
+        public override string Name => "monogamous";
     }
 }

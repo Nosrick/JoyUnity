@@ -6,7 +6,9 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using Castle.Core.Internal;
 using JoyLib.Code.Helpers;
+using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using UnityEngine;
 
@@ -110,12 +112,45 @@ namespace JoyLib.Code.Conversation
             return topics;
         }
         
-        public List<ITopic> Converse(Entity instigator, Entity listener, int selectedItem = 0)
+        public List<ITopic> Converse(Entity instigator, Entity listener, string topicID)
         {
-            ITopic[] next = m_CurrentTopics[selectedItem].Interact(instigator, listener);
+            ITopic currentTopic;
             
             List<ITopic> validTopics = new List<ITopic>();
+            
+            if (m_CurrentTopics.IsNullOrEmpty())
+            {
+                ITopic[] topics = m_Topics.Where(t => t.ID.Equals(topicID, StringComparison.OrdinalIgnoreCase))
+                    .ToArray();
+                
+                foreach (ITopic topic in topics)
+                {
+                    ITopicCondition[] conditions = topic.Conditions;
+                    List<Tuple<string, int>> tuples = new List<Tuple<string, int>>();
 
+                    foreach (ITopicCondition condition in conditions)
+                    {
+                        tuples.AddRange(listener.GetData(
+                            new [] {condition.Criteria}, 
+                            new object[] { listener }));
+                    }
+
+                    if(topic.PassesConditions(tuples.ToArray()))
+                    {
+                        validTopics.Add(topic);
+                    }
+                }
+                
+                currentTopic = validTopics[RNG.instance.Roll(0, validTopics.Count)];
+            }
+            else
+            {
+                currentTopic = m_CurrentTopics.First(t => t.ID.Equals(topicID, StringComparison.OrdinalIgnoreCase));
+            }
+            
+            ITopic[] next = currentTopic.Interact(instigator, listener);
+
+            validTopics = new List<ITopic>();
             foreach (ITopic topic in next)
             {
                 ITopicCondition[] conditions = topic.Conditions;
