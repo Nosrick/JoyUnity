@@ -11499,6 +11499,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1293420870}
     m_Modifications:
+    - target: {fileID: 8424994987034671138, guid: cfe1cedfce4989c4cb9746366d92c235,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.0020141602
+      objectReference: {fileID: 0}
+    - target: {fileID: 8424994987034671140, guid: cfe1cedfce4989c4cb9746366d92c235,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: bc4caedb64152144cbaa38f8bc6bbc11,
+        type: 3}
     - target: {fileID: 8424994987622645024, guid: cfe1cedfce4989c4cb9746366d92c235,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -11557,22 +11568,22 @@ PrefabInstance:
     - target: {fileID: 8424994987622645024, guid: cfe1cedfce4989c4cb9746366d92c235,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 368.39
+      value: -409.9
       objectReference: {fileID: 0}
     - target: {fileID: 8424994987622645024, guid: cfe1cedfce4989c4cb9746366d92c235,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -114.026245
+      value: 231
       objectReference: {fileID: 0}
     - target: {fileID: 8424994987622645024, guid: cfe1cedfce4989c4cb9746366d92c235,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 160
+      value: 933.9
       objectReference: {fileID: 0}
     - target: {fileID: 8424994987622645024, guid: cfe1cedfce4989c4cb9746366d92c235,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 440
       objectReference: {fileID: 0}
     - target: {fileID: 8424994987622645024, guid: cfe1cedfce4989c4cb9746366d92c235,
         type: 3}
@@ -11604,10 +11615,35 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8424994987622645026, guid: cfe1cedfce4989c4cb9746366d92c235,
+        type: 3}
+      propertyPath: m_HorizontalFit
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8424994987622645026, guid: cfe1cedfce4989c4cb9746366d92c235,
+        type: 3}
+      propertyPath: m_VerticalFit
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8424994987622645055, guid: cfe1cedfce4989c4cb9746366d92c235,
         type: 3}
       propertyPath: m_Name
       value: Conversation Window
+      objectReference: {fileID: 0}
+    - target: {fileID: 8424994988068797230, guid: cfe1cedfce4989c4cb9746366d92c235,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 467.95004
+      objectReference: {fileID: 0}
+    - target: {fileID: 8424994988068797230, guid: cfe1cedfce4989c4cb9746366d92c235,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 931.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 8424994988665683029, guid: cfe1cedfce4989c4cb9746366d92c235,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 4.8900146
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cfe1cedfce4989c4cb9746366d92c235, type: 3}

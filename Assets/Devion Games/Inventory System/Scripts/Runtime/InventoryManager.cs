@@ -111,7 +111,7 @@ namespace DevionGames.InventorySystem
         }
 
         private static T GetSetting<T>() where T: Configuration.Settings {
-            if (InventoryManager.Database != null)
+            if (!(InventoryManager.Database is null))
             {
                 T result = (T)InventoryManager.Database.settings.Where(x => x.GetType() == typeof(T)).FirstOrDefault();
                 if (!(result is null))
@@ -122,7 +122,6 @@ namespace DevionGames.InventorySystem
 
             return ScriptableObject.CreateInstance<T>();
         }
-
 
         protected static Dictionary<string, GameObject> m_PrefabCache;
 
