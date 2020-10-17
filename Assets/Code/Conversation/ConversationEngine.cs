@@ -228,7 +228,7 @@ namespace JoyLib.Code.Conversation
             {
                 for (int i = MenuList.Count; i < topics.Length; i++)
                 {
-                    ConversationMenu child = GameObject.Instantiate(MenuItem, this.gameObject.transform).GetComponent<ConversationMenu>();
+                    ConversationMenu child = GameObject.Instantiate(MenuItem, Window.transform).GetComponent<ConversationMenu>();
                     MenuList.Add(child);
                 }
             }

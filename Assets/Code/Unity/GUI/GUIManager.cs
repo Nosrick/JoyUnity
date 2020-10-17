@@ -47,14 +47,18 @@ namespace JoyLib.Code.Unity.GUI
         {
             GUIData toOpen = m_GUIs.First(gui => 
                     gui.name.Equals(name, StringComparison.OrdinalIgnoreCase));
-            
-            m_ActiveGUIs.Add(toOpen);
-            toOpen.gameObject.SetActive(true);
 
             if (toOpen.ClosesOthers)
             {
-                CloseGUI(name);
+                List<GUIData> activeCopy = new List<GUIData>(m_ActiveGUIs);
+                foreach (GUIData data in activeCopy)
+                {
+                    CloseGUI(data.name);
+                }
             }
+            
+            m_ActiveGUIs.Add(toOpen);
+            toOpen.gameObject.SetActive(true);
         }
 
         public void CloseGUI(string activeName)
@@ -87,6 +91,11 @@ namespace JoyLib.Code.Unity.GUI
         public GameObject GetGUI(string name)
         {
             return m_GUIs.First(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase)).gameObject;
+        }
+
+        public bool IsActive(string name)
+        {
+            return m_ActiveGUIs.Any(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
     }
 }

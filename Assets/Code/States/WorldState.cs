@@ -11,6 +11,7 @@ using JoyLib.Code.World;
 using System;
 using DevionGames.InventorySystem;
 using DevionGames.UIWidgets;
+using JoyLib.Code.Conversation;
 using JoyLib.Code.Unity;
 using JoyLib.Code.Unity.GUI;
 using UnityEngine;
@@ -26,8 +27,6 @@ namespace JoyLib.Code.States
         protected WorldInstance m_Overworld;
 
         protected GameplayFlags m_GameplayFlags;
-
-        protected TextMeshProUGUI m_NeedsPanel;
 
         protected Camera m_Camera;
 
@@ -46,10 +45,12 @@ namespace JoyLib.Code.States
         protected GameObject m_GameManager;
         protected PhysicsManager m_PhysicsManager;
         protected EntityRelationshipHandler m_RelationshipHandler;
+        protected ConversationEngine m_ConversationEngine;
 
         private const string NEEDSRECT = "NeedsRect";
         private const string INVENTORY = "Inventory";
         private const string EQUIPMENT = "Equipment";
+        private const string CONVERSATION = "Conversation Window";
 
         public WorldState(WorldInstance overworldRef, WorldInstance activeWorldRef, GameplayFlags flagsRef) : base()
         {
@@ -66,6 +67,7 @@ namespace JoyLib.Code.States
             m_GameManager = GameObject.Find("GameManager");
             m_PhysicsManager = m_GameManager.GetComponent<PhysicsManager>();
             m_RelationshipHandler = m_GameManager.GetComponent<EntityRelationshipHandler>();
+            m_ConversationEngine = m_GameManager.GetComponent<ConversationEngine>();
         }
 
         public override void LoadContent()
@@ -82,11 +84,13 @@ namespace JoyLib.Code.States
                 GameObject needsGUIPrefab = GameObject.Find(NEEDSRECT);
                 GameObject inventoryGUIPrefab = GameObject.Find(INVENTORY);
                 GameObject equipmentGUIPrefab = GameObject.Find(EQUIPMENT);
+                GameObject conversationWindow = GameObject.Find(CONVERSATION);
 
                 s_GUIManager = new GUIManager();
                 s_GUIManager.AddGUI(needsGUIPrefab, false, false);
                 s_GUIManager.AddGUI(inventoryGUIPrefab, true, false);
                 s_GUIManager.AddGUI(equipmentGUIPrefab, true, false);
+                s_GUIManager.AddGUI(conversationWindow, true, true);
             }
 
             s_GUIManager.CloseAllOtherGUIs();
@@ -240,6 +244,21 @@ namespace JoyLib.Code.States
             else if (Input.GetKeyDown(KeyCode.E))
             {
                 s_GUIManager.ToggleGUI(EQUIPMENT);
+            }
+            else if (Input.GetKeyDown(KeyCode.T))
+            {
+                if (s_GUIManager.IsActive(CONVERSATION))
+                {
+                    s_GUIManager.CloseGUI(CONVERSATION);
+                }
+                else
+                {
+                    //TODO: Make a targeting system or something
+                    Entity listener = this.m_ActiveWorld.GetRandomSentient();
+                    s_GUIManager.OpenGUI(CONVERSATION);
+                    m_ConversationEngine.SetActors(this.playerWorld.Player, listener);
+                    m_ConversationEngine.Converse("Greeting");   
+                }
             }
 
             if (s_GUIManager.RemovesControl())
