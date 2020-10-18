@@ -7,11 +7,15 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using Castle.Core.Internal;
+using DevionGames.UIWidgets;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.Unity.GUI;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
 
 namespace JoyLib.Code.Conversation
 {
@@ -25,6 +29,18 @@ namespace JoyLib.Code.Conversation
         protected GameObject s_Window;
 
         protected List<ConversationMenu> MenuList
+        {
+            get;
+            set;
+        }
+
+        protected TextMeshProUGUI LastSaid
+        {
+            get;
+            set;
+        }
+
+        protected Image ListenerIcon
         {
             get;
             set;
@@ -66,6 +82,11 @@ namespace JoyLib.Code.Conversation
 
                 Window = Window is null ? GameObject.Find("Conversation Window") : Window;
 
+                /*
+                Transform title = Window.transform.GetChild(0);
+                LastSaid = title.GetComponentInChildren<TextMeshProUGUI>();
+                ListenerIcon = title.GetComponentInChildren<Image>();
+                */
                 MenuItem = Window.transform.GetChild(0).gameObject;
                 
                 MenuList = new List<ConversationMenu>();
@@ -156,6 +177,8 @@ namespace JoyLib.Code.Conversation
         {
             Instigator = instigator;
             Listener = listener;
+
+            //ListenerIcon.sprite = Listener.Icon;
         }
         
         public List<ITopic> Converse(string topicID)
@@ -193,6 +216,8 @@ namespace JoyLib.Code.Conversation
             {
                 currentTopic = m_CurrentTopics.First(t => t.ID.Equals(topicID, StringComparison.OrdinalIgnoreCase));
             }
+
+            //SetTitle(currentTopic.Words);
             
             ITopic[] next = currentTopic.Interact(Instigator, Listener);
 
@@ -222,6 +247,11 @@ namespace JoyLib.Code.Conversation
             return validTopics;
         }
 
+        protected void SetTitle(string text)
+        {
+            LastSaid.text = text;
+        }
+
         protected void CreateMenuItems(ITopic[] topics)
         {
             if (topics.Length > MenuList.Count)
@@ -238,6 +268,11 @@ namespace JoyLib.Code.Conversation
                 MenuList[i].TopicID = topics[i].ID;
                 MenuList[i].SetText(topics[i].Words);
                 MenuList[i].gameObject.SetActive(true);
+                ConversationMenu menu = MenuList[i].GetComponent<ConversationMenu>();
+                MenuItem menuItem = MenuList[i].GetComponent<MenuItem>();
+                Button.ButtonClickedEvent buttonClickedEvent = new Button.ButtonClickedEvent();
+                buttonClickedEvent.AddListener(menu.OnMouseDown);
+                menuItem.onTrigger = buttonClickedEvent;
             }
 
             for (int i = topics.Length; i < MenuList.Count; i++)
