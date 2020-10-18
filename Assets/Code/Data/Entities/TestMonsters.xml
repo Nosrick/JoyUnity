@@ -50,6 +50,8 @@
 
   	<Need>hunger</Need>
 	<Need>thirst</Need>
+  	<Need>sex</Need>
+  	<Need>friendship</Need>
 
 	<Slot>Head</Slot>
 	<Slot>Neck</Slot>
@@ -146,6 +148,8 @@
 
   	<Need>hunger</Need>
 	<Need>thirst</Need>
+	<Need>sex</Need>
+	<Need>friendship</Need>
 
 	<Slot>Torso</Slot>
 

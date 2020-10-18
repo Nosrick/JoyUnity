@@ -412,7 +412,7 @@ namespace JoyLib.Code.Entities
                 data.Add(new Tuple<string, int>(jobLevel.Key, jobLevel.Value));
             }
 
-            if (args[0] is JoyObject other)
+            if (args.Length > 0 && args[0] is JoyObject other)
             {
                 //Check relationships
                 IRelationship[] relationships = s_RelationshipHandler.GetAllForObject(this);

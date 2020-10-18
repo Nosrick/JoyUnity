@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using Castle.Core.Internal;
+using DevionGames;
 using DevionGames.UIWidgets;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Rollers;
@@ -82,12 +83,10 @@ namespace JoyLib.Code.Conversation
 
                 Window = Window is null ? GameObject.Find("Conversation Window") : Window;
 
-                /*
-                Transform title = Window.transform.GetChild(0);
+                Transform title = Window.FindChild("Title", true).transform;
                 LastSaid = title.GetComponentInChildren<TextMeshProUGUI>();
                 ListenerIcon = title.GetComponentInChildren<Image>();
-                */
-                MenuItem = Window.transform.GetChild(0).gameObject;
+                MenuItem = Window.FindChild("Menu Item", true);
                 
                 MenuList = new List<ConversationMenu>();
             }
@@ -178,7 +177,7 @@ namespace JoyLib.Code.Conversation
             Instigator = instigator;
             Listener = listener;
 
-            //ListenerIcon.sprite = Listener.Icon;
+            ListenerIcon.sprite = Listener.Icon;
         }
         
         public List<ITopic> Converse(string topicID)
@@ -217,7 +216,7 @@ namespace JoyLib.Code.Conversation
                 currentTopic = m_CurrentTopics.First(t => t.ID.Equals(topicID, StringComparison.OrdinalIgnoreCase));
             }
 
-            //SetTitle(currentTopic.Words);
+            SetTitle(currentTopic.Words);
             
             ITopic[] next = currentTopic.Interact(Instigator, Listener);
 
