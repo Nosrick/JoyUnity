@@ -1,6 +1,7 @@
 ﻿using JoyLib.Code.Entities;
 using System;
 using System.Collections.Generic;
+using JoyLib.Code.Scripting;
 
 namespace JoyLib.Code.Conversation.Conversations
 {
@@ -31,11 +32,46 @@ namespace JoyLib.Code.Conversation.Conversations
             get;
         }
 
+        IJoyAction[] CachedActions
+        {
+            get;
+        }
+
+        Speaker Speaker
+        {
+            get;
+        }
+
+        string Link
+        {
+            get;
+        }
+
         string[] GetConditionTags();
 
         bool PassesConditions(Tuple<string, int>[] values);
 
         ITopic[] Interact(Entity instigator, Entity listener);
+
+        void Initialise(
+            ITopicCondition[] conditions,
+            string ID,
+            string[] nextTopics,
+            string words,
+            int priority,
+            string[] cachedActions,
+            Speaker speaker,
+            string link = "");
+        
+        void Initialise(
+            ITopicCondition[] conditions,
+            string ID,
+            string[] nextTopics,
+            string words,
+            int priority,
+            IJoyAction[] actions,
+            Speaker speaker,
+            string link);
     }
 
     public class TopicComparer : IComparer<ITopic>
@@ -44,5 +80,11 @@ namespace JoyLib.Code.Conversation.Conversations
         {
             return x.Priority.CompareTo(y.Priority);
         }
+    }
+
+    public enum Speaker
+    {
+        LISTENER,
+        INSTIGATOR
     }
 }

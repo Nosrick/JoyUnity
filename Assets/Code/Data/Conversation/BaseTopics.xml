@@ -5,31 +5,41 @@
     <Text>Let's talk.</Text>
     <Processor>ChatterProcessor</Processor>
     <Next>ChatterTopic</Next>
+    <Speaker>instigator</Speaker>
   </Line>
   <Line>
     <Text>Can you tell me anything about this place?</Text>
     <Processor>LocalAreaInfoProcessor</Processor>
     <Next>LocalAreaInfo</Next>
+    <Speaker>instigator</Speaker>
   </Line>
   <Line>
     <Text>Do you have anything to trade?</Text>
     <Processor>TradeProcessor</Processor>
     <Next>TradeDialogue</Next>
+    <Speaker>instigator</Speaker>
   </Line>
   <Line>
     <Text>Is there anything I can do for you?</Text>
     <Processor>TaskProcessor</Processor>
     <Next>TaskDialogue</Next>
+    <Speaker>instigator</Speaker>
   </Line>
   <Line>
     <Text>Fancy a quicky?</Text>
     <Processor>SexProposalProcessor</Processor>
     <Next>SexProposal</Next>
+    <Speaker>instigator</Speaker>
   </Line>
   <Line>
     <Text>Would you do me the honour of becoming my spouse?</Text>
     <Condition>Relationship = Romantic</Condition>
     <Processor>MarriageProposalProcessor</Processor>
     <Next>MarriageProposal</Next>
+    <Speaker>instigator</Speaker>
+  </Line>
+  <Line>
+    <Link>Farewells</Link>
+    <Speaker>instigator</Speaker>
   </Line>
 </Conversations>

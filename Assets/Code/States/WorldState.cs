@@ -52,6 +52,12 @@ namespace JoyLib.Code.States
         private const string EQUIPMENT = "Equipment";
         private const string CONVERSATION = "Conversation Window";
 
+        protected static bool SetUpGUI
+        {
+            get;
+            set;
+        }
+
         public WorldState(WorldInstance overworldRef, WorldInstance activeWorldRef, GameplayFlags flagsRef) : base()
         {
             m_WorldSerialiser = new WorldSerialiser();
@@ -68,6 +74,7 @@ namespace JoyLib.Code.States
             m_PhysicsManager = m_GameManager.GetComponent<PhysicsManager>();
             m_RelationshipHandler = m_GameManager.GetComponent<EntityRelationshipHandler>();
             m_ConversationEngine = m_GameManager.GetComponent<ConversationEngine>();
+            s_GUIManager = m_GameManager.GetComponent<GUIManager>();
         }
 
         public override void LoadContent()
@@ -79,20 +86,21 @@ namespace JoyLib.Code.States
         {
             base.SetUpUi();
 
-            if (s_GUIManager == null)
+            if (!SetUpGUI)
             {
                 GameObject needsGUIPrefab = GameObject.Find(NEEDSRECT);
                 GameObject inventoryGUIPrefab = GameObject.Find(INVENTORY);
                 GameObject equipmentGUIPrefab = GameObject.Find(EQUIPMENT);
                 GameObject conversationWindow = GameObject.Find(CONVERSATION);
-
-                s_GUIManager = new GUIManager();
+    
                 s_GUIManager.AddGUI(needsGUIPrefab, false, false);
                 s_GUIManager.AddGUI(inventoryGUIPrefab, true, false);
                 s_GUIManager.AddGUI(equipmentGUIPrefab, true, false);
                 s_GUIManager.AddGUI(conversationWindow, true, true);
-            }
 
+                SetUpGUI = true;
+            }
+            
             s_GUIManager.CloseAllOtherGUIs();
             s_GUIManager.OpenGUI(NEEDSRECT);
 
@@ -257,7 +265,7 @@ namespace JoyLib.Code.States
                     Entity listener = this.m_ActiveWorld.GetRandomSentient();
                     s_GUIManager.OpenGUI(CONVERSATION);
                     m_ConversationEngine.SetActors(this.playerWorld.Player, listener);
-                    m_ConversationEngine.Converse("Greeting");   
+                    m_ConversationEngine.Converse();   
                 }
             }
 

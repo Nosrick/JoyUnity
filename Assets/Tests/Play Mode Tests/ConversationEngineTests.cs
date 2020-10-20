@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
+﻿using System.Collections.Generic;
 using Castle.Core.Internal;
 using DevionGames.InventorySystem;
 using JoyLib.Code.Conversation;
@@ -18,6 +15,7 @@ using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
+using JoyLib.Code.World;
 using Moq;
 using NUnit.Framework;
 using UnityEngine;
@@ -49,6 +47,8 @@ namespace Tests
 
         private Entity instigator;
         private Entity listener;
+
+        private WorldInstance world;
         
         [SetUp]
         public void SetUp()
@@ -71,6 +71,11 @@ namespace Tests
             scriptingEngine = new ScriptingEngine();
 
             target = gameManager.AddComponent<ConversationEngine>();
+            
+            world = new WorldInstance(
+                new WorldTile[0,0], 
+                new string[0],
+                "TESTING");
             
             EntityFactory factory = new EntityFactory();
             
@@ -99,6 +104,12 @@ namespace Tests
                 cultures,
                 female.Object,
                 sexuality.Object);
+            
+            world.AddEntity(instigator);
+            world.AddEntity(listener);
+
+            instigator.MyWorld = world;
+            listener.MyWorld = world;
         }
 
         [Test]
@@ -107,7 +118,7 @@ namespace Tests
             //given
             
             //when
-            ReadOnlyCollection<ITopic> topics = target.AllTopics;
+            ITopic[] topics = target.AllTopics;
 
             //then
             Assert.That(topics, Is.Not.Empty);
@@ -127,11 +138,11 @@ namespace Tests
             
             target.SetActors(instigator, listener);
             
-            List<ITopic> topics = target.Converse("Greeting");
+            ITopic[] topics = target.Converse();
             while (topics.IsNullOrEmpty() == false)
             {
-                int result = RNG.instance.Roll(0, topics.Count);
-                topics = target.Converse(topics[result].ID);
+                int result = RNG.instance.Roll(0, topics.Length);
+                topics = target.Converse(result);
 
                 depth += 1;
             }

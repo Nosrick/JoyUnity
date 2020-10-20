@@ -8,15 +8,14 @@ using System.Linq;
 using System.Xml.Linq;
 using Castle.Core.Internal;
 using DevionGames;
-using DevionGames.UIWidgets;
 using JoyLib.Code.Helpers;
-using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.Unity.GUI;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
+using MenuItem = DevionGames.UIWidgets.MenuItem;
 
 namespace JoyLib.Code.Conversation
 {
@@ -24,10 +23,15 @@ namespace JoyLib.Code.Conversation
     {
         protected List<ITopic> m_Topics;
         protected List<ITopic> m_CurrentTopics;
-        protected List<ITopic> m_PreviousTopics;
 
         [SerializeField]
         protected GameObject s_Window;
+
+        protected GUIManager GUIManager
+        {
+            get;
+            set;
+        }
 
         protected List<ConversationMenu> MenuList
         {
@@ -35,13 +39,19 @@ namespace JoyLib.Code.Conversation
             set;
         }
 
-        protected TextMeshProUGUI LastSaid
+        protected TextMeshProUGUI LastSaidGUI
         {
             get;
             set;
         }
 
-        protected Image ListenerIcon
+        protected ITopic LastSaid
+        {
+            get;
+            set;
+        }
+
+        protected Image LastSpokeIcon
         {
             get;
             set;
@@ -79,16 +89,16 @@ namespace JoyLib.Code.Conversation
                 
                 m_CurrentTopics = new List<ITopic>();
 
-                m_PreviousTopics = new List<ITopic>();
-
                 Window = Window is null ? GameObject.Find("Conversation Window") : Window;
 
                 Transform title = Window.FindChild("Title", true).transform;
-                LastSaid = title.GetComponentInChildren<TextMeshProUGUI>();
-                ListenerIcon = title.GetComponentInChildren<Image>();
+                LastSaidGUI = title.GetComponentInChildren<TextMeshProUGUI>();
+                LastSpokeIcon = title.GetComponentInChildren<Image>();
                 MenuItem = Window.FindChild("Menu Item", true);
                 
                 MenuList = new List<ConversationMenu>();
+
+                this.GUIManager = this.gameObject.GetComponent<GUIManager>();
             }
         }
 
@@ -121,6 +131,14 @@ namespace JoyLib.Code.Conversation
                         
                         int priority = line.Element("Priority").DefaultIfEmpty(0);
 
+                        string speaker = line.Element("Speaker").DefaultIfEmpty("instigator");
+
+                        string link = line.Element("Link").DefaultIfEmpty("");
+
+                        Speaker speakerEnum = speaker.Equals("instigator", StringComparison.OrdinalIgnoreCase)
+                            ? Speaker.INSTIGATOR
+                            : Speaker.LISTENER;
+
                         List<ITopicCondition> conditions = new List<ITopicCondition>();
                         foreach (string condition in conditionStrings)
                         {
@@ -135,7 +153,18 @@ namespace JoyLib.Code.Conversation
                             try
                             {
                                 Type type = ScriptingEngine.instance.FetchType(processor);
-                                topics.Add((ITopic)Activator.CreateInstance(type));
+                                ITopic processorObject = (ITopic) Activator.CreateInstance(type);
+                                processorObject.Initialise(
+                                    conditions.ToArray(),
+                                    topicName,
+                                    nextTopics.ToArray(),
+                                    text,
+                                    priority,
+                                    actions,
+                                    speakerEnum,
+                                    link);
+                                
+                                topics.Add(processorObject);
                             }
                             catch (Exception e)
                             {
@@ -146,7 +175,9 @@ namespace JoyLib.Code.Conversation
                                     nextTopics.ToArray(),
                                     text,
                                     priority,
-                                    actions));
+                                    actions,
+                                    speakerEnum,
+                                    link));
                             }
                         }
                         else
@@ -157,7 +188,9 @@ namespace JoyLib.Code.Conversation
                                     nextTopics.ToArray(),
                                     text,
                                     priority,
-                                    actions));
+                                    actions,
+                                    speakerEnum,
+                                    link));
                         }
                     }
                 }
@@ -169,7 +202,40 @@ namespace JoyLib.Code.Conversation
                 }
             }
 
+            topics = PerformLinks(topics);
+
             return topics;
+        }
+
+        protected List<ITopic> PerformLinks(List<ITopic> topics)
+        {
+            List<ITopic> linked = new List<ITopic>(topics);
+
+            foreach (ITopic topic in topics)
+            {
+                if (topic.Link.IsNullOrEmpty() == false)
+                {
+                    ITopic[] links = topics.Where(left =>
+                            topics.Any(right => right.Link.Equals(left.ID, StringComparison.OrdinalIgnoreCase)))
+                        .ToArray();
+
+                    foreach (ITopic link in links)
+                    {
+                        link.Initialise(
+                            link.Conditions,
+                            topic.ID,
+                            link.NextTopics,
+                            link.Words,
+                            link.Priority,
+                            link.CachedActions,
+                            link.Speaker,
+                            link.Link);
+                    }
+                    linked.Remove(topic);
+                }
+            }
+            
+            return linked;
         }
 
         public void SetActors(Entity instigator, Entity listener)
@@ -177,51 +243,81 @@ namespace JoyLib.Code.Conversation
             Instigator = instigator;
             Listener = listener;
 
-            ListenerIcon.sprite = Listener.Icon;
+            LastSpokeIcon.sprite = Listener.Icon;
+        }
+
+        protected void SetLastSpoke(Entity speaker)
+        {
+            LastSpokeIcon.sprite = speaker.Icon;
         }
         
-        public List<ITopic> Converse(string topicID)
+        public ITopic[] Converse(int index = 0)
         {
-            ITopic currentTopic;
-            
-            List<ITopic> validTopics = new List<ITopic>();
-            
-            if (m_CurrentTopics.IsNullOrEmpty())
+            if (CurrentTopics.Length == 0)
             {
-                ITopic[] topics = m_Topics.Where(t => t.ID.Equals(topicID, StringComparison.OrdinalIgnoreCase))
+                CurrentTopics = m_Topics.Where(topic => topic.ID.Equals("greeting", StringComparison.OrdinalIgnoreCase))
                     .ToArray();
-                
-                foreach (ITopic topic in topics)
-                {
-                    ITopicCondition[] conditions = topic.Conditions;
-                    List<Tuple<string, int>> tuples = new List<Tuple<string, int>>();
 
-                    foreach (ITopicCondition condition in conditions)
-                    {
-                        tuples.AddRange(Listener.GetData(
-                            new [] {condition.Criteria}, 
-                            new object[] { Listener }));
-                    }
-
-                    if(topic.PassesConditions(tuples.ToArray()))
-                    {
-                        validTopics.Add(topic);
-                    }
-                }
-                
-                currentTopic = validTopics[RNG.instance.Roll(0, validTopics.Count)];
+                CurrentTopics = SanitiseTopics(CurrentTopics);
             }
-            else
-            {
-                currentTopic = m_CurrentTopics.First(t => t.ID.Equals(topicID, StringComparison.OrdinalIgnoreCase));
-            }
-
-            SetTitle(currentTopic.Words);
             
+            ITopic currentTopic = CurrentTopics[index];
+            
+            //Listener speaks
+            //Instigator speaks
+            //Listener speaks
+            //Instigator speaks
+            //HALT
             ITopic[] next = currentTopic.Interact(Instigator, Listener);
 
-            validTopics = new List<ITopic>();
-            foreach (ITopic topic in next)
+            next = SanitiseTopics(next);
+
+            if (next.Length == 0)
+            {
+                this.GUIManager.CloseGUI(Window.name);
+                CurrentTopics = next;
+                return next;
+            }
+            
+            switch (currentTopic.Speaker)
+            {
+                case Speaker.LISTENER:
+                    LastSaid = currentTopic;
+                    SetTitle(LastSaid.Words);
+                    break;
+                
+                case Speaker.INSTIGATOR:
+                    currentTopic = next[0];
+                    if (currentTopic.Speaker == Speaker.LISTENER)
+                    {
+                        next = currentTopic.Interact(Instigator, Listener);
+                        next = SanitiseTopics(next);
+                        LastSaid = currentTopic;
+                        SetTitle(LastSaid.Words);
+                    }
+                    break;
+            }
+
+            CurrentTopics = next;
+
+            CreateMenuItems(CurrentTopics);
+            return CurrentTopics;
+        }
+
+        protected ITopic[] SanitiseTopics(ITopic[] topics)
+        {
+            ITopic[] next = topics;
+            next = GetValidTopics(next);
+            next = TrimEmpty(next);
+            next = SortByPriority(next);
+
+            return next;
+        }
+
+        protected ITopic[] GetValidTopics(ITopic[] topics)
+        {
+            List<ITopic> validTopics = new List<ITopic>();
+            foreach (ITopic topic in topics)
             {
                 ITopicCondition[] conditions = topic.Conditions;
                 List<Tuple<string, int>> tuples = new List<Tuple<string, int>>();
@@ -239,16 +335,19 @@ namespace JoyLib.Code.Conversation
                 }
             }
 
-            validTopics = TrimEmpty(validTopics);
-            
-            CreateMenuItems(validTopics.ToArray());
-            
-            return validTopics;
+            return validTopics.ToArray();
         }
 
         protected void SetTitle(string text)
         {
-            LastSaid.text = text;
+            LastSaidGUI.text = text;
+        }
+
+        protected ITopic[] SortByPriority(ITopic[] topics)
+        {
+            List<ITopic> sorting = new List<ITopic>(topics);
+
+            return sorting.OrderByDescending(t => t.Priority).ToArray();
         }
 
         protected void CreateMenuItems(ITopic[] topics)
@@ -267,6 +366,7 @@ namespace JoyLib.Code.Conversation
                 MenuList[i].TopicID = topics[i].ID;
                 MenuList[i].SetText(topics[i].Words);
                 MenuList[i].gameObject.SetActive(true);
+                MenuList[i].Index = i;
                 ConversationMenu menu = MenuList[i].GetComponent<ConversationMenu>();
                 MenuItem menuItem = MenuList[i].GetComponent<MenuItem>();
                 Button.ButtonClickedEvent buttonClickedEvent = new Button.ButtonClickedEvent();
@@ -280,11 +380,11 @@ namespace JoyLib.Code.Conversation
             }
         }
 
-        protected List<ITopic> TrimEmpty(List<ITopic> topics)
+        protected ITopic[] TrimEmpty(ITopic[] topics)
         {
-            List<ITopic> newTopics = new List<ITopic>(topics.Count);
+            List<ITopic> newTopics = new List<ITopic>(topics.Length);
 
-            for(int i = 0; i < topics.Count; i++)
+            for(int i = 0; i < topics.Length; i++)
             {
                 if(string.IsNullOrWhiteSpace(topics[i].Words) == false)
                 {
@@ -292,7 +392,7 @@ namespace JoyLib.Code.Conversation
                 }
             }
 
-            return newTopics;
+            return newTopics.ToArray();
         }
 
         protected ITopicCondition ParseCondition(string conditionString)
@@ -317,8 +417,18 @@ namespace JoyLib.Code.Conversation
             return factory.Create(criteria, operand, value);
         }
 
-        public ReadOnlyCollection<ITopic> CurrentTopics => m_CurrentTopics.AsReadOnly();
+        public ITopic[] CurrentTopics
+        {
+            get
+            {
+                return m_CurrentTopics.ToArray();
+            }
+            set
+            {
+                m_CurrentTopics = value.ToList();
+            }
+        }
 
-        public ReadOnlyCollection<ITopic> AllTopics => m_Topics.AsReadOnly();
+        public ITopic[] AllTopics => m_Topics.ToArray();
     }
 }
