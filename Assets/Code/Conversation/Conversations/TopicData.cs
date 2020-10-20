@@ -5,6 +5,7 @@ using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Scripting;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using UnityEngine;
 
 namespace JoyLib.Code.Conversation.Conversations
@@ -17,19 +18,19 @@ namespace JoyLib.Code.Conversation.Conversations
             string[] nextTopics,
             string words,
             int priority,
-            string[] cachedActions)
+            string[] cachedActions,
+            Speaker speaker,
+            string link = "")
         {
-            this.Conditions = conditions;
-            this.ID = ID;
-            this.NextTopics = nextTopics;
-            this.Words = words;
-            this.Priority = priority;
-
-            List<IJoyAction> actions = new List<IJoyAction>(ScriptingEngine.instance.FetchActions(cachedActions));ScriptingEngine.instance.FetchActions(cachedActions);
-            string[] standardActions = new[] {"fulfillneedaction", "modifyrelationshippointsaction"};
-            actions.AddRange(ScriptingEngine.instance.FetchActions(standardActions));
-            
-            this.CachedActions = actions.ToArray();
+            Initialise(
+                conditions,
+                ID,
+                nextTopics,
+                words,
+                priority,
+                cachedActions,
+                speaker,
+                link);
 
             if (ConversationEngine is null)
             {
@@ -45,7 +46,11 @@ namespace JoyLib.Code.Conversation.Conversations
         public string Words { get; protected set; }
         public int Priority { get; protected set; }
         
-        protected IJoyAction[] CachedActions { get; set; }
+        public Speaker Speaker { get; protected set; }
+        
+        public string Link { get; protected set; }
+        
+        public IJoyAction[] CachedActions { get; protected set; }
         
         protected static ConversationEngine ConversationEngine { get; set; }
         
@@ -70,6 +75,59 @@ namespace JoyLib.Code.Conversation.Conversations
             }
 
             return true;
+        }
+
+        public void Initialise(
+            ITopicCondition[] conditions, 
+            string ID, 
+            string[] nextTopics, 
+            string words, 
+            int priority,
+            string[] cachedActions,
+            Speaker speaker,
+            string link = "")
+        {
+            this.Conditions = conditions;
+            this.ID = ID;
+            this.NextTopics = nextTopics;
+            this.Words = words;
+            this.Priority = priority;
+
+            this.CachedActions = GetCachedActions(cachedActions);
+
+            this.Speaker = speaker;
+            this.Link = link;
+        }
+
+        public void Initialise(
+            ITopicCondition[] conditions,
+            string ID,
+            string[] nextTopics,
+            string words,
+            int priority,
+            IJoyAction[] actions,
+            Speaker speaker,
+            string link)
+        {
+            this.Conditions = conditions;
+            this.ID = ID;
+            this.NextTopics = nextTopics;
+            this.Words = words;
+            this.Priority = priority;
+
+            this.CachedActions = actions;
+
+            this.Speaker = speaker;
+            this.Link = link;
+        }
+
+        protected IJoyAction[] GetCachedActions(string[] actionNames)
+        {
+            List<IJoyAction> actions = new List<IJoyAction>(ScriptingEngine.instance.FetchActions(actionNames));
+            string[] standardActions = new[] {"fulfillneedaction", "modifyrelationshippointsaction"};
+            actions.AddRange(ScriptingEngine.instance.FetchActions(standardActions));
+
+            return actions.ToArray();
         }
 
         public virtual ITopic[] Interact(Entity instigator, Entity listener)
@@ -109,9 +167,11 @@ namespace JoyLib.Code.Conversation.Conversations
 
         protected ITopic[] FetchNextTopics()
         {
-            return ConversationEngine.AllTopics
+            List<ITopic> nextTopics = ConversationEngine.AllTopics
                 .Where(topic => NextTopics.Contains(topic.ID))
-                .ToArray();
+                .ToList();
+
+            return nextTopics.ToArray();
         }
     }
 }

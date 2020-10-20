@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Conversations>
+    <Name>Farewells</Name>
+    <Line>
+        <Text>Goodbye.</Text>
+        <Condition>Relationship &lt; 50</Condition>
+        <Priority>0</Priority>
+        <Speaker>instigator</Speaker>
+    </Line>
+    <Line>
+        <Text>See you later!</Text>
+        <Condition>Relationship &gt; 49</Condition>
+        <Priority>1</Priority>
+        <Speaker>instigator</Speaker>
+    </Line>
+    <Line>
+        <Text>I'll be back soon, darling.</Text>
+        <Condition>Relationship = Romantic</Condition>
+        <Priority>2</Priority>
+        <Speaker>instigator</Speaker>
+    </Line>
+</Conversations>

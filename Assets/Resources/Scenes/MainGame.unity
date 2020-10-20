@@ -7134,6 +7134,11 @@ PrefabInstance:
       propertyPath: m_Color.b
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8424994987622645025, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8424994987622645026, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
         type: 3}
       propertyPath: m_VerticalFit
@@ -7157,30 +7162,29 @@ PrefabInstance:
     - target: {fileID: 9014987977286830260, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
         type: 3}
       propertyPath: m_textInfo.characterCount
-      value: 0
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 9014987977286830260, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
         type: 3}
       propertyPath: m_textInfo.spaceCount
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9014987977286830260, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
         type: 3}
       propertyPath: m_textInfo.wordCount
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 9014987977286830260, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
         type: 3}
       propertyPath: m_textInfo.lineCount
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9014987977286830260, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
         type: 3}
       propertyPath: m_textInfo.pageCount
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 8424994987622645029, guid: 2d53dc4a1c9b3c54d82d77dde2040807, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2d53dc4a1c9b3c54d82d77dde2040807, type: 3}
 --- !u!1 &1293420869
 GameObject:
@@ -8953,6 +8957,7 @@ GameObject:
   - component: {fileID: 1629111824}
   - component: {fileID: 1629111823}
   - component: {fileID: 1629111834}
+  - component: {fileID: 1629111835}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -9213,6 +9218,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 95de0185431088c49a2abe23e380724b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1629111835
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1629111813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bec165c7d7b93984d9f36cad41abecca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1631259443

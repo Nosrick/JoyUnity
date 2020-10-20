@@ -11,6 +11,12 @@ namespace JoyLib.Code.Unity.GUI
             get;
             set;
         }
+
+        public int Index
+        {
+            get;
+            set;
+        }
         
         protected static ConversationEngine ConversationEngine
         {
@@ -36,7 +42,7 @@ namespace JoyLib.Code.Unity.GUI
 
         public void OnMouseDown()
         {
-            ConversationEngine.Converse(TopicID);
+            ConversationEngine.Converse(Index);
         }
 
         public void SetText(string text)

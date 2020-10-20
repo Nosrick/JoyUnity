@@ -5,15 +5,23 @@ using UnityEngine;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public class GUIManager
+    public class GUIManager : MonoBehaviour
     {
         private List<GUIData> m_GUIs;
         private List<GUIData> m_ActiveGUIs;
 
-        public GUIManager()
+        public void Awake()
         {
-            m_GUIs = new List<GUIData>();
-            m_ActiveGUIs = new List<GUIData>();
+            Initialise();
+        }
+
+        protected void Initialise()
+        {
+            if (m_GUIs is null)
+            {
+                m_GUIs = new List<GUIData>();
+                m_ActiveGUIs = new List<GUIData>();
+            }
         }
 
         public void AddGUI(
@@ -21,6 +29,7 @@ namespace JoyLib.Code.Unity.GUI
             bool removesControl = true,
             bool closesOthers = false)
         {
+            Initialise();
             gui.SetActive(false);
             GUIData data = gui.AddComponent<GUIData>();
             data.Initialise(removesControl, closesOthers);
