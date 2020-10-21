@@ -15,6 +15,7 @@ using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
+using JoyLib.Code.Unity.GUI;
 using JoyLib.Code.World;
 using Moq;
 using NUnit.Framework;
@@ -45,6 +46,8 @@ namespace Tests
 
         private ObjectIconHandler objectIconHandler;
 
+        private GUIManager guiManager;
+
         private Entity instigator;
         private Entity listener;
 
@@ -67,6 +70,13 @@ namespace Tests
             entityRelationshipHandler = gameManager.AddComponent<EntityRelationshipHandler>();
             materialHandler = gameManager.AddComponent<MaterialHandler>();
             jobHandler = gameManager.AddComponent<JobHandler>();
+            guiManager = gameManager.AddComponent<GUIManager>();
+
+            GameObject conversationGUI =
+                GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/GUI/Conversation/Conversation Window"));
+            conversationGUI.name = "Conversation Window";
+            guiManager.AddGUI(conversationGUI, true, true);
+            guiManager.OpenGUI(conversationGUI.name);
 
             scriptingEngine = new ScriptingEngine();
 
