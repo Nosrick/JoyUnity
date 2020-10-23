@@ -117,8 +117,9 @@ namespace JoyLib.Code.Entities
                 catch (Exception e)
                 {
                     ActionLog.instance.AddText("ERROR LOADING ENTITY TEMPLATES, FILE " + file);
-                    ActionLog.instance.AddText(e.Message);
-                    ActionLog.instance.AddText(e.StackTrace);
+                    Debug.LogWarning("ERROR LOADING ENTITY TEMPLATES, FILE " + file);
+                    Debug.LogWarning(e.Message);
+                    Debug.LogWarning(e.StackTrace);
                 }
             }
 

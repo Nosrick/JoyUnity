@@ -6,7 +6,7 @@ namespace JoyLib.Code.Entities.Needs
 {
     public abstract class AbstractNeed : INeed
     {
-        protected readonly static string s_Name = "abstractneed";
+        public virtual string Name => "abstractneed";
 
         protected Dictionary<string, IJoyAction> m_CachedActions;
 
@@ -103,14 +103,6 @@ namespace JoyLib.Code.Entities.Needs
         {
             m_Value = Math.Max(0, Math.Min(m_MaximumValue, value));
             return m_Value;
-        }
-
-        public virtual string Name
-        {
-            get
-            {
-                return s_Name;
-            }
         }
 
         public int Priority
