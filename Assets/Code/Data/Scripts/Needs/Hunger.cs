@@ -6,6 +6,15 @@ namespace JoyLib.Code.Entities.Needs
 {
     public class Hunger : AbstractNeed
     {
+        protected const int DECAY = 200;
+        protected const int PRIORITY = 12;
+
+        protected const int HAPPINESS_THRESHOLD_MIN = 5;
+        protected const int HAPPINESS_THRESHOLD_MAX = 24;
+
+        protected const int MAX_VALUE_MIN = HAPPINESS_THRESHOLD_MAX;
+        protected const int MAX_VALUE_MAX = MAX_VALUE_MIN * 4;
+        
         public Hunger() : 
             base(
                 0, 
@@ -137,7 +146,14 @@ namespace JoyLib.Code.Entities.Needs
 
         public override INeed Randomise()
         {
-            return new Hunger(200, 200, true, 12, RNG.instance.Roll(5, 24), 24, 0, 0);
+            return new Hunger(
+                DECAY, 
+                DECAY, 
+                true, 
+                PRIORITY, 
+                RNG.instance.Roll(HAPPINESS_THRESHOLD_MIN, HAPPINESS_THRESHOLD_MAX), 
+                HAPPINESS_THRESHOLD_MAX, 
+                RNG.instance.Roll(MAX_VALUE_MIN, MAX_VALUE_MAX));
         }
 
         public override string Name
