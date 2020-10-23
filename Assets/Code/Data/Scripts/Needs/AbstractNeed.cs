@@ -41,7 +41,15 @@ namespace JoyLib.Code.Entities.Needs
         public AbstractNeed(int decayRef, int decayCounterRef, bool doesDecayRef, int priorityRef, int happinessThresholdRef,
             int valueRef, int maxValueRef, string[] actions, int averageForDayRef = 0, int averageForWeekRef = 0)
         {
-            m_CachedActions = new Dictionary<string, IJoyAction>(actions.Length);
+            m_CachedActions = new Dictionary<string, IJoyAction>();
+
+            IJoyAction[] standardActions = FetchStandardActions();
+
+            foreach (IJoyAction action in standardActions)
+            {
+                m_CachedActions.Add(action.Name, action);
+            }
+            
             m_Decay = decayRef;
             m_DecayCounter = decayCounterRef;
             m_DoesDecay = doesDecayRef;
@@ -103,6 +111,16 @@ namespace JoyLib.Code.Entities.Needs
         {
             m_Value = Math.Max(0, Math.Min(m_MaximumValue, value));
             return m_Value;
+        }
+
+        protected IJoyAction[] FetchStandardActions()
+        {
+            List<IJoyAction> actions = new List<IJoyAction>();
+            actions.Add(ScriptingEngine.instance.FetchAction("seekaction"));
+            actions.Add(ScriptingEngine.instance.FetchAction("wanderaction"));
+            actions.Add(ScriptingEngine.instance.FetchAction("fulfillneedaction"));
+
+            return actions.ToArray();
         }
 
         public int Priority

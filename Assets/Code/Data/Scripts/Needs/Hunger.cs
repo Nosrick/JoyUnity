@@ -15,9 +15,7 @@ namespace JoyLib.Code.Entities.Needs
                 1, 
                 1, 
                 1,
-                new string[] { 
-                    "seekaction",
-                    "wanderaction"})
+                new string[0])
         {
         }
 
@@ -40,10 +38,7 @@ namespace JoyLib.Code.Entities.Needs
                 happinessThresholdRef, 
                 valueRef, 
                 maxValueRef, 
-                new string[] {
-                    "seekaction",
-                    "wanderaction"
-                },
+                new string[0],
                 averageForDayRef, 
                 averageForWeekRef)
         {
@@ -114,9 +109,9 @@ namespace JoyLib.Code.Entities.Needs
                 else
                 {
                     m_CachedActions["seekaction"].Execute(
-                        new JoyObject[]{ actor },
+                        new JoyObject[]{ actor, chosenFood },
                         new string[] { "seek", "need", "hunger" },
-                        new object[] { chosenFood });
+                        new object[] { "hunger" });
                     return true;
                 }
             }

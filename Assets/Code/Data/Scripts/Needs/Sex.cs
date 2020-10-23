@@ -33,11 +33,7 @@ namespace JoyLib.Code.Entities.Needs
                 1, 
                 1, 
                 1, 
-                new string[] { 
-                    "seekaction",
-                    "wanderaction",
-                    "fulfillneedaction"
-                })
+                new string[0])
         {
             Initialise();
         }
@@ -126,20 +122,20 @@ namespace JoyLib.Code.Entities.Needs
                 }
             }
 
-            if (bestMate != null)
+            if (bestMate is null)
             {
-                m_CachedActions["seekaction"].Execute(
+                m_CachedActions["wanderaction"].Execute(
                     new JoyObject[] { actor },
-                    new string[] { "need", "seek", "sex" },
-                    new object[] { bestMate });
+                    new [] { "need", "wander", "sex" },
+                    new object[] {});
                 return true;
             }
             else
             {
-                m_CachedActions["wanderaction"].Execute(
-                    new JoyObject[] { actor },
-                    new string[] { "need", "wander", "sex" },
-                    new object[] {});
+                m_CachedActions["seekaction"].Execute(
+                    new JoyObject[] { actor, bestMate },
+                    new [] { "need", "seek", "sex" },
+                    new object[] { "sex" });
                 return true;
             }
         }

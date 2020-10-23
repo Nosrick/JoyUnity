@@ -120,9 +120,9 @@ namespace JoyLib.Code.Entities.Needs
             }
 
             m_CachedActions["seekaction"].Execute(
-                new JoyObject[] {actor},
+                new JoyObject[] {actor, bestMatch},
                 new[] {"need", "seek", "friendship"},
-                new object[] {bestMatch});
+                new object[] {"friendship"});
             return true;
         }
 

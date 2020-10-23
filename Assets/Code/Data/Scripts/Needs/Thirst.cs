@@ -15,11 +15,7 @@ namespace JoyLib.Code.Entities.Needs
                     1,
                     1,
                     1,
-                    new string[]{
-                        "seekaction",
-                        "wanderaction"
-                    }
-                )
+                    new string[0])
         {
 
         }
