@@ -57,11 +57,7 @@ namespace JoyLib.Code.Entities.Needs
                 happinessThresholdRef,
                 valueRef,
                 maxValueRef,
-                new string[] { 
-                    "seekaction",
-                    "wanderaction",
-                    "fulfillneedaction"
-                 },
+                new string[0],
                 averageForDayRef,
                 averageForWeekRef)
         {

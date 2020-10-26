@@ -156,12 +156,6 @@ namespace JoyLib.Code.Entities.Needs
                 RNG.instance.Roll(MAX_VALUE_MIN, MAX_VALUE_MAX));
         }
 
-        public override string Name
-        {
-            get
-            {
-                return "hunger";
-            }
-        }
+        public override string Name => "hunger";
     }
 }

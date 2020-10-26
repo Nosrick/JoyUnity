@@ -48,10 +48,7 @@ namespace JoyLib.Code.Entities.Needs
                 happinessThresholdRef,
                 valueRef,
                 maxValueRef,
-                new string[] {
-                    "seekaction",
-                    "wanderaction"
-                },
+                new string[0],
                 averageForDayRef,
                 averageForWeekRef)
         {
@@ -69,8 +66,7 @@ namespace JoyLib.Code.Entities.Needs
                 this.m_Value,
                 this.m_MaximumValue,
                 this.m_AverageForDay,
-                this.m_AverageForWeek
-                );
+                this.m_AverageForWeek);
         }
 
         public override bool FindFulfilmentObject(Entity actor)

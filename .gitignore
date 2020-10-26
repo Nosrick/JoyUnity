@@ -26,3 +26,5 @@ log
 /Logs/*
 /ProjectSettings/*
 /.idea/*
+
+InitScene*

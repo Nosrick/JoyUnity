@@ -26,6 +26,19 @@ namespace JoyLib.Code.Entities.Needs
             set;
         }
 
+        public Health()
+            : base(
+                0, 
+                1, 
+                true, 
+                1, 
+                1, 
+                1, 
+                1,
+                new string[0])
+        {
+        }
+
         public Health(
             int decayRef, 
             int decayCounterRef, 

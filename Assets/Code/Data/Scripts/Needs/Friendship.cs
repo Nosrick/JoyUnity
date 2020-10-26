@@ -32,10 +32,7 @@ namespace JoyLib.Code.Entities.Needs
                 1, 
                 1, 
                 1,
-                new [] { 
-                    "seekaction",
-                    "wanderaction",
-                    "fulfillneedaction" })
+                new string[0])
         {
             Initialise();
         }
@@ -58,10 +55,7 @@ namespace JoyLib.Code.Entities.Needs
                 happinessThresholdRef, 
                 valueRef, 
                 maxValueRef, 
-                new [] { 
-                    "seekaction",
-                    "wanderaction",
-                    "fulfillneedaction" }, 
+                new string[0], 
                 averageForDayRef, 
                 averageForWeekRef)
         {
