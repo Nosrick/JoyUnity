@@ -41,6 +41,7 @@ namespace JoyLib.Code.Conversation.Conversations
 
                     foreach (XElement line in doc.Elements("Line"))
                     {
+                        //TODO: FINISH THIS
                         string text = line.Element("Text").GetAs<string>("SOMEONE FORGOT TO INCLUDE TEXT.");
                     }
                 }
