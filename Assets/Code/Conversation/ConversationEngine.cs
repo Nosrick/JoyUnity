@@ -197,8 +197,9 @@ namespace JoyLib.Code.Conversation
                 catch (Exception e)
                 {
                     ActionLog.instance.AddText("Could not load conversations from file " + file);
-                    ActionLog.instance.AddText(e.Message);
-                    ActionLog.instance.AddText(e.StackTrace);
+                    Debug.LogWarning("Could not load conversations from file " + file);
+                    Debug.LogWarning(e.Message);
+                    Debug.LogWarning(e.StackTrace);
                 }
             }
 
@@ -329,7 +330,7 @@ namespace JoyLib.Code.Conversation
                         new object[] { Listener }));
                 }
 
-                if(topic.PassesConditions(tuples.ToArray()))
+                if(topic.FulfilsConditions(tuples.ToArray()))
                 {
                     validTopics.Add(topic);
                 }

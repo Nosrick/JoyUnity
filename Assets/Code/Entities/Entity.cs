@@ -337,6 +337,12 @@ namespace JoyLib.Code.Entities
                     data.Add(new Tuple<string, int>(tag, m_Statistics[tag].Value));
                 }
             }
+            
+            //Fetch all statistics
+            if (tags.Any(tag => tag.Equals("statistics", StringComparison.OrdinalIgnoreCase)))
+            {
+                data.AddRange(m_Statistics.Select(statistic => new Tuple<string, int>("statistics", statistic.Value)));
+            }
 
             //Check skills
             foreach (string tag in tags)
@@ -347,6 +353,12 @@ namespace JoyLib.Code.Entities
                 }
             }
 
+            //Fetch all skills
+            if (tags.Any(tag => tag.Equals("skills", StringComparison.OrdinalIgnoreCase)))
+            {
+                data.AddRange(from EntitySkill skill in m_Skills select new Tuple<string, int>("skills", skill.Value));
+            }
+
             //Check needs
             foreach (string tag in tags)
             {
@@ -354,6 +366,12 @@ namespace JoyLib.Code.Entities
                 {
                     data.Add(new Tuple<string, int>(tag, m_Needs[tag].Value));
                 }
+            }
+            
+            //Fetch all needs
+            if (tags.Any(tag => tag.Equals("needs", StringComparison.OrdinalIgnoreCase)))
+            {
+                data.AddRange(from INeed need in m_Needs select new Tuple<string, int>("needs", need.Value));
             }
 
             //Check equipment
@@ -411,9 +429,24 @@ namespace JoyLib.Code.Entities
                 
                 data.Add(new Tuple<string, int>(jobLevel.Key, jobLevel.Value));
             }
-
-            if (args.Length > 0 && args[0] is JoyObject other)
+            
+            //Fetch all job levels
+            if (tags.Any(tag => tag.Equals("jobs", StringComparison.OrdinalIgnoreCase)))
             {
+                data.AddRange(from int level in m_JobLevels select new Tuple<string, int>("jobs", level));
+            }
+
+            if (args.Length <= 0)
+            {
+                return data.ToArray();
+            }
+            foreach (object obj in args)
+            {
+                if (!(obj is Entity other))
+                {
+                    continue;
+                }
+                
                 //Check relationships
                 IRelationship[] relationships = s_RelationshipHandler.GetAllForObject(this);
                 foreach (IRelationship relationship in relationships)
@@ -427,7 +460,7 @@ namespace JoyLib.Code.Entities
                             data.Add(new Tuple<string, int>("relationship", relationshipValue));
                         }
                     }
-                }                
+                }
             }
 
             return data.ToArray();

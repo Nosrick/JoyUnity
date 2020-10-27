@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using JoyLib.Code.Conversation.Conversations;
 
 namespace JoyLib.Code.Conversation.Subengines.Rumours
 {
@@ -23,6 +21,24 @@ namespace JoyLib.Code.Conversation.Subengines.Rumours
             get;
         }
 
-        
+        ITopicCondition[] Conditions
+        {
+            get;
+        }
+
+        string[] Parameters
+        {
+            get;
+        }
+
+        string Words
+        {
+            get;
+        }
+
+        bool FulfilsConditions(IEnumerable<Tuple<string, int>> values);
+        bool FulfilsConditions(IEnumerable<JoyObject> participants);
+
+        string ConstructString();
     }
 }

@@ -61,20 +61,37 @@ namespace JoyLib.Code.Conversation.Conversations
             return Conditions.Select(c => c.Criteria).ToArray();
         }
 
-        public bool PassesConditions(Tuple<string, int>[] values)
+        public bool FulfilsConditions(IEnumerable<Tuple<string, int>> values)
         {
-            foreach (Tuple<string, int> value in values)
+            foreach (ITopicCondition condition in Conditions)
             {
-                ITopicCondition condition = Conditions.First(
-                    c => c.Criteria.Equals(value.Item1, StringComparison.OrdinalIgnoreCase));
-
-                if (!condition.FulfillsCondition(value.Item2))
+                int value = values.Where(pair =>
+                        pair.Item1.Equals(condition.Criteria, StringComparison.OrdinalIgnoreCase))
+                    .Max(tuple => tuple.Item2);
+                if (condition.FulfillsCondition(value) == false)
                 {
                     return false;
                 }
             }
 
             return true;
+        }
+
+        public bool FulfilsConditions(IEnumerable<JoyObject> participants)
+        {
+            string[] criteria = Conditions.Select(c => c.Criteria).ToArray();
+
+            List<Tuple<string, int>> values = new List<Tuple<string, int>>();
+            foreach (JoyObject participant in participants)
+            {
+                if (participant is Entity entity)
+                {
+                    JoyObject[] others = participants.Where(p => p.GUID.Equals(participant.GUID) == false).ToArray();
+                    values.AddRange(entity.GetData(criteria, others));                    
+                }
+            }
+
+            return this.FulfilsConditions(values);
         }
 
         public void Initialise(

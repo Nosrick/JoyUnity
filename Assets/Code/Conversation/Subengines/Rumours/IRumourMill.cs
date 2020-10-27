@@ -12,5 +12,14 @@ namespace JoyLib.Code.Conversation.Subengines.Rumours
         {
             get;
         }
+
+        List<IRumour> RumourTypes
+        {
+            get;
+        }
+
+        IRumour GenerateRandomRumour(JoyObject[] participants);
+
+        IRumour GenerateRumourFromTags(JoyObject[] participants, string[] tags);
     }
 }

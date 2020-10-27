@@ -75,7 +75,7 @@ namespace JoyLib.Code.Conversation.Subengines
                 string[] conditions = topic.GetConditionTags();
                 Tuple<string, int>[] data = instigator.GetData(conditions);
 
-                if (topic.PassesConditions(data))
+                if (topic.FulfilsConditions(data))
                 {
                     validResponses.Add(topic);
                 }

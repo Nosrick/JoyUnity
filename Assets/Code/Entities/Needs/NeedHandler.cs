@@ -83,5 +83,7 @@ namespace JoyLib.Code.Entities.Needs
                 return m_Needs.Keys.ToArray();
             }
         }
+
+        public Dictionary<string, INeed> Needs => new Dictionary<string, INeed>(m_Needs);
     }
 }

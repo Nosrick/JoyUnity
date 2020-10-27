@@ -49,7 +49,8 @@ namespace JoyLib.Code.Conversation.Conversations
 
         string[] GetConditionTags();
 
-        bool PassesConditions(Tuple<string, int>[] values);
+        bool FulfilsConditions(IEnumerable<Tuple<string, int>> values);
+        bool FulfilsConditions(IEnumerable<JoyObject> participants);
 
         ITopic[] Interact(Entity instigator, Entity listener);
 
