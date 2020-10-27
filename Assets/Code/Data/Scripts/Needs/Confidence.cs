@@ -20,6 +20,19 @@ namespace JoyLib.Code.Entities.Needs
 
         protected const int MAX_VALUE_MIN = HAPPINESS_THRESHOLD_MAX;
         protected const int MAX_VALUE_MAX = MAX_VALUE_MIN * 4;
+
+        public Confidence()
+            : base(
+                0,
+                1,
+                true,
+                1,
+                1,
+                1,
+                1,
+                new string[0])
+        {
+        }
         
         public Confidence(
             int decayRef,
