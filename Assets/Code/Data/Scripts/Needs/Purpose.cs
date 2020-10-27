@@ -24,13 +24,13 @@ namespace JoyLib.Code.Entities.Needs
         protected const int MAX_VALUE_MIN = HAPPINESS_THRESHOLD_MAX;
         protected const int MAX_VALUE_MAX = MAX_VALUE_MIN * 4;
 
-        protected EntityRelationshipHandler RelationshipHandler
+        protected static EntityRelationshipHandler RelationshipHandler
         {
             get;
             set;
         }
 
-        protected QuestProvider QuestProvider
+        protected static QuestProvider QuestProvider
         {
             get;
             set;

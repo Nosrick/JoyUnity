@@ -10,8 +10,12 @@ namespace JoyLib.Code.Entities.Needs
     public class Friendship : AbstractNeed
     {
         public override string Name => "friendship";
-        
-        protected static EntityRelationshipHandler s_EntityRelationshipHandler;
+
+        protected static EntityRelationshipHandler EntityRelationshipHandler
+        {
+            get;
+            set;
+        }
 
         protected const int DECAY_MIN = 4;
         protected const int DECAY_MAX = 128;
@@ -66,9 +70,9 @@ namespace JoyLib.Code.Entities.Needs
 
         protected void Initialise()
         {
-            if(s_EntityRelationshipHandler is null)
+            if(EntityRelationshipHandler is null)
             {
-                s_EntityRelationshipHandler = GameObject.Find("GameManager").GetComponent<EntityRelationshipHandler>();
+                EntityRelationshipHandler = GameObject.Find("GameManager").GetComponent<EntityRelationshipHandler>();
             }
         }
 
@@ -97,7 +101,7 @@ namespace JoyLib.Code.Entities.Needs
 
                 string[] relationshipTags = new[] {"friendship"};
                 IRelationship[] relationships =
-                    s_EntityRelationshipHandler.Get(participants.ToArray(), relationshipTags);
+                    EntityRelationshipHandler.Get(participants.ToArray(), relationshipTags);
 
                 foreach (IRelationship relationship in relationships)
                 {

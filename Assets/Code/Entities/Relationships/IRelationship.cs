@@ -9,6 +9,8 @@ namespace JoyLib.Code.Entities.Relationships
 
         int GetRelationshipValue(long left, long right);
 
+        int GetHighestRelationshipValue(long GUID);
+
         string[] GetTags();
         
         JoyObject GetParticipant(long GUID);

@@ -1,69 +1,99 @@
 ﻿using System;
 using System.Linq;
 using JoyLib.Code.Collections;
+using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Rollers;
+using UnityEngine;
 
 namespace JoyLib.Code.Entities.Needs
 {
-    public class Confidence : AbstractNeed
+    public class Respect : AbstractNeed
     {
-        public override string Name => "confidence";
+        public override string Name => "respect";
 
         protected const int DECAY_MIN = 4;
         protected const int DECAY_MAX = 128;
 
-        protected const int PRIORITY_MIN = 4;
+        protected const int PRIORITY_MIN = 0;
         protected const int PRIORITY_MAX = 12;
 
-        protected const int HAPPINESS_THRESHOLD_MIN = 8;
+        protected const int HAPPINESS_THRESHOLD_MIN = 0;
         protected const int HAPPINESS_THRESHOLD_MAX = 24;
 
         protected const int MAX_VALUE_MIN = HAPPINESS_THRESHOLD_MAX;
         protected const int MAX_VALUE_MAX = MAX_VALUE_MIN * 4;
         
-        public Confidence(
-            int decayRef,
+        protected static EntityRelationshipHandler RelationshipHandler { get; set; }
+        
+        public Respect()
+            : base(
+                1,
+                1,
+                true,
+                1,
+                1,
+                1,
+                1,
+                new string[0])
+        {
+            Initialise();
+        }
+        
+        public Respect(
+            int decayRef, 
             int decayCounterRef, 
             bool doesDecayRef, 
             int priorityRef, 
             int happinessThresholdRef, 
-            int valueRef, 
-            int maxValueRef, 
+            int valueRef,
+            int maxValueRef,
             int averageForDayRef = 0,
-            int averageForWeekRef = 0)
+            int averageForWeekRef = 0) 
             : base(
-                decayRef, 
+                decayRef,
                 decayCounterRef, 
-                doesDecayRef, 
-                priorityRef, 
-                happinessThresholdRef, 
-                valueRef, 
+                doesDecayRef,
+                priorityRef,
+                happinessThresholdRef,
+                valueRef,
                 maxValueRef,
                 new string[0],
                 averageForDayRef, 
                 averageForWeekRef)
         {
+            Initialise();
         }
 
-        //This is an aggregate need of all other needs
-        //So go for your lowest need
+        protected void Initialise()
+        {
+            if(RelationshipHandler is null)
+            {
+                RelationshipHandler = GameObject.Find("GameManager").GetComponent<EntityRelationshipHandler>();
+            }
+        }
+
+        //This is to do with others, so look for something to do
         public override bool FindFulfilmentObject(Entity actor)
         {
-            BasicValueContainer<INeed> needs = actor.Needs;
+            INeed[] needs = actor.Needs.Where(need => 
+                need.Name.Equals("family", StringComparison.OrdinalIgnoreCase)
+                || need.Name.Equals("friendship", StringComparison.OrdinalIgnoreCase)
+                || need.Name.Equals("purpose", StringComparison.OrdinalIgnoreCase))
+                .ToArray();
 
             INeed chosenNeed = null;
-            int bestMatch = int.MaxValue;
+            int bestMatch = Int32.MaxValue;
             foreach (INeed need in needs)
             {
-                if (need.ContributingHappiness == false && need.Value < bestMatch)
+                if (need.ContributingHappiness == false && bestMatch > need.Value)
                 {
-                    bestMatch = need.Value;
                     chosenNeed = need;
+                    bestMatch = need.Value;
                 }
             }
 
-            //This means all of the needs are contributing happiness
-            if (chosenNeed is null)
+            //If this is true, then there are no needs that are not contributing happiness
+            if (chosenNeed == null)
             {
                 return true;
             }
@@ -78,7 +108,7 @@ namespace JoyLib.Code.Entities.Needs
 
         public override INeed Copy()
         {
-            return new Confidence(
+            return new Respect(
                 this.m_Decay,
                 this.m_DecayCounter,
                 this.m_DoesDecay,
@@ -86,7 +116,8 @@ namespace JoyLib.Code.Entities.Needs
                 this.m_HappinessThreshold,
                 this.m_Value,
                 this.m_MaximumValue,
-                this.AverageForWeek);
+                this.m_AverageForDay,
+                this.m_AverageForWeek);
         }
 
         public override INeed Randomise()
@@ -98,7 +129,7 @@ namespace JoyLib.Code.Entities.Needs
             int value = RNG.instance.Roll(0, HAPPINESS_THRESHOLD_MAX);
             int maxValue = RNG.instance.Roll(MAX_VALUE_MIN, MAX_VALUE_MAX);
             
-            return new Confidence(
+            return new Respect(
                 decay,
                 decayCounter,
                 true,
@@ -110,19 +141,19 @@ namespace JoyLib.Code.Entities.Needs
 
         public override bool Tick(Entity actor)
         {
-            if (this.m_DecayCounter == 0 && this.m_DoesDecay)
+            if (this.m_DecayCounter == 0 && m_DoesDecay)
             {
-                BasicValueContainer<INeed> needs = actor.Needs;
+                IRelationship[] relationships = RelationshipHandler.GetAllForObject(actor);
 
-                int average = (int) Math.Ceiling(
-                    needs.Where(need => need.ContributingHappiness)
-                        .Average(need => need.Value));
+                int average = (int)Math.Ceiling(
+                    relationships.Average(relationship => 
+                        relationship.GetHighestRelationshipValue(actor.GUID)));
 
                 this.Fulfill(average);
                 base.Tick(actor);
                 return true;
             }
-            
+
             base.Tick(actor);
             return false;
         }

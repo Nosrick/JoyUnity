@@ -77,6 +77,12 @@ namespace JoyLib.Code.Entities.Relationships
             return m_Participants.Values.ToArray();
         }
 
+        public int GetHighestRelationshipValue(long GUID)
+        {
+            return m_Values.Where(pair => pair.Key.Equals(GUID))
+                .Max(pair => pair.Value.Max(valuePair => valuePair.Value));
+        }
+
         public string[] GetTags()
         {
             return m_Tags.ToArray();
