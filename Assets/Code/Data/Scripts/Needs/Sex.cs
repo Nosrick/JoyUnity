@@ -10,6 +10,8 @@ namespace JoyLib.Code.Entities.Needs
 {
     public class Sex : AbstractNeed
     {
+        public override string Name => "sex";
+        
         protected static EntityRelationshipHandler s_EntityRelationshipHandler;
 
         protected const int DECAY_MIN = 200;
@@ -220,7 +222,5 @@ namespace JoyLib.Code.Entities.Needs
                 HAPPINESS_THRESHOLD_MAX, 
                 maxValue);
         }
-
-        public override string Name => "sex";
     }
 }

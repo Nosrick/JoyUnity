@@ -9,7 +9,8 @@ namespace JoyLib.Code.Entities.Needs
 {
     public class Family : AbstractNeed
     {
-
+        public override string Name => "family";
+        
         protected const int DECAY_MIN = 4;
         protected const int DECAY_MAX = 128;
 

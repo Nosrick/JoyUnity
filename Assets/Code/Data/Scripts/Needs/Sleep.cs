@@ -7,6 +7,8 @@ namespace JoyLib.Code.Entities.Needs
 {
     public class Sleep : AbstractNeed
     {
+        public override string Name => "sleep";
+
         protected const int DECAY = 200;
         protected const int PRIORITY = 12;
 

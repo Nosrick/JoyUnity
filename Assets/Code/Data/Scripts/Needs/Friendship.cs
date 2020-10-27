@@ -9,6 +9,8 @@ namespace JoyLib.Code.Entities.Needs
 {
     public class Friendship : AbstractNeed
     {
+        public override string Name => "friendship";
+        
         protected static EntityRelationshipHandler s_EntityRelationshipHandler;
 
         protected const int DECAY_MIN = 4;
@@ -164,7 +166,5 @@ namespace JoyLib.Code.Entities.Needs
                 value,
                 maxValue);
         }
-
-        public override string Name => "friendship";
     }
 }

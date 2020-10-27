@@ -1,68 +1,77 @@
-﻿using JoyLib.Code.Rollers;
+﻿using System;
+using System.Linq;
+using JoyLib.Code.Collections;
+using JoyLib.Code.Rollers;
 
 namespace JoyLib.Code.Entities.Needs
 {
-    public class Morality : AbstractNeed
+    public class Confidence : AbstractNeed
     {
-        public override string Name => "morality";
+        public override string Name => "confidence";
 
         protected const int DECAY_MIN = 4;
         protected const int DECAY_MAX = 128;
 
-        protected const int PRIORITY_MIN = 0;
+        protected const int PRIORITY_MIN = 4;
         protected const int PRIORITY_MAX = 12;
 
-        protected const int HAPPINESS_THRESHOLD_MIN = 0;
+        protected const int HAPPINESS_THRESHOLD_MIN = 8;
         protected const int HAPPINESS_THRESHOLD_MAX = 24;
 
         protected const int MAX_VALUE_MIN = HAPPINESS_THRESHOLD_MAX;
         protected const int MAX_VALUE_MAX = MAX_VALUE_MIN * 4;
         
-        public Morality()
-        : base(
-            1,
-            1,
-            true,
-            1,
-            1,
-            1,
-            1,
-            new string[0])
-        {
-            
-        }
-        
-        public Morality(
-            int decayRef, 
+        public Confidence(
+            int decayRef,
             int decayCounterRef, 
             bool doesDecayRef, 
             int priorityRef, 
             int happinessThresholdRef, 
             int valueRef, 
-            int maxValueRef,
-            int averageForDayRef = 0, 
-            int averageForWeekRef = 0) 
+            int maxValueRef, 
+            int averageForDayRef = 0,
+            int averageForWeekRef = 0)
             : base(
                 decayRef, 
                 decayCounterRef, 
                 doesDecayRef, 
-                priorityRef,
-                happinessThresholdRef,
-                valueRef,
+                priorityRef, 
+                happinessThresholdRef, 
+                valueRef, 
                 maxValueRef,
                 new string[0],
-                averageForDayRef,
+                averageForDayRef, 
                 averageForWeekRef)
         {
         }
 
-        //Things to find for morality:
-        //People to talk with
-        //People to help
-        //People to give to charitably
+        //This is an aggregate need of all other needs
+        //So go for your lowest need
         public override bool FindFulfilmentObject(Entity actor)
         {
-            return false;
+            BasicValueContainer<INeed> needs = actor.Needs;
+
+            INeed chosenNeed = null;
+            int bestMatch = int.MaxValue;
+            foreach (INeed need in needs)
+            {
+                if (need.ContributingHappiness == false)
+                {
+                    if (need.Value < bestMatch)
+                    {
+                        bestMatch = need.Value;
+                        chosenNeed = need;
+                    }
+                }
+            }
+
+            //This means all of the needs are contributing happiness
+            if (chosenNeed is null)
+            {
+                return true;
+            }
+
+            return chosenNeed.FindFulfilmentObject(actor);
         }
 
         public override bool Interact(Entity actor, JoyObject obj)
@@ -72,7 +81,7 @@ namespace JoyLib.Code.Entities.Needs
 
         public override INeed Copy()
         {
-            return new Morality(
+            return new Confidence(
                 this.m_Decay,
                 this.m_DecayCounter,
                 this.m_DoesDecay,
@@ -92,7 +101,7 @@ namespace JoyLib.Code.Entities.Needs
             int value = RNG.instance.Roll(0, HAPPINESS_THRESHOLD_MAX);
             int maxValue = RNG.instance.Roll(MAX_VALUE_MIN, MAX_VALUE_MAX);
             
-            return new Morality(
+            return new Confidence(
                 decay,
                 decayCounter,
                 true,
@@ -100,6 +109,22 @@ namespace JoyLib.Code.Entities.Needs
                 happinessThreshold,
                 value,
                 maxValue);
+        }
+
+        public override bool Tick(Entity actor)
+        {
+            if (this.m_DecayCounter == 0 && this.m_DoesDecay)
+            {
+                BasicValueContainer<INeed> needs = actor.Needs;
+
+                int average = (int) Math.Ceiling(
+                    needs.Where(need => need.ContributingHappiness)
+                        .Average(need => need.Value));
+
+                this.Fulfill(average);
+            }
+            
+            return base.Tick(actor);
         }
     }
 }

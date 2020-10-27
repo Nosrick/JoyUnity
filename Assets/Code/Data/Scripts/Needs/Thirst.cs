@@ -6,6 +6,8 @@ namespace JoyLib.Code.Entities.Needs
 {
     public class Thirst : AbstractNeed
     {
+        public override string Name => "thirst";
+        
         protected const int DECAY = 200;
         protected const int PRIORITY = 12;
 
@@ -167,7 +169,5 @@ namespace JoyLib.Code.Entities.Needs
                 HAPPINESS_THRESHOLD_MAX, 
                 RNG.instance.Roll(MAX_VALUE_MIN, MAX_VALUE_MAX));
         }
-
-        public override string Name => "thirst";
     }
 }
