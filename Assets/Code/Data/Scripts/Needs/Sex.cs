@@ -94,7 +94,11 @@ namespace JoyLib.Code.Entities.Needs
 
             if (possibleMates.Count == 0)
             {
-                return false;
+                m_CachedActions["wanderaction"].Execute(
+                    new JoyObject[] { actor },
+                    new [] { "need", "wander", "sex" },
+                    new object[] {});
+                return true;
             }
 
             Entity bestMate = null;

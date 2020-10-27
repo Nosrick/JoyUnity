@@ -78,6 +78,10 @@ namespace JoyLib.Code.Entities.Needs
 
             if (possibleListeners.Count == 0)
             {
+                m_CachedActions["wanderaction"].Execute(
+                    new JoyObject[] {actor},
+                    new[] {"wander", "need", "friendship"},
+                    new object[] {});
                 return false;
             }
 

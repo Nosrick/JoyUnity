@@ -76,6 +76,15 @@ namespace JoyLib.Code.Entities.Needs
             int bestDrink = 0;
             ItemInstance chosenDrink = null;
 
+            if (targets.Length == 0)
+            {
+                m_CachedActions["wanderaction"].Execute(
+                    new JoyObject[] { actor },
+                    new string[] { "need", "thirst", "wander" });
+
+                return false;
+            }
+
             //Look for food in the target list
             foreach (ItemInstance target in targets)
             {

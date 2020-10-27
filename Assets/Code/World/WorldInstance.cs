@@ -390,7 +390,7 @@ namespace JoyLib.Code.World
             foreach(JoyObject obj in inSight)
             {
                 IEnumerable<string> intersect = obj.Tags.Intersect(tags);
-                if(intersect.SequenceEqual(tags))
+                if(tags.Any() == false || intersect.SequenceEqual(tags))
                 {
                     data.Add(obj);
                 }

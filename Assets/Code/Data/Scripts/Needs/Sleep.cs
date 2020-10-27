@@ -60,6 +60,9 @@ namespace JoyLib.Code.Entities.Needs
 
             if (objects.Count == 0)
             {
+                m_CachedActions["wanderaction"].Execute(
+                    new JoyObject[] {actor},
+                    new[] {"need", "sleep", "wander"});
                 return false;
             }
             
@@ -78,7 +81,7 @@ namespace JoyLib.Code.Entities.Needs
             m_CachedActions["wanderaction"].Execute(
                 new JoyObject[] {actor},
                 new[] {"need", "sleep", "wander"});
-            return true;
+            return false;
 
         }
 
