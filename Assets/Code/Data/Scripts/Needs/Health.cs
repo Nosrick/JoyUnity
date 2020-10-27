@@ -1,11 +1,18 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using JoyLib.Code.Rollers;
-using JoyLib.Code.Scripting;
 
 namespace JoyLib.Code.Entities.Needs
 {
     public class Health : AbstractNeed
     {
+        protected bool CleanBonusApplied
+        {
+            get;
+            set;
+        }
+        
         protected const int DECAY_MIN = 64;
         protected const int DECAY_MAX = 128;
 
@@ -17,7 +24,10 @@ namespace JoyLib.Code.Entities.Needs
 
         protected const int MAX_VALUE_MIN = HAPPINESS_THRESHOLD_MAX;
         protected const int MAX_VALUE_MAX = MAX_VALUE_MIN * 4;
-        
+
+        //Bonus to health for having no diseases
+        protected const int CLEAN_BONUS = 50;
+
         public override string Name => "health";
 
         protected INeed ActingNeed
@@ -46,7 +56,7 @@ namespace JoyLib.Code.Entities.Needs
             int priorityRef, 
             int happinessThresholdRef, 
             int valueRef, 
-            int maxValueRef,  
+            int maxValueRef, 
             int averageForDayRef = 0, 
             int averageForWeekRef = 0) 
             : base(
@@ -57,7 +67,7 @@ namespace JoyLib.Code.Entities.Needs
                 happinessThresholdRef, 
                 valueRef, 
                 maxValueRef, 
-                new string[0], 
+                new string[0],
                 averageForDayRef, 
                 averageForWeekRef)
         {
@@ -93,14 +103,14 @@ namespace JoyLib.Code.Entities.Needs
             return chosen.FindFulfilmentObject(actor);
         }
 
-        public override bool Interact(Entity user, JoyObject obj)
+        public override bool Interact(Entity actor, JoyObject obj)
         {
             if (ActingNeed is null)
             {
                 return false;
             }
 
-            return ActingNeed.Interact(user, obj);
+            return ActingNeed.Interact(actor, obj);
         }
 
         public override INeed Copy()
@@ -134,6 +144,28 @@ namespace JoyLib.Code.Entities.Needs
                 happinessThreshold,
                 value,
                 maxValue);
+        }
+
+        public override bool Tick(Entity actor)
+        {
+            base.Tick(actor);
+
+            bool diseaseFree = actor.Abilities.Any(
+                ability => ability.Tags.Any(
+                    tag => tag.Equals("disease", StringComparison.OrdinalIgnoreCase)));
+            
+            if (diseaseFree == true && CleanBonusApplied == false)
+            {
+                CleanBonusApplied = true;
+                this.Value += CLEAN_BONUS;
+            }
+            else if (diseaseFree == false && CleanBonusApplied == true)
+            {
+                CleanBonusApplied = false;
+                this.Value -= CLEAN_BONUS;
+            }
+
+            return true;
         }
     }
 }

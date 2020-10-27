@@ -136,20 +136,20 @@ namespace JoyLib.Code.Entities.Needs
             }
         }
 
-        public override bool Interact(Entity user, JoyObject obj)
+        public override bool Interact(Entity actor, JoyObject obj)
         {
             if (!(obj is Entity partner))
             {
                 return false;
             }
 
-            if (user.Sexuality.WillMateWith(user, partner, 
+            if (actor.Sexuality.WillMateWith(actor, partner, 
                 s_EntityRelationshipHandler.Get(
-                    new long[] { user.GUID, partner.GUID },
+                    new long[] { actor.GUID, partner.GUID },
                     new string[] { "sexual" })))
             {
                 int satisfaction = CalculateSatisfaction(
-                    new Entity[] { user, partner },
+                    new Entity[] { actor, partner },
                     new string[] {
                         EntityStatistic.ENDURANCE,
                         EntityStatistic.CUNNING,
@@ -157,11 +157,11 @@ namespace JoyLib.Code.Entities.Needs
 
                 int time = RNG.instance.Roll(5, 30);
 
-                if (user.FulfillmentData.Name.Equals(this.Name) && 
-                partner.FulfillmentData.Name.Equals(this.Name))
+                if (actor.FulfillmentData.Name.Equals(this.Name) && 
+                    partner.FulfillmentData.Name.Equals(this.Name))
                 {
-                    HashSet<JoyObject> userParticipants = new HashSet<JoyObject>(user.FulfillmentData.Targets);
-                    userParticipants.Add(user);
+                    HashSet<JoyObject> userParticipants = new HashSet<JoyObject>(actor.FulfillmentData.Targets);
+                    userParticipants.Add(actor);
                     userParticipants.Add(partner);
                     m_CachedActions["fulfillneedaction"].Execute(
                         userParticipants.ToArray(),
@@ -170,7 +170,7 @@ namespace JoyLib.Code.Entities.Needs
 
                     HashSet<JoyObject> partnerParticipants = new HashSet<JoyObject>(partner.FulfillmentData.Targets);
                     partnerParticipants.Add(partner);
-                    partnerParticipants.Add(user);
+                    partnerParticipants.Add(actor);
                     m_CachedActions["fulfillneedaction"].Execute(
                         partnerParticipants.ToArray(),
                         new string[] { "sex", "need", "fulfill" },

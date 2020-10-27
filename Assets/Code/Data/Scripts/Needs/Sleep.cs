@@ -48,7 +48,7 @@ namespace JoyLib.Code.Entities.Needs
                 happinessThresholdRef,
                 valueRef,
                 maxValueRef,
-                new string[0], 
+                new string[0],
                 averageForDayRef, 
                 averageForWeekRef)
         {
@@ -82,14 +82,14 @@ namespace JoyLib.Code.Entities.Needs
 
         }
 
-        public override bool Interact(Entity user, JoyObject obj)
+        public override bool Interact(Entity actor, JoyObject obj)
         {
             if (!(obj is ItemInstance item))
             {
                 return false;
             }
             
-            item.Interact(user);
+            item.Interact(actor);
 
             return true;
         }
@@ -103,7 +103,7 @@ namespace JoyLib.Code.Entities.Needs
                 this.m_Priority,
                 this.m_HappinessThreshold,
                 this.m_Value,
-                this.m_MaximumValue,
+                this.m_MaximumValue, 
                 this.AverageForDay,
                 this.AverageForWeek);
         }

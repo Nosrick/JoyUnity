@@ -65,7 +65,7 @@ namespace JoyLib.Code.Entities.Needs
                 this.m_HappinessThreshold,
                 this.m_Value,
                 this.m_MaximumValue,
-                this.m_AverageForDay,
+                this.AverageForDay,
                 this.m_AverageForWeek);
         }
 
@@ -135,14 +135,14 @@ namespace JoyLib.Code.Entities.Needs
             return false;
         }
 
-        public override bool Interact(Entity user, JoyObject obj)
+        public override bool Interact(Entity actor, JoyObject obj)
         {
             if (!(obj is ItemInstance item))
             {
                 return false;
             }
 
-            item.Interact(user);
+            item.Interact(actor);
 
             return true;
         }
@@ -159,12 +159,6 @@ namespace JoyLib.Code.Entities.Needs
                 RNG.instance.Roll(MAX_VALUE_MIN, MAX_VALUE_MAX));
         }
 
-        public override string Name
-        {
-            get
-            {
-                return "thirst";
-            }
-        }
+        public override string Name => "thirst";
     }
 }

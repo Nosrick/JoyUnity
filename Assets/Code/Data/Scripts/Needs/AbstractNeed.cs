@@ -35,11 +35,17 @@ namespace JoyLib.Code.Entities.Needs
         protected int m_AverageForWeek;
         protected int m_AverageForMonth;
 
-        //Bonus to health for having no diseases
-        protected const int CLEAN_BONUS = 50;
-
-        public AbstractNeed(int decayRef, int decayCounterRef, bool doesDecayRef, int priorityRef, int happinessThresholdRef,
-            int valueRef, int maxValueRef, string[] actions, int averageForDayRef = 0, int averageForWeekRef = 0)
+        public AbstractNeed(
+            int decayRef, 
+            int decayCounterRef, 
+            bool doesDecayRef, 
+            int priorityRef, 
+            int happinessThresholdRef,
+            int valueRef, 
+            int maxValueRef, 
+            string[] actions,
+            int averageForDayRef = 0, 
+            int averageForWeekRef = 0)
         {
             m_CachedActions = new Dictionary<string, IJoyAction>();
 
@@ -77,7 +83,7 @@ namespace JoyLib.Code.Entities.Needs
         public abstract INeed Randomise();
 
         //This will be called once per in-game minute
-        public virtual bool Tick()
+        public virtual bool Tick(Entity actor)
         {
             m_DecayCounter -= 1;
             if (m_DecayCounter == 0 && m_DoesDecay)
@@ -105,7 +111,7 @@ namespace JoyLib.Code.Entities.Needs
             return m_Value;
         }
 
-        public abstract bool Interact(Entity user, JoyObject obj);
+        public abstract bool Interact(Entity actor, JoyObject obj);
 
         public int SetValue(int value)
         {

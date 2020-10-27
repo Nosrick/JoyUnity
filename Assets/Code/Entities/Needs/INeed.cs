@@ -7,13 +7,13 @@ namespace JoyLib.Code.Entities.Needs
 
         bool FindFulfilmentObject(Entity actor);
 
-        bool Interact(Entity user, JoyObject obj);
+        bool Interact(Entity actor, JoyObject obj);
 
         INeed Copy();
 
         INeed Randomise();
 
-        bool Tick();
+        bool Tick(Entity actor);
 
         int Fulfill(int value);
 

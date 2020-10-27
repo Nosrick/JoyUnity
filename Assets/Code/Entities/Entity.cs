@@ -302,7 +302,7 @@ namespace JoyLib.Code.Entities
 
                 foreach (INeed need in m_Needs.Collection)
                 {
-                    need.Tick();
+                    need.Tick(this);
                 }
             }
 
