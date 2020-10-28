@@ -17,7 +17,7 @@
     </Line>
     <Line>
         <Text>Thanks, love.</Text>
-        <Condition>Relationsiph = Romantic</Condition>
+        <Condition>Relationship = Romantic</Condition>
         <Priority>2</Priority>
         <Next>BaseTopics</Next>
         <Speaker>instigator</Speaker>
