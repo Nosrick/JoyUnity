@@ -152,8 +152,7 @@ namespace JoyLib.Code.Conversation
                         {
                             try
                             {
-                                Type type = ScriptingEngine.instance.FetchType(processor);
-                                ITopic processorObject = (ITopic) Activator.CreateInstance(type);
+                                ITopic processorObject = (ITopic)ScriptingEngine.instance.FetchAndInitialise(processor);
                                 processorObject.Initialise(
                                     conditions.ToArray(),
                                     topicName,

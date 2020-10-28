@@ -16,7 +16,7 @@ namespace JoyLib.Code.Conversation.Subengines.Rumours
             get;
         }
 
-        int ViralPotential
+        float ViralPotential
         {
             get;
         }
@@ -41,18 +41,37 @@ namespace JoyLib.Code.Conversation.Subengines.Rumours
             get;
         }
 
+        float LifetimeMultiplier
+        {
+            get;
+        }
+
+        int Lifetime
+        {
+            get;
+        }
+
+        bool IsAlive
+        {
+            get;
+        }
+
         bool FulfilsConditions(IEnumerable<Tuple<string, int>> values);
         bool FulfilsConditions(IEnumerable<JoyObject> participants);
+
+        int Tick();
 
         string ConstructString();
 
         IRumour Create(
             JoyObject[] participants,
             string[] tags,
-            int viralPotential,
+            float viralPotential,
             ITopicCondition[] conditions,
             string[] parameters,
             string words,
+            float lifetimeMultiplier = 1f,
+            int lifetime = 5000,
             bool baseless = false);
     }
 }

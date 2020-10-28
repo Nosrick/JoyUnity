@@ -101,8 +101,8 @@ namespace JoyLib.Code.Scripting
             }
             catch(Exception ex)
             {
-                Debug.LogError(ex.Message);
-                Debug.LogError(ex.StackTrace);
+                Debug.LogWarning(ex.Message);
+                Debug.LogWarning(ex.StackTrace);
                 throw new InvalidOperationException("Error when searching for Type in ScriptingEngine, type name " + type.ToString());
             }
         }
@@ -122,8 +122,8 @@ namespace JoyLib.Code.Scripting
             }
             catch (Exception e)
             {
-                Debug.LogError(e.Message);
-                Debug.LogError(e.StackTrace);
+                Debug.LogWarning(e.Message);
+                Debug.LogWarning(e.StackTrace);
                 throw new InvalidOperationException("Error when searching for Type in ScriptingEngine, " + typeof(T).Name);
             }
         }
@@ -150,8 +150,8 @@ namespace JoyLib.Code.Scripting
             }
             catch(Exception ex)
             {
-                Debug.LogError(ex.Message);
-                Debug.LogError(ex.StackTrace);
+                Debug.LogWarning(ex.Message);
+                Debug.LogWarning(ex.StackTrace);
                 throw new InvalidOperationException("Error when searching for Type in ScriptingEngine, " + typeName);
             }
         }
@@ -166,8 +166,8 @@ namespace JoyLib.Code.Scripting
             }
             catch(Exception e)
             {
-                Debug.LogError(e.Message);
-                Debug.LogError(e.StackTrace);
+                Debug.LogWarning(e.Message);
+                Debug.LogWarning(e.StackTrace);
                 throw new InvalidOperationException("Error when searching for Type in ScriptingEngine, " + type.FullName);
             }
         }
@@ -183,8 +183,8 @@ namespace JoyLib.Code.Scripting
             }
             catch(Exception e)
             {
-                ActionLog.instance.AddText(e.Message);
-                ActionLog.instance.AddText(e.StackTrace);
+                Debug.LogWarning(e.Message);
+                Debug.LogWarning(e.StackTrace);
                 throw new InvalidOperationException("Error when finding action, no such action " + actionName);
             }
         }

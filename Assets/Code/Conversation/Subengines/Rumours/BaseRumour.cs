@@ -11,15 +11,38 @@ namespace JoyLib.Code.Conversation.Conversations.Rumours
 {
     public class BaseRumour : IRumour
     {
+        public const int DEFAULT_LIFETIME = 5000;
         public JoyObject[] Participants { get; protected set; }
         public string[] Tags { get; protected set; }
-        public int ViralPotential { get; protected set; }
+        public float ViralPotential { get; protected set; }
+        
+        public float LifetimeMultiplier { get; protected set; }
         public ITopicCondition[] Conditions { get; protected set; }
         public string[] Parameters { get; protected set; }
-        public string Words { get; protected set; }
+
+        public int Lifetime { get; protected set; }
+
+        public bool IsAlive => Lifetime > 0;
+
+        public string Words
+        {
+            get
+            {
+                if (m_Words.Contains("<") == false)
+                {
+                    return m_Words;
+                }
+                m_Words = ConstructString();
+                return m_Words;
+            }
+            protected set
+            {
+                m_Words = value;
+            }
+        }
         public bool Baseless { get; protected set; }
 
-        protected string RegexMatcher => @"/{\d}";
+        protected string m_Words;
 
         protected static ParameterProcessorHandler ProcessorHandler
         {
@@ -35,10 +58,12 @@ namespace JoyLib.Code.Conversation.Conversations.Rumours
         public BaseRumour(
             JoyObject[] participants,
             string[] tags,
-            int viralPotential,
+            float viralPotential,
             ITopicCondition[] conditions,
             string[] parameters,
             string words,
+            float lifetimeMultiplier = 1f,
+            int lifetime = DEFAULT_LIFETIME,
             bool baseless = false)
         {
             this.Participants = participants;
@@ -47,7 +72,11 @@ namespace JoyLib.Code.Conversation.Conversations.Rumours
             this.Conditions = conditions;
             this.Parameters = parameters;
             this.Words = words;
+            this.LifetimeMultiplier = lifetimeMultiplier;
+            this.Lifetime = (int)Math.Ceiling(lifetime * this.LifetimeMultiplier);
             this.Baseless = baseless;
+            
+            Initialise();
         }
 
         protected void Initialise()
@@ -101,22 +130,34 @@ namespace JoyLib.Code.Conversation.Conversations.Rumours
             return this.FulfilsConditions(values);
         }
 
+        public int Tick()
+        {
+            throw new NotImplementedException();
+        }
+
         public string ConstructString()
         {
-            if (Words.Contains("{") == false)
+            if (Participants is null)
             {
-                return Words;
+                return m_Words;
             }
             
-            Regex regex = new Regex(RegexMatcher);
-
-            MatchCollection matches = regex.Matches(Words);
-            if (matches.Count != Parameters.Length)
+            int count = 0;
+            for (int i = 1; i <= Parameters.Length; i++)
             {
-                return "PARAMETER NUMBER MISMATCH. SOMEONE ENTERED THE WRONG NUMBER OF PARAMETER REPLACEMENTS.";
+                if (m_Words.Contains("<" + i + ">"))
+                {
+                    count++;
+                }
+            }
+            
+            if (count != Parameters.Length)
+            {
+                m_Words = "PARAMETER NUMBER MISMATCH. SOMEONE ENTERED THE WRONG NUMBER OF PARAMETER REPLACEMENTS.";
+                return m_Words;
             }
 
-            for (int i = 0; i < matches.Count; i++)
+            for (int i = 0; i < count; i++)
             {
                 foreach(JoyObject obj in Participants)
                 {
@@ -125,20 +166,22 @@ namespace JoyLib.Code.Conversation.Conversations.Rumours
                         .Parse(Parameters[i], obj);
 
                     i++;
-                    Words = Words.Replace("{" + i + "}", replacement);
+                    m_Words = m_Words.Replace("<" + i + ">", replacement);
                 }
             }
 
-            return Words;
+            return m_Words;
         }
 
         public IRumour Create(
             JoyObject[] participants, 
             string[] tags, 
-            int viralPotential, 
+            float viralPotential, 
             ITopicCondition[] conditions,
             string[] parameters, 
             string words, 
+            float lifetimeMultiplier = 1f,
+            int lifetime = DEFAULT_LIFETIME,
             bool baseless = false)
         {
             return new BaseRumour(
@@ -148,6 +191,8 @@ namespace JoyLib.Code.Conversation.Conversations.Rumours
                 conditions,
                 parameters,
                 words,
+                lifetimeMultiplier,
+                lifetime,
                 baseless);
         }
     }

@@ -1,21 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Rumours>
     <Line>
-        <Text>Have you heard about {1} and {2}? They make such a cute couple.</Text>
+        <Text>Have you heard about &lt;1&gt; and &lt;2&gt;? They make such a cute couple.</Text>
         <Parameter>participant</Parameter>
         <Parameter>participant</Parameter>
         <Condition>relationship = romantic</Condition>
+        <Tag>relationship</Tag>
+        <Tag>positive</Tag>
     </Line>
     <Line>
-        <Text>I hear {1} is really good at {2}! I wish I was that good.</Text>
+        <Text>I hear &lt;1&gt; is really good at &lt;2&gt;! I wish I was that good.</Text>
         <Parameter>participant</Parameter>
-        <Parameter>skill</Parameter>
+        <Parameter>skills</Parameter>
         <Condition>skill &gt; 5</Condition>
+        <Tag>skill</Tag>
+        <Tag>positive</Tag>
     </Line>
     <Line>
-        <Text>I heard that {1} doesn't much like {2}.</Text>
+        <Text>I heard that &lt;1&gt; doesn't much like &lt;2&gt;.</Text>
         <Parameter>participant</Parameter>
         <Parameter>participant</Parameter>
         <Condition>relationship &lt; 0</Condition>
+        <Tag>relationship</Tag>
+        <Tag>negative</Tag>
     </Line>
 </Rumours>

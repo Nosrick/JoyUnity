@@ -21,5 +21,7 @@ namespace JoyLib.Code.Conversation.Subengines.Rumours
         IRumour GenerateRandomRumour(JoyObject[] participants);
 
         IRumour GenerateRumourFromTags(JoyObject[] participants, string[] tags);
+
+        IRumour[] GenerateOneRumourOfEachType(JoyObject[] participants);
     }
 }

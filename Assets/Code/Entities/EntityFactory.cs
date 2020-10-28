@@ -32,6 +32,11 @@ namespace JoyLib.Code.Entities
 
         public EntityFactory()
         {
+            Initialise();
+        }
+
+        protected void Initialise()
+        {
             if(s_GameManager is null)
             {
                 s_GameManager = GameObject.Find("GameManager");
@@ -42,7 +47,6 @@ namespace JoyLib.Code.Entities
                 s_BioSexHandler = s_GameManager.GetComponent<EntityBioSexHandler>();
                 s_JobHandler = s_GameManager.GetComponent<JobHandler>();
             }
-
         }
 
         public Entity CreateFromTemplate(
@@ -57,6 +61,11 @@ namespace JoyLib.Code.Entities
             WorldInstance world = null,
             IDriver driver = null)
         {
+            if (s_GameManager is null)
+            {
+                Initialise();
+            }
+            
             JobType selectedJob = job;
             IBioSex selectedSex = sex;
             ISexuality selectedSexuality = sexuality;
@@ -144,6 +153,11 @@ namespace JoyLib.Code.Entities
             List<CultureType> cultures = null,
             IDriver driver = null)
         {
+            if (s_GameManager is null)
+            {
+                Initialise();
+            }
+            
             List<CultureType> creatureCultures = new List<CultureType>();
             if (cultures != null)
             {
