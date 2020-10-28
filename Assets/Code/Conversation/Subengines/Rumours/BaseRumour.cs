@@ -17,6 +17,7 @@ namespace JoyLib.Code.Conversation.Conversations.Rumours
         public ITopicCondition[] Conditions { get; protected set; }
         public string[] Parameters { get; protected set; }
         public string Words { get; protected set; }
+        public bool Baseless { get; protected set; }
 
         protected string RegexMatcher => @"/{\d}";
 
@@ -31,6 +32,24 @@ namespace JoyLib.Code.Conversation.Conversations.Rumours
             Initialise();
         }
 
+        public BaseRumour(
+            JoyObject[] participants,
+            string[] tags,
+            int viralPotential,
+            ITopicCondition[] conditions,
+            string[] parameters,
+            string words,
+            bool baseless = false)
+        {
+            this.Participants = participants;
+            this.Tags = tags;
+            this.ViralPotential = viralPotential;
+            this.Conditions = conditions;
+            this.Parameters = parameters;
+            this.Words = words;
+            this.Baseless = baseless;
+        }
+
         protected void Initialise()
         {
             if (ProcessorHandler is null)
@@ -41,6 +60,11 @@ namespace JoyLib.Code.Conversation.Conversations.Rumours
 
         public bool FulfilsConditions(IEnumerable<Tuple<string, int>> values)
         {
+            if (Baseless)
+            {
+                return true;
+            }
+            
             foreach (ITopicCondition condition in Conditions)
             {
                 int value = values.Where(pair =>
@@ -57,6 +81,11 @@ namespace JoyLib.Code.Conversation.Conversations.Rumours
         
         public bool FulfilsConditions(IEnumerable<JoyObject> participants)
         {
+            if (Baseless)
+            {
+                return true;
+            }
+            
             string[] criteria = Conditions.Select(c => c.Criteria).ToArray();
 
             List<Tuple<string, int>> values = new List<Tuple<string, int>>();
@@ -101,6 +130,25 @@ namespace JoyLib.Code.Conversation.Conversations.Rumours
             }
 
             return Words;
+        }
+
+        public IRumour Create(
+            JoyObject[] participants, 
+            string[] tags, 
+            int viralPotential, 
+            ITopicCondition[] conditions,
+            string[] parameters, 
+            string words, 
+            bool baseless = false)
+        {
+            return new BaseRumour(
+                participants,
+                tags,
+                viralPotential,
+                conditions,
+                parameters,
+                words,
+                baseless);
         }
     }
 }

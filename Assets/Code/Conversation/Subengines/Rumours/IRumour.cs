@@ -36,9 +36,23 @@ namespace JoyLib.Code.Conversation.Subengines.Rumours
             get;
         }
 
+        bool Baseless
+        {
+            get;
+        }
+
         bool FulfilsConditions(IEnumerable<Tuple<string, int>> values);
         bool FulfilsConditions(IEnumerable<JoyObject> participants);
 
         string ConstructString();
+
+        IRumour Create(
+            JoyObject[] participants,
+            string[] tags,
+            int viralPotential,
+            ITopicCondition[] conditions,
+            string[] parameters,
+            string words,
+            bool baseless = false);
     }
 }

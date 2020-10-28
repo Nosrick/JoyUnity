@@ -5,6 +5,7 @@ using System.Linq;
 using System.Xml.Linq;
 using JoyLib.Code.Conversation.Subengines.Rumours;
 using JoyLib.Code.Helpers;
+using JoyLib.Code.Rollers;
 using UnityEngine;
 
 namespace JoyLib.Code.Conversation.Conversations
@@ -60,14 +61,29 @@ namespace JoyLib.Code.Conversation.Conversations
         public IRumour GenerateRandomRumour(JoyObject[] participants)
         {
             IRumour rumour = null;
-            int breakout = 0;
-            while (rumour is null && breakout < 100)
+            IRumour[] possibilities = RumourTypes.Where(r => r.FulfilsConditions(participants)).ToArray();
+
+            if (possibilities.Length > 0)
             {
-                IRumour[] possibilities = RumourTypes.Where(r => r.FulfilsConditions(participants)).ToArray();
-                
-                
-                
-                breakout++;
+                rumour = possibilities[RNG.instance.Roll(0, possibilities.Length)].Create(
+                    participants,
+                    rumour.Tags,
+                    rumour.ViralPotential,
+                    rumour.Conditions,
+                    rumour.Parameters,
+                    rumour.Words);
+            }
+            else
+            {
+                int result = RNG.instance.Roll(0, RumourTypes.Count);
+                rumour = RumourTypes[result].Create(
+                    participants,
+                    rumour.Tags,
+                    rumour.ViralPotential,
+                    rumour.Conditions,
+                    rumour.Parameters,
+                    rumour.Words,
+                    true);
             }
 
             return rumour;
@@ -75,7 +91,38 @@ namespace JoyLib.Code.Conversation.Conversations
 
         public IRumour GenerateRumourFromTags(JoyObject[] participants, string[] tags)
         {
-            throw new System.NotImplementedException();
+            IRumour rumour = null;
+
+            IRumour[] possibilities = RumourTypes.Where(r =>
+                r.Tags.Intersect(tags, StringComparer.OrdinalIgnoreCase).Any() && r.FulfilsConditions(participants))
+                .ToArray();
+            
+            if (possibilities.Length > 0)
+            {
+                IRumour resultingRumour = possibilities[RNG.instance.Roll(0, possibilities.Length)];
+                rumour = resultingRumour.Create(
+                    participants,
+                    resultingRumour.Tags,
+                    resultingRumour.ViralPotential,
+                    resultingRumour.Conditions,
+                    resultingRumour.Parameters,
+                    resultingRumour.Words);
+            }
+            else
+            {
+                int result = RNG.instance.Roll(0, RumourTypes.Count);
+                IRumour resultingRumour = RumourTypes[result];
+                rumour = resultingRumour.Create(
+                    participants,
+                    resultingRumour.Tags,
+                    resultingRumour.ViralPotential,
+                    resultingRumour.Conditions,
+                    resultingRumour.Parameters,
+                    resultingRumour.Words,
+                    true);
+            }
+
+            return rumour;
         }
     }
 }
