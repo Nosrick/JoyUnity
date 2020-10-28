@@ -371,7 +371,7 @@ namespace JoyLib.Code.World
         }
 
         /// <summary>
-        /// TODO: REDO THIS
+        /// Searches for any objects that match the tags specified, which the entity can see.
         /// </summary>
         /// <param name="entityRef"></param>
         /// <param name="objectType"></param>
