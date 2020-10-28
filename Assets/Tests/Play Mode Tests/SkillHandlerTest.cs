@@ -29,7 +29,7 @@ namespace Tests
         {
             BasicValueContainer<INeed> needs =
                 new BasicValueContainer<INeed>(
-                    needHandler.NeedNames.Select(needName => needHandler.GetRandomised(needName))
+                    needHandler.Needs.Keys.Select(needName => needHandler.GetRandomised(needName))
                         .ToList());
     
             BasicValueContainer<IGrowingValue> skills = target.GetDefaultSkillBlock(needs);

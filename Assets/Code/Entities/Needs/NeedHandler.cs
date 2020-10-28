@@ -17,7 +17,7 @@ namespace JoyLib.Code.Entities.Needs
             }
         }
 
-        public static Dictionary<string, INeed> Initialise()
+        protected static Dictionary<string, INeed> Initialise()
         {
             try
             {
@@ -74,14 +74,6 @@ namespace JoyLib.Code.Entities.Needs
                 return m_Needs[name].Randomise();
             }
             throw new InvalidOperationException("Need not found, looking for " + name);
-        }
-
-        public string[] NeedNames
-        {
-            get
-            {
-                return m_Needs.Keys.ToArray();
-            }
         }
 
         public Dictionary<string, INeed> Needs => new Dictionary<string, INeed>(m_Needs);
