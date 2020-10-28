@@ -1,4 +1,5 @@
-﻿using DevionGames.InventorySystem;
+﻿using System.Collections;
+using DevionGames.InventorySystem;
 using JoyLib.Code;
 using JoyLib.Code.Collections;
 using JoyLib.Code.Cultures;
@@ -15,6 +16,7 @@ using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.TestTools;
 
 namespace Tests
 {
@@ -42,6 +44,8 @@ namespace Tests
         private EntityFactory entityFactory;
 
         private GameObject container;
+
+        private GameObject inventoryManager;
         
         private Entity left;
         private Entity right;
@@ -50,7 +54,8 @@ namespace Tests
         public void SetUp()
         {
             container = new GameObject("GameManager");
-            container.AddComponent<InventoryManager>();
+            inventoryManager = new GameObject();
+            inventoryManager.AddComponent<InventoryManager>();
 
             scriptingEngine = new ScriptingEngine();
 
@@ -91,8 +96,8 @@ namespace Tests
                 Vector2Int.up);
         }
 
-        [Test]
-        public void CreateRelationship_ShouldHave_ZeroValue()
+        [UnityTest]
+        public IEnumerator CreateRelationship_ShouldHave_ZeroValue()
         {
             //given
             IRelationship relationship = target.CreateRelationship(new[] {left, right});
@@ -101,10 +106,12 @@ namespace Tests
 
             //then
             Assert.That(relationship.GetRelationshipValue(left.GUID, right.GUID), Is.EqualTo(0));
+            
+            yield return new WaitForSeconds(0.01f);
         }
 
-        [Test]
-        public void CreateRelationshipWithValue_ShouldHave_NonZeroValue()
+        [UnityTest]
+        public IEnumerator CreateRelationshipWithValue_ShouldHave_NonZeroValue()
         {
             //given
             IRelationship relationship = target.CreateRelationshipWithValue(
@@ -116,6 +123,15 @@ namespace Tests
             
             //then
             Assert.That(relationship.GetRelationshipValue(left.GUID, right.GUID), Is.EqualTo(50));
+            
+            yield return new WaitForSeconds(0.01f);
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            GameObject.DestroyImmediate(container);
+            GameObject.DestroyImmediate(inventoryManager);
         }
     }
 }

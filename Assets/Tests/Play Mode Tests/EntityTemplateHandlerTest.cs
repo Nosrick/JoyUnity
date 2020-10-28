@@ -16,11 +16,14 @@ namespace Tests
 
         private GameObject container;
 
+        private GameObject inventoryManager;
+
         [SetUp]
         public void SetUp()
         {
             container = new GameObject("GameManager");
-            container.AddComponent<InventoryManager>();
+            inventoryManager = new GameObject();
+            inventoryManager.AddComponent<InventoryManager>();
             
             needHandler = container.AddComponent<NeedHandler>();
             target = container.AddComponent<EntityTemplateHandler>();
@@ -33,7 +36,6 @@ namespace Tests
             EntityTemplate[] entityTemplates = target.Templates;
 
             //when
-            yield return new WaitForSeconds(0.1f);
 
             //then
             Assert.That(entityTemplates, Is.Not.Empty);
@@ -46,8 +48,15 @@ namespace Tests
                 Assert.False(template.CreatureType == "DEFAULT");
                 Assert.False(template.Tileset == "DEFAULT");
             }
+            
+            yield return new WaitForSeconds(0.1f);
+        }
 
-            Object.DestroyImmediate(container);
+        [TearDown]
+        public void TearDown()
+        {
+            GameObject.DestroyImmediate(container);
+            GameObject.DestroyImmediate(inventoryManager);
         }
     }
 }

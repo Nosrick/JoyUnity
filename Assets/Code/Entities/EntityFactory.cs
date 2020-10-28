@@ -17,18 +17,18 @@ namespace JoyLib.Code.Entities
 {
     public class EntityFactory
     {
-        protected static GameObject s_GameManager;
-        protected static NeedHandler s_NeedHandler;
+        protected GameObject s_GameManager;
+        protected NeedHandler s_NeedHandler;
 
-        protected static ObjectIconHandler s_ObjectIcons;
+        protected ObjectIconHandler s_ObjectIcons;
 
-        protected static CultureHandler s_CultureHandler;
+        protected CultureHandler s_CultureHandler;
 
-        protected static EntitySexualityHandler s_SexualityHandler;
+        protected EntitySexualityHandler s_SexualityHandler;
 
-        protected static EntityBioSexHandler s_BioSexHandler;
+        protected EntityBioSexHandler s_BioSexHandler;
 
-        protected static JobHandler s_JobHandler;
+        protected JobHandler s_JobHandler;
 
         public EntityFactory()
         {
@@ -45,6 +45,7 @@ namespace JoyLib.Code.Entities
                 s_CultureHandler = s_GameManager.GetComponent<CultureHandler>();
                 s_SexualityHandler = s_GameManager.GetComponent<EntitySexualityHandler>();
                 s_BioSexHandler = s_GameManager.GetComponent<EntityBioSexHandler>();
+                Debug.Log("SETTING BIOSEXHANDLER");
                 s_JobHandler = s_GameManager.GetComponent<JobHandler>();
             }
         }
@@ -100,6 +101,7 @@ namespace JoyLib.Code.Entities
 
             if(selectedSex is null)
             {
+                Debug.Log("SETTING ENTITY SEX");
                 selectedSex = dominantCulture.ChooseSex(s_BioSexHandler.Sexes);
             }
 

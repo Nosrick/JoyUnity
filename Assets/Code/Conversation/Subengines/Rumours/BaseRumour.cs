@@ -132,7 +132,7 @@ namespace JoyLib.Code.Conversation.Conversations.Rumours
 
         public int Tick()
         {
-            throw new NotImplementedException();
+            return --Lifetime;
         }
 
         public string ConstructString()

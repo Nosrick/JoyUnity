@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using DevionGames.InventorySystem;
 using JoyLib.Code;
 using JoyLib.Code.Collections;
@@ -19,6 +20,7 @@ using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.TestTools;
 
 namespace Tests
 {
@@ -52,6 +54,8 @@ namespace Tests
         private EntitySkillHandler skillHandler;
 
         private EntityFactory entityFactory;
+
+        private GameObject inventoryManager;
         
         private Entity left;
         private Entity right;
@@ -60,7 +64,8 @@ namespace Tests
         public void SetUp()
         {
             container = new GameObject("GameManager");
-            container.AddComponent<InventoryManager>();
+            inventoryManager = new GameObject();
+            inventoryManager.AddComponent<InventoryManager>();
 
             scriptingEngine = new ScriptingEngine();
 
@@ -101,8 +106,8 @@ namespace Tests
                 Vector2Int.up);
         }
 
-        [Test]
-        public void RumourMill_ShouldHave_NonZeroRumourTypeCount()
+        [UnityTest]
+        public IEnumerator RumourMill_ShouldHave_NonZeroRumourTypeCount()
         {
             //given
             
@@ -110,10 +115,12 @@ namespace Tests
             
             //then
             Assert.That(target.RumourTypes, Is.Not.Empty);
+            
+            yield return new WaitForSeconds(0.01f);
         }
 
-        [Test]
-        public void RumourMill_ShouldMake_ValidRumours()
+        [UnityTest]
+        public IEnumerator RumourMill_ShouldMake_ValidRumours()
         {
             //given
             IRumour[] rumours = target.GenerateOneRumourOfEachType(new JoyObject[] {left, right});
@@ -126,7 +133,14 @@ namespace Tests
                 Debug.Log(rumour.Words);
             }
             
+            yield return new WaitForSeconds(0.01f);
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
             GameObject.DestroyImmediate(container);
+            GameObject.DestroyImmediate(inventoryManager);
         }
     }
 }

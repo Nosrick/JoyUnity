@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using Castle.Core.Internal;
 using DevionGames.InventorySystem;
 using JoyLib.Code.Conversation;
@@ -20,6 +21,7 @@ using JoyLib.Code.World;
 using Moq;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.TestTools;
 
 namespace Tests
 {
@@ -48,6 +50,8 @@ namespace Tests
 
         private GUIManager guiManager;
 
+        private GameObject inventoryManager;
+
         private Entity instigator;
         private Entity listener;
 
@@ -57,7 +61,8 @@ namespace Tests
         public void SetUp()
         {
             gameManager = new GameObject("GameManager");
-            gameManager.AddComponent<InventoryManager>();
+            inventoryManager = new GameObject();
+            inventoryManager.AddComponent<InventoryManager>();
 
             conversationWindow =
                 GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/GUI/Conversation/Conversation Window"));
@@ -122,8 +127,8 @@ namespace Tests
             listener.MyWorld = world;
         }
 
-        [Test]
-        public void LoadData_ShouldNotBeEmpty()
+        [UnityTest]
+        public IEnumerator LoadData_ShouldNotBeEmpty()
         {
             //given
             
@@ -138,11 +143,11 @@ namespace Tests
                 Assert.That(topic.ID.Length, Is.GreaterThan(0));
             }
             
-            GameObject.DestroyImmediate(gameManager);
+            yield return new WaitForSeconds(0.01f);
         }
 
-        [Test]
-        public void Converse_ShouldCompleteConversation()
+        [UnityTest]
+        public IEnumerator Converse_ShouldCompleteConversation()
         {
             int depth = 0;
             
@@ -159,7 +164,14 @@ namespace Tests
 
             Assert.That(depth, Is.Not.Zero);
             
+            yield return new WaitForSeconds(0.01f);
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
             GameObject.DestroyImmediate(gameManager);
+            GameObject.DestroyImmediate(inventoryManager);
         }
     }
 }

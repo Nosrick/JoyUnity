@@ -1,6 +1,8 @@
-﻿using JoyLib.Code.Entities.Needs;
+﻿using System.Collections;
+using JoyLib.Code.Entities.Needs;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.TestTools;
 
 namespace Tests
 {
@@ -17,8 +19,8 @@ namespace Tests
             target = container.AddComponent<NeedHandler>();
         }
     
-        [Test]
-        public void Initialise_ShouldHave_ValidData()
+        [UnityTest]
+        public IEnumerator Initialise_ShouldHave_ValidData()
         {
             //given
             
@@ -32,6 +34,12 @@ namespace Tests
                 Assert.That(need.Name, Is.Not.EqualTo("DEFAULT"));
             }
             
+            yield return new WaitForSeconds(0.01f);
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
             GameObject.DestroyImmediate(container);
         }
     }

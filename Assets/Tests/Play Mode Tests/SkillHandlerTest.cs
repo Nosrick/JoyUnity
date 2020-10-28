@@ -1,10 +1,12 @@
-﻿using System.Linq;
+﻿using System.Collections;
+using System.Linq;
 using JoyLib.Code.Collections;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Statistics;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.TestTools;
 
 namespace Tests
 {
@@ -24,8 +26,8 @@ namespace Tests
             target = container.AddComponent<EntitySkillHandler>();
         }
     
-        [Test]
-        public void GetDefaultSkillBlock_ShouldHave_ValidData()
+        [UnityTest]
+        public IEnumerator GetDefaultSkillBlock_ShouldHave_ValidData()
         {
             BasicValueContainer<INeed> needs =
                 new BasicValueContainer<INeed>(
@@ -38,8 +40,14 @@ namespace Tests
             {
                 Assert.That(skill.GoverningNeeds, Is.Not.Empty);
             }
-            
-            Object.DestroyImmediate(container);
+
+            yield return new WaitForSeconds(0.01f);
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            GameObject.DestroyImmediate(container);
         }
     }
 }

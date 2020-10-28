@@ -44,6 +44,8 @@ namespace Tests
 
         private GameObject container;
 
+        private GameObject inventoryManager;
+
 
 
         private Entity heteroMaleHuman;
@@ -66,7 +68,8 @@ namespace Tests
         public void SetUp()
         {
             container = new GameObject("GameManager");
-            container.AddComponent<InventoryManager>();
+            inventoryManager = new GameObject();
+            inventoryManager.AddComponent<InventoryManager>();
 
             scriptingEngine = new ScriptingEngine();
 
@@ -226,8 +229,6 @@ namespace Tests
             IRelationship[] relationships = entityRelationshipHandler.Get(participants);
             Assert.IsTrue(heterosexual.WillMateWith(heterofemaleHuman, heteroMaleHuman, relationships));
 
-            GameObject.Destroy(container);
-
             yield return new WaitForSeconds(0.01f);
         }
 
@@ -237,8 +238,6 @@ namespace Tests
             JoyObject[] participants = new [] { heterofemaleHuman, homofemaleHumanLeft };
             IRelationship[] relationships = entityRelationshipHandler.Get(participants);
             Assert.IsFalse(heterosexual.WillMateWith(heterofemaleHuman, homofemaleHumanLeft, relationships));
-
-            GameObject.DestroyImmediate(container);
 
             yield return new WaitForSeconds(0.01f);
         }
@@ -250,8 +249,6 @@ namespace Tests
             IRelationship[] relationships = entityRelationshipHandler.Get(participants);
             Assert.IsTrue(homosexual.WillMateWith(homoMaleHumanLeft, homoMaleHumanRight, relationships));
 
-            GameObject.DestroyImmediate(container);
-
             yield return new WaitForSeconds(0.01f);
         }
 
@@ -261,8 +258,6 @@ namespace Tests
             JoyObject[] participants = new[] { homofemaleHumanLeft, homofemaleHumanRight };
             IRelationship[] relationships = entityRelationshipHandler.Get(participants);
             Assert.IsFalse(homosexual.WillMateWith(homoMaleHumanLeft, homofemaleHumanRight, relationships));
-
-            GameObject.DestroyImmediate(container);
 
             yield return new WaitForSeconds(0.01f);
         }
@@ -274,8 +269,6 @@ namespace Tests
             IRelationship[] relationships = entityRelationshipHandler.Get(participants);
             Assert.IsTrue(bisexual.WillMateWith(bifemaleHuman, homofemaleHumanLeft, relationships));
 
-            GameObject.DestroyImmediate(container);
-
             yield return new WaitForSeconds(0.01f);
         }
 
@@ -286,9 +279,14 @@ namespace Tests
             IRelationship[] relationships = entityRelationshipHandler.Get(participants);
             Assert.IsTrue(bisexual.WillMateWith(bifemaleHuman, biMaleHuman, relationships));
 
-            GameObject.DestroyImmediate(container);
-
             yield return new WaitForSeconds(0.01f);
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            GameObject.DestroyImmediate(container);
+            GameObject.DestroyImmediate(inventoryManager);
         }
     }
 }
