@@ -66,6 +66,7 @@ namespace JoyLib.Code.Entities
         protected const int ATTACK_THRESHOLD = -50;
 
         protected static EntityRelationshipHandler s_RelationshipHandler;
+        protected static EntitySkillHandler s_SkillHandler;
 
         public Entity()
         {}
@@ -120,6 +121,13 @@ namespace JoyLib.Code.Entities
                 sprites,
                 template.Tags)
         {
+            if (s_RelationshipHandler is null)
+            {
+                GameObject gameManager = GameObject.Find("GameManager");
+                s_RelationshipHandler = gameManager.GetComponent<EntityRelationshipHandler>();
+                s_SkillHandler = gameManager.GetComponent<EntitySkillHandler>();
+            }
+            
             this.CreatureType = template.CreatureType;
             this.m_Slots = template.Slots.ToList();
 
@@ -130,9 +138,21 @@ namespace JoyLib.Code.Entities
             this.m_IdentifiedItems = identifiedItems;
             this.m_Statistics = template.Statistics;
 
-            this.m_Skills = template.Skills;
+            this.m_Skills = new BasicValueContainer<IGrowingValue>();
+            
 
             this.m_Needs = needs;
+
+            foreach (IGrowingValue skill in template.Skills)
+            {
+                this.m_Skills.Add(skill);
+            }
+
+            foreach (IGrowingValue skill in s_SkillHandler.GetDefaultSkillBlock(this.m_Needs))
+            {
+                this.m_Skills.Add(skill);
+            }
+                
             this.m_Abilities = template.Abilities.ToList();
             this.m_Level = level;
             for (int i = 1; i < level.Value; i++)
@@ -169,11 +189,6 @@ namespace JoyLib.Code.Entities
             this.m_Driver = driver;
 
             SetCurrentTarget();
-
-            if (s_RelationshipHandler is null)
-            {
-                s_RelationshipHandler = GameObject.Find("GameManager").GetComponent<EntityRelationshipHandler>();
-            }
         }
 
         /// <summary>
@@ -341,7 +356,7 @@ namespace JoyLib.Code.Entities
             //Fetch all statistics
             if (tags.Any(tag => tag.Equals("statistics", StringComparison.OrdinalIgnoreCase)))
             {
-                data.AddRange(m_Statistics.Select(statistic => new Tuple<string, int>("statistics", statistic.Value)));
+                data.AddRange(m_Statistics.Select(statistic => new Tuple<string, int>(statistic.Name, statistic.Value)));
             }
 
             //Check skills
@@ -356,7 +371,7 @@ namespace JoyLib.Code.Entities
             //Fetch all skills
             if (tags.Any(tag => tag.Equals("skills", StringComparison.OrdinalIgnoreCase)))
             {
-                data.AddRange(from EntitySkill skill in m_Skills select new Tuple<string, int>("skills", skill.Value));
+                data.AddRange(from EntitySkill skill in m_Skills select new Tuple<string, int>(skill.Name, skill.Value));
             }
 
             //Check needs
@@ -371,7 +386,7 @@ namespace JoyLib.Code.Entities
             //Fetch all needs
             if (tags.Any(tag => tag.Equals("needs", StringComparison.OrdinalIgnoreCase)))
             {
-                data.AddRange(from INeed need in m_Needs select new Tuple<string, int>("needs", need.Value));
+                data.AddRange(from INeed need in m_Needs select new Tuple<string, int>(need.Name, need.Value));
             }
 
             //Check equipment
