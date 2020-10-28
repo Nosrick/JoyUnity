@@ -31,6 +31,9 @@ namespace JoyLib.Code.Entities.Relationships
         bool RemoveParticipant(long currentGUID);
 
         long GenerateHash(long[] participants);
+        
+        IRelationship Create(IEnumerable<JoyObject> participants);
+        IRelationship CreateWithValue(IEnumerable<JoyObject> participants, int value);
 
         string Name
         {

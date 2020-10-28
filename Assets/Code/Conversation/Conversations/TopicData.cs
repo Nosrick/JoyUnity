@@ -159,7 +159,7 @@ namespace JoyLib.Code.Conversation.Conversations
                 new object[] { "friendship", instigator.Statistics[EntityStatistic.PERSONALITY].Value, 0, true });
 
             string[] tags = RelationshipHandler.Get(
-                new long[] {instigator.GUID, listener.GUID}).SelectMany(relationship => relationship.GetTags()).ToArray();
+                new JoyObject[] {instigator, listener}).SelectMany(relationship => relationship.GetTags()).ToArray();
             
             influence.Execute(
                 new JoyObject[] { instigator, listener },

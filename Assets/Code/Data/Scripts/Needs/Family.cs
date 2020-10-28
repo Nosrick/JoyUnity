@@ -96,9 +96,9 @@ namespace JoyLib.Code.Entities.Needs
             int bestRelationship = int.MinValue;
             foreach (Entity possible in possibleListeners)
             {
-                List<long> participants = new List<long>();
-                participants.Add(actor.GUID);
-                participants.Add(possible.GUID);
+                List<JoyObject> participants = new List<JoyObject>();
+                participants.Add(actor);
+                participants.Add(possible);
 
                 string[] relationshipTags = new[] {"family"};
                 IRelationship[] relationships = RelationshipHandler.Get(participants.ToArray(), relationshipTags);

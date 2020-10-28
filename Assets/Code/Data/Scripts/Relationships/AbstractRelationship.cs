@@ -200,7 +200,10 @@ namespace JoyLib.Code.Entities.Relationships
             return 0;
         }
 
-        public virtual string Name => "AbstractRelationship";
+        public abstract IRelationship Create(IEnumerable<JoyObject> participants);
+        public abstract IRelationship CreateWithValue(IEnumerable<JoyObject> participants, int value);
+
+        public virtual string Name => "abstractrelationship";
 
         public ReadOnlyCollection<string> Tags => m_Tags.AsReadOnly();
     }

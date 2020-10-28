@@ -107,9 +107,9 @@ namespace JoyLib.Code.Entities.Needs
             int bestRelationship = actor.Sexuality.MatingThreshold;
             foreach (Entity mate in possibleMates)
             {
-                List<long> participants = new List<long>();
-                participants.Add(actor.GUID);
-                participants.Add(mate.GUID);
+                List<JoyObject> participants = new List<JoyObject>();
+                participants.Add(actor);
+                participants.Add(mate);
                 string[] relationshipTags = new string[] { "sexual" };
                 IRelationship[] relationships = s_EntityRelationshipHandler.Get(participants.ToArray(), relationshipTags);
 
@@ -151,7 +151,7 @@ namespace JoyLib.Code.Entities.Needs
 
             if (actor.Sexuality.WillMateWith(actor, partner, 
                 s_EntityRelationshipHandler.Get(
-                    new long[] { actor.GUID, partner.GUID },
+                    new JoyObject[] { actor, partner },
                     new string[] { "sexual" })))
             {
                 int satisfaction = CalculateSatisfaction(

@@ -136,6 +136,12 @@ namespace JoyLib.Code.Entities
             return null;
         }
 
+        public EntityTemplate GetRandom()
+        {
+            int result = RNG.instance.Roll(0, m_Templates.Count);
+            return m_Templates[result];
+        }
+
         protected void AddSlotsToDatabase(List<string> slots)
         {
             foreach (string slot in slots)

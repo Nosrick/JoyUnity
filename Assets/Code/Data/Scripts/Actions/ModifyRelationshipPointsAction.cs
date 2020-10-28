@@ -43,9 +43,7 @@ namespace JoyLib.Code.Scripting.Actions
             
             int relationshipMod = (int)args[0];
 
-            long[] guids = participants.Select(participant => participant.GUID).ToArray();
-
-            IRelationship[] relationships = RelationshipHandler.Get(guids, tags);
+            IRelationship[] relationships = RelationshipHandler.Get(participants, tags);
 
             bool doAll = args.Length < 2 ? false : (bool)args[1];
 

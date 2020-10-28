@@ -1,4 +1,6 @@
-﻿namespace JoyLib.Code.Entities.Relationships
+﻿using System.Collections.Generic;
+
+namespace JoyLib.Code.Entities.Relationships
 {
     public class MonogamousRelationship : AbstractRelationship
     {
@@ -10,13 +12,33 @@
 
         public override bool AddParticipant(JoyObject newParticipant)
         {
-            if(m_Participants.Count < 2)
+            return m_Participants.Count < 2 && base.AddParticipant(newParticipant);
+        }
+        
+        public override IRelationship Create(IEnumerable<JoyObject> participants)
+        {
+            IRelationship newRelationship = new MonogamousRelationship();
+            foreach (JoyObject obj in participants)
             {
-                return base.AddParticipant(newParticipant);
+                newRelationship.AddParticipant(obj);
             }
-            return false;
+
+            return newRelationship;
         }
 
-        public override string Name => "monogamous";
+        public override IRelationship CreateWithValue(IEnumerable<JoyObject> participants, int value)
+        {
+            IRelationship newRelationship = new MonogamousRelationship();
+            foreach (JoyObject obj in participants)
+            {
+                newRelationship.AddParticipant(obj);
+            }
+
+            newRelationship.ModifyValueOfAllParticipants(value);
+
+            return newRelationship;
+        }
+
+        public override string Name => "monogamousrelationship";
     }
 }

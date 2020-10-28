@@ -9,7 +9,13 @@ namespace JoyLib.Code.Entities.Sexes
 {
     public class EntityBioSexHandler : MonoBehaviour
     {
-        private Dictionary<string, IBioSex> m_Sexes;
+        protected Dictionary<string, IBioSex> m_Sexes;
+
+        protected static CultureHandler CultureHandler
+        {
+            get;
+            set;
+        }
 
         public void Awake()
         {
@@ -22,35 +28,30 @@ namespace JoyLib.Code.Entities.Sexes
         private void Initialise()
         {
             
-            CultureHandler cultureHandler = GameObject.Find("GameManager")
+            CultureHandler = GameObject.Find("GameManager")
                                             .GetComponent<CultureHandler>();
 
-            Load(cultureHandler.Cultures);
+            Load(CultureHandler.Cultures);
         }
 
         public bool Load(CultureType[] cultures)
         {
-            if(m_Sexes != null)
+            if (CultureHandler is null)
+            {
+                Initialise();
+            }
+            
+            if(!(m_Sexes is null))
             {
                 return true;
             }
 
             m_Sexes = new Dictionary<string, IBioSex>();
-
-            foreach(CultureType culture in cultures)
+            
+            IBioSex[] sexes = ScriptingEngine.instance.FetchAndInitialiseChildren<IBioSex>();
+            foreach(IBioSex sex in sexes)
             {
-                foreach (string sex in culture.Sexes)
-                {
-                    if(m_Sexes.ContainsKey(sex) == false)
-                    {
-                        Type type = ScriptingEngine.instance.FetchType(sex);
-                        if(!(type is null))
-                        {
-                            IBioSex sexInstance = (IBioSex)Activator.CreateInstance(type);
-                            m_Sexes.Add(sex, sexInstance);
-                        }
-                    }
-                }
+                m_Sexes.Add(sex.Name, sex);
             }
 
             return true;
@@ -58,14 +59,14 @@ namespace JoyLib.Code.Entities.Sexes
 
         public IBioSex Get(string name)
         {
-            if(m_Sexes == null)
+            if (CultureHandler is null)
             {
-                return null;
+                Initialise();
             }
 
-            if(m_Sexes.ContainsKey(name))
+            if(m_Sexes.Any(sex => sex.Key.Equals(name, StringComparison.OrdinalIgnoreCase)))
             {
-                return m_Sexes[name];
+                return m_Sexes.First(sex => sex.Key.Equals(name, StringComparison.OrdinalIgnoreCase)).Value;
             }
             return null;
         }
@@ -74,7 +75,7 @@ namespace JoyLib.Code.Entities.Sexes
         {
             get
             {
-                if(m_Sexes is null)
+                if(CultureHandler is null)
                 {
                     Initialise();
                 }

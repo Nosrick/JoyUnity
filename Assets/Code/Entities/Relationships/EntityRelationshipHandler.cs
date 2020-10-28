@@ -11,7 +11,7 @@ namespace JoyLib.Code.Entities.Relationships
 {
     public class EntityRelationshipHandler : MonoBehaviour
     {
-        private Dictionary<string, Type> m_RelationshipTypes;
+        private Dictionary<string, IRelationship> m_RelationshipTypes;
         private NonUniqueDictionary<long, IRelationship> m_Relationships;
 
         public void Awake()
@@ -21,11 +21,11 @@ namespace JoyLib.Code.Entities.Relationships
 
         public bool Initialise()
         {
-            m_RelationshipTypes = new Dictionary<string, Type>();
+            m_RelationshipTypes = new Dictionary<string, IRelationship>();
             m_Relationships = new NonUniqueDictionary<long, IRelationship>();
 
-            Type[] types = ScriptingEngine.instance.FetchTypeAndChildren(typeof(IRelationship));
-            foreach(Type type in types)
+            IRelationship[] types = ScriptingEngine.instance.FetchAndInitialiseChildren<IRelationship>();
+            foreach(IRelationship type in types)
             {
                 m_RelationshipTypes.Add(type.Name, type);
             }
@@ -35,14 +35,15 @@ namespace JoyLib.Code.Entities.Relationships
 
         public IRelationship CreateRelationship(Entity[] participants, string type = "friendship")
         {
-            if(m_RelationshipTypes.ContainsKey(type))
+            if(m_RelationshipTypes.Any(t => t.Key.Equals(type, StringComparison.OrdinalIgnoreCase)))
             {
-                IRelationship newRelationship = (IRelationship)Activator.CreateInstance(m_RelationshipTypes[type]);
+                IRelationship newRelationship = m_RelationshipTypes
+                    .First(t => t.Key.Equals(type, StringComparison.OrdinalIgnoreCase)).Value
+                    .Create(participants);
                 
                 List<long> GUIDs = new List<long>();
                 foreach(Entity participant in participants)
                 {
-                    newRelationship.AddParticipant(participant);
                     GUIDs.Add(participant.GUID);
                 }
 
@@ -57,18 +58,16 @@ namespace JoyLib.Code.Entities.Relationships
         {
             if(m_RelationshipTypes.Any(t => t.Key.Equals(type, StringComparison.OrdinalIgnoreCase)))
             {
-                Type relationshipType =
-                    m_RelationshipTypes.First(t => t.Key.Equals(type, StringComparison.OrdinalIgnoreCase)).Value;
-                IRelationship newRelationship = (IRelationship)Activator.CreateInstance(relationshipType);
+                IRelationship newRelationship = m_RelationshipTypes
+                    .First(t => t.Key.Equals(type, StringComparison.OrdinalIgnoreCase)).Value
+                    .CreateWithValue(participants, value);
 
                 List<long> GUIDs = new List<long>();
                 foreach(Entity participant in participants)
                 {
-                    newRelationship.AddParticipant(participant);
                     GUIDs.Add(participant.GUID);
                 }
 
-                newRelationship.ModifyValueOfAllParticipants(value);
                 m_Relationships.Add(newRelationship.GenerateHash(GUIDs.ToArray()), newRelationship);
                 return newRelationship;
             }
@@ -76,22 +75,22 @@ namespace JoyLib.Code.Entities.Relationships
             throw new InvalidOperationException("Relationship type " + type + " not found.");
         }
 
-        public IRelationship[] Get(long[] participants, string[] tags = null)
+        public IRelationship[] Get(JoyObject[] participants, string[] tags = null)
         {
             IRelationship query = null;
             
-            foreach(Type relationship in m_RelationshipTypes.Values)
+            foreach(IRelationship relationship in m_RelationshipTypes.Values)
             {
-                if(relationship.IsAbstract)
-                {
-                    continue;
-                }
-
-                query = (IRelationship)Activator.CreateInstance(relationship);
+                query = relationship.Create(participants);
                 break;
             }
 
-            long hash = query.GenerateHash(participants);
+            List<long> GUIDs = new List<long>();
+            foreach (JoyObject participant in participants)
+            {
+                GUIDs.Add(participant.GUID);
+            }
+            long hash = query.GenerateHash(GUIDs.ToArray());
 
             List<IRelationship> relationships = new List<IRelationship>();
             
@@ -147,7 +146,7 @@ namespace JoyLib.Code.Entities.Relationships
 
         public int GetHighestRelationshipValue(JoyObject speaker, JoyObject listener, string[] tags = null)
         {
-            long[] participants = new long[] { speaker.GUID, listener.GUID };
+            JoyObject[] participants = new [] { speaker, listener };
             IRelationship[] relationships = Get(participants, tags);
 
             int highestValue = int.MinValue;
@@ -172,7 +171,7 @@ namespace JoyLib.Code.Entities.Relationships
 
         public bool IsFamily(JoyObject speaker, JoyObject listener)
         {
-            long[] participants = new long[] { speaker.GUID, listener.GUID };
+            JoyObject[] participants = new [] { speaker, listener };
             IRelationship[] relationships = Get(participants, new[] {"family"});
 
             return relationships.Length > 0;

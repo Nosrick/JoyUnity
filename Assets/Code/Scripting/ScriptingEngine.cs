@@ -111,7 +111,7 @@ namespace JoyLib.Code.Scripting
         {
             try
             {
-                Type[] types = m_Types.Where(t => t.IsAssignableFrom(typeof(T)) && t.IsAbstract == false).ToArray();
+                Type[] types = m_Types.Where(t => typeof(T).IsAssignableFrom(t) && t.IsAbstract == false).ToArray();
                 List<T> children = new List<T>();
                 foreach (Type tempType in types)
                 {
@@ -160,8 +160,7 @@ namespace JoyLib.Code.Scripting
         {
             try
             {
-                Type[] types = m_Types.Where(t => type.IsAssignableFrom(t)).ToArray();
-                types = types.Where(t => t.IsAbstract == false && t.IsInterface == false).ToArray();
+                Type[] types = m_Types.Where(t => type.IsAssignableFrom(t) && t.IsAbstract == false).ToArray();
 
                 return types;
             }
