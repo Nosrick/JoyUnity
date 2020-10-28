@@ -398,24 +398,31 @@ namespace JoyLib.Code.Conversation
 
         protected ITopicCondition ParseCondition(string conditionString)
         {
-            string[] split = conditionString.Split(new char[] {'<', '>', '=', '!'}, StringSplitOptions.RemoveEmptyEntries);
+            try
+            {
+                string[] split = conditionString.Split(new char[] {'<', '>', '=', '!'}, StringSplitOptions.RemoveEmptyEntries);
 
-            string criteria = split[0].Trim();
-            string operand = conditionString.First(c => c.Equals('!')
-                                                        || c.Equals('=')
-                                                        || c.Equals('<')
-                                                        || c.Equals('>')).ToString();
-            string stringValue = split[1].Trim();
+                string criteria = split[0].Trim();
+                string operand = conditionString.First(c => c.Equals('!')
+                                                            || c.Equals('=')
+                                                            || c.Equals('<')
+                                                            || c.Equals('>')).ToString();
+                string stringValue = split[1].Trim();
             
-            TopicConditionFactory factory = new TopicConditionFactory();
+                TopicConditionFactory factory = new TopicConditionFactory();
 
-            int value = criteria.Equals("relationship", StringComparison.OrdinalIgnoreCase) && operand.Equals("=")
-                ? 1
-                : int.Parse(stringValue);
+                int value = criteria.Equals("relationship", StringComparison.OrdinalIgnoreCase) && operand.Equals("=")
+                    ? 1
+                    : int.Parse(stringValue);
 
-            criteria = criteria.Equals("relationship", StringComparison.OrdinalIgnoreCase) && operand.Equals("=") ? stringValue : criteria;
+                criteria = criteria.Equals("relationship", StringComparison.OrdinalIgnoreCase) && operand.Equals("=") ? stringValue : criteria;
 
-            return factory.Create(criteria, operand, value);
+                return factory.Create(criteria, operand, value);
+            }
+            catch (Exception e)
+            {
+                throw new InvalidOperationException("Could not parse conversation condition line " + conditionString);
+            }
         }
 
         public ITopic[] CurrentTopics
