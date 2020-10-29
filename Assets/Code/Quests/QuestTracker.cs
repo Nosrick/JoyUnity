@@ -1,61 +1,79 @@
-﻿using JoyLib.Code.Entities;
+﻿using System;
+using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.World;
 using System.Collections.Generic;
 using System.Linq;
+using JoyLib.Code.Scripting;
+using UnityEngine;
 
 namespace JoyLib.Code.Quests
 {
-    public static class QuestTracker
+    public class QuestTracker : MonoBehaviour
     {
-        private static Dictionary<long, List<Quest>> s_EntityQuests;
+        protected Dictionary<long, List<IQuest>> EntityQuests { get; set; }
 
-        public static void Initialise()
+        public void Awake()
         {
-            s_EntityQuests = new Dictionary<long, List<Quest>>();
+            Initialise();
         }
-
-        public static List<Quest> GetQuestsForEntity(long GUID)
+        
+        public void Initialise()
         {
-            if (s_EntityQuests.ContainsKey(GUID))
-                return s_EntityQuests[GUID];
-            else
-                return new List<Quest>();
-        }
-
-        public static Quest GetPrimaryQuestForEntity(long GUID)
-        {
-            if (s_EntityQuests.ContainsKey(GUID) && s_EntityQuests[GUID].Count > 0)
-                return s_EntityQuests[GUID][0];
-            else
-                return null;
-        }
-
-        public static void AddQuest(long GUID, Quest quest)
-        {
-            if (s_EntityQuests.ContainsKey(GUID))
-                s_EntityQuests[GUID].Add(quest);
-            else
+            if (EntityQuests is null)
             {
-                s_EntityQuests.Add(GUID, new List<Quest>() { quest });
+                EntityQuests = new Dictionary<long, List<IQuest>>();
             }
         }
 
-        private static void CompleteQuest(Entity questor, Quest quest)
+        public List<IQuest> GetQuestsForEntity(long GUID)
         {
-            for (int i = 0; i < quest.rewards.Count; i++)
+            if (EntityQuests.ContainsKey(GUID))
             {
-                questor.AddContents(quest.rewards[i]);
+                return EntityQuests[GUID];
             }
-            questor.AddExperience(quest.step * 10);
+                
+            return new List<IQuest>();
+        }
 
-            lock (s_EntityQuests)
+        public IQuest GetPrimaryQuestForEntity(long GUID)
+        {
+            if (EntityQuests.ContainsKey(GUID) && EntityQuests[GUID].Count > 0)
             {
-                s_EntityQuests[questor.GUID].Remove(quest);
+                return EntityQuests[GUID][0];
+            }
+            
+            throw new InvalidOperationException("No quests found for " + GUID + ".");
+        }
+
+        public void AddQuest(long GUID, IQuest quest)
+        {
+            if (EntityQuests.ContainsKey(GUID))
+            {
+                EntityQuests[GUID].Add(quest);
+            }
+            else
+            {
+                EntityQuests.Add(GUID, new List<IQuest>() { quest });
             }
         }
 
-        public static void PerformDelivery(Entity questor, ItemInstance item, Entity recipient)
+        protected void CompleteQuest(Entity questor, IQuest quest)
+        {
+            quest.CompleteQuest(questor);
+            EntityQuests[questor.GUID].Remove(quest);
+        }
+
+        public void PerformQuestAction(Entity questor, IQuest quest, IJoyAction completedAction)
+        {
+            if (quest.FulfilsRequirements(questor, completedAction) && quest.AdvanceStep())
+            {
+                CompleteQuest(questor, quest);
+            }
+        }
+
+        /*
+        public void PerformDelivery(Entity questor, ItemInstance item, Entity recipient)
         {
             try
             {
@@ -179,5 +197,6 @@ namespace JoyLib.Code.Quests
 
             }
         }
+        */
     }
 }
