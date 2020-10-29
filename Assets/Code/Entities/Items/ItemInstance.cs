@@ -56,7 +56,7 @@ namespace JoyLib.Code.Entities.Items
                 copy.WorldPosition,
                 copy.m_Type.SpriteSheet,
                 copy.m_CachedActions.ToArray(),
-                copy.m_Icons,
+                copy.Icons,
                 copy.m_Type.Tags)
         {
             FindItemHandler();

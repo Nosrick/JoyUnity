@@ -18,8 +18,8 @@ namespace JoyLib.Code.Entities.AI
             List<Vector2Int> walls = new List<Vector2Int>();
             lock (world.Objects)
             {
-                List<JoyObject> tempList = world.Objects.ToList();
-                Dictionary<Vector2Int, JoyObject> wallsDictionary = tempList.Where(x => x.IsWall).ToDictionary(x => x.WorldPosition, x => x);
+                List<IJoyObject> tempList = world.Objects.ToList();
+                Dictionary<Vector2Int, IJoyObject> wallsDictionary = tempList.Where(x => x.IsWall).ToDictionary(x => x.WorldPosition, x => x);
 
                 walls.AddRange(wallsDictionary.Keys);
             }

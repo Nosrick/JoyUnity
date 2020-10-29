@@ -7,6 +7,15 @@ namespace JoyLib.Code.Scripting.Actions
 {
     public class ModifyRelationshipPointsAction : IJoyAction
     {
+        public IJoyObject[] LastParticipants { get; protected set; }
+        public string[] LastTags { get; protected set; }
+        public object[] LastArgs { get; protected set; }
+        
+        public string Name => "modifyrelationshippointsaction";
+
+        public string ActionString => "modification of relationship points";
+        
+        protected static EntityRelationshipHandler RelationshipHandler { get; set; }
 
         public ModifyRelationshipPointsAction()
         {
@@ -15,26 +24,8 @@ namespace JoyLib.Code.Scripting.Actions
                 RelationshipHandler = GameObject.Find("GameManager").GetComponent<EntityRelationshipHandler>();
             }
         }
-        
-        public string Name
-        {
-            get
-            {
-                return "modifyrelationshippointsaction";
-            }
-        }
 
-        public string ActionString
-        {
-            get
-            {
-                return "modification of relationship points";
-            }
-        }
-        
-        protected static EntityRelationshipHandler RelationshipHandler { get; set; }
-
-        public bool Execute(JoyObject[] participants, string[] tags = null, params object[] args)
+        public bool Execute(IJoyObject[] participants, string[] tags = null, params object[] args)
         {
             if (args.Length == 0)
             {
@@ -61,8 +52,17 @@ namespace JoyLib.Code.Scripting.Actions
                     }
                 }
             }
+            
+            SetLastParameters(participants, tags, args);
 
-            return false;
+            return true;
+        }
+        
+        public void SetLastParameters(IJoyObject[] participants, string[] tags = null, params object[] args)
+        {
+            this.LastParticipants = participants;
+            this.LastTags = tags;
+            this.LastArgs = args;
         }
     }
 }

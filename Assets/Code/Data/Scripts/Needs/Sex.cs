@@ -97,7 +97,7 @@ namespace JoyLib.Code.Entities.Needs
             if (possibleMates.Count == 0)
             {
                 m_CachedActions["wanderaction"].Execute(
-                    new JoyObject[] { actor },
+                    new IJoyObject[] { actor },
                     new [] { "need", "wander", "sex" },
                     new object[] {});
                 return true;
@@ -107,7 +107,7 @@ namespace JoyLib.Code.Entities.Needs
             int bestRelationship = actor.Sexuality.MatingThreshold;
             foreach (Entity mate in possibleMates)
             {
-                List<JoyObject> participants = new List<JoyObject>();
+                List<IJoyObject> participants = new List<IJoyObject>();
                 participants.Add(actor);
                 participants.Add(mate);
                 string[] relationshipTags = new string[] { "sexual" };
@@ -127,7 +127,7 @@ namespace JoyLib.Code.Entities.Needs
             if (bestMate is null)
             {
                 m_CachedActions["wanderaction"].Execute(
-                    new JoyObject[] { actor },
+                    new IJoyObject[] { actor },
                     new [] { "need", "wander", "sex" },
                     new object[] {});
                 return true;
@@ -135,14 +135,14 @@ namespace JoyLib.Code.Entities.Needs
             else
             {
                 m_CachedActions["seekaction"].Execute(
-                    new JoyObject[] { actor, bestMate },
+                    new IJoyObject[] { actor, bestMate },
                     new [] { "need", "seek", "sex" },
                     new object[] { "sex" });
                 return true;
             }
         }
 
-        public override bool Interact(Entity actor, JoyObject obj)
+        public override bool Interact(Entity actor, IJoyObject obj)
         {
             if (!(obj is Entity partner))
             {
@@ -151,7 +151,7 @@ namespace JoyLib.Code.Entities.Needs
 
             if (actor.Sexuality.WillMateWith(actor, partner, 
                 s_EntityRelationshipHandler.Get(
-                    new JoyObject[] { actor, partner },
+                    new IJoyObject[] { actor, partner },
                     new string[] { "sexual" })))
             {
                 int satisfaction = CalculateSatisfaction(
@@ -166,7 +166,7 @@ namespace JoyLib.Code.Entities.Needs
                 if (actor.FulfillmentData.Name.Equals(this.Name) && 
                     partner.FulfillmentData.Name.Equals(this.Name))
                 {
-                    HashSet<JoyObject> userParticipants = new HashSet<JoyObject>(actor.FulfillmentData.Targets);
+                    HashSet<IJoyObject> userParticipants = new HashSet<IJoyObject>(actor.FulfillmentData.Targets);
                     userParticipants.Add(actor);
                     userParticipants.Add(partner);
                     m_CachedActions["fulfillneedaction"].Execute(
@@ -174,7 +174,7 @@ namespace JoyLib.Code.Entities.Needs
                         new string[] { "sex", "need", "fulfill" },
                         new object[] { this.Name, satisfaction, time });
 
-                    HashSet<JoyObject> partnerParticipants = new HashSet<JoyObject>(partner.FulfillmentData.Targets);
+                    HashSet<IJoyObject> partnerParticipants = new HashSet<IJoyObject>(partner.FulfillmentData.Targets);
                     partnerParticipants.Add(partner);
                     partnerParticipants.Add(actor);
                     m_CachedActions["fulfillneedaction"].Execute(

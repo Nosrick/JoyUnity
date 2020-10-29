@@ -1,4 +1,5 @@
 ﻿using JoyLib.Code.Graphics;
+using JoyLib.Code.World;
 
 namespace JoyLib.Code
 {
@@ -8,6 +9,8 @@ namespace JoyLib.Code
         bool IsWall { get; }
         string JoyName { get; }
         long GUID { get; }
+        
+        WorldInstance MyWorld { get; }
         
         void Update();
     }

@@ -61,7 +61,7 @@ namespace JoyLib.Code.Entities.Needs
 
         public override bool FindFulfilmentObject(Entity actor)
         {
-            IEnumerable<JoyObject> objects = actor.MyWorld.SearchForObjects(actor, new string[0]);
+            IEnumerable<IJoyObject> objects = actor.MyWorld.SearchForObjects(actor, new string[0]);
 
             if (objects.Any() == false)
             {
@@ -70,7 +70,7 @@ namespace JoyLib.Code.Entities.Needs
 
             ItemInstance chosenItem = null;
             int highestValue = int.MinValue;
-            foreach (JoyObject obj in objects)
+            foreach (IJoyObject obj in objects)
             {
                 if (!(obj is ItemInstance item))
                 {
@@ -87,19 +87,19 @@ namespace JoyLib.Code.Entities.Needs
             if (chosenItem is null)
             {
                 m_CachedActions["wanderaction"].Execute(
-                    new JoyObject[] { actor },
+                    new IJoyObject[] { actor },
                     new string[] { "need", "property", "wander" });
                 return false;
             }
             
             m_CachedActions["seekaction"].Execute(
-                new JoyObject[] {actor, chosenItem},
+                new IJoyObject[] {actor, chosenItem},
                 new[] {"need", "property", "seek"},
                 new object[] {"property"});
             return true;
         }
 
-        public override bool Interact(Entity actor, JoyObject obj)
+        public override bool Interact(Entity actor, IJoyObject obj)
         {
             if (!(obj is ItemInstance item))
             {

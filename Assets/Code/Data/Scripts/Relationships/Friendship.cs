@@ -9,10 +9,10 @@ namespace JoyLib.Code.Entities.Relationships
             AddTag("friendship");
         }
         
-        public override IRelationship Create(IEnumerable<JoyObject> participants)
+        public override IRelationship Create(IEnumerable<IJoyObject> participants)
         {
             IRelationship newRelationship = new Friendship();
-            foreach (JoyObject obj in participants)
+            foreach (IJoyObject obj in participants)
             {
                 newRelationship.AddParticipant(obj);
             }
@@ -20,10 +20,10 @@ namespace JoyLib.Code.Entities.Relationships
             return newRelationship;
         }
 
-        public override IRelationship CreateWithValue(IEnumerable<JoyObject> participants, int value)
+        public override IRelationship CreateWithValue(IEnumerable<IJoyObject> participants, int value)
         {
             IRelationship newRelationship = new Friendship();
-            foreach (JoyObject obj in participants)
+            foreach (IJoyObject obj in participants)
             {
                 newRelationship.AddParticipant(obj);
             }

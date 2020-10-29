@@ -58,7 +58,7 @@ namespace JoyLib.Code.Entities.Needs
 
         public override bool FindFulfilmentObject(Entity actor)
         {
-            Dictionary<Vector2Int, JoyObject> objects = actor.MyWorld.GetObjectsOfType(new [] {"bed", "sleep"});
+            Dictionary<Vector2Int, IJoyObject> objects = actor.MyWorld.GetObjectsOfType(new [] {"bed", "sleep"});
 
             if (objects.Count == 0)
             {
@@ -68,7 +68,7 @@ namespace JoyLib.Code.Entities.Needs
                 return false;
             }
             
-            foreach (KeyValuePair<Vector2Int, JoyObject> pair in objects)
+            foreach (KeyValuePair<Vector2Int, IJoyObject> pair in objects)
             {
                 if (actor.MyWorld.GetEntity(pair.Key) is null)
                 {
@@ -81,13 +81,13 @@ namespace JoyLib.Code.Entities.Needs
             }
 
             m_CachedActions["wanderaction"].Execute(
-                new JoyObject[] {actor},
+                new IJoyObject[] {actor},
                 new[] {"need", "sleep", "wander"});
             return false;
 
         }
 
-        public override bool Interact(Entity actor, JoyObject obj)
+        public override bool Interact(Entity actor, IJoyObject obj)
         {
             if (!(obj is ItemInstance item))
             {

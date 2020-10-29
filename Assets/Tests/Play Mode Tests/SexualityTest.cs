@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DevionGames.InventorySystem;
 using DevionGames.InventorySystem.Configuration;
+using JoyLib.Code;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities.Sexuality;
 using JoyLib.Code.Entities;
@@ -225,7 +226,7 @@ namespace Tests
         [UnityTest]
         public IEnumerator Heterosexual_WillMateWith_AcceptsHeteroPartners()
         {
-            JoyObject[] participants = new [] { heterofemaleHuman, heteroMaleHuman };
+            IJoyObject[] participants = new [] { heterofemaleHuman, heteroMaleHuman };
             IRelationship[] relationships = entityRelationshipHandler.Get(participants);
             Assert.IsTrue(heterosexual.WillMateWith(heterofemaleHuman, heteroMaleHuman, relationships));
 
@@ -235,7 +236,7 @@ namespace Tests
         [UnityTest]
         public IEnumerator Heterosexual_WillMateWith_RejectsHomoPartners()
         {
-            JoyObject[] participants = new [] { heterofemaleHuman, homofemaleHumanLeft };
+            IJoyObject[] participants = new [] { heterofemaleHuman, homofemaleHumanLeft };
             IRelationship[] relationships = entityRelationshipHandler.Get(participants);
             Assert.IsFalse(heterosexual.WillMateWith(heterofemaleHuman, homofemaleHumanLeft, relationships));
 
@@ -245,7 +246,7 @@ namespace Tests
         [UnityTest]
         public IEnumerator Homosexual_WillMateWith_AcceptsHomoPartners()
         {
-            JoyObject[] participants = new [] { homoMaleHumanLeft, homoMaleHumanRight };
+            IJoyObject[] participants = new [] { homoMaleHumanLeft, homoMaleHumanRight };
             IRelationship[] relationships = entityRelationshipHandler.Get(participants);
             Assert.IsTrue(homosexual.WillMateWith(homoMaleHumanLeft, homoMaleHumanRight, relationships));
 
@@ -255,7 +256,7 @@ namespace Tests
         [UnityTest]
         public IEnumerator Homosexual_WillMateWith_RejectsHeteroPartners()
         {
-            JoyObject[] participants = new[] { homofemaleHumanLeft, homofemaleHumanRight };
+            IJoyObject[] participants = new[] { homofemaleHumanLeft, homofemaleHumanRight };
             IRelationship[] relationships = entityRelationshipHandler.Get(participants);
             Assert.IsFalse(homosexual.WillMateWith(homoMaleHumanLeft, homofemaleHumanRight, relationships));
 
@@ -265,7 +266,7 @@ namespace Tests
         [UnityTest]
         public IEnumerator Bisexual_WillMateWith_WillAcceptHomoPartners()
         {
-            JoyObject[] participants = new[] { bifemaleHuman, homofemaleHumanLeft };
+            IJoyObject[] participants = new[] { bifemaleHuman, homofemaleHumanLeft };
             IRelationship[] relationships = entityRelationshipHandler.Get(participants);
             Assert.IsTrue(bisexual.WillMateWith(bifemaleHuman, homofemaleHumanLeft, relationships));
 
@@ -275,7 +276,7 @@ namespace Tests
         [UnityTest]
         public IEnumerator Bisexual_WillMateWith_WillAcceptHeteroPartners()
         {
-            JoyObject[] participants = new[] { bifemaleHuman, biMaleHuman };
+            IJoyObject[] participants = new[] { bifemaleHuman, biMaleHuman };
             IRelationship[] relationships = entityRelationshipHandler.Get(participants);
             Assert.IsTrue(bisexual.WillMateWith(bifemaleHuman, biMaleHuman, relationships));
 

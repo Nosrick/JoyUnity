@@ -75,7 +75,7 @@ namespace JoyLib.Code.Entities.Relationships
             throw new InvalidOperationException("Relationship type " + type + " not found.");
         }
 
-        public IRelationship[] Get(JoyObject[] participants, string[] tags = null)
+        public IRelationship[] Get(IJoyObject[] participants, string[] tags = null)
         {
             IRelationship query = null;
             

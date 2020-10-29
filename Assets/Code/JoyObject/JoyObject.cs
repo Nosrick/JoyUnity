@@ -33,14 +33,13 @@ namespace JoyLib.Code
         public bool IsWall { get; protected set; }
 
         public bool IsDestructible { get; protected set; }
+        
+        public WorldInstance MyWorld { get; set; }
 
-        public WorldInstance MyWorld { get => m_MyWorld; set => m_MyWorld = value; }
-
+        [NonSerialized]
         protected List<IJoyAction> m_CachedActions;
 
         [NonSerialized]
-        protected WorldInstance m_MyWorld;
-
         protected const int FRAMES_PER_SECOND = 30;
 
         public JoyObject()

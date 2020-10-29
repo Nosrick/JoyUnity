@@ -81,7 +81,7 @@ namespace JoyLib.Code.Entities.Needs
             if (targets.Length == 0)
             {
                 m_CachedActions["wanderaction"].Execute(
-                    new JoyObject[] { actor },
+                    new IJoyObject[] { actor },
                     new string[] { "need", "thirst", "wander" });
 
                 return false;
@@ -106,8 +106,8 @@ namespace JoyLib.Code.Entities.Needs
             }
 
             //Search the floor
-            IEnumerable<JoyObject> objects = actor.MyWorld.SearchForObjects(actor, new string[] { type });
-            foreach (JoyObject obj in objects)
+            IEnumerable<IJoyObject> objects = actor.MyWorld.SearchForObjects(actor, new string[] { type });
+            foreach (IJoyObject obj in objects)
             {
                 if (!(obj is ItemInstance item))
                 {
@@ -132,7 +132,7 @@ namespace JoyLib.Code.Entities.Needs
                 else
                 {
                     m_CachedActions["seekaction"].Execute(
-                        new JoyObject[] { actor, chosenDrink },
+                        new IJoyObject[] { actor, chosenDrink },
                         new string[] { "need", "thirst", "seek" },
                         new object[] { "thirst" });
                     return true;
@@ -140,13 +140,13 @@ namespace JoyLib.Code.Entities.Needs
             }
 
             m_CachedActions["wanderaction"].Execute(
-                new JoyObject[] { actor },
+                new IJoyObject[] { actor },
                 new string[] { "need", "thirst", "wander" });
 
             return false;
         }
 
-        public override bool Interact(Entity actor, JoyObject obj)
+        public override bool Interact(Entity actor, IJoyObject obj)
         {
             if (!(obj is ItemInstance item))
             {

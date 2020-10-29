@@ -65,7 +65,7 @@ namespace JoyLib.Code.Entities.Needs
             return false;
         }
 
-        public override bool Interact(Entity actor, JoyObject obj)
+        public override bool Interact(Entity actor, IJoyObject obj)
         {
             return false;
         }

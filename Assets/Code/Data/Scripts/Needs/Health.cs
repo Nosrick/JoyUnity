@@ -103,7 +103,7 @@ namespace JoyLib.Code.Entities.Needs
             return chosen.FindFulfilmentObject(actor);
         }
 
-        public override bool Interact(Entity actor, JoyObject obj)
+        public override bool Interact(Entity actor, IJoyObject obj)
         {
             if (ActingNeed is null)
             {

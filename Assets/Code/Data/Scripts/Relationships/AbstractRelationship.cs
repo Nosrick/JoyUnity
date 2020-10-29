@@ -9,17 +9,17 @@ namespace JoyLib.Code.Entities.Relationships
         //Yeesh, this is messy
         //But this is a key value pair for how each participant feels about the other in the relationship
         protected SortedDictionary<long, Dictionary<long, int>> m_Values;
-        protected SortedDictionary<long, JoyObject> m_Participants;
+        protected SortedDictionary<long, IJoyObject> m_Participants;
         protected List<string> m_Tags;
 
         public AbstractRelationship()
         {
-            m_Participants = new SortedDictionary<long, JoyObject>();
+            m_Participants = new SortedDictionary<long, IJoyObject>();
             m_Values = new SortedDictionary<long, Dictionary<long, int>>();
             m_Tags = new List<string>();
         }
 
-        public virtual bool AddParticipant(JoyObject newParticipant)
+        public virtual bool AddParticipant(IJoyObject newParticipant)
         {
             if(m_Participants.ContainsKey(newParticipant.GUID) == false)
             {
@@ -63,7 +63,7 @@ namespace JoyLib.Code.Entities.Relationships
             return false;
         }
 
-        public JoyObject GetParticipant(long GUID)
+        public IJoyObject GetParticipant(long GUID)
         {
             if(m_Participants.ContainsKey(GUID))
             {
@@ -72,7 +72,7 @@ namespace JoyLib.Code.Entities.Relationships
             return null;
         }
 
-        public JoyObject[] GetParticipants()
+        public IJoyObject[] GetParticipants()
         {
             return m_Participants.Values.ToArray();
         }
@@ -200,8 +200,8 @@ namespace JoyLib.Code.Entities.Relationships
             return 0;
         }
 
-        public abstract IRelationship Create(IEnumerable<JoyObject> participants);
-        public abstract IRelationship CreateWithValue(IEnumerable<JoyObject> participants, int value);
+        public abstract IRelationship Create(IEnumerable<IJoyObject> participants);
+        public abstract IRelationship CreateWithValue(IEnumerable<IJoyObject> participants, int value);
 
         public virtual string Name => "abstractrelationship";
 

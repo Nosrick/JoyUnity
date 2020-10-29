@@ -10,10 +10,10 @@ namespace JoyLib.Code.Entities.Relationships
             AddTag("sexual");
         }
 
-        public override IRelationship Create(IEnumerable<JoyObject> participants)
+        public override IRelationship Create(IEnumerable<IJoyObject> participants)
         {
             IRelationship newRelationship = new PolyamourousRelationship();
-            foreach (JoyObject obj in participants)
+            foreach (IJoyObject obj in participants)
             {
                 newRelationship.AddParticipant(obj);
             }
@@ -21,10 +21,10 @@ namespace JoyLib.Code.Entities.Relationships
             return newRelationship;
         }
 
-        public override IRelationship CreateWithValue(IEnumerable<JoyObject> participants, int value)
+        public override IRelationship CreateWithValue(IEnumerable<IJoyObject> participants, int value)
         {
             IRelationship newRelationship = new PolyamourousRelationship();
-            foreach (JoyObject obj in participants)
+            foreach (IJoyObject obj in participants)
             {
                 newRelationship.AddParticipant(obj);
             }

@@ -111,7 +111,7 @@ namespace JoyLib.Code.Entities.Needs
             return m_Value;
         }
 
-        public abstract bool Interact(Entity actor, JoyObject obj);
+        public abstract bool Interact(Entity actor, IJoyObject obj);
 
         public int SetValue(int value)
         {

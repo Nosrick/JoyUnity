@@ -35,8 +35,8 @@ namespace JoyLib.Code.World
 
         protected List<Entity> m_Entities;
         
-        protected List<JoyObject> m_Objects;
-        protected Dictionary<Vector2Int, JoyObject> m_Walls;
+        protected List<IJoyObject> m_Objects;
+        protected Dictionary<Vector2Int, IJoyObject> m_Walls;
         
         protected Vector2Int m_SpawnPoint;
 
@@ -73,8 +73,8 @@ namespace JoyLib.Code.World
             m_Tiles = tiles;
             m_Areas = new Dictionary<Vector2Int, WorldInstance>();
             m_Entities = new List<Entity>();
-            m_Objects = new List<JoyObject>();
-            m_Walls = new Dictionary<Vector2Int, JoyObject>();
+            m_Objects = new List<IJoyObject>();
+            m_Walls = new Dictionary<Vector2Int, IJoyObject>();
             GUID = GUIDManager.Instance.AssignGUID();
             m_Discovered = new bool[m_Tiles.GetLength(0), m_Tiles.GetLength(1)];
             m_Light = new int[m_Tiles.GetLength(0), m_Tiles.GetLength(1)];
@@ -104,7 +104,7 @@ namespace JoyLib.Code.World
         /// <param name="tags"></param>
         /// <param name="name"></param>
         public WorldInstance(WorldTile[,] tiles, Dictionary<Vector2Int, WorldInstance> areas, List<Entity> entities,
-            List<JoyObject> objects, Dictionary<Vector2Int, JoyObject> walls, string[] tags, string name)
+            List<IJoyObject> objects, Dictionary<Vector2Int, IJoyObject> walls, string[] tags, string name)
         {
             this.Name = name;
             this.m_Tags = tags;
@@ -160,7 +160,7 @@ namespace JoyLib.Code.World
             m_Light = new int[m_Light.GetLength(0), m_Light.GetLength(1)];
 
             //Do objects first
-            List<JoyObject> objects = m_Objects.ToList();
+            List<IJoyObject> objects = new List<IJoyObject>(m_Objects);
 
             for(int i = 0; i < objects.Count; i++)
             {
@@ -333,7 +333,7 @@ namespace JoyLib.Code.World
             return removed;
         }
 
-        public JoyObject GetObject(Vector2Int WorldPosition)
+        public IJoyObject GetObject(Vector2Int WorldPosition)
         {
             for(int i = 0; i < m_Objects.Count; i++)
             {
@@ -377,17 +377,17 @@ namespace JoyLib.Code.World
         /// <param name="objectType"></param>
         /// <param name="intentRef"></param>
         /// <returns></returns>
-        public IEnumerable<JoyObject> SearchForObjects(Entity entityRef, IEnumerable<string> tags)
+        public IEnumerable<IJoyObject> SearchForObjects(Entity entityRef, IEnumerable<string> tags)
         {
-            List<JoyObject> data = new List<JoyObject>();
+            List<IJoyObject> data = new List<IJoyObject>();
 
             if (entityRef.Vision.GetLength(0) == 1)
             {
                 return data;
             }
 
-            List<JoyObject> inSight = m_Objects.Where(obj => entityRef.VisionProvider.CanSee(entityRef, this, obj.WorldPosition) == true).ToList();
-            foreach(JoyObject obj in inSight)
+            List<IJoyObject> inSight = m_Objects.Where(obj => entityRef.VisionProvider.CanSee(entityRef, this, obj.WorldPosition) == true).ToList();
+            foreach(IJoyObject obj in inSight)
             {
                 IEnumerable<string> intersect = obj.Tags.Intersect(tags);
                 if(tags.Any() == false || intersect.SequenceEqual(tags))
@@ -785,9 +785,9 @@ namespace JoyLib.Code.World
             }
         }
 
-        public Dictionary<Vector2Int, JoyObject> GetObjectsOfType(string[] tags)
+        public Dictionary<Vector2Int, IJoyObject> GetObjectsOfType(string[] tags)
         {
-            Dictionary<Vector2Int, JoyObject> objects = new Dictionary<Vector2Int, JoyObject>();
+            Dictionary<Vector2Int, IJoyObject> objects = new Dictionary<Vector2Int, IJoyObject>();
             foreach (JoyObject joyObject in m_Objects)
             {
                 int matches = 0;
@@ -798,7 +798,7 @@ namespace JoyLib.Code.World
                         matches++;
                     }
                 }
-                if(matches == tags.Length || (tags.Length < joyObject.TotalTags && matches > 0))
+                if(matches == tags.Length || (tags.Length < joyObject.Tags.Count && matches > 0))
                 {
                     objects.Add(joyObject.WorldPosition, joyObject);
                 }
@@ -833,7 +833,7 @@ namespace JoyLib.Code.World
             }
         }
 
-        public List<JoyObject> Objects
+        public List<IJoyObject> Objects
         {
             get
             {
@@ -841,7 +841,7 @@ namespace JoyLib.Code.World
             }
         }
 
-        public Dictionary<Vector2Int, JoyObject> Walls
+        public Dictionary<Vector2Int, IJoyObject> Walls
         {
             get
             {

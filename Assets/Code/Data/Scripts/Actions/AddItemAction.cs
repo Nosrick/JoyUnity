@@ -7,8 +7,11 @@ namespace JoyLib.Code.Scripting.Actions
         public string Name => "additemaction";
 
         public string ActionString => "adding item";
+        public IJoyObject[] LastParticipants { get; protected set; }
+        public string[] LastTags { get; protected set; }
+        public object[] LastArgs { get; protected set; }
 
-        public bool Execute(JoyObject[] participants, string[] tags = null, params object[] args)
+        public bool Execute(IJoyObject[] participants, string[] tags = null, params object[] args)
         {
             if(!(participants[0] is IItemContainer container))
             {
@@ -19,8 +22,17 @@ namespace JoyLib.Code.Scripting.Actions
             {
                 return false;
             }
+            
+            SetLastParameters(participants, tags, args);
 
             return container.AddContents(item);
+        }
+        
+        public void SetLastParameters(IJoyObject[] participants, string[] tags = null, params object[] args)
+        {
+            this.LastParticipants = participants;
+            this.LastTags = tags;
+            this.LastArgs = args;
         }
     }
 }

@@ -10,15 +10,15 @@ namespace JoyLib.Code.Entities.Relationships
             AddTag("sexual");
         }
 
-        public override bool AddParticipant(JoyObject newParticipant)
+        public override bool AddParticipant(IJoyObject newParticipant)
         {
             return m_Participants.Count < 2 && base.AddParticipant(newParticipant);
         }
         
-        public override IRelationship Create(IEnumerable<JoyObject> participants)
+        public override IRelationship Create(IEnumerable<IJoyObject> participants)
         {
             IRelationship newRelationship = new MonogamousRelationship();
-            foreach (JoyObject obj in participants)
+            foreach (IJoyObject obj in participants)
             {
                 newRelationship.AddParticipant(obj);
             }
@@ -26,10 +26,10 @@ namespace JoyLib.Code.Entities.Relationships
             return newRelationship;
         }
 
-        public override IRelationship CreateWithValue(IEnumerable<JoyObject> participants, int value)
+        public override IRelationship CreateWithValue(IEnumerable<IJoyObject> participants, int value)
         {
             IRelationship newRelationship = new MonogamousRelationship();
-            foreach (JoyObject obj in participants)
+            foreach (IJoyObject obj in participants)
             {
                 newRelationship.AddParticipant(obj);
             }

@@ -7,7 +7,7 @@ namespace JoyLib.Code.Entities.Needs
 
         bool FindFulfilmentObject(Entity actor);
 
-        bool Interact(Entity actor, JoyObject obj);
+        bool Interact(Entity actor, IJoyObject obj);
 
         INeed Copy();
 

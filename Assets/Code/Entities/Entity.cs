@@ -67,6 +67,7 @@ namespace JoyLib.Code.Entities
 
         protected static EntityRelationshipHandler s_RelationshipHandler;
         protected static EntitySkillHandler s_SkillHandler;
+        protected static QuestTracker QuestTracker { get; set; } 
 
         public Entity()
         {}
@@ -126,6 +127,7 @@ namespace JoyLib.Code.Entities
                 GameObject gameManager = GameObject.Find("GameManager");
                 s_RelationshipHandler = gameManager.GetComponent<EntityRelationshipHandler>();
                 s_SkillHandler = gameManager.GetComponent<EntitySkillHandler>();
+                QuestTracker = gameManager.GetComponent<QuestTracker>();
             }
             
             this.CreatureType = template.CreatureType;
@@ -161,7 +163,7 @@ namespace JoyLib.Code.Entities
             }
             this.m_CurrentJob = job;
 
-            this.m_Tags = template.Tags.ToList();
+            this.Tags = template.Tags.ToList();
 
             this.m_NaturalWeapons = naturalWeapons;
             this.m_Equipment = equipment;
@@ -215,7 +217,7 @@ namespace JoyLib.Code.Entities
         protected Entity(Entity copy) :
             base(
                 copy.JoyName,
-                copy.m_DerivedValues,
+                copy.DerivedValues,
                 copy.WorldPosition,
                 copy.Tileset,
                 copy.m_CachedActions.ToArray(),
@@ -308,10 +310,10 @@ namespace JoyLib.Code.Entities
             RegenTicker += 1;
             if (RegenTicker == REGEN_TICK_TIME)
             {
-                m_DerivedValues[EntityDerivedValue.HITPOINTS].ModifyValue(1);
-                m_DerivedValues[EntityDerivedValue.CONCENTRATION].ModifyValue(1);
-                m_DerivedValues[EntityDerivedValue.COMPOSURE].ModifyValue(1);
-                m_DerivedValues[EntityDerivedValue.MANA].ModifyValue(1);
+                DerivedValues[EntityDerivedValue.HITPOINTS].ModifyValue(1);
+                DerivedValues[EntityDerivedValue.CONCENTRATION].ModifyValue(1);
+                DerivedValues[EntityDerivedValue.COMPOSURE].ModifyValue(1);
+                DerivedValues[EntityDerivedValue.MANA].ModifyValue(1);
 
                 RegenTicker = 0;
 
@@ -324,19 +326,9 @@ namespace JoyLib.Code.Entities
             UpdateMe();
         }
 
-        public void AddQuest(Quest quest)
+        public void AddQuest(IQuest quest)
         {
-            List<QuestStep> steps = quest.steps;
-            for (int i = 0; i < steps.Count; i++)
-            {
-                if (steps[i].action == QuestAction.Deliver && steps[i].objects.Count != 0)
-                {
-                    for (int j = 0; j < steps[i].objects.Count; j++)
-                    {
-                        AddContents(steps[i].objects[j]);
-                    }
-                }
-            }
+            quest.StartQuest(this);
             QuestTracker.AddQuest(GUID, quest);
         }
 
@@ -570,7 +562,7 @@ namespace JoyLib.Code.Entities
                             matches++;
                         }
                     }
-                    if (matches == tags.Length || (tags.Length < item.TotalTags && matches > 0))
+                    if (matches == tags.Length || (tags.Length < item.Tags.Count && matches > 0))
                     {
                         matchingItems.Add(item);
                     }
@@ -645,32 +637,32 @@ namespace JoyLib.Code.Entities
 
         public void DecreaseMana(int value)
         {
-            m_DerivedValues[EntityDerivedValue.MANA].ModifyValue(-value);
+            DerivedValues[EntityDerivedValue.MANA].ModifyValue(-value);
         }
 
         public void IncreaseMana(int value)
         {
-            m_DerivedValues[EntityDerivedValue.MANA].ModifyValue(value);
+            DerivedValues[EntityDerivedValue.MANA].ModifyValue(value);
         }
 
         public void DecreaseComposure(int value)
         {
-            m_DerivedValues[EntityDerivedValue.COMPOSURE].ModifyValue(-value);
+            DerivedValues[EntityDerivedValue.COMPOSURE].ModifyValue(-value);
         }
 
         public void IncreaseComposure(int value)
         {
-            m_DerivedValues[EntityDerivedValue.COMPOSURE].ModifyValue(value);
+            DerivedValues[EntityDerivedValue.COMPOSURE].ModifyValue(value);
         }
 
         public void DecreaseConcentration(int value)
         {
-            m_DerivedValues[EntityDerivedValue.CONCENTRATION].ModifyValue(-value);
+            DerivedValues[EntityDerivedValue.CONCENTRATION].ModifyValue(-value);
         }
 
         public void IncreaseConcentration(int value)
         {
-            m_DerivedValues[EntityDerivedValue.CONCENTRATION].ModifyValue(value);
+            DerivedValues[EntityDerivedValue.CONCENTRATION].ModifyValue(value);
         }
 
         public void AddExperience(float value)
@@ -722,26 +714,26 @@ namespace JoyLib.Code.Entities
                 }
             }
 
-            base.DamageMe(damage);
+            base.DamageValue(EntityDerivedValue.HITPOINTS, damage);
         }
 
         public void DirectDVModification(int value, string index = EntityDerivedValue.HITPOINTS)
         {
-            m_DerivedValues[index].ModifyValue(value);
+            DerivedValues[index].ModifyValue(value);
         }
 
         protected void CalculateDerivatives()
         {
-            IDerivedValue hitpoints = m_DerivedValues[EntityDerivedValue.HITPOINTS];
+            IDerivedValue hitpoints = DerivedValues[EntityDerivedValue.HITPOINTS];
             int lastHP = hitpoints.Value;
 
-            IDerivedValue concentration = m_DerivedValues[EntityDerivedValue.CONCENTRATION];
+            IDerivedValue concentration = DerivedValues[EntityDerivedValue.CONCENTRATION];
             int lastConc = concentration.Value;
 
-            IDerivedValue composure = m_DerivedValues[EntityDerivedValue.COMPOSURE];
+            IDerivedValue composure = DerivedValues[EntityDerivedValue.COMPOSURE];
             int lastComp = composure.Value;
 
-            IDerivedValue mana = m_DerivedValues[EntityDerivedValue.MANA];
+            IDerivedValue mana = DerivedValues[EntityDerivedValue.MANA];
             int lastMana = mana.Value;
 
             IValueFormula valueFormula = new BasicDerivedValueFormula();
@@ -890,7 +882,7 @@ namespace JoyLib.Code.Entities
         {
             get
             {
-                return m_Tags.Any(tag => tag.Equals("sentient", StringComparison.OrdinalIgnoreCase));
+                return Tags.Any(tag => tag.Equals("sentient", StringComparison.OrdinalIgnoreCase));
             }
         }
 
@@ -968,7 +960,7 @@ namespace JoyLib.Code.Entities
         {
             get
             {
-                return m_DerivedValues[EntityDerivedValue.MANA].Maximum;
+                return DerivedValues[EntityDerivedValue.MANA].Maximum;
             }
         }
 
@@ -976,7 +968,7 @@ namespace JoyLib.Code.Entities
         {
             get
             {
-                return m_DerivedValues[EntityDerivedValue.MANA].Value;
+                return DerivedValues[EntityDerivedValue.MANA].Value;
             }
         }
 
@@ -984,7 +976,7 @@ namespace JoyLib.Code.Entities
         {
             get
             {
-                return m_DerivedValues[EntityDerivedValue.COMPOSURE].Value;
+                return DerivedValues[EntityDerivedValue.COMPOSURE].Value;
             }
         }
 
@@ -992,7 +984,7 @@ namespace JoyLib.Code.Entities
         {
             get
             {
-                return m_DerivedValues[EntityDerivedValue.COMPOSURE].Maximum;
+                return DerivedValues[EntityDerivedValue.COMPOSURE].Maximum;
             }
         }
 
@@ -1000,7 +992,7 @@ namespace JoyLib.Code.Entities
         {
             get
             {
-                return m_DerivedValues[EntityDerivedValue.CONCENTRATION].Maximum;
+                return DerivedValues[EntityDerivedValue.CONCENTRATION].Maximum;
             }
         }
 
@@ -1008,7 +1000,7 @@ namespace JoyLib.Code.Entities
         {
             get
             {
-                return m_DerivedValues[EntityDerivedValue.CONCENTRATION].Value;
+                return DerivedValues[EntityDerivedValue.CONCENTRATION].Value;
             }
         }
 

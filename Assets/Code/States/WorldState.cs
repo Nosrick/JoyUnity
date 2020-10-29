@@ -157,7 +157,7 @@ namespace JoyLib.Code.States
 
             m_GameplayFlags = GameplayFlags.Moving;
 
-            QuestTracker.PerformExploration(player, newWorld);
+            //QuestTracker.PerformExploration(player, newWorld);
             Tick();
         }
 

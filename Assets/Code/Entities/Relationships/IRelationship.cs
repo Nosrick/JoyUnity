@@ -13,8 +13,8 @@ namespace JoyLib.Code.Entities.Relationships
 
         string[] GetTags();
         
-        JoyObject GetParticipant(long GUID);
-        JoyObject[] GetParticipants();
+        IJoyObject GetParticipant(long GUID);
+        IJoyObject[] GetParticipants();
 
         bool AddTag(string tag);
 
@@ -26,14 +26,14 @@ namespace JoyLib.Code.Entities.Relationships
 
         int ModifyValueOfAllParticipants(int value);
 
-        bool AddParticipant(JoyObject newParticipant);
+        bool AddParticipant(IJoyObject newParticipant);
         
         bool RemoveParticipant(long currentGUID);
 
         long GenerateHash(long[] participants);
         
-        IRelationship Create(IEnumerable<JoyObject> participants);
-        IRelationship CreateWithValue(IEnumerable<JoyObject> participants, int value);
+        IRelationship Create(IEnumerable<IJoyObject> participants);
+        IRelationship CreateWithValue(IEnumerable<IJoyObject> participants, int value);
 
         string Name
         {
