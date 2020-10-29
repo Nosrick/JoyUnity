@@ -81,6 +81,12 @@ namespace JoyLib.Code.Conversation
             set;
         }
 
+        protected RectTransform TitleRect
+        {
+            get;
+            set;
+        }
+
         public void Awake()
         {
             if (m_Topics is null)
@@ -91,7 +97,8 @@ namespace JoyLib.Code.Conversation
 
                 Window = Window is null ? GameObject.Find("Conversation Window") : Window;
 
-                Transform title = Window.FindChild("Title", true).transform;
+                Transform title = Window.FindChild("Conversation Title", true).transform;
+                TitleRect = title.gameObject.GetComponent<RectTransform>();
                 LastSaidGUI = title.GetComponentInChildren<TextMeshProUGUI>();
                 LastSpokeIcon = title.GetComponentInChildren<Image>();
                 MenuItem = Window.FindChild("Menu Item", true);
@@ -341,6 +348,7 @@ namespace JoyLib.Code.Conversation
         protected void SetTitle(string text)
         {
             LastSaidGUI.text = text;
+            LayoutRebuilder.ForceRebuildLayoutImmediate(TitleRect);
         }
 
         protected ITopic[] SortByPriority(ITopic[] topics)

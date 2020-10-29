@@ -1892,6 +1892,12 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 448261941}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &463172627 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4625570237856246421, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
+    type: 3}
+  m_PrefabInstance: {fileID: 1285147743}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &483492478
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5953,7 +5959,7 @@ GameObject:
   - component: {fileID: 1143682852}
   - component: {fileID: 1143682851}
   m_Layer: 5
-  m_Name: Title
+  m_Name: Inventory Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6979,6 +6985,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1293420870}
     m_Modifications:
+    - target: {fileID: 214761953502410758, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
+        type: 3}
+      propertyPath: m_Title
+      value: 
+      objectReference: {fileID: 463172627}
+    - target: {fileID: 214761953502410758, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
+        type: 3}
+      propertyPath: m_TitleGameObject
+      value: 
+      objectReference: {fileID: 463172627}
     - target: {fileID: 835294647578703609, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
         type: 3}
       propertyPath: m_AnchorMin.y
@@ -7032,7 +7048,7 @@ PrefabInstance:
     - target: {fileID: 1688692771016098577, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 475.14502
+      value: 476.64502
       objectReference: {fileID: 0}
     - target: {fileID: 1688692771016098577, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
         type: 3}
@@ -7068,6 +7084,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4625570237856246421, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
+        type: 3}
+      propertyPath: m_Name
+      value: Conversation Title
       objectReference: {fileID: 0}
     - target: {fileID: 8424994987034671138, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
         type: 3}
@@ -7287,6 +7308,16 @@ PrefabInstance:
     - target: {fileID: 8660288408924330932, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
         type: 3}
       propertyPath: m_ChildAlignment
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8660288408924330932, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
+        type: 3}
+      propertyPath: m_Spacing
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8660288408924330932, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
+        type: 3}
+      propertyPath: m_ChildScaleWidth
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9014987977286830260, guid: 2d53dc4a1c9b3c54d82d77dde2040807,

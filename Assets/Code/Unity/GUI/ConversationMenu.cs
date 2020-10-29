@@ -1,3 +1,4 @@
+using System;
 using JoyLib.Code.Conversation;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,6 +18,12 @@ namespace JoyLib.Code.Unity.GUI
             get;
             set;
         }
+
+        protected Text Text
+        {
+            get;
+            set;
+        }
         
         protected static ConversationEngine ConversationEngine
         {
@@ -24,14 +31,9 @@ namespace JoyLib.Code.Unity.GUI
             set;
         }
 
-        protected Text Text
-        {
-            get;
-            set;
-        }
-
         public void Awake()
         {
+            
             if (ConversationEngine is null)
             {
                 ConversationEngine = GameObject.Find("GameManager").GetComponent<ConversationEngine>();
