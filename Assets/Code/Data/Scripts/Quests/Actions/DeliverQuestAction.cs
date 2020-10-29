@@ -7,6 +7,7 @@ using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.World;
+using UnityEngine;
 
 namespace JoyLib.Code.Quests
 {
@@ -22,16 +23,27 @@ namespace JoyLib.Code.Quests
 
         protected static ItemFactory ItemFactory { get; set; }
 
+        public DeliverQuestAction()
+        {
+            if (ItemFactory is null)
+            {
+                ItemFactory = new ItemFactory();
+            }
+        }
+        
         public DeliverQuestAction(
             List<ItemInstance> items,
             List<IJoyObject> actors,
             List<WorldInstance> areas,
              string[] tags)
         {
+            List<string> tempTags = new List<string>();
+            tempTags.Add("deliver");
+            tempTags.AddRange(tags);
             this.Items = items;
             this.Actors = actors;
             this.Areas = areas;
-            this.Tags = tags;
+            this.Tags = tempTags.ToArray();
             Description = AssembleDescription();
 
             if (ItemFactory is null)
@@ -56,11 +68,15 @@ namespace JoyLib.Code.Quests
                 deliveryItem = ItemFactory.CreateCompletelyRandomItem();
             }
 
+            this.Items = new List<ItemInstance> {deliveryItem};
+            this.Actors = new List<IJoyObject> {endPoint};
+            this.Areas = new List<WorldInstance>();
+
             IQuestStep step = new ConcreteQuestStep(
                 this, 
-                new List<ItemInstance> { deliveryItem }, 
-                new List<IJoyObject> { endPoint }, 
-                new List<WorldInstance>());
+                this.Items, 
+                this.Actors, 
+                this.Areas);
             return step;
         }
 
@@ -87,6 +103,7 @@ namespace JoyLib.Code.Quests
         public string AssembleDescription()
         {
             StringBuilder itemBuilder = new StringBuilder();
+            Debug.Log("ITEM COUNT IS " + Items.Count);
             for (int i = 0; i < Items.Count; i++)
             {
                 if (i > 0 && i < Items.Count - 1)
@@ -101,6 +118,7 @@ namespace JoyLib.Code.Quests
             }
             
             StringBuilder actorBuilder = new StringBuilder();
+            Debug.Log("ACTOR COUNT IS " + Actors.Count);
             for(int i = 0; i < Actors.Count; i++)
             {
                 if (i > 0 && i < Actors.Count - 1)
@@ -116,7 +134,21 @@ namespace JoyLib.Code.Quests
                 actorBuilder.Append(Actors[i].MyWorld.Name);
             }
 
+            Debug.Log("Deliver " + itemBuilder.ToString() + " to " + actorBuilder.ToString() + ".");
             return "Deliver " + itemBuilder.ToString() + " to " + actorBuilder.ToString() + ".";
+        }
+
+        public IQuestAction Create(
+            string[] tags, 
+            List<ItemInstance> items, 
+            List<IJoyObject> actors, 
+            List<WorldInstance> areas)
+        {
+            return new DeliverQuestAction(
+                items,
+                actors,
+                areas,
+                tags);
         }
     }
 }

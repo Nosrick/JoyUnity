@@ -15,7 +15,7 @@ namespace JoyLib.Code.Quests
     {
         protected EntityRelationshipHandler m_EntityRelationshipHandler;
         
-        protected List<IQuestAction> Actions { get; set; }
+        public List<IQuestAction> Actions { get; protected set; }
 
         public void Awake()
         {
@@ -29,7 +29,7 @@ namespace JoyLib.Code.Quests
             Actions = ScriptingEngine.instance.FetchAndInitialiseChildren<IQuestAction>().ToList();
         }
 
-        public Quest MakeRandomQuest(Entity questor, Entity provider, WorldInstance overworldRef)
+        public IQuest MakeRandomQuest(Entity questor, Entity provider, WorldInstance overworldRef)
         {
             List<IQuestStep> steps = new List<IQuestStep>();
 
@@ -38,7 +38,14 @@ namespace JoyLib.Code.Quests
             for (int i = 0; i < numberOfSteps; i++)
             {
                 int result = RNG.instance.Roll(0, Actions.Count);
-                IQuestAction action = Actions[result];
+                List<IJoyObject> actors = new List<IJoyObject>();
+                actors.Add(questor);
+                actors.Add(provider);
+                IQuestAction action = Actions[result].Create(
+                    new string[0],
+                    new List<ItemInstance>(),
+                    new List<IJoyObject>(),
+                    new List<WorldInstance>());
                 steps.Add(action.Make(provider, overworldRef));
             }
             

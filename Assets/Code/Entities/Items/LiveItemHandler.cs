@@ -165,20 +165,12 @@ namespace JoyLib.Code.Entities.Items
             return items;
         }
 
-        public BaseItemType[] FindItemsOfType(string[] tags)
+        public BaseItemType[] FindItemsOfType(string[] tags, int tolerance = 1)
         {
             List<BaseItemType> matchingTypes = new List<BaseItemType>();
             foreach (BaseItemType itemType in ItemDatabase)
             {
-                int matches = 0;
-                for (int i = 0; i < tags.Length; i++)
-                {
-                    if (itemType.Tags.Contains(tags[i]))
-                    {
-                        matches++;
-                    }
-                }
-                if (matches == tags.Length || (tags.Length < itemType.Tags.Length && matches > 0))
+                if (itemType.Tags.Intersect(tags).Count() >= tolerance)
                 {
                     matchingTypes.Add(itemType);
                 }

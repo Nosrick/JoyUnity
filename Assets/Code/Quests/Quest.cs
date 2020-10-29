@@ -108,7 +108,7 @@ namespace JoyLib.Code.Quests
             {
                 fullString += Steps[j].ToString();
             }
-            fullString += rewardString + ". ";
+            fullString += " " + rewardString + ".";
             return fullString;
         }
 

@@ -7,6 +7,8 @@ namespace JoyLib.Code.Quests
 {
     public class ConcreteQuestStep : IQuestStep
     {
+        protected string Description { get; set; }
+        
         public ConcreteQuestStep(
             IQuestAction action, 
             List<ItemInstance> objects, 
@@ -21,7 +23,7 @@ namespace JoyLib.Code.Quests
 
         public override string ToString()
         {
-            return Action.Description;
+            return Description ?? (Description = Action.AssembleDescription());
         }
 
         public IQuestAction Action
@@ -50,7 +52,7 @@ namespace JoyLib.Code.Quests
 
         public void StartQuest(Entity questor)
         {
-            
+            Action.ExecutePrerequisites(questor);
         }
     }
 }

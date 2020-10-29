@@ -20,5 +20,11 @@ namespace JoyLib.Code.Quests
         string AssembleDescription();
 
         void ExecutePrerequisites(Entity questor);
+
+        IQuestAction Create(
+            string[] tags,
+            List<ItemInstance> items,
+            List<IJoyObject> actors,
+            List<WorldInstance> areas);
     }
 }

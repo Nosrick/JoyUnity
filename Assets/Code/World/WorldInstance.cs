@@ -425,7 +425,7 @@ namespace JoyLib.Code.World
         {
             List<Entity> sentients = m_Entities.Where(x => x.Sentient).ToList();
             if (sentients.Count > 0)
-                return sentients[RNG.instance.Roll(0, sentients.Count - 1)];
+                return sentients[RNG.instance.Roll(0, sentients.Count)];
             else
                 return null;
         }
@@ -433,11 +433,11 @@ namespace JoyLib.Code.World
         public Entity GetRandomSentientWorldWide()
         {
             List<WorldInstance> worlds = GetWorlds(GetOverworld());
-            int result = RNG.instance.Roll(0, worlds.Count - 1);
+            int result = RNG.instance.Roll(0, worlds.Count);
             Entity entity = worlds[result].GetRandomSentient();
             while (entity == null)
             {
-                result = RNG.instance.Roll(0, worlds.Count - 1);
+                result = RNG.instance.Roll(0, worlds.Count);
                 entity = worlds[result].GetRandomSentient();
             }
             return entity;
@@ -642,6 +642,8 @@ namespace JoyLib.Code.World
 
             CalculatePlayerIndex();
             IsDirty = true;
+
+            entityRef.MyWorld = this;
         }
 
         public void RemoveEntity(Vector2Int positionRef)
