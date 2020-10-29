@@ -1,6 +1,6 @@
-﻿using JoyLib.Code.Entities;
-using JoyLib.Code.World;
+﻿using JoyLib.Code.World;
 using System.Linq;
+using Castle.Core.Internal;
 
 namespace JoyLib.Code.Helpers
 {
@@ -21,7 +21,9 @@ namespace JoyLib.Code.Helpers
 
         public static int GetNumberOfCreatures(string entityType, WorldInstance worldToCheck)
         {
-            return worldToCheck.Entities.Count(x => x.CreatureType.Equals(entityType));
+            return entityType.IsNullOrEmpty() ? 
+                worldToCheck.Entities.Count 
+                : worldToCheck.Entities.Count(x => x.CreatureType.Equals(entityType));
         }
     }
 }

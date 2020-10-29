@@ -16,6 +16,7 @@ using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
+using JoyLib.Code.Unity;
 using JoyLib.Code.Unity.GUI;
 using JoyLib.Code.World;
 using Moq;
@@ -46,12 +47,19 @@ namespace Tests
 
         private EntityRelationshipHandler entityRelationshipHandler;
 
+        private EntitySkillHandler skillHandler;
+
         private ObjectIconHandler objectIconHandler;
 
         private GUIManager guiManager;
 
         private GameObject inventoryManager;
 
+        private MonoBehaviourHandler instigatorObject;
+        private MonoBehaviourHandler listenerObject;
+
+        private GameObject prefab;
+        
         private Entity instigator;
         private Entity listener;
 
@@ -60,6 +68,7 @@ namespace Tests
         [SetUp]
         public void SetUp()
         {
+            prefab = Resources.Load<GameObject>("Prefabs/MonoBehaviourHandler");
             gameManager = new GameObject("GameManager");
             inventoryManager = new GameObject();
             inventoryManager.AddComponent<InventoryManager>();
@@ -72,6 +81,7 @@ namespace Tests
             templateHandler = gameManager.AddComponent<EntityTemplateHandler>();
             cultureHandler = gameManager.AddComponent<CultureHandler>();
             needHandler = gameManager.AddComponent<NeedHandler>();
+            skillHandler = gameManager.AddComponent<EntitySkillHandler>();
             entityRelationshipHandler = gameManager.AddComponent<EntityRelationshipHandler>();
             materialHandler = gameManager.AddComponent<MaterialHandler>();
             jobHandler = gameManager.AddComponent<JobHandler>();
@@ -125,6 +135,12 @@ namespace Tests
 
             instigator.MyWorld = world;
             listener.MyWorld = world;
+            
+            instigatorObject = GameObject.Instantiate(prefab).GetComponent<MonoBehaviourHandler>();
+            instigatorObject.AttachJoyObject(instigator);
+            
+            listenerObject = GameObject.Instantiate(prefab).GetComponent<MonoBehaviourHandler>();
+            listenerObject.AttachJoyObject(listener);
         }
 
         [UnityTest]
@@ -172,6 +188,8 @@ namespace Tests
         {
             GameObject.DestroyImmediate(gameManager);
             GameObject.DestroyImmediate(inventoryManager);
+            GameObject.DestroyImmediate(listenerObject.gameObject);
+            GameObject.DestroyImmediate(instigatorObject.gameObject);
         }
     }
 }

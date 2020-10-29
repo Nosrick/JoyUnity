@@ -76,6 +76,16 @@ namespace JoyLib.Code.Entities.Needs
             throw new InvalidOperationException("Need not found, looking for " + name);
         }
 
-        public Dictionary<string, INeed> Needs => new Dictionary<string, INeed>(m_Needs);
+        public Dictionary<string, INeed> Needs
+        {
+            get
+            {
+                if (m_Needs is null)
+                {
+                    m_Needs = Initialise();
+                }
+                return new Dictionary<string, INeed>(m_Needs);
+            }
+        }
     }
 }

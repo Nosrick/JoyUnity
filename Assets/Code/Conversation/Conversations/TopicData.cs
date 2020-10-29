@@ -182,7 +182,7 @@ namespace JoyLib.Code.Conversation.Conversations
             return FetchNextTopics();
         }
 
-        protected ITopic[] FetchNextTopics()
+        protected virtual ITopic[] FetchNextTopics()
         {
             List<ITopic> nextTopics = ConversationEngine.AllTopics
                 .Where(topic => NextTopics.Contains(topic.ID))

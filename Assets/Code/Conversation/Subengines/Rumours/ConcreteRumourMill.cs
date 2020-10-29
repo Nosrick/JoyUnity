@@ -5,9 +5,12 @@ using System.Linq;
 using System.Xml.Linq;
 using JoyLib.Code.Conversation.Conversations.Rumours;
 using JoyLib.Code.Conversation.Subengines.Rumours;
+using JoyLib.Code.Entities;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
+using JoyLib.Code.Unity;
+using JoyLib.Code.World;
 using UnityEngine;
 
 namespace JoyLib.Code.Conversation.Conversations
@@ -109,6 +112,18 @@ namespace JoyLib.Code.Conversation.Conversations
             }
 
             return rumours;
+        }
+
+        public IRumour GetRandom()
+        {
+            if (Rumours.Count == 0)
+            {
+                JoyObject left = GameObject.FindObjectOfType<MonoBehaviourHandler>().MyJoyObject.MyWorld.GetRandomSentient();
+                JoyObject right = left.MyWorld.GetRandomSentient();
+                Rumours.Add(GenerateRandomRumour(new []{left, right}));
+            }
+
+            return Rumours[RNG.instance.Roll(0, Rumours.Count)];
         }
 
         public IRumour GenerateRandomRumour(JoyObject[] participants)

@@ -812,44 +812,6 @@ namespace JoyLib.Code.World
             m_Areas.Add(key, value);
         }
 
-        public string GetLocalAreaInfo(Entity entityRef)
-        {
-            if (HasTag("interior"))
-            {
-                int result = RNG.instance.Roll(0, 100);
-                if (result <= 50)
-                {
-                    int numberOfLevels = 1;
-                    numberOfLevels = WorldConversationDataHelper.GetNumberOfFloors(numberOfLevels, this);
-
-                    if (numberOfLevels == 1)
-                    {
-                        return "This place only has " + numberOfLevels + " floor to it.";
-                    }
-                    else
-                    {
-                        return "This place has at least " + numberOfLevels + " floors.";
-                    }
-                }
-                else if (result > 50)
-                {
-                    int exactNumber = WorldConversationDataHelper.GetNumberOfCreatures(entityRef.CreatureType, this);
-                    int roughNumber = 0;
-                    if (exactNumber % 10 < 6)
-                    {
-                        roughNumber = exactNumber - (exactNumber % 10);
-                    }
-                    else
-                    {
-                        roughNumber = exactNumber + (exactNumber % 10);
-                    }
-                    return "There are around " + roughNumber + " " + entityRef.CreatureType + "s here.";
-                }
-            }
-
-            return "I don't know much about this place, sorry.";
-        }
-
         public bool HasTag(string tag)
         {
             return m_Tags.Contains(tag.ToLower());
