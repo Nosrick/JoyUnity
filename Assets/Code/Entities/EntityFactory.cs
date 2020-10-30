@@ -45,7 +45,6 @@ namespace JoyLib.Code.Entities
                 s_CultureHandler = s_GameManager.GetComponent<CultureHandler>();
                 s_SexualityHandler = s_GameManager.GetComponent<EntitySexualityHandler>();
                 s_BioSexHandler = s_GameManager.GetComponent<EntityBioSexHandler>();
-                Debug.Log("SETTING BIOSEXHANDLER");
                 s_JobHandler = s_GameManager.GetComponent<JobHandler>();
             }
         }
@@ -101,7 +100,6 @@ namespace JoyLib.Code.Entities
 
             if(selectedSex is null)
             {
-                Debug.Log("SETTING ENTITY SEX");
                 selectedSex = dominantCulture.ChooseSex(s_BioSexHandler.Sexes);
             }
 

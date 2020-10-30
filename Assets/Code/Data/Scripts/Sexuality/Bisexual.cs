@@ -37,7 +37,8 @@ namespace JoyLib.Code.Entities.Sexuality
             
             foreach (IRelationship relationship in relationships)
             {
-                if (relationship.GetRelationshipValue(me.GUID, them.GUID) > MatingThreshold && me.Sentient == them.Sentient)
+                if (relationship.GetRelationshipValue(me.GUID, them.GUID) > MatingThreshold 
+                    && me.Sentient == them.Sentient)
                 {
                     return true;
                 }

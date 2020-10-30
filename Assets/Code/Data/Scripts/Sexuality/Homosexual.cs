@@ -37,45 +37,17 @@ namespace JoyLib.Code.Entities.Sexuality
 
             foreach (IRelationship relationship in relationships)
             {
-                if(relationship.GetRelationshipValue(me.GUID, them.GUID) > MatingThreshold)
+                if(relationship.GetRelationshipValue(me.GUID, them.GUID) < MatingThreshold)
                 {
-                    Debug.Log("Mating Threshold passed.");
-                }
-                else
-                {
-                    Debug.Log("Mating Threshold failed!");
                     return false;
                 }
 
-                if(me.Sex.CanBirth == them.Sex.CanBirth)
+                if(me.Sex.CanBirth != them.Sex.CanBirth)
                 {
-                    Debug.Log("Homosexual relationship established.");
-                }
-                else
-                {
-                    Debug.Log("Non-homosexual relationship!");
                     return false;
                 }
 
-                if(me.Sentient == them.Sentient)
-                {
-                    Debug.Log("Sentience equality.");
-                }
-                else
-                {
-                    Debug.Log("Sentience inequality!");
-                    return false;
-                }
-
-                return true;
-
-                /*
-                if (relationship.GetRelationshipValue(me.GUID, them.GUID) > MatingThreshold &&
-                    me.Sex.CanBirth != them.Sex.CanBirth && me.Sentient == them.Sentient)
-                {
-                    return true;
-                }
-                */
+                return me.Sentient == them.Sentient;
             }
             return false;
         }
