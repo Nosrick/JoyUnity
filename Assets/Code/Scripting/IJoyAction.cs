@@ -29,5 +29,10 @@ namespace JoyLib.Code.Scripting
         {
             get;
         }
+
+        bool Successful
+        {
+            get;
+        }
     }
 }

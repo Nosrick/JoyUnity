@@ -12,9 +12,12 @@ namespace JoyLib.Code.Scripting.Actions
         public IJoyObject[] LastParticipants { get; protected set; }
         public string[] LastTags { get; protected set; }
         public object[] LastArgs { get; protected set; }
+        public bool Successful { get; protected set; }
 
         public bool Execute(IJoyObject[] participants, string[] tags = null, params object[] args)
         {
+            Successful = false;
+            
             if(!(participants[0] is Entity actor))
             {
                 return false;
@@ -45,6 +48,7 @@ namespace JoyLib.Code.Scripting.Actions
             this.LastParticipants = participants;
             this.LastTags = tags;
             this.LastArgs = args;
+            Successful = true;
         }
     }
 }

@@ -22,7 +22,7 @@ namespace JoyLib.Code.Quests
         }
 
         public override string ToString()
-        {
+        { 
             return Description ?? (Description = Action.AssembleDescription());
         }
 

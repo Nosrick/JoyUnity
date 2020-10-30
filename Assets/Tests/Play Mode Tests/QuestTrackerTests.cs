@@ -1,4 +1,5 @@
-﻿using DevionGames.InventorySystem;
+﻿using System.Collections;
+using DevionGames.InventorySystem;
 using JoyLib.Code;
 using JoyLib.Code.Collections;
 using JoyLib.Code.Cultures;
@@ -14,8 +15,10 @@ using JoyLib.Code.Graphics;
 using JoyLib.Code.Quests;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
+using JoyLib.Code.World;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.TestTools;
 
 namespace Tests
 {
@@ -46,9 +49,15 @@ namespace Tests
 
         private EntitySexualityHandler sexualityHandler;
 
+        private EntitySkillHandler skillHandler;
+
         private EntityFactory entityFactory;
 
+        private LiveItemHandler itemHandler;
+
         private GameObject inventoryManager;
+
+        private WorldInstance world;
         
         private Entity left;
         private Entity right;
@@ -71,17 +80,24 @@ namespace Tests
             jobHandler = container.AddComponent<JobHandler>();
             bioSexHandler = container.AddComponent<EntityBioSexHandler>();
             sexualityHandler = container.AddComponent<EntitySexualityHandler>();
+            skillHandler = container.AddComponent<EntitySkillHandler>();
+            itemHandler = container.AddComponent<LiveItemHandler>();
 
             questProvider = container.AddComponent<QuestProvider>();
             target = container.AddComponent<QuestTracker>();
 
             entityFactory = new EntityFactory();
+            
+            world = new WorldInstance(
+                new WorldTile[0,0], 
+                new string[0],
+                "TESTING");
         }
         
         [SetUp]
         public void SetUpEntities()
         {
-            EntityTemplate random = templateHandler.GetRandom();
+            EntityTemplate random = templateHandler.Get("human");
             IGrowingValue level = new ConcreteGrowingValue(
                 "level",
                 1,
@@ -100,6 +116,46 @@ namespace Tests
                 random,
                 level,
                 Vector2Int.up);
+
+            world.AddEntity(left);
+            world.AddEntity(right);
+        }
+
+        [UnityTest]
+        public IEnumerator QuestTracker_Should_AddQuest()
+        {
+            //given
+
+            //when
+            target.AddQuest(left.GUID, questProvider.MakeRandomQuest(left, right, world));
+            
+            //then
+            Assert.That(target.GetQuestsForEntity(left.GUID), Is.Not.Empty);
+
+            return null;
+        }
+
+        [UnityTest]
+        public IEnumerator QuestTracker_Should_AdvanceOrCompleteQuest()
+        {
+            //given
+            IQuest quest = questProvider.MakeRandomQuest(left, right, world);
+            target.AddQuest(left.GUID, quest);
+            quest.StartQuest(left);
+            
+            //when
+            IJoyAction action = left.FetchAction("giveitemaction");
+            action.Execute(
+                new IJoyObject[] {left, right},
+                new string[0], 
+                left.Backpack[0]);
+            target.PerformQuestAction(left, quest, action);
+
+            //then
+            Assert.That(quest.IsComplete, Is.True);
+            Assert.That(target.GetQuestsForEntity(left.GUID), Is.Empty);
+
+            return null;
         }
 
         [TearDown]

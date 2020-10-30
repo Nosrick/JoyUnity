@@ -48,8 +48,8 @@ namespace Tests
                 Assert.False(template.CreatureType == "DEFAULT");
                 Assert.False(template.Tileset == "DEFAULT");
             }
-            
-            yield return new WaitForSeconds(0.1f);
+
+            return null;
         }
 
         [TearDown]

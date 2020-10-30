@@ -90,20 +90,27 @@ namespace JoyLib.Code.Quests
 
         public bool ExecutedSuccessfully(IJoyAction action)
         {
-            if (action.Name.Equals("giveitemaction") == false)
+            if (action.Name.Equals("giveitemaction", StringComparison.OrdinalIgnoreCase) == false)
             {
                 return false;
             }
 
-            return action.LastParticipants.Intersect(this.Actors).Count() == this.Actors.Count
-                   && action.LastTags.Intersect(this.Tags).Count() == this.Tags.Length
-                   && action.LastArgs.Intersect(this.Items).Count() == this.Items.Count;
+            if (action.LastParticipants.Intersect(Actors).Count() != Actors.Count)
+            {
+                return false;
+            }
+
+            if (action.LastArgs.Intersect(Items).Count() != Items.Count)
+            {
+                return false;
+            }
+
+            return action.Successful;
         }
 
         public string AssembleDescription()
         {
             StringBuilder itemBuilder = new StringBuilder();
-            Debug.Log("ITEM COUNT IS " + Items.Count);
             for (int i = 0; i < Items.Count; i++)
             {
                 if (i > 0 && i < Items.Count - 1)
@@ -118,7 +125,6 @@ namespace JoyLib.Code.Quests
             }
             
             StringBuilder actorBuilder = new StringBuilder();
-            Debug.Log("ACTOR COUNT IS " + Actors.Count);
             for(int i = 0; i < Actors.Count; i++)
             {
                 if (i > 0 && i < Actors.Count - 1)
@@ -134,7 +140,6 @@ namespace JoyLib.Code.Quests
                 actorBuilder.Append(Actors[i].MyWorld.Name);
             }
 
-            Debug.Log("Deliver " + itemBuilder.ToString() + " to " + actorBuilder.ToString() + ".");
             return "Deliver " + itemBuilder.ToString() + " to " + actorBuilder.ToString() + ".";
         }
 

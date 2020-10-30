@@ -118,7 +118,11 @@ namespace JoyLib.Code.Entities
                     template.Statistics[EntityStatistic.WIT]),
                 position,
                 template.Tileset,
-                new string[] { "fulfillneedaction" },
+                new[]
+                {
+                    "fulfillneedaction",
+                    "giveitemaction"
+                },
                 sprites,
                 template.Tags)
         {
@@ -220,7 +224,7 @@ namespace JoyLib.Code.Entities
                 copy.DerivedValues,
                 copy.WorldPosition,
                 copy.Tileset,
-                copy.m_CachedActions.ToArray(),
+                copy.CachedActions.ToArray(),
                 copy.Icons,
                 copy.Tags.ToArray())
         {
@@ -796,10 +800,9 @@ namespace JoyLib.Code.Entities
                 return false;
             }
 
-            if (m_IdentifiedItems.Contains(item.JoyName))
+            if (m_IdentifiedItems.Any(i => i.Equals(item.JoyName, StringComparison.OrdinalIgnoreCase)))
             {
                 item.IdentifyMe();
-                m_IdentifiedItems.Add(item.JoyName);
             }
 
             m_Backpack.Add(item);

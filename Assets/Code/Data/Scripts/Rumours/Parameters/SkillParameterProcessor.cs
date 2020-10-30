@@ -59,10 +59,6 @@ namespace JoyLib.Code.Conversation.Subengines.Rumours
                 || entity.Skills.Has(parameter))
             {
                 Tuple<string, int>[] values = entity.GetData(new string[] {parameter});
-                foreach (Tuple<string, int> value in values)
-                {
-                    Debug.Log(value);
-                }
 
                 return values.OrderByDescending(tuple => tuple.Item2)
                     .First()

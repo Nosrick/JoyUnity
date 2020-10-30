@@ -36,8 +36,8 @@ namespace Tests
                 Assert.That(job.StatisticGrowths, Is.Not.Empty);
                 Assert.IsNotEmpty(job.Name);
             }
-            
-            yield return new WaitForSeconds(0.01f);
+
+            return null;
         }
 
         [TearDown]

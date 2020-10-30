@@ -115,8 +115,8 @@ namespace Tests
             
             //then
             Assert.That(target.RumourTypes, Is.Not.Empty);
-            
-            yield return new WaitForSeconds(0.01f);
+
+            return null;
         }
 
         [UnityTest]
@@ -132,8 +132,8 @@ namespace Tests
                 Assert.That(rumour.Words, Does.Not.Contain("PARAMETER NUMBER MISMATCH"));
                 Debug.Log(rumour.Words);
             }
-            
-            yield return new WaitForSeconds(0.01f);
+
+            return null;
         }
 
         [TearDown]

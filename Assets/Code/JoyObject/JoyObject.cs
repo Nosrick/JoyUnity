@@ -36,8 +36,7 @@ namespace JoyLib.Code
         
         public WorldInstance MyWorld { get; set; }
 
-        [NonSerialized]
-        protected List<IJoyAction> m_CachedActions;
+        public List<IJoyAction> CachedActions { get; protected set; }
 
         [NonSerialized]
         protected const int FRAMES_PER_SECOND = 30;
@@ -99,7 +98,7 @@ namespace JoyLib.Code
                 tags);
         }
 
-        private void Initialise(
+        protected void Initialise(
             string name, 
             BasicValueContainer<IDerivedValue> derivedValues, 
             Vector2Int position, 
@@ -149,12 +148,17 @@ namespace JoyLib.Code
             this.LastIcon = 0;
             this.FramesSinceLastChange = 0;
 
-            this.m_CachedActions = new List<IJoyAction>(actions);
+            this.CachedActions = new List<IJoyAction>(actions);
         }
 
         ~JoyObject()
         {
             GUIDManager.Instance.ReleaseGUID(this.GUID);
+        }
+
+        public IJoyAction FetchAction(string name)
+        {
+            return CachedActions.First(action => action.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
 
         public bool AddTag(string tag)

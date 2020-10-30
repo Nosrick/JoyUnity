@@ -55,7 +55,7 @@ namespace JoyLib.Code.Entities.Items
                 copy.m_Type.Weight),
                 copy.WorldPosition,
                 copy.m_Type.SpriteSheet,
-                copy.m_CachedActions.ToArray(),
+                copy.CachedActions.ToArray(),
                 copy.Icons,
                 copy.m_Type.Tags)
         {

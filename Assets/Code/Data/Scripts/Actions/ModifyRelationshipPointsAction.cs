@@ -14,7 +14,8 @@ namespace JoyLib.Code.Scripting.Actions
         public string Name => "modifyrelationshippointsaction";
 
         public string ActionString => "modification of relationship points";
-        
+        public bool Successful { get; protected set; }
+
         protected static EntityRelationshipHandler RelationshipHandler { get; set; }
 
         public ModifyRelationshipPointsAction()
@@ -27,6 +28,7 @@ namespace JoyLib.Code.Scripting.Actions
 
         public bool Execute(IJoyObject[] participants, string[] tags = null, params object[] args)
         {
+            Successful = false;
             if (args.Length == 0)
             {
                 return false;
@@ -63,6 +65,7 @@ namespace JoyLib.Code.Scripting.Actions
             this.LastParticipants = participants;
             this.LastTags = tags;
             this.LastArgs = args;
+            Successful = true;
         }
     }
 }

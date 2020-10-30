@@ -34,7 +34,7 @@ namespace Tests
                 Assert.That(need.Name, Is.Not.EqualTo("DEFAULT"));
             }
             
-            yield return new WaitForSeconds(0.01f);
+            return null;
         }
 
         [TearDown]

@@ -15,6 +15,8 @@ namespace JoyLib.Code.Quests
         JoyObject Instigator { get; }
         
         long ID { get; }
+        
+        bool IsComplete { get; }
 
         bool BelongsToThis(object searchTerm);
         bool AdvanceStep();

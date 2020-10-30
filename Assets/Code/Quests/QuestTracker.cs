@@ -54,7 +54,7 @@ namespace JoyLib.Code.Quests
             }
             else
             {
-                EntityQuests.Add(GUID, new List<IQuest>() { quest });
+                EntityQuests.Add(GUID, new List<IQuest> { quest });
             }
         }
 

@@ -41,7 +41,7 @@ namespace Tests
                 Assert.That(skill.GoverningNeeds, Is.Not.Empty);
             }
 
-            yield return new WaitForSeconds(0.01f);
+            return null;
         }
 
         [TearDown]

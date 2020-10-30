@@ -158,8 +158,8 @@ namespace Tests
                 Assert.That(topic.Words.Length, Is.GreaterThan(0));
                 Assert.That(topic.ID.Length, Is.GreaterThan(0));
             }
-            
-            yield return new WaitForSeconds(0.01f);
+
+            return null;
         }
 
         [UnityTest]
@@ -179,8 +179,8 @@ namespace Tests
             }
 
             Assert.That(depth, Is.Not.Zero);
-            
-            yield return new WaitForSeconds(0.01f);
+
+            return null;
         }
 
         [TearDown]

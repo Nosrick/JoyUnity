@@ -106,8 +106,8 @@ namespace Tests
 
             //then
             Assert.That(relationship.GetRelationshipValue(left.GUID, right.GUID), Is.EqualTo(0));
-            
-            yield return new WaitForSeconds(0.01f);
+
+            return null;
         }
 
         [UnityTest]
@@ -123,8 +123,8 @@ namespace Tests
             
             //then
             Assert.That(relationship.GetRelationshipValue(left.GUID, right.GUID), Is.EqualTo(50));
-            
-            yield return new WaitForSeconds(0.01f);
+
+            return null;
         }
 
         [TearDown]

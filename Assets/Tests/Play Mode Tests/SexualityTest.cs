@@ -230,7 +230,7 @@ namespace Tests
             IRelationship[] relationships = entityRelationshipHandler.Get(participants);
             Assert.IsTrue(heterosexual.WillMateWith(heterofemaleHuman, heteroMaleHuman, relationships));
 
-            yield return new WaitForSeconds(0.01f);
+            return null;
         }
 
         [UnityTest]
@@ -240,7 +240,7 @@ namespace Tests
             IRelationship[] relationships = entityRelationshipHandler.Get(participants);
             Assert.IsFalse(heterosexual.WillMateWith(heterofemaleHuman, homofemaleHumanLeft, relationships));
 
-            yield return new WaitForSeconds(0.01f);
+            return null;
         }
 
         [UnityTest]
@@ -250,7 +250,7 @@ namespace Tests
             IRelationship[] relationships = entityRelationshipHandler.Get(participants);
             Assert.IsTrue(homosexual.WillMateWith(homoMaleHumanLeft, homoMaleHumanRight, relationships));
 
-            yield return new WaitForSeconds(0.01f);
+            return null;
         }
 
         [UnityTest]
@@ -260,7 +260,7 @@ namespace Tests
             IRelationship[] relationships = entityRelationshipHandler.Get(participants);
             Assert.IsFalse(homosexual.WillMateWith(homoMaleHumanLeft, homofemaleHumanRight, relationships));
 
-            yield return new WaitForSeconds(0.01f);
+            return null;
         }
 
         [UnityTest]
@@ -270,7 +270,7 @@ namespace Tests
             IRelationship[] relationships = entityRelationshipHandler.Get(participants);
             Assert.IsTrue(bisexual.WillMateWith(bifemaleHuman, homofemaleHumanLeft, relationships));
 
-            yield return new WaitForSeconds(0.01f);
+            return null;
         }
 
         [UnityTest]
@@ -280,7 +280,7 @@ namespace Tests
             IRelationship[] relationships = entityRelationshipHandler.Get(participants);
             Assert.IsTrue(bisexual.WillMateWith(bifemaleHuman, biMaleHuman, relationships));
 
-            yield return new WaitForSeconds(0.01f);
+            return null;
         }
 
         [TearDown]

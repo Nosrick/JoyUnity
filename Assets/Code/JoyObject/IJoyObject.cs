@@ -1,4 +1,6 @@
-﻿using JoyLib.Code.Graphics;
+﻿using System.Collections.Generic;
+using JoyLib.Code.Graphics;
+using JoyLib.Code.Scripting;
 using JoyLib.Code.World;
 
 namespace JoyLib.Code
@@ -12,6 +14,10 @@ namespace JoyLib.Code
         
         WorldInstance MyWorld { get; }
         
+        List<IJoyAction> CachedActions { get; }
+        
         void Update();
+
+        IJoyAction FetchAction(string name);
     }
 }
