@@ -9,7 +9,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
                 new ITopicCondition[0], 
                 "TaskNo",
                 new []{ "BaseTopics" }, 
-                "", 
+                "I can't do that for you.", 
                 0,
                 new string[0], 
                 Speaker.INSTIGATOR)

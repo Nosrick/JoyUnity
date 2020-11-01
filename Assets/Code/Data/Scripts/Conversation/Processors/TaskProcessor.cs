@@ -16,8 +16,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
                 "TaskTopic", 
                 new []
                 {
-                    "TaskYes",
-                    "TaskNo"
+                    "TaskPresentation"
                 }, 
                 "", 
                 0, 
@@ -39,8 +38,6 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
 
         public override ITopic[] Interact(Entity instigator, Entity listener)
         {
-            base.Interact(instigator, listener);
-
             OfferedQuest = QuestProvider.MakeRandomQuest(
                 instigator,
                 listener,
@@ -53,8 +50,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
         {
             return new ITopic[]
             {
-                new TaskYesProcessor(OfferedQuest),
-                new TaskNoProcessor()
+                new TaskPresentationProcessor(OfferedQuest)
             };
         }
     }
