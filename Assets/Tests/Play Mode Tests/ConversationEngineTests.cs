@@ -14,6 +14,7 @@ using JoyLib.Code.Entities.Sexes;
 using JoyLib.Code.Entities.Sexuality;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
+using JoyLib.Code.Quests;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.Unity;
@@ -55,6 +56,11 @@ namespace Tests
 
         private GameObject inventoryManager;
 
+        private QuestTracker questTracker;
+        private QuestProvider questProvider;
+
+        private LiveEntityHandler entityHandler;
+
         private MonoBehaviourHandler instigatorObject;
         private MonoBehaviourHandler listenerObject;
 
@@ -86,6 +92,11 @@ namespace Tests
             materialHandler = gameManager.AddComponent<MaterialHandler>();
             jobHandler = gameManager.AddComponent<JobHandler>();
             guiManager = gameManager.AddComponent<GUIManager>();
+
+            questProvider = gameManager.AddComponent<QuestProvider>();
+            questTracker = gameManager.AddComponent<QuestTracker>();
+
+            entityHandler = gameManager.AddComponent<LiveEntityHandler>();
 
             GameObject conversationGUI =
                 GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/GUI/Conversation/Conversation Window"));

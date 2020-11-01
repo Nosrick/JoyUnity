@@ -16,13 +16,13 @@
   <Line>
     <Text>Do you have anything to trade?</Text>
     <Processor>TradeProcessor</Processor>
-    <Next>TradeDialogue</Next>
+    <Next>TradeTopic</Next>
     <Speaker>instigator</Speaker>
   </Line>
   <Line>
     <Text>Is there anything I can do for you?</Text>
     <Processor>TaskProcessor</Processor>
-    <Next>TaskDialogue</Next>
+    <Next>TaskTopic</Next>
     <Speaker>instigator</Speaker>
   </Line>
   <Line>

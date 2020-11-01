@@ -24,7 +24,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
             Initialise();
         }
 
-        public void Initialise()
+        protected void Initialise()
         {
             if (RumourMill is null)
             {
