@@ -72,6 +72,14 @@ namespace JoyLib.Code.Quests
             }
         }
 
+        public void PerformQuestAction(Entity questor, IJoyAction completedAction)
+        {
+            foreach (IQuest quest in GetQuestsForEntity(questor.GUID))
+            {
+                PerformQuestAction(questor, quest, completedAction);
+            }
+        }
+
         /*
         public void PerformDelivery(Entity questor, ItemInstance item, Entity recipient)
         {

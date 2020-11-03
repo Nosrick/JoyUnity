@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DevionGames.InventorySystem;
+using JoyLib.Code.Unity;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities.Items
@@ -24,7 +25,7 @@ namespace JoyLib.Code.Entities.Items
 
         protected static LiveItemHandler s_ItemHandler;
 
-        public ItemInstance(BaseItemType type, Vector2Int position, bool identified, Sprite[] sprites, Item itemSO, IAbility abilityRef = null) :
+        public ItemInstance(BaseItemType type, Vector2Int position, bool identified, Sprite[] sprites, JoyItem itemSO, IAbility abilityRef = null) :
             base(type.UnidentifiedName, 
                 EntityDerivedValue.GetDefaultForItem(
                     type.Material.Bonus,
@@ -46,6 +47,7 @@ namespace JoyLib.Code.Entities.Items
 
             m_Ability = abilityRef;
             this.Item = itemSO;
+            this.Item.AttachJoyObject(this);
         }
 
         public ItemInstance(ItemInstance copy) :
@@ -386,7 +388,7 @@ namespace JoyLib.Code.Entities.Items
             }
         }
 
-        public Item Item
+        public JoyItem Item
         {
             get;
             protected set;

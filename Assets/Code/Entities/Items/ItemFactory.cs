@@ -5,6 +5,7 @@ using JoyLib.Code.Graphics;
 using System.Collections.Generic;
 using System.Linq;
 using DevionGames.InventorySystem;
+using JoyLib.Code.Unity;
 
 namespace JoyLib.Code.Entities.Items
 {
@@ -101,13 +102,13 @@ namespace JoyLib.Code.Entities.Items
             return itemInstance;
         }
 
-        private Item FetchItemSO(BaseItemType itemType)
+        private JoyItem FetchItemSO(BaseItemType itemType)
         {
             Item[] items = InventoryManager.Database.items
                 .Where(item => item.Name.Equals(itemType.IdentifiedName, StringComparison.OrdinalIgnoreCase)).ToArray();
 
             int result = RNG.instance.Roll(0, items.Length);
-            return items[result];
+            return (JoyItem)items[result];
         }
     }
 }

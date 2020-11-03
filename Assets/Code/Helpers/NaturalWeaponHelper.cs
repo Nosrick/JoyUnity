@@ -1,5 +1,6 @@
 ﻿using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Graphics;
+using JoyLib.Code.Unity;
 using UnityEngine;
 
 namespace JoyLib.Code.Helpers
@@ -31,7 +32,12 @@ namespace JoyLib.Code.Helpers
             BaseItemType baseItem = new BaseItemType(tags, "A claw, fist or psuedopod.", "A claw, fist or psuedopod.", "Natural Weapon", "Natural Weapon", new string[] { "Hand" }, 
                 (wielderSize + 1) * 40.0f, itemMaterial, "Martial Arts", "strikes", 0, 0, "None");
 
-            return new ItemInstance(baseItem, new Vector2Int(-1, -1), true, s_ObjectIcons.GetDefaultSprites(), null);
+            return new ItemInstance(
+                baseItem, 
+                new Vector2Int(-1, -1), 
+                true, 
+                s_ObjectIcons.GetDefaultSprites(), 
+                ScriptableObject.CreateInstance<JoyItem>());
         }
     }
 }

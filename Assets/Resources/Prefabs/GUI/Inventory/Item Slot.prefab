@@ -312,7 +312,7 @@ GameObject:
   - component: {fileID: 8604156886097528883}
   - component: {fileID: 8604156886097528882}
   - component: {fileID: 8604156886097528885}
-  - component: {fileID: 8604156886097528884}
+  - component: {fileID: 7594581071963496037}
   m_Layer: 5
   m_Name: Item Slot
   m_TagString: Untagged
@@ -423,7 +423,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &8604156886097528884
+--- !u!114 &7594581071963496037
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -432,9 +432,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8604156886097528880}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45d4d70931d8ad9478920245a476327b, type: 3}
+  m_Script: {fileID: 11500000, guid: 8c252713a0824ab3adeb6774dfd327c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
   m_ItemName: {fileID: 0}
   "m_\xCDcon": {fileID: 8604156885990248955}
   m_Stack: {fileID: 8604156884670249676}

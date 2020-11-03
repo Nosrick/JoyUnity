@@ -28,7 +28,7 @@
   <Line>
     <Text>I have something for you.</Text>
     <Processor>GiftProcessor</Processor>
-    <Next>GiftTopic</Next>
+    <Next>ListenerThanks</Next>
     <Speaker>instigator</Speaker>
   </Line>
   <Line>

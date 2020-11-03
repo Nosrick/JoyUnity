@@ -1393,6 +1393,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1293420870}
     m_Modifications:
+    - target: {fileID: 6570393122829272896, guid: f5857d03d4a6f6b46a7802a876f7f062,
+        type: 3}
+      propertyPath: m_DeactivateOnClose
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6570393122829272897, guid: f5857d03d4a6f6b46a7802a876f7f062,
+        type: 3}
+      propertyPath: m_Alpha
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6570393122829272897, guid: f5857d03d4a6f6b46a7802a876f7f062,
+        type: 3}
+      propertyPath: m_Interactable
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6570393122829272897, guid: f5857d03d4a6f6b46a7802a876f7f062,
+        type: 3}
+      propertyPath: m_BlocksRaycasts
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6570393122829272900, guid: f5857d03d4a6f6b46a7802a876f7f062,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1431,7 +1451,7 @@ PrefabInstance:
     - target: {fileID: 6570393122829272900, guid: f5857d03d4a6f6b46a7802a876f7f062,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6570393122829272900, guid: f5857d03d4a6f6b46a7802a876f7f062,
         type: 3}
@@ -1503,7 +1523,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Context Menu
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6570393122829272896, guid: f5857d03d4a6f6b46a7802a876f7f062, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: f5857d03d4a6f6b46a7802a876f7f062, type: 3}
 --- !u!224 &206369572 stripped
 RectTransform:
@@ -1511,6 +1532,53 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 206369571}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &206369573 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6570393122362114379, guid: f5857d03d4a6f6b46a7802a876f7f062,
+    type: 3}
+  m_PrefabInstance: {fileID: 206369571}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2b07d55f135ac04bbe9c99ce80d32ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &206369574 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6570393122829272923, guid: f5857d03d4a6f6b46a7802a876f7f062,
+    type: 3}
+  m_PrefabInstance: {fileID: 206369571}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &206369575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 206369574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 002a8d896b61418d810316fd242c3d00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  delegates: []
+  name: ContextMenu
+  priority: 0
+  m_KeyCode: 0
+  m_EaseType: 28
+  m_Duration: 0.7
+  showSound: {fileID: 0}
+  closeSound: {fileID: 0}
+  m_Focus: 1
+  m_DeactivateOnClose: 1
+  onShow:
+    m_PersistentCalls:
+      m_Calls: []
+  onClose:
+    m_PersistentCalls:
+      m_Calls: []
+  m_MenuItemPrefab: {fileID: 206369573}
 --- !u!224 &220384646 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 605077351958355958, guid: f354a9795ff61894481e786a4ca0b891,
@@ -7133,7 +7201,7 @@ PrefabInstance:
     - target: {fileID: 8424994987622645024, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
         type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8424994987622645024, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
         type: 3}
@@ -7383,8 +7451,8 @@ RectTransform:
   - {fileID: 2036211358}
   - {fileID: 220384646}
   - {fileID: 950311962}
-  - {fileID: 206369572}
   - {fileID: 773103077}
+  - {fileID: 206369572}
   m_Father: {fileID: 205221783}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

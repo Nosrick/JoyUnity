@@ -69,16 +69,16 @@ namespace JoyLib.Code.Conversation
             set;
         }
 
-        protected Entity Instigator
+        public Entity Instigator
         {
             get;
-            set;
+            protected set;
         }
 
-        protected Entity Listener
+        public Entity Listener
         {
             get;
-            set;
+            protected set;
         }
 
         protected RectTransform TitleRect
@@ -253,16 +253,11 @@ namespace JoyLib.Code.Conversation
             LastSpokeIcon.sprite = Listener.Icon;
         }
 
-        protected void SetLastSpoke(Entity speaker)
-        {
-            LastSpokeIcon.sprite = speaker.Icon;
-        }
-        
-        public ITopic[] Converse(int index = 0)
+        public ITopic[] Converse(string topic, int index = 0)
         {
             if (CurrentTopics.Length == 0)
             {
-                CurrentTopics = m_Topics.Where(topic => topic.ID.Equals("greeting", StringComparison.OrdinalIgnoreCase))
+                CurrentTopics = m_Topics.Where(t => t.ID.Equals(topic, StringComparison.OrdinalIgnoreCase))
                     .ToArray();
 
                 CurrentTopics = SanitiseTopics(CurrentTopics);
@@ -270,11 +265,32 @@ namespace JoyLib.Code.Conversation
             
             ITopic currentTopic = CurrentTopics[index];
             
-            //Listener speaks
-            //Instigator speaks
-            //Listener speaks
-            //Instigator speaks
-            //HALT
+            DoInteractions(currentTopic);
+
+            CreateMenuItems(CurrentTopics);
+            return CurrentTopics;
+        }
+
+        public ITopic[] Converse(int index = 0)
+        {
+            if (CurrentTopics.Length == 0)
+            {
+                CurrentTopics = m_Topics.Where(t => t.ID.Equals("greeting", StringComparison.OrdinalIgnoreCase))
+                    .ToArray();
+
+                CurrentTopics = SanitiseTopics(CurrentTopics);
+            }
+            
+            ITopic currentTopic = CurrentTopics[index];
+            
+            DoInteractions(currentTopic);
+
+            CreateMenuItems(CurrentTopics);
+            return CurrentTopics;
+        }
+
+        protected void DoInteractions(ITopic currentTopic)
+        {
             ITopic[] next = currentTopic.Interact(Instigator, Listener);
 
             next = SanitiseTopics(next);
@@ -283,7 +299,9 @@ namespace JoyLib.Code.Conversation
             {
                 this.GUIManager.CloseGUI(Window.name);
                 CurrentTopics = next;
-                return next;
+                Listener = null;
+                Instigator = null;
+                return;
             }
             
             switch (currentTopic.Speaker)
@@ -306,9 +324,6 @@ namespace JoyLib.Code.Conversation
             }
 
             CurrentTopics = next;
-
-            CreateMenuItems(CurrentTopics);
-            return CurrentTopics;
         }
 
         protected ITopic[] SanitiseTopics(ITopic[] topics)

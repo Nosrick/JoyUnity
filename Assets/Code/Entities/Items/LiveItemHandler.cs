@@ -9,6 +9,7 @@ using System.Linq;
 using System.Xml.Linq;
 using UnityEngine;
 using DevionGames.InventorySystem;
+using JoyLib.Code.Unity;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace JoyLib.Code.Entities.Items
@@ -133,7 +134,7 @@ namespace JoyLib.Code.Entities.Items
                         
                         if(baseItemType.Slots.Any(slot => slot.Equals("none", StringComparison.OrdinalIgnoreCase)))
                         {
-                            Item itemSO = ScriptableObject.CreateInstance<Item>();
+                            JoyItem itemSO = ScriptableObject.CreateInstance<JoyItem>();
                             itemSO.Name = baseItemType.IdentifiedName;
                             itemSO.Icon = m_ObjectIcons.GetSprite(baseItemType.SpriteSheet, baseItemType.IdentifiedName);
                             itemSO.Prefab = s_ItemPrefab;
@@ -142,10 +143,9 @@ namespace JoyLib.Code.Entities.Items
                         }
                         else
                         {
-                            EquipmentItem itemSO = ScriptableObject.CreateInstance<EquipmentItem>();
+                            JoyItem itemSO = ScriptableObject.CreateInstance<JoyItem>();
                             itemSO.Name = baseItemType.IdentifiedName;
-                            itemSO.Icon =
-                                m_ObjectIcons.GetSprite(baseItemType.SpriteSheet, baseItemType.IdentifiedName);
+                            itemSO.Icon = m_ObjectIcons.GetSprite(baseItemType.SpriteSheet, baseItemType.IdentifiedName);
                             itemSO.Prefab = s_ItemPrefab;
                             List<EquipmentRegion> regions = new List<EquipmentRegion>();
                             foreach (string slot in baseItemType.Slots)

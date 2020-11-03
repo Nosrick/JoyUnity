@@ -15,6 +15,23 @@ namespace JoyLib.Code.Unity.GUI
             Initialise();
         }
 
+        public void OnGUI()
+        {
+            for (int i = 0; i < m_ActiveGUIs.Count; i++)
+            {
+                UnityEngine.GUI.Window(
+                    i,
+                    m_ActiveGUIs[i].GetComponent<RectTransform>().rect,
+                    Empty,
+                    m_ActiveGUIs[i].name);
+            }
+        }
+
+        protected void Empty(int index)
+        {
+            
+        }
+
         protected void Initialise()
         {
             if (m_GUIs is null)
@@ -54,6 +71,11 @@ namespace JoyLib.Code.Unity.GUI
 
         public void OpenGUI(string name)
         {
+            if (m_ActiveGUIs.Any(data => data.name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+            {
+                return;
+            }
+            
             GUIData toOpen = m_GUIs.First(gui => 
                     gui.name.Equals(name, StringComparison.OrdinalIgnoreCase));
 
@@ -72,11 +94,26 @@ namespace JoyLib.Code.Unity.GUI
 
         public void CloseGUI(string activeName)
         {
+            if (m_ActiveGUIs.Any(data => data.name.Equals(activeName, StringComparison.OrdinalIgnoreCase)) == false)
+            {
+                return;
+            }
+            
             GUIData toClose = m_ActiveGUIs
                 .First(gui => gui.name.Equals(activeName, StringComparison.OrdinalIgnoreCase));
             
             toClose.gameObject.SetActive(false);
             m_ActiveGUIs.Remove(toClose);
+        }
+
+        public void BringToFront(string name)
+        {
+            if (!m_ActiveGUIs.Any(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+            {
+                return;
+            }
+            int index = m_ActiveGUIs.IndexOf(m_GUIs.First(g => g.name.Equals(name, StringComparison.OrdinalIgnoreCase)));
+            UnityEngine.GUI.BringWindowToFront(index);
         }
 
         public void CloseAllOtherGUIs(string activeName = "")

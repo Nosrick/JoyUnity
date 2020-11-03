@@ -7,12 +7,12 @@ namespace JoyLib.Code.Unity.GUI
 {
     public class GUINeedsAlert : MonoBehaviour
     {
-        private Text m_Text;
+        protected Text m_Text;
 
-        private Entity m_Player;
+        protected Entity m_Player;
 
-        private int m_Counter = 0;
-        private const int MAXIMUM_FRAMES = 90;
+        protected int m_Counter = 0;
+        protected const int MAXIMUM_FRAMES = 90;
 
         public void SetPlayer(Entity player)
         {
@@ -35,7 +35,7 @@ namespace JoyLib.Code.Unity.GUI
             }
         }
 
-        private void DoText()
+        protected void DoText()
         {
             m_Text.text = "";
             if(m_Player == null)

@@ -15,7 +15,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
             : base(
                 new ITopicCondition[0], 
                 "TaskYes", 
-                new []{ "BaseTopics" }, 
+                new []{ "ListenerThanks" }, 
                 "I can do that.", 
                 0, 
                 new string[0], 
@@ -42,6 +42,11 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
             QuestTracker.AddQuest(
                 instigator.GUID,
                 this.OfferedQuest);
+
+            foreach (string next in NextTopics)
+            {
+                Debug.Log(next);
+            }
             
             OfferedQuest.StartQuest(instigator);
 

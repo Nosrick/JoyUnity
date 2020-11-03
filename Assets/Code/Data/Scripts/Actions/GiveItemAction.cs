@@ -1,5 +1,7 @@
 ﻿using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
+using JoyLib.Code.Quests;
+using UnityEngine;
 
 namespace JoyLib.Code.Scripting.Actions
 {
@@ -12,11 +14,21 @@ namespace JoyLib.Code.Scripting.Actions
         public object[] LastArgs { get; protected set; }
         public bool Successful { get; protected set; }
         
+        protected static QuestTracker QuestTracker { get; set; }
+
+        public GiveItemAction()
+        {
+            if (QuestTracker is null)
+            {
+                QuestTracker = GameObject.Find("GameManager").GetComponent<QuestTracker>();
+            }
+        }
+        
         public bool Execute(IJoyObject[] participants, string[] tags = null, params object[] args)
         {
             Successful = false;
             
-            if (participants.Length < 2)
+            if (participants.Length != 2)
             {
                 return false;
             }
@@ -46,6 +58,8 @@ namespace JoyLib.Code.Scripting.Actions
             }
             
             SetLastParameters(participants, tags, args);
+            
+            QuestTracker.PerformQuestAction(left, this);
 
             return true;
         }
