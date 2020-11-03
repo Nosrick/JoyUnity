@@ -321,6 +321,9 @@ namespace JoyLib.Code.Conversation
                         SetTitle(LastSaid.Words);
                     }
                     break;
+                
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
             CurrentTopics = next;

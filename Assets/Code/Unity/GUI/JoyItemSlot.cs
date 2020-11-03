@@ -27,16 +27,25 @@ namespace JoyLib.Code.Unity.GUI
         public override void OnPointerUp(PointerEventData eventData)
         {
             base.OnPointerUp(eventData);
+
+            if (eventData.dragging)
+            {
+                return;
+            }
             
             ContextMenu menu = InventoryManager.UI.contextMenu;
             if (menu is null || Container.UseContextMenu == false)
             {
                 return;
             }
-
-            menu.AddMenuItem("Give", GiveItem);
             
-            menu.Show();
+            if (Container.useButton.HasFlag((InputButton)Mathf.Clamp(((int)eventData.button * 2), 1, int.MaxValue)))
+            {
+                menu.AddMenuItem("Give", GiveItem);
+                            
+                menu.Show();
+            }
+           
         }
 
         protected void GiveItem()

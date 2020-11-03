@@ -15,18 +15,6 @@ namespace JoyLib.Code.Unity.GUI
             Initialise();
         }
 
-        public void OnGUI()
-        {
-            for (int i = 0; i < m_ActiveGUIs.Count; i++)
-            {
-                UnityEngine.GUI.Window(
-                    i,
-                    m_ActiveGUIs[i].GetComponent<RectTransform>().rect,
-                    Empty,
-                    m_ActiveGUIs[i].name);
-            }
-        }
-
         protected void Empty(int index)
         {
             
@@ -112,8 +100,18 @@ namespace JoyLib.Code.Unity.GUI
             {
                 return;
             }
-            int index = m_ActiveGUIs.IndexOf(m_GUIs.First(g => g.name.Equals(name, StringComparison.OrdinalIgnoreCase)));
-            UnityEngine.GUI.BringWindowToFront(index);
+            GUIData toFront = m_ActiveGUIs.First(g => g.name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            foreach (GUIData gui in m_ActiveGUIs)
+            {
+                if (toFront.Equals(gui))
+                {
+                    continue;
+                }
+
+                gui.transform.parent.GetComponent<Canvas>().sortingOrder = int.MinValue;
+            }
+
+            toFront.transform.parent.GetComponent<Canvas>().sortingOrder = 1;
         }
 
         public void CloseAllOtherGUIs(string activeName = "")
