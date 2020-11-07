@@ -12,7 +12,7 @@ namespace JoyLib.Code
         string JoyName { get; }
         long GUID { get; }
         
-        WorldInstance MyWorld { get; }
+        WorldInstance MyWorld { get; set; }
         
         List<IJoyAction> CachedActions { get; }
         

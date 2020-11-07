@@ -108,7 +108,7 @@ namespace JoyLib.Code.Entities.Items
                 .Where(item => item.Name.Equals(itemType.IdentifiedName, StringComparison.OrdinalIgnoreCase)).ToArray();
 
             int result = RNG.instance.Roll(0, items.Length);
-            return (JoyItem)items[result];
+            return (JoyItem)ScriptableObject.Instantiate(items[result]);
         }
     }
 }

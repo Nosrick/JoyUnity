@@ -303,31 +303,17 @@ namespace JoyLib.Code.World
 
         public bool RemoveObject(Vector2Int positionRef, ItemInstance itemRef)
         {
-            List<long> objectGUIDs = new List<long>();
             bool removed = false;
-            for (int i = 0; i < m_Objects.Count; i++)
-            {
-                if (m_Objects[i].WorldPosition == positionRef && itemRef.GUID == m_Objects[i].GUID)
-                {
-                    objectGUIDs.Add(m_Objects[i].GUID);
-                    m_Objects.RemoveAt(i);
-                    IsDirty = true;
-                    removed = true;
-                    break;
-                }
-            }
+            IJoyObject seek = m_Objects.First(obj => obj.WorldPosition.Equals(positionRef) && itemRef.GUID.Equals(obj.GUID));
+            removed = m_Objects.Remove(seek);
 
-            for(int i = 0; i < m_ObjectHolder.transform.childCount; i++)
+            if (removed)
             {
-                GameObject temp = m_ObjectHolder.transform.GetChild(i).gameObject;
-                for (int j = 0; j < objectGUIDs.Count; j++)
-                {
-                    if (temp.name.Contains(objectGUIDs[j].ToString()))
-                    {
-                        GameObject.Destroy(temp);
-                        break;
-                    }
-                }
+                IsDirty = true;
+
+                seek.MyWorld = null;
+
+                itemRef.Move(new Vector2Int(-1, -1));
             }
 
             return removed;

@@ -28,7 +28,8 @@ namespace JoyLib.Code.Unity
             ItemBehaviourHandler itemBehaviourHandler = this.gameObject.GetComponent<ItemBehaviourHandler>();
             if (itemBehaviourHandler.MyJoyObject is ItemInstance item)
             {
-                bool result = ItemBehaviourHandler.LiveItemHandler.RemoveItem(item.GUID);
+                bool result = ItemBehaviourHandler.LiveItemHandler.RemoveItemFromWorld(item.GUID);
+                result &= itemBehaviourHandler.EntityInRange.AddContents(item);
                 if (result)
                 {
                     return ActionStatus.Success;

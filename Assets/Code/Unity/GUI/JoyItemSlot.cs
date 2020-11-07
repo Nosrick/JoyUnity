@@ -58,15 +58,19 @@ namespace JoyLib.Code.Unity.GUI
                 return;
             }
 
-            if (ObservedItem is JoyItem joyItem)
+            if (!(ObservedItem is JoyItem joyItem))
             {
-                left.FetchAction("giveitemaction").Execute(
-                    new IJoyObject[] {left, right},
-                    new string[] {"give"},
-                    joyItem.ItemInstance);
-                
-                GUIManager.CloseGUI("Inventory");
+                return;
             }
+            
+            left.FetchAction("giveitemaction").Execute(
+                new IJoyObject[] {left, right},
+                new string[] {"give"},
+                joyItem.ItemInstance);
+                
+            Debug.Log(left.FetchAction("giveitemaction").Successful);
+                
+            GUIManager.CloseGUI("Inventory");
         }
     }
 }

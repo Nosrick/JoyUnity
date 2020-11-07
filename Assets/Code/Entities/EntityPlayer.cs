@@ -29,8 +29,16 @@ namespace JoyLib.Code.Entities
             if(actor is ItemInstance item)
             {
                 m_Inventory.StackOrAdd(item.Item);
+                return base.AddContents(actor);
             }
-            return base.AddContents(actor);
+
+            return false;
+        }
+
+        public override bool RemoveItemFromBackpack(ItemInstance item)
+        {
+            m_Inventory.RemoveItem(item.Item);
+            return base.RemoveItemFromBackpack(item);
         }
     }
 }

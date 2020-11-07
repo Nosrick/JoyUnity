@@ -10,6 +10,7 @@ using System.Xml.Linq;
 using UnityEngine;
 using DevionGames.InventorySystem;
 using JoyLib.Code.Unity;
+using JoyLib.Code.World;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace JoyLib.Code.Entities.Items
@@ -178,8 +179,6 @@ namespace JoyLib.Code.Entities.Items
             return matchingTypes.ToArray();
         }
 
-
-
         public ItemInstance GetInstance(long GUID)
         {
             if (LiveItems.ContainsKey(GUID))
@@ -202,17 +201,41 @@ namespace JoyLib.Code.Entities.Items
             return true;
         }
 
-        public bool RemoveItem(long GUID)
+        public bool RemoveItemFromWorld(long GUID)
         {
-            if (LiveItems.ContainsKey(GUID))
+            if (!LiveItems.ContainsKey(GUID))
             {
-                ItemInstance item = GetItem(GUID);
-                item.MyWorld.RemoveObject(item.WorldPosition, item);
-                LiveItems.Remove(GUID);
-                return true;
+                return false;
+            }
+            
+            ItemInstance item = GetItem(GUID);
+            item.MyWorld.RemoveObject(item.WorldPosition, item);
+            //LiveItems.Remove(GUID);
+            return true;
+
+        }
+
+        public bool RemoveItemFromWorld(ItemInstance item)
+        {
+            if (!LiveItems.ContainsKey(item.GUID))
+            {
+                return false;
             }
 
-            return false;
+            return item.MyWorld.RemoveObject(item.WorldPosition, item);
+        }
+
+        public bool AddItemToWorld(WorldInstance world, long GUID)
+        {
+            if (!LiveItems.ContainsKey(GUID))
+            {
+                return false;
+            }
+            
+            ItemInstance item = GetItem(GUID);
+            item.MyWorld = world;
+            world.AddObject(item);
+            return true;
         }
 
         public ItemInstance GetItem(long GUID)

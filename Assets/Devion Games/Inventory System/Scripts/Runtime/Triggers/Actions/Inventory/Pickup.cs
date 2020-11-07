@@ -11,13 +11,13 @@ namespace DevionGames.InventorySystem
     public class Pickup : Action
     {
         [SerializeField]
-        private string m_WindowName = "Inventory";
+        protected string m_WindowName = "Inventory";
         [SerializeField]
-        private bool m_DestroyWhenEmpty = true;
+        protected bool m_DestroyWhenEmpty = true;
         [SerializeField]
-        private int m_Amount = -1;
+        protected int m_Amount = -1;
 
-        private ItemCollection m_ItemCollection;
+        protected ItemCollection m_ItemCollection;
 
         public override void OnStart()
         {
