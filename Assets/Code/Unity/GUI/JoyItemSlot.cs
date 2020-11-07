@@ -1,4 +1,5 @@
 ﻿using System;
+using DevionGames;
 using DevionGames.InventorySystem;
 using UnityEngine.EventSystems;
 using JoyLib.Code.Conversation;
@@ -13,6 +14,8 @@ namespace JoyLib.Code.Unity.GUI
         protected static ConversationEngine ConversationEngine { get; set; }
         
         protected static GUIManager GUIManager { get; set; }
+        
+        protected static GameObject ItemHolder { get; set;}
 
         public void Awake()
         {
@@ -22,6 +25,7 @@ namespace JoyLib.Code.Unity.GUI
             }
             ConversationEngine = GameObject.Find("GameManager").GetComponent<ConversationEngine>();
             GUIManager = GameObject.Find("GameManager").GetComponent<GUIManager>();
+            ItemHolder = GameObject.Find("WorldObjects");
         }
 
         public override void OnPointerUp(PointerEventData eventData)
@@ -69,6 +73,71 @@ namespace JoyLib.Code.Unity.GUI
                 joyItem.ItemInstance);
                 
             GUIManager.CloseGUI("Inventory");
+        }
+
+        protected override void DropItem()
+        {
+            //Get the item to drop
+            JoyItem item = dragObject != null ? (JoyItem)dragObject.item : (JoyItem)ObservedItem;
+
+            //Check if the item is droppable
+            if (item != null && item.IsDroppable)
+            {
+                //Get item prefab
+                GameObject prefab = item.OverridePrefab != null ? item.OverridePrefab : item.Prefab;
+                RaycastHit hit;
+                Vector3 position = Vector3.zero;
+                Vector3 forward = Vector3.zero;
+                if (InventoryManager.current.PlayerInfo.transform != null)
+                {
+                    position = InventoryManager.current.PlayerInfo.transform.position;
+                    forward = InventoryManager.current.PlayerInfo.transform.forward;
+                }
+
+                //Cast a ray from mouse postion to ground
+                if (UnityEngine.Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit) &&
+                    !UnityTools.IsPointerOverUI())
+                {
+                    //Clamp the drop distance to max drop distance defined in setting.
+                    Vector3 worldPos = hit.point;
+                    Vector3 diff = worldPos - position;
+                    float distance = diff.magnitude;
+                    if (distance > (InventoryManager.DefaultSettings.maxDropDistance - (transform.localScale.x / 2)))
+                    {
+                        position = position + (diff / distance) * InventoryManager.DefaultSettings.maxDropDistance;
+                    }
+                    else
+                    {
+                        position = worldPos;
+                    }
+                }
+                else
+                {
+                    position = position + forward;
+                }
+
+                //Instantiate the prefab at position
+                GameObject go = InventoryManager.Instantiate(prefab, position + Vector3.up * 0.3f, Quaternion.identity);
+                go.name = go.name.Replace("(Clone)", "");
+                
+                go.transform.parent = ItemHolder.transform;
+                go.GetComponent<ItemBehaviourHandler>().AttachJoyObject(item.ItemInstance);
+                SpriteRenderer renderer = go.GetComponent<SpriteRenderer>(); 
+                renderer.sprite = item.ItemInstance.Icon;
+                item.ItemInstance.Move(Vector2Int.FloorToInt(position));
+                renderer.sortingLayerName = "Objects";
+                
+                //Reset the item collection of the prefab with this item
+                ItemCollection collection = go.GetComponent<ItemCollection>();
+                if (collection != null)
+                {
+                    collection.Clear();
+                    collection.Add(item);
+                }
+
+                ItemContainer.RemoveItemCompletely(item);
+                Container.NotifyDropItem(item, go);
+            }
         }
     }
 }

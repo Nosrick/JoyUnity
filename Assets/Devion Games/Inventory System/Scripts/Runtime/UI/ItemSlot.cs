@@ -304,7 +304,7 @@ namespace DevionGames.InventorySystem
         }
 
         //Try to drop the item to ground
-        private void DropItem()
+        protected virtual void DropItem()
         {
             //Get the item to drop
             Item item = dragObject != null ? dragObject.item : ObservedItem;
