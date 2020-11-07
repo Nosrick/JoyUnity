@@ -68,8 +68,6 @@ namespace JoyLib.Code.Unity.GUI
                 new string[] {"give"},
                 joyItem.ItemInstance);
                 
-            Debug.Log(left.FetchAction("giveitemaction").Successful);
-                
             GUIManager.CloseGUI("Inventory");
         }
     }
