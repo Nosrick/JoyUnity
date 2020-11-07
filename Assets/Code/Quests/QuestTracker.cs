@@ -74,7 +74,8 @@ namespace JoyLib.Code.Quests
 
         public void PerformQuestAction(Entity questor, IJoyAction completedAction)
         {
-            foreach (IQuest quest in GetQuestsForEntity(questor.GUID))
+            List<IQuest> copy = new List<IQuest>(GetQuestsForEntity(questor.GUID));
+            foreach (IQuest quest in copy)
             {
                 PerformQuestAction(questor, quest, completedAction);
             }

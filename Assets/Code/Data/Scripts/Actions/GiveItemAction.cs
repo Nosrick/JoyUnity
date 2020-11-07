@@ -5,14 +5,10 @@ using UnityEngine;
 
 namespace JoyLib.Code.Scripting.Actions
 {
-    public class GiveItemAction : IJoyAction
+    public class GiveItemAction : AbstractAction
     {
-        public string Name => "giveitemaction";
-        public string ActionString => "gives";
-        public IJoyObject[] LastParticipants { get; protected set; }
-        public string[] LastTags { get; protected set; }
-        public object[] LastArgs { get; protected set; }
-        public bool Successful { get; protected set; }
+        public override string Name => "giveitemaction";
+        public override string ActionString => "gives";
         
         protected static QuestTracker QuestTracker { get; set; }
 
@@ -24,9 +20,9 @@ namespace JoyLib.Code.Scripting.Actions
             }
         }
         
-        public bool Execute(IJoyObject[] participants, string[] tags = null, params object[] args)
+        public override bool Execute(IJoyObject[] participants, string[] tags = null, params object[] args)
         {
-            Successful = false;
+            ClearLastParameters();
             
             if (participants.Length != 2)
             {
@@ -58,18 +54,8 @@ namespace JoyLib.Code.Scripting.Actions
             }
             
             SetLastParameters(participants, tags, args);
-            
-            QuestTracker.PerformQuestAction(left, this);
 
             return true;
-        }
-        
-        public void SetLastParameters(IJoyObject[] participants, string[] tags = null, params object[] args)
-        {
-            this.LastParticipants = participants;
-            this.LastTags = tags;
-            this.LastArgs = args;
-            Successful = true;
         }
     }
 }

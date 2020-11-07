@@ -5,7 +5,7 @@ using JoyLib.Code.World;
 
 namespace JoyLib.Code
 {
-    public interface IJoyObject : ITagged, IPosition, IAnimated, IDerivedValueContainer
+    public interface IJoyObject : ITagged, IPosition, IAnimated, IDerivedValueContainer, IDataContainer
     {
         bool IsDestructible { get; }
         bool IsWall { get; }

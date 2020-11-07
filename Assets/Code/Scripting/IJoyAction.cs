@@ -5,6 +5,8 @@ namespace JoyLib.Code.Scripting
         bool Execute(IJoyObject[] participants, string[] tags = null, params object[] args);
         void SetLastParameters(IJoyObject[] participants, string[] tags = null, params object[] args);
 
+        void ClearLastParameters();
+
         string Name
         {
             get;

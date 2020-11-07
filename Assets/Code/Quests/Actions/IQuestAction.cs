@@ -14,7 +14,7 @@ namespace JoyLib.Code.Quests
         List<IJoyObject> Actors { get; }
         List<WorldInstance> Areas { get; }
 
-        IQuestStep Make(Entity provider, WorldInstance overworld);
+        IQuestStep Make(Entity questor, Entity provider, WorldInstance overworld);
         bool ExecutedSuccessfully(IJoyAction action);
 
         string AssembleDescription();

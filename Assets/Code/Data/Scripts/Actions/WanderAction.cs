@@ -4,19 +4,16 @@ using JoyLib;
 
 namespace JoyLib.Code.Scripting.Actions
 {
-    public class WanderAction : IJoyAction
+    public class WanderAction : AbstractAction
     {
-        public string Name => "wanderaction";
+        public override string Name => "wanderaction";
 
-        public string ActionString => "wandering";
-        public IJoyObject[] LastParticipants { get; protected set; }
-        public string[] LastTags { get; protected set; }
-        public object[] LastArgs { get; protected set; }
-        public bool Successful { get; protected set; }
+        public override string ActionString => "wandering";
 
-        public bool Execute(IJoyObject[] participants, string[] tags = null, params object[] args)
+        public override bool Execute(IJoyObject[] participants, string[] tags = null, params object[] args)
         {
-            Successful = false;
+            ClearLastParameters();
+            
             if(!(participants[0] is Entity actor))
             {
                 return false;
@@ -35,14 +32,6 @@ namespace JoyLib.Code.Scripting.Actions
             SetLastParameters(participants, tags, args);
 
             return true;
-        }
-        
-        public void SetLastParameters(IJoyObject[] participants, string[] tags = null, params object[] args)
-        {
-            LastParticipants = participants;
-            LastTags = tags;
-            LastArgs = args;
-            Successful = true;
         }
     }
 }

@@ -35,6 +35,24 @@ namespace JoyLib.Code
         public bool IsDestructible { get; protected set; }
         
         public WorldInstance MyWorld { get; set; }
+        
+        public Sprite Icon => Icons[ChosenIcon];
+
+        public Sprite[] Icons { get; protected set; }
+
+        public long GUID { get; protected set; }
+
+        public string JoyName { get; protected set; }
+
+        public int HitPointsRemaining => GetValue("hitpoints");
+
+        public int HitPoints => GetMaximum("hitpoints");
+
+        public bool Conscious => HitPointsRemaining > 0;
+
+        public bool Alive => HitPointsRemaining > (HitPoints * (-1));
+        
+        protected NonUniqueDictionary<object, object> Data { get; set; }
 
         public List<IJoyAction> CachedActions { get; protected set; }
 
@@ -107,6 +125,8 @@ namespace JoyLib.Code
             Sprite[] sprites, 
             params string[] tags)
         {
+            this.Data = new NonUniqueDictionary<object, object>();
+            
             this.JoyName = name;
             this.GUID = GUIDManager.Instance.AssignGUID();
 
@@ -279,21 +299,40 @@ namespace JoyLib.Code
         {
             return "{ " + this.JoyName + " : " + this.GUID + "}";
         }
-        
-        public Sprite Icon => Icons[ChosenIcon];
 
-        public Sprite[] Icons { get; protected set; }
+        public bool AddData(object key, object value)
+        {
+            Data.Add(key, value);
+            return true;
+        }
 
-        public long GUID { get; protected set; }
+        public bool RemoveData(object key)
+        {
+            return Data.RemoveByKey(key) > 0;
+        }
 
-        public string JoyName { get; protected set; }
+        public bool HasDataKey(object search)
+        {
+            return Data.ContainsKey(search);
+        }
 
-        public int HitPointsRemaining => GetValue("hitpoints");
+        public bool HasDataValue(object search)
+        {
+            return Data.ContainsValue(search);
+        }
 
-        public int HitPoints => GetMaximum("hitpoints");
+        public object[] GetDataValues(object key)
+        {
+            return Data.Where(tuple => tuple.Item1.Equals(key))
+                .Select(tuple => tuple.Item2)
+                .ToArray();
+        }
 
-        public bool Conscious => HitPointsRemaining > 0;
-
-        public bool Alive => HitPointsRemaining > (HitPoints * (-1));
+        public object[] GetDataKeysForValue(object value)
+        {
+            return Data.Where(tuple => tuple.Item2.Equals(value))
+                .Select(tuple => tuple.Item1)
+                .ToArray();
+        }
     }    
 }

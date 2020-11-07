@@ -2,19 +2,16 @@ using JoyLib.Code.Entities.Items;
 
 namespace JoyLib.Code.Scripting.Actions
 {
-    public class AddItemAction : IJoyAction
+    public class AddItemAction : AbstractAction
     {
-        public string Name => "additemaction";
+        public override string Name => "additemaction";
 
-        public string ActionString => "adding item";
-        public IJoyObject[] LastParticipants { get; protected set; }
-        public string[] LastTags { get; protected set; }
-        public object[] LastArgs { get; protected set; }
-        public bool Successful { get; protected set; }
+        public override string ActionString => "adding item";
 
-        public bool Execute(IJoyObject[] participants, string[] tags = null, params object[] args)
+        public override bool Execute(IJoyObject[] participants, string[] tags = null, params object[] args)
         {
-            Successful = false;
+            ClearLastParameters();
+            
             if(!(participants[0] is IItemContainer container))
             {
                 return false;
@@ -28,14 +25,6 @@ namespace JoyLib.Code.Scripting.Actions
             SetLastParameters(participants, tags, args);
 
             return container.AddContents(item);
-        }
-        
-        public void SetLastParameters(IJoyObject[] participants, string[] tags = null, params object[] args)
-        {
-            this.LastParticipants = participants;
-            this.LastTags = tags;
-            this.LastArgs = args;
-            Successful = true;
         }
     }
 }

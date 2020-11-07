@@ -5,19 +5,16 @@ using JoyLib.Code.Helpers;
 
 namespace JoyLib.Code.Scripting.Actions
 {
-    public class FulfillNeedAction : IJoyAction
+    public class FulfillNeedAction : AbstractAction
     {
-        public string Name => "fulfillneedaction";
+        public override string Name => "fulfillneedaction";
 
-        public string ActionString => "fulfilling need";
-        public IJoyObject[] LastParticipants { get; protected set; }
-        public string[] LastTags { get; protected set; }
-        public object[] LastArgs { get; protected set; }
-        public bool Successful { get; protected set; }
+        public override string ActionString => "fulfilling need";
 
-        public bool Execute(IJoyObject[] participants, string[] tags = null, params object[] args)
+        public override bool Execute(IJoyObject[] participants, string[] tags = null, params object[] args)
         {
-            Successful = false;
+            ClearLastParameters();
+            
             if(!(participants[0] is Entity actor))
             {
                 return false;
@@ -60,14 +57,6 @@ namespace JoyLib.Code.Scripting.Actions
             SetLastParameters(participants, tags, args);
 
             return true;
-        }
-        
-        public void SetLastParameters(IJoyObject[] participants, string[] tags = null, params object[] args)
-        {
-            this.LastParticipants = participants;
-            this.LastTags = tags;
-            this.LastArgs = args;
-            Successful = true;
         }
     }
 }

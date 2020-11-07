@@ -67,32 +67,41 @@ namespace JoyLib.Code.Entities
 
         protected static EntityRelationshipHandler s_RelationshipHandler;
         protected static EntitySkillHandler s_SkillHandler;
-        protected static QuestTracker QuestTracker { get; set; } 
+        protected static QuestTracker QuestTracker { get; set; }
+
+        protected readonly static string[] STANDARD_ACTIONS = new string[]
+        {
+            "giveitemaction",
+            "fulfillneedaction",
+            "seekaction",
+            "wanderaction",
+            "modifyrelationshippointsaction",
+            "enterworldaction"
+        };
 
         public Entity()
         {}
-
+        
         /// <summary>
-        /// Create an entity with job levels, equipment, family, etc
+        /// 
         /// </summary>
         /// <param name="template"></param>
         /// <param name="needs"></param>
+        /// <param name="cultures"></param>
         /// <param name="level"></param>
         /// <param name="experience"></param>
         /// <param name="job"></param>
         /// <param name="sex"></param>
         /// <param name="sexuality"></param>
         /// <param name="position"></param>
-        /// <param name="icons"></param>
+        /// <param name="sprites"></param>
         /// <param name="naturalWeapons"></param>
         /// <param name="equipment"></param>
         /// <param name="backpack"></param>
-        /// <param name="relationships"></param>
         /// <param name="identifiedItems"></param>
-        /// <param name="family"></param>
         /// <param name="jobLevels"></param>
         /// <param name="world"></param>
-        /// <param name="tileset"></param>
+        /// <param name="driver"></param>
         public Entity(
             EntityTemplate template,
             BasicValueContainer<INeed> needs,
@@ -118,11 +127,7 @@ namespace JoyLib.Code.Entities
                     template.Statistics[EntityStatistic.WIT]),
                 position,
                 template.Tileset,
-                new[]
-                {
-                    "fulfillneedaction",
-                    "giveitemaction"
-                },
+                STANDARD_ACTIONS,
                 sprites,
                 template.Tags)
         {

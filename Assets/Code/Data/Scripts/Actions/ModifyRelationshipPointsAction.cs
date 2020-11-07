@@ -5,16 +5,12 @@ using UnityEngine;
 
 namespace JoyLib.Code.Scripting.Actions
 {
-    public class ModifyRelationshipPointsAction : IJoyAction
+    public class ModifyRelationshipPointsAction : AbstractAction
     {
-        public IJoyObject[] LastParticipants { get; protected set; }
-        public string[] LastTags { get; protected set; }
-        public object[] LastArgs { get; protected set; }
         
-        public string Name => "modifyrelationshippointsaction";
+        public override string Name => "modifyrelationshippointsaction";
 
-        public string ActionString => "modification of relationship points";
-        public bool Successful { get; protected set; }
+        public override string ActionString => "modification of relationship points";
 
         protected static EntityRelationshipHandler RelationshipHandler { get; set; }
 
@@ -26,9 +22,10 @@ namespace JoyLib.Code.Scripting.Actions
             }
         }
 
-        public bool Execute(IJoyObject[] participants, string[] tags = null, params object[] args)
+        public override bool Execute(IJoyObject[] participants, string[] tags = null, params object[] args)
         {
-            Successful = false;
+            ClearLastParameters();
+            
             if (args.Length == 0)
             {
                 return false;
@@ -58,14 +55,6 @@ namespace JoyLib.Code.Scripting.Actions
             SetLastParameters(participants, tags, args);
 
             return true;
-        }
-        
-        public void SetLastParameters(IJoyObject[] participants, string[] tags = null, params object[] args)
-        {
-            this.LastParticipants = participants;
-            this.LastTags = tags;
-            this.LastArgs = args;
-            Successful = true;
         }
     }
 }

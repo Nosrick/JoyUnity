@@ -144,11 +144,13 @@ namespace JoyLib.Code.States
 
             WorldInstance oldWorld = m_ActiveWorld;
             Entity player = oldWorld.Player;
-            m_ActiveWorld.RemoveEntity(player.WorldPosition);
 
+            player.FetchAction("enterworldaction")
+                .Execute(
+                    new IJoyObject[] {player},
+                    new[] {"exploration", "world change"},
+                    new object[] {newWorld});
             m_ActiveWorld = newWorld;
-            m_ActiveWorld.AddEntity(player);
-            player.MyWorld = m_ActiveWorld;
 
             player = m_ActiveWorld.Player;
 
@@ -156,8 +158,6 @@ namespace JoyLib.Code.States
             player.UpdateMe();
 
             m_GameplayFlags = GameplayFlags.Moving;
-
-            //QuestTracker.PerformExploration(player, newWorld);
             Tick();
         }
 

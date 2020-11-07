@@ -52,7 +52,7 @@ namespace JoyLib.Code.Quests
             }
         }
         
-        public IQuestStep Make(Entity provider, WorldInstance overworld)
+        public IQuestStep Make(Entity questor, Entity provider, WorldInstance overworld)
         {
             ItemInstance deliveryItem = null;
             ItemInstance[] backpack = provider.Backpack;

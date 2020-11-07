@@ -46,7 +46,7 @@ namespace JoyLib.Code.Quests
                     new List<ItemInstance>(),
                     new List<IJoyObject>(),
                     new List<WorldInstance>());
-                steps.Add(action.Make(provider, overworldRef));
+                steps.Add(action.Make(questor, provider, overworldRef));
             }
 
             return new Quest(steps, QuestMorality.Neutral, GetRewards(questor, provider, steps), provider);
