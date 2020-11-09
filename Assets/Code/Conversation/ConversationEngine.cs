@@ -8,6 +8,7 @@ using System.Linq;
 using System.Xml.Linq;
 using Castle.Core.Internal;
 using DevionGames;
+using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.Unity.GUI;
@@ -57,6 +58,18 @@ namespace JoyLib.Code.Conversation
             set;
         }
 
+        protected TextMeshProUGUI LastSpokeName
+        {
+            get;
+            set;
+        }
+
+        protected RectTransform ListenerSection
+        {
+            get;
+            set;
+        }
+
         protected GameObject Window
         {
             get => s_Window;
@@ -86,11 +99,15 @@ namespace JoyLib.Code.Conversation
             get;
             set;
         }
+        
+        protected EntityRelationshipHandler RelationshipHandler { get; set; }
 
         public void Awake()
         {
             if (m_Topics is null)
             {
+                RelationshipHandler = GameObject.Find("GameManager").GetComponent<EntityRelationshipHandler>();
+                
                 m_Topics = LoadTopics();
                 
                 m_CurrentTopics = new List<ITopic>();
@@ -98,9 +115,12 @@ namespace JoyLib.Code.Conversation
                 Window = Window is null ? GameObject.Find("Conversation Window") : Window;
 
                 Transform title = Window.FindChild("Conversation Title", true).transform;
-                TitleRect = title.gameObject.GetComponent<RectTransform>();
-                LastSaidGUI = title.GetComponentInChildren<TextMeshProUGUI>();
-                LastSpokeIcon = title.GetComponentInChildren<Image>();
+                TitleRect = title.GetComponent<RectTransform>();
+                ListenerSection = TitleRect.gameObject.transform.Find("Listener Section").GetComponent<RectTransform>();
+                LastSaidGUI = title.Find("Last Said").GetComponent<TextMeshProUGUI>();
+                Transform listenerSection = title.Find("Listener Section");
+                LastSpokeName = listenerSection.Find("Listener Name").GetComponent<TextMeshProUGUI>();
+                LastSpokeIcon = listenerSection.Find("Listener Icon").GetComponent<Image>();
                 MenuItem = Window.FindChild("Menu Item", true);
                 
                 MenuList = new List<ConversationMenu>();
@@ -251,6 +271,17 @@ namespace JoyLib.Code.Conversation
             Listener = listener;
 
             LastSpokeIcon.sprite = Listener.Icon;
+
+            try
+            {
+                IRelationship relationship = RelationshipHandler.GetBestRelationship(Instigator, Listener);
+                LastSpokeName.text = Listener.JoyName + ", " + relationship.DisplayName;
+            }
+            catch (Exception e)
+            {
+                LastSpokeName.text = Listener.JoyName + ", acquaintance.";
+            }
+            LayoutRebuilder.ForceRebuildLayoutImmediate(TitleRect);
         }
 
         public ITopic[] Converse(string topic, int index = 0)
@@ -365,6 +396,9 @@ namespace JoyLib.Code.Conversation
 
         protected void SetTitle(string text)
         {
+            int remainingWidth = (int)(TitleRect.rect.width - ListenerSection.rect.width);
+            
+            
             LastSaidGUI.text = text;
             LayoutRebuilder.ForceRebuildLayoutImmediate(TitleRect);
         }

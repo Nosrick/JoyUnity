@@ -35,14 +35,10 @@ namespace JoyLib.Code.Entities.Relationships
         IRelationship Create(IEnumerable<IJoyObject> participants);
         IRelationship CreateWithValue(IEnumerable<IJoyObject> participants, int value);
 
-        string Name
-        {
-            get;
-        }
+        string Name { get; }
 
-        ReadOnlyCollection<string> Tags
-        {
-            get;
-        }
+        ReadOnlyCollection<string> Tags { get; }
+
+        string DisplayName { get; }
     }
 }

@@ -206,5 +206,7 @@ namespace JoyLib.Code.Entities.Relationships
         public virtual string Name => "abstractrelationship";
 
         public ReadOnlyCollection<string> Tags => m_Tags.AsReadOnly();
+
+        public virtual string DisplayName => "SOMEONE FORGOT TO OVERRIDE THE DISPLAYNAME";
     }
 }

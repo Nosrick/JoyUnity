@@ -40,5 +40,7 @@ namespace JoyLib.Code.Entities.Relationships
         }
 
         public override string Name => "monogamousrelationship";
+
+        public override string DisplayName => "lover";
     }
 }

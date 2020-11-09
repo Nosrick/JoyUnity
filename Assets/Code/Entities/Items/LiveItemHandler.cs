@@ -189,7 +189,7 @@ namespace JoyLib.Code.Entities.Items
             return null;
         }
 
-        public bool AddItem(ItemInstance item)
+        public bool AddItem(ItemInstance item, bool addToWorld = false)
         {
             if (LiveItems.ContainsKey(item.GUID))
             {
@@ -197,7 +197,10 @@ namespace JoyLib.Code.Entities.Items
             }
 
             LiveItems.Add(item.GUID, item);
-            item.MyWorld.AddObject(item);
+            if (addToWorld)
+            {
+                item.MyWorld.AddObject(item);
+            }
             return true;
         }
 

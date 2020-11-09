@@ -4,7 +4,7 @@ using JoyLib.Code.Collections;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using JoyLib.Code.Helpers;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities.Relationships
@@ -33,7 +33,7 @@ namespace JoyLib.Code.Entities.Relationships
             return true;
         }
 
-        public IRelationship CreateRelationship(Entity[] participants, string type = "friendship")
+        public IRelationship CreateRelationship(IJoyObject[] participants, string type = "friendship")
         {
             if(m_RelationshipTypes.Any(t => t.Key.Equals(type, StringComparison.OrdinalIgnoreCase)))
             {
@@ -42,7 +42,7 @@ namespace JoyLib.Code.Entities.Relationships
                     .Create(participants);
                 
                 List<long> GUIDs = new List<long>();
-                foreach(Entity participant in participants)
+                foreach(IJoyObject participant in participants)
                 {
                     GUIDs.Add(participant.GUID);
                 }
@@ -54,7 +54,7 @@ namespace JoyLib.Code.Entities.Relationships
             throw new InvalidOperationException("Relationship type " + type + " not found.");
         }
 
-        public IRelationship CreateRelationshipWithValue(Entity[] participants, string type, int value)
+        public IRelationship CreateRelationshipWithValue(IJoyObject[] participants, string type, int value)
         {
             if(m_RelationshipTypes.Any(t => t.Key.Equals(type, StringComparison.OrdinalIgnoreCase)))
             {
@@ -63,7 +63,7 @@ namespace JoyLib.Code.Entities.Relationships
                     .CreateWithValue(participants, value);
 
                 List<long> GUIDs = new List<long>();
-                foreach(Entity participant in participants)
+                foreach(IJoyObject participant in participants)
                 {
                     GUIDs.Add(participant.GUID);
                 }
@@ -75,7 +75,7 @@ namespace JoyLib.Code.Entities.Relationships
             throw new InvalidOperationException("Relationship type " + type + " not found.");
         }
 
-        public IRelationship[] Get(IJoyObject[] participants, string[] tags = null)
+        public IRelationship[] Get(IJoyObject[] participants, string[] tags = null, bool createNewIfNone = false)
         {
             IRelationship query = null;
             
@@ -141,37 +141,66 @@ namespace JoyLib.Code.Entities.Relationships
                 relationships.Add(bestRelationship);
             }
 
+            if (relationships.Count == 0 && createNewIfNone)
+            {
+                relationships.Add(CreateRelationship(participants));
+            }
+
             return relationships.ToArray();
         }
 
-        public int GetHighestRelationshipValue(JoyObject speaker, JoyObject listener, string[] tags = null)
+        public int GetHighestRelationshipValue(IJoyObject speaker, IJoyObject listener, string[] tags = null)
         {
-            JoyObject[] participants = new [] { speaker, listener };
-            IRelationship[] relationships = Get(participants, tags);
+            try
+            {
+                return GetBestRelationship(speaker, listener, tags)
+                    .GetRelationshipValue(speaker.GUID, listener.GUID);
+            }
+            catch (Exception e)
+            {
+                ActionLog.instance.AddText("No relationship found for " + speaker + " and " + listener + ".");
+                Debug.LogWarning("No relationship found for " + speaker + " and " + listener + ".");
+                Debug.LogWarning(e.Message);
+                Debug.LogWarning(e.StackTrace);
+                return 0;
+            }
+        }
+
+        public IRelationship GetBestRelationship(IJoyObject speaker, IJoyObject listener, string[] tags = null)
+        {
+            IJoyObject[] participants = {speaker, listener};
+            IRelationship[] relationships = Get(participants, tags, false);
 
             int highestValue = int.MinValue;
-            foreach(IRelationship relationship in relationships)
+            IRelationship bestMatch = null;
+            foreach (IRelationship relationship in relationships)
             {
                 int value = relationship.GetRelationshipValue(speaker.GUID, listener.GUID);
                 if (value > highestValue)
                 {
                     highestValue = value;
+                    bestMatch = relationship;
                 }
             }
 
-            return highestValue;
+            if (bestMatch is null)
+            {
+                throw new InvalidOperationException("No relationship between " + speaker.JoyName + " and " + listener.JoyName + ".");
+            }
+
+            return bestMatch;
         }
 
-        public IRelationship[] GetAllForObject(JoyObject actor)
+        public IRelationship[] GetAllForObject(IJoyObject actor)
         {
             return m_Relationships.Where(tuple => tuple.Item1.Equals(actor.GUID))
                 .Select(tuple => tuple.Item2)
                 .ToArray();
         }
 
-        public bool IsFamily(JoyObject speaker, JoyObject listener)
+        public bool IsFamily(IJoyObject speaker, IJoyObject listener)
         {
-            JoyObject[] participants = new [] { speaker, listener };
+            IJoyObject[] participants = { speaker, listener };
             IRelationship[] relationships = Get(participants, new[] {"family"});
 
             return relationships.Length > 0;

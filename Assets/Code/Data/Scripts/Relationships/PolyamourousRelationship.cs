@@ -34,12 +34,8 @@ namespace JoyLib.Code.Entities.Relationships
             return newRelationship;
         }
 
-        public override string Name
-        {
-            get
-            {
-                return "polyamorousrelationship";
-            }
-        }
+        public override string Name => "polyamorousrelationship";
+
+        public override string DisplayName => "lover";
     }
 }

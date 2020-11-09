@@ -33,12 +33,8 @@ namespace JoyLib.Code.Entities.Relationships
             return newRelationship;
         }
 
-        public override string Name
-        {
-            get
-            {
-                return "friendship";
-            }
-        }
+        public override string Name => "friendship";
+
+        public override string DisplayName => "friend";
     }
 }
