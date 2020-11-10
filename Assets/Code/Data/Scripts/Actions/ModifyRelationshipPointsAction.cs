@@ -30,12 +30,19 @@ namespace JoyLib.Code.Scripting.Actions
             {
                 return false;
             }
+
+            if (participants.Distinct().Count() != participants.Length)
+            {
+                return false;
+            }
             
             int relationshipMod = (int)args[0];
 
             IRelationship[] relationships = RelationshipHandler.Get(participants, tags, true);
+            
+            Debug.Log("RELATIONSHIPS LENGTH: " + relationships.Length);
 
-            bool doAll = args.Length < 2 ? false : (bool)args[1];
+            bool doAll = args.Length >= 2 && (bool)args[1];
 
             if(relationships.Length > 0)
             {
@@ -49,6 +56,7 @@ namespace JoyLib.Code.Scripting.Actions
                     {
                         relationship.ModifyValueOfOtherParticipants(participants[0].GUID, relationshipMod);
                     }
+                    Debug.Log("MODIFIED RELATIONSHIP TO: " + relationship.GetHighestRelationshipValue(participants[0].GUID));
                 }
             }
             

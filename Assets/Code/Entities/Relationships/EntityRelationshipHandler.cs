@@ -47,6 +47,8 @@ namespace JoyLib.Code.Entities.Relationships
                     GUIDs.Add(participant.GUID);
                 }
 
+                newRelationship.ModifyValueOfAllParticipants(0);
+
                 m_Relationships.Add(newRelationship.GenerateHash(GUIDs.ToArray()), newRelationship);
                 return newRelationship;
             }

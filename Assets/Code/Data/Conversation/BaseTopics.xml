@@ -40,6 +40,7 @@
   <Line>
     <Text>Would you be my partner?</Text>
     <Processor>RomanticProposalProcessor</Processor>
+    <Condition>Relationship ! Romantic</Condition>
     <Next>RomanticProposal</Next>
     <Speaker>instigator</Speaker>
   </Line>

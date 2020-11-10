@@ -473,11 +473,12 @@ namespace JoyLib.Code.Conversation
             
                 TopicConditionFactory factory = new TopicConditionFactory();
 
-                int value = criteria.Equals("relationship", StringComparison.OrdinalIgnoreCase) && operand.Equals("=")
-                    ? 1
-                    : int.Parse(stringValue);
-
-                criteria = criteria.Equals("relationship", StringComparison.OrdinalIgnoreCase) && operand.Equals("=") ? stringValue : criteria;
+                int value = int.MinValue;
+                if (!int.TryParse(stringValue, out value))
+                {
+                    value = 1;
+                    criteria = stringValue;
+                }
 
                 return factory.Create(criteria, operand, value);
             }

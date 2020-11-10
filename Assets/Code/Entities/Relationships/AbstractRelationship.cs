@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using UnityEngine;
 
 namespace JoyLib.Code.Entities.Relationships
 {
@@ -35,10 +36,6 @@ namespace JoyLib.Code.Entities.Relationships
                     {
                         foreach(long guid in participantGUIDs)
                         {
-                            if(guid == newParticipant.GUID)
-                            {
-                                continue;
-                            }
                             m_Values[newParticipant.GUID].Add(guid, 0);
                         }
                     }
@@ -79,6 +76,13 @@ namespace JoyLib.Code.Entities.Relationships
 
         public int GetHighestRelationshipValue(long GUID)
         {
+            Debug.Log("GUID IS " + GUID);
+            Debug.Log("PARTICIPANT GUIDS:");
+            foreach (long value in this.m_Participants.Keys)
+            {
+                Debug.Log(value);
+            }
+            
             return m_Values.Where(pair => pair.Key.Equals(GUID))
                 .Max(pair => pair.Value.Max(valuePair => valuePair.Value));
         }
@@ -129,8 +133,18 @@ namespace JoyLib.Code.Entities.Relationships
             List<long> participantKeys = m_Values.Keys.ToList();
             foreach(long guid in participantKeys)
             {
+                if (m_Values[guid].Keys.Count == 0)
+                {
+                    foreach (long participant in m_Participants.Keys)
+                    {
+                        if (guid != participant)
+                        {
+                            m_Values[guid].Add(participant, 0);
+                        }
+                    }
+                }
                 List<long> involvedKeys = m_Values[guid].Keys.ToList();
-
+                
                 foreach(long involvedGUID in involvedKeys)
                 {
                     m_Values[guid][involvedGUID] += value;
