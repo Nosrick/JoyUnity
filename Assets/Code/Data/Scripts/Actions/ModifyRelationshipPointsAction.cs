@@ -33,7 +33,7 @@ namespace JoyLib.Code.Scripting.Actions
             
             int relationshipMod = (int)args[0];
 
-            IRelationship[] relationships = RelationshipHandler.Get(participants, tags);
+            IRelationship[] relationships = RelationshipHandler.Get(participants, tags, true);
 
             bool doAll = args.Length < 2 ? false : (bool)args[1];
 

@@ -25,17 +25,37 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
 
         protected override ITopic[] FetchNextTopics()
         {
-            Entity listener = ConversationEngine.Listener;
             
-            int cultureResult = RNG.instance.Roll(0, listener.Cultures.Length);
-            int relationshipTypeResult = RNG.instance.Roll(0, listener.Cultures[cultureResult].RelationshipTypes.Length);
-
-            string relationshipType = listener.Cultures[cultureResult].RelationshipTypes[relationshipTypeResult];
-
-            return new ITopic[]
+            Entity listener = ConversationEngine.Listener;
+            Entity instigator = ConversationEngine.Instigator;
+            int highestValue = RelationshipHandler.GetHighestRelationshipValue(instigator, listener);
+            Debug.Log("HIGHEST RELATIONSHIP VALUE IS " + highestValue);
+            if (highestValue > listener.Sexuality.MatingThreshold)
             {
-                new RomancePresentation(relationshipType)
-            };
+                int cultureResult = RNG.instance.Roll(0, listener.Cultures.Length);
+                            int relationshipTypeResult = RNG.instance.Roll(0, listener.Cultures[cultureResult].RelationshipTypes.Length);
+                
+                            string relationshipType = listener.Cultures[cultureResult].RelationshipTypes[relationshipTypeResult];
+                
+                            return new ITopic[]
+                            {
+                                new RomancePresentation(relationshipType)
+                            };
+            }
+            else
+            {
+                return new ITopic[]
+                {
+                    new TopicData(
+                        new ITopicCondition[0],
+                        "RomanceTurnDown",
+                        new[] {"BaseTopics"},
+                        "Uh, no thanks.",
+                        0,
+                        new string[0],
+                        Speaker.LISTENER)
+                };
+            }
         }
     }
 }
