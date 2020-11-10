@@ -32,7 +32,7 @@ namespace JoyLib.Code.Scripting
                 string dir = Directory.GetCurrentDirectory() + "/" + GlobalConstants.SCRIPTS_FOLDER;
                 string[] scriptFiles = Directory.GetFiles(dir, "*.cs", SearchOption.AllDirectories);
 
-                List<Microsoft.CodeAnalysis.SyntaxTree> builtFiles = new List<Microsoft.CodeAnalysis.SyntaxTree>();
+                List<SyntaxTree> builtFiles = new List<SyntaxTree>();
 
                 foreach(string scriptFile in scriptFiles)
                 {

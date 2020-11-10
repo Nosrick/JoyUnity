@@ -486,57 +486,6 @@ namespace JoyLib.Code.Conversation
                 throw new InvalidOperationException("Could not parse conversation condition line " + conditionString);
             }
         }
-        
-        protected string WrapText(
-            TextMeshProUGUI textToWrap,
-            string text,
-            double pixels)
-        {
-            textToWrap.text = text;
-            textToWrap.ForceMeshUpdate();
-            string[] originalLines = text.Split(new string[] { " " }, 
-                StringSplitOptions.None);
-
-            List<string> wrappedLines = new List<string>();
-
-            StringBuilder actualLine = new StringBuilder();
-            double actualWidth = 0;
-
-            for(int i = 0; i < originalLines.Length; i++)
-            {
-                string item = originalLines[i];
-                actualLine.Append(item + " ");
-                int firstCharacterIndex = textToWrap.textInfo.wordInfo[i].firstCharacterIndex;
-                for (int j = firstCharacterIndex; j < firstCharacterIndex + item.Length; j++)
-                {
-                    TMP_CharacterInfo characterInfo = textToWrap.textInfo.characterInfo[j];
-                    actualWidth += Math.Abs(characterInfo.topRight.x - characterInfo.topLeft.x);
-    
-                    if (actualWidth > pixels)
-                    {
-                        wrappedLines.Add(actualLine.ToString());
-                        actualLine.Clear();
-                        actualWidth = 0;
-                    }
-                }
-                
-            }
-
-            if (actualLine.Length > 0)
-            {
-                wrappedLines.Add(actualLine.ToString());
-            }
-
-            actualLine.Clear();
-            foreach (string line in wrappedLines)
-            {
-                actualLine.AppendLine(line);
-            }
-
-            textToWrap.text = actualLine.ToString();
-            textToWrap.ForceMeshUpdate();
-            return actualLine.ToString();
-        }
 
         public ITopic[] CurrentTopics
         {

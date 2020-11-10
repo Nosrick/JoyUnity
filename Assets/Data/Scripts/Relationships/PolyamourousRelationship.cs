@@ -2,22 +2,17 @@
 
 namespace JoyLib.Code.Entities.Relationships
 {
-    public class MonogamousRelationship : AbstractRelationship
+    public class PolyamourousRelationship : AbstractRelationship
     {
-        public MonogamousRelationship()
+        public PolyamourousRelationship()
         {
             AddTag("romantic");
             AddTag("sexual");
         }
 
-        public override bool AddParticipant(IJoyObject newParticipant)
-        {
-            return m_Participants.Count < 2 && base.AddParticipant(newParticipant);
-        }
-        
         public override IRelationship Create(IEnumerable<IJoyObject> participants)
         {
-            IRelationship newRelationship = new MonogamousRelationship();
+            IRelationship newRelationship = new PolyamourousRelationship();
             foreach (IJoyObject obj in participants)
             {
                 newRelationship.AddParticipant(obj);
@@ -28,7 +23,7 @@ namespace JoyLib.Code.Entities.Relationships
 
         public override IRelationship CreateWithValue(IEnumerable<IJoyObject> participants, int value)
         {
-            IRelationship newRelationship = new MonogamousRelationship();
+            IRelationship newRelationship = new PolyamourousRelationship();
             foreach (IJoyObject obj in participants)
             {
                 newRelationship.AddParticipant(obj);
@@ -39,7 +34,7 @@ namespace JoyLib.Code.Entities.Relationships
             return newRelationship;
         }
 
-        public override string Name => "monogamousrelationship";
+        public override string Name => "polyamorous";
 
         public override string DisplayName => "lover";
     }

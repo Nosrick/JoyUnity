@@ -168,7 +168,7 @@ namespace JoyLib.Code.Entities.Relationships
             return false;
         }
 
-        public long GenerateHash(long[] participants)
+        public long GenerateHash(IEnumerable<long> participants)
         {
             long hash = 0;
 

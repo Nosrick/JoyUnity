@@ -5,9 +5,8 @@ namespace JoyLib.Code
 {
     public static class GlobalConstants
     {
-        public const string DATA_FOLDER = "/Assets/Code/Data/";
+        public const string DATA_FOLDER = "/Assets/Data/";
         public const string SCRIPTS_FOLDER = DATA_FOLDER + "Scripts/";
-        public const string NEEDS_FOLDER = SCRIPTS_FOLDER + "Needs/";
 
         public const int SPRITE_SIZE = 16;
         public const int DEFAULT_SUCCESS_THRESHOLD = 7;

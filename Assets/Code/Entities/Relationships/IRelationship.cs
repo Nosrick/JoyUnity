@@ -30,7 +30,7 @@ namespace JoyLib.Code.Entities.Relationships
         
         bool RemoveParticipant(long currentGUID);
 
-        long GenerateHash(long[] participants);
+        long GenerateHash(IEnumerable<long> participants);
         
         IRelationship Create(IEnumerable<IJoyObject> participants);
         IRelationship CreateWithValue(IEnumerable<IJoyObject> participants, int value);
