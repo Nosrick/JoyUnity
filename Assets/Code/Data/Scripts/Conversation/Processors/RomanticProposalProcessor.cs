@@ -14,8 +14,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
                 "RomanticProposal", 
                 new []
                 {
-                    "RomanceYes",
-                    "RomanceNo"
+                    "RomancePresentation"
                 }, 
                 "words", 
                 0, 

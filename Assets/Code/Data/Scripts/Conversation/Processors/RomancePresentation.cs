@@ -1,5 +1,4 @@
-﻿using DevionGames.InventorySystem;
-using JoyLib.Code.Conversation.Conversations;
+﻿using JoyLib.Code.Conversation.Conversations;
 
 namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
 {
