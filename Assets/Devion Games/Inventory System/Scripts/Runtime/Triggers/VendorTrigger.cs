@@ -36,7 +36,20 @@ namespace DevionGames.InventorySystem
         [SerializeField]
         protected string m_PaymentWindow = "Inventory";
         [SerializeField]
+        protected bool m_RemoveItemAfterPurchase = false;
+
+        [Header("Buy & Sell Dialog")]
+        [SerializeField]
         private string m_BuySellDialogName = "BuySellDialog";
+
+        [SerializeField]
+        private string m_BuyDialogTitle = "Buy";
+        [SerializeField]
+        private bool m_BuyDialogueDisplaySpinner = true;
+        [SerializeField]
+        private string m_BuyDialogText= "How many items do you want to buy?";
+        [SerializeField]
+        private string m_BuyDialogButton = "Buy";
 
         private DialogBox m_BuySellDialog;
         private Spinner m_AmountSpinner;
@@ -75,8 +88,6 @@ namespace DevionGames.InventorySystem
             handler.OnFailedToBuyItem(item, player, failureCause);
         }
 
-
-
         protected override void Start()
         {
             base.Start();
@@ -88,16 +99,22 @@ namespace DevionGames.InventorySystem
             this.m_PurchasedStorageContainer= WidgetUtility.Find<ItemContainer>(this.m_PurchasedStorageWindow);
             this.m_PaymentContainer = WidgetUtility.Find<ItemContainer>(this.m_PaymentWindow);
 
-            ItemCollection collection = GetComponent<ItemCollection>();
+          /*  ItemCollection collection = GetComponent<ItemCollection>();
             for (int i = 0; i < collection.Count; i++) {
                 collection[i].BuyPrice = Mathf.RoundToInt(m_BuyPriceFactor*collection[i].BuyPrice);
-            }
+            }*/
         }
 
         public override bool OverrideUse(Slot slot, Item item)
         {
+            
             if (slot.Container.CanSellItems)
             {
+                if (!item.IsSellable)
+                {
+                    InventoryManager.Notifications.cantSellItem.Show(item.DisplayName);
+                    return true;
+                }
                 SellItem(item, item.Stack, true);
             }
             else if(Trigger.currentUsedWindow == slot.Container)
@@ -112,73 +129,86 @@ namespace DevionGames.InventorySystem
            
             if (showDialog)
             {
-                this.m_AmountSpinner.gameObject.SetActive(true);
+                this.m_AmountSpinner.gameObject.SetActive(this.m_BuyDialogueDisplaySpinner);
 
                 this.m_AmountSpinner.onChange.RemoveAllListeners();
                 this.m_AmountSpinner.current = 1;
                 this.m_AmountSpinner.min = 1;
-                this.m_AmountSpinner.max = int.MaxValue;
+                this.m_AmountSpinner.max = this.m_RemoveItemAfterPurchase?item.Stack:int.MaxValue;
                 this.m_AmountSpinner.onChange.AddListener(delegate (float value)
                 {
                     Currency price = Instantiate(item.BuyCurrency);
-                    price.Stack = Mathf.RoundToInt(item.BuyPrice * value);
+                    price.Stack = Mathf.RoundToInt(this.m_BuyPriceFactor * item.BuyPrice * value);
                     this.m_PriceInfo.RemoveItems();
                     this.m_PriceInfo.StackOrAdd(price);
                 });
                 this.m_AmountSpinner.onChange.Invoke(this.m_AmountSpinner.current);
 
                 ExecuteEvent<ITriggerSelectBuyItem>(Execute, item);
-                this.m_BuySellDialog.Show("Buy", "How many items do you want to buy?", item.Icon, delegate (int result)
+                this.m_BuySellDialog.Show(this.m_BuyDialogTitle, this.m_BuyDialogText, item.Icon, delegate (int result)
                 {
                     if (result == 0){
                         BuyItem(item, Mathf.RoundToInt(this.m_AmountSpinner.current), false);
                     }
-                }, "Buy", "Cancel");
+                }, this.m_BuyDialogButton, "Cancel");
             }else {
                 if (this.m_PurchasedStorageContainer == null || this.m_PaymentContainer == null){
                     return;
                 }
-                item = Instantiate(item);
-                item.Stack = amount;
-                Currency price = Instantiate(item.BuyCurrency);
-                price.Stack = Mathf.RoundToInt(item.BuyPrice * amount);
+                Rarity rarity = item.Rarity;
+                Item instance = Instantiate(item);
+
+                instance.Rarity = rarity;
+                instance.Stack = amount;
+                Currency price = Instantiate(instance.BuyCurrency);
+                price.Stack = Mathf.RoundToInt(this.m_BuyPriceFactor*instance.BuyPrice * amount);
 
                 if ( this.m_PaymentContainer.RemoveItem(price,price.Stack))
                 {
 
-                    if (amount > item.MaxStack)
+                    if (amount > instance.MaxStack)
                     {
-                        int stack = item.Stack;
-                        Currency singlePrice = Instantiate(item.BuyCurrency);
-                        singlePrice.Stack = item.BuyPrice;
+                        int stack = instance.Stack;
+                        Currency singlePrice = Instantiate(instance.BuyCurrency);
+                        singlePrice.Stack = Mathf.RoundToInt(instance.BuyPrice*this.m_BuyPriceFactor);
                        // singlePrice.Stack = Mathf.RoundToInt(this.m_BuyPriceFactor * singlePrice.Stack);
                         int purchasedStack = 0;
                         for (int i = 0; i < stack; i++)
                         {
-                            Item singleItem = Instantiate(item);
+                            Item singleItem = Instantiate(instance);
+                            singleItem.Rarity = instance.Rarity;
                             singleItem.Stack = 1;
                             if (!this.m_PurchasedStorageContainer.StackOrAdd(singleItem))
                             {
                                 this.m_PaymentContainer.StackOrAdd(singlePrice);
                                 InventoryManager.Notifications.containerFull.Show(this.m_PurchasedStorageWindow);
-                                ExecuteEvent<ITriggerFailedToBuyItem>(Execute, item, FailureCause.ContainerFull);
+                                ExecuteEvent<ITriggerFailedToBuyItem>(Execute, instance, FailureCause.ContainerFull);
                                 break;
                             }
                             purchasedStack += 1;
                             ExecuteEvent<ITriggerBoughtItem>(Execute, singleItem);
                         }
-                        InventoryManager.Notifications.boughtItem.Show(purchasedStack.ToString()+"x"+item.Name, singlePrice.Stack*purchasedStack + " " + price.Name);
+                        if (this.m_RemoveItemAfterPurchase)
+                        {
+                            item.Container.RemoveItem(item, purchasedStack);
+                        }
+                        InventoryManager.Notifications.boughtItem.Show(purchasedStack.ToString()+"x"+instance.DisplayName, singlePrice.Stack*purchasedStack + " " + price.Name);
                     }
                     else
                     {
-                        Item itemInstance = Instantiate(item);
+                        Item itemInstance = Instantiate(instance);
+                        itemInstance.Rarity = instance.Rarity;
+
                         if (!this.m_PurchasedStorageContainer.StackOrAdd(itemInstance))
                         {
                             this.m_PaymentContainer.StackOrAdd(price);
                             InventoryManager.Notifications.containerFull.Show(this.m_PurchasedStorageWindow);
-                            ExecuteEvent<ITriggerFailedToBuyItem>(Execute, item, FailureCause.ContainerFull);
-                        }
-                        else {
+                            ExecuteEvent<ITriggerFailedToBuyItem>(Execute, instance, FailureCause.ContainerFull);
+                        }else {
+                            if (this.m_RemoveItemAfterPurchase)
+                            {
+                                item.Container.RemoveItem(item, amount);
+                            }
                             InventoryManager.Notifications.boughtItem.Show(itemInstance.Name, price.Stack+" "+price.Name);
                             ExecuteEvent<ITriggerBoughtItem>(Execute, itemInstance);
                         }
@@ -186,12 +216,11 @@ namespace DevionGames.InventorySystem
                 }
                 else
                 {
-                    InventoryManager.Notifications.noCurrencyToBuy.Show(item.Name, price.Stack + " " + price.Name);
+                    InventoryManager.Notifications.noCurrencyToBuy.Show(item.DisplayName, price.Stack + " " + price.Name);
                     ExecuteEvent<ITriggerFailedToBuyItem>(Execute, item, FailureCause.NotEnoughCurrency);
                 }
             }
         }
-
 
         public void SellItem(Item item, int amount, bool showDialog = true)
         {

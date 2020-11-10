@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace DevionGames.InventorySystem
 {
+    [UnityEngine.Scripting.APIUpdating.MovedFromAttribute(true, null, "Assembly-CSharp")]
     [Icon("Component")]
     [ComponentMenu("Component/Invoke Notify")]
     [System.Serializable]

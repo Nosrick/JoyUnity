@@ -187,12 +187,13 @@ MonoBehaviour:
   - id: 6
   - id: 7
   - id: 8
+  - id: 9
   references:
     version: 1
     00000000:
-      type: {class: HasItem, ns: DevionGames.InventorySystem, asm: Assembly-CSharp}
+      type: {class: HasItem, ns: DevionGames.InventorySystem, asm: DevionGames.InventorySystem}
       data:
-        m_Type: 
+        m_Type: DevionGames.InventorySystem.HasItem
         m_Enabled: 1
         requiredItems:
         - item: {fileID: -4474190543486091594, guid: 1ae57b994efcab048a1bb130d4e11d83,
@@ -200,54 +201,67 @@ MonoBehaviour:
           boolValue: 0
           stringValue: Equipment
           intValue: 0
+        - item: {fileID: -9164302591508860154, guid: 1ae57b994efcab048a1bb130d4e11d83,
+            type: 2}
+          boolValue: 0
+          stringValue: Skills
+          intValue: 0
     00000001:
-      type: {class: SetEnabled, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: SetEnabled, ns: DevionGames, asm: DevionGames.Triggers}
       data:
-        m_Type: 
+        m_Type: DevionGames.SetEnabled
         m_Enabled: 1
         m_Target: 1
         m_ComponentName: ThirdPersonController
         m_Enable: 0
     00000002:
-      type: {class: LookAtTrigger, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: LookAtTrigger, ns: DevionGames, asm: DevionGames.Triggers}
       data:
-        m_Type: 
+        m_Type: DevionGames.LookAtTrigger
         m_Enabled: 1
         m_Speed: 15
     00000003:
-      type: {class: CrossFade, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: CrossFade, ns: DevionGames, asm: DevionGames.Triggers}
       data:
-        m_Type: 
+        m_Type: DevionGames.CrossFade
         m_Enabled: 1
         m_Target: 1
         m_AnimatorState: Cut
         m_TransitionDuration: 0.2
     00000004:
-      type: {class: Wait, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: Wait, ns: DevionGames, asm: DevionGames.Triggers}
       data:
-        m_Type: 
+        m_Type: DevionGames.Wait
         m_Enabled: 1
         duration: 6
     00000005:
-      type: {class: SetEnabled, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: SetEnabled, ns: DevionGames, asm: DevionGames.Triggers}
       data:
-        m_Type: 
+        m_Type: DevionGames.SetEnabled
         m_Enabled: 1
         m_Target: 1
         m_ComponentName: ThirdPersonController
         m_Enable: 1
     00000006:
-      type: {class: Pickup, ns: DevionGames.InventorySystem, asm: Assembly-CSharp}
+      type: {class: CheckSkill, ns: DevionGames.InventorySystem, asm: DevionGames.InventorySystem}
       data:
-        m_Type: 
+        m_Type: DevionGames.InventorySystem.CheckSkill
+        m_Enabled: 1
+        m_WindowName: Skills
+        m_Skill: {fileID: -9164302591508860154, guid: 1ae57b994efcab048a1bb130d4e11d83,
+          type: 2}
+    00000007:
+      type: {class: Pickup, ns: DevionGames.InventorySystem, asm: DevionGames.InventorySystem}
+      data:
+        m_Type: DevionGames.InventorySystem.Pickup
         m_Enabled: 1
         m_WindowName: 
         m_DestroyWhenEmpty: 0
         m_Amount: 1
-    00000007:
-      type: {class: Invoke, ns: DevionGames, asm: Assembly-CSharp}
+    00000008:
+      type: {class: Invoke, ns: DevionGames, asm: DevionGames.Triggers}
       data:
-        m_Type: 
+        m_Type: DevionGames.Invoke
         m_Enabled: 1
         m_Target: 1
         m_ComponentName: StatsHandler
@@ -271,10 +285,10 @@ MonoBehaviour:
           m_ColorValue: {r: 0, g: 0, b: 0, a: 0}
           m_ObjectValue: {fileID: 0}
           m_ArgumentType: 3
-    00000008:
-      type: {class: Instantiate, ns: DevionGames, asm: Assembly-CSharp}
+    00000009:
+      type: {class: Instantiate, ns: DevionGames, asm: DevionGames.Triggers}
       data:
-        m_Type: 
+        m_Type: DevionGames.Instantiate
         m_Enabled: 1
         m_Target: 0
         m_Original: {fileID: 5089913065857802077, guid: 6bf46658136834f4da3d0726d48e1c0d,
@@ -294,13 +308,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68165cdf1896c89479a91b2478670c0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  items:
+  saveable: 1
+  m_Items:
   - {fileID: -5663772737389988193, guid: 1ae57b994efcab048a1bb130d4e11d83, type: 2}
   - {fileID: -5663772737389988193, guid: 1ae57b994efcab048a1bb130d4e11d83, type: 2}
-  amounts: 0100000001000000
-  randomProperty:
-  - 0
-  - 0
+  m_Amounts: 0100000001000000
+  m_Modifiers:
+  - modifiers: []
+  - modifiers: []
+  - modifiers: []
+  - modifiers: []
   onChange:
     m_PersistentCalls:
       m_Calls: []
@@ -320,18 +337,21 @@ MonoBehaviour:
   - item: {fileID: -5663772737389988193, guid: 1ae57b994efcab048a1bb130d4e11d83, type: 2}
     minStack: 3
     maxStack: 3
-    propertyRandomizer: 0
     chance: 0.5
+    modifiers:
+      modifiers: []
   - item: {fileID: -5663772737389988193, guid: 1ae57b994efcab048a1bb130d4e11d83, type: 2}
     minStack: 1
     maxStack: 2
-    propertyRandomizer: 0
     chance: 0.7
+    modifiers:
+      modifiers: []
   - item: {fileID: -5663772737389988193, guid: 1ae57b994efcab048a1bb130d4e11d83, type: 2}
     minStack: 1
     maxStack: 1
-    propertyRandomizer: 0
     chance: 0.9
+    modifiers:
+      modifiers: []
   m_MaxAmount: 3
 --- !u!1 &7232939143057212312
 GameObject:

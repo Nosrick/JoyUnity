@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace DevionGames
 {
+    [UnityEngine.Scripting.APIUpdating.MovedFromAttribute(true, null, "Assembly-CSharp")]
     [Icon(typeof(GameObject))]
     [ComponentMenu("GameObject/SendMessage")]
     public class SendMessage : Action

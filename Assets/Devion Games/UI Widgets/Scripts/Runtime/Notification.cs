@@ -26,5 +26,11 @@ namespace DevionGames.UIWidgets
             }
             return base.AddItem(options);
         }
+
+        public override bool CanAddItem(NotificationOptions item, out UISlot<NotificationOptions> slot, bool createSlot = false)
+        {
+            slot = null;
+            return gameObject.activeInHierarchy && base.CanAddItem(item, out slot, createSlot);
+        }
     }
 }

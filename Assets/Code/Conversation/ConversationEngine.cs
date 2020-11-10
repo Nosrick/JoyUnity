@@ -3,8 +3,10 @@ using JoyLib.Code.Conversation.Conversations;
 using JoyLib.Code.Entities;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Xml.Linq;
 using Castle.Core.Internal;
 using DevionGames;
@@ -15,6 +17,7 @@ using JoyLib.Code.Unity.GUI;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using MenuItem = DevionGames.UIWidgets.MenuItem;
 
@@ -26,7 +29,7 @@ namespace JoyLib.Code.Conversation
         protected List<ITopic> m_CurrentTopics;
 
         [SerializeField]
-        protected GameObject s_Window;
+        protected GameObject m_Window;
 
         protected GUIManager GUIManager
         {
@@ -72,8 +75,8 @@ namespace JoyLib.Code.Conversation
 
         protected GameObject Window
         {
-            get => s_Window;
-            set => s_Window = value;
+            get => m_Window;
+            set => m_Window = value;
         }
 
         protected GameObject MenuItem
@@ -396,9 +399,9 @@ namespace JoyLib.Code.Conversation
 
         protected void SetTitle(string text)
         {
-            int remainingWidth = (int)(TitleRect.rect.width - ListenerSection.rect.width);
-            
-            
+            double remainingWidth = TitleRect.rect.width - ListenerSection.rect.width;
+
+            //LastSaidGUI.text = WrapText(LastSaidGUI, text, remainingWidth);
             LastSaidGUI.text = text;
             LayoutRebuilder.ForceRebuildLayoutImmediate(TitleRect);
         }
@@ -482,6 +485,57 @@ namespace JoyLib.Code.Conversation
             {
                 throw new InvalidOperationException("Could not parse conversation condition line " + conditionString);
             }
+        }
+        
+        protected string WrapText(
+            TextMeshProUGUI textToWrap,
+            string text,
+            double pixels)
+        {
+            textToWrap.text = text;
+            textToWrap.ForceMeshUpdate();
+            string[] originalLines = text.Split(new string[] { " " }, 
+                StringSplitOptions.None);
+
+            List<string> wrappedLines = new List<string>();
+
+            StringBuilder actualLine = new StringBuilder();
+            double actualWidth = 0;
+
+            for(int i = 0; i < originalLines.Length; i++)
+            {
+                string item = originalLines[i];
+                actualLine.Append(item + " ");
+                int firstCharacterIndex = textToWrap.textInfo.wordInfo[i].firstCharacterIndex;
+                for (int j = firstCharacterIndex; j < firstCharacterIndex + item.Length; j++)
+                {
+                    TMP_CharacterInfo characterInfo = textToWrap.textInfo.characterInfo[j];
+                    actualWidth += Math.Abs(characterInfo.topRight.x - characterInfo.topLeft.x);
+    
+                    if (actualWidth > pixels)
+                    {
+                        wrappedLines.Add(actualLine.ToString());
+                        actualLine.Clear();
+                        actualWidth = 0;
+                    }
+                }
+                
+            }
+
+            if (actualLine.Length > 0)
+            {
+                wrappedLines.Add(actualLine.ToString());
+            }
+
+            actualLine.Clear();
+            foreach (string line in wrappedLines)
+            {
+                actualLine.AppendLine(line);
+            }
+
+            textToWrap.text = actualLine.ToString();
+            textToWrap.ForceMeshUpdate();
+            return actualLine.ToString();
         }
 
         public ITopic[] CurrentTopics

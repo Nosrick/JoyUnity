@@ -4,8 +4,10 @@
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "JoyUnity",
-        "DevionGames",
-        "LeanGUI"
+        "LeanGUI",
+        "DevionGames.InventorySystem",
+        "DevionGames.Utilities",
+        "DevionGames.UIWidgets"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

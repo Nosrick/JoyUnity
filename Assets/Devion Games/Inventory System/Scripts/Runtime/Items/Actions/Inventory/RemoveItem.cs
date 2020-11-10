@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace DevionGames.InventorySystem.ItemActions
 {
+    [UnityEngine.Scripting.APIUpdating.MovedFromAttribute(true, null, "Assembly-CSharp")]
     [Icon("Item")]
     [ComponentMenu("Inventory System/Remove Item")]
     [System.Serializable]

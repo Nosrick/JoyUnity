@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace DevionGames.InventorySystem
 {
+    [UnityEngine.Scripting.APIUpdating.MovedFromAttribute(true, null, "Assembly-CSharp")]
     [Icon("Item")]
     [ComponentMenu("Inventory System/Show Window")]
     public class ShowWindow : Action, ITriggerUnUsedHandler
@@ -25,7 +26,7 @@ namespace DevionGames.InventorySystem
             this.m_WindowStatus = ActionStatus.Inactive;
             this.m_ItemContainer = WidgetUtility.Find<ItemContainer>(this.m_WindowName);
             if (this.m_ItemContainer != null) {
-                this.m_ItemContainer.onClose.AddListener(delegate () { this.m_WindowStatus = ActionStatus.Success;  });
+                this.m_ItemContainer.RegisterListener("OnClose",(CallbackEventData eventData)=>{ this.m_WindowStatus = ActionStatus.Success;  });
             }
             this.m_ItemCollection = gameObject.GetComponent<ItemCollection>();
             if (this.m_ItemCollection != null)

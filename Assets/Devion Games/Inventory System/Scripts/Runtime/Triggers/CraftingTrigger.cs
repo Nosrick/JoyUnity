@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DevionGames.UIWidgets;
 using UnityEngine;
 
@@ -72,7 +73,7 @@ namespace DevionGames.InventorySystem
 
         public override bool OverrideUse(Slot slot, Item item)
         {
- 
+
             if (Trigger.currentUsedWindow == item.Container && !slot.MoveItem())
             {
                 this.m_AmountSpinner = Trigger.currentUsedWindow.GetComponentInChildren<Spinner>();
@@ -120,6 +121,29 @@ namespace DevionGames.InventorySystem
                 return;
             }
 
+            if (item.UseCraftingSkill)
+            {
+                ItemContainer skills = WidgetUtility.Find<ItemContainer>(item.SkillWindow);
+                if (skills != null)
+                {
+                    Skill skill = (Skill)skills.GetItems(item.CraftingSkill.Id).FirstOrDefault();
+                    if (skill == null)
+                    {
+                        InventoryManager.Notifications.missingSkillToCraft.Show(item.DisplayName);
+                        return;
+                    }
+
+                    if (skill.CurrentValue < item.MinCraftingSkillValue)
+                    {
+                        InventoryManager.Notifications.requiresHigherSkill.Show(item.DisplayName, skill.DisplayName);
+                        return;
+                    }
+                }
+                else {
+                    Debug.LogWarning("Item is set to use a skill but no skill window with name "+item.SkillWindow+" found!");
+                }
+            }
+
             if (!HasIngredients(this.m_RequiredIngredientsContainer, item))
             {
                 InventoryManager.Notifications.missingIngredient.Show();
@@ -128,10 +152,16 @@ namespace DevionGames.InventorySystem
             }
 
             GameObject user = InventoryManager.current.PlayerInfo.gameObject;
-            user.transform.LookAt(new Vector3(Trigger.currentUsedTrigger.transform.position.x, user.transform.position.y, Trigger.currentUsedTrigger.transform.position.z));
-            user.SendMessage("SetControllerActive", false, SendMessageOptions.DontRequireReceiver);
-            Animator animator = user.GetComponent<Animator>();
-            animator.CrossFadeInFixedTime(Animator.StringToHash(item.CraftingAnimatorState), 0.2f);
+            if (user != null)
+            {
+                //user.transform.LookAt(new Vector3(Trigger.currentUsedTrigger.transform.position.x, user.transform.position.y, Trigger.currentUsedTrigger.transform.position.z));
+                user.SendMessage("SetControllerActive", false, SendMessageOptions.DontRequireReceiver);
+
+                Animator animator = InventoryManager.current.PlayerInfo.animator;
+                if(animator != null)
+                    animator.CrossFadeInFixedTime(Animator.StringToHash(item.CraftingAnimatorState), 0.2f);
+
+            }
             //this.m_RequiredIngredientsContainer.Lock(true);
             StartCoroutine(CraftItems(item, amount));
             ExecuteEvent<ITriggerCraftStart>(Execute, item);
@@ -153,10 +183,11 @@ namespace DevionGames.InventorySystem
         {
             this.m_IsCrafting = false;
             GameObject user = InventoryManager.current.PlayerInfo.gameObject;
-            user.SendMessage("SetControllerActive", true, SendMessageOptions.DontRequireReceiver);
+            if(user != null)
+                user.SendMessage("SetControllerActive", true, SendMessageOptions.DontRequireReceiver);
+
             LoadCachedAnimatorStates();
             StopCoroutine("CraftItems");
-          //  this.m_RequiredIngredientsContainer.Lock(false);
             ExecuteEvent<ITriggerCraftStop>(Execute, item);
             this.m_Progressbar.SetProgress(0f);
         }
@@ -187,10 +218,29 @@ namespace DevionGames.InventorySystem
             this.m_ProgressDuration = item.CraftingDuration;
             this.m_ProgressInitTime = Time.time;
             yield return new WaitForSeconds(item.CraftingDuration);
+            if (item.UseCraftingSkill) {
+                ItemContainer skills = WidgetUtility.Find<ItemContainer>(item.SkillWindow);
+                Skill skill = (Skill)skills.GetItems(item.CraftingSkill.Id).FirstOrDefault();
+                if (skill == null) { Debug.LogWarning("Skill not found in " + item.SkillWindow + "."); }
+                if (!skill.CheckSkill()) {
+                    InventoryManager.Notifications.failedToCraft.Show(item.DisplayName);
+                    if (item.RemoveIngredientsWhenFailed) {
+                        for (int i = 0; i < item.ingredients.Count; i++)
+                        {
+                            this.m_RequiredIngredientsContainer.RemoveItem(item.ingredients[i].item, item.ingredients[i].amount);
+                        }
+                    }
+                    yield break;
+                }  
+
+            }
+
             Item craftedItem = Instantiate(item);
-            craftedItem.PropertyPercentRange = item.PropertyPercentRange;
-            craftedItem.RandomizeProperties();
             craftedItem.Stack = 1;
+            craftedItem.CraftingModifier.Modify(craftedItem);
+
+
+
             if (this.m_ResultStorageContainer.StackOrAdd(craftedItem))
             {
                 for (int i = 0; i < item.ingredients.Count; i++)

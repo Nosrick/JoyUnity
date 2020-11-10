@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 
 namespace DevionGames
 {
+    [UnityEngine.Scripting.APIUpdating.MovedFromAttribute(true, null, "Assembly-CSharp")]
     public abstract class BaseTrigger : CallbackHandler, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
     {
         //Player GameObject, overrride this and set 
@@ -34,8 +35,6 @@ namespace DevionGames
         //If in range and trigger input type includes key, the key to use the trigger.
         public KeyCode key = KeyCode.F;
 
-        //Does the user quits application
-        private bool m_ApplicationQuit;
         //Custom Trigger callbacks
         protected ITriggerEventHandler[] m_TriggerEvents;
         //Current trigger used by the player
@@ -77,7 +76,7 @@ namespace DevionGames
         public bool InUse
         {
             get { return this.m_InUse; }
-            protected set
+            set
             {
                 if (this.m_InUse != value)
                 {
@@ -125,16 +124,10 @@ namespace DevionGames
             }
         }
 
-        //Called when the player quits the game
-        private void OnApplicationQuit()
-        {
-            this.m_ApplicationQuit = true;
-        }
-
         protected virtual void OnDestroy()
         {
             //Check if the user quits the game
-            if (!this.m_ApplicationQuit)
+            if (Time.frameCount > 0)
             {
                 //Set in range to false when the game object gets destroyed to invoke OnTriggerUnUsed events
                 InRange = false;
@@ -145,7 +138,7 @@ namespace DevionGames
         protected virtual void OnTriggerEnter(Collider other)
         {
             //Check if the collider other is player 
-            if (other.tag == PlayerInfo.gameObject.tag)
+            if (isActiveAndEnabled && other.tag == PlayerInfo.gameObject.tag)
             {
                 //Set that player is in range
                 InRange = true;
@@ -156,7 +149,7 @@ namespace DevionGames
         protected virtual void OnTriggerExit(Collider other)
         {
             //Check if the collider other is player
-            if (other.tag == PlayerInfo.gameObject.tag)
+            if (isActiveAndEnabled && other.tag == PlayerInfo.gameObject.tag)
             {
                 //Set that player is out of range
                 InRange = false;
@@ -231,11 +224,10 @@ namespace DevionGames
             RaycastHit hit;
             bool raycast = Physics.Raycast(playerPosition, direction, out hit);
             collider.enabled = true;
-            if (raycast && hit.transform != transform && gameObject != PlayerInfo.gameObject)
+            if (raycast && !UnityEngine.Object.ReferenceEquals(hit.transform,transform))
             {
                 return false;
             }
-
             //Trigger can be used
             return true;
         }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace DevionGames
 {
+    [UnityEngine.Scripting.APIUpdating.MovedFromAttribute(true, null, "Assembly-CSharp")]
     [System.Serializable]
     public abstract class Action : IAction
     {

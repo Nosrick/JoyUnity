@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace DevionGames
 {
+    [UnityEngine.Scripting.APIUpdating.MovedFromAttribute(true, null, "Assembly-CSharp")]
     [Icon("Component")]
     [ComponentMenu("Component/Set Enabled")]
     public class SetEnabled : Action

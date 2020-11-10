@@ -2,6 +2,7 @@
 
 namespace DevionGames
 {
+    [UnityEngine.Scripting.APIUpdating.MovedFromAttribute(true, null, "Assembly-CSharp")]
     [Icon(typeof(Transform))]
     [ComponentMenu("Transform/Set Position")]
     public class SetPosition : Action

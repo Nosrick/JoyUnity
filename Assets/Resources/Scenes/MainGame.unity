@@ -1578,16 +1578,10 @@ MonoBehaviour:
   m_KeyCode: 0
   m_EaseType: 28
   m_Duration: 0.7
-  showSound: {fileID: 0}
-  closeSound: {fileID: 0}
+  m_ShowSound: {fileID: 0}
+  m_CloseSound: {fileID: 0}
   m_Focus: 1
   m_DeactivateOnClose: 1
-  onShow:
-    m_PersistentCalls:
-      m_Calls: []
-  onClose:
-    m_PersistentCalls:
-      m_Calls: []
   m_MenuItemPrefab: {fileID: 206369573}
 --- !u!224 &220384646 stripped
 RectTransform:
@@ -3333,7 +3327,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 9
   m_TargetDisplay: 0
 --- !u!1001 &669451214
 PrefabInstance:
@@ -4914,10 +4908,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Database: {fileID: 11400000, guid: cf6137838032cfb4bb3a37f83d9cda74, type: 2}
   dontDestroyOnLoad: 1
-  onSceneLoaded:
+  onDataLoaded:
     m_PersistentCalls:
       m_Calls: []
-  onSceneSaved:
+  onDataSaved:
     m_PersistentCalls:
       m_Calls: []
 --- !u!4 &944051913
@@ -6133,23 +6127,17 @@ MonoBehaviour:
   m_KeyCode: 0
   m_EaseType: 28
   m_Duration: 0.7
-  showSound: {fileID: 0}
-  closeSound: {fileID: 0}
+  m_ShowSound: {fileID: 0}
+  m_CloseSound: {fileID: 0}
   m_Focus: 1
   m_DeactivateOnClose: 1
-  onShow:
-    m_PersistentCalls:
-      m_Calls: []
-  onClose:
-    m_PersistentCalls:
-      m_Calls: []
   useButton: 2
   m_DynamicContainer: 0
   m_SlotParent: {fileID: 871055357}
   m_SlotPrefab: {fileID: 0}
   m_UseReferences: 0
-  m_CanDragIn: 0
-  m_CanDragOut: 0
+  m_CanDragIn: 1
+  m_CanDragOut: 1
   m_CanDropItems: 1
   m_CanReferenceItems: 1
   m_CanSellItems: 0
@@ -6185,9 +6173,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68165cdf1896c89479a91b2478670c0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  items: []
-  amounts: 
-  randomProperty: []
+  saveable: 1
+  m_Items: []
+  m_Amounts: 
+  m_Modifiers: []
   onChange:
     m_PersistentCalls:
       m_Calls: []
@@ -7455,11 +7444,6 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 835294647578703609, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
         type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 469.14502
-      objectReference: {fileID: 0}
-    - target: {fileID: 835294647578703609, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
-        type: 3}
       propertyPath: m_AnchorMin.y
       value: 0
       objectReference: {fileID: 0}
@@ -7470,13 +7454,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 835294647578703609, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
         type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 835294647578703609, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
+        type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 835294647578703609, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 934.29004
       objectReference: {fileID: 0}
     - target: {fileID: 835294647578703609, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
         type: 3}
@@ -7500,12 +7489,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1688692771016098577, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
         type: 3}
-      propertyPath: m_AnchoredPosition.y
+      propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1688692771016098577, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
         type: 3}
-      propertyPath: m_SizeDelta.x
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1688692771016098577, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
@@ -7566,7 +7555,7 @@ PrefabInstance:
     - target: {fileID: 7623997236991320388, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 67.535
+      value: 295.00836
       objectReference: {fileID: 0}
     - target: {fileID: 7623997236991320388, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
         type: 3}
@@ -7700,28 +7689,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8424994987622645027, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
         type: 3}
-      propertyPath: m_ChildAlignment
+      propertyPath: m_ChildControlWidth
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8424994987622645027, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
+        type: 3}
+      propertyPath: m_ChildControlHeight
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8424994987622645055, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
         type: 3}
       propertyPath: m_Name
       value: Conversation Window
-      objectReference: {fileID: 0}
-    - target: {fileID: 9014987977286830260, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
-        type: 3}
-      propertyPath: m_overflowMode
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9014987977286830260, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
-        type: 3}
-      propertyPath: m_enableWordWrapping
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9014987977286830260, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
-        type: 3}
-      propertyPath: m_parseCtrlCharacters
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2d53dc4a1c9b3c54d82d77dde2040807, type: 3}
@@ -7855,9 +7834,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68165cdf1896c89479a91b2478670c0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  items: []
-  amounts: 
-  randomProperty: []
+  saveable: 1
+  m_Items: []
+  m_Amounts: 
+  m_Modifiers: []
   onChange:
     m_PersistentCalls:
       m_Calls: []
@@ -9921,7 +9901,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebb364355c0f7024bbaa62f6af61a0f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  s_Window: {fileID: 773103076}
+  m_Window: {fileID: 773103076}
 --- !u!114 &1629111833
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12267,23 +12247,17 @@ MonoBehaviour:
   m_KeyCode: 0
   m_EaseType: 28
   m_Duration: 0.7
-  showSound: {fileID: 0}
-  closeSound: {fileID: 0}
+  m_ShowSound: {fileID: 0}
+  m_CloseSound: {fileID: 0}
   m_Focus: 1
   m_DeactivateOnClose: 1
-  onShow:
-    m_PersistentCalls:
-      m_Calls: []
-  onClose:
-    m_PersistentCalls:
-      m_Calls: []
   useButton: 2
   m_DynamicContainer: 0
   m_SlotParent: {fileID: 1923560014}
   m_SlotPrefab: {fileID: 0}
   m_UseReferences: 0
-  m_CanDragIn: 0
-  m_CanDragOut: 0
+  m_CanDragIn: 1
+  m_CanDragOut: 1
   m_CanDropItems: 0
   m_CanReferenceItems: 1
   m_CanSellItems: 0
@@ -12319,9 +12293,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68165cdf1896c89479a91b2478670c0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  items: []
-  amounts: 
-  randomProperty: []
+  saveable: 1
+  m_Items: []
+  m_Amounts: 
+  m_Modifiers: []
   onChange:
     m_PersistentCalls:
       m_Calls: []

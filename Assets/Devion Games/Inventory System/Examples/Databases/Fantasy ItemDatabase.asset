@@ -1,5 +1,55 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-9164302591508860154
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a9a3ee254b78a64481dccedbfd4ba41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Id: 328c9708-0135-44ee-8000-39309dfa737b
+  m_ItemName: Lumberjacking
+  m_UseItemNameAsDisplayName: 1
+  m_DisplayName: New Item
+  m_Icon: {fileID: 21300000, guid: 81e9ec1d21e1f8f43a06e7e75c17fc37, type: 3}
+  m_Prefab: {fileID: 0}
+  m_Description: As your skill improves, your chance of successfully harvesting wood
+    from a given tree increases.
+  m_Category: {fileID: -8831619382594955781}
+  m_IsSellable: 1
+  m_BuyPrice: 80
+  m_BuyCurrency: {fileID: -2811142919616601772}
+  m_SellPrice: 0
+  m_SellCurrency: {fileID: -2811142919616601772}
+  m_Stack: 1
+  m_MaxStack: 1
+  m_IsDroppable: 1
+  m_DropSound: {fileID: 0}
+  m_OverridePrefab: {fileID: 0}
+  m_IsCraftable: 0
+  m_CraftingDuration: 2
+  m_UseCraftingSkill: 0
+  m_SkillWindow: Skills
+  m_CraftingSkill: {fileID: 0}
+  m_RemoveIngredientsWhenFailed: 0
+  m_MinCraftingSkillValue: 0
+  m_CraftingAnimatorState: Blacksmithy
+  m_CraftingModifier:
+    modifiers: []
+  ingredients: []
+  properties: []
+  m_UseCategoryCooldown: 1
+  m_Cooldown: 1
+  actions: []
+  m_FixedSuccessChance: 50
+  m_GainModifier: {fileID: 11400000, guid: ab8c15d98d0de6d448b589d24bbb0eef, type: 2}
+  references:
+    version: 1
 --- !u!114 &-9040799555073544844
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -13,6 +63,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Tool
+  m_EditorColor: {r: 0.6132076, g: 0.6132076, b: 0.6132076, a: 1}
   m_Cooldown: 1
 --- !u!114 &-8967533827971111582
 MonoBehaviour:
@@ -28,16 +79,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Id: d498fc18-b018-47fb-a353-5f61052108a4
   m_ItemName: Bow
+  m_UseItemNameAsDisplayName: 1
+  m_DisplayName: New Item
   m_Icon: {fileID: 21300000, guid: 5d7061fc7da05ce44add317708ec7215, type: 3}
   m_Prefab: {fileID: 8054533140301882152, guid: 439347daebb9d4c49bc0207cc598caa0,
     type: 3}
   m_Description: Use a bow to attack enemies from range.
   m_Category: {fileID: -5355670550631679221}
-  m_PossibleRarity:
-  - {fileID: 4257271418691296376}
-  - {fileID: 1459171670829712994}
-  - {fileID: 7388703754817051196}
-  - {fileID: 8829102310862775636}
+  m_IsSellable: 1
   m_BuyPrice: 21
   m_BuyCurrency: {fileID: -2811142919616601772}
   m_SellPrice: 18
@@ -49,7 +98,15 @@ MonoBehaviour:
   m_OverridePrefab: {fileID: 0}
   m_IsCraftable: 1
   m_CraftingDuration: 5
+  m_UseCraftingSkill: 1
+  m_SkillWindow: Skills
+  m_CraftingSkill: {fileID: -3323905948889970588}
+  m_RemoveIngredientsWhenFailed: 1
+  m_MinCraftingSkillValue: 4
   m_CraftingAnimatorState: Blacksmithy
+  m_CraftingModifier:
+    modifiers:
+    - {fileID: 11400000, guid: af5120ca8702be44fb59b6eadcd27cd0, type: 2}
   ingredients:
   - item: {fileID: -5663772737389988193}
     amount: 4
@@ -160,11 +217,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Id: 0d1cc315-7f58-4f30-a344-863a5f05e37a
   m_ItemName: Gold
+  m_UseItemNameAsDisplayName: 1
+  m_DisplayName: New Item
   m_Icon: {fileID: 21300000, guid: 1da9f2b04608b044eb7f66ef739e8303, type: 3}
   m_Prefab: {fileID: 0}
   m_Description: 
   m_Category: {fileID: 0}
-  m_PossibleRarity: []
+  m_IsSellable: 1
   m_BuyPrice: 0
   m_BuyCurrency: {fileID: 0}
   m_SellPrice: 0
@@ -176,12 +235,34 @@ MonoBehaviour:
   m_OverridePrefab: {fileID: 0}
   m_IsCraftable: 0
   m_CraftingDuration: 2
+  m_UseCraftingSkill: 0
+  m_SkillWindow: Skills
+  m_CraftingSkill: {fileID: 0}
+  m_RemoveIngredientsWhenFailed: 0
+  m_MinCraftingSkillValue: 0
   m_CraftingAnimatorState: Blacksmithy
+  m_CraftingModifier:
+    modifiers: []
   ingredients: []
   properties: []
   currencyConversions:
   - factor: 100
     currency: {fileID: -6442420119529586086}
+--- !u!114 &-8831619382594955781
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4abab319188bac4a8515c585b13ba9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  name: Skills
+  m_EditorColor: {r: 0, g: 0, b: 0, a: 0}
+  m_Cooldown: 1
 --- !u!114 &-8373593952731256949
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -212,7 +293,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   autoSave: 1
   savingKey: Player
-  savingRate: 60
+  savingRate: 10
   provider: 0
 --- !u!114 &-8192587188366231400
 MonoBehaviour:
@@ -238,18 +319,20 @@ MonoBehaviour:
   - {fileID: 1063046599387310152}
   - {fileID: 8763039942855579107}
   - {fileID: -5663772737389988193}
-  m_Amounts: 01000000010000000100000001000000010000000100000001000000010000000100000001000000
-  m_RandomProperty:
-  - 0.1
-  - 0.1
-  - 0.1
-  - 0.1
-  - 0.1
-  - 0.1
-  - 0
-  - 0
-  - 0
-  - 0
+  - {fileID: 8429455951140046941}
+  m_Amounts: 0100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+  m_Modifiers:
+  - modifiers: []
+  - modifiers: []
+  - modifiers: []
+  - modifiers: []
+  - modifiers: []
+  - modifiers: []
+  - modifiers: []
+  - modifiers: []
+  - modifiers: []
+  - modifiers: []
+  - modifiers: []
 --- !u!114 &-8061578217545172497
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -290,6 +373,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Material
+  m_EditorColor: {r: 0.36739054, g: 0.6037736, b: 0.4591628, a: 1}
   m_Cooldown: 1
 --- !u!114 &-6642204398173666289
 MonoBehaviour:
@@ -318,11 +402,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Id: 3ab54e42-a79e-43d1-a07d-e0fbe98e4da5
   m_ItemName: Silver
+  m_UseItemNameAsDisplayName: 1
+  m_DisplayName: New Item
   m_Icon: {fileID: 21300000, guid: 4d9c85175f3dfa0408f65c38dbdf69b4, type: 3}
   m_Prefab: {fileID: 0}
   m_Description: 
   m_Category: {fileID: 0}
-  m_PossibleRarity: []
+  m_IsSellable: 1
   m_BuyPrice: 0
   m_BuyCurrency: {fileID: 0}
   m_SellPrice: 0
@@ -334,7 +420,14 @@ MonoBehaviour:
   m_OverridePrefab: {fileID: 0}
   m_IsCraftable: 0
   m_CraftingDuration: 2
+  m_UseCraftingSkill: 0
+  m_SkillWindow: Skills
+  m_CraftingSkill: {fileID: 0}
+  m_RemoveIngredientsWhenFailed: 0
+  m_MinCraftingSkillValue: 0
   m_CraftingAnimatorState: Blacksmithy
+  m_CraftingModifier:
+    modifiers: []
   ingredients: []
   properties: []
   currencyConversions:
@@ -355,7 +448,127 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: None
+  m_EditorColor: {r: 1, g: 1, b: 1, a: 0}
   m_Cooldown: 1
+--- !u!114 &-6266380644497530537
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a78acd5557204d499bcf3420fd4ee78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Id: c3599c25-74e3-46fd-97b7-c55ea09e6945
+  m_ItemName: Home Rune
+  m_UseItemNameAsDisplayName: 1
+  m_DisplayName: New Item
+  m_Icon: {fileID: 21300000, guid: 9e2c99a2f1ae70343ba923d766b9ead8, type: 3}
+  m_Prefab: {fileID: 0}
+  m_Description: Brings you home.
+  m_Category: {fileID: -6294223960729143046}
+  m_IsSellable: 0
+  m_BuyPrice: 0
+  m_BuyCurrency: {fileID: -2811142919616601772}
+  m_SellPrice: 0
+  m_SellCurrency: {fileID: -2811142919616601772}
+  m_Stack: 1
+  m_MaxStack: 1
+  m_IsDroppable: 0
+  m_DropSound: {fileID: 0}
+  m_OverridePrefab: {fileID: 0}
+  m_IsCraftable: 0
+  m_CraftingDuration: 2
+  m_UseCraftingSkill: 0
+  m_SkillWindow: Skills
+  m_CraftingSkill: {fileID: 0}
+  m_RemoveIngredientsWhenFailed: 0
+  m_MinCraftingSkillValue: 0
+  m_CraftingAnimatorState: Blacksmithy
+  m_CraftingModifier:
+    modifiers: []
+  ingredients: []
+  properties: []
+  m_UseCategoryCooldown: 0
+  m_Cooldown: 3
+  actions:
+  - id: 0
+  - id: 1
+  - id: 2
+  - id: 3
+  - id: 4
+  - id: 5
+  - id: 6
+  - id: 7
+  - id: 8
+  references:
+    version: 1
+    00000000:
+      type: {class: SetEnabled, ns: DevionGames, asm: DevionGames.Triggers}
+      data:
+        m_Type: DevionGames.SetEnabled
+        m_Enabled: 1
+        m_Target: 1
+        m_ComponentName: ThirdPersonController
+        m_Enable: 0
+    00000001:
+      type: {class: SetFloat, ns: DevionGames, asm: DevionGames.Triggers}
+      data:
+        m_Type: DevionGames.SetFloat
+        m_Enabled: 1
+        m_Target: 1
+        m_ParameterName: Forward Input
+        m_Value: 0
+    00000002:
+      type: {class: CrossFade, ns: DevionGames, asm: DevionGames.Triggers}
+      data:
+        m_Type: DevionGames.CrossFade
+        m_Enabled: 1
+        m_Target: 1
+        m_AnimatorState: Magic Idle
+        m_TransitionDuration: 0.2
+    00000003:
+      type: {class: Cooldown, ns: DevionGames.InventorySystem.ItemActions, asm: DevionGames.InventorySystem}
+      data:
+        m_Type: DevionGames.InventorySystem.ItemActions.Cooldown
+        m_Enabled: 1
+        item: {fileID: -6266380644497530537}
+        m_GlobalCooldown: 3
+    00000004:
+      type: {class: Wait, ns: DevionGames, asm: DevionGames.Triggers}
+      data:
+        m_Type: DevionGames.Wait
+        m_Enabled: 1
+        duration: 3
+    00000005:
+      type: {class: Save, ns: DevionGames.InventorySystem, asm: DevionGames.InventorySystem}
+      data:
+        m_Type: DevionGames.InventorySystem.Save
+        m_Enabled: 1
+    00000006:
+      type: {class: LoadScene, ns: DevionGames, asm: DevionGames.Triggers}
+      data:
+        m_Type: DevionGames.LoadScene
+        m_Enabled: 1
+        m_Scene: Main Scene
+    00000007:
+      type: {class: SetPosition, ns: DevionGames, asm: DevionGames.Triggers}
+      data:
+        m_Type: DevionGames.SetPosition
+        m_Enabled: 1
+        m_Target: 1
+        m_Position: {x: 0, y: 0, z: 0}
+    00000008:
+      type: {class: SetEnabled, ns: DevionGames, asm: DevionGames.Triggers}
+      data:
+        m_Type: DevionGames.SetEnabled
+        m_Enabled: 1
+        m_Target: 1
+        m_ComponentName: ThirdPersonController
+        m_Enable: 1
 --- !u!114 &-5663772737389988193
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -370,24 +583,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Id: 7104b05e-6d4e-4447-87bd-aad3db602483
   m_ItemName: Wood
+  m_UseItemNameAsDisplayName: 1
+  m_DisplayName: New Item
   m_Icon: {fileID: 21300000, guid: b69b1ca52acfaed43b07c602653a71fd, type: 3}
   m_Prefab: {fileID: 8050120179880737813, guid: 9c7a32b2c2e150b4a9f6d6d8974a9f40,
     type: 3}
   m_Description: Resource for crafting items.
   m_Category: {fileID: -7427245140175711199}
-  m_PossibleRarity: []
+  m_IsSellable: 1
   m_BuyPrice: 3
   m_BuyCurrency: {fileID: -2811142919616601772}
   m_SellPrice: 2
   m_SellCurrency: {fileID: -2811142919616601772}
   m_Stack: 1
-  m_MaxStack: 60
+  m_MaxStack: 3
   m_IsDroppable: 1
   m_DropSound: {fileID: 0}
   m_OverridePrefab: {fileID: 0}
   m_IsCraftable: 0
   m_CraftingDuration: 2
+  m_UseCraftingSkill: 0
+  m_SkillWindow: Skills
+  m_CraftingSkill: {fileID: 0}
+  m_RemoveIngredientsWhenFailed: 0
+  m_MinCraftingSkillValue: 0
   m_CraftingAnimatorState: Blacksmithy
+  m_CraftingModifier:
+    modifiers: []
   ingredients: []
   properties: []
 --- !u!114 &-5355670550631679221
@@ -403,6 +625,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Weapon
+  m_EditorColor: {r: 0.8962264, g: 0.17846043, b: 0.012682426, a: 1}
   m_Cooldown: 1
 --- !u!114 &-4474190543486091594
 MonoBehaviour:
@@ -418,13 +641,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Id: deaf6164-418d-4a18-bc10-d1cb6580f1e4
   m_ItemName: Axe
+  m_UseItemNameAsDisplayName: 1
+  m_DisplayName: New Item
   m_Icon: {fileID: 21300000, guid: 81e9ec1d21e1f8f43a06e7e75c17fc37, type: 3}
   m_Prefab: {fileID: 7757701744868425547, guid: 6a881db9233fb0748ad9709b178e05e2,
     type: 3}
   m_Description: An axe can be used to cut trees.
   m_Category: {fileID: -9040799555073544844}
-  m_PossibleRarity:
-  - {fileID: 4257271418691296376}
+  m_IsSellable: 1
   m_BuyPrice: 8
   m_BuyCurrency: {fileID: -2811142919616601772}
   m_SellPrice: 6
@@ -436,7 +660,14 @@ MonoBehaviour:
   m_OverridePrefab: {fileID: 0}
   m_IsCraftable: 1
   m_CraftingDuration: 3
+  m_UseCraftingSkill: 1
+  m_SkillWindow: Skills
+  m_CraftingSkill: {fileID: -3323905948889970588}
+  m_RemoveIngredientsWhenFailed: 1
+  m_MinCraftingSkillValue: 0
   m_CraftingAnimatorState: Blacksmithy
+  m_CraftingModifier:
+    modifiers: []
   ingredients:
   - item: {fileID: -5663772737389988193}
     amount: 1
@@ -464,11 +695,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Id: 5bf4d465-0a9f-4bae-b804-60cbc81d48b5
   m_ItemName: Healing
+  m_UseItemNameAsDisplayName: 1
+  m_DisplayName: New Item
   m_Icon: {fileID: 21300000, guid: 4fb083f2779c6a54b83359c8e1f645ae, type: 3}
   m_Prefab: {fileID: 100010, guid: 1b80c9f94defa634487a6d9f6e386f6a, type: 3}
   m_Description: Restores your health by 13 points.
   m_Category: {fileID: -3989543302354102894}
-  m_PossibleRarity: []
+  m_IsSellable: 1
   m_BuyPrice: 0
   m_BuyCurrency: {fileID: -2811142919616601772}
   m_SellPrice: 0
@@ -480,7 +713,14 @@ MonoBehaviour:
   m_OverridePrefab: {fileID: 0}
   m_IsCraftable: 0
   m_CraftingDuration: 2
+  m_UseCraftingSkill: 0
+  m_SkillWindow: Skills
+  m_CraftingSkill: {fileID: 0}
+  m_RemoveIngredientsWhenFailed: 0
+  m_MinCraftingSkillValue: 0
   m_CraftingAnimatorState: Blacksmithy
+  m_CraftingModifier:
+    modifiers: []
   ingredients: []
   properties: []
   m_UseCategoryCooldown: 0
@@ -499,7 +739,7 @@ MonoBehaviour:
   references:
     version: 1
     00000000:
-      type: {class: InvokeNotify, ns: DevionGames.InventorySystem, asm: Assembly-CSharp}
+      type: {class: InvokeNotify, ns: DevionGames.InventorySystem, asm: DevionGames.InventorySystem}
       data:
         m_Type: 
         m_Enabled: 1
@@ -534,7 +774,7 @@ MonoBehaviour:
           duration: 2
           ignoreTimeScale: 1
     00000001:
-      type: {class: Invoke, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: Invoke, ns: DevionGames, asm: DevionGames.Triggers}
       data:
         m_Type: 
         m_Enabled: 1
@@ -561,14 +801,14 @@ MonoBehaviour:
           m_ObjectValue: {fileID: 0}
           m_ArgumentType: 3
     00000002:
-      type: {class: Cooldown, ns: DevionGames.InventorySystem.ItemActions, asm: Assembly-CSharp}
+      type: {class: Cooldown, ns: DevionGames.InventorySystem.ItemActions, asm: DevionGames.InventorySystem}
       data:
         m_Type: 
         m_Enabled: 1
         item: {fileID: -4423743630002525559}
         m_GlobalCooldown: 5
     00000003:
-      type: {class: SendMessage, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: SendMessage, ns: DevionGames, asm: DevionGames.Triggers}
       data:
         m_Type: 
         m_Enabled: 1
@@ -586,7 +826,7 @@ MonoBehaviour:
           m_ArgumentType: 1
         m_Options: 1
     00000004:
-      type: {class: CrossFade, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: CrossFade, ns: DevionGames, asm: DevionGames.Triggers}
       data:
         m_Type: 
         m_Enabled: 1
@@ -594,13 +834,13 @@ MonoBehaviour:
         m_AnimatorState: Healing
         m_TransitionDuration: 0.2
     00000005:
-      type: {class: Wait, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: Wait, ns: DevionGames, asm: DevionGames.Triggers}
       data:
         m_Type: 
         m_Enabled: 1
         duration: 0.5
     00000006:
-      type: {class: Instantiate, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: Instantiate, ns: DevionGames, asm: DevionGames.Triggers}
       data:
         m_Type: 
         m_Enabled: 1
@@ -610,7 +850,7 @@ MonoBehaviour:
         m_Offset: {x: 0, y: 0, z: 0}
         m_IgnorePlayerCollision: 1
     00000007:
-      type: {class: Invoke, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: Invoke, ns: DevionGames, asm: DevionGames.Triggers}
       data:
         m_Type: 
         m_Enabled: 1
@@ -637,13 +877,13 @@ MonoBehaviour:
           m_ObjectValue: {fileID: 0}
           m_ArgumentType: 3
     00000008:
-      type: {class: Wait, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: Wait, ns: DevionGames, asm: DevionGames.Triggers}
       data:
         m_Type: 
         m_Enabled: 1
         duration: 1.2
     00000009:
-      type: {class: SendMessage, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: SendMessage, ns: DevionGames, asm: DevionGames.Triggers}
       data:
         m_Type: 
         m_Enabled: 1
@@ -674,8 +914,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   contextMenuName: ContextMenu
   tooltipName: Tooltip
+  sellPriceTooltipName: Sell Price Tooltip
   stackName: Stack
   notificationName: Notification
+--- !u!114 &-4213577332647146612
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28fccac83a2fa2245991bffe45a6cdd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_GroupName: Alchemy
+  m_Items:
+  - {fileID: 8429455951140046941}
+  m_Amounts: 01000000
+  m_Modifiers:
+  - modifiers: []
 --- !u!114 &-3989543302354102894
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -689,6 +948,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Spells
+  m_EditorColor: {r: 0, g: 0, b: 0, a: 0}
   m_Cooldown: 1
 --- !u!114 &-3817802777368614781
 MonoBehaviour:
@@ -706,6 +966,142 @@ MonoBehaviour:
   maxDropDistance: 1
   debugMessages: 1
   showAllComponents: 0
+--- !u!114 &-3796731219101042533
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28fccac83a2fa2245991bffe45a6cdd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_GroupName: Loot
+  m_Items:
+  - {fileID: 8429455951140046941}
+  - {fileID: -5663772737389988193}
+  - {fileID: -4474190543486091594}
+  - {fileID: -2060425377994505070}
+  - {fileID: -8967533827971111582}
+  - {fileID: 8763039942855579107}
+  - {fileID: 3129509250564287029}
+  - {fileID: -447126039411374142}
+  - {fileID: 2409076057030828310}
+  - {fileID: 960666660569578442}
+  - {fileID: 529780001783015153}
+  m_Amounts: 0100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+  m_Modifiers:
+  - modifiers: []
+  - modifiers: []
+  - modifiers: []
+  - modifiers: []
+  - modifiers: []
+  - modifiers: []
+  - modifiers: []
+  - modifiers: []
+  - modifiers: []
+  - modifiers: []
+  - modifiers: []
+--- !u!114 &-3323905948889970588
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a9a3ee254b78a64481dccedbfd4ba41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Id: e4f98e95-2c8c-42b2-b020-9b7f9ab982d6
+  m_ItemName: Blacksmithy
+  m_UseItemNameAsDisplayName: 1
+  m_DisplayName: New Item
+  m_Icon: {fileID: 21300000, guid: f6293f20fd85aa143bead12afd67ebbb, type: 3}
+  m_Prefab: {fileID: 0}
+  m_Description: Increases the chance to craft an item.
+  m_Category: {fileID: -8831619382594955781}
+  m_IsSellable: 1
+  m_BuyPrice: 322
+  m_BuyCurrency: {fileID: -2811142919616601772}
+  m_SellPrice: 0
+  m_SellCurrency: {fileID: -2811142919616601772}
+  m_Stack: 1
+  m_MaxStack: 1
+  m_IsDroppable: 1
+  m_DropSound: {fileID: 0}
+  m_OverridePrefab: {fileID: 0}
+  m_IsCraftable: 0
+  m_CraftingDuration: 2
+  m_UseCraftingSkill: 0
+  m_SkillWindow: Skills
+  m_CraftingSkill: {fileID: 0}
+  m_RemoveIngredientsWhenFailed: 0
+  m_MinCraftingSkillValue: 0
+  m_CraftingAnimatorState: Blacksmithy
+  m_CraftingModifier:
+    modifiers: []
+  ingredients: []
+  properties: []
+  m_UseCategoryCooldown: 1
+  m_Cooldown: 1
+  actions: []
+  m_FixedSuccessChance: 50
+  m_GainModifier: {fileID: 11400000, guid: 444722d6eb4ecd243aa83015e96c5485, type: 2}
+  references:
+    version: 1
+--- !u!114 &-2920532131010319874
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a9a3ee254b78a64481dccedbfd4ba41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Id: b694ddfb-5dbf-481f-b72c-a22ac94d819a
+  m_ItemName: Swordsmanship
+  m_UseItemNameAsDisplayName: 1
+  m_DisplayName: New Item
+  m_Icon: {fileID: 21300000, guid: 5fd50594014b70e48bd6993443d46b32, type: 3}
+  m_Prefab: {fileID: 0}
+  m_Description: Swordsmanship increases your damage and hit chance.
+  m_Category: {fileID: -8831619382594955781}
+  m_IsSellable: 1
+  m_BuyPrice: 0
+  m_BuyCurrency: {fileID: -2811142919616601772}
+  m_SellPrice: 0
+  m_SellCurrency: {fileID: -2811142919616601772}
+  m_Stack: 1
+  m_MaxStack: 1
+  m_IsDroppable: 1
+  m_DropSound: {fileID: 0}
+  m_OverridePrefab: {fileID: 0}
+  m_IsCraftable: 0
+  m_CraftingDuration: 2
+  m_UseCraftingSkill: 0
+  m_SkillWindow: Skills
+  m_CraftingSkill: {fileID: 0}
+  m_RemoveIngredientsWhenFailed: 0
+  m_MinCraftingSkillValue: 0
+  m_CraftingAnimatorState: Blacksmithy
+  m_CraftingModifier:
+    modifiers: []
+  ingredients: []
+  properties: []
+  m_UseCategoryCooldown: 1
+  m_Cooldown: 1
+  actions: []
+  m_FixedSuccessChance: 50
+  m_GainModifier: {fileID: 11400000, guid: c1992775e12652140b4d346619cbf34f, type: 2}
+  references:
+    version: 1
 --- !u!114 &-2839999955813321745
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -720,11 +1116,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Id: 07046059-4d5f-45d7-bbbf-5b7912bf8134
   m_ItemName: Lohra
+  m_UseItemNameAsDisplayName: 1
+  m_DisplayName: New Item
   m_Icon: {fileID: 825313862262482097, guid: ed1162d009219214ab9e282868df2b6d, type: 3}
   m_Prefab: {fileID: 0}
   m_Description: Be careful outside the town in the first map.
   m_Category: {fileID: 164684216256526245}
-  m_PossibleRarity: []
+  m_IsSellable: 1
   m_BuyPrice: 0
   m_BuyCurrency: {fileID: -2811142919616601772}
   m_SellPrice: 0
@@ -736,7 +1134,14 @@ MonoBehaviour:
   m_OverridePrefab: {fileID: 0}
   m_IsCraftable: 0
   m_CraftingDuration: 2
+  m_UseCraftingSkill: 0
+  m_SkillWindow: Skills
+  m_CraftingSkill: {fileID: 0}
+  m_RemoveIngredientsWhenFailed: 0
+  m_MinCraftingSkillValue: 0
   m_CraftingAnimatorState: Blacksmithy
+  m_CraftingModifier:
+    modifiers: []
   ingredients: []
   properties: []
   m_UseCategoryCooldown: 1
@@ -752,7 +1157,7 @@ MonoBehaviour:
   references:
     version: 1
     00000000:
-      type: {class: SetEnabled, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: SetEnabled, ns: DevionGames, asm: DevionGames.Triggers}
       data:
         m_Type: 
         m_Enabled: 1
@@ -760,38 +1165,38 @@ MonoBehaviour:
         m_ComponentName: ThirdPersonController
         m_Enable: 0
     00000001:
-      type: {class: Cooldown, ns: DevionGames.InventorySystem.ItemActions, asm: Assembly-CSharp}
+      type: {class: Cooldown, ns: DevionGames.InventorySystem.ItemActions, asm: DevionGames.InventorySystem}
       data:
         m_Type: 
         m_Enabled: 1
         item: {fileID: -2839999955813321745}
         m_GlobalCooldown: 1
     00000002:
-      type: {class: Wait, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: Wait, ns: DevionGames, asm: DevionGames.Triggers}
       data:
         m_Type: 
         m_Enabled: 1
         duration: 1
     00000003:
-      type: {class: Save, ns: DevionGames.InventorySystem, asm: Assembly-CSharp}
+      type: {class: Save, ns: DevionGames.InventorySystem, asm: DevionGames.InventorySystem}
       data:
         m_Type: 
         m_Enabled: 1
     00000004:
-      type: {class: LoadScene, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: LoadScene, ns: DevionGames, asm: DevionGames.Triggers}
       data:
         m_Type: 
         m_Enabled: 1
         m_Scene: Main Scene
     00000005:
-      type: {class: SetPosition, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: SetPosition, ns: DevionGames, asm: DevionGames.Triggers}
       data:
         m_Type: 
         m_Enabled: 1
         m_Target: 1
         m_Position: {x: 20.65, y: 0.018, z: -21.71}
     00000006:
-      type: {class: SetEnabled, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: SetEnabled, ns: DevionGames, asm: DevionGames.Triggers}
       data:
         m_Type: 
         m_Enabled: 1
@@ -812,11 +1217,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Id: e558a93c-b67f-478f-b363-8a58b51ae9b4
   m_ItemName: Copper
+  m_UseItemNameAsDisplayName: 1
+  m_DisplayName: New Item
   m_Icon: {fileID: 21300000, guid: c11ca993f17417d40bc0966f07565d84, type: 3}
   m_Prefab: {fileID: 0}
   m_Description: 
   m_Category: {fileID: 0}
-  m_PossibleRarity: []
+  m_IsSellable: 1
   m_BuyPrice: 0
   m_BuyCurrency: {fileID: 0}
   m_SellPrice: 0
@@ -828,7 +1235,14 @@ MonoBehaviour:
   m_OverridePrefab: {fileID: 0}
   m_IsCraftable: 0
   m_CraftingDuration: 2
+  m_UseCraftingSkill: 0
+  m_SkillWindow: Skills
+  m_CraftingSkill: {fileID: 0}
+  m_RemoveIngredientsWhenFailed: 0
+  m_MinCraftingSkillValue: 0
   m_CraftingAnimatorState: Blacksmithy
+  m_CraftingModifier:
+    modifiers: []
   ingredients: []
   properties: []
   currencyConversions:
@@ -848,16 +1262,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Id: 77eb276e-4388-4545-9fe6-b513438e9719
   m_ItemName: Shield
+  m_UseItemNameAsDisplayName: 1
+  m_DisplayName: Cool Shield
   m_Icon: {fileID: 21300000, guid: b97c91e8b348f3f4ebdc11f5c82182cd, type: 3}
   m_Prefab: {fileID: 6955947972541771316, guid: caa4712265fb87f48917ca9e4be3350a,
     type: 3}
   m_Description: A wooden shield.
   m_Category: {fileID: 8705209814584371102}
-  m_PossibleRarity:
-  - {fileID: 4257271418691296376}
-  - {fileID: 1459171670829712994}
-  - {fileID: 7388703754817051196}
-  - {fileID: 8829102310862775636}
+  m_IsSellable: 1
   m_BuyPrice: 19
   m_BuyCurrency: {fileID: -2811142919616601772}
   m_SellPrice: 17
@@ -869,7 +1281,15 @@ MonoBehaviour:
   m_OverridePrefab: {fileID: 0}
   m_IsCraftable: 1
   m_CraftingDuration: 5
+  m_UseCraftingSkill: 1
+  m_SkillWindow: Skills
+  m_CraftingSkill: {fileID: -3323905948889970588}
+  m_RemoveIngredientsWhenFailed: 1
+  m_MinCraftingSkillValue: 7.7
   m_CraftingAnimatorState: Blacksmithy
+  m_CraftingModifier:
+    modifiers:
+    - {fileID: 11400000, guid: af5120ca8702be44fb59b6eadcd27cd0, type: 2}
   ingredients:
   - item: {fileID: -5663772737389988193}
     amount: 3
@@ -934,6 +1354,49 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Head
+--- !u!114 &-1175442255857385599
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e14be5e3e6cf2204293682bf65bce5dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Id: 344ba9ba-a2e4-4bf8-b120-830bbdfca227
+  m_ItemName: Scoparius
+  m_UseItemNameAsDisplayName: 1
+  m_DisplayName: New Item
+  m_Icon: {fileID: 21300000, guid: 597ce5b3f1754db4799e0b0046802f23, type: 3}
+  m_Prefab: {fileID: 3767645054357415353, guid: 9a894f0b89034d146b6cf6c49af16592,
+    type: 3}
+  m_Description: Plant to craft a health potion.
+  m_Category: {fileID: -7427245140175711199}
+  m_IsSellable: 1
+  m_BuyPrice: 4
+  m_BuyCurrency: {fileID: -2811142919616601772}
+  m_SellPrice: 3
+  m_SellCurrency: {fileID: -2811142919616601772}
+  m_Stack: 1
+  m_MaxStack: 10
+  m_IsDroppable: 0
+  m_DropSound: {fileID: 0}
+  m_OverridePrefab: {fileID: 0}
+  m_IsCraftable: 0
+  m_CraftingDuration: 2
+  m_UseCraftingSkill: 0
+  m_SkillWindow: Skills
+  m_CraftingSkill: {fileID: 0}
+  m_RemoveIngredientsWhenFailed: 0
+  m_MinCraftingSkillValue: 0
+  m_CraftingAnimatorState: Blacksmithy
+  m_CraftingModifier:
+    modifiers: []
+  ingredients: []
+  properties: []
 --- !u!114 &-447126039411374142
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -948,13 +1411,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Id: 7f88be02-e6ca-4ec2-b89f-4f5febd3dcf5
   m_ItemName: Hammer
+  m_UseItemNameAsDisplayName: 1
+  m_DisplayName: New Item
   m_Icon: {fileID: 21300000, guid: f6293f20fd85aa143bead12afd67ebbb, type: 3}
   m_Prefab: {fileID: 5445779230513671954, guid: f82bc419a6e172a44bd05e66d42408dc,
     type: 3}
   m_Description: Hammer is used to craft items.
   m_Category: {fileID: -9040799555073544844}
-  m_PossibleRarity:
-  - {fileID: 4257271418691296376}
+  m_IsSellable: 1
   m_BuyPrice: 6
   m_BuyCurrency: {fileID: -2811142919616601772}
   m_SellPrice: 4
@@ -966,7 +1430,14 @@ MonoBehaviour:
   m_OverridePrefab: {fileID: 0}
   m_IsCraftable: 1
   m_CraftingDuration: 3
+  m_UseCraftingSkill: 1
+  m_SkillWindow: Skills
+  m_CraftingSkill: {fileID: -3323905948889970588}
+  m_RemoveIngredientsWhenFailed: 1
+  m_MinCraftingSkillValue: 0
   m_CraftingAnimatorState: Blacksmithy
+  m_CraftingModifier:
+    modifiers: []
   ingredients:
   - item: {fileID: -5663772737389988193}
     amount: 1
@@ -1008,21 +1479,28 @@ MonoBehaviour:
   items:
   - {fileID: -2060425377994505070}
   - {fileID: 8429455951140046941}
-  - {fileID: 1063046599387310152}
   - {fileID: 6234106693565876968}
-  - {fileID: 8763039942855579107}
+  - {fileID: 1063046599387310152}
   - {fileID: -5663772737389988193}
+  - {fileID: 8763039942855579107}
+  - {fileID: -1175442255857385599}
+  - {fileID: -6266380644497530537}
   - {fileID: 3129509250564287029}
-  - {fileID: -4423743630002525559}
   - {fileID: 4447567160419299934}
+  - {fileID: -4423743630002525559}
   - {fileID: -2839999955813321745}
-  - {fileID: 2033560685258441697}
   - {fileID: 8692695060773013855}
-  - {fileID: 2409076057030828310}
-  - {fileID: -4474190543486091594}
+  - {fileID: 2033560685258441697}
+  - {fileID: 529780001783015153}
   - {fileID: -447126039411374142}
+  - {fileID: -4474190543486091594}
+  - {fileID: 2409076057030828310}
   - {fileID: -8967533827971111582}
   - {fileID: 960666660569578442}
+  - {fileID: -2920532131010319874}
+  - {fileID: -3323905948889970588}
+  - {fileID: -9164302591508860154}
+  - {fileID: 6595735557147903839}
   currencies:
   - {fileID: -2811142919616601772}
   - {fileID: -6442420119529586086}
@@ -1041,6 +1519,7 @@ MonoBehaviour:
   - {fileID: -7427245140175711199}
   - {fileID: -3989543302354102894}
   - {fileID: 164684216256526245}
+  - {fileID: -8831619382594955781}
   equipments:
   - {fileID: -1474344929657048262}
   - {fileID: -327638963660831434}
@@ -1057,6 +1536,9 @@ MonoBehaviour:
   - {fileID: -8192587188366231400}
   - {fileID: 6066131165606410366}
   - {fileID: 7990749027154876597}
+  - {fileID: -4213577332647146612}
+  - {fileID: -3796731219101042533}
+  - {fileID: 5365859910722360372}
   settings:
   - {fileID: -3817802777368614781}
   - {fileID: -8057506047932969836}
@@ -1090,6 +1572,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Teleporter
+  m_EditorColor: {r: 0, g: 0, b: 0, a: 0}
   m_Cooldown: 1
 --- !u!114 &171625507360801261
 MonoBehaviour:
@@ -1104,6 +1587,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Consumable
+  m_EditorColor: {r: 1, g: 0.8296584, b: 0, a: 1}
   m_Cooldown: 1
 --- !u!114 &316844889573954113
 MonoBehaviour:
@@ -1118,6 +1602,64 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Right Hand
+--- !u!114 &529780001783015153
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a78acd5557204d499bcf3420fd4ee78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Id: 63bb00df-e2e8-4e6e-8552-bb9d27049d1b
+  m_ItemName: Bowl
+  m_UseItemNameAsDisplayName: 1
+  m_DisplayName: New Item
+  m_Icon: {fileID: 21300000, guid: a937ffac382045c4faf50a0158a078c7, type: 3}
+  m_Prefab: {fileID: 6550093729711604389, guid: 53bbca1204ea7aa48938286fdd6d36b6,
+    type: 3}
+  m_Description: Tool used for Alchemy.
+  m_Category: {fileID: -9040799555073544844}
+  m_IsSellable: 0
+  m_BuyPrice: 10
+  m_BuyCurrency: {fileID: -2811142919616601772}
+  m_SellPrice: 7
+  m_SellCurrency: {fileID: -2811142919616601772}
+  m_Stack: 1
+  m_MaxStack: 1
+  m_IsDroppable: 1
+  m_DropSound: {fileID: 0}
+  m_OverridePrefab: {fileID: 0}
+  m_IsCraftable: 1
+  m_CraftingDuration: 2
+  m_UseCraftingSkill: 1
+  m_SkillWindow: Skills
+  m_CraftingSkill: {fileID: -3323905948889970588}
+  m_RemoveIngredientsWhenFailed: 1
+  m_MinCraftingSkillValue: 4
+  m_CraftingAnimatorState: Blacksmithy
+  m_CraftingModifier:
+    modifiers: []
+  ingredients:
+  - item: {fileID: 8763039942855579107}
+    amount: 2
+  properties: []
+  m_UseCategoryCooldown: 1
+  m_Cooldown: 1
+  actions:
+  - id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: ShowWindow, ns: DevionGames.InventorySystem, asm: DevionGames.InventorySystem}
+      data:
+        m_Type: DevionGames.InventorySystem.ShowWindow
+        m_Enabled: 1
+        m_WindowName: Alchemy
+        m_DestroyWhenEmpty: 0
 --- !u!114 &960666660569578442
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1132,15 +1674,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Id: de6b9e9e-9c60-4ba8-a61c-3a6d7a0e5e65
   m_ItemName: Rusty Sword
+  m_UseItemNameAsDisplayName: 1
+  m_DisplayName: New Item
   m_Icon: {fileID: 21300000, guid: 5fd50594014b70e48bd6993443d46b32, type: 3}
   m_Prefab: {fileID: 7505499703950806449, guid: 8d1205197ce57bf48b0d586eccfd9e61,
     type: 3}
   m_Description: One handed weapon.
   m_Category: {fileID: -5355670550631679221}
-  m_PossibleRarity:
-  - {fileID: 4257271418691296376}
-  - {fileID: 1459171670829712994}
-  - {fileID: 7388703754817051196}
+  m_IsSellable: 1
   m_BuyPrice: 18
   m_BuyCurrency: {fileID: -2811142919616601772}
   m_SellPrice: 15
@@ -1152,7 +1693,15 @@ MonoBehaviour:
   m_OverridePrefab: {fileID: 0}
   m_IsCraftable: 1
   m_CraftingDuration: 3
+  m_UseCraftingSkill: 1
+  m_SkillWindow: Skills
+  m_CraftingSkill: {fileID: -3323905948889970588}
+  m_RemoveIngredientsWhenFailed: 1
+  m_MinCraftingSkillValue: 1
   m_CraftingAnimatorState: Blacksmithy
+  m_CraftingModifier:
+    modifiers:
+    - {fileID: 11400000, guid: af5120ca8702be44fb59b6eadcd27cd0, type: 2}
   ingredients:
   - item: {fileID: 8763039942855579107}
     amount: 3
@@ -1262,12 +1811,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Id: 77052a30-3511-4faf-bbf6-12ab39f5d855
   m_ItemName: Nail
+  m_UseItemNameAsDisplayName: 1
+  m_DisplayName: New Item
   m_Icon: {fileID: 21300000, guid: e5cec7d40f0b3224b8ff49b5c174ed93, type: 3}
   m_Prefab: {fileID: 8526908806523285250, guid: 1961bb04f2536f846a015e7023bb8217,
     type: 3}
   m_Description: Resource for crafting items.
   m_Category: {fileID: -7427245140175711199}
-  m_PossibleRarity: []
+  m_IsSellable: 1
   m_BuyPrice: 6
   m_BuyCurrency: {fileID: -2811142919616601772}
   m_SellPrice: 4
@@ -1279,7 +1830,14 @@ MonoBehaviour:
   m_OverridePrefab: {fileID: 0}
   m_IsCraftable: 1
   m_CraftingDuration: 3
+  m_UseCraftingSkill: 1
+  m_SkillWindow: Skills
+  m_CraftingSkill: {fileID: -3323905948889970588}
+  m_RemoveIngredientsWhenFailed: 0
+  m_MinCraftingSkillValue: 0
   m_CraftingAnimatorState: Blacksmithy
+  m_CraftingModifier:
+    modifiers: []
   ingredients:
   - item: {fileID: 8763039942855579107}
     amount: 1
@@ -1297,9 +1855,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Common
+  m_UseAsNamePrefix: 0
   color: {r: 1, g: 1, b: 1, a: 1}
   chance: 80
   multiplier: 1.3
+  m_PriceMultiplier: 1.1
 --- !u!114 &2033560685258441697
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1314,11 +1874,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Id: 55fc7dcb-4995-4046-8c76-700f8d888b79
   m_ItemName: Furia
+  m_UseItemNameAsDisplayName: 1
+  m_DisplayName: New Item
   m_Icon: {fileID: 6292824489877327052, guid: ed1162d009219214ab9e282868df2b6d, type: 3}
   m_Prefab: {fileID: 0}
   m_Description: Furia is the town in the first map.
   m_Category: {fileID: 164684216256526245}
-  m_PossibleRarity: []
+  m_IsSellable: 1
   m_BuyPrice: 0
   m_BuyCurrency: {fileID: -2811142919616601772}
   m_SellPrice: 0
@@ -1330,7 +1892,14 @@ MonoBehaviour:
   m_OverridePrefab: {fileID: 0}
   m_IsCraftable: 0
   m_CraftingDuration: 2
+  m_UseCraftingSkill: 0
+  m_SkillWindow: Skills
+  m_CraftingSkill: {fileID: 0}
+  m_RemoveIngredientsWhenFailed: 0
+  m_MinCraftingSkillValue: 0
   m_CraftingAnimatorState: Blacksmithy
+  m_CraftingModifier:
+    modifiers: []
   ingredients: []
   properties: []
   m_UseCategoryCooldown: 1
@@ -1346,7 +1915,7 @@ MonoBehaviour:
   references:
     version: 1
     00000000:
-      type: {class: SetEnabled, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: SetEnabled, ns: DevionGames, asm: DevionGames.Triggers}
       data:
         m_Type: 
         m_Enabled: 1
@@ -1354,38 +1923,38 @@ MonoBehaviour:
         m_ComponentName: ThirdPersonController
         m_Enable: 0
     00000001:
-      type: {class: Cooldown, ns: DevionGames.InventorySystem.ItemActions, asm: Assembly-CSharp}
+      type: {class: Cooldown, ns: DevionGames.InventorySystem.ItemActions, asm: DevionGames.InventorySystem}
       data:
         m_Type: 
         m_Enabled: 1
         item: {fileID: 2033560685258441697}
         m_GlobalCooldown: 1
     00000002:
-      type: {class: Wait, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: Wait, ns: DevionGames, asm: DevionGames.Triggers}
       data:
         m_Type: 
         m_Enabled: 1
         duration: 1
     00000003:
-      type: {class: Save, ns: DevionGames.InventorySystem, asm: Assembly-CSharp}
+      type: {class: Save, ns: DevionGames.InventorySystem, asm: DevionGames.InventorySystem}
       data:
         m_Type: 
         m_Enabled: 1
     00000004:
-      type: {class: LoadScene, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: LoadScene, ns: DevionGames, asm: DevionGames.Triggers}
       data:
         m_Type: 
         m_Enabled: 1
         m_Scene: Main Scene
     00000005:
-      type: {class: SetPosition, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: SetPosition, ns: DevionGames, asm: DevionGames.Triggers}
       data:
         m_Type: 
         m_Enabled: 1
         m_Target: 1
         m_Position: {x: -3.45, y: 0.018, z: 10.92}
     00000006:
-      type: {class: SetEnabled, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: SetEnabled, ns: DevionGames, asm: DevionGames.Triggers}
       data:
         m_Type: 
         m_Enabled: 1
@@ -1406,13 +1975,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Id: cacbc413-2b42-4006-8a72-17f51df5d864
   m_ItemName: Pickaxe
+  m_UseItemNameAsDisplayName: 1
+  m_DisplayName: New Item
   m_Icon: {fileID: 21300000, guid: 575a1e2821f78e24bb70f3ba24d83bde, type: 3}
   m_Prefab: {fileID: 2446829401942333329, guid: f8834d5f45c6f6c40906a029b73145c6,
     type: 3}
   m_Description: A pickaxe can be used to mine.
   m_Category: {fileID: -9040799555073544844}
-  m_PossibleRarity:
-  - {fileID: 4257271418691296376}
+  m_IsSellable: 1
   m_BuyPrice: 12
   m_BuyCurrency: {fileID: -2811142919616601772}
   m_SellPrice: 9
@@ -1424,7 +1994,14 @@ MonoBehaviour:
   m_OverridePrefab: {fileID: 0}
   m_IsCraftable: 1
   m_CraftingDuration: 5
+  m_UseCraftingSkill: 1
+  m_SkillWindow: Skills
+  m_CraftingSkill: {fileID: -3323905948889970588}
+  m_RemoveIngredientsWhenFailed: 1
+  m_MinCraftingSkillValue: 0
   m_CraftingAnimatorState: Blacksmithy
+  m_CraftingModifier:
+    modifiers: []
   ingredients:
   - item: {fileID: 8763039942855579107}
     amount: 1
@@ -1452,12 +2029,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Id: 152288af-0366-4252-a6e3-792bda51b22a
   m_ItemName: 'Recipe: Bow'
+  m_UseItemNameAsDisplayName: 1
+  m_DisplayName: New Item
   m_Icon: {fileID: 21300000, guid: db427fab3e94daf4caa704d9314a77a1, type: 3}
   m_Prefab: {fileID: 8586804418029938465, guid: bf4366d8a00ec44418140c9fb529068e,
     type: 3}
   m_Description: This recipe teaches you to craft a bow.
   m_Category: {fileID: -6294223960729143046}
-  m_PossibleRarity: []
+  m_IsSellable: 1
   m_BuyPrice: 22
   m_BuyCurrency: {fileID: -2811142919616601772}
   m_SellPrice: 19
@@ -1469,7 +2048,14 @@ MonoBehaviour:
   m_OverridePrefab: {fileID: 0}
   m_IsCraftable: 0
   m_CraftingDuration: 2
+  m_UseCraftingSkill: 0
+  m_SkillWindow: Skills
+  m_CraftingSkill: {fileID: 0}
+  m_RemoveIngredientsWhenFailed: 0
+  m_MinCraftingSkillValue: 0
   m_CraftingAnimatorState: Blacksmithy
+  m_CraftingModifier:
+    modifiers: []
   ingredients: []
   properties: []
   m_UseCategoryCooldown: 0
@@ -1482,28 +2068,29 @@ MonoBehaviour:
   references:
     version: 1
     00000000:
-      type: {class: Cooldown, ns: DevionGames.InventorySystem.ItemActions, asm: Assembly-CSharp}
+      type: {class: Cooldown, ns: DevionGames.InventorySystem.ItemActions, asm: DevionGames.InventorySystem}
       data:
         m_Type: 
         m_Enabled: 1
         item: {fileID: 3129509250564287029}
         m_GlobalCooldown: 5
     00000001:
-      type: {class: Wait, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: Wait, ns: DevionGames, asm: DevionGames.Triggers}
       data:
         m_Type: 
         m_Enabled: 1
         duration: 5
     00000002:
-      type: {class: AddItem, ns: DevionGames.InventorySystem.ItemActions, asm: Assembly-CSharp}
+      type: {class: AddItem, ns: DevionGames.InventorySystem.ItemActions, asm: DevionGames.InventorySystem}
       data:
         m_Type: 
         m_Enabled: 1
         item: {fileID: 3129509250564287029}
         m_WindowName: Crafting
         m_Item: {fileID: -8967533827971111582}
+        m_Amount: 0
     00000003:
-      type: {class: ReduceStack, ns: DevionGames.InventorySystem.ItemActions, asm: Assembly-CSharp}
+      type: {class: ReduceStack, ns: DevionGames.InventorySystem.ItemActions, asm: DevionGames.InventorySystem}
       data:
         m_Type: 
         m_Enabled: 1
@@ -1536,6 +2123,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   contextMenuName: ContextMenu
   tooltipName: Tooltip
+  sellPriceTooltipName: Sell Price Tooltip
   stackName: Stack
   notificationName: Notification
 --- !u!114 &4257271418691296376
@@ -1551,9 +2139,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Junk
+  m_UseAsNamePrefix: 0
   color: {r: 0.6886792, g: 0.6886792, b: 0.6886792, a: 1}
   chance: 100
   multiplier: 1
+  m_PriceMultiplier: 1
 --- !u!114 &4447567160419299934
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1568,11 +2158,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Id: 5bf4d465-0a9f-4bae-b804-60cbc81d48b5
   m_ItemName: Arcane Ball
+  m_UseItemNameAsDisplayName: 1
+  m_DisplayName: New Item
   m_Icon: {fileID: 21300000, guid: ec24783658f55204083d307b3f27395e, type: 3}
   m_Prefab: {fileID: 100014, guid: d6f72918cc3dd004584674be2b246697, type: 3}
   m_Description: Cast a magical arcane ball.
   m_Category: {fileID: -3989543302354102894}
-  m_PossibleRarity: []
+  m_IsSellable: 1
   m_BuyPrice: 0
   m_BuyCurrency: {fileID: -2811142919616601772}
   m_SellPrice: 0
@@ -1584,7 +2176,14 @@ MonoBehaviour:
   m_OverridePrefab: {fileID: 0}
   m_IsCraftable: 0
   m_CraftingDuration: 2
+  m_UseCraftingSkill: 0
+  m_SkillWindow: Skills
+  m_CraftingSkill: {fileID: 0}
+  m_RemoveIngredientsWhenFailed: 0
+  m_MinCraftingSkillValue: 0
   m_CraftingAnimatorState: Blacksmithy
+  m_CraftingModifier:
+    modifiers: []
   ingredients: []
   properties: []
   m_UseCategoryCooldown: 0
@@ -1603,7 +2202,7 @@ MonoBehaviour:
   references:
     version: 1
     00000000:
-      type: {class: InvokeNotify, ns: DevionGames.InventorySystem, asm: Assembly-CSharp}
+      type: {class: InvokeNotify, ns: DevionGames.InventorySystem, asm: DevionGames.InventorySystem}
       data:
         m_Type: 
         m_Enabled: 1
@@ -1638,7 +2237,7 @@ MonoBehaviour:
           duration: 2
           ignoreTimeScale: 1
     00000001:
-      type: {class: Invoke, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: Invoke, ns: DevionGames, asm: DevionGames.Triggers}
       data:
         m_Type: 
         m_Enabled: 1
@@ -1665,14 +2264,14 @@ MonoBehaviour:
           m_ObjectValue: {fileID: 0}
           m_ArgumentType: 3
     00000002:
-      type: {class: Cooldown, ns: DevionGames.InventorySystem.ItemActions, asm: Assembly-CSharp}
+      type: {class: Cooldown, ns: DevionGames.InventorySystem.ItemActions, asm: DevionGames.InventorySystem}
       data:
         m_Type: 
         m_Enabled: 1
         item: {fileID: 4447567160419299934}
         m_GlobalCooldown: 3
     00000003:
-      type: {class: SendMessage, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: SendMessage, ns: DevionGames, asm: DevionGames.Triggers}
       data:
         m_Type: 
         m_Enabled: 1
@@ -1690,13 +2289,13 @@ MonoBehaviour:
           m_ArgumentType: 1
         m_Options: 1
     00000004:
-      type: {class: LookForward, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: LookForward, ns: DevionGames, asm: DevionGames.Triggers}
       data:
         m_Type: 
         m_Enabled: 1
         m_Target: 1
     00000005:
-      type: {class: CrossFade, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: CrossFade, ns: DevionGames, asm: DevionGames.Triggers}
       data:
         m_Type: 
         m_Enabled: 1
@@ -1704,13 +2303,13 @@ MonoBehaviour:
         m_AnimatorState: Arcane Ball
         m_TransitionDuration: 0.2
     00000006:
-      type: {class: Wait, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: Wait, ns: DevionGames, asm: DevionGames.Triggers}
       data:
         m_Type: 
         m_Enabled: 1
         duration: 1.2
     00000007:
-      type: {class: Instantiate, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: Instantiate, ns: DevionGames, asm: DevionGames.Triggers}
       data:
         m_Type: 
         m_Enabled: 1
@@ -1720,13 +2319,13 @@ MonoBehaviour:
         m_Offset: {x: 0, y: 0, z: 0}
         m_IgnorePlayerCollision: 1
     00000008:
-      type: {class: Wait, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: Wait, ns: DevionGames, asm: DevionGames.Triggers}
       data:
         m_Type: 
         m_Enabled: 1
         duration: 1.2
     00000009:
-      type: {class: SendMessage, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: SendMessage, ns: DevionGames, asm: DevionGames.Triggers}
       data:
         m_Type: 
         m_Enabled: 1
@@ -1757,6 +2356,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unstackEvent: -1
   unstackKeyCode: 304
+--- !u!114 &5365859910722360372
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28fccac83a2fa2245991bffe45a6cdd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_GroupName: Skills
+  m_Items:
+  - {fileID: -2920532131010319874}
+  m_Amounts: 01000000
+  m_Modifiers:
+  - modifiers: []
 --- !u!114 &5658350685615726283
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1800,9 +2417,9 @@ MonoBehaviour:
   - {fileID: -4423743630002525559}
   - {fileID: 4447567160419299934}
   m_Amounts: 0100000001000000
-  m_RandomProperty:
-  - 0
-  - 0
+  m_Modifiers:
+  - modifiers: []
+  - modifiers: []
 --- !u!114 &6127056651903551046
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1833,12 +2450,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Id: 5607774a-5409-412d-916a-54ed6692f441
   m_ItemName: Arrow
+  m_UseItemNameAsDisplayName: 1
+  m_DisplayName: New Item
   m_Icon: {fileID: 21300000, guid: e50febd6717db2b43a8fa67d1259fa02, type: 3}
   m_Prefab: {fileID: 8838616929701194134, guid: 406b98225cd8404479b032b2508644f5,
     type: 3}
   m_Description: Arrows are required to use a bow.
   m_Category: {fileID: -7427245140175711199}
-  m_PossibleRarity: []
+  m_IsSellable: 1
   m_BuyPrice: 1
   m_BuyCurrency: {fileID: -2811142919616601772}
   m_SellPrice: 1
@@ -1850,7 +2469,14 @@ MonoBehaviour:
   m_OverridePrefab: {fileID: 0}
   m_IsCraftable: 1
   m_CraftingDuration: 2
+  m_UseCraftingSkill: 0
+  m_SkillWindow: Skills
+  m_CraftingSkill: {fileID: 0}
+  m_RemoveIngredientsWhenFailed: 0
+  m_MinCraftingSkillValue: 0
   m_CraftingAnimatorState: Blacksmithy
+  m_CraftingModifier:
+    modifiers: []
   ingredients:
   - item: {fileID: -5663772737389988193}
     amount: 1
@@ -1869,6 +2495,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   contextMenuName: ContextMenu
   tooltipName: Tooltip
+  sellPriceTooltipName: Sell Price Tooltip
   stackName: Stack
   notificationName: Notification
 --- !u!114 &6580122338069936885
@@ -1947,6 +2574,30 @@ MonoBehaviour:
     delay: 2
     duration: 2
     ignoreTimeScale: 1
+  failedToCraft:
+    title: 
+    text: You failed to craft {0}.
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  missingSkillToCraft:
+    title: 
+    text: You don't have the skill to craft this item!
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  requiresHigherSkill:
+    title: 
+    text: Your {0} is to low to craft {1}.
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
   soldItem:
     title: 
     text: Sold {0} for {1}.
@@ -1966,6 +2617,14 @@ MonoBehaviour:
   noCurrencyToBuy:
     title: 
     text: You don't have enough coins.
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  cantSellItem:
+    title: 
+    text: You can't sell this {0}!
     color: {r: 1, g: 1, b: 1, a: 1}
     icon: {fileID: 0}
     delay: 2
@@ -1995,6 +2654,64 @@ MonoBehaviour:
     delay: 2
     duration: 2
     ignoreTimeScale: 1
+  skillGain:
+    title: 
+    text: Your {0} increased by {1}% to {2}%.
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+--- !u!114 &6595735557147903839
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a9a3ee254b78a64481dccedbfd4ba41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Id: 8d6ade66-001d-4481-a70b-7db0a93db87d
+  m_ItemName: Mining
+  m_UseItemNameAsDisplayName: 1
+  m_DisplayName: New Item
+  m_Icon: {fileID: 21300000, guid: 575a1e2821f78e24bb70f3ba24d83bde, type: 3}
+  m_Prefab: {fileID: 0}
+  m_Description: Mining increases your chance of successfully harvest stones and
+    ores.
+  m_Category: {fileID: -8831619382594955781}
+  m_IsSellable: 1
+  m_BuyPrice: 124
+  m_BuyCurrency: {fileID: -2811142919616601772}
+  m_SellPrice: 0
+  m_SellCurrency: {fileID: -2811142919616601772}
+  m_Stack: 1
+  m_MaxStack: 1
+  m_IsDroppable: 1
+  m_DropSound: {fileID: 0}
+  m_OverridePrefab: {fileID: 0}
+  m_IsCraftable: 0
+  m_CraftingDuration: 2
+  m_UseCraftingSkill: 0
+  m_SkillWindow: Skills
+  m_CraftingSkill: {fileID: 0}
+  m_RemoveIngredientsWhenFailed: 0
+  m_MinCraftingSkillValue: 0
+  m_CraftingAnimatorState: Blacksmithy
+  m_CraftingModifier:
+    modifiers: []
+  ingredients: []
+  properties: []
+  m_UseCategoryCooldown: 1
+  m_Cooldown: 1
+  actions: []
+  m_FixedSuccessChance: 50
+  m_GainModifier: {fileID: 11400000, guid: 469cf9288efaed44a9d0eb78c6b58840, type: 2}
+  references:
+    version: 1
 --- !u!114 &7014612192586799646
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2037,9 +2754,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Rare
+  m_UseAsNamePrefix: 1
   color: {r: 0.7744908, g: 0.3443396, b: 1, a: 1}
   chance: 70
   multiplier: 1.5
+  m_PriceMultiplier: 1.3
 --- !u!114 &7990749027154876597
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2058,10 +2777,10 @@ MonoBehaviour:
   - {fileID: -2839999955813321745}
   - {fileID: 8692695060773013855}
   m_Amounts: 010000000100000001000000
-  m_RandomProperty:
-  - 0
-  - 0
-  - 0
+  m_Modifiers:
+  - modifiers: []
+  - modifiers: []
+  - modifiers: []
 --- !u!114 &8429455951140046941
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2076,12 +2795,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Id: 71139cc0-8276-4974-ab21-d551b4c013dd
   m_ItemName: Health Potion
+  m_UseItemNameAsDisplayName: 1
+  m_DisplayName: New Item
   m_Icon: {fileID: 21300000, guid: fb38af54312632d47bc615bfe636f9a4, type: 3}
   m_Prefab: {fileID: 7185777887056126559, guid: 7129d33baee5a304fa5a78de1cd04f6a,
     type: 3}
   m_Description: Restores your health by 10 points.
   m_Category: {fileID: 171625507360801261}
-  m_PossibleRarity: []
+  m_IsSellable: 1
   m_BuyPrice: 3
   m_BuyCurrency: {fileID: -2811142919616601772}
   m_SellPrice: 2
@@ -2091,10 +2812,19 @@ MonoBehaviour:
   m_IsDroppable: 1
   m_DropSound: {fileID: 0}
   m_OverridePrefab: {fileID: 0}
-  m_IsCraftable: 0
+  m_IsCraftable: 1
   m_CraftingDuration: 2
-  m_CraftingAnimatorState: Blacksmithy
-  ingredients: []
+  m_UseCraftingSkill: 0
+  m_SkillWindow: Skills
+  m_CraftingSkill: {fileID: 0}
+  m_RemoveIngredientsWhenFailed: 0
+  m_MinCraftingSkillValue: 0
+  m_CraftingAnimatorState: 
+  m_CraftingModifier:
+    modifiers: []
+  ingredients:
+  - item: {fileID: -1175442255857385599}
+    amount: 1
   properties: []
   m_UseCategoryCooldown: 1
   m_Cooldown: 1
@@ -2106,7 +2836,7 @@ MonoBehaviour:
   references:
     version: 1
     00000000:
-      type: {class: Invoke, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: Invoke, ns: DevionGames, asm: DevionGames.Triggers}
       data:
         m_Type: 
         m_Enabled: 1
@@ -2133,21 +2863,21 @@ MonoBehaviour:
           m_ObjectValue: {fileID: 0}
           m_ArgumentType: 3
     00000001:
-      type: {class: ReduceStack, ns: DevionGames.InventorySystem.ItemActions, asm: Assembly-CSharp}
+      type: {class: ReduceStack, ns: DevionGames.InventorySystem.ItemActions, asm: DevionGames.InventorySystem}
       data:
         m_Type: 
         m_Enabled: 1
         item: {fileID: 8429455951140046941}
         m_Amount: 1
     00000002:
-      type: {class: Cooldown, ns: DevionGames.InventorySystem.ItemActions, asm: Assembly-CSharp}
+      type: {class: Cooldown, ns: DevionGames.InventorySystem.ItemActions, asm: DevionGames.InventorySystem}
       data:
         m_Type: 
         m_Enabled: 1
         item: {fileID: 8429455951140046941}
         m_GlobalCooldown: 0.5
     00000003:
-      type: {class: Wait, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: Wait, ns: DevionGames, asm: DevionGames.Triggers}
       data:
         m_Type: 
         m_Enabled: 1
@@ -2166,11 +2896,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Id: 08ccfdf8-7007-4ce8-80e9-c7614f351595
   m_ItemName: Seraphina
+  m_UseItemNameAsDisplayName: 1
+  m_DisplayName: New Item
   m_Icon: {fileID: -8583486841737024011, guid: ed1162d009219214ab9e282868df2b6d, type: 3}
   m_Prefab: {fileID: 0}
   m_Description: Town in the second map.
   m_Category: {fileID: 164684216256526245}
-  m_PossibleRarity: []
+  m_IsSellable: 1
   m_BuyPrice: 0
   m_BuyCurrency: {fileID: -2811142919616601772}
   m_SellPrice: 0
@@ -2182,7 +2914,14 @@ MonoBehaviour:
   m_OverridePrefab: {fileID: 0}
   m_IsCraftable: 0
   m_CraftingDuration: 2
+  m_UseCraftingSkill: 0
+  m_SkillWindow: Skills
+  m_CraftingSkill: {fileID: 0}
+  m_RemoveIngredientsWhenFailed: 0
+  m_MinCraftingSkillValue: 0
   m_CraftingAnimatorState: Blacksmithy
+  m_CraftingModifier:
+    modifiers: []
   ingredients: []
   properties: []
   m_UseCategoryCooldown: 1
@@ -2198,7 +2937,7 @@ MonoBehaviour:
   references:
     version: 1
     00000000:
-      type: {class: SetEnabled, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: SetEnabled, ns: DevionGames, asm: DevionGames.Triggers}
       data:
         m_Type: 
         m_Enabled: 1
@@ -2206,38 +2945,38 @@ MonoBehaviour:
         m_ComponentName: ThirdPersonController
         m_Enable: 0
     00000001:
-      type: {class: Cooldown, ns: DevionGames.InventorySystem.ItemActions, asm: Assembly-CSharp}
+      type: {class: Cooldown, ns: DevionGames.InventorySystem.ItemActions, asm: DevionGames.InventorySystem}
       data:
         m_Type: 
         m_Enabled: 1
         item: {fileID: 8692695060773013855}
         m_GlobalCooldown: 1
     00000002:
-      type: {class: Wait, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: Wait, ns: DevionGames, asm: DevionGames.Triggers}
       data:
         m_Type: 
         m_Enabled: 1
         duration: 1
     00000003:
-      type: {class: Save, ns: DevionGames.InventorySystem, asm: Assembly-CSharp}
+      type: {class: Save, ns: DevionGames.InventorySystem, asm: DevionGames.InventorySystem}
       data:
         m_Type: 
         m_Enabled: 1
     00000004:
-      type: {class: LoadScene, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: LoadScene, ns: DevionGames, asm: DevionGames.Triggers}
       data:
         m_Type: 
         m_Enabled: 1
         m_Scene: Map2
     00000005:
-      type: {class: SetPosition, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: SetPosition, ns: DevionGames, asm: DevionGames.Triggers}
       data:
         m_Type: 
         m_Enabled: 1
         m_Target: 1
         m_Position: {x: -3.45, y: 0.018, z: 3.96}
     00000006:
-      type: {class: SetEnabled, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: SetEnabled, ns: DevionGames, asm: DevionGames.Triggers}
       data:
         m_Type: 
         m_Enabled: 1
@@ -2257,6 +2996,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Armor
+  m_EditorColor: {r: 0.81960785, g: 0.6627451, b: 0.4, a: 1}
   m_Cooldown: 1
 --- !u!114 &8763039942855579107
 MonoBehaviour:
@@ -2272,12 +3012,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Id: e893343b-3f8d-430c-85af-5a9ef62ed18c
   m_ItemName: Iron
+  m_UseItemNameAsDisplayName: 1
+  m_DisplayName: New Item
   m_Icon: {fileID: 21300000, guid: 3e4fcc84a0ac95b429c56452575f6021, type: 3}
   m_Prefab: {fileID: 8122114857979880778, guid: 9ca50f633f494d14fb4aef0e7f958c7c,
     type: 3}
   m_Description: Resource for crafting items.
   m_Category: {fileID: -7427245140175711199}
-  m_PossibleRarity: []
+  m_IsSellable: 1
   m_BuyPrice: 5
   m_BuyCurrency: {fileID: -2811142919616601772}
   m_SellPrice: 3
@@ -2289,7 +3031,14 @@ MonoBehaviour:
   m_OverridePrefab: {fileID: 0}
   m_IsCraftable: 0
   m_CraftingDuration: 2
+  m_UseCraftingSkill: 0
+  m_SkillWindow: Skills
+  m_CraftingSkill: {fileID: 0}
+  m_RemoveIngredientsWhenFailed: 0
+  m_MinCraftingSkillValue: 0
   m_CraftingAnimatorState: Blacksmithy
+  m_CraftingModifier:
+    modifiers: []
   ingredients: []
   properties: []
 --- !u!114 &8829102310862775636
@@ -2305,9 +3054,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Legendary
+  m_UseAsNamePrefix: 1
   color: {r: 1, g: 0.48286825, b: 0, a: 1}
   chance: 60
   multiplier: 2
+  m_PriceMultiplier: 1.5
 --- !u!114 &8981082385679816718
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2329,13 +3080,13 @@ MonoBehaviour:
   - {fileID: -447126039411374142}
   - {fileID: 1063046599387310152}
   m_Amounts: 010000000100000001000000010000000100000001000000
-  m_RandomProperty:
-  - 0.2
-  - 0.2
-  - 0.2
-  - 0.2
-  - 0.2
-  - 0
+  m_Modifiers:
+  - modifiers: []
+  - modifiers: []
+  - modifiers: []
+  - modifiers: []
+  - modifiers: []
+  - modifiers: []
 --- !u!114 &9220062648813220349
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2412,6 +3163,30 @@ MonoBehaviour:
     delay: 2
     duration: 2
     ignoreTimeScale: 1
+  failedToCraft:
+    title: 
+    text: You failed to craft {0}.
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  missingSkillToCraft:
+    title: 
+    text: You don't have the skill to craft this item!
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  requiresHigherSkill:
+    title: 
+    text: You don't have the skill to craft this item!
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
   soldItem:
     title: 
     text: Sold {0} for {1}.
@@ -2436,6 +3211,14 @@ MonoBehaviour:
     delay: 2
     duration: 2
     ignoreTimeScale: 1
+  cantSellItem:
+    title: 
+    text: You can't sell this {0}!
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
   toFarAway:
     title: 
     text: This is to far away!
@@ -2455,6 +3238,14 @@ MonoBehaviour:
   empty:
     title: 
     text: There is nothing to be found here.
+    color: {r: 1, g: 1, b: 1, a: 1}
+    icon: {fileID: 0}
+    delay: 2
+    duration: 2
+    ignoreTimeScale: 1
+  skillGain:
+    title: 
+    text: Your {0} increased by {1}% to {2}%.
     color: {r: 1, g: 1, b: 1, a: 1}
     icon: {fileID: 0}
     delay: 2

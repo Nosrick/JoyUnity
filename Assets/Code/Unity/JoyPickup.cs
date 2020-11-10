@@ -30,7 +30,7 @@ namespace JoyLib.Code.Unity
             {
                 bool result = ItemBehaviourHandler.LiveItemHandler.RemoveItemFromWorld(item.GUID);
                 result &= itemBehaviourHandler.EntityInRange.AddContents(item);
-                GameObject.DestroyImmediate(this.gameObject);
+                //GameObject.DestroyImmediate(this.gameObject);
                 if (result)
                 {
                     return ActionStatus.Success;

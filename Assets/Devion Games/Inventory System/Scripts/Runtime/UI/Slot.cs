@@ -15,6 +15,12 @@ namespace DevionGames.InventorySystem
         [SerializeField]
         protected Text m_ItemName;
         /// <summary>
+        /// Should the name be colored?
+        /// </summary>
+        [SerializeField]
+        protected bool m_UseRarityColor=false;
+
+        /// <summary>
         /// The Image to display item icon.
         /// </summary>
         [SerializeField]
@@ -33,23 +39,13 @@ namespace DevionGames.InventorySystem
         /// <summary>
         /// The item this slot is holding
         /// </summary>
-        public Item ObservedItem{
-            get {
+        public Item ObservedItem
+        {
+            get{
                 return this.m_Item;
             }
             set {
                 this.m_Item = value;
-
-                if (this.m_Item != null) {
-                    if (!Container.UseReferences){
-                        this.m_Item.Slot = this;
-                    }else{
-                        if (!this.m_Item.ReferencedSlots.Contains(this))
-                        {
-                            this.m_Item.ReferencedSlots.Add(this);
-                        }
-                    }
-                }
                 Repaint();
             }
         }
@@ -93,7 +89,8 @@ namespace DevionGames.InventorySystem
         protected virtual void Start() {
 
             Container.OnAddItem += (Item item, Slot slot) => {
-                if (slot == this){
+                if (slot == this)
+                {
                     ItemEventData eventData = new ItemEventData(item);
                     eventData.slot = slot;
                     Execute("OnAddItem", eventData);
@@ -101,7 +98,8 @@ namespace DevionGames.InventorySystem
 
             };
             Container.OnRemoveItem += (Item item, int amount, Slot slot) => {
-                if (slot == this){
+                if (slot == this)
+                {
                     ItemEventData eventData = new ItemEventData(item);
                     eventData.slot = slot;
                     Execute("OnRemoveItem", eventData);
@@ -116,7 +114,7 @@ namespace DevionGames.InventorySystem
                     Execute("OnUseItem", eventData);
                 }
             };
-            
+
         }
 
         /// <summary>
@@ -126,7 +124,7 @@ namespace DevionGames.InventorySystem
         {
             if (this.m_ItemName != null){
                 //Updates the text with item name and rarity color. If this slot is empty, sets the text to empty.
-                this.m_ItemName.text = (!IsEmpty ? UnityTools.ColorString(ObservedItem.Name, ObservedItem.Rarity.Color) : string.Empty);
+                this.m_ItemName.text = (!IsEmpty ? (this.m_UseRarityColor?UnityTools.ColorString(ObservedItem.DisplayName, ObservedItem.Rarity.Color):ObservedItem.DisplayName) : string.Empty);
             }
 
             if (this.m_Ícon != null){
@@ -154,6 +152,7 @@ namespace DevionGames.InventorySystem
 
         //Use the item
         public virtual void Use() {
+            Container.NotifyTryUseItem(ObservedItem, this);
             //Check if the item can be used.
             if (CanUse())
             {
@@ -170,7 +169,9 @@ namespace DevionGames.InventorySystem
                 //Try to move item
                 if (!MoveItem())
                 {
+                    Debug.Log("use");
                     ObservedItem.Use();
+                    Container.NotifyUseItem(ObservedItem, this);
                 }
             }
         }
@@ -185,30 +186,33 @@ namespace DevionGames.InventorySystem
         /// </summary>
         /// <returns>True if item was moved.</returns>
         public virtual bool MoveItem() {
+
             if (Container.MoveUsedItem)
             {
                 for (int i = 0; i < Container.moveItemConditions.Count; i++)
                 {
                     ItemContainer.MoveItemCondition condition = Container.moveItemConditions[i];
-                    ItemContainer itemContainer = WidgetUtility.Find<ItemContainer>(condition.window);
-                    if (itemContainer == null || (condition.requiresVisibility && !itemContainer.IsVisible))
+                    ItemContainer moveToContainer = WidgetUtility.Find<ItemContainer>(condition.window);
+                    if (moveToContainer == null || (condition.requiresVisibility && !moveToContainer.IsVisible))
                     {
                         continue;
                     }
-                    if (itemContainer.IsLocked) {
+                    if (moveToContainer.IsLocked) {
                         InventoryManager.Notifications.inUse.Show();
                         continue;
                     }
-                    if (itemContainer.CanAddItem(ObservedItem) && itemContainer.StackOrAdd(ObservedItem))
+
+                    if (moveToContainer.CanAddItem(ObservedItem) && moveToContainer.StackOrAdd(ObservedItem))
                     {
-                        if (!itemContainer.UseReferences || !Container.CanReferenceItems){
+                        if (!moveToContainer.UseReferences || !Container.CanReferenceItems){
+                           // Debug.Log("Move Item from "+Container.Name+" to "+moveToContainer.Name);
                             Container.RemoveItem(Index);
                         }
                         return true;
                     }
-                    for (int j = 0; j < itemContainer.Slots.Count; j++)
+                    for (int j = 0; j < moveToContainer.Slots.Count; j++)
                     {
-                        if (itemContainer.CanSwapItems(itemContainer.Slots[j],this) && itemContainer.SwapItems(itemContainer.Slots[j], this))
+                        if (moveToContainer.CanSwapItems(moveToContainer.Slots[j],this) && moveToContainer.SwapItems(moveToContainer.Slots[j], this))
                         {
                             return true;
                         }
@@ -231,7 +235,7 @@ namespace DevionGames.InventorySystem
             {
                 if (!restrictions[i].CanAddItem(item))
                 {
-                  //  Debug.Log("Can't add item: "+item.Name+" to "+Container.Name+" Failed in: "+restrictions[i]);
+                   // Debug.Log("Can't add item: "+item.Name+" to "+Container.Name+" Failed in: "+restrictions[i]);
                     return false;
                 }
             }

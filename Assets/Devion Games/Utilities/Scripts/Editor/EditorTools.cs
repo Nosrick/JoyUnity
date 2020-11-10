@@ -154,7 +154,7 @@ namespace DevionGames{
             GUILayout.Label(GUIContent.none,Styles.seperator);
         }
 
-        private static void BeginIndent(int indent, bool fold = false)
+        public static void BeginIndent(int indent, bool fold = false)
         {
             GUILayout.BeginHorizontal();
 
@@ -162,7 +162,7 @@ namespace DevionGames{
             GUILayout.BeginVertical();
         }
 
-        private static void EndIndent()
+        public static void EndIndent()
         {
             GUILayout.EndVertical();
             GUILayout.EndHorizontal();
@@ -233,14 +233,27 @@ namespace DevionGames{
 
         public static bool Foldout(string hash, GUIContent content)
         {
-            return Foldout(hash, content, EditorStyles.foldout);
+            return Foldout(hash, content,null, EditorStyles.foldout);
         }
 
-        public static bool Foldout(string hash, GUIContent content, GUIStyle style)
+        public static bool Foldout(string hash, GUIContent content, GenericMenu context)
+        {
+            return Foldout(hash, content, context, EditorStyles.foldout);
+        }
+
+        public static bool Foldout(string hash, GUIContent content, GenericMenu context, GUIStyle style)
         {
             bool foldout = EditorPrefs.GetBool("Fold" + hash, true);
 
             bool flag = EditorGUILayout.Foldout(foldout, content, style);
+            if (context != null)
+            {
+                Rect rect = GUILayoutUtility.GetLastRect();
+                if (Event.current.type == EventType.MouseDown && Event.current.button == 1 && rect.Contains(Event.current.mousePosition))
+                {
+                    context.ShowAsContext();
+                }
+            }
             if (flag != foldout)
             {
                 EditorPrefs.SetBool("Fold" + hash, flag);

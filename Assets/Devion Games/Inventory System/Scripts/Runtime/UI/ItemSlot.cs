@@ -117,6 +117,7 @@ namespace DevionGames.InventorySystem
                     for (int i = 0; i < ObservedItem.ingredients.Count; i++)
                     {
                         Item ingredient = Instantiate(ObservedItem.ingredients[i].item);
+                        ingredient.Stack = ObservedItem.ingredients[i].amount;
                         this.m_Ingredients.StackOrAdd(ingredient);
                     }
                 }
@@ -130,6 +131,7 @@ namespace DevionGames.InventorySystem
                     Currency price = Instantiate(ObservedItem.BuyCurrency);
                     price.Stack = Mathf.RoundToInt(ObservedItem.BuyPrice);
                     this.m_BuyPrice.StackOrAdd(price);
+                    //Debug.Log(" Price Update for "+ObservedItem.Name+" "+price.Name+" "+price.Stack);
                 }
             }
         }
@@ -150,7 +152,16 @@ namespace DevionGames.InventorySystem
             }
             if (InventoryManager.UI.tooltip != null && ObservedItem != null)
             {
-                InventoryManager.UI.tooltip.Show(UnityTools.ColorString(ObservedItem.Name, ObservedItem.Rarity.Color), ObservedItem.Description, ObservedItem.Icon, ObservedItem.GetPropertyInfo());
+                InventoryManager.UI.tooltip.Show(UnityTools.ColorString(ObservedItem.DisplayName, ObservedItem.Rarity.Color), ObservedItem.Description, ObservedItem.Icon, ObservedItem.GetPropertyInfo());
+                if (InventoryManager.UI.sellPriceTooltip != null && ObservedItem.IsSellable && ObservedItem.SellPrice > 0)
+                {
+                    InventoryManager.UI.sellPriceTooltip.RemoveItems();
+                    Currency currency = Instantiate(ObservedItem.SellCurrency);
+                    currency.Stack = ObservedItem.SellPrice*ObservedItem.Stack;
+
+                    InventoryManager.UI.sellPriceTooltip.StackOrAdd(currency);
+                    InventoryManager.UI.sellPriceTooltip.Show();
+                }
             }
         }
 
@@ -160,7 +171,7 @@ namespace DevionGames.InventorySystem
         }
 
         private void ShowTooltip() {
-            if (Container.ShowTooltips && dragObject == null && ObservedItem != null)
+            if (isActiveAndEnabled && Container.ShowTooltips && dragObject == null && ObservedItem != null)
             {
                 if (this.m_DelayTooltipCoroutine != null)
                 {
@@ -174,6 +185,11 @@ namespace DevionGames.InventorySystem
             if (Container.ShowTooltips && InventoryManager.UI.tooltip != null)
             {
                 InventoryManager.UI.tooltip.Close();
+                if (InventoryManager.UI.sellPriceTooltip != null)
+                {
+                    InventoryManager.UI.sellPriceTooltip.RemoveItems();
+                    InventoryManager.UI.sellPriceTooltip.Close();
+                }
             }
             if (this.m_DelayTooltipCoroutine != null)
             {
@@ -211,6 +227,7 @@ namespace DevionGames.InventorySystem
                         UIWidgets.ContextMenu menu = InventoryManager.UI.contextMenu;
                         if (menu == null) { return; }
                         menu.Clear();
+
                         if (Trigger.currentUsedTrigger != null && Trigger.currentUsedTrigger is VendorTrigger && Container.CanSellItems)
                         {
                             menu.AddMenuItem("Sell", Use);
@@ -287,6 +304,7 @@ namespace DevionGames.InventorySystem
             }
   
             dragObject = null;
+           
             if (this.m_ParentScrollRect != null)
             {
                 this.m_ParentScrollRect.OnEndDrag(eventData);
@@ -404,7 +422,7 @@ namespace DevionGames.InventorySystem
         /// </summary>
         public override void Use()
         {
-            
+            Container.NotifyTryUseItem(ObservedItem, this);
             //Check if the item can be used.
             if (CanUse())
             {
@@ -430,7 +448,7 @@ namespace DevionGames.InventorySystem
                 }
               
             } else if(IsCooldown && !IsEmpty){
-                InventoryManager.Notifications.inCooldown.Show(ObservedItem.Name, (cooldownDuration - (Time.time - cooldownInitTime)).ToString("f2"));
+                InventoryManager.Notifications.inCooldown.Show(ObservedItem.DisplayName, (cooldownDuration - (Time.time - cooldownInitTime)).ToString("f2"));
             }
         }
 

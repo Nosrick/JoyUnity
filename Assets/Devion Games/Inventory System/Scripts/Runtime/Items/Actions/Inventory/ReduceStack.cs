@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 namespace DevionGames.InventorySystem.ItemActions{
+    [UnityEngine.Scripting.APIUpdating.MovedFromAttribute(true, null, "Assembly-CSharp")]
     [Icon("Item")]
     [ComponentMenu("Inventory System/Reduce Stack")]
 	[System.Serializable]

@@ -184,7 +184,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3959420146890985638}
-  m_LocalRotation: {x: -0, y: 0.1280473, z: -0, w: 0.99176806}
+  m_LocalRotation: {x: 0, y: 0.12805131, z: 0, w: 0.9917676}
   m_LocalPosition: {x: -1.3100004, y: 0.83299994, z: -8.809999}
   m_LocalScale: {x: 0.58122844, y: 0.83874166, z: 0.58122844}
   m_Children:
@@ -289,9 +289,9 @@ MonoBehaviour:
   references:
     version: 1
     00000000:
-      type: {class: ShowWindow, ns: DevionGames.InventorySystem, asm: Assembly-CSharp}
+      type: {class: ShowWindow, ns: DevionGames.InventorySystem, asm: DevionGames.InventorySystem}
       data:
-        m_Type: 
+        m_Type: DevionGames.InventorySystem.ShowWindow
         m_Enabled: 1
         m_WindowName: Bank
         m_DestroyWhenEmpty: 0

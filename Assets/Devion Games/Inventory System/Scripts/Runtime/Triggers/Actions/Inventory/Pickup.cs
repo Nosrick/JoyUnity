@@ -5,19 +5,20 @@ using DevionGames.UIWidgets;
 
 namespace DevionGames.InventorySystem
 {
+    [UnityEngine.Scripting.APIUpdating.MovedFromAttribute(true, null, "Assembly-CSharp")]
     [Icon("Item")]
     [ComponentMenu("Inventory System/Pickup Item")]
     [RequireComponent(typeof(ItemCollection))]
     public class Pickup : Action
     {
         [SerializeField]
-        protected string m_WindowName = "Inventory";
+        private string m_WindowName = "Inventory";
         [SerializeField]
-        protected bool m_DestroyWhenEmpty = true;
+        private bool m_DestroyWhenEmpty = true;
         [SerializeField]
-        protected int m_Amount = -1;
+        private int m_Amount = -1;
 
-        protected ItemCollection m_ItemCollection;
+        private ItemCollection m_ItemCollection;
 
         public override void OnStart()
         {

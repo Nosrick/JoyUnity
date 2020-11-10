@@ -8,7 +8,7 @@ namespace JoyLib.Code.Unity
 {
     public class MutableItemContainer : ItemContainer
     {
-        public override List<Slot> GetRequiredSlots(Item item)
+        public override List<Slot> GetRequiredSlots(Item item, Slot preferedSlot = null)
         {
             List<Slot> slots = new List<Slot>();
             if (item == null || !(item is EquipmentItem)) { return slots; }

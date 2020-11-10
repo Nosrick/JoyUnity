@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace DevionGames.InventorySystem
 {
+    [UnityEngine.Scripting.APIUpdating.MovedFromAttribute(true, null, "Assembly-CSharp")]
     [Icon(typeof(Canvas))]
     [ComponentMenu("UI/Show Notification")]
     [System.Serializable]

@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 namespace DevionGames
 {
+    [UnityEngine.Scripting.APIUpdating.MovedFromAttribute(true, null, "Assembly-CSharp")]
     [ComponentMenu("SceneManager/Load Scene")]
     public class LoadScene : Action
     {

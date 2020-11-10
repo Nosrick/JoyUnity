@@ -1,8 +1,5 @@
 ﻿using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Managers;
-using JoyLib.Code.States;
 using System;
 using System.Collections.Generic;
 using System.Linq;

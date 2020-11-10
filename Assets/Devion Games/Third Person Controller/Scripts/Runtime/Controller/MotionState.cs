@@ -61,7 +61,18 @@ namespace DevionGames
             }
         }
 
-        [SerializeField]
+		[SerializeField]
+		private bool m_PauseItemUpdate = true;
+
+		public bool PauseItemUpdate
+		{
+			get
+			{
+				return this.m_PauseItemUpdate;
+			}
+		}
+
+		[SerializeField]
 		private float m_TransitionDuration = 0.2f;
 
 		public float TransitionDuration {
@@ -140,7 +151,8 @@ namespace DevionGames
 
 		private void Start ()
 		{
-			this.m_Transform = transform.root;
+			//this.m_Transform = transform.root;
+			this.m_Transform = transform;
 			this.m_Animator = this.m_Transform.GetComponent<Animator> ();
 			this.m_Rigidbody = this.m_Transform.GetComponent<Rigidbody> ();
 			this.m_CapsuleCollider = this.m_Transform.GetComponent<CapsuleCollider> ();
@@ -167,7 +179,8 @@ namespace DevionGames
 			if (!this.m_IsActive || !force && !this.CanStop ()) {
 				return;
 			}
-			SendMessage("PauseItemUpdate", false, SendMessageOptions.DontRequireReceiver);
+			if(PauseItemUpdate)
+				SendMessage("PauseItemUpdate", false, SendMessageOptions.DontRequireReceiver);
 			this.m_IsActive = false;
 			OnStop ();
             m_Controller.CheckDefaultAnimatorStates();
@@ -182,7 +195,8 @@ namespace DevionGames
 
 		public void StartMotion ()
 		{
-			SendMessage("PauseItemUpdate", true, SendMessageOptions.DontRequireReceiver);
+			if (PauseItemUpdate)
+				SendMessage("PauseItemUpdate", true, SendMessageOptions.DontRequireReceiver);
 			this.m_IsActive = true;
 
 			OnStart ();
