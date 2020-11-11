@@ -11,24 +11,27 @@ using JoyLib.Code.Entities.Sexes;
 using JoyLib.Code.Entities.Sexuality;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.AI.Drivers;
+using JoyLib.Code.Entities.Romance;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities
 {
     public class EntityFactory
     {
-        protected GameObject s_GameManager;
-        protected NeedHandler s_NeedHandler;
+        protected GameObject GameManager { get; set; }
+        protected NeedHandler NeedHandler { get; set; }
 
-        protected ObjectIconHandler s_ObjectIcons;
+        protected ObjectIconHandler ObjectIcons { get; set; }
 
-        protected CultureHandler s_CultureHandler;
+        protected CultureHandler CultureHandler { get; set; }
 
-        protected EntitySexualityHandler s_SexualityHandler;
+        protected EntitySexualityHandler SexualityHandler { get; set; }
 
-        protected EntityBioSexHandler s_BioSexHandler;
+        protected EntityBioSexHandler BioSexHandler { get; set; }
+        
+        protected EntityRomanceHandler RomanceHandler { get; set; }
 
-        protected JobHandler s_JobHandler;
+        protected JobHandler JobHandler { get; set; }
 
         public EntityFactory()
         {
@@ -37,15 +40,16 @@ namespace JoyLib.Code.Entities
 
         protected void Initialise()
         {
-            if(s_GameManager is null)
+            if(GameManager is null)
             {
-                s_GameManager = GameObject.Find("GameManager");
-                s_NeedHandler = s_GameManager.GetComponent<NeedHandler>();
-                s_ObjectIcons = s_GameManager.GetComponent<ObjectIconHandler>();
-                s_CultureHandler = s_GameManager.GetComponent<CultureHandler>();
-                s_SexualityHandler = s_GameManager.GetComponent<EntitySexualityHandler>();
-                s_BioSexHandler = s_GameManager.GetComponent<EntityBioSexHandler>();
-                s_JobHandler = s_GameManager.GetComponent<JobHandler>();
+                GameManager = GameObject.Find("GameManager");
+                NeedHandler = GameManager.GetComponent<NeedHandler>();
+                ObjectIcons = GameManager.GetComponent<ObjectIconHandler>();
+                CultureHandler = GameManager.GetComponent<CultureHandler>();
+                SexualityHandler = GameManager.GetComponent<EntitySexualityHandler>();
+                BioSexHandler = GameManager.GetComponent<EntityBioSexHandler>();
+                JobHandler = GameManager.GetComponent<JobHandler>();
+                RomanceHandler = GameManager.GetComponent<EntityRomanceHandler>();
             }
         }
 
@@ -53,24 +57,26 @@ namespace JoyLib.Code.Entities
             EntityTemplate template,
             IGrowingValue level,
             Vector2Int position,
-            List<CultureType> cultures = null,
+            List<ICulture> cultures = null,
             IBioSex sex = null,
             ISexuality sexuality = null,
-            JobType job = null,
+            IRomance romance = null,
+            IJob job = null,
             Sprite[] sprites = null,
             WorldInstance world = null,
             IDriver driver = null)
         {
-            if (s_GameManager is null)
+            if (GameManager is null)
             {
                 Initialise();
             }
             
-            JobType selectedJob = job;
+            IJob selectedJob = job;
             IBioSex selectedSex = sex;
             ISexuality selectedSexuality = sexuality;
+            IRomance selectedRomance = romance;
             Sprite[] selectedSprites = sprites;
-            List<CultureType> creatureCultures = new List<CultureType>();
+            List<ICulture> creatureCultures = new List<ICulture>();
             IDriver selectedDriver = driver;
             if (!(cultures is null))
             {
@@ -78,8 +84,8 @@ namespace JoyLib.Code.Entities
             }
             else
             {
-                creatureCultures = new List<CultureType>();
-                List<CultureType> cultureTypes = s_CultureHandler.GetByCreatureType(template.CreatureType);
+                creatureCultures = new List<ICulture>();
+                List<ICulture> cultureTypes = CultureHandler.GetByCreatureType(template.CreatureType);
                 creatureCultures.AddRange(cultureTypes);
             }
 
@@ -87,30 +93,35 @@ namespace JoyLib.Code.Entities
 
             foreach (string need in template.Needs)
             {
-                needs.Add(s_NeedHandler.GetRandomised(need));
+                needs.Add(NeedHandler.GetRandomised(need));
             }
 
             int result = RNG.instance.Roll(0, creatureCultures.Count);
-            CultureType dominantCulture = creatureCultures[result];
+            ICulture dominantCulture = creatureCultures[result];
 
             if(selectedJob is null)
             {
-                selectedJob = dominantCulture.ChooseJob(s_JobHandler.Jobs);
+                selectedJob = dominantCulture.ChooseJob(JobHandler.Jobs);
             }
 
             if(selectedSex is null)
             {
-                selectedSex = dominantCulture.ChooseSex(s_BioSexHandler.Sexes);
+                selectedSex = dominantCulture.ChooseSex(BioSexHandler.Sexes);
+            }
+
+            if (selectedRomance is null)
+            {
+                selectedRomance = dominantCulture.ChooseRomance(RomanceHandler.Romances);
             }
 
             if(selectedSexuality is null)
             {
-                selectedSexuality = dominantCulture.ChooseSexuality(s_SexualityHandler.Sexualities);
+                selectedSexuality = dominantCulture.ChooseSexuality(SexualityHandler.Sexualities);
             }
 
             if(selectedSprites is null)
             {
-                selectedSprites = s_ObjectIcons.GetSprites(template.Tileset, template.JoyType);
+                selectedSprites = ObjectIcons.GetSprites(template.Tileset, template.JoyType);
             }
 
             if(selectedDriver is null)
@@ -126,6 +137,7 @@ namespace JoyLib.Code.Entities
                 selectedJob, 
                 selectedSex, 
                 selectedSexuality, 
+                selectedRomance,
                 position, 
                 selectedSprites, 
                 world,
@@ -142,6 +154,7 @@ namespace JoyLib.Code.Entities
             JobType job,
             IBioSex sex,
             ISexuality sexuality,
+            IRomance romance,
             Vector2Int position,
             Sprite[] sprites,
             ItemInstance naturalWeapons,
@@ -150,22 +163,22 @@ namespace JoyLib.Code.Entities
             List<string> identifiedItems,
             Dictionary<string, int> jobLevels,
             WorldInstance world,
-            List<CultureType> cultures = null,
+            List<ICulture> cultures = null,
             IDriver driver = null)
         {
-            if (s_GameManager is null)
+            if (GameManager is null)
             {
                 Initialise();
             }
             
-            List<CultureType> creatureCultures = new List<CultureType>();
+            List<ICulture> creatureCultures = new List<ICulture>();
             if (cultures != null)
             {
                 creatureCultures.AddRange(cultures);
             }
             else
             {
-                List<CultureType> cultureTypes = s_CultureHandler.GetByCreatureType(template.CreatureType);
+                List<ICulture> cultureTypes = CultureHandler.GetByCreatureType(template.CreatureType);
                 creatureCultures.AddRange(cultureTypes);
             }
 
@@ -184,6 +197,7 @@ namespace JoyLib.Code.Entities
                 job, 
                 sex, 
                 sexuality, 
+                romance,
                 position,
                 sprites, 
                 naturalWeapons, 

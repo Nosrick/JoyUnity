@@ -39,8 +39,6 @@ namespace JoyLib.Code.Scripting.Actions
             int relationshipMod = (int)args[0];
 
             IRelationship[] relationships = RelationshipHandler.Get(participants, tags, true);
-            
-            Debug.Log("RELATIONSHIPS LENGTH: " + relationships.Length);
 
             bool doAll = args.Length >= 2 && (bool)args[1];
 
@@ -56,7 +54,6 @@ namespace JoyLib.Code.Scripting.Actions
                     {
                         relationship.ModifyValueOfOtherParticipants(participants[0].GUID, relationshipMod);
                     }
-                    Debug.Log("MODIFIED RELATIONSHIP TO: " + relationship.GetHighestRelationshipValue(participants[0].GUID));
                 }
             }
             

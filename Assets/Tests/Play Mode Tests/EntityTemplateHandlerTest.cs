@@ -4,6 +4,7 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 using System.Collections;
+using System.Collections.Generic;
 using DevionGames.InventorySystem;
 
 namespace Tests
@@ -33,7 +34,7 @@ namespace Tests
         public IEnumerator LoadTypes_ShouldHaveValidData()
         {
             //given
-            EntityTemplate[] entityTemplates = target.Templates;
+            List<EntityTemplate> entityTemplates = target.Templates;
 
             //when
 

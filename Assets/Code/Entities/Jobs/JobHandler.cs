@@ -13,16 +13,16 @@ namespace JoyLib.Code.Entities.Jobs
 {
     public class JobHandler : MonoBehaviour
     {
-        private List<JobType> m_Jobs;
+        private List<IJob> m_Jobs;
 
         public void Awake()
         {
-            m_Jobs = new List<JobType>();
+            m_Jobs = new List<IJob>();
 
             m_Jobs = LoadTypes();
         }
 
-        public JobType Get(string jobName)
+        public IJob Get(string jobName)
         {
             if (m_Jobs.Any(x => x.Name == jobName))
             {
@@ -32,14 +32,14 @@ namespace JoyLib.Code.Entities.Jobs
             return null;
         }
 
-        public JobType GetRandom()
+        public IJob GetRandom()
         {
             return m_Jobs[RNG.instance.Roll(0, m_Jobs.Count - 1)];
         }
 
-        private List<JobType> LoadTypes()
+        private List<IJob> LoadTypes()
         {
-            List<JobType> jobTypes = new List<JobType>();
+            List<IJob> jobTypes = new List<IJob>();
 
             string[] files = Directory.GetFiles(
                 Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Jobs", 
@@ -107,7 +107,7 @@ namespace JoyLib.Code.Entities.Jobs
             return jobTypes;
         }
 
-        public JobType[] Jobs
+        public IJob[] Jobs
         {
             get
             {

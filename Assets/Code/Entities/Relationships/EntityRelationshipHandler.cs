@@ -109,7 +109,7 @@ namespace JoyLib.Code.Entities.Relationships
                 {
                     float tagsPercentage = 0.0f;
                     int totalTags = 0;
-                    string[] relationshipTags = pair.Item2.GetTags();
+                    List<string> relationshipTags = pair.Item2.Tags;
                     foreach (string tag in tags)
                     {
                         if (relationshipTags.Contains(tag))

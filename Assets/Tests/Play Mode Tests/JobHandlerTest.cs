@@ -26,11 +26,11 @@ namespace Tests
             //given
 
             //when
-            JobType[] jobs = target.Jobs;
+            IJob[] jobs = target.Jobs;
 
             //then
             Assert.That(jobs, Is.Not.Empty);
-            foreach(JobType job in jobs)
+            foreach(IJob job in jobs)
             {
                 Assert.That(job.SkillGrowths, Is.Not.Empty);
                 Assert.That(job.StatisticGrowths, Is.Not.Empty);

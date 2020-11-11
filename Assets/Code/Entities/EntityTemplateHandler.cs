@@ -20,6 +20,19 @@ namespace JoyLib.Code.Entities
     {
         private List<EntityTemplate> m_Templates;
 
+        public List<EntityTemplate> Templates
+        {
+            get
+            {
+                if (m_Templates is null)
+                {
+                    m_Templates = LoadTypes();
+                }
+
+                return m_Templates;
+            }
+        }
+
         public void Awake()
         {
             m_Templates = LoadTypes();
@@ -128,9 +141,9 @@ namespace JoyLib.Code.Entities
 
         public EntityTemplate Get(string type)
         {
-            if(m_Templates.Any(x => x.CreatureType == type))
+            if(Templates.Any(x => x.CreatureType == type))
             {
-                return m_Templates.First(x => x.CreatureType == type);
+                return Templates.First(x => x.CreatureType == type);
             }
 
             return null;
@@ -139,7 +152,7 @@ namespace JoyLib.Code.Entities
         public EntityTemplate GetRandom()
         {
             int result = RNG.instance.Roll(0, m_Templates.Count);
-            return m_Templates[result];
+            return Templates[result];
         }
 
         protected void AddSlotsToDatabase(List<string> slots)
@@ -155,14 +168,6 @@ namespace JoyLib.Code.Entities
                 EquipmentRegion region = ScriptableObject.CreateInstance<EquipmentRegion>();
                 region.Name = slot;
                 InventoryManager.Database.equipments.Add(region);                
-            }
-        }
-
-        public EntityTemplate[] Templates
-        {
-            get
-            {
-                return m_Templates.ToArray();
             }
         }
     }

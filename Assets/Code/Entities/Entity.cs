@@ -20,6 +20,7 @@ using JoyLib.Code.World;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using JoyLib.Code.Entities.Romance;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities
@@ -34,15 +35,16 @@ namespace JoyLib.Code.Entities
         protected List<ItemInstance> m_Backpack;
         protected ItemInstance m_NaturalWeapons;
         protected ISexuality m_Sexuality;
+        protected IRomance m_Romance;
 
         protected List<string> m_IdentifiedItems;
 
-        protected JobType m_CurrentJob;
+        protected IJob m_CurrentJob;
         protected Dictionary<string, int> m_JobLevels;
 
         protected List<string> m_Slots;
 
-        protected List<CultureType> m_Cultures;
+        protected List<ICulture> m_Cultures;
 
         protected int m_Size;
 
@@ -105,12 +107,13 @@ namespace JoyLib.Code.Entities
         public Entity(
             EntityTemplate template,
             BasicValueContainer<INeed> needs,
-            List<CultureType> cultures,
+            List<ICulture> cultures,
             IGrowingValue level,
             float experience,
-            JobType job,
+            IJob job,
             IBioSex sex,
             ISexuality sexuality,
+            IRomance romance,
             Vector2Int position,
             Sprite[] sprites,
             ItemInstance naturalWeapons,
@@ -146,6 +149,7 @@ namespace JoyLib.Code.Entities
 
             this.m_JobLevels = jobLevels;
             this.m_Sexuality = sexuality;
+            this.m_Romance = romance;
             this.m_IdentifiedItems = identifiedItems;
             this.m_Statistics = template.Statistics;
 
@@ -215,9 +219,20 @@ namespace JoyLib.Code.Entities
         /// <param name="position"></param>
         /// <param name="icons"></param>
         /// <param name="world"></param>
-        public Entity(EntityTemplate template, BasicValueContainer<INeed> needs, List<CultureType> cultures, IGrowingValue level, JobType job, IBioSex sex, ISexuality sexuality,
-            Vector2Int position, Sprite[] sprites, WorldInstance world, IDriver driver) :
-            this(template, needs, cultures, level, 0, job, sex, sexuality, position, sprites,
+        public Entity(
+            EntityTemplate template, 
+            BasicValueContainer<INeed> needs, 
+            List<ICulture> cultures,
+            IGrowingValue level,
+            IJob job,
+            IBioSex sex,
+            ISexuality sexuality,
+            IRomance romance,
+            Vector2Int position,
+            Sprite[] sprites,
+            WorldInstance world,
+            IDriver driver) :
+            this(template, needs, cultures, level, 0, job, sex, sexuality, romance, position, sprites,
                 NaturalWeaponHelper.MakeNaturalWeapon(template.Size), new NonUniqueDictionary<string, ItemInstance>(),
                 new List<ItemInstance>(), new List<string>(), new Dictionary<string, int>(), world, driver)
         {
@@ -289,7 +304,7 @@ namespace JoyLib.Code.Entities
                                     .Max(z => z);
             for (int i = 0; i <= maxNames; i++)
             {
-                CultureType random = m_Cultures[RNG.instance.Roll(0, m_Cultures.Count - 1)];
+                ICulture random = m_Cultures[RNG.instance.Roll(0, m_Cultures.Count - 1)];
                 while (random.NameData.SelectMany(x => x.chain).Max(y => y) < maxNames)
                 {
                     random = m_Cultures[RNG.instance.Roll(0, m_Cultures.Count - 1)];
@@ -1038,11 +1053,11 @@ namespace JoyLib.Code.Entities
             set;
         }
 
-        public CultureType[] Cultures => m_Cultures.ToArray();
+        public ICulture[] Cultures => m_Cultures.ToArray();
 
         public IVision VisionProvider => m_VisionProvider;
 
-        public JobType Job
+        public IJob Job
         {
             get
             {

@@ -38,6 +38,13 @@
 				<Chance>5</Chance>
 			</Sexuality>
 		</Sexualities>
+		
+		<Romances>
+			<Romance>
+				<Name>aromantic</Name>
+				<Chance>100</Chance>
+			</Romance>
+		</Romances>
 
 		<Sexes>
 			<Sex>

@@ -2,9 +2,9 @@
 
 namespace JoyLib.Code.Entities.Relationships
 {
-    public class MonogamousRelationship : AbstractRelationship
+    public class MonoamorousRelationship : AbstractRelationship
     {
-        public MonogamousRelationship()
+        public MonoamorousRelationship()
         {
             AddTag("romantic");
             AddTag("sexual");
@@ -17,7 +17,7 @@ namespace JoyLib.Code.Entities.Relationships
         
         public override IRelationship Create(IEnumerable<IJoyObject> participants)
         {
-            IRelationship newRelationship = new MonogamousRelationship();
+            IRelationship newRelationship = new MonoamorousRelationship();
             foreach (IJoyObject obj in participants)
             {
                 newRelationship.AddParticipant(obj);
@@ -28,7 +28,7 @@ namespace JoyLib.Code.Entities.Relationships
 
         public override IRelationship CreateWithValue(IEnumerable<IJoyObject> participants, int value)
         {
-            IRelationship newRelationship = new MonogamousRelationship();
+            IRelationship newRelationship = new MonoamorousRelationship();
             foreach (IJoyObject obj in participants)
             {
                 newRelationship.AddParticipant(obj);

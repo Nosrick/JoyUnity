@@ -4,7 +4,7 @@ namespace JoyLib.Code.Entities.Relationships
 {
     public class Friendship : AbstractRelationship
     {
-        public Friendship() : base()
+        public Friendship()
         {
             AddTag("friendship");
         }

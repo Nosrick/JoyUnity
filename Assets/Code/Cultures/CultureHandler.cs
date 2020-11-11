@@ -11,16 +11,16 @@ namespace JoyLib.Code.Cultures
 {
     public class CultureHandler : MonoBehaviour
     {        
-        protected Dictionary<string, CultureType> m_Cultures;
+        protected Dictionary<string, ICulture> m_Cultures;
 
         public void Awake()
         {
-            m_Cultures = new Dictionary<string, CultureType>();
+            m_Cultures = new Dictionary<string, ICulture>();
 
             m_Cultures = LoadCultures();
         }
 
-        private Dictionary<string, CultureType> LoadCultures()
+        private Dictionary<string, ICulture> LoadCultures()
         {
             string folderPath = Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Cultures";
             string[] files = Directory.GetFiles(folderPath, "*.xml");
@@ -28,7 +28,7 @@ namespace JoyLib.Code.Cultures
             ObjectIconHandler objectIcons = GameObject.Find("GameManager")
                                                 .GetComponent<ObjectIconHandler>();
 
-            Dictionary<string, CultureType> cultures = new Dictionary<string, CultureType>();
+            Dictionary<string, ICulture> cultures = new Dictionary<string, ICulture>();
 
             foreach (string file in files)
             {
@@ -66,6 +66,13 @@ namespace JoyLib.Code.Cultures
                                                                       sexualities.Element("Name").GetAs<string>(),
                                                                       sexualities.Element("Chance").GetAs<int>()
                                                                       )).ToDictionary(x => x.Key, x => x.Value);
+
+                    Dictionary<string, int> romanceDictionary = (from romances in culture.Element("Romances")
+                                .Elements("Romance")
+                            select new KeyValuePair<string, int>(
+                                romances.Element("Name").GetAs<string>(),
+                                romances.Element("Chance").GetAs<int>()))
+                        .ToDictionary(x => x.Key, x => x.Value);
 
                     Dictionary<string, int> sexesDictionary = (from sexes in culture.Element("Sexes")
                                                                     .Elements("Sex")
@@ -120,14 +127,15 @@ namespace JoyLib.Code.Cultures
                             sexualitiesDictionary,
                             sexesDictionary,
                             statVarianceDictionary,
-                            relationships));
+                            relationships,
+                            romanceDictionary));
                 }
             }
 
             return cultures;
         }
 
-        public CultureType GetByCultureName(string name)
+        public ICulture GetByCultureName(string name)
         {
             if(m_Cultures is null)
             {
@@ -142,7 +150,7 @@ namespace JoyLib.Code.Cultures
             return null;
         }
 
-        public List<CultureType> GetByCreatureType(string type)
+        public List<ICulture> GetByCreatureType(string type)
         {
             if(m_Cultures is null)
             {
@@ -151,7 +159,7 @@ namespace JoyLib.Code.Cultures
 
             try
             {
-                Dictionary<string, CultureType> cultures = m_Cultures.Where(
+                Dictionary<string, ICulture> cultures = m_Cultures.Where(
                     culture => culture.Value.Inhabitants.Contains(
                         type, GlobalConstants.STRING_COMPARER))
                     .ToDictionary(pair => pair.Key, pair => pair.Value);
@@ -164,7 +172,7 @@ namespace JoyLib.Code.Cultures
             }
         }
 
-        public CultureType[] Cultures
+        public ICulture[] Cultures
         {
             get
             {

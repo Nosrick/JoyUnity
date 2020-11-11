@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using UnityEngine;
@@ -7,17 +8,23 @@ namespace JoyLib.Code.Entities.Relationships
 {
     public abstract class AbstractRelationship : IRelationship
     {
+
+        public virtual string Name => "abstractrelationship";
+
+        public List<string> Tags { get; protected set; }
+
+        public virtual string DisplayName => "SOMEONE FORGOT TO OVERRIDE THE DISPLAYNAME";
+        
         //Yeesh, this is messy
         //But this is a key value pair for how each participant feels about the other in the relationship
         protected SortedDictionary<long, Dictionary<long, int>> m_Values;
         protected SortedDictionary<long, IJoyObject> m_Participants;
-        protected List<string> m_Tags;
 
         public AbstractRelationship()
         {
             m_Participants = new SortedDictionary<long, IJoyObject>();
             m_Values = new SortedDictionary<long, Dictionary<long, int>>();
-            m_Tags = new List<string>();
+            Tags = new List<string>();
         }
 
         public virtual bool AddParticipant(IJoyObject newParticipant)
@@ -44,19 +51,43 @@ namespace JoyLib.Code.Entities.Relationships
                         m_Values[pair.Key].Add(newParticipant.GUID, 0);
                     }
                 }
+                
+                if (newParticipant is Entity entity)
+                {
+                    foreach (string tag in entity.Sexuality.Tags)
+                    {
+                        AddTag(tag);
+                    }
+                }
 
                 return true;
             }
             return false;
         }
+        
+        public bool HasTag(string tag)
+        {
+            return Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase));
+        }
 
         public bool AddTag(string tag)
         {
-            if(m_Tags.Contains(tag) == false)
+            if (HasTag(tag))
             {
-                m_Tags.Add(tag);
+                return false;
+            }
+            Tags.Add(tag);
+            return true;
+        }
+
+        public bool RemoveTag(string tag)
+        {
+            if (HasTag(tag))
+            {
+                Tags.Remove(tag);
                 return true;
             }
+
             return false;
         }
 
@@ -85,11 +116,6 @@ namespace JoyLib.Code.Entities.Relationships
             
             return m_Values.Where(pair => pair.Key.Equals(GUID))
                 .Max(pair => pair.Value.Max(valuePair => valuePair.Value));
-        }
-
-        public string[] GetTags()
-        {
-            return m_Tags.ToArray();
         }
 
         public Dictionary<long, int> GetValuesOfParticipant(long GUID)
@@ -172,16 +198,6 @@ namespace JoyLib.Code.Entities.Relationships
             return false;
         }
 
-        public bool RemoveTag(string tag)
-        {
-            if(m_Tags.Contains(tag))
-            {
-                m_Tags.Remove(tag);
-                return true;
-            }
-            return false;
-        }
-
         public long GenerateHash(IEnumerable<long> participants)
         {
             long hash = 0;
@@ -216,11 +232,5 @@ namespace JoyLib.Code.Entities.Relationships
 
         public abstract IRelationship Create(IEnumerable<IJoyObject> participants);
         public abstract IRelationship CreateWithValue(IEnumerable<IJoyObject> participants, int value);
-
-        public virtual string Name => "abstractrelationship";
-
-        public ReadOnlyCollection<string> Tags => m_Tags.AsReadOnly();
-
-        public virtual string DisplayName => "SOMEONE FORGOT TO OVERRIDE THE DISPLAYNAME";
     }
 }

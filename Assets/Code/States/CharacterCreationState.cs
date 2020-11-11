@@ -139,6 +139,7 @@ namespace JoyLib.Code.States
                 null,
                 null,
                 null,
+                null,
                 m_Jobs[m_JobIndex]);
             
             m_Player = new EntityPlayer(temp);

@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace JoyLib.Code.Entities.Jobs
 {
-    public class JobType
+    public class JobType : IJob
     {
         protected NonUniqueDictionary<int, IAbility> m_Abilities;
         protected Dictionary<string, float> m_StatisticGrowths;

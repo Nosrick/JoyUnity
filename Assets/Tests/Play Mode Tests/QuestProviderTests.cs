@@ -8,6 +8,7 @@ using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Jobs;
 using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Relationships;
+using JoyLib.Code.Entities.Romance;
 using JoyLib.Code.Entities.Sexes;
 using JoyLib.Code.Entities.Sexuality;
 using JoyLib.Code.Entities.Statistics;
@@ -49,6 +50,8 @@ namespace Tests
 
         private EntitySexualityHandler sexualityHandler;
 
+        private EntityRomanceHandler romanceHandler;
+
         private EntitySkillHandler skillHandler;
 
         private EntityFactory entityFactory;
@@ -82,6 +85,7 @@ namespace Tests
             sexualityHandler = container.AddComponent<EntitySexualityHandler>();
             skillHandler = container.AddComponent<EntitySkillHandler>();
             itemHandler = container.AddComponent<LiveItemHandler>();
+            romanceHandler = container.AddComponent<EntityRomanceHandler>();
 
             target = container.AddComponent<QuestProvider>();
             questTracker = container.AddComponent<QuestTracker>();

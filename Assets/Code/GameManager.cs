@@ -15,6 +15,7 @@ using JoyLib.Code.Rollers;
 using JoyLib.Code.States;
 using System;
 using System.Collections.Generic;
+using JoyLib.Code.Entities.Romance;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -30,6 +31,7 @@ public class GameManager : MonoBehaviour
         EntityBioSexHandler bioSexHandler = this.GetComponent<EntityBioSexHandler>();
         EntitySexualityHandler sexualityHandler = this.GetComponent<EntitySexualityHandler>();
         JobHandler jobHandler = this.GetComponent<JobHandler>();
+        EntityRomanceHandler romanceHandler = this.GetComponent<EntityRomanceHandler>();
 
         InitialiseEverything();
 
@@ -41,10 +43,10 @@ public class GameManager : MonoBehaviour
         INeed testingNeed = needHandler.GetRandomised("thirst");
         needs.Add(testingNeed);
 
-        List<CultureType> cultures = cultureHandler.GetByCreatureType("Human");
-        CultureType culture = cultures[0];
+        List<ICulture> cultures = cultureHandler.GetByCreatureType("Human");
+        ICulture culture = cultures[0];
         EntityTemplate human = entityTemplateHandler.Get("human");
-        JobType jobType = culture.ChooseJob(jobHandler.Jobs);
+        IJob jobType = culture.ChooseJob(jobHandler.Jobs);
 
         IGrowingValue level = new ConcreteGrowingValue("level", 1, 100, 0, GlobalConstants.DEFAULT_SUCCESS_THRESHOLD,
                                                         new StandardRoller(), new NonUniqueDictionary<INeed, float>());
@@ -54,9 +56,10 @@ public class GameManager : MonoBehaviour
             human, 
             level, 
             Vector2Int.zero, 
-            new List<CultureType>() { culture },
+            new List<ICulture>() { culture },
             culture.ChooseSex(bioSexHandler.Sexes), 
             culture.ChooseSexuality(sexualityHandler.Sexualities), 
+            culture.ChooseRomance(romanceHandler.Romances),
             jobType, 
             objectIcons.GetSprites(human.Tileset, jobType.Name),
             null,

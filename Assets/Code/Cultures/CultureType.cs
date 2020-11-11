@@ -5,16 +5,19 @@ using JoyLib.Code.Rollers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
+using JoyLib.Code.Entities.Romance;
 
 namespace JoyLib.Code.Cultures
 {
-    public class CultureType
+    public class CultureType : ICulture
     {
         protected List<string> m_RulerTypes;
         protected List<string> m_Crimes;
         protected List<NameData> m_NameData;
         protected Dictionary<string, int> m_SexPrevelence;
         protected Dictionary<string, int> m_SexualityPrevelence;
+        protected Dictionary<string, int> m_RomancePrevelence;
 
         //The first number is the chance, the second is the actual number it can vary by
         protected Dictionary<string, Tuple<int, int>> m_StatVariance;
@@ -27,7 +30,8 @@ namespace JoyLib.Code.Cultures
 
         public CultureType(string nameRef, List<string> rulersRef, List<string> crimesRef, List<NameData> namesRef, 
             Dictionary<string, int> jobRef, List<string> inhabitantsNameRef, Dictionary<string, int> sexualityPrevelenceRef, 
-            Dictionary<string, int> sexPrevelence, Dictionary<string, Tuple<int, int>> statVariance, List<string> relationshipTypes)
+            Dictionary<string, int> sexPrevelence, Dictionary<string, Tuple<int, int>> statVariance, List<string> relationshipTypes,
+            Dictionary<string, int> romancePrevelence)
         {
             CultureName = nameRef;
             m_RulerTypes = rulersRef;
@@ -40,6 +44,7 @@ namespace JoyLib.Code.Cultures
             m_SexualityPrevelence = sexualityPrevelenceRef;
             m_StatVariance = statVariance;
             m_RelationshipTypes = relationshipTypes;
+            m_RomancePrevelence = romancePrevelence;
         }
 
         public string GetRandomName(IBioSex sexRef)
@@ -125,7 +130,28 @@ namespace JoyLib.Code.Cultures
             return null;
         }
 
-        public JobType ChooseJob(JobType[] jobs)
+        public IRomance ChooseRomance(IRomance[] romances)
+        {
+            int soFar = 0;
+            int totalRomance = 0;
+            foreach(int value in m_RomancePrevelence.Values)
+            {
+                totalRomance += value;
+            }
+            int result = RNG.instance.Roll(0, totalRomance - 1);
+
+            foreach (KeyValuePair<string, int> pair in m_RomancePrevelence)
+            {
+                soFar += pair.Value;
+                if(result < soFar)
+                {
+                    return romances.First(romance => romance.Name.Equals(pair.Key, StringComparison.OrdinalIgnoreCase));
+                }
+            }
+            return null;
+        }
+
+        public IJob ChooseJob(IJob[] jobs)
         {
             int soFar = 0;
             int totalJob = 0;
@@ -150,7 +176,7 @@ namespace JoyLib.Code.Cultures
         {
             if(m_StatVariance.ContainsKey(statistic))
             {
-                if(RNG.instance.Roll(1, 100) < m_StatVariance[statistic].Item1)
+                if(RNG.instance.Roll(0, 100) < m_StatVariance[statistic].Item1)
                 {
                     return RNG.instance.Roll(-m_StatVariance[statistic].Item2, m_StatVariance[statistic].Item2);
                 }
@@ -158,66 +184,26 @@ namespace JoyLib.Code.Cultures
             return 0;
         }
 
-        public string[] Inhabitants
-        {
-            get
-            {
-                return m_Inhabitants.ToArray();
-            }
-        }
+        public string[] Inhabitants => m_Inhabitants.ToArray();
 
         public string CultureName
         {
             get;
-            private set;
+            protected set;
         }
 
-        public string[] RulerTypes
-        {
-            get
-            {
-                return m_RulerTypes.ToArray();
-            }
-        }
+        public string[] RulerTypes => m_RulerTypes.ToArray();
 
-        public string[] Crimes
-        {
-            get
-            {
-                return m_Crimes.ToArray();
-            }
-        }
+        public string[] Crimes => m_Crimes.ToArray();
 
-        public string[] RelationshipTypes
-        {
-            get
-            {
-                return m_RelationshipTypes.ToArray();
-            }
-        }
+        public string[] RelationshipTypes => m_RelationshipTypes.ToArray();
 
-        public string[] Sexes
-        {
-            get
-            {
-                return m_SexPrevelence.Keys.ToArray();
-            }
-        }
+        public string[] RomanceTypes => m_RomancePrevelence.Keys.ToArray();
 
-        public string[] Sexualities
-        {
-            get
-            {
-                return m_SexualityPrevelence.Keys.ToArray();
-            }
-        }
+        public string[] Sexes => m_SexPrevelence.Keys.ToArray();
 
-        public NameData[] NameData
-        {
-            get
-            {
-                return m_NameData.ToArray();
-            }
-        }
+        public string[] Sexualities => m_SexualityPrevelence.Keys.ToArray();
+
+        public NameData[] NameData => m_NameData.ToArray();
     }
 }

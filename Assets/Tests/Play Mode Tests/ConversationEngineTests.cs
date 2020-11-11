@@ -4,12 +4,14 @@ using Castle.Core.Internal;
 using DevionGames.InventorySystem;
 using JoyLib.Code.Conversation;
 using JoyLib.Code.Conversation.Conversations;
+using JoyLib.Code.Conversation.Subengines.Rumours.Parameters;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Jobs;
 using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Relationships;
+using JoyLib.Code.Entities.Romance;
 using JoyLib.Code.Entities.Sexes;
 using JoyLib.Code.Entities.Sexuality;
 using JoyLib.Code.Entities.Statistics;
@@ -35,6 +37,7 @@ namespace Tests
 
         private GameObject gameManager;
         private GameObject conversationWindow;
+        private GameObject inventoryWindow;
         
         private EntityTemplateHandler templateHandler;
 
@@ -59,7 +62,10 @@ namespace Tests
         private QuestTracker questTracker;
         private QuestProvider questProvider;
 
+        private ParameterProcessorHandler parameterProcessorHandler;
+
         private LiveEntityHandler entityHandler;
+        private LiveItemHandler itemHandler;
 
         private MonoBehaviourHandler instigatorObject;
         private MonoBehaviourHandler listenerObject;
@@ -83,6 +89,9 @@ namespace Tests
                 GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/GUI/Conversation/Conversation Window"));
             conversationWindow.name = "Conversation Window";
 
+            inventoryWindow = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/GUI/Inventory/GUIInventory"));
+            inventoryWindow.name = "Inventory";
+
             objectIconHandler = gameManager.AddComponent<ObjectIconHandler>();
             templateHandler = gameManager.AddComponent<EntityTemplateHandler>();
             cultureHandler = gameManager.AddComponent<CultureHandler>();
@@ -92,6 +101,9 @@ namespace Tests
             materialHandler = gameManager.AddComponent<MaterialHandler>();
             jobHandler = gameManager.AddComponent<JobHandler>();
             guiManager = gameManager.AddComponent<GUIManager>();
+            itemHandler = gameManager.AddComponent<LiveItemHandler>();
+
+            parameterProcessorHandler = gameManager.AddComponent<ParameterProcessorHandler>();
 
             questProvider = gameManager.AddComponent<QuestProvider>();
             questTracker = gameManager.AddComponent<QuestTracker>();
@@ -103,6 +115,7 @@ namespace Tests
             conversationGUI.name = "Conversation Window";
             guiManager.AddGUI(conversationGUI, true, true);
             guiManager.OpenGUI(conversationGUI.name);
+            guiManager.AddGUI(inventoryWindow);
 
             scriptingEngine = new ScriptingEngine();
 
@@ -114,32 +127,47 @@ namespace Tests
                 "TESTING");
             
             EntityFactory factory = new EntityFactory();
-            
-            Mock<IBioSex> female = new Mock<IBioSex>();
-            female.Setup(sex => sex.Name).Returns("female");
-            
-            List<CultureType> cultures = cultureHandler.GetByCreatureType("human");
-            
-            Mock<ISexuality> sexuality = new Mock<ISexuality>();
-            
-            Mock<IGrowingValue> level = new Mock<IGrowingValue>();
+
+            IBioSex female = Mock.Of<IBioSex>(sex => sex.Name == "female");
+
+            NameData[] namedata = new[]
+            {
+                new NameData("NAME",
+                    new[] {0, 1},
+                    new[] {"male", "female"})
+            };
+
+            List<ICulture> cultures = new List<ICulture>()
+            {
+                Mock.Of<ICulture>(
+                    c => c.GetNameForChain(It.IsAny<int>(), It.IsAny<string>()) == "NAME"
+                    && c.NameData == namedata)
+            };
+
+            IRomance romance = Mock.Of<IRomance>();
+
+            ISexuality sexuality = Mock.Of<ISexuality>(s => s.Tags == new List<string>());
+
+            IGrowingValue level = Mock.Of<IGrowingValue>();
             EntityTemplate humanTemplate = templateHandler.Get("human");
             
             instigator = factory.CreateFromTemplate(
                 humanTemplate,
-                level.Object,
+                level,
                 Vector2Int.zero,
                 cultures,
-                female.Object,
-                sexuality.Object);
+                female,
+                sexuality,
+                romance);
             
             listener = factory.CreateFromTemplate(
                 humanTemplate,
-                level.Object,
+                level,
                 Vector2Int.zero,
                 cultures,
-                female.Object,
-                sexuality.Object);
+                female,
+                sexuality,
+                romance);
             
             world.AddEntity(instigator);
             world.AddEntity(listener);

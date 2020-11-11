@@ -154,27 +154,27 @@ namespace JoyLib.Code.Conversation.Conversations
                 action.Name.Equals("modifyrelationshippointsaction", StringComparison.OrdinalIgnoreCase));
 
             fulfillNeed.Execute(
-                new JoyObject[] { instigator, listener },
+                new IJoyObject[] { instigator, listener },
                 new [] { "friendship" },
                 new object[] { "friendship", instigator.Statistics[EntityStatistic.PERSONALITY].Value, 0, true });
 
             string[] tags = RelationshipHandler.Get(
-                new JoyObject[] {instigator, listener}).SelectMany(relationship => relationship.GetTags()).ToArray();
+                new IJoyObject[] {instigator, listener}).SelectMany(relationship => relationship.Tags).ToArray();
             
             influence.Execute(
-                new JoyObject[] { instigator, listener },
+                new IJoyObject[] { instigator, listener },
                 tags,
                 new object[] { instigator.Statistics[EntityStatistic.PERSONALITY].Value });
 
             influence.Execute(
-                new JoyObject[] {listener, instigator},
+                new IJoyObject[] {listener, instigator},
                 tags,
                 new object[] { listener.Statistics[EntityStatistic.PERSONALITY].Value });
 
             if (RelationshipHandler.IsFamily(instigator, listener))
             {
                 fulfillNeed.Execute(
-                    new JoyObject[] {instigator, listener},
+                    new IJoyObject[] {instigator, listener},
                     new string[] {"family"},
                     new object[] {"family", instigator.Statistics[EntityStatistic.PERSONALITY].Value, 0, true});
             }

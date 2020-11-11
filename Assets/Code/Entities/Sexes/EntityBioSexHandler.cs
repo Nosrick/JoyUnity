@@ -34,7 +34,7 @@ namespace JoyLib.Code.Entities.Sexes
             Load(CultureHandler.Cultures);
         }
 
-        public bool Load(CultureType[] cultures)
+        public bool Load(ICulture[] cultures)
         {
             if (CultureHandler is null)
             {

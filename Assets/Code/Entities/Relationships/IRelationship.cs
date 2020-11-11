@@ -3,22 +3,16 @@ using System.Collections.ObjectModel;
 
 namespace JoyLib.Code.Entities.Relationships
 {
-    public interface IRelationship
+    public interface IRelationship : ITagged
     {
         Dictionary<long, int> GetValuesOfParticipant(long GUID);
 
         int GetRelationshipValue(long left, long right);
 
         int GetHighestRelationshipValue(long GUID);
-
-        string[] GetTags();
         
         IJoyObject GetParticipant(long GUID);
         IJoyObject[] GetParticipants();
-
-        bool AddTag(string tag);
-
-        bool RemoveTag(string tag);
 
         int ModifyValueOfParticipant(long actor, long observer, int value);
 
@@ -36,8 +30,6 @@ namespace JoyLib.Code.Entities.Relationships
         IRelationship CreateWithValue(IEnumerable<IJoyObject> participants, int value);
 
         string Name { get; }
-
-        ReadOnlyCollection<string> Tags { get; }
 
         string DisplayName { get; }
     }

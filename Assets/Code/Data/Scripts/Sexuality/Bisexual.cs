@@ -29,12 +29,13 @@ namespace JoyLib.Code.Entities.Sexuality
             }
         }
 
+        public Bisexual()
+        {
+            AddTag("bi");
+        }
+
         public override bool WillMateWith(Entity me, Entity them, IRelationship[] relationships)
         {
-
-            List<long> participants = new List<long>() { me.GUID, them.GUID };
-            List<string> tags = new List<string>() { "sexual" };
-            
             foreach (IRelationship relationship in relationships)
             {
                 if (relationship.GetRelationshipValue(me.GUID, them.GUID) > MatingThreshold 

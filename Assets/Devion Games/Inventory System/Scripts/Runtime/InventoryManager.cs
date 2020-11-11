@@ -36,7 +36,11 @@ namespace DevionGames.InventorySystem
 		public static ItemDatabase Database {
 			get {
 				if (InventoryManager.current != null) {
-                    Assert.IsNotNull(InventoryManager.current.m_Database, "Please assign ItemDatabase to the Inventory Manager!");
+                    //Assert.IsNotNull(InventoryManager.current.m_Database, "Please assign ItemDatabase to the Inventory Manager!");
+                    if (current.m_Database is null)
+                    {
+                        current.m_Database = ScriptableObject.CreateInstance<ItemDatabase>();
+                    }
                     return InventoryManager.current.m_Database;
 				}
 				return null;
@@ -46,7 +50,7 @@ namespace DevionGames.InventorySystem
         private static Default m_DefaultSettings;
         public static Default DefaultSettings {
             get {
-                if (m_DefaultSettings== null)
+                if (m_DefaultSettings is null)
                 {
                     m_DefaultSettings = GetSetting<Default>();
                 }
@@ -109,7 +113,12 @@ namespace DevionGames.InventorySystem
         private static T GetSetting<T>() where T: Configuration.Settings{
             if (InventoryManager.Database != null)
             {
-                return (T)InventoryManager.Database.settings.Where(x => x.GetType() == typeof(T)).FirstOrDefault();
+                T obj = (T) InventoryManager.Database.settings.Where(x => x.GetType() == typeof(T)).FirstOrDefault();
+                if (obj is null)
+                {
+                    obj = ScriptableObject.CreateInstance<T>();
+                }
+                return obj;
             }
             return default(T);
         }
