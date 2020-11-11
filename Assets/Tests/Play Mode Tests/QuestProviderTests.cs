@@ -147,7 +147,6 @@ namespace Tests
             IQuest quest = target.MakeRandomQuest(left, right, world);
 
             //then
-            quest.ToString();
             Assert.That(quest.Rewards, Is.Not.Empty);
             Assert.That(quest.Steps, Is.Not.Empty);
 
