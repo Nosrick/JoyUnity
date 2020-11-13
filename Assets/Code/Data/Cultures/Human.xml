@@ -100,15 +100,13 @@
 		<Names>
 			<NameData>
 				<Name>Alex</Name>
-				<Sex>male</Sex>
-				<Sex>female</Sex>
+				<Sex>all</Sex>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>McHuman</Name>
-				<Sex>male</Sex>
-				<Sex>female</Sex>
+				<Sex>all</Sex>
 				<Chain>1</Chain>
 			</NameData>
 		</Names>

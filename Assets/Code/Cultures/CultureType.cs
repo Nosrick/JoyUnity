@@ -51,7 +51,9 @@ namespace JoyLib.Code.Cultures
         {
             Dictionary<int, List<string>> allViablesNames = new Dictionary<int, List<string>>();
 
-            List<NameData> thisSexNames = m_NameData.Where(nameData => nameData.sexes.Contains(sexRef.Name)).ToList();
+            List<NameData> thisSexNames = m_NameData.Where(nameData => nameData.sexes.Any(
+                s => s.Equals(sexRef.Name, StringComparison.OrdinalIgnoreCase)
+                        || s.Equals("all", StringComparison.OrdinalIgnoreCase))).ToList();
 
             foreach(NameData name in thisSexNames)
             {
@@ -82,7 +84,9 @@ namespace JoyLib.Code.Cultures
 
         public string GetNameForChain(int chain, string sex)
         {
-            NameData[] names = m_NameData.Where(x => x.chain.Contains(chain) && x.sexes.Contains(sex, GlobalConstants.STRING_COMPARER)).ToArray();
+            NameData[] names = m_NameData.Where(x => x.chain.Contains(chain) 
+                                                     && (x.sexes.Contains(sex, GlobalConstants.STRING_COMPARER) 
+                                                         || x.sexes.Any(s => s.Equals("all", StringComparison.OrdinalIgnoreCase)))).ToArray();
 
             int result = RNG.instance.Roll(0, names.Length - 1);
             return names[result].name;

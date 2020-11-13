@@ -133,8 +133,7 @@
 
 			<NameData>
 				<Name>Ananta</Name>
-				<Sex>male</Sex>
-				<Sex>female</Sex>
+				<Sex>all</Sex>
 				<Chain>0</Chain>
 			</NameData>
 
@@ -218,8 +217,7 @@
 
 			<NameData>
 				<Name>Chandra</Name>
-				<Sex>male</Sex>
-				<Sex>female</Sex>
+				<Sex>all</Sex>
 				<Chain>0</Chain>
 			</NameData>
 
@@ -328,8 +326,7 @@
 
 			<NameData>
 				<Name>Kamala</Name>
-				<Sex>male</Sex>
-				<Sex>female</Sex>
+				<Sex>all</Sex>
 				<Chain>0</Chain>
 			</NameData>
 
@@ -371,8 +368,7 @@
 
 			<NameData>
 				<Name>Lalita</Name>
-				<Sex>male</Sex>
-				<Sex>female</Sex>
+				<Sex>all</Sex>
 				<Chain>0</Chain>
 			</NameData>
 
@@ -402,8 +398,7 @@
 
 			<NameData>
 				<Name>Manu</Name>
-				<Sex>male</Sex>
-				<Sex>female</Sex>
+				<Sex>all</Sex>
 				<Chain>0</Chain>
 			</NameData>
 
@@ -421,15 +416,13 @@
 
 			<NameData>
 				<Name>Mitra</Name>
-				<Sex>male</Sex>
-				<Sex>female</Sex>
+				<Sex>all</Sex>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Mohana</Name>
-				<Sex>male</Sex>
-				<Sex>female</Sex>
+				<Sex>all</Sex>
 				<Chain>0</Chain>
 			</NameData>
 
@@ -459,8 +452,7 @@
 
 			<NameData>
 				<Name>Padma</Name>
-				<Sex>male</Sex>
-				<Sex>female</Sex>
+				<Sex>all</Sex>
 				<Chain>0</Chain>
 			</NameData>
 
@@ -628,8 +620,7 @@
 
 			<NameData>
 				<Name>Shyama</Name>
-				<Sex>female</Sex>
-				<Sex>male</Sex>
+				<Sex>all</Sex>
 				<Chain>0</Chain>
 			</NameData>
 
@@ -671,8 +662,7 @@
 
 			<NameData>
 				<Name>Sushila</Name>
-				<Sex>female</Sex>
-				<Sex>male</Sex>
+				<Sex>all</Sex>
 				<Chain>0</Chain>
 			</NameData>
 
@@ -714,8 +704,7 @@
 
 			<NameData>
 				<Name>Vijaya</Name>
-				<Sex>male</Sex>
-				<Sex>female</Sex>
+				<Sex>all</Sex>
 				<Chain>0</Chain>
 			</NameData>
 
@@ -739,8 +728,7 @@
 
 			<NameData>
 				<Name>McNaga</Name>
-				<Sex>male</Sex>
-				<Sex>female</Sex>
+				<Sex>all</Sex>
 				<Chain>1</Chain>
 			</NameData>
 		</Names>

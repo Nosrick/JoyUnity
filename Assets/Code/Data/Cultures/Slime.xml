@@ -70,37 +70,43 @@
 		<Names>
 			<NameData>
 				<Name>Glorp</Name>
-				<Sex>neutral</Sex>
+				<Sex>all</Sex>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Blip</Name>
-				<Sex>neutral</Sex>
+				<Sex>all</Sex>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Slorp</Name>
-				<Sex>neutral</Sex>
+				<Sex>all</Sex>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Glurg</Name>
-				<Sex>neutral</Sex>
+				<Sex>all</Sex>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>The</Name>
-				<Sex>neutral</Sex>
+				<Sex>all</Sex>
+				<Chain>1</Chain>
+			</NameData>
+			
+			<NameData>
+				<Name>Von</Name>
+				<Sex>all</Sex>
 				<Chain>1</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Slimy</Name>
-				<Sex>neutral</Sex>
+				<Sex>all</Sex>
 				<Chain>2</Chain>
 			</NameData>
 		</Names>
