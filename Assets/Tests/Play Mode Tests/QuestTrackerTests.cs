@@ -132,6 +132,8 @@ namespace Tests
                 sprites,
                 world,
                 new StandardDriver());
+
+            left.PlayerControlled = true;
             
             right = new Entity(
                 random,

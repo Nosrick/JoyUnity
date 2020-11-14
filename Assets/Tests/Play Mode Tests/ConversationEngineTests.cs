@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Castle.Core.Internal;
 using DevionGames.InventorySystem;
 using JoyLib.Code.Conversation;
@@ -84,12 +85,20 @@ namespace Tests
             gameManager = new GameObject("GameManager");
             inventoryManager = new GameObject();
             inventoryManager.AddComponent<InventoryManager>();
+            
+            Canvas canvas = new GameObject("Parent").AddComponent<Canvas>();
 
             conversationWindow =
-                GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/GUI/Conversation/Conversation Window"));
+                GameObject.Instantiate(
+                    Resources.Load<GameObject>("Prefabs/GUI/Conversation/Conversation Window"), 
+                    canvas.transform, 
+                    true);
             conversationWindow.name = "Conversation Window";
 
-            inventoryWindow = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/GUI/Inventory/GUIInventory"));
+            inventoryWindow = GameObject.Instantiate(
+                Resources.Load<GameObject>("Prefabs/GUI/Inventory/GUIInventory"), 
+                canvas.transform,
+                true);
             inventoryWindow.name = "Inventory";
 
             objectIconHandler = gameManager.AddComponent<ObjectIconHandler>();
@@ -168,6 +177,8 @@ namespace Tests
                 female,
                 sexuality,
                 romance);
+
+            instigator.PlayerControlled = true;
             
             world.AddEntity(instigator);
             world.AddEntity(listener);
@@ -207,19 +218,32 @@ namespace Tests
             int depth = 0;
             
             target.SetActors(instigator, listener);
-            
-            ITopic[] topics = target.Converse();
-            while (topics.IsNullOrEmpty() == false)
-            {
-                int result = RNG.instance.Roll(0, topics.Length);
-                topics = target.Converse(result);
 
-                depth += 1;
+            ITopic[] baseTopics = target.Converse();
+            bool ended = false;
+            foreach (ITopic topic in baseTopics)
+            {
+                ended = AdvanceToEnd(topic, baseTopics);
             }
 
-            Assert.That(depth, Is.Not.Zero);
+            Assert.That(ended, Is.True);
 
             return null;
+        }
+
+        private bool AdvanceToEnd(ITopic topic, ITopic[] baseTopics)
+        {
+            ITopic[] nextTopics = target.Converse(topic.ID);
+            if (nextTopics.Intersect(baseTopics).Count() == baseTopics.Length)
+            {
+                return true;
+            }
+            foreach (ITopic next in nextTopics)
+            {
+                AdvanceToEnd(next, baseTopics);
+            }
+
+            return true;
         }
 
         [TearDown]

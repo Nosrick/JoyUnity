@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using JoyLib.Code.Conversation.Subengines.Rumours;
 using JoyLib.Code.Conversation.Subengines.Rumours.Parameters;
 using JoyLib.Code.Entities;
+using TMPro;
 using UnityEngine;
 
 namespace JoyLib.Code.Conversation.Conversations.Rumours
@@ -96,12 +97,31 @@ namespace JoyLib.Code.Conversation.Conversations.Rumours
             
             foreach (ITopicCondition condition in Conditions)
             {
-                int value = values.Where(pair =>
-                    pair.Item1.Equals(condition.Criteria, StringComparison.OrdinalIgnoreCase))
-                    .Max(tuple => tuple.Item2);
-                if (condition.FulfillsCondition(value) == false)
+                if (values.Any() == false)
                 {
-                    return false;
+                    if (condition.FulfillsCondition(0) == false)
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    if (values.Any(pair => pair.Item1.Equals(condition.Criteria)) == false)
+                    {
+                        if (condition.FulfillsCondition(0) == false)
+                        {
+                            return false;
+                        }
+                    }
+                    
+                    int value = values.Where(pair =>
+                            pair.Item1.Equals(condition.Criteria, StringComparison.OrdinalIgnoreCase))
+                        .Max(tuple => tuple.Item2);
+
+                    if (condition.FulfillsCondition(value) == false)
+                    {
+                        return false;
+                    }
                 }
             }
 
