@@ -13,6 +13,8 @@ namespace JoyLib.Code.Entities.Romance
 
         public virtual int RomanceThreshold { get; set; }
 
+        public virtual int BondingThreshold { get; set; }
+
         public List<string> Tags { get; protected set; }
 
         public AbstractRomance()

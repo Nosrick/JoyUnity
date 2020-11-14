@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Castle.Components.DictionaryAdapter;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Entities.Statistics;
@@ -63,13 +64,47 @@ namespace JoyLib.Code.Conversation.Conversations
 
         public bool FulfilsConditions(IEnumerable<Tuple<string, int>> values)
         {
+            bool any = values.Any();
+            
             foreach (ITopicCondition condition in Conditions)
             {
-                int value = values.Where(pair =>
-                        pair.Item1.Equals(condition.Criteria, StringComparison.OrdinalIgnoreCase))
-                    .Max(tuple => tuple.Item2);
-                if (condition.FulfillsCondition(value) == false)
+                try
                 {
+                    if (!any)
+                    {
+                        if (condition.FulfillsCondition(0) == false)
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        if (values.Any(
+                            pair => pair.Item1.Equals(condition.Criteria, StringComparison.OrdinalIgnoreCase)) == false)
+                        {
+                            if (condition.FulfillsCondition(0) == false)
+                            {
+                                return false;
+                            }
+                        }
+                        else
+                        {
+                            int value = values.Where(pair =>
+                                    pair.Item1.Equals(condition.Criteria, StringComparison.OrdinalIgnoreCase))
+                                .Max(tuple => tuple.Item2);
+                            
+                            if (condition.FulfillsCondition(value) == false)
+                            {
+                                return false;
+                            }
+                        }
+                        
+                    }
+                    
+                }
+                catch (Exception e)
+                {
+                    //suppress this
                     return false;
                 }
             }

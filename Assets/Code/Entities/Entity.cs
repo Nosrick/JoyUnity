@@ -20,6 +20,7 @@ using JoyLib.Code.World;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using JoyLib.Code.Entities.Romance;
 using UnityEngine;
 
@@ -452,13 +453,12 @@ namespace JoyLib.Code.Entities
                 try
                 {
                     jobLevel = m_JobLevels.First(job => job.Key.Equals(tag, StringComparison.OrdinalIgnoreCase));
+                    data.Add(new Tuple<string, int>(jobLevel.Key, jobLevel.Value));
                 }
                 catch (Exception e)
                 {
                     //suppress this
                 }
-                
-                data.Add(new Tuple<string, int>(jobLevel.Key, jobLevel.Value));
             }
             
             //Fetch all job levels
@@ -484,10 +484,10 @@ namespace JoyLib.Code.Entities
                 {
                     foreach (string tag in tags)
                     {
-                        if (relationship.Tags.Contains(tag))
+                        if (relationship.Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase)))
                         {
                             int relationshipValue = relationship.GetRelationshipValue(this.GUID, other.GUID);
-                            data.Add(new Tuple<string, int>(tag, relationshipValue));
+                            data.Add(new Tuple<string, int>(tag, 1));
                             data.Add(new Tuple<string, int>("relationship", relationshipValue));
                         }
                     }
@@ -965,13 +965,9 @@ namespace JoyLib.Code.Entities
             }
         }
 
-        public ISexuality Sexuality
-        {
-            get
-            {
-                return m_Sexuality;
-            }
-        }
+        public ISexuality Sexuality => m_Sexuality;
+
+        public IRomance Romance => m_Romance;
 
         public IAbility TargetingAbility
         {

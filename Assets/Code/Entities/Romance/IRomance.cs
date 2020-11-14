@@ -11,5 +11,7 @@ namespace JoyLib.Code.Entities.Romance
         bool DecaysNeed { get; }
         
         int RomanceThreshold { get; set; }
+        
+        int BondingThreshold { get; set; }
     }
 }

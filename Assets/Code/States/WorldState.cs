@@ -263,9 +263,13 @@ namespace JoyLib.Code.States
                 {
                     //TODO: Make a targeting system or something
                     Entity listener = this.m_ActiveWorld.GetRandomSentient();
-                    s_GUIManager.OpenGUI(CONVERSATION);
-                    m_ConversationEngine.SetActors(this.playerWorld.Player, listener);
-                    m_ConversationEngine.Converse();   
+
+                    if (!(listener is null))
+                    {
+                        s_GUIManager.OpenGUI(CONVERSATION);
+                        m_ConversationEngine.SetActors(this.playerWorld.Player, listener);
+                        m_ConversationEngine.Converse(); 
+                    }
                 }
             }
 

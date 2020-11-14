@@ -410,10 +410,9 @@ namespace JoyLib.Code.World
         public Entity GetRandomSentient()
         {
             List<Entity> sentients = m_Entities.Where(x => x.Sentient).ToList();
-            if (sentients.Count > 0)
-                return sentients[RNG.instance.Roll(0, sentients.Count)];
-            else
-                return null;
+            sentients = sentients.Where(entity => entity.GUID.Equals(Player.GUID) == false).ToList();
+            
+            return sentients.Count > 0 ? sentients[RNG.instance.Roll(0, sentients.Count)] : null;
         }
 
         public Entity GetRandomSentientWorldWide()

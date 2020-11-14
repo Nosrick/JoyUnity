@@ -58,23 +58,13 @@ namespace JoyLib.Code.Entities.Relationships
 
         public IRelationship CreateRelationshipWithValue(IJoyObject[] participants, string type, int value)
         {
-            if(m_RelationshipTypes.Any(t => t.Key.Equals(type, StringComparison.OrdinalIgnoreCase)))
+            IRelationship relationship = CreateRelationship(participants, type);
+            if (relationship.GetRelationshipValue(participants[0].GUID, participants[1].GUID) == 0)
             {
-                IRelationship newRelationship = m_RelationshipTypes
-                    .First(t => t.Key.Equals(type, StringComparison.OrdinalIgnoreCase)).Value
-                    .CreateWithValue(participants, value);
-
-                List<long> GUIDs = new List<long>();
-                foreach(IJoyObject participant in participants)
-                {
-                    GUIDs.Add(participant.GUID);
-                }
-
-                m_Relationships.Add(newRelationship.GenerateHash(GUIDs.ToArray()), newRelationship);
-                return newRelationship;
+                relationship.ModifyValueOfAllParticipants(value);
             }
 
-            throw new InvalidOperationException("Relationship type " + type + " not found.");
+            return relationship;
         }
 
         public IRelationship[] Get(IJoyObject[] participants, string[] tags = null, bool createNewIfNone = false)
@@ -105,7 +95,7 @@ namespace JoyLib.Code.Entities.Relationships
                     continue;
                 }
                 
-                if (tags != null)
+                if (tags != null && tags.Length > 0)
                 {
                     float tagsPercentage = 0.0f;
                     int totalTags = 0;
@@ -195,7 +185,7 @@ namespace JoyLib.Code.Entities.Relationships
 
         public IRelationship[] GetAllForObject(IJoyObject actor)
         {
-            return m_Relationships.Where(tuple => tuple.Item1.Equals(actor.GUID))
+            return m_Relationships.Where(tuple => tuple.Item2.GetParticipant(actor.GUID) is null == false)
                 .Select(tuple => tuple.Item2)
                 .ToArray();
         }

@@ -47,8 +47,9 @@
   <Line>
     <Text>Would you do me the honour of becoming my spouse?</Text>
     <Condition>Relationship = Romantic</Condition>
-    <Processor>MarriageProposalProcessor</Processor>
-    <Next>MarriageProposal</Next>
+    <Condition>Relationship ! Bonded</Condition>
+    <Processor>BondingProposalProcessor</Processor>
+    <Next>BondingProposal</Next>
     <Speaker>instigator</Speaker>
   </Line>
   <Line>

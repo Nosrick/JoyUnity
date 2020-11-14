@@ -25,22 +25,20 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
 
         protected override ITopic[] FetchNextTopics()
         {
-            
             Entity listener = ConversationEngine.Listener;
             Entity instigator = ConversationEngine.Instigator;
             int highestValue = RelationshipHandler.GetHighestRelationshipValue(instigator, listener);
-            Debug.Log("HIGHEST RELATIONSHIP VALUE IS " + highestValue);
             if (highestValue > listener.Sexuality.MatingThreshold)
             {
                 int cultureResult = RNG.instance.Roll(0, listener.Cultures.Length);
-                            int relationshipTypeResult = RNG.instance.Roll(0, listener.Cultures[cultureResult].RelationshipTypes.Length);
-                
-                            string relationshipType = listener.Cultures[cultureResult].RelationshipTypes[relationshipTypeResult];
-                
-                            return new ITopic[]
-                            {
-                                new RomancePresentation(relationshipType)
-                            };
+                int relationshipTypeResult = RNG.instance.Roll(0, listener.Cultures[cultureResult].RelationshipTypes.Length);
+    
+                string relationshipType = listener.Cultures[cultureResult].RelationshipTypes[relationshipTypeResult];
+    
+                return new ITopic[]
+                {
+                    new RomancePresentation(relationshipType)
+                };
             }
             else
             {
