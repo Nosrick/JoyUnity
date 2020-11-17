@@ -23,8 +23,13 @@ public class GameManager : MonoBehaviour
     protected StateManager m_StateManager;
 
 	// Use this for initialization
-	void Start ()
+	protected void Start ()
     {
+        if (GlobalConstants.GameManager is null)
+        {
+            GlobalConstants.GameManager = this.gameObject;
+        }
+        
         ObjectIconHandler objectIcons = this.GetComponent<ObjectIconHandler>();
         CultureHandler cultureHandler = this.GetComponent<CultureHandler>();
         EntityTemplateHandler entityTemplateHandler = this.GetComponent<EntityTemplateHandler>();
@@ -74,19 +79,18 @@ public class GameManager : MonoBehaviour
         //GameObject.Find("NeedsText").GetComponent<GUINeedsAlert>().SetPlayer(player);
     }
 
-    private void InitialiseEverything()
+    protected void InitialiseEverything()
     {
         RNG.instance.SetSeed(DateTime.Now.Millisecond);
         AbilityHandler.instance.Initialise();
     }
 	
 	// Update is called once per frame
-	void Update ()
+	protected void Update ()
     {
         if(!(m_StateManager is null))
         {
             m_StateManager.Update();
         }
-
-	}
+    }
 }

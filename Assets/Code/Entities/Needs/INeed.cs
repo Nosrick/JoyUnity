@@ -1,4 +1,5 @@
 ﻿using JoyLib.Code.Entities.Statistics;
+using UnityEngine;
 
 namespace JoyLib.Code.Entities.Needs
 {
@@ -42,6 +43,11 @@ namespace JoyLib.Code.Entities.Needs
         }
 
         int AverageForMonth
+        {
+            get;
+        }
+
+        Sprite FulfillingSprite
         {
             get;
         }

@@ -1,10 +1,14 @@
 ﻿using JoyLib.Code.Rollers;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
 using UnityEngine;
 using JoyLib.Code.Collections;
+using JoyLib.Code.Helpers;
+using UnityEngine.PlayerLoop;
 
 namespace JoyLib.Code.Graphics
 {
@@ -15,8 +19,7 @@ namespace JoyLib.Code.Graphics
 
         public void Awake()
         {
-            this.SpriteSize = 16;
-            Load();
+            Initalise(GlobalConstants.SPRITE_SIZE);
         }
 
         public void Initalise(int spriteSize) 
@@ -69,6 +72,38 @@ namespace JoyLib.Code.Graphics
             };
 
             Icons.Add(iconData, "obscure");
+
+            string[] files =
+                Directory.GetFiles(
+                    Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "/Sprite Definitions", "*.xml",
+                    SearchOption.AllDirectories);
+
+            foreach (string file in files)
+            {
+                try
+                {
+                    XElement doc = XElement.Load(file);
+
+                    string tileSet = doc.Element("TilesetName").GetAs<string>();
+                    string sheet = doc.Element("Sheet").GetAs<string>();
+
+                    IconData[] iconDatas = (from data in doc.Elements("Icon")
+                        select new IconData()
+                        {
+                            data = data.Element("Data").DefaultIfEmpty("DEFAULT"),
+                            filename = sheet,
+                            frames = data.Element("Frames").DefaultIfEmpty(1),
+                            name = data.Element("Name").GetAs<string>(),
+                            position = data.Element("Position").GetAs<int>()
+                        }).ToArray();
+
+                    AddIcons(tileSet, iconDatas);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+            }
 
             return true;
         }

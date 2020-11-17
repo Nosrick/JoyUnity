@@ -4,6 +4,7 @@ using JoyLib.Code.Rollers;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Entities.Relationships;
 using System;
+using JoyLib.Code.Graphics;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities.Needs
@@ -38,6 +39,8 @@ namespace JoyLib.Code.Entities.Needs
                 new string[0])
         {
             Initialise();
+            this.FulfillingSprite = GlobalConstants.GameManager.GetComponent<ObjectIconHandler>()
+                .GetSprite("needs", this.Name);
         }
 
         public Sex(
@@ -48,6 +51,7 @@ namespace JoyLib.Code.Entities.Needs
             int happinessThresholdRef,
             int valueRef,
             int maxValueRef,
+            Sprite fulfillingSprite,
             int averageForDayRef = 0,
             int averageForWeekRef = 0) :
 
@@ -60,6 +64,7 @@ namespace JoyLib.Code.Entities.Needs
                 valueRef,
                 maxValueRef,
                 new string[0],
+                fulfillingSprite,
                 averageForDayRef,
                 averageForWeekRef)
         {
@@ -70,7 +75,7 @@ namespace JoyLib.Code.Entities.Needs
         {
             if(s_EntityRelationshipHandler is null)
             {
-                s_EntityRelationshipHandler = GameObject.Find("GameManager").GetComponent<EntityRelationshipHandler>();
+                s_EntityRelationshipHandler = GlobalConstants.GameManager.GetComponent<EntityRelationshipHandler>();
             }
         }
 
@@ -84,6 +89,7 @@ namespace JoyLib.Code.Entities.Needs
                 this.m_HappinessThreshold,
                 this.m_Value,
                 this.m_MaximumValue,
+                this.FulfillingSprite,
                 this.m_AverageForDay,
                 this.m_AverageForWeek);
         }
@@ -220,7 +226,8 @@ namespace JoyLib.Code.Entities.Needs
                 PRIORITY, 
                 RNG.instance.Roll(HAPPINESS_THRESHOLD_MIN, HAPPINESS_THRESHOLD_MAX), 
                 HAPPINESS_THRESHOLD_MAX, 
-                maxValue);
+                maxValue,
+                this.FulfillingSprite);
         }
     }
 }

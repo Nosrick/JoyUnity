@@ -1,4 +1,6 @@
-﻿using JoyLib.Code.Rollers;
+﻿using JoyLib.Code.Graphics;
+using JoyLib.Code.Rollers;
+using UnityEngine;
 
 namespace JoyLib.Code.Entities.Needs
 {
@@ -29,7 +31,8 @@ namespace JoyLib.Code.Entities.Needs
             1,
             new string[0])
         {
-            
+            this.FulfillingSprite = GlobalConstants.GameManager.GetComponent<ObjectIconHandler>()
+                .GetSprite("needs", this.Name);
         }
         
         public Morality(
@@ -40,6 +43,7 @@ namespace JoyLib.Code.Entities.Needs
             int happinessThresholdRef, 
             int valueRef, 
             int maxValueRef,
+            Sprite fulfillingSprite,
             int averageForDayRef = 0, 
             int averageForWeekRef = 0) 
             : base(
@@ -51,6 +55,7 @@ namespace JoyLib.Code.Entities.Needs
                 valueRef,
                 maxValueRef,
                 new string[0],
+                fulfillingSprite,
                 averageForDayRef,
                 averageForWeekRef)
         {
@@ -80,6 +85,7 @@ namespace JoyLib.Code.Entities.Needs
                 this.m_HappinessThreshold,
                 this.m_Value,
                 this.m_MaximumValue,
+                this.FulfillingSprite,
                 this.AverageForWeek);
         }
 
@@ -99,7 +105,8 @@ namespace JoyLib.Code.Entities.Needs
                 priority,
                 happinessThreshold,
                 value,
-                maxValue);
+                maxValue,
+                this.FulfillingSprite);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
-using JoyLib.Code.Collections;
 using JoyLib.Code.Entities.Relationships;
+using JoyLib.Code.Graphics;
 using JoyLib.Code.Rollers;
 using UnityEngine;
 
@@ -37,6 +37,8 @@ namespace JoyLib.Code.Entities.Needs
                 new string[0])
         {
             Initialise();
+            this.FulfillingSprite = GlobalConstants.GameManager.GetComponent<ObjectIconHandler>()
+                .GetSprite("needs", this.Name);
         }
         
         public Respect(
@@ -47,6 +49,7 @@ namespace JoyLib.Code.Entities.Needs
             int happinessThresholdRef, 
             int valueRef,
             int maxValueRef,
+            Sprite fulfillingSprite,
             int averageForDayRef = 0,
             int averageForWeekRef = 0) 
             : base(
@@ -58,6 +61,7 @@ namespace JoyLib.Code.Entities.Needs
                 valueRef,
                 maxValueRef,
                 new string[0],
+                fulfillingSprite,
                 averageForDayRef, 
                 averageForWeekRef)
         {
@@ -68,7 +72,7 @@ namespace JoyLib.Code.Entities.Needs
         {
             if(RelationshipHandler is null)
             {
-                RelationshipHandler = GameObject.Find("GameManager").GetComponent<EntityRelationshipHandler>();
+                RelationshipHandler = GlobalConstants.GameManager.GetComponent<EntityRelationshipHandler>();
             }
         }
 
@@ -116,6 +120,7 @@ namespace JoyLib.Code.Entities.Needs
                 this.m_HappinessThreshold,
                 this.m_Value,
                 this.m_MaximumValue,
+                this.FulfillingSprite,
                 this.m_AverageForDay,
                 this.m_AverageForWeek);
         }
@@ -136,7 +141,8 @@ namespace JoyLib.Code.Entities.Needs
                 priority,
                 happinessThreshold,
                 value,
-                maxValue);
+                maxValue,
+                this.FulfillingSprite);
         }
 
         public override bool Tick(Entity actor)

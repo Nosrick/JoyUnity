@@ -70,9 +70,13 @@ namespace JoyLib.Code.Unity
             m_SpriteRenderer.sprite = joyObject.Icon;
         }
 
-        public void SetSpeechBubble(bool on)
+        public void SetSpeechBubble(bool on, Sprite need = null)
         {
             SpeechBubble.gameObject.SetActive(on);
+            if (on)
+            {
+                SpeechBubble.sprite = need;
+            }
         }
     }
 }

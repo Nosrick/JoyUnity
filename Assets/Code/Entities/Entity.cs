@@ -20,6 +20,7 @@ using JoyLib.Code.World;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Castle.Core.Internal;
 using JoyLib.Code.Entities.Romance;
 using UnityEngine;
 
@@ -963,7 +964,11 @@ namespace JoyLib.Code.Entities
             set
             {
                 m_FulfillmentData = value;
-                MonoBehaviourHandler.SetSpeechBubble(m_FulfillmentData.Counter > 0);
+                if (m_FulfillmentData.Name.Equals("none", StringComparison.OrdinalIgnoreCase) == false &&
+                    m_FulfillmentData.Name.IsNullOrEmpty() == false)
+                {
+                    MonoBehaviourHandler.SetSpeechBubble(m_FulfillmentData.Counter > 0, m_Needs[m_FulfillmentData.Name].FulfillingSprite);
+                }
             }
         }
 

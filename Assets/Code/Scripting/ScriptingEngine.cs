@@ -47,7 +47,8 @@ namespace JoyLib.Code.Scripting
                     MetadataReference.CreateFromFile(typeof(Entities.Entity).Assembly.Location),
                     MetadataReference.CreateFromFile(typeof(Vector2Int).Assembly.Location),
                     MetadataReference.CreateFromFile(typeof(Queue<bool>).Assembly.Location),
-                    MetadataReference.CreateFromFile(typeof(System.Linq.IQueryable).Assembly.Location)
+                    MetadataReference.CreateFromFile(typeof(System.Linq.IQueryable).Assembly.Location),
+                    MetadataReference.CreateFromFile(typeof(GlobalConstants).Assembly.Location)
                 };
                 CSharpCompilation compilation = CSharpCompilation.Create("JoyScripts", builtFiles, libs, 
                     new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));

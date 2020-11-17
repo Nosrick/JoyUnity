@@ -2,6 +2,7 @@
 using System.Linq;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Graphics;
 using JoyLib.Code.Quests;
 using JoyLib.Code.Rollers;
 using UnityEngine;
@@ -47,6 +48,8 @@ namespace JoyLib.Code.Entities.Needs
             1,
             new string[0])
         {
+            this.FulfillingSprite = GlobalConstants.GameManager.GetComponent<ObjectIconHandler>()
+                .GetSprite("needs", this.Name);
         }
 
         public Purpose(
@@ -56,7 +59,8 @@ namespace JoyLib.Code.Entities.Needs
             int priorityRef, 
             int happinessThresholdRef, 
             int valueRef, 
-            int maxValueRef, 
+            int maxValueRef,
+            Sprite fulfillingSprite,
             int averageForDayRef = 0, 
             int averageForWeekRef = 0) 
             : base(
@@ -68,6 +72,7 @@ namespace JoyLib.Code.Entities.Needs
                 valueRef, 
                 maxValueRef, 
                 new string[0], 
+                fulfillingSprite,
                 averageForDayRef,
                 averageForWeekRef)
         {
@@ -180,7 +185,8 @@ namespace JoyLib.Code.Entities.Needs
                 this.m_HappinessThreshold,
                 this.m_Value,
                 this.m_MaximumValue,
-                this.AverageForWeek);
+                this.FulfillingSprite,
+                this.AverageForDay);
         }
 
         public override INeed Randomise()
@@ -199,7 +205,8 @@ namespace JoyLib.Code.Entities.Needs
                 priority,
                 happinessThreshold,
                 value,
-                maxValue);
+                maxValue,
+                this.FulfillingSprite);
         }
     }
 }

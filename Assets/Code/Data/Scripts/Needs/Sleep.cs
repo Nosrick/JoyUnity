@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using JoyLib.Code.Entities.Items;
+using JoyLib.Code.Graphics;
 using JoyLib.Code.Rollers;
 using UnityEngine;
 
@@ -29,7 +30,8 @@ namespace JoyLib.Code.Entities.Needs
                 1,
                 new string[0])
         {
-            
+            this.FulfillingSprite = GlobalConstants.GameManager.GetComponent<ObjectIconHandler>()
+                .GetSprite("needs", this.Name);
         }
         
         public Sleep(
@@ -40,6 +42,7 @@ namespace JoyLib.Code.Entities.Needs
             int happinessThresholdRef, 
             int valueRef, 
             int maxValueRef, 
+            Sprite fulfillingSprite,
             int averageForDayRef = 0, 
             int averageForWeekRef = 0) 
             : base(
@@ -51,6 +54,7 @@ namespace JoyLib.Code.Entities.Needs
                 valueRef,
                 maxValueRef,
                 new string[0],
+                fulfillingSprite,
                 averageForDayRef, 
                 averageForWeekRef)
         {
@@ -108,7 +112,8 @@ namespace JoyLib.Code.Entities.Needs
                 this.m_Priority,
                 this.m_HappinessThreshold,
                 this.m_Value,
-                this.m_MaximumValue, 
+                this.m_MaximumValue,
+                this.FulfillingSprite,
                 this.AverageForDay,
                 this.AverageForWeek);
         }
@@ -122,7 +127,8 @@ namespace JoyLib.Code.Entities.Needs
                 PRIORITY, 
                 RNG.instance.Roll(HAPPINESS_THRESHOLD_MIN, HAPPINESS_THRESHOLD_MAX), 
                 HAPPINESS_THRESHOLD_MAX, 
-                RNG.instance.Roll(MAX_VALUE_MIN, MAX_VALUE_MAX));
+                RNG.instance.Roll(MAX_VALUE_MIN, MAX_VALUE_MAX),
+                this.FulfillingSprite);
         }
     }
 }
