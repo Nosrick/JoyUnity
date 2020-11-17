@@ -1,5 +1,7 @@
 ﻿using JoyLib.Code.Conversation.Conversations;
 using JoyLib.Code.Entities.Relationships;
+using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Scripting;
 
 namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
 {
@@ -9,17 +11,15 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
             : base(
                 new ITopicCondition[0],
                 "SexProposal",
-                new []{"SexDecision"},
+                new string[0],
                 "words",
                 0,
                 new string[0],
                 Speaker.INSTIGATOR)
         {}
 
-        protected override ITopic[] FetchNextTopics()
+        public override ITopic[] Interact(Entity instigator, Entity listener)
         {
-            Entity listener = ConversationEngine.Listener;
-            Entity instigator = ConversationEngine.Instigator;
             IRelationship[] relationships =
                 RelationshipHandler.Get(new IJoyObject[] {instigator, listener}, new[] {"sexual"});
             int highestValue = int.MinValue;
@@ -35,22 +35,35 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
                 }
             }
 
-            string decision = "";
-            bool happening = false;
-            if (highestValue > listener.Sexuality.MatingThreshold && chosenRelationship is null == false)
+            if (highestValue < listener.Sexuality.MatingThreshold || chosenRelationship is null)
             {
-                decision = "Sounds good.";
-                happening = true;
+                return base.Interact(instigator, listener);
             }
-            else
-            {
-                decision = "I'm sorry, no.";
-            }
+            
+            base.Interact(instigator, listener);
+            
+            IJoyAction fulfillNeed = instigator.FetchAction("fulfillneedaction");
 
-            return new ITopic[]
-            {
-                new SexDecision(decision, happening)
-            };
+            int listenerSatisfaction = (
+                instigator.Statistics[EntityStatistic.INTELLECT].Value
+                + instigator.Statistics[EntityStatistic.ENDURANCE].Value
+                + instigator.Statistics[EntityStatistic.PERSONALITY].Value) / 3;
+            
+            int instigatorSatisfaction = (
+                listener.Statistics[EntityStatistic.INTELLECT].Value
+                + listener.Statistics[EntityStatistic.ENDURANCE].Value
+                + listener.Statistics[EntityStatistic.PERSONALITY].Value) / 3;
+            
+            fulfillNeed.Execute(
+                new IJoyObject[] {instigator},
+                new[] {"sex", "need"},
+                new object[] {"sex", instigatorSatisfaction, 5});
+            fulfillNeed.Execute(
+                new IJoyObject[] {listener},
+                new[] {"sex", "need"},
+                new object[] {"sex", listenerSatisfaction, 5});
+
+            return FetchNextTopics();
         }
     }
 }

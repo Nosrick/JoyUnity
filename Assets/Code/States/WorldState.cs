@@ -1,21 +1,18 @@
 ﻿using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Abilities;
-using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.IO;
 using JoyLib.Code.Physics;
-using JoyLib.Code.Quests;
 using JoyLib.Code.States.Gameplay;
 using JoyLib.Code.World;
 using System;
-using DevionGames.InventorySystem;
+using System.Collections;
 using DevionGames.UIWidgets;
 using JoyLib.Code.Conversation;
 using JoyLib.Code.Unity;
 using JoyLib.Code.Unity.GUI;
 using UnityEngine;
-using TMPro;
 using EquipmentHandler = JoyLib.Code.Unity.GUI.EquipmentHandler;
 
 namespace JoyLib.Code.States
@@ -46,6 +43,8 @@ namespace JoyLib.Code.States
         protected PhysicsManager m_PhysicsManager;
         protected EntityRelationshipHandler m_RelationshipHandler;
         protected ConversationEngine m_ConversationEngine;
+        
+        protected IEnumerator TickTimer { get; set; }
 
         private const string NEEDSRECT = "NeedsRect";
         private const string INVENTORY = "Inventory";
@@ -75,6 +74,9 @@ namespace JoyLib.Code.States
             m_RelationshipHandler = m_GameManager.GetComponent<EntityRelationshipHandler>();
             m_ConversationEngine = m_GameManager.GetComponent<ConversationEngine>();
             s_GUIManager = m_GameManager.GetComponent<GUIManager>();
+
+            TickTimer = TickEvent();
+            m_GameManager.GetComponent<MonoBehaviour>().StartCoroutine(TickTimer);
         }
 
         public override void LoadContent()
@@ -114,7 +116,7 @@ namespace JoyLib.Code.States
             m_ActiveWorld.Player.UpdateMe();
             m_GameplayFlags = GameplayFlags.Moving;
 
-            SetEntityWorld(overworld);
+            SetEntityWorld(Overworld);
 
             SetUpUi();
         }
@@ -161,33 +163,16 @@ namespace JoyLib.Code.States
             Tick();
         }
 
-        public static void TalkToPlayer(Entity entityRef)
+        protected IEnumerator TickEvent()
         {
-        }
-
-        protected void SetToAttack(object sender, EventArgs e)
-        {
-            m_GameplayFlags = GameplayFlags.Attacking;
-        }
-
-        protected void InteractWithCreature(object sender, EventArgs e)
-        {
-        }
-
-        protected void GiftToCreature(object sender, EventArgs e)
-        {
-        }
-
-        protected void OpenInventory(object sender, EventArgs e)
-        {
-        }
-
-        protected void OpenCharacterSheet(object sender, EventArgs e)
-        {
-        }
-
-        protected void SetToThrow(object sender, EventArgs e)
-        {
+            while (true)
+            {
+                yield return new WaitForSeconds(0.2f);
+                if (AutoTurn)
+                {
+                    Tick();
+                }
+            }
         }
 
         public override void HandleInput()
@@ -197,6 +182,17 @@ namespace JoyLib.Code.States
             bool hasMoved = false;
 
             Entity player = m_ActiveWorld.Player;
+
+            if (Input.GetKeyUp(KeyCode.Space))
+            {
+                ManualAutoTurn = !ManualAutoTurn;
+                AutoTurn = !AutoTurn;
+            }
+
+            if (AutoTurn)
+            {
+                return;
+            }
 
             /*
             if (m_Input.currentMouseState.ScrollWheelValue > m_Input.lastMouseState.ScrollWheelValue)
@@ -267,7 +263,7 @@ namespace JoyLib.Code.States
                     if (!(listener is null))
                     {
                         s_GUIManager.OpenGUI(CONVERSATION);
-                        m_ConversationEngine.SetActors(this.playerWorld.Player, listener);
+                        m_ConversationEngine.SetActors(this.PlayerWorld.Player, listener);
                         m_ConversationEngine.Converse(); 
                     }
                 }
@@ -434,15 +430,13 @@ namespace JoyLib.Code.States
                     Entity tempEntity = m_ActiveWorld.GetEntity(newPlayerPoint);
                     if (m_GameplayFlags == GameplayFlags.Interacting)
                     {
-                        if(tempEntity.Sentient)
-                            TalkToPlayer(tempEntity);
                     }
                     else if (m_GameplayFlags == GameplayFlags.Giving)
                     {
                     }
                     else if (m_GameplayFlags == GameplayFlags.Moving)
                     {
-                        playerWorld.SwapPosition(player, tempEntity);
+                        PlayerWorld.SwapPosition(player, tempEntity);
                         Tick();
                     }
                     else if(m_GameplayFlags == GameplayFlags.Attacking)
@@ -514,27 +508,12 @@ namespace JoyLib.Code.States
                     }
                 }
             }
-
-            if(autoTurn)
-            {
-                Tick();
-            }
             m_Camera.transform.position = new Vector3(player.WorldPosition.x, player.WorldPosition.y, m_Camera.transform.position.z);
-        }
-
-        public static void HandBack(IAbility abilityRef)
-        {
-            /*
-            s_GameplayFlags = GameplayFlags.Targeting;
-            s_ActiveWorld.player.targetingAbility = abilityRef;
-            s_ActiveWorld.player.targetPoint = s_ActiveWorld.player.position;
-            */
         }
 
         protected void Tick()
         {
             m_ActiveWorld.Tick();
-            m_ActiveWorld.Update();
             
             /*
             for (int i = 0; i < s_ActiveWorld.entities.Count; i++)
@@ -556,7 +535,7 @@ namespace JoyLib.Code.States
             base.OnGui();
 
             GameObject needsText = s_GUIManager.GetGUI("NeedsText");
-            needsText.GetComponent<TextMeshProUGUI>();
+            //needsText.GetComponent<TextMeshProUGUI>();
         }
 
         public override void Draw()
@@ -603,6 +582,17 @@ namespace JoyLib.Code.States
 
         public override void Update()
         {
+            Entity player = m_ActiveWorld.Player;
+            
+            if (!AutoTurn && player.FulfillmentData.Counter > 0)
+            {
+                AutoTurn = true;
+            }
+            else if (AutoTurn && player.FulfillmentData.Counter <= 0 && !ManualAutoTurn)
+            {
+                AutoTurn = false;
+            }
+            
             base.Update();
             DrawObjects();
         }
@@ -619,38 +609,33 @@ namespace JoyLib.Code.States
 
         public override GameState GetNextState()
         {
+            m_GameManager.GetComponent<MonoBehaviour>().StopCoroutine(TickTimer);
             return new WorldDestructionState(m_Overworld, m_ActiveWorld);
         }
 
-        public WorldInstance overworld
-        {
-            get
-            {
-                return m_Overworld;
-            }
-        }
+        public WorldInstance Overworld => m_Overworld;
 
-        public WorldInstance playerWorld
-        {
-            get
-            {
-                return m_ActiveWorld;
-            }
-        }
+        public WorldInstance PlayerWorld => m_ActiveWorld;
 
-        private int tickCounter
+        protected int TickCounter
         {
             get;
             set;
         }
 
-        private bool autoTurn
+        protected bool AutoTurn
         {
             get;
             set;
         }
 
-        protected bool expandConsole
+        protected bool ManualAutoTurn
+        {
+            get;
+            set;
+        }
+
+        protected bool ExpandConsole
         {
             get;
             set;

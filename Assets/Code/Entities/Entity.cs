@@ -331,6 +331,11 @@ namespace JoyLib.Code.Entities
                 m_FulfillmentData.DecrementCounter();
             }
 
+            if (m_FulfillmentData.Counter <= 0)
+            {
+                MonoBehaviourHandler.SetSpeechBubble(false);
+            }
+
             RegenTicker += 1;
             if (RegenTicker == REGEN_TICK_TIME)
             {
@@ -954,13 +959,11 @@ namespace JoyLib.Code.Entities
 
         public FulfillmentData FulfillmentData
         {
-            get
-            {
-                return m_FulfillmentData;
-            }
+            get => m_FulfillmentData;
             set
             {
                 m_FulfillmentData = value;
+                MonoBehaviourHandler.SetSpeechBubble(m_FulfillmentData.Counter > 0);
             }
         }
 

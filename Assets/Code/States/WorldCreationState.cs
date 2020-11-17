@@ -91,7 +91,7 @@ namespace JoyLib.Code.States
             {
                 for (int i = 0; i < SIMULATION_TICKS; i++)
                 {
-                    worlds[a].Update();
+                    worlds[a].Tick();
                 }
             }
         }

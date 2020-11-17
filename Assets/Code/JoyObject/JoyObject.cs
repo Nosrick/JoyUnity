@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using JoyLib.Code.Collections;
 using System.Linq;
+using JoyLib.Code.Unity;
 using JoyLib.Code.World;
 using UnityEngine;
 
@@ -55,6 +56,8 @@ namespace JoyLib.Code
         protected NonUniqueDictionary<object, object> Data { get; set; }
 
         public List<IJoyAction> CachedActions { get; protected set; }
+        
+        protected MonoBehaviourHandler MonoBehaviourHandler { get; set; }
 
         [NonSerialized]
         protected const int FRAMES_PER_SECOND = 30;
@@ -333,6 +336,11 @@ namespace JoyLib.Code
             return Data.Where(tuple => tuple.Item2.Equals(value))
                 .Select(tuple => tuple.Item1)
                 .ToArray();
+        }
+
+        public void AttachMonoBehaviourHandler(MonoBehaviourHandler mbh)
+        {
+            MonoBehaviourHandler = mbh;
         }
     }    
 }

@@ -342,15 +342,16 @@ namespace JoyLib.Code.World
             {
                 s_DateTime = s_DateTime.AddHours(1.0);
             }
-        }
-
-        public void Update()
-        {
-            //CalculateLightLevels();
 
             foreach (Entity entity in m_Entities)
             {
-                 entity.Tick();
+                string[] names = m_Entities.Select(entity1 => entity1.JoyName).ToArray();
+                foreach (string name in names)
+                {
+                    Debug.Log(name);
+                }
+                Debug.Log("TICKING: " + entity.JoyName);
+                entity.Tick();
             }
 
             IsDirty = false;

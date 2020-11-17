@@ -28,6 +28,8 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
                 return base.Interact(instigator, listener);
             }
             
+            base.Interact(instigator, listener);
+            
             IJoyAction fulfillNeed = instigator.FetchAction("fulfillneedaction");
 
             int listenerSatisfaction = (
@@ -49,24 +51,14 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
                 new[] {"sex", "need"},
                 new object[] {"sex", listenerSatisfaction, 5});
 
-            return base.Interact(instigator, listener);
+            return FetchNextTopics();
         }
 
         protected override ITopic[] FetchNextTopics()
         {
             if (Happening)
             {
-                return new ITopic[]
-                {
-                    new TopicData(
-                        new ITopicCondition[0],
-                        "SexAccept",
-                        new string[0], 
-                        this.Words,
-                        0,
-                        new string[0],
-                        Speaker.LISTENER) 
-                };
+                return new ITopic[0];
             }
             else
             {

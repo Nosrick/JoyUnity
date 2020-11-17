@@ -33,7 +33,6 @@ namespace JoyLib.Code.Unity.GUI
 
         public void Awake()
         {
-            
             if (ConversationEngine is null)
             {
                 ConversationEngine = GameObject.Find("GameManager").GetComponent<ConversationEngine>();
