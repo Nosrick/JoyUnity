@@ -1,4 +1,5 @@
-﻿using JoyLib.Code.Entities.Relationships;
+﻿using System;
+using JoyLib.Code.Entities.Relationships;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -44,7 +45,7 @@ namespace JoyLib.Code.Entities.Sexuality
                     return false;
                 }
 
-                if(me.Sex.CanBirth != them.Sex.CanBirth)
+                if(me.Gender.Name.Equals(them.Gender.Name, StringComparison.OrdinalIgnoreCase) == false)
                 {
                     return false;
                 }
