@@ -10,13 +10,14 @@ using UnityEngine;
 namespace JoyLib.Code.Entities.Items
 {
     [Serializable]
-    public class ItemInstance : JoyObject, IItemContainer
+    public class ItemInstance : JoyObject, IItemContainer, IOwnable
     {
         protected bool m_Identified;
-        protected long m_OwnerGUID;
 
         protected List<long> m_Contents;
         protected BaseItemType m_Type;
+
+        public long Owner { get; protected set; }
 
         protected IAbility m_Ability;
 
@@ -107,6 +108,11 @@ namespace JoyLib.Code.Entities.Items
                                     .GetComponent<LiveItemHandler>();
             }
         }
+        
+        public void SetOwner(long newOwner)
+        {
+            Owner = newOwner;
+        }
 
         public void Interact(Entity user)
         {
@@ -171,18 +177,6 @@ namespace JoyLib.Code.Entities.Items
             m_Contents.Add(actor.GUID);
 
             return true;
-        }
-
-        public long OwnerGUID
-        {
-            get
-            {
-                return m_OwnerGUID;
-            }
-            set
-            {
-                m_OwnerGUID = value;
-            }
         }
 
         public bool Identified

@@ -52,6 +52,8 @@ namespace JoyLib.Code.Scripting.Actions
             {
                 return false;
             }
+
+            item.SetOwner(right.GUID);
             
             SetLastParameters(participants, tags, args);
 

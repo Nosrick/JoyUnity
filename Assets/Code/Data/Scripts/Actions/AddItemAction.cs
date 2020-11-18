@@ -1,3 +1,4 @@
+using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
 
 namespace JoyLib.Code.Scripting.Actions
@@ -20,6 +21,13 @@ namespace JoyLib.Code.Scripting.Actions
             if(!(participants[1] is ItemInstance item))
             {
                 return false;
+            }
+
+            bool newOwner = args.Length > 0 && (bool)args[0];
+
+            if (newOwner && container is Entity owner)
+            {
+                item.SetOwner(owner.GUID);
             }
             
             SetLastParameters(participants, tags, args);

@@ -496,11 +496,21 @@ namespace JoyLib.Code.World
 
         public ItemInstance PickUpObject(Entity entityRef)
         {
-            ItemInstance item = (ItemInstance)GetObject(entityRef.WorldPosition);
-            if (item != null)
+            if (GetObject(entityRef.WorldPosition) is ItemInstance item)
             {
-                item.OwnerGUID = entityRef.GUID;
-                entityRef.AddContents(item);
+                List<string> tags = new List<string> {"pick up"};
+                bool newOwner = true;
+                if (item.Owner != default && item.Owner != entityRef.GUID)
+                {
+                    tags.Add("theft");
+                    newOwner = false;
+                }
+
+                entityRef.FetchAction("additemaction")
+                    .Execute(new IJoyObject[] {entityRef, item},
+                        tags.ToArray(),
+                        new object[] {newOwner});
+                
                 m_Objects.Remove(item);
 
                 return item;
