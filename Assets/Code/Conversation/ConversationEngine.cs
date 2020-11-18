@@ -321,6 +321,8 @@ namespace JoyLib.Code.Conversation
             DoInteractions(currentTopic);
 
             CreateMenuItems(CurrentTopics);
+
+            SetActors(Instigator, Listener);
             return CurrentTopics;
         }
 
