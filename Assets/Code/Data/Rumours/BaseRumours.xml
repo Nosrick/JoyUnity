@@ -9,9 +9,10 @@
         <Tag>positive</Tag>
     </Line>
     <Line>
-        <Text>I hear &lt;1&gt; is really good at &lt;2&gt;! I wish I was that good.</Text>
+        <Text>I hear &lt;1&gt; is really good at &lt;2&gt;! I wish I was as good as &lt;3&gt;.</Text>
         <Parameter>participant</Parameter>
         <Parameter>skills</Parameter>
+        <Parameter>gender/personal</Parameter>
         <Condition>skill &gt; 5</Condition>
         <Tag>skill</Tag>
         <Tag>positive</Tag>

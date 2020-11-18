@@ -9,7 +9,7 @@ namespace JoyLib.Code.Conversation.Subengines.Rumours
             return parameter.Equals("participant", StringComparison.OrdinalIgnoreCase);
         }
         
-        public string Parse(string parameter, JoyObject participant)
+        public string Parse(string parameter, IJoyObject participant)
         {
             if (parameter.Equals("participant", StringComparison.OrdinalIgnoreCase) == false)
             {

@@ -177,17 +177,21 @@ namespace JoyLib.Code.Conversation.Conversations.Rumours
                 return m_Words;
             }
 
+            int participantNumber = 0;
+            IJoyObject obj = null;
             for (int i = 0; i < count; i++)
             {
-                foreach(JoyObject obj in Participants)
+                if (Parameters[i].Equals("participant", StringComparison.OrdinalIgnoreCase))
                 {
-                    string replacement = ProcessorHandler
-                        .Get(Parameters[i])
-                        .Parse(Parameters[i], obj);
-
-                    i++;
-                    m_Words = m_Words.Replace("<" + i + ">", replacement);
+                    obj = Participants[participantNumber];
+                    participantNumber++;
                 }
+
+                string replacement = ProcessorHandler
+                    .Get(Parameters[i])
+                    .Parse(Parameters[i], obj);
+                
+                m_Words = m_Words.Replace("<" + (i + 1) + ">", replacement);
             }
 
             return m_Words;

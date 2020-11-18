@@ -48,7 +48,7 @@ namespace JoyLib.Code.Conversation.Subengines.Rumours
             return skills.Has(parameter);
         }
 
-        public string Parse(string parameter, JoyObject participant)
+        public string Parse(string parameter, IJoyObject participant)
         {
             if (!(participant is Entity entity))
             {

@@ -5,6 +5,6 @@
 
         bool CanParse(string parameter);
         
-        string Parse(string parameter, JoyObject participant);
+        string Parse(string parameter, IJoyObject participant);
     }
 }

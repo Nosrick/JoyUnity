@@ -111,7 +111,9 @@ namespace Tests
 
             IJob job = Mock.Of<IJob>();
             IBioSex sex = Mock.Of<IBioSex>(s => s.Name == "female");
-            IGender gender = Mock.Of<IGender>(g => g.Name == "female");
+            IGender gender = Mock.Of<IGender>(
+                g => g.Name == "female" 
+                    && g.Personal == "her");
             ISexuality sexuality = Mock.Of<ISexuality>();
             IRomance romance = Mock.Of<IRomance>();
 
