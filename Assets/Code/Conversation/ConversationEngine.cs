@@ -277,8 +277,27 @@ namespace JoyLib.Code.Conversation
 
             try
             {
-                IRelationship relationship = RelationshipHandler.GetBestRelationship(Instigator, Listener);
-                LastSpokeName.text = Listener.JoyName + ", " + relationship.DisplayName;
+                IRelationship[] relationships = RelationshipHandler.Get(new IJoyObject[] {Instigator, Listener});
+
+                IRelationship chosenRelationship = null;
+                int best = Int32.MinValue;
+                foreach (IRelationship relationship in relationships)
+                {
+                    if (relationship.HasTag("romantic"))
+                    {
+                        chosenRelationship = relationship;
+                        break;
+                    }
+                    
+                    int value = relationship.GetRelationshipValue(Instigator.GUID, Listener.GUID);
+                    if (value > best)
+                    {
+                        best = value;
+                        chosenRelationship = relationship;
+                    }
+                }
+                
+                LastSpokeName.text = Listener.JoyName + ", " + chosenRelationship.DisplayName;
             }
             catch (Exception e)
             {
