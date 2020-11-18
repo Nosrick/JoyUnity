@@ -7,6 +7,7 @@ using JoyLib.Code.Collections;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.AI.Drivers;
+using JoyLib.Code.Entities.Gender;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Jobs;
 using JoyLib.Code.Entities.Needs;
@@ -75,6 +76,8 @@ namespace Tests
             inventoryManager = new GameObject();
             inventoryManager.AddComponent<InventoryManager>();
 
+            GlobalConstants.GameManager = container;
+
             scriptingEngine = new ScriptingEngine();
 
             objectIconHandler = container.AddComponent<ObjectIconHandler>();
@@ -114,6 +117,7 @@ namespace Tests
 
             IJob job = Mock.Of<IJob>();
             IBioSex sex = Mock.Of<IBioSex>(s => s.Name == "female");
+            IGender gender = Mock.Of<IGender>(g => g.Name == "female");
             ISexuality sexuality = Mock.Of<ISexuality>();
             IRomance romance = Mock.Of<IRomance>();
 
@@ -125,6 +129,7 @@ namespace Tests
                 cultures,
                 level,
                 job,
+                gender,
                 sex,
                 sexuality,
                 romance,
@@ -141,6 +146,7 @@ namespace Tests
                 cultures,
                 level,
                 job,
+                gender,
                 sex,
                 sexuality,
                 romance,

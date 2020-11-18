@@ -10,7 +10,7 @@ namespace JoyLib.Code.Entities.Gender
 {
     public class GenderHandler : MonoBehaviour
     {
-        protected HashSet<IGender> Genders { get; set; }
+        public HashSet<IGender> Genders { get; protected set; }
 
         public void Awake()
         {

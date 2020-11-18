@@ -1,4 +1,5 @@
 using System.Collections;
+using JoyLib.Code;
 using JoyLib.Code.Entities.Jobs;
 using NUnit.Framework;
 using UnityEngine;
@@ -16,6 +17,8 @@ namespace Tests
         public void SetUp()
         {
             gameManager = new GameObject("GameManager");
+
+            GlobalConstants.GameManager = gameManager;
 
             target = gameManager.AddComponent<JobHandler>();
         }

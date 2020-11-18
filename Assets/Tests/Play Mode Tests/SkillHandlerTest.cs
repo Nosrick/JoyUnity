@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Linq;
+using JoyLib.Code;
 using JoyLib.Code.Collections;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Graphics;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -17,11 +19,17 @@ namespace Tests
         private GameObject container;
     
         private NeedHandler needHandler;
+
+        private ObjectIconHandler objectIconHandler;
     
         [SetUp]
         public void Initialise()
         {
             container = new GameObject("GameManager");
+
+            GlobalConstants.GameManager = container;
+
+            objectIconHandler = container.AddComponent<ObjectIconHandler>();
             needHandler = container.AddComponent<NeedHandler>();
             target = container.AddComponent<EntitySkillHandler>();
         }

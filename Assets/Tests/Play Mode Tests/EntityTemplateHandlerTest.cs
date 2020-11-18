@@ -6,6 +6,8 @@ using UnityEngine.TestTools;
 using System.Collections;
 using System.Collections.Generic;
 using DevionGames.InventorySystem;
+using JoyLib.Code;
+using JoyLib.Code.Graphics;
 
 namespace Tests
 {
@@ -14,6 +16,8 @@ namespace Tests
         private EntityTemplateHandler target;
 
         private NeedHandler needHandler;
+
+        private ObjectIconHandler objectIconHandler;
 
         private GameObject container;
 
@@ -25,7 +29,10 @@ namespace Tests
             container = new GameObject("GameManager");
             inventoryManager = new GameObject();
             inventoryManager.AddComponent<InventoryManager>();
+
+            GlobalConstants.GameManager = container;
             
+            objectIconHandler = container.AddComponent<ObjectIconHandler>();
             needHandler = container.AddComponent<NeedHandler>();
             target = container.AddComponent<EntityTemplateHandler>();
         }

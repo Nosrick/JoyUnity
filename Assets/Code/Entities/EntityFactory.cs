@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.Collections;
 using JoyLib.Code.Entities.Needs;
@@ -11,6 +12,7 @@ using JoyLib.Code.Entities.Sexes;
 using JoyLib.Code.Entities.Sexuality;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.AI.Drivers;
+using JoyLib.Code.Entities.Gender;
 using JoyLib.Code.Entities.Romance;
 using UnityEngine;
 
@@ -29,6 +31,8 @@ namespace JoyLib.Code.Entities
 
         protected EntityBioSexHandler BioSexHandler { get; set; }
         
+        protected GenderHandler GenderHandler { get; set; }
+        
         protected EntityRomanceHandler RomanceHandler { get; set; }
 
         protected JobHandler JobHandler { get; set; }
@@ -42,7 +46,7 @@ namespace JoyLib.Code.Entities
         {
             if(GameManager is null)
             {
-                GameManager = GameObject.Find("GameManager");
+                GameManager = GlobalConstants.GameManager;
                 NeedHandler = GameManager.GetComponent<NeedHandler>();
                 ObjectIcons = GameManager.GetComponent<ObjectIconHandler>();
                 CultureHandler = GameManager.GetComponent<CultureHandler>();
@@ -50,6 +54,7 @@ namespace JoyLib.Code.Entities
                 BioSexHandler = GameManager.GetComponent<EntityBioSexHandler>();
                 JobHandler = GameManager.GetComponent<JobHandler>();
                 RomanceHandler = GameManager.GetComponent<EntityRomanceHandler>();
+                GenderHandler = GameManager.GetComponent<GenderHandler>();
             }
         }
 
@@ -58,6 +63,7 @@ namespace JoyLib.Code.Entities
             IGrowingValue level,
             Vector2Int position,
             List<ICulture> cultures = null,
+            IGender gender = null,
             IBioSex sex = null,
             ISexuality sexuality = null,
             IRomance romance = null,
@@ -72,6 +78,7 @@ namespace JoyLib.Code.Entities
             }
             
             IJob selectedJob = job;
+            IGender selectedGender = gender;
             IBioSex selectedSex = sex;
             ISexuality selectedSexuality = sexuality;
             IRomance selectedRomance = romance;
@@ -109,6 +116,11 @@ namespace JoyLib.Code.Entities
                 selectedSex = dominantCulture.ChooseSex(BioSexHandler.Sexes);
             }
 
+            if (selectedGender is null)
+            {
+                selectedGender = dominantCulture.ChooseGender(selectedSex, GenderHandler.Genders.ToArray());
+            }
+
             if (selectedRomance is null)
             {
                 selectedRomance = dominantCulture.ChooseRomance(RomanceHandler.Romances);
@@ -135,6 +147,7 @@ namespace JoyLib.Code.Entities
                 creatureCultures, 
                 level, 
                 selectedJob, 
+                selectedGender,
                 selectedSex, 
                 selectedSexuality, 
                 selectedRomance,
@@ -152,6 +165,7 @@ namespace JoyLib.Code.Entities
             IGrowingValue level,
             float experience,
             JobType job,
+            IGender gender,
             IBioSex sex,
             ISexuality sexuality,
             IRomance romance,
@@ -195,6 +209,7 @@ namespace JoyLib.Code.Entities
                 level, 
                 experience, 
                 job, 
+                gender,
                 sex, 
                 sexuality, 
                 romance,

@@ -6,6 +6,7 @@ using DevionGames.InventorySystem;
 using JoyLib.Code;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities;
+using JoyLib.Code.Entities.Gender;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Jobs;
 using JoyLib.Code.Entities.Needs;
@@ -80,6 +81,8 @@ namespace Tests
             inventoryManager = new GameObject();
             inventoryManager.AddComponent<InventoryManager>();
 
+            GlobalConstants.GameManager = container;
+
             scriptingEngine = new ScriptingEngine();
 
             objectIconHandler = container.AddComponent<ObjectIconHandler>();
@@ -99,12 +102,15 @@ namespace Tests
         [SetUp]
         public void SetUpHumans()
         {
-            IBioSex female = Mock.Of<IBioSex>(
+            IBioSex femaleSex = Mock.Of<IBioSex>(
                 sex => sex.Name == "female"
                        && sex.CanBirth == true);
-            IBioSex male = Mock.Of<IBioSex>(
+            IBioSex maleSex = Mock.Of<IBioSex>(
                 sex => sex.Name == "male"
                        && sex.CanBirth == false);
+
+            IGender femaleGender = Mock.Of<IGender>(gender => gender.Name == "female");
+            IGender maleGender = Mock.Of<IGender>(gender => gender.Name == "male");
 
             JobType job = Mock.Of<JobType>();
 
@@ -125,7 +131,8 @@ namespace Tests
                 level,
                 Vector2Int.zero,
                 cultures,
-                female,
+                femaleGender,
+                femaleSex,
                 asexual,
                 heteroromantic,
                 job);
@@ -135,7 +142,8 @@ namespace Tests
                 level,
                 Vector2Int.zero,
                 cultures,
-                male,
+                maleGender,
+                maleSex,
                 asexual,
                 heteroromantic,
                 job);
@@ -145,7 +153,8 @@ namespace Tests
                 level,
                 Vector2Int.zero,
                 cultures,
-                male,
+                maleGender,
+                maleSex,
                 asexual,
                 homoromantic,
                 job);
@@ -155,7 +164,8 @@ namespace Tests
                 level,
                 Vector2Int.zero,
                 cultures,
-                male,
+                maleGender,
+                maleSex,
                 asexual,
                 homoromantic,
                 job);
@@ -165,7 +175,8 @@ namespace Tests
                 level,
                 Vector2Int.zero,
                 cultures,
-                female,
+                femaleGender,
+                femaleSex,
                 asexual,
                 homoromantic,
                 job);
@@ -175,7 +186,8 @@ namespace Tests
                 level,
                 Vector2Int.zero,
                 cultures,
-                female,
+                femaleGender,
+                femaleSex,
                 asexual,
                 homoromantic,
                 job);
@@ -185,7 +197,8 @@ namespace Tests
                 level,
                 Vector2Int.zero,
                 cultures,
-                male,
+                maleGender,
+                maleSex,
                 asexual,
                 biromantic,
                 job);
@@ -195,7 +208,8 @@ namespace Tests
                 level,
                 Vector2Int.zero,
                 cultures,
-                female,
+                femaleGender,
+                femaleSex,
                 asexual,
                 biromantic,
                 job);
@@ -205,7 +219,8 @@ namespace Tests
                 level,
                 Vector2Int.zero,
                 cultures,
-                male,
+                maleGender,
+                maleSex,
                 asexual,
                 aromantic,
                 job);

@@ -49,8 +49,6 @@ namespace JoyLib.Code.Entities.Needs
                 1,
                 new string[0])
         {
-            this.FulfillingSprite = GlobalConstants.GameManager.GetComponent<ObjectIconHandler>()
-                .GetSprite("needs", this.Name);
         }
 
         public Health(

@@ -8,6 +8,8 @@ using JoyLib.Code.Conversation.Subengines.Rumours;
 using JoyLib.Code.Conversation.Subengines.Rumours.Parameters;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities;
+using JoyLib.Code.Entities.AI.Drivers;
+using JoyLib.Code.Entities.Gender;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Jobs;
 using JoyLib.Code.Entities.Needs;
@@ -19,6 +21,8 @@ using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
+using JoyLib.Code.World;
+using Moq;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -70,6 +74,8 @@ namespace Tests
             inventoryManager = new GameObject();
             inventoryManager.AddComponent<InventoryManager>();
 
+            GlobalConstants.GameManager = container;
+
             scriptingEngine = new ScriptingEngine();
 
             objectIconHandler = container.AddComponent<ObjectIconHandler>();
@@ -88,26 +94,60 @@ namespace Tests
             entityFactory = new EntityFactory();
             
             target = new ConcreteRumourMill();
+            
+            WorldInstance world = new WorldInstance(
+                new WorldTile[0,0], 
+                new string[0],
+                "TESTING");
 
             EntityTemplate template = templateHandler.GetRandom();
-            ConcreteGrowingValue level = new ConcreteGrowingValue(
-                "level",
-                1,
-                GlobalConstants.DEFAULT_SUCCESS_THRESHOLD,
-                0,
-                GlobalConstants.DEFAULT_SUCCESS_THRESHOLD,
-                new StandardRoller(),
-                new NonUniqueDictionary<INeed, float>());
+            IGrowingValue level = Mock.Of<IGrowingValue>();
+            
+            ICulture culture = Mock.Of<ICulture>(
+                c => c.GetNameForChain(It.IsAny<int>(), It.IsAny<string>()) == "NAME"
+                     && c.NameData == new[] { new NameData("NAME", new []{ 0, 1 }, new [] { "female", "male" }) });
 
-            left = entityFactory.CreateFromTemplate(
-                template,
-                level,
-                Vector2Int.down);
+            List<ICulture> cultures = new List<ICulture> {culture};
 
-            right = entityFactory.CreateFromTemplate(
+            IJob job = Mock.Of<IJob>();
+            IBioSex sex = Mock.Of<IBioSex>(s => s.Name == "female");
+            IGender gender = Mock.Of<IGender>(g => g.Name == "female");
+            ISexuality sexuality = Mock.Of<ISexuality>();
+            IRomance romance = Mock.Of<IRomance>();
+
+            Sprite[] sprites = objectIconHandler.GetDefaultSprites();
+
+            left = new Entity(
                 template,
+                new BasicValueContainer<INeed>(),
+                cultures,
                 level,
-                Vector2Int.up);
+                job,
+                gender,
+                sex,
+                sexuality,
+                romance,
+                Vector2Int.zero,
+                sprites,
+                world,
+                new StandardDriver());
+
+            left.PlayerControlled = true;
+            
+            right = new Entity(
+                template,
+                new BasicValueContainer<INeed>(),
+                cultures,
+                level,
+                job,
+                gender,
+                sex,
+                sexuality,
+                romance,
+                Vector2Int.zero,
+                sprites,
+                world,
+                new StandardDriver());
         }
 
         [UnityTest]

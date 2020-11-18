@@ -78,6 +78,25 @@
 			</Sexuality>
 		</Sexualities>
 
+		<Genders>
+			<Gender>
+				<Name>male</Name>
+				<Chance>40</Chance>
+			</Gender>
+			<Gender>
+				<Name>female</Name>
+				<Chance>40</Chance>
+			</Gender>
+			<Gender>
+				<Name>neutral</Name>
+				<Chance>10</Chance>
+			</Gender>
+			<Gender>
+				<Name>agender</Name>
+				<Chance>5</Chance>
+			</Gender>
+		</Genders>
+
 		<Romances>
 			<Romance>
 				<Name>heteroromantic</Name>

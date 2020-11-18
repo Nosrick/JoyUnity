@@ -1,5 +1,7 @@
 ﻿using System.Collections;
+using JoyLib.Code;
 using JoyLib.Code.Entities.Needs;
+using JoyLib.Code.Graphics;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -11,11 +13,16 @@ namespace Tests
         private GameObject container;
     
         private NeedHandler target;
+
+        private ObjectIconHandler objectIconHandler;
     
         [SetUp]
         public void SetUp()
         {
             container = new GameObject("GameManager");
+            GlobalConstants.GameManager = container;
+            
+            objectIconHandler = container.AddComponent<ObjectIconHandler>();
             target = container.AddComponent<NeedHandler>();
         }
     

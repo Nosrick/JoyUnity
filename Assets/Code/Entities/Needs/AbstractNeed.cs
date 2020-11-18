@@ -1,6 +1,7 @@
 ﻿using System;
 using JoyLib.Code.Scripting;
 using System.Collections.Generic;
+using JoyLib.Code.Graphics;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities.Needs
@@ -80,6 +81,9 @@ namespace JoyLib.Code.Entities.Needs
             {
                 m_CachedActions.Add(action, ScriptingEngine.instance.FetchAction(action));
             }
+            
+            this.FulfillingSprite = GlobalConstants.GameManager.GetComponent<ObjectIconHandler>()
+                .GetSprite("needs", this.Name);
         }
 
         public abstract bool FindFulfilmentObject(Entity actor);

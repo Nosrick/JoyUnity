@@ -22,7 +22,7 @@ namespace JoyLib.Code.World.Generators.Interiors
 
         public DungeonEntityPlacer()
         {
-            s_GameManager = GameObject.Find("GameManager");
+            s_GameManager = GlobalConstants.GameManager;
             s_EntityHandler = s_GameManager.GetComponent<LiveEntityHandler>();
             s_EntityTemplateHandler = s_GameManager.GetComponent<EntityTemplateHandler>();
             s_PhysicsManager = s_GameManager.GetComponent<PhysicsManager>();
@@ -71,6 +71,7 @@ namespace JoyLib.Code.World.Generators.Interiors
                     templates[entityIndex], 
                     level, 
                     availablePoints[pointIndex],
+                    null,
                     null,
                     null,
                     null,

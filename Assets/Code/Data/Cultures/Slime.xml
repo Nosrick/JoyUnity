@@ -53,6 +53,13 @@
 			</Sex>
 		</Sexes>
 
+		<Genders>
+			<Gender>
+				<Name>neutral</Name>
+				<Chance>100</Chance>
+			</Gender>
+		</Genders>
+
 		<Jobs>
 			<Job>
 				<Name>warrior</Name>

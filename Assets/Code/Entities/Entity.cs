@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
+using JoyLib.Code.Entities.Gender;
 using JoyLib.Code.Entities.Romance;
 using UnityEngine;
 
@@ -112,6 +113,7 @@ namespace JoyLib.Code.Entities
             IGrowingValue level,
             float experience,
             IJob job,
+            IGender gender,
             IBioSex sex,
             ISexuality sexuality,
             IRomance romance,
@@ -147,6 +149,8 @@ namespace JoyLib.Code.Entities
             this.m_Slots = template.Slots.ToList();
 
             this.m_Size = template.Size;
+
+            this.Gender = gender;
 
             this.m_JobLevels = jobLevels;
             this.m_Sexuality = sexuality;
@@ -226,6 +230,7 @@ namespace JoyLib.Code.Entities
             List<ICulture> cultures,
             IGrowingValue level,
             IJob job,
+            IGender gender,
             IBioSex sex,
             ISexuality sexuality,
             IRomance romance,
@@ -233,7 +238,7 @@ namespace JoyLib.Code.Entities
             Sprite[] sprites,
             WorldInstance world,
             IDriver driver) :
-            this(template, needs, cultures, level, 0, job, sex, sexuality, romance, position, sprites,
+            this(template, needs, cultures, level, 0, job, gender, sex, sexuality, romance, position, sprites,
                 NaturalWeaponHelper.MakeNaturalWeapon(template.Size), new NonUniqueDictionary<string, ItemInstance>(),
                 new List<ItemInstance>(), new List<string>(), new Dictionary<string, int>(), world, driver)
         {
@@ -273,6 +278,7 @@ namespace JoyLib.Code.Entities
             this.m_NaturalWeapons = copy.m_NaturalWeapons;
             this.m_Equipment = copy.m_Equipment;
             this.m_Backpack = copy.m_Backpack;
+            this.Gender = copy.Gender;
             this.Sex = copy.Sex;
             this.m_VisionProvider = copy.m_VisionProvider;
 
@@ -311,7 +317,7 @@ namespace JoyLib.Code.Entities
                     random = m_Cultures[RNG.instance.Roll(0, m_Cultures.Count - 1)];
                 }
 
-                nameList.Add(random.GetNameForChain(i, this.Sex.Name));
+                nameList.Add(random.GetNameForChain(i, this.Gender.Name));
             }
             return String.Join(" ", nameList);
         }
@@ -841,6 +847,12 @@ namespace JoyLib.Code.Entities
         }
 
         public IBioSex Sex
+        {
+            get;
+            protected set;
+        }
+
+        public IGender Gender
         {
             get;
             protected set;

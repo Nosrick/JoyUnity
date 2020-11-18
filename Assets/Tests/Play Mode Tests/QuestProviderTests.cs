@@ -1,9 +1,11 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using DevionGames.InventorySystem;
 using JoyLib.Code;
 using JoyLib.Code.Collections;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities;
+using JoyLib.Code.Entities.Gender;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Jobs;
 using JoyLib.Code.Entities.Needs;
@@ -17,6 +19,7 @@ using JoyLib.Code.Quests;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.World;
+using Moq;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -72,6 +75,8 @@ namespace Tests
             inventoryManager = new GameObject();
             inventoryManager.AddComponent<InventoryManager>();
 
+            GlobalConstants.GameManager = container;
+
             scriptingEngine = new ScriptingEngine();
 
             objectIconHandler = container.AddComponent<ObjectIconHandler>();
@@ -110,16 +115,44 @@ namespace Tests
                 GlobalConstants.DEFAULT_SUCCESS_THRESHOLD,
                 new StandardRoller(),
                 new NonUniqueDictionary<INeed, float>());
+
+            ICulture culture = Mock.Of<ICulture>( c => c.GetNameForChain(It.IsAny<int>(), It.IsAny<string>()) == "NAME"
+                                                       && c.NameData == new NameData[] { new NameData("NAME", new []{0, 1}, new []{"all"}) });
+            List<ICulture> cultures = new List<ICulture> {culture};
+
+            IGender gender = Mock.Of<IGender>(g => g.Name == "female");
+            IBioSex sex = Mock.Of<IBioSex>(s => s.Name == "female"
+                                                && s.CanBirth == true);
+            ISexuality sexuality = Mock.Of<ISexuality>(s => s.WillMateWith(
+                                                                It.IsAny<Entity>(), It.IsAny<Entity>(), It.IsAny<IRelationship[]>()) == true
+                                                            && s.Tags == new List<string>());
+            IRomance romance = Mock.Of<IRomance>(r => r.Compatible(
+                It.IsAny<Entity>(), It.IsAny<Entity>(), It.IsAny<IRelationship[]>()) == true);
+            IJob job = Mock.Of<IJob>();
             
             left = entityFactory.CreateFromTemplate(
                 random,
                 level,  
-                Vector2Int.down);
+                Vector2Int.down,
+                cultures,
+                gender,
+                sex,
+                sexuality,
+                romance,
+                job);
 
             right = entityFactory.CreateFromTemplate(
                 random,
                 level,
-                Vector2Int.up);
+                Vector2Int.up,
+                cultures,
+                gender,
+                sex,
+                sexuality,
+                romance,
+                job);
+
+            left.PlayerControlled = true;
             
             world.AddEntity(left);
             world.AddEntity(right);

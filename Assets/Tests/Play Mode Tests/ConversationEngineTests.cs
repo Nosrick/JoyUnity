@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
 using DevionGames.InventorySystem;
+using JoyLib.Code;
 using JoyLib.Code.Conversation;
 using JoyLib.Code.Conversation.Conversations;
 using JoyLib.Code.Conversation.Subengines.Rumours.Parameters;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities;
+using JoyLib.Code.Entities.Gender;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Jobs;
 using JoyLib.Code.Entities.Needs;
@@ -83,6 +85,9 @@ namespace Tests
         {
             prefab = Resources.Load<GameObject>("Prefabs/MonoBehaviourHandler");
             gameManager = new GameObject("GameManager");
+
+            GlobalConstants.GameManager = gameManager;
+            
             inventoryManager = new GameObject();
             inventoryManager.AddComponent<InventoryManager>();
             
@@ -137,7 +142,9 @@ namespace Tests
             
             EntityFactory factory = new EntityFactory();
 
-            IBioSex female = Mock.Of<IBioSex>(sex => sex.Name == "female");
+            IBioSex femaleSex = Mock.Of<IBioSex>(sex => sex.Name == "female");
+
+            IGender femaleGender = Mock.Of<IGender>(gender => gender.Name == "female");
 
             NameData[] namedata = new[]
             {
@@ -165,7 +172,8 @@ namespace Tests
                 level,
                 Vector2Int.zero,
                 cultures,
-                female,
+                femaleGender,
+                femaleSex,
                 sexuality,
                 romance);
             
@@ -174,7 +182,8 @@ namespace Tests
                 level,
                 Vector2Int.zero,
                 cultures,
-                female,
+                femaleGender,
+                femaleSex,
                 sexuality,
                 romance);
 

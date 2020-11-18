@@ -43,8 +43,6 @@ namespace JoyLib.Code.Entities.Needs
                 new string[0])
         {
             Initialise();
-            this.FulfillingSprite = GlobalConstants.GameManager.GetComponent<ObjectIconHandler>()
-                .GetSprite("needs", this.Name);
         }
         
         

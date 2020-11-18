@@ -81,6 +81,13 @@ namespace JoyLib.Code.Cultures
                                                               sexes.Element("Chance").GetAs<int>()))
                                                                    .ToDictionary(x => x.Key, x => x.Value);
 
+                    Dictionary<string, int> genderDictionary = (from genders in culture.Element("Genders")
+                                .Elements("Gender")
+                            select new KeyValuePair<string, int>(
+                                genders.Element("Name").GetAs<string>(),
+                                genders.Element("Chance").GetAs<int>()))
+                        .ToDictionary(x => x.Key, x => x.Value);
+                    
                     Dictionary<string, Tuple<int, int>> statVarianceDictionary = (from statVariances in culture.Element("Statistics")
                                                                                     .Elements("StatVariance")
                                                                                   select new KeyValuePair<string, Tuple<int, int>>(
@@ -98,6 +105,8 @@ namespace JoyLib.Code.Cultures
                                                                            .ToDictionary(x => x.Key, x => x.Value);
 
                     string cultureName = culture.Element("CultureName").GetAs<string>();
+
+                    int nonConformingGenderChance = culture.Element("NonConformingGenderChance").DefaultIfEmpty(10);
 
                     string tileSet = culture.Element("TileSet").Element("Name").DefaultIfEmpty("");
                     //string filename = culture.Element("TileSet").Element("Filename").DefaultIfEmpty("");
@@ -128,7 +137,9 @@ namespace JoyLib.Code.Cultures
                             sexesDictionary,
                             statVarianceDictionary,
                             relationships,
-                            romanceDictionary));
+                            romanceDictionary,
+                            genderDictionary,
+                            nonConformingGenderChance));
                 }
             }
 

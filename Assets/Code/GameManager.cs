@@ -62,6 +62,7 @@ public class GameManager : MonoBehaviour
             level, 
             Vector2Int.zero, 
             new List<ICulture>() { culture },
+            null,
             culture.ChooseSex(bioSexHandler.Sexes), 
             culture.ChooseSexuality(sexualityHandler.Sexualities), 
             culture.ChooseRomance(romanceHandler.Romances),
