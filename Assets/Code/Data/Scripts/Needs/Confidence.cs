@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using JoyLib.Code.Collections;
+using JoyLib.Code.Entities.AI;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Rollers;
 using UnityEngine;
@@ -93,6 +94,15 @@ namespace JoyLib.Code.Entities.Needs
 
         public override bool Interact(Entity actor, IJoyObject obj)
         {
+            actor.CurrentTarget = new NeedAIData
+            {
+                idle = true,
+                intent = Intent.Interact,
+                need = "none",
+                searching = false,
+                target = null,
+                targetPoint = GlobalConstants.NO_TARGET
+            };
             return false;
         }
 

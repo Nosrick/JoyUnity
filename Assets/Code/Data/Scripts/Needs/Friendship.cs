@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using JoyLib.Code.Entities.AI;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
@@ -141,6 +142,16 @@ namespace JoyLib.Code.Entities.Needs
                 new[] {actor, obj},
                 new[] {"need", "friendship", "fulfill"},
                 new object[] {"friendship", actor.Statistics[EntityStatistic.PERSONALITY].Value, 5, true});
+            
+            actor.CurrentTarget = new NeedAIData
+            {
+                idle = true,
+                intent = Intent.Interact,
+                need = "none",
+                searching = false,
+                target = null,
+                targetPoint = GlobalConstants.NO_TARGET
+            };
             return true;
         }
 

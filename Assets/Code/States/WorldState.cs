@@ -197,6 +197,10 @@ namespace JoyLib.Code.States
                 {
                     contextMenu.AddMenuItem("Talk", TalkToPlayer);
                 }
+                else
+                {
+                    contextMenu.AddMenuItem("Call Over", CallOver);
+                }
             }
 
             if (contextMenu.GetComponentsInChildren<MenuItem>(true).Length > 1)
@@ -219,6 +223,19 @@ namespace JoyLib.Code.States
             s_GUIManager.OpenGUI(CONVERSATION);
             m_ConversationEngine.SetActors(m_ActiveWorld.Player, entity);
             m_ConversationEngine.Converse();
+        }
+
+        protected void CallOver()
+        {
+            if (!(PrimaryTarget is Entity entity))
+            {
+                return;
+            }
+
+            entity.FetchAction("seekaction").Execute(
+                new IJoyObject[] {entity, m_ActiveWorld.Player},
+                new[] {"call over"},
+                new object[] {"friendship"});
         }
 
         public override void HandleInput()

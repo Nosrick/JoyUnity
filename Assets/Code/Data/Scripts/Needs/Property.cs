@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using JoyLib.Code.Entities.AI;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Rollers;
@@ -110,6 +111,15 @@ namespace JoyLib.Code.Entities.Needs
             {
                 return false;
             }
+            actor.CurrentTarget = new NeedAIData
+            {
+                idle = true,
+                intent = Intent.Interact,
+                need = "none",
+                searching = false,
+                target = null,
+                targetPoint = GlobalConstants.NO_TARGET
+            };
             
             return m_CachedActions["additemaction"].Execute(
                 new[] {actor, obj},

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using JoyLib.Code.Entities.AI;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Rollers;
@@ -99,6 +100,16 @@ namespace JoyLib.Code.Entities.Needs
             }
             
             item.Interact(actor);
+            
+            actor.CurrentTarget = new NeedAIData
+            {
+                idle = true,
+                intent = Intent.Interact,
+                need = "none",
+                searching = false,
+                target = null,
+                targetPoint = GlobalConstants.NO_TARGET
+            };
 
             return true;
         }
