@@ -662,14 +662,7 @@ namespace JoyLib.Code.World
 
         public Entity GetEntity(Vector2Int positionRef)
         {
-            for (int i = 0; i < m_Entities.Count; i++)
-            {
-                if (m_Entities[i].WorldPosition.Equals(positionRef))
-                {
-                    return m_Entities[i];
-                }
-            }
-            return null;
+            return m_Entities.FirstOrDefault(t => t.WorldPosition.Equals(positionRef));
         }
 
         public Sector GetSectorFromPoint(Vector2Int point)

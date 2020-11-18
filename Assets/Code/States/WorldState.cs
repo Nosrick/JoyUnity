@@ -13,6 +13,7 @@ using JoyLib.Code.Conversation;
 using JoyLib.Code.Unity;
 using JoyLib.Code.Unity.GUI;
 using UnityEngine;
+using ContextMenu = DevionGames.UIWidgets.ContextMenu;
 using EquipmentHandler = JoyLib.Code.Unity.GUI.EquipmentHandler;
 
 namespace JoyLib.Code.States
@@ -45,11 +46,14 @@ namespace JoyLib.Code.States
         protected ConversationEngine m_ConversationEngine;
         
         protected IEnumerator TickTimer { get; set; }
+        
+        protected IJoyObject PrimaryTarget { get; set; }
 
         private const string NEEDSRECT = "NeedsRect";
         private const string INVENTORY = "Inventory";
         private const string EQUIPMENT = "Equipment";
         private const string CONVERSATION = "Conversation Window";
+        private const string CONTEXT_MENU = "Context Menu";
 
         protected static bool SetUpGUI
         {
@@ -94,11 +98,13 @@ namespace JoyLib.Code.States
                 GameObject inventoryGUIPrefab = GameObject.Find(INVENTORY);
                 GameObject equipmentGUIPrefab = GameObject.Find(EQUIPMENT);
                 GameObject conversationWindow = GameObject.Find(CONVERSATION);
+                GameObject contextMenu = GameObject.Find(CONTEXT_MENU);
     
                 s_GUIManager.AddGUI(needsGUIPrefab, false, false);
                 s_GUIManager.AddGUI(inventoryGUIPrefab, true, false);
                 s_GUIManager.AddGUI(equipmentGUIPrefab, true, false);
                 s_GUIManager.AddGUI(conversationWindow, true, true);
+                s_GUIManager.AddGUI(contextMenu, false, false);
 
                 SetUpGUI = true;
             }
@@ -175,6 +181,40 @@ namespace JoyLib.Code.States
             }
         }
 
+        protected void SetUpContextMenu()
+        {
+            ContextMenu contextMenu = s_GUIManager.GetGUI(CONTEXT_MENU).GetComponent<ContextMenu>();
+
+            contextMenu.Clear();
+
+            if (PrimaryTarget.GUID == m_ActiveWorld.Player.GUID)
+            {
+                
+            }
+            else
+            {
+                contextMenu.AddMenuItem("Talk", TalkToPlayer);
+            }
+            Debug.Log("Showing context menu");
+            s_GUIManager.OpenGUI(CONTEXT_MENU);
+            contextMenu.Show();
+        }
+
+        protected void TalkToPlayer()
+        {
+            if (!(PrimaryTarget is Entity entity))
+            {
+                return;
+            }
+
+            ContextMenu contextMenu = s_GUIManager.GetGUI(CONTEXT_MENU).GetComponent<ContextMenu>();
+            s_GUIManager.CloseGUI(CONTEXT_MENU);
+            contextMenu.Close();
+            s_GUIManager.OpenGUI(CONVERSATION);
+            m_ConversationEngine.SetActors(m_ActiveWorld.Player, entity);
+            m_ConversationEngine.Converse();
+        }
+
         public override void HandleInput()
         {
             base.HandleInput();
@@ -240,7 +280,6 @@ namespace JoyLib.Code.States
                 autoTurn = true;
             }
             */
-
             if (Input.GetKeyDown(KeyCode.I))
             {
                 s_GUIManager.ToggleGUI(INVENTORY);
@@ -274,7 +313,21 @@ namespace JoyLib.Code.States
                 return;
             }
 
-            if (Input.GetKeyDown(KeyCode.Return))
+
+            if (Input.GetMouseButtonUp(1))
+            {
+                Vector3 temp = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                Vector2Int position = new Vector2Int((int)Math.Ceiling(temp.x), (int)Math.Ceiling(temp.y));
+
+                PrimaryTarget = m_ActiveWorld.GetEntity(position);
+                if (PrimaryTarget is null)
+                {
+                    return;
+                }
+                
+                SetUpContextMenu();
+            }
+            else if (Input.GetKeyDown(KeyCode.Return))
             {
                 //Going up a level
                 if (m_ActiveWorld.Parent != null && player.WorldPosition == m_ActiveWorld.SpawnPoint && !player.HasMoved)

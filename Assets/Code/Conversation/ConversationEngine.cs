@@ -124,7 +124,7 @@ namespace JoyLib.Code.Conversation
                 Transform listenerSection = title.Find("Listener Section");
                 LastSpokeName = listenerSection.Find("Listener Name").GetComponent<TextMeshProUGUI>();
                 LastSpokeIcon = listenerSection.Find("Listener Icon").GetComponent<Image>();
-                MenuItem = Window.FindChild("Menu Item", true);
+                MenuItem = Window.FindChild("Topic Item", true);
                 
                 MenuList = new List<ConversationMenu>();
 
