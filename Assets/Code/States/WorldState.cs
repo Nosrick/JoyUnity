@@ -193,11 +193,17 @@ namespace JoyLib.Code.States
             }
             else
             {
-                contextMenu.AddMenuItem("Talk", TalkToPlayer);
+                if (AdjacencyHelper.IsAdjacent(m_ActiveWorld.Player.WorldPosition, PrimaryTarget.WorldPosition))
+                {
+                    contextMenu.AddMenuItem("Talk", TalkToPlayer);
+                }
             }
-            Debug.Log("Showing context menu");
-            s_GUIManager.OpenGUI(CONTEXT_MENU);
-            contextMenu.Show();
+
+            if (contextMenu.GetComponentsInChildren<MenuItem>(true).Length > 1)
+            {
+                s_GUIManager.OpenGUI(CONTEXT_MENU);
+                contextMenu.Show();
+            }
         }
 
         protected void TalkToPlayer()
