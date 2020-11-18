@@ -327,14 +327,14 @@ namespace JoyLib.Code.Entities
 
         public void Tick()
         {
-            if (m_FulfillmentData.Counter > 0)
-            {
-                m_FulfillmentData.DecrementCounter();
-            }
-
-            if (m_FulfillmentData.Counter <= 0)
+            if (m_FulfillmentData.Counter > 0 && m_FulfillmentData.DecrementCounter() == 0)
             {
                 MonoBehaviourHandler.SetSpeechBubble(false);
+            }
+
+            if (m_FulfillmentData.Counter == 0)
+            {
+                
             }
 
             RegenTicker += 1;

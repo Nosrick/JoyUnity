@@ -172,16 +172,6 @@ namespace JoyLib.Code.Entities.Needs
                 new JoyObject[] {actor},
                 new[] {"need", "purpose", "fulfill"},
                 new object[] {"purpose", listener.Statistics[EntityStatistic.PERSONALITY].Value, 0, false});
-            
-            actor.CurrentTarget = new NeedAIData
-            {
-                idle = true,
-                intent = Intent.Interact,
-                need = "none",
-                searching = false,
-                target = null,
-                targetPoint = GlobalConstants.NO_TARGET
-            };
 
             return true;
         }

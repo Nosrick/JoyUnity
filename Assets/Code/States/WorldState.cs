@@ -232,7 +232,8 @@ namespace JoyLib.Code.States
                 return;
             }
 
-            entity.FetchAction("seekaction").Execute(
+            entity.FetchAction("seekaction")
+                .Execute(
                 new IJoyObject[] {entity, m_ActiveWorld.Player},
                 new[] {"call over"},
                 new object[] {"friendship"});

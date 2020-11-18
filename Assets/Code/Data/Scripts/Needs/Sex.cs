@@ -190,16 +190,6 @@ namespace JoyLib.Code.Entities.Needs
                         new object[] { this.Name, satisfaction, time });
                 }
             }
-            
-            actor.CurrentTarget = new NeedAIData
-            {
-                idle = true,
-                intent = Intent.Interact,
-                need = "none",
-                searching = false,
-                target = null,
-                targetPoint = GlobalConstants.NO_TARGET
-            };
 
             return true;
         }

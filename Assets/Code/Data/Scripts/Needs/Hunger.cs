@@ -159,16 +159,6 @@ namespace JoyLib.Code.Entities.Needs
             }
 
             item.Interact(actor);
-            
-            actor.CurrentTarget = new NeedAIData
-            {
-                idle = true,
-                intent = Intent.Interact,
-                need = "none",
-                searching = false,
-                target = null,
-                targetPoint = GlobalConstants.NO_TARGET
-            };
 
             return true;
         }

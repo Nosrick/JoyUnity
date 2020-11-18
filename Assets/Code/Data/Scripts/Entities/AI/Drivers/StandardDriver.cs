@@ -120,6 +120,15 @@ namespace JoyLib.Code.Entities.AI.Drivers
                         INeed need = vehicle.Needs[vehicle.CurrentTarget.need];
 
                         need.Interact(vehicle, vehicle.CurrentTarget.target);
+                        vehicle.CurrentTarget = new NeedAIData
+                        {
+                            idle = true,
+                            intent = Intent.Interact,
+                            need = "none",
+                            searching = false,
+                            target = null,
+                            targetPoint = GlobalConstants.NO_TARGET
+                        };
                     }
                 }
                 //If we do not, we were probably wandering

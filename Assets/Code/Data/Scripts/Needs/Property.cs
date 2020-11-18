@@ -111,15 +111,6 @@ namespace JoyLib.Code.Entities.Needs
             {
                 return false;
             }
-            actor.CurrentTarget = new NeedAIData
-            {
-                idle = true,
-                intent = Intent.Interact,
-                need = "none",
-                searching = false,
-                target = null,
-                targetPoint = GlobalConstants.NO_TARGET
-            };
             
             return m_CachedActions["additemaction"].Execute(
                 new[] {actor, obj},
