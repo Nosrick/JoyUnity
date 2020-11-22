@@ -139,17 +139,5 @@ namespace JoyLib.Code.Unity.GUI
                 Container.NotifyDropItem(item, go);
             }
         }
-
-        protected override void Update()
-        {
-            if (Input.GetKeyUp(m_UseKey))
-            {
-                Use();
-            }
-            if (Container != null && Container.IsVisible)
-            {
-                UpdateCooldown();
-            }
-        }
     }
 }
