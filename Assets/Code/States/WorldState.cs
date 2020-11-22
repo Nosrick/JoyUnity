@@ -54,6 +54,7 @@ namespace JoyLib.Code.States
         private const string EQUIPMENT = "Equipment";
         private const string CONVERSATION = "Conversation Window";
         private const string CONTEXT_MENU = "Context Menu";
+        private const string TRADE = "Trade";
 
         protected static bool SetUpGUI
         {
@@ -99,12 +100,14 @@ namespace JoyLib.Code.States
                 GameObject equipmentGUIPrefab = GameObject.Find(EQUIPMENT);
                 GameObject conversationWindow = GameObject.Find(CONVERSATION);
                 GameObject contextMenu = GameObject.Find(CONTEXT_MENU);
+                GameObject tradeWindow = GameObject.Find(TRADE);
     
                 s_GUIManager.AddGUI(needsGUIPrefab, false, false);
                 s_GUIManager.AddGUI(inventoryGUIPrefab, true, false);
                 s_GUIManager.AddGUI(equipmentGUIPrefab, true, false);
                 s_GUIManager.AddGUI(conversationWindow, true, true);
                 s_GUIManager.AddGUI(contextMenu, false, false);
+                s_GUIManager.AddGUI(tradeWindow, true, true);
 
                 SetUpGUI = true;
             }

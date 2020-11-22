@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using DevionGames.InventorySystem;
 using DevionGames.InventorySystem.Restrictions;
 using EquipmentRegion = DevionGames.InventorySystem.Restrictions.EquipmentRegion;
@@ -49,6 +50,64 @@ namespace JoyLib.Code.Unity
             }
 
             return slots;
+        }
+        
+        public new ItemCollection Collection {
+
+            get
+            {
+                return m_Collection;
+            }
+            
+            set {
+                if (value == null) {
+                    return;
+                }
+                RemoveItems(true);
+                value.Initialize();
+                this.m_Collection = value;
+              
+                CurrencySlot[] currencySlots = GetSlots<CurrencySlot>();
+
+                for (int i = 0; i < currencySlots.Length; i++) {
+                    Currency defaultCurrency = currencySlots[i].GetDefaultCurrency();
+                    Currency currency = m_Collection.Where(x => typeof(Currency).IsAssignableFrom(x.GetType()) && x.Id == defaultCurrency.Id).FirstOrDefault() as Currency;
+                    if (currency == null) {
+                        ReplaceItem(currencySlots[i].Index, defaultCurrency);
+                    } else {
+                        currencySlots[i].ObservedItem = currency;
+                        currency.Slots.Add(currencySlots[i]);
+                    }
+                }
+
+                for(int i=0; i < this.m_Collection.Count; i++)
+                {
+                    Item item = this.m_Collection[i];
+                    if (item is Currency)
+                        continue;
+
+                    item.Slots.RemoveAll(x => x == null);
+                    if (item.Slots.Count > 0)
+                    {
+                        for (int j = 0; j < item.Slots.Count; j++)
+                        {
+                            item.Slots[j].ObservedItem = item;
+                        }
+                        continue;
+                    }
+                    if (this.m_DynamicContainer) {
+                        Slot slot = CreateSlot();
+                        slot.ObservedItem = item;
+                        item.Slots.Add(slot);
+                    } else {
+                        Slot slot;
+                        if (CanAddItem(item, out slot)) {
+                            ReplaceItem(slot.Index, item);
+                        }
+                    }
+
+                }
+            }
         }
 
         public new List<Slot> Slots => this.m_Slots;
