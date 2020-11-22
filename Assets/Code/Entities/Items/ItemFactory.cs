@@ -99,13 +99,14 @@ namespace JoyLib.Code.Entities.Items
                                                             itemType.SpriteSheet,
                                                             itemType.UnidentifiedName),
                                                         FetchItemSO(itemType));
+            itemInstance.Item.Icon = itemInstance.Icon;
             return itemInstance;
         }
 
         private JoyItem FetchItemSO(BaseItemType itemType)
         {
             Item[] items = InventoryManager.Database.items
-                .Where(item => item.Name.Equals(itemType.IdentifiedName, StringComparison.OrdinalIgnoreCase)).ToArray();
+                .Where(i => i.Name.Equals(itemType.IdentifiedName, StringComparison.OrdinalIgnoreCase)).ToArray();
 
             int result = RNG.instance.Roll(0, items.Length);
             return (JoyItem)ScriptableObject.Instantiate(items[result]);
