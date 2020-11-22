@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using Castle.DynamicProxy;
 using DevionGames.InventorySystem;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
@@ -35,8 +36,10 @@ namespace JoyLib.Code.Unity.GUI
 
             LeftInventory.OnAddItem += Tally;
             LeftOffering.OnAddItem += Tally;
+            LeftOffering.OnRemoveItem += Tally;
             RightInventory.OnAddItem += Tally;
             RightOffering.OnAddItem += Tally;
+            RightOffering.OnRemoveItem += Tally;
         }
 
         public void SetActors(Entity left, Entity right)
@@ -44,10 +47,24 @@ namespace JoyLib.Code.Unity.GUI
             Left = left;
             Right = right;
 
+            /*
             LeftInventory.Collection.Clear();
             LeftOffering.Collection.Clear();
             RightInventory.Collection.Clear();
             RightOffering.Collection.Clear();
+            */
+
+            for (int i = LeftInventory.Collection.Count - 1; i >= 0; i--)
+            {
+                Item item = LeftInventory.Collection[i];
+                LeftInventory.RemoveItem(item);
+            }
+
+            for (int i = RightInventory.Collection.Count - 1; i >= 0; i--)
+            {
+                Item item = RightInventory.Collection[i];
+                RightInventory.RemoveItem(item);
+            }
 
             foreach (ItemInstance item in Left.Backpack)
             {
@@ -156,6 +173,11 @@ namespace JoyLib.Code.Unity.GUI
 
             LeftValue.text = "Your value: " + leftValue;
             RightValue.text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Right.Gender.Personal) + " value: " + rightValue;
+        }
+
+        protected void Tally(Item itemRef, int value, Slot slot)
+        {
+            Tally(itemRef, slot);
         }
     }
 }

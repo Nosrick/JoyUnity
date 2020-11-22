@@ -218,7 +218,7 @@ MonoBehaviour:
   m_MoveUsedItem: 1
   moveItemConditions:
   - window: Inventory
-    requiresVisibility: 0
+    requiresVisibility: 1
   restrictions: []
 --- !u!114 &4484802662267518624
 MonoBehaviour:

@@ -15,6 +15,7 @@ namespace JoyLib.Code.States
         protected EntityPlayer m_Player;
 
         protected WorldInstance m_World;
+        protected WorldInstance m_ActiveWorld;
 
         protected WorldInfoHandler m_WorldInfoHandler = GameObject.Find("GameManager")
                                                             .GetComponent<WorldInfoHandler>();
@@ -76,7 +77,8 @@ namespace JoyLib.Code.States
             Vector2Int transitionPoint = spawnPlacer.PlaceTransitionPoint(m_World);
             m_World.AddArea(transitionPoint, dungeon);
             Done = true;
-            
+
+            m_ActiveWorld = dungeon;
             m_Player.Move(dungeon.SpawnPoint);
             dungeon.AddEntity(m_Player);
 
@@ -111,7 +113,8 @@ namespace JoyLib.Code.States
 
         public override GameState GetNextState()
         {
-            return new WorldInitialisationState(m_World, m_World);
+            //return new WorldInitialisationState(m_World, m_World);
+            return new WorldInitialisationState(m_World, m_ActiveWorld);
         }
     }
 }
