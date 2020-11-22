@@ -9,6 +9,8 @@ using System.Linq;
 using System.Xml.Linq;
 using UnityEngine;
 using DevionGames.InventorySystem;
+using JoyLib.Code.Unity;
+using JoyLib.Code.World;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace JoyLib.Code.Entities.Items
@@ -133,7 +135,7 @@ namespace JoyLib.Code.Entities.Items
                         
                         if(baseItemType.Slots.Any(slot => slot.Equals("none", StringComparison.OrdinalIgnoreCase)))
                         {
-                            Item itemSO = ScriptableObject.CreateInstance<Item>();
+                            JoyItem itemSO = ScriptableObject.CreateInstance<JoyItem>();
                             itemSO.Name = baseItemType.IdentifiedName;
                             itemSO.Icon = m_ObjectIcons.GetSprite(baseItemType.SpriteSheet, baseItemType.IdentifiedName);
                             itemSO.Prefab = s_ItemPrefab;
@@ -142,10 +144,9 @@ namespace JoyLib.Code.Entities.Items
                         }
                         else
                         {
-                            EquipmentItem itemSO = ScriptableObject.CreateInstance<EquipmentItem>();
+                            JoyItem itemSO = ScriptableObject.CreateInstance<JoyItem>();
                             itemSO.Name = baseItemType.IdentifiedName;
-                            itemSO.Icon =
-                                m_ObjectIcons.GetSprite(baseItemType.SpriteSheet, baseItemType.IdentifiedName);
+                            itemSO.Icon = m_ObjectIcons.GetSprite(baseItemType.SpriteSheet, baseItemType.IdentifiedName);
                             itemSO.Prefab = s_ItemPrefab;
                             List<EquipmentRegion> regions = new List<EquipmentRegion>();
                             foreach (string slot in baseItemType.Slots)
@@ -165,28 +166,18 @@ namespace JoyLib.Code.Entities.Items
             return items;
         }
 
-        public BaseItemType[] FindItemsOfType(string[] tags)
+        public BaseItemType[] FindItemsOfType(string[] tags, int tolerance = 1)
         {
             List<BaseItemType> matchingTypes = new List<BaseItemType>();
             foreach (BaseItemType itemType in ItemDatabase)
             {
-                int matches = 0;
-                for (int i = 0; i < tags.Length; i++)
-                {
-                    if (itemType.Tags.Contains(tags[i]))
-                    {
-                        matches++;
-                    }
-                }
-                if (matches == tags.Length || (tags.Length < itemType.Tags.Length && matches > 0))
+                if (itemType.Tags.Intersect(tags).Count() >= tolerance)
                 {
                     matchingTypes.Add(itemType);
                 }
             }
             return matchingTypes.ToArray();
         }
-
-
 
         public ItemInstance GetInstance(long GUID)
         {
@@ -198,7 +189,7 @@ namespace JoyLib.Code.Entities.Items
             return null;
         }
 
-        public bool AddItem(ItemInstance item)
+        public bool AddItem(ItemInstance item, bool addToWorld = false)
         {
             if (LiveItems.ContainsKey(item.GUID))
             {
@@ -206,21 +197,48 @@ namespace JoyLib.Code.Entities.Items
             }
 
             LiveItems.Add(item.GUID, item);
-            item.MyWorld.AddObject(item);
+            if (addToWorld)
+            {
+                item.MyWorld.AddObject(item);
+            }
             return true;
         }
 
-        public bool RemoveItem(long GUID)
+        public bool RemoveItemFromWorld(long GUID)
         {
-            if (LiveItems.ContainsKey(GUID))
+            if (!LiveItems.ContainsKey(GUID))
             {
-                ItemInstance item = GetItem(GUID);
-                item.MyWorld.RemoveObject(item.WorldPosition, item);
-                LiveItems.Remove(GUID);
-                return true;
+                return false;
+            }
+            
+            ItemInstance item = GetItem(GUID);
+            item.MyWorld.RemoveObject(item.WorldPosition, item);
+            //LiveItems.Remove(GUID);
+            return true;
+
+        }
+
+        public bool RemoveItemFromWorld(ItemInstance item)
+        {
+            if (!LiveItems.ContainsKey(item.GUID))
+            {
+                return false;
             }
 
-            return false;
+            return item.MyWorld.RemoveObject(item.WorldPosition, item);
+        }
+
+        public bool AddItemToWorld(WorldInstance world, long GUID)
+        {
+            if (!LiveItems.ContainsKey(GUID))
+            {
+                return false;
+            }
+            
+            ItemInstance item = GetItem(GUID);
+            item.MyWorld = world;
+            world.AddObject(item);
+            return true;
         }
 
         public ItemInstance GetItem(long GUID)

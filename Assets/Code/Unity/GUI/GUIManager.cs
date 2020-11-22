@@ -15,6 +15,11 @@ namespace JoyLib.Code.Unity.GUI
             Initialise();
         }
 
+        protected void Empty(int index)
+        {
+            
+        }
+
         protected void Initialise()
         {
             if (m_GUIs is null)
@@ -54,6 +59,11 @@ namespace JoyLib.Code.Unity.GUI
 
         public void OpenGUI(string name)
         {
+            if (m_ActiveGUIs.Any(data => data.name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+            {
+                return;
+            }
+            
             GUIData toOpen = m_GUIs.First(gui => 
                     gui.name.Equals(name, StringComparison.OrdinalIgnoreCase));
 
@@ -72,11 +82,36 @@ namespace JoyLib.Code.Unity.GUI
 
         public void CloseGUI(string activeName)
         {
+            if (m_ActiveGUIs.Any(data => data.name.Equals(activeName, StringComparison.OrdinalIgnoreCase)) == false)
+            {
+                return;
+            }
+            
             GUIData toClose = m_ActiveGUIs
                 .First(gui => gui.name.Equals(activeName, StringComparison.OrdinalIgnoreCase));
             
             toClose.gameObject.SetActive(false);
             m_ActiveGUIs.Remove(toClose);
+        }
+
+        public void BringToFront(string name)
+        {
+            if (!m_ActiveGUIs.Any(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+            {
+                return;
+            }
+            GUIData toFront = m_ActiveGUIs.First(g => g.name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            foreach (GUIData gui in m_ActiveGUIs)
+            {
+                if (toFront.Equals(gui))
+                {
+                    continue;
+                }
+
+                gui.transform.parent.GetComponent<Canvas>().sortingOrder = int.MinValue;
+            }
+
+            toFront.transform.parent.GetComponent<Canvas>().sortingOrder = 1;
         }
 
         public void CloseAllOtherGUIs(string activeName = "")

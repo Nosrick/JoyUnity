@@ -1,30 +1,29 @@
 ﻿using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Managers;
-using JoyLib.Code.States;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using DevionGames.InventorySystem;
+using JoyLib.Code.Unity;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities.Items
 {
     [Serializable]
-    public class ItemInstance : JoyObject, IItemContainer
+    public class ItemInstance : JoyObject, IItemContainer, IOwnable
     {
         protected bool m_Identified;
-        protected long m_OwnerGUID;
 
         protected List<long> m_Contents;
         protected BaseItemType m_Type;
+
+        public long Owner { get; protected set; }
 
         protected IAbility m_Ability;
 
         protected static LiveItemHandler s_ItemHandler;
 
-        public ItemInstance(BaseItemType type, Vector2Int position, bool identified, Sprite[] sprites, Item itemSO, IAbility abilityRef = null) :
+        public ItemInstance(BaseItemType type, Vector2Int position, bool identified, Sprite[] sprites, JoyItem itemSO, IAbility abilityRef = null) :
             base(type.UnidentifiedName, 
                 EntityDerivedValue.GetDefaultForItem(
                     type.Material.Bonus,
@@ -46,6 +45,7 @@ namespace JoyLib.Code.Entities.Items
 
             m_Ability = abilityRef;
             this.Item = itemSO;
+            this.Item.AttachJoyObject(this);
         }
 
         public ItemInstance(ItemInstance copy) :
@@ -55,8 +55,8 @@ namespace JoyLib.Code.Entities.Items
                 copy.m_Type.Weight),
                 copy.WorldPosition,
                 copy.m_Type.SpriteSheet,
-                copy.m_CachedActions.ToArray(),
-                copy.m_Icons,
+                copy.CachedActions.ToArray(),
+                copy.Icons,
                 copy.m_Type.Tags)
         {
             FindItemHandler();
@@ -107,6 +107,11 @@ namespace JoyLib.Code.Entities.Items
                 s_ItemHandler = GameObject.Find("GameManager")
                                     .GetComponent<LiveItemHandler>();
             }
+        }
+        
+        public void SetOwner(long newOwner)
+        {
+            Owner = newOwner;
         }
 
         public void Interact(Entity user)
@@ -172,18 +177,6 @@ namespace JoyLib.Code.Entities.Items
             m_Contents.Add(actor.GUID);
 
             return true;
-        }
-
-        public long OwnerGUID
-        {
-            get
-            {
-                return m_OwnerGUID;
-            }
-            set
-            {
-                m_OwnerGUID = value;
-            }
         }
 
         public bool Identified
@@ -386,7 +379,7 @@ namespace JoyLib.Code.Entities.Items
             }
         }
 
-        public Item Item
+        public JoyItem Item
         {
             get;
             protected set;

@@ -1,12 +1,8 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using System;
 using System.Linq;
-using System.Reflection;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Events;
-using DevionGames.StatSystem;
 
 namespace DevionGames.InventorySystem
 {
@@ -74,9 +70,12 @@ namespace DevionGames.InventorySystem
 
         private void OnDisable()
         {
-			for (int i = 0; i < childEditors.Count; i++)
+			if (childEditors != null)
 			{
-				childEditors[i].OnDisable();
+				for (int i = 0; i < childEditors.Count; i++)
+				{
+					childEditors[i].OnDisable();
+				}
 			}
 		}
 
@@ -151,6 +150,8 @@ namespace DevionGames.InventorySystem
 					if (GUILayout.Button(AssetDatabase.GetAssetPath(databases[i]), style))
 					{
 						Database = databases[i];
+						if (Database.categories.Count == 0)
+							CreateDefaultCategory(Database);
 						onSelect.Invoke();
 					}
 				}
@@ -162,12 +163,25 @@ namespace DevionGames.InventorySystem
 					ItemDatabase db = EditorTools.CreateAsset<ItemDatabase>(true);
 					if (db != null)
 					{
+						CreateDefaultCategory(db);
 						ArrayUtility.Add<ItemDatabase>(ref databases, db);
+
 					}
 				}
 				GUI.backgroundColor = color;
 			});
 
+		}
+
+		private static void CreateDefaultCategory(ItemDatabase database) {
+			Category category = ScriptableObject.CreateInstance<Category>();
+			category.Name = "None";
+			category.hideFlags = HideFlags.HideInHierarchy;
+			AssetDatabase.AddObjectToAsset(category, database);
+			AssetDatabase.SaveAssets();
+			AssetDatabase.Refresh();
+			database.categories.Add(category);
+			EditorUtility.SetDirty(database);
 		}
 
 		private void ResetChildEditors ()

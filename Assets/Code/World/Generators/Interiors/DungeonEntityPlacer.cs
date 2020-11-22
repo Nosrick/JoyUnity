@@ -22,7 +22,7 @@ namespace JoyLib.Code.World.Generators.Interiors
 
         public DungeonEntityPlacer()
         {
-            s_GameManager = GameObject.Find("GameManager");
+            s_GameManager = GlobalConstants.GameManager;
             s_EntityHandler = s_GameManager.GetComponent<LiveEntityHandler>();
             s_EntityTemplateHandler = s_GameManager.GetComponent<EntityTemplateHandler>();
             s_PhysicsManager = s_GameManager.GetComponent<PhysicsManager>();
@@ -32,11 +32,11 @@ namespace JoyLib.Code.World.Generators.Interiors
         {
             List<Entity> entities = new List<Entity>();
 
-            EntityTemplate[] templates = s_EntityTemplateHandler.Templates;
-            templates = templates.Where(x => entityTypes.Contains(x.CreatureType)).ToArray();
+            List<EntityTemplate> templates = s_EntityTemplateHandler.Templates;
+            templates = templates.Where(x => entityTypes.Contains(x.CreatureType)).ToList();
 
-            int numberToPlace = (worldRef.Tiles.GetLength(0) * worldRef.Tiles.GetLength(1)) / 50;
-            //int numberToPlace = 1;
+            //int numberToPlace = (worldRef.Tiles.GetLength(0) * worldRef.Tiles.GetLength(1)) / 50;
+            int numberToPlace = 1;
 
             List<Vector2Int> availablePoints = new List<Vector2Int>();
 
@@ -54,9 +54,9 @@ namespace JoyLib.Code.World.Generators.Interiors
 
             for (int i = 0; i < numberToPlace; i++)
             {
-                int pointIndex = RNG.instance.Roll(0, availablePoints.Count - 1);
+                int pointIndex = RNG.instance.Roll(0, availablePoints.Count);
 
-                int entityIndex = RNG.instance.Roll(0, templates.Length - 1);
+                int entityIndex = RNG.instance.Roll(0, templates.Count);
 
                 IGrowingValue level = new ConcreteGrowingValue(
                     "level", 
@@ -74,7 +74,9 @@ namespace JoyLib.Code.World.Generators.Interiors
                     null,
                     null,
                     null,
+                    null,
                     null, 
+                    null,
                     null,
                     worldRef);
 

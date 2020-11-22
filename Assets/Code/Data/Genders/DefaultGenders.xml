@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Genders>
+    <Gender>
+        <Name>male</Name>
+        <Possessive>his</Possessive>
+        <Personal>he</Personal>
+        <Reflexive>himself</Reflexive>
+        <PossessivePlural>his</PossessivePlural>
+        <ReflexivePlural>himself</ReflexivePlural>
+    </Gender>
+    
+    <Gender>
+        <Name>female</Name>
+        <Possessive>her</Possessive>
+        <Personal>her</Personal>
+        <Reflexive>herself</Reflexive>
+        <PossessivePlural>hers</PossessivePlural>
+        <ReflexivePlural>herself</ReflexivePlural>
+    </Gender>
+    
+    <Gender>
+        <Name>agender</Name>
+        <Possessive>its</Possessive>
+        <Personal>it</Personal>
+        <Reflexive>itself</Reflexive>
+        <PossessivePlural>its</PossessivePlural>
+        <ReflexivePlural>itself</ReflexivePlural>
+    </Gender>
+    
+    <Gender>
+        <Name>neutral</Name>
+        <Possessive>their</Possessive>
+        <Personal>them</Personal>
+        <Reflexive>themself</Reflexive>
+        <PossessivePlural>theirs</PossessivePlural>
+        <ReflexivePlural>themselves</ReflexivePlural>
+    </Gender>
+</Genders>

@@ -22,7 +22,7 @@ namespace JoyLib.Code.Physics
                 return PhysicsResult.WallCollision;
             }
 
-            JoyObject obj = worldRef.GetObject(to);
+            IJoyObject obj = worldRef.GetObject(to);
             if (obj != null)
             {
                 return PhysicsResult.ObjectCollision;

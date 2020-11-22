@@ -4,7 +4,10 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 using System.Collections;
+using System.Collections.Generic;
 using DevionGames.InventorySystem;
+using JoyLib.Code;
+using JoyLib.Code.Graphics;
 
 namespace Tests
 {
@@ -14,14 +17,22 @@ namespace Tests
 
         private NeedHandler needHandler;
 
+        private ObjectIconHandler objectIconHandler;
+
         private GameObject container;
+
+        private GameObject inventoryManager;
 
         [SetUp]
         public void SetUp()
         {
             container = new GameObject("GameManager");
-            container.AddComponent<InventoryManager>();
+            inventoryManager = new GameObject();
+            inventoryManager.AddComponent<InventoryManager>();
+
+            GlobalConstants.GameManager = container;
             
+            objectIconHandler = container.AddComponent<ObjectIconHandler>();
             needHandler = container.AddComponent<NeedHandler>();
             target = container.AddComponent<EntityTemplateHandler>();
         }
@@ -30,10 +41,9 @@ namespace Tests
         public IEnumerator LoadTypes_ShouldHaveValidData()
         {
             //given
-            EntityTemplate[] entityTemplates = target.Templates;
+            List<EntityTemplate> entityTemplates = target.Templates;
 
             //when
-            yield return new WaitForSeconds(0.1f);
 
             //then
             Assert.That(entityTemplates, Is.Not.Empty);
@@ -47,7 +57,14 @@ namespace Tests
                 Assert.False(template.Tileset == "DEFAULT");
             }
 
-            Object.DestroyImmediate(container);
+            return null;
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            GameObject.DestroyImmediate(container);
+            GameObject.DestroyImmediate(inventoryManager);
         }
     }
 }

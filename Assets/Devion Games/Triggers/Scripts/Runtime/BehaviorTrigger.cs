@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace DevionGames
 {
+    [UnityEngine.Scripting.APIUpdating.MovedFromAttribute(true, null, "Assembly-CSharp")]
     public class BehaviorTrigger : BaseTrigger
     {
         //Actions to run when the trigger is used.
@@ -67,7 +68,6 @@ namespace DevionGames
         //Use the trigger
         public override bool Use()
         {
-
             //Can the trigger be used?
             if (!CanUse())
             {
@@ -77,6 +77,7 @@ namespace DevionGames
             //Set the trigger in use
             this.InUse = true;
             this.m_ActionBehavior.Start();
+            
             return true;
         }
 

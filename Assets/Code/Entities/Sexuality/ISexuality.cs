@@ -2,7 +2,7 @@
 
 namespace JoyLib.Code.Entities.Sexuality
 {
-    public interface ISexuality
+    public interface ISexuality : ITagged
     {
         bool WillMateWith(Entity me, Entity them, IRelationship[] relationships);
 

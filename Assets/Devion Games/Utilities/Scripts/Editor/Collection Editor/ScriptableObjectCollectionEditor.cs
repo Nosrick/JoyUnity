@@ -74,6 +74,9 @@ namespace DevionGames
 				AssetDatabase.SaveAssets ();
 				AssetDatabase.Refresh ();
 				Items.Remove (item);
+				base.m_SelectedItemIndex = -1;
+				if (editor != null)
+					ScriptableObject.DestroyImmediate(editor);
 				EditorUtility.SetDirty (target);
 			}
 		}

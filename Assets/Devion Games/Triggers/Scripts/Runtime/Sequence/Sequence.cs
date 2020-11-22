@@ -15,10 +15,6 @@ namespace DevionGames
             this.m_AllActions = actions;
             for (int i = 0; i < this.m_AllActions.Length; i++)
             {
-                if (this.m_AllActions[i] == null) {
-                    this.m_AllActions[i] = new MissingAction();
-                }
-
                 this.m_AllActions[i].Initialize(gameObject, playerInfo);
             }
             this.m_Status = ActionStatus.Inactive;

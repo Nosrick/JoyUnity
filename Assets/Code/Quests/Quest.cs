@@ -2,101 +2,125 @@
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.World;
 using System.Collections.Generic;
-using System.Linq;
+using JoyLib.Code.Managers;
+using JoyLib.Code.Scripting;
 
 namespace JoyLib.Code.Quests
 {
-    public class Quest
+    public class Quest : IQuest
     {
-        protected readonly List<QuestStep> m_Steps;
-        protected readonly QuestMorality m_Morality;
-        protected readonly List<ItemInstance> m_Rewards;
-
-        public Quest(List<QuestStep> steps, QuestMorality morality, List<ItemInstance> rewards, int step = 0)
+        public Quest(
+            List<IQuestStep> steps,
+            QuestMorality morality,
+            List<ItemInstance> rewards,
+            JoyObject instigator)
         {
-            m_Steps = steps;
-            m_Morality = morality;
-            m_Rewards = rewards;
-            this.step = step;
+            this.Steps = steps;
+            this.Morality = morality;
+            this.Rewards = rewards;
+            this.Instigator = instigator;
+            this.CurrentStep = 0;
+            this.ID = GUIDManager.Instance.AssignGUID();
+        }
+
+        ~Quest()
+        {
+            GUIDManager.Instance.ReleaseGUID(this.ID);
+        }
+
+        public bool AdvanceStep()
+        {
+            this.CurrentStep++;
+
+            return this.IsComplete;
+        }
+
+        public bool FulfilsRequirements(Entity questor, IJoyAction action)
+        {
+            return Steps[CurrentStep].Action.ExecutedSuccessfully(action);
+        }
+
+        public void StartQuest(Entity questor)
+        {
+            foreach (IQuestStep step in Steps)
+            {
+                step.StartQuest(questor);
+            }
         }
 
         public bool BelongsToThis(object searchTerm)
         {
-            if(searchTerm is ItemInstance)
+            switch (searchTerm)
             {
-                ItemInstance item = (ItemInstance)searchTerm;
-                return steps[step].objects.Contains(item);
+                case ItemInstance itemInstance:
+                {
+                    return Steps[CurrentStep].Items.Contains(itemInstance);
+                }
+                case Entity entity:
+                {
+                    return Steps[CurrentStep].Actors.Contains(entity);
+                }
+                case WorldInstance worldInstance:
+                {
+                    return Steps[CurrentStep].Areas.Contains(worldInstance);
+                }
+                default:
+                    return false;
             }
-            else if(searchTerm is Entity)
+        }
+
+        public bool CompleteQuest(Entity questor)
+        {
+            if (this.IsComplete == false)
             {
-                Entity entity = (Entity)searchTerm;
-                return steps[step].actors.Contains(entity);
-            }
-            else if(searchTerm is WorldInstance)
-            {
-                WorldInstance world = (WorldInstance)searchTerm;
-                return steps[step].areas.Contains(world);
+                return false;
             }
 
-            return false;
+            foreach (ItemInstance reward in Rewards)
+            {
+                questor.AddContents(reward);
+            }
+
+            return true;
         }
 
         public override string ToString()
         {
             string fullString = "";
-            string rewardString = m_Rewards.Count > 0 ? "I'll give you " : "";
-            for (int i = 0; i < m_Rewards.Count; i++)
+            string rewardString = Rewards.Count > 0 ? "I'll give you " : "";
+            for (int i = 0; i < Rewards.Count; i++)
             {
-                rewardString += m_Rewards[i].JoyName;
-                if(m_Rewards[i].Contents.Count != 0)
+                rewardString += Rewards[i].JoyName;
+                if(Rewards[i].Contents.Count != 0)
                 {
-                    rewardString += ", " + m_Rewards[i].ContentString;
+                    rewardString += ", " + Rewards[i].ContentString;
                 }
-                if (m_Rewards.Count > 1)
+                if (Rewards.Count > 1)
                 {
-                    if (i == m_Rewards.Count - 2)
+                    if (i == Rewards.Count - 2)
                         rewardString += "and ";
-                    else if (i < m_Rewards.Count - 2)
+                    else if (i < Rewards.Count - 2)
                         rewardString += ", ";
                 }
             }
 
-            for (int j = 0; j < m_Steps.Count; j++)
+            for (int j = 0; j < Steps.Count; j++)
             {
-                fullString += m_Steps[j].ToString();
+                fullString += Steps[j].ToString();
             }
-            fullString += rewardString + ". ";
+            fullString += " " + rewardString + ".";
             return fullString;
         }
 
-        public int step
-        {
-            get;
-            set;
-        }
+        public List<IQuestStep> Steps { get; protected set; }
+        public QuestMorality Morality { get; protected set; }
+        public List<ItemInstance> Rewards { get; protected set; }
+        public int CurrentStep { get; protected set;  }
 
-        public List<QuestStep> steps
-        {
-            get
-            {
-                return m_Steps.ToList();
-            }
-        }
+        public JoyObject Instigator { get; protected set; }
+        
+        public long ID { get; protected set; }
 
-        public QuestMorality morality
-        {
-            get
-            {
-                return m_Morality;
-            }
-        }
-
-        public List<ItemInstance> rewards
-        {
-            get
-            {
-                return m_Rewards.ToList();
-            }
-        }
+        public bool IsComplete => this.CurrentStep == this.Steps.Count;
     }
 }

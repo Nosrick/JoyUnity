@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 namespace DevionGames.InventorySystem
 {
-
+    [UnityEngine.Scripting.APIUpdating.MovedFromAttribute(true, null, "Assembly-CSharp")]
     [DisallowMultipleComponent]
     public class Trigger : BehaviorTrigger
 	{
@@ -30,6 +30,19 @@ namespace DevionGames.InventorySystem
         //used for UI Button reference
         public void StartUse() {
             Use();
+        }
+
+        public void StartUse(ItemContainer window)
+        {
+            if (window.IsVisible)
+            {
+                Trigger.currentUsedWindow = window;
+                Use();
+            }
+        }
+
+        public void StopUse() {
+            InUse = false;
         }
 
         public virtual bool OverrideUse(Slot slot, Item item) {

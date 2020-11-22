@@ -1,4 +1,6 @@
-﻿namespace JoyLib.Code.Entities.Relationships
+﻿using System.Collections.Generic;
+
+namespace JoyLib.Code.Entities.Relationships
 {
     public class PolyamourousRelationship : AbstractRelationship
     {
@@ -7,12 +9,33 @@
             AddTag("romantic");
             AddTag("sexual");
         }
-        public override string Name
+
+        public override IRelationship Create(IEnumerable<IJoyObject> participants)
         {
-            get
+            IRelationship newRelationship = new PolyamourousRelationship();
+            foreach (IJoyObject obj in participants)
             {
-                return "polyamorous";
+                newRelationship.AddParticipant(obj);
             }
+
+            return newRelationship;
         }
+
+        public override IRelationship CreateWithValue(IEnumerable<IJoyObject> participants, int value)
+        {
+            IRelationship newRelationship = new PolyamourousRelationship();
+            foreach (IJoyObject obj in participants)
+            {
+                newRelationship.AddParticipant(obj);
+            }
+
+            newRelationship.ModifyValueOfAllParticipants(value);
+
+            return newRelationship;
+        }
+
+        public override string Name => "polyamorous";
+
+        public override string DisplayName => "lover";
     }
 }

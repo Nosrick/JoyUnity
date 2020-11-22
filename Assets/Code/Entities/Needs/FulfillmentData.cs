@@ -4,7 +4,7 @@ namespace JoyLib.Code.Entities.Needs
 {
     public class FulfillmentData
     {
-        public FulfillmentData(string name, int counter, JoyObject[] targets)
+        public FulfillmentData(string name, int counter, IJoyObject[] targets)
         {
             this.Name = name;
             this.Counter = counter;
@@ -29,7 +29,7 @@ namespace JoyLib.Code.Entities.Needs
             protected set;
         }
 
-        public JoyObject[] Targets
+        public IJoyObject[] Targets
         {
             get;
             protected set;

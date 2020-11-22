@@ -1,15 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using DevionGames.UIWidgets;
 using System.Linq;
-using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections.ObjectModel;
 using System;
-using UnityEditor;
-using DevionGames.StatSystem;
 
 namespace DevionGames.InventorySystem
 {
@@ -35,6 +31,7 @@ namespace DevionGames.InventorySystem
                 callbacks.Add("OnRemoveItem");
                 callbacks.Add("OnRemoveItemReference");
                 callbacks.Add("OnFailedToRemoveItem");
+                callbacks.Add("OnTryUseItem");
                 callbacks.Add("OnUseItem");
                 callbacks.Add("OnDropItem");
                 return callbacks.ToArray();
@@ -66,6 +63,10 @@ namespace DevionGames.InventorySystem
         public event FailedToRemoveItemDelegate OnFailedToRemoveItem;
 
         public delegate void UseItemDelegate(Item item, Slot slot);
+        /// <summary>
+        /// Called when the user trys to use item. This is called before OnUseItem and any checks including CanUseItem
+        /// </summary>
+        public event UseItemDelegate OnTryUseItem;
         /// <summary>
         /// Called when an item was used from this container.
         /// </summary>
@@ -211,8 +212,6 @@ namespace DevionGames.InventorySystem
             protected set { this.m_MoveUsedItem = value; }
         }
 
-     
-
         /// <summary>
         /// Conditions for auto moving items when used
         /// </summary>
@@ -243,7 +242,9 @@ namespace DevionGames.InventorySystem
                 RemoveItems(true);
                 value.Initialize();
                 this.m_Collection = value;
+              
                 CurrencySlot[] currencySlots = GetSlots<CurrencySlot>();
+
                 for (int i = 0; i < currencySlots.Length; i++) {
                     Currency defaultCurrency = currencySlots[i].GetDefaultCurrency();
                     Currency currency = m_Collection.Where(x => typeof(Currency).IsAssignableFrom(x.GetType()) && x.Id == defaultCurrency.Id).FirstOrDefault() as Currency;
@@ -251,26 +252,34 @@ namespace DevionGames.InventorySystem
                         ReplaceItem(currencySlots[i].Index, defaultCurrency);
                     } else {
                         currencySlots[i].ObservedItem = currency;
+                        currency.Slots.Add(currencySlots[i]);
                     }
                 }
 
                 for(int i=0; i < this.m_Collection.Count; i++)
                 {
                     Item item = this.m_Collection[i];
-                    if (item.Slot != null) {
-                        item.Slot.ObservedItem = item;
+                    if (item is Currency)
+                        continue;
+
+                    item.Slots.RemoveAll(x => x == null);
+                    if (item.Slots.Count > 0)
+                    {
+                        for (int j = 0; j < item.Slots.Count; j++)
+                        {
+                            item.Slots[j].ObservedItem = item;
+                        }
                         continue;
                     }
-
                     if (this.m_DynamicContainer) {
                         Slot slot = CreateSlot();
                         slot.ObservedItem = item;
+                        item.Slots.Add(slot);
                     } else {
                         Slot slot;
                         if (CanAddItem(item, out slot)) {
                             ReplaceItem(slot.Index, item);
                         }
-                       
                     }
 
                 }
@@ -289,7 +298,6 @@ namespace DevionGames.InventorySystem
             RefreshSlots();
             RegisterCallbacks();
             this.Collection = GetComponent<ItemCollection>();
-            
         }
 
         /// <summary>
@@ -302,6 +310,9 @@ namespace DevionGames.InventorySystem
             if (s1 == s2) {
                 return false;
             }
+            if (s2.Container.UseReferences && !s1.Container.UseReferences) {
+                return false;
+            }
 
             if (s1.Container.UseReferences && !s2.Container.CanReferenceItems) {
                 return false;
@@ -311,30 +322,38 @@ namespace DevionGames.InventorySystem
                 if (!s2.Container.UseReferences && !s1.Container.UseReferences) {
                     s2.Container.RemoveItem(s2.Index);
                 }
+      
                 return true;
             }
+
             return SwapItems(s1, s2);
 
         }
 
         /// <summary>
-        /// Swaps items in slots.
+        /// Swaps items in slots. From s2 to s1
         /// </summary>
         /// <param name="s1">First slot</param>
         /// <param name="s2">Second slot</param>
         /// <returns>True if swapped.</returns>
         public bool SwapItems(Slot s1, Slot s2) {
 
-            List<Slot> requiredSlotsObserved = s2.Container.GetRequiredSlots(s1.ObservedItem);
+            if (s2.Container.UseReferences && !s1.Container.UseReferences) {
+                return false;
+            }
+
+            //Slots the item is currently inside.
+            List<Slot> requiredSlotsObserved = s2.Container.GetRequiredSlots(s1.ObservedItem, s2);
             if (requiredSlotsObserved.Count == 0)
             {
                 requiredSlotsObserved.Add(s2);
             }
+
             Item[] itemsInRequiredSlotsObserved = requiredSlotsObserved.Where(x => x.ObservedItem != null).Select(y => y.ObservedItem).Distinct().ToArray();
             Slot[] willBeFreeSlotsObserved = s1.Container.GetSlots(s1.ObservedItem);
             Dictionary<Slot, Item> moveLocationsObserved = new Dictionary<Slot, Item>();
 
-            List<Slot> requiredSlots = s1.Container.GetRequiredSlots(s2.ObservedItem);
+            List<Slot> requiredSlots = s1.Container.GetRequiredSlots(s2.ObservedItem, s1);
             if (requiredSlots.Count == 0)
             {
                 requiredSlots.Add(s1);
@@ -378,6 +397,18 @@ namespace DevionGames.InventorySystem
                         s1.Container.ReplaceItem(kvp.Key.Index, kvp.Value);
                     }
                 }
+
+                if (s1.Container == s2.Container) {
+                    foreach (KeyValuePair<Slot, Item> kvp in moveLocations)
+                    {
+                        s2.Container.ReplaceItem(kvp.Key.Index, kvp.Value);
+                    }
+                    foreach (KeyValuePair<Slot, Item> kvp in moveLocationsObserved)
+                    {
+                        s1.Container.ReplaceItem(kvp.Key.Index, kvp.Value);
+                    }
+
+                }
                 return true;
             }
             return false;
@@ -390,7 +421,7 @@ namespace DevionGames.InventorySystem
         /// <param name="s2">Slot 2</param>
         /// <returns>True if items can be swapped.</returns>
         public bool CanSwapItems(Slot s1, Slot s2) {
-            List<Slot> requiredSlotsObserved = s2.Container.GetRequiredSlots(s1.ObservedItem);
+            List<Slot> requiredSlotsObserved = s2.Container.GetRequiredSlots(s1.ObservedItem,s2);
             if (requiredSlotsObserved.Count == 0)
             {
                 requiredSlotsObserved.Add(s2);
@@ -399,7 +430,7 @@ namespace DevionGames.InventorySystem
             Slot[] willBeFreeSlotsObserved = s1.Container.GetSlots(s1.ObservedItem);
             Dictionary<Slot, Item> moveLocationsObserved = new Dictionary<Slot, Item>();
 
-            List<Slot> requiredSlots = s1.Container.GetRequiredSlots(s2.ObservedItem);
+            List<Slot> requiredSlots = s1.Container.GetRequiredSlots(s2.ObservedItem, s1);
             if (requiredSlots.Count == 0)
             {
                 requiredSlots.Add(s1);
@@ -420,6 +451,8 @@ namespace DevionGames.InventorySystem
         public virtual bool StackOrAdd(Item item)
         {
             if (!StackItem(item) && !AddItem(item)){
+
+                Debug.Log("False");
                 return false;
             }
             return true;
@@ -450,12 +483,76 @@ namespace DevionGames.InventorySystem
                 if (!slot.Container.UseReferences && item.Slot != null){
                     item.Container.RemoveItem(item.Slot.Index);
                 }
-               
-                slot.Container.ReplaceItem(slot.Index, item);
 
+                slot.Container.ReplaceItem(slot.Index, item);
                 return true;
             }
             //Return false if the item can't be stacked to the slot
+            return false;
+        }
+
+        /// <summary>
+        /// Adds a new item to a free or dynamicly created slot in this container.
+        /// </summary>
+        /// <param name="item">Item to add</param>
+        /// <returns>True if item was added.</returns>
+        public virtual bool AddItem(Item item)
+        {
+            Slot slot = null;
+            if (CanAddItem(item, out slot, true))
+            {
+                ReplaceItem(slot.Index, item);
+                return true;
+            }
+            OnFailedToAddItem(item);
+            return false;
+        }
+
+        /// <summary>
+        /// Try to stack the item to any item in collection.
+        /// </summary>
+        public bool StackItem(Item item)
+        {
+            //Check if item or collection is null
+            if (item == null || this.m_Collection == null)
+            {
+                return false;
+            }
+            //Get all items in collection with same id as the item to stack
+            Item[] items = this.m_Collection.Where(x => x != null && x.Id == item.Id && x.Rarity == item.Rarity).ToArray();
+
+            int stack = item.Stack;
+
+            //Loop through the items
+            for (int i = 0; i < items.Length; i++)
+            {
+                Item current = items[i];
+
+                //Check if max stack is reached
+                if ((current.Stack + item.Stack) <= current.MaxStack)
+                {
+
+                    current.Stack += item.Stack;
+                    TryConvertCurrency(current as Currency);
+                    OnAddItem(item, current.Slot);
+         
+                    return true;
+                }
+
+                if (current.Stack < current.MaxStack)
+                {
+                    int restAmount = stack - (current.MaxStack - current.Stack);
+                    current.Stack = current.MaxStack;
+                    stack = restAmount;
+                    if (stack <= 0)
+                    {
+                        return true;
+                    }
+                }
+
+            }
+            item.Stack = stack;
+ 
             return false;
         }
 
@@ -470,11 +567,14 @@ namespace DevionGames.InventorySystem
             for (int i = checkedItems.Count - 1; i >= 0; i--)
             {
                 Item current = checkedItems[i];
-                List<Slot> requiredSlots = container.GetRequiredSlots(current);
+                List<Slot> requiredSlots = container.GetRequiredSlots(current, preferredSlot);
                 for (int j = 0; j < requiredSlots.Count; j++)
                 {
+                   // Debug.Log("CanMove : "+(requiredSlots[j].IsEmpty || slotsWillBeFree.Contains(requiredSlots[j]))+" "+ requiredSlots[j].CanAddItem(current) +" "+ !reservedSlots.Contains(requiredSlots[j]));
+
                     if ((requiredSlots[j].IsEmpty || slotsWillBeFree.Contains(requiredSlots[j])) && requiredSlots[j].CanAddItem(current) && !reservedSlots.Contains(requiredSlots[j]))
                     {
+                        //Debug.Log("CanMove : "+container.Name+" "+requiredSlots[j].Index);
                         reservedSlots.Add(requiredSlots[j]);
                         checkedItems.RemoveAt(i);
                         moveLocations.Add(requiredSlots[j], current);
@@ -513,24 +613,7 @@ namespace DevionGames.InventorySystem
         }
 
         /// <summary>
-        /// Adds a new item to a free or dynamicly created slot in this container.
-        /// </summary>
-        /// <param name="item">Item to add</param>
-        /// <returns>True if item was added.</returns>
-        public virtual bool AddItem(Item item)
-        {
-            Slot slot = null;
-            if (CanAddItem(item, out slot, true))
-            {
-                ReplaceItem(slot.Index, item);
-                return true;
-            }
-            OnFailedToAddItem(item);
-            return false;
-        }
-
-        /// <summary>
-        /// Checks if the item can be added at index.
+        /// Checks if the item can be added at index. Free slot is required
         /// </summary>
         /// <param name="index">Slot index.</param>
         /// <param name="item">Item to add.</param>
@@ -557,7 +640,7 @@ namespace DevionGames.InventorySystem
         }
 
         /// <summary>
-        /// Checks if the item can be added to this container.
+        /// Checks if the item can be added to this container. Free slot is required.
         /// </summary>
         /// <param name="item">Item to check.</param>
         /// <returns>Returns true if the item can be added.</returns>
@@ -568,7 +651,7 @@ namespace DevionGames.InventorySystem
         }
 
         /// <summary>
-        /// Checks if the item can be added to this container.
+        /// Checks if the item can be added to this container. Free slot is required.
         /// </summary>
         /// <param name="item">The item to check.</param>
         /// <param name="slot">Required or next free slot</param>
@@ -578,7 +661,7 @@ namespace DevionGames.InventorySystem
         {
             slot = null;
             if (item == null) { return true; }
-     
+
             List<Slot> requiredSlots = GetRequiredSlots(item);
             if (requiredSlots.Count > 0)
             {
@@ -612,6 +695,7 @@ namespace DevionGames.InventorySystem
                 }
                 return true;
             }
+
             return false;
         }
 
@@ -627,23 +711,15 @@ namespace DevionGames.InventorySystem
             if (index < this.m_Slots.Count)
             {
                 Slot slot = this.m_Slots[index];
-                List<Slot> slotsForItem = GetRequiredSlots(item);
+                List<Slot> slotsForItem = GetRequiredSlots(item, slot);
+           
+                if (slotsForItem.Count == 0 && slot.CanAddItem(item))
+                    slotsForItem.Add(slot);
 
-                if (!slotsForItem.Contains(slot) && slot.CanAddItem(item)) { slotsForItem.Add(slot); }
-                for (int i = 0; i < slotsForItem.Count; i++)
-                {
-                    if (!slotsForItem[i].IsEmpty && !slotsForItem[i].CanAddItem(item))
-                    {
-                        OnFailedToAddItem(item);
-                        return list.ToArray();
-                    }
-                }
+               // Debug.Log("ReplaceItem Index:" + index + " SlotsForItem:" + slotsForItem.Count);
+
                 if (item != null)
                 {
-                    if (!UseReferences && !this.m_Collection.Contains(item))
-                    {
-                        this.m_Collection.Add(item);
-                    }
                     for (int i = 0; i < slotsForItem.Count; i++)
                     {
                         Item current = slotsForItem[i].ObservedItem;
@@ -653,6 +729,20 @@ namespace DevionGames.InventorySystem
                             RemoveItem(slotsForItem[i].Index);
                         }
                         slotsForItem[i].ObservedItem = item;
+                        if (UseReferences && !item.ReferencedSlots.Contains(slotsForItem[i]))
+                            item.ReferencedSlots.Add(slotsForItem[i]);
+                    }
+
+                    if (!UseReferences)
+                    {
+                        if (!this.m_Collection.Contains(item))
+                            this.m_Collection.Add(item);
+
+                        item.Slots.Clear();
+                        item.Slots.AddRange(slotsForItem);
+                    } else {
+                        item.ReferencedSlots = item.ReferencedSlots.Except(slotsForItem).ToList();
+                        item.ReferencedSlots.AddRange(slotsForItem);
                     }
                     OnAddItem(item, slot);
                 }
@@ -660,45 +750,27 @@ namespace DevionGames.InventorySystem
             return list.ToArray();
         }
 
+
         /// <summary>
-        /// Removes the item at index. Sometimes an item requires more then one slot(two-handed weapon), this will remove the item with the extra slots.
+        /// Removes the item at index from this conrainer
         /// </summary>
         /// <param name="index">The slot index where to remove the item.</param>
         /// <returns>Returns true if the item was removed.</returns>
         public virtual bool RemoveItem(int index)
         {
+
             if (index < this.m_Slots.Count)
             {
                 Slot slot = this.m_Slots[index];
                 Item item = slot.ObservedItem;
+                if (item is null) return false;
 
-
-                List<Slot> slotsForItem = GetRequiredSlots(item);
-                if (!slotsForItem.Contains(slot)) { slotsForItem.Add(slot); }
-
-                if (item != null)
+                if (UseReferences)
                 {
-                    if (!UseReferences)
-                    {
-                        this.m_Collection.Remove(item);
-                    }else {
-                        item.ReferencedSlots.Remove(slot);
-                    }
-
-                    for (int i = 0; i < slotsForItem.Count; i++)
-                    {
-                        slotsForItem[i].ObservedItem = null;
-                    }
-                  
-                    OnRemoveItem(item, item.Stack, slot);
-                    if (this.m_DynamicContainer)
-                    {
-                        DestroyImmediate(this.m_Slots[index].gameObject);
-                        RefreshSlots();
-                    }
-
-                    return true;
+                    slot.ObservedItem = null;
+                    return item.ReferencedSlots.Remove(slot);
                 }
+                return RemoveItem(item);
             }
             return false;
         }
@@ -777,7 +849,6 @@ namespace DevionGames.InventorySystem
                     }
                 }
             }
-
             return (currentAmount <= 0);
         }
 
@@ -805,7 +876,6 @@ namespace DevionGames.InventorySystem
                         if (this.m_DynamicContainer)
                         {
                             DestroyImmediate(this.m_Slots[i].gameObject);
-                            Debug.Log("Destroy");
                         }
                     }
                 }
@@ -845,8 +915,10 @@ namespace DevionGames.InventorySystem
                     if (this.m_Slots[i].ObservedItem != null)
                     {
                         Item item = this.m_Slots[i].ObservedItem;
+                        item.Slots.Remove(this.m_Slots[i]);
                         OnRemoveItem(item, item.Stack, this.m_Slots[i]);
                     }
+                   
                     DestroyImmediate(this.m_Slots[i].gameObject);
                 }
                 RefreshSlots();
@@ -858,9 +930,12 @@ namespace DevionGames.InventorySystem
                     if (this.m_Slots[i].ObservedItem != null)
                     {
                         Item item = this.m_Slots[i].ObservedItem;
+                       // item.Slots.Remove(this.m_Slots[i]);
                         OnRemoveItem(item, item.Stack, this.m_Slots[i]); 
                     }
+
                     this.m_Slots[i].ObservedItem = null;
+                    
                 }
             }
             if (!UseReferences && !keepInCollection)
@@ -868,7 +943,6 @@ namespace DevionGames.InventorySystem
                 //Remove items from the collection
                 this.m_Collection.Clear();
             }
-
         }
 
         /// <summary>
@@ -910,17 +984,30 @@ namespace DevionGames.InventorySystem
         /// </summary>
         /// <param name="id">Item id</param>
         /// <returns>Array of items with given id</returns>
-        public Item[] GetItems(string id)
+        public Item[] GetItems(string idOrName)
         {
             List<Item> items = new List<Item>();
             if (!this.m_UseReferences)
             {
-                items.AddRange(this.m_Collection.Where(x => x.Id == id));
+                items.AddRange(this.m_Collection.Where(x => x.Id == idOrName));
             }
             else
             {
-                items.AddRange(this.m_Slots.Where(x => !x.IsEmpty && x.ObservedItem.Id == id).Select(y => y.ObservedItem));
+                items.AddRange(this.m_Slots.Where(x => !x.IsEmpty && x.ObservedItem.Id == idOrName).Select(y => y.ObservedItem));
             }
+
+            if (items.Count == 0) {
+                if (!this.m_UseReferences)
+                {
+                    items.AddRange(this.m_Collection.Where(x => x.Name == idOrName));
+                }
+                else
+                {
+                    items.AddRange(this.m_Slots.Where(x => !x.IsEmpty && x.ObservedItem.Name == idOrName).Select(y => y.ObservedItem));
+                }
+
+            }
+
             return items.ToArray();
         }
 
@@ -949,32 +1036,77 @@ namespace DevionGames.InventorySystem
             return items.ToArray();
         }
 
-        /// <summary>
-        /// Returns required slots for this item in this container. Some items like two-handed weapons require multiple slots.
+        /// Returns required slots for this item in this container. Empty slots are prefered.
         /// </summary>
         /// <param name="item">Item to get the required slots for.</param>
-        /// <returns>Required slots for given item. If item does not require any special slots the returned list will be empty.</returns>
-        public virtual List<Slot> GetRequiredSlots(Item item)
+        /// <param name="preferedSlot"></param>
+        /// <returns></returns>
+        public virtual List<Slot> GetRequiredSlots(Item item, Slot preferedSlot = null)
         {
             List<Slot> slots = new List<Slot>();
-            if (item == null || !(item is EquipmentItem)) { return slots; }
-            EquipmentItem equipmentItem = item as EquipmentItem;
+            if (item == null) return slots;
 
-            for (int i = 0; i < this.m_Slots.Count; i++)
+            if (!(item is EquipmentItem equipmentItem) ) { return slots; }
+
+            List<EquipmentRegion> requiredRegions = new List<EquipmentRegion>(equipmentItem.Region);
+
+
+            if (preferedSlot != null && preferedSlot.IsEmpty)
             {
-                Restrictions.EquipmentRegion restriction = this.m_Slots[i].GetComponent<Restrictions.EquipmentRegion>();
-                if (restriction != null)
+                Restrictions.EquipmentRegion[] restrictions = preferedSlot.GetComponents<Restrictions.EquipmentRegion>();
+                for (int i = requiredRegions.Count - 1; i >= 0; i--)
                 {
-                    for (int j = 0; j < equipmentItem.Region.Count; j++)
-                    {
-                        if (equipmentItem.Region[j].Name == restriction.region.Name)
-                        {
-                            slots.Add(this.m_Slots[i]);
-                        }
+                    if (restrictions.Select(x => x.region).Contains(requiredRegions[i])) {
+                        slots.Add(preferedSlot);
+                        requiredRegions.RemoveAt(i);
+                        break;
                     }
                 }
             }
 
+            for (int i = requiredRegions.Count - 1; i >= 0; i--)
+            {
+                for (int j = 0; j < this.m_Slots.Count; j++)
+                {
+                    Restrictions.EquipmentRegion[] restrictions = this.m_Slots[j].GetComponents<Restrictions.EquipmentRegion>();
+                    if (this.m_Slots[j].IsEmpty && restrictions.Select(x=>x.region).Contains(requiredRegions[i])) {
+                        slots.Add(this.m_Slots[j]);
+                        requiredRegions.RemoveAt(i);
+                        break;
+                    }
+                }
+            }
+
+            //No empty slots availible, second loop
+            if (requiredRegions.Count > 0) {
+                if (preferedSlot != null)
+                {
+                    Restrictions.EquipmentRegion[] restrictions = preferedSlot.GetComponents<Restrictions.EquipmentRegion>();
+                    for (int i = requiredRegions.Count - 1; i >= 0; i--)
+                    {
+                        if (restrictions.Select(x => x.region).Contains(requiredRegions[i]))
+                        {
+                            slots.Add(preferedSlot);
+                            requiredRegions.RemoveAt(i);
+                            break;
+                        }
+                    }
+                }
+
+                for (int i = requiredRegions.Count - 1; i >= 0; i--)
+                {
+                    for (int j = 0; j < this.m_Slots.Count; j++)
+                    {
+                        Restrictions.EquipmentRegion[] restrictions = this.m_Slots[j].GetComponents<Restrictions.EquipmentRegion>();
+                        if (restrictions.Select(x => x.region).Contains(requiredRegions[i]))
+                        {
+                            slots.Add(this.m_Slots[j]);
+                            requiredRegions.RemoveAt(i);
+                            break;
+                        }
+                    }
+                }
+            }
             return slots;
         }
 
@@ -1081,7 +1213,7 @@ namespace DevionGames.InventorySystem
             Item slotItem = slot.ObservedItem;
             return (slotItem != null &&
                     item != null &&
-                    slotItem.Id == item.Id &&
+                    slotItem.Id == item.Id && slotItem.Rarity== item.Rarity &&
                     (slotItem.Stack + item.Stack) <= slotItem.MaxStack);
         }
 
@@ -1097,7 +1229,7 @@ namespace DevionGames.InventorySystem
                 return false;
             }
             //Get all items in collection with same id as the item to stack
-            Item[] items = this.m_Collection.Where(x => x != null && x.Id == item.Id).ToArray();
+            Item[] items = this.m_Collection.Where(x => x != null && x.Id == item.Id && x.Rarity == item.Rarity).ToArray();
             //Loop through the items
             for (int i = 0; i < items.Length; i++)
             {
@@ -1105,34 +1237,6 @@ namespace DevionGames.InventorySystem
                 //Check if max stack is reached
                 if ((current.Stack + item.Stack) <= current.MaxStack)
                 {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        /// <summary>
-        /// Try to stack the item to any item in collection.
-        /// </summary>
-        public bool StackItem(Item item)
-        {
-            //Check if item or collection is null
-            if (item == null || this.m_Collection == null)
-            {
-                return false;
-            }
-            //Get all items in collection with same id as the item to stack
-            Item[] items = this.m_Collection.Where(x => x != null && x.Id == item.Id).ToArray();
-            //Loop through the items
-            for (int i = 0; i < items.Length; i++)
-            {
-                Item current = items[i];
-                //Check if max stack is reached
-                if ((current.Stack + item.Stack) <= current.MaxStack)
-                {
-                    current.Stack += item.Stack;
-                    TryConvertCurrency(current as Currency);
-                    OnAddItem(item, current.Slot);
                     return true;
                 }
             }
@@ -1157,11 +1261,9 @@ namespace DevionGames.InventorySystem
                 for (int i = 0; i < this.m_Slots.Count; i++)
                 {
                     this.m_Slots[i].gameObject.SetActive(true);
-
                 }
             }
         }
-
 
         /// <summary>
         /// Try to convert currency based on currency conversation set in the editor
@@ -1253,7 +1355,6 @@ namespace DevionGames.InventorySystem
             }
         }
 
-
         /// <summary>
         /// Register callbacks for inspector
         /// </summary>
@@ -1277,17 +1378,29 @@ namespace DevionGames.InventorySystem
                 ItemEventData eventData = new ItemEventData(item);
                 Execute("OnFailedToRemoveItem", eventData);
             };
+            OnTryUseItem += (Item item, Slot slot) => {
+                ItemEventData eventData = new ItemEventData(item);
+                eventData.slot = slot;
+                Execute("OnTryUseItem", eventData);
+            };
             OnUseItem += (Item item, Slot slot) => {
                 ItemEventData eventData = new ItemEventData(item);
                 eventData.slot = slot;
                 Execute("OnUseItem", eventData);
             };
+
             OnDropItem += (Item item, GameObject droppedInstance) => {
                 ItemEventData eventData = new ItemEventData(item);
                 eventData.gameObject = droppedInstance;
                 Execute("OnDropItem", eventData);
             };
            
+        }
+
+        public static void RemoveItems(string windowName, bool keepInCollection = false) {
+            ItemContainer container = WidgetUtility.Find<ItemContainer>(windowName);
+            if (container != null)
+                container.RemoveItems(keepInCollection);
         }
 
         /// <summary>
@@ -1374,6 +1487,26 @@ namespace DevionGames.InventorySystem
 
             }
             return existingAmount >= amount;
+        }
+
+        /// <summary>
+        /// Get the first item in container by name.
+        /// </summary>
+        /// <param name="windowName"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Item GetItem(string windowName, string nameOrId) {
+            ItemContainer[] windows = WidgetUtility.FindAll<ItemContainer>(windowName);
+            for (int j = 0; j < windows.Length; j++)
+            {
+                ItemContainer current = windows[j];
+
+
+                Item item = current.GetItems(nameOrId).FirstOrDefault();
+                if (item != null)
+                    return item;
+            }
+            return null;
         }
 
         /// <summary>
@@ -1553,6 +1686,11 @@ namespace DevionGames.InventorySystem
         public void NotifyUseItem(Item item, Slot slot)
         {
             OnUseItem(item, slot);
+        }
+
+        public void NotifyTryUseItem(Item item, Slot slot)
+        {
+            OnTryUseItem(item, slot);
         }
 
         public void Lock(bool state) {

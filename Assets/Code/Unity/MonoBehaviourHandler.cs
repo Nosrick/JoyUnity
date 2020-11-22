@@ -7,6 +7,9 @@ namespace JoyLib.Code.Unity
     {
         protected JoyObject m_JoyObject;
         protected SpriteRenderer m_SpriteRenderer;
+        protected SpriteRenderer SpeechBubble { get; set; }
+
+        public JoyObject MyJoyObject => m_JoyObject;
 
         public void Update()
         {
@@ -27,7 +30,14 @@ namespace JoyLib.Code.Unity
         public virtual void AttachJoyObject(JoyObject joyObject)
         {
             m_JoyObject = joyObject;
+            m_JoyObject.AttachMonoBehaviourHandler(this);
             m_SpriteRenderer = this.GetComponent<SpriteRenderer>();
+            Transform transform = this.transform.Find("Speech Bubble");
+            if (transform is null == false)
+            {
+                SpeechBubble = transform.GetComponent<SpriteRenderer>();
+                SpeechBubble.gameObject.SetActive(false);
+            }
 
             if(m_JoyObject.JoyName.StartsWith("Downstairs") || m_JoyObject.JoyName.StartsWith("Upstairs"))
             {
@@ -60,11 +70,12 @@ namespace JoyLib.Code.Unity
             m_SpriteRenderer.sprite = joyObject.Icon;
         }
 
-        public JoyObject MyJoyObject
+        public void SetSpeechBubble(bool on, Sprite need = null)
         {
-            get
+            SpeechBubble.gameObject.SetActive(on);
+            if (on)
             {
-                return m_JoyObject;
+                SpeechBubble.sprite = need;
             }
         }
     }

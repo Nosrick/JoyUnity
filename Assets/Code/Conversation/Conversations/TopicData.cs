@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Castle.Components.DictionaryAdapter;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Entities.Statistics;
@@ -61,20 +62,71 @@ namespace JoyLib.Code.Conversation.Conversations
             return Conditions.Select(c => c.Criteria).ToArray();
         }
 
-        public bool PassesConditions(Tuple<string, int>[] values)
+        public bool FulfilsConditions(IEnumerable<Tuple<string, int>> values)
         {
-            foreach (Tuple<string, int> value in values)
+            bool any = values.Any();
+            
+            foreach (ITopicCondition condition in Conditions)
             {
-                ITopicCondition condition = Conditions.First(
-                    c => c.Criteria.Equals(value.Item1, StringComparison.OrdinalIgnoreCase));
-
-                if (!condition.FulfillsCondition(value.Item2))
+                try
                 {
+                    if (!any)
+                    {
+                        if (condition.FulfillsCondition(0) == false)
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        if (values.Any(
+                            pair => pair.Item1.Equals(condition.Criteria, StringComparison.OrdinalIgnoreCase)) == false)
+                        {
+                            if (condition.FulfillsCondition(0) == false)
+                            {
+                                return false;
+                            }
+                        }
+                        else
+                        {
+                            int value = values.Where(pair =>
+                                    pair.Item1.Equals(condition.Criteria, StringComparison.OrdinalIgnoreCase))
+                                .Max(tuple => tuple.Item2);
+                            
+                            if (condition.FulfillsCondition(value) == false)
+                            {
+                                return false;
+                            }
+                        }
+                        
+                    }
+                    
+                }
+                catch (Exception e)
+                {
+                    //suppress this
                     return false;
                 }
             }
 
             return true;
+        }
+
+        public bool FulfilsConditions(IEnumerable<JoyObject> participants)
+        {
+            string[] criteria = Conditions.Select(c => c.Criteria).ToArray();
+
+            List<Tuple<string, int>> values = new List<Tuple<string, int>>();
+            foreach (JoyObject participant in participants)
+            {
+                if (participant is Entity entity)
+                {
+                    JoyObject[] others = participants.Where(p => p.GUID.Equals(participant.GUID) == false).ToArray();
+                    values.AddRange(entity.GetData(criteria, others));                    
+                }
+            }
+
+            return this.FulfilsConditions(values);
         }
 
         public void Initialise(
@@ -137,27 +189,27 @@ namespace JoyLib.Code.Conversation.Conversations
                 action.Name.Equals("modifyrelationshippointsaction", StringComparison.OrdinalIgnoreCase));
 
             fulfillNeed.Execute(
-                new JoyObject[] { instigator, listener },
+                new IJoyObject[] { instigator, listener },
                 new [] { "friendship" },
                 new object[] { "friendship", instigator.Statistics[EntityStatistic.PERSONALITY].Value, 0, true });
 
             string[] tags = RelationshipHandler.Get(
-                new long[] {instigator.GUID, listener.GUID}).SelectMany(relationship => relationship.GetTags()).ToArray();
+                new IJoyObject[] {instigator, listener}).SelectMany(relationship => relationship.Tags).ToArray();
             
             influence.Execute(
-                new JoyObject[] { instigator, listener },
+                new IJoyObject[] { instigator, listener },
                 tags,
                 new object[] { instigator.Statistics[EntityStatistic.PERSONALITY].Value });
 
             influence.Execute(
-                new JoyObject[] {listener, instigator},
+                new IJoyObject[] {listener, instigator},
                 tags,
                 new object[] { listener.Statistics[EntityStatistic.PERSONALITY].Value });
 
             if (RelationshipHandler.IsFamily(instigator, listener))
             {
                 fulfillNeed.Execute(
-                    new JoyObject[] {instigator, listener},
+                    new IJoyObject[] {instigator, listener},
                     new string[] {"family"},
                     new object[] {"family", instigator.Statistics[EntityStatistic.PERSONALITY].Value, 0, true});
             }
@@ -165,7 +217,7 @@ namespace JoyLib.Code.Conversation.Conversations
             return FetchNextTopics();
         }
 
-        protected ITopic[] FetchNextTopics()
+        protected virtual ITopic[] FetchNextTopics()
         {
             List<ITopic> nextTopics = ConversationEngine.AllTopics
                 .Where(topic => NextTopics.Contains(topic.ID))

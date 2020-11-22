@@ -20,6 +20,9 @@ using JoyLib.Code.World;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Castle.Core.Internal;
+using JoyLib.Code.Entities.Gender;
+using JoyLib.Code.Entities.Romance;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities
@@ -34,15 +37,16 @@ namespace JoyLib.Code.Entities
         protected List<ItemInstance> m_Backpack;
         protected ItemInstance m_NaturalWeapons;
         protected ISexuality m_Sexuality;
+        protected IRomance m_Romance;
 
         protected List<string> m_IdentifiedItems;
 
-        protected JobType m_CurrentJob;
+        protected IJob m_CurrentJob;
         protected Dictionary<string, int> m_JobLevels;
 
         protected List<string> m_Slots;
 
-        protected List<CultureType> m_Cultures;
+        protected List<ICulture> m_Cultures;
 
         protected int m_Size;
 
@@ -66,40 +70,53 @@ namespace JoyLib.Code.Entities
         protected const int ATTACK_THRESHOLD = -50;
 
         protected static EntityRelationshipHandler s_RelationshipHandler;
+        protected static EntitySkillHandler s_SkillHandler;
+        protected static QuestTracker QuestTracker { get; set; }
+
+        protected readonly static string[] STANDARD_ACTIONS = new string[]
+        {
+            "giveitemaction",
+            "fulfillneedaction",
+            "seekaction",
+            "wanderaction",
+            "modifyrelationshippointsaction",
+            "enterworldaction"
+        };
 
         public Entity()
         {}
-
+        
         /// <summary>
-        /// Create an entity with job levels, equipment, family, etc
+        /// 
         /// </summary>
         /// <param name="template"></param>
         /// <param name="needs"></param>
+        /// <param name="cultures"></param>
         /// <param name="level"></param>
         /// <param name="experience"></param>
         /// <param name="job"></param>
         /// <param name="sex"></param>
         /// <param name="sexuality"></param>
         /// <param name="position"></param>
-        /// <param name="icons"></param>
+        /// <param name="sprites"></param>
         /// <param name="naturalWeapons"></param>
         /// <param name="equipment"></param>
         /// <param name="backpack"></param>
-        /// <param name="relationships"></param>
         /// <param name="identifiedItems"></param>
-        /// <param name="family"></param>
         /// <param name="jobLevels"></param>
         /// <param name="world"></param>
-        /// <param name="tileset"></param>
+        /// <param name="driver"></param>
         public Entity(
             EntityTemplate template,
             BasicValueContainer<INeed> needs,
-            List<CultureType> cultures,
+            List<ICulture> cultures,
             IGrowingValue level,
             float experience,
-            JobType job,
+            IJob job,
+            IGender gender,
             IBioSex sex,
             ISexuality sexuality,
+            IRomance romance,
             Vector2Int position,
             Sprite[] sprites,
             ItemInstance naturalWeapons,
@@ -116,23 +133,46 @@ namespace JoyLib.Code.Entities
                     template.Statistics[EntityStatistic.WIT]),
                 position,
                 template.Tileset,
-                new string[] { "fulfillneedaction" },
+                STANDARD_ACTIONS,
                 sprites,
                 template.Tags)
         {
+            if (s_RelationshipHandler is null)
+            {
+                GameObject gameManager = GameObject.Find("GameManager");
+                s_RelationshipHandler = gameManager.GetComponent<EntityRelationshipHandler>();
+                s_SkillHandler = gameManager.GetComponent<EntitySkillHandler>();
+                QuestTracker = gameManager.GetComponent<QuestTracker>();
+            }
+            
             this.CreatureType = template.CreatureType;
             this.m_Slots = template.Slots.ToList();
 
             this.m_Size = template.Size;
 
+            this.Gender = gender;
+
             this.m_JobLevels = jobLevels;
             this.m_Sexuality = sexuality;
+            this.m_Romance = romance;
             this.m_IdentifiedItems = identifiedItems;
             this.m_Statistics = template.Statistics;
 
-            this.m_Skills = template.Skills;
+            this.m_Skills = new BasicValueContainer<IGrowingValue>();
+            
 
             this.m_Needs = needs;
+
+            foreach (IGrowingValue skill in template.Skills)
+            {
+                this.m_Skills.Add(skill);
+            }
+
+            foreach (IGrowingValue skill in s_SkillHandler.GetDefaultSkillBlock(this.m_Needs))
+            {
+                this.m_Skills.Add(skill);
+            }
+                
             this.m_Abilities = template.Abilities.ToList();
             this.m_Level = level;
             for (int i = 1; i < level.Value; i++)
@@ -141,7 +181,7 @@ namespace JoyLib.Code.Entities
             }
             this.m_CurrentJob = job;
 
-            this.m_Tags = template.Tags.ToList();
+            this.Tags = template.Tags.ToList();
 
             this.m_NaturalWeapons = naturalWeapons;
             this.m_Equipment = equipment;
@@ -169,11 +209,6 @@ namespace JoyLib.Code.Entities
             this.m_Driver = driver;
 
             SetCurrentTarget();
-
-            if (s_RelationshipHandler is null)
-            {
-                s_RelationshipHandler = GameObject.Find("GameManager").GetComponent<EntityRelationshipHandler>();
-            }
         }
 
         /// <summary>
@@ -189,9 +224,21 @@ namespace JoyLib.Code.Entities
         /// <param name="position"></param>
         /// <param name="icons"></param>
         /// <param name="world"></param>
-        public Entity(EntityTemplate template, BasicValueContainer<INeed> needs, List<CultureType> cultures, IGrowingValue level, JobType job, IBioSex sex, ISexuality sexuality,
-            Vector2Int position, Sprite[] sprites, WorldInstance world, IDriver driver) :
-            this(template, needs, cultures, level, 0, job, sex, sexuality, position, sprites,
+        public Entity(
+            EntityTemplate template, 
+            BasicValueContainer<INeed> needs, 
+            List<ICulture> cultures,
+            IGrowingValue level,
+            IJob job,
+            IGender gender,
+            IBioSex sex,
+            ISexuality sexuality,
+            IRomance romance,
+            Vector2Int position,
+            Sprite[] sprites,
+            WorldInstance world,
+            IDriver driver) :
+            this(template, needs, cultures, level, 0, job, gender, sex, sexuality, romance, position, sprites,
                 NaturalWeaponHelper.MakeNaturalWeapon(template.Size), new NonUniqueDictionary<string, ItemInstance>(),
                 new List<ItemInstance>(), new List<string>(), new Dictionary<string, int>(), world, driver)
         {
@@ -200,10 +247,10 @@ namespace JoyLib.Code.Entities
         protected Entity(Entity copy) :
             base(
                 copy.JoyName,
-                copy.m_DerivedValues,
+                copy.DerivedValues,
                 copy.WorldPosition,
                 copy.Tileset,
-                copy.m_CachedActions.ToArray(),
+                copy.CachedActions.ToArray(),
                 copy.Icons,
                 copy.Tags.ToArray())
         {
@@ -231,6 +278,7 @@ namespace JoyLib.Code.Entities
             this.m_NaturalWeapons = copy.m_NaturalWeapons;
             this.m_Equipment = copy.m_Equipment;
             this.m_Backpack = copy.m_Backpack;
+            this.Gender = copy.Gender;
             this.Sex = copy.Sex;
             this.m_VisionProvider = copy.m_VisionProvider;
 
@@ -263,13 +311,13 @@ namespace JoyLib.Code.Entities
                                     .Max(z => z);
             for (int i = 0; i <= maxNames; i++)
             {
-                CultureType random = m_Cultures[RNG.instance.Roll(0, m_Cultures.Count - 1)];
+                ICulture random = m_Cultures[RNG.instance.Roll(0, m_Cultures.Count - 1)];
                 while (random.NameData.SelectMany(x => x.chain).Max(y => y) < maxNames)
                 {
                     random = m_Cultures[RNG.instance.Roll(0, m_Cultures.Count - 1)];
                 }
 
-                nameList.Add(random.GetNameForChain(i, this.Sex.Name));
+                nameList.Add(random.GetNameForChain(i, this.Gender.Name));
             }
             return String.Join(" ", nameList);
         }
@@ -285,43 +333,38 @@ namespace JoyLib.Code.Entities
 
         public void Tick()
         {
-            if (m_FulfillmentData.Counter > 0)
+            if (m_FulfillmentData.Counter > 0 && m_FulfillmentData.DecrementCounter() == 0)
             {
-                m_FulfillmentData.DecrementCounter();
+                MonoBehaviourHandler.SetSpeechBubble(false);
+            }
+
+            if (m_FulfillmentData.Counter == 0)
+            {
+                
             }
 
             RegenTicker += 1;
             if (RegenTicker == REGEN_TICK_TIME)
             {
-                m_DerivedValues[EntityDerivedValue.HITPOINTS].ModifyValue(1);
-                m_DerivedValues[EntityDerivedValue.CONCENTRATION].ModifyValue(1);
-                m_DerivedValues[EntityDerivedValue.COMPOSURE].ModifyValue(1);
-                m_DerivedValues[EntityDerivedValue.MANA].ModifyValue(1);
+                DerivedValues[EntityDerivedValue.HITPOINTS].ModifyValue(1);
+                DerivedValues[EntityDerivedValue.CONCENTRATION].ModifyValue(1);
+                DerivedValues[EntityDerivedValue.COMPOSURE].ModifyValue(1);
+                DerivedValues[EntityDerivedValue.MANA].ModifyValue(1);
 
                 RegenTicker = 0;
 
                 foreach (INeed need in m_Needs.Collection)
                 {
-                    need.Tick();
+                    need.Tick(this);
                 }
             }
 
             UpdateMe();
         }
 
-        public void AddQuest(Quest quest)
+        public void AddQuest(IQuest quest)
         {
-            List<QuestStep> steps = quest.steps;
-            for (int i = 0; i < steps.Count; i++)
-            {
-                if (steps[i].action == QuestAction.Deliver && steps[i].objects.Count != 0)
-                {
-                    for (int j = 0; j < steps[i].objects.Count; j++)
-                    {
-                        AddContents(steps[i].objects[j]);
-                    }
-                }
-            }
+            quest.StartQuest(this);
             QuestTracker.AddQuest(GUID, quest);
         }
 
@@ -337,6 +380,12 @@ namespace JoyLib.Code.Entities
                     data.Add(new Tuple<string, int>(tag, m_Statistics[tag].Value));
                 }
             }
+            
+            //Fetch all statistics
+            if (tags.Any(tag => tag.Equals("statistics", StringComparison.OrdinalIgnoreCase)))
+            {
+                data.AddRange(m_Statistics.Select(statistic => new Tuple<string, int>(statistic.Name, statistic.Value)));
+            }
 
             //Check skills
             foreach (string tag in tags)
@@ -347,6 +396,12 @@ namespace JoyLib.Code.Entities
                 }
             }
 
+            //Fetch all skills
+            if (tags.Any(tag => tag.Equals("skills", StringComparison.OrdinalIgnoreCase)))
+            {
+                data.AddRange(from EntitySkill skill in m_Skills select new Tuple<string, int>(skill.Name, skill.Value));
+            }
+
             //Check needs
             foreach (string tag in tags)
             {
@@ -354,6 +409,12 @@ namespace JoyLib.Code.Entities
                 {
                     data.Add(new Tuple<string, int>(tag, m_Needs[tag].Value));
                 }
+            }
+            
+            //Fetch all needs
+            if (tags.Any(tag => tag.Equals("needs", StringComparison.OrdinalIgnoreCase)))
+            {
+                data.AddRange(from INeed need in m_Needs select new Tuple<string, int>(need.Name, need.Value));
             }
 
             //Check equipment
@@ -403,31 +464,45 @@ namespace JoyLib.Code.Entities
                 try
                 {
                     jobLevel = m_JobLevels.First(job => job.Key.Equals(tag, StringComparison.OrdinalIgnoreCase));
+                    data.Add(new Tuple<string, int>(jobLevel.Key, jobLevel.Value));
                 }
                 catch (Exception e)
                 {
                     //suppress this
                 }
-                
-                data.Add(new Tuple<string, int>(jobLevel.Key, jobLevel.Value));
+            }
+            
+            //Fetch all job levels
+            if (tags.Any(tag => tag.Equals("jobs", StringComparison.OrdinalIgnoreCase)))
+            {
+                data.AddRange(from int level in m_JobLevels select new Tuple<string, int>("jobs", level));
             }
 
-            if (args.Length > 0 && args[0] is JoyObject other)
+            if (args.Length <= 0)
             {
+                return data.ToArray();
+            }
+            foreach (object obj in args)
+            {
+                if (!(obj is Entity other))
+                {
+                    continue;
+                }
+                
                 //Check relationships
                 IRelationship[] relationships = s_RelationshipHandler.GetAllForObject(this);
                 foreach (IRelationship relationship in relationships)
                 {
                     foreach (string tag in tags)
                     {
-                        if (relationship.Tags.Contains(tag))
+                        if (relationship.Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase)))
                         {
                             int relationshipValue = relationship.GetRelationshipValue(this.GUID, other.GUID);
-                            data.Add(new Tuple<string, int>(tag, relationshipValue));
+                            data.Add(new Tuple<string, int>(tag, 1));
                             data.Add(new Tuple<string, int>("relationship", relationshipValue));
                         }
                     }
-                }                
+                }
             }
 
             return data.ToArray();
@@ -522,7 +597,7 @@ namespace JoyLib.Code.Entities
                             matches++;
                         }
                     }
-                    if (matches == tags.Length || (tags.Length < item.TotalTags && matches > 0))
+                    if (matches == tags.Length || (tags.Length < item.Tags.Count && matches > 0))
                     {
                         matchingItems.Add(item);
                     }
@@ -597,32 +672,32 @@ namespace JoyLib.Code.Entities
 
         public void DecreaseMana(int value)
         {
-            m_DerivedValues[EntityDerivedValue.MANA].ModifyValue(-value);
+            DerivedValues[EntityDerivedValue.MANA].ModifyValue(-value);
         }
 
         public void IncreaseMana(int value)
         {
-            m_DerivedValues[EntityDerivedValue.MANA].ModifyValue(value);
+            DerivedValues[EntityDerivedValue.MANA].ModifyValue(value);
         }
 
         public void DecreaseComposure(int value)
         {
-            m_DerivedValues[EntityDerivedValue.COMPOSURE].ModifyValue(-value);
+            DerivedValues[EntityDerivedValue.COMPOSURE].ModifyValue(-value);
         }
 
         public void IncreaseComposure(int value)
         {
-            m_DerivedValues[EntityDerivedValue.COMPOSURE].ModifyValue(value);
+            DerivedValues[EntityDerivedValue.COMPOSURE].ModifyValue(value);
         }
 
         public void DecreaseConcentration(int value)
         {
-            m_DerivedValues[EntityDerivedValue.CONCENTRATION].ModifyValue(-value);
+            DerivedValues[EntityDerivedValue.CONCENTRATION].ModifyValue(-value);
         }
 
         public void IncreaseConcentration(int value)
         {
-            m_DerivedValues[EntityDerivedValue.CONCENTRATION].ModifyValue(value);
+            DerivedValues[EntityDerivedValue.CONCENTRATION].ModifyValue(value);
         }
 
         public void AddExperience(float value)
@@ -674,26 +749,26 @@ namespace JoyLib.Code.Entities
                 }
             }
 
-            base.DamageMe(damage);
+            base.DamageValue(EntityDerivedValue.HITPOINTS, damage);
         }
 
         public void DirectDVModification(int value, string index = EntityDerivedValue.HITPOINTS)
         {
-            m_DerivedValues[index].ModifyValue(value);
+            DerivedValues[index].ModifyValue(value);
         }
 
         protected void CalculateDerivatives()
         {
-            IDerivedValue hitpoints = m_DerivedValues[EntityDerivedValue.HITPOINTS];
+            IDerivedValue hitpoints = DerivedValues[EntityDerivedValue.HITPOINTS];
             int lastHP = hitpoints.Value;
 
-            IDerivedValue concentration = m_DerivedValues[EntityDerivedValue.CONCENTRATION];
+            IDerivedValue concentration = DerivedValues[EntityDerivedValue.CONCENTRATION];
             int lastConc = concentration.Value;
 
-            IDerivedValue composure = m_DerivedValues[EntityDerivedValue.COMPOSURE];
+            IDerivedValue composure = DerivedValues[EntityDerivedValue.COMPOSURE];
             int lastComp = composure.Value;
 
-            IDerivedValue mana = m_DerivedValues[EntityDerivedValue.MANA];
+            IDerivedValue mana = DerivedValues[EntityDerivedValue.MANA];
             int lastMana = mana.Value;
 
             IValueFormula valueFormula = new BasicDerivedValueFormula();
@@ -756,10 +831,9 @@ namespace JoyLib.Code.Entities
                 return false;
             }
 
-            if (m_IdentifiedItems.Contains(item.JoyName))
+            if (m_IdentifiedItems.Any(i => i.Equals(item.JoyName, StringComparison.OrdinalIgnoreCase)))
             {
                 item.IdentifyMe();
-                m_IdentifiedItems.Add(item.JoyName);
             }
 
             m_Backpack.Add(item);
@@ -773,6 +847,12 @@ namespace JoyLib.Code.Entities
         }
 
         public IBioSex Sex
+        {
+            get;
+            protected set;
+        }
+
+        public IGender Gender
         {
             get;
             protected set;
@@ -842,7 +922,7 @@ namespace JoyLib.Code.Entities
         {
             get
             {
-                return m_Tags.Any(tag => tag.Equals("sentient", StringComparison.OrdinalIgnoreCase));
+                return Tags.Any(tag => tag.Equals("sentient", StringComparison.OrdinalIgnoreCase));
             }
         }
 
@@ -892,23 +972,21 @@ namespace JoyLib.Code.Entities
 
         public FulfillmentData FulfillmentData
         {
-            get
-            {
-                return m_FulfillmentData;
-            }
+            get => m_FulfillmentData;
             set
             {
                 m_FulfillmentData = value;
+                if (m_FulfillmentData.Name.Equals("none", StringComparison.OrdinalIgnoreCase) == false &&
+                    m_FulfillmentData.Name.IsNullOrEmpty() == false)
+                {
+                    MonoBehaviourHandler.SetSpeechBubble(m_FulfillmentData.Counter > 0, m_Needs[m_FulfillmentData.Name].FulfillingSprite);
+                }
             }
         }
 
-        public ISexuality Sexuality
-        {
-            get
-            {
-                return m_Sexuality;
-            }
-        }
+        public ISexuality Sexuality => m_Sexuality;
+
+        public IRomance Romance => m_Romance;
 
         public IAbility TargetingAbility
         {
@@ -920,7 +998,7 @@ namespace JoyLib.Code.Entities
         {
             get
             {
-                return m_DerivedValues[EntityDerivedValue.MANA].Maximum;
+                return DerivedValues[EntityDerivedValue.MANA].Maximum;
             }
         }
 
@@ -928,7 +1006,7 @@ namespace JoyLib.Code.Entities
         {
             get
             {
-                return m_DerivedValues[EntityDerivedValue.MANA].Value;
+                return DerivedValues[EntityDerivedValue.MANA].Value;
             }
         }
 
@@ -936,7 +1014,7 @@ namespace JoyLib.Code.Entities
         {
             get
             {
-                return m_DerivedValues[EntityDerivedValue.COMPOSURE].Value;
+                return DerivedValues[EntityDerivedValue.COMPOSURE].Value;
             }
         }
 
@@ -944,7 +1022,7 @@ namespace JoyLib.Code.Entities
         {
             get
             {
-                return m_DerivedValues[EntityDerivedValue.COMPOSURE].Maximum;
+                return DerivedValues[EntityDerivedValue.COMPOSURE].Maximum;
             }
         }
 
@@ -952,7 +1030,7 @@ namespace JoyLib.Code.Entities
         {
             get
             {
-                return m_DerivedValues[EntityDerivedValue.CONCENTRATION].Maximum;
+                return DerivedValues[EntityDerivedValue.CONCENTRATION].Maximum;
             }
         }
 
@@ -960,7 +1038,7 @@ namespace JoyLib.Code.Entities
         {
             get
             {
-                return m_DerivedValues[EntityDerivedValue.CONCENTRATION].Value;
+                return DerivedValues[EntityDerivedValue.CONCENTRATION].Value;
             }
         }
 
@@ -990,11 +1068,11 @@ namespace JoyLib.Code.Entities
             set;
         }
 
-        public CultureType[] Cultures => m_Cultures.ToArray();
+        public ICulture[] Cultures => m_Cultures.ToArray();
 
         public IVision VisionProvider => m_VisionProvider;
 
-        public JobType Job
+        public IJob Job
         {
             get
             {

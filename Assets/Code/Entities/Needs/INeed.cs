@@ -1,4 +1,5 @@
 ﻿using JoyLib.Code.Entities.Statistics;
+using UnityEngine;
 
 namespace JoyLib.Code.Entities.Needs
 {
@@ -7,13 +8,13 @@ namespace JoyLib.Code.Entities.Needs
 
         bool FindFulfilmentObject(Entity actor);
 
-        bool Interact(Entity user, JoyObject obj);
+        bool Interact(Entity actor, IJoyObject obj);
 
         INeed Copy();
 
         INeed Randomise();
 
-        bool Tick();
+        bool Tick(Entity actor);
 
         int Fulfill(int value);
 
@@ -42,6 +43,11 @@ namespace JoyLib.Code.Entities.Needs
         }
 
         int AverageForMonth
+        {
+            get;
+        }
+
+        Sprite FulfillingSprite
         {
             get;
         }

@@ -1,6 +1,9 @@
+using System.Collections;
+using JoyLib.Code;
 using JoyLib.Code.Entities.Jobs;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.TestTools;
 
 namespace Tests
 {
@@ -15,26 +18,34 @@ namespace Tests
         {
             gameManager = new GameObject("GameManager");
 
+            GlobalConstants.GameManager = gameManager;
+
             target = gameManager.AddComponent<JobHandler>();
         }
 
-        [Test]
-        public void LoadTypes_ShouldHaveValidData()
+        [UnityTest]
+        public IEnumerator LoadTypes_ShouldHaveValidData()
         {
             //given
 
             //when
-            JobType[] jobs = target.Jobs;
+            IJob[] jobs = target.Jobs;
 
             //then
             Assert.That(jobs, Is.Not.Empty);
-            foreach(JobType job in jobs)
+            foreach(IJob job in jobs)
             {
                 Assert.That(job.SkillGrowths, Is.Not.Empty);
                 Assert.That(job.StatisticGrowths, Is.Not.Empty);
                 Assert.IsNotEmpty(job.Name);
             }
 
+            return null;
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
             GameObject.DestroyImmediate(gameManager);
         }
     }

@@ -12,10 +12,10 @@ public class ItemContainerCallbackTester : MonoBehaviour
         ItemContainer container = GetComponent<ItemContainer>();
         container.OnRemoveItem += (Item item, int amount, Slot slot) =>
         {
-            Debug.Log("["+Time.time+"]"+"OnRemoveItem: " + item.Name + " Amount: " + amount + " Container: " + slot.Container.Name + " Slot: " + slot.Index);
+            Debug.Log("[" + Time.time + "]" + "OnRemoveItem: " + item.Name + " Amount: " + amount + " Container: " + slot.Container.Name + " Slot: " + slot.Index);
         };
 
-        container.OnAddItem += (Item item,Slot slot) =>
+        container.OnAddItem += (Item item, Slot slot) =>
         {
             Debug.Log("[" + Time.time + "]" + "OnAddItem: " + item.Name + " Amount: " + item.Stack + "Container: " + slot.Container.Name + " Slot: " + slot.Index);
         };

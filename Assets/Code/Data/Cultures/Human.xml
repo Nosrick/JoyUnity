@@ -57,6 +57,47 @@
 				<Chance>3</Chance>
 			</Sexuality>
 		</Sexualities>
+		
+		<Genders>
+			<Gender>
+				<Name>male</Name>
+				<Chance>40</Chance>
+			</Gender>
+			<Gender>
+				<Name>female</Name>
+				<Chance>40</Chance>
+			</Gender>
+			<Gender>
+				<Name>neutral</Name>
+				<Chance>10</Chance>
+			</Gender>
+			<Gender>
+				<Name>agender</Name>
+				<Chance>5</Chance>
+			</Gender>
+		</Genders>
+		
+		<Romances>
+			<Romance>
+				<Name>heteroromantic</Name>
+				<Chance>70</Chance>
+			</Romance>
+			
+			<Romance>
+				<Name>homoromantic</Name>
+				<Chance>10</Chance>
+			</Romance>
+			
+			<Romance>
+				<Name>biromantic</Name>
+				<Chance>10</Chance>
+			</Romance>
+			
+			<Romance>
+				<Name>aromantic</Name>
+				<Chance>3</Chance>
+			</Romance>
+		</Romances>
 
 		<Sexes>
 			<Sex>
@@ -78,15 +119,13 @@
 		<Names>
 			<NameData>
 				<Name>Alex</Name>
-				<Sex>male</Sex>
-				<Sex>female</Sex>
+				<Sex>all</Sex>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>McHuman</Name>
-				<Sex>male</Sex>
-				<Sex>female</Sex>
+				<Sex>all</Sex>
 				<Chain>1</Chain>
 			</NameData>
 		</Names>

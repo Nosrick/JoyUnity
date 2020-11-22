@@ -91,17 +91,22 @@ namespace DevionGames.InventorySystem
                 this.m_CurrentProjectile.transform.position = this.m_FirePoint.transform.position;
                 this.m_CurrentProjectile.transform.parent = null;
                 Rigidbody projectileRigidbody = this.m_CurrentProjectile.GetComponent<Rigidbody>();
+                this.m_CurrentProjectile.GetComponent<Projectile>().enabled = true;
                 projectileRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
                 RaycastHit hit;
                 if (Physics.Raycast(this.m_CameraTransform.position, this.m_CameraTransform.forward, out hit, float.PositiveInfinity))
                 {
-                    projectileRigidbody.transform.LookAt(hit.point);
+                    if(Vector3.Distance(m_CurrentProjectile.transform.position,hit.point)>1f)
+                        projectileRigidbody.transform.LookAt(hit.point);
+
                 }
                 else
                 {
                     projectileRigidbody.transform.forward = this.m_CameraTransform.forward;
                 }
+
                 projectileRigidbody.velocity = projectileRigidbody.transform.forward * this.m_ProjectileSpeed;
+              
                 this.m_CurrentProjectile = null;
             }
         }

@@ -4,14 +4,16 @@ using JoyLib;
 
 namespace JoyLib.Code.Scripting.Actions
 {
-    public class SeekAction : IJoyAction
+    public class SeekAction : AbstractAction
     {
-        public string Name => "seekaction";
+        public override string Name => "seekaction";
 
-        public string ActionString => "seeking";
+        public override string ActionString => "seeking";
 
-        public bool Execute(JoyObject[] participants, string[] tags = null, params object[] args)
+        public override bool Execute(IJoyObject[] participants, string[] tags = null, params object[] args)
         {
+            ClearLastParameters();
+            
             if(!(participants[0] is Entity actor))
             {
                 return false;
@@ -32,6 +34,8 @@ namespace JoyLib.Code.Scripting.Actions
             };
 
             actor.CurrentTarget = needAIData;
+            
+            SetLastParameters(participants, tags, args);
 
             return true;
         }

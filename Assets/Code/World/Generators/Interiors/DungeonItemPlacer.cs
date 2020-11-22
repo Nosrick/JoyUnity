@@ -29,7 +29,7 @@ namespace JoyLib.Code.World.Generators.Interiors
             int itemsToPlace = dungeonArea / prosperity;
 
             List<Vector2Int> unavailablePoints = new List<Vector2Int>();
-            foreach(JoyObject wall in worldRef.Walls.Values)
+            foreach(IJoyObject wall in worldRef.Walls.Values)
             {
                 unavailablePoints.Add(wall.WorldPosition);
             }
@@ -45,7 +45,7 @@ namespace JoyLib.Code.World.Generators.Interiors
 
                 ItemInstance item = s_ItemFactory.CreateCompletelyRandomItem();
                 item.MyWorld = worldRef;
-                s_ItemHandler.AddItem(item);
+                s_ItemHandler.AddItem(item, true);
                 item.Move(point);
                 placedItems.Add(item);
             }

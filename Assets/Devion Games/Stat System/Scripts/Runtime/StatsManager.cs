@@ -127,6 +127,12 @@ namespace DevionGames.StatSystem
                 StatsManager.m_Current = this;
                 if (dontDestroyOnLoad)
                 {
+                    if (transform.parent != null)
+                    {
+                        if (StatsManager.DefaultSettings.debugMessages)
+                            Debug.Log("Stats Manager with DontDestroyOnLoad can't be a child transform. Unparent!");
+                        transform.parent = null;
+                    }
                     DontDestroyOnLoad(gameObject);
                 }
                 this.m_StatsHandler = new List<StatsHandler>();
@@ -134,7 +140,8 @@ namespace DevionGames.StatSystem
                 {
                     StartCoroutine(RepeatSaving(StatsManager.SavingLoading.savingRate));
                 }
-                Debug.Log("Stats Manager initialized.");
+                if (StatsManager.DefaultSettings.debugMessages)
+                    Debug.Log("Stats Manager initialized.");
             }
         }
 

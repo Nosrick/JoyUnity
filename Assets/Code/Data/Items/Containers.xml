@@ -8,9 +8,9 @@
     <Material>leather</Material>
     <Size>100</Size>
     <Tileset>Containers</Tileset>
+    <Tag>container</Tag>
+    <Tag>leather</Tag>
   </IdentifiedItem>
-
-  <Tag>container</Tag>
 
   <TileSet>
     <Filename>Chest0</Filename>

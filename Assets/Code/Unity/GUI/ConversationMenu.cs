@@ -1,3 +1,4 @@
+using System;
 using JoyLib.Code.Conversation;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,14 +18,14 @@ namespace JoyLib.Code.Unity.GUI
             get;
             set;
         }
-        
-        protected static ConversationEngine ConversationEngine
+
+        protected Text Text
         {
             get;
             set;
         }
-
-        protected Text Text
+        
+        protected static ConversationEngine ConversationEngine
         {
             get;
             set;

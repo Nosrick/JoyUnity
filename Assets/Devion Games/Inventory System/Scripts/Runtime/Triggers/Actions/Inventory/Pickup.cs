@@ -5,6 +5,7 @@ using DevionGames.UIWidgets;
 
 namespace DevionGames.InventorySystem
 {
+    [UnityEngine.Scripting.APIUpdating.MovedFromAttribute(true, null, "Assembly-CSharp")]
     [Icon("Item")]
     [ComponentMenu("Inventory System/Pickup Item")]
     [RequireComponent(typeof(ItemCollection))]

@@ -71,7 +71,7 @@ namespace DevionGames.UIWidgets
 
         public static void Set(Sprite sprite, Vector2 size, bool showCursor, string animatorState)
         {
-            if (instance != null && instance.image)
+            if (instance != null && instance.image && instance.gameObject.activeInHierarchy)
             {
                 if (sprite != null)
                 {

@@ -1,24 +1,34 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Castle.Core.Internal;
 using DevionGames.InventorySystem;
+using JoyLib.Code;
 using JoyLib.Code.Conversation;
 using JoyLib.Code.Conversation.Conversations;
+using JoyLib.Code.Conversation.Subengines.Rumours.Parameters;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities;
+using JoyLib.Code.Entities.Gender;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Jobs;
 using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Relationships;
+using JoyLib.Code.Entities.Romance;
 using JoyLib.Code.Entities.Sexes;
 using JoyLib.Code.Entities.Sexuality;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
+using JoyLib.Code.Quests;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
+using JoyLib.Code.Unity;
+using JoyLib.Code.Unity.GUI;
 using JoyLib.Code.World;
 using Moq;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.TestTools;
 
 namespace Tests
 {
@@ -30,6 +40,7 @@ namespace Tests
 
         private GameObject gameManager;
         private GameObject conversationWindow;
+        private GameObject inventoryWindow;
         
         private EntityTemplateHandler templateHandler;
 
@@ -43,8 +54,27 @@ namespace Tests
 
         private EntityRelationshipHandler entityRelationshipHandler;
 
+        private EntitySkillHandler skillHandler;
+
         private ObjectIconHandler objectIconHandler;
 
+        private GUIManager guiManager;
+
+        private GameObject inventoryManager;
+
+        private QuestTracker questTracker;
+        private QuestProvider questProvider;
+
+        private ParameterProcessorHandler parameterProcessorHandler;
+
+        private LiveEntityHandler entityHandler;
+        private LiveItemHandler itemHandler;
+
+        private MonoBehaviourHandler instigatorObject;
+        private MonoBehaviourHandler listenerObject;
+
+        private GameObject prefab;
+        
         private Entity instigator;
         private Entity listener;
 
@@ -53,20 +83,53 @@ namespace Tests
         [SetUp]
         public void SetUp()
         {
+            prefab = Resources.Load<GameObject>("Prefabs/MonoBehaviourHandler");
             gameManager = new GameObject("GameManager");
-            gameManager.AddComponent<InventoryManager>();
+
+            GlobalConstants.GameManager = gameManager;
+            
+            inventoryManager = new GameObject();
+            inventoryManager.AddComponent<InventoryManager>();
+            
+            Canvas canvas = new GameObject("Parent").AddComponent<Canvas>();
 
             conversationWindow =
-                GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/GUI/Conversation/Conversation Window"));
+                GameObject.Instantiate(
+                    Resources.Load<GameObject>("Prefabs/GUI/Conversation/Conversation Window"), 
+                    canvas.transform, 
+                    true);
             conversationWindow.name = "Conversation Window";
+
+            inventoryWindow = GameObject.Instantiate(
+                Resources.Load<GameObject>("Prefabs/GUI/Inventory/GUIInventory"), 
+                canvas.transform,
+                true);
+            inventoryWindow.name = "Inventory";
 
             objectIconHandler = gameManager.AddComponent<ObjectIconHandler>();
             templateHandler = gameManager.AddComponent<EntityTemplateHandler>();
             cultureHandler = gameManager.AddComponent<CultureHandler>();
             needHandler = gameManager.AddComponent<NeedHandler>();
+            skillHandler = gameManager.AddComponent<EntitySkillHandler>();
             entityRelationshipHandler = gameManager.AddComponent<EntityRelationshipHandler>();
             materialHandler = gameManager.AddComponent<MaterialHandler>();
             jobHandler = gameManager.AddComponent<JobHandler>();
+            guiManager = gameManager.AddComponent<GUIManager>();
+            itemHandler = gameManager.AddComponent<LiveItemHandler>();
+
+            parameterProcessorHandler = gameManager.AddComponent<ParameterProcessorHandler>();
+
+            questProvider = gameManager.AddComponent<QuestProvider>();
+            questTracker = gameManager.AddComponent<QuestTracker>();
+
+            entityHandler = gameManager.AddComponent<LiveEntityHandler>();
+
+            GameObject conversationGUI =
+                GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/GUI/Conversation/Conversation Window"));
+            conversationGUI.name = "Conversation Window";
+            guiManager.AddGUI(conversationGUI, true, true);
+            guiManager.OpenGUI(conversationGUI.name);
+            guiManager.AddGUI(inventoryWindow);
 
             scriptingEngine = new ScriptingEngine();
 
@@ -78,42 +141,69 @@ namespace Tests
                 "TESTING");
             
             EntityFactory factory = new EntityFactory();
-            
-            Mock<IBioSex> female = new Mock<IBioSex>();
-            female.Setup(sex => sex.Name).Returns("female");
-            
-            List<CultureType> cultures = cultureHandler.GetByCreatureType("human");
-            
-            Mock<ISexuality> sexuality = new Mock<ISexuality>();
-            
-            Mock<IGrowingValue> level = new Mock<IGrowingValue>();
+
+            IBioSex femaleSex = Mock.Of<IBioSex>(sex => sex.Name == "female");
+
+            IGender femaleGender = Mock.Of<IGender>(gender => gender.Name == "female");
+
+            NameData[] namedata = new[]
+            {
+                new NameData("NAME",
+                    new[] {0, 1},
+                    new[] {"male", "female"})
+            };
+
+            List<ICulture> cultures = new List<ICulture>()
+            {
+                Mock.Of<ICulture>(
+                    c => c.GetNameForChain(It.IsAny<int>(), It.IsAny<string>()) == "NAME"
+                    && c.NameData == namedata)
+            };
+
+            IRomance romance = Mock.Of<IRomance>();
+
+            ISexuality sexuality = Mock.Of<ISexuality>(s => s.Tags == new List<string>());
+
+            IGrowingValue level = Mock.Of<IGrowingValue>();
             EntityTemplate humanTemplate = templateHandler.Get("human");
             
             instigator = factory.CreateFromTemplate(
                 humanTemplate,
-                level.Object,
+                level,
                 Vector2Int.zero,
                 cultures,
-                female.Object,
-                sexuality.Object);
+                femaleGender,
+                femaleSex,
+                sexuality,
+                romance);
             
             listener = factory.CreateFromTemplate(
                 humanTemplate,
-                level.Object,
+                level,
                 Vector2Int.zero,
                 cultures,
-                female.Object,
-                sexuality.Object);
+                femaleGender,
+                femaleSex,
+                sexuality,
+                romance);
+
+            instigator.PlayerControlled = true;
             
             world.AddEntity(instigator);
             world.AddEntity(listener);
 
             instigator.MyWorld = world;
             listener.MyWorld = world;
+            
+            instigatorObject = GameObject.Instantiate(prefab).GetComponent<MonoBehaviourHandler>();
+            instigatorObject.AttachJoyObject(instigator);
+            
+            listenerObject = GameObject.Instantiate(prefab).GetComponent<MonoBehaviourHandler>();
+            listenerObject.AttachJoyObject(listener);
         }
 
-        [Test]
-        public void LoadData_ShouldNotBeEmpty()
+        [UnityTest]
+        public IEnumerator LoadData_ShouldNotBeEmpty()
         {
             //given
             
@@ -127,29 +217,51 @@ namespace Tests
                 Assert.That(topic.Words.Length, Is.GreaterThan(0));
                 Assert.That(topic.ID.Length, Is.GreaterThan(0));
             }
-            
-            GameObject.DestroyImmediate(gameManager);
+
+            return null;
         }
 
-        [Test]
-        public void Converse_ShouldCompleteConversation()
+        [UnityTest]
+        public IEnumerator Converse_ShouldCompleteConversation()
         {
             int depth = 0;
             
             target.SetActors(instigator, listener);
-            
-            ITopic[] topics = target.Converse();
-            while (topics.IsNullOrEmpty() == false)
-            {
-                int result = RNG.instance.Roll(0, topics.Length);
-                topics = target.Converse(result);
 
-                depth += 1;
+            ITopic[] baseTopics = target.Converse();
+            bool ended = false;
+            foreach (ITopic topic in baseTopics)
+            {
+                ended = AdvanceToEnd(topic, baseTopics);
             }
 
-            Assert.That(depth, Is.Not.Zero);
-            
+            Assert.That(ended, Is.True);
+
+            return null;
+        }
+
+        private bool AdvanceToEnd(ITopic topic, ITopic[] baseTopics)
+        {
+            ITopic[] nextTopics = target.Converse(topic.ID);
+            if (nextTopics.Intersect(baseTopics).Count() == baseTopics.Length)
+            {
+                return true;
+            }
+            foreach (ITopic next in nextTopics)
+            {
+                AdvanceToEnd(next, baseTopics);
+            }
+
+            return true;
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
             GameObject.DestroyImmediate(gameManager);
+            GameObject.DestroyImmediate(inventoryManager);
+            GameObject.DestroyImmediate(listenerObject.gameObject);
+            GameObject.DestroyImmediate(instigatorObject.gameObject);
         }
     }
 }

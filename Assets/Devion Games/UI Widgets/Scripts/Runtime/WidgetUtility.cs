@@ -40,7 +40,7 @@ namespace DevionGames.UIWidgets
 		{
 
 			List<UIWidget> current = null;
-			if (!widgetCache.TryGetValue(name, out current))
+			if (!widgetCache.TryGetValue(name, out current) || current.Count == 0)
 			{
 				current = new List<UIWidget>();
 				Canvas[] canvas = GameObject.FindObjectsOfType<Canvas>();
@@ -49,7 +49,13 @@ namespace DevionGames.UIWidgets
 					T[] windows = canvas[c].GetComponentsInChildren<T>(true);
 					current.AddRange(windows.Where(x => x.Name == name).OrderByDescending(y => y.priority).Cast<UIWidget>());
 				}
-				widgetCache.Add(name, current);
+				if (!widgetCache.ContainsKey(name))
+				{
+					widgetCache.Add(name, current);
+				}
+				else {
+					widgetCache[name] = current;
+				}
 			}
 			return current.Where(x => typeof(T).IsAssignableFrom(x.GetType())).Cast<T>().ToArray();
 		}

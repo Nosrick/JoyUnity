@@ -29,6 +29,16 @@ namespace JoyLib.Code.Collections
             m_KeyValues.Add(new Tuple<K, T>(key, value));
         }
 
+        public int RemoveByKey(K key)
+        {
+            return m_KeyValues.RemoveAll(tuple => tuple.Item1.Equals(key));
+        }
+
+        public int RemoveByValue(T value)
+        {
+            return m_KeyValues.RemoveAll(tuple => tuple.Item2.Equals(value));
+        }
+
         public bool Remove(K key, T value)
         {
             return m_KeyValues.Remove(new Tuple<K, T>(key, value));

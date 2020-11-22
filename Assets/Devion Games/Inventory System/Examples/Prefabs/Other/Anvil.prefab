@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5157323341887067007}
   - component: {fileID: 5157323341887067004}
   - component: {fileID: 5157323341740066072}
+  - component: {fileID: 7650208012899672282}
   - component: {fileID: 5157323341740066066}
   m_Layer: 0
   m_Name: Anvil
@@ -28,7 +29,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5157323341740066078}
-  m_LocalRotation: {x: -0, y: 0.23597325, z: -0, w: 0.97175956}
+  m_LocalRotation: {x: 0, y: 0.23597325, z: 0, w: 0.97175956}
   m_LocalPosition: {x: 2.8381395, y: -3.9222403, z: 3.0933747}
   m_LocalScale: {x: 0.6344713, y: 0.72172, z: 0.47700644}
   m_Children:
@@ -111,6 +112,21 @@ MonoBehaviour:
   m_DisplayType: 34
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Offset: {x: 0, y: 0.4, z: 0}
+--- !u!114 &7650208012899672282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5157323341740066078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aee479a81ddf78248a87eb09e719d8d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Sprite: {fileID: 21300000, guid: f6293f20fd85aa143bead12afd67ebbb, type: 3}
+  m_Size: {x: 32, y: 32}
+  m_AnimatorState: Cursor
 --- !u!114 &5157323341740066066
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -144,9 +160,9 @@ MonoBehaviour:
   references:
     version: 1
     00000000:
-      type: {class: HasItem, ns: DevionGames.InventorySystem, asm: Assembly-CSharp}
+      type: {class: HasItem, ns: DevionGames.InventorySystem, asm: DevionGames.InventorySystem}
       data:
-        m_Type: 
+        m_Type: DevionGames.InventorySystem.HasItem
         m_Enabled: 1
         requiredItems:
         - item: {fileID: -447126039411374142, guid: 1ae57b994efcab048a1bb130d4e11d83,
@@ -155,32 +171,32 @@ MonoBehaviour:
           stringValue: Equipment
           intValue: 0
     00000001:
-      type: {class: SetEnabled, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: SetEnabled, ns: DevionGames, asm: DevionGames.Triggers}
       data:
-        m_Type: 
+        m_Type: DevionGames.SetEnabled
         m_Enabled: 1
         m_Target: 1
         m_ComponentName: ThirdPersonController
         m_Enable: 0
     00000002:
-      type: {class: ApplyRootMotion, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: ApplyRootMotion, ns: DevionGames, asm: DevionGames.Triggers}
       data:
-        m_Type: 
+        m_Type: DevionGames.ApplyRootMotion
         m_Enabled: 1
         m_Target: 1
         m_Apply: 0
     00000003:
-      type: {class: SetFloat, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: SetFloat, ns: DevionGames, asm: DevionGames.Triggers}
       data:
-        m_Type: 
+        m_Type: DevionGames.SetFloat
         m_Enabled: 1
         m_Target: 1
         m_ParameterName: Forward Input
         m_Value: 1
     00000004:
-      type: {class: MoveTowards, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: MoveTowards, ns: DevionGames, asm: DevionGames.Triggers}
       data:
-        m_Type: 
+        m_Type: DevionGames.MoveTowards
         m_Enabled: 1
         m_Target: 1
         m_Position: {x: 11.94487, y: 0, z: 4.779361}
@@ -188,38 +204,38 @@ MonoBehaviour:
         m_LookAtPosition: 1
         m_UsePath: 1
     00000005:
-      type: {class: SetFloat, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: SetFloat, ns: DevionGames, asm: DevionGames.Triggers}
       data:
-        m_Type: 
+        m_Type: DevionGames.SetFloat
         m_Enabled: 1
         m_Target: 1
         m_ParameterName: Forward Input
         m_Value: 0
     00000006:
-      type: {class: LookAtTrigger, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: LookAtTrigger, ns: DevionGames, asm: DevionGames.Triggers}
       data:
-        m_Type: 
+        m_Type: DevionGames.LookAtTrigger
         m_Enabled: 1
         m_Speed: 5
     00000007:
-      type: {class: ApplyRootMotion, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: ApplyRootMotion, ns: DevionGames, asm: DevionGames.Triggers}
       data:
-        m_Type: 
+        m_Type: DevionGames.ApplyRootMotion
         m_Enabled: 1
         m_Target: 1
         m_Apply: 1
     00000008:
-      type: {class: SetEnabled, ns: DevionGames, asm: Assembly-CSharp}
+      type: {class: SetEnabled, ns: DevionGames, asm: DevionGames.Triggers}
       data:
-        m_Type: 
+        m_Type: DevionGames.SetEnabled
         m_Enabled: 1
         m_Target: 1
         m_ComponentName: ThirdPersonController
         m_Enable: 1
     00000009:
-      type: {class: ShowWindow, ns: DevionGames.InventorySystem, asm: Assembly-CSharp}
+      type: {class: ShowWindow, ns: DevionGames.InventorySystem, asm: DevionGames.InventorySystem}
       data:
-        m_Type: 
+        m_Type: DevionGames.InventorySystem.ShowWindow
         m_Enabled: 1
         m_WindowName: Crafting
         m_DestroyWhenEmpty: 0

@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Conversations>
+    <Name>ListenerThanks</Name>
+    <Line>
+        <Text>Uh, thanks?</Text>
+        <Condition>Relationship &lt; 0</Condition>
+        <Priority>1</Priority>
+        <Next>BaseTopics</Next>
+        <Speaker>listener</Speaker>
+    </Line>
+    <Line>
+        <Text>Thank you kindly.</Text>
+        <Condition>Relationship &lt; 50</Condition>
+        <Priority>0</Priority>
+        <Next>BaseTopics</Next>
+        <Speaker>listener</Speaker>
+    </Line>
+    <Line>
+        <Text>Thanks, friend.</Text>
+        <Condition>Relationship &gt; 49</Condition>
+        <Priority>2</Priority>
+        <Next>BaseTopics</Next>
+        <Speaker>listener</Speaker>
+    </Line>
+    <Line>
+        <Text>Thanks, love.</Text>
+        <Condition>Relationship = Romantic</Condition>
+        <Priority>3</Priority>
+        <Next>BaseTopics</Next>
+        <Speaker>listener</Speaker>
+    </Line>
+</Conversations>

@@ -16,13 +16,19 @@
   <Line>
     <Text>Do you have anything to trade?</Text>
     <Processor>TradeProcessor</Processor>
-    <Next>TradeDialogue</Next>
+    <Next>TradeTopic</Next>
     <Speaker>instigator</Speaker>
   </Line>
   <Line>
     <Text>Is there anything I can do for you?</Text>
     <Processor>TaskProcessor</Processor>
-    <Next>TaskDialogue</Next>
+    <Next>TaskTopic</Next>
+    <Speaker>instigator</Speaker>
+  </Line>
+  <Line>
+    <Text>I have something for you.</Text>
+    <Processor>GiftProcessor</Processor>
+    <Next>ListenerThanks</Next>
     <Speaker>instigator</Speaker>
   </Line>
   <Line>
@@ -32,10 +38,18 @@
     <Speaker>instigator</Speaker>
   </Line>
   <Line>
+    <Text>Would you be my partner?</Text>
+    <Processor>RomanticProposalProcessor</Processor>
+    <Condition>Relationship ! Romantic</Condition>
+    <Next>RomanticProposal</Next>
+    <Speaker>instigator</Speaker>
+  </Line>
+  <Line>
     <Text>Would you do me the honour of becoming my spouse?</Text>
     <Condition>Relationship = Romantic</Condition>
-    <Processor>MarriageProposalProcessor</Processor>
-    <Next>MarriageProposal</Next>
+    <Condition>Relationship ! Bonded</Condition>
+    <Processor>BondingProposalProcessor</Processor>
+    <Next>BondingProposal</Next>
     <Speaker>instigator</Speaker>
   </Line>
   <Line>

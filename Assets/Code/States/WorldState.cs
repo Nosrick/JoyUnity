@@ -1,21 +1,19 @@
 ﻿using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Abilities;
-using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.IO;
 using JoyLib.Code.Physics;
-using JoyLib.Code.Quests;
 using JoyLib.Code.States.Gameplay;
 using JoyLib.Code.World;
 using System;
-using DevionGames.InventorySystem;
+using System.Collections;
 using DevionGames.UIWidgets;
 using JoyLib.Code.Conversation;
 using JoyLib.Code.Unity;
 using JoyLib.Code.Unity.GUI;
 using UnityEngine;
-using TMPro;
+using ContextMenu = DevionGames.UIWidgets.ContextMenu;
 using EquipmentHandler = JoyLib.Code.Unity.GUI.EquipmentHandler;
 
 namespace JoyLib.Code.States
@@ -46,11 +44,17 @@ namespace JoyLib.Code.States
         protected PhysicsManager m_PhysicsManager;
         protected EntityRelationshipHandler m_RelationshipHandler;
         protected ConversationEngine m_ConversationEngine;
+        
+        protected IEnumerator TickTimer { get; set; }
+        
+        protected IJoyObject PrimaryTarget { get; set; }
 
         private const string NEEDSRECT = "NeedsRect";
         private const string INVENTORY = "Inventory";
         private const string EQUIPMENT = "Equipment";
         private const string CONVERSATION = "Conversation Window";
+        private const string CONTEXT_MENU = "Context Menu";
+        private const string TRADE = "Trade";
 
         protected static bool SetUpGUI
         {
@@ -75,6 +79,9 @@ namespace JoyLib.Code.States
             m_RelationshipHandler = m_GameManager.GetComponent<EntityRelationshipHandler>();
             m_ConversationEngine = m_GameManager.GetComponent<ConversationEngine>();
             s_GUIManager = m_GameManager.GetComponent<GUIManager>();
+
+            TickTimer = TickEvent();
+            m_GameManager.GetComponent<MonoBehaviour>().StartCoroutine(TickTimer);
         }
 
         public override void LoadContent()
@@ -92,11 +99,15 @@ namespace JoyLib.Code.States
                 GameObject inventoryGUIPrefab = GameObject.Find(INVENTORY);
                 GameObject equipmentGUIPrefab = GameObject.Find(EQUIPMENT);
                 GameObject conversationWindow = GameObject.Find(CONVERSATION);
+                GameObject contextMenu = GameObject.Find(CONTEXT_MENU);
+                GameObject tradeWindow = GameObject.Find(TRADE);
     
                 s_GUIManager.AddGUI(needsGUIPrefab, false, false);
                 s_GUIManager.AddGUI(inventoryGUIPrefab, true, false);
                 s_GUIManager.AddGUI(equipmentGUIPrefab, true, false);
                 s_GUIManager.AddGUI(conversationWindow, true, true);
+                s_GUIManager.AddGUI(contextMenu, false, false);
+                s_GUIManager.AddGUI(tradeWindow, true, true);
 
                 SetUpGUI = true;
             }
@@ -114,7 +125,7 @@ namespace JoyLib.Code.States
             m_ActiveWorld.Player.UpdateMe();
             m_GameplayFlags = GameplayFlags.Moving;
 
-            SetEntityWorld(overworld);
+            SetEntityWorld(Overworld);
 
             SetUpUi();
         }
@@ -144,11 +155,13 @@ namespace JoyLib.Code.States
 
             WorldInstance oldWorld = m_ActiveWorld;
             Entity player = oldWorld.Player;
-            m_ActiveWorld.RemoveEntity(player.WorldPosition);
 
+            player.FetchAction("enterworldaction")
+                .Execute(
+                    new IJoyObject[] {player},
+                    new[] {"exploration", "world change"},
+                    new object[] {newWorld});
             m_ActiveWorld = newWorld;
-            m_ActiveWorld.AddEntity(player);
-            player.MyWorld = m_ActiveWorld;
 
             player = m_ActiveWorld.Player;
 
@@ -156,38 +169,77 @@ namespace JoyLib.Code.States
             player.UpdateMe();
 
             m_GameplayFlags = GameplayFlags.Moving;
-
-            QuestTracker.PerformExploration(player, newWorld);
             Tick();
         }
 
-        public static void TalkToPlayer(Entity entityRef)
+        protected IEnumerator TickEvent()
         {
+            while (true)
+            {
+                yield return new WaitForSeconds(0.2f);
+                if (AutoTurn)
+                {
+                    Tick();
+                }
+            }
         }
 
-        protected void SetToAttack(object sender, EventArgs e)
+        protected void SetUpContextMenu()
         {
-            m_GameplayFlags = GameplayFlags.Attacking;
+            ContextMenu contextMenu = s_GUIManager.GetGUI(CONTEXT_MENU).GetComponent<ContextMenu>();
+
+            contextMenu.Clear();
+
+            if (PrimaryTarget.GUID == m_ActiveWorld.Player.GUID)
+            {
+                
+            }
+            else
+            {
+                if (AdjacencyHelper.IsAdjacent(m_ActiveWorld.Player.WorldPosition, PrimaryTarget.WorldPosition))
+                {
+                    contextMenu.AddMenuItem("Talk", TalkToPlayer);
+                }
+                else
+                {
+                    contextMenu.AddMenuItem("Call Over", CallOver);
+                }
+            }
+
+            if (contextMenu.GetComponentsInChildren<MenuItem>(true).Length > 1)
+            {
+                s_GUIManager.OpenGUI(CONTEXT_MENU);
+                contextMenu.Show();
+            }
         }
 
-        protected void InteractWithCreature(object sender, EventArgs e)
+        protected void TalkToPlayer()
         {
+            if (!(PrimaryTarget is Entity entity))
+            {
+                return;
+            }
+
+            ContextMenu contextMenu = s_GUIManager.GetGUI(CONTEXT_MENU).GetComponent<ContextMenu>();
+            s_GUIManager.CloseGUI(CONTEXT_MENU);
+            contextMenu.Close();
+            s_GUIManager.OpenGUI(CONVERSATION);
+            m_ConversationEngine.SetActors(m_ActiveWorld.Player, entity);
+            m_ConversationEngine.Converse();
         }
 
-        protected void GiftToCreature(object sender, EventArgs e)
+        protected void CallOver()
         {
-        }
+            if (!(PrimaryTarget is Entity entity))
+            {
+                return;
+            }
 
-        protected void OpenInventory(object sender, EventArgs e)
-        {
-        }
-
-        protected void OpenCharacterSheet(object sender, EventArgs e)
-        {
-        }
-
-        protected void SetToThrow(object sender, EventArgs e)
-        {
+            entity.FetchAction("seekaction")
+                .Execute(
+                new IJoyObject[] {entity, m_ActiveWorld.Player},
+                new[] {"call over"},
+                new object[] {"friendship"});
         }
 
         public override void HandleInput()
@@ -197,6 +249,17 @@ namespace JoyLib.Code.States
             bool hasMoved = false;
 
             Entity player = m_ActiveWorld.Player;
+
+            if (Input.GetKeyUp(KeyCode.Space))
+            {
+                ManualAutoTurn = !ManualAutoTurn;
+                AutoTurn = !AutoTurn;
+            }
+
+            if (AutoTurn)
+            {
+                return;
+            }
 
             /*
             if (m_Input.currentMouseState.ScrollWheelValue > m_Input.lastMouseState.ScrollWheelValue)
@@ -244,7 +307,6 @@ namespace JoyLib.Code.States
                 autoTurn = true;
             }
             */
-
             if (Input.GetKeyDown(KeyCode.I))
             {
                 s_GUIManager.ToggleGUI(INVENTORY);
@@ -263,9 +325,13 @@ namespace JoyLib.Code.States
                 {
                     //TODO: Make a targeting system or something
                     Entity listener = this.m_ActiveWorld.GetRandomSentient();
-                    s_GUIManager.OpenGUI(CONVERSATION);
-                    m_ConversationEngine.SetActors(this.playerWorld.Player, listener);
-                    m_ConversationEngine.Converse();   
+
+                    if (!(listener is null))
+                    {
+                        s_GUIManager.OpenGUI(CONVERSATION);
+                        m_ConversationEngine.SetActors(this.PlayerWorld.Player, listener);
+                        m_ConversationEngine.Converse(); 
+                    }
                 }
             }
 
@@ -274,7 +340,21 @@ namespace JoyLib.Code.States
                 return;
             }
 
-            if (Input.GetKeyDown(KeyCode.Return))
+
+            if (Input.GetMouseButtonUp(1))
+            {
+                Vector3 temp = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                Vector2Int position = new Vector2Int((int)Math.Ceiling(temp.x), (int)Math.Ceiling(temp.y));
+
+                PrimaryTarget = m_ActiveWorld.GetEntity(position);
+                if (PrimaryTarget is null)
+                {
+                    return;
+                }
+                
+                SetUpContextMenu();
+            }
+            else if (Input.GetKeyDown(KeyCode.Return))
             {
                 //Going up a level
                 if (m_ActiveWorld.Parent != null && player.WorldPosition == m_ActiveWorld.SpawnPoint && !player.HasMoved)
@@ -430,15 +510,13 @@ namespace JoyLib.Code.States
                     Entity tempEntity = m_ActiveWorld.GetEntity(newPlayerPoint);
                     if (m_GameplayFlags == GameplayFlags.Interacting)
                     {
-                        if(tempEntity.Sentient)
-                            TalkToPlayer(tempEntity);
                     }
                     else if (m_GameplayFlags == GameplayFlags.Giving)
                     {
                     }
                     else if (m_GameplayFlags == GameplayFlags.Moving)
                     {
-                        playerWorld.SwapPosition(player, tempEntity);
+                        PlayerWorld.SwapPosition(player, tempEntity);
                         Tick();
                     }
                     else if(m_GameplayFlags == GameplayFlags.Attacking)
@@ -447,7 +525,7 @@ namespace JoyLib.Code.States
                         {
                             //TODO: REDO COMBAT ENGINE
                             //CombatEngine.SwingWeapon(player, tempEntity);
-                            IRelationship[] relationships = m_RelationshipHandler.Get(new long[] { tempEntity.GUID, player.GUID });
+                            IRelationship[] relationships = m_RelationshipHandler.Get(new JoyObject[] { tempEntity, player });
                             foreach(IRelationship relationship in relationships)
                             {
                                 relationship.ModifyValueOfParticipant(player.GUID, tempEntity.GUID, -50);
@@ -510,27 +588,12 @@ namespace JoyLib.Code.States
                     }
                 }
             }
-
-            if(autoTurn)
-            {
-                Tick();
-            }
             m_Camera.transform.position = new Vector3(player.WorldPosition.x, player.WorldPosition.y, m_Camera.transform.position.z);
-        }
-
-        public static void HandBack(IAbility abilityRef)
-        {
-            /*
-            s_GameplayFlags = GameplayFlags.Targeting;
-            s_ActiveWorld.player.targetingAbility = abilityRef;
-            s_ActiveWorld.player.targetPoint = s_ActiveWorld.player.position;
-            */
         }
 
         protected void Tick()
         {
             m_ActiveWorld.Tick();
-            m_ActiveWorld.Update();
             
             /*
             for (int i = 0; i < s_ActiveWorld.entities.Count; i++)
@@ -552,7 +615,7 @@ namespace JoyLib.Code.States
             base.OnGui();
 
             GameObject needsText = s_GUIManager.GetGUI("NeedsText");
-            needsText.GetComponent<TextMeshProUGUI>();
+            //needsText.GetComponent<TextMeshProUGUI>();
         }
 
         public override void Draw()
@@ -599,6 +662,17 @@ namespace JoyLib.Code.States
 
         public override void Update()
         {
+            Entity player = m_ActiveWorld.Player;
+            
+            if (!AutoTurn && player.FulfillmentData.Counter > 0)
+            {
+                AutoTurn = true;
+            }
+            else if (AutoTurn && player.FulfillmentData.Counter <= 0 && !ManualAutoTurn)
+            {
+                AutoTurn = false;
+            }
+            
             base.Update();
             DrawObjects();
         }
@@ -615,38 +689,33 @@ namespace JoyLib.Code.States
 
         public override GameState GetNextState()
         {
+            m_GameManager.GetComponent<MonoBehaviour>().StopCoroutine(TickTimer);
             return new WorldDestructionState(m_Overworld, m_ActiveWorld);
         }
 
-        public WorldInstance overworld
-        {
-            get
-            {
-                return m_Overworld;
-            }
-        }
+        public WorldInstance Overworld => m_Overworld;
 
-        public WorldInstance playerWorld
-        {
-            get
-            {
-                return m_ActiveWorld;
-            }
-        }
+        public WorldInstance PlayerWorld => m_ActiveWorld;
 
-        private int tickCounter
+        protected int TickCounter
         {
             get;
             set;
         }
 
-        private bool autoTurn
+        protected bool AutoTurn
         {
             get;
             set;
         }
 
-        protected bool expandConsole
+        protected bool ManualAutoTurn
+        {
+            get;
+            set;
+        }
+
+        protected bool ExpandConsole
         {
             get;
             set;

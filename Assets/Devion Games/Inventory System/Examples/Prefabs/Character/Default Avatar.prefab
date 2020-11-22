@@ -3940,7 +3940,6 @@ GameObject:
   - component: {fileID: 6874675272001939284}
   - component: {fileID: 6874675272001939285}
   - component: {fileID: 6874675272001939286}
-  - component: {fileID: 6874675272001939290}
   - component: {fileID: 6874675272001939288}
   - component: {fileID: 2528819391161695290}
   m_Layer: 9
@@ -4756,36 +4755,6 @@ MonoBehaviour:
   m_State: Push
   m_CameraPreset: Default
   m_Distance: 0.5
---- !u!114 &6874675272001939290
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6874675272001939313}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18135c67df91bfe49aecaf565168592d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  delegates: []
-  useDistance: 2
-  triggerType: 2
-  key: 111
-  actions:
-  - id: 0
-  m_RequiredIngredientsWindow: Inventory
-  m_ResultStorageWindow: Inventory
-  m_CraftingProgressbar: CraftingProgress
-  references:
-    version: 1
-    00000000:
-      type: {class: ShowWindow, ns: DevionGames.InventorySystem, asm: Assembly-CSharp}
-      data:
-        m_Type: 
-        m_Enabled: 1
-        m_WindowName: Crafting Global
-        m_DestroyWhenEmpty: 0
 --- !u!114 &6874675272001939288
 MonoBehaviour:
   m_ObjectHideFlags: 0

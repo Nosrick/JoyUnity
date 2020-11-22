@@ -5,14 +5,16 @@ using JoyLib.Code.Helpers;
 
 namespace JoyLib.Code.Scripting.Actions
 {
-    public class FulfillNeedAction : IJoyAction
+    public class FulfillNeedAction : AbstractAction
     {
-        public string Name => "fulfillneedaction";
+        public override string Name => "fulfillneedaction";
 
-        public string ActionString => "fulfilling need";
+        public override string ActionString => "fulfilling need";
 
-        public bool Execute(JoyObject[] participants, string[] tags = null, params object[] args)
+        public override bool Execute(IJoyObject[] participants, string[] tags = null, params object[] args)
         {
+            ClearLastParameters();
+            
             if(!(participants[0] is Entity actor))
             {
                 return false;
@@ -32,7 +34,7 @@ namespace JoyLib.Code.Scripting.Actions
 
             bool doAll = args.Length < 4 ? false : (bool) args[3];
 
-            JoyObject[] fellowActors = participants.Where(p => p.GUID != actor.GUID).ToArray();
+            IJoyObject[] fellowActors = participants.Where(p => p.GUID != actor.GUID).ToArray();
             
             actor.Needs[need].Fulfill(value);
             actor.FulfillmentData = new Entities.Needs.FulfillmentData(need, counter, fellowActors);
@@ -43,7 +45,7 @@ namespace JoyLib.Code.Scripting.Actions
                 {
                     if (jo is Entity entity)
                     {
-                        JoyObject[] others = participants.Where(p => p.GUID != entity.GUID).ToArray();
+                        IJoyObject[] others = participants.Where(p => p.GUID != entity.GUID).ToArray();
                         entity.Needs[need].Fulfill(value);
                         actor.FulfillmentData = new Entities.Needs.FulfillmentData(need, counter, others);
                     }
@@ -51,6 +53,8 @@ namespace JoyLib.Code.Scripting.Actions
             }
 
             ActionLog.instance.LogAction(actor, ActionString + need);
+            
+            SetLastParameters(participants, tags, args);
 
             return true;
         }

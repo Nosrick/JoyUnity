@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace DevionGames
 {
+    [UnityEngine.Scripting.APIUpdating.MovedFromAttribute(true, null, "Assembly-CSharp")]
     [Icon(typeof(Animator))]
     [ComponentMenu("Animator/CrossFade")]
     public class CrossFade : Action

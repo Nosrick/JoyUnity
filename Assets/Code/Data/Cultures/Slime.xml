@@ -38,6 +38,13 @@
 				<Chance>5</Chance>
 			</Sexuality>
 		</Sexualities>
+		
+		<Romances>
+			<Romance>
+				<Name>aromantic</Name>
+				<Chance>100</Chance>
+			</Romance>
+		</Romances>
 
 		<Sexes>
 			<Sex>
@@ -45,6 +52,13 @@
 				<Chance>100</Chance>
 			</Sex>
 		</Sexes>
+
+		<Genders>
+			<Gender>
+				<Name>neutral</Name>
+				<Chance>100</Chance>
+			</Gender>
+		</Genders>
 
 		<Jobs>
 			<Job>
@@ -63,37 +77,43 @@
 		<Names>
 			<NameData>
 				<Name>Glorp</Name>
-				<Sex>neutral</Sex>
+				<Sex>all</Sex>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Blip</Name>
-				<Sex>neutral</Sex>
+				<Sex>all</Sex>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Slorp</Name>
-				<Sex>neutral</Sex>
+				<Sex>all</Sex>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Glurg</Name>
-				<Sex>neutral</Sex>
+				<Sex>all</Sex>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>The</Name>
-				<Sex>neutral</Sex>
+				<Sex>all</Sex>
+				<Chain>1</Chain>
+			</NameData>
+			
+			<NameData>
+				<Name>Von</Name>
+				<Sex>all</Sex>
 				<Chain>1</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Slimy</Name>
-				<Sex>neutral</Sex>
+				<Sex>all</Sex>
 				<Chain>2</Chain>
 			</NameData>
 		</Names>

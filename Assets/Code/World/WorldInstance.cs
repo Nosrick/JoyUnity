@@ -35,8 +35,8 @@ namespace JoyLib.Code.World
 
         protected List<Entity> m_Entities;
         
-        protected List<JoyObject> m_Objects;
-        protected Dictionary<Vector2Int, JoyObject> m_Walls;
+        protected List<IJoyObject> m_Objects;
+        protected Dictionary<Vector2Int, IJoyObject> m_Walls;
         
         protected Vector2Int m_SpawnPoint;
 
@@ -73,8 +73,8 @@ namespace JoyLib.Code.World
             m_Tiles = tiles;
             m_Areas = new Dictionary<Vector2Int, WorldInstance>();
             m_Entities = new List<Entity>();
-            m_Objects = new List<JoyObject>();
-            m_Walls = new Dictionary<Vector2Int, JoyObject>();
+            m_Objects = new List<IJoyObject>();
+            m_Walls = new Dictionary<Vector2Int, IJoyObject>();
             GUID = GUIDManager.Instance.AssignGUID();
             m_Discovered = new bool[m_Tiles.GetLength(0), m_Tiles.GetLength(1)];
             m_Light = new int[m_Tiles.GetLength(0), m_Tiles.GetLength(1)];
@@ -104,7 +104,7 @@ namespace JoyLib.Code.World
         /// <param name="tags"></param>
         /// <param name="name"></param>
         public WorldInstance(WorldTile[,] tiles, Dictionary<Vector2Int, WorldInstance> areas, List<Entity> entities,
-            List<JoyObject> objects, Dictionary<Vector2Int, JoyObject> walls, string[] tags, string name)
+            List<IJoyObject> objects, Dictionary<Vector2Int, IJoyObject> walls, string[] tags, string name)
         {
             this.Name = name;
             this.m_Tags = tags;
@@ -160,7 +160,7 @@ namespace JoyLib.Code.World
             m_Light = new int[m_Light.GetLength(0), m_Light.GetLength(1)];
 
             //Do objects first
-            List<JoyObject> objects = m_Objects.ToList();
+            List<IJoyObject> objects = new List<IJoyObject>(m_Objects);
 
             for(int i = 0; i < objects.Count; i++)
             {
@@ -303,37 +303,23 @@ namespace JoyLib.Code.World
 
         public bool RemoveObject(Vector2Int positionRef, ItemInstance itemRef)
         {
-            List<long> objectGUIDs = new List<long>();
             bool removed = false;
-            for (int i = 0; i < m_Objects.Count; i++)
-            {
-                if (m_Objects[i].WorldPosition == positionRef && itemRef.GUID == m_Objects[i].GUID)
-                {
-                    objectGUIDs.Add(m_Objects[i].GUID);
-                    m_Objects.RemoveAt(i);
-                    IsDirty = true;
-                    removed = true;
-                    break;
-                }
-            }
+            IJoyObject seek = m_Objects.First(obj => obj.WorldPosition.Equals(positionRef) && itemRef.GUID.Equals(obj.GUID));
+            removed = m_Objects.Remove(seek);
 
-            for(int i = 0; i < m_ObjectHolder.transform.childCount; i++)
+            if (removed)
             {
-                GameObject temp = m_ObjectHolder.transform.GetChild(i).gameObject;
-                for (int j = 0; j < objectGUIDs.Count; j++)
-                {
-                    if (temp.name.Contains(objectGUIDs[j].ToString()))
-                    {
-                        GameObject.Destroy(temp);
-                        break;
-                    }
-                }
+                IsDirty = true;
+
+                seek.MyWorld = null;
+
+                itemRef.Move(new Vector2Int(-1, -1));
             }
 
             return removed;
         }
 
-        public JoyObject GetObject(Vector2Int WorldPosition)
+        public IJoyObject GetObject(Vector2Int WorldPosition)
         {
             for(int i = 0; i < m_Objects.Count; i++)
             {
@@ -356,41 +342,42 @@ namespace JoyLib.Code.World
             {
                 s_DateTime = s_DateTime.AddHours(1.0);
             }
-        }
-
-        public void Update()
-        {
-            //CalculateLightLevels();
 
             foreach (Entity entity in m_Entities)
             {
-                 entity.Tick();
+                string[] names = m_Entities.Select(entity1 => entity1.JoyName).ToArray();
+                foreach (string name in names)
+                {
+                    Debug.Log(name);
+                }
+                Debug.Log("TICKING: " + entity.JoyName);
+                entity.Tick();
             }
 
             IsDirty = false;
         }
 
         /// <summary>
-        /// TODO: REDO THIS
+        /// Searches for any objects that match the tags specified, which the entity can see.
         /// </summary>
         /// <param name="entityRef"></param>
         /// <param name="objectType"></param>
         /// <param name="intentRef"></param>
         /// <returns></returns>
-        public IEnumerable<JoyObject> SearchForObjects(Entity entityRef, IEnumerable<string> tags)
+        public IEnumerable<IJoyObject> SearchForObjects(Entity entityRef, IEnumerable<string> tags)
         {
-            List<JoyObject> data = new List<JoyObject>();
+            List<IJoyObject> data = new List<IJoyObject>();
 
             if (entityRef.Vision.GetLength(0) == 1)
             {
                 return data;
             }
 
-            List<JoyObject> inSight = m_Objects.Where(obj => entityRef.VisionProvider.CanSee(entityRef, this, obj.WorldPosition) == true).ToList();
-            foreach(JoyObject obj in inSight)
+            List<IJoyObject> inSight = m_Objects.Where(obj => entityRef.VisionProvider.CanSee(entityRef, this, obj.WorldPosition) == true).ToList();
+            foreach(IJoyObject obj in inSight)
             {
                 IEnumerable<string> intersect = obj.Tags.Intersect(tags);
-                if(intersect.SequenceEqual(tags))
+                if(tags.Any() == false || intersect.SequenceEqual(tags))
                 {
                     data.Add(obj);
                 }
@@ -424,20 +411,19 @@ namespace JoyLib.Code.World
         public Entity GetRandomSentient()
         {
             List<Entity> sentients = m_Entities.Where(x => x.Sentient).ToList();
-            if (sentients.Count > 0)
-                return sentients[RNG.instance.Roll(0, sentients.Count - 1)];
-            else
-                return null;
+            sentients = sentients.Where(entity => entity.GUID.Equals(Player.GUID) == false).ToList();
+            
+            return sentients.Count > 0 ? sentients[RNG.instance.Roll(0, sentients.Count)] : null;
         }
 
         public Entity GetRandomSentientWorldWide()
         {
             List<WorldInstance> worlds = GetWorlds(GetOverworld());
-            int result = RNG.instance.Roll(0, worlds.Count - 1);
+            int result = RNG.instance.Roll(0, worlds.Count);
             Entity entity = worlds[result].GetRandomSentient();
             while (entity == null)
             {
-                result = RNG.instance.Roll(0, worlds.Count - 1);
+                result = RNG.instance.Roll(0, worlds.Count);
                 entity = worlds[result].GetRandomSentient();
             }
             return entity;
@@ -510,11 +496,21 @@ namespace JoyLib.Code.World
 
         public ItemInstance PickUpObject(Entity entityRef)
         {
-            ItemInstance item = (ItemInstance)GetObject(entityRef.WorldPosition);
-            if (item != null)
+            if (GetObject(entityRef.WorldPosition) is ItemInstance item)
             {
-                item.OwnerGUID = entityRef.GUID;
-                entityRef.AddContents(item);
+                List<string> tags = new List<string> {"pick up"};
+                bool newOwner = true;
+                if (item.Owner != default && item.Owner != entityRef.GUID)
+                {
+                    tags.Add("theft");
+                    newOwner = false;
+                }
+
+                entityRef.FetchAction("additemaction")
+                    .Execute(new IJoyObject[] {entityRef, item},
+                        tags.ToArray(),
+                        new object[] {newOwner});
+                
                 m_Objects.Remove(item);
 
                 return item;
@@ -642,6 +638,8 @@ namespace JoyLib.Code.World
 
             CalculatePlayerIndex();
             IsDirty = true;
+
+            entityRef.MyWorld = this;
         }
 
         public void RemoveEntity(Vector2Int positionRef)
@@ -674,14 +672,7 @@ namespace JoyLib.Code.World
 
         public Entity GetEntity(Vector2Int positionRef)
         {
-            for (int i = 0; i < m_Entities.Count; i++)
-            {
-                if (m_Entities[i].WorldPosition.Equals(positionRef))
-                {
-                    return m_Entities[i];
-                }
-            }
-            return null;
+            return m_Entities.FirstOrDefault(t => t.WorldPosition.Equals(positionRef));
         }
 
         public Sector GetSectorFromPoint(Vector2Int point)
@@ -785,9 +776,9 @@ namespace JoyLib.Code.World
             }
         }
 
-        public Dictionary<Vector2Int, JoyObject> GetObjectsOfType(string[] tags)
+        public Dictionary<Vector2Int, IJoyObject> GetObjectsOfType(string[] tags)
         {
-            Dictionary<Vector2Int, JoyObject> objects = new Dictionary<Vector2Int, JoyObject>();
+            Dictionary<Vector2Int, IJoyObject> objects = new Dictionary<Vector2Int, IJoyObject>();
             foreach (JoyObject joyObject in m_Objects)
             {
                 int matches = 0;
@@ -798,7 +789,7 @@ namespace JoyLib.Code.World
                         matches++;
                     }
                 }
-                if(matches == tags.Length || (tags.Length < joyObject.TotalTags && matches > 0))
+                if(matches == tags.Length || (tags.Length < joyObject.Tags.Count && matches > 0))
                 {
                     objects.Add(joyObject.WorldPosition, joyObject);
                 }
@@ -810,44 +801,6 @@ namespace JoyLib.Code.World
         {
             value.Parent = this;
             m_Areas.Add(key, value);
-        }
-
-        public string GetLocalAreaInfo(Entity entityRef)
-        {
-            if (HasTag("interior"))
-            {
-                int result = RNG.instance.Roll(0, 100);
-                if (result <= 50)
-                {
-                    int numberOfLevels = 1;
-                    numberOfLevels = WorldConversationDataHelper.GetNumberOfFloors(numberOfLevels, this);
-
-                    if (numberOfLevels == 1)
-                    {
-                        return "This place only has " + numberOfLevels + " floor to it.";
-                    }
-                    else
-                    {
-                        return "This place has at least " + numberOfLevels + " floors.";
-                    }
-                }
-                else if (result > 50)
-                {
-                    int exactNumber = WorldConversationDataHelper.GetNumberOfCreatures(entityRef.CreatureType, this);
-                    int roughNumber = 0;
-                    if (exactNumber % 10 < 6)
-                    {
-                        roughNumber = exactNumber - (exactNumber % 10);
-                    }
-                    else
-                    {
-                        roughNumber = exactNumber + (exactNumber % 10);
-                    }
-                    return "There are around " + roughNumber + " " + entityRef.CreatureType + "s here.";
-                }
-            }
-
-            return "I don't know much about this place, sorry.";
         }
 
         public bool HasTag(string tag)
@@ -871,7 +824,7 @@ namespace JoyLib.Code.World
             }
         }
 
-        public List<JoyObject> Objects
+        public List<IJoyObject> Objects
         {
             get
             {
@@ -879,7 +832,7 @@ namespace JoyLib.Code.World
             }
         }
 
-        public Dictionary<Vector2Int, JoyObject> Walls
+        public Dictionary<Vector2Int, IJoyObject> Walls
         {
             get
             {

@@ -3,17 +3,21 @@ using JoyLib.Code.Conversation.Conversations;
 using JoyLib.Code.Entities;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Xml.Linq;
 using Castle.Core.Internal;
 using DevionGames;
+using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.Unity.GUI;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using MenuItem = DevionGames.UIWidgets.MenuItem;
 
@@ -25,7 +29,7 @@ namespace JoyLib.Code.Conversation
         protected List<ITopic> m_CurrentTopics;
 
         [SerializeField]
-        protected GameObject s_Window;
+        protected GameObject m_Window;
 
         protected GUIManager GUIManager
         {
@@ -57,10 +61,22 @@ namespace JoyLib.Code.Conversation
             set;
         }
 
+        protected TextMeshProUGUI LastSpokeName
+        {
+            get;
+            set;
+        }
+
+        protected RectTransform ListenerSection
+        {
+            get;
+            set;
+        }
+
         protected GameObject Window
         {
-            get => s_Window;
-            set => s_Window = value;
+            get => m_Window;
+            set => m_Window = value;
         }
 
         protected GameObject MenuItem
@@ -69,32 +85,46 @@ namespace JoyLib.Code.Conversation
             set;
         }
 
-        protected Entity Instigator
+        public Entity Instigator
         {
             get;
-            set;
+            protected set;
         }
 
-        protected Entity Listener
+        public Entity Listener
+        {
+            get;
+            protected set;
+        }
+
+        protected RectTransform TitleRect
         {
             get;
             set;
         }
+        
+        protected EntityRelationshipHandler RelationshipHandler { get; set; }
 
         public void Awake()
         {
             if (m_Topics is null)
             {
+                RelationshipHandler = GameObject.Find("GameManager").GetComponent<EntityRelationshipHandler>();
+                
                 m_Topics = LoadTopics();
                 
                 m_CurrentTopics = new List<ITopic>();
 
                 Window = Window is null ? GameObject.Find("Conversation Window") : Window;
 
-                Transform title = Window.FindChild("Title", true).transform;
-                LastSaidGUI = title.GetComponentInChildren<TextMeshProUGUI>();
-                LastSpokeIcon = title.GetComponentInChildren<Image>();
-                MenuItem = Window.FindChild("Menu Item", true);
+                Transform title = Window.FindChild("Conversation Title", true).transform;
+                TitleRect = title.GetComponent<RectTransform>();
+                ListenerSection = TitleRect.gameObject.transform.Find("Listener Section").GetComponent<RectTransform>();
+                LastSaidGUI = title.Find("Last Said").GetComponent<TextMeshProUGUI>();
+                Transform listenerSection = title.Find("Listener Section");
+                LastSpokeName = listenerSection.Find("Listener Name").GetComponent<TextMeshProUGUI>();
+                LastSpokeIcon = listenerSection.Find("Listener Icon").GetComponent<Image>();
+                MenuItem = Window.FindChild("Topic Item", true);
                 
                 MenuList = new List<ConversationMenu>();
 
@@ -152,8 +182,7 @@ namespace JoyLib.Code.Conversation
                         {
                             try
                             {
-                                Type type = ScriptingEngine.instance.FetchType(processor);
-                                ITopic processorObject = (ITopic) Activator.CreateInstance(type);
+                                ITopic processorObject = (ITopic)ScriptingEngine.instance.FetchAndInitialise(processor);
                                 processorObject.Initialise(
                                     conditions.ToArray(),
                                     topicName,
@@ -197,8 +226,9 @@ namespace JoyLib.Code.Conversation
                 catch (Exception e)
                 {
                     ActionLog.instance.AddText("Could not load conversations from file " + file);
-                    ActionLog.instance.AddText(e.Message);
-                    ActionLog.instance.AddText(e.StackTrace);
+                    Debug.LogWarning("Could not load conversations from file " + file);
+                    Debug.LogWarning(e.Message);
+                    Debug.LogWarning(e.StackTrace);
                 }
             }
 
@@ -244,18 +274,43 @@ namespace JoyLib.Code.Conversation
             Listener = listener;
 
             LastSpokeIcon.sprite = Listener.Icon;
+
+            try
+            {
+                IRelationship[] relationships = RelationshipHandler.Get(new IJoyObject[] {Instigator, Listener});
+
+                IRelationship chosenRelationship = null;
+                int best = Int32.MinValue;
+                foreach (IRelationship relationship in relationships)
+                {
+                    if (relationship.HasTag("romantic"))
+                    {
+                        chosenRelationship = relationship;
+                        break;
+                    }
+                    
+                    int value = relationship.GetRelationshipValue(Instigator.GUID, Listener.GUID);
+                    if (value > best)
+                    {
+                        best = value;
+                        chosenRelationship = relationship;
+                    }
+                }
+                
+                LastSpokeName.text = Listener.JoyName + ", " + chosenRelationship.DisplayName;
+            }
+            catch (Exception e)
+            {
+                LastSpokeName.text = Listener.JoyName + ", acquaintance.";
+            }
+            LayoutRebuilder.ForceRebuildLayoutImmediate(TitleRect);
         }
 
-        protected void SetLastSpoke(Entity speaker)
-        {
-            LastSpokeIcon.sprite = speaker.Icon;
-        }
-        
-        public ITopic[] Converse(int index = 0)
+        public ITopic[] Converse(string topic, int index = 0)
         {
             if (CurrentTopics.Length == 0)
             {
-                CurrentTopics = m_Topics.Where(topic => topic.ID.Equals("greeting", StringComparison.OrdinalIgnoreCase))
+                CurrentTopics = m_Topics.Where(t => t.ID.Equals(topic, StringComparison.OrdinalIgnoreCase))
                     .ToArray();
 
                 CurrentTopics = SanitiseTopics(CurrentTopics);
@@ -263,11 +318,34 @@ namespace JoyLib.Code.Conversation
             
             ITopic currentTopic = CurrentTopics[index];
             
-            //Listener speaks
-            //Instigator speaks
-            //Listener speaks
-            //Instigator speaks
-            //HALT
+            DoInteractions(currentTopic);
+
+            CreateMenuItems(CurrentTopics);
+
+            SetActors(Instigator, Listener);
+            return CurrentTopics;
+        }
+
+        public ITopic[] Converse(int index = 0)
+        {
+            if (CurrentTopics.Length == 0)
+            {
+                CurrentTopics = m_Topics.Where(t => t.ID.Equals("greeting", StringComparison.OrdinalIgnoreCase))
+                    .ToArray();
+
+                CurrentTopics = SanitiseTopics(CurrentTopics);
+            }
+            
+            ITopic currentTopic = CurrentTopics[index];
+            
+            DoInteractions(currentTopic);
+
+            CreateMenuItems(CurrentTopics);
+            return CurrentTopics;
+        }
+
+        protected void DoInteractions(ITopic currentTopic)
+        {
             ITopic[] next = currentTopic.Interact(Instigator, Listener);
 
             next = SanitiseTopics(next);
@@ -276,7 +354,9 @@ namespace JoyLib.Code.Conversation
             {
                 this.GUIManager.CloseGUI(Window.name);
                 CurrentTopics = next;
-                return next;
+                Listener = null;
+                Instigator = null;
+                return;
             }
             
             switch (currentTopic.Speaker)
@@ -296,12 +376,12 @@ namespace JoyLib.Code.Conversation
                         SetTitle(LastSaid.Words);
                     }
                     break;
+                
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
             CurrentTopics = next;
-
-            CreateMenuItems(CurrentTopics);
-            return CurrentTopics;
         }
 
         protected ITopic[] SanitiseTopics(ITopic[] topics)
@@ -329,7 +409,7 @@ namespace JoyLib.Code.Conversation
                         new object[] { Listener }));
                 }
 
-                if(topic.PassesConditions(tuples.ToArray()))
+                if(topic.FulfilsConditions(tuples.ToArray()))
                 {
                     validTopics.Add(topic);
                 }
@@ -340,7 +420,11 @@ namespace JoyLib.Code.Conversation
 
         protected void SetTitle(string text)
         {
+            double remainingWidth = TitleRect.rect.width - ListenerSection.rect.width;
+
+            //LastSaidGUI.text = WrapText(LastSaidGUI, text, remainingWidth);
             LastSaidGUI.text = text;
+            LayoutRebuilder.ForceRebuildLayoutImmediate(TitleRect);
         }
 
         protected ITopic[] SortByPriority(ITopic[] topics)
@@ -397,24 +481,32 @@ namespace JoyLib.Code.Conversation
 
         protected ITopicCondition ParseCondition(string conditionString)
         {
-            string[] split = conditionString.Split(new char[] {'<', '>', '=', '!'}, StringSplitOptions.RemoveEmptyEntries);
+            try
+            {
+                string[] split = conditionString.Split(new char[] {'<', '>', '=', '!'}, StringSplitOptions.RemoveEmptyEntries);
 
-            string criteria = split[0].Trim();
-            string operand = conditionString.First(c => c.Equals('!')
-                                                        || c.Equals('=')
-                                                        || c.Equals('<')
-                                                        || c.Equals('>')).ToString();
-            string stringValue = split[1].Trim();
+                string criteria = split[0].Trim();
+                string operand = conditionString.First(c => c.Equals('!')
+                                                            || c.Equals('=')
+                                                            || c.Equals('<')
+                                                            || c.Equals('>')).ToString();
+                string stringValue = split[1].Trim();
             
-            TopicConditionFactory factory = new TopicConditionFactory();
+                TopicConditionFactory factory = new TopicConditionFactory();
 
-            int value = criteria.Equals("relationship", StringComparison.OrdinalIgnoreCase) && operand.Equals("=")
-                ? 1
-                : int.Parse(stringValue);
+                int value = int.MinValue;
+                if (!int.TryParse(stringValue, out value))
+                {
+                    value = 1;
+                    criteria = stringValue;
+                }
 
-            criteria = criteria.Equals("relationship", StringComparison.OrdinalIgnoreCase) && operand.Equals("=") ? stringValue : criteria;
-
-            return factory.Create(criteria, operand, value);
+                return factory.Create(criteria, operand, value);
+            }
+            catch (Exception e)
+            {
+                throw new InvalidOperationException("Could not parse conversation condition line " + conditionString);
+            }
         }
 
         public ITopic[] CurrentTopics

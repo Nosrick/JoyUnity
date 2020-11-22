@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
+using JoyLib.Code.Entities.AI;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Graphics;
 using JoyLib.Code.Rollers;
 using UnityEngine;
 
@@ -9,7 +11,13 @@ namespace JoyLib.Code.Entities.Needs
 {
     public class Friendship : AbstractNeed
     {
-        protected static EntityRelationshipHandler s_EntityRelationshipHandler;
+        public override string Name => "friendship";
+
+        protected static EntityRelationshipHandler EntityRelationshipHandler
+        {
+            get;
+            set;
+        }
 
         protected const int DECAY_MIN = 4;
         protected const int DECAY_MAX = 128;
@@ -32,10 +40,7 @@ namespace JoyLib.Code.Entities.Needs
                 1, 
                 1, 
                 1,
-                new [] { 
-                    "seekaction",
-                    "wanderaction",
-                    "fulfillneedaction" })
+                new string[0])
         {
             Initialise();
         }
@@ -47,7 +52,8 @@ namespace JoyLib.Code.Entities.Needs
             int priorityRef, 
             int happinessThresholdRef, 
             int valueRef, 
-            int maxValueRef,  
+            int maxValueRef,
+            Sprite fulfillingSprite,
             int averageForDayRef = 0, 
             int averageForWeekRef = 0) 
             : base(
@@ -58,10 +64,8 @@ namespace JoyLib.Code.Entities.Needs
                 happinessThresholdRef, 
                 valueRef, 
                 maxValueRef, 
-                new [] { 
-                    "seekaction",
-                    "wanderaction",
-                    "fulfillneedaction" }, 
+                new string[0],
+                fulfillingSprite,
                 averageForDayRef, 
                 averageForWeekRef)
         {
@@ -70,9 +74,9 @@ namespace JoyLib.Code.Entities.Needs
 
         protected void Initialise()
         {
-            if(s_EntityRelationshipHandler is null)
+            if(EntityRelationshipHandler is null)
             {
-                s_EntityRelationshipHandler = GameObject.Find("GameManager").GetComponent<EntityRelationshipHandler>();
+                EntityRelationshipHandler = GlobalConstants.GameManager.GetComponent<EntityRelationshipHandler>();
             }
         }
 
@@ -84,6 +88,10 @@ namespace JoyLib.Code.Entities.Needs
 
             if (possibleListeners.Count == 0)
             {
+                m_CachedActions["wanderaction"].Execute(
+                    new JoyObject[] {actor},
+                    new[] {"wander", "need", "friendship"},
+                    new object[] {});
                 return false;
             }
 
@@ -91,20 +99,20 @@ namespace JoyLib.Code.Entities.Needs
             int bestRelationship = int.MinValue;
             foreach (Entity possible in possibleListeners)
             {
-                List<long> participants = new List<long>();
-                participants.Add(actor.GUID);
-                participants.Add(possible.GUID);
+                List<JoyObject> participants = new List<JoyObject>();
+                participants.Add(actor);
+                participants.Add(possible);
 
                 string[] relationshipTags = new[] {"friendship"};
                 IRelationship[] relationships =
-                    s_EntityRelationshipHandler.Get(participants.ToArray(), relationshipTags);
+                    EntityRelationshipHandler.Get(participants.ToArray(), relationshipTags);
 
                 foreach (IRelationship relationship in relationships)
                 {
                     int thisRelationship = relationship.GetRelationshipValue(actor.GUID, possible.GUID);
                     if (bestRelationship < thisRelationship)
                     {
-                        thisRelationship = bestRelationship;
+                        bestRelationship = thisRelationship;
                         bestMatch = possible;
                     }
                 }
@@ -120,18 +128,19 @@ namespace JoyLib.Code.Entities.Needs
             }
 
             m_CachedActions["seekaction"].Execute(
-                new JoyObject[] {actor},
+                new JoyObject[] {actor, bestMatch},
                 new[] {"need", "seek", "friendship"},
-                new object[] {bestMatch});
+                new object[] {"friendship"});
             return true;
         }
 
-        public override bool Interact(Entity user, JoyObject obj)
+        public override bool Interact(Entity actor, IJoyObject obj)
         {
             m_CachedActions["fulfillneedaction"].Execute(
-                new[] {user, obj},
+                new[] {actor, obj},
                 new[] {"need", "friendship", "fulfill"},
-                new object[] {"friendship", user.Statistics[EntityStatistic.PERSONALITY].Value, 5});
+                new object[] {"friendship", actor.Statistics[EntityStatistic.PERSONALITY].Value, 5, true});
+            
             return true;
         }
 
@@ -145,7 +154,7 @@ namespace JoyLib.Code.Entities.Needs
                 this.m_HappinessThreshold,
                 this.m_Value,
                 this.m_MaximumValue,
-                this.AverageForDay,
+                this.FulfillingSprite,
                 this.AverageForWeek);
         }
 
@@ -165,9 +174,8 @@ namespace JoyLib.Code.Entities.Needs
                 priority,
                 happinessThreshold,
                 value,
-                maxValue);
+                maxValue,
+                this.FulfillingSprite);
         }
-
-        public override string Name => "friendship";
     }
 }

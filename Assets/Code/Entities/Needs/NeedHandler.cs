@@ -11,10 +11,13 @@ namespace JoyLib.Code.Entities.Needs
 
         public void Awake()
         {
-            m_Needs = Initialise();
+            if (m_Needs is null)
+            {
+                m_Needs = Initialise();                
+            }
         }
 
-        public static Dictionary<string, INeed> Initialise()
+        protected static Dictionary<string, INeed> Initialise()
         {
             try
             {
@@ -24,7 +27,7 @@ namespace JoyLib.Code.Entities.Needs
 
                 foreach (Type type in needTypes)
                 {
-                    if ((typeof(INeed)).IsAssignableFrom(type) == true && type.IsAbstract == false)
+                    if (typeof(INeed).IsAssignableFrom(type) == true && type.IsAbstract == false)
                     {
                         INeed newNeed = (INeed)Activator.CreateInstance(type);
                         needs.Add(newNeed.Name, newNeed);
@@ -73,11 +76,15 @@ namespace JoyLib.Code.Entities.Needs
             throw new InvalidOperationException("Need not found, looking for " + name);
         }
 
-        public string[] NeedNames
+        public Dictionary<string, INeed> Needs
         {
             get
             {
-                return m_Needs.Keys.ToArray();
+                if (m_Needs is null)
+                {
+                    m_Needs = Initialise();
+                }
+                return new Dictionary<string, INeed>(m_Needs);
             }
         }
     }

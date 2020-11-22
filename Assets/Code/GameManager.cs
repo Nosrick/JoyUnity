@@ -15,6 +15,7 @@ using JoyLib.Code.Rollers;
 using JoyLib.Code.States;
 using System;
 using System.Collections.Generic;
+using JoyLib.Code.Entities.Romance;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -22,14 +23,20 @@ public class GameManager : MonoBehaviour
     protected StateManager m_StateManager;
 
 	// Use this for initialization
-	void Start ()
+	protected void Start ()
     {
+        if (GlobalConstants.GameManager is null)
+        {
+            GlobalConstants.GameManager = this.gameObject;
+        }
+        
         ObjectIconHandler objectIcons = this.GetComponent<ObjectIconHandler>();
         CultureHandler cultureHandler = this.GetComponent<CultureHandler>();
         EntityTemplateHandler entityTemplateHandler = this.GetComponent<EntityTemplateHandler>();
         EntityBioSexHandler bioSexHandler = this.GetComponent<EntityBioSexHandler>();
         EntitySexualityHandler sexualityHandler = this.GetComponent<EntitySexualityHandler>();
         JobHandler jobHandler = this.GetComponent<JobHandler>();
+        EntityRomanceHandler romanceHandler = this.GetComponent<EntityRomanceHandler>();
 
         InitialiseEverything();
 
@@ -41,10 +48,10 @@ public class GameManager : MonoBehaviour
         INeed testingNeed = needHandler.GetRandomised("thirst");
         needs.Add(testingNeed);
 
-        List<CultureType> cultures = cultureHandler.GetByCreatureType("Human");
-        CultureType culture = cultures[0];
+        List<ICulture> cultures = cultureHandler.GetByCreatureType("Human");
+        ICulture culture = cultures[0];
         EntityTemplate human = entityTemplateHandler.Get("human");
-        JobType jobType = culture.ChooseJob(jobHandler.Jobs);
+        IJob jobType = culture.ChooseJob(jobHandler.Jobs);
 
         IGrowingValue level = new ConcreteGrowingValue("level", 1, 100, 0, GlobalConstants.DEFAULT_SUCCESS_THRESHOLD,
                                                         new StandardRoller(), new NonUniqueDictionary<INeed, float>());
@@ -54,9 +61,11 @@ public class GameManager : MonoBehaviour
             human, 
             level, 
             Vector2Int.zero, 
-            new List<CultureType>() { culture },
+            new List<ICulture>() { culture },
+            null,
             culture.ChooseSex(bioSexHandler.Sexes), 
             culture.ChooseSexuality(sexualityHandler.Sexualities), 
+            culture.ChooseRomance(romanceHandler.Romances),
             jobType, 
             objectIcons.GetSprites(human.Tileset, jobType.Name),
             null,
@@ -71,19 +80,18 @@ public class GameManager : MonoBehaviour
         //GameObject.Find("NeedsText").GetComponent<GUINeedsAlert>().SetPlayer(player);
     }
 
-    private void InitialiseEverything()
+    protected void InitialiseEverything()
     {
         RNG.instance.SetSeed(DateTime.Now.Millisecond);
         AbilityHandler.instance.Initialise();
     }
 	
 	// Update is called once per frame
-	void Update ()
+	protected void Update ()
     {
         if(!(m_StateManager is null))
         {
             m_StateManager.Update();
         }
-
-	}
+    }
 }

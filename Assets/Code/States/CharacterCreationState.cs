@@ -139,6 +139,8 @@ namespace JoyLib.Code.States
                 null,
                 null,
                 null,
+                null,
+                null,
                 m_Jobs[m_JobIndex]);
             
             m_Player = new EntityPlayer(temp);
@@ -146,7 +148,11 @@ namespace JoyLib.Code.States
             m_Player.PlayerControlled = true;
 
             ItemFactory itemFactory = new ItemFactory();
-            m_Player.AddContents(itemFactory.CreateRandomItemOfType(new string[] { "light source" }, true));
+            ItemInstance light = itemFactory.CreateRandomItemOfType(new string[] {"light source"}, true);
+            m_Player.FetchAction("additemaction")
+                .Execute(new IJoyObject[] {m_Player, light},
+                    new string[0],
+                    new object[] {true});
         }
 
         public override GameState GetNextState()

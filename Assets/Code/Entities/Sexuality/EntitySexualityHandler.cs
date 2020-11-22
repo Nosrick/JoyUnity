@@ -24,7 +24,7 @@ namespace JoyLib.Code.Entities.Sexuality
             Load(m_CultureHandler.Cultures);
         }
 
-        protected bool Load(CultureType[] cultures)
+        protected bool Load(ICulture[] cultures)
         {
             if (m_Sexualities != null)
             {
@@ -56,13 +56,14 @@ namespace JoyLib.Code.Entities.Sexuality
         {
             if (m_Sexualities is null)
             {
+                throw new InvalidOperationException("Sexuality search was null.");
             }
 
             if (m_Sexualities.ContainsKey(sexuality))
             {
                 return m_Sexualities[sexuality];
             }
-            return null;
+            throw new InvalidOperationException("Sexuality of type " + sexuality + " not found.");
         }
 
         public ISexuality[] Sexualities

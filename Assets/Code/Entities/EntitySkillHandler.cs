@@ -51,6 +51,7 @@ namespace JoyLib.Code.Entities
         {
             return new NonUniqueDictionary<INeed, float>();
         }
+        
         public NonUniqueDictionary<INeed, float> GetCoefficients(List<string> needNames, string skillName)
         {
             BasicValueContainer<INeed> needs = new BasicValueContainer<INeed>();
@@ -77,7 +78,7 @@ namespace JoyLib.Code.Entities
 
                 foreach(string key in m_SkillCoefficients.Keys)
                 {
-                    if(key == skillName)
+                    if(key.Equals(skillName, StringComparison.OrdinalIgnoreCase))
                     {
                         foreach(Tuple<string, float> tuple in m_SkillCoefficients[key])
                         {
@@ -91,6 +92,11 @@ namespace JoyLib.Code.Entities
                                 ActionLog.instance.AddText(
                                     "Suppressing Exception when trying to add Skill Coefficient. Skill is "
                                     + skillName + ", with need name " + tuple.Item1);
+                                Debug.LogWarning(
+                                    "Suppressing Exception when trying to add Skill Coefficient. Skill is "
+                                                 + skillName + ", with need name " + tuple.Item1);
+                                Debug.LogWarning(e.Message);
+                                Debug.LogWarning(e.StackTrace);
                             }
                         }
                     }
@@ -105,7 +111,7 @@ namespace JoyLib.Code.Entities
         {
             Dictionary<string, List<Tuple<string, float>>> skillCoefficients = new Dictionary<string, List<Tuple<string, float>>>();
 
-            XElement doc = XElement.Load(Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "SkillCoefficients.xml");
+            XElement doc = XElement.Load(Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Skills/" + "SkillCoefficients.xml");
 
             foreach (XElement skill in doc.Elements("Skill"))
             {

@@ -32,7 +32,7 @@ namespace JoyLib.Code.Scripting
                 string dir = Directory.GetCurrentDirectory() + "/" + GlobalConstants.SCRIPTS_FOLDER;
                 string[] scriptFiles = Directory.GetFiles(dir, "*.cs", SearchOption.AllDirectories);
 
-                List<Microsoft.CodeAnalysis.SyntaxTree> builtFiles = new List<Microsoft.CodeAnalysis.SyntaxTree>();
+                List<SyntaxTree> builtFiles = new List<SyntaxTree>();
 
                 foreach(string scriptFile in scriptFiles)
                 {
@@ -47,7 +47,8 @@ namespace JoyLib.Code.Scripting
                     MetadataReference.CreateFromFile(typeof(Entities.Entity).Assembly.Location),
                     MetadataReference.CreateFromFile(typeof(Vector2Int).Assembly.Location),
                     MetadataReference.CreateFromFile(typeof(Queue<bool>).Assembly.Location),
-                    MetadataReference.CreateFromFile(typeof(System.Linq.IQueryable).Assembly.Location)
+                    MetadataReference.CreateFromFile(typeof(System.Linq.IQueryable).Assembly.Location),
+                    MetadataReference.CreateFromFile(typeof(GlobalConstants).Assembly.Location)
                 };
                 CSharpCompilation compilation = CSharpCompilation.Create("JoyScripts", builtFiles, libs, 
                     new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
@@ -101,8 +102,8 @@ namespace JoyLib.Code.Scripting
             }
             catch(Exception ex)
             {
-                Debug.LogError(ex.Message);
-                Debug.LogError(ex.StackTrace);
+                Debug.LogWarning(ex.Message);
+                Debug.LogWarning(ex.StackTrace);
                 throw new InvalidOperationException("Error when searching for Type in ScriptingEngine, type name " + type.ToString());
             }
         }
@@ -111,7 +112,7 @@ namespace JoyLib.Code.Scripting
         {
             try
             {
-                Type[] types = m_Types.Where(t => t.IsAssignableFrom(typeof(T))).ToArray();
+                Type[] types = m_Types.Where(t => typeof(T).IsAssignableFrom(t) && t.IsAbstract == false).ToArray();
                 List<T> children = new List<T>();
                 foreach (Type tempType in types)
                 {
@@ -122,8 +123,8 @@ namespace JoyLib.Code.Scripting
             }
             catch (Exception e)
             {
-                Debug.LogError(e.Message);
-                Debug.LogError(e.StackTrace);
+                Debug.LogWarning(e.Message);
+                Debug.LogWarning(e.StackTrace);
                 throw new InvalidOperationException("Error when searching for Type in ScriptingEngine, " + typeof(T).Name);
             }
         }
@@ -150,8 +151,8 @@ namespace JoyLib.Code.Scripting
             }
             catch(Exception ex)
             {
-                Debug.LogError(ex.Message);
-                Debug.LogError(ex.StackTrace);
+                Debug.LogWarning(ex.Message);
+                Debug.LogWarning(ex.StackTrace);
                 throw new InvalidOperationException("Error when searching for Type in ScriptingEngine, " + typeName);
             }
         }
@@ -160,15 +161,14 @@ namespace JoyLib.Code.Scripting
         {
             try
             {
-                Type[] types = m_Types.Where(t => type.IsAssignableFrom(t)).ToArray();
-                types = types.Where(t => t.IsAbstract == false && t.IsInterface == false).ToArray();
+                Type[] types = m_Types.Where(t => type.IsAssignableFrom(t) && t.IsAbstract == false).ToArray();
 
                 return types;
             }
             catch(Exception e)
             {
-                Debug.LogError(e.Message);
-                Debug.LogError(e.StackTrace);
+                Debug.LogWarning(e.Message);
+                Debug.LogWarning(e.StackTrace);
                 throw new InvalidOperationException("Error when searching for Type in ScriptingEngine, " + type.FullName);
             }
         }
@@ -184,8 +184,8 @@ namespace JoyLib.Code.Scripting
             }
             catch(Exception e)
             {
-                ActionLog.instance.AddText(e.Message);
-                ActionLog.instance.AddText(e.StackTrace);
+                Debug.LogWarning(e.Message);
+                Debug.LogWarning(e.StackTrace);
                 throw new InvalidOperationException("Error when finding action, no such action " + actionName);
             }
         }

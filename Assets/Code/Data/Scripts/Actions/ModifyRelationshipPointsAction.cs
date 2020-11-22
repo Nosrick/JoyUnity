@@ -5,8 +5,14 @@ using UnityEngine;
 
 namespace JoyLib.Code.Scripting.Actions
 {
-    public class ModifyRelationshipPointsAction : IJoyAction
+    public class ModifyRelationshipPointsAction : AbstractAction
     {
+        
+        public override string Name => "modifyrelationshippointsaction";
+
+        public override string ActionString => "modification of relationship points";
+
+        protected static EntityRelationshipHandler RelationshipHandler { get; set; }
 
         public ModifyRelationshipPointsAction()
         {
@@ -15,39 +21,26 @@ namespace JoyLib.Code.Scripting.Actions
                 RelationshipHandler = GameObject.Find("GameManager").GetComponent<EntityRelationshipHandler>();
             }
         }
-        
-        public string Name
-        {
-            get
-            {
-                return "modifyrelationshippointsaction";
-            }
-        }
 
-        public string ActionString
+        public override bool Execute(IJoyObject[] participants, string[] tags = null, params object[] args)
         {
-            get
-            {
-                return "modification of relationship points";
-            }
-        }
-        
-        protected static EntityRelationshipHandler RelationshipHandler { get; set; }
-
-        public bool Execute(JoyObject[] participants, string[] tags = null, params object[] args)
-        {
+            ClearLastParameters();
+            
             if (args.Length == 0)
+            {
+                return false;
+            }
+
+            if (participants.Distinct().Count() != participants.Length)
             {
                 return false;
             }
             
             int relationshipMod = (int)args[0];
 
-            long[] guids = participants.Select(participant => participant.GUID).ToArray();
+            IRelationship[] relationships = RelationshipHandler.Get(participants, tags, true);
 
-            IRelationship[] relationships = RelationshipHandler.Get(guids, tags);
-
-            bool doAll = args.Length < 2 ? false : (bool)args[1];
+            bool doAll = args.Length >= 2 && (bool)args[1];
 
             if(relationships.Length > 0)
             {
@@ -63,8 +56,10 @@ namespace JoyLib.Code.Scripting.Actions
                     }
                 }
             }
+            
+            SetLastParameters(participants, tags, args);
 
-            return false;
+            return true;
         }
     }
 }

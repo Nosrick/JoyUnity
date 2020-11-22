@@ -11,7 +11,7 @@ namespace DevionGames.InventorySystem
         private string m_WindowName = "Equipment";
 
         [SerializeField]
-        private List<EquipmentBone> m_Bones;
+        private List<EquipmentBone> m_Bones= new List<EquipmentBone>();
         public List<EquipmentBone> Bones
         {
             get { return this.m_Bones; }
@@ -30,7 +30,7 @@ namespace DevionGames.InventorySystem
 
         private void Start()
         {
-            if (transform.root != transform)
+           /* if (transform.root != transform)
             {
                 EquipmentHandler handler = transform.root.gameObject.GetComponent<EquipmentHandler>();
                 if (handler == null)
@@ -41,7 +41,7 @@ namespace DevionGames.InventorySystem
 
                 Destroy(this);
                 return;
-            }
+            }*/
            
             this.m_EquipmentContainer = WidgetUtility.Find<ItemContainer>(this.m_WindowName);
             if (this.m_EquipmentContainer != null)
@@ -55,10 +55,12 @@ namespace DevionGames.InventorySystem
 
                 UpdateEquipment();
                 if (InventoryManager.current != null) {
-                    InventoryManager.current.onSceneLoaded.AddListener(UpdateEquipment);
+                    InventoryManager.current.onDataLoaded.AddListener(UpdateEquipment);
                 }
             }
         }
+
+        private void TriggerAnimationEvent(string ev) { }
 
         private void OnAddItem(Item item, Slot slot)
         {

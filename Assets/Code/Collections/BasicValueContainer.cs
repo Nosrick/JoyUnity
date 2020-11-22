@@ -45,23 +45,19 @@ namespace JoyLib.Code.Collections
 
         public int Get(string name)
         {
-            if(m_Values.ContainsKey(name))
-            {
-                return m_Values[name].Value;
-            }
-            return 0;
+            return this.Has(name) ? this.GetRawValue(name).Value : 0;
         }
 
         public bool Has(string name)
         {
-            return m_Values.ContainsKey(name);
+            return m_Values.Any(pair => pair.Key.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
 
         public T GetRawValue(string name)
         {
-            if(m_Values.ContainsKey(name))
+            if(m_Values.Any(pair => pair.Key.Equals(name, StringComparison.OrdinalIgnoreCase)))
             {
-                return m_Values[name];
+                return m_Values.First(pair => pair.Key.Equals(name, StringComparison.OrdinalIgnoreCase)).Value;
             }
             throw new InvalidOperationException("Attempted to access " + this.GetType().Name + ".GetRawValue() with parameter of " + name);
         }

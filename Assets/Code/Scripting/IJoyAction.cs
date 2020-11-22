@@ -2,7 +2,10 @@ namespace JoyLib.Code.Scripting
 {
     public interface IJoyAction
     {
-        bool Execute(JoyObject[] participants, string[] tags = null , params object[] args);
+        bool Execute(IJoyObject[] participants, string[] tags = null, params object[] args);
+        void SetLastParameters(IJoyObject[] participants, string[] tags = null, params object[] args);
+
+        void ClearLastParameters();
 
         string Name
         {
@@ -10,6 +13,26 @@ namespace JoyLib.Code.Scripting
         }
 
         string ActionString
+        {
+            get;
+        }
+
+        IJoyObject[] LastParticipants
+        {
+            get;
+        }
+
+        string[] LastTags
+        {
+            get;
+        }
+
+        object[] LastArgs
+        {
+            get;
+        }
+
+        bool Successful
         {
             get;
         }

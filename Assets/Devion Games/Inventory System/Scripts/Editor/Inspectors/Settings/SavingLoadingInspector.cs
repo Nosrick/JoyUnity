@@ -41,6 +41,8 @@ namespace DevionGames.InventorySystem.Configuration
             this.m_ServerAdress = serializedObject.FindProperty("serverAdress");
             this.m_SaveScript = serializedObject.FindProperty("saveScript");
             this.m_LoadScript = serializedObject.FindProperty("loadScript");
+
+           // this.m_SavedData = JsonSerializer.Deserialize<InventoryManager.SaveData>(PlayerPrefs.GetString("InventorySystemData"), new List<UnityEngine.Object>());
         }
 
         public override void OnInspectorGUI()
@@ -76,74 +78,84 @@ namespace DevionGames.InventorySystem.Configuration
             GUILayout.Space(2f);
             EditorTools.Seperator();
 
-            string data = PlayerPrefs.GetString("SavedKeys");
-            if (!string.IsNullOrEmpty(data))
-            {
-                string[] keys = data.Split(';').Distinct().ToArray();
-                Array.Reverse(keys);
-                ArrayUtility.Remove<string>(ref keys, "");
-                ArrayUtility.Remove<string>(ref keys, string.Empty);
+            List<string> keys = PlayerPrefs.GetString("InventorySystemSavedKeys").Split(';').ToList();
+            keys.RemoveAll(x => string.IsNullOrEmpty(x));
 
-                bool state = EditorPrefs.GetBool("SavedData", false);
-                bool foldout = EditorGUILayout.Foldout(state, "Saved Data " + keys.Length.ToString(), true);
-                if (foldout != state)
-                {
-                    EditorPrefs.SetBool("SavedData", foldout);
+
+
+            if (EditorTools.Foldout("InventorySavedData", new GUIContent("Saved Data " + keys.Count)))
+            {
+                EditorTools.BeginIndent(1,true);
+                if (keys.Count == 0){
+                    GUILayout.Label("No data saved on this device!");
                 }
 
-                if (foldout)
+
+                for (int i = 0; i < keys.Count; i++)
                 {
-                    EditorGUI.indentLevel += 1;
-                    if (keys.Length == 0)
-                    {
-                        GUILayout.BeginHorizontal();
-                        GUILayout.Space(16f);
-                        GUILayout.BeginVertical();
-                        GUILayout.Label("No data saved on this device!");
-                        GUILayout.EndVertical();
-                        GUILayout.EndHorizontal();
+                    string key = keys[i];
+                    List<string> scenes = PlayerPrefs.GetString(key + ".Scenes").Split(';').ToList();
+                    scenes.RemoveAll(x => string.IsNullOrEmpty(x));
+                    string uiData = PlayerPrefs.GetString(key + ".UI");
+                    if (scenes.Count == 0 && string.IsNullOrEmpty(uiData)) {
+                        List<string> allKeys = new List<string>(keys);
+                        allKeys.Remove(key);
+                        PlayerPrefs.SetString("InventorySystemSavedKeys", string.Join(";", allKeys));
                     }
 
-                    for (int i = 0; i < keys.Length; i++)
-                    {
-                        string key = keys[i];
-                        if (!string.IsNullOrEmpty(key))
+                    GenericMenu keyMenu = new GenericMenu();
+
+                    keyMenu.AddItem(new GUIContent("Delete Key"), false, () => {
+                        List<string> allKeys = new List<string>(keys);
+                        allKeys.Remove(key);
+                        PlayerPrefs.SetString("InventorySystemSavedKeys", string.Join(";", allKeys));
+                        PlayerPrefs.DeleteKey(key + ".UI");
+                        PlayerPrefs.DeleteKey(key+".Scenes");
+                        for (int j = 0; j < scenes.Count; j++)
                         {
-                            state = EditorPrefs.GetBool(key, false);
-                            GUILayout.BeginHorizontal();
-                            foldout = EditorGUILayout.Foldout(state, key, true);
-                            Rect rect = GUILayoutUtility.GetLastRect();
-                            if (Event.current.type == EventType.MouseDown && Event.current.button == 1 && rect.Contains(Event.current.mousePosition))
-                            {
-                                GenericMenu menu = new GenericMenu();
-                                menu.AddItem(new GUIContent("Delete"), false, delegate () {
-                                    PlayerPrefs.DeleteKey(key);
-                                    PlayerPrefs.SetString("SavedKeys", data.Replace(key, ""));
-                                });
-                                menu.ShowAsContext();
-                            }
-                            GUILayout.EndHorizontal();
-                            if (foldout != state)
-                            {
-                                EditorPrefs.SetBool(key, foldout);
-                            }
-                            if (foldout)
-                            {
-                                GUILayout.BeginHorizontal();
-                                GUILayout.Space(16f * 2f);
-                                GUILayout.BeginVertical();
+                            PlayerPrefs.DeleteKey(key + "." + scenes[j]);
+                        }
+                    });
 
-                                GUILayout.Label(PlayerPrefs.GetString(key), EditorStyles.wordWrappedLabel);
+                    if (EditorTools.Foldout(key, new GUIContent(key),keyMenu)){
+                        EditorTools.BeginIndent(1, true);
 
-                                GUILayout.EndVertical();
-                                GUILayout.EndHorizontal();
+                        if (!string.IsNullOrEmpty(uiData)){
+                            GenericMenu uiMenu = new GenericMenu();
+                            uiMenu.AddItem(new GUIContent("Delete UI"), false, () => {
+                                PlayerPrefs.DeleteKey(key + ".UI");
+                            });
 
+                            if (EditorTools.Foldout(key + ".UI", new GUIContent("UI"), uiMenu)) {
+                                EditorTools.BeginIndent(1, true);
+                                GUILayout.Label(uiData, EditorStyles.wordWrappedLabel);
+                                EditorTools.EndIndent();
                             }
                         }
+                        for (int j = 0; j < scenes.Count; j++) {
+                            string scene = scenes[j];
+                            GenericMenu sceneMenu = new GenericMenu();
+                            sceneMenu.AddItem(new GUIContent("Delete "+scene), false, () => {
+                                PlayerPrefs.DeleteKey(key + "." + scene);
+                                List<string> allScenes = new List<string>(scenes);
+                                allScenes.Remove(scene);
+                                scenes.RemoveAll(x => string.IsNullOrEmpty(x));
+                                PlayerPrefs.SetString(key+".Scenes",string.Join(";",allScenes));
+                            });
+
+                            if (EditorTools.Foldout(key + "." + scene, new GUIContent(scene), sceneMenu))
+                            {
+                                EditorTools.BeginIndent(1, true);
+                                GUILayout.Label(PlayerPrefs.GetString(key + "." + scene), EditorStyles.wordWrappedLabel);
+                                EditorTools.EndIndent();
+                            }
+                        }
+                        EditorTools.EndIndent();
                     }
-                    EditorGUI.indentLevel -= 1;
                 }
+                EditorTools.EndIndent();
             }
+            
 
             serializedObject.ApplyModifiedProperties();
         }
