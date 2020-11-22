@@ -403,7 +403,7 @@ namespace DevionGames.InventorySystem
         /// <summary>
         /// Updates the cooldown image and sets if the slot is in cooldown.
         /// </summary>
-        private void UpdateCooldown()
+        protected void UpdateCooldown()
         {
             if (this.m_IsCooldown && this.m_CooldownOverlay != null)
             {

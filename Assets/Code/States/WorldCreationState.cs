@@ -65,9 +65,8 @@ namespace JoyLib.Code.States
             m_World.SpawnPoint = spawnPoint;
 
             //Set up the player
-            m_Player.Move(m_World.SpawnPoint);
-            m_Player.MyWorld = m_World;
-            m_World.AddEntity(m_Player);
+            //m_Player.Move(m_World.SpawnPoint);
+            //m_World.AddEntity(m_Player);
 
             //Begin the first floor of the Naga Pits
             WorldInfo worldInfo = m_WorldInfoHandler.GetWorldInfo("naga pits")[0];
@@ -77,10 +76,19 @@ namespace JoyLib.Code.States
             Vector2Int transitionPoint = spawnPlacer.PlaceTransitionPoint(m_World);
             m_World.AddArea(transitionPoint, dungeon);
             Done = true;
+            
+            m_Player.Move(dungeon.SpawnPoint);
+            dungeon.AddEntity(m_Player);
 
             ItemFactory itemFactory = new ItemFactory();
             ItemInstance lightSource = itemFactory.CreateRandomItemOfType(new string[] { "light source" });
             m_Player.AddContents(lightSource);
+
+            for (int i = 0; i < 4; i++)
+            {
+                m_Player.AddContents(itemFactory.CreateCompletelyRandomItem(true));
+            }
+            
             m_World.Tick();
         }
 
