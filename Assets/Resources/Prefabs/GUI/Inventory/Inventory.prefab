@@ -185,7 +185,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7087841497948643126}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -338,7 +338,7 @@ MonoBehaviour:
   m_Focus: 1
   m_DeactivateOnClose: 1
   useButton: 2
-  m_DynamicContainer: 0
+  m_DynamicContainer: 1
   m_SlotParent: {fileID: 7087841499281627286}
   m_SlotPrefab: {fileID: 0}
   m_UseReferences: 0

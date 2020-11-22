@@ -149,10 +149,7 @@ namespace JoyLib.Code.States
 
             ItemFactory itemFactory = new ItemFactory();
             ItemInstance light = itemFactory.CreateRandomItemOfType(new string[] {"light source"}, true);
-            m_Player.FetchAction("additemaction")
-                .Execute(new IJoyObject[] {m_Player, light},
-                    new string[0],
-                    new object[] {true});
+            m_Player.AddContents(light);
         }
 
         public override GameState GetNextState()

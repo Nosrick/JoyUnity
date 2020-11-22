@@ -18,8 +18,7 @@
 		<Name>Light Source</Name>
 		<Icon>
 			<Name>Lantern</Name>
-			<X>3</X>
-			<Y>0</Y>
+			<Position>3</Position>
 			<Data>Default</Data>
 		</Icon>
 	</TileSet>
