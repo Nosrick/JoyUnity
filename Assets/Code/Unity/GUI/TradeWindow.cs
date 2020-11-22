@@ -47,13 +47,6 @@ namespace JoyLib.Code.Unity.GUI
             Left = left;
             Right = right;
 
-            /*
-            LeftInventory.Collection.Clear();
-            LeftOffering.Collection.Clear();
-            RightInventory.Collection.Clear();
-            RightOffering.Collection.Clear();
-            */
-
             for (int i = LeftInventory.Collection.Count - 1; i >= 0; i--)
             {
                 Item item = LeftInventory.Collection[i];
@@ -172,7 +165,7 @@ namespace JoyLib.Code.Unity.GUI
             }
 
             LeftValue.text = "Your value: " + leftValue;
-            RightValue.text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Right.Gender.Personal) + " value: " + rightValue;
+            RightValue.text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Right.Gender.Possessive) + " value: " + rightValue;
         }
 
         protected void Tally(Item itemRef, int value, Slot slot)
