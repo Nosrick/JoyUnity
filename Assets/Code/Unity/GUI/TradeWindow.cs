@@ -95,9 +95,9 @@ namespace JoyLib.Code.Unity.GUI
                 rightValue += joyItem.ItemInstance.Value;
             }
 
-            int relatioshipValue = RelationshipHandler.GetHighestRelationshipValue(Left, Right);
+            int relationshipValue = RelationshipHandler.GetHighestRelationshipValue(Right, Left);
 
-            if (leftValue + relatioshipValue >= rightValue)
+            if (leftValue + relationshipValue >= rightValue)
             {
                 int difference = leftValue - rightValue;
 

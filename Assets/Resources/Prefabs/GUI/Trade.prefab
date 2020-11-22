@@ -923,12 +923,12 @@ MonoBehaviour:
   m_Focus: 1
   m_DeactivateOnClose: 1
   useButton: 2
-  m_DynamicContainer: 1
+  m_DynamicContainer: 0
   m_SlotParent: {fileID: 2333912725361723184}
   m_SlotPrefab: {fileID: 0}
   m_UseReferences: 0
-  m_CanDragIn: 0
-  m_CanDragOut: 0
+  m_CanDragIn: 1
+  m_CanDragOut: 1
   m_CanDropItems: 0
   m_CanReferenceItems: 0
   m_CanSellItems: 0
@@ -1792,12 +1792,12 @@ MonoBehaviour:
   m_Focus: 1
   m_DeactivateOnClose: 1
   useButton: 2
-  m_DynamicContainer: 1
+  m_DynamicContainer: 0
   m_SlotParent: {fileID: 2333912726183872303}
   m_SlotPrefab: {fileID: 0}
   m_UseReferences: 0
-  m_CanDragIn: 0
-  m_CanDragOut: 0
+  m_CanDragIn: 1
+  m_CanDragOut: 1
   m_CanDropItems: 0
   m_CanReferenceItems: 0
   m_CanSellItems: 0
@@ -2225,12 +2225,12 @@ MonoBehaviour:
   m_Focus: 1
   m_DeactivateOnClose: 1
   useButton: 2
-  m_DynamicContainer: 1
+  m_DynamicContainer: 0
   m_SlotParent: {fileID: 2333912725364287207}
   m_SlotPrefab: {fileID: 0}
   m_UseReferences: 0
-  m_CanDragIn: 0
-  m_CanDragOut: 0
+  m_CanDragIn: 1
+  m_CanDragOut: 1
   m_CanDropItems: 0
   m_CanReferenceItems: 0
   m_CanSellItems: 0
@@ -2338,12 +2338,12 @@ MonoBehaviour:
   m_Focus: 1
   m_DeactivateOnClose: 1
   useButton: 2
-  m_DynamicContainer: 1
+  m_DynamicContainer: 0
   m_SlotParent: {fileID: 2333912725858335130}
   m_SlotPrefab: {fileID: 0}
   m_UseReferences: 0
-  m_CanDragIn: 0
-  m_CanDragOut: 0
+  m_CanDragIn: 1
+  m_CanDragOut: 1
   m_CanDropItems: 0
   m_CanReferenceItems: 0
   m_CanSellItems: 0
