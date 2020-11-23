@@ -48,11 +48,6 @@ namespace JoyLib.Code.World.Generators
                 count += 1;
             }
 
-            if (count >= breakout)
-            {
-                Debug.Log("BREAKOUT REACHED WHEN PLACING DOWNSTAIRS");
-            }
-
             Pathfinder pathfinder = new Pathfinder();
             Queue<Vector2Int> points = pathfinder.FindPath(point, worldRef.SpawnPoint, worldRef);
 
@@ -73,9 +68,9 @@ namespace JoyLib.Code.World.Generators
                     count += 1;
                 }
 
-                if (count >= breakout)
+                if (count < breakout)
                 {
-                    Debug.Log("BREAKOUT REACHED WHEN PLACING DOWNSTAIRS, SECOND TRY");
+                    return point;
                 }
             }
 

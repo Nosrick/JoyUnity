@@ -49,7 +49,7 @@ namespace JoyLib.Code.World.Generators.Interiors
                 //Link to the previous floor
                 if(current != null)
                 {
-                    current.AddArea(worldInstance.SpawnPoint, worldInstance);
+                    current.AddArea(spawnPointPlacer.PlaceTransitionPoint(current), worldInstance);
                 }
                 current = worldInstance;
             }
