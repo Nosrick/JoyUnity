@@ -80,7 +80,7 @@ namespace JoyLib.Code.States
             m_ConversationEngine = m_GameManager.GetComponent<ConversationEngine>();
             GUIManager = m_GameManager.GetComponent<GUIManager>();
 
-            ContextMenu contextMenu = GameObject.Find(CONTEXT_MENU).GetComponent<ContextMenu>();
+            ContextMenu contextMenu = WidgetUtility.Find<ContextMenu>("ContextMenu");
             contextMenu.Close();
 
             TickTimer = TickEvent();
