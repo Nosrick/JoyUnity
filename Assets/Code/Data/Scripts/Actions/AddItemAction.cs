@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
 
@@ -27,7 +29,13 @@ namespace JoyLib.Code.Scripting.Actions
 
             if (newOwner && container is Entity owner)
             {
-                item.SetOwner(owner.GUID);
+                if (tags is null == false 
+                    && (tags.Any(tag => tag.Equals("theft", StringComparison.OrdinalIgnoreCase)) 
+                        && owner.GUID != item.Owner)
+                    || item.Owner == 0)
+                {
+                    item.SetOwner(owner.GUID);
+                }
             }
             
             SetLastParameters(participants, tags, args);

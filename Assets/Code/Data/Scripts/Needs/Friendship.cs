@@ -90,19 +90,13 @@ namespace JoyLib.Code.Entities.Needs
             int bestRelationship = int.MinValue;
             foreach (Entity possible in possibleListeners)
             {
-                List<JoyObject> participants = new List<JoyObject>();
+                List<IJoyObject> participants = new List<IJoyObject>();
                 participants.Add(actor);
                 participants.Add(possible);
 
                 string[] relationshipTags = new[] {"friendship"};
                 IRelationship[] relationships =
                     EntityRelationshipHandler.Get(participants.ToArray(), relationshipTags);
-
-                if (relationships.Length == 0)
-                {
-                    bestMatch = possibleListeners[RNG.instance.Roll(0, possibleListeners.Count)];
-                    break;
-                }
                 
                 foreach (IRelationship relationship in relationships)
                 {
@@ -117,15 +111,11 @@ namespace JoyLib.Code.Entities.Needs
 
             if (bestMatch is null)
             {
-                m_CachedActions["wanderaction"].Execute(
-                    new JoyObject[] {actor},
-                    new[] {"wander", "need", "friendship"},
-                    new object[] {});
-                return false;
+                bestMatch = possibleListeners[RNG.instance.Roll(0, possibleListeners.Count)];
             }
 
             m_CachedActions["seekaction"].Execute(
-                new JoyObject[] {actor, bestMatch},
+                new IJoyObject[] {actor, bestMatch},
                 new[] {"need", "seek", "friendship"},
                 new object[] {"friendship"});
             return true;
@@ -146,7 +136,7 @@ namespace JoyLib.Code.Entities.Needs
             if (obj is Entity listener)
             {
                 m_CachedActions["modifyrelationshippointsaction"].Execute(
-                                new []{listener, actor},
+                                new IJoyObject[]{listener, actor},
                                 new[] { "friendship"},
                                 new object[] { listener.Statistics[EntityStatistic.PERSONALITY].Value, false });
             }

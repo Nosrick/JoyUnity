@@ -149,6 +149,11 @@ namespace JoyLib.Code.Entities.Needs
             {
                 IRelationship[] relationships = RelationshipHandler.GetAllForObject(actor);
 
+                if (relationships.Length == 0)
+                {
+                    return false;
+                }
+                
                 int average = (int)Math.Ceiling(
                     relationships.Average(relationship => 
                         relationship.GetHighestRelationshipValue(actor.GUID)));

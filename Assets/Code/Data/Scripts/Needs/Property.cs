@@ -109,10 +109,38 @@ namespace JoyLib.Code.Entities.Needs
             {
                 return false;
             }
-            
-            return m_CachedActions["additemaction"].Execute(
+
+            List<string> tags = new List<string> {"pickup", "property"};
+            if (item.Owner != actor.GUID && item.Owner != 0)
+            {
+                tags.Add("theft");
+            }
+
+            if (m_CachedActions["additemaction"].Execute(
                 new[] {actor, obj},
-                new[] {"pickup", "property"});
+                tags.ToArray(),
+                new object[] {true}))
+            {
+                if (actor.MyWorld.RemoveObject(actor.WorldPosition, item))
+                {
+                    actor.CurrentTarget = new NeedAIData
+                    {
+                        idle = true,
+                        intent = Intent.Interact,
+                        need = null,
+                        searching = false,
+                        target = null,
+                        targetPoint = GlobalConstants.NO_TARGET
+                    };
+                    return true;
+                }
+                else
+                {
+                    FindFulfilmentObject(actor);
+                }
+            }
+
+            return false;
         }
 
         public override INeed Copy()

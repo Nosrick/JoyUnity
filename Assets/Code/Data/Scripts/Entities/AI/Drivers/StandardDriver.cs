@@ -2,6 +2,7 @@ using JoyLib.Code.World;
 using System.Collections.Generic;
 using JoyLib.Code.Entities.Needs;
 using System.Linq;
+using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using UnityEngine;
@@ -43,7 +44,6 @@ namespace JoyLib.Code.Entities.AI.Drivers
                     }
 
                     need.FindFulfilmentObject(vehicle);
-                    idle = false;
                     break;
                 }
 
@@ -62,11 +62,6 @@ namespace JoyLib.Code.Entities.AI.Drivers
                         new JoyObject[] { vehicle },
                         new[] { "wander", "idle"});
                 }
-
-                NeedAIData currentTarget = vehicle.CurrentTarget;
-                currentTarget.idle = idle;
-
-                vehicle.CurrentTarget = currentTarget;
             }
 
             //If we're wandering, select a point we can see and wander there
@@ -98,18 +93,45 @@ namespace JoyLib.Code.Entities.AI.Drivers
 
             //If we have somewhere to be, move there
             if (vehicle.WorldPosition != vehicle.CurrentTarget.targetPoint 
-                || (vehicle.CurrentTarget.target != null 
-                    && AdjacencyHelper.IsAdjacent(vehicle.WorldPosition, vehicle.CurrentTarget.target.WorldPosition)))
+                || vehicle.CurrentTarget.target != null)
             {
-                MoveToTarget(vehicle);
+                if (vehicle.CurrentTarget.target is ItemInstance 
+                    && vehicle.WorldPosition != vehicle.CurrentTarget.target.WorldPosition)
+                {
+                    if (vehicle.CurrentTarget.targetPoint.Equals(GlobalConstants.NO_TARGET))
+                    {
+                        NeedAIData newData = new NeedAIData
+                        {
+                            idle = vehicle.CurrentTarget.idle,
+                            intent = vehicle.CurrentTarget.intent,
+                            need = vehicle.CurrentTarget.need,
+                            searching = vehicle.CurrentTarget.searching,
+                            target = vehicle.CurrentTarget.target,
+                            targetPoint = vehicle.CurrentTarget.target.WorldPosition
+                        };
+                        vehicle.CurrentTarget = newData;
+                    }
+                    MoveToTarget(vehicle);
+                }
+                else if(vehicle.CurrentTarget.target is Entity
+                    && AdjacencyHelper.IsAdjacent(vehicle.WorldPosition, vehicle.CurrentTarget.target.WorldPosition) == false)
+                {
+                    MoveToTarget(vehicle);
+                }
+                else if (vehicle.CurrentTarget.target is null 
+                && vehicle.CurrentTarget.targetPoint.Equals(GlobalConstants.NO_TARGET) == false)
+                {
+                    MoveToTarget(vehicle);
+                }
             }
             //If we've arrived at our destination, then we do our thing
-            if (vehicle.WorldPosition == vehicle.CurrentTarget.targetPoint 
-                || (vehicle.CurrentTarget.target != null 
-                    && AdjacencyHelper.IsAdjacent(vehicle.WorldPosition, vehicle.CurrentTarget.target.WorldPosition)))
+            if ((vehicle.WorldPosition == vehicle.CurrentTarget.targetPoint
+                && (vehicle.CurrentTarget.target is ItemInstance || vehicle.CurrentTarget.target is null)
+                || (vehicle.CurrentTarget.target is Entity 
+                    && AdjacencyHelper.IsAdjacent(vehicle.WorldPosition, vehicle.CurrentTarget.target.WorldPosition))))
             {
                 //If we have a target
-                if (vehicle.CurrentTarget.target != null)
+                if (vehicle.CurrentTarget.target is null == false)
                 {
                     if (vehicle.CurrentTarget.intent == Intent.Attack)
                     {

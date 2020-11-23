@@ -1,104 +1,112 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Entities>
-  <Entity>
-    <CreatureType>human</CreatureType>
-    <Type>humanoid</Type>
+    <Entity>
+        <CreatureType>human</CreatureType>
+        <Type>humanoid</Type>
 
-    <Statistic>
-		<Name>strength</Name>
-		<Value>4</Value>
-	</Statistic>
-    <Statistic>
-		<Name>agility</Name>
-		<Value>4</Value>
-	</Statistic>
-	<Statistic>
-		<Name>endurance</Name>
-		<Value>5</Value>
-	</Statistic>
+        <Statistic>
+            <Name>strength</Name>
+            <Value>4</Value>
+        </Statistic>
+        <Statistic>
+            <Name>agility</Name>
+            <Value>4</Value>
+        </Statistic>
+        <Statistic>
+            <Name>endurance</Name>
+            <Value>5</Value>
+        </Statistic>
 
-	<Statistic>
-		<Name>intellect</Name>
-		<Value>4</Value>
-	</Statistic>
-	<Statistic>
-		<Name>cunning</Name>
-		<Value>4</Value>
-	</Statistic>
-	<Statistic>
-		<Name>focus</Name>
-		<Value>4</Value>
-	</Statistic>
+        <Statistic>
+            <Name>intellect</Name>
+            <Value>4</Value>
+        </Statistic>
+        <Statistic>
+            <Name>cunning</Name>
+            <Value>4</Value>
+        </Statistic>
+        <Statistic>
+            <Name>focus</Name>
+            <Value>4</Value>
+        </Statistic>
 
-	<Statistic>
-		<Name>personality</Name>
-		<Value>4</Value>
-	</Statistic>
-	<Statistic>
-		<Name>suavity</Name>
-		<Value>4</Value>
-	</Statistic>
-	<Statistic>
-		<Name>wit</Name>
-		<Value>4</Value>
-	</Statistic>
+        <Statistic>
+            <Name>personality</Name>
+            <Value>4</Value>
+        </Statistic>
+        <Statistic>
+            <Name>suavity</Name>
+            <Value>4</Value>
+        </Statistic>
+        <Statistic>
+            <Name>wit</Name>
+            <Value>4</Value>
+        </Statistic>
 
-	<Tag>Living</Tag>
-	<Tag>Sentient</Tag>
-	<Tag>Animated</Tag>
-	<Tag>Diurnal</Tag>
+        <Tag>Living</Tag>
+        <Tag>Sentient</Tag>
+        <Tag>Animated</Tag>
+        <Tag>Diurnal</Tag>
 
-  	<Need>hunger</Need>
-  	<Need>friendship</Need>
-  	<Need>thirst</Need>
-  	<Need>sex</Need>
+        <Need>hunger</Need>
+        <Need>thirst</Need>
+        <Need>sex</Need>
+        <Need>friendship</Need>
+        <Need>family</Need>
+        <Need>health</Need>
+        <Need>property</Need>
+        <Need>respect</Need>
+        <Need>sleep</Need>
+        <Need>confidence</Need>
+        <Need>morality</Need>
+        <Need>purpose</Need>
 
-	<Slot>Head</Slot>
-	<Slot>Neck</Slot>
-	<Slot>Shoulders</Slot>
-	<Slot>Torso</Slot>
-	<Slot>Waist</Slot>
-	<Slot>Legs</Slot>
-	<Slot>Feet</Slot>
-	<Slot>Hand</Slot>
-	<Slot>Hand</Slot>
-	<Slot>Ring</Slot>
-	<Slot>Ring</Slot>
-	<Slot>Ranged</Slot>
-	<Slot>Ammo</Slot>
-	<Slot>Job Pin</Slot>
-	<Slot>Throw</Slot>
+        <Slot>Head</Slot>
+        <Slot>Neck</Slot>
+        <Slot>Shoulders</Slot>
+        <Slot>Torso</Slot>
+        <Slot>Waist</Slot>
+        <Slot>Legs</Slot>
+        <Slot>Feet</Slot>
+        <Slot>Hand</Slot>
+        <Slot>Hand</Slot>
+        <Slot>Ring</Slot>
+        <Slot>Ring</Slot>
+        <Slot>Ranged</Slot>
+        <Slot>Ammo</Slot>
+        <Slot>Job Pin</Slot>
+        <Slot>Throw</Slot>
 
-	<Need>thirst</Need>
+        <Need>thirst</Need>
 
-	<Filename>Player0</Filename>
-	<Tileset>Human</Tileset>
+        <Filename>Player0</Filename>
+        <Tileset>Human</Tileset>
 
-	<Icon>
-		<Name>Warrior</Name>
-		<X>1</X>
-		<Y>11</Y>
-		<Data>Warrior</Data>
-	</Icon>
-	<Icon>
-		<Name>Hedge Wizard</Name>
-		<X>6</X>
-		<Y>11</Y>
-		<Data>Hedge Wizard</Data>
-	</Icon>
-	<Icon>
-		<Name>Thief</Name>
-		<X>7</X>
-		<Y>10</Y>
-		<Data>Thief</Data>
-	</Icon>
+        <Icon>
+            <Name>Warrior</Name>
+            <X>1</X>
+            <Y>11</Y>
+            <Data>Warrior</Data>
+        </Icon>
+        <Icon>
+            <Name>Hedge Wizard</Name>
+            <X>6</X>
+            <Y>11</Y>
+            <Data>Hedge Wizard</Data>
+        </Icon>
+        <Icon>
+            <Name>Thief</Name>
+            <X>7</X>
+            <Y>10</Y>
+            <Data>Thief</Data>
+        </Icon>
 
-	<Icon>
-		<Name>Human</Name>
-		<X>0</X>
-		<Y>11</Y>
-		<Data>Default</Data>
-	</Icon>
+        <Icon>
+            <Name>Human</Name>
+            <X>0</X>
+            <Y>11</Y>
+            <Data>Default</Data>
+        </Icon>
 
-  </Entity>
+    </Entity>
 </Entities>

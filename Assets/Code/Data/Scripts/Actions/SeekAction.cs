@@ -27,6 +27,7 @@ namespace JoyLib.Code.Scripting.Actions
 
             NeedAIData needAIData = new NeedAIData
             {
+                idle = false,
                 intent = Intent.Interact,
                 searching = false,
                 target = participants[1],

@@ -92,7 +92,7 @@ namespace JoyLib.Code.Entities.Needs
             int bestRelationship = int.MinValue;
             foreach (Entity possible in possibleListeners)
             {
-                List<JoyObject> participants = new List<JoyObject>();
+                List<IJoyObject> participants = new List<IJoyObject>();
                 participants.Add(actor);
                 participants.Add(possible);
 
@@ -112,15 +112,39 @@ namespace JoyLib.Code.Entities.Needs
 
             if (bestMatch is null)
             {
-                m_CachedActions["wanderaction"].Execute(
-                    new JoyObject[] {actor},
-                    new[] {"wander", "need", "family"},
-                    new object[] {});
-                return false;
+                foreach (Entity possible in possibleListeners)
+                {
+                    List<IJoyObject> participants = new List<IJoyObject>();
+                    participants.Add(actor);
+                    participants.Add(possible);
+
+                    string[] relationshipTags = new[] {"friendship"};
+                    IRelationship[] relationships = RelationshipHandler.Get(participants.ToArray(), relationshipTags);
+
+                    foreach (IRelationship relationship in relationships)
+                    {
+                        int thisRelationship = relationship.GetRelationshipValue(actor.GUID, possible.GUID);
+                        if (bestRelationship < thisRelationship && actor.Sexuality.WillMateWith(actor, possible, relationships))
+                        {
+                            bestRelationship = thisRelationship;
+                            bestMatch = possible;
+                        }
+                    }
+                }
+
+                if (bestMatch is null)
+                {
+                    m_CachedActions["wanderaction"].Execute(
+                        new IJoyObject[] {actor},
+                        new[] {"wander", "need", "family"},
+                        new object[] {});
+                    return false;
+                }
+                
             }
 
             m_CachedActions["seekaction"].Execute(
-                new JoyObject[] {actor, bestMatch},
+                new IJoyObject[] {actor, bestMatch},
                 new[] {"need", "seek", "family"},
                 new object[] {"family"});
             return true;

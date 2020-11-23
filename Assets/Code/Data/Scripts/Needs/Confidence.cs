@@ -74,6 +74,11 @@ namespace JoyLib.Code.Entities.Needs
             int bestMatch = int.MaxValue;
             foreach (INeed need in needs)
             {
+                if (need == this)
+                {
+                    continue;
+                }
+                
                 if (need.ContributingHappiness == false && need.Value < bestMatch)
                 {
                     bestMatch = need.Value;

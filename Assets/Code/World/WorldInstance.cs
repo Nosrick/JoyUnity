@@ -301,6 +301,12 @@ namespace JoyLib.Code.World
         public bool RemoveObject(Vector2Int positionRef, ItemInstance itemRef)
         {
             bool removed = false;
+
+            if (m_Objects.Any(o => o.WorldPosition.Equals(positionRef) && itemRef.GUID.Equals(o.GUID)) == false)
+            {
+                return false;
+            }
+            
             IJoyObject seek = m_Objects.First(obj => obj.WorldPosition.Equals(positionRef) && itemRef.GUID.Equals(obj.GUID));
             removed = m_Objects.Remove(seek);
 

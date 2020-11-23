@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code.Entities.AI;
 using JoyLib.Code.Entities.Relationships;
@@ -90,7 +91,7 @@ namespace JoyLib.Code.Entities.Needs
         //This will just seek out a random person and ask for a quest stub.
         public override bool FindFulfilmentObject(Entity actor)
         {
-            IEnumerable<string> tags = actor.Tags.Where(x => x.Contains("sentient"));
+            IEnumerable<string> tags = actor.Tags.Where(x => x.IndexOf("sentient", StringComparison.OrdinalIgnoreCase) >= 0);
 
             List<Entity> possibleListeners = actor.MyWorld.SearchForEntities(actor, tags).ToList();
 
@@ -98,9 +99,7 @@ namespace JoyLib.Code.Entities.Needs
             int bestRelationship = int.MinValue;
             foreach (Entity possible in possibleListeners)
             {
-                List<JoyObject> participants = new List<JoyObject>();
-                participants.Add(actor);
-                participants.Add(possible);
+                List<JoyObject> participants = new List<JoyObject> {actor, possible};
 
                 string[] relationshipTags = new[] {"friendship"};
                 IRelationship[] relationships = RelationshipHandler.Get(participants.ToArray(), relationshipTags);
@@ -119,13 +118,13 @@ namespace JoyLib.Code.Entities.Needs
             if (bestMatch is null)
             {
                 m_CachedActions["wanderaction"].Execute(
-                    new JoyObject[] {actor},
+                    new IJoyObject[] {actor},
                     new[] {"wander", "need", "purpose"});
                 return false;
             }
 
             m_CachedActions["seekaction"].Execute(
-                new JoyObject[] {actor, bestMatch},
+                new IJoyObject[] {actor, bestMatch},
                 new[] {"need", "seek", "purpose"},
                 new object[] {"purpose"});
             return true;

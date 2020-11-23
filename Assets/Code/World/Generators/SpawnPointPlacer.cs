@@ -40,13 +40,17 @@ namespace JoyLib.Code.World.Generators
 
             int count = 0;
             while (worldRef.Walls.Keys.Any(l => l == point) && 
-                (point.x != worldRef.SpawnPoint.x && point.y != worldRef.SpawnPoint.y ||
-                count < breakout))
+                (point.Equals(worldRef.SpawnPoint) || count < breakout))
             {
                 x = RNG.instance.Roll(1, worldRef.Tiles.GetLength(0) - 1);
                 y = RNG.instance.Roll(1, worldRef.Tiles.GetLength(1) - 1);
                 point = new Vector2Int(x, y);
                 count += 1;
+            }
+
+            if (count >= breakout)
+            {
+                Debug.Log("BREAKOUT REACHED WHEN PLACING DOWNSTAIRS");
             }
 
             Pathfinder pathfinder = new Pathfinder();
@@ -59,14 +63,19 @@ namespace JoyLib.Code.World.Generators
             else
             {
                 count = 0;
-                while (worldRef.Walls.Keys.Any(l => l == point) &&
-                (point.x != worldRef.SpawnPoint.x && point.y != worldRef.SpawnPoint.y ||
-                count < breakout))
+                while (worldRef.Walls.Keys.Any(l => l == point) 
+                        && (point.Equals(worldRef.SpawnPoint) || count < breakout) 
+                        && pathfinder.FindPath(point, worldRef.SpawnPoint, worldRef).Count == 0)
                 {
                     x = RNG.instance.Roll(1, worldRef.Tiles.GetLength(0) - 1);
                     y = RNG.instance.Roll(1, worldRef.Tiles.GetLength(1) - 1);
                     point = new Vector2Int(x, y);
                     count += 1;
+                }
+
+                if (count >= breakout)
+                {
+                    Debug.Log("BREAKOUT REACHED WHEN PLACING DOWNSTAIRS, SECOND TRY");
                 }
             }
 
