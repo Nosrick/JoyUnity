@@ -44,18 +44,15 @@
 
 	<Icon>
 		<Name>Cider</Name>
-		<X>0</X>
-		<Y>0</Y>
+		<Position>0</Position>
 	</Icon>
 	<Icon>
 		<Name>Water</Name>
-		<X>1</X>
-		<Y>0</Y>
+		<Position>1</Position>
 	</Icon>
 	<Icon>
 		<Name>Wine</Name>
-		<X>2</X>
-		<Y>0</Y>
+		<Position>2</Position>
 	</Icon>
 	</TileSet>
 </Items>
