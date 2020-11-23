@@ -342,12 +342,6 @@ namespace JoyLib.Code.World
 
             foreach (Entity entity in m_Entities)
             {
-                string[] names = m_Entities.Select(entity1 => entity1.JoyName).ToArray();
-                foreach (string name in names)
-                {
-                    Debug.Log(name);
-                }
-                Debug.Log("TICKING: " + entity.JoyName);
                 entity.Tick();
             }
 

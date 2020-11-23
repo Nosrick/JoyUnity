@@ -88,15 +88,6 @@ namespace JoyLib.Code.Entities.Needs
 
             List<Entity> possibleListeners = actor.MyWorld.SearchForEntities(actor, tags).ToList();
 
-            if (possibleListeners.Count == 0)
-            {
-                m_CachedActions["wanderaction"].Execute(
-                    new JoyObject[] {actor},
-                    new[] {"wander", "need", "family"},
-                    new object[] {});
-                return false;
-            }
-
             Entity bestMatch = null;
             int bestRelationship = int.MinValue;
             foreach (Entity possible in possibleListeners)

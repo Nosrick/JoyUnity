@@ -62,14 +62,6 @@ namespace JoyLib.Code.Entities.Needs
         public override bool FindFulfilmentObject(Entity actor)
         {
             Dictionary<Vector2Int, IJoyObject> objects = actor.MyWorld.GetObjectsOfType(new [] {"bed", "sleep"});
-
-            if (objects.Count == 0)
-            {
-                m_CachedActions["wanderaction"].Execute(
-                    new JoyObject[] {actor},
-                    new[] {"need", "sleep", "wander"});
-                return false;
-            }
             
             foreach (KeyValuePair<Vector2Int, IJoyObject> pair in objects)
             {

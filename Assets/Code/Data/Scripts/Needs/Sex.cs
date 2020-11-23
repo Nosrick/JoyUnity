@@ -99,15 +99,6 @@ namespace JoyLib.Code.Entities.Needs
 
             List<Entity> possibleMates = actor.MyWorld.SearchForEntities(actor, tags).ToList();
 
-            if (possibleMates.Count == 0)
-            {
-                m_CachedActions["wanderaction"].Execute(
-                    new IJoyObject[] { actor },
-                    new [] { "need", "wander", "sex" },
-                    new object[] {});
-                return true;
-            }
-
             Entity bestMate = null;
             int bestRelationship = actor.Sexuality.MatingThreshold;
             foreach (Entity mate in possibleMates)
@@ -135,7 +126,7 @@ namespace JoyLib.Code.Entities.Needs
                     new IJoyObject[] { actor },
                     new [] { "need", "wander", "sex" },
                     new object[] {});
-                return true;
+                return false;
             }
             else
             {

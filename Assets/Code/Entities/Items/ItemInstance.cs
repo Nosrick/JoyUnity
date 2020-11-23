@@ -367,21 +367,9 @@ namespace JoyLib.Code.Entities.Items
 
         public void Interact(Entity user)
         {
-            //PythonEngine.ExecuteClassFunction(m_InteractionFile, m_ClassName, "Interact", new dynamic[] { user, this });
+            SetUser(user);
 
-            //object[] arguments = { new MoonEntity(user), new MoonItem(this) };
-            //ScriptingEngine.RunScript(ItemType.InteractionFileContents, ItemType.InteractionFileName, "Interact", arguments);
-
-
-            foreach (IAbility ability in this.UniqueAbilities)
-            {
-                ability.OnInteract(User, this);
-            }
-
-            foreach (IAbility ability in this.ItemType.Effects)
-            {
-                ability.OnInteract(User, this);
-            }
+            Use();
 
             if(!Identified)
             {

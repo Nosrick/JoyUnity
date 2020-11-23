@@ -60,7 +60,7 @@ namespace JoyLib.Code.Entities.AI.Drivers
                 {
                     s_WanderAction.Execute(
                         new JoyObject[] { vehicle },
-                        new string[] {});
+                        new[] { "wander", "idle"});
                 }
 
                 NeedAIData currentTarget = vehicle.CurrentTarget;

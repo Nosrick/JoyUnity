@@ -86,15 +86,6 @@ namespace JoyLib.Code.Entities.Needs
 
             List<Entity> possibleListeners = actor.MyWorld.SearchForEntities(actor, tags).ToList();
 
-            if (possibleListeners.Count == 0)
-            {
-                m_CachedActions["wanderaction"].Execute(
-                    new JoyObject[] {actor},
-                    new[] {"wander", "need", "friendship"},
-                    new object[] {});
-                return false;
-            }
-
             Entity bestMatch = null;
             int bestRelationship = int.MinValue;
             foreach (Entity possible in possibleListeners)
@@ -107,6 +98,12 @@ namespace JoyLib.Code.Entities.Needs
                 IRelationship[] relationships =
                     EntityRelationshipHandler.Get(participants.ToArray(), relationshipTags);
 
+                if (relationships.Length == 0)
+                {
+                    bestMatch = possibleListeners[RNG.instance.Roll(0, possibleListeners.Count)];
+                    break;
+                }
+                
                 foreach (IRelationship relationship in relationships)
                 {
                     int thisRelationship = relationship.GetRelationshipValue(actor.GUID, possible.GUID);

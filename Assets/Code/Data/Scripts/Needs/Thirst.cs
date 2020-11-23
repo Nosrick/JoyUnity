@@ -83,15 +83,6 @@ namespace JoyLib.Code.Entities.Needs
             int bestDrink = 0;
             ItemInstance chosenDrink = null;
 
-            if (targets.Length == 0)
-            {
-                m_CachedActions["wanderaction"].Execute(
-                    new IJoyObject[] { actor },
-                    new string[] { "need", "thirst", "wander" });
-
-                return false;
-            }
-
             //Look for food in the target list
             foreach (ItemInstance target in targets)
             {
@@ -103,7 +94,7 @@ namespace JoyLib.Code.Entities.Needs
             }
 
             //If we've found food, eat it
-            if (chosenDrink != null)
+            if (chosenDrink is null == false)
             {
                 this.Interact(actor, chosenDrink);
                 actor.RemoveContents(chosenDrink);
@@ -126,7 +117,7 @@ namespace JoyLib.Code.Entities.Needs
                 }
             }
 
-            if (chosenDrink != null)
+            if (chosenDrink is null == false)
             {
                 if (chosenDrink.WorldPosition.Equals(actor.WorldPosition))
                 {
