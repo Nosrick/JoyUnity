@@ -36,7 +36,7 @@ namespace JoyLib.Code.States
         protected GameObject m_FogOfWarHolder;
         protected GameObject m_EntitiesHolder;
 
-        protected static GUIManager s_GUIManager;
+        protected GUIManager GUIManager { get; set; }
 
         protected readonly WorldSerialiser m_WorldSerialiser;
 
@@ -74,11 +74,14 @@ namespace JoyLib.Code.States
             m_FogOfWarHolder = GameObject.Find("WorldFog");
             m_EntitiesHolder = GameObject.Find("WorldEntities");
 
-            m_GameManager = GameObject.Find("GameManager");
+            m_GameManager = GlobalConstants.GameManager;
             m_PhysicsManager = m_GameManager.GetComponent<PhysicsManager>();
             m_RelationshipHandler = m_GameManager.GetComponent<EntityRelationshipHandler>();
             m_ConversationEngine = m_GameManager.GetComponent<ConversationEngine>();
-            s_GUIManager = m_GameManager.GetComponent<GUIManager>();
+            GUIManager = m_GameManager.GetComponent<GUIManager>();
+
+            ContextMenu contextMenu = GameObject.Find(CONTEXT_MENU).GetComponent<ContextMenu>();
+            contextMenu.Close();
 
             TickTimer = TickEvent();
             m_GameManager.GetComponent<MonoBehaviour>().StartCoroutine(TickTimer);
@@ -102,18 +105,18 @@ namespace JoyLib.Code.States
                 GameObject contextMenu = GameObject.Find(CONTEXT_MENU);
                 GameObject tradeWindow = GameObject.Find(TRADE);
     
-                s_GUIManager.AddGUI(needsGUIPrefab, false, false);
-                s_GUIManager.AddGUI(inventoryGUIPrefab, true, false);
-                s_GUIManager.AddGUI(equipmentGUIPrefab, true, false);
-                s_GUIManager.AddGUI(conversationWindow, true, true);
-                s_GUIManager.AddGUI(contextMenu, false, false);
-                s_GUIManager.AddGUI(tradeWindow, true, true);
+                GUIManager.AddGUI(needsGUIPrefab, false, false);
+                GUIManager.AddGUI(inventoryGUIPrefab, true, false);
+                GUIManager.AddGUI(equipmentGUIPrefab, true, false);
+                GUIManager.AddGUI(conversationWindow, true, true);
+                GUIManager.AddGUI(contextMenu, false, false);
+                GUIManager.AddGUI(tradeWindow, true, true);
 
                 SetUpGUI = true;
             }
             
-            s_GUIManager.CloseAllOtherGUIs();
-            s_GUIManager.OpenGUI(NEEDSRECT);
+            GUIManager.CloseAllOtherGUIs();
+            GUIManager.OpenGUI(NEEDSRECT);
 
             EquipmentHandler equipmentHandler = WidgetUtility.Find<MutableItemContainer>("Equipment").gameObject.GetComponent<EquipmentHandler>();
             equipmentHandler.SetPlayer(m_ActiveWorld.Player);
@@ -186,7 +189,7 @@ namespace JoyLib.Code.States
 
         protected void SetUpContextMenu()
         {
-            ContextMenu contextMenu = s_GUIManager.GetGUI(CONTEXT_MENU).GetComponent<ContextMenu>();
+            ContextMenu contextMenu = GUIManager.GetGUI(CONTEXT_MENU).GetComponent<ContextMenu>();
 
             contextMenu.Clear();
 
@@ -208,7 +211,7 @@ namespace JoyLib.Code.States
 
             if (contextMenu.GetComponentsInChildren<MenuItem>(true).Length > 1)
             {
-                s_GUIManager.OpenGUI(CONTEXT_MENU);
+                GUIManager.OpenGUI(CONTEXT_MENU);
                 contextMenu.Show();
             }
         }
@@ -220,10 +223,10 @@ namespace JoyLib.Code.States
                 return;
             }
 
-            ContextMenu contextMenu = s_GUIManager.GetGUI(CONTEXT_MENU).GetComponent<ContextMenu>();
-            s_GUIManager.CloseGUI(CONTEXT_MENU);
+            ContextMenu contextMenu = GUIManager.GetGUI(CONTEXT_MENU).GetComponent<ContextMenu>();
+            GUIManager.CloseGUI(CONTEXT_MENU);
             contextMenu.Close();
-            s_GUIManager.OpenGUI(CONVERSATION);
+            GUIManager.OpenGUI(CONVERSATION);
             m_ConversationEngine.SetActors(m_ActiveWorld.Player, entity);
             m_ConversationEngine.Converse();
         }
@@ -309,17 +312,17 @@ namespace JoyLib.Code.States
             */
             if (Input.GetKeyDown(KeyCode.I))
             {
-                s_GUIManager.ToggleGUI(INVENTORY);
+                GUIManager.ToggleGUI(INVENTORY);
             }
             else if (Input.GetKeyDown(KeyCode.E))
             {
-                s_GUIManager.ToggleGUI(EQUIPMENT);
+                GUIManager.ToggleGUI(EQUIPMENT);
             }
             else if (Input.GetKeyDown(KeyCode.T))
             {
-                if (s_GUIManager.IsActive(CONVERSATION))
+                if (GUIManager.IsActive(CONVERSATION))
                 {
-                    s_GUIManager.CloseGUI(CONVERSATION);
+                    GUIManager.CloseGUI(CONVERSATION);
                 }
                 else
                 {
@@ -328,14 +331,14 @@ namespace JoyLib.Code.States
 
                     if (!(listener is null))
                     {
-                        s_GUIManager.OpenGUI(CONVERSATION);
+                        GUIManager.OpenGUI(CONVERSATION);
                         m_ConversationEngine.SetActors(this.PlayerWorld.Player, listener);
                         m_ConversationEngine.Converse(); 
                     }
                 }
             }
 
-            if (s_GUIManager.RemovesControl())
+            if (GUIManager.RemovesControl())
             {
                 return;
             }
@@ -614,7 +617,7 @@ namespace JoyLib.Code.States
         {
             base.OnGui();
 
-            GameObject needsText = s_GUIManager.GetGUI("NeedsText");
+            GameObject needsText = GUIManager.GetGUI("NeedsText");
             //needsText.GetComponent<TextMeshProUGUI>();
         }
 
