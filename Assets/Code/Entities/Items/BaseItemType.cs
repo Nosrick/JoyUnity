@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using JoyLib.Code.Entities.Abilities;
 
 namespace JoyLib.Code.Entities.Items
 {
@@ -9,9 +10,22 @@ namespace JoyLib.Code.Entities.Items
         protected string m_ClassName;
         protected List<string> m_Tags;
 
-        public BaseItemType(string[] tags, string description, string unidentifiedDescriptionRef, string unidentifiedNameRef, string identifiedNameRef, 
-            string[] slotsRef, float size, ItemMaterial material, string governingSkillRef, string actionStringRef, 
-            int valueRef, int spawnRef, string spriteSheet, int lightLevel = 0)
+        public BaseItemType(
+            string[] tags, 
+            string description, 
+            string unidentifiedDescriptionRef, 
+            string unidentifiedNameRef, 
+            string identifiedNameRef, 
+            string[] slotsRef, 
+            float size, 
+            ItemMaterial material, 
+            string governingSkillRef, 
+            string actionStringRef, 
+            int valueRef, 
+            int spawnRef, 
+            string spriteSheet, 
+            int lightLevel = 0,
+            IAbility[] abilities = null)
         {
             m_Tags = tags.ToList();
             
@@ -30,6 +44,7 @@ namespace JoyLib.Code.Entities.Items
             this.ActionString = actionStringRef;
             this.LightLevel = lightLevel;
             this.SpriteSheet = spriteSheet;
+            this.Effects = abilities;
         }
 
         public bool AddTag(string tag)
@@ -86,6 +101,12 @@ namespace JoyLib.Code.Entities.Items
         }
 
         public string UnidentifiedName
+        {
+            get;
+            protected set;
+        }
+
+        public IAbility[] Effects
         {
             get;
             protected set;

@@ -145,13 +145,10 @@ namespace JoyLib.Code.World
 
         protected void CalculatePlayerIndex()
         {
-            for (int i = 0; i < m_Entities.Count; i++)
+            m_PlayerIndex = m_Entities.FindIndex(entity => entity.PlayerControlled);
+            if (m_PlayerIndex > 0 && m_PlayerIndex < m_Entities.Count)
             {
-                if (m_Entities[i].PlayerControlled)
-                {
-                    m_PlayerIndex = i;
-                    return;
-                }
+                s_EntityHandler.SetPlayer(m_Entities[m_PlayerIndex]);
             }
         }
 

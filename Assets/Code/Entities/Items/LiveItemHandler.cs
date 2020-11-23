@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using Castle.Core.Internal;
 using UnityEngine;
 using DevionGames.InventorySystem;
 using JoyLib.Code.Unity;
@@ -76,7 +77,7 @@ namespace JoyLib.Code.Entities.Items
                                                             materials = item.Elements("Material").Select(material => material.GetAs<string>()).ToArray(),
                                                             tags = item.Elements("Tag").Select(tag => tag.GetAs<string>()).ToArray(),
                                                             weighting = item.Element("SpawnWeighting").GetAs<int>(),
-                                                            abilities = item.Elements("Ability").Select(ability => AbilityHandler.instance.GetAbility(ability.GetAs<string>())).ToArray(),
+                                                            abilities = item.Elements("Effect").Select(ability => ability.GetAs<string>() != null ? AbilityHandler.instance.GetAbility(ability.GetAs<string>()) : null).ToArray(),
                                                             lightLevel = item.Element("LightLevel").GetAs<int>()
 
                                                         }).ToList();
@@ -110,6 +111,7 @@ namespace JoyLib.Code.Entities.Items
 
                 string actionWord = doc.Element("ActionWord").DefaultIfEmpty("strikes");
 
+                string effect = doc.Element("Effect").DefaultIfEmpty("");
 
                 for (int j = 0; j < identifiedItems.Count; j++)
                 {
@@ -130,7 +132,8 @@ namespace JoyLib.Code.Entities.Items
                             m_MaterialHandler.GetMaterial(identifiedItems[j].materials[k]), identifiedItems[j].skill,
                             actionWord,
                             identifiedItems[j].value, identifiedItems[j].weighting, identifiedItems[j].spriteSheet,
-                            identifiedItems[j].lightLevel);
+                            identifiedItems[j].lightLevel, 
+                            identifiedItems[j].abilities);
                         items.Add(baseItemType);
                         
                         if(baseItemType.Slots.Any(slot => slot.Equals("none", StringComparison.OrdinalIgnoreCase)))

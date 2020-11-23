@@ -4,7 +4,6 @@
 		<Name>Cider</Name>
 		<Description>Crisp, delicious cider. Made from the finest apples.</Description>
 		<Value>15</Value>
-		<Effect></Effect>
 		<SpawnWeight>30</SpawnWeight>
 		<Material>Glass</Material>
 		<Size>50</Size>
@@ -29,7 +28,6 @@
 		<Name>Wine</Name>
 		<Description>Red wine, made from grapes.</Description>
 		<Value>50</Value>
-		<Effect></Effect>
 		<SpawnWeight>30</SpawnWeight>
 		<Material>Glass</Material>
 		<Size>100</Size>

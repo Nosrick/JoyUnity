@@ -6,7 +6,7 @@
 		<Name>Apple</Name>
 		<Description>Said to keep the doctor away. Juicy and fresh!</Description>
 		<Value>5</Value>
-		<Effect></Effect>
+		<Effect>FoodItem</Effect>
 		<SpawnWeight>30</SpawnWeight>
 		<Material>Food</Material>
 		<Size>36</Size>

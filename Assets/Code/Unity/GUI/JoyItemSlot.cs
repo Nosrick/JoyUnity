@@ -17,6 +17,8 @@ namespace JoyLib.Code.Unity.GUI
         protected static GUIManager GUIManager { get; set; }
         
         protected static GameObject ItemHolder { get; set;}
+        
+        protected static Entity Player { get; set; }
 
         public void Awake()
         {
@@ -24,8 +26,8 @@ namespace JoyLib.Code.Unity.GUI
             {
                 return;
             }
-            ConversationEngine = GameObject.Find("GameManager").GetComponent<ConversationEngine>();
-            GUIManager = GameObject.Find("GameManager").GetComponent<GUIManager>();
+            ConversationEngine = GlobalConstants.GameManager.GetComponent<ConversationEngine>();
+            GUIManager = GlobalConstants.GameManager.GetComponent<GUIManager>();
             ItemHolder = GameObject.Find("WorldObjects");
         }
 
@@ -50,7 +52,12 @@ namespace JoyLib.Code.Unity.GUI
                             
                 menu.Show();
             }
-           
+
+            if (ObservedItem is null == false && ObservedItem is ItemInstance item)
+            {
+                Player = GlobalConstants.GameManager.GetComponent<LiveEntityHandler>().GetPlayer();
+                item.SetUser(Player);
+            }
         }
 
         protected void GiveItem()

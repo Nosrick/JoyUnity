@@ -71,7 +71,7 @@ namespace JoyLib.Code.Entities.Items
 
         public long Owner { get; protected set; }
 
-        protected IAbility m_Ability;
+        public List<IAbility> UniqueAbilities { get; protected set; }
 
         protected static LiveItemHandler s_ItemHandler;
 
@@ -81,8 +81,8 @@ namespace JoyLib.Code.Entities.Items
             Vector2Int position, 
             bool identified, 
             Sprite[] sprites,
-            IAbility abilityRef = null,
-            IJoyAction[] actions = null)
+            IEnumerable<IAbility> uniqueAbilities = null,
+            IEnumerable<IJoyAction> actions = null)
         {        
             this.Data = new NonUniqueDictionary<object, object>();
 
@@ -140,7 +140,7 @@ namespace JoyLib.Code.Entities.Items
 
             this.m_Contents = new List<long>();
 
-            m_Ability = abilityRef;
+            UniqueAbilities = uniqueAbilities is null == false ? new List<IAbility>(uniqueAbilities) : new List<IAbility>();
 
             m_Icon = Sprite;
         }
@@ -157,7 +157,7 @@ namespace JoyLib.Code.Entities.Items
                 copy.WorldPosition,
                 copy.Identified,
                 copy.Sprites,
-                copy.m_Ability,
+                copy.UniqueAbilities,
                 copy.CachedActions.ToArray());
 
             return newItem;
@@ -170,12 +170,20 @@ namespace JoyLib.Code.Entities.Items
 
         public override void Use()
         {
-            if (this.m_Ability is null || User is null)
+            if ((this.UniqueAbilities.Count == 0 && this.ItemType.Effects.Length == 0) || User is null)
             {
                 return;
             }
-            
-            this.m_Ability.OnUse(User, this);
+
+            foreach (IAbility ability in this.UniqueAbilities)
+            {
+                ability.OnUse(User, this);
+            }
+
+            foreach (IAbility ability in this.ItemType.Effects)
+            {
+                ability.OnUse(User, this);
+            }
         }
 
         public IJoyAction FetchAction(string name)
@@ -348,8 +356,7 @@ namespace JoyLib.Code.Entities.Items
         {
             if(s_ItemHandler is null)
             {
-                s_ItemHandler = GameObject.Find("GameManager")
-                                    .GetComponent<LiveItemHandler>();
+                s_ItemHandler = GlobalConstants.GameManager.GetComponent<LiveItemHandler>();
             }
         }
         
@@ -365,7 +372,16 @@ namespace JoyLib.Code.Entities.Items
             //object[] arguments = { new MoonEntity(user), new MoonItem(this) };
             //ScriptingEngine.RunScript(ItemType.InteractionFileContents, ItemType.InteractionFileName, "Interact", arguments);
 
-            m_Ability.OnInteract(user, this);
+
+            foreach (IAbility ability in this.UniqueAbilities)
+            {
+                ability.OnInteract(User, this);
+            }
+
+            foreach (IAbility ability in this.ItemType.Effects)
+            {
+                ability.OnInteract(User, this);
+            }
 
             if(!Identified)
             {
@@ -373,11 +389,11 @@ namespace JoyLib.Code.Entities.Items
                 user.AddIdentifiedItem(DisplayName);
             }
             //Identify any identical items the user is carrying
-            for(int i = 0; i < user.Backpack.Length; i++)
+            foreach (ItemInstance item in user.Backpack)
             {
-                if(user.Backpack[i].DisplayName.Equals(DisplayName) && !user.Backpack[i].Identified)
+                if(item.DisplayName.Equals(DisplayName) && !item.Identified)
                 {
-                    user.Backpack[i].IdentifyMe();
+                    item.IdentifyMe();
                 }
             }
         }

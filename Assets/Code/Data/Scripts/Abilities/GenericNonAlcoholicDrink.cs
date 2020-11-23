@@ -20,9 +20,7 @@ namespace JoyLib.Code.Entities.Abilities
             new Tuple<IBasicValue, int>[0],
             AbilityTrigger.OnUse,
             AbilityTarget.Self)
-        {
-
-        }
+        { }
 
         public GenericNonAlcoholicDrink(
             string name, 
@@ -123,7 +121,7 @@ namespace JoyLib.Code.Entities.Abilities
             {
                 m_CachedActions["fulfillneedaction"].Execute(
                     new JoyObject[] { user },
-                    new string[] { "thirst", "alcohol", "need", "fulfill" },
+                    new string[] { "thirst", "need", "fulfill" },
                     new object[] { "thirst", item.ItemType.Value, 10 }
                 );
                 user.RemoveItemFromPerson(item);

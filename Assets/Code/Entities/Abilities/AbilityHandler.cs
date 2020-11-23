@@ -16,32 +16,26 @@ namespace JoyLib.Code.Entities.Abilities
         private void Load()
         {
             m_Abilities = new List<IAbility>();
-            Type[] types = ScriptingEngine.instance.FetchTypeAndChildren("AbstractAbility");
-            foreach (Type type in types)
-            {
-                if (type.IsAbstract == false && type.IsInterface == false)
-                {
-                    m_Abilities.Add((IAbility)Activator.CreateInstance(type));
-                }
-            }
+            m_Abilities.AddRange(ScriptingEngine.instance.FetchAndInitialiseChildren<IAbility>());
         }
 
         public bool Initialise()
         {
-            if (m_Abilities != null)
+            if (m_Abilities is null)
             {
-                return true;
+                Load();
             }
                 
-            Load();
             return true;
         }
 
         public IAbility GetAbility(string nameRef)
         {
-            if(m_Abilities.Any(x => x.InternalName.Equals(nameRef)))
+            Initialise();
+            
+            if(m_Abilities.Any(x => x.InternalName.Equals(nameRef, StringComparison.OrdinalIgnoreCase)))
             {
-                return m_Abilities.First(x => x.InternalName.Equals(nameRef));
+                return m_Abilities.First(x => x.InternalName.Equals(nameRef, StringComparison.OrdinalIgnoreCase));
             }
             throw new InvalidOperationException("Could not find IAbility with name " + nameRef);
         }
