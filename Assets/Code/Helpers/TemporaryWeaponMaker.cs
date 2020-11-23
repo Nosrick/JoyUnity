@@ -1,4 +1,5 @@
 ﻿using JoyLib.Code.Entities.Items;
+using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
 using UnityEngine;
 
@@ -10,7 +11,7 @@ namespace JoyLib.Code.Helpers
 
         private static void Initialise()
         {
-            s_ObjectIcons = GameObject.Find("GameManager").GetComponent<ObjectIconHandler>();
+            s_ObjectIcons = GlobalConstants.GameManager.GetComponent<ObjectIconHandler>();
         }
 
         //Meant for making things like magic blasts that will never actually appear in the world.
@@ -38,7 +39,17 @@ namespace JoyLib.Code.Helpers
                 0, 
                 "None");
 
-            return new ItemInstance(tempItem, new Vector2Int(-1, -1), true, s_ObjectIcons.GetDefaultSprites(), null);
+            ItemInstance temporary = ScriptableObject.CreateInstance<ItemInstance>();
+            temporary.Initialise(
+                tempItem,
+                EntityDerivedValue.GetDefaultForItem(
+                    tempItem.Material.Bonus,
+                    tempItem.Weight),
+                GlobalConstants.NO_TARGET,
+                true,
+                s_ObjectIcons.GetDefaultSprites());
+
+            return temporary;
         }
     }
 }

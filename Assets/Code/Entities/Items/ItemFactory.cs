@@ -5,6 +5,7 @@ using JoyLib.Code.Graphics;
 using System.Collections.Generic;
 using System.Linq;
 using DevionGames.InventorySystem;
+using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Unity;
 
 namespace JoyLib.Code.Entities.Items
@@ -35,13 +36,18 @@ namespace JoyLib.Code.Entities.Items
                 int result = RNG.instance.Roll(0, matchingTypes.Length);
                 BaseItemType itemType = matchingTypes[result];
 
-                ItemInstance itemInstance = new ItemInstance(itemType, 
-                                                            new Vector2Int(-1, -1), 
-                                                            identified, 
-                                                            ObjectIcons.GetSprites(
-                                                                itemType.SpriteSheet,
-                                                                itemType.UnidentifiedName),
-                                                            FetchItemSO(matchingTypes[result]));
+                ItemInstance itemInstance = ScriptableObject.CreateInstance<ItemInstance>(); 
+                    
+                    itemInstance.Initialise(
+                        itemType, 
+                        EntityDerivedValue.GetDefaultForItem(
+                            itemType.Material.Bonus,
+                            itemType.Weight),
+                        new Vector2Int(-1, -1), 
+                        identified, 
+                        ObjectIcons.GetSprites(
+                            itemType.SpriteSheet,
+                            itemType.UnidentifiedName));
                 return itemInstance;
             }
 
@@ -73,13 +79,19 @@ namespace JoyLib.Code.Entities.Items
             {
                 int result = RNG.instance.Roll(0, secondRound.Count);
                 BaseItemType type = secondRound[result];
-                ItemInstance itemInstance = new ItemInstance(type, 
-                                                            new Vector2Int(-1, -1), 
-                                                            identified,
-                                                            ObjectIcons.GetSprites(
-                                                                type.SpriteSheet,
-                                                                type.UnidentifiedName),
-                                                            FetchItemSO(type));
+                ItemInstance itemInstance = ScriptableObject.CreateInstance<ItemInstance>(); 
+                    
+                    itemInstance.Initialise(
+                        type, 
+                        EntityDerivedValue.GetDefaultForItem(
+                            type.Material.Bonus,
+                            type.Weight),
+                        new Vector2Int(-1, -1), 
+                        identified, 
+                        ObjectIcons.GetSprites(
+                            type.SpriteSheet,
+                            type.UnidentifiedName));
+                    
                 return itemInstance;
             }
 
@@ -92,24 +104,19 @@ namespace JoyLib.Code.Entities.Items
 
             int result = RNG.instance.Roll(0, itemDatabase.Count);
             BaseItemType itemType = itemDatabase[result];
-            ItemInstance itemInstance = new ItemInstance(itemType, 
-                                                        new Vector2Int(-1, -1), 
-                                                        identified,
-                                                        ObjectIcons.GetSprites(
-                                                            itemType.SpriteSheet,
-                                                            itemType.UnidentifiedName),
-                                                        FetchItemSO(itemType));
-            itemInstance.Item.Icon = itemInstance.Icon;
+            ItemInstance itemInstance = ScriptableObject.CreateInstance<ItemInstance>(); 
+                itemInstance.Initialise(
+                    itemType, 
+                    EntityDerivedValue.GetDefaultForItem(
+                        itemType.Material.Bonus,
+                        itemType.Weight),
+                    new Vector2Int(-1, -1), 
+                    identified, 
+                    ObjectIcons.GetSprites(
+                        itemType.SpriteSheet,
+                        itemType.UnidentifiedName));
+                
             return itemInstance;
-        }
-
-        private JoyItem FetchItemSO(BaseItemType itemType)
-        {
-            Item[] items = InventoryManager.Database.items
-                .Where(i => i.Name.Equals(itemType.IdentifiedName, StringComparison.OrdinalIgnoreCase)).ToArray();
-
-            int result = RNG.instance.Roll(0, items.Length);
-            return (JoyItem)ScriptableObject.Instantiate(items[result]);
         }
     }
 }

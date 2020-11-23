@@ -338,7 +338,7 @@ MonoBehaviour:
   m_Focus: 1
   m_DeactivateOnClose: 1
   useButton: 2
-  m_DynamicContainer: 1
+  m_DynamicContainer: 0
   m_SlotParent: {fileID: 7087841499281627286}
   m_SlotPrefab: {fileID: 0}
   m_UseReferences: 0

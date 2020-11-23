@@ -14,17 +14,19 @@ namespace JoyLib.Code.Unity
         protected static GameObject s_WorldObjects;
         protected static LiveEntityHandler s_EntityHandler;
 
-        public JoyPickup()
+        protected void Initialise()
         {
             if (s_WorldObjects is null)
             {
                 s_WorldObjects = GameObject.Find("WorldObjects");
-                s_EntityHandler = GameObject.Find("GameManager").GetComponent<LiveEntityHandler>();
+                s_EntityHandler = GlobalConstants.GameManager.GetComponent<LiveEntityHandler>();
             }
         }
 
         protected override ActionStatus PickupItems()
         {
+            Initialise();
+            
             ItemBehaviourHandler itemBehaviourHandler = this.gameObject.GetComponent<ItemBehaviourHandler>();
             if (itemBehaviourHandler.MyJoyObject is ItemInstance item)
             {
@@ -42,6 +44,8 @@ namespace JoyLib.Code.Unity
 
         protected override void DropItem(Item item)
         {
+            Initialise();
+            
             ItemBehaviourHandler itemBehaviourHandler = this.gameObject.GetComponent<ItemBehaviourHandler>();
             if (itemBehaviourHandler.MyJoyObject is ItemInstance itemInstance)
             {

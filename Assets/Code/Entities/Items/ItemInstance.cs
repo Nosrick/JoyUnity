@@ -2,16 +2,68 @@
 using JoyLib.Code.Entities.Statistics;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using DevionGames.InventorySystem;
+using JoyLib.Code.Collections;
+using JoyLib.Code.Managers;
+using JoyLib.Code.Rollers;
+using JoyLib.Code.Scripting;
 using JoyLib.Code.Unity;
+using JoyLib.Code.World;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities.Items
 {
     [Serializable]
-    public class ItemInstance : JoyObject, IItemContainer, IOwnable
+    public class ItemInstance : EquipmentItem, IJoyObject, IItemContainer, IOwnable
     {
+        public BasicValueContainer<IDerivedValue> DerivedValues { get; protected set; }
+
+        public string TileSet { get; protected set; }
+        
+        public Vector2Int WorldPosition { get; protected set; }
+
+        public bool IsAnimated { get; protected set; }
+
+        public int ChosenSprite { get; protected set; }
+        
+        public int LastIndex { get; protected set; }
+
+        public int FramesSinceLastChange { get; protected set; }
+
+        public List<string> Tags { get; protected set; }
+
+        public bool IsWall { get; protected set; }
+
+        public bool IsDestructible { get; protected set; }
+        
+        public WorldInstance MyWorld { get; set; }
+        
+        public Sprite Sprite => Sprites[ChosenSprite];
+
+        public Sprite[] Sprites { get; protected set; }
+
+        public long GUID { get; protected set; }
+
+        public string JoyName { get; protected set; }
+
+        public int HitPointsRemaining => GetValue("hitpoints");
+
+        public int HitPoints => GetMaximum("hitpoints");
+
+        public bool Conscious => HitPointsRemaining > 0;
+
+        public bool Alive => HitPointsRemaining > (HitPoints * (-1));
+        
+        protected NonUniqueDictionary<object, object> Data { get; set; }
+
+        public List<IJoyAction> CachedActions { get; protected set; }
+        
+        public MonoBehaviourHandler MonoBehaviourHandler { get; protected set; }
+        
+        protected Entity User { get; set; }
+        
         protected bool m_Identified;
 
         protected List<long> m_Contents;
@@ -23,17 +75,62 @@ namespace JoyLib.Code.Entities.Items
 
         protected static LiveItemHandler s_ItemHandler;
 
-        public ItemInstance(BaseItemType type, Vector2Int position, bool identified, Sprite[] sprites, JoyItem itemSO, IAbility abilityRef = null) :
-            base(type.UnidentifiedName, 
-                EntityDerivedValue.GetDefaultForItem(
-                    type.Material.Bonus,
-                    type.Weight),
-                position, 
-                type.SpriteSheet, 
-                new string[] {},
-                sprites, 
-                type.Tags)
+        public void Initialise(
+            BaseItemType type, 
+            BasicValueContainer<IDerivedValue> derivedValues,
+            Vector2Int position, 
+            bool identified, 
+            Sprite[] sprites,
+            IAbility abilityRef = null,
+            IJoyAction[] actions = null)
         {        
+            this.Data = new NonUniqueDictionary<object, object>();
+
+            this.JoyName = identified ? type.IdentifiedName : type.UnidentifiedName;
+            this.Name = this.JoyName;
+            this.m_Description = identified ? type.Description : type.UnidentifiedDescription;
+            this.GUID = GUIDManager.Instance.AssignGUID();
+
+            this.DerivedValues = derivedValues;
+
+            this.TileSet = type.SpriteSheet;
+            this.Tags = type.Tags.ToList();
+
+            this.WorldPosition = position;
+            this.Move(this.WorldPosition);
+
+            this.Sprites = sprites;
+
+            if (this.Tags.Any(tag => tag.Equals("animated", StringComparison.OrdinalIgnoreCase)))
+            {
+                this.IsAnimated = true;
+            }
+
+            if (this.Tags.Any(tag => tag.Equals("invulnerable", StringComparison.OrdinalIgnoreCase)))
+            {
+                this.IsDestructible = false;
+            }
+
+            if (this.Tags.Any(tag => tag.Equals("wall", StringComparison.OrdinalIgnoreCase)))
+            {
+                this.IsWall = true;
+            }
+
+            //If it's not animated, select a random icon to represent it
+            if (!this.IsAnimated && sprites != null)
+            {
+                this.ChosenSprite = RNG.instance.Roll(0, sprites.Length);
+            }
+            else
+            {
+                this.ChosenSprite = 0;
+            }
+
+            this.LastIndex = 0;
+            this.FramesSinceLastChange = 0;
+
+            this.CachedActions = actions is null ? new List<IJoyAction>() : new List<IJoyAction>(actions);
+
             FindItemHandler();
                 
             this.m_Type = type;
@@ -44,61 +141,208 @@ namespace JoyLib.Code.Entities.Items
             this.m_Contents = new List<long>();
 
             m_Ability = abilityRef;
-            this.Item = itemSO;
-            this.Item.AttachJoyObject(this);
+
+            m_Icon = Sprite;
         }
 
-        public ItemInstance(ItemInstance copy) :
-            base(copy.m_Type.UnidentifiedName,
-            EntityDerivedValue.GetDefaultForItem(
-                copy.m_Type.Material.Bonus,
-                copy.m_Type.Weight),
-                copy.WorldPosition,
-                copy.m_Type.SpriteSheet,
-                copy.CachedActions.ToArray(),
-                copy.Icons,
-                copy.m_Type.Tags)
+        public ItemInstance Copy(ItemInstance copy)
         {
             FindItemHandler();
 
-            this.m_Type = copy.m_Type;
-            this.Identified = copy.Identified;
-            this.m_Contents = copy.m_Contents;
-            this.m_Ability = copy.m_Ability;
-            this.Item = copy.Item;
-        }
+            ItemInstance newItem = ScriptableObject.CreateInstance<ItemInstance>();
+            
+            newItem.Initialise(
+                copy.ItemType,
+                copy.DerivedValues,
+                copy.WorldPosition,
+                copy.Identified,
+                copy.Sprites,
+                copy.m_Ability,
+                copy.CachedActions.ToArray());
 
-        /*
-        public ItemInstance(BaseItemType type, int HPRemaining, Vector2Int position, bool identified) : 
-            base(type.description, type.unidentifiedDescription, type.unidentifiedName, type.name, type.slot, type.size, 
-            type.material, position, type.baseType, type.governingSkill, type.actionString, type.interactionFile, 
-            type.value, type.spawnWeighting, type.LightLevel)
+            return newItem;
+        }
+        
+        public void SetUser(Entity user)
         {
-            m_HPRemaining = HPRemaining;
-            GUIDManager.ReleaseGUID(GUID);
-            GUID = GUIDManager.AssignGUID();
-            this.identified = identified;
-            chosenIcon = RNG.instance.Roll(0, m_Icons.Length - 1);
-
-            m_Contents = new List<ItemInstance>();
+            User = user;
         }
 
-        [JsonConstructor]
-        public ItemInstance(List<ItemInstance> contents, int HPRemaining, bool identified, string description, string unidentifiedDescription, 
-            string unidentifiedName, string name, string slot, float size, Material material, Vector2Int position, string baseType, string governingSkill, 
-            string actionString, string interactionFile, int value, int spawnWeighting, int lightLevel) :
-            base(description, unidentifiedDescription, unidentifiedName, name, slot, size, material, position, 
-                baseType, governingSkill, actionString, interactionFile, value, spawnWeighting, lightLevel)
+        public override void Use()
         {
-            m_HPRemaining = HPRemaining;
-            GUIDManager.ReleaseGUID(GUID);
-            GUID = GUIDManager.AssignGUID();
-            this.identified = identified;
-            chosenIcon = RNG.instance.Roll(0, m_Icons.Length - 1);
-
-            m_Contents = contents;
+            if (this.m_Ability is null || User is null)
+            {
+                return;
+            }
+            
+            this.m_Ability.OnUse(User, this);
         }
-        */
+
+        public IJoyAction FetchAction(string name)
+        {
+            return CachedActions.First(action => action.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public bool AddTag(string tag)
+        {
+            if (Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase)) != false)
+            {
+                return false;
+            }
+            
+            Tags.Add(tag);
+            return true;
+        }
+
+        public bool RemoveTag(string tag)
+        {
+            if (!Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase)))
+            {
+                return false;
+            }
+            
+            Tags.Remove(tag);
+            return true;
+        }
+
+        public bool HasTag(string tag)
+        {
+            return Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public void Move(Vector2Int newPosition)
+        {
+            this.WorldPosition = newPosition;
+        }
+
+        public int DamageValue(string name, int value)
+        {
+            return this.ModifyValue(name, -value);
+        }
+
+        public int RestoreValue(string name, int value)
+        {
+            return this.ModifyValue(name, value);
+        }
+
+        public int GetValue(string name)
+        {
+            if (DerivedValues.Has(name))
+            {
+                return DerivedValues.Get(name);
+            }
+            
+            throw new InvalidOperationException("Derived value of " + name + " not found on JoyObject " + this.ToString());
+        }
+
+        public int GetMaximum(string name)
+        {
+            if (DerivedValues.Has(name))
+            {
+                return DerivedValues.GetRawValue(name).Maximum;
+            }
+            
+            throw new InvalidOperationException("Derived value of " + name + " not found on JoyObject " + this.ToString());
+        }
+
+        public int ModifyValue(string name, int value)
+        {
+            if (DerivedValues.Has(name))
+            {
+                return DerivedValues[name].ModifyValue(value);
+            }
+
+            throw new InvalidOperationException("Derived value of " + name + " not found on JoyObject " + this.ToString());
+        }
+
+        //Used for deserialisation
+        public void SetIcons(Sprite[] sprites)
+        {
+            Sprites = sprites;
+        }
+
+        // Update is called once per frame
+        public virtual void Update ()
+        {
+            FramesSinceLastChange += 1;
+
+            if(IsAnimated == false)
+            {
+                return;
+            }
+
+            if (FramesSinceLastChange != GlobalConstants.FRAMES_PER_SECOND)
+            {
+                return;
+            }
+            
+            ChosenSprite += 1;
+            ChosenSprite %= Sprites.Length;
+
+            FramesSinceLastChange = 0;
+
+            m_Icon = Sprite;
+        }
+
+        public int CompareTo(object obj)
+        {
+            switch (obj)
+            {
+                case null:
+                    return 1;
+                
+                case JoyObject joyObject:
+                    return this.GUID.CompareTo(joyObject.GUID);
+                
+                default:
+                    throw new ArgumentException("Object is not a JoyObject");
+            }
+        }
+
+        public override string ToString()
+        {
+            return "{ " + this.JoyName + " : " + this.GUID + "}";
+        }
+
+        public bool AddData(object key, object value)
+        {
+            Data.Add(key, value);
+            return true;
+        }
+
+        public bool RemoveData(object key)
+        {
+            return Data.RemoveByKey(key) > 0;
+        }
+
+        public bool HasDataKey(object search)
+        {
+            return Data.ContainsKey(search);
+        }
+
+        public bool HasDataValue(object search)
+        {
+            return Data.ContainsValue(search);
+        }
+
+        public object[] GetDataValues(object key)
+        {
+            return Data.Where(tuple => tuple.Item1.Equals(key))
+                .Select(tuple => tuple.Item2)
+                .ToArray();
+        }
+
+        public object[] GetDataKeysForValue(object value)
+        {
+            return Data.Where(tuple => tuple.Item2.Equals(value))
+                .Select(tuple => tuple.Item1)
+                .ToArray();
+        }
+
+        public void AttachMonoBehaviourHandler(MonoBehaviourHandler mbh)
+        {
+            MonoBehaviourHandler = mbh;
+        }
 
         protected void FindItemHandler()
         {
@@ -172,11 +416,16 @@ namespace JoyLib.Code.Entities.Items
             return contents;
         }
 
-        public bool AddContents(JoyObject actor)
+        public bool AddContents(ItemInstance actor)
         {
             m_Contents.Add(actor.GUID);
 
             return true;
+        }
+
+        public bool RemoveContents(ItemInstance actor)
+        {
+            return m_Contents.Remove(actor.GUID);
         }
 
         public bool Identified
@@ -250,7 +499,7 @@ namespace JoyLib.Code.Entities.Items
             }
         }
 
-        public string DisplayName
+        public new string DisplayName
         {
             get
             {
@@ -363,26 +612,8 @@ namespace JoyLib.Code.Entities.Items
             }
         }
 
-        public BaseItemType ItemType
-        {
-            get
-            {
-                return m_Type;
-            }
-        }
+        public BaseItemType ItemType => m_Type;
 
-        public int Value
-        {
-            get
-            {
-                return (int)(m_Type.Value * m_Type.Material.ValueMod);
-            }
-        }
-
-        public JoyItem Item
-        {
-            get;
-            protected set;
-        }
+        public int Value => (int)(m_Type.Value * m_Type.Material.ValueMod);
     }
 }

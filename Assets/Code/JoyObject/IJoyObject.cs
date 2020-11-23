@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Scripting;
+using JoyLib.Code.Unity;
 using JoyLib.Code.World;
 
 namespace JoyLib.Code
@@ -14,10 +15,14 @@ namespace JoyLib.Code
         
         WorldInstance MyWorld { get; set; }
         
+        MonoBehaviourHandler MonoBehaviourHandler { get; }
+        
         List<IJoyAction> CachedActions { get; }
         
         void Update();
 
         IJoyAction FetchAction(string name);
+
+        void AttachMonoBehaviourHandler(MonoBehaviourHandler behaviourHandler);
     }
 }

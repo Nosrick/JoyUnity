@@ -33,8 +33,11 @@ namespace JoyLib.Code.Conversation.Subengines.Rumours
                 case "possessive":
                     return gender.Possessive;
                 
-                case "personal":
-                    return gender.Personal;
+                case "personalsubject":
+                    return gender.PersonalSubject;
+                
+                case "personalobject":
+                    return gender.PersonalObject;
                 
                 case "reflexive":
                     return gender.Reflexive;
@@ -46,7 +49,7 @@ namespace JoyLib.Code.Conversation.Subengines.Rumours
                     return gender.ReflexivePlural;
                 
                 default:
-                    return gender.Personal;
+                    return gender.PersonalObject;
             }
         }
     }

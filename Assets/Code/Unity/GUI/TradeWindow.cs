@@ -68,15 +68,15 @@ namespace JoyLib.Code.Unity.GUI
 
             foreach (ItemInstance item in Left.Backpack)
             {
-                LeftInventory.StackOrAdd(item.Item);
+                LeftInventory.StackOrAdd(item);
             }
 
             foreach (ItemInstance item in Right.Backpack)
             {
-                RightInventory.StackOrAdd(item.Item);
+                RightInventory.StackOrAdd(item);
             }
 
-            RightName.text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Right.Gender.Personal) + " " + Right.Gender.IsOrAre + " offering";
+            RightName.text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Right.Gender.PersonalSubject) + " " + Right.Gender.IsOrAre + " offering";
             LayoutRebuilder.ForceRebuildLayoutImmediate(RectTransform);
         }
 
@@ -87,22 +87,22 @@ namespace JoyLib.Code.Unity.GUI
             
             foreach (Item item in LeftOffering.Collection)
             {
-                if (!(item is JoyItem joyItem))
+                if (!(item is ItemInstance joyItem))
                 {
                     continue;
                 }
 
-                leftValue += joyItem.ItemInstance.Value;
+                leftValue += joyItem.Value;
             }
 
             foreach (Item item in RightOffering.Collection)
             {
-                if (!(item is JoyItem joyItem))
+                if (!(item is ItemInstance joyItem))
                 {
                     continue;
                 }
 
-                rightValue += joyItem.ItemInstance.Value;
+                rightValue += joyItem.Value;
             }
 
             int relationshipValue = RelationshipHandler.GetHighestRelationshipValue(Right, Left);
@@ -119,26 +119,26 @@ namespace JoyLib.Code.Unity.GUI
 
                 for(int i = LeftOffering.Collection.Count - 1; i >= 0; i--)
                 {
-                    if (!(LeftOffering.Collection[i] is JoyItem joyItem))
+                    if (!(LeftOffering.Collection[i] is ItemInstance joyItem))
                     {
                         continue;
                     }
 
                     LeftOffering.RemoveItem(joyItem);
-                    Left.RemoveItemFromBackpack(joyItem.ItemInstance);
-                    Right.AddContents(joyItem.ItemInstance);
+                    Left.RemoveContents(joyItem);
+                    Right.AddContents(joyItem);
                 }
 
                 for(int i = RightOffering.Collection.Count - 1; i >= 0; i--)
                 {
-                    if (!(RightOffering.Collection[i] is JoyItem joyItem))
+                    if (!(RightOffering.Collection[i] is ItemInstance joyItem))
                     {
                         continue;
                     }
 
                     RightOffering.RemoveItem(joyItem);
-                    Right.RemoveItemFromBackpack(joyItem.ItemInstance);
-                    Left.AddContents(joyItem.ItemInstance);
+                    Right.RemoveContents(joyItem);
+                    Left.AddContents(joyItem);
                 }
                 
                 SetActors(Left, Right);
@@ -156,22 +156,22 @@ namespace JoyLib.Code.Unity.GUI
             
             foreach (Item item in LeftOffering.Collection)
             {
-                if (!(item is JoyItem joyItem))
+                if (!(item is ItemInstance joyItem))
                 {
                     continue;
                 }
 
-                leftValue += joyItem.ItemInstance.Value;
+                leftValue += joyItem.Value;
             }
 
             foreach (Item item in RightOffering.Collection)
             {
-                if (!(item is JoyItem joyItem))
+                if (!(item is ItemInstance joyItem))
                 {
                     continue;
                 }
 
-                rightValue += joyItem.ItemInstance.Value;
+                rightValue += joyItem.Value;
             }
 
             LeftValue.text = "Your value: " + leftValue;

@@ -5,11 +5,11 @@ namespace JoyLib.Code.Unity
 {
     public class MonoBehaviourHandler : MonoBehaviour
     {
-        protected JoyObject m_JoyObject;
+        protected IJoyObject m_JoyObject;
         protected SpriteRenderer m_SpriteRenderer;
         protected SpriteRenderer SpeechBubble { get; set; }
 
-        public JoyObject MyJoyObject => m_JoyObject;
+        public IJoyObject MyJoyObject => m_JoyObject;
 
         public void Update()
         {
@@ -19,7 +19,7 @@ namespace JoyLib.Code.Unity
             }
             
             m_JoyObject.Update();
-            m_SpriteRenderer.sprite = m_JoyObject.Icon;
+            m_SpriteRenderer.sprite = m_JoyObject.Sprite;
             this.transform.position = new Vector3(m_JoyObject.WorldPosition.x, m_JoyObject.WorldPosition.y);
         }
 
@@ -27,7 +27,7 @@ namespace JoyLib.Code.Unity
         {
         }
 
-        public virtual void AttachJoyObject(JoyObject joyObject)
+        public virtual void AttachJoyObject(IJoyObject joyObject)
         {
             m_JoyObject = joyObject;
             m_JoyObject.AttachMonoBehaviourHandler(this);
@@ -67,7 +67,7 @@ namespace JoyLib.Code.Unity
             }
             this.name = m_JoyObject.JoyName + ":" + m_JoyObject.GUID;
             this.transform.position = new Vector3(m_JoyObject.WorldPosition.x, m_JoyObject.WorldPosition.y, 0.0f);
-            m_SpriteRenderer.sprite = joyObject.Icon;
+            m_SpriteRenderer.sprite = joyObject.Sprite;
         }
 
         public void SetSpeechBubble(bool on, Sprite need = null)

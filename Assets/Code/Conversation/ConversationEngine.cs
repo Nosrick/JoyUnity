@@ -273,7 +273,7 @@ namespace JoyLib.Code.Conversation
             Instigator = instigator;
             Listener = listener;
 
-            LastSpokeIcon.sprite = Listener.Icon;
+            LastSpokeIcon.sprite = Listener.Sprite;
 
             try
             {

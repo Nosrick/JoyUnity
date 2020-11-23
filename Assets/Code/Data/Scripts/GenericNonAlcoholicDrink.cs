@@ -67,7 +67,7 @@ namespace JoyLib.Code.Entities.Abilities
             return healing;
         }
 
-        public override bool OnInteract(Entity actor, JoyObject observer)
+        public override bool OnInteract(Entity actor, IJoyObject observer)
         {
             return false;
         }
@@ -117,10 +117,9 @@ namespace JoyLib.Code.Entities.Abilities
             return false;
         }
 
-        public override bool OnUse(Entity user, JoyObject target)
+        public override bool OnUse(Entity user, IJoyObject target)
         {
-            ItemInstance item = target as ItemInstance;
-            if(item != null)
+            if(target is ItemInstance item)
             {
                 m_CachedActions["fulfillneedaction"].Execute(
                     new JoyObject[] { user },

@@ -6,6 +6,8 @@ namespace JoyLib.Code.Entities.Items
     {
         List<ItemInstance> GetContents();
 
-        bool AddContents(JoyObject actor);
+        bool AddContents(ItemInstance actor);
+
+        bool RemoveContents(ItemInstance actor);
     }
 }

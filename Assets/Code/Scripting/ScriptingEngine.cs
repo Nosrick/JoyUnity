@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using DevionGames;
+using DevionGames.InventorySystem;
 using UnityEngine;
 using JoyLib.Code.Helpers;
 
@@ -48,7 +50,9 @@ namespace JoyLib.Code.Scripting
                     MetadataReference.CreateFromFile(typeof(Vector2Int).Assembly.Location),
                     MetadataReference.CreateFromFile(typeof(Queue<bool>).Assembly.Location),
                     MetadataReference.CreateFromFile(typeof(System.Linq.IQueryable).Assembly.Location),
-                    MetadataReference.CreateFromFile(typeof(GlobalConstants).Assembly.Location)
+                    MetadataReference.CreateFromFile(typeof(GlobalConstants).Assembly.Location),
+                    MetadataReference.CreateFromFile(typeof(EquipmentItem).Assembly.Location),
+                    MetadataReference.CreateFromFile(typeof(INameable).Assembly.Location)
                 };
                 CSharpCompilation compilation = CSharpCompilation.Create("JoyScripts", builtFiles, libs, 
                     new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
@@ -60,8 +64,11 @@ namespace JoyLib.Code.Scripting
                 {
                     foreach(var diagnostic in result.Diagnostics)
                     {
-                        Debug.Log(diagnostic.GetMessage());
-                        Debug.Log(diagnostic.Severity.ToString());
+                        if (diagnostic.Severity == DiagnosticSeverity.Error)
+                        {
+                            Debug.Log(diagnostic.Severity.ToString());
+                            Debug.Log(diagnostic.GetMessage());
+                        }
                     }
                 }
 

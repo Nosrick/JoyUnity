@@ -41,13 +41,13 @@ namespace JoyLib.Code.Unity
             }
         }
 
-        public override void AttachJoyObject(JoyObject joyObject)
+        public override void AttachJoyObject(IJoyObject joyObject)
         {
             base.AttachJoyObject(joyObject);
 
             if (joyObject is ItemInstance itemInstance)
             {
-                m_Items.Add(itemInstance.Item);
+                m_Items.Add(itemInstance);
             }
         }
 

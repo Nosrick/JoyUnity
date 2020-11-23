@@ -51,7 +51,7 @@ namespace DevionGames.InventorySystem
         }
 
         [SerializeField]
-		private Sprite m_Icon;
+		protected Sprite m_Icon;
 
 		public Sprite Icon {
 			get{ return this.m_Icon; }
@@ -68,7 +68,7 @@ namespace DevionGames.InventorySystem
 
 		[SerializeField]
 		[Multiline (4)]
-		private string m_Description = string.Empty;
+		protected string m_Description = string.Empty;
 
 		public string Description {
 			get{ return this.m_Description; }

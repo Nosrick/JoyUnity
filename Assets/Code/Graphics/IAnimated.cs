@@ -4,11 +4,11 @@ namespace JoyLib.Code.Graphics
 {
     public interface IAnimated
     {
-        Sprite[] Icons { get; }
-        Sprite Icon { get; }
-        int LastIcon { get; }
-        int ChosenIcon { get; }
-        string Tileset { get; }
+        Sprite[] Sprites { get; }
+        Sprite Sprite { get; }
+        int LastIndex { get; }
+        int ChosenSprite { get; }
+        string TileSet { get; }
         int FramesSinceLastChange { get; }
         bool IsAnimated { get; }
     }

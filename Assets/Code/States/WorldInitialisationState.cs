@@ -89,14 +89,14 @@ namespace JoyLib.Code.States
             }
 
             //Create the objects
-            foreach (JoyObject obj in m_ActiveWorld.Objects)
+            foreach (IJoyObject obj in m_ActiveWorld.Objects)
             {
                 MonoBehaviourHandler newObject = GameObject.Instantiate(itemPrefab, objectHolder.transform, true);
                 newObject.AttachJoyObject(obj);
             }
 
             //Create the walls
-            foreach(JoyObject wall in m_ActiveWorld.Walls.Values)
+            foreach(IJoyObject wall in m_ActiveWorld.Walls.Values)
             {
                 MonoBehaviourHandler newObject = GameObject.Instantiate(prefab, wallHolder.transform, true);
                 newObject.AttachJoyObject(wall);

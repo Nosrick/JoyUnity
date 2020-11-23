@@ -4,6 +4,7 @@ using DevionGames.InventorySystem;
 using UnityEngine.EventSystems;
 using JoyLib.Code.Conversation;
 using JoyLib.Code.Entities;
+using JoyLib.Code.Entities.Items;
 using UnityEngine;
 using ContextMenu = DevionGames.UIWidgets.ContextMenu;
 
@@ -62,7 +63,7 @@ namespace JoyLib.Code.Unity.GUI
                 return;
             }
 
-            if (!(ObservedItem is JoyItem joyItem))
+            if (!(ObservedItem is ItemInstance joyItem))
             {
                 return;
             }
@@ -70,7 +71,7 @@ namespace JoyLib.Code.Unity.GUI
             left.FetchAction("giveitemaction").Execute(
                 new IJoyObject[] {left, right},
                 new string[] {"give"},
-                joyItem.ItemInstance);
+                joyItem);
                 
             GUIManager.CloseGUI("Inventory");
         }
@@ -78,7 +79,7 @@ namespace JoyLib.Code.Unity.GUI
         protected override void DropItem()
         {
             //Get the item to drop
-            JoyItem item = dragObject != null ? (JoyItem)dragObject.item : (JoyItem)ObservedItem;
+            ItemInstance item = dragObject != null ? (ItemInstance)dragObject.item : (ItemInstance)ObservedItem;
 
             //Check if the item is droppable
             if (item != null && item.IsDroppable)
@@ -121,10 +122,10 @@ namespace JoyLib.Code.Unity.GUI
                 go.name = go.name.Replace("(Clone)", "");
                 
                 go.transform.parent = ItemHolder.transform;
-                go.GetComponent<ItemBehaviourHandler>().AttachJoyObject(item.ItemInstance);
+                go.GetComponent<ItemBehaviourHandler>().AttachJoyObject(item);
                 SpriteRenderer renderer = go.GetComponent<SpriteRenderer>(); 
-                renderer.sprite = item.ItemInstance.Icon;
-                item.ItemInstance.Move(Vector2Int.FloorToInt(position));
+                renderer.sprite = item.Sprite;
+                item.Move(Vector2Int.FloorToInt(position));
                 renderer.sortingLayerName = "Objects";
                 
                 //Reset the item collection of the prefab with this item

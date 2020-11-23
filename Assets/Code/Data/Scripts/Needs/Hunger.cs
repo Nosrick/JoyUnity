@@ -104,7 +104,7 @@ namespace JoyLib.Code.Entities.Needs
             if(chosenFood != null)
             {
                 this.Interact(actor, chosenFood);
-                actor.RemoveItemFromBackpack(chosenFood);
+                actor.RemoveContents(chosenFood);
                 return true;
             }
 

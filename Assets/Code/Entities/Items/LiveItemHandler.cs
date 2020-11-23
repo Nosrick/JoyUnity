@@ -135,7 +135,7 @@ namespace JoyLib.Code.Entities.Items
                         
                         if(baseItemType.Slots.Any(slot => slot.Equals("none", StringComparison.OrdinalIgnoreCase)))
                         {
-                            JoyItem itemSO = ScriptableObject.CreateInstance<JoyItem>();
+                            ItemInstance itemSO = ScriptableObject.CreateInstance<ItemInstance>();
                             itemSO.Name = baseItemType.IdentifiedName;
                             itemSO.Icon = m_ObjectIcons.GetSprite(baseItemType.SpriteSheet, baseItemType.IdentifiedName);
                             itemSO.Prefab = s_ItemPrefab;
@@ -144,7 +144,7 @@ namespace JoyLib.Code.Entities.Items
                         }
                         else
                         {
-                            JoyItem itemSO = ScriptableObject.CreateInstance<JoyItem>();
+                            ItemInstance itemSO = ScriptableObject.CreateInstance<ItemInstance>();
                             itemSO.Name = baseItemType.IdentifiedName;
                             itemSO.Icon = m_ObjectIcons.GetSprite(baseItemType.SpriteSheet, baseItemType.IdentifiedName);
                             itemSO.Prefab = s_ItemPrefab;

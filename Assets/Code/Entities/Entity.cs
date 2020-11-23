@@ -249,9 +249,9 @@ namespace JoyLib.Code.Entities
                 copy.JoyName,
                 copy.DerivedValues,
                 copy.WorldPosition,
-                copy.Tileset,
+                copy.TileSet,
                 copy.CachedActions.ToArray(),
-                copy.Icons,
+                copy.Sprites,
                 copy.Tags.ToArray())
         {
             this.CreatureType = copy.CreatureType;
@@ -536,7 +536,7 @@ namespace JoyLib.Code.Entities
             m_IdentifiedItems.Add(nameRef);
         }
 
-        public virtual bool RemoveItemFromBackpack(ItemInstance item)
+        public virtual bool RemoveContents(ItemInstance item)
         {
             if (m_Backpack.Contains(item))
             {
@@ -565,7 +565,7 @@ namespace JoyLib.Code.Entities
                 }
             }
             //Then the backpack
-            return RemoveItemFromBackpack(item);
+            return RemoveContents(item);
         }
 
         public virtual bool RemoveEquipment(string slot, ItemInstance item = null)
@@ -824,19 +824,14 @@ namespace JoyLib.Code.Entities
             return m_Backpack;
         }
 
-        public virtual bool AddContents(JoyObject actor)
+        public virtual bool AddContents(ItemInstance actor)
         {
-            if(!(actor is ItemInstance item))
+            if (m_IdentifiedItems.Any(i => i.Equals(actor.JoyName, StringComparison.OrdinalIgnoreCase)))
             {
-                return false;
+                actor.IdentifyMe();
             }
 
-            if (m_IdentifiedItems.Any(i => i.Equals(item.JoyName, StringComparison.OrdinalIgnoreCase)))
-            {
-                item.IdentifyMe();
-            }
-
-            m_Backpack.Add(item);
+            m_Backpack.Add(actor);
             return true;
         }
 

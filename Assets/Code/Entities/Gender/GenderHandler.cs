@@ -42,7 +42,8 @@ namespace JoyLib.Code.Entities.Gender
                         select new BaseGender(
                             gender.Element("Name").GetAs<string>(),
                             gender.Element("Possessive").GetAs<string>(),
-                            gender.Element("Personal").GetAs<string>(),
+                            gender.Element("PersonalSubject").GetAs<string>(),
+                            gender.Element("PersonalObject").GetAs<string>(),
                             gender.Element("Reflexive").GetAs<string>(),
                             gender.Element("PossessivePlural").GetAs<string>(),
                             gender.Element("ReflexivePlural").GetAs<string>(),

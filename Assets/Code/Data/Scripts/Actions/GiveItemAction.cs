@@ -43,7 +43,7 @@ namespace JoyLib.Code.Scripting.Actions
                 return false;
             }
 
-            if (!left.RemoveItemFromBackpack(item))
+            if (!left.RemoveContents(item))
             {
                 return false;
             }

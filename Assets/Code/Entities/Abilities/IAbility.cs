@@ -34,10 +34,10 @@ namespace JoyLib.Code.Entities.Abilities
         bool OnDisable(Entity attacker, Entity target, IDerivedValue value);
 
         //When the entity uses an item
-        bool OnUse(Entity user, JoyObject target);
+        bool OnUse(Entity user, IJoyObject target);
 
         //When the entity interacts with something
-        bool OnInteract(Entity actor, JoyObject observer);
+        bool OnInteract(Entity actor, IJoyObject observer);
 
         //When the entity uses a skill
         //This returns the success threshold modification for the roll

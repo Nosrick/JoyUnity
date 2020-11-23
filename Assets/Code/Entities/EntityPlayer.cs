@@ -24,21 +24,16 @@ namespace JoyLib.Code.Entities
             return base.EquipItem(slotRef, itemRef);
         }
 
-        public override bool AddContents(JoyObject actor)
+        public override bool AddContents(ItemInstance actor)
         {
-            if(actor is ItemInstance item)
-            {
-                m_Inventory.StackOrAdd(item.Item);
-                return base.AddContents(actor);
-            }
-
-            return false;
+            m_Inventory.StackOrAdd(actor);
+            return base.AddContents(actor);
         }
 
-        public override bool RemoveItemFromBackpack(ItemInstance item)
+        public override bool RemoveContents(ItemInstance item)
         {
-            m_Inventory.RemoveItem(item.Item);
-            return base.RemoveItemFromBackpack(item);
+            m_Inventory.RemoveItem(item);
+            return base.RemoveContents(item);
         }
     }
 }

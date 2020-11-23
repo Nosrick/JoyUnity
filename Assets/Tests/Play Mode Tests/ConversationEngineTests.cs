@@ -41,6 +41,7 @@ namespace Tests
         private GameObject gameManager;
         private GameObject conversationWindow;
         private GameObject inventoryWindow;
+        private GameObject tradeWindow;
         
         private EntityTemplateHandler templateHandler;
 
@@ -101,10 +102,16 @@ namespace Tests
             conversationWindow.name = "Conversation Window";
 
             inventoryWindow = GameObject.Instantiate(
-                Resources.Load<GameObject>("Prefabs/GUI/Inventory/GUIInventory"), 
+                Resources.Load<GameObject>("Prefabs/GUI/Inventory/Inventory"), 
                 canvas.transform,
                 true);
             inventoryWindow.name = "Inventory";
+
+            tradeWindow = GameObject.Instantiate(
+                Resources.Load<GameObject>("Prefabs/GUI/Trade"),
+                canvas.transform,
+                true);
+            tradeWindow.name = "Trade";
 
             objectIconHandler = gameManager.AddComponent<ObjectIconHandler>();
             templateHandler = gameManager.AddComponent<EntityTemplateHandler>();
@@ -124,12 +131,13 @@ namespace Tests
 
             entityHandler = gameManager.AddComponent<LiveEntityHandler>();
 
-            GameObject conversationGUI =
+            conversationWindow =
                 GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/GUI/Conversation/Conversation Window"));
-            conversationGUI.name = "Conversation Window";
-            guiManager.AddGUI(conversationGUI, true, true);
-            guiManager.OpenGUI(conversationGUI.name);
+            conversationWindow.name = "Conversation Window";
+            guiManager.AddGUI(conversationWindow, true, true);
             guiManager.AddGUI(inventoryWindow);
+            guiManager.AddGUI(tradeWindow);
+            guiManager.OpenGUI(conversationWindow.name);
 
             scriptingEngine = new ScriptingEngine();
 
@@ -260,6 +268,9 @@ namespace Tests
         {
             GameObject.DestroyImmediate(gameManager);
             GameObject.DestroyImmediate(inventoryManager);
+            GameObject.DestroyImmediate(tradeWindow);
+            GameObject.DestroyImmediate(inventoryWindow);
+            GameObject.DestroyImmediate(conversationWindow);
             GameObject.DestroyImmediate(listenerObject.gameObject);
             GameObject.DestroyImmediate(instigatorObject.gameObject);
         }

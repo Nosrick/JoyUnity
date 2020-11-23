@@ -82,12 +82,12 @@ namespace JoyLib.Code.IO
         {
             foreach(JoyObject obj in parent.Objects)
             {
-                obj.SetIcons(s_ObjectIcons.GetSprites(obj.Tileset, obj.JoyName));
+                obj.SetIcons(s_ObjectIcons.GetSprites(obj.TileSet, obj.JoyName));
             }
 
             foreach(Entity entity in parent.Entities)
             {
-                entity.SetIcons(s_ObjectIcons.GetSprites(entity.Tileset, entity.CreatureType));
+                entity.SetIcons(s_ObjectIcons.GetSprites(entity.TileSet, entity.CreatureType));
             }
 
             foreach(WorldInstance world in parent.Areas.Values)

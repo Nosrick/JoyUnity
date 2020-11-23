@@ -113,7 +113,7 @@ namespace Tests
             IBioSex sex = Mock.Of<IBioSex>(s => s.Name == "female");
             IGender gender = Mock.Of<IGender>(
                 g => g.Name == "female" 
-                    && g.Personal == "her");
+                    && g.PersonalSubject == "her");
             ISexuality sexuality = Mock.Of<ISexuality>();
             IRomance romance = Mock.Of<IRomance>();
 

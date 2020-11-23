@@ -3,7 +3,8 @@
     public interface IGender
     {
         string Possessive { get; }
-        string Personal { get; }
+        string PersonalSubject { get; }
+        string PersonalObject { get; }
         string Reflexive { get; }
         string Name { get; }
 

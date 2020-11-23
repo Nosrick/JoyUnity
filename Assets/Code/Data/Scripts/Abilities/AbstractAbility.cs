@@ -106,14 +106,14 @@ namespace JoyLib.Code.Entities.Abilities
         //Triggered when an entity uses the JoyObject this ability is attached to
         //This is typically an item
         //Returns true when the ability triggers
-        public virtual bool OnUse(Entity user, JoyObject target)
+        public virtual bool OnUse(Entity user, IJoyObject target)
         {
             return false;
         }
 
         //Triggered when an entity interacts with the JoyObject (could be an item or an entity or whatever)
         //Returns true when the effect triggers
-        public virtual bool OnInteract(Entity actor, JoyObject observer)
+        public virtual bool OnInteract(Entity actor, IJoyObject observer)
         {
             return false;
         }

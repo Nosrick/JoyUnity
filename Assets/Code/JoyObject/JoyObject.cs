@@ -17,15 +17,15 @@ namespace JoyLib.Code
     {
         public BasicValueContainer<IDerivedValue> DerivedValues { get; protected set; }
 
-        public string Tileset { get; protected set; }
+        public string TileSet { get; protected set; }
         
         public Vector2Int WorldPosition { get; protected set; }
 
         public bool IsAnimated { get; protected set; }
 
-        public int ChosenIcon { get; protected set; }
+        public int ChosenSprite { get; protected set; }
         
-        public int LastIcon { get; protected set; }
+        public int LastIndex { get; protected set; }
 
         public int FramesSinceLastChange { get; protected set; }
 
@@ -37,9 +37,9 @@ namespace JoyLib.Code
         
         public WorldInstance MyWorld { get; set; }
         
-        public Sprite Icon => Icons[ChosenIcon];
+        public Sprite Sprite => Sprites[ChosenSprite];
 
-        public Sprite[] Icons { get; protected set; }
+        public Sprite[] Sprites { get; protected set; }
 
         public long GUID { get; protected set; }
 
@@ -57,10 +57,7 @@ namespace JoyLib.Code
 
         public List<IJoyAction> CachedActions { get; protected set; }
         
-        protected MonoBehaviourHandler MonoBehaviourHandler { get; set; }
-
-        [NonSerialized]
-        protected const int FRAMES_PER_SECOND = 30;
+        public MonoBehaviourHandler MonoBehaviourHandler { get; protected set; }
 
         public JoyObject()
         {}
@@ -135,13 +132,13 @@ namespace JoyLib.Code
 
             this.DerivedValues = derivedValues;
 
-            this.Tileset = tileSet;
+            this.TileSet = tileSet;
             this.Tags = tags.ToList();
 
             this.WorldPosition = position;
             this.Move(this.WorldPosition);
 
-            this.Icons = sprites;
+            this.Sprites = sprites;
 
             if (tags.Any(tag => tag.Equals("animated", StringComparison.OrdinalIgnoreCase)))
             {
@@ -161,14 +158,14 @@ namespace JoyLib.Code
             //If it's not animated, select a random icon to represent it
             if (!this.IsAnimated && sprites != null)
             {
-                this.ChosenIcon = RNG.instance.Roll(0, sprites.Length - 1);
+                this.ChosenSprite = RNG.instance.Roll(0, sprites.Length - 1);
             }
             else
             {
-                this.ChosenIcon = 0;
+                this.ChosenSprite = 0;
             }
 
-            this.LastIcon = 0;
+            this.LastIndex = 0;
             this.FramesSinceLastChange = 0;
 
             this.CachedActions = new List<IJoyAction>(actions);
@@ -259,7 +256,7 @@ namespace JoyLib.Code
         //Used for deserialisation
         public void SetIcons(Sprite[] sprites)
         {
-            Icons = sprites;
+            Sprites = sprites;
         }
 
         // Update is called once per frame
@@ -272,13 +269,13 @@ namespace JoyLib.Code
                 return;
             }
 
-            if (FramesSinceLastChange != FRAMES_PER_SECOND)
+            if (FramesSinceLastChange != GlobalConstants.FRAMES_PER_SECOND)
             {
                 return;
             }
             
-            ChosenIcon += 1;
-            ChosenIcon %= Icons.Length;
+            ChosenSprite += 1;
+            ChosenSprite %= Sprites.Length;
 
             FramesSinceLastChange = 0;
         }

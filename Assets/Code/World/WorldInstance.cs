@@ -282,7 +282,7 @@ namespace JoyLib.Code.World
             return vision;
         }
 
-        public void AddObject(JoyObject objectRef)
+        public void AddObject(IJoyObject objectRef)
         {
             if(objectRef.IsWall)
             {
@@ -295,7 +295,7 @@ namespace JoyLib.Code.World
             IsDirty = true;
         }
 
-        protected void AddWall(JoyObject wallRef)
+        protected void AddWall(IJoyObject wallRef)
         {
             m_Walls.Add(wallRef.WorldPosition, wallRef);
             m_Costs[wallRef.WorldPosition.x, wallRef.WorldPosition.y] = byte.MaxValue;
@@ -523,13 +523,13 @@ namespace JoyLib.Code.World
         {
             if(leftItem != null)
             {
-                leftEntity.RemoveItemFromBackpack(leftItem);
+                leftEntity.RemoveContents(leftItem);
                 rightEntity.AddContents(leftItem);
             }
 
             if(rightItem != null)
             {
-                rightEntity.RemoveItemFromBackpack(rightItem);
+                rightEntity.RemoveContents(rightItem);
                 leftEntity.AddContents(rightItem);
             }
         }

@@ -3,7 +3,8 @@
     <Gender>
         <Name>male</Name>
         <Possessive>his</Possessive>
-        <Personal>he</Personal>
+        <PersonalSubject>he</PersonalSubject>
+        <PersonalObject>him</PersonalObject>
         <Reflexive>himself</Reflexive>
         <PossessivePlural>his</PossessivePlural>
         <ReflexivePlural>himself</ReflexivePlural>
@@ -13,7 +14,8 @@
     <Gender>
         <Name>female</Name>
         <Possessive>her</Possessive>
-        <Personal>she</Personal>
+        <PersonalSubject>she</PersonalSubject>
+        <PersonalObject>her</PersonalObject>
         <Reflexive>herself</Reflexive>
         <PossessivePlural>hers</PossessivePlural>
         <ReflexivePlural>herself</ReflexivePlural>
@@ -23,7 +25,8 @@
     <Gender>
         <Name>agender</Name>
         <Possessive>its</Possessive>
-        <Personal>it</Personal>
+        <PersonalSubject>it</PersonalSubject>
+        <PersonalObject>it</PersonalObject>
         <Reflexive>itself</Reflexive>
         <PossessivePlural>its</PossessivePlural>
         <ReflexivePlural>itself</ReflexivePlural>
@@ -33,7 +36,8 @@
     <Gender>
         <Name>neutral</Name>
         <Possessive>their</Possessive>
-        <Personal>they</Personal>
+        <PersonalSubject>they</PersonalSubject>
+        <PersonalObject>they</PersonalObject>
         <Reflexive>themself</Reflexive>
         <PossessivePlural>theirs</PossessivePlural>
         <ReflexivePlural>themselves</ReflexivePlural>
