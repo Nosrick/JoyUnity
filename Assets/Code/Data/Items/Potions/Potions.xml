@@ -40,23 +40,19 @@
 
     <Icon>
       <Name>Red Potion</Name>
-      <X>0</X>
-      <Y>4</Y>
+      <Position>0</Position>
     </Icon>
     <Icon>
       <Name>Pink Potion</Name>
-      <X>1</X>
-      <Y>4</Y>
+      <Position>1</Position>
     </Icon>
     <Icon>
       <Name>Orange Potion</Name>
-      <X>2</X>
-      <Y>4</Y>
+      <Position>2</Position>
     </Icon>
     <Icon>
       <Name>Yellow Potion</Name>
-      <X>3</X>
-      <Y>4</Y>
+      <Position>3</Position>
     </Icon>
   </TileSet>
 </Items>
