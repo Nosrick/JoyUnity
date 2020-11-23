@@ -383,7 +383,8 @@ namespace JoyLib.Code.World
 
             foreach(Entity entity in m_Entities)
             {
-                if(!actor.VisionProvider.CanSee(actor, this, entity.WorldPosition))
+                if(actor.GUID == entity.GUID 
+                   || !actor.VisionProvider.CanSee(actor, this, entity.WorldPosition))
                 {
                     continue;
                 }

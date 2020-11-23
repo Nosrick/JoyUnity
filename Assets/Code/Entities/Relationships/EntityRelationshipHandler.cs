@@ -78,7 +78,7 @@ namespace JoyLib.Code.Entities.Relationships
             }
 
             List<long> GUIDs = new List<long>();
-            foreach (JoyObject participant in participants)
+            foreach (IJoyObject participant in participants)
             {
                 GUIDs.Add(participant.GUID);
             }

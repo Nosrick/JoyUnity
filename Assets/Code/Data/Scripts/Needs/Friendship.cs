@@ -40,7 +40,7 @@ namespace JoyLib.Code.Entities.Needs
                 1, 
                 1, 
                 1,
-                new string[0])
+                new[] { "modifyrelationshippointsaction"})
         {
             Initialise();
         }
@@ -64,7 +64,7 @@ namespace JoyLib.Code.Entities.Needs
                 happinessThresholdRef, 
                 valueRef, 
                 maxValueRef, 
-                new string[0],
+                new[] { "modifyrelationshippointsaction"},
                 fulfillingSprite,
                 averageForDayRef, 
                 averageForWeekRef)
@@ -137,7 +137,20 @@ namespace JoyLib.Code.Entities.Needs
                 new[] {actor, obj},
                 new[] {"need", "friendship", "fulfill"},
                 new object[] {"friendship", actor.Statistics[EntityStatistic.PERSONALITY].Value, 5, true});
-            
+
+            m_CachedActions["modifyrelationshippointsaction"].Execute(
+            new []{actor, obj},
+            new[] { "friendship"},
+            new object[] { actor.Statistics[EntityStatistic.PERSONALITY].Value, false });
+
+            if (obj is Entity listener)
+            {
+                m_CachedActions["modifyrelationshippointsaction"].Execute(
+                                new []{listener, actor},
+                                new[] { "friendship"},
+                                new object[] { listener.Statistics[EntityStatistic.PERSONALITY].Value, false });
+            }
+
             return true;
         }
 
