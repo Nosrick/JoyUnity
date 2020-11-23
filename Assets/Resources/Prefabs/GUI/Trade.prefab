@@ -1370,6 +1370,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LeftValue: {fileID: 2333912725600333599}
   RightValue: {fileID: 2333912726121193145}
+  RightName: {fileID: 2333912725685141463}
   LeftInventory: {fileID: 2333912726033209119}
   LeftOffering: {fileID: 2333912726576562482}
   RightInventory: {fileID: 2333912727104761473}

@@ -9,5 +9,7 @@
 
         string PossessivePlural { get; }
         string ReflexivePlural { get; }
+        
+        string IsOrAre { get; }
     }
 }

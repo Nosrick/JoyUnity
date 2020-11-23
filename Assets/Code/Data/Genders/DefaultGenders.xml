@@ -7,15 +7,17 @@
         <Reflexive>himself</Reflexive>
         <PossessivePlural>his</PossessivePlural>
         <ReflexivePlural>himself</ReflexivePlural>
+        <IsOrAre>is</IsOrAre>
     </Gender>
     
     <Gender>
         <Name>female</Name>
         <Possessive>her</Possessive>
-        <Personal>her</Personal>
+        <Personal>she</Personal>
         <Reflexive>herself</Reflexive>
         <PossessivePlural>hers</PossessivePlural>
         <ReflexivePlural>herself</ReflexivePlural>
+        <IsOrAre>is</IsOrAre>
     </Gender>
     
     <Gender>
@@ -25,14 +27,16 @@
         <Reflexive>itself</Reflexive>
         <PossessivePlural>its</PossessivePlural>
         <ReflexivePlural>itself</ReflexivePlural>
+        <IsOrAre>is</IsOrAre>
     </Gender>
     
     <Gender>
         <Name>neutral</Name>
         <Possessive>their</Possessive>
-        <Personal>them</Personal>
+        <Personal>they</Personal>
         <Reflexive>themself</Reflexive>
         <PossessivePlural>theirs</PossessivePlural>
         <ReflexivePlural>themselves</ReflexivePlural>
+        <IsOrAre>are</IsOrAre>
     </Gender>
 </Genders>

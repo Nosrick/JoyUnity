@@ -6,6 +6,7 @@ using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Relationships;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity.GUI
 {
@@ -19,6 +20,8 @@ namespace JoyLib.Code.Unity.GUI
         [SerializeField]
         protected TextMeshProUGUI RightValue;
 
+        [SerializeField] protected TextMeshProUGUI RightName;
+
         [SerializeField] protected MutableItemContainer LeftInventory;
         [SerializeField] protected MutableItemContainer LeftOffering;
 
@@ -26,6 +29,8 @@ namespace JoyLib.Code.Unity.GUI
         [SerializeField] protected MutableItemContainer RightOffering;
 
         protected EntityRelationshipHandler RelationshipHandler { get; set; }
+        
+        protected RectTransform RectTransform { get; set; }
 
         public void Awake()
         {
@@ -33,6 +38,8 @@ namespace JoyLib.Code.Unity.GUI
             {
                 RelationshipHandler = GlobalConstants.GameManager.GetComponent<EntityRelationshipHandler>();
             }
+
+            RectTransform = this.GetComponent<RectTransform>();
 
             LeftInventory.OnAddItem += Tally;
             LeftOffering.OnAddItem += Tally;
@@ -68,6 +75,9 @@ namespace JoyLib.Code.Unity.GUI
             {
                 RightInventory.StackOrAdd(item.Item);
             }
+
+            RightName.text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Right.Gender.Personal) + " " + Right.Gender.IsOrAre + " offering";
+            LayoutRebuilder.ForceRebuildLayoutImmediate(RectTransform);
         }
 
         public bool Trade()

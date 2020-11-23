@@ -11,6 +11,8 @@
         public string ReflexivePlural { get; protected set; }
         public string Name { get; protected set; }
 
+        public string IsOrAre { get; protected set; }
+
         public BaseGender()
         {}
         
@@ -20,7 +22,8 @@
             string personal,
             string reflexive,
             string possessivePlural,
-            string reflexivePlural)
+            string reflexivePlural,
+            string isOrAre)
         {
             this.Name = name;
             this.Possessive = possessive;
@@ -28,6 +31,7 @@
             this.Personal = personal;
             this.Reflexive = reflexive;
             this.ReflexivePlural = reflexivePlural;
+            this.IsOrAre = isOrAre;
         }
     }
 }

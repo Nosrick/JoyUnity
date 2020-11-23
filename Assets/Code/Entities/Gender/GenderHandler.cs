@@ -45,7 +45,8 @@ namespace JoyLib.Code.Entities.Gender
                             gender.Element("Personal").GetAs<string>(),
                             gender.Element("Reflexive").GetAs<string>(),
                             gender.Element("PossessivePlural").GetAs<string>(),
-                            gender.Element("ReflexivePlural").GetAs<string>()));
+                            gender.Element("ReflexivePlural").GetAs<string>(),
+                            gender.Element("IsOrAre").DefaultIfEmpty("is")));
                 }
 
                 return genders;
