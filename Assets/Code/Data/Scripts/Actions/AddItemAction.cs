@@ -31,8 +31,8 @@ namespace JoyLib.Code.Scripting.Actions
             {
                 if (tags is null == false 
                     && (tags.Any(tag => tag.Equals("theft", StringComparison.OrdinalIgnoreCase)) 
-                        && owner.GUID != item.Owner)
-                    || item.Owner == 0)
+                        && owner.GUID != item.OwnerGUID)
+                    || item.OwnerGUID == 0)
                 {
                     item.SetOwner(owner.GUID);
                 }

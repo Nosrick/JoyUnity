@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Text;
+using Castle.Core.Internal;
 using DevionGames.InventorySystem;
 using JoyLib.Code.Collections;
 using JoyLib.Code.Managers;
@@ -69,11 +71,31 @@ namespace JoyLib.Code.Entities.Items
         protected List<long> m_Contents;
         protected BaseItemType m_Type;
 
-        public long Owner { get; protected set; }
+        protected long m_OwnerGUID;
+        protected string m_OwnerString;
+
+        public long OwnerGUID
+        {
+            get
+            {
+                return m_OwnerGUID;
+            }
+            protected set
+            {
+                m_OwnerGUID = value;
+                m_OwnerString = EntityHandler.Get(m_OwnerGUID).JoyName;
+            }
+        }
+
+        public string OwnerString
+        {
+            get => m_OwnerString;
+        }
 
         public List<IAbility> UniqueAbilities { get; protected set; }
 
         protected static LiveItemHandler s_ItemHandler;
+        protected static LiveEntityHandler EntityHandler { get; set; }
 
         public void Initialise(
             BaseItemType type, 
@@ -88,7 +110,6 @@ namespace JoyLib.Code.Entities.Items
 
             this.JoyName = identified ? type.IdentifiedName : type.UnidentifiedName;
             this.Name = this.JoyName;
-            this.m_Description = identified ? type.Description : type.UnidentifiedDescription;
             this.GUID = GUIDManager.Instance.AssignGUID();
 
             this.DerivedValues = derivedValues;
@@ -131,7 +152,7 @@ namespace JoyLib.Code.Entities.Items
 
             this.CachedActions = actions is null ? new List<IJoyAction>() : new List<IJoyAction>(actions);
 
-            FindItemHandler();
+            Initialise();
                 
             this.m_Type = type;
             
@@ -143,11 +164,12 @@ namespace JoyLib.Code.Entities.Items
             UniqueAbilities = uniqueAbilities is null == false ? new List<IAbility>(uniqueAbilities) : new List<IAbility>();
 
             m_Icon = Sprite;
+            ConstructDescription();
         }
 
         public ItemInstance Copy(ItemInstance copy)
         {
-            FindItemHandler();
+            Initialise();
 
             ItemInstance newItem = ScriptableObject.CreateInstance<ItemInstance>();
             
@@ -161,6 +183,27 @@ namespace JoyLib.Code.Entities.Items
                 copy.CachedActions.ToArray());
 
             return newItem;
+        }
+
+        protected void ConstructDescription()
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.AppendLine(this.Identified ? this.ItemType.Description : this.ItemType.UnidentifiedDescription);
+            if (this.ContentString.IsNullOrEmpty() == false)
+            {
+                builder.AppendLine(this.ContentString);
+            }
+            builder.AppendLine(this.ConditionString);
+            if (this.OwnerString.IsNullOrEmpty() == false)
+            {
+                builder.AppendLine("Owned by " + this.OwnerString + ".");
+            }
+            else
+            {
+                builder.AppendLine("This item is not owned.");
+            }
+            
+            m_Description = builder.ToString();
         }
         
         public void SetUser(Entity user)
@@ -184,6 +227,8 @@ namespace JoyLib.Code.Entities.Items
             {
                 ability.OnUse(User, this);
             }
+            
+            ConstructDescription();
         }
 
         public IJoyAction FetchAction(string name)
@@ -257,7 +302,9 @@ namespace JoyLib.Code.Entities.Items
         {
             if (DerivedValues.Has(name))
             {
-                return DerivedValues[name].ModifyValue(value);
+                int result = DerivedValues[name].ModifyValue(value);
+                ConstructDescription();
+                return result;
             }
 
             throw new InvalidOperationException("Derived value of " + name + " not found on JoyObject " + this.ToString());
@@ -352,17 +399,19 @@ namespace JoyLib.Code.Entities.Items
             MonoBehaviourHandler = mbh;
         }
 
-        protected void FindItemHandler()
+        protected void Initialise()
         {
             if(s_ItemHandler is null)
             {
                 s_ItemHandler = GlobalConstants.GameManager.GetComponent<LiveItemHandler>();
+                EntityHandler = GlobalConstants.GameManager.GetComponent<LiveEntityHandler>();
             }
         }
         
         public void SetOwner(long newOwner)
         {
-            Owner = newOwner;
+            OwnerGUID = newOwner;
+            ConstructDescription();
         }
 
         public void Interact(Entity user)
@@ -424,11 +473,15 @@ namespace JoyLib.Code.Entities.Items
         {
             m_Contents.Add(actor.GUID);
 
+            ConstructDescription();
+
             return true;
         }
 
         public bool RemoveContents(ItemInstance actor)
         {
+            ConstructDescription();
+            
             return m_Contents.Remove(actor.GUID);
         }
 
@@ -611,7 +664,7 @@ namespace JoyLib.Code.Entities.Items
                         items.Remove(itemsToRemove[i]);
                     }
                 }
-                contentString = contentString.Substring(0, contentString.Length - 2);
+                contentString = contentString.Substring(0, contentString.Length - 2) + ".";
                 return contentString;
             }
         }

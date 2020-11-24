@@ -196,11 +196,7 @@ namespace JoyLib.Code.States
 
             contextMenu.Clear();
 
-            if (PrimaryTarget.GUID == m_ActiveWorld.Player.GUID)
-            {
-                
-            }
-            else
+            if (PrimaryTarget.GUID != m_ActiveWorld.Player.GUID)
             {
                 if (AdjacencyHelper.IsAdjacent(m_ActiveWorld.Player.WorldPosition, PrimaryTarget.WorldPosition))
                 {

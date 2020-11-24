@@ -5,6 +5,7 @@ using DevionGames.UIWidgets;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Rollers;
+using JoyLib.Code.Scripting;
 using UnityEngine;
 
 namespace JoyLib.Code.Unity
@@ -31,7 +32,12 @@ namespace JoyLib.Code.Unity
             if (itemBehaviourHandler.MyJoyObject is ItemInstance item)
             {
                 bool result = ItemBehaviourHandler.LiveItemHandler.RemoveItemFromWorld(item.GUID);
-                result &= itemBehaviourHandler.EntityInRange.AddContents(item);
+                IJoyAction addItemAction = itemBehaviourHandler.EntityInRange.FetchAction("additemaction");
+                result &= addItemAction.Execute(
+                    new IJoyObject[] {itemBehaviourHandler.EntityInRange, item},
+                    new string[] {"pickup"},
+                    new object[] {true});
+                
                 //GameObject.DestroyImmediate(this.gameObject);
                 if (result)
                 {

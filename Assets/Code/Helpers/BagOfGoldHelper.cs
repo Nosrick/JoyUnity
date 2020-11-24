@@ -21,8 +21,8 @@ namespace JoyLib.Code.Helpers
             for (int i = 0; i < count; i++)
             {
                 ItemInstance coin = s_ItemFactory.CreateSpecificType("copper coin", new string[] { "currency" }, true);
-                bag.PutItem(coin.GUID);
                 ItemHandler.AddItem(coin);
+                bag.AddContents(coin);
             }
 
             return bag;

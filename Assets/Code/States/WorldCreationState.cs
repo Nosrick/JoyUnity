@@ -6,6 +6,7 @@ using JoyLib.Code.World.Generators.Interiors;
 using JoyLib.Code.World.Generators.Overworld;
 using System;
 using System.Collections.Generic;
+using JoyLib.Code.Scripting;
 using UnityEngine;
 
 namespace JoyLib.Code.States
@@ -82,13 +83,22 @@ namespace JoyLib.Code.States
             m_Player.Move(dungeon.SpawnPoint);
             dungeon.AddEntity(m_Player);
 
+            GlobalConstants.GameManager.GetComponent<LiveEntityHandler>().AddEntity(m_Player);
+
             ItemFactory itemFactory = new ItemFactory();
             ItemInstance lightSource = itemFactory.CreateRandomItemOfType(new string[] { "light source" });
-            m_Player.AddContents(lightSource);
+            IJoyAction addItemAction = m_Player.FetchAction("additemaction");
+            addItemAction.Execute(
+                new IJoyObject[] {m_Player, lightSource},
+                new []{"pickup"},
+                new object[] { true });
 
             for (int i = 0; i < 4; i++)
             {
-                m_Player.AddContents(itemFactory.CreateCompletelyRandomItem(true));
+                addItemAction.Execute(
+                    new IJoyObject[] {m_Player, itemFactory.CreateCompletelyRandomItem(true)},
+                    new []{"pickup"},
+                    new object[] { true });
             }
             
             m_World.Tick();

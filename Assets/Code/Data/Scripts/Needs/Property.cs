@@ -111,7 +111,7 @@ namespace JoyLib.Code.Entities.Needs
             }
 
             List<string> tags = new List<string> {"pickup", "property"};
-            if (item.Owner != actor.GUID && item.Owner != 0)
+            if (item.OwnerGUID != actor.GUID && item.OwnerGUID != 0)
             {
                 tags.Add("theft");
             }

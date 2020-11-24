@@ -506,7 +506,7 @@ namespace JoyLib.Code.World
             {
                 List<string> tags = new List<string> {"pick up"};
                 bool newOwner = true;
-                if (item.Owner != default && item.Owner != entityRef.GUID)
+                if (item.OwnerGUID != default && item.OwnerGUID != entityRef.GUID)
                 {
                     tags.Add("theft");
                     newOwner = false;

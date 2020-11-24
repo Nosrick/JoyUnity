@@ -80,7 +80,8 @@ namespace JoyLib.Code.Entities
             "seekaction",
             "wanderaction",
             "modifyrelationshippointsaction",
-            "enterworldaction"
+            "enterworldaction",
+            "additemaction"
         };
 
         public Entity()

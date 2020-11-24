@@ -2,7 +2,7 @@
 {
     public interface IOwnable
     {
-        long Owner { get; }
+        long OwnerGUID { get; }
 
         void SetOwner(long newOwner);
     }
