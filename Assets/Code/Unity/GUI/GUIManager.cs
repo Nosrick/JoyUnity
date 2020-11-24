@@ -15,11 +15,6 @@ namespace JoyLib.Code.Unity.GUI
             Initialise();
         }
 
-        protected void Empty(int index)
-        {
-            
-        }
-
         protected void Initialise()
         {
             if (m_GUIs is null)
@@ -140,6 +135,11 @@ namespace JoyLib.Code.Unity.GUI
         public bool IsActive(string name)
         {
             return m_ActiveGUIs.Any(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public bool AreAnyOpen()
+        {
+            return m_ActiveGUIs.Count > 0;
         }
     }
 }

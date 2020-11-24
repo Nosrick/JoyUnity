@@ -55,6 +55,7 @@ namespace JoyLib.Code.States
         private const string CONVERSATION = "Conversation Window";
         private const string CONTEXT_MENU = "Context Menu";
         private const string TRADE = "Trade";
+        private const string QUEST_JOURNAL = "Quest Journal";
 
         protected static bool SetUpGUI
         {
@@ -104,6 +105,7 @@ namespace JoyLib.Code.States
                 GameObject conversationWindow = GameObject.Find(CONVERSATION);
                 GameObject contextMenu = GameObject.Find(CONTEXT_MENU);
                 GameObject tradeWindow = GameObject.Find(TRADE);
+                GameObject questJournal = GameObject.Find(QUEST_JOURNAL);
     
                 GUIManager.AddGUI(needsGUIPrefab, false, false);
                 GUIManager.AddGUI(inventoryGUIPrefab, true, false);
@@ -111,6 +113,7 @@ namespace JoyLib.Code.States
                 GUIManager.AddGUI(conversationWindow, true, true);
                 GUIManager.AddGUI(contextMenu, false, false);
                 GUIManager.AddGUI(tradeWindow, true, true);
+                GUIManager.AddGUI(questJournal, true, true);
 
                 SetUpGUI = true;
             }
@@ -310,15 +313,24 @@ namespace JoyLib.Code.States
                 autoTurn = true;
             }
             */
-            if (Input.GetKeyDown(KeyCode.I))
+            if (Input.GetKeyUp(KeyCode.Escape))
+            {
+                GUIManager.CloseAllOtherGUIs(NEEDSRECT);
+                GUIManager.OpenGUI(NEEDSRECT);
+            }
+            else if (Input.GetKeyUp(KeyCode.I))
             {
                 GUIManager.ToggleGUI(INVENTORY);
             }
-            else if (Input.GetKeyDown(KeyCode.E))
+            else if (Input.GetKeyUp(KeyCode.E))
             {
                 GUIManager.ToggleGUI(EQUIPMENT);
             }
-            else if (Input.GetKeyDown(KeyCode.T))
+            else if (Input.GetKeyUp(KeyCode.J))
+            {
+                GUIManager.ToggleGUI(QUEST_JOURNAL);
+            }
+            else if (Input.GetKeyUp(KeyCode.T))
             {
                 if (GUIManager.IsActive(CONVERSATION))
                 {
@@ -336,6 +348,11 @@ namespace JoyLib.Code.States
                         m_ConversationEngine.Converse(); 
                     }
                 }
+            }
+
+            if (GUIManager.AreAnyOpen() == false)
+            {
+                GUIManager.OpenGUI(NEEDSRECT);
             }
 
             if (GUIManager.RemovesControl())
@@ -357,7 +374,7 @@ namespace JoyLib.Code.States
                 
                 SetUpContextMenu();
             }
-            else if (Input.GetKeyDown(KeyCode.Return))
+            else if (Input.GetKeyUp(KeyCode.Return))
             {
                 //Going up a level
                 if (m_ActiveWorld.Parent != null && player.WorldPosition == m_ActiveWorld.SpawnPoint && !player.HasMoved)
@@ -391,7 +408,7 @@ namespace JoyLib.Code.States
             Vector2Int newPlayerPoint = m_ActiveWorld.Player.WorldPosition;
 
             //North
-            if (Input.GetKeyDown(KeyCode.Keypad8))
+            if (Input.GetKeyUp(KeyCode.Keypad8))
             {
                 if (m_GameplayFlags == GameplayFlags.Targeting)
                 {
@@ -404,7 +421,7 @@ namespace JoyLib.Code.States
                 }
             }
             //North east
-            else if (Input.GetKeyDown(KeyCode.Keypad9))
+            else if (Input.GetKeyUp(KeyCode.Keypad9))
             {
                 if (m_GameplayFlags == GameplayFlags.Targeting)
                 {
@@ -418,7 +435,7 @@ namespace JoyLib.Code.States
                 }
             }
             //East
-            else if (Input.GetKeyDown(KeyCode.Keypad6))
+            else if (Input.GetKeyUp(KeyCode.Keypad6))
             {
                 if (m_GameplayFlags == GameplayFlags.Targeting)
                 {
@@ -431,7 +448,7 @@ namespace JoyLib.Code.States
                 }
             }
             //South east
-            else if (Input.GetKeyDown(KeyCode.Keypad3))
+            else if (Input.GetKeyUp(KeyCode.Keypad3))
             {
                 if (m_GameplayFlags == GameplayFlags.Targeting)
                 {
@@ -445,7 +462,7 @@ namespace JoyLib.Code.States
                 }
             }
             //South
-            else if (Input.GetKeyDown(KeyCode.Keypad2))
+            else if (Input.GetKeyUp(KeyCode.Keypad2))
             {
                 if (m_GameplayFlags == GameplayFlags.Targeting)
                 {
@@ -458,7 +475,7 @@ namespace JoyLib.Code.States
                 }
             }
             //South west
-            else if (Input.GetKeyDown(KeyCode.Keypad1))
+            else if (Input.GetKeyUp(KeyCode.Keypad1))
             {
                 if (m_GameplayFlags == GameplayFlags.Targeting)
                 {
@@ -472,7 +489,7 @@ namespace JoyLib.Code.States
                 }
             }
             //West
-            else if (Input.GetKeyDown(KeyCode.Keypad4))
+            else if (Input.GetKeyUp(KeyCode.Keypad4))
             {
                 if (m_GameplayFlags == GameplayFlags.Targeting)
                 {
@@ -485,7 +502,7 @@ namespace JoyLib.Code.States
                 }
             }
             //North west
-            else if (Input.GetKeyDown(KeyCode.Keypad7))
+            else if (Input.GetKeyUp(KeyCode.Keypad7))
             {
                 if (m_GameplayFlags == GameplayFlags.Targeting)
                 {
@@ -498,7 +515,7 @@ namespace JoyLib.Code.States
                     hasMoved = true;
                 }
             }
-            else if (Input.GetKeyDown(KeyCode.Keypad5))
+            else if (Input.GetKeyUp(KeyCode.Keypad5))
             {
                 Tick();
                 return;
