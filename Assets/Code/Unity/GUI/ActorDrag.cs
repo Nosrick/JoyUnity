@@ -16,12 +16,24 @@ namespace JoyLib.Code.Unity.GUI
 
         public override void OnDrag(PointerEventData eventData)
         {
-            Vector2 targetConstraintMin = new Vector2(m_TargetConstraint.HorizontalMin, m_TargetConstraint.VerticalMin);
-            Vector2 targetConstraintMax = new Vector2(m_TargetConstraint.HorizontalMax, m_TargetConstraint.VerticalMax);
+            RectTransform targetRect = m_TargetConstraint.GetComponent<RectTransform>();
+            
+            Vector2 targetConstraintMin = new Vector2(
+                m_TargetConstraint.Horizontal ? m_TargetConstraint.HorizontalMin : targetRect.anchoredPosition.x, 
+                m_TargetConstraint.Vertical ? m_TargetConstraint.VerticalMin : targetRect.anchoredPosition.y);
+            
+            Vector2 targetConstraintMax = new Vector2(
+                m_TargetConstraint.Horizontal ? m_TargetConstraint.HorizontalMax : targetRect.anchoredPosition.x, 
+                m_TargetConstraint.Vertical ? m_TargetConstraint.VerticalMax : targetRect.anchoredPosition.y);
 
             Vector2 dragActorConstraintMin =
-                new Vector2(m_DragActorConstraint.HorizontalMin, m_DragActorConstraint.VerticalMin);
-            Vector2 dragActorConstraintMax = new Vector2(m_DragActorConstraint.HorizontalMax, m_DragActorConstraint.VerticalMax);
+                new Vector2(
+                    m_DragActorConstraint.Horizontal ? m_DragActorConstraint.HorizontalMin : m_DragActor.anchoredPosition.x, 
+                    m_DragActorConstraint.Vertical ? m_DragActorConstraint.VerticalMin : m_DragActor.anchoredPosition.y);
+            
+            Vector2 dragActorConstraintMax = new Vector2(
+                m_DragActorConstraint.Horizontal ? m_DragActorConstraint.HorizontalMax : m_DragActor.anchoredPosition.x,
+                m_DragActorConstraint.Vertical ? m_DragActorConstraint.VerticalMax : m_DragActor.anchoredPosition.y);
 
             // Only drag if OnBeginDrag was successful
             if (dragging == true)

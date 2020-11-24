@@ -68,6 +68,19 @@ namespace JoyLib.Code.Unity.GUI
             {
                 MenuItems[i].gameObject.SetActive(false);
             }
+
+            if (quests.Count == 0)
+            {
+                if (MenuItems.Count == 0)
+                {
+                    MenuItems.Add(
+                        GameObject.Instantiate(MenuItemPrefab, Container.transform)
+                            .GetComponent<MenuItem>());
+                }
+
+                MenuItems[0].GetComponentInChildren<Text>().text = "You have no quests.";
+                MenuItems[0].gameObject.SetActive(true);
+            }
         }
     }
 }

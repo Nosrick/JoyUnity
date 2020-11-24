@@ -337,7 +337,7 @@ GameObject:
   - component: {fileID: 2333912725601075033}
   - component: {fileID: 2333912725601075038}
   m_Layer: 0
-  m_Name: Offering Text
+  m_Name: Other Offering Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1370,7 +1370,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LeftValue: {fileID: 2333912725600333599}
   RightValue: {fileID: 2333912726121193145}
-  RightName: {fileID: 2333912725685141463}
+  RightName: {fileID: 2333912725601075038}
   LeftInventory: {fileID: 2333912726033209119}
   LeftOffering: {fileID: 2333912726576562482}
   RightInventory: {fileID: 2333912727104761473}
@@ -1841,7 +1841,7 @@ GameObject:
   - component: {fileID: 2333912726655709336}
   - component: {fileID: 2333912726655709337}
   m_Layer: 0
-  m_Name: Offering Text
+  m_Name: Player Offering Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -112,7 +112,7 @@ namespace JoyLib.Code.Unity.GUI
         public void CloseAllOtherGUIs(string activeName = "")
         {
             GUIData[] toClose = m_ActiveGUIs
-                .Where(gui => gui.name.Equals(activeName, StringComparison.OrdinalIgnoreCase)).ToArray();
+                .Where(gui => gui.name.Equals(activeName, StringComparison.OrdinalIgnoreCase) == false).ToArray();
 
             foreach (GUIData data in toClose)
             {
@@ -123,8 +123,7 @@ namespace JoyLib.Code.Unity.GUI
 
         public bool RemovesControl()
         {
-            GUIData[] data = m_ActiveGUIs.Where(gui => gui.RemovesControl).ToArray();
-            return data.Length > 0;
+            return m_ActiveGUIs.Any(gui => gui.RemovesControl);
         }
 
         public GameObject GetGUI(string name)
