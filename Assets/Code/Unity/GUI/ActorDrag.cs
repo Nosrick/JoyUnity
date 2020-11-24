@@ -67,10 +67,12 @@ namespace JoyLib.Code.Unity.GUI
                                         float lerp = (target.localPosition.y - targetConstraintMin.y) /
                                                      (targetConstraintMax.y - targetConstraintMin.y);
 
+                                        lerp = Math.Abs(lerp);
                                         lerp = m_ReverseVertical ? 1.0f - lerp : lerp;
                                         
-                                        newDragActorOffset = Vector2.Lerp(dragActorConstraintMin, dragActorConstraintMax,
-                                            lerp);
+                                        Debug.Log("LERP: " + lerp);
+                                        
+                                        newDragActorOffset = Vector2.Lerp(dragActorConstraintMin, dragActorConstraintMax, lerp);
                                         break;
                                     
                                     case LerpType.HORIZONTAL:
@@ -105,6 +107,8 @@ namespace JoyLib.Code.Unity.GUI
 
                             // Offset the anchored position by the difference
                             target.anchoredPosition = anchoredPosition;
+                            Debug.Log("OLD POSITION: " + m_DragActor.anchoredPosition);
+                            Debug.Log("NEW POSITION: " + newDragActorOffset);
                             m_DragActor.anchoredPosition = newDragActorOffset;
                         }
                     }

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DevionGames;
 using DevionGames.InventorySystem;
 using DevionGames.InventorySystem.Restrictions;
 using JoyLib.Code.Entities;
@@ -84,10 +85,10 @@ namespace JoyLib.Code.Unity.GUI
             }
 
             m_EquipmentContainer.RefreshSlots();
-            LeanConstrainAnchoredPosition[] constrains = this.gameObject.GetComponentsInChildren<LeanConstrainAnchoredPosition>(true);
-            GridLayoutGroup grid = this.gameObject.GetComponentInChildren<GridLayoutGroup>(true);
-            LeanConstrainAnchoredPosition constrain = constrains.First(gui => gui.name.Equals("EquipmentSlots"));
-            constrain.VerticalMax = (grid.transform.childCount * (grid.spacing.y + grid.cellSize.y)) / 2 ;
+            GameObject equipmentSlots = this.gameObject.FindChild("EquipmentSlots", true);
+            LeanConstrainAnchoredPosition constrain = equipmentSlots.GetComponent<LeanConstrainAnchoredPosition>();
+            GridLayoutGroup grid = equipmentSlots.GetComponent<GridLayoutGroup>();
+            constrain.VerticalMax = (grid.transform.childCount * (grid.spacing.y + grid.cellSize.y)) / 2;
         }
     }
 }
