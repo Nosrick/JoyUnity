@@ -2,8 +2,8 @@
 <Items>
   <Category>Containers</Category>
   <IdentifiedItem>
-    <Name>Leather bag</Name>
-    <Description>A leather bag, used to store things.</Description>
+    <Name>Leather Bag</Name>
+    <Description>A simple leather bag, used to store things.</Description>
     <Value>5</Value>
     <Material>leather</Material>
     <Size>100</Size>
@@ -12,14 +12,29 @@
     <Tag>leather</Tag>
   </IdentifiedItem>
 
+  <IdentifiedItem>
+    <Name>Canvas Bag</Name>
+    <Description>A simple canvas bag, used to store things.</Description>
+    <Value>5</Value>
+    <Material>canvas</Material>
+    <Size>100</Size>
+    <Tileset>Containers</Tileset>
+    <Tag>container</Tag>
+    <Tag>cloth</Tag>
+  </IdentifiedItem>
+
   <TileSet>
     <Filename>Chest0</Filename>
     <Name>Containers</Name>
 
     <Icon>
-      <Name>Leather bag</Name>
-      <X>0</X>
-      <Y>0</Y>
+      <Name>canvas bag</Name>
+      <Position>12</Position>
+    </Icon>
+    
+    <Icon>
+      <Name>leather bag</Name>
+      <Position>12</Position>
     </Icon>
   </TileSet>
 </Items>

@@ -2,7 +2,11 @@
 using System.IO;
 using System.Xml;
 using System;
+using System.Linq;
+using System.Xml.Linq;
+using JoyLib.Code.Helpers;
 using UnityEngine;
+
 
 namespace JoyLib.Code.Entities.Items
 {
@@ -36,51 +40,16 @@ namespace JoyLib.Code.Entities.Items
 
             for (int i = 0; i < files.Length; i++)
             {
-                XmlReader reader = XmlReader.Create(files[i]);
-
-                while (reader.Read())
-                {
-                    if (reader.Depth == 0 && reader.NodeType == XmlNodeType.Element && !reader.Name.Equals("Materials"))
-                        break;
-
-                    if (reader.Name.Equals("Material"))
-                    {
-                        string name = "DEFAULT MATERIAL";
-                        float hardness = 1;
-                        int bonus = 0;
-                        float weight = 1.0f;
-                        float value = 1.0f;
-
-                        while (reader.NodeType != XmlNodeType.EndElement)
-                        {
-                            reader.Read();
-                            if (reader.Name.Equals("Name"))
-                            {
-                                name = reader.ReadElementContentAsString();
-                            }
-                            else if (reader.Name.Equals("Bonus"))
-                            {
-                                bonus = reader.ReadElementContentAsInt();
-                            }
-                            else if (reader.Name.Equals("Hardness"))
-                            {
-                                hardness = reader.ReadElementContentAsFloat();
-                            }
-                            else if (reader.Name.Equals("Weight"))
-                            {
-                                weight = reader.ReadElementContentAsFloat();
-                            }
-                            else if (reader.Name.Equals("Value"))
-                            {
-                                value = reader.ReadElementContentAsFloat();
-                            }
-                        }
-
-                        materials.Add(new ItemMaterial(name, hardness, bonus, weight, value));
-                    }
-                }
-
-                reader.Close();
+                XElement reader = XElement.Load(files[i]);
+                
+                materials.AddRange(
+                    (from material in reader.Elements("Material")
+                        select new ItemMaterial(
+                            material.Element("Name").GetAs<string>(),
+                            material.Element("Hardness").DefaultIfEmpty(1.0f),
+                            material.Element("Bonus").DefaultIfEmpty(0),
+                            material.Element("Weight").GetAs<float>(),
+                            material.Element("Value").DefaultIfEmpty(1.0f))));
             }
 
             return materials;
@@ -93,8 +62,10 @@ namespace JoyLib.Code.Entities.Items
                 Initialise();
             }
 
-            if (m_Materials.ContainsKey(nameRef))
-                return m_Materials[nameRef];
+            if (m_Materials.Any(pair => pair.Value.Name.Equals(nameRef, StringComparison.OrdinalIgnoreCase)))
+            {
+                return m_Materials.First(pair => pair.Value.Name.Equals(nameRef, StringComparison.OrdinalIgnoreCase)).Value;
+            }
 
             return m_Materials["DEFAULT MATERIAL"];
         }

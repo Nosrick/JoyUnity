@@ -9,6 +9,7 @@
             Hardness = 1.0f;
             Bonus = 0;
             Density = 1.0f;
+            ValueMod = 1.0f;
         }
 
         public ItemMaterial(string nameRef, float hardnessRef, int bonusRef, float weightRef, float valueMod)

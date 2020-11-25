@@ -415,9 +415,18 @@ namespace JoyLib.Code.Entities.Items
             }
         }
         
-        public void SetOwner(long newOwner)
+        public void SetOwner(long newOwner, bool recursive = false)
         {
             OwnerGUID = newOwner;
+
+            if (recursive)
+            {
+                foreach (ItemInstance item in this.Contents)
+                {
+                    item.SetOwner(newOwner, recursive);
+                }
+            }
+            
             ConstructDescription();
         }
 

@@ -4,6 +4,6 @@
     {
         long OwnerGUID { get; }
 
-        void SetOwner(long newOwner);
+        void SetOwner(long newOwner, bool recursive = false);
     }
 }
