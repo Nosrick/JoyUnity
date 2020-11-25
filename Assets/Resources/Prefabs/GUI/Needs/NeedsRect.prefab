@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 605077351958355958}
   - component: {fileID: 605077350822209350}
+  - component: {fileID: 1491090006}
   m_Layer: 5
   m_Name: NeedsRect
   m_TagString: Untagged
@@ -26,7 +27,7 @@ RectTransform:
   m_GameObject: {fileID: 605077350822209349}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.94583774, y: 0.94583774, z: 0.94583774}
   m_Children:
   - {fileID: 605077352495157242}
   - {fileID: 605077351876519292}
@@ -54,8 +55,20 @@ MonoBehaviour:
   horizontalMin: -100
   horizontalMax: 100
   vertical: 1
-  verticalMin: -540
-  verticalMax: -165
+  verticalMin: -570
+  verticalMax: -365
+--- !u!114 &1491090006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 605077350822209349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ecda4be82e800a44aba3fd5f5f46b6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &605077351876519291
 GameObject:
   m_ObjectHideFlags: 0
