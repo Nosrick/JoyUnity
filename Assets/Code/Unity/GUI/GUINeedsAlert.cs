@@ -1,5 +1,10 @@
-﻿using JoyLib.Code.Entities;
+﻿using System;
+using System.Globalization;
+using System.Text;
+using DevionGames;
+using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Needs;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,29 +12,35 @@ namespace JoyLib.Code.Unity.GUI
 {
     public class GUINeedsAlert : MonoBehaviour
     {
-        protected Text m_Text;
+        protected TextMeshProUGUI Text { get; set; }
 
-        protected Entity m_Player;
+        protected Entity Player { get; set; }
+        
+        protected LiveEntityHandler EntityHandler { get; set; }
 
-        protected int m_Counter = 0;
+        protected int Counter { get; set; }
         protected const int MAXIMUM_FRAMES = 90;
+
+        public void Awake()
+        {
+            if (EntityHandler is null)
+            {
+                EntityHandler = GlobalConstants.GameManager.GetComponent<LiveEntityHandler>();
+                Text = this.gameObject.FindChild("NeedsText", true).GetComponent<TextMeshProUGUI>();
+            }
+        }
 
         public void SetPlayer(Entity player)
         {
-            m_Player = player;
-        }
-
-        public void Start()
-        {
-            m_Text = GameObject.Find("NeedsText").GetComponent<Text>();
+            Player = player;
         }
 
         public void Update()
         {
-            m_Counter += 1;
-            m_Counter %= MAXIMUM_FRAMES;
+            Counter += 1;
+            Counter %= MAXIMUM_FRAMES;
 
-            if(m_Counter == 0)
+            if(Counter == 0)
             {
                 DoText();
             }
@@ -37,19 +48,34 @@ namespace JoyLib.Code.Unity.GUI
 
         protected void DoText()
         {
-            m_Text.text = "";
-            if(m_Player == null)
+            Text.text = "";
+            if(Player is null)
             {
-                return;
+                Player = EntityHandler.GetPlayer();
+
+                if (Player is null)
+                {
+                    return;
+                }
             }
 
-            foreach(INeed need in m_Player.Needs.Collection)
+            StringBuilder builder = new StringBuilder();
+            foreach(INeed need in Player.Needs.Collection)
             {
                 if(!need.ContributingHappiness)
                 {
-                    m_Text.text += "<color=yellow>" + need.Name + "</color>\r\n";
+                    if (need.Value < need.HappinessThreshold / 2)
+                    {
+                        builder.AppendLine("<color=red>" + CultureInfo.CurrentCulture.TextInfo.ToTitleCase(need.Name) + "</color>");
+                    }
+                    else
+                    {
+                        builder.AppendLine("<color=yellow>" + CultureInfo.CurrentCulture.TextInfo.ToTitleCase(need.Name) + "</color>");
+                    }
                 }
             }
+
+            Text.text = builder.ToString();
         }
     }
 }

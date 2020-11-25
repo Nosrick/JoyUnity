@@ -51,5 +51,10 @@ namespace JoyLib.Code.Entities.Needs
         {
             get;
         }
+
+        int HappinessThreshold
+        {
+            get;
+        }
     }
 }

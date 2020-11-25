@@ -206,5 +206,7 @@ namespace JoyLib.Code.Entities.Needs
                 m_AverageForMonth = value;
             }
         }
+
+        public int HappinessThreshold => m_HappinessThreshold;
     }
 }
