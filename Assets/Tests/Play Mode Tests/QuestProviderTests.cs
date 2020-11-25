@@ -116,8 +116,11 @@ namespace Tests
                 new StandardRoller(),
                 new NonUniqueDictionary<INeed, float>());
 
-            ICulture culture = Mock.Of<ICulture>( c => c.GetNameForChain(It.IsAny<int>(), It.IsAny<string>()) == "NAME"
-                                                       && c.NameData == new NameData[] { new NameData("NAME", new []{0, 1}, new []{"all"}) });
+            ICulture culture = Mock.Of<ICulture>( c => c.GetNameForChain(
+                                                           It.IsAny<int>(), 
+                                                           It.IsAny<string>(), 
+                                                           It.IsAny<int>()) == "NAME"
+                                                       && c.NameData == new NameData[] { new NameData("NAME", new []{0, 1}, new []{"all"}, new int[0]) });
             List<ICulture> cultures = new List<ICulture> {culture};
 
             IGender gender = Mock.Of<IGender>(g => g.Name == "female");

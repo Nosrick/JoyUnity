@@ -1,4 +1,5 @@
-﻿using JoyLib.Code.Entities.Gender;
+﻿using System;
+using JoyLib.Code.Entities.Gender;
 using JoyLib.Code.Entities.Jobs;
 using JoyLib.Code.Entities.Romance;
 using JoyLib.Code.Entities.Sexes;
@@ -8,9 +9,9 @@ namespace JoyLib.Code.Cultures
 {
     public interface ICulture
     {
-        string GetRandomName(IGender genderRef);
+        string GetRandomName(string genderRef);
 
-        string GetNameForChain(int chain, string gender);
+        string GetNameForChain(int chain, string gender, int group = Int32.MinValue);
 
         IBioSex ChooseSex(IBioSex[] sexes);
 
@@ -22,7 +23,11 @@ namespace JoyLib.Code.Cultures
 
         IJob ChooseJob(IJob[] jobs);
 
+        void ClearLastGroup();
+
         int GetStatVariance(string statistic);
+        
+        int LastGroup { get; }
         
         string[] Inhabitants { get; }
         

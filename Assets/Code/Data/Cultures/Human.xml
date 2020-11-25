@@ -128,6 +128,28 @@
 				<Sex>all</Sex>
 				<Chain>1</Chain>
 			</NameData>
+			
+			<NameData>
+				<Name>The</Name>
+				<Sex>all</Sex>
+				<Chain>1</Chain>
+				<Group>0</Group>
+				<Group>1</Group>
+			</NameData>
+			
+			<NameData>
+				<Name>Fantastic</Name>
+				<sex>all</sex>
+				<Chain>2</Chain>
+				<Group>0</Group>
+			</NameData>
+			
+			<NameData>
+				<Name>Despicable</Name>
+				<sex>all</sex>
+				<Chain>2</Chain>
+				<Group>1</Group>
+			</NameData>
 		</Names>
 
 		<Statistics>

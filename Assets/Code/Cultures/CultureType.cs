@@ -6,8 +6,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
+using Castle.Core.Internal;
 using JoyLib.Code.Entities.Gender;
 using JoyLib.Code.Entities.Romance;
+using UnityEngine;
 
 namespace JoyLib.Code.Cultures
 {
@@ -26,6 +28,8 @@ namespace JoyLib.Code.Cultures
         protected List<string> m_RelationshipTypes;
         Dictionary<string, int> m_JobPrevelence;
         List<string> m_Inhabitants;
+
+        public int LastGroup { get; protected set; }
 
         public CultureType()
         {}
@@ -49,50 +53,73 @@ namespace JoyLib.Code.Cultures
             m_RomancePrevelence = romancePrevelence;
             m_GenderPrevelence = genderPrevelence;
             NonConformingGenderChance = nonConformingGenderChance;
+            
+            ClearLastGroup();
         }
 
-        public string GetRandomName(IGender genderRef)
+        public void ClearLastGroup()
         {
-            Dictionary<int, List<string>> allViableNames = new Dictionary<int, List<string>>();
+            LastGroup = Int32.MinValue;
+        }
 
-            List<NameData> thisGenderNames = m_NameData.Where(nameData => nameData.genders.Any(
-                s => s.Equals(genderRef.Name, StringComparison.OrdinalIgnoreCase)
-                        || s.Equals("all", StringComparison.OrdinalIgnoreCase))).ToList();
-
-            foreach(NameData name in thisGenderNames)
-            {
-                foreach(int chain in name.chain)
-                {
-                    if(allViableNames.ContainsKey(chain))
-                    {
-                        allViableNames[chain].Add(name.name);
-                    }
-                    else
-                    {
-                        allViableNames.Add(chain, new List<string>());
-                        allViableNames[chain].Add(name.name);
-                    }
-                }
-            }
-
+        public string GetRandomName(string genderRef)
+        {
             string returnName = "";
 
-            foreach(List<string> names in allViableNames.Values)
+            int maxChain = m_NameData.Where(data => data.genders.Contains(genderRef, GlobalConstants.STRING_COMPARER))
+                .SelectMany(data => data.chain)
+                .Distinct()
+                .Max(data => data);
+
+            for (int i = 0; i < maxChain; i++)
             {
-                returnName += names[RNG.instance.Roll(0, names.Count - 1)] + " ";
+                returnName += GetNameForChain(i, genderRef, 25);
             }
+            
             returnName = returnName.TrimEnd();
+            
+            ClearLastGroup();
 
             return returnName;
         }
 
-        public string GetNameForChain(int chain, string sex)
+        public string GetNameForChain(int chain, string gender, int group = Int32.MinValue)
         {
-            NameData[] names = m_NameData.Where(x => x.chain.Contains(chain) 
-                                                     && (x.genders.Contains(sex, GlobalConstants.STRING_COMPARER) 
-                                                         || x.genders.Any(s => s.Equals("all", StringComparison.OrdinalIgnoreCase)))).ToArray();
+            NameData[] names;
 
-            int result = RNG.instance.Roll(0, names.Length - 1);
+            int chosenGroup = group == Int32.MinValue ? LastGroup : group;
+
+            LastGroup = chosenGroup;
+            
+            if (chosenGroup == Int32.MinValue)
+            {
+                names = m_NameData.Where(x => x.chain.Contains(chain) 
+                                              && (x.genders.Contains(gender, GlobalConstants.STRING_COMPARER) 
+                                                  || x.genders.Any(s => s.Equals("all", StringComparison.OrdinalIgnoreCase)))
+                                              && x.groups.IsNullOrEmpty()).ToArray();
+            }
+            else
+            {
+                names = m_NameData.Where(x => x.chain.Contains(chain)
+                                              && (x.genders.Contains(gender, GlobalConstants.STRING_COMPARER)
+                                                  || x.genders.Any(s =>
+                                                      s.Equals("all", StringComparison.OrdinalIgnoreCase))
+                                                  && x.groups.Contains(group))).ToArray();
+            }
+
+            if (names.IsNullOrEmpty())
+            {
+                if (LastGroup != int.MinValue)
+                {
+                    ClearLastGroup();
+                    return GetNameForChain(chain, gender, LastGroup);
+                }
+                else
+                {
+                    return "";
+                }
+            }
+            int result = RNG.instance.Roll(0, names.Length);
             return names[result].name;
         }
 

@@ -158,13 +158,17 @@ namespace Tests
             {
                 new NameData("NAME",
                     new[] {0, 1},
-                    new[] {"male", "female"})
+                    new[] {"male", "female"},
+                    new int[0])
             };
 
             List<ICulture> cultures = new List<ICulture>()
             {
                 Mock.Of<ICulture>(
-                    c => c.GetNameForChain(It.IsAny<int>(), It.IsAny<string>()) == "NAME"
+                    c => c.GetNameForChain(
+                             It.IsAny<int>(), 
+                             It.IsAny<string>(), 
+                             It.IsAny<int>()) == "NAME"
                     && c.NameData == namedata)
             };
 

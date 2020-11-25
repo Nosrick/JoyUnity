@@ -104,8 +104,11 @@ namespace Tests
             IGrowingValue level = Mock.Of<IGrowingValue>();
             
             ICulture culture = Mock.Of<ICulture>(
-                c => c.GetNameForChain(It.IsAny<int>(), It.IsAny<string>()) == "NAME"
-                     && c.NameData == new[] { new NameData("NAME", new []{ 0, 1 }, new [] { "female", "male" }) });
+                c => c.GetNameForChain(
+                         It.IsAny<int>(), 
+                         It.IsAny<string>(),
+                         It.IsAny<int>()) == "NAME"
+                     && c.NameData == new[] { new NameData("NAME", new []{ 0, 1 }, new [] { "female", "male" }, new int[0]) });
 
             List<ICulture> cultures = new List<ICulture> {culture};
 
