@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Materials>
+    <Material>
+        <Name>Cloth</Name>
+        <Hardness>0.8</Hardness>
+        <Bonus>0</Bonus>
+        <Weight>2</Weight>
+    </Material>
+    
+    <Material>
+        <Name>Canvas</Name>
+        <Hardness>1</Hardness>
+        <Bonus>0</Bonus>
+        <Weight>2</Weight>
+    </Material>
+</Materials>

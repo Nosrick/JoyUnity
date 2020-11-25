@@ -57,6 +57,10 @@ namespace JoyLib.Code.Quests
             List<ItemInstance> rewards = new List<ItemInstance>();
             int reward = ((steps.Count * 100) + (m_EntityRelationshipHandler.GetHighestRelationshipValue(provider, questor)));
             rewards.Add(BagOfGoldHelper.GetBagOfGold(reward));
+            foreach (ItemInstance item in rewards)
+            {
+                item.SetOwner(questor.GUID);
+            }
 
             return rewards;
         }
