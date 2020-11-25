@@ -478,11 +478,44 @@ namespace JoyLib.Code.Entities
             {
                 data.AddRange(from int level in m_JobLevels select new Tuple<string, int>("jobs", level));
             }
+            
+            //Fetch gender data
+            if (tags.Any(tag => tag.Equals(this.Gender.Name, StringComparison.OrdinalIgnoreCase))
+                || tags.Any(tag => tag.Equals("gender", StringComparison.OrdinalIgnoreCase)))
+            {
+                data.Add(new Tuple<string, int>(this.Gender.Name, 1));
+            }
+            
+            //Fetch sex data
+            if (tags.Any(tag => tag.Equals(this.Sex.Name, StringComparison.OrdinalIgnoreCase))
+                || tags.Any(tag => tag.Equals("sex")))
+            {
+                data.Add(new Tuple<string, int>(this.Sex.Name, 1));
+            }
+            if (tags.Any(tag => tag.Equals("can birth", StringComparison.OrdinalIgnoreCase)))
+            {
+                data.Add(new Tuple<string, int>("can birth", this.Sex.CanBirth == true ? 1 : 0));
+            }
+            
+            //Fetch sexuality data
+            if (tags.Any(tag => tag.Equals(this.Sexuality.Name, StringComparison.OrdinalIgnoreCase))
+                || tags.Any(tag => tag.Equals("sexuality", StringComparison.OrdinalIgnoreCase)))
+            {
+                data.Add(new Tuple<string, int>(this.Sexuality.Name, 1));
+            }
+            
+            //Fetch romance data
+            if (tags.Any(tag => tag.Equals(this.Romance.Name, StringComparison.OrdinalIgnoreCase))
+                || tags.Any(tag => tag.Equals("romance", StringComparison.OrdinalIgnoreCase)))
+            {
+                data.Add(new Tuple<string, int>(this.Romance.Name, 1));
+            }
 
-            if (args.Length <= 0)
+            if (args is null || args.Length <= 0)
             {
                 return data.ToArray();
             }
+            
             foreach (object obj in args)
             {
                 if (!(obj is Entity other))
@@ -490,8 +523,23 @@ namespace JoyLib.Code.Entities
                     continue;
                 }
                 
-                //Check relationships
                 IRelationship[] relationships = s_RelationshipHandler.GetAllForObject(this);
+
+                if (tags.Any(tag => tag.Equals("will mate", StringComparison.OrdinalIgnoreCase)))
+                {
+                    data.Add(new Tuple<string, int>(
+                        other.JoyName, 
+                        this.Sexuality.WillMateWith(this, other, relationships) == true ? 1 : 0));
+                }
+
+                if (tags.Any(tag => tag.Equals("will romance", StringComparison.OrdinalIgnoreCase)))
+                {
+                    data.Add(new Tuple<string, int>(
+                        other.JoyName,
+                        this.Romance.Compatible(this, other, relationships) == true ? 1 : 0));
+                }
+                
+                //Check relationships
                 foreach (IRelationship relationship in relationships)
                 {
                     foreach (string tag in tags)
