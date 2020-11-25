@@ -8,6 +8,10 @@ namespace JoyLib.Code.Entities.Items
 
         bool AddContents(ItemInstance actor);
 
+        bool AddContents(IEnumerable<ItemInstance> actors);
+
         bool RemoveContents(ItemInstance actor);
+
+        void Clear();
     }
 }

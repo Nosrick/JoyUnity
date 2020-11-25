@@ -74,6 +74,8 @@ namespace JoyLib.Code.Entities.Items
         protected long m_OwnerGUID;
         protected string m_OwnerString;
 
+        protected int m_Value;
+
         public long OwnerGUID
         {
             get
@@ -164,6 +166,7 @@ namespace JoyLib.Code.Entities.Items
             UniqueAbilities = uniqueAbilities is null == false ? new List<IAbility>(uniqueAbilities) : new List<IAbility>();
 
             m_Icon = Sprite;
+            CalculateValue();
             ConstructDescription();
         }
 
@@ -194,6 +197,7 @@ namespace JoyLib.Code.Entities.Items
                 builder.AppendLine(this.ContentString);
             }
             builder.AppendLine(this.ConditionString);
+            
             if (this.OwnerString.IsNullOrEmpty() == false)
             {
                 builder.AppendLine("Owned by " + this.OwnerString + ".");
@@ -202,6 +206,8 @@ namespace JoyLib.Code.Entities.Items
             {
                 builder.AppendLine("This item is not owned.");
             }
+
+            builder.AppendLine("It is worth " + this.Value + ".");
             
             m_Description = builder.ToString();
         }
@@ -228,6 +234,7 @@ namespace JoyLib.Code.Entities.Items
                 ability.OnUse(User, this);
             }
             
+            CalculateValue();
             ConstructDescription();
         }
 
@@ -473,6 +480,17 @@ namespace JoyLib.Code.Entities.Items
         {
             m_Contents.Add(actor.GUID);
 
+            CalculateValue();
+            ConstructDescription();
+
+            return true;
+        }
+
+        public bool AddContents(IEnumerable<ItemInstance> actors)
+        {
+            m_Contents.AddRange(actors.Select(instance => instance.GUID));
+            
+            CalculateValue();
             ConstructDescription();
 
             return true;
@@ -480,9 +498,31 @@ namespace JoyLib.Code.Entities.Items
 
         public bool RemoveContents(ItemInstance actor)
         {
+            bool result = m_Contents.Remove(actor.GUID);
+            if (!result)
+            {
+                return result;
+            }
+            CalculateValue();
             ConstructDescription();
-            
-            return m_Contents.Remove(actor.GUID);
+
+            return result;
+        }
+
+        public void Clear()
+        {
+            m_Contents.Clear();
+            CalculateValue();
+            ConstructDescription();
+        }
+
+        protected void CalculateValue()
+        {
+            m_Value = (int)(m_Type.Value * m_Type.Material.ValueMod);
+            foreach (ItemInstance item in this.Contents)
+            {
+                m_Value += item.Value;
+            }
         }
 
         public bool Identified
@@ -648,7 +688,7 @@ namespace JoyLib.Code.Entities.Items
                 {
                     List<ItemInstance> types = items.Where(x => x.JoyName == items[0].JoyName).ToList();
                     string name = types[0].JoyName;
-                    contentString += types.Count + " " + name + ", ";
+                    contentString += types.Count + " " + name + (types.Count > 1 ? "s, " : ", ");
 
                     List<ItemInstance> itemsToRemove = new List<ItemInstance>();
                     for (int i = 0; i < items.Count; i++)
@@ -671,6 +711,6 @@ namespace JoyLib.Code.Entities.Items
 
         public BaseItemType ItemType => m_Type;
 
-        public int Value => (int)(m_Type.Value * m_Type.Material.ValueMod);
+        public int Value => m_Value;
     }
 }

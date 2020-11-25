@@ -1,4 +1,5 @@
-﻿using DevionGames.InventorySystem;
+﻿using System.Collections.Generic;
+using DevionGames.InventorySystem;
 using DevionGames.UIWidgets;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Unity;
@@ -26,14 +27,33 @@ namespace JoyLib.Code.Entities
 
         public override bool AddContents(ItemInstance actor)
         {
-            m_Inventory.StackOrAdd(actor);
-            return base.AddContents(actor);
+            bool result = true;
+            result &= m_Inventory.StackOrAdd(actor);
+            return result && base.AddContents(actor);
+        }
+
+        public override bool AddContents(IEnumerable<ItemInstance> actors)
+        {
+            bool result = true;
+            foreach (ItemInstance item in actors)
+            {
+                result &= m_Inventory.StackOrAdd(item);
+            }
+            
+            return result && base.AddContents(actors);
         }
 
         public override bool RemoveContents(ItemInstance item)
         {
-            m_Inventory.RemoveItem(item);
-            return base.RemoveContents(item);
+            bool result = true;
+            result &= m_Inventory.RemoveItem(item);
+            return result && base.RemoveContents(item);
+        }
+
+        public override void Clear()
+        {
+            m_Inventory.RemoveItems();
+            base.Clear();
         }
     }
 }

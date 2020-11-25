@@ -836,6 +836,25 @@ namespace JoyLib.Code.Entities
             return true;
         }
 
+        public virtual bool AddContents(IEnumerable<ItemInstance> actors)
+        {
+            foreach (ItemInstance actor in actors)
+            {
+                if (m_IdentifiedItems.Any(i => i.Equals(actor.JoyName, StringComparison.OrdinalIgnoreCase)))
+                {
+                    actor.IdentifyMe();
+                }
+            }
+            
+            m_Backpack.AddRange(actors);
+            return true;
+        }
+
+        public virtual void Clear()
+        {
+            m_Backpack.Clear();
+        }
+
         public string CreatureType
         {
             get;
