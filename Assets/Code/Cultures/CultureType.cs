@@ -102,9 +102,8 @@ namespace JoyLib.Code.Cultures
             {
                 names = m_NameData.Where(x => x.chain.Contains(chain)
                                               && (x.genders.Contains(gender, GlobalConstants.STRING_COMPARER)
-                                                  || x.genders.Any(s =>
-                                                      s.Equals("all", StringComparison.OrdinalIgnoreCase))
-                                                  && x.groups.Contains(group))).ToArray();
+                                                  || x.genders.Any(s => s.Equals("all", StringComparison.OrdinalIgnoreCase))
+                                                  && x.groups.Contains(chosenGroup))).ToArray();
             }
 
             if (names.IsNullOrEmpty())
