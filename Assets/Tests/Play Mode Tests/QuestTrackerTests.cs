@@ -58,7 +58,7 @@ namespace Tests
 
         private EntitySkillHandler skillHandler;
 
-        private EntityFactory entityFactory;
+        private LiveEntityHandler entityHandler;
 
         private LiveItemHandler itemHandler;
 
@@ -92,11 +92,10 @@ namespace Tests
             skillHandler = container.AddComponent<EntitySkillHandler>();
             itemHandler = container.AddComponent<LiveItemHandler>();
             romanceHandler = container.AddComponent<EntityRomanceHandler>();
+            entityHandler = container.AddComponent<LiveEntityHandler>();
 
             questProvider = container.AddComponent<QuestProvider>();
             target = container.AddComponent<QuestTracker>();
-
-            entityFactory = new EntityFactory();
             
             world = new WorldInstance(
                 new WorldTile[0,0], 
@@ -114,7 +113,7 @@ namespace Tests
                          It.IsAny<int>(), 
                          It.IsAny<string>(), 
                          It.IsAny<int>()) == "NAME"
-                && c.NameData == new[] { new NameData("NAME", new []{ 0, 1 }, new [] { "female", "male" }, new int[0]) });
+                && c.NameData == new[] { new NameData("NAME", new []{ 0, 1 }, new [] { "all" }, new int[0]) });
 
             List<ICulture> cultures = new List<ICulture> {culture};
 
@@ -157,6 +156,9 @@ namespace Tests
                 sprites,
                 world,
                 new StandardDriver());
+
+            entityHandler.AddEntity(left);
+            entityHandler.AddEntity(right);
 
             world.AddEntity(left);
             world.AddEntity(right);

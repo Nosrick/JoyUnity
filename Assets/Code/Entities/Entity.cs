@@ -331,13 +331,22 @@ namespace JoyLib.Code.Entities
                 if (lastGroup == int.MinValue && RNG.instance.Roll(0, 100) < groupChance)
                 {
                     int[] groups = random.NameData.SelectMany(data => data.groups).Distinct().ToArray();
-                    lastGroup = groups[RNG.instance.Roll(0, groups.Length)];
-                    if (random.NameData.Any(data => random.NameData.SelectMany(d => d.chain)
-                                                        .Min(d => d) == i 
-                                            && data.groups.Contains(lastGroup)) == false)
+
+                    if (groups.Length == 0)
                     {
                         lastGroup = Int32.MinValue;
                     }
+                    else
+                    {
+                        lastGroup = groups[RNG.instance.Roll(0, groups.Length)];
+                        if (random.NameData.Any(data => random.NameData.SelectMany(d => d.chain)
+                                                            .Min(d => d) == i 
+                                                && data.groups.Contains(lastGroup)) == false)
+                        {
+                            lastGroup = Int32.MinValue;
+                        }
+                    }
+                    
                 }
                 
                 nameList.Add(random.GetNameForChain(i, this.Gender.Name, lastGroup));

@@ -4,11 +4,13 @@ using System.Linq;
 using Castle.Core.Internal;
 using DevionGames.InventorySystem;
 using JoyLib.Code;
+using JoyLib.Code.Collections;
 using JoyLib.Code.Conversation;
 using JoyLib.Code.Conversation.Conversations;
 using JoyLib.Code.Conversation.Subengines.Rumours.Parameters;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities;
+using JoyLib.Code.Entities.AI.Drivers;
 using JoyLib.Code.Entities.Gender;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Jobs;
@@ -79,6 +81,8 @@ namespace Tests
         private Entity instigator;
         private Entity listener;
 
+        private Canvas canvas;
+
         private WorldInstance world;
         
         [SetUp]
@@ -92,7 +96,7 @@ namespace Tests
             inventoryManager = new GameObject();
             inventoryManager.AddComponent<InventoryManager>();
             
-            Canvas canvas = new GameObject("Parent").AddComponent<Canvas>();
+            canvas = new GameObject("Parent").AddComponent<Canvas>();
 
             conversationWindow =
                 GameObject.Instantiate(
@@ -115,14 +119,11 @@ namespace Tests
 
             objectIconHandler = gameManager.AddComponent<ObjectIconHandler>();
             templateHandler = gameManager.AddComponent<EntityTemplateHandler>();
-            cultureHandler = gameManager.AddComponent<CultureHandler>();
             needHandler = gameManager.AddComponent<NeedHandler>();
             skillHandler = gameManager.AddComponent<EntitySkillHandler>();
             entityRelationshipHandler = gameManager.AddComponent<EntityRelationshipHandler>();
-            materialHandler = gameManager.AddComponent<MaterialHandler>();
-            jobHandler = gameManager.AddComponent<JobHandler>();
             guiManager = gameManager.AddComponent<GUIManager>();
-            itemHandler = gameManager.AddComponent<LiveItemHandler>();
+            materialHandler = gameManager.AddComponent<MaterialHandler>();
 
             parameterProcessorHandler = gameManager.AddComponent<ParameterProcessorHandler>();
 
@@ -147,60 +148,73 @@ namespace Tests
                 new WorldTile[0,0], 
                 new string[0],
                 "TESTING");
-            
-            EntityFactory factory = new EntityFactory();
 
-            IBioSex femaleSex = Mock.Of<IBioSex>(sex => sex.Name == "female");
+            EntityTemplate random = templateHandler.Get("human");
+            IGrowingValue level = new ConcreteGrowingValue(
+                "level",
+                1,
+                GlobalConstants.DEFAULT_SUCCESS_THRESHOLD,
+                0f,
+                GlobalConstants.DEFAULT_SUCCESS_THRESHOLD,
+                new StandardRoller(),
+                new NonUniqueDictionary<INeed, float>());
 
-            IGender femaleGender = Mock.Of<IGender>(gender => gender.Name == "female");
+            ICulture culture = Mock.Of<ICulture>( c => c.GetNameForChain(
+                                                           It.IsAny<int>(), 
+                                                           It.IsAny<string>(), 
+                                                           It.IsAny<int>()) == "NAME"
+                                                       && c.NameData == new NameData[] { new NameData("NAME", new []{0, 1}, new []{"all"}, new int[0]) });
+            List<ICulture> cultures = new List<ICulture> {culture};
 
-            NameData[] namedata = new[]
-            {
-                new NameData("NAME",
-                    new[] {0, 1},
-                    new[] {"male", "female"},
-                    new int[0])
-            };
+            IGender gender = Mock.Of<IGender>(g => g.Name == "female");
+            IBioSex sex = Mock.Of<IBioSex>(s => s.Name == "female"
+                                                && s.CanBirth == true);
+            ISexuality sexuality = Mock.Of<ISexuality>(s => s.WillMateWith(
+                                                                It.IsAny<Entity>(), It.IsAny<Entity>(), It.IsAny<IRelationship[]>()) == true
+                                                            && s.Tags == new List<string>());
+            IRomance romance = Mock.Of<IRomance>(r => r.Compatible(
+                It.IsAny<Entity>(), It.IsAny<Entity>(), It.IsAny<IRelationship[]>()) == true);
+            IJob job = Mock.Of<IJob>();
 
-            List<ICulture> cultures = new List<ICulture>()
-            {
-                Mock.Of<ICulture>(
-                    c => c.GetNameForChain(
-                             It.IsAny<int>(), 
-                             It.IsAny<string>(), 
-                             It.IsAny<int>()) == "NAME"
-                    && c.NameData == namedata)
-            };
+            Sprite[] sprites = objectIconHandler.GetDefaultSprites();
 
-            IRomance romance = Mock.Of<IRomance>();
+            BasicValueContainer<INeed> needs = new BasicValueContainer<INeed>(needHandler.GetManyRandomised(random.Needs));
 
-            ISexuality sexuality = Mock.Of<ISexuality>(s => s.Tags == new List<string>());
-
-            IGrowingValue level = Mock.Of<IGrowingValue>();
-            EntityTemplate humanTemplate = templateHandler.Get("human");
-            
-            instigator = factory.CreateFromTemplate(
-                humanTemplate,
-                level,
-                Vector2Int.zero,
+            instigator = new Entity(
+                random,
+                needs, 
                 cultures,
-                femaleGender,
-                femaleSex,
-                sexuality,
-                romance);
-            
-            listener = factory.CreateFromTemplate(
-                humanTemplate,
                 level,
-                Vector2Int.zero,
-                cultures,
-                femaleGender,
-                femaleSex,
+                job,
+                gender,
+                sex,
                 sexuality,
-                romance);
+                romance,
+                Vector2Int.down, 
+                sprites,
+                world,
+                new StandardDriver());
+
+            listener = new Entity(
+                random,
+                needs, 
+                cultures,
+                level,
+                job,
+                gender,
+                sex,
+                sexuality,
+                romance,
+                Vector2Int.down, 
+                sprites,
+                world,
+                new StandardDriver());
 
             instigator.PlayerControlled = true;
-            
+
+            entityHandler.AddEntity(instigator);
+            entityHandler.AddEntity(listener);
+
             world.AddEntity(instigator);
             world.AddEntity(listener);
 
@@ -272,9 +286,7 @@ namespace Tests
         {
             GameObject.DestroyImmediate(gameManager);
             GameObject.DestroyImmediate(inventoryManager);
-            GameObject.DestroyImmediate(tradeWindow);
-            GameObject.DestroyImmediate(inventoryWindow);
-            GameObject.DestroyImmediate(conversationWindow);
+            GameObject.DestroyImmediate(canvas);
             GameObject.DestroyImmediate(listenerObject.gameObject);
             GameObject.DestroyImmediate(instigatorObject.gameObject);
         }

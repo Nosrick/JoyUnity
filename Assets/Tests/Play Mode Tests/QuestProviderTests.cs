@@ -5,6 +5,7 @@ using JoyLib.Code;
 using JoyLib.Code.Collections;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities;
+using JoyLib.Code.Entities.AI.Drivers;
 using JoyLib.Code.Entities.Gender;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Jobs;
@@ -61,6 +62,8 @@ namespace Tests
 
         private LiveItemHandler itemHandler;
 
+        private LiveEntityHandler entityHandler;
+
         private GameObject inventoryManager;
 
         private WorldInstance world;
@@ -81,16 +84,11 @@ namespace Tests
 
             objectIconHandler = container.AddComponent<ObjectIconHandler>();
             templateHandler = container.AddComponent<EntityTemplateHandler>();
-            cultureHandler = container.AddComponent<CultureHandler>();
-            needHandler = container.AddComponent<NeedHandler>();
             relationshipHandler = container.AddComponent<EntityRelationshipHandler>();
             materialHandler = container.AddComponent<MaterialHandler>();
-            jobHandler = container.AddComponent<JobHandler>();
-            bioSexHandler = container.AddComponent<EntityBioSexHandler>();
-            sexualityHandler = container.AddComponent<EntitySexualityHandler>();
             skillHandler = container.AddComponent<EntitySkillHandler>();
             itemHandler = container.AddComponent<LiveItemHandler>();
-            romanceHandler = container.AddComponent<EntityRomanceHandler>();
+            entityHandler = container.AddComponent<LiveEntityHandler>();
 
             target = container.AddComponent<QuestProvider>();
             questTracker = container.AddComponent<QuestTracker>();
@@ -132,31 +130,44 @@ namespace Tests
             IRomance romance = Mock.Of<IRomance>(r => r.Compatible(
                 It.IsAny<Entity>(), It.IsAny<Entity>(), It.IsAny<IRelationship[]>()) == true);
             IJob job = Mock.Of<IJob>();
-            
-            left = entityFactory.CreateFromTemplate(
-                random,
-                level,  
-                Vector2Int.down,
-                cultures,
-                gender,
-                sex,
-                sexuality,
-                romance,
-                job);
 
-            right = entityFactory.CreateFromTemplate(
+            Sprite[] sprites = objectIconHandler.GetDefaultSprites();
+            
+            left = new Entity(
                 random,
-                level,
-                Vector2Int.up,
+                new BasicValueContainer<INeed>(), 
                 cultures,
+                level,
+                job,
                 gender,
                 sex,
                 sexuality,
                 romance,
-                job);
+                Vector2Int.down, 
+                sprites,
+                world,
+                new StandardDriver());
+
+            right = new Entity(
+                random,
+                new BasicValueContainer<INeed>(), 
+                cultures,
+                level,
+                job,
+                gender,
+                sex,
+                sexuality,
+                romance,
+                Vector2Int.down, 
+                sprites,
+                world,
+                new StandardDriver());
 
             left.PlayerControlled = true;
-            
+
+            entityHandler.AddEntity(left);
+            entityHandler.AddEntity(right);
+
             world.AddEntity(left);
             world.AddEntity(right);
         }

@@ -22,9 +22,9 @@ namespace JoyLib.Code.Entities.Items
         {
             if(GameManager is null)
             {
-                GameManager = GameObject.Find("GameManager");
-                ObjectIcons = GameObject.Find("GameManager").GetComponent<ObjectIconHandler>();
-                ItemHandler = GameObject.Find("GameManager").GetComponent<LiveItemHandler>();
+                GameManager = GlobalConstants.GameManager;
+                ObjectIcons = GameManager.GetComponent<ObjectIconHandler>();
+                ItemHandler = GameManager.GetComponent<LiveItemHandler>();
             }
         }
 
