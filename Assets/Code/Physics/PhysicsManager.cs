@@ -4,7 +4,12 @@ using UnityEngine;
 
 namespace JoyLib.Code.Physics
 {
-    public class PhysicsManager : MonoBehaviour
+    public interface IPhysicsManager
+    {
+        PhysicsResult IsCollision(Vector2Int from, Vector2Int to, WorldInstance worldRef);
+    }
+
+    public class PhysicsManager : IPhysicsManager
     {
         public PhysicsResult IsCollision(Vector2Int from, Vector2Int to, WorldInstance worldRef)
         {

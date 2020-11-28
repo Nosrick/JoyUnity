@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Linq;
+using DevionGames.InventorySystem;
 using JoyLib.Code;
 using JoyLib.Code.Collections;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
+using JoyLib.Code.Unity.GUI;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -14,24 +16,21 @@ namespace Tests
 {
     public class SkillHandlerTest
     {
-        private EntitySkillHandler target;
+        private IEntitySkillHandler target;
     
-        private GameObject container;
-    
-        private NeedHandler needHandler;
+        private IGameManager container;
 
-        private ObjectIconHandler objectIconHandler;
+        private GameObject inventoryManager;
     
         [SetUp]
         public void Initialise()
         {
-            container = new GameObject("GameManager");
+            inventoryManager = new GameObject();
+            inventoryManager.AddComponent<InventoryManager>();
+            container = new GameObject("GameManager").AddComponent<GameManager>();
 
             GlobalConstants.GameManager = container;
-
-            objectIconHandler = container.AddComponent<ObjectIconHandler>();
-            needHandler = container.AddComponent<NeedHandler>();
-            target = container.AddComponent<EntitySkillHandler>();
+            target = container.SkillHandler;
         }
     
         [UnityTest]
@@ -39,8 +38,7 @@ namespace Tests
         {
             BasicValueContainer<INeed> needs =
                 new BasicValueContainer<INeed>(
-                    needHandler.Needs.Keys.Select(needName => needHandler.GetRandomised(needName))
-                        .ToList());
+                    container.NeedHandler.GetManyRandomised(container.NeedHandler.NeedNames));
     
             BasicValueContainer<IGrowingValue> skills = target.GetDefaultSkillBlock(needs);
     
@@ -55,7 +53,7 @@ namespace Tests
         [TearDown]
         public void TearDown()
         {
-            GameObject.DestroyImmediate(container);
+            GameObject.DestroyImmediate(container.MyGameObject);
         }
     }
 }

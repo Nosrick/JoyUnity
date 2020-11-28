@@ -23,15 +23,14 @@ using MenuItem = DevionGames.UIWidgets.MenuItem;
 
 namespace JoyLib.Code.Conversation
 {
-    public class ConversationEngine : MonoBehaviour
+    public class ConversationEngine : IConversationEngine
     {
         protected List<ITopic> m_Topics;
         protected List<ITopic> m_CurrentTopics;
 
-        [SerializeField]
         protected GameObject m_Window;
 
-        protected GUIManager GUIManager
+        protected IGUIManager GUIManager
         {
             get;
             set;
@@ -103,36 +102,33 @@ namespace JoyLib.Code.Conversation
             set;
         }
         
-        protected EntityRelationshipHandler RelationshipHandler { get; set; }
+        protected IEntityRelationshipHandler RelationshipHandler { get; set; }
 
-        public void Awake()
+        public ConversationEngine(IEntityRelationshipHandler relationshipHandler, IGUIManager guiManager)
         {
-            if (m_Topics is null)
-            {
-                RelationshipHandler = GameObject.Find("GameManager").GetComponent<EntityRelationshipHandler>();
+            RelationshipHandler = relationshipHandler;
                 
-                m_Topics = LoadTopics();
-                
-                m_CurrentTopics = new List<ITopic>();
+            m_Topics = LoadTopics();
+            
+            m_CurrentTopics = new List<ITopic>();
 
-                Window = Window is null ? GameObject.Find("Conversation Window") : Window;
+            Window = Window is null ? GameObject.Find("Conversation Window") : Window;
 
-                Transform title = Window.FindChild("Conversation Title", true).transform;
-                TitleRect = title.GetComponent<RectTransform>();
-                ListenerSection = TitleRect.gameObject.transform.Find("Listener Section").GetComponent<RectTransform>();
-                LastSaidGUI = title.Find("Last Said").GetComponent<TextMeshProUGUI>();
-                Transform listenerSection = title.Find("Listener Section");
-                LastSpokeName = listenerSection.Find("Listener Name").GetComponent<TextMeshProUGUI>();
-                LastSpokeIcon = listenerSection.Find("Listener Icon").GetComponent<Image>();
-                MenuItem = Window.FindChild("Topic Item", true);
-                
-                MenuList = new List<ConversationMenu>();
+            Transform title = Window.FindChild("Conversation Title", true).transform;
+            TitleRect = title.GetComponent<RectTransform>();
+            ListenerSection = TitleRect.gameObject.transform.Find("Listener Section").GetComponent<RectTransform>();
+            LastSaidGUI = title.Find("Last Said").GetComponent<TextMeshProUGUI>();
+            Transform listenerSection = title.Find("Listener Section");
+            LastSpokeName = listenerSection.Find("Listener Name").GetComponent<TextMeshProUGUI>();
+            LastSpokeIcon = listenerSection.Find("Listener Icon").GetComponent<Image>();
+            MenuItem = Window.FindChild("Topic Item", true);
+            
+            MenuList = new List<ConversationMenu>();
 
-                this.GUIManager = this.gameObject.GetComponent<GUIManager>();
-            }
+            this.GUIManager = guiManager;
         }
 
-        public List<ITopic> LoadTopics()
+        protected List<ITopic> LoadTopics()
         {
             List<ITopic> topics = new List<ITopic>();
 

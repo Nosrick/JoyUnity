@@ -1,4 +1,5 @@
 using System.Collections;
+using DevionGames.InventorySystem;
 using JoyLib.Code;
 using JoyLib.Code.Entities.Jobs;
 using NUnit.Framework;
@@ -9,18 +10,22 @@ namespace Tests
 {
     public class JobHandlerTest
     {
-        private JobHandler target;
+        private IJobHandler target;
 
-        private GameObject gameManager;
+        private IGameManager gameManager;
+
+        private GameObject inventoryManager;
 
         [SetUp]
         public void SetUp()
         {
-            gameManager = new GameObject("GameManager");
+            inventoryManager = new GameObject();
+            inventoryManager.AddComponent<InventoryManager>();
+            gameManager = new GameObject("GameManager").AddComponent<GameManager>();
 
             GlobalConstants.GameManager = gameManager;
 
-            target = gameManager.AddComponent<JobHandler>();
+            target = gameManager.JobHandler;
         }
 
         [UnityTest]
@@ -46,7 +51,7 @@ namespace Tests
         [TearDown]
         public void TearDown()
         {
-            GameObject.DestroyImmediate(gameManager);
+            GameObject.DestroyImmediate(gameManager.MyGameObject);
         }
     }
 }

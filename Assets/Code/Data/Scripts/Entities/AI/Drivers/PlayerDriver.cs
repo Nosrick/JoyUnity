@@ -6,11 +6,11 @@ namespace JoyLib.Code.Entities.AI.Drivers
 {
     public class PlayerDriver : AbstractDriver
     {
-        protected static PhysicsManager s_PhysicsManager;
+        protected static IPhysicsManager s_PhysicsManager;
 
         public PlayerDriver()
         {
-            s_PhysicsManager = GameObject.Find("GameManager").GetComponent<PhysicsManager>();
+            s_PhysicsManager = GlobalConstants.GameManager.PhysicsManager;
         }
 
         public override void Interact()

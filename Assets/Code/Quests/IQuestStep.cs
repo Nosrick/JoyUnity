@@ -5,10 +5,10 @@ using JoyLib.Code.World;
 
 namespace JoyLib.Code.Quests
 {
-    public interface IQuestStep
+    public interface IQuestStep : ITagged
     {
         IQuestAction Action { get; }
-        List<ItemInstance> Items { get; }
+        List<IItemInstance> Items { get; }
         List<IJoyObject> Actors { get; }
         List<WorldInstance> Areas { get; }
 

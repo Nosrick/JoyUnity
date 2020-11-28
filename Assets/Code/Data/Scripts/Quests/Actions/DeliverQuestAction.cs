@@ -17,7 +17,7 @@ namespace JoyLib.Code.Quests
 
         public string Description { get; protected set; }
         
-        public List<ItemInstance> Items { get; protected set; }
+        public List<IItemInstance> Items { get; protected set; }
         public List<IJoyObject> Actors { get; protected set; }
         public List<WorldInstance> Areas { get; protected set; }
 
@@ -32,10 +32,10 @@ namespace JoyLib.Code.Quests
         }
         
         public DeliverQuestAction(
-            List<ItemInstance> items,
+            List<IItemInstance> items,
             List<IJoyObject> actors,
             List<WorldInstance> areas,
-             string[] tags)
+             IEnumerable<string> tags)
         {
             List<string> tempTags = new List<string>();
             tempTags.Add("deliver");
@@ -52,10 +52,10 @@ namespace JoyLib.Code.Quests
             }
         }
         
-        public IQuestStep Make(Entity questor, Entity provider, WorldInstance overworld)
+        public IQuestStep Make(Entity questor, Entity provider, WorldInstance overworld, IEnumerable<string> tags)
         {
-            ItemInstance deliveryItem = null;
-            ItemInstance[] backpack = provider.Backpack;
+            IItemInstance deliveryItem = null;
+            IItemInstance[] backpack = provider.Backpack;
             if (backpack.Length > 0)
             {
                 int result = RNG.instance.Roll(0, backpack.Length);
@@ -68,7 +68,7 @@ namespace JoyLib.Code.Quests
                 deliveryItem = ItemFactory.CreateCompletelyRandomItem();
             }
 
-            this.Items = new List<ItemInstance> {deliveryItem};
+            this.Items = new List<IItemInstance> {deliveryItem};
             this.Actors = new List<IJoyObject> {endPoint};
             this.Areas = new List<WorldInstance>();
 
@@ -76,7 +76,8 @@ namespace JoyLib.Code.Quests
                 this, 
                 this.Items, 
                 this.Actors, 
-                this.Areas);
+                this.Areas,
+                this.Tags);
             return step;
         }
 
@@ -143,10 +144,9 @@ namespace JoyLib.Code.Quests
             return "Deliver " + itemBuilder.ToString() + " to " + actorBuilder.ToString() + ".";
         }
 
-        public IQuestAction Create(
-            string[] tags, 
-            List<ItemInstance> items, 
-            List<IJoyObject> actors, 
+        public IQuestAction Create(IEnumerable<string> tags,
+            List<IItemInstance> items,
+            List<IJoyObject> actors,
             List<WorldInstance> areas)
         {
             return new DeliverQuestAction(

@@ -17,7 +17,7 @@ namespace JoyLib.Code.Unity
             m_Items = this.GetComponent<ItemCollection>();
             if (LiveItemHandler is null)
             {
-                LiveItemHandler = GameObject.Find("GameManager").GetComponent<LiveItemHandler>();
+                LiveItemHandler = GlobalConstants.GameManager.ItemHandler;
             }
         }
 
@@ -51,7 +51,7 @@ namespace JoyLib.Code.Unity
             }
         }
 
-        public static LiveItemHandler LiveItemHandler
+        public static ILiveItemHandler LiveItemHandler
         {
             get;
             protected set;

@@ -16,14 +16,14 @@ namespace JoyLib.Code.Entities.Sexuality
         
         public List<string> Tags { get; protected set; }
         
-        protected static EntitySexualityHandler s_SexualityHandler;
+        protected static IEntitySexualityHandler s_SexualityHandler;
 
         public AbstractSexuality()
         {
             Tags = new List<string>();
             if(s_SexualityHandler is null)
             {
-                s_SexualityHandler = GameObject.Find("GameManager").GetComponent<EntitySexualityHandler>();
+                s_SexualityHandler = GlobalConstants.GameManager.SexualityHandler;
             }
         }
         

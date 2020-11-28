@@ -28,7 +28,7 @@ namespace JoyLib.Code.Unity.GUI
         [SerializeField] protected MutableItemContainer RightInventory;
         [SerializeField] protected MutableItemContainer RightOffering;
 
-        protected EntityRelationshipHandler RelationshipHandler { get; set; }
+        protected IEntityRelationshipHandler RelationshipHandler { get; set; }
         
         protected RectTransform RectTransform { get; set; }
 
@@ -36,7 +36,7 @@ namespace JoyLib.Code.Unity.GUI
         {
             if (RelationshipHandler is null)
             {
-                RelationshipHandler = GlobalConstants.GameManager.GetComponent<EntityRelationshipHandler>();
+                RelationshipHandler = GlobalConstants.GameManager.RelationshipHandler;
             }
 
             RectTransform = this.GetComponent<RectTransform>();

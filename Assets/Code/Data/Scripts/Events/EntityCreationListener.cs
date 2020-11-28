@@ -5,11 +5,11 @@ namespace JoyLib.Code.Events
 {
     public class EntityCreationListener : JoyEventListener
     {
-        private LiveEntityHandler m_EntityHandler;
+        private ILiveEntityHandler m_EntityHandler;
 
         public void Awake()
         {
-            m_EntityHandler = GameObject.Find("GameManager").GetComponent<LiveEntityHandler>();
+            m_EntityHandler = GlobalConstants.GameManager.EntityHandler;
         }
 
         public override void OnEventRaised(params object[] args)

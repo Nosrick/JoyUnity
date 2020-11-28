@@ -10,21 +10,21 @@ using JoyLib.Code.Unity;
 
 namespace JoyLib.Code.Entities.Items
 {
-    public class ItemFactory
+    public class ItemFactory :IItemFactory
     {
-        protected GameObject GameManager { get; set; }
+        protected IGameManager GameManager { get; set; }
 
-        protected LiveItemHandler ItemHandler { get; set; }
+        protected ILiveItemHandler ItemHandler { get; set; }
 
-        protected ObjectIconHandler ObjectIcons { get; set; }
+        protected IObjectIconHandler ObjectIcons { get; set; }
 
         public ItemFactory()
         {
             if(GameManager is null)
             {
                 GameManager = GlobalConstants.GameManager;
-                ObjectIcons = GameManager.GetComponent<ObjectIconHandler>();
-                ItemHandler = GameManager.GetComponent<LiveItemHandler>();
+                ObjectIcons = GameManager.ObjectIconHandler;
+                ItemHandler = GameManager.ItemHandler;
             }
         }
 

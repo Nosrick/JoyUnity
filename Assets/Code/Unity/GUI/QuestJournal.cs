@@ -17,9 +17,9 @@ namespace JoyLib.Code.Unity.GUI
     {
         public Entity Player { get; set; }
         
-        protected LiveEntityHandler EntityHandler { get; set; }
+        protected ILiveEntityHandler EntityHandler { get; set; }
         
-        protected QuestTracker QuestTracker { get; set; }
+        protected IQuestTracker QuestTracker { get; set; }
         
         protected GameObject MenuItemPrefab { get; set; }
         protected RectTransform MenuItemRect { get; set; }
@@ -36,8 +36,8 @@ namespace JoyLib.Code.Unity.GUI
                 MenuItemRect = MenuItemPrefab.GetComponent<RectTransform>();
                 Container = this.gameObject.FindChild("Quest MenuContainer", true);
                 MenuItems = new List<MenuItem>();
-                QuestTracker = GlobalConstants.GameManager.GetComponent<QuestTracker>();
-                EntityHandler = GlobalConstants.GameManager.GetComponent<LiveEntityHandler>();
+                QuestTracker = GlobalConstants.GameManager.QuestTracker;
+                EntityHandler = GlobalConstants.GameManager.EntityHandler;
                 Player = EntityHandler.GetPlayer();
             }
         }

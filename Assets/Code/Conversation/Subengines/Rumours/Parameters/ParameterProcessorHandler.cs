@@ -5,16 +5,13 @@ using UnityEngine;
 
 namespace JoyLib.Code.Conversation.Subengines.Rumours.Parameters
 {
-    public class ParameterProcessorHandler : MonoBehaviour
+    public class ParameterProcessorHandler : IParameterProcessorHandler
     {
         protected List<IParameterProcessor> Parameters { get; set; }
 
-        public void Awake()
+        public ParameterProcessorHandler()
         {
-            if (Parameters is null)
-            {
-                Parameters = LoadProcessors();
-            }
+            Parameters = LoadProcessors();
         }
 
         protected List<IParameterProcessor> LoadProcessors()

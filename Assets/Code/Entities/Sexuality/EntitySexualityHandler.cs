@@ -7,21 +7,21 @@ using UnityEngine;
 
 namespace JoyLib.Code.Entities.Sexuality
 {
-    public class EntitySexualityHandler : MonoBehaviour
+    public class EntitySexualityHandler : IEntitySexualityHandler
     {
         protected Dictionary<string, ISexuality> m_Sexualities;
 
-        protected CultureHandler m_CultureHandler;
+        protected ICultureHandler CultureHandler { get; set; }
 
-        public void Awake()
+        public EntitySexualityHandler(ICultureHandler cultureHandler)
         {
+            CultureHandler = cultureHandler;
             Initialise();
         }
 
-        public void Initialise()
+        protected void Initialise()
         {
-            m_CultureHandler = GameObject.Find("GameManager").GetComponent<CultureHandler>();
-            Load(m_CultureHandler.Cultures);
+            Load(CultureHandler.Cultures);
         }
 
         protected bool Load(ICulture[] cultures)

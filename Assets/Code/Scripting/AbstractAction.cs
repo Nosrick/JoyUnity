@@ -10,7 +10,7 @@ namespace JoyLib.Code.Scripting
         {
             if (QuestTracker is null)
             {
-                QuestTracker = GameObject.Find("GameManager").GetComponent<QuestTracker>();
+                QuestTracker = GlobalConstants.GameManager.QuestTracker;
             }
         }
         
@@ -41,6 +41,6 @@ namespace JoyLib.Code.Scripting
         public object[] LastArgs { get; protected set; }
         public bool Successful { get; protected set; }
         
-        protected static QuestTracker QuestTracker { get; set; }
+        protected static IQuestTracker QuestTracker { get; set; }
     }
 }

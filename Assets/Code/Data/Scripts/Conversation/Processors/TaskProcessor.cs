@@ -6,7 +6,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
 {
     public class TaskProcessor : TopicData
     {
-        protected static QuestProvider QuestProvider { get; set; }
+        protected static IQuestProvider QuestProvider { get; set; }
         
         protected IQuest OfferedQuest { get; set; }
         
@@ -32,8 +32,9 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
             {
                 return;
             }
-            GameObject gameManager = GameObject.Find("GameManager");
-            QuestProvider = gameManager.GetComponent<QuestProvider>();
+
+            IGameManager gameManager = GlobalConstants.GameManager;
+            QuestProvider = gameManager.QuestProvider;
         }
 
         public override ITopic[] Interact(Entity instigator, Entity listener)

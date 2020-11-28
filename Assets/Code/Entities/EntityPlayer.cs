@@ -20,19 +20,24 @@ namespace JoyLib.Code.Entities
             }
         }
         
-        public override bool EquipItem(string slotRef, ItemInstance itemRef)
+        public override bool EquipItem(string slotRef, IItemInstance itemRef)
         {
             return base.EquipItem(slotRef, itemRef);
         }
 
-        public override bool AddContents(ItemInstance actor)
+        public override bool AddContents(IItemInstance actor)
         {
-            bool result = true;
-            result &= m_Inventory.StackOrAdd(actor);
-            return result && base.AddContents(actor);
+            if (actor is ItemInstance item)
+            {
+                bool result = true;
+                result &= m_Inventory.StackOrAdd(item);
+                return result && base.AddContents(actor);
+            }
+
+            return false;
         }
 
-        public override bool AddContents(IEnumerable<ItemInstance> actors)
+        public override bool AddContents(IEnumerable<IItemInstance> actors)
         {
             bool result = true;
             foreach (ItemInstance item in actors)
@@ -43,11 +48,16 @@ namespace JoyLib.Code.Entities
             return result && base.AddContents(actors);
         }
 
-        public override bool RemoveContents(ItemInstance item)
+        public override bool RemoveContents(IItemInstance item)
         {
-            bool result = true;
-            result &= m_Inventory.RemoveItem(item);
-            return result && base.RemoveContents(item);
+            if (item is ItemInstance instance)
+            {
+                bool result = true;
+                result &= m_Inventory.RemoveItem(instance);
+                return result && base.RemoveContents(item);
+            }
+
+            return false;
         }
 
         public override void Clear()

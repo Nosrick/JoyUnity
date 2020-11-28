@@ -12,20 +12,20 @@ namespace JoyLib.Code.World.Generators.Interiors
 {
     public class DungeonEntityPlacer
     {
-        protected static GameObject s_GameManager;
-        protected static LiveEntityHandler s_EntityHandler;
-        protected static EntityTemplateHandler s_EntityTemplateHandler;
+        protected static IGameManager s_GameManager;
+        protected static ILiveEntityHandler s_EntityHandler;
+        protected static IEntityTemplateHandler s_EntityTemplateHandler;
 
-        protected static PhysicsManager s_PhysicsManager;
+        protected static IPhysicsManager s_PhysicsManager;
 
         protected static EntityFactory s_EntityFactory = new EntityFactory();
 
         public DungeonEntityPlacer()
         {
             s_GameManager = GlobalConstants.GameManager;
-            s_EntityHandler = s_GameManager.GetComponent<LiveEntityHandler>();
-            s_EntityTemplateHandler = s_GameManager.GetComponent<EntityTemplateHandler>();
-            s_PhysicsManager = s_GameManager.GetComponent<PhysicsManager>();
+            s_EntityHandler = s_GameManager.EntityHandler;
+            s_EntityTemplateHandler = s_GameManager.EntityTemplateHandler;
+            s_PhysicsManager = s_GameManager.PhysicsManager;
         }
 
         public List<Entity> PlaceEntities(WorldInstance worldRef, List<string> entityTypes)

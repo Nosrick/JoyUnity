@@ -16,21 +16,21 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace JoyLib.Code.Entities.Items
 {
-    public class LiveItemHandler : MonoBehaviour
+    public class LiveItemHandler : ILiveItemHandler
     {
-        protected Dictionary<long, ItemInstance> m_LiveItems;
+        protected Dictionary<long, IItemInstance> m_LiveItems;
 
         protected List<BaseItemType> m_ItemDatabase;
 
-        protected GameObject m_GameManager;
+        protected IGameManager m_GameManager;
 
-        protected ObjectIconHandler m_ObjectIcons;
+        protected IObjectIconHandler m_ObjectIcons;
 
-        protected MaterialHandler m_MaterialHandler;
+        protected IMaterialHandler m_MaterialHandler;
 
         protected static GameObject s_ItemPrefab; 
 
-        public void Awake()
+        public LiveItemHandler()
         {
             if (m_ItemDatabase is null)
             {
@@ -40,11 +40,11 @@ namespace JoyLib.Code.Entities.Items
 
         protected void Initialise()
         {
-            m_LiveItems = new Dictionary<long, ItemInstance>();
+            m_LiveItems = new Dictionary<long, IItemInstance>();
 
-            m_GameManager = GameObject.Find("GameManager");
-            m_ObjectIcons = m_GameManager.GetComponent<ObjectIconHandler>();
-            m_MaterialHandler = m_GameManager.GetComponent<MaterialHandler>();
+            m_GameManager = GlobalConstants.GameManager;
+            m_ObjectIcons = m_GameManager.ObjectIconHandler;
+            m_MaterialHandler = m_GameManager.MaterialHandler;
 
             s_ItemPrefab = Resources.Load<GameObject>("Prefabs/ItemInstance");
 
@@ -77,7 +77,7 @@ namespace JoyLib.Code.Entities.Items
                                                             materials = item.Elements("Material").Select(material => material.GetAs<string>()).ToArray(),
                                                             tags = item.Elements("Tag").Select(tag => tag.GetAs<string>()).ToArray(),
                                                             weighting = item.Element("SpawnWeighting").GetAs<int>(),
-                                                            abilities = item.Elements("Effect").Select(ability => ability.GetAs<string>() != null ? AbilityHandler.instance.GetAbility(ability.GetAs<string>()) : null).ToArray(),
+                                                            abilities = item.Elements("Effect").Select(ability => ability.GetAs<string>() != null ? GlobalConstants.GameManager.AbilityHandler.GetAbility(ability.GetAs<string>()) : null).ToArray(),
                                                             lightLevel = item.Element("LightLevel").GetAs<int>()
 
                                                         }).ToList();
@@ -182,17 +182,7 @@ namespace JoyLib.Code.Entities.Items
             return matchingTypes.ToArray();
         }
 
-        public ItemInstance GetInstance(long GUID)
-        {
-            if (LiveItems.ContainsKey(GUID))
-            {
-                return LiveItems[GUID];
-            }
-
-            return null;
-        }
-
-        public bool AddItem(ItemInstance item, bool addToWorld = false)
+        public bool AddItem(IItemInstance item, bool addToWorld = false)
         {
             if (LiveItems.ContainsKey(item.GUID))
             {
@@ -214,14 +204,14 @@ namespace JoyLib.Code.Entities.Items
                 return false;
             }
             
-            ItemInstance item = GetItem(GUID);
+            IItemInstance item = GetItem(GUID);
             item.MyWorld.RemoveObject(item.WorldPosition, item);
             //LiveItems.Remove(GUID);
             return true;
 
         }
 
-        public bool RemoveItemFromWorld(ItemInstance item)
+        public bool RemoveItemFromWorld(IItemInstance item)
         {
             if (!LiveItems.ContainsKey(item.GUID))
             {
@@ -238,13 +228,13 @@ namespace JoyLib.Code.Entities.Items
                 return false;
             }
             
-            ItemInstance item = GetItem(GUID);
+            IItemInstance item = GetItem(GUID);
             item.MyWorld = world;
             world.AddObject(item);
             return true;
         }
 
-        public ItemInstance GetItem(long GUID)
+        public IItemInstance GetItem(long GUID)
         {
             if (LiveItems.ContainsKey(GUID))
             {
@@ -266,7 +256,7 @@ namespace JoyLib.Code.Entities.Items
             }
         }
 
-        protected Dictionary<long, ItemInstance> LiveItems
+        protected Dictionary<long, IItemInstance> LiveItems
         {
             get
             {

@@ -10,11 +10,11 @@ namespace JoyLib.Code.Quests
     {
         string[] Tags { get; }
         string Description { get; }
-        List<ItemInstance> Items { get; }
+        List<IItemInstance> Items { get; }
         List<IJoyObject> Actors { get; }
         List<WorldInstance> Areas { get; }
 
-        IQuestStep Make(Entity questor, Entity provider, WorldInstance overworld);
+        IQuestStep Make(Entity questor, Entity provider, WorldInstance overworld, IEnumerable<string> tags);
         bool ExecutedSuccessfully(IJoyAction action);
 
         string AssembleDescription();
@@ -22,8 +22,8 @@ namespace JoyLib.Code.Quests
         void ExecutePrerequisites(Entity questor);
 
         IQuestAction Create(
-            string[] tags,
-            List<ItemInstance> items,
+            IEnumerable<string> tags,
+            List<IItemInstance> items,
             List<IJoyObject> actors,
             List<WorldInstance> areas);
     }

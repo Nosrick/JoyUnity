@@ -15,67 +15,72 @@ using JoyLib.Code.Rollers;
 using JoyLib.Code.States;
 using System;
 using System.Collections.Generic;
+using DevionGames.InventorySystem;
+using JoyLib.Code.Conversation;
+using JoyLib.Code.Conversation.Subengines.Rumours;
+using JoyLib.Code.Conversation.Subengines.Rumours.Parameters;
+using JoyLib.Code.Entities.Gender;
+using JoyLib.Code.Entities.Items;
+using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Entities.Romance;
+using JoyLib.Code.Physics;
+using JoyLib.Code.Quests;
+using JoyLib.Code.Unity.GUI;
+using JoyLib.Code.World;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviour, IGameManager
 {
     protected StateManager m_StateManager;
 
-	// Use this for initialization
-	protected void Start ()
+    // Use this for initialization
+	protected void Awake ()
     {
         if (GlobalConstants.GameManager is null)
         {
-            GlobalConstants.GameManager = this.gameObject;
+            GlobalConstants.GameManager = this;
         }
+
+        MyGameObject = this.gameObject;
+
+        PhysicsManager = new PhysicsManager();
+
+        RelationshipHandler = new EntityRelationshipHandler();
+
+        QuestProvider = new QuestProvider(RelationshipHandler);
+        QuestTracker = new QuestTracker();
         
-        ObjectIconHandler objectIcons = this.GetComponent<ObjectIconHandler>();
-        CultureHandler cultureHandler = this.GetComponent<CultureHandler>();
-        EntityTemplateHandler entityTemplateHandler = this.GetComponent<EntityTemplateHandler>();
-        EntityBioSexHandler bioSexHandler = this.GetComponent<EntityBioSexHandler>();
-        EntitySexualityHandler sexualityHandler = this.GetComponent<EntitySexualityHandler>();
-        JobHandler jobHandler = this.GetComponent<JobHandler>();
-        EntityRomanceHandler romanceHandler = this.GetComponent<EntityRomanceHandler>();
+        GUIManager = new GUIManager();
+        
+        AbilityHandler = new AbilityHandler();
+        
+        MaterialHandler = new MaterialHandler();
+        ObjectIconHandler = new ObjectIconHandler();
+
+        NeedHandler = new NeedHandler();
+        CultureHandler = new CultureHandler();
+        BioSexHandler = new EntityBioSexHandler(CultureHandler);
+        SexualityHandler = new EntitySexualityHandler(CultureHandler);
+        RomanceHandler = new EntityRomanceHandler(CultureHandler);
+        JobHandler = new JobHandler();
+        GenderHandler = new GenderHandler();
+        SkillHandler = new EntitySkillHandler(NeedHandler);
+        EntityTemplateHandler = new EntityTemplateHandler();
+        
+        WorldInfoHandler = new WorldInfoHandler(ObjectIconHandler);
+        
+        ParameterProcessorHandler = new ParameterProcessorHandler();
+        
+        EntityHandler = new LiveEntityHandler();
+        ItemHandler = new LiveItemHandler();
+        
+        ConversationEngine = new ConversationEngine(RelationshipHandler, GUIManager);
 
         InitialiseEverything();
 
         m_StateManager = new StateManager();
-
-        //REPLACE THIS WITH AN ACTUAL ENTITY CONSTRUCTOR
-        BasicValueContainer<INeed> needs = new BasicValueContainer<INeed>();
-        NeedHandler needHandler = this.GetComponent<NeedHandler>();
-        INeed testingNeed = needHandler.GetRandomised("thirst");
-        needs.Add(testingNeed);
-
-        List<ICulture> cultures = cultureHandler.GetByCreatureType("Human");
-        ICulture culture = cultures[0];
-        EntityTemplate human = entityTemplateHandler.Get("human");
-        IJob jobType = culture.ChooseJob(jobHandler.Jobs);
-
-        IGrowingValue level = new ConcreteGrowingValue("level", 1, 100, 0, GlobalConstants.DEFAULT_SUCCESS_THRESHOLD,
-                                                        new StandardRoller(), new NonUniqueDictionary<INeed, float>());
-
-        EntityFactory entityFactory = new EntityFactory();
-        Entity temp = entityFactory.CreateFromTemplate(
-            human, 
-            level, 
-            Vector2Int.zero, 
-            new List<ICulture>() { culture },
-            null,
-            culture.ChooseSex(bioSexHandler.Sexes), 
-            culture.ChooseSexuality(sexualityHandler.Sexualities), 
-            culture.ChooseRomance(romanceHandler.Romances),
-            jobType, 
-            objectIcons.GetSprites(human.Tileset, jobType.Name),
-            null,
-            new PlayerDriver());
         
-        EntityPlayer player = new EntityPlayer(temp);
-        
-        player.PlayerControlled = true;
-
-        m_StateManager.ChangeState(new WorldCreationState(player));
+        m_StateManager.ChangeState(new CharacterCreationState());
 
         //GameObject.Find("NeedsText").GetComponent<GUINeedsAlert>().SetPlayer(player);
     }
@@ -83,7 +88,6 @@ public class GameManager : MonoBehaviour
     protected void InitialiseEverything()
     {
         RNG.instance.SetSeed(DateTime.Now.Millisecond);
-        AbilityHandler.instance.Initialise();
     }
 	
 	// Update is called once per frame
@@ -94,4 +98,28 @@ public class GameManager : MonoBehaviour
             m_StateManager.Update();
         }
     }
+    
+    public IQuestTracker QuestTracker { get; protected set; }
+    public IQuestProvider QuestProvider { get; protected set; }
+    public IEntityRelationshipHandler RelationshipHandler { get; protected set; }
+    public IObjectIconHandler ObjectIconHandler { get; protected set; }
+    public IMaterialHandler MaterialHandler { get; protected set; }
+    public ICultureHandler CultureHandler { get; protected set; }
+    public IEntityTemplateHandler EntityTemplateHandler { get; protected set; }
+    public IEntityBioSexHandler BioSexHandler { get; protected set; }
+    public IEntitySexualityHandler SexualityHandler { get; protected set; }
+    public IJobHandler JobHandler { get; protected set; }
+    public IEntityRomanceHandler RomanceHandler { get; protected set; }
+    public IGenderHandler GenderHandler { get; protected set; }
+    public IGUIManager GUIManager { get; protected set; }
+    public IParameterProcessorHandler ParameterProcessorHandler { get; protected set; }
+    public ILiveEntityHandler EntityHandler { get; protected set; }
+    public ILiveItemHandler ItemHandler { get; protected set; }
+    public INeedHandler NeedHandler { get; protected set; }
+    public IEntitySkillHandler SkillHandler { get; protected set; }
+    public IWorldInfoHandler WorldInfoHandler { get; protected set; }
+    public IPhysicsManager PhysicsManager { get; protected set; }
+    public IConversationEngine ConversationEngine { get; protected set; }
+    public IAbilityHandler AbilityHandler { get; protected set; }
+    public GameObject MyGameObject { get; protected set; }
 }

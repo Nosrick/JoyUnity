@@ -11,14 +11,12 @@ using UnityEngine;
 
 namespace JoyLib.Code.Entities.Jobs
 {
-    public class JobHandler : MonoBehaviour
+    public class JobHandler : IJobHandler
     {
         private List<IJob> m_Jobs;
 
-        public void Awake()
+        public JobHandler()
         {
-            m_Jobs = new List<IJob>();
-
             m_Jobs = LoadTypes();
         }
 
@@ -37,7 +35,7 @@ namespace JoyLib.Code.Entities.Jobs
             return m_Jobs[RNG.instance.Roll(0, m_Jobs.Count - 1)];
         }
 
-        private List<IJob> LoadTypes()
+        protected List<IJob> LoadTypes()
         {
             List<IJob> jobTypes = new List<IJob>();
 
@@ -74,7 +72,7 @@ namespace JoyLib.Code.Entities.Jobs
                             List<Tuple<int, IAbility>> listAbilities = (from ability in jobElement.Elements("Ability")
                                                                         select new Tuple<int, IAbility>(
                                                                             ability.Element("Level").GetAs<int>(),
-                                                                            AbilityHandler.instance.GetAbility(
+                                                                            GlobalConstants.GameManager.AbilityHandler.GetAbility(
                                                                                 ability.Element("Name").GetAs<string>()))).ToList();
 
                             foreach (Tuple<int, IAbility> ability in listAbilities)

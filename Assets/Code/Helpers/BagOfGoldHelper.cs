@@ -9,13 +9,13 @@ namespace JoyLib.Code.Helpers
     {
         private static ItemFactory s_ItemFactory = new ItemFactory();
         
-        private static LiveItemHandler ItemHandler { get; set; }
+        private static ILiveItemHandler ItemHandler { get; set; }
 
         public static ItemInstance GetBagOfGold(int count)
         {
             if (ItemHandler is null)
             {
-                ItemHandler = GameObject.Find("GameManager").GetComponent<LiveItemHandler>();
+                ItemHandler = GlobalConstants.GameManager.ItemHandler;
             }
             
             ItemInstance bag = s_ItemFactory.CreateRandomItemOfType(new string[] { "container", "leather" }, true);

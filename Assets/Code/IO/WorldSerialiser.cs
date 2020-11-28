@@ -10,8 +10,7 @@ namespace JoyLib.Code.IO
 {
     public class WorldSerialiser
     {
-        protected static ObjectIconHandler s_ObjectIcons = GameObject.Find("GameManager")
-                                                            .GetComponent<ObjectIconHandler>();
+        protected static IObjectIconHandler s_ObjectIcons = GlobalConstants.GameManager.ObjectIconHandler; 
 
         public void Serialise(WorldInstance world)
         {

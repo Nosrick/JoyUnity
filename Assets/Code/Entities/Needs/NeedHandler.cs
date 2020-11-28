@@ -5,16 +5,13 @@ using UnityEngine;
 
 namespace JoyLib.Code.Entities.Needs
 {
-    public class NeedHandler : MonoBehaviour
+    public class NeedHandler : INeedHandler
     {
-        private Dictionary<string, INeed> m_Needs;
+        protected Dictionary<string, INeed> m_Needs;
 
-        public void Awake()
+        public NeedHandler()
         {
-            if (m_Needs is null)
-            {
-                m_Needs = Initialise();                
-            }
+            m_Needs = Initialise();
         }
 
         protected static Dictionary<string, INeed> Initialise()
@@ -23,19 +20,11 @@ namespace JoyLib.Code.Entities.Needs
             {
                 Dictionary<string, INeed> needs = new Dictionary<string, INeed>();
 
-                Type[] needTypes = Scripting.ScriptingEngine.instance.FetchTypeAndChildren(typeof(INeed));
+                INeed[] needTypes = Scripting.ScriptingEngine.instance.FetchAndInitialiseChildren<INeed>();
 
-                foreach (Type type in needTypes)
+                foreach (INeed type in needTypes)
                 {
-                    if (typeof(INeed).IsAssignableFrom(type) == true && type.IsAbstract == false)
-                    {
-                        INeed newNeed = (INeed)Activator.CreateInstance(type);
-                        needs.Add(newNeed.Name, newNeed);
-                    }
-                    else
-                    {
-                        continue;
-                    }
+                    needs.Add(type.Name, type);
                 }
                 return needs;
             }
@@ -62,7 +51,7 @@ namespace JoyLib.Code.Entities.Needs
             throw new InvalidOperationException("Need not found, looking for " + name);
         }
 
-        public ICollection<INeed> GetMany(string[] names)
+        public ICollection<INeed> GetMany(IEnumerable<string> names)
         {
             if (m_Needs is null)
             {
@@ -78,7 +67,7 @@ namespace JoyLib.Code.Entities.Needs
             return needs;
         }
 
-        public ICollection<INeed> GetManyRandomised(string[] names)
+        public ICollection<INeed> GetManyRandomised(IEnumerable<string> names)
         {
             INeed[] tempNeeds = GetMany(names).ToArray();
 
@@ -106,7 +95,7 @@ namespace JoyLib.Code.Entities.Needs
             throw new InvalidOperationException("Need not found, looking for " + name);
         }
 
-        public Dictionary<string, INeed> Needs
+        public IEnumerable<INeed> Needs
         {
             get
             {
@@ -114,7 +103,20 @@ namespace JoyLib.Code.Entities.Needs
                 {
                     m_Needs = Initialise();
                 }
-                return new Dictionary<string, INeed>(m_Needs);
+                return new List<INeed>(m_Needs.Values);
+            }
+        }
+
+        public IEnumerable<string> NeedNames
+        {
+            get
+            {
+                if (m_Needs is null)
+                {
+                    m_Needs = Initialise();
+                }
+
+                return new List<string>(m_Needs.Keys);
             }
         }
     }

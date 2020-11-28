@@ -12,13 +12,13 @@ namespace JoyLib.Code.Scripting.Actions
 
         public override string ActionString => "modification of relationship points";
 
-        protected static EntityRelationshipHandler RelationshipHandler { get; set; }
+        protected static IEntityRelationshipHandler RelationshipHandler { get; set; }
 
         public ModifyRelationshipPointsAction()
         {
             if (RelationshipHandler is null)
             {
-                RelationshipHandler = GameObject.Find("GameManager").GetComponent<EntityRelationshipHandler>();
+                RelationshipHandler = GlobalConstants.GameManager.RelationshipHandler;
             }
         }
 

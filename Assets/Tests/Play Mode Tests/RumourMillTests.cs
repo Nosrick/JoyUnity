@@ -31,34 +31,11 @@ namespace Tests
 {
     public class RumourMillTests
     {
-        private GameObject container;
+        private IGameManager container;
 
         private IRumourMill target;
         
         private ScriptingEngine scriptingEngine;
-        private EntityTemplateHandler templateHandler;
-
-        private NeedHandler needHandler;
-
-        private CultureHandler cultureHandler;
-
-        private MaterialHandler materialHandler;
-
-        private JobHandler jobHandler;
-
-        private EntityRelationshipHandler relationshipHandler;
-
-        private ObjectIconHandler objectIconHandler;
-
-        private EntityBioSexHandler bioSexHandler;
-
-        private EntitySexualityHandler sexualityHandler;
-
-        private EntityRomanceHandler romanceHandler;
-
-        private ParameterProcessorHandler parameterProcessorHandler;
-
-        private EntitySkillHandler skillHandler;
 
         private EntityFactory entityFactory;
 
@@ -70,26 +47,13 @@ namespace Tests
         [SetUp]
         public void SetUp()
         {
-            container = new GameObject("GameManager");
             inventoryManager = new GameObject();
             inventoryManager.AddComponent<InventoryManager>();
+            container = new GameObject("GameManager").AddComponent<GameManager>();
 
             GlobalConstants.GameManager = container;
 
             scriptingEngine = new ScriptingEngine();
-
-            objectIconHandler = container.AddComponent<ObjectIconHandler>();
-            templateHandler = container.AddComponent<EntityTemplateHandler>();
-            cultureHandler = container.AddComponent<CultureHandler>();
-            needHandler = container.AddComponent<NeedHandler>();
-            relationshipHandler = container.AddComponent<EntityRelationshipHandler>();
-            materialHandler = container.AddComponent<MaterialHandler>();
-            jobHandler = container.AddComponent<JobHandler>();
-            bioSexHandler = container.AddComponent<EntityBioSexHandler>();
-            sexualityHandler = container.AddComponent<EntitySexualityHandler>();
-            skillHandler = container.AddComponent<EntitySkillHandler>();
-            parameterProcessorHandler = container.AddComponent<ParameterProcessorHandler>();
-            romanceHandler = container.AddComponent<EntityRomanceHandler>();
 
             entityFactory = new EntityFactory();
             
@@ -100,7 +64,7 @@ namespace Tests
                 new string[0],
                 "TESTING");
 
-            EntityTemplate template = templateHandler.GetRandom();
+            EntityTemplate template = container.EntityTemplateHandler.GetRandom();
             IGrowingValue level = Mock.Of<IGrowingValue>();
             
             ICulture culture = Mock.Of<ICulture>(
@@ -120,7 +84,7 @@ namespace Tests
             ISexuality sexuality = Mock.Of<ISexuality>();
             IRomance romance = Mock.Of<IRomance>();
 
-            Sprite[] sprites = objectIconHandler.GetDefaultSprites();
+            Sprite[] sprites = container.ObjectIconHandler.GetDefaultSprites();
 
             left = new Entity(
                 template,
@@ -188,7 +152,7 @@ namespace Tests
         [TearDown]
         public void TearDown()
         {
-            GameObject.DestroyImmediate(container);
+            GameObject.DestroyImmediate(container.MyGameObject);
             GameObject.DestroyImmediate(inventoryManager);
         }
     }

@@ -45,7 +45,7 @@ namespace JoyLib.Code.Conversation.Conversations.Rumours
 
         protected string m_Words;
 
-        protected static ParameterProcessorHandler ProcessorHandler
+        protected static IParameterProcessorHandler ProcessorHandler
         {
             get;
             set;
@@ -84,7 +84,7 @@ namespace JoyLib.Code.Conversation.Conversations.Rumours
         {
             if (ProcessorHandler is null)
             {
-                ProcessorHandler = GameObject.Find("GameManager").GetComponent<ParameterProcessorHandler>();
+                ProcessorHandler = GlobalConstants.GameManager.ParameterProcessorHandler;
             }
         }
 

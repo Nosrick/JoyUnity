@@ -5,14 +5,14 @@ using JoyLib.Code.Scripting;
 
 namespace JoyLib.Code.Quests
 {
-    public interface IQuest
+    public interface IQuest : ITagged
     {
         List<IQuestStep> Steps { get; }
         QuestMorality Morality { get; }
-        List<ItemInstance> Rewards { get; }
+        List<IItemInstance> Rewards { get; }
         int CurrentStep { get; }
         
-        JoyObject Instigator { get; }
+        IJoyObject Instigator { get; }
         
         long ID { get; }
         

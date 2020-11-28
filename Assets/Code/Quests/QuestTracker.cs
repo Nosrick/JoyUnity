@@ -9,11 +9,11 @@ using UnityEngine;
 
 namespace JoyLib.Code.Quests
 {
-    public class QuestTracker : MonoBehaviour
+    public class QuestTracker : IQuestTracker
     {
         protected Dictionary<long, List<IQuest>> EntityQuests { get; set; }
 
-        public void Awake()
+        public QuestTracker()
         {
             Initialise();
         }
@@ -58,9 +58,19 @@ namespace JoyLib.Code.Quests
             }
         }
 
-        protected void CompleteQuest(Entity questor, IQuest quest)
+        public void CompleteQuest(Entity questor, IQuest quest)
         {
             quest.CompleteQuest(questor);
+            EntityQuests[questor.GUID].Remove(quest);
+        }
+
+        public void AbandonQuest(Entity questor, IQuest quest)
+        {
+            EntityQuests[questor.GUID].Remove(quest);
+        }
+
+        public void FailQuest(Entity questor, IQuest quest)
+        {
             EntityQuests[questor.GUID].Remove(quest);
         }
 
@@ -80,132 +90,5 @@ namespace JoyLib.Code.Quests
                 PerformQuestAction(questor, quest, completedAction);
             }
         }
-
-        /*
-        public void PerformDelivery(Entity questor, ItemInstance item, Entity recipient)
-        {
-            try
-            {
-                bool matchingEntity, matchingItem;
-                matchingEntity = s_EntityQuests[questor.GUID].Any(x => x.BelongsToThis(recipient));
-                matchingItem = s_EntityQuests[questor.GUID].Any(x => x.BelongsToThis(item));
-
-                if (matchingItem && matchingEntity)
-                {
-                    Quest quest = s_EntityQuests[questor.GUID].First(x => x.BelongsToThis(recipient));
-                    quest.step += 1;
-                    if (quest.step == quest.steps.Count)
-                    {
-                        //Then the quest is complete!
-                        CompleteQuest(questor, quest);
-                    }
-                }
-            }
-            catch
-            {
-
-            }
-        }
-
-        public static void PerformEntityDestruction(Entity questor, Entity target)
-        {
-            try
-            {
-                if (s_EntityQuests[questor.GUID].Any(x => x.BelongsToThis(target)))
-                {
-                    Quest quest = s_EntityQuests[questor.GUID].First(x => x.BelongsToThis(target));
-                    quest.step += 1;
-                    if (quest.step == quest.steps.Count)
-                    {
-                        CompleteQuest(questor, quest);
-                    }
-                }
-            }
-            catch
-            {
-
-            }
-        }
-
-        public static void PerformItemDestruction(Entity questor, ItemInstance target)
-        {
-            try
-            {
-                if (s_EntityQuests[questor.GUID].Any(x => x.BelongsToThis(target)))
-                {
-                    Quest quest = s_EntityQuests[questor.GUID].First(x => x.BelongsToThis(target));
-                    quest.step += 1;
-                    if (quest.step == quest.steps.Count)
-                    {
-                        CompleteQuest(questor, quest);
-                    }
-                }
-            }
-            catch
-            {
-
-            }
-        }
-
-        public static void PerformEntityDestruction(Entity questor, ItemInstance target)
-        {
-            try
-            {
-                if (s_EntityQuests[questor.GUID].Any(x => x.BelongsToThis(target)))
-                {
-                    Quest quest = s_EntityQuests[questor.GUID].First(x => x.BelongsToThis(target));
-                    quest.step += 1;
-                    if (quest.step == quest.steps.Count)
-                    {
-                        CompleteQuest(questor, quest);
-                    }
-                }
-            }
-            catch
-            {
-
-            }
-        }
-
-        public static void PerformExploration(Entity questor, WorldInstance target)
-        {
-            try
-            {
-                if (s_EntityQuests[questor.GUID].Any(x => x.BelongsToThis(target)))
-                {
-                    Quest quest = s_EntityQuests[questor.GUID].First(x => x.BelongsToThis(target));
-                    quest.step += 1;
-                    if (quest.step == quest.steps.Count)
-                    {
-                        CompleteQuest(questor, quest);
-                    }
-                }
-            }
-            catch
-            {
-
-            }
-        }
-
-        public static void PerformRetrieval(Entity questor, ItemInstance target)
-        {
-            try
-            {
-                if (s_EntityQuests[questor.GUID].Any(x => x.BelongsToThis(target)))
-                {
-                    Quest quest = s_EntityQuests[questor.GUID].First(x => x.BelongsToThis(target));
-                    quest.step += 1;
-                    if (quest.step == quest.steps.Count)
-                    {
-                        CompleteQuest(questor, quest);
-                    }
-                }
-            }
-            catch
-            {
-
-            }
-        }
-        */
     }
 }

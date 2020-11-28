@@ -48,8 +48,7 @@ namespace JoyLib.Code.World
         [NonSerialized] protected GameObject m_ObjectHolder;
         [NonSerialized] protected GameObject m_EntityHolder;
 
-        [NonSerialized] protected static LiveEntityHandler s_EntityHandler = GameObject.Find("GameManager")
-            .GetComponent<LiveEntityHandler>();
+        [NonSerialized] protected static ILiveEntityHandler s_EntityHandler = GlobalConstants.GameManager.EntityHandler;
 
         /// <summary>
         /// A template for adding stuff to later. A blank WorldInstance.
@@ -188,10 +187,10 @@ namespace JoyLib.Code.World
             for (int i = 0; i < entities.Count; i++)
             {
                 Entity entity = entities[i];
-                ItemInstance[] backpack = entity.Backpack;
+                IItemInstance[] backpack = entity.Backpack;
                 for (int j = 0; j < backpack.Length; j++)
                 {
-                    ItemInstance item = backpack[j];
+                    IItemInstance item = backpack[j];
                     item.Move(entity.WorldPosition);
 
                     int xMin, xMax;
@@ -217,7 +216,7 @@ namespace JoyLib.Code.World
             }
         }
 
-        protected int[,] LightTiles(Vector2Int pointRef, ItemInstance objectRef, int[,] lightRef)
+        protected int[,] LightTiles(Vector2Int pointRef, IItemInstance objectRef, int[,] lightRef)
         {
             int[,] vision = lightRef;
 
@@ -235,7 +234,7 @@ namespace JoyLib.Code.World
             return vision;
         }
 
-        protected int[,] LightTile(float x, float y, ItemInstance objectRef, int[,] visionRef)
+        protected int[,] LightTile(float x, float y, IItemInstance objectRef, int[,] visionRef)
         {
             int[,] vision = visionRef;
             float oX, oY;
@@ -293,7 +292,7 @@ namespace JoyLib.Code.World
             m_Costs[wallRef.WorldPosition.x, wallRef.WorldPosition.y] = byte.MaxValue;
         }
 
-        public bool RemoveObject(Vector2Int positionRef, ItemInstance itemRef)
+        public bool RemoveObject(Vector2Int positionRef, IItemInstance itemRef)
         {
             bool removed = false;
 

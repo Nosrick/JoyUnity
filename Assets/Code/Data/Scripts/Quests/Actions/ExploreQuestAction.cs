@@ -14,7 +14,7 @@ namespace JoyLib.Code.Quests
     {
         public string[] Tags { get; protected set; }
         public string Description { get; protected set; }
-        public List<ItemInstance> Items { get; protected set; }
+        public List<IItemInstance> Items { get; protected set; }
         public List<IJoyObject> Actors { get; protected set; }
         public List<WorldInstance> Areas { get; protected set; }
         
@@ -22,10 +22,10 @@ namespace JoyLib.Code.Quests
         {}
         
         public ExploreQuestAction(
-            List<ItemInstance> items,
+            List<IItemInstance> items,
             List<IJoyObject> actors,
             List<WorldInstance> areas,
-            string[] tags)
+            IEnumerable<string> tags)
         {
             List<string> tempTags = new List<string>();
             tempTags.Add("exploration");
@@ -37,7 +37,7 @@ namespace JoyLib.Code.Quests
             Description = AssembleDescription();
         }
         
-        public IQuestStep Make(Entity questor, Entity provider, WorldInstance overworld)
+        public IQuestStep Make(Entity questor, Entity provider, WorldInstance overworld, IEnumerable<string> tags)
         {
             List<WorldInstance> worlds = overworld.GetWorlds(overworld); 
 
@@ -60,7 +60,7 @@ namespace JoyLib.Code.Quests
                 throw new InvalidOperationException(questor.JoyName + " has explored the whole world!");
             }
 
-            this.Items = new List<ItemInstance>();
+            this.Items = new List<IItemInstance>();
             this.Actors = new List<IJoyObject>();
             this.Areas = new List<WorldInstance> { worlds[result] };
 
@@ -68,7 +68,8 @@ namespace JoyLib.Code.Quests
                 this, 
                 this.Items, 
                 this.Actors, 
-                this.Areas);
+                this.Areas,
+                this.Tags);
             return step;
         }
 
@@ -116,10 +117,9 @@ namespace JoyLib.Code.Quests
         {
         }
 
-        public IQuestAction Create(
-            string[] tags, 
-            List<ItemInstance> items, 
-            List<IJoyObject> actors, 
+        public IQuestAction Create(IEnumerable<string> tags,
+            List<IItemInstance> items,
+            List<IJoyObject> actors,
             List<WorldInstance> areas)
         {
             return new ExploreQuestAction(

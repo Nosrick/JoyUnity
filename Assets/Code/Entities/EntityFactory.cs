@@ -20,22 +20,22 @@ namespace JoyLib.Code.Entities
 {
     public class EntityFactory
     {
-        protected GameObject GameManager { get; set; }
-        protected NeedHandler NeedHandler { get; set; }
+        protected IGameManager GameManager { get; set; }
+        protected INeedHandler NeedHandler { get; set; }
 
-        protected ObjectIconHandler ObjectIcons { get; set; }
+        protected IObjectIconHandler ObjectIcons { get; set; }
 
-        protected CultureHandler CultureHandler { get; set; }
+        protected ICultureHandler CultureHandler { get; set; }
 
-        protected EntitySexualityHandler SexualityHandler { get; set; }
+        protected IEntitySexualityHandler SexualityHandler { get; set; }
 
-        protected EntityBioSexHandler BioSexHandler { get; set; }
+        protected IEntityBioSexHandler BioSexHandler { get; set; }
         
-        protected GenderHandler GenderHandler { get; set; }
+        protected IGenderHandler GenderHandler { get; set; }
         
-        protected EntityRomanceHandler RomanceHandler { get; set; }
+        protected IEntityRomanceHandler RomanceHandler { get; set; }
 
-        protected JobHandler JobHandler { get; set; }
+        protected IJobHandler JobHandler { get; set; }
 
         public EntityFactory()
         {
@@ -44,18 +44,15 @@ namespace JoyLib.Code.Entities
 
         protected void Initialise()
         {
-            if(GameManager is null)
-            {
-                GameManager = GlobalConstants.GameManager;
-                NeedHandler = GameManager.GetComponent<NeedHandler>();
-                ObjectIcons = GameManager.GetComponent<ObjectIconHandler>();
-                CultureHandler = GameManager.GetComponent<CultureHandler>();
-                SexualityHandler = GameManager.GetComponent<EntitySexualityHandler>();
-                BioSexHandler = GameManager.GetComponent<EntityBioSexHandler>();
-                JobHandler = GameManager.GetComponent<JobHandler>();
-                RomanceHandler = GameManager.GetComponent<EntityRomanceHandler>();
-                GenderHandler = GameManager.GetComponent<GenderHandler>();
-            }
+            GameManager = GlobalConstants.GameManager;
+            NeedHandler = GameManager.NeedHandler;
+            ObjectIcons = GameManager.ObjectIconHandler;
+            CultureHandler = GameManager.CultureHandler;
+            SexualityHandler = GameManager.SexualityHandler;
+            BioSexHandler = GameManager.BioSexHandler;
+            JobHandler = GameManager.JobHandler;
+            RomanceHandler = GameManager.RomanceHandler;
+            GenderHandler = GameManager.GenderHandler;
         }
 
         public Entity CreateFromTemplate(
@@ -164,16 +161,16 @@ namespace JoyLib.Code.Entities
             BasicValueContainer<INeed> needs,
             IGrowingValue level,
             float experience,
-            JobType job,
+            IJob job,
             IGender gender,
             IBioSex sex,
             ISexuality sexuality,
             IRomance romance,
             Vector2Int position,
             Sprite[] sprites,
-            ItemInstance naturalWeapons,
-            NonUniqueDictionary<string, ItemInstance> equipment,
-            List<ItemInstance> backpack,
+            IItemInstance naturalWeapons,
+            NonUniqueDictionary<string, IItemInstance> equipment,
+            List<IItemInstance> backpack,
             List<string> identifiedItems,
             Dictionary<string, int> jobLevels,
             WorldInstance world,

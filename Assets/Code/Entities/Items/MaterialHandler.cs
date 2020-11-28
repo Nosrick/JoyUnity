@@ -10,21 +10,21 @@ using UnityEngine;
 
 namespace JoyLib.Code.Entities.Items
 {
-    public class MaterialHandler : MonoBehaviour
+    public class MaterialHandler : IMaterialHandler
     {
-        private Dictionary<string, ItemMaterial> m_Materials;
+        private Dictionary<string, IItemMaterial> m_Materials;
 
-        public void Awake()
+        public MaterialHandler()
         {
             Initialise();
         }
 
         public void Initialise()
         {
-            List<ItemMaterial> flatList = LoadMaterials();
-            m_Materials = new Dictionary<string, ItemMaterial>(flatList.Count);
+            List<IItemMaterial> flatList = LoadMaterials();
+            m_Materials = new Dictionary<string, IItemMaterial>(flatList.Count);
 
-            foreach(ItemMaterial material in flatList)
+            foreach(IItemMaterial material in flatList)
             {
                 m_Materials.Add(material.Name, material);
             }
@@ -32,9 +32,9 @@ namespace JoyLib.Code.Entities.Items
             m_Materials.Add("DEFAULT MATERIAL", new ItemMaterial("DEFAULT MATERIAL", 0.1f, 0, 1.0f, 0.0f));
         }
 
-        public List<ItemMaterial> LoadMaterials()
+        public List<IItemMaterial> LoadMaterials()
         {
-            List<ItemMaterial> materials = new List<ItemMaterial>();
+            List<IItemMaterial> materials = new List<IItemMaterial>();
             
             string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Materials", "*.xml", SearchOption.AllDirectories);
 
@@ -55,7 +55,7 @@ namespace JoyLib.Code.Entities.Items
             return materials;
         }
 
-        public ItemMaterial GetMaterial(string nameRef)
+        public IItemMaterial GetMaterial(string nameRef)
         {
             if(m_Materials is null)
             {

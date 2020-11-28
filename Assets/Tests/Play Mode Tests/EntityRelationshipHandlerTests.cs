@@ -17,6 +17,7 @@ using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
+using JoyLib.Code.Unity.GUI;
 using Moq;
 using NUnit.Framework;
 using UnityEngine;
@@ -27,33 +28,14 @@ namespace Tests
     public class EntityRelationshipHandlerTests
     {
         private ScriptingEngine scriptingEngine;
-        private EntityTemplateHandler templateHandler;
-
-        private NeedHandler needHandler;
-
-        private CultureHandler cultureHandler;
-
-        private MaterialHandler materialHandler;
-
-        private JobHandler jobHandler;
-
-        private EntityRelationshipHandler target;
-
-        private ObjectIconHandler objectIconHandler;
-
-        private EntityBioSexHandler bioSexHandler;
-
-        private EntitySexualityHandler sexualityHandler;
-
-        private EntityRomanceHandler romanceHandler;
-
-        private EntitySkillHandler skillHandler;
 
         private EntityFactory entityFactory;
 
-        private GameObject container;
+        private IGameManager container;
 
         private GameObject inventoryManager;
+
+        private IEntityRelationshipHandler target;
         
         private Entity left;
         private Entity right;
@@ -61,25 +43,16 @@ namespace Tests
         [SetUp]
         public void SetUp()
         {
-            container = new GameObject("GameManager");
             inventoryManager = new GameObject();
             inventoryManager.AddComponent<InventoryManager>();
+            
+            container = new GameObject("GameManager").AddComponent<GameManager>();
+
+            target = container.RelationshipHandler;
 
             GlobalConstants.GameManager = container;
 
             scriptingEngine = new ScriptingEngine();
-
-            objectIconHandler = container.AddComponent<ObjectIconHandler>();
-            templateHandler = container.AddComponent<EntityTemplateHandler>();
-            cultureHandler = container.AddComponent<CultureHandler>();
-            needHandler = container.AddComponent<NeedHandler>();
-            target = container.AddComponent<EntityRelationshipHandler>();
-            materialHandler = container.AddComponent<MaterialHandler>();
-            jobHandler = container.AddComponent<JobHandler>();
-            bioSexHandler = container.AddComponent<EntityBioSexHandler>();
-            sexualityHandler = container.AddComponent<EntitySexualityHandler>();
-            romanceHandler = container.AddComponent<EntityRomanceHandler>();
-            skillHandler = container.AddComponent<EntitySkillHandler>();
 
             entityFactory = new EntityFactory();
         }
@@ -87,7 +60,7 @@ namespace Tests
         [SetUp]
         public void SetUpEntities()
         {
-            EntityTemplate random = templateHandler.GetRandom();
+            EntityTemplate random = container.EntityTemplateHandler.GetRandom();
             IGrowingValue level = new ConcreteGrowingValue(
                 "level",
                 1,
@@ -171,7 +144,7 @@ namespace Tests
         [TearDown]
         public void TearDown()
         {
-            GameObject.DestroyImmediate(container);
+            GameObject.DestroyImmediate(container.MyGameObject);
             GameObject.DestroyImmediate(inventoryManager);
         }
     }

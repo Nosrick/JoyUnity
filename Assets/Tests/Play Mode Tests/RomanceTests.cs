@@ -27,32 +27,15 @@ namespace Tests
     public class RomanceTests
     {
         private ScriptingEngine scriptingEngine;
-        private EntityTemplateHandler templateHandler;
-
-        private NeedHandler needHandler;
-
-        private CultureHandler cultureHandler;
-
-        private MaterialHandler materialHandler;
-
-        private JobHandler jobHandler;
-
-        private EntityRelationshipHandler entityRelationshipHandler;
-
-        private ObjectIconHandler objectIconHandler;
-
-        private EntityFactory entityFactory;
-
-        private EntitySkillHandler skillHandler;
-
-        private GameObject container;
+        
+        private IGameManager container;
 
         private GameObject inventoryManager;
 
-        private EntityRomanceHandler target;
+        private IEntityRomanceHandler target;
 
-
-
+        private EntityFactory entityFactory;
+        
         private Entity heteroMaleHuman;
         private Entity heterofemaleHuman;
 
@@ -77,25 +60,16 @@ namespace Tests
         [SetUp]
         public void SetUp()
         {
-            container = new GameObject("GameManager");
             inventoryManager = new GameObject();
             inventoryManager.AddComponent<InventoryManager>();
+            container = new GameObject("GameManager").AddComponent<GameManager>();
 
             GlobalConstants.GameManager = container;
 
             scriptingEngine = new ScriptingEngine();
 
-            objectIconHandler = container.AddComponent<ObjectIconHandler>();
-            templateHandler = container.AddComponent<EntityTemplateHandler>();
-            cultureHandler = container.AddComponent<CultureHandler>();
-            needHandler = container.AddComponent<NeedHandler>();
-            entityRelationshipHandler = container.AddComponent<EntityRelationshipHandler>();
-            materialHandler = container.AddComponent<MaterialHandler>();
-            jobHandler = container.AddComponent<JobHandler>();
-            skillHandler = container.AddComponent<EntitySkillHandler>();
-
-            target = container.AddComponent<EntityRomanceHandler>();
-
+            target = container.RomanceHandler;
+            
             entityFactory = new EntityFactory();
         }
 
@@ -114,7 +88,7 @@ namespace Tests
 
             JobType job = Mock.Of<JobType>();
 
-            List<ICulture> cultures = cultureHandler.GetByCreatureType("human");
+            List<ICulture> cultures = container.CultureHandler.GetByCreatureType("human");
 
             asexual = Mock.Of<ISexuality>(sexuality => sexuality.Tags == new List<string>());
 
@@ -124,7 +98,7 @@ namespace Tests
             aromantic = target.Get("aromantic");
 
             IGrowingValue level = Mock.Of<IGrowingValue>();
-            EntityTemplate humanTemplate = templateHandler.Get("human");
+            EntityTemplate humanTemplate = container.EntityTemplateHandler.Get("human");
 
             heterofemaleHuman = entityFactory.CreateFromTemplate(
                 humanTemplate,
@@ -233,19 +207,19 @@ namespace Tests
             Entity[] biCoupleRight = new Entity[] { bifemaleHuman, biMaleHuman };
             Entity[] asexualCouple = new[] {aroMaleHuman, bifemaleHuman};
 
-            entityRelationshipHandler.CreateRelationshipWithValue(heteroCouple, "monoamorous", 500);
-            entityRelationshipHandler.CreateRelationshipWithValue(homofemaleCouple, "monoamorous", 500);
-            entityRelationshipHandler.CreateRelationshipWithValue(homoMaleCouple, "monoamorous", 500);
-            entityRelationshipHandler.CreateRelationshipWithValue(biCoupleLeft, "monoamorous", 500);
-            entityRelationshipHandler.CreateRelationshipWithValue(biCoupleRight, "monoamorous", 500);
-            entityRelationshipHandler.CreateRelationshipWithValue(asexualCouple, "monoamorous", 500);
+            container.RelationshipHandler.CreateRelationshipWithValue(heteroCouple, "monoamorous", 500);
+            container.RelationshipHandler.CreateRelationshipWithValue(homofemaleCouple, "monoamorous", 500);
+            container.RelationshipHandler.CreateRelationshipWithValue(homoMaleCouple, "monoamorous", 500);
+            container.RelationshipHandler.CreateRelationshipWithValue(biCoupleLeft, "monoamorous", 500);
+            container.RelationshipHandler.CreateRelationshipWithValue(biCoupleRight, "monoamorous", 500);
+            container.RelationshipHandler.CreateRelationshipWithValue(asexualCouple, "monoamorous", 500);
         }
 
         [UnityTest]
         public IEnumerator Heteroromantic_Compatible_AcceptsHeteroPartners()
         {
             IJoyObject[] participants = new [] { heterofemaleHuman, heteroMaleHuman };
-            IRelationship[] relationships = entityRelationshipHandler.Get(participants);
+            IRelationship[] relationships = container.RelationshipHandler.Get(participants);
             Assert.IsTrue(heteroromantic.Compatible(heterofemaleHuman, heteroMaleHuman, relationships));
 
             return null;
@@ -255,7 +229,7 @@ namespace Tests
         public IEnumerator Heteroromantic_Compatible_RejectsHomoPartners()
         {
             IJoyObject[] participants = new [] { heterofemaleHuman, homofemaleHumanLeft };
-            IRelationship[] relationships = entityRelationshipHandler.Get(participants);
+            IRelationship[] relationships = container.RelationshipHandler.Get(participants);
             Assert.IsFalse(heteroromantic.Compatible(heterofemaleHuman, heteroMaleHuman, relationships));
 
             return null;
@@ -265,7 +239,7 @@ namespace Tests
         public IEnumerator Homoromantic_Compatible_AcceptsHomoPartners()
         {
             IJoyObject[] participants = new [] { homoMaleHumanLeft, homoMaleHumanRight };
-            IRelationship[] relationships = entityRelationshipHandler.Get(participants);
+            IRelationship[] relationships = container.RelationshipHandler.Get(participants);
             Assert.IsTrue(homoromantic.Compatible(homoMaleHumanLeft, homoMaleHumanRight, relationships));
 
             return null;
@@ -275,7 +249,7 @@ namespace Tests
         public IEnumerator Homoromantic_Compatible_RejectsHeteroPartners()
         {
             IJoyObject[] participants = new[] { homofemaleHumanLeft, homofemaleHumanRight };
-            IRelationship[] relationships = entityRelationshipHandler.Get(participants);
+            IRelationship[] relationships = container.RelationshipHandler.Get(participants);
             Assert.IsFalse(homoromantic.Compatible(homoMaleHumanLeft, homofemaleHumanRight, relationships));
 
             return null;
@@ -285,7 +259,7 @@ namespace Tests
         public IEnumerator Biromantic_Compatible_WillAcceptHomoPartners()
         {
             IJoyObject[] participants = new[] { bifemaleHuman, homofemaleHumanLeft };
-            IRelationship[] relationships = entityRelationshipHandler.Get(participants);
+            IRelationship[] relationships = container.RelationshipHandler.Get(participants);
             Assert.IsTrue(biromantic.Compatible(bifemaleHuman, homofemaleHumanLeft, relationships));
 
             return null;
@@ -295,7 +269,7 @@ namespace Tests
         public IEnumerator Biromantic_Compatible_WillAcceptHeteroPartners()
         {
             IJoyObject[] participants = new[] { bifemaleHuman, biMaleHuman };
-            IRelationship[] relationships = entityRelationshipHandler.Get(participants);
+            IRelationship[] relationships = container.RelationshipHandler.Get(participants);
             Assert.IsTrue(biromantic.Compatible(bifemaleHuman, biMaleHuman, relationships));
 
             return null;
@@ -305,7 +279,7 @@ namespace Tests
         public IEnumerator Aromantic_Compatible_WillRejectPartner()
         {
             IJoyObject[] participants = new[] { aroMaleHuman, bifemaleHuman };
-            IRelationship[] relationships = entityRelationshipHandler.Get(participants);
+            IRelationship[] relationships = container.RelationshipHandler.Get(participants);
             Assert.IsFalse(aromantic.Compatible(aroMaleHuman, bifemaleHuman, relationships));
 
             return null;
@@ -314,7 +288,7 @@ namespace Tests
         [TearDown]
         public void TearDown()
         {
-            GameObject.DestroyImmediate(container);
+            GameObject.DestroyImmediate(container.MyGameObject);
             GameObject.DestroyImmediate(inventoryManager);
         }
     }

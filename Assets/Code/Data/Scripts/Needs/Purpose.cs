@@ -27,13 +27,13 @@ namespace JoyLib.Code.Entities.Needs
         protected const int MAX_VALUE_MIN = HAPPINESS_THRESHOLD_MAX;
         protected const int MAX_VALUE_MAX = MAX_VALUE_MIN * 4;
 
-        protected static EntityRelationshipHandler RelationshipHandler
+        protected static IEntityRelationshipHandler RelationshipHandler
         {
             get;
             set;
         }
 
-        protected static QuestProvider QuestProvider
+        protected static IQuestProvider QuestProvider
         {
             get;
             set;
@@ -82,8 +82,8 @@ namespace JoyLib.Code.Entities.Needs
         {
             if (RelationshipHandler is null)
             {
-                RelationshipHandler = GameObject.Find("GameManager").GetComponent<EntityRelationshipHandler>();
-                QuestProvider = GameObject.Find("GameManager").GetComponent<QuestProvider>();
+                RelationshipHandler = GlobalConstants.GameManager.RelationshipHandler;
+                QuestProvider = GlobalConstants.GameManager.QuestProvider;
             }
         }
 

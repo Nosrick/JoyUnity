@@ -9,12 +9,12 @@ using UnityEngine;
 
 namespace JoyLib.Code.Entities.Relationships
 {
-    public class EntityRelationshipHandler : MonoBehaviour
+    public class EntityRelationshipHandler : IEntityRelationshipHandler
     {
         private Dictionary<string, IRelationship> m_RelationshipTypes;
         private NonUniqueDictionary<long, IRelationship> m_Relationships;
 
-        public void Awake()
+        public EntityRelationshipHandler()
         {
             Initialise();
         }

@@ -1,7 +1,7 @@
 ﻿namespace JoyLib.Code.Entities.Items
 {
     [System.Serializable()]
-    public class ItemMaterial
+    public class ItemMaterial : IItemMaterial
     {
         public ItemMaterial()
         {

@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using DevionGames.InventorySystem;
 using JoyLib.Code;
 using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Graphics;
@@ -10,20 +11,21 @@ namespace Tests
 {
     public class NeedHandlerTests
     {
-        private GameObject container;
+        private IGameManager container;
     
-        private NeedHandler target;
+        private INeedHandler target;
 
-        private ObjectIconHandler objectIconHandler;
+        private GameObject inventoryManager;
     
         [SetUp]
         public void SetUp()
         {
-            container = new GameObject("GameManager");
+            inventoryManager = new GameObject();
+            inventoryManager.AddComponent<InventoryManager>();
+            container = new GameObject("GameManager").AddComponent<GameManager>();
             GlobalConstants.GameManager = container;
             
-            objectIconHandler = container.AddComponent<ObjectIconHandler>();
-            target = container.AddComponent<NeedHandler>();
+            target = container.NeedHandler;
         }
     
         [UnityTest]
@@ -35,7 +37,7 @@ namespace Tests
             
             //then
             Assert.That(target.Needs, Is.Not.Empty);
-            foreach (INeed need in target.Needs.Values)
+            foreach (INeed need in target.Needs)
             {
                 Assert.That(need.Name, Is.Not.Empty);
                 Assert.That(need.Name, Is.Not.EqualTo("DEFAULT"));
@@ -47,7 +49,7 @@ namespace Tests
         [TearDown]
         public void TearDown()
         {
-            GameObject.DestroyImmediate(container);
+            GameObject.DestroyImmediate(container.MyGameObject);
         }
     }
 }

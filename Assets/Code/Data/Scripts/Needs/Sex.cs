@@ -14,7 +14,7 @@ namespace JoyLib.Code.Entities.Needs
     {
         public override string Name => "sex";
         
-        protected static EntityRelationshipHandler s_EntityRelationshipHandler;
+        protected static IEntityRelationshipHandler s_EntityRelationshipHandler;
 
         protected const int DECAY_MIN = 200;
         protected const int DECAY_MAX = 600;
@@ -74,7 +74,7 @@ namespace JoyLib.Code.Entities.Needs
         {
             if(s_EntityRelationshipHandler is null)
             {
-                s_EntityRelationshipHandler = GlobalConstants.GameManager.GetComponent<EntityRelationshipHandler>();
+                s_EntityRelationshipHandler = GlobalConstants.GameManager.RelationshipHandler;
             }
         }
 

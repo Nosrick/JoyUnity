@@ -16,7 +16,7 @@ using JoyLib.Code.Scripting;
 
 namespace JoyLib.Code.Entities
 {
-    public class EntityTemplateHandler : MonoBehaviour
+    public class EntityTemplateHandler : IEntityTemplateHandler
     {
         private List<EntityTemplate> m_Templates;
 
@@ -33,7 +33,7 @@ namespace JoyLib.Code.Entities
             }
         }
 
-        public void Awake()
+        public EntityTemplateHandler()
         {
             m_Templates = LoadTypes();
         }
@@ -44,11 +44,11 @@ namespace JoyLib.Code.Entities
             
             List<EntityTemplate> entities = new List<EntityTemplate>();
 
-            GameObject gameManager = GameObject.Find("GameManager");
+            IGameManager gameManager = GlobalConstants.GameManager;
 
-            NeedHandler needHandler = gameManager.GetComponent<NeedHandler>();
+            INeedHandler needHandler = gameManager.NeedHandler;
 
-            EntitySkillHandler skillHandler = gameManager.GetComponent<EntitySkillHandler>();
+            IEntitySkillHandler skillHandler = gameManager.SkillHandler;
             
             string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Entities", "*.xml", SearchOption.AllDirectories);
 
@@ -101,7 +101,7 @@ namespace JoyLib.Code.Entities
                         try
                         {
                             abilities = (from ability in entity.Elements("Ability")
-                                                    select AbilityHandler.instance.GetAbility(ability.DefaultIfEmpty("DEFAULT"))).ToList();
+                                                    select GlobalConstants.GameManager.AbilityHandler.GetAbility(ability.DefaultIfEmpty("DEFAULT"))).ToList();
                         }
                         catch(Exception e)
                         {

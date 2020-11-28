@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using JoyLib.Code.Collections;
+using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.Unity;
@@ -8,6 +10,8 @@ namespace JoyLib.Code
 {
     public interface IJoyObject : ITagged, IPosition, IAnimated, IDerivedValueContainer, IDataContainer
     {
+        BasicValueContainer<IDerivedValue> DerivedValues { get; }
+        
         bool IsDestructible { get; }
         bool IsWall { get; }
         string JoyName { get; }

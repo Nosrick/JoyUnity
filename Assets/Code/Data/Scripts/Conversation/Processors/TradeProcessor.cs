@@ -7,7 +7,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
     public class TradeProcessor : TopicData
     {
         protected static TradeWindow TradeWindow { get; set; }
-        protected static GUIManager GUIManager { get; set; }
+        protected static IGUIManager GUIManager { get; set; }
 
         public TradeProcessor()
             : base(
@@ -27,7 +27,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
             if (TradeWindow is null)
             {
                 TradeWindow = GameObject.Find("Trade").GetComponent<TradeWindow>();
-                GUIManager = GlobalConstants.GameManager.GetComponent<GUIManager>();
+                GUIManager = GlobalConstants.GameManager.GUIManager;
             }
         }
 

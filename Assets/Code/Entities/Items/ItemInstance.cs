@@ -18,7 +18,7 @@ using UnityEngine;
 namespace JoyLib.Code.Entities.Items
 {
     [Serializable]
-    public class ItemInstance : EquipmentItem, IJoyObject, IItemContainer, IOwnable
+    public class ItemInstance : EquipmentItem, IItemInstance
     {
         public BasicValueContainer<IDerivedValue> DerivedValues { get; protected set; }
 
@@ -96,8 +96,8 @@ namespace JoyLib.Code.Entities.Items
 
         public List<IAbility> UniqueAbilities { get; protected set; }
 
-        protected static LiveItemHandler s_ItemHandler;
-        protected static LiveEntityHandler EntityHandler { get; set; }
+        protected static ILiveItemHandler ItemHandler { get; set; }
+        protected static ILiveEntityHandler EntityHandler { get; set; }
 
         public void Initialise(
             BaseItemType type, 
@@ -408,10 +408,10 @@ namespace JoyLib.Code.Entities.Items
 
         protected void Initialise()
         {
-            if(s_ItemHandler is null)
+            if(ItemHandler is null)
             {
-                s_ItemHandler = GlobalConstants.GameManager.GetComponent<LiveItemHandler>();
-                EntityHandler = GlobalConstants.GameManager.GetComponent<LiveEntityHandler>();
+                ItemHandler = GlobalConstants.GameManager.ItemHandler;
+                EntityHandler = GlobalConstants.GameManager.EntityHandler;
             }
         }
         
@@ -456,16 +456,11 @@ namespace JoyLib.Code.Entities.Items
             Identified = true;
         }
 
-        public void PutItem(long item)
-        {
-            m_Contents.Add(item);
-        }
-
-        public ItemInstance TakeMyItem(int index)
+        public IItemInstance TakeMyItem(int index)
         {
             if(index > 0 && index < m_Contents.Count)
             {
-                ItemInstance item = s_ItemHandler.GetInstance(m_Contents[index]);
+                IItemInstance item = ItemHandler.GetItem(m_Contents[index]);
                 m_Contents.RemoveAt(index);
                 return item;
             }
@@ -473,19 +468,7 @@ namespace JoyLib.Code.Entities.Items
             return null;
         }
 
-        public List<ItemInstance> GetContents()
-        {
-            List<ItemInstance> contents = new List<ItemInstance>(m_Contents.Count);
-
-            foreach(long id in m_Contents)
-            {
-                contents.Add(s_ItemHandler.GetInstance(id));
-            }
-
-            return contents;
-        }
-
-        public bool AddContents(ItemInstance actor)
+        public bool AddContents(IItemInstance actor)
         {
             m_Contents.Add(actor.GUID);
 
@@ -495,7 +478,7 @@ namespace JoyLib.Code.Entities.Items
             return true;
         }
 
-        public bool AddContents(IEnumerable<ItemInstance> actors)
+        public bool AddContents(IEnumerable<IItemInstance> actors)
         {
             m_Contents.AddRange(actors.Select(instance => instance.GUID));
             
@@ -505,7 +488,7 @@ namespace JoyLib.Code.Entities.Items
             return true;
         }
 
-        public bool RemoveContents(ItemInstance actor)
+        public bool RemoveContents(IItemInstance actor)
         {
             bool result = m_Contents.Remove(actor.GUID);
             if (!result)
@@ -648,10 +631,10 @@ namespace JoyLib.Code.Entities.Items
             get
             {
                 float weight = m_Type.Weight;
-                List<ItemInstance> contents = Contents;
+                List<IItemInstance> contents = Contents;
                 for(int i = 0; i < contents.Count; i++)
                 {
-                    weight += contents[i].ItemType.Weight;
+                    weight += contents[i].Weight;
                 }
 
                 return weight;
@@ -666,14 +649,14 @@ namespace JoyLib.Code.Entities.Items
             }
         }
 
-        public List<ItemInstance> Contents
+        public List<IItemInstance> Contents
         {
             get
             {
-                List<ItemInstance> contents = new List<ItemInstance>();
+                List<IItemInstance> contents = new List<IItemInstance>();
                 foreach(long GUID in m_Contents)
                 {
-                    contents.Add(s_ItemHandler.GetInstance(GUID));
+                    contents.Add(ItemHandler.GetItem(GUID));
                 }
                 return contents;
             }
@@ -685,7 +668,7 @@ namespace JoyLib.Code.Entities.Items
             {
                 string contentString = "It contains ";
 
-                List<ItemInstance> items = Contents;
+                List<IItemInstance> items = Contents;
 
                 if (items.Count == 0)
                 {
@@ -695,11 +678,11 @@ namespace JoyLib.Code.Entities.Items
 
                 while (items.Count > 0)
                 {
-                    List<ItemInstance> types = items.Where(x => x.JoyName == items[0].JoyName).ToList();
+                    List<IItemInstance> types = items.Where(x => x.JoyName == items[0].JoyName).ToList();
                     string name = types[0].JoyName;
                     contentString += types.Count + " " + name + (types.Count > 1 ? "s, " : ", ");
 
-                    List<ItemInstance> itemsToRemove = new List<ItemInstance>();
+                    List<IItemInstance> itemsToRemove = new List<IItemInstance>();
                     for (int i = 0; i < items.Count; i++)
                     {
                         if (items[i].JoyName == name)

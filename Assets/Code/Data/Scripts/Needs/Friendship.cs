@@ -13,7 +13,7 @@ namespace JoyLib.Code.Entities.Needs
     {
         public override string Name => "friendship";
 
-        protected static EntityRelationshipHandler EntityRelationshipHandler
+        protected static IEntityRelationshipHandler EntityRelationshipHandler
         {
             get;
             set;
@@ -76,7 +76,7 @@ namespace JoyLib.Code.Entities.Needs
         {
             if(EntityRelationshipHandler is null)
             {
-                EntityRelationshipHandler = GlobalConstants.GameManager.GetComponent<EntityRelationshipHandler>();
+                EntityRelationshipHandler = GlobalConstants.GameManager.RelationshipHandler;
             }
         }
 

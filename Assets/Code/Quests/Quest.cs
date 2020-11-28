@@ -1,7 +1,9 @@
-﻿using JoyLib.Code.Entities;
+﻿using System;
+using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.World;
 using System.Collections.Generic;
+using System.Linq;
 using JoyLib.Code.Managers;
 using JoyLib.Code.Scripting;
 
@@ -12,8 +14,9 @@ namespace JoyLib.Code.Quests
         public Quest(
             List<IQuestStep> steps,
             QuestMorality morality,
-            List<ItemInstance> rewards,
-            JoyObject instigator)
+            List<IItemInstance> rewards,
+            IJoyObject instigator,
+            IEnumerable<string> tags)
         {
             this.Steps = steps;
             this.Morality = morality;
@@ -21,6 +24,7 @@ namespace JoyLib.Code.Quests
             this.Instigator = instigator;
             this.CurrentStep = 0;
             this.ID = GUIDManager.Instance.AssignGUID();
+            this.Tags = new List<string>(tags);
         }
 
         ~Quest()
@@ -83,6 +87,33 @@ namespace JoyLib.Code.Quests
 
             return true;
         }
+        
+        public bool AddTag(string tag)
+        {
+            if (Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase)) != false)
+            {
+                return false;
+            }
+            
+            Tags.Add(tag);
+            return true;
+        }
+
+        public bool RemoveTag(string tag)
+        {
+            if (!Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase)))
+            {
+                return false;
+            }
+            
+            Tags.Remove(tag);
+            return true;
+        }
+
+        public bool HasTag(string tag)
+        {
+            return Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase));
+        }
 
         public override string ToString()
         {
@@ -114,13 +145,15 @@ namespace JoyLib.Code.Quests
 
         public List<IQuestStep> Steps { get; protected set; }
         public QuestMorality Morality { get; protected set; }
-        public List<ItemInstance> Rewards { get; protected set; }
+        public List<IItemInstance> Rewards { get; protected set; }
         public int CurrentStep { get; protected set;  }
 
-        public JoyObject Instigator { get; protected set; }
+        public IJoyObject Instigator { get; protected set; }
         
         public long ID { get; protected set; }
 
         public bool IsComplete => this.CurrentStep == this.Steps.Count;
+        
+        public List<string> Tags { get; protected set; }
     }
 }

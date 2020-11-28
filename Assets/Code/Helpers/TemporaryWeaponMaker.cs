@@ -7,11 +7,11 @@ namespace JoyLib.Code.Helpers
 {
     public static class TemporaryWeaponMaker
     {
-        private static ObjectIconHandler s_ObjectIcons;
+        private static IObjectIconHandler s_ObjectIcons;
 
         private static void Initialise()
         {
-            s_ObjectIcons = GlobalConstants.GameManager.GetComponent<ObjectIconHandler>();
+            s_ObjectIcons = GlobalConstants.GameManager.ObjectIconHandler;
         }
 
         //Meant for making things like magic blasts that will never actually appear in the world.

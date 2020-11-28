@@ -10,8 +10,7 @@ namespace JoyLib.Code.World.Generators.Interiors
     {
         protected GeneratorTileType[,] m_UntreatedTiles;
 
-        protected static ObjectIconHandler s_ObjectIcons = GameObject.Find("GameManager")
-                                                            .GetComponent<ObjectIconHandler>();
+        protected static IObjectIconHandler s_ObjectIcons = GlobalConstants.GameManager.ObjectIconHandler;
 
         public WorldTile[,] GenerateWorldSpace(int sizeRef, string tileSet)
         {

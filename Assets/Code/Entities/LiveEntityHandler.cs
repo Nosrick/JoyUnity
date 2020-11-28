@@ -4,7 +4,7 @@ using System;
 
 namespace JoyLib.Code.Entities
 {
-    public class LiveEntityHandler : MonoBehaviour
+    public class LiveEntityHandler : ILiveEntityHandler
     {
         protected Dictionary<long, Entity> m_Entities;
         protected Entity m_Player;
@@ -30,12 +30,14 @@ namespace JoyLib.Code.Entities
             }
         }
 
-        public void Remove(long GUID)
+        public bool Remove(long GUID)
         {
             if(Entities.ContainsKey(GUID))
             {
-                Entities.Remove(GUID);
+                return Entities.Remove(GUID);
             }
+
+            return false;
         }
 
         public Entity Get(long GUID)

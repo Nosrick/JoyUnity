@@ -12,9 +12,9 @@ namespace JoyLib.Code.Unity.GUI
 {
     public class JoyItemSlot : ItemSlot
     {
-        protected static ConversationEngine ConversationEngine { get; set; }
+        protected static IConversationEngine ConversationEngine { get; set; }
         
-        protected static GUIManager GUIManager { get; set; }
+        protected static IGUIManager GUIManager { get; set; }
         
         protected static GameObject ItemHolder { get; set;}
         
@@ -26,8 +26,8 @@ namespace JoyLib.Code.Unity.GUI
             {
                 return;
             }
-            ConversationEngine = GlobalConstants.GameManager.GetComponent<ConversationEngine>();
-            GUIManager = GlobalConstants.GameManager.GetComponent<GUIManager>();
+            ConversationEngine = GlobalConstants.GameManager.ConversationEngine;
+            GUIManager = GlobalConstants.GameManager.GUIManager;
             ItemHolder = GameObject.Find("WorldObjects");
         }
 
@@ -55,7 +55,7 @@ namespace JoyLib.Code.Unity.GUI
 
             if (ObservedItem is null == false && ObservedItem is ItemInstance item)
             {
-                Player = GlobalConstants.GameManager.GetComponent<LiveEntityHandler>().GetPlayer();
+                Player = GlobalConstants.GameManager.EntityHandler.GetPlayer();
                 item.SetUser(Player);
             }
         }

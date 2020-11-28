@@ -4,14 +4,16 @@ namespace JoyLib.Code.Entities.Items
 {
     public interface IItemContainer
     {
-        List<ItemInstance> GetContents();
+        List<IItemInstance> Contents { get; }
 
-        bool AddContents(ItemInstance actor);
+        bool AddContents(IItemInstance actor);
 
-        bool AddContents(IEnumerable<ItemInstance> actors);
+        bool AddContents(IEnumerable<IItemInstance> actors);
 
-        bool RemoveContents(ItemInstance actor);
+        bool RemoveContents(IItemInstance actor);
 
         void Clear();
+        
+        string ContentString { get; }
     }
 }

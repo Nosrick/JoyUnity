@@ -9,29 +9,33 @@ using UnityEngine;
 
 namespace JoyLib.Code.World
 {
-    public class WorldInfoHandler : MonoBehaviour
+    public interface IWorldInfoHandler
     {
-        protected ObjectIconHandler m_ObjectIcons;
+        WorldInfo[] GetWorldInfo(string name);
+    }
 
-        private List<WorldInfo> m_WorldInfo;
+    public class WorldInfoHandler : IWorldInfoHandler
+    {
+        protected IObjectIconHandler ObjectIcons { get; set; }
 
-        public void Awake()
+        protected List<WorldInfo> WorldInfo { get; set; }
+
+        public WorldInfoHandler(IObjectIconHandler objectIconHandler)
         {
-            m_ObjectIcons = GameObject.Find("GameManager")
-                                .GetComponent<ObjectIconHandler>();
+            ObjectIcons = objectIconHandler;
 
             Load();
         }
 
-        public bool Load()
+        protected bool Load()
         {
-            if (m_WorldInfo != null)
+            if (WorldInfo is null == false)
             {
                 return true;
             }
 
             string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "World Spaces", "*.xml", SearchOption.AllDirectories);
-            m_WorldInfo = new List<WorldInfo>();
+            WorldInfo = new List<WorldInfo>();
 
             foreach (string file in files)
             {
@@ -68,9 +72,9 @@ namespace JoyLib.Code.World
                         iconData.Add(newIcon);
                     }
 
-                    m_WorldInfo.Add(info);
+                    WorldInfo.Add(info);
 
-                    m_ObjectIcons.AddIcons(
+                    ObjectIcons.AddIcons(
                         info.tileset,
                         iconData.ToArray());
 
@@ -89,7 +93,7 @@ namespace JoyLib.Code.World
         {
             try
             {
-                return m_WorldInfo.Where(info => info.name.StartsWith(name, StringComparison.OrdinalIgnoreCase)).ToArray();
+                return WorldInfo.Where(info => info.name.StartsWith(name, StringComparison.OrdinalIgnoreCase)).ToArray();
             }
             catch (Exception e)
             {

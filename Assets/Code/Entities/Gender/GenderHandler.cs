@@ -8,11 +8,11 @@ using UnityEngine;
 
 namespace JoyLib.Code.Entities.Gender
 {
-    public class GenderHandler : MonoBehaviour
+    public class GenderHandler : IGenderHandler
     {
         public HashSet<IGender> Genders { get; protected set; }
 
-        public void Awake()
+        public GenderHandler()
         {
             Initialise();
         }

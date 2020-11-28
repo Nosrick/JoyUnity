@@ -18,7 +18,7 @@ namespace JoyLib.Code.Entities.Items
             string identifiedNameRef, 
             string[] slotsRef, 
             float size, 
-            ItemMaterial material, 
+            IItemMaterial material, 
             string governingSkillRef, 
             string actionStringRef, 
             int valueRef, 
@@ -124,7 +124,7 @@ namespace JoyLib.Code.Entities.Items
             protected set;
         }
 
-        public ItemMaterial Material
+        public IItemMaterial Material
         {
             get;
             protected set;

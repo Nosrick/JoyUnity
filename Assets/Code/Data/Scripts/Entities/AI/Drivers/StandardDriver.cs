@@ -15,13 +15,13 @@ namespace JoyLib.Code.Entities.AI.Drivers
     {
         protected static IJoyAction s_WanderAction = ScriptingEngine.instance.FetchAction("wanderaction");
 
-        protected static PhysicsManager s_PhysicsManager;
+        protected static IPhysicsManager s_PhysicsManager;
 
         public StandardDriver()
         {
             if(s_PhysicsManager is null)
             {
-                s_PhysicsManager = GameObject.Find("GameManager").GetComponent<PhysicsManager>();
+                s_PhysicsManager = GlobalConstants.GameManager.PhysicsManager;
             }
         }
 

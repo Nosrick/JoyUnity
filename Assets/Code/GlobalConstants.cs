@@ -19,13 +19,13 @@ namespace JoyLib.Code
 
         public static readonly StringComparer STRING_COMPARER = StringComparer.OrdinalIgnoreCase;
 
-        public static GameObject GameManager
+        public static IGameManager GameManager
         {
             get
             {
                 if (m_GameManager is null)
                 {
-                    m_GameManager = GameObject.Find("GameManager");
+                    m_GameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
                 }
 
                 return m_GameManager;
@@ -33,6 +33,6 @@ namespace JoyLib.Code
             set => m_GameManager = value;
         }
 
-        private static GameObject m_GameManager;
+        private static IGameManager m_GameManager;
     }
 }

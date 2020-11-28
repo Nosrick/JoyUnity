@@ -36,14 +36,14 @@ namespace JoyLib.Code.States
         protected GameObject m_FogOfWarHolder;
         protected GameObject m_EntitiesHolder;
 
-        protected GUIManager GUIManager { get; set; }
+        protected IGUIManager GUIManager { get; set; }
 
         protected readonly WorldSerialiser m_WorldSerialiser;
 
-        protected GameObject m_GameManager;
-        protected PhysicsManager m_PhysicsManager;
-        protected EntityRelationshipHandler m_RelationshipHandler;
-        protected ConversationEngine m_ConversationEngine;
+        protected IGameManager GameManager { get; set; }
+        protected IPhysicsManager PhysicsManager { get; set; }
+        protected IEntityRelationshipHandler RelationshipHandler { get; set; }
+        protected IConversationEngine ConversationEngine { get; set; }
         
         protected IEnumerator TickTimer { get; set; }
         
@@ -75,17 +75,17 @@ namespace JoyLib.Code.States
             m_FogOfWarHolder = GameObject.Find("WorldFog");
             m_EntitiesHolder = GameObject.Find("WorldEntities");
 
-            m_GameManager = GlobalConstants.GameManager;
-            m_PhysicsManager = m_GameManager.GetComponent<PhysicsManager>();
-            m_RelationshipHandler = m_GameManager.GetComponent<EntityRelationshipHandler>();
-            m_ConversationEngine = m_GameManager.GetComponent<ConversationEngine>();
-            GUIManager = m_GameManager.GetComponent<GUIManager>();
+            GameManager = GlobalConstants.GameManager;
+            PhysicsManager = GameManager.PhysicsManager;
+            RelationshipHandler = GameManager.RelationshipHandler;
+            ConversationEngine = GameManager.ConversationEngine;
+            GUIManager = GameManager.GUIManager;
 
             ContextMenu contextMenu = WidgetUtility.Find<ContextMenu>("ContextMenu");
             contextMenu.Close();
 
             TickTimer = TickEvent();
-            m_GameManager.GetComponent<MonoBehaviour>().StartCoroutine(TickTimer);
+            GameManager.MyGameObject.GetComponent<MonoBehaviour>().StartCoroutine(TickTimer);
         }
 
         public override void LoadContent()
@@ -226,8 +226,8 @@ namespace JoyLib.Code.States
             GUIManager.CloseGUI(CONTEXT_MENU);
             contextMenu.Close();
             GUIManager.OpenGUI(CONVERSATION);
-            m_ConversationEngine.SetActors(m_ActiveWorld.Player, entity);
-            m_ConversationEngine.Converse();
+            ConversationEngine.SetActors(m_ActiveWorld.Player, entity);
+            ConversationEngine.Converse();
         }
 
         protected void CallOver()
@@ -340,8 +340,8 @@ namespace JoyLib.Code.States
                     if (!(listener is null))
                     {
                         GUIManager.OpenGUI(CONVERSATION);
-                        m_ConversationEngine.SetActors(this.PlayerWorld.Player, listener);
-                        m_ConversationEngine.Converse(); 
+                        ConversationEngine.SetActors(this.PlayerWorld.Player, listener);
+                        ConversationEngine.Converse(); 
                     }
                 }
             }
@@ -519,7 +519,7 @@ namespace JoyLib.Code.States
 
             if (hasMoved)
             {
-                PhysicsResult physicsResult = m_PhysicsManager.IsCollision(player.WorldPosition, newPlayerPoint, m_ActiveWorld);
+                PhysicsResult physicsResult = PhysicsManager.IsCollision(player.WorldPosition, newPlayerPoint, m_ActiveWorld);
 
                 if (physicsResult == PhysicsResult.EntityCollision)
                 {
@@ -541,7 +541,7 @@ namespace JoyLib.Code.States
                         {
                             //TODO: REDO COMBAT ENGINE
                             //CombatEngine.SwingWeapon(player, tempEntity);
-                            IRelationship[] relationships = m_RelationshipHandler.Get(new JoyObject[] { tempEntity, player });
+                            IRelationship[] relationships = RelationshipHandler.Get(new JoyObject[] { tempEntity, player });
                             foreach(IRelationship relationship in relationships)
                             {
                                 relationship.ModifyValueOfParticipant(player.GUID, tempEntity.GUID, -50);
@@ -705,7 +705,7 @@ namespace JoyLib.Code.States
 
         public override GameState GetNextState()
         {
-            m_GameManager.GetComponent<MonoBehaviour>().StopCoroutine(TickTimer);
+            GameManager.MyGameObject.GetComponent<MonoBehaviour>().StopCoroutine(TickTimer);
             return new WorldDestructionState(m_Overworld, m_ActiveWorld);
         }
 

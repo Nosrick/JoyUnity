@@ -121,9 +121,9 @@ namespace JoyLib.Code.States
 
         private void NextState(object sender, EventArgs eventArgs)
         {
-            GameObject gameManager = GameObject.Find("GameManager");
+            IGameManager gameManager = GlobalConstants.GameManager;
 
-            EntityTemplateHandler templateHandler = gameManager.GetComponent<EntityTemplateHandler>(); 
+            IEntityTemplateHandler templateHandler = gameManager.EntityTemplateHandler; 
 
             EntityTemplate humanTemplate = templateHandler.Get("Human");
 

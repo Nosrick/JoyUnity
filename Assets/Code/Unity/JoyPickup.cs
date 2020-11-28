@@ -13,14 +13,14 @@ namespace JoyLib.Code.Unity
     public class JoyPickup : Pickup
     {
         protected static GameObject s_WorldObjects;
-        protected static LiveEntityHandler s_EntityHandler;
+        protected static ILiveEntityHandler s_EntityHandler;
 
         protected void Initialise()
         {
             if (s_WorldObjects is null)
             {
                 s_WorldObjects = GameObject.Find("WorldObjects");
-                s_EntityHandler = GlobalConstants.GameManager.GetComponent<LiveEntityHandler>();
+                s_EntityHandler = GlobalConstants.GameManager.EntityHandler;
             }
         }
 

@@ -82,8 +82,7 @@ namespace JoyLib.Code.Entities.Needs
                 m_CachedActions.Add(action, ScriptingEngine.instance.FetchAction(action));
             }
             
-            this.FulfillingSprite = GlobalConstants.GameManager.GetComponent<ObjectIconHandler>()
-                .GetSprite("needs", this.Name);
+            this.FulfillingSprite = GlobalConstants.GameManager.ObjectIconHandler.GetSprite("needs", this.Name);
         }
 
         public abstract bool FindFulfilmentObject(Entity actor);

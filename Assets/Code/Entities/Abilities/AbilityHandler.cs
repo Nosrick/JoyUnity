@@ -5,23 +5,24 @@ using System.Linq;
 
 namespace JoyLib.Code.Entities.Abilities
 {
-    public class AbilityHandler
+    public class AbilityHandler : IAbilityHandler
     {
-        private static readonly Lazy<AbilityHandler> lazy = new Lazy<AbilityHandler>(() => new AbilityHandler());
+        protected List<IAbility> Abilities { get; set; }
 
-        public static AbilityHandler instance => lazy.Value;
-
-        private List<IAbility> m_Abilities;
+        public AbilityHandler()
+        {
+            Initialise();
+        }
 
         private void Load()
         {
-            m_Abilities = new List<IAbility>();
-            m_Abilities.AddRange(ScriptingEngine.instance.FetchAndInitialiseChildren<IAbility>());
+            Abilities = new List<IAbility>();
+            Abilities.AddRange(ScriptingEngine.instance.FetchAndInitialiseChildren<IAbility>());
         }
 
         public bool Initialise()
         {
-            if (m_Abilities is null)
+            if (Abilities is null)
             {
                 Load();
             }
@@ -33,9 +34,9 @@ namespace JoyLib.Code.Entities.Abilities
         {
             Initialise();
             
-            if(m_Abilities.Any(x => x.InternalName.Equals(nameRef, StringComparison.OrdinalIgnoreCase)))
+            if(Abilities.Any(x => x.InternalName.Equals(nameRef, StringComparison.OrdinalIgnoreCase)))
             {
-                return m_Abilities.First(x => x.InternalName.Equals(nameRef, StringComparison.OrdinalIgnoreCase));
+                return Abilities.First(x => x.InternalName.Equals(nameRef, StringComparison.OrdinalIgnoreCase));
             }
             throw new InvalidOperationException("Could not find IAbility with name " + nameRef);
         }

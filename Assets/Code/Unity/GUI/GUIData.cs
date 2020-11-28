@@ -5,7 +5,7 @@ namespace JoyLib.Code.Unity.GUI
 {
     public class GUIData : MonoBehaviour, IPointerDownHandler
     {
-        protected static GUIManager GUIManager { get; set; }
+        protected static IGUIManager GUIManager { get; set; }
         
         public void Initialise(
             bool removesControl,
@@ -16,7 +16,7 @@ namespace JoyLib.Code.Unity.GUI
             
             if (GUIManager is null)
             {
-                GUIManager = GameObject.Find("GameManager").GetComponent<GUIManager>();
+                GUIManager = GlobalConstants.GameManager.GUIManager;
             }
         }
 

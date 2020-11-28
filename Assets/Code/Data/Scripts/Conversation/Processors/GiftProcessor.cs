@@ -6,7 +6,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
 {
     public class GiftProcessor : TopicData
     {
-        protected GUIManager GUIManager { get; set; }
+        protected IGUIManager GUIManager { get; set; }
         
         public GiftProcessor() 
             : base(
@@ -20,7 +20,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
         {
             if (GUIManager is null)
             {
-                GUIManager = GameObject.Find("GameManager").GetComponent<GUIManager>();
+                GUIManager = GlobalConstants.GameManager.GUIManager;
             }
         }
 

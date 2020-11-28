@@ -12,8 +12,7 @@ namespace JoyLib.Code.World.Generators.Interiors
     {
         protected static ItemFactory s_ItemFactory = new ItemFactory();
 
-        protected static LiveItemHandler s_ItemHandler = GameObject.Find("GameManager")
-                                                            .GetComponent<LiveItemHandler>();
+        protected static ILiveItemHandler s_ItemHandler = GlobalConstants.GameManager.ItemHandler;
 
         /// <summary>
         /// Places items in the dungeon

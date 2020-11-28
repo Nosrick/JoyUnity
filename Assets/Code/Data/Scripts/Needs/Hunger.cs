@@ -77,12 +77,12 @@ namespace JoyLib.Code.Entities.Needs
 
         public override bool FindFulfilmentObject(Entity actor)
         {
-            ItemInstance[] targets = actor.SearchBackpackForItemType(new string[] { "food" });
+            IItemInstance[] targets = actor.SearchBackpackForItemType(new string[] { "food" });
             int bestFood = 0;
-            ItemInstance chosenFood = null;
+            IItemInstance chosenFood = null;
 
             //Look for food in the target list
-            foreach(ItemInstance target in targets)
+            foreach(IItemInstance target in targets)
             {
                 if(target.ItemType.Value > bestFood)
                 {
@@ -103,7 +103,7 @@ namespace JoyLib.Code.Entities.Needs
             IEnumerable<IJoyObject> objects = actor.MyWorld.SearchForObjects(actor, new string[] { "food" });
             foreach(IJoyObject obj in objects)
             {
-                if(!(obj is ItemInstance item))
+                if(!(obj is IItemInstance item))
                 {
                     continue;
                 }

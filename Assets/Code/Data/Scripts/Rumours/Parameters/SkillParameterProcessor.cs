@@ -10,13 +10,13 @@ namespace JoyLib.Code.Conversation.Subengines.Rumours
 {
     public class SkillParameterProcessor : IParameterProcessor
     {
-        protected EntitySkillHandler SkillHandler
+        protected IEntitySkillHandler SkillHandler
         {
             get;
             set;
         }
 
-        protected NeedHandler NeedHandler
+        protected INeedHandler NeedHandler
         {
             get;
             set;
@@ -30,12 +30,9 @@ namespace JoyLib.Code.Conversation.Subengines.Rumours
 
         public SkillParameterProcessor()
         {
-            if (SkillHandler is null)
-            {
-                SkillHandler = GameObject.Find("GameManager").GetComponent<EntitySkillHandler>();
-                NeedHandler = GameObject.Find("GameManager").GetComponent<NeedHandler>();
-                DefaultNeeds = new BasicValueContainer<INeed>(NeedHandler.Needs.Values);
-            }
+            SkillHandler = GlobalConstants.GameManager.SkillHandler;
+            NeedHandler = GlobalConstants.GameManager.NeedHandler;
+            DefaultNeeds = new BasicValueContainer<INeed>(NeedHandler.Needs.ToArray());
         }
         
         public bool CanParse(string parameter)

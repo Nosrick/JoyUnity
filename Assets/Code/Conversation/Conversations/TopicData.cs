@@ -13,6 +13,22 @@ namespace JoyLib.Code.Conversation.Conversations
 {
     public class TopicData : ITopic
     {
+        public ITopicCondition[] Conditions { get; protected set; }
+        public string ID { get; protected set; }
+        public string[] NextTopics { get; protected set; }
+        public string Words { get; protected set; }
+        public int Priority { get; protected set; }
+        
+        public Speaker Speaker { get; protected set; }
+        
+        public string Link { get; protected set; }
+        
+        public IJoyAction[] CachedActions { get; protected set; }
+        
+        protected static IConversationEngine ConversationEngine { get; set; }
+        
+        protected static IEntityRelationshipHandler RelationshipHandler { get; set; }
+        
         public TopicData(
             ITopicCondition[] conditions,
             string ID,
@@ -32,30 +48,21 @@ namespace JoyLib.Code.Conversation.Conversations
                 cachedActions,
                 speaker,
                 link);
-
-            if (ConversationEngine is null)
-            {
-                GameObject gameManager = GameObject.Find("GameManager");
-                ConversationEngine = gameManager.GetComponent<ConversationEngine>();
-                RelationshipHandler = gameManager.GetComponent<EntityRelationshipHandler>();
-            }
+            
+            GetBits();
         }
 
-        public ITopicCondition[] Conditions { get; protected set; }
-        public string ID { get; protected set; }
-        public string[] NextTopics { get; protected set; }
-        public string Words { get; protected set; }
-        public int Priority { get; protected set; }
-        
-        public Speaker Speaker { get; protected set; }
-        
-        public string Link { get; protected set; }
-        
-        public IJoyAction[] CachedActions { get; protected set; }
-        
-        protected static ConversationEngine ConversationEngine { get; set; }
-        
-        protected static EntityRelationshipHandler RelationshipHandler { get; set; }
+        protected void GetBits()
+        {
+            if (ConversationEngine is null)
+            {
+                ConversationEngine = GlobalConstants.GameManager.ConversationEngine;
+            }
+            if(RelationshipHandler is null)
+            {
+                RelationshipHandler = GlobalConstants.GameManager.RelationshipHandler;
+            }
+        }
         
         public string[] GetConditionTags()
         {
@@ -219,6 +226,8 @@ namespace JoyLib.Code.Conversation.Conversations
 
         protected virtual ITopic[] FetchNextTopics()
         {
+            GetBits();
+            
             List<ITopic> nextTopics = ConversationEngine.AllTopics
                 .Where(topic => NextTopics.Contains(topic.ID))
                 .ToList();

@@ -11,20 +11,20 @@ using UnityEngine;
 
 namespace JoyLib.Code.Quests
 {
-    public class QuestProvider : MonoBehaviour
+    public class QuestProvider : IQuestProvider
     {
-        protected EntityRelationshipHandler m_EntityRelationshipHandler;
-        
+        protected IEntityRelationshipHandler EntityRelationshipHandler { get; set; }
+
         public List<IQuestAction> Actions { get; protected set; }
 
-        public void Awake()
+        public QuestProvider(IEntityRelationshipHandler entityRelationshipHandler)
         {
-            Initialise();
+            EntityRelationshipHandler = entityRelationshipHandler;
         }
 
         protected void Initialise()
         {
-            m_EntityRelationshipHandler = GameObject.Find("GameManager").GetComponent<EntityRelationshipHandler>();
+            EntityRelationshipHandler = GlobalConstants.GameManager.RelationshipHandler;
 
             Actions = ScriptingEngine.instance.FetchAndInitialiseChildren<IQuestAction>().ToList();
         }
@@ -43,21 +43,28 @@ namespace JoyLib.Code.Quests
                 actors.Add(provider);
                 IQuestAction action = Actions[result].Create(
                     new string[0],
-                    new List<ItemInstance>(),
+                    new List<IItemInstance>(),
                     new List<IJoyObject>(),
                     new List<WorldInstance>());
-                steps.Add(action.Make(questor, provider, overworldRef));
+                steps.Add(action.Make(questor, provider, overworldRef, action.Tags));
             }
 
-            return new Quest(steps, QuestMorality.Neutral, GetRewards(questor, provider, steps), provider);
+            IEnumerable<string> tagsForAllSteps = steps.SelectMany(step => step.Tags);
+            
+            return new Quest(steps, QuestMorality.Neutral, GetRewards(questor, provider, steps), provider, tagsForAllSteps);
         }
 
-        private List<ItemInstance> GetRewards(Entity questor, Entity provider, List<IQuestStep> steps)
+        public IQuest MakeQuestOfType(Entity questor, Entity provider, WorldInstance overworldRef, string[] tags)
         {
-            List<ItemInstance> rewards = new List<ItemInstance>();
-            int reward = ((steps.Count * 100) + (m_EntityRelationshipHandler.GetHighestRelationshipValue(provider, questor)));
+            throw new System.NotImplementedException();
+        }
+
+        private List<IItemInstance> GetRewards(Entity questor, Entity provider, List<IQuestStep> steps)
+        {
+            List<IItemInstance> rewards = new List<IItemInstance>();
+            int reward = ((steps.Count * 100) + (EntityRelationshipHandler.GetHighestRelationshipValue(provider, questor)));
             rewards.Add(BagOfGoldHelper.GetBagOfGold(reward));
-            foreach (ItemInstance item in rewards)
+            foreach (IItemInstance item in rewards)
             {
                 item.SetOwner(questor.GUID);
             }

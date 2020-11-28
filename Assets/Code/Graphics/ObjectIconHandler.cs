@@ -12,24 +12,24 @@ using UnityEngine.PlayerLoop;
 
 namespace JoyLib.Code.Graphics
 {
-    public class ObjectIconHandler : MonoBehaviour
+    public class ObjectIconHandler : IObjectIconHandler
     {
 
         protected int m_SpriteSize = 16;
 
-        public void Awake()
+        public ObjectIconHandler()
         {
             Initalise(GlobalConstants.SPRITE_SIZE);
         }
 
-        public void Initalise(int spriteSize) 
+        protected void Initalise(int spriteSize) 
         {
             this.SpriteSize = spriteSize;
 
             Load();
         }
 
-        public bool Load()
+        protected bool Load()
         {
             if(!(Icons is null))
             {

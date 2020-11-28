@@ -13,28 +13,22 @@ namespace Tests
 {
     public class EntityTemplateHandlerTest
     {
-        private EntityTemplateHandler target;
+        private IEntityTemplateHandler target;
 
-        private NeedHandler needHandler;
-
-        private ObjectIconHandler objectIconHandler;
-
-        private GameObject container;
+        private IGameManager container;
 
         private GameObject inventoryManager;
 
         [SetUp]
         public void SetUp()
         {
-            container = new GameObject("GameManager");
             inventoryManager = new GameObject();
             inventoryManager.AddComponent<InventoryManager>();
-
+            
+            container = new GameObject("GameManager").AddComponent<GameManager>();
             GlobalConstants.GameManager = container;
             
-            objectIconHandler = container.AddComponent<ObjectIconHandler>();
-            needHandler = container.AddComponent<NeedHandler>();
-            target = container.AddComponent<EntityTemplateHandler>();
+            target = container.EntityTemplateHandler;
         }
 
         [UnityTest]
@@ -63,7 +57,7 @@ namespace Tests
         [TearDown]
         public void TearDown()
         {
-            GameObject.DestroyImmediate(container);
+            GameObject.DestroyImmediate(container.MyGameObject);
             GameObject.DestroyImmediate(inventoryManager);
         }
     }

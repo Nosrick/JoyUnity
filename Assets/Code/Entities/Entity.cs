@@ -34,9 +34,9 @@ namespace JoyLib.Code.Entities
         protected BasicValueContainer<IGrowingValue> m_Skills;
         protected BasicValueContainer<INeed> m_Needs;
         protected List<IAbility> m_Abilities;
-        protected NonUniqueDictionary<string, ItemInstance> m_Equipment;
-        protected List<ItemInstance> m_Backpack;
-        protected ItemInstance m_NaturalWeapons;
+        protected NonUniqueDictionary<string, IItemInstance> m_Equipment;
+        protected List<IItemInstance> m_Backpack;
+        protected IItemInstance m_NaturalWeapons;
         protected ISexuality m_Sexuality;
         protected IRomance m_Romance;
 
@@ -70,9 +70,9 @@ namespace JoyLib.Code.Entities
 
         protected const int ATTACK_THRESHOLD = -50;
 
-        protected static EntityRelationshipHandler s_RelationshipHandler;
-        protected static EntitySkillHandler s_SkillHandler;
-        protected static QuestTracker QuestTracker { get; set; }
+        protected static IEntityRelationshipHandler s_RelationshipHandler;
+        protected static IEntitySkillHandler s_SkillHandler;
+        protected static IQuestTracker QuestTracker { get; set; }
 
         protected readonly static string[] STANDARD_ACTIONS = new string[]
         {
@@ -110,7 +110,7 @@ namespace JoyLib.Code.Entities
         /// <param name="world"></param>
         /// <param name="driver"></param>
         public Entity(
-            EntityTemplate template,
+            IEntityTemplate template,
             BasicValueContainer<INeed> needs,
             List<ICulture> cultures,
             IGrowingValue level,
@@ -122,9 +122,9 @@ namespace JoyLib.Code.Entities
             IRomance romance,
             Vector2Int position,
             Sprite[] sprites,
-            ItemInstance naturalWeapons,
-            NonUniqueDictionary<string, ItemInstance> equipment,
-            List<ItemInstance> backpack,
+            IItemInstance naturalWeapons,
+            NonUniqueDictionary<string, IItemInstance> equipment,
+            List<IItemInstance> backpack,
             List<string> identifiedItems,
             Dictionary<string, int> jobLevels,
             WorldInstance world,
@@ -138,14 +138,15 @@ namespace JoyLib.Code.Entities
                 template.Tileset,
                 STANDARD_ACTIONS,
                 sprites,
-                template.Tags)
+                template.Tags.ToArray())
         {
             if (s_RelationshipHandler is null)
             {
-                GameObject gameManager = GameObject.Find("GameManager");
-                s_RelationshipHandler = gameManager.GetComponent<EntityRelationshipHandler>();
-                s_SkillHandler = gameManager.GetComponent<EntitySkillHandler>();
-                QuestTracker = gameManager.GetComponent<QuestTracker>();
+                var test = template.Statistics[EntityStatistic.WIT];
+                IGameManager gameManager = GlobalConstants.GameManager;
+                s_RelationshipHandler = gameManager.RelationshipHandler;
+                s_SkillHandler = gameManager.SkillHandler;
+                QuestTracker = gameManager.QuestTracker;
             }
 
             this.CreatureType = template.CreatureType;
@@ -229,7 +230,7 @@ namespace JoyLib.Code.Entities
         /// <param name="icons"></param>
         /// <param name="world"></param>
         public Entity(
-            EntityTemplate template,
+            IEntityTemplate template,
             BasicValueContainer<INeed> needs,
             List<ICulture> cultures,
             IGrowingValue level,
@@ -243,8 +244,8 @@ namespace JoyLib.Code.Entities
             WorldInstance world,
             IDriver driver) :
             this(template, needs, cultures, level, 0, job, gender, sex, sexuality, romance, position, sprites,
-                NaturalWeaponHelper.MakeNaturalWeapon(template.Size), new NonUniqueDictionary<string, ItemInstance>(),
-                new List<ItemInstance>(), new List<string>(), new Dictionary<string, int>(), world, driver)
+                NaturalWeaponHelper.MakeNaturalWeapon(template.Size), new NonUniqueDictionary<string, IItemInstance>(),
+                new List<IItemInstance>(), new List<string>(), new Dictionary<string, int>(), world, driver)
         {
         }
 
@@ -453,7 +454,7 @@ namespace JoyLib.Code.Entities
             }
 
             //Check equipment
-            List<ItemInstance> items = m_Equipment.Values;
+            List<IItemInstance> items = m_Equipment.Values;
 
             foreach (string tag in tags)
             {
@@ -620,7 +621,7 @@ namespace JoyLib.Code.Entities
             m_IdentifiedItems.Add(nameRef);
         }
 
-        public virtual bool RemoveContents(ItemInstance item)
+        public virtual bool RemoveContents(IItemInstance item)
         {
             if (m_Backpack.Contains(item))
             {
@@ -631,10 +632,10 @@ namespace JoyLib.Code.Entities
             return false;
         }
 
-        public virtual bool RemoveItemFromPerson(ItemInstance item)
+        public virtual bool RemoveItemFromPerson(IItemInstance item)
         {
             //Check slots first
-            foreach (Tuple<string, ItemInstance> tuple in m_Equipment)
+            foreach (Tuple<string, IItemInstance> tuple in m_Equipment)
             {
                 if (tuple.Item2 == null)
                 {
@@ -654,9 +655,9 @@ namespace JoyLib.Code.Entities
             return RemoveContents(item);
         }
 
-        public virtual bool RemoveEquipment(string slot, ItemInstance item = null)
+        public virtual bool RemoveEquipment(string slot, IItemInstance item = null)
         {
-            foreach (Tuple<string, ItemInstance> tuple in m_Equipment)
+            foreach (Tuple<string, IItemInstance> tuple in m_Equipment)
             {
                 if (tuple.Item1.Equals(slot) && (item != null && tuple.Item2.GUID == item.GUID))
                 {
@@ -669,12 +670,12 @@ namespace JoyLib.Code.Entities
             return false;
         }
 
-        public ItemInstance[] SearchBackpackForItemType(string[] tags)
+        public IItemInstance[] SearchBackpackForItemType(string[] tags)
         {
             try
             {
-                List<ItemInstance> matchingItems = new List<ItemInstance>();
-                foreach (ItemInstance item in m_Backpack)
+                List<IItemInstance> matchingItems = new List<IItemInstance>();
+                foreach (IItemInstance item in m_Backpack)
                 {
                     int matches = 0;
                     foreach (string tag in tags)
@@ -698,22 +699,22 @@ namespace JoyLib.Code.Entities
                 ActionLog.instance.AddText("ERROR WHEN SEARCHING BACKPACK OF " + this.ToString());
                 ActionLog.instance.AddText(ex.Message);
                 ActionLog.instance.AddText(ex.StackTrace);
-                return new List<ItemInstance>().ToArray();
+                return new List<IItemInstance>().ToArray();
             }
         }
 
-        public void PlaceItemInWorld(ItemInstance item)
+        public void PlaceItemInWorld(IItemInstance item)
         {
             m_Backpack.Remove(item);
             item.Move(WorldPosition);
             MyWorld.AddObject(item);
         }
 
-        public virtual bool EquipItem(string slotRef, ItemInstance itemRef)
+        public virtual bool EquipItem(string slotRef, IItemInstance itemRef)
         {
             bool contains = false;
-            Tuple<string, ItemInstance> firstEmptySlot = null;
-            foreach (Tuple<string, ItemInstance> tuple in m_Equipment)
+            Tuple<string, IItemInstance> firstEmptySlot = null;
+            foreach (Tuple<string, IItemInstance> tuple in m_Equipment)
             {
                 if (tuple.Item1.Equals(slotRef))
                 {
@@ -745,7 +746,7 @@ namespace JoyLib.Code.Entities
 
         public virtual bool UnequipItem(string slot)
         {
-            foreach (Tuple<string, ItemInstance> tuple in m_Equipment)
+            foreach (Tuple<string, IItemInstance> tuple in m_Equipment)
             {
                 if (tuple.Item1.Equals(slot))
                 {
@@ -887,9 +888,9 @@ namespace JoyLib.Code.Entities
             mana.ModifyValue(mana.Maximum - lastMana);
         }
 
-        public ItemInstance GetEquipment(string slotRef)
+        public IItemInstance GetEquipment(string slotRef)
         {
-            foreach (Tuple<string, ItemInstance> tuple in m_Equipment)
+            foreach (Tuple<string, IItemInstance> tuple in m_Equipment)
             {
                 if (tuple.Item1.Equals(slotRef))
                 {
@@ -907,19 +908,22 @@ namespace JoyLib.Code.Entities
             return null;
         }
 
-        public bool PerformAction(IJoyAction action, JoyObject[] participants, string[] tags = null,
+        public bool PerformAction(IJoyAction action, IJoyObject[] participants, string[] tags = null,
             params object[] args)
         {
             ActionLog.instance.AddText(this.JoyName + "is performing " + action.ActionString);
             return action.Execute(participants, tags, args);
         }
 
-        public List<ItemInstance> GetContents()
+        public List<IItemInstance> Contents
         {
-            return m_Backpack;
+            get
+            {
+                return m_Backpack;
+            }
         }
 
-        public virtual bool AddContents(ItemInstance actor)
+        public virtual bool AddContents(IItemInstance actor)
         {
             if (m_IdentifiedItems.Any(i => i.Equals(actor.JoyName, StringComparison.OrdinalIgnoreCase)))
             {
@@ -930,7 +934,7 @@ namespace JoyLib.Code.Entities
             return true;
         }
 
-        public virtual bool AddContents(IEnumerable<ItemInstance> actors)
+        public virtual bool AddContents(IEnumerable<IItemInstance> actors)
         {
             foreach (ItemInstance actor in actors)
             {
@@ -949,6 +953,8 @@ namespace JoyLib.Code.Entities
             m_Backpack.Clear();
         }
 
+        public string ContentString { get; }
+
         public string CreatureType { get; protected set; }
 
         public IBioSex Sex { get; protected set; }
@@ -961,9 +967,9 @@ namespace JoyLib.Code.Entities
             set { m_CurrentTarget = value; }
         }
 
-        public List<Tuple<string, ItemInstance>> Equipment
+        public NonUniqueDictionary<string, IItemInstance> Equipment
         {
-            get { return new List<Tuple<string, ItemInstance>>(m_Equipment); }
+            get { return new NonUniqueDictionary<string, IItemInstance>(m_Equipment); }
         }
 
         public BasicValueContainer<IRollableValue> Statistics
@@ -1008,7 +1014,7 @@ namespace JoyLib.Code.Entities
 
         public bool PlayerControlled { get; set; }
 
-        public ItemInstance[] Backpack
+        public IItemInstance[] Backpack
         {
             get { return m_Backpack.ToArray(); }
         }

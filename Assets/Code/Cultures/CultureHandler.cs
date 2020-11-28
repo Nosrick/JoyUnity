@@ -9,11 +9,11 @@ using UnityEngine;
 
 namespace JoyLib.Code.Cultures
 {
-    public class CultureHandler : MonoBehaviour
+    public class CultureHandler : ICultureHandler
     {        
         protected Dictionary<string, ICulture> m_Cultures;
 
-        public void Awake()
+        public CultureHandler()
         {
             m_Cultures = new Dictionary<string, ICulture>();
 
@@ -25,8 +25,7 @@ namespace JoyLib.Code.Cultures
             string folderPath = Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Cultures";
             string[] files = Directory.GetFiles(folderPath, "*.xml");
 
-            ObjectIconHandler objectIcons = GameObject.Find("GameManager")
-                                                .GetComponent<ObjectIconHandler>();
+            IObjectIconHandler objectIcons = GlobalConstants.GameManager.ObjectIconHandler;
 
             Dictionary<string, ICulture> cultures = new Dictionary<string, ICulture>();
 

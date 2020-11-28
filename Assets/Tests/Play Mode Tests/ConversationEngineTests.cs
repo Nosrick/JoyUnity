@@ -38,40 +38,14 @@ namespace Tests
     {
         private ScriptingEngine scriptingEngine;
         
-        private ConversationEngine target;
+        private IConversationEngine target;
 
-        private GameObject gameManager;
+        private IGameManager gameManager;
         private GameObject conversationWindow;
         private GameObject inventoryWindow;
         private GameObject tradeWindow;
-        
-        private EntityTemplateHandler templateHandler;
-
-        private NeedHandler needHandler;
-
-        private CultureHandler cultureHandler;
-
-        private MaterialHandler materialHandler;
-
-        private JobHandler jobHandler;
-
-        private EntityRelationshipHandler entityRelationshipHandler;
-
-        private EntitySkillHandler skillHandler;
-
-        private ObjectIconHandler objectIconHandler;
-
-        private GUIManager guiManager;
 
         private GameObject inventoryManager;
-
-        private QuestTracker questTracker;
-        private QuestProvider questProvider;
-
-        private ParameterProcessorHandler parameterProcessorHandler;
-
-        private LiveEntityHandler entityHandler;
-        private LiveItemHandler itemHandler;
 
         private MonoBehaviourHandler instigatorObject;
         private MonoBehaviourHandler listenerObject;
@@ -89,12 +63,11 @@ namespace Tests
         public void SetUp()
         {
             prefab = Resources.Load<GameObject>("Prefabs/MonoBehaviourHandler");
-            gameManager = new GameObject("GameManager");
-
-            GlobalConstants.GameManager = gameManager;
             
             inventoryManager = new GameObject();
             inventoryManager.AddComponent<InventoryManager>();
+
+            scriptingEngine = new ScriptingEngine();
             
             canvas = new GameObject("Parent").AddComponent<Canvas>();
 
@@ -104,6 +77,21 @@ namespace Tests
                     canvas.transform, 
                     true);
             conversationWindow.name = "Conversation Window";
+
+            gameManager = Mock.Of<IGameManager>(
+                manager => manager.RelationshipHandler == Mock.Of<IEntityRelationshipHandler>()
+                && manager.GUIManager == Mock.Of<IGUIManager>()
+                && manager.SkillHandler == Mock.Of<IEntitySkillHandler>()
+                && manager.NeedHandler == Mock.Of<INeedHandler>(
+                    handler => handler.GetManyRandomised(It.IsAny<IEnumerable<string>>()) == 
+                               new List<INeed>()
+                               {
+                                   new JoyLib.Code.Entities.Needs.Friendship()
+                               }));
+            
+            IEntityTemplateHandler templateHandler = new EntityTemplateHandler();
+
+            GlobalConstants.GameManager = gameManager;
 
             inventoryWindow = GameObject.Instantiate(
                 Resources.Load<GameObject>("Prefabs/GUI/Inventory/Inventory"), 
@@ -116,40 +104,20 @@ namespace Tests
                 canvas.transform,
                 true);
             tradeWindow.name = "Trade";
+            
+            gameManager.GUIManager.AddGUI(conversationWindow, true, true);
+            gameManager.GUIManager.AddGUI(inventoryWindow);
+            gameManager.GUIManager.AddGUI(tradeWindow);
+            gameManager.GUIManager.OpenGUI(conversationWindow.name);
 
-            objectIconHandler = gameManager.AddComponent<ObjectIconHandler>();
-            templateHandler = gameManager.AddComponent<EntityTemplateHandler>();
-            needHandler = gameManager.AddComponent<NeedHandler>();
-            skillHandler = gameManager.AddComponent<EntitySkillHandler>();
-            entityRelationshipHandler = gameManager.AddComponent<EntityRelationshipHandler>();
-            guiManager = gameManager.AddComponent<GUIManager>();
-            materialHandler = gameManager.AddComponent<MaterialHandler>();
-
-            parameterProcessorHandler = gameManager.AddComponent<ParameterProcessorHandler>();
-
-            questProvider = gameManager.AddComponent<QuestProvider>();
-            questTracker = gameManager.AddComponent<QuestTracker>();
-
-            entityHandler = gameManager.AddComponent<LiveEntityHandler>();
-
-            conversationWindow =
-                GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/GUI/Conversation/Conversation Window"));
-            conversationWindow.name = "Conversation Window";
-            guiManager.AddGUI(conversationWindow, true, true);
-            guiManager.AddGUI(inventoryWindow);
-            guiManager.AddGUI(tradeWindow);
-            guiManager.OpenGUI(conversationWindow.name);
-
-            scriptingEngine = new ScriptingEngine();
-
-            target = gameManager.AddComponent<ConversationEngine>();
+            target = new ConversationEngine(gameManager.RelationshipHandler, gameManager.GUIManager);
             
             world = new WorldInstance(
                 new WorldTile[0,0], 
                 new string[0],
                 "TESTING");
 
-            EntityTemplate random = templateHandler.Get("human");
+            IEntityTemplate template = templateHandler.Get("human");
             IGrowingValue level = new ConcreteGrowingValue(
                 "level",
                 1,
@@ -176,12 +144,12 @@ namespace Tests
                 It.IsAny<Entity>(), It.IsAny<Entity>(), It.IsAny<IRelationship[]>()) == true);
             IJob job = Mock.Of<IJob>();
 
-            Sprite[] sprites = objectIconHandler.GetDefaultSprites();
+            Sprite[] sprites = gameManager.ObjectIconHandler.GetDefaultSprites();
 
-            BasicValueContainer<INeed> needs = new BasicValueContainer<INeed>(needHandler.GetManyRandomised(random.Needs));
+            BasicValueContainer<INeed> needs = new BasicValueContainer<INeed>(gameManager.NeedHandler.GetManyRandomised(new List<string>()));
 
             instigator = new Entity(
-                random,
+                template,
                 needs, 
                 cultures,
                 level,
@@ -196,7 +164,7 @@ namespace Tests
                 new StandardDriver());
 
             listener = new Entity(
-                random,
+                template,
                 needs, 
                 cultures,
                 level,
@@ -212,8 +180,8 @@ namespace Tests
 
             instigator.PlayerControlled = true;
 
-            entityHandler.AddEntity(instigator);
-            entityHandler.AddEntity(listener);
+            gameManager.EntityHandler.AddEntity(instigator);
+            gameManager.EntityHandler.AddEntity(listener);
 
             world.AddEntity(instigator);
             world.AddEntity(listener);
@@ -284,7 +252,7 @@ namespace Tests
         [TearDown]
         public void TearDown()
         {
-            GameObject.DestroyImmediate(gameManager);
+            GameObject.DestroyImmediate(gameManager.MyGameObject);
             GameObject.DestroyImmediate(inventoryManager);
             GameObject.DestroyImmediate(canvas);
             GameObject.DestroyImmediate(listenerObject.gameObject);

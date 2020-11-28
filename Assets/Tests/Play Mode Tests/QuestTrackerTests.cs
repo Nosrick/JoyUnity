@@ -29,38 +29,13 @@ namespace Tests
 {
     public class QuestTrackerTests
     {
-        private GameObject container;
+        private IGameManager container;
 
-        private QuestTracker target;
+        private IQuestTracker target;
 
-        private QuestProvider questProvider;
+        private IQuestProvider questProvider;
         
         private ScriptingEngine scriptingEngine;
-        private EntityTemplateHandler templateHandler;
-
-        private NeedHandler needHandler;
-
-        private CultureHandler cultureHandler;
-
-        private MaterialHandler materialHandler;
-
-        private JobHandler jobHandler;
-
-        private EntityRelationshipHandler relationshipHandler;
-
-        private ObjectIconHandler objectIconHandler;
-
-        private EntityBioSexHandler bioSexHandler;
-
-        private EntitySexualityHandler sexualityHandler;
-
-        private EntityRomanceHandler romanceHandler;
-
-        private EntitySkillHandler skillHandler;
-
-        private LiveEntityHandler entityHandler;
-
-        private LiveItemHandler itemHandler;
 
         private GameObject inventoryManager;
 
@@ -72,30 +47,16 @@ namespace Tests
         [SetUp]
         public void SetUp()
         {
-            container = new GameObject("GameManager");
             inventoryManager = new GameObject();
             inventoryManager.AddComponent<InventoryManager>();
+            container = new GameObject("GameManager").AddComponent<GameManager>();
 
             GlobalConstants.GameManager = container;
 
             scriptingEngine = new ScriptingEngine();
 
-            objectIconHandler = container.AddComponent<ObjectIconHandler>();
-            templateHandler = container.AddComponent<EntityTemplateHandler>();
-            cultureHandler = container.AddComponent<CultureHandler>();
-            needHandler = container.AddComponent<NeedHandler>();
-            relationshipHandler = container.AddComponent<EntityRelationshipHandler>();
-            materialHandler = container.AddComponent<MaterialHandler>();
-            jobHandler = container.AddComponent<JobHandler>();
-            bioSexHandler = container.AddComponent<EntityBioSexHandler>();
-            sexualityHandler = container.AddComponent<EntitySexualityHandler>();
-            skillHandler = container.AddComponent<EntitySkillHandler>();
-            itemHandler = container.AddComponent<LiveItemHandler>();
-            romanceHandler = container.AddComponent<EntityRomanceHandler>();
-            entityHandler = container.AddComponent<LiveEntityHandler>();
-
-            questProvider = container.AddComponent<QuestProvider>();
-            target = container.AddComponent<QuestTracker>();
+            questProvider = container.QuestProvider;
+            target = container.QuestTracker;
             
             world = new WorldInstance(
                 new WorldTile[0,0], 
@@ -106,7 +67,7 @@ namespace Tests
         [SetUp]
         public void SetUpEntities()
         {
-            EntityTemplate random = templateHandler.Get("human");
+            EntityTemplate random = container.EntityTemplateHandler.Get("human");
             IGrowingValue level = Mock.Of<IGrowingValue>();
             ICulture culture = Mock.Of<ICulture>(
                 c => c.GetNameForChain(
@@ -123,7 +84,7 @@ namespace Tests
             ISexuality sexuality = Mock.Of<ISexuality>();
             IRomance romance = Mock.Of<IRomance>();
 
-            Sprite[] sprites = objectIconHandler.GetDefaultSprites();
+            Sprite[] sprites = container.ObjectIconHandler.GetDefaultSprites();
 
             left = new Entity(
                 random,
@@ -157,8 +118,8 @@ namespace Tests
                 world,
                 new StandardDriver());
 
-            entityHandler.AddEntity(left);
-            entityHandler.AddEntity(right);
+            container.EntityHandler.AddEntity(left);
+            container.EntityHandler.AddEntity(right);
 
             world.AddEntity(left);
             world.AddEntity(right);
@@ -204,7 +165,7 @@ namespace Tests
         [TearDown]
         public void TearDown()
         {
-            GameObject.DestroyImmediate(container);
+            GameObject.DestroyImmediate(container.MyGameObject);
             GameObject.DestroyImmediate(inventoryManager);
         }
     }

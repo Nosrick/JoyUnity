@@ -7,34 +7,28 @@ using UnityEngine;
 
 namespace JoyLib.Code.Entities.Sexes
 {
-    public class EntityBioSexHandler : MonoBehaviour
+    public class EntityBioSexHandler : IEntityBioSexHandler
     {
         protected Dictionary<string, IBioSex> m_Sexes;
 
-        protected static CultureHandler CultureHandler
+        protected ICultureHandler CultureHandler
         {
             get;
             set;
         }
 
-        public void Awake()
+        public EntityBioSexHandler(ICultureHandler cultureHandler)
         {
-            if(m_Sexes is null)
-            {
-                Initialise();
-            }
+            this.CultureHandler = cultureHandler;
+            Initialise();
         }
 
-        private void Initialise()
+        protected void Initialise()
         {
-            
-            CultureHandler = GameObject.Find("GameManager")
-                                            .GetComponent<CultureHandler>();
-
             Load(CultureHandler.Cultures);
         }
 
-        public bool Load(ICulture[] cultures)
+        protected bool Load(ICulture[] cultures)
         {
             if (CultureHandler is null)
             {

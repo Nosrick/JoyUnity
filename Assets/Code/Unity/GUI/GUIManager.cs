@@ -5,12 +5,12 @@ using UnityEngine;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public class GUIManager : MonoBehaviour
+    public class GUIManager : IGUIManager
     {
         private List<GUIData> m_GUIs;
         private List<GUIData> m_ActiveGUIs;
 
-        public void Awake()
+        public GUIManager()
         {
             Initialise();
         }

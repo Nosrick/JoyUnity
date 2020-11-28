@@ -7,26 +7,23 @@ using UnityEngine;
 
 namespace JoyLib.Code.Entities.Romance
 {
-    public class EntityRomanceHandler : MonoBehaviour
+    public class EntityRomanceHandler : IEntityRomanceHandler
     {
         protected Dictionary<string, IRomance> RomanceTypes { get; set; }
         
-        protected CultureHandler CultureHandler { get; set; }
+        protected ICultureHandler CultureHandler { get; set; }
         
         public IRomance[] Romances => RomanceTypes.Values.ToArray();
 
-        public void Awake()
+        public EntityRomanceHandler(ICultureHandler cultureHandler)
         {
+            this.CultureHandler = cultureHandler;
             Initialise();
         }
 
         protected void Initialise()
         {
-            if (CultureHandler is null)
-            {
-                CultureHandler = GameObject.Find("GameManager").GetComponent<CultureHandler>();
-                Load(CultureHandler.Cultures);
-            }
+            Load(CultureHandler.Cultures);
         }
 
         protected bool Load(ICulture[] cultures)

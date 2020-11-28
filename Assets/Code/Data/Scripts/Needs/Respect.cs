@@ -23,7 +23,7 @@ namespace JoyLib.Code.Entities.Needs
         protected const int MAX_VALUE_MIN = HAPPINESS_THRESHOLD_MAX;
         protected const int MAX_VALUE_MAX = MAX_VALUE_MIN * 4;
         
-        protected static EntityRelationshipHandler RelationshipHandler { get; set; }
+        protected static IEntityRelationshipHandler RelationshipHandler { get; set; }
         
         public Respect()
             : base(
@@ -70,7 +70,7 @@ namespace JoyLib.Code.Entities.Needs
         {
             if(RelationshipHandler is null)
             {
-                RelationshipHandler = GlobalConstants.GameManager.GetComponent<EntityRelationshipHandler>();
+                RelationshipHandler = GlobalConstants.GameManager.RelationshipHandler;
             }
         }
 

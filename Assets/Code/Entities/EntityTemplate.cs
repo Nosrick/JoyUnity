@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Entities.AI.LOS.Providers;
@@ -7,7 +8,7 @@ using System.Linq;
 
 namespace JoyLib.Code.Entities
 {
-    public class EntityTemplate
+    public class EntityTemplate : IEntityTemplate
     {
         protected readonly string m_CreatureType;
         protected readonly string m_Type;
@@ -17,7 +18,7 @@ namespace JoyLib.Code.Entities
         protected readonly string[] m_Needs;
         protected readonly IAbility[] m_Abilities;
         protected readonly string[] m_Slots;
-        protected readonly string[] m_Tags;
+        protected readonly HashSet<string> m_Tags;
         
         protected readonly int m_Size;
 
@@ -55,19 +56,34 @@ namespace JoyLib.Code.Entities
 
             m_Tileset = tileset;
 
-            m_Tags = new string[tags.Length];
+            m_Tags = new HashSet<string>();
             for(int i = 0; i < tags.Length; i++)
             {
-                m_Tags[i] = tags[i];
+                m_Tags.Add(tags[i]);
             }
         }
 
-        public string[] Tags
+        public List<string> Tags
         {
             get
             {
-                return m_Tags;
+                return new List<string>(m_Tags);
             }
+        }
+
+        public bool HasTag(string tag)
+        {
+            return m_Tags.Contains(tag);
+        }
+
+        public bool AddTag(string tag)
+        {
+            return m_Tags.Add(tag);
+        }
+
+        public bool RemoveTag(string tag)
+        {
+            return m_Tags.Remove(tag);
         }
 
         public string[] Slots

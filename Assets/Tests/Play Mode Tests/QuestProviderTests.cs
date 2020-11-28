@@ -29,44 +29,19 @@ namespace Tests
 {
     public class QuestProviderTests
     {
-        private GameObject container;
+        private IGameManager container;
 
-        private QuestTracker questTracker;
+        private IQuestTracker questTracker;
 
-        private QuestProvider target;
+        private IQuestProvider target;
         
         private ScriptingEngine scriptingEngine;
-        private EntityTemplateHandler templateHandler;
-
-        private NeedHandler needHandler;
-
-        private CultureHandler cultureHandler;
-
-        private MaterialHandler materialHandler;
-
-        private JobHandler jobHandler;
-
-        private EntityRelationshipHandler relationshipHandler;
-
-        private ObjectIconHandler objectIconHandler;
-
-        private EntityBioSexHandler bioSexHandler;
-
-        private EntitySexualityHandler sexualityHandler;
-
-        private EntityRomanceHandler romanceHandler;
-
-        private EntitySkillHandler skillHandler;
-
-        private EntityFactory entityFactory;
-
-        private LiveItemHandler itemHandler;
-
-        private LiveEntityHandler entityHandler;
-
         private GameObject inventoryManager;
 
         private WorldInstance world;
+
+        private Canvas canvas;
+        private GameObject conversationWindow;
         
         private Entity left;
         private Entity right;
@@ -74,26 +49,26 @@ namespace Tests
         [SetUp]
         public void SetUp()
         {
-            container = new GameObject("GameManager");
             inventoryManager = new GameObject();
             inventoryManager.AddComponent<InventoryManager>();
+            
+            canvas = new GameObject("Parent").AddComponent<Canvas>();
+
+            conversationWindow =
+                GameObject.Instantiate(
+                    Resources.Load<GameObject>("Prefabs/GUI/Conversation/Conversation Window"), 
+                    canvas.transform, 
+                    true);
+            conversationWindow.name = "Conversation Window";
+            
+            container = new GameObject("GameManager").AddComponent<GameManager>();
 
             GlobalConstants.GameManager = container;
 
             scriptingEngine = new ScriptingEngine();
 
-            objectIconHandler = container.AddComponent<ObjectIconHandler>();
-            templateHandler = container.AddComponent<EntityTemplateHandler>();
-            relationshipHandler = container.AddComponent<EntityRelationshipHandler>();
-            materialHandler = container.AddComponent<MaterialHandler>();
-            skillHandler = container.AddComponent<EntitySkillHandler>();
-            itemHandler = container.AddComponent<LiveItemHandler>();
-            entityHandler = container.AddComponent<LiveEntityHandler>();
-
-            target = container.AddComponent<QuestProvider>();
-            questTracker = container.AddComponent<QuestTracker>();
-
-            entityFactory = new EntityFactory();
+            target = container.QuestProvider;
+            questTracker = container.QuestTracker;
             
             world = new WorldInstance(
                 new WorldTile[0,0], 
@@ -104,7 +79,7 @@ namespace Tests
         [SetUp]
         public void SetUpEntities()
         {
-            EntityTemplate random = templateHandler.Get("human");
+            EntityTemplate random = container.EntityTemplateHandler.Get("human");
             IGrowingValue level = new ConcreteGrowingValue(
                 "level",
                 1,
@@ -131,7 +106,7 @@ namespace Tests
                 It.IsAny<Entity>(), It.IsAny<Entity>(), It.IsAny<IRelationship[]>()) == true);
             IJob job = Mock.Of<IJob>();
 
-            Sprite[] sprites = objectIconHandler.GetDefaultSprites();
+            Sprite[] sprites = container.ObjectIconHandler.GetDefaultSprites();
             
             left = new Entity(
                 random,
@@ -165,8 +140,8 @@ namespace Tests
 
             left.PlayerControlled = true;
 
-            entityHandler.AddEntity(left);
-            entityHandler.AddEntity(right);
+            container.EntityHandler.AddEntity(left);
+            container.EntityHandler.AddEntity(right);
 
             world.AddEntity(left);
             world.AddEntity(right);
@@ -203,7 +178,7 @@ namespace Tests
         [TearDown]
         public void TearDown()
         {
-            GameObject.DestroyImmediate(container);
+            GameObject.DestroyImmediate(container.MyGameObject);
             GameObject.DestroyImmediate(inventoryManager);
         }
     }

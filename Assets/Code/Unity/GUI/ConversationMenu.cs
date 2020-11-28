@@ -25,7 +25,7 @@ namespace JoyLib.Code.Unity.GUI
             set;
         }
         
-        protected static ConversationEngine ConversationEngine
+        protected static IConversationEngine ConversationEngine
         {
             get;
             set;
@@ -35,7 +35,7 @@ namespace JoyLib.Code.Unity.GUI
         {
             if (ConversationEngine is null)
             {
-                ConversationEngine = GameObject.Find("GameManager").GetComponent<ConversationEngine>();
+                ConversationEngine = GlobalConstants.GameManager.ConversationEngine;
 
                 Text = this.transform.GetChild(0).GetComponent<Text>();
             }

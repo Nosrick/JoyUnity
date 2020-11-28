@@ -16,7 +16,7 @@ namespace JoyLib.Code.Unity.GUI
 
         protected Entity Player { get; set; }
         
-        protected LiveEntityHandler EntityHandler { get; set; }
+        protected ILiveEntityHandler EntityHandler { get; set; }
 
         protected int Counter { get; set; }
         protected const int MAXIMUM_FRAMES = 90;
@@ -25,7 +25,7 @@ namespace JoyLib.Code.Unity.GUI
         {
             if (EntityHandler is null)
             {
-                EntityHandler = GlobalConstants.GameManager.GetComponent<LiveEntityHandler>();
+                EntityHandler = GlobalConstants.GameManager.EntityHandler;
                 Text = this.gameObject.FindChild("NeedsText", true).GetComponent<TextMeshProUGUI>();
             }
         }

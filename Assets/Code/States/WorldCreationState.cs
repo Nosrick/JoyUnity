@@ -18,8 +18,7 @@ namespace JoyLib.Code.States
         protected WorldInstance m_World;
         protected WorldInstance m_ActiveWorld;
 
-        protected WorldInfoHandler m_WorldInfoHandler = GameObject.Find("GameManager")
-                                                            .GetComponent<WorldInfoHandler>();
+        protected IWorldInfoHandler m_WorldInfoHandler = GlobalConstants.GameManager.WorldInfoHandler;
 
         protected const int SIMULATION_TICKS = 600;
 
@@ -83,7 +82,7 @@ namespace JoyLib.Code.States
             m_Player.Move(dungeon.SpawnPoint);
             dungeon.AddEntity(m_Player);
 
-            GlobalConstants.GameManager.GetComponent<LiveEntityHandler>().AddEntity(m_Player);
+            GlobalConstants.GameManager.EntityHandler.AddEntity(m_Player);
 
             ItemFactory itemFactory = new ItemFactory();
             ItemInstance lightSource = itemFactory.CreateRandomItemOfType(new string[] { "light source" });
