@@ -116,12 +116,12 @@ namespace JoyLib.Code.Entities.Needs
 
         public override INeed Randomise()
         {
-            int decay = RNG.instance.Roll(DECAY_MIN, DECAY_MAX);
-            int decayCounter = RNG.instance.Roll(0, DECAY_MAX);
-            int priority = RNG.instance.Roll(PRIORITY_MIN, PRIORITY_MAX);
-            int happinessThreshold = RNG.instance.Roll(HAPPINESS_THRESHOLD_MIN, HAPPINESS_THRESHOLD_MAX);
-            int value = RNG.instance.Roll(0, HAPPINESS_THRESHOLD_MAX);
-            int maxValue = RNG.instance.Roll(MAX_VALUE_MIN, MAX_VALUE_MAX);
+            int decay = Roller.Roll(DECAY_MIN, DECAY_MAX);
+            int decayCounter = Roller.Roll(0, DECAY_MAX);
+            int priority = Roller.Roll(PRIORITY_MIN, PRIORITY_MAX);
+            int happinessThreshold = Roller.Roll(HAPPINESS_THRESHOLD_MIN, HAPPINESS_THRESHOLD_MAX);
+            int value = Roller.Roll(0, HAPPINESS_THRESHOLD_MAX);
+            int maxValue = Roller.Roll(MAX_VALUE_MIN, MAX_VALUE_MAX);
             
             return new Confidence(
                 decay,

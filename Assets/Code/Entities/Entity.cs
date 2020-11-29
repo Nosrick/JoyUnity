@@ -70,9 +70,10 @@ namespace JoyLib.Code.Entities
 
         protected const int ATTACK_THRESHOLD = -50;
 
-        protected static IEntityRelationshipHandler s_RelationshipHandler;
-        protected static IEntitySkillHandler s_SkillHandler;
-        protected static IQuestTracker QuestTracker { get; set; }
+        public static IEntityRelationshipHandler RelationshipHandler { get; set; }
+        public static IEntitySkillHandler SkillHandler { get; set; }
+        public static IQuestTracker QuestTracker { get; set; }
+        public static NaturalWeaponHelper NaturalWeaponHelper { get; set; }
 
         protected readonly static string[] STANDARD_ACTIONS = new string[]
         {
@@ -128,7 +129,8 @@ namespace JoyLib.Code.Entities
             List<string> identifiedItems,
             Dictionary<string, int> jobLevels,
             WorldInstance world,
-            IDriver driver) :
+            IDriver driver,
+            RNG roller = null) :
             base("",
                 EntityDerivedValue.GetDefault(
                     template.Statistics[EntityStatistic.ENDURANCE],
@@ -138,17 +140,9 @@ namespace JoyLib.Code.Entities
                 template.Tileset,
                 STANDARD_ACTIONS,
                 sprites,
+                roller,
                 template.Tags.ToArray())
         {
-            if (s_RelationshipHandler is null)
-            {
-                var test = template.Statistics[EntityStatistic.WIT];
-                IGameManager gameManager = GlobalConstants.GameManager;
-                s_RelationshipHandler = gameManager.RelationshipHandler;
-                s_SkillHandler = gameManager.SkillHandler;
-                QuestTracker = gameManager.QuestTracker;
-            }
-
             this.CreatureType = template.CreatureType;
             this.m_Slots = template.Slots.ToList();
 
@@ -163,8 +157,6 @@ namespace JoyLib.Code.Entities
             this.m_Statistics = template.Statistics;
 
             this.m_Skills = new BasicValueContainer<IGrowingValue>();
-
-
             this.m_Needs = needs;
 
             foreach (IGrowingValue skill in template.Skills)
@@ -172,9 +164,12 @@ namespace JoyLib.Code.Entities
                 this.m_Skills.Add(skill);
             }
 
-            foreach (IGrowingValue skill in s_SkillHandler.GetDefaultSkillBlock(this.m_Needs))
+            if (SkillHandler is null == false)
             {
-                this.m_Skills.Add(skill);
+                foreach (IGrowingValue skill in SkillHandler.GetDefaultSkillBlock(this.m_Needs))
+                {
+                    this.m_Skills.Add(skill);
+                }
             }
 
             this.m_Abilities = template.Abilities.ToList();
@@ -206,7 +201,7 @@ namespace JoyLib.Code.Entities
                 0,
                 new JoyObject[0]);
 
-            this.RegenTicker = RNG.instance.Roll(0, REGEN_TICK_TIME - 1);
+            this.RegenTicker = Roller.Roll(0, REGEN_TICK_TIME - 1);
 
             this.MyWorld = world;
             this.JoyName = this.GetNameFromMultipleCultures();
@@ -242,10 +237,11 @@ namespace JoyLib.Code.Entities
             Vector2Int position,
             Sprite[] sprites,
             WorldInstance world,
-            IDriver driver) :
+            IDriver driver,
+            RNG roller = null) :
             this(template, needs, cultures, level, 0, job, gender, sex, sexuality, romance, position, sprites,
-                NaturalWeaponHelper.MakeNaturalWeapon(template.Size), new NonUniqueDictionary<string, IItemInstance>(),
-                new List<IItemInstance>(), new List<string>(), new Dictionary<string, int>(), world, driver)
+                NaturalWeaponHelper?.MakeNaturalWeapon(template.Size), new NonUniqueDictionary<string, IItemInstance>(),
+                new List<IItemInstance>(), new List<string>(), new Dictionary<string, int>(), world, driver, roller)
         {
         }
 
@@ -301,7 +297,7 @@ namespace JoyLib.Code.Entities
                 0,
                 new JoyObject[0]);
 
-            this.RegenTicker = RNG.instance.Roll(0, REGEN_TICK_TIME - 1);
+            this.RegenTicker = Roller.Roll(0, REGEN_TICK_TIME - 1);
 
             this.MyWorld = copy.MyWorld;
 
@@ -322,14 +318,14 @@ namespace JoyLib.Code.Entities
             int lastGroup = Int32.MinValue;
             for (int i = 0; i <= maxNames; i++)
             {
-                ICulture random = m_Cultures[RNG.instance.Roll(0, m_Cultures.Count)];
+                ICulture random = m_Cultures[Roller.Roll(0, m_Cultures.Count)];
 
                 while (random.NameData.SelectMany(x => x.chain).Max(y => y) < maxNames)
                 {
-                    random = m_Cultures[RNG.instance.Roll(0, m_Cultures.Count)];
+                    random = m_Cultures[Roller.Roll(0, m_Cultures.Count)];
                 }
 
-                if (lastGroup == int.MinValue && RNG.instance.Roll(0, 100) < groupChance)
+                if (lastGroup == int.MinValue && Roller.Roll(0, 100) < groupChance)
                 {
                     int[] groups = random.NameData.SelectMany(data => data.groups).Distinct().ToArray();
 
@@ -339,7 +335,7 @@ namespace JoyLib.Code.Entities
                     }
                     else
                     {
-                        lastGroup = groups[RNG.instance.Roll(0, groups.Length)];
+                        lastGroup = groups[Roller.Roll(0, groups.Length)];
                         if (random.NameData.Any(data => random.NameData.SelectMany(d => d.chain)
                                                             .Min(d => d) == i 
                                                 && data.groups.Contains(lastGroup)) == false)
@@ -399,7 +395,7 @@ namespace JoyLib.Code.Entities
         public void AddQuest(IQuest quest)
         {
             quest.StartQuest(this);
-            QuestTracker.AddQuest(GUID, quest);
+            QuestTracker?.AddQuest(GUID, quest);
         }
 
         public Tuple<string, int>[] GetData(string[] tags, params object[] args)
@@ -559,7 +555,12 @@ namespace JoyLib.Code.Entities
                     continue;
                 }
 
-                IRelationship[] relationships = s_RelationshipHandler.GetAllForObject(this);
+                IRelationship[] relationships = RelationshipHandler?.GetAllForObject(this);
+
+                if (relationships is null)
+                {
+                    return data.ToArray();
+                }
 
                 if (tags.Any(tag => tag.Equals("will mate", StringComparison.OrdinalIgnoreCase)))
                 {

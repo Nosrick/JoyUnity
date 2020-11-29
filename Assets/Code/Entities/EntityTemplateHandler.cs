@@ -18,7 +18,8 @@ namespace JoyLib.Code.Entities
 {
     public class EntityTemplateHandler : IEntityTemplateHandler
     {
-        private List<EntityTemplate> m_Templates;
+        protected List<EntityTemplate> m_Templates;
+        protected IEntitySkillHandler SkillHandler { get; set; }
 
         public List<EntityTemplate> Templates
         {
@@ -33,8 +34,9 @@ namespace JoyLib.Code.Entities
             }
         }
 
-        public EntityTemplateHandler()
+        public EntityTemplateHandler(IEntitySkillHandler skillHandler)
         {
+            this.SkillHandler = skillHandler;
             m_Templates = LoadTypes();
         }
 
@@ -43,12 +45,6 @@ namespace JoyLib.Code.Entities
             InventoryManager.Database.equipments.Clear();
             
             List<EntityTemplate> entities = new List<EntityTemplate>();
-
-            IGameManager gameManager = GlobalConstants.GameManager;
-
-            INeedHandler needHandler = gameManager.NeedHandler;
-
-            IEntitySkillHandler skillHandler = gameManager.SkillHandler;
             
             string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Entities", "*.xml", SearchOption.AllDirectories);
 
@@ -63,7 +59,7 @@ namespace JoyLib.Code.Entities
                         List<EntityStatistic> statistics = (from stat in entity.Elements("Statistic")
                                                                           select new EntityStatistic(stat.Element("Name").DefaultIfEmpty("DEFAULT"), 
                                                                           stat.Element("Value").DefaultIfEmpty(4), 
-                                                                          stat.Element("Threshold").DefaultIfEmpty(7), new StandardRoller())).ToList();
+                                                                          stat.Element("Threshold").DefaultIfEmpty(7), new StandardRoller(new RNG()))).ToList();
 
                         //TODO: FIX THIS NASTY CAST
                         List<IRollableValue> statFudge = new List<IRollableValue>(statistics);
@@ -77,7 +73,7 @@ namespace JoyLib.Code.Entities
                                                                   skill.Element("Value").DefaultIfEmpty(0),
                                                                   skill.Element("Threshold").DefaultIfEmpty(7),
                                                                   skill.Element("Experience").DefaultIfEmpty(0),
-                                                                  skillHandler.GetCoefficients(needs, skill.Element("Name").DefaultIfEmpty("DEFAULT")), new StandardRoller())).ToList();
+                                                                  SkillHandler.GetCoefficients(needs, skill.Element("Name").DefaultIfEmpty("DEFAULT")), new StandardRoller(new RNG()))).ToList();
 
                         //TODO: FIX THIS NASTY CAST
                         List<IGrowingValue> skillFudge = new List<IGrowingValue>(skills);
@@ -151,7 +147,7 @@ namespace JoyLib.Code.Entities
 
         public EntityTemplate GetRandom()
         {
-            int result = RNG.instance.Roll(0, m_Templates.Count);
+            int result = GlobalConstants.GameManager.Roller.Roll(0, m_Templates.Count);
             return Templates[result];
         }
 

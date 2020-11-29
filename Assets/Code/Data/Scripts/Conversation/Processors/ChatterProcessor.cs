@@ -1,5 +1,6 @@
 ﻿using JoyLib.Code.Conversation.Conversations;
 using JoyLib.Code.Conversation.Subengines.Rumours;
+using JoyLib.Code.Rollers;
 
 namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
 {
@@ -19,7 +20,8 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
                 "", 
                 0, 
                 new string[0], 
-                Speaker.LISTENER)
+                Speaker.LISTENER,
+                new RNG())
         {
             Initialise();
         }
@@ -43,7 +45,8 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
                     RumourMill.GetRandom().Words,
                     0,
                     new string[0],
-                    Speaker.LISTENER)
+                    Speaker.LISTENER,
+                    new RNG())
             };
         }
     }

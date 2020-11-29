@@ -39,7 +39,8 @@ namespace JoyLib.Code.Entities.Items
         public bool IsWall { get; protected set; }
 
         public bool IsDestructible { get; protected set; }
-        
+
+        public RNG Roller { get; protected set; }
         public WorldInstance MyWorld { get; set; }
         
         public Sprite Sprite => Sprites[ChosenSprite];
@@ -85,7 +86,7 @@ namespace JoyLib.Code.Entities.Items
             protected set
             {
                 m_OwnerGUID = value;
-                m_OwnerString = EntityHandler.Get(m_OwnerGUID).JoyName;
+                m_OwnerString = EntityHandler?.Get(m_OwnerGUID).JoyName;
             }
         }
 
@@ -96,8 +97,8 @@ namespace JoyLib.Code.Entities.Items
 
         public List<IAbility> UniqueAbilities { get; protected set; }
 
-        protected static ILiveItemHandler ItemHandler { get; set; }
-        protected static ILiveEntityHandler EntityHandler { get; set; }
+        public static ILiveItemHandler ItemHandler { get; set; }
+        public static ILiveEntityHandler EntityHandler { get; set; }
 
         public void Initialise(
             BaseItemType type, 
@@ -105,9 +106,11 @@ namespace JoyLib.Code.Entities.Items
             Vector2Int position, 
             bool identified, 
             Sprite[] sprites,
+            RNG roller = null,
             IEnumerable<IAbility> uniqueAbilities = null,
             IEnumerable<IJoyAction> actions = null)
-        {        
+        {
+            this.Roller = roller is null ? new RNG() : roller;
             this.Data = new NonUniqueDictionary<object, object>();
 
             this.JoyName = identified ? type.IdentifiedName : type.UnidentifiedName;
@@ -142,7 +145,7 @@ namespace JoyLib.Code.Entities.Items
             //If it's not animated, select a random icon to represent it
             if (!this.IsAnimated && sprites != null)
             {
-                this.ChosenSprite = RNG.instance.Roll(0, sprites.Length);
+                this.ChosenSprite = Roller.Roll(0, sprites.Length);
             }
             else
             {
@@ -182,6 +185,7 @@ namespace JoyLib.Code.Entities.Items
                 copy.WorldPosition,
                 copy.Identified,
                 copy.Sprites,
+                copy.Roller,
                 copy.UniqueAbilities,
                 copy.CachedActions.ToArray());
 
@@ -408,7 +412,7 @@ namespace JoyLib.Code.Entities.Items
 
         protected void Initialise()
         {
-            if(ItemHandler is null)
+            if(GlobalConstants.GameManager is null == false)
             {
                 ItemHandler = GlobalConstants.GameManager.ItemHandler;
                 EntityHandler = GlobalConstants.GameManager.EntityHandler;
@@ -460,7 +464,7 @@ namespace JoyLib.Code.Entities.Items
         {
             if(index > 0 && index < m_Contents.Count)
             {
-                IItemInstance item = ItemHandler.GetItem(m_Contents[index]);
+                IItemInstance item = ItemHandler?.GetItem(m_Contents[index]);
                 m_Contents.RemoveAt(index);
                 return item;
             }
@@ -656,7 +660,7 @@ namespace JoyLib.Code.Entities.Items
                 List<IItemInstance> contents = new List<IItemInstance>();
                 foreach(long GUID in m_Contents)
                 {
-                    contents.Add(ItemHandler.GetItem(GUID));
+                    contents.Add(ItemHandler?.GetItem(GUID));
                 }
                 return contents;
             }

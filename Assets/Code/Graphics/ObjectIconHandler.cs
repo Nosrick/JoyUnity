@@ -14,11 +14,13 @@ namespace JoyLib.Code.Graphics
 {
     public class ObjectIconHandler : IObjectIconHandler
     {
-
+        protected RNG Roller { get; set; }
+        
         protected int m_SpriteSize = 16;
 
-        public ObjectIconHandler()
+        public ObjectIconHandler(RNG roller)
         {
+            Roller = roller;
             Initalise(GlobalConstants.SPRITE_SIZE);
         }
 
@@ -234,7 +236,7 @@ namespace JoyLib.Code.Graphics
                 {
                     return ReturnDefaultArray();
                 }
-                int result = RNG.instance.Roll(0, icons.Length - 1);
+                int result = Roller.Roll(0, icons.Length - 1);
                 string[] nameToFind = Regex.Split(icons[result].name, @"^[^\d]+");
                 icons = icons.Where(x => x.name.StartsWith(nameToFind[0])).ToArray();
                 if(icons.Length == 0)

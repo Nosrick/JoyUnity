@@ -22,16 +22,27 @@ namespace JoyLib.Code.Entities.Items
 
         protected List<BaseItemType> m_ItemDatabase;
 
-        protected IGameManager m_GameManager;
-
         protected IObjectIconHandler m_ObjectIcons;
 
         protected IMaterialHandler m_MaterialHandler;
+        
+        protected IAbilityHandler AbilityHandler { get; set; }
+        
+        protected RNG Roller { get; set; }
 
         protected static GameObject s_ItemPrefab; 
 
-        public LiveItemHandler()
+        public LiveItemHandler(
+            IObjectIconHandler objectIconHandler,
+            IMaterialHandler materialHandler,
+            IAbilityHandler abilityHandler,
+            RNG roller)
         {
+            AbilityHandler = abilityHandler;
+            Roller = roller;
+            m_ObjectIcons = objectIconHandler;
+            m_MaterialHandler = materialHandler;
+            
             if (m_ItemDatabase is null)
             {
                 Initialise();
@@ -41,10 +52,6 @@ namespace JoyLib.Code.Entities.Items
         protected void Initialise()
         {
             m_LiveItems = new Dictionary<long, IItemInstance>();
-
-            m_GameManager = GlobalConstants.GameManager;
-            m_ObjectIcons = m_GameManager.ObjectIconHandler;
-            m_MaterialHandler = m_GameManager.MaterialHandler;
 
             s_ItemPrefab = Resources.Load<GameObject>("Prefabs/ItemInstance");
 
@@ -77,7 +84,7 @@ namespace JoyLib.Code.Entities.Items
                                                             materials = item.Elements("Material").Select(material => material.GetAs<string>()).ToArray(),
                                                             tags = item.Elements("Tag").Select(tag => tag.GetAs<string>()).ToArray(),
                                                             weighting = item.Element("SpawnWeighting").GetAs<int>(),
-                                                            abilities = item.Elements("Effect").Select(ability => ability.GetAs<string>() != null ? GlobalConstants.GameManager.AbilityHandler.GetAbility(ability.GetAs<string>()) : null).ToArray(),
+                                                            abilities = item.Elements("Effect").Select(ability => ability.GetAs<string>() != null ? AbilityHandler?.GetAbility(ability.GetAs<string>()) : null).ToArray(),
                                                             lightLevel = item.Element("LightLevel").GetAs<int>()
 
                                                         }).ToList();
@@ -119,7 +126,7 @@ namespace JoyLib.Code.Entities.Items
 
                     if (unidentifiedItems.Count != 0)
                     {
-                        int index = RNG.instance.Roll(0, unidentifiedItems.Count - 1);
+                        int index = Roller.Roll(0, unidentifiedItems.Count - 1);
                         chosenDescription = unidentifiedItems[index];
                         unidentifiedItems.RemoveAt(index);
                     }

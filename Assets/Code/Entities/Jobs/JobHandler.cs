@@ -13,10 +13,13 @@ namespace JoyLib.Code.Entities.Jobs
 {
     public class JobHandler : IJobHandler
     {
-        private List<IJob> m_Jobs;
+        protected List<IJob> m_Jobs;
+        
+        protected RNG Roller { get; set; }
 
-        public JobHandler()
+        public JobHandler(RNG roller)
         {
+            Roller = roller;
             m_Jobs = LoadTypes();
         }
 
@@ -32,7 +35,7 @@ namespace JoyLib.Code.Entities.Jobs
 
         public IJob GetRandom()
         {
-            return m_Jobs[RNG.instance.Roll(0, m_Jobs.Count - 1)];
+            return m_Jobs[Roller.Roll(0, m_Jobs.Count - 1)];
         }
 
         protected List<IJob> LoadTypes()

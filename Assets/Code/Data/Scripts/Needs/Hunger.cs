@@ -159,9 +159,9 @@ namespace JoyLib.Code.Entities.Needs
                 DECAY, 
                 true, 
                 PRIORITY, 
-                RNG.instance.Roll(HAPPINESS_THRESHOLD_MIN, HAPPINESS_THRESHOLD_MAX), 
+                Roller.Roll(HAPPINESS_THRESHOLD_MIN, HAPPINESS_THRESHOLD_MAX), 
                 HAPPINESS_THRESHOLD_MAX, 
-                RNG.instance.Roll(MAX_VALUE_MIN, MAX_VALUE_MAX),
+                Roller.Roll(MAX_VALUE_MIN, MAX_VALUE_MAX),
                 this.FulfillingSprite);
         }
     }

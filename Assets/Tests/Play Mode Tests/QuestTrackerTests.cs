@@ -18,6 +18,7 @@ using JoyLib.Code.Entities.Sexuality;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Quests;
+using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.World;
 using Moq;
@@ -29,8 +30,6 @@ namespace Tests
 {
     public class QuestTrackerTests
     {
-        private IGameManager container;
-
         private IQuestTracker target;
 
         private IQuestProvider questProvider;
@@ -38,6 +37,13 @@ namespace Tests
         private ScriptingEngine scriptingEngine;
 
         private GameObject inventoryManager;
+
+        private ILiveEntityHandler EntityHandler;
+        private IEntityRelationshipHandler RelationshipHandler;
+        private IEntityTemplateHandler TemplateHandler;
+
+        private INeedHandler NeedHandler;
+        private IEntitySkillHandler SkillHandler;
 
         private WorldInstance world;
         
@@ -49,25 +55,30 @@ namespace Tests
         {
             inventoryManager = new GameObject();
             inventoryManager.AddComponent<InventoryManager>();
-            container = new GameObject("GameManager").AddComponent<GameManager>();
-
-            GlobalConstants.GameManager = container;
 
             scriptingEngine = new ScriptingEngine();
+            
+            NeedHandler = new NeedHandler();
+            SkillHandler = new EntitySkillHandler(NeedHandler);
+            EntityHandler = new LiveEntityHandler();
+            RelationshipHandler = new EntityRelationshipHandler();
+            TemplateHandler = new EntityTemplateHandler(SkillHandler);
 
-            questProvider = container.QuestProvider;
-            target = container.QuestTracker;
+            questProvider = new QuestProvider(RelationshipHandler, new RNG());
+            target = new QuestTracker();
             
             world = new WorldInstance(
                 new WorldTile[0,0], 
                 new string[0],
-                "TESTING");
+                "TESTING",
+                EntityHandler,
+                new RNG());
         }
         
         [SetUp]
         public void SetUpEntities()
         {
-            EntityTemplate random = container.EntityTemplateHandler.Get("human");
+            EntityTemplate random = TemplateHandler.Get("human");
             IGrowingValue level = Mock.Of<IGrowingValue>();
             ICulture culture = Mock.Of<ICulture>(
                 c => c.GetNameForChain(
@@ -84,7 +95,7 @@ namespace Tests
             ISexuality sexuality = Mock.Of<ISexuality>();
             IRomance romance = Mock.Of<IRomance>();
 
-            Sprite[] sprites = container.ObjectIconHandler.GetDefaultSprites();
+            Sprite[] sprites = new Sprite[0];
 
             left = new Entity(
                 random,
@@ -117,9 +128,6 @@ namespace Tests
                 sprites,
                 world,
                 new StandardDriver());
-
-            container.EntityHandler.AddEntity(left);
-            container.EntityHandler.AddEntity(right);
 
             world.AddEntity(left);
             world.AddEntity(right);
@@ -165,7 +173,6 @@ namespace Tests
         [TearDown]
         public void TearDown()
         {
-            GameObject.DestroyImmediate(container.MyGameObject);
             GameObject.DestroyImmediate(inventoryManager);
         }
     }

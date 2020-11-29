@@ -1,5 +1,6 @@
 ﻿using JoyLib.Code.Conversation.Conversations;
 using JoyLib.Code.Entities.Relationships;
+using JoyLib.Code.Rollers;
 
 namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
 {
@@ -16,7 +17,8 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
                 "words",
                 0,
                 new string[0],
-                Speaker.INSTIGATOR)
+                Speaker.INSTIGATOR,
+                new RNG())
         {}
 
         protected override ITopic[] FetchNextTopics()

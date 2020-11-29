@@ -59,6 +59,8 @@ namespace JoyLib.Code
         
         public MonoBehaviourHandler MonoBehaviourHandler { get; protected set; }
 
+        public RNG Roller { get; protected set; }
+
         public JoyObject()
         {}
 
@@ -79,8 +81,10 @@ namespace JoyLib.Code
             string tileSet, 
             string[] actions,
             Sprite[] sprites, 
+            RNG roller = null,
             params string[] tags)
         {
+            Roller = roller is null ? new RNG() : roller; 
             List<IJoyAction> tempActions = new List<IJoyAction>(); 
             foreach(string action in actions)
             {
@@ -158,7 +162,7 @@ namespace JoyLib.Code
             //If it's not animated, select a random icon to represent it
             if (!this.IsAnimated && sprites != null)
             {
-                this.ChosenSprite = RNG.instance.Roll(0, sprites.Length - 1);
+                this.ChosenSprite = Roller.Roll(0, sprites.Length - 1);
             }
             else
             {

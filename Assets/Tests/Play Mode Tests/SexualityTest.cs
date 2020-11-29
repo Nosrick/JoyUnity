@@ -17,9 +17,12 @@ using JoyLib.Code.Entities.Jobs;
 using JoyLib.Code.Entities.Sexes;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Collections;
+using JoyLib.Code.Entities.AI.Drivers;
 using JoyLib.Code.Entities.Gender;
 using JoyLib.Code.Entities.Romance;
+using JoyLib.Code.Rollers;
 using JoyLib.Code.Unity.GUI;
+using JoyLib.Code.World;
 using NUnit.Framework;
 using Moq;
 using UnityEngine;
@@ -30,9 +33,16 @@ namespace Tests
     public class SexualityTest
     {
         private ScriptingEngine scriptingEngine;
-        private EntityFactory entityFactory;
 
-        private IGameManager container;
+        private ILiveEntityHandler EntityHandler;
+        private IEntityRelationshipHandler RelationshipHandler;
+        private IEntityTemplateHandler TemplateHandler;
+
+        private INeedHandler NeedHandler;
+        private IEntitySkillHandler SkillHandler;
+        private ICultureHandler CultureHandler;
+
+        private WorldInstance world;
 
         private GameObject inventoryManager;
 
@@ -62,13 +72,23 @@ namespace Tests
         {
             inventoryManager = new GameObject();
             inventoryManager.AddComponent<InventoryManager>();
-            container = new GameObject("GameManager").AddComponent<GameManager>();
-
-            GlobalConstants.GameManager = container;
 
             scriptingEngine = new ScriptingEngine();
+            
+            NeedHandler = new NeedHandler();
+            SkillHandler = new EntitySkillHandler(NeedHandler);
+            EntityHandler = new LiveEntityHandler();
+            RelationshipHandler = new EntityRelationshipHandler();
+            TemplateHandler = new EntityTemplateHandler(SkillHandler);
 
-            entityFactory = new EntityFactory();
+            CultureHandler = new CultureHandler();
+            
+            world = new WorldInstance(
+                new WorldTile[0,0],
+                new string[0], 
+                "TEST",
+                EntityHandler,
+                new RNG());
         }
 
         [SetUp]
@@ -88,7 +108,7 @@ namespace Tests
 
             IRomance aromantic = Mock.Of<IRomance>();
 
-            List<ICulture> cultures = container.CultureHandler.GetByCreatureType("human");
+            List<ICulture> cultures = CultureHandler.GetByCreatureType("human");
 
             heterosexual = target.Get("heterosexual");
             homosexual = target.Get("homosexual");
@@ -96,106 +116,142 @@ namespace Tests
             asexual = target.Get("asexual");
 
             IGrowingValue level = Mock.Of<IGrowingValue>();
-            EntityTemplate humanTemplate = container.EntityTemplateHandler.Get("human");
+            EntityTemplate humanTemplate = TemplateHandler.Get("human");
 
-            heterofemaleHuman = entityFactory.CreateFromTemplate(
+            heterofemaleHuman = new Entity(
                 humanTemplate,
-                level,
-                Vector2Int.zero,
+                new BasicValueContainer<INeed>(),
                 cultures,
+                level,
+                job,
                 femaleGender,
                 femaleSex,
                 heterosexual,
                 aromantic,
-                job);
-
-            heteroMaleHuman = entityFactory.CreateFromTemplate(
-                humanTemplate,
-                level,
                 Vector2Int.zero,
+                new Sprite[0], 
+                world,
+                new StandardDriver());
+
+            heteroMaleHuman = new Entity(
+                humanTemplate,
+                new BasicValueContainer<INeed>(),
                 cultures,
+                level,
+                job,
                 maleGender,
                 maleSex,
                 heterosexual,
                 aromantic,
-                job);
-
-            homoMaleHumanLeft = entityFactory.CreateFromTemplate(
-                humanTemplate,
-                level,
                 Vector2Int.zero,
+                new Sprite[0], 
+                world,
+                new StandardDriver());
+
+            homoMaleHumanLeft = new Entity(
+                humanTemplate,
+                new BasicValueContainer<INeed>(),
                 cultures,
+                level,
+                job,
                 maleGender,
                 maleSex,
                 homosexual,
                 aromantic,
-                job);
-
-            homoMaleHumanRight = entityFactory.CreateFromTemplate(
-                humanTemplate,
-                level,
                 Vector2Int.zero,
+                new Sprite[0], 
+                world,
+                new StandardDriver());
+
+            homoMaleHumanRight = new Entity(
+                humanTemplate,
+                new BasicValueContainer<INeed>(),
                 cultures,
+                level,
+                job,
                 maleGender,
                 maleSex,
                 homosexual,
                 aromantic,
-                job);
-
-            homofemaleHumanLeft = entityFactory.CreateFromTemplate(
-                humanTemplate,
-                level,
                 Vector2Int.zero,
+                new Sprite[0], 
+                world,
+                new StandardDriver());
+
+            homofemaleHumanLeft = new Entity(
+                humanTemplate,
+                new BasicValueContainer<INeed>(),
                 cultures,
+                level,
+                job,
                 femaleGender,
                 femaleSex,
                 homosexual,
                 aromantic,
-                job);
-
-            homofemaleHumanRight = entityFactory.CreateFromTemplate(
-                humanTemplate,
-                level,
                 Vector2Int.zero,
+                new Sprite[0], 
+                world,
+                new StandardDriver());
+
+            homofemaleHumanRight = new Entity(
+                humanTemplate,
+                new BasicValueContainer<INeed>(),
                 cultures,
+                level,
+                job,
                 femaleGender,
                 femaleSex,
                 homosexual,
                 aromantic,
-                job);
-
-            biMaleHuman = entityFactory.CreateFromTemplate(
-                humanTemplate,
-                level,
                 Vector2Int.zero,
+                new Sprite[0], 
+                world,
+                new StandardDriver());
+
+            biMaleHuman = new Entity(
+                humanTemplate,
+                new BasicValueContainer<INeed>(),
                 cultures,
+                level,
+                job,
                 maleGender,
                 maleSex,
                 bisexual,
                 aromantic,
-                job);
-
-            bifemaleHuman = entityFactory.CreateFromTemplate(
-                humanTemplate,
-                level,
                 Vector2Int.zero,
+                new Sprite[0], 
+                world,
+                new StandardDriver());
+
+            bifemaleHuman = new Entity(
+                humanTemplate,
+                new BasicValueContainer<INeed>(),
                 cultures,
+                level,
+                job,
                 femaleGender,
                 femaleSex,
                 bisexual,
                 aromantic,
-                job);
-
-            asexualMaleHuman = entityFactory.CreateFromTemplate(
-                humanTemplate,
-                level,
                 Vector2Int.zero,
+                new Sprite[0], 
+                world,
+                new StandardDriver());
+
+            asexualMaleHuman = new Entity(
+                humanTemplate,
+                new BasicValueContainer<INeed>(),
                 cultures,
+                level,
+                job,
                 maleGender,
                 maleSex,
                 asexual,
                 aromantic,
-                job);
+                Vector2Int.zero,
+                new Sprite[0], 
+                world,
+                new StandardDriver());
 
 
             Entity[] heteroCouple = new Entity[] { heterofemaleHuman, heteroMaleHuman };
@@ -205,19 +261,19 @@ namespace Tests
             Entity[] biCoupleRight = new Entity[] { bifemaleHuman, biMaleHuman };
             Entity[] asexualCouple = new[] {asexualMaleHuman, bifemaleHuman};
 
-            container.RelationshipHandler.CreateRelationshipWithValue(heteroCouple, "monoamorous", 500);
-            container.RelationshipHandler.CreateRelationshipWithValue(homofemaleCouple, "monoamorous", 500);
-            container.RelationshipHandler.CreateRelationshipWithValue(homoMaleCouple, "monoamorous", 500);
-            container.RelationshipHandler.CreateRelationshipWithValue(biCoupleLeft, "monoamorous", 500);
-            container.RelationshipHandler.CreateRelationshipWithValue(biCoupleRight, "monoamorous", 500);
-            container.RelationshipHandler.CreateRelationshipWithValue(asexualCouple, "monoamorous", 500);
+            RelationshipHandler.CreateRelationshipWithValue(heteroCouple, "monoamorous", 500);
+            RelationshipHandler.CreateRelationshipWithValue(homofemaleCouple, "monoamorous", 500);
+            RelationshipHandler.CreateRelationshipWithValue(homoMaleCouple, "monoamorous", 500);
+            RelationshipHandler.CreateRelationshipWithValue(biCoupleLeft, "monoamorous", 500);
+            RelationshipHandler.CreateRelationshipWithValue(biCoupleRight, "monoamorous", 500);
+            RelationshipHandler.CreateRelationshipWithValue(asexualCouple, "monoamorous", 500);
         }
 
         [UnityTest]
         public IEnumerator Heterosexual_WillMateWith_AcceptsHeteroPartners()
         {
             IJoyObject[] participants = new [] { heterofemaleHuman, heteroMaleHuman };
-            IRelationship[] relationships = container.RelationshipHandler.Get(participants);
+            IRelationship[] relationships = RelationshipHandler.Get(participants);
             Assert.IsTrue(heterosexual.WillMateWith(heterofemaleHuman, heteroMaleHuman, relationships));
 
             return null;
@@ -227,7 +283,7 @@ namespace Tests
         public IEnumerator Heterosexual_WillMateWith_RejectsHomoPartners()
         {
             IJoyObject[] participants = new [] { heterofemaleHuman, homofemaleHumanLeft };
-            IRelationship[] relationships = container.RelationshipHandler.Get(participants);
+            IRelationship[] relationships = RelationshipHandler.Get(participants);
             Assert.IsFalse(heterosexual.WillMateWith(heterofemaleHuman, homofemaleHumanLeft, relationships));
 
             return null;
@@ -237,7 +293,7 @@ namespace Tests
         public IEnumerator Homosexual_WillMateWith_AcceptsHomoPartners()
         {
             IJoyObject[] participants = new [] { homoMaleHumanLeft, homoMaleHumanRight };
-            IRelationship[] relationships = container.RelationshipHandler.Get(participants);
+            IRelationship[] relationships = RelationshipHandler.Get(participants);
             Assert.IsTrue(homosexual.WillMateWith(homoMaleHumanLeft, homoMaleHumanRight, relationships));
 
             return null;
@@ -247,7 +303,7 @@ namespace Tests
         public IEnumerator Homosexual_WillMateWith_RejectsHeteroPartners()
         {
             IJoyObject[] participants = new[] { homofemaleHumanLeft, homofemaleHumanRight };
-            IRelationship[] relationships = container.RelationshipHandler.Get(participants);
+            IRelationship[] relationships = RelationshipHandler.Get(participants);
             Assert.IsFalse(homosexual.WillMateWith(homoMaleHumanLeft, homofemaleHumanRight, relationships));
 
             return null;
@@ -257,7 +313,7 @@ namespace Tests
         public IEnumerator Bisexual_WillMateWith_WillAcceptHomoPartners()
         {
             IJoyObject[] participants = new[] { bifemaleHuman, homofemaleHumanLeft };
-            IRelationship[] relationships = container.RelationshipHandler.Get(participants);
+            IRelationship[] relationships = RelationshipHandler.Get(participants);
             Assert.IsTrue(bisexual.WillMateWith(bifemaleHuman, homofemaleHumanLeft, relationships));
 
             return null;
@@ -267,7 +323,7 @@ namespace Tests
         public IEnumerator Bisexual_WillMateWith_WillAcceptHeteroPartners()
         {
             IJoyObject[] participants = new[] { bifemaleHuman, biMaleHuman };
-            IRelationship[] relationships = container.RelationshipHandler.Get(participants);
+            IRelationship[] relationships = RelationshipHandler.Get(participants);
             Assert.IsTrue(bisexual.WillMateWith(bifemaleHuman, biMaleHuman, relationships));
 
             return null;
@@ -277,7 +333,7 @@ namespace Tests
         public IEnumerator Asexual_WillMateWith_RejectsPartner()
         {
             IJoyObject[] participants = new IJoyObject[] { asexualMaleHuman, bifemaleHuman };
-            IRelationship[] relationships = container.RelationshipHandler.Get(participants);
+            IRelationship[] relationships = RelationshipHandler.Get(participants);
             Assert.IsFalse(asexual.WillMateWith(asexualMaleHuman, bifemaleHuman, relationships));
 
             return null;
@@ -286,7 +342,6 @@ namespace Tests
         [TearDown]
         public void TearDown()
         {
-            GameObject.DestroyImmediate(container.MyGameObject);
             GameObject.DestroyImmediate(inventoryManager);
         }
     }

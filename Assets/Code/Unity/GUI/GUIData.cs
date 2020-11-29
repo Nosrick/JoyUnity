@@ -5,7 +5,7 @@ namespace JoyLib.Code.Unity.GUI
 {
     public class GUIData : MonoBehaviour, IPointerDownHandler
     {
-        protected static IGUIManager GUIManager { get; set; }
+        public static IGUIManager GUIManager { get; set; }
         
         public void Initialise(
             bool removesControl,
@@ -13,11 +13,6 @@ namespace JoyLib.Code.Unity.GUI
         {
             this.ClosesOthers = closesOthers;
             this.RemovesControl = removesControl;
-            
-            if (GUIManager is null)
-            {
-                GUIManager = GlobalConstants.GameManager.GUIManager;
-            }
         }
 
         public void OnPointerDown(PointerEventData eventData)

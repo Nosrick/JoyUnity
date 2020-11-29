@@ -1,6 +1,7 @@
 ﻿using JoyLib.Code.Entities;
 using System;
 using System.Collections.Generic;
+using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 
 namespace JoyLib.Code.Conversation.Conversations
@@ -46,6 +47,8 @@ namespace JoyLib.Code.Conversation.Conversations
         {
             get;
         }
+        
+        RNG Roller { get; }
 
         string[] GetConditionTags();
 

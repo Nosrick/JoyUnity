@@ -20,7 +20,6 @@ namespace JoyLib.Code.Entities
 {
     public class EntityFactory
     {
-        protected IGameManager GameManager { get; set; }
         protected INeedHandler NeedHandler { get; set; }
 
         protected IObjectIconHandler ObjectIcons { get; set; }
@@ -36,23 +35,29 @@ namespace JoyLib.Code.Entities
         protected IEntityRomanceHandler RomanceHandler { get; set; }
 
         protected IJobHandler JobHandler { get; set; }
+        
+        protected RNG Roller { get; set; }
 
-        public EntityFactory()
+        public EntityFactory(
+            INeedHandler needHandler,
+            IObjectIconHandler objectIconHandler,
+            ICultureHandler cultureHandler,
+            IEntitySexualityHandler sexualityHandler,
+            IEntityBioSexHandler sexHandler,
+            IGenderHandler genderHandler,
+            IEntityRomanceHandler romanceHandler,
+            IJobHandler jobHandler,
+            RNG roller)
         {
-            Initialise();
-        }
-
-        protected void Initialise()
-        {
-            GameManager = GlobalConstants.GameManager;
-            NeedHandler = GameManager.NeedHandler;
-            ObjectIcons = GameManager.ObjectIconHandler;
-            CultureHandler = GameManager.CultureHandler;
-            SexualityHandler = GameManager.SexualityHandler;
-            BioSexHandler = GameManager.BioSexHandler;
-            JobHandler = GameManager.JobHandler;
-            RomanceHandler = GameManager.RomanceHandler;
-            GenderHandler = GameManager.GenderHandler;
+            Roller = roller;
+            NeedHandler = needHandler;
+            ObjectIcons = objectIconHandler;
+            CultureHandler = cultureHandler;
+            SexualityHandler = sexualityHandler;
+            BioSexHandler = sexHandler;
+            JobHandler = jobHandler;
+            RomanceHandler = romanceHandler;
+            GenderHandler = genderHandler;
         }
 
         public Entity CreateFromTemplate(
@@ -69,11 +74,6 @@ namespace JoyLib.Code.Entities
             WorldInstance world = null,
             IDriver driver = null)
         {
-            if (GameManager is null)
-            {
-                Initialise();
-            }
-            
             IJob selectedJob = job;
             IGender selectedGender = gender;
             IBioSex selectedSex = sex;
@@ -100,7 +100,7 @@ namespace JoyLib.Code.Entities
                 needs.Add(NeedHandler.GetRandomised(need));
             }
 
-            int result = RNG.instance.Roll(0, creatureCultures.Count);
+            int result = Roller.Roll(0, creatureCultures.Count);
             ICulture dominantCulture = creatureCultures[result];
 
             if(selectedJob is null)
@@ -151,7 +151,8 @@ namespace JoyLib.Code.Entities
                 position, 
                 selectedSprites, 
                 world,
-                selectedDriver);
+                selectedDriver,
+                new RNG());
 
             return entity;
         }
@@ -177,11 +178,6 @@ namespace JoyLib.Code.Entities
             List<ICulture> cultures = null,
             IDriver driver = null)
         {
-            if (GameManager is null)
-            {
-                Initialise();
-            }
-            
             List<ICulture> creatureCultures = new List<ICulture>();
             if (cultures != null)
             {
@@ -218,7 +214,8 @@ namespace JoyLib.Code.Entities
                 identifiedItems, 
                 jobLevels, 
                 world,
-                selectedDriver);
+                selectedDriver,
+                new RNG());
 
             return entity;
         }

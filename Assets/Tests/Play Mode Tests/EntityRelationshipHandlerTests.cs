@@ -5,6 +5,7 @@ using JoyLib.Code;
 using JoyLib.Code.Collections;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities;
+using JoyLib.Code.Entities.AI.Drivers;
 using JoyLib.Code.Entities.Gender;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Jobs;
@@ -18,6 +19,7 @@ using JoyLib.Code.Graphics;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.Unity.GUI;
+using JoyLib.Code.World;
 using Moq;
 using NUnit.Framework;
 using UnityEngine;
@@ -29,13 +31,16 @@ namespace Tests
     {
         private ScriptingEngine scriptingEngine;
 
-        private EntityFactory entityFactory;
-
-        private IGameManager container;
-
         private GameObject inventoryManager;
 
         private IEntityRelationshipHandler target;
+
+        private IEntitySkillHandler SkillHandler;
+        private IEntityTemplateHandler TemplateHandler;
+        private INeedHandler NeedHandler;
+        private ILiveEntityHandler EntityHandler;
+
+        private WorldInstance world;
         
         private Entity left;
         private Entity right;
@@ -45,29 +50,27 @@ namespace Tests
         {
             inventoryManager = new GameObject();
             inventoryManager.AddComponent<InventoryManager>();
-            
-            container = new GameObject("GameManager").AddComponent<GameManager>();
-
-            target = container.RelationshipHandler;
-
-            GlobalConstants.GameManager = container;
 
             scriptingEngine = new ScriptingEngine();
 
-            entityFactory = new EntityFactory();
+            target = new EntityRelationshipHandler();
+            NeedHandler = new NeedHandler();
+            SkillHandler = new EntitySkillHandler(NeedHandler);
+            TemplateHandler = new EntityTemplateHandler(SkillHandler);
+            EntityHandler = new LiveEntityHandler();
         }
 
         [SetUp]
         public void SetUpEntities()
         {
-            EntityTemplate random = container.EntityTemplateHandler.GetRandom();
+            EntityTemplate random = TemplateHandler.GetRandom();
             IGrowingValue level = new ConcreteGrowingValue(
                 "level",
                 1,
                 GlobalConstants.DEFAULT_SUCCESS_THRESHOLD,
                 0f,
                 GlobalConstants.DEFAULT_SUCCESS_THRESHOLD,
-                new StandardRoller(),
+                new StandardRoller(new RNG()),
                 new NonUniqueDictionary<INeed, float>());
 
             ICulture culture = Mock.Of<ICulture>( c => c.GetNameForChain(
@@ -87,27 +90,47 @@ namespace Tests
                 It.IsAny<Entity>(), It.IsAny<Entity>(), It.IsAny<IRelationship[]>()) == true);
             IJob job = Mock.Of<IJob>();
             
-            left = entityFactory.CreateFromTemplate(
+            world = new WorldInstance(
+                new WorldTile[0,0], 
+                new string[0], 
+                "TESTING",
+                EntityHandler,
+                new RNG());
+            
+            left = new Entity(
                 random,
-                level,  
-                Vector2Int.down,
+                new BasicValueContainer<INeed>(NeedHandler.GetManyRandomised(NeedHandler.NeedNames)),
                 cultures,
-                gender,
-                sex,
-                sexuality,
-                romance,
-                job);
-
-            right = entityFactory.CreateFromTemplate(
-                random,
                 level,
-                Vector2Int.up,
-                cultures,
+                job,
                 gender,
                 sex,
                 sexuality,
                 romance,
-                job);
+                Vector2Int.down,
+                new Sprite[0], 
+                world,
+                new StandardDriver());
+
+            right = new Entity(
+                random,
+                new BasicValueContainer<INeed>(NeedHandler.GetManyRandomised(NeedHandler.NeedNames)),
+                cultures,
+                level,
+                job,
+                gender,
+                sex,
+                sexuality,
+                romance,
+                Vector2Int.down,
+                new Sprite[0], 
+                world,
+                new StandardDriver());
+
+            left.PlayerControlled = true;
+            
+            world.AddEntity(left);
+            world.AddEntity(right);
         }
 
         [UnityTest]
@@ -144,7 +167,6 @@ namespace Tests
         [TearDown]
         public void TearDown()
         {
-            GameObject.DestroyImmediate(container.MyGameObject);
             GameObject.DestroyImmediate(inventoryManager);
         }
     }

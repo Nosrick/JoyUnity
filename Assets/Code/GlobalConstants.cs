@@ -21,15 +21,7 @@ namespace JoyLib.Code
 
         public static IGameManager GameManager
         {
-            get
-            {
-                if (m_GameManager is null)
-                {
-                    m_GameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-                }
-
-                return m_GameManager;
-            }
+            get => m_GameManager;
             set => m_GameManager = value;
         }
 

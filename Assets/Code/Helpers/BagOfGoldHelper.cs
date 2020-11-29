@@ -7,7 +7,7 @@ namespace JoyLib.Code.Helpers
 {
     public static class BagOfGoldHelper
     {
-        private static ItemFactory s_ItemFactory = new ItemFactory();
+        private static ItemFactory ItemFactory { get; set; }
         
         private static ILiveItemHandler ItemHandler { get; set; }
 
@@ -17,8 +17,13 @@ namespace JoyLib.Code.Helpers
             {
                 ItemHandler = GlobalConstants.GameManager.ItemHandler;
             }
+
+            if (ItemFactory is null)
+            {
+                ItemFactory = GlobalConstants.GameManager.ItemFactory;
+            }
             
-            ItemInstance bag = s_ItemFactory.CreateRandomItemOfType(new string[] { "container", "leather" }, true);
+            ItemInstance bag = ItemFactory.CreateRandomItemOfType(new string[] { "container", "leather" }, true);
             ItemHandler.AddItem(bag);
             List<ItemInstance> coins = new List<ItemInstance>();
             int gold = count / 100;
@@ -27,7 +32,7 @@ namespace JoyLib.Code.Helpers
 
             if (gold > 0)
             {
-                ItemInstance goldCoin = s_ItemFactory.CreateSpecificType("gold coin", new string[] {"currency"}, true);
+                ItemInstance goldCoin = ItemFactory.CreateSpecificType("gold coin", new string[] {"currency"}, true);
                 for (int i = 0; i < gold; i++)
                 {
                     coins.Add(goldCoin.Copy(goldCoin));
@@ -36,7 +41,7 @@ namespace JoyLib.Code.Helpers
             
             if (silver > 0)
             {
-                ItemInstance silverCoin = s_ItemFactory.CreateSpecificType("silver coin", new string[] {"currency"}, true);
+                ItemInstance silverCoin = ItemFactory.CreateSpecificType("silver coin", new string[] {"currency"}, true);
                 for (int i = 0; i < silver; i++)
                 {
                     coins.Add(silverCoin.Copy(silverCoin));
@@ -45,7 +50,7 @@ namespace JoyLib.Code.Helpers
 
             if (copper > 0)
             {
-                ItemInstance copperCoin = s_ItemFactory.CreateSpecificType("copper coin", new string[] {"currency"}, true);
+                ItemInstance copperCoin = ItemFactory.CreateSpecificType("copper coin", new string[] {"currency"}, true);
                 for (int i = 0; i < copper; i++)
                 {
                     coins.Add(copperCoin.Copy(copperCoin));

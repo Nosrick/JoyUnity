@@ -5,6 +5,7 @@ using Castle.Components.DictionaryAdapter;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using UnityEngine;
@@ -20,7 +21,9 @@ namespace JoyLib.Code.Conversation.Conversations
         public int Priority { get; protected set; }
         
         public Speaker Speaker { get; protected set; }
-        
+
+        public RNG Roller { get; protected set; }
+
         public string Link { get; protected set; }
         
         public IJoyAction[] CachedActions { get; protected set; }
@@ -37,8 +40,11 @@ namespace JoyLib.Code.Conversation.Conversations
             int priority,
             string[] cachedActions,
             Speaker speaker,
+            RNG roller = null,
             string link = "")
         {
+            Roller = roller is null ? new RNG( ): roller; 
+            
             Initialise(
                 conditions,
                 ID,
@@ -54,13 +60,16 @@ namespace JoyLib.Code.Conversation.Conversations
 
         protected void GetBits()
         {
-            if (ConversationEngine is null)
+            if (GlobalConstants.GameManager is null == false)
             {
-                ConversationEngine = GlobalConstants.GameManager.ConversationEngine;
-            }
-            if(RelationshipHandler is null)
-            {
-                RelationshipHandler = GlobalConstants.GameManager.RelationshipHandler;
+                if (ConversationEngine is null)
+                {
+                    ConversationEngine = GlobalConstants.GameManager.ConversationEngine;
+                }
+                if(RelationshipHandler is null)
+                {
+                    RelationshipHandler = GlobalConstants.GameManager.RelationshipHandler;
+                }
             }
         }
         

@@ -3,6 +3,7 @@ using JoyLib.Code.Graphics;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using JoyLib.Code.Rollers;
 
 namespace JoyLib.Code.World.Generators.Interiors
 {
@@ -10,18 +11,25 @@ namespace JoyLib.Code.World.Generators.Interiors
     {
         protected GeneratorTileType[,] m_UntreatedTiles;
 
-        protected static IObjectIconHandler s_ObjectIcons = GlobalConstants.GameManager.ObjectIconHandler;
+        protected IObjectIconHandler ObjectIcons { get; set; }
+        protected RNG Roller { get; set; }
+
+        public DungeonInteriorGenerator(IObjectIconHandler objectIconHandler, RNG roller)
+        {
+            Roller = roller;
+            ObjectIcons = objectIconHandler;
+        }
 
         public WorldTile[,] GenerateWorldSpace(int sizeRef, string tileSet)
         {
             TileSet = tileSet;
             WorldTile[,] tiles = new WorldTile[sizeRef, sizeRef];
 
-            DungeonRoomGenerator roomGen = new DungeonRoomGenerator(sizeRef);
+            DungeonRoomGenerator roomGen = new DungeonRoomGenerator(sizeRef, Roller);
 
             m_UntreatedTiles = roomGen.GenerateRooms();
 
-            DungeonCorridorGenerator corrGen = new DungeonCorridorGenerator(m_UntreatedTiles, roomGen.rooms, 50);
+            DungeonCorridorGenerator corrGen = new DungeonCorridorGenerator(m_UntreatedTiles, roomGen.rooms, 50, Roller);
             m_UntreatedTiles = corrGen.GenerateCorridors();
 
             tiles = TreatTiles();
@@ -50,7 +58,7 @@ namespace JoyLib.Code.World.Generators.Interiors
         public List<JoyObject> GenerateWalls(WorldTile[,] worldTiles)
         {
             List<JoyObject> walls = new List<JoyObject>();
-            Sprite[] sprites = s_ObjectIcons.GetSprites(TileSet, "surroundwall");
+            Sprite[] sprites = ObjectIcons.GetSprites(TileSet, "surroundwall");
 
             for (int i = 0; i < m_UntreatedTiles.GetLength(0); i++)
             {
@@ -67,7 +75,9 @@ namespace JoyLib.Code.World.Generators.Interiors
                                 new Vector2Int(i, j), 
                                 TileSet, 
                                 new string[] {}, 
-                                sprites, new string[] { "wall", "interior" }));
+                                sprites,
+                                null,
+                                new string[] { "wall", "interior" }));
                     }
                 }
             }

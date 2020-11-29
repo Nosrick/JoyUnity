@@ -1,3 +1,5 @@
+using JoyLib.Code.Quests;
+
 namespace JoyLib.Code.Scripting
 {
     public interface IJoyAction

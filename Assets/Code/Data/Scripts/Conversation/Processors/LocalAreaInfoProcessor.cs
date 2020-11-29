@@ -21,7 +21,8 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
                 "",
                 0,
                 new string[0], 
-                Speaker.LISTENER)
+                Speaker.LISTENER,
+                new RNG())
         {
         }
 
@@ -42,7 +43,8 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
                     GetAreaInfo(Listener),
                     0,
                     new string[0], 
-                    Speaker.LISTENER) 
+                    Speaker.LISTENER,
+                    new RNG()) 
             };
         }
 
@@ -53,7 +55,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
             WorldInstance listenerWorld = listener.MyWorld;
             if (listenerWorld.HasTag("interior"))
             {
-                int result = RNG.instance.Roll(0, 100);
+                int result = Roller.Roll(0, 100);
                 if (result <= 50)
                 {
                     int numberOfLevels = 1;

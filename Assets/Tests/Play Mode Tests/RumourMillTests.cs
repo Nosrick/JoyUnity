@@ -31,13 +31,16 @@ namespace Tests
 {
     public class RumourMillTests
     {
-        private IGameManager container;
-
         private IRumourMill target;
         
         private ScriptingEngine scriptingEngine;
 
-        private EntityFactory entityFactory;
+        private ILiveEntityHandler EntityHandler;
+        private IEntityRelationshipHandler RelationshipHandler;
+        private IEntityTemplateHandler TemplateHandler;
+
+        private INeedHandler NeedHandler;
+        private IEntitySkillHandler SkillHandler;
 
         private GameObject inventoryManager;
         
@@ -49,22 +52,25 @@ namespace Tests
         {
             inventoryManager = new GameObject();
             inventoryManager.AddComponent<InventoryManager>();
-            container = new GameObject("GameManager").AddComponent<GameManager>();
-
-            GlobalConstants.GameManager = container;
 
             scriptingEngine = new ScriptingEngine();
-
-            entityFactory = new EntityFactory();
             
             target = new ConcreteRumourMill();
+            
+            NeedHandler = new NeedHandler();
+            SkillHandler = new EntitySkillHandler(NeedHandler);
+            EntityHandler = new LiveEntityHandler();
+            RelationshipHandler = new EntityRelationshipHandler();
+            TemplateHandler = new EntityTemplateHandler(SkillHandler);
             
             WorldInstance world = new WorldInstance(
                 new WorldTile[0,0], 
                 new string[0],
-                "TESTING");
+                "TESTING",
+                EntityHandler,
+                new RNG());
 
-            EntityTemplate template = container.EntityTemplateHandler.GetRandom();
+            EntityTemplate template = TemplateHandler.GetRandom();
             IGrowingValue level = Mock.Of<IGrowingValue>();
             
             ICulture culture = Mock.Of<ICulture>(
@@ -84,7 +90,7 @@ namespace Tests
             ISexuality sexuality = Mock.Of<ISexuality>();
             IRomance romance = Mock.Of<IRomance>();
 
-            Sprite[] sprites = container.ObjectIconHandler.GetDefaultSprites();
+            Sprite[] sprites = new Sprite[0];
 
             left = new Entity(
                 template,
@@ -152,7 +158,6 @@ namespace Tests
         [TearDown]
         public void TearDown()
         {
-            GameObject.DestroyImmediate(container.MyGameObject);
             GameObject.DestroyImmediate(inventoryManager);
         }
     }

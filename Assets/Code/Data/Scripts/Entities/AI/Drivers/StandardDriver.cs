@@ -16,12 +16,15 @@ namespace JoyLib.Code.Entities.AI.Drivers
         protected static IJoyAction s_WanderAction = ScriptingEngine.instance.FetchAction("wanderaction");
 
         protected static IPhysicsManager s_PhysicsManager;
+        
+        protected RNG Roller { get; set; }
 
-        public StandardDriver()
+        public StandardDriver(IPhysicsManager physicsManager = null, RNG roller = null)
         {
+            Roller = roller is null ? new RNG() : roller;
             if(s_PhysicsManager is null)
             {
-                s_PhysicsManager = GlobalConstants.GameManager.PhysicsManager;
+                s_PhysicsManager = physicsManager is null ? null : physicsManager;
             }
         }
 
@@ -49,7 +52,7 @@ namespace JoyLib.Code.Entities.AI.Drivers
 
                 if(idle == true)
                 {
-                    int result = RNG.instance.Roll(0, 10);
+                    int result = Roller.Roll(0, 10);
                     if (result < 1)
                     {
                         wander = true;
@@ -85,7 +88,7 @@ namespace JoyLib.Code.Entities.AI.Drivers
                 }
 
                 //Pick a random spot to wander to
-                int result = RNG.instance.Roll(0, visibleSpots.Count - 1);
+                int result = Roller.Roll(0, visibleSpots.Count - 1);
                 NeedAIData currentTarget = vehicle.CurrentTarget;
                 currentTarget.targetPoint = visibleSpots[result];
                 vehicle.CurrentTarget = currentTarget;

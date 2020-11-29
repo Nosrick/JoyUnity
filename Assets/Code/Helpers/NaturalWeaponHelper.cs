@@ -6,30 +6,22 @@ using UnityEngine;
 
 namespace JoyLib.Code.Helpers
 {
-    public static class NaturalWeaponHelper
+    public class NaturalWeaponHelper
     {
-        private static IGameManager s_GameManager;
+        protected IObjectIconHandler ObjectIcons { get; set; }
 
-        private static IObjectIconHandler s_ObjectIcons;
+        protected IMaterialHandler MaterialHandler { get; set; }
 
-        private static IMaterialHandler s_MaterialHandler;
-
-        private static void Initialise()
+        public NaturalWeaponHelper(IObjectIconHandler objectIconHandler, IMaterialHandler materialHandler)
         {
-            s_GameManager = GlobalConstants.GameManager;
-            s_ObjectIcons = s_GameManager.ObjectIconHandler;
-            s_MaterialHandler = s_GameManager.MaterialHandler;
+            ObjectIcons = objectIconHandler;
+            MaterialHandler = materialHandler;
         }
 
         //TODO: THIS NEEDS TO BE REWRITTEN ENTIRELY TO SUPPORT NEW SIZE MECHANICS
-        public static IItemInstance MakeNaturalWeapon(int wielderSize, string material = "flesh", params string[] tags)
+        public IItemInstance MakeNaturalWeapon(int wielderSize, string material = "flesh", params string[] tags)
         {
-            if(s_GameManager is null)
-            {
-                Initialise();
-            }
-
-            IItemMaterial itemMaterial = s_MaterialHandler.GetMaterial(material);
+            IItemMaterial itemMaterial = MaterialHandler.GetMaterial(material);
             BaseItemType baseItem = new BaseItemType(tags, "A claw, fist or psuedopod.", "A claw, fist or psuedopod.", "Natural Weapon", "Natural Weapon", new string[] { "Hand" }, 
                 (wielderSize + 1) * 40.0f, itemMaterial, "Martial Arts", "strikes", 0, 0, "None");
 
@@ -41,7 +33,7 @@ namespace JoyLib.Code.Helpers
                     baseItem.Weight),
                 new Vector2Int(-1, -1), 
                 true, 
-                s_ObjectIcons.GetDefaultSprites());
+                ObjectIcons.GetDefaultSprites());
             return naturalWeapon;
         }
     }

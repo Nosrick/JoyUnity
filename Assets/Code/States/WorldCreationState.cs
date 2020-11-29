@@ -51,13 +51,18 @@ namespace JoyLib.Code.States
             OverworldGenerator overworldGen = new OverworldGenerator();
 
             //Generate the basic overworld
-            m_World = new WorldInstance(overworldGen.GenerateWorldSpace(WORLD_SIZE, "plains"), new string[] { "overworld", "exterior" }, "Everse");
+            m_World = new WorldInstance(
+                overworldGen.GenerateWorldSpace(WORLD_SIZE, "plains"), 
+                new string[] { "overworld", "exterior" }, 
+                "Everse",
+                GlobalConstants.GameManager.EntityHandler,
+                GlobalConstants.GameManager.Roller);
 
             //Set the date and time for 1/1/1555, 12:00pm
             m_World.SetDateTime(new DateTime(1555, 1, 1, 12, 0, 0));
 
             //Do the spawn point
-            SpawnPointPlacer spawnPlacer = new SpawnPointPlacer();
+            SpawnPointPlacer spawnPlacer = new SpawnPointPlacer(GlobalConstants.GameManager.Roller);
             Vector2Int spawnPoint = spawnPlacer.PlaceSpawnPoint(m_World);
             while((spawnPoint.x == -1 && spawnPoint.y == -1))
             {
@@ -72,7 +77,13 @@ namespace JoyLib.Code.States
             //Begin the first floor of the Naga Pits
             WorldInfo worldInfo = m_WorldInfoHandler.GetWorldInfo("naga pits")[0];
 
-            WorldInstance dungeon = DungeonGenerator.GenerateDungeon(worldInfo, WORLD_SIZE, 3);
+            DungeonGenerator dungeonGenerator = new DungeonGenerator();
+            WorldInstance dungeon = dungeonGenerator.GenerateDungeon(
+                worldInfo, 
+                WORLD_SIZE, 
+                3, 
+                GlobalConstants.GameManager, 
+                GlobalConstants.GameManager.Roller);
 
             Vector2Int transitionPoint = spawnPlacer.PlaceTransitionPoint(m_World);
             m_World.AddArea(transitionPoint, dungeon);
@@ -83,9 +94,8 @@ namespace JoyLib.Code.States
             dungeon.AddEntity(m_Player);
 
             GlobalConstants.GameManager.EntityHandler.AddEntity(m_Player);
-
-            ItemFactory itemFactory = new ItemFactory();
-            ItemInstance lightSource = itemFactory.CreateRandomItemOfType(new string[] { "light source" });
+            
+            ItemInstance lightSource = GlobalConstants.GameManager.ItemFactory.CreateRandomItemOfType(new string[] { "light source" });
             IJoyAction addItemAction = m_Player.FetchAction("additemaction");
             addItemAction.Execute(
                 new IJoyObject[] {m_Player, lightSource},
@@ -95,7 +105,7 @@ namespace JoyLib.Code.States
             for (int i = 0; i < 4; i++)
             {
                 addItemAction.Execute(
-                    new IJoyObject[] {m_Player, itemFactory.CreateCompletelyRandomItem(true)},
+                    new IJoyObject[] {m_Player, GlobalConstants.GameManager.ItemFactory.CreateCompletelyRandomItem(true)},
                     new []{"pickup"},
                     new object[] { true });
             }

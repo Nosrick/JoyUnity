@@ -9,19 +9,26 @@ namespace JoyLib.Code.World.Generators
 {
     public class SpawnPointPlacer
     {
+        protected RNG Roller { get; set; }
+
+        public SpawnPointPlacer(RNG roller)
+        {
+            this.Roller = roller;
+        }
+        
         public Vector2Int PlaceSpawnPoint(WorldInstance worldRef)
         {
             int x, y;
 
-            x = RNG.instance.Roll(1, worldRef.Tiles.GetLength(0) - 1);
-            y = RNG.instance.Roll(1, worldRef.Tiles.GetLength(1) - 1);
+            x = Roller.Roll(1, worldRef.Tiles.GetLength(0));
+            y = Roller.Roll(1, worldRef.Tiles.GetLength(1));
 
             Vector2Int point = new Vector2Int(x, y);
 
             while (worldRef.Walls.Keys.Any(l => l.Equals(point)))
             {
-                x = RNG.instance.Roll(1, worldRef.Tiles.GetLength(0) - 1);
-                y = RNG.instance.Roll(1, worldRef.Tiles.GetLength(1) - 1);
+                x = Roller.Roll(1, worldRef.Tiles.GetLength(0));
+                y = Roller.Roll(1, worldRef.Tiles.GetLength(1));
                 point = new Vector2Int(x, y);
             }
 
@@ -33,8 +40,8 @@ namespace JoyLib.Code.World.Generators
             int breakout = (worldRef.Tiles.GetLength(0) * worldRef.Tiles.GetLength(1)) / 4;
             int x, y;
 
-            x = RNG.instance.Roll(1, worldRef.Tiles.GetLength(0) - 1);
-            y = RNG.instance.Roll(1, worldRef.Tiles.GetLength(1) - 1);
+            x = Roller.Roll(1, worldRef.Tiles.GetLength(0));
+            y = Roller.Roll(1, worldRef.Tiles.GetLength(1));
 
             Vector2Int point = new Vector2Int(x, y);
 
@@ -42,8 +49,8 @@ namespace JoyLib.Code.World.Generators
             while (worldRef.Walls.Keys.Any(l => l == point) && 
                 (point.Equals(worldRef.SpawnPoint) || count < breakout))
             {
-                x = RNG.instance.Roll(1, worldRef.Tiles.GetLength(0) - 1);
-                y = RNG.instance.Roll(1, worldRef.Tiles.GetLength(1) - 1);
+                x = Roller.Roll(1, worldRef.Tiles.GetLength(0));
+                y = Roller.Roll(1, worldRef.Tiles.GetLength(1));
                 point = new Vector2Int(x, y);
                 count += 1;
             }
@@ -62,8 +69,8 @@ namespace JoyLib.Code.World.Generators
                         && (point.Equals(worldRef.SpawnPoint) || count < breakout) 
                         && pathfinder.FindPath(point, worldRef.SpawnPoint, worldRef).Count == 0)
                 {
-                    x = RNG.instance.Roll(1, worldRef.Tiles.GetLength(0) - 1);
-                    y = RNG.instance.Roll(1, worldRef.Tiles.GetLength(1) - 1);
+                    x = Roller.Roll(1, worldRef.Tiles.GetLength(0));
+                    y = Roller.Roll(1, worldRef.Tiles.GetLength(1));
                     point = new Vector2Int(x, y);
                     count += 1;
                 }

@@ -4,6 +4,7 @@ using JoyLib.Code.Entities.Jobs;
 using JoyLib.Code.Entities.Romance;
 using JoyLib.Code.Entities.Sexes;
 using JoyLib.Code.Entities.Sexuality;
+using JoyLib.Code.Rollers;
 
 namespace JoyLib.Code.Cultures
 {
@@ -50,5 +51,7 @@ namespace JoyLib.Code.Cultures
         int NonConformingGenderChance { get; }
         
         NameData[] NameData { get; }
+        
+        RNG Roller { get; }
     }
 }

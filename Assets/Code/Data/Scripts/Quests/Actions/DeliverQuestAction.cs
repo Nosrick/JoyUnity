@@ -21,21 +21,21 @@ namespace JoyLib.Code.Quests
         public List<IJoyObject> Actors { get; protected set; }
         public List<WorldInstance> Areas { get; protected set; }
 
-        protected static ItemFactory ItemFactory { get; set; }
+        protected ItemFactory ItemFactory { get; set; }
+
+        public RNG Roller { get; protected set; }
 
         public DeliverQuestAction()
         {
-            if (ItemFactory is null)
-            {
-                ItemFactory = new ItemFactory();
-            }
         }
         
         public DeliverQuestAction(
             List<IItemInstance> items,
             List<IJoyObject> actors,
             List<WorldInstance> areas,
-             IEnumerable<string> tags)
+             IEnumerable<string> tags,
+            ItemFactory itemFactory = null,
+            RNG roller = null)
         {
             List<string> tempTags = new List<string>();
             tempTags.Add("deliver");
@@ -46,10 +46,8 @@ namespace JoyLib.Code.Quests
             this.Tags = tempTags.ToArray();
             Description = AssembleDescription();
 
-            if (ItemFactory is null)
-            {
-                ItemFactory = new ItemFactory();
-            }
+            Roller = roller is null ? new RNG() : roller; 
+            ItemFactory = itemFactory is null ? GlobalConstants.GameManager.ItemFactory : itemFactory;
         }
         
         public IQuestStep Make(Entity questor, Entity provider, WorldInstance overworld, IEnumerable<string> tags)
@@ -58,7 +56,7 @@ namespace JoyLib.Code.Quests
             IItemInstance[] backpack = provider.Backpack;
             if (backpack.Length > 0)
             {
-                int result = RNG.instance.Roll(0, backpack.Length);
+                int result = Roller.Roll(0, backpack.Length);
 
                 deliveryItem = backpack[result];
             }

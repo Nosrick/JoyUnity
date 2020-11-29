@@ -7,7 +7,6 @@ namespace JoyLib.Code.Scripting.Actions
 {
     public class ModifyRelationshipPointsAction : AbstractAction
     {
-        
         public override string Name => "modifyrelationshippointsaction";
 
         public override string ActionString => "modification of relationship points";
@@ -16,7 +15,7 @@ namespace JoyLib.Code.Scripting.Actions
 
         public ModifyRelationshipPointsAction()
         {
-            if (RelationshipHandler is null)
+            if (GlobalConstants.GameManager is null == false)
             {
                 RelationshipHandler = GlobalConstants.GameManager.RelationshipHandler;
             }
@@ -38,7 +37,12 @@ namespace JoyLib.Code.Scripting.Actions
             
             int relationshipMod = (int)args[0];
 
-            IRelationship[] relationships = RelationshipHandler.Get(participants, tags, true);
+            if (RelationshipHandler is null)
+            {
+                return false;
+            }
+
+            IRelationship[] relationships = RelationshipHandler?.Get(participants, tags, true);
 
             bool doAll = args.Length >= 2 && (bool)args[1];
 

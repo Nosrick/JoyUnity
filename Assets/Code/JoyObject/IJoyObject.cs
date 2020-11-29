@@ -2,6 +2,7 @@
 using JoyLib.Code.Collections;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
+using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.Unity;
 using JoyLib.Code.World;
@@ -16,6 +17,8 @@ namespace JoyLib.Code
         bool IsWall { get; }
         string JoyName { get; }
         long GUID { get; }
+        
+        RNG Roller { get; }
         
         WorldInstance MyWorld { get; set; }
         

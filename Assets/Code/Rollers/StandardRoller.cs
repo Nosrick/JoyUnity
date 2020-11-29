@@ -8,7 +8,14 @@ namespace JoyLib.Code.Rollers
 {
     public class StandardRoller : IRollable
     {
-        public int Roll(IRollableValue[] statistics, IGrowingValue[] skills, IAbility[] modifiers, params string[] tags)
+        protected RNG Roller { get; set; }
+
+        public StandardRoller(RNG roller = null)
+        {
+            Roller = roller is null ? new RNG() : roller;
+        }
+
+    public int Roll(IRollableValue[] statistics, IGrowingValue[] skills, IAbility[] modifiers, params string[] tags)
         {
             int successes = 0;
 
@@ -58,7 +65,7 @@ namespace JoyLib.Code.Rollers
 
             for (int i = 0; i < newNumber; i++)
             {
-                int result = RNG.instance.Roll(1, 10);
+                int result = Roller.Roll(1, 10);
 
                 if (result == 1)
                 {

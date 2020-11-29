@@ -1,4 +1,5 @@
 ﻿using JoyLib.Code.Conversation.Conversations;
+using JoyLib.Code.Rollers;
 
 namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
 {
@@ -18,7 +19,8 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
             "Is a <1> relationship okay?",
             0,
             new string[0],
-            Speaker.LISTENER)
+            Speaker.LISTENER,
+            new RNG())
         {
             this.RelationshipType = relationshipType;
             Words = Words.Replace("<1>", RelationshipType);

@@ -21,6 +21,7 @@ using JoyLib.Code.Entities.Sexes;
 using JoyLib.Code.Entities.Sexuality;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
+using JoyLib.Code.Helpers;
 using JoyLib.Code.Quests;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
@@ -40,7 +41,12 @@ namespace Tests
         
         private IConversationEngine target;
 
-        private IGameManager gameManager;
+        private IGUIManager GUIManager;
+        private IEntityRelationshipHandler RelationshipHandler;
+        private IObjectIconHandler ObjectIconHandler;
+        private INeedHandler NeedHandler;
+        private ILiveEntityHandler EntityHandler;
+        
         private GameObject conversationWindow;
         private GameObject inventoryWindow;
         private GameObject tradeWindow;
@@ -77,21 +83,23 @@ namespace Tests
                     canvas.transform, 
                     true);
             conversationWindow.name = "Conversation Window";
-
-            gameManager = Mock.Of<IGameManager>(
-                manager => manager.RelationshipHandler == Mock.Of<IEntityRelationshipHandler>()
-                && manager.GUIManager == Mock.Of<IGUIManager>()
-                && manager.SkillHandler == Mock.Of<IEntitySkillHandler>()
-                && manager.NeedHandler == Mock.Of<INeedHandler>(
-                    handler => handler.GetManyRandomised(It.IsAny<IEnumerable<string>>()) == 
-                               new List<INeed>()
-                               {
-                                   new JoyLib.Code.Entities.Needs.Friendship()
-                               }));
             
-            IEntityTemplateHandler templateHandler = new EntityTemplateHandler();
+            GUIManager = new GUIManager();
 
-            GlobalConstants.GameManager = gameManager;
+            IEntitySkillHandler skillHandler = Mock.Of<IEntitySkillHandler>(
+                handler => handler.GetCoefficients(
+                    It.IsAny<List<string>>(), 
+                    It.IsAny<string>()) 
+                           == new NonUniqueDictionary<INeed, float>());
+
+            ObjectIconHandler = new ObjectIconHandler(new RNG());
+
+            NeedHandler = Mock.Of<INeedHandler>(
+                handler => handler.GetManyRandomised(It.IsAny<IEnumerable<string>>()) == new List<INeed>());
+
+            EntityHandler = Mock.Of<ILiveEntityHandler>();
+            
+            IEntityTemplateHandler templateHandler = new EntityTemplateHandler(skillHandler);
 
             inventoryWindow = GameObject.Instantiate(
                 Resources.Load<GameObject>("Prefabs/GUI/Inventory/Inventory"), 
@@ -105,17 +113,25 @@ namespace Tests
                 true);
             tradeWindow.name = "Trade";
             
-            gameManager.GUIManager.AddGUI(conversationWindow, true, true);
-            gameManager.GUIManager.AddGUI(inventoryWindow);
-            gameManager.GUIManager.AddGUI(tradeWindow);
-            gameManager.GUIManager.OpenGUI(conversationWindow.name);
+            GUIManager.AddGUI(conversationWindow, true, true);
+            GUIManager.AddGUI(inventoryWindow);
+            GUIManager.AddGUI(tradeWindow);
+            GUIManager.OpenGUI(conversationWindow.name);
 
-            target = new ConversationEngine(gameManager.RelationshipHandler, gameManager.GUIManager);
+            target = new ConversationEngine(RelationshipHandler, GUIManager, conversationWindow);
+            
+            GUIData.GUIManager = GUIManager;
+            JoyItemSlot.ItemHolder = new GameObject("World Objects");
+            JoyItemSlot.ConversationEngine = target;
+            JoyItemSlot.GUIManager = GUIManager;
+            TradeWindow.RelationshipHandler = RelationshipHandler;
             
             world = new WorldInstance(
                 new WorldTile[0,0], 
                 new string[0],
-                "TESTING");
+                "TESTING",
+                EntityHandler,
+                new RNG());
 
             IEntityTemplate template = templateHandler.Get("human");
             IGrowingValue level = new ConcreteGrowingValue(
@@ -124,7 +140,7 @@ namespace Tests
                 GlobalConstants.DEFAULT_SUCCESS_THRESHOLD,
                 0f,
                 GlobalConstants.DEFAULT_SUCCESS_THRESHOLD,
-                new StandardRoller(),
+                new StandardRoller(new RNG()),
                 new NonUniqueDictionary<INeed, float>());
 
             ICulture culture = Mock.Of<ICulture>( c => c.GetNameForChain(
@@ -144,9 +160,9 @@ namespace Tests
                 It.IsAny<Entity>(), It.IsAny<Entity>(), It.IsAny<IRelationship[]>()) == true);
             IJob job = Mock.Of<IJob>();
 
-            Sprite[] sprites = gameManager.ObjectIconHandler.GetDefaultSprites();
+            Sprite[] sprites = ObjectIconHandler.GetDefaultSprites();
 
-            BasicValueContainer<INeed> needs = new BasicValueContainer<INeed>(gameManager.NeedHandler.GetManyRandomised(new List<string>()));
+            BasicValueContainer<INeed> needs = new BasicValueContainer<INeed>(NeedHandler.GetManyRandomised(new List<string>()));
 
             instigator = new Entity(
                 template,
@@ -179,9 +195,6 @@ namespace Tests
                 new StandardDriver());
 
             instigator.PlayerControlled = true;
-
-            gameManager.EntityHandler.AddEntity(instigator);
-            gameManager.EntityHandler.AddEntity(listener);
 
             world.AddEntity(instigator);
             world.AddEntity(listener);
@@ -252,7 +265,6 @@ namespace Tests
         [TearDown]
         public void TearDown()
         {
-            GameObject.DestroyImmediate(gameManager.MyGameObject);
             GameObject.DestroyImmediate(inventoryManager);
             GameObject.DestroyImmediate(canvas);
             GameObject.DestroyImmediate(listenerObject.gameObject);

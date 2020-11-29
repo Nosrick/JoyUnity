@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using JoyLib.Code.Rollers;
 
 namespace JoyLib.Code.Conversation.Subengines.Rumours
 {
@@ -17,6 +18,8 @@ namespace JoyLib.Code.Conversation.Subengines.Rumours
         {
             get;
         }
+        
+        RNG Roller { get; }
 
         IRumour GenerateRandomRumour(JoyObject[] participants);
 

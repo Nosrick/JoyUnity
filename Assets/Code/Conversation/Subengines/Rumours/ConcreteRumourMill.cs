@@ -21,8 +21,11 @@ namespace JoyLib.Code.Conversation.Conversations
 
         public List<IRumour> RumourTypes { get; protected set; }
 
-        public ConcreteRumourMill()
+        public RNG Roller { get; protected set; }
+
+        public ConcreteRumourMill(RNG roller = null)
         {
+            Roller = roller is null ? new RNG() : roller; 
             Initialise();
         }
 
@@ -123,7 +126,7 @@ namespace JoyLib.Code.Conversation.Conversations
                 Rumours.Add(GenerateRandomRumour(new []{left, right}));
             }
 
-            return Rumours[RNG.instance.Roll(0, Rumours.Count)];
+            return Rumours[Roller.Roll(0, Rumours.Count)];
         }
 
         public IRumour GenerateRandomRumour(JoyObject[] participants)
@@ -138,7 +141,7 @@ namespace JoyLib.Code.Conversation.Conversations
 
             if (possibilities.Length > 0)
             {
-                IRumour selected = possibilities[RNG.instance.Roll(0, possibilities.Length)];
+                IRumour selected = possibilities[Roller.Roll(0, possibilities.Length)];
                 rumour = selected.Create(
                     participants,
                     selected.Tags,
@@ -151,7 +154,7 @@ namespace JoyLib.Code.Conversation.Conversations
             }
             else
             {
-                IRumour selected = RumourTypes[RNG.instance.Roll(0, RumourTypes.Count)];
+                IRumour selected = RumourTypes[Roller.Roll(0, RumourTypes.Count)];
                 rumour = selected.Create(
                     participants,
                     selected.Tags,
@@ -182,7 +185,7 @@ namespace JoyLib.Code.Conversation.Conversations
             
             if (possibilities.Length > 0)
             {
-                IRumour resultingRumour = possibilities[RNG.instance.Roll(0, possibilities.Length)];
+                IRumour resultingRumour = possibilities[Roller.Roll(0, possibilities.Length)];
                 rumour = resultingRumour.Create(
                     participants,
                     resultingRumour.Tags,
@@ -195,7 +198,7 @@ namespace JoyLib.Code.Conversation.Conversations
             }
             else
             {
-                int result = RNG.instance.Roll(0, RumourTypes.Count);
+                int result = Roller.Roll(0, RumourTypes.Count);
                 IRumour resultingRumour = RumourTypes[result];
                 rumour = resultingRumour.Create(
                     participants,

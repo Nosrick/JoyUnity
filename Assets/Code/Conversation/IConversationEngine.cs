@@ -1,5 +1,6 @@
 ﻿using JoyLib.Code.Conversation.Conversations;
 using JoyLib.Code.Entities;
+using UnityEngine;
 
 namespace JoyLib.Code.Conversation
 {
@@ -13,5 +14,7 @@ namespace JoyLib.Code.Conversation
         ITopic[] AllTopics { get; }
         Entity Instigator { get; }
         Entity Listener { get; }
+        
+        GameObject Window { get; set; }
     }
 }

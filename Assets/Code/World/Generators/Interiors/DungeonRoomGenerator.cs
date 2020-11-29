@@ -10,23 +10,26 @@ namespace JoyLib.Code.World.Generators.Interiors
 
     public class DungeonRoomGenerator
     {
-        private const int LOOP_BREAK = 50;
+        protected const int LOOP_BREAK = 50;
 
-        private const int MIN_ROOM_SIZE = 5;
-        private const int MAX_ROOM_SIZE = 11;
-        private const int MIN_MAP_SIZE = 19;
+        protected const int MIN_ROOM_SIZE = 5;
+        protected const int MAX_ROOM_SIZE = 11;
+        protected const int MIN_MAP_SIZE = 19;
 
-        private readonly int m_Size;
-        private readonly GeneratorTileType[,] m_Tiles;
+        protected readonly int m_Size;
+        protected readonly GeneratorTileType[,] m_Tiles;
 
-        private readonly int m_NumberOfRooms;
-        private int m_NumberRoomsPlaced;
+        protected readonly int m_NumberOfRooms;
+        protected int m_NumberRoomsPlaced;
 
-        private readonly List<Rect> m_Rooms;
+        protected readonly List<Rect> m_Rooms;
+        
+        protected RNG Roller { get; set; }
 
-        public DungeonRoomGenerator(int size)
+        public DungeonRoomGenerator(int size, RNG roller)
         {
             m_Size = size;
+            Roller = roller;
 
             if (m_Size < MIN_MAP_SIZE)
             {
@@ -47,13 +50,13 @@ namespace JoyLib.Code.World.Generators.Interiors
             while (m_NumberRoomsPlaced <= m_NumberOfRooms && loopCounter < LOOP_BREAK)
             {
                 Vector2Int topLeft = new Vector2Int();
-                topLeft.x = RNG.instance.Roll(1, m_Size - 1);
+                topLeft.x = Roller.Roll(1, m_Size - 1);
                 if (topLeft.x % 2 == 1)
                 {
                     topLeft.x += 1;
                 }
 
-                topLeft.y = RNG.instance.Roll(1, m_Size - 1);
+                topLeft.y = Roller.Roll(1, m_Size - 1);
                 if (topLeft.y % 2 == 1)
                 {
                     topLeft.y += 1;
@@ -92,8 +95,8 @@ namespace JoyLib.Code.World.Generators.Interiors
                 if (m_NumberOfRooms == m_NumberRoomsPlaced)
                     return false;
 
-                Vector2Int bottomRight = new Vector2Int(topLeft.x + RNG.instance.Roll(MIN_ROOM_SIZE, MAX_ROOM_SIZE),
-                                                topLeft.y + RNG.instance.Roll(MIN_ROOM_SIZE, MAX_ROOM_SIZE));
+                Vector2Int bottomRight = new Vector2Int(topLeft.x + Roller.Roll(MIN_ROOM_SIZE, MAX_ROOM_SIZE),
+                                                topLeft.y + Roller.Roll(MIN_ROOM_SIZE, MAX_ROOM_SIZE));
 
                 if (!ValidateRoom(topLeft, bottomRight))
                     return false;
@@ -146,7 +149,7 @@ namespace JoyLib.Code.World.Generators.Interiors
 
             for (int i = 0; i < doors; i++)
             {
-                int index = RNG.instance.Roll(0, validDoors.Count - 1);
+                int index = Roller.Roll(0, validDoors.Count - 1);
 
                 Vector2Int point = new Vector2Int(validDoors[index].x, validDoors[index].y);
 
@@ -178,7 +181,7 @@ namespace JoyLib.Code.World.Generators.Interiors
             int roomArea = (int)(room.width * room.height);
             int maxDoors = (int)Math.Sqrt(roomArea);
 
-            return RNG.instance.Roll(1, maxDoors);
+            return Roller.Roll(1, maxDoors);
         }
 
         private bool CheckForRoom(Vector2Int topLeft, Vector2Int bottomRight)
@@ -240,7 +243,7 @@ namespace JoyLib.Code.World.Generators.Interiors
             if (validPoints.Count == 0)
                 return new Vector2Int(m_Tiles.GetLength(0) / 2, m_Tiles.GetLength(1) / 2);
 
-            int index = RNG.instance.Roll(0, validPoints.Count - 1);
+            int index = Roller.Roll(0, validPoints.Count - 1);
             return validPoints[index];
         }
     }

@@ -4,15 +4,29 @@ using JoyLib.Code.Rollers;
 using JoyLib.Code.States;
 using System.Collections.Generic;
 using System.Linq;
+using JoyLib.Code.Graphics;
+using JoyLib.Code.Unity;
 using UnityEngine;
 
 namespace JoyLib.Code.World.Generators.Interiors
 {
     public class DungeonItemPlacer
     {
-        protected static ItemFactory s_ItemFactory = new ItemFactory();
+        protected ItemFactory ItemFactory { get; set; }
 
-        protected static ILiveItemHandler s_ItemHandler = GlobalConstants.GameManager.ItemHandler;
+        protected ILiveItemHandler ItemHandler { get; set; }
+        
+        protected RNG Roller { get; set; }
+
+        public DungeonItemPlacer(
+            ILiveItemHandler itemHandler,
+            RNG roller,
+            ItemFactory itemFactory)
+        {
+            Roller = roller;
+            ItemHandler = itemHandler;
+            ItemFactory = itemFactory;
+        }
 
         /// <summary>
         /// Places items in the dungeon
@@ -35,16 +49,16 @@ namespace JoyLib.Code.World.Generators.Interiors
 
             for(int i = 0; i < itemsToPlace; i++)
             {
-                Vector2Int point = new Vector2Int(RNG.instance.Roll(1, worldRef.Tiles.GetLength(0) - 1), RNG.instance.Roll(1, worldRef.Tiles.GetLength(1) - 1));
+                Vector2Int point = new Vector2Int(Roller.Roll(1, worldRef.Tiles.GetLength(0) - 1), Roller.Roll(1, worldRef.Tiles.GetLength(1) - 1));
 
                 while(unavailablePoints.Contains(point))
                 {
-                    point = new Vector2Int(RNG.instance.Roll(1, worldRef.Tiles.GetLength(0) - 1), RNG.instance.Roll(1, worldRef.Tiles.GetLength(1) - 1));
+                    point = new Vector2Int(Roller.Roll(1, worldRef.Tiles.GetLength(0) - 1), Roller.Roll(1, worldRef.Tiles.GetLength(1) - 1));
                 }
 
-                ItemInstance item = s_ItemFactory.CreateCompletelyRandomItem();
+                ItemInstance item = ItemFactory.CreateCompletelyRandomItem();
                 item.MyWorld = worldRef;
-                s_ItemHandler.AddItem(item, true);
+                ItemHandler.AddItem(item, true);
                 item.Move(point);
                 placedItems.Add(item);
             }

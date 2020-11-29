@@ -1,17 +1,42 @@
 ﻿using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
 using System.Collections.Generic;
+using JoyLib.Code.Graphics;
+using JoyLib.Code.Physics;
+using JoyLib.Code.Rollers;
 
 namespace JoyLib.Code.World.Generators.Interiors
 {
-    public static class DungeonGenerator
+    public class DungeonGenerator
     {
-        public static WorldInstance GenerateDungeon(WorldInfo worldInfo, int size, int levels)
+        public WorldInstance GenerateDungeon(
+            WorldInfo worldInfo, 
+            int size, 
+            int levels, 
+            IGameManager gameManager,
+            RNG roller)
         {
-            DungeonInteriorGenerator interiorGenerator = new DungeonInteriorGenerator();
-            SpawnPointPlacer spawnPointPlacer = new SpawnPointPlacer();
-            DungeonItemPlacer itemPlacer = new DungeonItemPlacer();
-            DungeonEntityPlacer entityPlacer = new DungeonEntityPlacer();
+            DungeonInteriorGenerator interiorGenerator = new DungeonInteriorGenerator(gameManager.ObjectIconHandler, roller);
+            SpawnPointPlacer spawnPointPlacer = new SpawnPointPlacer(roller);
+            DungeonItemPlacer itemPlacer = new DungeonItemPlacer(
+                gameManager.ItemHandler, 
+                roller,
+                new ItemFactory(gameManager.ItemHandler, gameManager.ObjectIconHandler, roller));
+            
+            DungeonEntityPlacer entityPlacer = new DungeonEntityPlacer(
+                gameManager.EntityHandler, 
+                gameManager.EntityTemplateHandler, 
+                gameManager.PhysicsManager, 
+                new EntityFactory(
+                    gameManager.NeedHandler,
+                    gameManager.ObjectIconHandler,
+                    gameManager.CultureHandler,
+                    gameManager.SexualityHandler,
+                    gameManager.BioSexHandler,
+                    gameManager.GenderHandler,
+                    gameManager.RomanceHandler,
+                    gameManager.JobHandler,
+                    roller));
 
             List<string> entitiesToPlace = new List<string>();
             entitiesToPlace.AddRange(worldInfo.inhabitants);
@@ -21,7 +46,12 @@ namespace JoyLib.Code.World.Generators.Interiors
             for (int i = 1; i <= levels; i++)
             {
                 WorldTile[,] tiles = interiorGenerator.GenerateWorldSpace(size, worldInfo.tileset);
-                WorldInstance worldInstance = new WorldInstance(tiles, worldInfo.tags, worldInfo.name + " " + i);
+                WorldInstance worldInstance = new WorldInstance(
+                    tiles, 
+                    worldInfo.tags, 
+                    worldInfo.name + " " + i, 
+                    gameManager.EntityHandler, 
+                    roller);
 
                 List<JoyObject> walls = interiorGenerator.GenerateWalls(tiles);
                 foreach(JoyObject wall in walls)
@@ -31,7 +61,7 @@ namespace JoyLib.Code.World.Generators.Interiors
 
                 List<ItemInstance> items = itemPlacer.PlaceItems(worldInstance);
 
-                List<Entity> entities = entityPlacer.PlaceEntities(worldInstance, entitiesToPlace);
+                List<Entity> entities = entityPlacer.PlaceEntities(worldInstance, entitiesToPlace, roller);
                 foreach(Entity entity in entities)
                 {
                     worldInstance.AddEntity(entity);

@@ -12,24 +12,15 @@ namespace JoyLib.Code.Unity.GUI
 {
     public class JoyItemSlot : ItemSlot
     {
-        protected static IConversationEngine ConversationEngine { get; set; }
+        public static IConversationEngine ConversationEngine { get; set; }
         
-        protected static IGUIManager GUIManager { get; set; }
+        public static IGUIManager GUIManager { get; set; }
         
-        protected static GameObject ItemHolder { get; set;}
+        public static GameObject ItemHolder { get; set;}
+        
+        public static ILiveEntityHandler EntityHandler { get; set; }
         
         protected static Entity Player { get; set; }
-
-        public void Awake()
-        {
-            if (!(ConversationEngine is null))
-            {
-                return;
-            }
-            ConversationEngine = GlobalConstants.GameManager.ConversationEngine;
-            GUIManager = GlobalConstants.GameManager.GUIManager;
-            ItemHolder = GameObject.Find("WorldObjects");
-        }
 
         public override void OnPointerUp(PointerEventData eventData)
         {
@@ -55,15 +46,15 @@ namespace JoyLib.Code.Unity.GUI
 
             if (ObservedItem is null == false && ObservedItem is ItemInstance item)
             {
-                Player = GlobalConstants.GameManager.EntityHandler.GetPlayer();
+                Player = EntityHandler?.GetPlayer();
                 item.SetUser(Player);
             }
         }
 
         protected void GiveItem()
         {
-            Entity left = ConversationEngine.Instigator;
-            Entity right = ConversationEngine.Listener;
+            Entity left = ConversationEngine?.Instigator;
+            Entity right = ConversationEngine?.Listener;
 
             if (left is null || right is null)
             {
@@ -80,7 +71,7 @@ namespace JoyLib.Code.Unity.GUI
                 new string[] {"give"},
                 joyItem);
                 
-            GUIManager.CloseGUI("Inventory");
+            GUIManager?.CloseGUI("Inventory");
         }
 
         protected override void DropItem()
@@ -128,7 +119,7 @@ namespace JoyLib.Code.Unity.GUI
                 GameObject go = InventoryManager.Instantiate(prefab, position + Vector3.up * 0.3f, Quaternion.identity);
                 go.name = go.name.Replace("(Clone)", "");
                 
-                go.transform.parent = ItemHolder.transform;
+                go.transform.parent = ItemHolder?.transform;
                 go.GetComponent<ItemBehaviourHandler>().AttachJoyObject(item);
                 SpriteRenderer renderer = go.GetComponent<SpriteRenderer>(); 
                 renderer.sprite = item.Sprite;

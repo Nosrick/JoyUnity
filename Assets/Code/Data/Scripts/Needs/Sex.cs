@@ -157,7 +157,7 @@ namespace JoyLib.Code.Entities.Needs
                         EntityStatistic.CUNNING,
                         EntityStatistic.PERSONALITY });
 
-                int time = RNG.instance.Roll(5, 30);
+                int time = Roller.Roll(5, 30);
 
                 if (actor.FulfillmentData.Name.Equals(this.Name) && 
                     partner.FulfillmentData.Name.Equals(this.Name))
@@ -206,15 +206,15 @@ namespace JoyLib.Code.Entities.Needs
 
         public override INeed Randomise()
         {
-            int decay = RNG.instance.Roll(DECAY_MIN, DECAY_MAX);
-            int decayCounter = RNG.instance.Roll(0, DECAY_MAX);
-            int maxValue = RNG.instance.Roll(MAX_VALUE_MIN, MAX_VALUE_MAX);
+            int decay = Roller.Roll(DECAY_MIN, DECAY_MAX);
+            int decayCounter = Roller.Roll(0, DECAY_MAX);
+            int maxValue = Roller.Roll(MAX_VALUE_MIN, MAX_VALUE_MAX);
             return new Sex(
                 decay, 
                 decayCounter, 
                 true, 
                 PRIORITY, 
-                RNG.instance.Roll(HAPPINESS_THRESHOLD_MIN, HAPPINESS_THRESHOLD_MAX), 
+                Roller.Roll(HAPPINESS_THRESHOLD_MIN, HAPPINESS_THRESHOLD_MAX), 
                 HAPPINESS_THRESHOLD_MAX, 
                 maxValue,
                 this.FulfillingSprite);

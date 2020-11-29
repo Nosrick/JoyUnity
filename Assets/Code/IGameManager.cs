@@ -14,6 +14,7 @@ using JoyLib.Code.Entities.Sexuality;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Physics;
 using JoyLib.Code.Quests;
+using JoyLib.Code.Rollers;
 using JoyLib.Code.Unity.GUI;
 using JoyLib.Code.World;
 using UnityEngine;
@@ -44,6 +45,10 @@ namespace JoyLib.Code
         IPhysicsManager PhysicsManager { get; }
         IConversationEngine ConversationEngine { get; }
         IAbilityHandler AbilityHandler { get; }
+        RNG Roller { get; }
+        
+        EntityFactory EntityFactory { get; }
+        ItemFactory ItemFactory { get; }
         
         GameObject MyGameObject { get; }
     }

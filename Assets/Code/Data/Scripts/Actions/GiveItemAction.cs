@@ -10,16 +10,6 @@ namespace JoyLib.Code.Scripting.Actions
         public override string Name => "giveitemaction";
         public override string ActionString => "gives";
         
-        protected static IQuestTracker QuestTracker { get; set; }
-
-        public GiveItemAction()
-        {
-            if (QuestTracker is null)
-            {
-                QuestTracker = GlobalConstants.GameManager.QuestTracker;
-            }
-        }
-        
         public override bool Execute(IJoyObject[] participants, string[] tags = null, params object[] args)
         {
             ClearLastParameters();

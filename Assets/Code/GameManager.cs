@@ -23,6 +23,7 @@ using JoyLib.Code.Entities.Gender;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Entities.Romance;
+using JoyLib.Code.Helpers;
 using JoyLib.Code.Physics;
 using JoyLib.Code.Quests;
 using JoyLib.Code.Unity.GUI;
@@ -42,12 +43,14 @@ public class GameManager : MonoBehaviour, IGameManager
         }
 
         MyGameObject = this.gameObject;
+        
+        Roller = new RNG(AlgorithmsElf.ChopLong(DateTimeOffset.Now.ToUnixTimeMilliseconds()));
 
         PhysicsManager = new PhysicsManager();
 
         RelationshipHandler = new EntityRelationshipHandler();
 
-        QuestProvider = new QuestProvider(RelationshipHandler);
+        QuestProvider = new QuestProvider(RelationshipHandler, Roller);
         QuestTracker = new QuestTracker();
         
         GUIManager = new GUIManager();
@@ -55,39 +58,46 @@ public class GameManager : MonoBehaviour, IGameManager
         AbilityHandler = new AbilityHandler();
         
         MaterialHandler = new MaterialHandler();
-        ObjectIconHandler = new ObjectIconHandler();
+        ObjectIconHandler = new ObjectIconHandler(Roller);
 
         NeedHandler = new NeedHandler();
         CultureHandler = new CultureHandler();
         BioSexHandler = new EntityBioSexHandler(CultureHandler);
         SexualityHandler = new EntitySexualityHandler(CultureHandler);
         RomanceHandler = new EntityRomanceHandler(CultureHandler);
-        JobHandler = new JobHandler();
+        JobHandler = new JobHandler(Roller);
         GenderHandler = new GenderHandler();
         SkillHandler = new EntitySkillHandler(NeedHandler);
-        EntityTemplateHandler = new EntityTemplateHandler();
+        EntityTemplateHandler = new EntityTemplateHandler(SkillHandler);
         
         WorldInfoHandler = new WorldInfoHandler(ObjectIconHandler);
         
         ParameterProcessorHandler = new ParameterProcessorHandler();
         
         EntityHandler = new LiveEntityHandler();
-        ItemHandler = new LiveItemHandler();
+        ItemHandler = new LiveItemHandler(ObjectIconHandler, MaterialHandler, AbilityHandler, Roller);
+        
+        EntityFactory = new EntityFactory(
+            NeedHandler,
+            ObjectIconHandler,
+            CultureHandler,
+            SexualityHandler,
+            BioSexHandler,
+            GenderHandler,
+            RomanceHandler,
+            JobHandler,
+            Roller);
+        
+        ItemFactory = new ItemFactory(
+            ItemHandler,
+            ObjectIconHandler,
+            Roller);
         
         ConversationEngine = new ConversationEngine(RelationshipHandler, GUIManager);
-
-        InitialiseEverything();
 
         m_StateManager = new StateManager();
         
         m_StateManager.ChangeState(new CharacterCreationState());
-
-        //GameObject.Find("NeedsText").GetComponent<GUINeedsAlert>().SetPlayer(player);
-    }
-
-    protected void InitialiseEverything()
-    {
-        RNG.instance.SetSeed(DateTime.Now.Millisecond);
     }
 	
 	// Update is called once per frame
@@ -121,5 +131,9 @@ public class GameManager : MonoBehaviour, IGameManager
     public IPhysicsManager PhysicsManager { get; protected set; }
     public IConversationEngine ConversationEngine { get; protected set; }
     public IAbilityHandler AbilityHandler { get; protected set; }
+    public RNG Roller { get; protected set; }
+
+    public EntityFactory EntityFactory { get; protected set; }
+    public ItemFactory ItemFactory { get; protected set; }
     public GameObject MyGameObject { get; protected set; }
 }

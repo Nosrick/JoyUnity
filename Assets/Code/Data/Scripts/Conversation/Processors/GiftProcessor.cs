@@ -1,4 +1,5 @@
 ﻿using JoyLib.Code.Conversation.Conversations;
+using JoyLib.Code.Rollers;
 using JoyLib.Code.Unity.GUI;
 using UnityEngine;
 
@@ -16,7 +17,8 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
                 "", 
                 0, 
                 new string[] { "giveitemaction" }, 
-                Speaker.INSTIGATOR)
+                Speaker.INSTIGATOR,
+                new RNG())
         {
             if (GUIManager is null)
             {

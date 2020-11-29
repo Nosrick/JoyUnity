@@ -29,14 +29,19 @@ namespace Tests
 {
     public class QuestProviderTests
     {
-        private IGameManager container;
-
         private IQuestTracker questTracker;
 
         private IQuestProvider target;
         
         private ScriptingEngine scriptingEngine;
         private GameObject inventoryManager;
+
+        private ILiveEntityHandler EntityHandler;
+        private IEntityRelationshipHandler RelationshipHandler;
+        private IEntityTemplateHandler TemplateHandler;
+
+        private INeedHandler NeedHandler;
+        private IEntitySkillHandler SkillHandler;
 
         private WorldInstance world;
 
@@ -60,26 +65,30 @@ namespace Tests
                     canvas.transform, 
                     true);
             conversationWindow.name = "Conversation Window";
-            
-            container = new GameObject("GameManager").AddComponent<GameManager>();
-
-            GlobalConstants.GameManager = container;
 
             scriptingEngine = new ScriptingEngine();
+            
+            NeedHandler = new NeedHandler();
+            SkillHandler = new EntitySkillHandler(NeedHandler);
+            EntityHandler = new LiveEntityHandler();
+            RelationshipHandler = new EntityRelationshipHandler();
+            TemplateHandler = new EntityTemplateHandler(SkillHandler);
 
-            target = container.QuestProvider;
-            questTracker = container.QuestTracker;
+            target = new QuestProvider(RelationshipHandler, new RNG());
+            questTracker = new QuestTracker();
             
             world = new WorldInstance(
                 new WorldTile[0,0], 
                 new string[0],
-                "TESTING");
+                "TESTING",
+                EntityHandler,
+                new RNG());
         }
         
         [SetUp]
         public void SetUpEntities()
         {
-            EntityTemplate random = container.EntityTemplateHandler.Get("human");
+            EntityTemplate random = TemplateHandler.Get("human");
             IGrowingValue level = new ConcreteGrowingValue(
                 "level",
                 1,
@@ -106,7 +115,7 @@ namespace Tests
                 It.IsAny<Entity>(), It.IsAny<Entity>(), It.IsAny<IRelationship[]>()) == true);
             IJob job = Mock.Of<IJob>();
 
-            Sprite[] sprites = container.ObjectIconHandler.GetDefaultSprites();
+            Sprite[] sprites = new Sprite[0];
             
             left = new Entity(
                 random,
@@ -139,9 +148,6 @@ namespace Tests
                 new StandardDriver());
 
             left.PlayerControlled = true;
-
-            container.EntityHandler.AddEntity(left);
-            container.EntityHandler.AddEntity(right);
 
             world.AddEntity(left);
             world.AddEntity(right);
@@ -178,7 +184,6 @@ namespace Tests
         [TearDown]
         public void TearDown()
         {
-            GameObject.DestroyImmediate(container.MyGameObject);
             GameObject.DestroyImmediate(inventoryManager);
         }
     }

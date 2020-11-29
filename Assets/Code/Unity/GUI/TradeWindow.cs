@@ -28,17 +28,12 @@ namespace JoyLib.Code.Unity.GUI
         [SerializeField] protected MutableItemContainer RightInventory;
         [SerializeField] protected MutableItemContainer RightOffering;
 
-        protected IEntityRelationshipHandler RelationshipHandler { get; set; }
+        public static IEntityRelationshipHandler RelationshipHandler { get; set; }
         
         protected RectTransform RectTransform { get; set; }
 
         public void Awake()
         {
-            if (RelationshipHandler is null)
-            {
-                RelationshipHandler = GlobalConstants.GameManager.RelationshipHandler;
-            }
-
             RectTransform = this.GetComponent<RectTransform>();
 
             LeftInventory.OnAddItem += Tally;
@@ -105,13 +100,18 @@ namespace JoyLib.Code.Unity.GUI
                 rightValue += joyItem.Value;
             }
 
-            int relationshipValue = RelationshipHandler.GetHighestRelationshipValue(Right, Left);
+            int? relationshipValue = RelationshipHandler?.GetHighestRelationshipValue(Right, Left);
+
+            if (relationshipValue is null)
+            {
+                return false;
+            }
 
             if (leftValue + relationshipValue >= rightValue)
             {
                 int difference = leftValue - rightValue;
 
-                IRelationship[] relationships = RelationshipHandler.Get(new IJoyObject[] { Left, Right });
+                IRelationship[] relationships = RelationshipHandler?.Get(new IJoyObject[] { Left, Right });
                 foreach (IRelationship relationship in relationships)
                 {
                     relationship.ModifyValueOfParticipant(Left.GUID, Right.GUID, difference);

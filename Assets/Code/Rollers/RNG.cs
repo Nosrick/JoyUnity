@@ -1,19 +1,23 @@
 ﻿using System;
+using JoyLib.Code.Helpers;
 
 namespace JoyLib.Code.Rollers
 {
     public class RNG
     {
-        private static readonly Lazy<RNG> lazy = new Lazy<RNG>(() => new RNG());
-
-        public static RNG instance => lazy.Value;
-
-        private int m_Seed = 0;
-        private Random m_Roller;
+        protected int m_Seed;
+        protected Random m_Roller;
 
         public RNG()
         {
+            m_Seed = AlgorithmsElf.ChopLong(DateTime.UtcNow.ToFileTimeUtc());
             m_Roller = new Random();
+        }
+
+        public RNG(int seed)
+        {
+            m_Seed = seed;
+            m_Roller = new Random(m_Seed);
         }
 
         /// <summary>

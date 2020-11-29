@@ -48,7 +48,8 @@ namespace JoyLib.Code.World
         [NonSerialized] protected GameObject m_ObjectHolder;
         [NonSerialized] protected GameObject m_EntityHolder;
 
-        [NonSerialized] protected static ILiveEntityHandler s_EntityHandler = GlobalConstants.GameManager.EntityHandler;
+        [NonSerialized] protected ILiveEntityHandler EntityHandler;
+        [NonSerialized] protected RNG Roller;
 
         /// <summary>
         /// A template for adding stuff to later. A blank WorldInstance.
@@ -56,8 +57,15 @@ namespace JoyLib.Code.World
         /// <param name="tiles"></param>
         /// <param name="tags"></param>
         /// <param name="name"></param>
-        public WorldInstance(WorldTile[,] tiles, string[] tags, string name)
+        public WorldInstance(WorldTile[,] tiles, 
+            string[] tags, 
+            string name, 
+            ILiveEntityHandler entityHandler,
+            RNG roller)
         {
+            this.EntityHandler = entityHandler;
+            this.Roller = roller;
+            
             m_Dimensions = new Vector2Int(tiles.GetLength(0), tiles.GetLength(1));
 
             this.Name = name;
@@ -140,7 +148,7 @@ namespace JoyLib.Code.World
             m_PlayerIndex = m_Entities.FindIndex(entity => entity.PlayerControlled);
             if (m_PlayerIndex > 0 && m_PlayerIndex < m_Entities.Count)
             {
-                s_EntityHandler.SetPlayer(m_Entities[m_PlayerIndex]);
+                EntityHandler.SetPlayer(m_Entities[m_PlayerIndex]);
             }
         }
 
@@ -417,17 +425,17 @@ namespace JoyLib.Code.World
                 sentients = sentients.Where(entity => entity.GUID.Equals(Player.GUID) == false).ToList();
             }
 
-            return sentients.Count > 0 ? sentients[RNG.instance.Roll(0, sentients.Count)] : null;
+            return sentients.Count > 0 ? sentients[Roller.Roll(0, sentients.Count)] : null;
         }
 
         public Entity GetRandomSentientWorldWide()
         {
             List<WorldInstance> worlds = GetWorlds(GetOverworld());
-            int result = RNG.instance.Roll(0, worlds.Count);
+            int result = Roller.Roll(0, worlds.Count);
             Entity entity = worlds[result].GetRandomSentient();
             while (entity == null)
             {
-                result = RNG.instance.Roll(0, worlds.Count);
+                result = Roller.Roll(0, worlds.Count);
                 entity = worlds[result].GetRandomSentient();
             }
 
@@ -639,6 +647,7 @@ namespace JoyLib.Code.World
         public void AddEntity(Entity entityRef)
         {
             m_Entities.Add(entityRef);
+            EntityHandler.AddEntity(entityRef);
 
             //Initialise a new GameObject here at some point
 
@@ -662,7 +671,7 @@ namespace JoyLib.Code.World
             }
 
             CalculatePlayerIndex();
-            s_EntityHandler.Remove(entityGUID);
+            EntityHandler.Remove(entityGUID);
 
             for (int i = 0; i < m_EntityHolder.transform.childCount; i++)
             {

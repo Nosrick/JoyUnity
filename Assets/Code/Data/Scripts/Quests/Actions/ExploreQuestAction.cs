@@ -17,7 +17,9 @@ namespace JoyLib.Code.Quests
         public List<IItemInstance> Items { get; protected set; }
         public List<IJoyObject> Actors { get; protected set; }
         public List<WorldInstance> Areas { get; protected set; }
-        
+
+        public RNG Roller { get; protected set; }
+
         public ExploreQuestAction()
         {}
         
@@ -25,8 +27,10 @@ namespace JoyLib.Code.Quests
             List<IItemInstance> items,
             List<IJoyObject> actors,
             List<WorldInstance> areas,
-            IEnumerable<string> tags)
+            IEnumerable<string> tags,
+            RNG roller = null)
         {
+            Roller = roller is null ? new RNG() : roller; 
             List<string> tempTags = new List<string>();
             tempTags.Add("exploration");
             tempTags.AddRange(tags);
@@ -41,7 +45,7 @@ namespace JoyLib.Code.Quests
         {
             List<WorldInstance> worlds = overworld.GetWorlds(overworld); 
 
-            int result = RNG.instance.Roll(0, worlds.Count);
+            int result = Roller.Roll(0, worlds.Count);
 
             int breakout = 0;
 

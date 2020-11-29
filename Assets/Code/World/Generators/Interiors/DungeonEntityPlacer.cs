@@ -12,27 +12,30 @@ namespace JoyLib.Code.World.Generators.Interiors
 {
     public class DungeonEntityPlacer
     {
-        protected static IGameManager s_GameManager;
-        protected static ILiveEntityHandler s_EntityHandler;
-        protected static IEntityTemplateHandler s_EntityTemplateHandler;
+        protected RNG Roller { get; set; }
+        protected ILiveEntityHandler EntityHandler { get; set; }
+        protected IEntityTemplateHandler EntityTemplateHandler { get; set; }
+        protected IPhysicsManager PhysicsManager { get; set; }
+        protected EntityFactory EntityFactory { get; set; }
 
-        protected static IPhysicsManager s_PhysicsManager;
-
-        protected static EntityFactory s_EntityFactory = new EntityFactory();
-
-        public DungeonEntityPlacer()
+        public DungeonEntityPlacer(
+            ILiveEntityHandler entityHandler,
+            IEntityTemplateHandler templateHandler,
+            IPhysicsManager physicsManager,
+            EntityFactory entityFactory)
         {
-            s_GameManager = GlobalConstants.GameManager;
-            s_EntityHandler = s_GameManager.EntityHandler;
-            s_EntityTemplateHandler = s_GameManager.EntityTemplateHandler;
-            s_PhysicsManager = s_GameManager.PhysicsManager;
+            EntityFactory = entityFactory;
+            EntityTemplateHandler = templateHandler;
+            PhysicsManager = physicsManager;
+            EntityHandler = entityHandler;
         }
 
-        public List<Entity> PlaceEntities(WorldInstance worldRef, List<string> entityTypes)
+        public List<Entity> PlaceEntities(WorldInstance worldRef, List<string> entityTypes, RNG roller, bool makeNewRollers = true)
         {
+            Roller = roller;
             List<Entity> entities = new List<Entity>();
 
-            List<EntityTemplate> templates = s_EntityTemplateHandler.Templates;
+            List<EntityTemplate> templates = EntityTemplateHandler.Templates;
             templates = templates.Where(x => entityTypes.Contains(x.CreatureType)).ToList();
 
             int numberToPlace = (worldRef.Tiles.GetLength(0) * worldRef.Tiles.GetLength(1)) / 50;
@@ -45,7 +48,7 @@ namespace JoyLib.Code.World.Generators.Interiors
                 for (int j = 0; j < worldRef.Tiles.GetLength(1); j++)
                 {
                     Vector2Int point = new Vector2Int(i, j);
-                    if (s_PhysicsManager.IsCollision(point, point, worldRef) == PhysicsResult.None && point != worldRef.SpawnPoint)
+                    if (PhysicsManager.IsCollision(point, point, worldRef) == PhysicsResult.None && point != worldRef.SpawnPoint)
                     {
                         availablePoints.Add(point);
                     }
@@ -54,20 +57,22 @@ namespace JoyLib.Code.World.Generators.Interiors
 
             for (int i = 0; i < numberToPlace; i++)
             {
-                int pointIndex = RNG.instance.Roll(0, availablePoints.Count);
+                int pointIndex = Roller.Roll(0, availablePoints.Count);
 
-                int entityIndex = RNG.instance.Roll(0, templates.Count);
+                int entityIndex = Roller.Roll(0, templates.Count);
 
+                RNG newRoller = makeNewRollers ? new RNG() : roller; 
+                
                 IGrowingValue level = new ConcreteGrowingValue(
                     "level", 
                     1, 
                     100, 
                     0, 
                     GlobalConstants.DEFAULT_SUCCESS_THRESHOLD,
-                    new StandardRoller(), 
+                    new StandardRoller(newRoller), 
                     new NonUniqueDictionary<INeed, float>());
 
-                Entity newEntity = s_EntityFactory.CreateFromTemplate(
+                Entity newEntity = EntityFactory.CreateFromTemplate(
                     templates[entityIndex], 
                     level, 
                     availablePoints[pointIndex],
@@ -80,7 +85,7 @@ namespace JoyLib.Code.World.Generators.Interiors
                     null,
                     worldRef);
 
-                s_EntityHandler.AddEntity(newEntity);
+                EntityHandler.AddEntity(newEntity);
                 entities.Add(newEntity);
 
                 availablePoints.RemoveAt(pointIndex);

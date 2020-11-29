@@ -17,15 +17,13 @@ namespace JoyLib.Code.Entities.Items
         protected ILiveItemHandler ItemHandler { get; set; }
 
         protected IObjectIconHandler ObjectIcons { get; set; }
+        protected RNG Roller { get; set; }
 
-        public ItemFactory()
+        public ItemFactory(ILiveItemHandler itemHandler, IObjectIconHandler objectIconHandler, RNG roller)
         {
-            if(GameManager is null)
-            {
-                GameManager = GlobalConstants.GameManager;
-                ObjectIcons = GameManager.ObjectIconHandler;
-                ItemHandler = GameManager.ItemHandler;
-            }
+            ItemHandler = itemHandler;
+            ObjectIcons = objectIconHandler;
+            Roller = roller;
         }
 
         public ItemInstance CreateRandomItemOfType(string[] tags, bool identified = false)
@@ -33,7 +31,7 @@ namespace JoyLib.Code.Entities.Items
             BaseItemType[] matchingTypes = ItemHandler.FindItemsOfType(tags);
             if (matchingTypes.Length > 0)
             {
-                int result = RNG.instance.Roll(0, matchingTypes.Length);
+                int result = Roller.Roll(0, matchingTypes.Length);
                 BaseItemType itemType = matchingTypes[result];
 
                 ItemInstance itemInstance = ScriptableObject.CreateInstance<ItemInstance>(); 
@@ -47,7 +45,8 @@ namespace JoyLib.Code.Entities.Items
                         identified, 
                         ObjectIcons.GetSprites(
                             itemType.SpriteSheet,
-                            itemType.UnidentifiedName));
+                            itemType.UnidentifiedName),
+                        new RNG());
                 return itemInstance;
             }
 
@@ -77,7 +76,7 @@ namespace JoyLib.Code.Entities.Items
             }
             if (secondRound.Count > 0)
             {
-                int result = RNG.instance.Roll(0, secondRound.Count);
+                int result = Roller.Roll(0, secondRound.Count);
                 BaseItemType type = secondRound[result];
                 ItemInstance itemInstance = ScriptableObject.CreateInstance<ItemInstance>(); 
                     
@@ -90,7 +89,8 @@ namespace JoyLib.Code.Entities.Items
                         identified, 
                         ObjectIcons.GetSprites(
                             type.SpriteSheet,
-                            type.UnidentifiedName));
+                            type.UnidentifiedName),
+                        new RNG());
                     
                 return itemInstance;
             }
@@ -102,7 +102,7 @@ namespace JoyLib.Code.Entities.Items
         {
             List<BaseItemType> itemDatabase = ItemHandler.ItemDatabase;
 
-            int result = RNG.instance.Roll(0, itemDatabase.Count);
+            int result = Roller.Roll(0, itemDatabase.Count);
             BaseItemType itemType = itemDatabase[result];
             ItemInstance itemInstance = ScriptableObject.CreateInstance<ItemInstance>(); 
                 itemInstance.Initialise(
@@ -114,7 +114,8 @@ namespace JoyLib.Code.Entities.Items
                     identified, 
                     ObjectIcons.GetSprites(
                         itemType.SpriteSheet,
-                        itemType.UnidentifiedName));
+                        itemType.UnidentifiedName),
+                    new RNG());
                 
             return itemInstance;
         }

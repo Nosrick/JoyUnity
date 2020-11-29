@@ -7,16 +7,19 @@ namespace JoyLib.Code.World.Generators.Interiors
 {
     public class DungeonCorridorGenerator
     {
-        private const int LOOP_BREAK = 50;
+        protected const int LOOP_BREAK = 50;
 
-        private GeneratorTileType[,] m_Tiles;
-        private List<InteriorRoom> m_Rooms;
-        private readonly int m_CorridorBend;
+        protected GeneratorTileType[,] m_Tiles;
+        protected List<InteriorRoom> m_Rooms;
+        protected readonly int m_CorridorBend;
+        
+        protected RNG Roller { get; set; }
 
-        private const int PASSES = 3;
+        protected const int PASSES = 3;
 
-        public DungeonCorridorGenerator(GeneratorTileType[,] tilesRef, List<Rect> roomsRef, int bendRef)
+        public DungeonCorridorGenerator(GeneratorTileType[,] tilesRef, List<Rect> roomsRef, int bendRef, RNG roller)
         {
+            Roller = roller;
             m_Tiles = tilesRef;
             m_Rooms = new List<InteriorRoom>();
 
@@ -43,7 +46,7 @@ namespace JoyLib.Code.World.Generators.Interiors
                                 HasFlag(m_Tiles[j, k], GeneratorTileType.Entrance))
                                 continue;
 
-                            Tunnel(new Vector2Int(j, k), (FacingDirection)(RNG.instance.Roll(0, 4) * 2));
+                            Tunnel(new Vector2Int(j, k), (FacingDirection)(Roller.Roll(0, 4) * 2));
                         }
                     }
                 }
@@ -159,15 +162,15 @@ namespace JoyLib.Code.World.Generators.Interiors
 
         private FacingDirection ChooseTunnelDirection(FacingDirection lastDirection)
         {
-            int roll = RNG.instance.Roll(0, 100);
+            int roll = Roller.Roll(0, 100);
 
             if (roll >= m_CorridorBend)
                 return lastDirection;
 
-            roll = RNG.instance.Roll(0, 3) * 2;
+            roll = Roller.Roll(0, 4) * 2;
             while (roll == (int)lastDirection)
             {
-                roll = RNG.instance.Roll(0, 3) * 2;
+                roll = Roller.Roll(0, 4) * 2;
             }
             return (FacingDirection)roll;
         }

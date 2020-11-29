@@ -14,11 +14,14 @@ namespace JoyLib.Code.Quests
     public class QuestProvider : IQuestProvider
     {
         protected IEntityRelationshipHandler EntityRelationshipHandler { get; set; }
+        
+        protected RNG Roller { get; set; }
 
         public List<IQuestAction> Actions { get; protected set; }
 
-        public QuestProvider(IEntityRelationshipHandler entityRelationshipHandler)
+        public QuestProvider(IEntityRelationshipHandler entityRelationshipHandler, RNG roller)
         {
+            Roller = roller;
             EntityRelationshipHandler = entityRelationshipHandler;
         }
 
@@ -37,7 +40,7 @@ namespace JoyLib.Code.Quests
             int numberOfSteps = 1;
             for (int i = 0; i < numberOfSteps; i++)
             {
-                int result = RNG.instance.Roll(0, Actions.Count);
+                int result = Roller.Roll(0, Actions.Count);
                 List<IJoyObject> actors = new List<IJoyObject>();
                 actors.Add(questor);
                 actors.Add(provider);

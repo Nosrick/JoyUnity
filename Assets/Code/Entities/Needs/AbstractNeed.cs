@@ -2,6 +2,7 @@
 using JoyLib.Code.Scripting;
 using System.Collections.Generic;
 using JoyLib.Code.Graphics;
+using JoyLib.Code.Rollers;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities.Needs
@@ -11,6 +12,8 @@ namespace JoyLib.Code.Entities.Needs
         public virtual string Name => "abstractneed";
 
         public Sprite FulfillingSprite { get; protected set; }
+
+        public RNG Roller { get; protected set; }
 
         protected Dictionary<string, IJoyAction> m_CachedActions;
 
@@ -50,8 +53,10 @@ namespace JoyLib.Code.Entities.Needs
             string[] actions,
             Sprite fulfillingSprite = null,
             int averageForDayRef = 0, 
-            int averageForWeekRef = 0)
+            int averageForWeekRef = 0,
+            RNG roller = null)
         {
+            Roller = roller is null ? new RNG() : roller; 
             m_CachedActions = new Dictionary<string, IJoyAction>();
 
             IJoyAction[] standardActions = FetchStandardActions();

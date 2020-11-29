@@ -72,10 +72,14 @@ namespace JoyLib.Code.Conversation
             set;
         }
 
-        protected GameObject Window
+        public GameObject Window
         {
             get => m_Window;
-            set => m_Window = value;
+            set
+            {
+                m_Window = value;
+                SetUpUI(m_Window);
+            }
         }
 
         protected GameObject MenuItem
@@ -104,7 +108,10 @@ namespace JoyLib.Code.Conversation
         
         protected IEntityRelationshipHandler RelationshipHandler { get; set; }
 
-        public ConversationEngine(IEntityRelationshipHandler relationshipHandler, IGUIManager guiManager)
+        public ConversationEngine(
+            IEntityRelationshipHandler relationshipHandler, 
+            IGUIManager guiManager,
+            GameObject window = null)
         {
             RelationshipHandler = relationshipHandler;
                 
@@ -112,8 +119,20 @@ namespace JoyLib.Code.Conversation
             
             m_CurrentTopics = new List<ITopic>();
 
-            Window = Window is null ? GameObject.Find("Conversation Window") : Window;
+            this.GUIManager = guiManager;
 
+            if (window is null == false)
+            {
+                SetUpUI(window);
+            }
+            
+            MenuList = new List<ConversationMenu>();
+        }
+
+        protected void SetUpUI(GameObject window)
+        {
+            m_Window = window;
+                
             Transform title = Window.FindChild("Conversation Title", true).transform;
             TitleRect = title.GetComponent<RectTransform>();
             ListenerSection = TitleRect.gameObject.transform.Find("Listener Section").GetComponent<RectTransform>();
@@ -122,10 +141,6 @@ namespace JoyLib.Code.Conversation
             LastSpokeName = listenerSection.Find("Listener Name").GetComponent<TextMeshProUGUI>();
             LastSpokeIcon = listenerSection.Find("Listener Icon").GetComponent<Image>();
             MenuItem = Window.FindChild("Topic Item", true);
-            
-            MenuList = new List<ConversationMenu>();
-
-            this.GUIManager = guiManager;
         }
 
         protected List<ITopic> LoadTopics()
@@ -202,6 +217,7 @@ namespace JoyLib.Code.Conversation
                                     priority,
                                     actions,
                                     speakerEnum,
+                                    null,
                                     link));
                             }
                         }
@@ -215,6 +231,7 @@ namespace JoyLib.Code.Conversation
                                     priority,
                                     actions,
                                     speakerEnum,
+                                    null,
                                     link));
                         }
                     }
