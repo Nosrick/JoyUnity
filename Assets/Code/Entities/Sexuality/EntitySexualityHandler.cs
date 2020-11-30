@@ -11,20 +11,17 @@ namespace JoyLib.Code.Entities.Sexuality
     {
         protected Dictionary<string, ISexuality> m_Sexualities;
 
-        protected ICultureHandler CultureHandler { get; set; }
-
-        public EntitySexualityHandler(ICultureHandler cultureHandler)
+        public EntitySexualityHandler()
         {
-            CultureHandler = cultureHandler;
             Initialise();
         }
 
         protected void Initialise()
         {
-            Load(CultureHandler.Cultures);
+            Load();
         }
 
-        protected bool Load(ICulture[] cultures)
+        protected bool Load()
         {
             if (m_Sexualities != null)
             {
@@ -33,20 +30,11 @@ namespace JoyLib.Code.Entities.Sexuality
 
             m_Sexualities = new Dictionary<string, ISexuality>();
 
-            foreach (CultureType culture in cultures)
+            ISexuality[] sexualities = ScriptingEngine.instance.FetchAndInitialiseChildren<ISexuality>();
+
+            foreach (ISexuality sexuality in sexualities)
             {
-                foreach (string sexuality in culture.Sexualities)
-                {
-                    if (m_Sexualities.ContainsKey(sexuality) == false)
-                    {
-                        Type type = ScriptingEngine.instance.FetchType(sexuality);
-                        if (!(type is null))
-                        {
-                            ISexuality sexualityInstance = (ISexuality)Activator.CreateInstance(type);
-                            m_Sexualities.Add(sexuality, sexualityInstance);
-                        }
-                    }
-                }
+                m_Sexualities.Add(sexuality.Name, sexuality);
             }
 
             return true;

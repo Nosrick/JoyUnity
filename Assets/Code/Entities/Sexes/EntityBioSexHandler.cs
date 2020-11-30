@@ -11,30 +11,18 @@ namespace JoyLib.Code.Entities.Sexes
     {
         protected Dictionary<string, IBioSex> m_Sexes;
 
-        protected ICultureHandler CultureHandler
+        public EntityBioSexHandler()
         {
-            get;
-            set;
-        }
-
-        public EntityBioSexHandler(ICultureHandler cultureHandler)
-        {
-            this.CultureHandler = cultureHandler;
             Initialise();
         }
 
         protected void Initialise()
         {
-            Load(CultureHandler.Cultures);
+            Load();
         }
 
-        protected bool Load(ICulture[] cultures)
+        protected bool Load()
         {
-            if (CultureHandler is null)
-            {
-                Initialise();
-            }
-            
             if(!(m_Sexes is null))
             {
                 return true;
@@ -53,11 +41,6 @@ namespace JoyLib.Code.Entities.Sexes
 
         public IBioSex Get(string name)
         {
-            if (CultureHandler is null)
-            {
-                Initialise();
-            }
-
             if(m_Sexes.Any(sex => sex.Key.Equals(name, StringComparison.OrdinalIgnoreCase)))
             {
                 return m_Sexes.First(sex => sex.Key.Equals(name, StringComparison.OrdinalIgnoreCase)).Value;
@@ -69,10 +52,6 @@ namespace JoyLib.Code.Entities.Sexes
         {
             get
             {
-                if(CultureHandler is null)
-                {
-                    Initialise();
-                }
                 return m_Sexes.Values.ToArray();
             }
         }

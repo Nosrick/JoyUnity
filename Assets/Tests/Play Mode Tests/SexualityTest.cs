@@ -34,33 +34,23 @@ namespace Tests
     {
         private ScriptingEngine scriptingEngine;
 
-        private ILiveEntityHandler EntityHandler;
         private IEntityRelationshipHandler RelationshipHandler;
-        private IEntityTemplateHandler TemplateHandler;
-
-        private INeedHandler NeedHandler;
-        private IEntitySkillHandler SkillHandler;
-        private ICultureHandler CultureHandler;
-
-        private WorldInstance world;
-
-        private GameObject inventoryManager;
 
         private IEntitySexualityHandler target;
         
-        private Entity heteroMaleHuman;
-        private Entity heterofemaleHuman;
+        private IEntity heteroMaleHuman;
+        private IEntity heterofemaleHuman;
 
-        private Entity homoMaleHumanLeft;
-        private Entity homoMaleHumanRight;
+        private IEntity homoMaleHumanLeft;
+        private IEntity homoMaleHumanRight;
 
-        private Entity homofemaleHumanLeft;
-        private Entity homofemaleHumanRight;
+        private IEntity homofemaleHumanLeft;
+        private IEntity homofemaleHumanRight;
 
-        private Entity biMaleHuman;
-        private Entity bifemaleHuman;
+        private IEntity biMaleHuman;
+        private IEntity bifemaleHuman;
 
-        private Entity asexualMaleHuman;
+        private IEntity asexualMaleHuman;
 
         private ISexuality heterosexual;
         private ISexuality homosexual;
@@ -70,25 +60,10 @@ namespace Tests
         [SetUp]
         public void SetUp()
         {
-            inventoryManager = new GameObject();
-            inventoryManager.AddComponent<InventoryManager>();
-
             scriptingEngine = new ScriptingEngine();
             
-            NeedHandler = new NeedHandler();
-            SkillHandler = new EntitySkillHandler(NeedHandler);
-            EntityHandler = new LiveEntityHandler();
+            target = new EntitySexualityHandler();
             RelationshipHandler = new EntityRelationshipHandler();
-            TemplateHandler = new EntityTemplateHandler(SkillHandler);
-
-            CultureHandler = new CultureHandler();
-            
-            world = new WorldInstance(
-                new WorldTile[0,0],
-                new string[0], 
-                "TEST",
-                EntityHandler,
-                new RNG());
         }
 
         [SetUp]
@@ -104,162 +79,54 @@ namespace Tests
             IGender femaleGender = Mock.Of<IGender>(gender => gender.Name == "female");
             IGender maleGender = Mock.Of<IGender>(gender => gender.Name == "male");
 
-            IJob job = Mock.Of<IJob>();
-
-            IRomance aromantic = Mock.Of<IRomance>();
-
-            List<ICulture> cultures = CultureHandler.GetByCreatureType("human");
-
             heterosexual = target.Get("heterosexual");
             homosexual = target.Get("homosexual");
             bisexual = target.Get("bisexual");
             asexual = target.Get("asexual");
 
-            IGrowingValue level = Mock.Of<IGrowingValue>();
-            EntityTemplate humanTemplate = TemplateHandler.Get("human");
+            heterofemaleHuman = Mock.Of<IEntity>(
+                entity => entity.Gender == femaleGender
+                && entity.Sexuality == heterosexual);
 
-            heterofemaleHuman = new Entity(
-                humanTemplate,
-                new BasicValueContainer<INeed>(),
-                cultures,
-                level,
-                job,
-                femaleGender,
-                femaleSex,
-                heterosexual,
-                aromantic,
-                Vector2Int.zero,
-                new Sprite[0], 
-                world,
-                new StandardDriver());
+            heteroMaleHuman = Mock.Of<IEntity>(
+                entity => entity.Gender == maleGender
+                          && entity.Sexuality == heterosexual);
 
-            heteroMaleHuman = new Entity(
-                humanTemplate,
-                new BasicValueContainer<INeed>(),
-                cultures,
-                level,
-                job,
-                maleGender,
-                maleSex,
-                heterosexual,
-                aromantic,
-                Vector2Int.zero,
-                new Sprite[0], 
-                world,
-                new StandardDriver());
+            homoMaleHumanLeft = Mock.Of<IEntity>(
+                entity => entity.Gender == maleGender
+                          && entity.Sexuality == homosexual);
 
-            homoMaleHumanLeft = new Entity(
-                humanTemplate,
-                new BasicValueContainer<INeed>(),
-                cultures,
-                level,
-                job,
-                maleGender,
-                maleSex,
-                homosexual,
-                aromantic,
-                Vector2Int.zero,
-                new Sprite[0], 
-                world,
-                new StandardDriver());
+            homoMaleHumanRight = Mock.Of<IEntity>(
+                entity => entity.Gender == maleGender
+                          && entity.Sexuality == homosexual);
 
-            homoMaleHumanRight = new Entity(
-                humanTemplate,
-                new BasicValueContainer<INeed>(),
-                cultures,
-                level,
-                job,
-                maleGender,
-                maleSex,
-                homosexual,
-                aromantic,
-                Vector2Int.zero,
-                new Sprite[0], 
-                world,
-                new StandardDriver());
+            homofemaleHumanLeft = Mock.Of<IEntity>(
+                entity => entity.Gender == femaleGender
+                          && entity.Sexuality == homosexual);
 
-            homofemaleHumanLeft = new Entity(
-                humanTemplate,
-                new BasicValueContainer<INeed>(),
-                cultures,
-                level,
-                job,
-                femaleGender,
-                femaleSex,
-                homosexual,
-                aromantic,
-                Vector2Int.zero,
-                new Sprite[0], 
-                world,
-                new StandardDriver());
+            homofemaleHumanRight = Mock.Of<IEntity>(
+                entity => entity.Gender == femaleGender
+                          && entity.Sexuality == homosexual);
 
-            homofemaleHumanRight = new Entity(
-                humanTemplate,
-                new BasicValueContainer<INeed>(),
-                cultures,
-                level,
-                job,
-                femaleGender,
-                femaleSex,
-                homosexual,
-                aromantic,
-                Vector2Int.zero,
-                new Sprite[0], 
-                world,
-                new StandardDriver());
+            biMaleHuman = Mock.Of<IEntity>(
+                entity => entity.Gender == maleGender
+                          && entity.Sexuality == bisexual);
 
-            biMaleHuman = new Entity(
-                humanTemplate,
-                new BasicValueContainer<INeed>(),
-                cultures,
-                level,
-                job,
-                maleGender,
-                maleSex,
-                bisexual,
-                aromantic,
-                Vector2Int.zero,
-                new Sprite[0], 
-                world,
-                new StandardDriver());
+            bifemaleHuman = Mock.Of<IEntity>(
+                entity => entity.Gender == femaleGender
+                          && entity.Sexuality == bisexual);
 
-            bifemaleHuman = new Entity(
-                humanTemplate,
-                new BasicValueContainer<INeed>(),
-                cultures,
-                level,
-                job,
-                femaleGender,
-                femaleSex,
-                bisexual,
-                aromantic,
-                Vector2Int.zero,
-                new Sprite[0], 
-                world,
-                new StandardDriver());
-
-            asexualMaleHuman = new Entity(
-                humanTemplate,
-                new BasicValueContainer<INeed>(),
-                cultures,
-                level,
-                job,
-                maleGender,
-                maleSex,
-                asexual,
-                aromantic,
-                Vector2Int.zero,
-                new Sprite[0], 
-                world,
-                new StandardDriver());
+            asexualMaleHuman = Mock.Of<IEntity>(
+                entity => entity.Gender == maleGender
+                          && entity.Sexuality == asexual);
 
 
-            Entity[] heteroCouple = new Entity[] { heterofemaleHuman, heteroMaleHuman };
-            Entity[] homofemaleCouple = new Entity[] { homofemaleHumanLeft, homofemaleHumanRight };
-            Entity[] homoMaleCouple = new Entity[] { homoMaleHumanLeft, homoMaleHumanRight };
-            Entity[] biCoupleLeft = new Entity[] { bifemaleHuman, homofemaleHumanLeft };
-            Entity[] biCoupleRight = new Entity[] { bifemaleHuman, biMaleHuman };
-            Entity[] asexualCouple = new[] {asexualMaleHuman, bifemaleHuman};
+            IEntity[] heteroCouple = new IEntity[] { heterofemaleHuman, heteroMaleHuman };
+            IEntity[] homofemaleCouple = new IEntity[] { homofemaleHumanLeft, homofemaleHumanRight };
+            IEntity[] homoMaleCouple = new IEntity[] { homoMaleHumanLeft, homoMaleHumanRight };
+            IEntity[] biCoupleLeft = new IEntity[] { bifemaleHuman, homofemaleHumanLeft };
+            IEntity[] biCoupleRight = new IEntity[] { bifemaleHuman, biMaleHuman };
+            IEntity[] asexualCouple = new IEntity[] {asexualMaleHuman, bifemaleHuman};
 
             RelationshipHandler.CreateRelationshipWithValue(heteroCouple, "monoamorous", 500);
             RelationshipHandler.CreateRelationshipWithValue(homofemaleCouple, "monoamorous", 500);
@@ -342,7 +209,6 @@ namespace Tests
         [TearDown]
         public void TearDown()
         {
-            GameObject.DestroyImmediate(inventoryManager);
         }
     }
 }

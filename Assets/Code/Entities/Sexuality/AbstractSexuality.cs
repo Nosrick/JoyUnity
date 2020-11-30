@@ -15,16 +15,10 @@ namespace JoyLib.Code.Entities.Sexuality
         public virtual int MatingThreshold { get; set; }
         
         public List<string> Tags { get; protected set; }
-        
-        protected static IEntitySexualityHandler s_SexualityHandler;
 
         public AbstractSexuality()
         {
             Tags = new List<string>();
-            if(s_SexualityHandler is null)
-            {
-                s_SexualityHandler = GlobalConstants.GameManager.SexualityHandler;
-            }
         }
         
         public bool HasTag(string tag)
