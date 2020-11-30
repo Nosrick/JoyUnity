@@ -75,7 +75,7 @@ namespace JoyLib.Code.Entities.Needs
         }
 
         //This is to do with others, so look for something to do
-        public override bool FindFulfilmentObject(Entity actor)
+        public override bool FindFulfilmentObject(IEntity actor)
         {
             INeed[] needs = actor.Needs.Where(need => 
                 need.Name.Equals("family", StringComparison.OrdinalIgnoreCase)
@@ -103,7 +103,7 @@ namespace JoyLib.Code.Entities.Needs
             return chosenNeed.FindFulfilmentObject(actor);
         }
 
-        public override bool Interact(Entity actor, IJoyObject obj)
+        public override bool Interact(IEntity actor, IJoyObject obj)
         {
             return false;
         }

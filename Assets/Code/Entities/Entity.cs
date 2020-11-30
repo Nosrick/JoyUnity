@@ -129,7 +129,7 @@ namespace JoyLib.Code.Entities
             List<IItemInstance> backpack,
             List<string> identifiedItems,
             Dictionary<string, int> jobLevels,
-            WorldInstance world,
+            IWorldInstance world,
             IDriver driver,
             RNG roller = null) :
             base("",
@@ -237,7 +237,7 @@ namespace JoyLib.Code.Entities
             IRomance romance,
             Vector2Int position,
             Sprite[] sprites,
-            WorldInstance world,
+            IWorldInstance world,
             IDriver driver,
             RNG roller = null) :
             this(template, needs, cultures, level, 0, job, gender, sex, sexuality, romance, position, sprites,
@@ -246,7 +246,7 @@ namespace JoyLib.Code.Entities
         {
         }
 
-        protected Entity(Entity copy) :
+        protected Entity(IEntity copy) :
             base(
                 copy.JoyName,
                 copy.DerivedValues,
@@ -257,36 +257,36 @@ namespace JoyLib.Code.Entities
                 copy.Tags.ToArray())
         {
             this.CreatureType = copy.CreatureType;
-            this.m_Slots = copy.m_Slots;
+            this.m_Slots = copy.Slots;
 
             this.m_Size = copy.Size;
 
             this.m_JobLevels = copy.JobLevels;
-            this.m_IdentifiedItems = copy.m_IdentifiedItems;
+            this.m_IdentifiedItems = copy.IdentifiedItems;
             this.m_Statistics = copy.Statistics;
 
             this.m_Skills = copy.Skills;
 
             this.m_Needs = copy.Needs;
-            this.m_Abilities = copy.m_Abilities;
-            this.m_Level = copy.m_Level;
+            this.m_Abilities = copy.Abilities;
+            this.m_Level = copy.Level;
             for (int i = 1; i < this.m_Level.Value; i++)
             {
                 this.LevelUp();
             }
 
-            this.m_CurrentJob = copy.Job;
+            this.m_CurrentJob = copy.CurrentJob;
 
-            this.m_NaturalWeapons = copy.m_NaturalWeapons;
-            this.m_Equipment = copy.m_Equipment;
-            this.m_Backpack = copy.m_Backpack;
+            this.m_NaturalWeapons = copy.NaturalWeapons;
+            this.m_Equipment = copy.Equipment;
+            this.m_Backpack = copy.Backpack;
             this.Gender = copy.Gender;
             this.Sex = copy.Sex;
             this.Sexuality = copy.Sexuality;
             this.Romance = copy.Romance;
-            this.m_VisionProvider = copy.m_VisionProvider;
+            this.m_VisionProvider = copy.VisionProvider;
 
-            this.m_Cultures = copy.m_Cultures;
+            this.m_Cultures = copy.Cultures;
 
             this.CalculateDerivatives();
 
@@ -302,7 +302,7 @@ namespace JoyLib.Code.Entities
 
             this.MyWorld = copy.MyWorld;
 
-            this.m_Driver = copy.m_Driver;
+            this.m_Driver = copy.Driver;
 
             SetCurrentTarget();
         }

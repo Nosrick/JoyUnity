@@ -20,7 +20,7 @@ namespace JoyLib.Code
         
         RNG Roller { get; }
         
-        WorldInstance MyWorld { get; set; }
+        IWorldInstance MyWorld { get; set; }
         
         MonoBehaviourHandler MonoBehaviourHandler { get; }
         

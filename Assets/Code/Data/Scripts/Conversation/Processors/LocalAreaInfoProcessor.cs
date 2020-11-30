@@ -52,7 +52,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
         {
             string message = "";
 
-            WorldInstance listenerWorld = listener.MyWorld;
+            IWorldInstance listenerWorld = listener.MyWorld;
             if (listenerWorld.HasTag("interior"))
             {
                 int result = Roller.Roll(0, 100);

@@ -130,7 +130,7 @@ namespace JoyLib.Code.States
             IGrowingValue level = new ConcreteGrowingValue("level", 1, 100, 0, GlobalConstants.DEFAULT_SUCCESS_THRESHOLD,
                 new StandardRoller(GlobalConstants.GameManager.Roller), new NonUniqueDictionary<INeed, float>());
 
-            Entity temp = GlobalConstants.GameManager.EntityFactory.CreateFromTemplate(
+            IEntity temp = GlobalConstants.GameManager.EntityFactory.CreateFromTemplate(
                 humanTemplate,
                 level,
                 new UnityEngine.Vector2Int(-1, -1),
@@ -145,7 +145,7 @@ namespace JoyLib.Code.States
 
             m_Player.PlayerControlled = true;
             
-            ItemInstance light = GlobalConstants.GameManager.ItemFactory.CreateRandomItemOfType(new string[] {"light source"}, true);
+            IItemInstance light = GlobalConstants.GameManager.ItemFactory.CreateRandomItemOfType(new string[] {"light source"}, true);
             m_Player.AddContents(light);
         }
 

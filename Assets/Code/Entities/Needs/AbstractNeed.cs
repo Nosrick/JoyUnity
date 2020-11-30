@@ -93,7 +93,7 @@ namespace JoyLib.Code.Entities.Needs
             }
         }
 
-        public abstract bool FindFulfilmentObject(Entity actor);
+        public abstract bool FindFulfilmentObject(IEntity actor);
 
         public abstract INeed Copy();
 
@@ -128,7 +128,7 @@ namespace JoyLib.Code.Entities.Needs
             return m_Value;
         }
 
-        public abstract bool Interact(Entity actor, IJoyObject obj);
+        public abstract bool Interact(IEntity actor, IJoyObject obj);
 
         public int SetValue(int value)
         {

@@ -6,17 +6,17 @@ namespace JoyLib.Code.Entities.AI.LOS
 {
     public abstract class AbstractFOVHandler : IFOVHandler
     {
-        public virtual bool HasVisibility(Entity viewer, WorldInstance world, Vector2Int point, bool[,] vision)
+        public virtual bool HasVisibility(IEntity viewer, IWorldInstance world, Vector2Int point, bool[,] vision)
         {
             return viewer.VisionProvider.HasVisibility(viewer, world, point, vision);
         }
 
-        public virtual bool HasVisibility(Entity viewer, WorldInstance world, int x, int y, bool[,] vision)
+        public virtual bool HasVisibility(IEntity viewer, IWorldInstance world, int x, int y, bool[,] vision)
         {
             return viewer.VisionProvider.HasVisibility(viewer, world, x, y, vision);
         }
 
-        public virtual IFOVBoard Do(Entity viewer, WorldInstance world, Vector2Int dimensions, Vector2Int[] walls)
+        public virtual IFOVBoard Do(IEntity viewer, IWorldInstance world, Vector2Int dimensions, Vector2Int[] walls)
         {
             throw new System.NotImplementedException("Someone forgot to implement Do()");
         }

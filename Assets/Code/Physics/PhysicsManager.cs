@@ -6,12 +6,12 @@ namespace JoyLib.Code.Physics
 {
     public interface IPhysicsManager
     {
-        PhysicsResult IsCollision(Vector2Int from, Vector2Int to, WorldInstance worldRef);
+        PhysicsResult IsCollision(Vector2Int from, Vector2Int to, IWorldInstance worldRef);
     }
 
     public class PhysicsManager : IPhysicsManager
     {
-        public PhysicsResult IsCollision(Vector2Int from, Vector2Int to, WorldInstance worldRef)
+        public PhysicsResult IsCollision(Vector2Int @from, Vector2Int to, IWorldInstance worldRef)
         {
             IEntity tempEntity = worldRef.GetEntity(to);
             if (tempEntity != null && from != to)

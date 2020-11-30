@@ -93,15 +93,15 @@ namespace JoyLib.Code.Entities.Needs
                 this.m_AverageForWeek);
         }
 
-        public override bool FindFulfilmentObject(Entity actor)
+        public override bool FindFulfilmentObject(IEntity actor)
         {
             IEnumerable<string> tags = actor.Tags.Where(x => x.Contains("sentient"));
 
-            List<Entity> possibleMates = actor.MyWorld.SearchForEntities(actor, tags).ToList();
+            List<IEntity> possibleMates = actor.MyWorld.SearchForEntities(actor, tags).ToList();
 
-            Entity bestMate = null;
+            IEntity bestMate = null;
             int bestRelationship = actor.Sexuality.MatingThreshold;
-            foreach (Entity mate in possibleMates)
+            foreach (IEntity mate in possibleMates)
             {
                 List<IJoyObject> participants = new List<IJoyObject>();
                 participants.Add(actor);
@@ -138,9 +138,9 @@ namespace JoyLib.Code.Entities.Needs
             }
         }
 
-        public override bool Interact(Entity actor, IJoyObject obj)
+        public override bool Interact(IEntity actor, IJoyObject obj)
         {
-            if (!(obj is Entity partner))
+            if (!(obj is IEntity partner))
             {
                 return false;
             }
@@ -151,7 +151,7 @@ namespace JoyLib.Code.Entities.Needs
                     new string[] { "sexual" })))
             {
                 int satisfaction = CalculateSatisfaction(
-                    new Entity[] { actor, partner },
+                    new IEntity[] { actor, partner },
                     new string[] {
                         EntityStatistic.ENDURANCE,
                         EntityStatistic.CUNNING,
@@ -183,11 +183,11 @@ namespace JoyLib.Code.Entities.Needs
             return true;
         }
 
-        protected int CalculateSatisfaction(IEnumerable<Entity> participants, IEnumerable<string> tags)
+        protected int CalculateSatisfaction(IEnumerable<IEntity> participants, IEnumerable<string> tags)
         {
             int satisfaction = 0;
             int total = 0;
-            foreach (Entity participant in participants)
+            foreach (IEntity participant in participants)
             {
                 Tuple<string, int>[] data = participant.GetData(tags.ToArray());
                 int subTotal = 0;

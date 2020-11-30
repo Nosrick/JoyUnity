@@ -47,8 +47,8 @@ namespace JoyLib.Code
         IAbilityHandler AbilityHandler { get; }
         RNG Roller { get; }
         
-        EntityFactory EntityFactory { get; }
-        ItemFactory ItemFactory { get; }
+        IEntityFactory EntityFactory { get; }
+        IItemFactory ItemFactory { get; }
         
         GameObject MyGameObject { get; }
         

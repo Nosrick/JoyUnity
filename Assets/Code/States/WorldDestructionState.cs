@@ -5,10 +5,10 @@ namespace JoyLib.Code.States
 {
     public class WorldDestructionState : GameState
     {
-        protected WorldInstance m_OverWorld;
-        protected WorldInstance m_NextWorld;
+        protected IWorldInstance m_OverWorld;
+        protected IWorldInstance m_NextWorld;
 
-        public WorldDestructionState(WorldInstance overworld, WorldInstance nextWorld)
+        public WorldDestructionState(IWorldInstance overworld, IWorldInstance nextWorld)
         {
             m_OverWorld = overworld;
             m_NextWorld = nextWorld;

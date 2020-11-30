@@ -16,7 +16,7 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
             Algorithm = algorithm;
         }
 
-        public virtual bool CanSee(Entity viewer, WorldInstance world, int x, int y)
+        public virtual bool CanSee(IEntity viewer, IWorldInstance world, int x, int y)
         {
             if (m_Vision is null)
             {
@@ -25,28 +25,28 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
             return m_Vision[x, y];
         }
 
-        public virtual bool CanSee(Entity viewer, WorldInstance world, Vector2Int point)
+        public virtual bool CanSee(IEntity viewer, IWorldInstance world, Vector2Int point)
         {
             return CanSee(viewer, world, point.x, point.y);
         }
 
-        public virtual bool HasVisibility(Entity viewer, WorldInstance world, int x, int y, bool[,] vision)
+        public virtual bool HasVisibility(IEntity viewer, IWorldInstance world, int x, int y, bool[,] vision)
         {
             return CanSee(viewer, world, x, y);
         }
 
-        public virtual bool HasVisibility(Entity viewer, WorldInstance world, Vector2Int point, bool[,] vision)
+        public virtual bool HasVisibility(IEntity viewer, IWorldInstance world, Vector2Int point, bool[,] vision)
         {
             return CanSee(viewer, world, point.x, point.y);
         }
 
-        public virtual RectInt GetFullVisionRect(Entity viewer)
+        public virtual RectInt GetFullVisionRect(IEntity viewer)
         {
-            RectInt visionRect = new RectInt(0, 0, viewer.Vision.GetLength(0), viewer.Vision.GetLength(1));
+            RectInt visionRect = new RectInt(0, 0, viewer.VisionProvider.Vision.GetLength(0), viewer.VisionProvider.Vision.GetLength(1));
             return visionRect;
         }
 
-        public virtual Vector2Int[] GetVisibleWalls(Entity viewer, WorldInstance world)
+        public virtual Vector2Int[] GetVisibleWalls(IEntity viewer, IWorldInstance world)
         {
             Vector2Int[] visibleWalls = viewer.MyWorld.Walls.Where(
                 wall => viewer.VisionProvider.CanSee(viewer, world, wall.Key))
@@ -54,13 +54,13 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
             return visibleWalls;
         }
 
-        public virtual RectInt GetVisionRect(Entity viewer)
+        public virtual RectInt GetVisionRect(IEntity viewer)
         {
             RectInt visionRect = new RectInt(viewer.WorldPosition, new Vector2Int(viewer.VisionMod * 2 + 1, viewer.VisionMod * 2 + 1));
             return visionRect;
         }
 
-        public virtual void Update(Entity viewer, WorldInstance world)
+        public virtual void Update(IEntity viewer, IWorldInstance world)
         {
             throw new NotImplementedException("Someone forgot to implement Update()");
         }

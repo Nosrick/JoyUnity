@@ -17,7 +17,7 @@ namespace JoyLib.Code.Quests
             IQuestAction action, 
             List<IItemInstance> objects, 
             List<IJoyObject> actors,
-            List<WorldInstance> areas,
+            List<IWorldInstance> areas,
             IEnumerable<string> tags)
         {
             this.Action = action;
@@ -50,7 +50,7 @@ namespace JoyLib.Code.Quests
             protected set;
         }
 
-        public List<WorldInstance> Areas
+        public List<IWorldInstance> Areas
         {
             get;
             protected set;

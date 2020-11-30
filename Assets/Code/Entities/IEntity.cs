@@ -11,6 +11,7 @@ using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Jobs;
 using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Romance;
+using JoyLib.Code.Entities.Sexes;
 using JoyLib.Code.Entities.Sexuality;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Quests;
@@ -28,6 +29,7 @@ namespace JoyLib.Code.Entities
         NonUniqueDictionary<string, IItemInstance> Equipment { get; }
         List<IItemInstance> Backpack { get; }
         IItemInstance NaturalWeapons { get; }
+        IBioSex Sex { get; }
         ISexuality Sexuality { get; }
         IRomance Romance { get; }
         
@@ -44,7 +46,7 @@ namespace JoyLib.Code.Entities
         
         IVision VisionProvider { get; }
         FulfillmentData FulfillmentData { get; }
-        NeedAIData CurrentTarget { get; }
+        NeedAIData CurrentTarget { get; set;  }
         IDriver Driver { get; }
         IPathfinder Pathfinder { get; }
         Queue<Vector2Int> PathfindingData { get; }

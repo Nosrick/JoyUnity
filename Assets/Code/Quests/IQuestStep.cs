@@ -10,7 +10,7 @@ namespace JoyLib.Code.Quests
         IQuestAction Action { get; }
         List<IItemInstance> Items { get; }
         List<IJoyObject> Actors { get; }
-        List<WorldInstance> Areas { get; }
+        List<IWorldInstance> Areas { get; }
 
         void StartQuest(IEntity questor);
     }

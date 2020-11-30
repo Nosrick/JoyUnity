@@ -6,11 +6,11 @@ namespace JoyLib.Code.Quests
 {
     public interface IQuestProvider
     {
-        IQuest MakeRandomQuest(IEntity questor, IEntity provider, WorldInstance overworldRef);
+        IQuest MakeRandomQuest(IEntity questor, IEntity provider, IWorldInstance overworldRef);
 
-        IQuest MakeQuestOfType(IEntity questor, IEntity provider, WorldInstance overworldRef, string[] tags);
+        IQuest MakeQuestOfType(IEntity questor, IEntity provider, IWorldInstance overworldRef, string[] tags);
 
-        IEnumerable<IQuest> MakeOneOfEachType(IEntity questor, IEntity provider, WorldInstance overworldRef);
+        IEnumerable<IQuest> MakeOneOfEachType(IEntity questor, IEntity provider, IWorldInstance overworldRef);
 
         List<IQuestAction> Actions { get; }
     }

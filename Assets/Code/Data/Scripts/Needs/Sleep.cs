@@ -59,7 +59,7 @@ namespace JoyLib.Code.Entities.Needs
         {
         }
 
-        public override bool FindFulfilmentObject(Entity actor)
+        public override bool FindFulfilmentObject(IEntity actor)
         {
             Dictionary<Vector2Int, IJoyObject> objects = actor.MyWorld.GetObjectsOfType(new [] {"bed", "sleep"});
             
@@ -82,7 +82,7 @@ namespace JoyLib.Code.Entities.Needs
 
         }
 
-        public override bool Interact(Entity actor, IJoyObject obj)
+        public override bool Interact(IEntity actor, IJoyObject obj)
         {
             if (!(obj is ItemInstance item))
             {

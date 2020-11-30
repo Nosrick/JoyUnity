@@ -18,7 +18,7 @@ using UnityEngine;
 
 namespace JoyLib.Code.Entities
 {
-    public class EntityFactory
+    public class EntityFactory : IEntityFactory
     {
         protected INeedHandler NeedHandler { get; set; }
 
@@ -60,7 +60,7 @@ namespace JoyLib.Code.Entities
             GenderHandler = genderHandler;
         }
 
-        public Entity CreateFromTemplate(
+        public IEntity CreateFromTemplate(
             EntityTemplate template,
             IGrowingValue level,
             Vector2Int position,
@@ -71,7 +71,7 @@ namespace JoyLib.Code.Entities
             IRomance romance = null,
             IJob job = null,
             Sprite[] sprites = null,
-            WorldInstance world = null,
+            IWorldInstance world = null,
             IDriver driver = null)
         {
             IJob selectedJob = job;
@@ -138,7 +138,7 @@ namespace JoyLib.Code.Entities
                 selectedDriver = new StandardDriver();
             }
 
-            Entity entity = new Entity(
+            IEntity entity = new Entity(
                 template, 
                 needs, 
                 creatureCultures, 
@@ -157,7 +157,7 @@ namespace JoyLib.Code.Entities
             return entity;
         }
 
-        public Entity CreateLong(
+        public IEntity CreateLong(
             EntityTemplate template,
             BasicValueContainer<INeed> needs,
             IGrowingValue level,
@@ -174,7 +174,7 @@ namespace JoyLib.Code.Entities
             List<IItemInstance> backpack,
             List<string> identifiedItems,
             Dictionary<string, int> jobLevels,
-            WorldInstance world,
+            IWorldInstance world,
             List<ICulture> cultures = null,
             IDriver driver = null)
         {
@@ -195,7 +195,7 @@ namespace JoyLib.Code.Entities
                 selectedDriver = new StandardDriver();
             }
 
-            Entity entity = new Entity(
+            IEntity entity = new Entity(
                 template, 
                 needs, 
                 creatureCultures, 

@@ -7,6 +7,7 @@ using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.World;
+using UnityEngine;
 
 namespace JoyLib.Code.Quests
 {
@@ -16,7 +17,7 @@ namespace JoyLib.Code.Quests
         public string Description { get; protected set; }
         public List<IItemInstance> Items { get; protected set; }
         public List<IJoyObject> Actors { get; protected set; }
-        public List<WorldInstance> Areas { get; protected set; }
+        public List<IWorldInstance> Areas { get; protected set; }
 
         public RNG Roller { get; protected set; }
 
@@ -26,7 +27,7 @@ namespace JoyLib.Code.Quests
         public ExploreQuestAction(
             List<IItemInstance> items,
             List<IJoyObject> actors,
-            List<WorldInstance> areas,
+            List<IWorldInstance> areas,
             IEnumerable<string> tags,
             RNG roller = null)
         {
@@ -41,15 +42,13 @@ namespace JoyLib.Code.Quests
             Description = AssembleDescription();
         }
         
-        public IQuestStep Make(IEntity questor, IEntity provider, WorldInstance overworld, IEnumerable<string> tags)
+        public IQuestStep Make(IEntity questor, IEntity provider, IWorldInstance overworld, IEnumerable<string> tags)
         {
-            List<WorldInstance> worlds = overworld.GetWorlds(overworld); 
+            List<IWorldInstance> worlds = overworld.GetWorlds(overworld); 
 
             int result = Roller.Roll(0, worlds.Count);
 
             int breakout = 0;
-
-            WorldInstance chosenWorld = null;
 
             while (questor.HasDataKey(worlds[result].Name) && breakout < worlds.Count)
             {
@@ -66,7 +65,7 @@ namespace JoyLib.Code.Quests
 
             this.Items = new List<IItemInstance>();
             this.Actors = new List<IJoyObject>();
-            this.Areas = new List<WorldInstance> { worlds[result] };
+            this.Areas = new List<IWorldInstance> { worlds[result] };
 
             IQuestStep step = new ConcreteQuestStep(
                 this, 
@@ -124,7 +123,7 @@ namespace JoyLib.Code.Quests
         public IQuestAction Create(IEnumerable<string> tags,
             List<IItemInstance> items,
             List<IJoyObject> actors,
-            List<WorldInstance> areas, 
+            List<IWorldInstance> areas,
             IItemFactory itemFactory = null)
         {
             return new ExploreQuestAction(

@@ -4,7 +4,7 @@ namespace JoyLib.Code.Entities.Sexuality
 {
     public interface ISexuality : ITagged
     {
-        bool WillMateWith(Entity me, Entity them, IRelationship[] relationships);
+        bool WillMateWith(IEntity me, IEntity them, IRelationship[] relationships);
 
         string Name
         {

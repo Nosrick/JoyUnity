@@ -12,7 +12,7 @@ namespace JoyLib.Code.World.Generators.Interiors
 {
     public class DungeonItemPlacer
     {
-        protected ItemFactory ItemFactory { get; set; }
+        protected IItemFactory ItemFactory { get; set; }
 
         protected ILiveItemHandler ItemHandler { get; set; }
         
@@ -21,7 +21,7 @@ namespace JoyLib.Code.World.Generators.Interiors
         public DungeonItemPlacer(
             ILiveItemHandler itemHandler,
             RNG roller,
-            ItemFactory itemFactory)
+            IItemFactory itemFactory)
         {
             Roller = roller;
             ItemHandler = itemHandler;
@@ -34,9 +34,9 @@ namespace JoyLib.Code.World.Generators.Interiors
         /// <param name="worldRef">The world in which to place the items</param>
         /// <param name="prosperity">The prosperity of the world, the lower the better</param>
         /// <returns>The items placed</returns>
-        public List<ItemInstance> PlaceItems(WorldInstance worldRef, int prosperity = 50)
+        public List<IItemInstance> PlaceItems(IWorldInstance worldRef, int prosperity = 50)
         {
-            List<ItemInstance> placedItems = new List<ItemInstance>();
+            List<IItemInstance> placedItems = new List<IItemInstance>();
 
             int dungeonArea = worldRef.Tiles.GetLength(0) * worldRef.Tiles.GetLength(1);
             int itemsToPlace = dungeonArea / prosperity;
@@ -56,7 +56,7 @@ namespace JoyLib.Code.World.Generators.Interiors
                     point = new Vector2Int(Roller.Roll(1, worldRef.Tiles.GetLength(0) - 1), Roller.Roll(1, worldRef.Tiles.GetLength(1) - 1));
                 }
 
-                ItemInstance item = ItemFactory.CreateCompletelyRandomItem();
+                IItemInstance item = ItemFactory.CreateCompletelyRandomItem();
                 item.MyWorld = worldRef;
                 ItemHandler.AddItem(item, true);
                 item.Move(point);

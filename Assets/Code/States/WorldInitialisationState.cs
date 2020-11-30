@@ -9,13 +9,12 @@ namespace JoyLib.Code.States
 {
     public class WorldInitialisationState : GameState
     {
-        protected WorldInstance m_Overworld;
-        protected WorldInstance m_ActiveWorld;
+        protected IWorldInstance m_Overworld;
+        protected IWorldInstance m_ActiveWorld;
 
-        protected ObjectIconHandler m_ObjectIcons = GameObject.Find("GameManager")
-                                                        .GetComponent<ObjectIconHandler>();
+        protected IObjectIconHandler m_ObjectIcons = GlobalConstants.GameManager.ObjectIconHandler;
 
-        public WorldInitialisationState(WorldInstance overWorld, WorldInstance activeWorld)
+        public WorldInitialisationState(IWorldInstance overWorld, IWorldInstance activeWorld)
         {
             m_Overworld = overWorld;
             m_ActiveWorld = activeWorld;
@@ -51,7 +50,7 @@ namespace JoyLib.Code.States
             }
 
             //Make each downstairs
-            foreach(KeyValuePair<Vector2Int, WorldInstance> pair in m_ActiveWorld.Areas)
+            foreach(KeyValuePair<Vector2Int, IWorldInstance> pair in m_ActiveWorld.Areas)
             {
                 Vector2Int position = pair.Key;
                 GameObject downstairs = GameObject.Instantiate(sprite, objectHolder.transform, true);

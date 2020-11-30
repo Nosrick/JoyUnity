@@ -75,7 +75,7 @@ namespace JoyLib.Code.Entities.Needs
                 this.m_AverageForWeek);
         }
 
-        public override bool FindFulfilmentObject(Entity actor)
+        public override bool FindFulfilmentObject(IEntity actor)
         {
             IItemInstance[] targets = actor.SearchBackpackForItemType(new string[] { "food" });
             int bestFood = 0;
@@ -140,7 +140,7 @@ namespace JoyLib.Code.Entities.Needs
             return false;
         }
 
-        public override bool Interact(Entity actor, IJoyObject obj)
+        public override bool Interact(IEntity actor, IJoyObject obj)
         {
             if (!(obj is ItemInstance item))
             {

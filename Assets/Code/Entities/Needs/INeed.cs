@@ -7,9 +7,9 @@ namespace JoyLib.Code.Entities.Needs
     public interface INeed : IBasicValue
     {
 
-        bool FindFulfilmentObject(Entity actor);
+        bool FindFulfilmentObject(IEntity actor);
 
-        bool Interact(Entity actor, IJoyObject obj);
+        bool Interact(IEntity actor, IJoyObject obj);
 
         INeed Copy();
 

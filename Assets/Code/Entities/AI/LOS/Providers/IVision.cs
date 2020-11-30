@@ -15,18 +15,18 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
             get;
         }
 
-        Vector2Int[] GetVisibleWalls(Entity viewer, WorldInstance world);
+        Vector2Int[] GetVisibleWalls(IEntity viewer, IWorldInstance world);
 
-        bool CanSee(Entity viewer, WorldInstance world, int x, int y);
-        bool CanSee(Entity viewer, WorldInstance world, Vector2Int point);
+        bool CanSee(IEntity viewer, IWorldInstance world, int x, int y);
+        bool CanSee(IEntity viewer, IWorldInstance world, Vector2Int point);
 
-        bool HasVisibility(Entity viewer, WorldInstance world, int x, int y, bool[,] vision);
-        bool HasVisibility(Entity viewer, WorldInstance world, Vector2Int point, bool[,] vision);
+        bool HasVisibility(IEntity viewer, IWorldInstance world, int x, int y, bool[,] vision);
+        bool HasVisibility(IEntity viewer, IWorldInstance world, Vector2Int point, bool[,] vision);
 
-        RectInt GetVisionRect(Entity viewer);
+        RectInt GetVisionRect(IEntity viewer);
 
-        RectInt GetFullVisionRect(Entity viewer);
+        RectInt GetFullVisionRect(IEntity viewer);
 
-        void Update(Entity viewer, WorldInstance world);
+        void Update(IEntity viewer, IWorldInstance world);
     }
 }

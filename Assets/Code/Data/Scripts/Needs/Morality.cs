@@ -63,12 +63,12 @@ namespace JoyLib.Code.Entities.Needs
         //People to talk with
         //People to help
         //People to give to charitably
-        public override bool FindFulfilmentObject(Entity actor)
+        public override bool FindFulfilmentObject(IEntity actor)
         {
             return false;
         }
 
-        public override bool Interact(Entity actor, IJoyObject obj)
+        public override bool Interact(IEntity actor, IJoyObject obj)
         {
             return false;
         }

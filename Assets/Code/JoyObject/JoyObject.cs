@@ -35,11 +35,11 @@ namespace JoyLib.Code
 
         public bool IsDestructible { get; protected set; }
         
-        public WorldInstance MyWorld { get; set; }
+        public IWorldInstance MyWorld { get; set; }
         
         public Sprite Sprite => Sprites[ChosenSprite];
 
-        public Sprite[] Sprites { get; protected set; }
+        public Sprite[] Sprites { get; set; }
 
         public long GUID { get; protected set; }
 

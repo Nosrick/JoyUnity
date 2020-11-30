@@ -82,15 +82,15 @@ namespace JoyLib.Code.Entities.Needs
             }
         }
 
-        public override bool FindFulfilmentObject(Entity actor)
+        public override bool FindFulfilmentObject(IEntity actor)
         {
             IEnumerable<string> tags = actor.Tags.Where(x => x.Contains("sentient"));
 
-            List<Entity> possibleListeners = actor.MyWorld.SearchForEntities(actor, tags).ToList();
+            List<IEntity> possibleListeners = actor.MyWorld.SearchForEntities(actor, tags).ToList();
 
-            Entity bestMatch = null;
+            IEntity bestMatch = null;
             int bestRelationship = int.MinValue;
-            foreach (Entity possible in possibleListeners)
+            foreach (IEntity possible in possibleListeners)
             {
                 List<IJoyObject> participants = new List<IJoyObject>();
                 participants.Add(actor);
@@ -150,7 +150,7 @@ namespace JoyLib.Code.Entities.Needs
             return true;
         }
 
-        public override bool Interact(Entity actor, IJoyObject obj)
+        public override bool Interact(IEntity actor, IJoyObject obj)
         {
             m_CachedActions["fulfillneedaction"].Execute(
                 new[] {actor, obj},

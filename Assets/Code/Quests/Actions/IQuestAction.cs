@@ -13,11 +13,11 @@ namespace JoyLib.Code.Quests
         string Description { get; }
         List<IItemInstance> Items { get; }
         List<IJoyObject> Actors { get; }
-        List<WorldInstance> Areas { get; }
+        List<IWorldInstance> Areas { get; }
         
         RNG Roller { get; }
 
-        IQuestStep Make(IEntity questor, IEntity provider, WorldInstance overworld, IEnumerable<string> tags);
+        IQuestStep Make(IEntity questor, IEntity provider, IWorldInstance overworld, IEnumerable<string> tags);
         bool ExecutedSuccessfully(IJoyAction action);
 
         string AssembleDescription();
@@ -28,7 +28,7 @@ namespace JoyLib.Code.Quests
             IEnumerable<string> tags,
             List<IItemInstance> items,
             List<IJoyObject> actors,
-            List<WorldInstance> areas,
+            List<IWorldInstance> areas,
             IItemFactory itemFactory = null);
     }
 }

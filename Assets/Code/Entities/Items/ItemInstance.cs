@@ -41,11 +41,11 @@ namespace JoyLib.Code.Entities.Items
         public bool IsDestructible { get; protected set; }
 
         public RNG Roller { get; protected set; }
-        public WorldInstance MyWorld { get; set; }
+        public IWorldInstance MyWorld { get; set; }
         
         public Sprite Sprite => Sprites[ChosenSprite];
 
-        public Sprite[] Sprites { get; protected set; }
+        public Sprite[] Sprites { get; set; }
 
         public long GUID { get; protected set; }
 
@@ -434,7 +434,7 @@ namespace JoyLib.Code.Entities.Items
             ConstructDescription();
         }
 
-        public void Interact(Entity user)
+        public void Interact(IEntity user)
         {
             SetUser(user);
 

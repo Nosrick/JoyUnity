@@ -12,7 +12,7 @@ namespace JoyLib.Code.IO
     {
         protected static IObjectIconHandler s_ObjectIcons = GlobalConstants.GameManager.ObjectIconHandler; 
 
-        public void Serialise(WorldInstance world)
+        public void Serialise(IWorldInstance world)
         {
             try
             {
@@ -42,12 +42,12 @@ namespace JoyLib.Code.IO
             }
         }
 
-        public WorldInstance Deserialise(string worldName)
+        public IWorldInstance Deserialise(string worldName)
         {
             StreamReader reader = new StreamReader(Directory.GetCurrentDirectory() + "/save/" + worldName + "/sav.dat");
             string worldString = reader.ReadToEnd();
             
-            WorldInstance world = JsonUtility.FromJson<WorldInstance>(worldString);
+            IWorldInstance world = JsonUtility.FromJson<WorldInstance>(worldString);
             LinkWorlds(world);
             EntityWorldKnowledge(world);
             AssignIcons(world);
@@ -55,41 +55,41 @@ namespace JoyLib.Code.IO
             return world;
         }
 
-        private void LinkWorlds(WorldInstance parent)
+        private void LinkWorlds(IWorldInstance parent)
         {
-            foreach (WorldInstance world in parent.Areas.Values)
+            foreach (IWorldInstance world in parent.Areas.Values)
             {
                 world.Parent = parent;
                 LinkWorlds(world);
             }
         }
 
-        private void EntityWorldKnowledge(WorldInstance parent)
+        private void EntityWorldKnowledge(IWorldInstance parent)
         {
-            foreach (Entity entity in parent.Entities)
+            foreach (IEntity entity in parent.Entities)
             {
                 entity.MyWorld = parent;
             }
 
-            foreach (WorldInstance world in parent.Areas.Values)
+            foreach (IWorldInstance world in parent.Areas.Values)
             {
                 EntityWorldKnowledge(world);
             }
         }
         
-        private void AssignIcons(WorldInstance parent)
+        private void AssignIcons(IWorldInstance parent)
         {
-            foreach(JoyObject obj in parent.Objects)
+            foreach(IJoyObject obj in parent.Objects)
             {
-                obj.SetIcons(s_ObjectIcons.GetSprites(obj.TileSet, obj.JoyName));
+                obj.Sprites = s_ObjectIcons.GetSprites(obj.TileSet, obj.JoyName);
             }
 
-            foreach(Entity entity in parent.Entities)
+            foreach(IEntity entity in parent.Entities)
             {
-                entity.SetIcons(s_ObjectIcons.GetSprites(entity.TileSet, entity.CreatureType));
+                entity.Sprites = s_ObjectIcons.GetSprites(entity.TileSet, entity.CreatureType);
             }
 
-            foreach(WorldInstance world in parent.Areas.Values)
+            foreach(IWorldInstance world in parent.Areas.Values)
             {
                 AssignIcons(world);
             }

@@ -11,7 +11,7 @@ namespace JoyLib.Code.Entities
     {
         protected static ItemContainer m_Inventory;
 
-        public EntityPlayer(Entity baseEntity) :
+        public EntityPlayer(IEntity baseEntity) :
             base(baseEntity)
         {
             if (m_Inventory is null)

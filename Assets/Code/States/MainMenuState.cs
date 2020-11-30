@@ -48,10 +48,10 @@ namespace JoyLib.Code.States
 
         private void ContinueGame(object sender, EventArgs eventArgs)
         {
-            WorldInstance overworld = m_WorldSerialiser.Deserialise("Everse");
+            IWorldInstance overworld = m_WorldSerialiser.Deserialise("Everse");
             Done = true;
 
-            WorldInstance playerWorld = overworld.Player.MyWorld;
+            IWorldInstance playerWorld = overworld.Player.MyWorld;
             m_NextState = new WorldState(overworld, playerWorld, Gameplay.GameplayFlags.Moving);
         }
 

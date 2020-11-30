@@ -63,7 +63,7 @@ namespace JoyLib.Code.Entities.Needs
         {
         }
 
-        public override bool FindFulfilmentObject(Entity actor)
+        public override bool FindFulfilmentObject(IEntity actor)
         {
             IEnumerable<IJoyObject> objects = actor.MyWorld.SearchForObjects(actor, new string[0]);
 
@@ -103,7 +103,7 @@ namespace JoyLib.Code.Entities.Needs
             return true;
         }
 
-        public override bool Interact(Entity actor, IJoyObject obj)
+        public override bool Interact(IEntity actor, IJoyObject obj)
         {
             if (!(obj is ItemInstance item))
             {

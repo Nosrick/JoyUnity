@@ -6,11 +6,11 @@ namespace JoyLib.Code.Helpers
 {
     public static class WorldConversationDataHelper
     {
-        public static int GetNumberOfFloors(int floorsSoFar, WorldInstance worldToCheck)
+        public static int GetNumberOfFloors(int floorsSoFar, IWorldInstance worldToCheck)
         {
             if (worldToCheck.Areas.Count > 0)
             {
-                foreach (WorldInstance world in worldToCheck.Areas.Values)
+                foreach (IWorldInstance world in worldToCheck.Areas.Values)
                 {
                     return GetNumberOfFloors(floorsSoFar + 1, world);
                 }
@@ -19,7 +19,7 @@ namespace JoyLib.Code.Helpers
             return floorsSoFar;
         }
 
-        public static int GetNumberOfCreatures(string entityType, WorldInstance worldToCheck)
+        public static int GetNumberOfCreatures(string entityType, IWorldInstance worldToCheck)
         {
             return entityType.IsNullOrEmpty() ? 
                 worldToCheck.Entities.Count 

@@ -11,9 +11,9 @@ namespace JoyLib.Code.Entities.AI
 {
     public class Pathfinder
     {
-        public Queue<Vector2Int> FindPath(Vector2Int from, Vector2Int to, WorldInstance worldRef)
+        public Queue<Vector2Int> FindPath(Vector2Int from, Vector2Int to, IWorldInstance worldRef)
         {
-            WorldInstance world = worldRef;
+            IWorldInstance world = worldRef;
 
             List<Vector2Int> walls = new List<Vector2Int>();
             lock (world.Objects)

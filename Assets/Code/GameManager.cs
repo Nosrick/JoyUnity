@@ -137,8 +137,8 @@ public class GameManager : MonoBehaviour, IGameManager
     public IAbilityHandler AbilityHandler { get; protected set; }
     public RNG Roller { get; protected set; }
 
-    public EntityFactory EntityFactory { get; protected set; }
-    public ItemFactory ItemFactory { get; protected set; }
+    public IEntityFactory EntityFactory { get; protected set; }
+    public IItemFactory ItemFactory { get; protected set; }
     public GameObject MyGameObject { get; protected set; }
 
     public IEntity Player { get; set; }

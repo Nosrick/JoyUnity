@@ -4,7 +4,7 @@ namespace JoyLib.Code.Graphics
 {
     public interface IAnimated
     {
-        Sprite[] Sprites { get; }
+        Sprite[] Sprites { get; set; }
         Sprite Sprite { get; }
         int LastIndex { get; }
         int ChosenSprite { get; }

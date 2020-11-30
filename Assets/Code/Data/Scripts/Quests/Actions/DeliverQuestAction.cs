@@ -19,7 +19,7 @@ namespace JoyLib.Code.Quests
         
         public List<IItemInstance> Items { get; protected set; }
         public List<IJoyObject> Actors { get; protected set; }
-        public List<WorldInstance> Areas { get; protected set; }
+        public List<IWorldInstance> Areas { get; protected set; }
 
         protected IItemFactory ItemFactory { get; set; }
 
@@ -32,7 +32,7 @@ namespace JoyLib.Code.Quests
         public DeliverQuestAction(
             List<IItemInstance> items,
             List<IJoyObject> actors,
-            List<WorldInstance> areas,
+            List<IWorldInstance> areas,
              IEnumerable<string> tags,
             IItemFactory itemFactory = null,
             RNG roller = null)
@@ -50,7 +50,7 @@ namespace JoyLib.Code.Quests
             ItemFactory = itemFactory is null || GlobalConstants.GameManager is null == false ? GlobalConstants.GameManager.ItemFactory : itemFactory;
         }
         
-        public IQuestStep Make(IEntity questor, IEntity provider, WorldInstance overworld, IEnumerable<string> tags)
+        public IQuestStep Make(IEntity questor, IEntity provider, IWorldInstance overworld, IEnumerable<string> tags)
         {
             IItemInstance deliveryItem = null;
             List<IItemInstance> backpack = provider.Backpack;
@@ -68,7 +68,7 @@ namespace JoyLib.Code.Quests
 
             this.Items = new List<IItemInstance> {deliveryItem};
             this.Actors = new List<IJoyObject> {endPoint};
-            this.Areas = new List<WorldInstance>();
+            this.Areas = new List<IWorldInstance>();
 
             IQuestStep step = new ConcreteQuestStep(
                 this, 
@@ -145,7 +145,7 @@ namespace JoyLib.Code.Quests
         public IQuestAction Create(IEnumerable<string> tags,
             List<IItemInstance> items,
             List<IJoyObject> actors,
-            List<WorldInstance> areas,
+            List<IWorldInstance> areas,
             IItemFactory itemFactory = null)
         {
             return new DeliverQuestAction(

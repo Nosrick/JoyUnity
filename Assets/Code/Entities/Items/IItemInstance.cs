@@ -15,7 +15,7 @@ namespace JoyLib.Code.Entities.Items
 
         void SetOwner(long newOwner, bool recursive = false);
 
-        void Interact(Entity user);
+        void Interact(IEntity user);
 
         void IdentifyMe();
 

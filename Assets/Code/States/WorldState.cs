@@ -20,9 +20,9 @@ namespace JoyLib.Code.States
 {
     public class WorldState : GameState
     {
-        protected WorldInstance m_ActiveWorld;
+        protected IWorldInstance m_ActiveWorld;
 
-        protected WorldInstance m_Overworld;
+        protected IWorldInstance m_Overworld;
 
         protected GameplayFlags m_GameplayFlags;
 
@@ -63,7 +63,7 @@ namespace JoyLib.Code.States
             set;
         }
 
-        public WorldState(WorldInstance overworldRef, WorldInstance activeWorldRef, GameplayFlags flagsRef) : base()
+        public WorldState(IWorldInstance overworldRef, IWorldInstance activeWorldRef, GameplayFlags flagsRef) : base()
         {
             m_WorldSerialiser = new WorldSerialiser();
 
@@ -142,7 +142,7 @@ namespace JoyLib.Code.States
             m_WorldSerialiser.Serialise(m_Overworld);
         }
 
-        protected void SetEntityWorld(WorldInstance world)
+        protected void SetEntityWorld(IWorldInstance world)
         {
             for(int i = 0; i < world.Entities.Count; i++)
             {
@@ -155,11 +155,11 @@ namespace JoyLib.Code.States
             }
         }
 
-        protected void ChangeWorld(WorldInstance newWorld, Vector2Int spawnPoint)
+        protected void ChangeWorld(IWorldInstance newWorld, Vector2Int spawnPoint)
         {
             Done = true;
 
-            WorldInstance oldWorld = m_ActiveWorld;
+            IWorldInstance oldWorld = m_ActiveWorld;
             IEntity player = oldWorld.Player;
 
             player.FetchAction("enterworldaction")
@@ -217,7 +217,7 @@ namespace JoyLib.Code.States
 
         protected void TalkToPlayer()
         {
-            if (!(PrimaryTarget is Entity entity))
+            if (!(PrimaryTarget is IEntity entity))
             {
                 return;
             }
@@ -232,7 +232,7 @@ namespace JoyLib.Code.States
 
         protected void CallOver()
         {
-            if (!(PrimaryTarget is Entity entity))
+            if (!(PrimaryTarget is IEntity entity))
             {
                 return;
             }
@@ -709,9 +709,9 @@ namespace JoyLib.Code.States
             return new WorldDestructionState(m_Overworld, m_ActiveWorld);
         }
 
-        public WorldInstance Overworld => m_Overworld;
+        public IWorldInstance Overworld => m_Overworld;
 
-        public WorldInstance PlayerWorld => m_ActiveWorld;
+        public IWorldInstance PlayerWorld => m_ActiveWorld;
 
         protected int TickCounter
         {

@@ -16,7 +16,7 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
 
         }
 
-        public override void Update(Entity viewer, WorldInstance world)
+        public override void Update(IEntity viewer, IWorldInstance world)
         {
             if (viewer is null)
             {
@@ -39,13 +39,13 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
             Vision = Board.GetVision();
         }
 
-        public override bool HasVisibility(Entity viewer, WorldInstance world, int x, int y, bool[,] vision)
+        public override bool HasVisibility(IEntity viewer, IWorldInstance world, int x, int y, bool[,] vision)
         {
             //TODO: Fix this once lighting calculations are back in
             return true;/* && world.LightLevels[x, y] > MinimumLightLevel;*/
         }
 
-        public override bool HasVisibility(Entity viewer, WorldInstance world, Vector2Int point, bool[,] vision)
+        public override bool HasVisibility(IEntity viewer, IWorldInstance world, Vector2Int point, bool[,] vision)
         {
             return HasVisibility(viewer, world, point.x, point.y, vision);
         }

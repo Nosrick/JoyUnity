@@ -11,7 +11,7 @@ namespace JoyLib.Code.Entities.AI.LOS
 
         private readonly Vector2Int[] DIAGONALS = { new Vector2Int(1, -1), new Vector2Int(1, 1), new Vector2Int(-1, 1), new Vector2Int(-1, -1) };
 
-        public override IFOVBoard Do(Entity viewer, WorldInstance world, Vector2Int dimensions, Vector2Int[] walls)
+        public override IFOVBoard Do(IEntity viewer, IWorldInstance world, Vector2Int dimensions, Vector2Int[] walls)
         {
             Vector2Int viewerPos = viewer.WorldPosition;
             
@@ -26,7 +26,7 @@ namespace JoyLib.Code.Entities.AI.LOS
             return m_Board;
         }
 
-        private void CastLight(Entity viewer, WorldInstance world, Vector2Int origin, int sightMod, int row, float start, float end, int xx, int xy, int yx, int yy)
+        private void CastLight(IEntity viewer, IWorldInstance world, Vector2Int origin, int sightMod, int row, float start, float end, int xx, int xy, int yx, int yy)
         {
             float newStart = 0.0f;
             if(start < end)

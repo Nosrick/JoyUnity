@@ -16,7 +16,7 @@ namespace JoyLib.Code.World.Generators
             this.Roller = roller;
         }
         
-        public Vector2Int PlaceSpawnPoint(WorldInstance worldRef)
+        public Vector2Int PlaceSpawnPoint(IWorldInstance worldRef)
         {
             int x, y;
 
@@ -35,7 +35,7 @@ namespace JoyLib.Code.World.Generators
             return point;
         }
 
-        public Vector2Int PlaceTransitionPoint(WorldInstance worldRef)
+        public Vector2Int PlaceTransitionPoint(IWorldInstance worldRef)
         {
             int breakout = (worldRef.Tiles.GetLength(0) * worldRef.Tiles.GetLength(1)) / 4;
             int x, y;

@@ -59,10 +59,10 @@ namespace JoyLib.Code.World.Generators.Interiors
                     worldInstance.AddObject(wall);
                 }
 
-                List<ItemInstance> items = itemPlacer.PlaceItems(worldInstance);
+                List<IItemInstance> items = itemPlacer.PlaceItems(worldInstance);
 
-                List<Entity> entities = entityPlacer.PlaceEntities(worldInstance, entitiesToPlace, roller);
-                foreach(Entity entity in entities)
+                List<IEntity> entities = entityPlacer.PlaceEntities(worldInstance, entitiesToPlace, roller);
+                foreach(IEntity entity in entities)
                 {
                     worldInstance.AddEntity(entity);
                 }

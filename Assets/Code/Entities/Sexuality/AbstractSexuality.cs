@@ -53,7 +53,7 @@ namespace JoyLib.Code.Entities.Sexuality
             return false;
         }
 
-        public virtual bool WillMateWith(Entity me, Entity them, IRelationship[] relationships)
+        public virtual bool WillMateWith(IEntity me, IEntity them, IRelationship[] relationships)
         {
             throw new NotImplementedException("Someone forgot to override WillMateWith in " + this.GetType().Name);
         }

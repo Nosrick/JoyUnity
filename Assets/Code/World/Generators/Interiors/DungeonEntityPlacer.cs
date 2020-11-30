@@ -30,10 +30,10 @@ namespace JoyLib.Code.World.Generators.Interiors
             EntityHandler = entityHandler;
         }
 
-        public List<Entity> PlaceEntities(WorldInstance worldRef, List<string> entityTypes, RNG roller, bool makeNewRollers = true)
+        public List<IEntity> PlaceEntities(IWorldInstance worldRef, List<string> entityTypes, RNG roller, bool makeNewRollers = true)
         {
             Roller = roller;
-            List<Entity> entities = new List<Entity>();
+            List<IEntity> entities = new List<IEntity>();
 
             List<EntityTemplate> templates = EntityTemplateHandler.Templates;
             templates = templates.Where(x => entityTypes.Contains(x.CreatureType)).ToList();
@@ -72,7 +72,7 @@ namespace JoyLib.Code.World.Generators.Interiors
                     new StandardRoller(newRoller), 
                     new NonUniqueDictionary<INeed, float>());
 
-                Entity newEntity = EntityFactory.CreateFromTemplate(
+                IEntity newEntity = EntityFactory.CreateFromTemplate(
                     templates[entityIndex], 
                     level, 
                     availablePoints[pointIndex],

@@ -89,17 +89,17 @@ namespace JoyLib.Code.Entities.Needs
 
         //Currently, the questing and employment systems are not (fully) in.
         //This will just seek out a random person and ask for a quest stub.
-        public override bool FindFulfilmentObject(Entity actor)
+        public override bool FindFulfilmentObject(IEntity actor)
         {
             IEnumerable<string> tags = actor.Tags.Where(x => x.IndexOf("sentient", StringComparison.OrdinalIgnoreCase) >= 0);
 
-            List<Entity> possibleListeners = actor.MyWorld.SearchForEntities(actor, tags).ToList();
+            List<IEntity> possibleListeners = actor.MyWorld.SearchForEntities(actor, tags).ToList();
 
-            Entity bestMatch = null;
+            IEntity bestMatch = null;
             int bestRelationship = int.MinValue;
-            foreach (Entity possible in possibleListeners)
+            foreach (IEntity possible in possibleListeners)
             {
-                List<JoyObject> participants = new List<JoyObject> {actor, possible};
+                List<IJoyObject> participants = new List<IJoyObject> {actor, possible};
 
                 string[] relationshipTags = new[] {"friendship"};
                 IRelationship[] relationships = RelationshipHandler?.Get(participants.ToArray(), relationshipTags);
@@ -135,23 +135,23 @@ namespace JoyLib.Code.Entities.Needs
             return true;
         }
 
-        public override bool Interact(Entity actor, IJoyObject obj)
+        public override bool Interact(IEntity actor, IJoyObject obj)
         {
-            if (!(obj is Entity listener))
+            if (!(obj is IEntity listener))
             {
                 return false;
             }
             
             //Asking to do something for your friend increases your relationship
             m_CachedActions["fulfillneedaction"].Execute(
-                new JoyObject[] {actor, listener},
+                new IJoyObject[] {actor, listener},
                 new[] {"need", "friendship", "fulfill"},
                 new object[] {"friendship", actor.Statistics[EntityStatistic.PERSONALITY].Value, 0, true});
 
             if (RelationshipHandler.IsFamily(actor, listener))
             {
                 m_CachedActions["fulfillneedaction"].Execute(
-                    new JoyObject[] {actor, listener},
+                    new IJoyObject[] {actor, listener},
                     new[] {"need", "family", "fulfill"},
                     new object[] {"family", actor.Statistics[EntityStatistic.PERSONALITY].Value, 0, true});
             }
@@ -166,7 +166,7 @@ namespace JoyLib.Code.Entities.Needs
             }
 
             m_CachedActions["fulfillneedaction"].Execute(
-                new JoyObject[] {actor},
+                new IJoyObject[] {actor},
                 new[] {"need", "purpose", "fulfill"},
                 new object[] {"purpose", listener.Statistics[EntityStatistic.PERSONALITY].Value, 0, false});
 

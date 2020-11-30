@@ -15,8 +15,8 @@ namespace JoyLib.Code.States
     {
         protected EntityPlayer m_Player;
 
-        protected WorldInstance m_World;
-        protected WorldInstance m_ActiveWorld;
+        protected IWorldInstance m_World;
+        protected IWorldInstance m_ActiveWorld;
 
         protected IWorldInfoHandler m_WorldInfoHandler = GlobalConstants.GameManager.WorldInfoHandler;
 
@@ -95,7 +95,7 @@ namespace JoyLib.Code.States
 
             GlobalConstants.GameManager.EntityHandler.AddEntity(m_Player);
             
-            ItemInstance lightSource = GlobalConstants.GameManager.ItemFactory.CreateRandomItemOfType(new string[] { "light source" });
+            IItemInstance lightSource = GlobalConstants.GameManager.ItemFactory.CreateRandomItemOfType(new string[] { "light source" });
             IJoyAction addItemAction = m_Player.FetchAction("additemaction");
             addItemAction.Execute(
                 new IJoyObject[] {m_Player, lightSource},
@@ -115,7 +115,7 @@ namespace JoyLib.Code.States
 
         protected void SimulateWorld()
         {
-            List<WorldInstance> worlds = m_World.GetWorlds(m_World);
+            List<IWorldInstance> worlds = m_World.GetWorlds(m_World);
             for (int a = 0; a < worlds.Count; a++)
             {
                 for (int i = 0; i < SIMULATION_TICKS; i++)

@@ -26,7 +26,7 @@ namespace JoyLib.Code.Entities.Items
             Roller = roller;
         }
 
-        public ItemInstance CreateRandomItemOfType(string[] tags, bool identified = false)
+        public IItemInstance CreateRandomItemOfType(string[] tags, bool identified = false)
         {
             BaseItemType[] matchingTypes = ItemHandler.FindItemsOfType(tags);
             if (matchingTypes.Length > 0)
@@ -53,7 +53,7 @@ namespace JoyLib.Code.Entities.Items
             return null;
         }
 
-        public ItemInstance CreateSpecificType(string name, string[] tags, bool identified = false)
+        public IItemInstance CreateSpecificType(string name, string[] tags, bool identified = false)
         {
             BaseItemType[] matchingTypes = ItemHandler.FindItemsOfType(tags);
             List<BaseItemType> secondRound = new List<BaseItemType>();
@@ -98,7 +98,7 @@ namespace JoyLib.Code.Entities.Items
             throw new ItemTypeNotFoundException(name, "Could not find an item type by the name of " + name);
         }
 
-        public ItemInstance CreateCompletelyRandomItem(bool identified = false, bool withAbility = false)
+        public IItemInstance CreateCompletelyRandomItem(bool identified = false, bool withAbility = false)
         {
             List<BaseItemType> itemDatabase = ItemHandler.ItemDatabase;
 

@@ -34,7 +34,7 @@ namespace JoyLib.Code.Entities.Sexuality
             AddTag("bi");
         }
 
-        public override bool WillMateWith(Entity me, Entity them, IRelationship[] relationships)
+        public override bool WillMateWith(IEntity me, IEntity them, IRelationship[] relationships)
         {
             foreach (IRelationship relationship in relationships)
             {

@@ -41,7 +41,7 @@ namespace JoyLib.Code.Quests
             Actions = ScriptingEngine.instance.FetchAndInitialiseChildren<IQuestAction>().ToList();
         }
 
-        public IQuest MakeRandomQuest(IEntity questor, IEntity provider, WorldInstance overworldRef)
+        public IQuest MakeRandomQuest(IEntity questor, IEntity provider, IWorldInstance overworldRef)
         {
             List<IQuestStep> steps = new List<IQuestStep>();
 
@@ -54,7 +54,7 @@ namespace JoyLib.Code.Quests
                     new string[0],
                     new List<IItemInstance>(),
                     new List<IJoyObject>(),
-                    new List<WorldInstance>());
+                    new List<IWorldInstance>());
                 steps.Add(action.Make(questor, provider, overworldRef, action.Tags));
             }
 
@@ -63,7 +63,7 @@ namespace JoyLib.Code.Quests
             return new Quest(steps, QuestMorality.Neutral, GetRewards(questor, provider, steps), provider, tagsForAllSteps);
         }
 
-        public IEnumerable<IQuest> MakeOneOfEachType(IEntity questor, IEntity provider, WorldInstance overworldRef)
+        public IEnumerable<IQuest> MakeOneOfEachType(IEntity questor, IEntity provider, IWorldInstance overworldRef)
         {
             List<IQuest> quests = new List<IQuest>();
 
@@ -73,7 +73,7 @@ namespace JoyLib.Code.Quests
                     new string[0],
                     new List<IItemInstance>(),
                     new List<IJoyObject>(),
-                    new List<WorldInstance>());
+                    new List<IWorldInstance>());
                 List<IQuestStep> steps = new List<IQuestStep>{newAction.Make(questor, provider, overworldRef, new string[0])};
                 quests.Add(new Quest(steps, QuestMorality.Neutral, GetRewards(questor, provider, steps), provider, new string[0]));
             }
@@ -81,7 +81,7 @@ namespace JoyLib.Code.Quests
             return quests;
         }
 
-        public IQuest MakeQuestOfType(IEntity questor, IEntity provider, WorldInstance overworldRef, string[] tags)
+        public IQuest MakeQuestOfType(IEntity questor, IEntity provider, IWorldInstance overworldRef, string[] tags)
         {
             throw new System.NotImplementedException();
         }
