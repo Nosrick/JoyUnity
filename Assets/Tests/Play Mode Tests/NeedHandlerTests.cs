@@ -3,6 +3,7 @@ using DevionGames.InventorySystem;
 using JoyLib.Code;
 using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Graphics;
+using JoyLib.Code.Scripting;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -11,11 +12,15 @@ namespace Tests
 {
     public class NeedHandlerTests
     {
+        private ScriptingEngine ScriptingEngine;
+        
         private INeedHandler target;
     
         [SetUp]
         public void SetUp()
         {
+            ScriptingEngine = new ScriptingEngine();
+            
             target = new NeedHandler();
         }
     
@@ -40,6 +45,7 @@ namespace Tests
         [TearDown]
         public void TearDown()
         {
+            GlobalConstants.GameManager = null;
         }
     }
 }

@@ -58,6 +58,7 @@ namespace Tests
         public void TearDown()
         {
             GameObject.DestroyImmediate(inventoryManager);
+            GlobalConstants.GameManager = null;
         }
     }
 }

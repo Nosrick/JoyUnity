@@ -7,6 +7,7 @@ using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
+using JoyLib.Code.Scripting;
 using JoyLib.Code.Unity.GUI;
 using NUnit.Framework;
 using UnityEngine;
@@ -16,29 +17,25 @@ namespace Tests
 {
     public class SkillHandlerTest
     {
+        private ScriptingEngine ScriptingEngine;
+        
         private IEntitySkillHandler target;
-    
-        private IGameManager container;
-
-        private GameObject inventoryManager;
+        private INeedHandler NeedHandler;
     
         [SetUp]
         public void Initialise()
         {
-            inventoryManager = new GameObject();
-            inventoryManager.AddComponent<InventoryManager>();
-            container = new GameObject("GameManager").AddComponent<GameManager>();
-
-            GlobalConstants.GameManager = container;
-            target = container.SkillHandler;
+            ScriptingEngine = new ScriptingEngine();
+            
+            NeedHandler = new NeedHandler();
+            target = new EntitySkillHandler(NeedHandler);
         }
     
         [UnityTest]
         public IEnumerator GetDefaultSkillBlock_ShouldHave_ValidData()
         {
             BasicValueContainer<INeed> needs =
-                new BasicValueContainer<INeed>(
-                    container.NeedHandler.GetManyRandomised(container.NeedHandler.NeedNames));
+                new BasicValueContainer<INeed>(NeedHandler.GetManyRandomised(NeedHandler.NeedNames));
     
             BasicValueContainer<IGrowingValue> skills = target.GetDefaultSkillBlock(needs);
     
@@ -53,7 +50,7 @@ namespace Tests
         [TearDown]
         public void TearDown()
         {
-            GameObject.DestroyImmediate(container.MyGameObject);
+            GlobalConstants.GameManager = null;
         }
     }
 }

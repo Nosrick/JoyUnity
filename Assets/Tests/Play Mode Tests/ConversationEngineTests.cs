@@ -219,6 +219,7 @@ namespace Tests
         public void TearDown()
         {
             GameObject.DestroyImmediate(canvas);
+            GlobalConstants.GameManager = null;
         }
     }
 }

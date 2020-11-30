@@ -58,23 +58,23 @@ namespace JoyLib.Code.Quests
             }
         }
 
-        public void CompleteQuest(Entity questor, IQuest quest)
+        public void CompleteQuest(IEntity questor, IQuest quest)
         {
             quest.CompleteQuest(questor);
             EntityQuests[questor.GUID].Remove(quest);
         }
 
-        public void AbandonQuest(Entity questor, IQuest quest)
+        public void AbandonQuest(IEntity questor, IQuest quest)
         {
             EntityQuests[questor.GUID].Remove(quest);
         }
 
-        public void FailQuest(Entity questor, IQuest quest)
+        public void FailQuest(IEntity questor, IQuest quest)
         {
             EntityQuests[questor.GUID].Remove(quest);
         }
 
-        public void PerformQuestAction(Entity questor, IQuest quest, IJoyAction completedAction)
+        public void PerformQuestAction(IEntity questor, IQuest quest, IJoyAction completedAction)
         {
             if (quest.FulfilsRequirements(questor, completedAction) && quest.AdvanceStep())
             {
@@ -82,7 +82,7 @@ namespace JoyLib.Code.Quests
             }
         }
 
-        public void PerformQuestAction(Entity questor, IJoyAction completedAction)
+        public void PerformQuestAction(IEntity questor, IJoyAction completedAction)
         {
             List<IQuest> copy = new List<IQuest>(GetQuestsForEntity(questor.GUID));
             foreach (IQuest quest in copy)

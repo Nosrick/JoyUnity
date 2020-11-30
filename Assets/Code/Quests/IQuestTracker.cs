@@ -12,14 +12,14 @@ namespace JoyLib.Code.Quests
 
         void AddQuest(long GUID, IQuest quest);
 
-        void CompleteQuest(Entity questor, IQuest quest);
+        void CompleteQuest(IEntity questor, IQuest quest);
 
-        void FailQuest(Entity questor, IQuest quest);
+        void FailQuest(IEntity questor, IQuest quest);
 
-        void AbandonQuest(Entity questor, IQuest quest);
+        void AbandonQuest(IEntity questor, IQuest quest);
 
-        void PerformQuestAction(Entity questor, IQuest quest, IJoyAction completedAction);
+        void PerformQuestAction(IEntity questor, IQuest quest, IJoyAction completedAction);
 
-        void PerformQuestAction(Entity questor, IJoyAction completedAction);
+        void PerformQuestAction(IEntity questor, IJoyAction completedAction);
     }
 }

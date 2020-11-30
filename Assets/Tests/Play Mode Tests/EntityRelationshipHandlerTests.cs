@@ -85,6 +85,7 @@ namespace Tests
         [TearDown]
         public void TearDown()
         {
+            GlobalConstants.GameManager = null;
         }
     }
 }
