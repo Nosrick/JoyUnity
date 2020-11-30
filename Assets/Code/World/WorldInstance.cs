@@ -474,7 +474,7 @@ namespace JoyLib.Code.World
             return new Vector2Int(-1, -1);
         }
 
-        public WorldInstance GetOverworld()
+        public IWorldInstance GetOverworld()
         {
             if (Parent == null)
             {

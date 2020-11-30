@@ -24,10 +24,10 @@ namespace JoyLib.Code.Conversation.Subengines.Rumours
 
         IRumour GenerateRandomRumour(IJoyObject[] participants);
 
-        IRumour GenerateRumourFromTags(JoyObject[] participants, string[] tags);
+        IRumour GenerateRumourFromTags(IJoyObject[] participants, string[] tags);
 
-        IRumour[] GenerateOneRumourOfEachType(JoyObject[] participants);
+        IRumour[] GenerateOneRumourOfEachType(IJoyObject[] participants);
 
-        IRumour GetRandom(WorldInstance overworldRef);
+        IRumour GetRandom(IWorldInstance overworldRef);
     }
 }

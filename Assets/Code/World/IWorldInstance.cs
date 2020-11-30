@@ -35,7 +35,7 @@ namespace JoyLib.Code.World
         IEntity GetRandomSentientWorldWide();
         List<IWorldInstance> GetWorlds(IWorldInstance parent);
         Vector2Int GetTransitionPointForParent();
-        WorldInstance GetOverworld();
+        IWorldInstance GetOverworld();
         IWorldInstance GetPlayerWorld(IWorldInstance parent);
         void SwapPosition(IEntity left, IEntity right);
         IItemInstance PickUpObject(IEntity entityRef);

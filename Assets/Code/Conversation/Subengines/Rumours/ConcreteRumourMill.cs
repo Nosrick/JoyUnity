@@ -117,7 +117,7 @@ namespace JoyLib.Code.Conversation.Conversations
             return rumours;
         }
 
-        public IRumour GetRandom(WorldInstance overworldRef)
+        public IRumour GetRandom(IWorldInstance overworldRef)
         {
             if (Rumours.Count == 0)
             {
@@ -170,7 +170,7 @@ namespace JoyLib.Code.Conversation.Conversations
             return rumour;
         }
 
-        public IRumour GenerateRumourFromTags(JoyObject[] participants, string[] tags)
+        public IRumour GenerateRumourFromTags(IJoyObject[] participants, string[] tags)
         {
             if (RumourTypes is null)
             {
@@ -215,7 +215,7 @@ namespace JoyLib.Code.Conversation.Conversations
             return rumour;
         }
 
-        public IRumour[] GenerateOneRumourOfEachType(JoyObject[] participants)
+        public IRumour[] GenerateOneRumourOfEachType(IJoyObject[] participants)
         {
             List<IRumour> rumours = new List<IRumour>();
             foreach (IRumour type in RumourTypes)

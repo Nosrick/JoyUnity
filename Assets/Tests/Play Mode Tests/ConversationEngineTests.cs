@@ -55,7 +55,7 @@ namespace Tests
 
         private Canvas canvas;
 
-        private WorldInstance world;
+        private IWorldInstance world;
 
         [SetUp]
         public void SetUp()
@@ -99,12 +99,26 @@ namespace Tests
             
             IEntityRelationshipHandler relationshipHandler = Mock.Of<IEntityRelationshipHandler>(
                 handler => handler.Get(It.IsAny<IJoyObject[]>(), It.IsAny<string[]>(), It.IsAny<bool>())
-                           == new IRelationship[] {friendship});world = new WorldInstance(
-                new WorldTile[0, 0],
-                new string[0],
-                "TESTING",
-                entityHandler,
-                new RNG());
+                           == new IRelationship[] {friendship});
+
+            IEntity questObject = Mock.Of<IEntity>(
+                entity => entity.JoyName == "NAME1" 
+                    && entity.MyWorld == Mock.Of<IWorldInstance>(
+                    w => w.GetRandomSentient() == Mock.Of<IEntity>(
+                        e => e.JoyName == "NAME2")));
+
+            world = Mock.Of<IWorldInstance>(
+                w => w.GetRandomSentientWorldWide() == questObject
+                     && w.GetRandomSentient() == questObject
+                     && w.GetWorlds(It.IsAny<IWorldInstance>()) == new List<IWorldInstance>
+                     {
+                         Mock.Of<IWorldInstance>(mock => mock.Name == "TEST2")
+                     }
+                     && w.GetOverworld() == Mock.Of<IWorldInstance>(
+                         mock => mock.Name == "EVERSE"
+                         && mock.GetRandomSentient() == questObject
+                         && mock.GetRandomSentientWorldWide() == questObject)
+                     && w.Name == "TEST");
 
             BasicValueContainer<INeed> needs = new BasicValueContainer<INeed> { Mock.Of<INeed>(
                 need => need.Fulfill(It.IsAny<int>()) == 1
@@ -145,9 +159,6 @@ namespace Tests
             
             friendship.AddParticipant(listener);
             friendship.AddParticipant(instigator);
-
-            world.AddEntity(instigator);
-            world.AddEntity(listener);
         }
 
         [UnityTest]
