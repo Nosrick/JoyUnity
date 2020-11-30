@@ -48,8 +48,6 @@ namespace Tests
         private GameObject inventoryWindow;
         private GameObject tradeWindow;
 
-        private GameObject inventoryManager;
-
         private GameObject prefab;
 
         private IEntity instigator;
@@ -63,9 +61,6 @@ namespace Tests
         public void SetUp()
         {
             prefab = Resources.Load<GameObject>("Prefabs/MonoBehaviourHandler");
-
-            inventoryManager = new GameObject();
-            inventoryManager.AddComponent<InventoryManager>();
 
             scriptingEngine = new ScriptingEngine();
 
@@ -212,7 +207,6 @@ namespace Tests
         [TearDown]
         public void TearDown()
         {
-            GameObject.DestroyImmediate(inventoryManager);
             GameObject.DestroyImmediate(canvas);
         }
     }
