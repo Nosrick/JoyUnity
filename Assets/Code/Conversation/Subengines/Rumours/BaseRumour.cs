@@ -82,7 +82,7 @@ namespace JoyLib.Code.Conversation.Conversations.Rumours
 
         protected void Initialise()
         {
-            if (ProcessorHandler is null)
+            if (GlobalConstants.GameManager is null == false && ProcessorHandler is null)
             {
                 ProcessorHandler = GlobalConstants.GameManager.ParameterProcessorHandler;
             }
@@ -187,10 +187,10 @@ namespace JoyLib.Code.Conversation.Conversations.Rumours
                     participantNumber++;
                 }
 
-                string replacement = ProcessorHandler
+                string replacement = ProcessorHandler?
                     .Get(Parameters[i])
                     .Parse(Parameters[i], obj);
-                
+
                 m_Words = m_Words.Replace("<" + (i + 1) + ">", replacement);
             }
 

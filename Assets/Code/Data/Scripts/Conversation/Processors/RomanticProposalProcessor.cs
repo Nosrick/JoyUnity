@@ -30,7 +30,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
             int highestValue = RelationshipHandler.GetHighestRelationshipValue(instigator, listener);
             if (highestValue > listener.Sexuality.MatingThreshold)
             {
-                int cultureResult = Roller.Roll(0, listener.Cultures.Length);
+                int cultureResult = Roller.Roll(0, listener.Cultures.Count);
                 int relationshipTypeResult = Roller.Roll(0, listener.Cultures[cultureResult].RelationshipTypes.Length);
     
                 string relationshipType = listener.Cultures[cultureResult].RelationshipTypes[relationshipTypeResult];

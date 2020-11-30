@@ -18,11 +18,20 @@ namespace JoyLib.Code.Quests
         protected RNG Roller { get; set; }
 
         public List<IQuestAction> Actions { get; protected set; }
+        
+        protected static BagOfGoldHelper BagOfGoldHelper { get; set; }
 
-        public QuestProvider(IEntityRelationshipHandler entityRelationshipHandler, RNG roller)
+        public QuestProvider(
+            IEntityRelationshipHandler entityRelationshipHandler,
+            ILiveItemHandler itemHandler,
+            IItemFactory itemFactory,
+            RNG roller)
         {
+            BagOfGoldHelper = new BagOfGoldHelper(itemHandler, itemFactory);
             Roller = roller;
             EntityRelationshipHandler = entityRelationshipHandler;
+
+            Actions = ScriptingEngine.instance.FetchAndInitialiseChildren<IQuestAction>().ToList();
         }
 
         protected void Initialise()
@@ -41,9 +50,6 @@ namespace JoyLib.Code.Quests
             for (int i = 0; i < numberOfSteps; i++)
             {
                 int result = Roller.Roll(0, Actions.Count);
-                List<IJoyObject> actors = new List<IJoyObject>();
-                actors.Add(questor);
-                actors.Add(provider);
                 IQuestAction action = Actions[result].Create(
                     new string[0],
                     new List<IItemInstance>(),
@@ -55,6 +61,24 @@ namespace JoyLib.Code.Quests
             IEnumerable<string> tagsForAllSteps = steps.SelectMany(step => step.Tags);
             
             return new Quest(steps, QuestMorality.Neutral, GetRewards(questor, provider, steps), provider, tagsForAllSteps);
+        }
+
+        public IEnumerable<IQuest> MakeOneOfEachType(Entity questor, Entity provider, WorldInstance overworldRef)
+        {
+            List<IQuest> quests = new List<IQuest>();
+
+            foreach (IQuestAction action in Actions)
+            {
+                IQuestAction newAction = action.Create(
+                    new string[0],
+                    new List<IItemInstance>(),
+                    new List<IJoyObject>(),
+                    new List<WorldInstance>());
+                List<IQuestStep> steps = new List<IQuestStep>{newAction.Make(questor, provider, overworldRef, new string[0])};
+                quests.Add(new Quest(steps, QuestMorality.Neutral, GetRewards(questor, provider, steps), provider, new string[0]));
+            }
+
+            return quests;
         }
 
         public IQuest MakeQuestOfType(Entity questor, Entity provider, WorldInstance overworldRef, string[] tags)
@@ -74,94 +98,5 @@ namespace JoyLib.Code.Quests
 
             return rewards;
         }
-
-        /*
-        public QuestStep MakeDestroyQuest(Entity provider, WorldInstance overworldRef)
-        {
-            QuestAction action = QuestAction.Destroy;
-
-            int result = RNG.instance.Roll(0, 1);
-            JoyObject target = null;
-            if(result == 0)
-            {
-                int breakout = 0;
-                //Destroy an item
-                while(breakout < 100)
-                {
-                    Entity holder = overworldRef.GetRandomSentientWorldWide();
-                    ItemInstance[] backpack = holder.Backpack;
-                    if (backpack.Length > 0)
-                    {
-                        result = RNG.instance.Roll(0, backpack.Length - 1);
-                        target = backpack[result];
-                        break;
-                    }
-                    breakout += 1;
-                }
-
-                if(breakout == 100)
-                {
-                    target = overworldRef.GetRandomSentientWorldWide();
-                }
-            }
-            else
-            {
-                //Destroy a creature
-                target = overworldRef.GetRandomSentientWorldWide();
-            }
-            QuestStep step = new QuestStep(action, new List<ItemInstance>(), new List<JoyObject>() { target }, new List<World.WorldInstance>());
-            return step;
-        }
-
-        public QuestStep MakeRetrieveQuest(Entity provider, WorldInstance overworldRef)
-        {
-            QuestAction action = QuestAction.Retrieve;
-
-            ItemInstance target = null;
-            int breakout = 0;
-            while(breakout < 100)
-            {
-                Entity holder = overworldRef.GetRandomSentientWorldWide();
-                ItemInstance[] backpack = holder.Backpack;
-                if(backpack.Length > 0)
-                {
-                    int result = RNG.instance.Roll(0, backpack.Length - 1);
-                    target = backpack[result];
-                    break;
-                }
-                breakout += 1;
-            }
-
-            if (breakout == 100)
-            {
-                return MakeExploreQuest(provider, overworldRef);
-            }
-
-            QuestStep step = new QuestStep(action, new List<ItemInstance>() { target }, new List<JoyObject>() { provider }, new List<World.WorldInstance>());
-            return step;
-        }
-
-        public QuestStep MakeExploreQuest(Entity provider, WorldInstance overworldRef)
-        {
-            QuestAction action = QuestAction.Explore;
-
-            List<WorldInstance> worlds = overworldRef.GetWorlds(overworldRef);
-            WorldInstance target = overworldRef;
-
-            WorldInstance currentWorld = provider.MyWorld;
-
-            while (true)
-            {
-                target = worlds[RNG.instance.Roll(0, worlds.Count - 1)];
-                if (target.GUID != currentWorld.GUID && target.GUID != overworldRef.GUID)
-                {
-                    break;
-                }
-            }
-
-            QuestStep step = new QuestStep(action, new List<ItemInstance>(), new List<JoyObject>(), new List<WorldInstance>() { target });
-            return step;
-        }
-        */
     }
 }

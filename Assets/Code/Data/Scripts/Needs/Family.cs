@@ -76,7 +76,7 @@ namespace JoyLib.Code.Entities.Needs
 
         protected void Initialise()
         {
-            if (RelationshipHandler is null)
+            if (GlobalConstants.GameManager is null == false && RelationshipHandler is null)
             {
                 RelationshipHandler = GlobalConstants.GameManager.RelationshipHandler;
             }

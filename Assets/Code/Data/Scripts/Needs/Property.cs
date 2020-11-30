@@ -182,12 +182,12 @@ namespace JoyLib.Code.Entities.Needs
         {
             base.Tick(actor);
 
-            if (actor.Backpack.Length == 0)
+            if (actor.Backpack.Count == 0)
             {
                 return false;
             }
 
-            this.Fulfill(actor.Backpack.Length);
+            this.Fulfill(actor.Backpack.Count);
             return true;
         }
     }

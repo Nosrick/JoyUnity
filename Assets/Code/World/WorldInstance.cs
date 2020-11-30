@@ -195,8 +195,8 @@ namespace JoyLib.Code.World
             for (int i = 0; i < entities.Count; i++)
             {
                 Entity entity = entities[i];
-                IItemInstance[] backpack = entity.Backpack;
-                for (int j = 0; j < backpack.Length; j++)
+                List<IItemInstance> backpack = entity.Backpack;
+                for (int j = 0; j < backpack.Count; j++)
                 {
                     IItemInstance item = backpack[j];
                     item.Move(entity.WorldPosition);

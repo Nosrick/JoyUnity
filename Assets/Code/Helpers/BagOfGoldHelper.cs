@@ -5,34 +5,36 @@ using UnityEngine;
 
 namespace JoyLib.Code.Helpers
 {
-    public static class BagOfGoldHelper
+    public class BagOfGoldHelper
     {
-        private static ItemFactory ItemFactory { get; set; }
+        private static IItemFactory ItemFactory { get; set; }
         
         private static ILiveItemHandler ItemHandler { get; set; }
 
-        public static ItemInstance GetBagOfGold(int count)
+        public BagOfGoldHelper(ILiveItemHandler itemHandler, IItemFactory itemFactory)
         {
-            if (ItemHandler is null)
+            ItemFactory = itemFactory;
+            ItemHandler = itemHandler;
+        }
+
+        public IItemInstance GetBagOfGold(int count)
+        {
+            if (GlobalConstants.GameManager is null == false && ItemHandler is null)
             {
                 ItemHandler = GlobalConstants.GameManager.ItemHandler;
-            }
-
-            if (ItemFactory is null)
-            {
                 ItemFactory = GlobalConstants.GameManager.ItemFactory;
             }
             
-            ItemInstance bag = ItemFactory.CreateRandomItemOfType(new string[] { "container", "leather" }, true);
+            IItemInstance bag = ItemFactory.CreateRandomItemOfType(new string[] { "container", "leather" }, true);
             ItemHandler.AddItem(bag);
-            List<ItemInstance> coins = new List<ItemInstance>();
+            List<IItemInstance> coins = new List<IItemInstance>();
             int gold = count / 100;
             int silver = (count - (gold * 100))  / 10;
             int copper = (count - (gold * 100) - (silver * 10));
 
             if (gold > 0)
             {
-                ItemInstance goldCoin = ItemFactory.CreateSpecificType("gold coin", new string[] {"currency"}, true);
+                IItemInstance goldCoin = ItemFactory.CreateSpecificType("gold coin", new string[] {"currency"}, true);
                 for (int i = 0; i < gold; i++)
                 {
                     coins.Add(goldCoin.Copy(goldCoin));
@@ -41,7 +43,7 @@ namespace JoyLib.Code.Helpers
             
             if (silver > 0)
             {
-                ItemInstance silverCoin = ItemFactory.CreateSpecificType("silver coin", new string[] {"currency"}, true);
+                IItemInstance silverCoin = ItemFactory.CreateSpecificType("silver coin", new string[] {"currency"}, true);
                 for (int i = 0; i < silver; i++)
                 {
                     coins.Add(silverCoin.Copy(silverCoin));
@@ -50,14 +52,14 @@ namespace JoyLib.Code.Helpers
 
             if (copper > 0)
             {
-                ItemInstance copperCoin = ItemFactory.CreateSpecificType("copper coin", new string[] {"currency"}, true);
+                IItemInstance copperCoin = ItemFactory.CreateSpecificType("copper coin", new string[] {"currency"}, true);
                 for (int i = 0; i < copper; i++)
                 {
                     coins.Add(copperCoin.Copy(copperCoin));
                 }
             }
             
-            foreach(ItemInstance coin in coins)
+            foreach(IItemInstance coin in coins)
             {
                 ItemHandler.AddItem(coin);
             }

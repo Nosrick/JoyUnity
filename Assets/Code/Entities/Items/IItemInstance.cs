@@ -11,7 +11,7 @@ namespace JoyLib.Code.Entities.Items
         
         List<IAbility> UniqueAbilities { get; }
 
-        ItemInstance Copy(ItemInstance copy);
+        IItemInstance Copy(IItemInstance copy);
 
         void SetOwner(long newOwner, bool recursive = false);
 

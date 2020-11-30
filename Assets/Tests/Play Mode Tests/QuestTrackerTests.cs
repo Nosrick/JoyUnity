@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using DevionGames.InventorySystem;
 using JoyLib.Code;
@@ -63,8 +64,7 @@ namespace Tests
             EntityHandler = new LiveEntityHandler();
             RelationshipHandler = new EntityRelationshipHandler();
             TemplateHandler = new EntityTemplateHandler(SkillHandler);
-
-            questProvider = new QuestProvider(RelationshipHandler, new RNG());
+            
             target = new QuestTracker();
             
             world = new WorldInstance(
@@ -113,34 +113,19 @@ namespace Tests
                 new StandardDriver());
 
             left.PlayerControlled = true;
-            
-            right = new Entity(
-                random,
-                new BasicValueContainer<INeed>(),
-                cultures,
-                level,
-                job,
-                gender,
-                sex,
-                sexuality,
-                romance,
-                Vector2Int.zero,
-                sprites,
-                world,
-                new StandardDriver());
 
             world.AddEntity(left);
-            world.AddEntity(right);
         }
 
         [UnityTest]
         public IEnumerator QuestTracker_Should_AddQuest()
         {
             //given
-
-            //when
-            target.AddQuest(left.GUID, questProvider.MakeRandomQuest(left, right, world));
+            IQuest quest = Mock.Of<IQuest>();
             
+            //when
+            target.AddQuest(left.GUID, quest);
+
             //then
             Assert.That(target.GetQuestsForEntity(left.GUID), Is.Not.Empty);
 

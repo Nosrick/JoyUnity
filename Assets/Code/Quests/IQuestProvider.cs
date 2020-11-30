@@ -10,6 +10,8 @@ namespace JoyLib.Code.Quests
 
         IQuest MakeQuestOfType(Entity questor, Entity provider, WorldInstance overworldRef, string[] tags);
 
+        IEnumerable<IQuest> MakeOneOfEachType(Entity questor, Entity provider, WorldInstance overworldRef);
+
         List<IQuestAction> Actions { get; }
     }
 }

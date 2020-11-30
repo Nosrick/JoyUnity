@@ -38,6 +38,8 @@ namespace Tests
     public class ConversationEngineTests
     {
         private ScriptingEngine scriptingEngine;
+
+        private IGameManager GameManager;
         
         private IConversationEngine target;
 
@@ -86,16 +88,10 @@ namespace Tests
             
             GUIManager = new GUIManager();
 
-            IEntitySkillHandler skillHandler = Mock.Of<IEntitySkillHandler>(
-                handler => handler.GetCoefficients(
-                    It.IsAny<List<string>>(), 
-                    It.IsAny<string>()) 
-                           == new NonUniqueDictionary<INeed, float>());
-
             ObjectIconHandler = new ObjectIconHandler(new RNG());
 
-            NeedHandler = Mock.Of<INeedHandler>(
-                handler => handler.GetManyRandomised(It.IsAny<IEnumerable<string>>()) == new List<INeed>());
+            NeedHandler = new NeedHandler();
+            IEntitySkillHandler skillHandler = new EntitySkillHandler(NeedHandler);
 
             EntityHandler = Mock.Of<ILiveEntityHandler>();
             
@@ -119,6 +115,16 @@ namespace Tests
             GUIManager.OpenGUI(conversationWindow.name);
 
             target = new ConversationEngine(RelationshipHandler, GUIManager, conversationWindow);
+
+            GameManager = Mock.Of<IGameManager>(
+                manager => manager.RelationshipHandler == RelationshipHandler
+                           && manager.ConversationEngine == target
+                           && manager.EntityTemplateHandler == templateHandler
+                           && manager.ObjectIconHandler == ObjectIconHandler
+                           && manager.NeedHandler == NeedHandler
+                           && manager.SkillHandler == skillHandler);
+
+            GlobalConstants.GameManager = GameManager;
             
             GUIData.GUIManager = GUIManager;
             JoyItemSlot.ItemHolder = new GameObject("World Objects");
@@ -162,7 +168,7 @@ namespace Tests
 
             Sprite[] sprites = ObjectIconHandler.GetDefaultSprites();
 
-            BasicValueContainer<INeed> needs = new BasicValueContainer<INeed>(NeedHandler.GetManyRandomised(new List<string>()));
+            BasicValueContainer<INeed> needs = new BasicValueContainer<INeed>(NeedHandler.GetManyRandomised(template.Needs));
 
             instigator = new Entity(
                 template,

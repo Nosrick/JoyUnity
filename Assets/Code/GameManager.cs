@@ -49,9 +49,6 @@ public class GameManager : MonoBehaviour, IGameManager
         PhysicsManager = new PhysicsManager();
 
         RelationshipHandler = new EntityRelationshipHandler();
-
-        QuestProvider = new QuestProvider(RelationshipHandler, Roller);
-        QuestTracker = new QuestTracker();
         
         GUIManager = new GUIManager();
         
@@ -92,6 +89,13 @@ public class GameManager : MonoBehaviour, IGameManager
             ItemHandler,
             ObjectIconHandler,
             Roller);
+
+        QuestProvider = new QuestProvider(
+            RelationshipHandler,
+            ItemHandler,
+            ItemFactory,
+            Roller);
+        QuestTracker = new QuestTracker();
         
         ConversationEngine = new ConversationEngine(RelationshipHandler, GUIManager);
 

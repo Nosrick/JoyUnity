@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DevionGames.InventorySystem;
 using JoyLib.Code;
 using JoyLib.Code.Collections;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities;
+using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.AI.Drivers;
 using JoyLib.Code.Entities.Gender;
 using JoyLib.Code.Entities.Items;
@@ -29,6 +31,8 @@ namespace Tests
 {
     public class QuestProviderTests
     {
+        private IGameManager gameManager;
+        
         private IQuestTracker questTracker;
 
         private IQuestProvider target;
@@ -74,8 +78,32 @@ namespace Tests
             RelationshipHandler = new EntityRelationshipHandler();
             TemplateHandler = new EntityTemplateHandler(SkillHandler);
 
-            target = new QuestProvider(RelationshipHandler, new RNG());
+            IItemFactory itemFactory = Mock.Of<IItemFactory>(
+                factory => factory.CreateSpecificType(It.IsAny<string>(), It.IsAny<string[]>(), It.IsAny<bool>())
+                           == Mock.Of<IItemInstance>(
+                               item => item.Copy(It.IsAny<IItemInstance>()) == Mock.Of<IItemInstance>()));
+
+            ILiveItemHandler itemHandler = Mock.Of<ILiveItemHandler>();
+
+            target = new QuestProvider(
+                RelationshipHandler,
+                itemHandler,
+                itemFactory,
+                new RNG());
             questTracker = new QuestTracker();
+
+            gameManager = Mock.Of<IGameManager>(
+                manager => manager.EntityHandler == EntityHandler
+                && manager.NeedHandler == NeedHandler
+                && manager.SkillHandler == SkillHandler
+                && manager.RelationshipHandler == RelationshipHandler
+                && manager.EntityTemplateHandler == TemplateHandler
+                && manager.ItemHandler == itemHandler
+                && manager.ItemFactory == itemFactory
+                && manager.QuestProvider == target
+                && manager.QuestTracker == questTracker);
+
+            GlobalConstants.GameManager = gameManager;
             
             world = new WorldInstance(
                 new WorldTile[0,0], 
@@ -172,11 +200,14 @@ namespace Tests
             //given
             
             //when
-            IQuest quest = target.MakeRandomQuest(left, right, world);
+            IQuest[] quests = target.MakeOneOfEachType(left, right, world).ToArray();
 
             //then
-            Assert.That(quest.Rewards, Is.Not.Empty);
-            Assert.That(quest.Steps, Is.Not.Empty);
+            foreach (IQuest quest in quests)
+            {
+                Assert.That(quest.Rewards, Is.Not.Empty);
+                Assert.That(quest.Steps, Is.Not.Empty);
+            }
 
             return null;
         }

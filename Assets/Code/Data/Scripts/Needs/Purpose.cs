@@ -80,7 +80,7 @@ namespace JoyLib.Code.Entities.Needs
 
         protected void Initialise()
         {
-            if (RelationshipHandler is null)
+            if (GlobalConstants.GameManager is null == false && RelationshipHandler is null)
             {
                 RelationshipHandler = GlobalConstants.GameManager.RelationshipHandler;
                 QuestProvider = GlobalConstants.GameManager.QuestProvider;
@@ -102,7 +102,12 @@ namespace JoyLib.Code.Entities.Needs
                 List<JoyObject> participants = new List<JoyObject> {actor, possible};
 
                 string[] relationshipTags = new[] {"friendship"};
-                IRelationship[] relationships = RelationshipHandler.Get(participants.ToArray(), relationshipTags);
+                IRelationship[] relationships = RelationshipHandler?.Get(participants.ToArray(), relationshipTags);
+
+                if (relationships is null)
+                {
+                    return false;
+                }
 
                 foreach (IRelationship relationship in relationships)
                 {
@@ -150,12 +155,15 @@ namespace JoyLib.Code.Entities.Needs
                     new[] {"need", "family", "fulfill"},
                     new object[] {"family", actor.Statistics[EntityStatistic.PERSONALITY].Value, 0, true});
             }
-            
-            actor.AddQuest(
-                QuestProvider.MakeRandomQuest(
-                    actor, 
-                    listener, 
-                    actor.MyWorld.GetOverworld()));
+
+            if (QuestProvider is null == false)
+            {
+                actor.AddQuest(
+                    QuestProvider.MakeRandomQuest(
+                        actor, 
+                        listener, 
+                        actor.MyWorld.GetOverworld()));
+            }
 
             m_CachedActions["fulfillneedaction"].Execute(
                 new JoyObject[] {actor},

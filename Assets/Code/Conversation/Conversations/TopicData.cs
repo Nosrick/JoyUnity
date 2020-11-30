@@ -209,7 +209,7 @@ namespace JoyLib.Code.Conversation.Conversations
                 new [] { "friendship" },
                 new object[] { "friendship", instigator.Statistics[EntityStatistic.PERSONALITY].Value, 0, true });
 
-            string[] tags = RelationshipHandler.Get(
+            string[] tags = RelationshipHandler is null ? new string[0] : RelationshipHandler.Get(
                 new IJoyObject[] {instigator, listener}).SelectMany(relationship => relationship.Tags).ToArray();
             
             influence.Execute(
@@ -222,7 +222,9 @@ namespace JoyLib.Code.Conversation.Conversations
                 tags,
                 new object[] { listener.Statistics[EntityStatistic.PERSONALITY].Value });
 
-            if (RelationshipHandler.IsFamily(instigator, listener))
+            bool? isFamily = RelationshipHandler?.IsFamily(instigator, listener);
+            
+            if (isFamily is null == false && isFamily == true)
             {
                 fulfillNeed.Execute(
                     new IJoyObject[] {instigator, listener},

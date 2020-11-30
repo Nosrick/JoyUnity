@@ -173,7 +173,7 @@ namespace JoyLib.Code.Entities.Items
             ConstructDescription();
         }
 
-        public ItemInstance Copy(ItemInstance copy)
+        public IItemInstance Copy(IItemInstance copy)
         {
             Initialise();
 

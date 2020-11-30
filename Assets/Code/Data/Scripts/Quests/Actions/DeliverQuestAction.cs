@@ -21,7 +21,7 @@ namespace JoyLib.Code.Quests
         public List<IJoyObject> Actors { get; protected set; }
         public List<WorldInstance> Areas { get; protected set; }
 
-        protected ItemFactory ItemFactory { get; set; }
+        protected IItemFactory ItemFactory { get; set; }
 
         public RNG Roller { get; protected set; }
 
@@ -34,7 +34,7 @@ namespace JoyLib.Code.Quests
             List<IJoyObject> actors,
             List<WorldInstance> areas,
              IEnumerable<string> tags,
-            ItemFactory itemFactory = null,
+            IItemFactory itemFactory = null,
             RNG roller = null)
         {
             List<string> tempTags = new List<string>();
@@ -47,16 +47,16 @@ namespace JoyLib.Code.Quests
             Description = AssembleDescription();
 
             Roller = roller is null ? new RNG() : roller; 
-            ItemFactory = itemFactory is null ? GlobalConstants.GameManager.ItemFactory : itemFactory;
+            ItemFactory = itemFactory is null || GlobalConstants.GameManager is null == false ? GlobalConstants.GameManager.ItemFactory : itemFactory;
         }
         
         public IQuestStep Make(Entity questor, Entity provider, WorldInstance overworld, IEnumerable<string> tags)
         {
             IItemInstance deliveryItem = null;
-            IItemInstance[] backpack = provider.Backpack;
-            if (backpack.Length > 0)
+            List<IItemInstance> backpack = provider.Backpack;
+            if (backpack.Count > 0)
             {
-                int result = Roller.Roll(0, backpack.Length);
+                int result = Roller.Roll(0, backpack.Count);
 
                 deliveryItem = backpack[result];
             }
@@ -145,13 +145,15 @@ namespace JoyLib.Code.Quests
         public IQuestAction Create(IEnumerable<string> tags,
             List<IItemInstance> items,
             List<IJoyObject> actors,
-            List<WorldInstance> areas)
+            List<WorldInstance> areas,
+            IItemFactory itemFactory = null)
         {
             return new DeliverQuestAction(
                 items,
                 actors,
                 areas,
-                tags);
+                tags, 
+                itemFactory);
         }
     }
 }

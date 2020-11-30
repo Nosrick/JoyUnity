@@ -124,7 +124,8 @@ namespace JoyLib.Code.Quests
         public IQuestAction Create(IEnumerable<string> tags,
             List<IItemInstance> items,
             List<IJoyObject> actors,
-            List<WorldInstance> areas)
+            List<WorldInstance> areas, 
+            IItemFactory itemFactory = null)
         {
             return new ExploreQuestAction(
                 items,

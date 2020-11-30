@@ -28,7 +28,7 @@ using UnityEngine;
 
 namespace JoyLib.Code.Entities
 {
-    public class Entity : JoyObject, IItemContainer
+    public class Entity : JoyObject, IEntity
     {
         protected BasicValueContainer<IRollableValue> m_Statistics;
         protected BasicValueContainer<IGrowingValue> m_Skills;
@@ -83,7 +83,8 @@ namespace JoyLib.Code.Entities
             "wanderaction",
             "modifyrelationshippointsaction",
             "enterworldaction",
-            "additemaction"
+            "additemaction",
+            "placeiteminworldaction"
         };
 
         public Entity()
@@ -612,11 +613,6 @@ namespace JoyLib.Code.Entities
             m_PathfindingData = pointsRef;
         }
 
-        public bool IsViableMate(Entity entityRef, IRelationship[] relationships)
-        {
-            return m_Sexuality.WillMateWith(this, entityRef, relationships);
-        }
-
         public void AddIdentifiedItem(string nameRef)
         {
             m_IdentifiedItems.Add(nameRef);
@@ -702,13 +698,6 @@ namespace JoyLib.Code.Entities
                 ActionLog.instance.AddText(ex.StackTrace);
                 return new List<IItemInstance>().ToArray();
             }
-        }
-
-        public void PlaceItemInWorld(IItemInstance item)
-        {
-            m_Backpack.Remove(item);
-            item.Move(WorldPosition);
-            MyWorld.AddObject(item);
         }
 
         public virtual bool EquipItem(string slotRef, IItemInstance itemRef)
@@ -909,13 +898,6 @@ namespace JoyLib.Code.Entities
             return null;
         }
 
-        public bool PerformAction(IJoyAction action, IJoyObject[] participants, string[] tags = null,
-            params object[] args)
-        {
-            ActionLog.instance.AddText(this.JoyName + "is performing " + action.ActionString);
-            return action.Execute(participants, tags, args);
-        }
-
         public List<IItemInstance> Contents
         {
             get
@@ -968,6 +950,8 @@ namespace JoyLib.Code.Entities
             set { m_CurrentTarget = value; }
         }
 
+        public IDriver Driver => m_Driver;
+
         public NonUniqueDictionary<string, IItemInstance> Equipment
         {
             get { return new NonUniqueDictionary<string, IItemInstance>(m_Equipment); }
@@ -988,10 +972,7 @@ namespace JoyLib.Code.Entities
             get { return m_Needs; }
         }
 
-        public IAbility[] Abilities
-        {
-            get { return m_Abilities.ToArray(); }
-        }
+        public List<IAbility> Abilities => m_Abilities;
 
         public string JobName
         {
@@ -1015,15 +996,12 @@ namespace JoyLib.Code.Entities
 
         public bool PlayerControlled { get; set; }
 
-        public IItemInstance[] Backpack
-        {
-            get { return m_Backpack.ToArray(); }
-        }
+        public List<IItemInstance> Backpack => m_Backpack;
 
-        public string[] IdentifiedItems
-        {
-            get { return m_IdentifiedItems.ToArray(); }
-        }
+        public IItemInstance NaturalWeapons => m_NaturalWeapons;
+
+        public List<string> IdentifiedItems => m_IdentifiedItems;
+        public IJob CurrentJob => m_CurrentJob;
 
         public bool HasMoved { get; set; }
 
@@ -1090,14 +1068,11 @@ namespace JoyLib.Code.Entities
 
         protected int RegenTicker { get; set; }
 
-        public int Level
-        {
-            get { return m_Level.Value; }
-        }
+        public IGrowingValue Level => m_Level;
 
         public Quest QuestOffered { get; set; }
 
-        public ICulture[] Cultures => m_Cultures.ToArray();
+        public List<ICulture> Cultures => m_Cultures;
 
         public IVision VisionProvider => m_VisionProvider;
 
@@ -1111,10 +1086,7 @@ namespace JoyLib.Code.Entities
             get { return m_JobLevels; }
         }
 
-        public string[] Slots
-        {
-            get { return m_Slots.ToArray(); }
-        }
+        public List<string> Slots => m_Slots;
 
         public int VisionMod
         {

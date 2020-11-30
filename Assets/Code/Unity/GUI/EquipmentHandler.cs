@@ -65,9 +65,9 @@ namespace JoyLib.Code.Unity.GUI
             }
             children.ForEach(child => Destroy(child));
             
-            string[] slots = m_Player.Slots;
+            List<string> slots = m_Player.Slots;
             
-            for(int i = 0; i < slots.Length; i++)
+            for(int i = 0; i < slots.Count; i++)
             {
                 GameObject slotInstance = GameObject.Instantiate(
                     m_SlotPrefab,
