@@ -140,4 +140,6 @@ public class GameManager : MonoBehaviour, IGameManager
     public EntityFactory EntityFactory { get; protected set; }
     public ItemFactory ItemFactory { get; protected set; }
     public GameObject MyGameObject { get; protected set; }
+
+    public IEntity Player { get; set; }
 }

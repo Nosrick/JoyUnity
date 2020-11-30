@@ -18,7 +18,7 @@ namespace JoyLib.Code.Conversation.Conversations
         {
         }
 
-        public override ITopic[] Interact(Entity instigator, Entity listener)
+        public override ITopic[] Interact(IEntity instigator, IEntity listener)
         {
             base.Interact(instigator, listener);
 

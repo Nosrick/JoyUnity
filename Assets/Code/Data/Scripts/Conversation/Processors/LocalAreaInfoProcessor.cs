@@ -7,7 +7,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
 {
     public class LocalAreaInfoProcessor : TopicData
     {
-        protected Entity Listener
+        protected IEntity Listener
         {
             get;
             set;
@@ -26,7 +26,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
         {
         }
 
-        public override ITopic[] Interact(Entity instigator, Entity listener)
+        public override ITopic[] Interact(IEntity instigator, IEntity listener)
         {
             Listener = listener;
             return base.Interact(instigator, listener);
@@ -48,7 +48,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
             };
         }
 
-        protected string GetAreaInfo(Entity listener)
+        protected string GetAreaInfo(IEntity listener)
         {
             string message = "";
 

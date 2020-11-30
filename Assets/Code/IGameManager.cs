@@ -51,5 +51,7 @@ namespace JoyLib.Code
         ItemFactory ItemFactory { get; }
         
         GameObject MyGameObject { get; }
+        
+        IEntity Player { get; set; }
     }
 }

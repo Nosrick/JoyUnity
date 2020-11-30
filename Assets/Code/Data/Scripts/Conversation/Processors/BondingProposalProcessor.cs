@@ -23,8 +23,8 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
 
         protected override ITopic[] FetchNextTopics()
         {
-            Entity listener = ConversationEngine.Listener;
-            Entity instigator = ConversationEngine.Instigator;
+            IEntity listener = ConversationEngine.Listener;
+            IEntity instigator = ConversationEngine.Instigator;
             IRelationship[] relationships =
                 RelationshipHandler.Get(new IJoyObject[] {instigator, listener}, new[] {"romantic"});
             int highestValue = int.MinValue;

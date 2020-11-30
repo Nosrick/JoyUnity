@@ -20,7 +20,7 @@ namespace JoyLib.Code.Unity.GUI
         
         public static ILiveEntityHandler EntityHandler { get; set; }
         
-        protected static Entity Player { get; set; }
+        protected static IEntity Player { get; set; }
 
         public override void OnPointerUp(PointerEventData eventData)
         {
@@ -53,8 +53,8 @@ namespace JoyLib.Code.Unity.GUI
 
         protected void GiveItem()
         {
-            Entity left = ConversationEngine?.Instigator;
-            Entity right = ConversationEngine?.Listener;
+            IEntity left = ConversationEngine?.Instigator;
+            IEntity right = ConversationEngine?.Listener;
 
             if (left is null || right is null)
             {

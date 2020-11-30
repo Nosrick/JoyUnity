@@ -117,19 +117,19 @@ namespace JoyLib.Code.Conversation.Conversations
             return rumours;
         }
 
-        public IRumour GetRandom()
+        public IRumour GetRandom(WorldInstance overworldRef)
         {
             if (Rumours.Count == 0)
             {
-                JoyObject left = GameObject.FindObjectOfType<MonoBehaviourHandler>().MyJoyObject.MyWorld.GetRandomSentient();
-                JoyObject right = left.MyWorld.GetRandomSentient();
+                IJoyObject left = overworldRef.GetRandomSentientWorldWide();
+                IJoyObject right = left.MyWorld.GetRandomSentient();
                 Rumours.Add(GenerateRandomRumour(new []{left, right}));
             }
 
             return Rumours[Roller.Roll(0, Rumours.Count)];
         }
 
-        public IRumour GenerateRandomRumour(JoyObject[] participants)
+        public IRumour GenerateRandomRumour(IJoyObject[] participants)
         {
             if (RumourTypes is null)
             {

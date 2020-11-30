@@ -65,7 +65,7 @@ namespace JoyLib.Code.Entities.Items
         
         public MonoBehaviourHandler MonoBehaviourHandler { get; protected set; }
         
-        protected Entity User { get; set; }
+        protected IEntity User { get; set; }
         
         protected bool m_Identified;
 
@@ -216,7 +216,7 @@ namespace JoyLib.Code.Entities.Items
             m_Description = builder.ToString();
         }
         
-        public void SetUser(Entity user)
+        public void SetUser(IEntity user)
         {
             User = user;
         }

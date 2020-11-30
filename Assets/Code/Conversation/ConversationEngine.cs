@@ -88,13 +88,13 @@ namespace JoyLib.Code.Conversation
             set;
         }
 
-        public Entity Instigator
+        public IEntity Instigator
         {
             get;
             protected set;
         }
 
-        public Entity Listener
+        public IEntity Listener
         {
             get;
             protected set;
@@ -114,6 +114,9 @@ namespace JoyLib.Code.Conversation
             GameObject window = null)
         {
             RelationshipHandler = relationshipHandler;
+
+            TopicData.ConversationEngine = this;
+            TopicData.RelationshipHandler = relationshipHandler;
                 
             m_Topics = LoadTopics();
             
@@ -281,7 +284,7 @@ namespace JoyLib.Code.Conversation
             return linked;
         }
 
-        public void SetActors(Entity instigator, Entity listener)
+        public void SetActors(IEntity instigator, IEntity listener)
         {
             Instigator = instigator;
             Listener = listener;

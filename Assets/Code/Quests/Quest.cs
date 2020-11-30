@@ -39,12 +39,12 @@ namespace JoyLib.Code.Quests
             return this.IsComplete;
         }
 
-        public bool FulfilsRequirements(Entity questor, IJoyAction action)
+        public bool FulfilsRequirements(IEntity questor, IJoyAction action)
         {
             return Steps[CurrentStep].Action.ExecutedSuccessfully(action);
         }
 
-        public void StartQuest(Entity questor)
+        public void StartQuest(IEntity questor)
         {
             foreach (IQuestStep step in Steps)
             {
@@ -73,7 +73,7 @@ namespace JoyLib.Code.Quests
             }
         }
 
-        public bool CompleteQuest(Entity questor)
+        public bool CompleteQuest(IEntity questor)
         {
             if (this.IsComplete == false)
             {

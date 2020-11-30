@@ -48,12 +48,12 @@ namespace JoyLib.Code.Entities.Abilities
                 target)
         {}
         
-        public override bool OnUse(Entity user, IJoyObject target)
+        public override bool OnUse(IEntity user, IJoyObject target)
         {
-            if(target is ItemInstance item)
+            if(target is IItemInstance item)
             {
                 m_CachedActions["fulfillneedaction"].Execute(
-                    new JoyObject[] { user },
+                    new IJoyObject[] { user },
                     new string[] { "hunger", "need", "fulfill" },
                     new object[] { "hunger", item.ItemType.Value, 10 }
                 );

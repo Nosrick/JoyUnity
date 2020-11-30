@@ -41,7 +41,7 @@ namespace JoyLib.Code.Quests
             Actions = ScriptingEngine.instance.FetchAndInitialiseChildren<IQuestAction>().ToList();
         }
 
-        public IQuest MakeRandomQuest(Entity questor, Entity provider, WorldInstance overworldRef)
+        public IQuest MakeRandomQuest(IEntity questor, IEntity provider, WorldInstance overworldRef)
         {
             List<IQuestStep> steps = new List<IQuestStep>();
 
@@ -63,7 +63,7 @@ namespace JoyLib.Code.Quests
             return new Quest(steps, QuestMorality.Neutral, GetRewards(questor, provider, steps), provider, tagsForAllSteps);
         }
 
-        public IEnumerable<IQuest> MakeOneOfEachType(Entity questor, Entity provider, WorldInstance overworldRef)
+        public IEnumerable<IQuest> MakeOneOfEachType(IEntity questor, IEntity provider, WorldInstance overworldRef)
         {
             List<IQuest> quests = new List<IQuest>();
 
@@ -81,12 +81,12 @@ namespace JoyLib.Code.Quests
             return quests;
         }
 
-        public IQuest MakeQuestOfType(Entity questor, Entity provider, WorldInstance overworldRef, string[] tags)
+        public IQuest MakeQuestOfType(IEntity questor, IEntity provider, WorldInstance overworldRef, string[] tags)
         {
             throw new System.NotImplementedException();
         }
 
-        private List<IItemInstance> GetRewards(Entity questor, Entity provider, List<IQuestStep> steps)
+        private List<IItemInstance> GetRewards(IEntity questor, IEntity provider, List<IQuestStep> steps)
         {
             List<IItemInstance> rewards = new List<IItemInstance>();
             int reward = ((steps.Count * 100) + (EntityRelationshipHandler.GetHighestRelationshipValue(provider, questor)));

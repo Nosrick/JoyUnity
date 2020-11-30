@@ -6,14 +6,14 @@ namespace JoyLib.Code.Conversation
 {
     public interface IConversationEngine
     {
-        void SetActors(Entity instigator, Entity listener);
+        void SetActors(IEntity instigator, IEntity listener);
         ITopic[] Converse(string topic, int index = 0);
         ITopic[] Converse(int index = 0);
         
         ITopic[] CurrentTopics { get; }
         ITopic[] AllTopics { get; }
-        Entity Instigator { get; }
-        Entity Listener { get; }
+        IEntity Instigator { get; }
+        IEntity Listener { get; }
         
         GameObject Window { get; set; }
     }

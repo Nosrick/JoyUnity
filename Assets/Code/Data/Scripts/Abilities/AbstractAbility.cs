@@ -53,7 +53,7 @@ namespace JoyLib.Code.Entities.Abilities
 
         //When the entity attacks, before any resolution occurs
         //Returns false to denote no effect took place
-        public virtual bool OnAttack(Entity attacker, Entity target)
+        public virtual bool OnAttack(IEntity attacker, IEntity target)
         {
             return false;
         }
@@ -61,14 +61,14 @@ namespace JoyLib.Code.Entities.Abilities
         //When the entity is hit, after resolution
         //Triggers even when no damage happens
         //Returns the damage by default
-        public virtual int OnTakeHit(Entity attacker, Entity defender, int damage)
+        public virtual int OnTakeHit(IEntity attacker, IEntity defender, int damage)
         {
             return damage;
         }
 
         //When the entity is healed
         //Returns the amount healed
-        public virtual int OnHeal(Entity receiver, Entity healer, int value)
+        public virtual int OnHeal(IEntity receiver, IEntity healer, int value)
         {
             return value;
         }
@@ -76,7 +76,7 @@ namespace JoyLib.Code.Entities.Abilities
         //When the entity picks up an item
         //Return true to denote an effect took place
         //Thus returns false by default
-        public virtual bool OnPickup(Entity entity, ItemInstance item)
+        public virtual bool OnPickup(IEntity entity, IItemInstance item)
         {
             return false;
         }
@@ -84,21 +84,21 @@ namespace JoyLib.Code.Entities.Abilities
         //Triggered when the entity ticks
         //Returns true when an effect triggers
         //Thus returns false by default
-        public virtual bool OnTick(Entity entity)
+        public virtual bool OnTick(IEntity entity)
         {
             return false;
         }
 
         //Triggered when an entity reduces another entity to zero of a Derived Value
         //Returns true when the effect takes place
-        public virtual bool OnReduceToZero(Entity attacker, Entity target, IDerivedValue value)
+        public virtual bool OnReduceToZero(IEntity attacker, IEntity target, IDerivedValue value)
         {
             return false;
         }
 
         //Triggered when an entity reduces another entity to the "disabled" of a Derived Value
         //Returns true when the effect takes place
-        public virtual bool OnDisable(Entity attacker, Entity target, IDerivedValue value)
+        public virtual bool OnDisable(IEntity attacker, IEntity target, IDerivedValue value)
         {
             return false;
         }
@@ -106,28 +106,28 @@ namespace JoyLib.Code.Entities.Abilities
         //Triggered when an entity uses the JoyObject this ability is attached to
         //This is typically an item
         //Returns true when the ability triggers
-        public virtual bool OnUse(Entity user, IJoyObject target)
+        public virtual bool OnUse(IEntity user, IJoyObject target)
         {
             return false;
         }
 
         //Triggered when an entity interacts with the JoyObject (could be an item or an entity or whatever)
         //Returns true when the effect triggers
-        public virtual bool OnInteract(Entity actor, IJoyObject observer)
+        public virtual bool OnInteract(IEntity actor, IJoyObject observer)
         {
             return false;
         }
 
         //Triggered when the ability is added to the entity
         //Returns true if an effect was added (other than this one)
-        public virtual bool OnAdd(Entity entity)
+        public virtual bool OnAdd(IEntity entity)
         {
             return false;
         }
 
         //Triggered when the ability is removed from the entity
         //Return true if an effect was removed (other than this one)
-        public virtual bool OnRemove(Entity entity)
+        public virtual bool OnRemove(IEntity entity)
         {
             return false;
         }
@@ -188,7 +188,7 @@ namespace JoyLib.Code.Entities.Abilities
             }
         }
 
-        public bool EnactToll(Entity caster)
+        public bool EnactToll(IEntity caster)
         {
             bool[] canCast = new bool[Costs.Length];
             for(int i = 0; i < Costs.Length; i++)

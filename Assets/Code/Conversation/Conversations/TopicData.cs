@@ -28,9 +28,9 @@ namespace JoyLib.Code.Conversation.Conversations
         
         public IJoyAction[] CachedActions { get; protected set; }
         
-        protected static IConversationEngine ConversationEngine { get; set; }
+        public static IConversationEngine ConversationEngine { get; set; }
         
-        protected static IEntityRelationshipHandler RelationshipHandler { get; set; }
+        public static IEntityRelationshipHandler RelationshipHandler { get; set; }
         
         public TopicData(
             ITopicCondition[] conditions,
@@ -133,11 +133,11 @@ namespace JoyLib.Code.Conversation.Conversations
             string[] criteria = Conditions.Select(c => c.Criteria).ToArray();
 
             List<Tuple<string, int>> values = new List<Tuple<string, int>>();
-            foreach (JoyObject participant in participants)
+            foreach (IJoyObject participant in participants)
             {
-                if (participant is Entity entity)
+                if (participant is IEntity entity)
                 {
-                    JoyObject[] others = participants.Where(p => p.GUID.Equals(participant.GUID) == false).ToArray();
+                    IJoyObject[] others = participants.Where(p => p.GUID.Equals(participant.GUID) == false).ToArray();
                     values.AddRange(entity.GetData(criteria, others));                    
                 }
             }
@@ -198,7 +198,7 @@ namespace JoyLib.Code.Conversation.Conversations
             return actions.ToArray();
         }
 
-        public virtual ITopic[] Interact(Entity instigator, Entity listener)
+        public virtual ITopic[] Interact(IEntity instigator, IEntity listener)
         {
             IJoyAction fulfillNeed = CachedActions.First(action => action.Name.Equals("fulfillneedaction", StringComparison.OrdinalIgnoreCase));
             IJoyAction influence = CachedActions.First(action =>

@@ -16,7 +16,7 @@ namespace JoyLib.Code.Unity.GUI
 {
     public class EquipmentHandler : MonoBehaviour
     {
-        private Entity m_Player;
+        private IEntity m_Player;
 
         private GameObject m_SlotPrefab;
         private GameObject m_Grid;
@@ -41,7 +41,7 @@ namespace JoyLib.Code.Unity.GUI
         
         }
 
-        public void SetPlayer(Entity player, bool clearSlots = false)
+        public void SetPlayer(IEntity player, bool clearSlots = false)
         {
             m_Player = player;
             CalculateSlots();

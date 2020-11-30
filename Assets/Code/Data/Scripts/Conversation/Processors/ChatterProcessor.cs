@@ -42,7 +42,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
                     new ITopicCondition[0],
                     "ChatterTopic",
                     new string[] {"Thanks"},
-                    RumourMill.GetRandom().Words,
+                    RumourMill.GetRandom(GlobalConstants.GameManager.Player.MyWorld.GetOverworld()).Words,
                     0,
                     new string[0],
                     Speaker.LISTENER,

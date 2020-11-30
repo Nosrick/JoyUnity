@@ -41,7 +41,7 @@ namespace JoyLib.Code.Quests
             Description = AssembleDescription();
         }
         
-        public IQuestStep Make(Entity questor, Entity provider, WorldInstance overworld, IEnumerable<string> tags)
+        public IQuestStep Make(IEntity questor, IEntity provider, WorldInstance overworld, IEnumerable<string> tags)
         {
             List<WorldInstance> worlds = overworld.GetWorlds(overworld); 
 
@@ -117,7 +117,7 @@ namespace JoyLib.Code.Quests
             return "Go to " + builder.ToString() + ".";
         }
 
-        public void ExecutePrerequisites(Entity questor)
+        public void ExecutePrerequisites(IEntity questor)
         {
         }
 

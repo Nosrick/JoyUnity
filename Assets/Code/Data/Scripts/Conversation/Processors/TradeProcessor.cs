@@ -31,7 +31,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
             }
         }
 
-        public override ITopic[] Interact(Entity instigator, Entity listener)
+        public override ITopic[] Interact(IEntity instigator, IEntity listener)
         {
             TradeWindow.SetActors(instigator, listener);
             

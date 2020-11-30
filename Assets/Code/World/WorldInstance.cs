@@ -31,7 +31,7 @@ namespace JoyLib.Code.World
 
         [NonSerialized] protected WorldInstance m_Parent;
 
-        protected List<Entity> m_Entities;
+        protected List<IEntity> m_Entities;
 
         protected List<IJoyObject> m_Objects;
         protected Dictionary<Vector2Int, IJoyObject> m_Walls;
@@ -72,7 +72,7 @@ namespace JoyLib.Code.World
             this.m_Tags = tags;
             m_Tiles = tiles;
             m_Areas = new Dictionary<Vector2Int, WorldInstance>();
-            m_Entities = new List<Entity>();
+            m_Entities = new List<IEntity>();
             m_Objects = new List<IJoyObject>();
             m_Walls = new Dictionary<Vector2Int, IJoyObject>();
             GUID = GUIDManager.Instance.AssignGUID();
@@ -103,7 +103,7 @@ namespace JoyLib.Code.World
         /// <param name="objects"></param>
         /// <param name="tags"></param>
         /// <param name="name"></param>
-        public WorldInstance(WorldTile[,] tiles, Dictionary<Vector2Int, WorldInstance> areas, List<Entity> entities,
+        public WorldInstance(WorldTile[,] tiles, Dictionary<Vector2Int, WorldInstance> areas, List<IEntity> entities,
             List<IJoyObject> objects, Dictionary<Vector2Int, IJoyObject> walls, string[] tags, string name)
         {
             this.Name = name;
@@ -190,11 +190,11 @@ namespace JoyLib.Code.World
             }
 
             //Then the objects used by entities
-            List<Entity> entities = m_Entities.ToList();
+            List<IEntity> entities = m_Entities.ToList();
 
             for (int i = 0; i < entities.Count; i++)
             {
-                Entity entity = entities[i];
+                IEntity entity = entities[i];
                 List<IItemInstance> backpack = entity.Backpack;
                 for (int j = 0; j < backpack.Count; j++)
                 {
@@ -411,14 +411,14 @@ namespace JoyLib.Code.World
             return searchEntities;
         }
 
-        public Entity GetRandomSentient()
+        public IEntity GetRandomSentient()
         {
             if (m_Entities.Count == 0)
             {
                 return null;
             }
 
-            List<Entity> sentients = m_Entities.Where(x => x.Sentient).ToList();
+            List<IEntity> sentients = m_Entities.Where(x => x.Sentient).ToList();
 
             if (!(this.Player is null))
             {
@@ -428,15 +428,18 @@ namespace JoyLib.Code.World
             return sentients.Count > 0 ? sentients[Roller.Roll(0, sentients.Count)] : null;
         }
 
-        public Entity GetRandomSentientWorldWide()
+        public IEntity GetRandomSentientWorldWide()
         {
             List<WorldInstance> worlds = GetWorlds(GetOverworld());
             int result = Roller.Roll(0, worlds.Count);
-            Entity entity = worlds[result].GetRandomSentient();
-            while (entity == null)
+            IEntity entity = worlds[result].GetRandomSentient();
+
+            int breakout = 0;
+            while (entity == null && breakout < 100)
             {
                 result = Roller.Roll(0, worlds.Count);
                 entity = worlds[result].GetRandomSentient();
+                breakout++;
             }
 
             return entity;
@@ -500,14 +503,14 @@ namespace JoyLib.Code.World
             return null;
         }
 
-        public void SwapPosition(Entity left, Entity right)
+        public void SwapPosition(IEntity left, IEntity right)
         {
             Vector2Int tempPosition = right.WorldPosition;
             right.Move(left.WorldPosition);
             left.Move(tempPosition);
         }
 
-        public ItemInstance PickUpObject(Entity entityRef)
+        public ItemInstance PickUpObject(IEntity entityRef)
         {
             if (GetObject(entityRef.WorldPosition) is ItemInstance item)
             {
@@ -532,119 +535,7 @@ namespace JoyLib.Code.World
             return null;
         }
 
-        public void TradeObjects(Entity leftEntity, ItemInstance leftItem, Entity rightEntity, ItemInstance rightItem)
-        {
-            if (leftItem != null)
-            {
-                leftEntity.RemoveContents(leftItem);
-                rightEntity.AddContents(leftItem);
-            }
-
-            if (rightItem != null)
-            {
-                rightEntity.RemoveContents(rightItem);
-                leftEntity.AddContents(rightItem);
-            }
-        }
-
-        protected bool[,] DiscoverTiles(Vector2Int pointRef, Entity entityRef, bool[,] visionRef)
-        {
-            bool[,] vision = visionRef;
-
-            int entityPerception = entityRef.VisionMod;
-            for (int i = 0; i < 360; i++)
-            {
-                float x = (float) Math.Cos(i * 0.01745f);
-                float y = (float) Math.Sin(i * 0.01745f);
-                vision = DiscoverTile(x, y, entityRef, entityPerception, vision);
-            }
-
-            return vision;
-        }
-
-        protected bool[,] DiscoverTile(float x, float y, Entity entityRef, int perception, bool[,] visionRef)
-        {
-            bool[,] vision = visionRef;
-
-            float oX = entityRef.WorldPosition.x + 0.5f;
-            float oY = entityRef.WorldPosition.y + 0.5f;
-
-            int arrayX = vision.GetLength(0);
-            int arrayY = vision.GetLength(1);
-
-            for (int i = 0; i < perception; i++)
-            {
-                if (oX < 0.0f || oY < 0.0f || oX >= arrayX || oY >= arrayY)
-                {
-                    return vision;
-                }
-
-                int posX = (int) oX;
-                int posY = (int) oY;
-
-                vision[posX, posY] = true;
-                if (Walls.ContainsKey(new Vector2Int(posX, posY)))
-                {
-                    return vision;
-                }
-
-                oX += x;
-                oY += y;
-            }
-
-            return vision;
-        }
-
-        /*
-        protected bool[,] DiscoverTilesOLD(Vector2Int pointRef, Entity entityRef, bool[,] visionRef)
-        {
-            bool[,] vision = visionRef;
-
-            float entityPerceptionMod = entityRef.VisionMod;
-            
-            Dictionary<Vector2Int, JoyObject> walls = m_Objects.Where(x => x.IsWall).ToDictionary(x => x.WorldPosition, x => x);
-
-            for (int i = 0; i < 360; i++)
-            {
-                float x = (float)Math.Cos(i * 0.01745f);
-                float y = (float)Math.Sin(i * 0.01745f);
-                vision = DiscoverTileOLD(x, y, entityRef, entityPerceptionMod, walls, vision);
-            }
-
-            return vision;
-        }
-
-        protected bool[,] DiscoverTileOLD(float x, float y, Entity entityRef, float perceptionMod, 
-            Dictionary<Vector2Int, JoyObject> walls, bool[,] visionRef)
-        {
-            bool[,] vision = visionRef;
-            float oX, oY;
-
-            oX = entityRef.WorldPosition.x + 0.5f;
-            oY = entityRef.WorldPosition.y + 0.5f;
-
-            for (int i = 0; i < perceptionMod; i++)
-            {
-
-                if (oX < 0.0f || oY < 0.0f || oX >= vision.GetLength(0) || oY >= vision.GetLength(1))
-                    return vision;
-
-                if (m_Light[(int)oX, (int)oY] == 0 && entityRef.VisionType != VisionType.Nocturnal)
-                    return vision;
-
-                vision[(int)oX, (int)oY] = true;
-                if (walls.ContainsKey(new Vector2Int((int)oX, (int)oY)))
-                    return vision;
-
-                oX += x;
-                oY += y;
-            }
-
-            return vision;
-        }
-        */
-
-        public void AddEntity(Entity entityRef)
+        public void AddEntity(IEntity entityRef)
         {
             m_Entities.Add(entityRef);
             EntityHandler.AddEntity(entityRef);
@@ -686,7 +577,7 @@ namespace JoyLib.Code.World
             IsDirty = true;
         }
 
-        public Entity GetEntity(Vector2Int positionRef)
+        public IEntity GetEntity(Vector2Int positionRef)
         {
             return m_Entities.FirstOrDefault(t => t.WorldPosition.Equals(positionRef));
         }
@@ -783,12 +674,6 @@ namespace JoyLib.Code.World
             get { return m_Tiles; }
         }
 
-        public bool[,] DiscoveredTiles
-        {
-            get { return m_Discovered; }
-            protected set { m_Discovered = value; }
-        }
-
         public Dictionary<Vector2Int, IJoyObject> GetObjectsOfType(string[] tags)
         {
             Dictionary<Vector2Int, IJoyObject> objects = new Dictionary<Vector2Int, IJoyObject>();
@@ -828,7 +713,7 @@ namespace JoyLib.Code.World
             get { return m_Areas; }
         }
 
-        public List<Entity> Entities
+        public List<IEntity> Entities
         {
             get { return m_Entities; }
         }
@@ -867,7 +752,7 @@ namespace JoyLib.Code.World
             protected set { m_Name = value; }
         }
 
-        public Entity Player
+        public IEntity Player
         {
             get
             {
@@ -896,21 +781,5 @@ namespace JoyLib.Code.World
         {
             get { return m_Costs; }
         }
-    }
-
-    public enum EntitySentienceSearch
-    {
-        Sentient,
-        NonSentient,
-        Any,
-        Matching
-    }
-
-    public enum EntityTypeSearch
-    {
-        MatchingAll,
-        MatchingBaseType,
-        NoMatch,
-        Any
     }
 }

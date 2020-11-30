@@ -17,12 +17,12 @@ namespace JoyLib.Code.Quests
         
         RNG Roller { get; }
 
-        IQuestStep Make(Entity questor, Entity provider, WorldInstance overworld, IEnumerable<string> tags);
+        IQuestStep Make(IEntity questor, IEntity provider, WorldInstance overworld, IEnumerable<string> tags);
         bool ExecutedSuccessfully(IJoyAction action);
 
         string AssembleDescription();
 
-        void ExecutePrerequisites(Entity questor);
+        void ExecutePrerequisites(IEntity questor);
 
         IQuestAction Create(
             IEnumerable<string> tags,

@@ -50,7 +50,7 @@ namespace JoyLib.Code.Quests
             ItemFactory = itemFactory is null || GlobalConstants.GameManager is null == false ? GlobalConstants.GameManager.ItemFactory : itemFactory;
         }
         
-        public IQuestStep Make(Entity questor, Entity provider, WorldInstance overworld, IEnumerable<string> tags)
+        public IQuestStep Make(IEntity questor, IEntity provider, WorldInstance overworld, IEnumerable<string> tags)
         {
             IItemInstance deliveryItem = null;
             List<IItemInstance> backpack = provider.Backpack;
@@ -60,7 +60,7 @@ namespace JoyLib.Code.Quests
 
                 deliveryItem = backpack[result];
             }
-            Entity endPoint = overworld.GetRandomSentientWorldWide();
+            IEntity endPoint = overworld.GetRandomSentientWorldWide();
             if(deliveryItem == null)
             {
                 deliveryItem = ItemFactory.CreateCompletelyRandomItem();
@@ -79,9 +79,9 @@ namespace JoyLib.Code.Quests
             return step;
         }
 
-        public void ExecutePrerequisites(Entity questor)
+        public void ExecutePrerequisites(IEntity questor)
         {
-            foreach (ItemInstance item in Items)
+            foreach (IItemInstance item in Items)
             {
                 questor.AddContents(item);
             }

@@ -55,7 +55,7 @@ namespace JoyLib.Code.Conversation.Conversations
         bool FulfilsConditions(IEnumerable<Tuple<string, int>> values);
         bool FulfilsConditions(IEnumerable<JoyObject> participants);
 
-        ITopic[] Interact(Entity instigator, Entity listener);
+        ITopic[] Interact(IEntity instigator, IEntity listener);
 
         void Initialise(
             ITopicCondition[] conditions,

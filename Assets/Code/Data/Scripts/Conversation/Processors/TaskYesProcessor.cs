@@ -7,7 +7,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
     public class TaskYesProcessor : TopicData
     {
         protected static IQuestTracker QuestTracker { get; set; }
-        protected static Entity Player { get; set; }
+        protected static IEntity Player { get; set; }
         
         protected IQuest OfferedQuest { get; set; }
         
@@ -37,7 +37,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
             Player = gameManager.EntityHandler.GetPlayer();
         }
 
-        public override ITopic[] Interact(Entity instigator, Entity listener)
+        public override ITopic[] Interact(IEntity instigator, IEntity listener)
         {
             base.Interact(instigator, listener);
             QuestTracker.AddQuest(

@@ -12,6 +12,6 @@ namespace JoyLib.Code.Quests
         List<IJoyObject> Actors { get; }
         List<WorldInstance> Areas { get; }
 
-        void StartQuest(Entity questor);
+        void StartQuest(IEntity questor);
     }
 }

@@ -56,7 +56,7 @@ namespace JoyLib.Code.Quests
             protected set;
         }
 
-        public void StartQuest(Entity questor)
+        public void StartQuest(IEntity questor)
         {
             Action.ExecutePrerequisites(questor);
         }

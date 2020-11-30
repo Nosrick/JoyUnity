@@ -6,6 +6,7 @@ using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.AI;
 using JoyLib.Code.Entities.AI.Drivers;
 using JoyLib.Code.Entities.AI.LOS.Providers;
+using JoyLib.Code.Entities.Gender;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Jobs;
 using JoyLib.Code.Entities.Needs;
@@ -30,6 +31,8 @@ namespace JoyLib.Code.Entities
         ISexuality Sexuality { get; }
         IRomance Romance { get; }
         
+        IGender Gender { get; }
+        
         List<string> IdentifiedItems { get; }
 
         IJob CurrentJob { get; }
@@ -45,6 +48,20 @@ namespace JoyLib.Code.Entities
         IDriver Driver { get; }
         IPathfinder Pathfinder { get; }
         Queue<Vector2Int> PathfindingData { get; }
+        
+        Vector2Int TargetPoint { get; set; }
+        IAbility TargetingAbility { get; set; }
+        
+        bool PlayerControlled { get; set; }
+        bool Sentient { get; }
+        
+        int VisionMod { get; }
+        
+        string CreatureType { get; }
+        
+        bool HasMoved { get; }
+        
+        bool Alive { get; }
 
         void Tick();
         void AddQuest(IQuest quest);

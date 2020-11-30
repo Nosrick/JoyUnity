@@ -21,10 +21,10 @@ namespace JoyLib.Code.Quests
         bool BelongsToThis(object searchTerm);
         bool AdvanceStep();
 
-        bool FulfilsRequirements(Entity questor, IJoyAction action);
+        bool FulfilsRequirements(IEntity questor, IJoyAction action);
 
-        void StartQuest(Entity questor);
+        void StartQuest(IEntity questor);
 
-        bool CompleteQuest(Entity questor);
+        bool CompleteQuest(IEntity questor);
     }
 }

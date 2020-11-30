@@ -12,8 +12,8 @@ namespace JoyLib.Code.Unity.GUI
 {
     public class TradeWindow : MonoBehaviour
     {
-        public Entity Left { get; protected set; }
-        public Entity Right { get; protected set; }
+        public IEntity Left { get; protected set; }
+        public IEntity Right { get; protected set; }
 
         [SerializeField]
         protected TextMeshProUGUI LeftValue;
@@ -44,7 +44,7 @@ namespace JoyLib.Code.Unity.GUI
             RightOffering.OnRemoveItem += Tally;
         }
 
-        public void SetActors(Entity left, Entity right)
+        public void SetActors(IEntity left, IEntity right)
         {
             Left = left;
             Right = right;
@@ -82,7 +82,7 @@ namespace JoyLib.Code.Unity.GUI
             
             foreach (Item item in LeftOffering.Collection)
             {
-                if (!(item is ItemInstance joyItem))
+                if (!(item is IItemInstance joyItem))
                 {
                     continue;
                 }
@@ -92,7 +92,7 @@ namespace JoyLib.Code.Unity.GUI
 
             foreach (Item item in RightOffering.Collection)
             {
-                if (!(item is ItemInstance joyItem))
+                if (!(item is IItemInstance joyItem))
                 {
                     continue;
                 }

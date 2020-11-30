@@ -21,7 +21,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
                 new RNG())
         {}
 
-        public override ITopic[] Interact(Entity instigator, Entity listener)
+        public override ITopic[] Interact(IEntity instigator, IEntity listener)
         {
             IJoyAction influence = CachedActions.First(action =>
                 action.Name.Equals("modifyrelationshippointsaction", StringComparison.OrdinalIgnoreCase));

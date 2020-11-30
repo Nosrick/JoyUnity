@@ -128,7 +128,7 @@ namespace JoyLib.Code.States
         public override void Start()
         {
             base.Start();
-            m_ActiveWorld.Player.UpdateMe();
+            m_ActiveWorld.Player.Tick();
             m_GameplayFlags = GameplayFlags.Moving;
 
             SetEntityWorld(Overworld);
@@ -160,7 +160,7 @@ namespace JoyLib.Code.States
             Done = true;
 
             WorldInstance oldWorld = m_ActiveWorld;
-            Entity player = oldWorld.Player;
+            IEntity player = oldWorld.Player;
 
             player.FetchAction("enterworldaction")
                 .Execute(
@@ -172,7 +172,7 @@ namespace JoyLib.Code.States
             player = m_ActiveWorld.Player;
 
             player.Move(spawnPoint);
-            player.UpdateMe();
+            player.Tick();
 
             m_GameplayFlags = GameplayFlags.Moving;
             Tick();
@@ -250,7 +250,7 @@ namespace JoyLib.Code.States
 
             bool hasMoved = false;
 
-            Entity player = m_ActiveWorld.Player;
+            IEntity player = m_ActiveWorld.Player;
 
             if (Input.GetKeyUp(KeyCode.Space))
             {
@@ -335,7 +335,7 @@ namespace JoyLib.Code.States
                 else
                 {
                     //TODO: Make a targeting system or something
-                    Entity listener = this.m_ActiveWorld.GetRandomSentient();
+                    IEntity listener = this.m_ActiveWorld.GetRandomSentient();
 
                     if (!(listener is null))
                     {
@@ -523,7 +523,7 @@ namespace JoyLib.Code.States
 
                 if (physicsResult == PhysicsResult.EntityCollision)
                 {
-                    Entity tempEntity = m_ActiveWorld.GetEntity(newPlayerPoint);
+                    IEntity tempEntity = m_ActiveWorld.GetEntity(newPlayerPoint);
                     if (m_GameplayFlags == GameplayFlags.Interacting)
                     {
                     }
@@ -541,7 +541,7 @@ namespace JoyLib.Code.States
                         {
                             //TODO: REDO COMBAT ENGINE
                             //CombatEngine.SwingWeapon(player, tempEntity);
-                            IRelationship[] relationships = RelationshipHandler.Get(new JoyObject[] { tempEntity, player });
+                            IRelationship[] relationships = RelationshipHandler.Get(new IJoyObject[] { tempEntity, player });
                             foreach(IRelationship relationship in relationships)
                             {
                                 relationship.ModifyValueOfParticipant(player.GUID, tempEntity.GUID, -50);
@@ -584,7 +584,7 @@ namespace JoyLib.Code.States
                 {
                     if (AdjacencyHelper.IsAdjacent(player.WorldPosition, player.TargetPoint))
                     {
-                        Entity tempEntity = m_ActiveWorld.GetEntity(player.TargetPoint);
+                        IEntity tempEntity = m_ActiveWorld.GetEntity(player.TargetPoint);
                         if (tempEntity != null && Input.GetKeyDown(KeyCode.Return))
                         {
                             player.TargetingAbility.OnUse(player, tempEntity);
@@ -595,7 +595,7 @@ namespace JoyLib.Code.States
                 }
                 else if (player.TargetingAbility.TargetType == AbilityTarget.Ranged)
                 {
-                    Entity tempEntity = m_ActiveWorld.GetEntity(player.TargetPoint);
+                    IEntity tempEntity = m_ActiveWorld.GetEntity(player.TargetPoint);
                     if(tempEntity != null && Input.GetKeyDown(KeyCode.Return))
                     {
                         player.TargetingAbility.OnUse(player, tempEntity);
@@ -657,8 +657,8 @@ namespace JoyLib.Code.States
 
         protected void DrawObjects()
         {
-            Entity player = m_ActiveWorld.Player;
-            bool[,] vision = player.Vision;
+            IEntity player = m_ActiveWorld.Player;
+            bool[,] vision = player.VisionProvider.Vision;
             for (int i = 0; i < m_FogOfWarHolder.transform.childCount; i++)
             {
                 GameObject fog = m_FogOfWarHolder.transform.GetChild(i).gameObject;
@@ -678,7 +678,7 @@ namespace JoyLib.Code.States
 
         public override void Update()
         {
-            Entity player = m_ActiveWorld.Player;
+            IEntity player = m_ActiveWorld.Player;
             
             if (!AutoTurn && player.FulfillmentData.Counter > 0)
             {

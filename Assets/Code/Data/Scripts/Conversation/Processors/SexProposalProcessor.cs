@@ -18,7 +18,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
                 Speaker.INSTIGATOR)
         {}
 
-        public override ITopic[] Interact(Entity instigator, Entity listener)
+        public override ITopic[] Interact(IEntity instigator, IEntity listener)
         {
             IRelationship[] relationships =
                 RelationshipHandler.Get(new IJoyObject[] {instigator, listener}, new[] {"sexual"});

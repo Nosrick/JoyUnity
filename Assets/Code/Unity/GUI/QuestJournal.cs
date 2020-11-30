@@ -15,7 +15,7 @@ namespace JoyLib.Code.Unity.GUI
 {
     public class QuestJournal : MonoBehaviour
     {
-        public Entity Player { get; set; }
+        public IEntity Player { get; set; }
         
         protected ILiveEntityHandler EntityHandler { get; set; }
         

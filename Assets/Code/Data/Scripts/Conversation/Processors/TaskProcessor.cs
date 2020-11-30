@@ -37,7 +37,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
             QuestProvider = gameManager.QuestProvider;
         }
 
-        public override ITopic[] Interact(Entity instigator, Entity listener)
+        public override ITopic[] Interact(IEntity instigator, IEntity listener)
         {
             OfferedQuest = QuestProvider.MakeRandomQuest(
                 instigator,

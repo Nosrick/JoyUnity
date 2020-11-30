@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using JoyLib.Code.Rollers;
+using JoyLib.Code.World;
 
 namespace JoyLib.Code.Conversation.Subengines.Rumours
 {
@@ -21,12 +22,12 @@ namespace JoyLib.Code.Conversation.Subengines.Rumours
         
         RNG Roller { get; }
 
-        IRumour GenerateRandomRumour(JoyObject[] participants);
+        IRumour GenerateRandomRumour(IJoyObject[] participants);
 
         IRumour GenerateRumourFromTags(JoyObject[] participants, string[] tags);
 
         IRumour[] GenerateOneRumourOfEachType(JoyObject[] participants);
 
-        IRumour GetRandom();
+        IRumour GetRandom(WorldInstance overworldRef);
     }
 }

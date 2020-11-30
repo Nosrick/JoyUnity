@@ -14,7 +14,7 @@ namespace JoyLib.Code.Unity.GUI
     {
         protected TextMeshProUGUI Text { get; set; }
 
-        protected Entity Player { get; set; }
+        protected IEntity Player { get; set; }
         
         protected ILiveEntityHandler EntityHandler { get; set; }
 

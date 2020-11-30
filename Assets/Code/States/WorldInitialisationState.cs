@@ -118,7 +118,7 @@ namespace JoyLib.Code.States
             }
 
             Camera camera = GameObject.Find("Main Camera").GetComponent<Camera>();
-            Entity player = m_ActiveWorld.Player;
+            IEntity player = m_ActiveWorld.Player;
             Transform transform = camera.transform;
             transform.position = new Vector3(player.WorldPosition.x, player.WorldPosition.y, transform.position.z);
 

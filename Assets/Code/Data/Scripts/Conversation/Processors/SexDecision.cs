@@ -21,7 +21,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
             Happening = happening;
         }
 
-        public override ITopic[] Interact(Entity instigator, Entity listener)
+        public override ITopic[] Interact(IEntity instigator, IEntity listener)
         {
             if (Happening == false)
             {

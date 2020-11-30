@@ -2,15 +2,15 @@
 {
     public interface ILiveEntityHandler
     {
-        bool AddEntity(Entity created);
+        bool AddEntity(IEntity created);
 
         bool Remove(long GUID);
 
-        Entity Get(long GUID);
+        IEntity Get(long GUID);
 
-        Entity GetPlayer();
+        IEntity GetPlayer();
 
-        void SetPlayer(Entity entity);
+        void SetPlayer(IEntity entity);
         
         
     }

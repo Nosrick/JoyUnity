@@ -22,7 +22,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
             this.RelationshipName = relationshipName;
         }
 
-        public override ITopic[] Interact(Entity instigator, Entity listener)
+        public override ITopic[] Interact(IEntity instigator, IEntity listener)
         {
             RelationshipHandler.CreateRelationship(
                 new IJoyObject[]

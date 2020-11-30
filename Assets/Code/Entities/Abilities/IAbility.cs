@@ -7,37 +7,37 @@ namespace JoyLib.Code.Entities.Abilities
     public interface IAbility
     {
         //When the ability is added to the user
-        bool OnAdd(Entity entity);
+        bool OnAdd(IEntity entity);
 
         //When the ability is removed from the user
-        bool OnRemove(Entity entity);
+        bool OnRemove(IEntity entity);
 
         //When the entity attacks
-        bool OnAttack(Entity attacker, Entity target);
+        bool OnAttack(IEntity attacker, IEntity target);
 
         //When the entity is hit
-        int OnTakeHit(Entity attacker, Entity defender, int damage);
+        int OnTakeHit(IEntity attacker, IEntity defender, int damage);
 
         //When the entity heals
-        int OnHeal(Entity receiver, Entity healer, int healing);
+        int OnHeal(IEntity receiver, IEntity healer, int healing);
 
         //When the entity picks up an item
-        bool OnPickup(Entity entity, ItemInstance item);
+        bool OnPickup(IEntity entity, IItemInstance item);
 
         //When the entity ticks
-        bool OnTick(Entity entity);
+        bool OnTick(IEntity entity);
 
         //When the entity reduces another entity to zero of a Derived Value
-        bool OnReduceToZero(Entity attacker, Entity target, IDerivedValue value);
+        bool OnReduceToZero(IEntity attacker, IEntity target, IDerivedValue value);
 
         //When the entity reduces another entity to the "disabled" status of a Derived Value
-        bool OnDisable(Entity attacker, Entity target, IDerivedValue value);
+        bool OnDisable(IEntity attacker, IEntity target, IDerivedValue value);
 
         //When the entity uses an item
-        bool OnUse(Entity user, IJoyObject target);
+        bool OnUse(IEntity user, IJoyObject target);
 
         //When the entity interacts with something
-        bool OnInteract(Entity actor, IJoyObject observer);
+        bool OnInteract(IEntity actor, IJoyObject observer);
 
         //When the entity uses a skill
         //This returns the success threshold modification for the roll
@@ -63,7 +63,7 @@ namespace JoyLib.Code.Entities.Abilities
 
         bool HasTag(string tag);
 
-        bool EnactToll(Entity caster);
+        bool EnactToll(IEntity caster);
 
         string Name
         {

@@ -13,7 +13,7 @@ namespace JoyLib.Code.Physics
     {
         public PhysicsResult IsCollision(Vector2Int from, Vector2Int to, WorldInstance worldRef)
         {
-            Entity tempEntity = worldRef.GetEntity(to);
+            IEntity tempEntity = worldRef.GetEntity(to);
             if (tempEntity != null && from != to)
             {
                 if(tempEntity.WorldPosition != from)

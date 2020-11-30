@@ -50,42 +50,42 @@ namespace JoyLib.Code.Entities.Abilities
         {
         }
 
-        public override bool OnAdd(Entity entity)
+        public override bool OnAdd(IEntity entity)
         {
             return false;
         }
 
-        public override bool OnAttack(Entity attacker, Entity target)
+        public override bool OnAttack(IEntity attacker, IEntity target)
         {
             return false;
         }
 
-        public override int OnHeal(Entity receiver, Entity healer, int healing)
+        public override int OnHeal(IEntity receiver, IEntity healer, int healing)
         {
             return healing;
         }
 
-        public override bool OnInteract(Entity actor, IJoyObject observer)
+        public override bool OnInteract(IEntity actor, IJoyObject observer)
         {
             return false;
         }
 
-        public override bool OnReduceToZero(Entity attacker, Entity target, IDerivedValue value)
+        public override bool OnReduceToZero(IEntity attacker, IEntity target, IDerivedValue value)
         {
             return false;
         }
 
-        public override bool OnDisable(Entity attacker, Entity target, IDerivedValue value)
+        public override bool OnDisable(IEntity attacker, IEntity target, IDerivedValue value)
         {
             return false;
         }
 
-        public override bool OnPickup(Entity entity, ItemInstance item)
+        public override bool OnPickup(IEntity entity, IItemInstance item)
         {
             return false;
         }
 
-        public override bool OnRemove(Entity entity)
+        public override bool OnRemove(IEntity entity)
         {
             return false;
         }
@@ -105,22 +105,22 @@ namespace JoyLib.Code.Entities.Abilities
             return successes;
         }
 
-        public override int OnTakeHit(Entity attacker, Entity defender, int damage)
+        public override int OnTakeHit(IEntity attacker, IEntity defender, int damage)
         {
             return damage;
         }
 
-        public override bool OnTick(Entity entity)
+        public override bool OnTick(IEntity entity)
         {
             return false;
         }
 
-        public override bool OnUse(Entity user, IJoyObject target)
+        public override bool OnUse(IEntity user, IJoyObject target)
         {
-            if(target is ItemInstance item)
+            if(target is IItemInstance item)
             {
                 m_CachedActions["fulfillneedaction"].Execute(
-                    new JoyObject[] { user },
+                    new IJoyObject[] { user },
                     new string[] { "thirst", "need", "fulfill" },
                     new object[] { "thirst", item.ItemType.Value, 10 }
                 );

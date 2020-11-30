@@ -6,7 +6,7 @@ namespace JoyLib.Code.Conversation.Subengines.Rumours
 {
     public interface IRumour
     {
-        JoyObject[] Participants
+        IJoyObject[] Participants
         {
             get;
         }
@@ -57,14 +57,14 @@ namespace JoyLib.Code.Conversation.Subengines.Rumours
         }
 
         bool FulfilsConditions(IEnumerable<Tuple<string, int>> values);
-        bool FulfilsConditions(IEnumerable<JoyObject> participants);
+        bool FulfilsConditions(IEnumerable<IJoyObject> participants);
 
         int Tick();
 
         string ConstructString();
 
         IRumour Create(
-            JoyObject[] participants,
+            IJoyObject[] participants,
             string[] tags,
             float viralPotential,
             ITopicCondition[] conditions,

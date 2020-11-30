@@ -13,7 +13,7 @@ namespace JoyLib.Code.Conversation.Conversations.Rumours
     public class BaseRumour : IRumour
     {
         public const int DEFAULT_LIFETIME = 5000;
-        public JoyObject[] Participants { get; protected set; }
+        public IJoyObject[] Participants { get; protected set; }
         public string[] Tags { get; protected set; }
         public float ViralPotential { get; protected set; }
         
@@ -57,7 +57,7 @@ namespace JoyLib.Code.Conversation.Conversations.Rumours
         }
 
         public BaseRumour(
-            JoyObject[] participants,
+            IJoyObject[] participants,
             string[] tags,
             float viralPotential,
             ITopicCondition[] conditions,
@@ -128,7 +128,7 @@ namespace JoyLib.Code.Conversation.Conversations.Rumours
             return true;
         }
         
-        public bool FulfilsConditions(IEnumerable<JoyObject> participants)
+        public bool FulfilsConditions(IEnumerable<IJoyObject> participants)
         {
             if (Baseless)
             {
@@ -138,11 +138,11 @@ namespace JoyLib.Code.Conversation.Conversations.Rumours
             string[] criteria = Conditions.Select(c => c.Criteria).ToArray();
 
             List<Tuple<string, int>> values = new List<Tuple<string, int>>();
-            foreach (JoyObject participant in participants)
+            foreach (IJoyObject participant in participants)
             {
                 if (participant is Entity entity)
                 {
-                    JoyObject[] others = participants.Where(p => p.GUID.Equals(participant.GUID) == false).ToArray();
+                    IJoyObject[] others = participants.Where(p => p.GUID.Equals(participant.GUID) == false).ToArray();
                     values.AddRange(entity.GetData(criteria, others));                    
                 }
             }
@@ -197,15 +197,14 @@ namespace JoyLib.Code.Conversation.Conversations.Rumours
             return m_Words;
         }
 
-        public IRumour Create(
-            JoyObject[] participants, 
-            string[] tags, 
-            float viralPotential, 
+        public IRumour Create(IJoyObject[] participants,
+            string[] tags,
+            float viralPotential,
             ITopicCondition[] conditions,
-            string[] parameters, 
-            string words, 
-            float lifetimeMultiplier = 1f,
-            int lifetime = DEFAULT_LIFETIME,
+            string[] parameters,
+            string words,
+            float lifetimeMultiplier = 1F,
+            int lifetime = 5000,
             bool baseless = false)
         {
             return new BaseRumour(

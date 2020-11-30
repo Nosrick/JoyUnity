@@ -6,10 +6,10 @@ namespace JoyLib.Code.Entities
 {
     public class LiveEntityHandler : ILiveEntityHandler
     {
-        protected Dictionary<long, Entity> m_Entities;
-        protected Entity m_Player;
+        protected Dictionary<long, IEntity> m_Entities;
+        protected IEntity m_Player;
 
-        public bool AddEntity(Entity created)
+        public bool AddEntity(IEntity created)
         {
             try
             {
@@ -40,7 +40,7 @@ namespace JoyLib.Code.Entities
             return false;
         }
 
-        public Entity Get(long GUID)
+        public IEntity Get(long GUID)
         {
             if(Entities.ContainsKey(GUID))
             {
@@ -49,23 +49,23 @@ namespace JoyLib.Code.Entities
             return null;
         }
 
-        public Entity GetPlayer()
+        public IEntity GetPlayer()
         {
             return m_Player;
         }
 
-        public void SetPlayer(Entity entity)
+        public void SetPlayer(IEntity entity)
         {
             m_Player = entity;
         }
 
-        protected Dictionary<long, Entity> Entities
+        protected Dictionary<long, IEntity> Entities
         {
             get
             {
                 if(m_Entities is null)
                 {
-                    m_Entities = new Dictionary<long, Entity>();
+                    m_Entities = new Dictionary<long, IEntity>();
                 }
 
                 return m_Entities;
