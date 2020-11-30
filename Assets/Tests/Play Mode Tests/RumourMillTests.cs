@@ -34,95 +34,43 @@ namespace Tests
         private IRumourMill target;
         
         private ScriptingEngine scriptingEngine;
-
-        private ILiveEntityHandler EntityHandler;
-        private IEntityRelationshipHandler RelationshipHandler;
-        private IEntityTemplateHandler TemplateHandler;
-
-        private INeedHandler NeedHandler;
-        private IEntitySkillHandler SkillHandler;
-
-        private GameObject inventoryManager;
         
-        private Entity left;
-        private Entity right;
+        private IEntityRelationshipHandler RelationshipHandler;
+        
+        private IEntity left;
+        private IEntity right;
 
         [SetUp]
         public void SetUp()
         {
-            inventoryManager = new GameObject();
-            inventoryManager.AddComponent<InventoryManager>();
-
             scriptingEngine = new ScriptingEngine();
             
             target = new ConcreteRumourMill();
-            
-            NeedHandler = new NeedHandler();
-            SkillHandler = new EntitySkillHandler(NeedHandler);
-            EntityHandler = new LiveEntityHandler();
-            RelationshipHandler = new EntityRelationshipHandler();
-            TemplateHandler = new EntityTemplateHandler(SkillHandler);
-            
-            WorldInstance world = new WorldInstance(
-                new WorldTile[0,0], 
-                new string[0],
-                "TESTING",
-                EntityHandler,
-                new RNG());
 
-            EntityTemplate template = TemplateHandler.GetRandom();
-            IGrowingValue level = Mock.Of<IGrowingValue>();
+            IWorldInstance world = Mock.Of<IWorldInstance>();
             
-            ICulture culture = Mock.Of<ICulture>(
-                c => c.GetNameForChain(
-                         It.IsAny<int>(), 
-                         It.IsAny<string>(),
-                         It.IsAny<int>()) == "NAME"
-                     && c.NameData == new[] { new NameData("NAME", new []{ 0, 1 }, new [] { "female", "male" }, new int[0]) });
+            INeedHandler needHandler = new NeedHandler();
+            IEntitySkillHandler skillHandler = new EntitySkillHandler(needHandler);
 
-            List<ICulture> cultures = new List<ICulture> {culture};
+            IGameManager gameManager = Mock.Of<IGameManager>(
+                manager => manager.NeedHandler == needHandler
+                && manager.SkillHandler == skillHandler);
 
-            IJob job = Mock.Of<IJob>();
-            IBioSex sex = Mock.Of<IBioSex>(s => s.Name == "female");
             IGender gender = Mock.Of<IGender>(
-                g => g.Name == "female" 
-                    && g.PersonalSubject == "her");
-            ISexuality sexuality = Mock.Of<ISexuality>();
-            IRomance romance = Mock.Of<IRomance>();
+                g => g.PersonalSubject == "her");
 
-            Sprite[] sprites = new Sprite[0];
+            BasicValueContainer<IGrowingValue> skills = skillHandler.GetDefaultSkillBlock(
+                new BasicValueContainer<INeed>(
+                    needHandler.GetManyRandomised(needHandler.NeedNames)));
 
-            left = new Entity(
-                template,
-                new BasicValueContainer<INeed>(),
-                cultures,
-                level,
-                job,
-                gender,
-                sex,
-                sexuality,
-                romance,
-                Vector2Int.zero,
-                sprites,
-                world,
-                new StandardDriver());
+            left = Mock.Of<IEntity>(
+                entity => entity.PlayerControlled == true
+                && entity.JoyName == "TEST1"
+                && entity.Skills == skills);
 
-            left.PlayerControlled = true;
-            
-            right = new Entity(
-                template,
-                new BasicValueContainer<INeed>(),
-                cultures,
-                level,
-                job,
-                gender,
-                sex,
-                sexuality,
-                romance,
-                Vector2Int.zero,
-                sprites,
-                world,
-                new StandardDriver());
+            right = Mock.Of<IEntity>(
+                entity => entity.JoyName == "TEST2"
+                          && entity.Skills == skills);
         }
 
         [UnityTest]
@@ -142,7 +90,7 @@ namespace Tests
         public IEnumerator RumourMill_ShouldMake_ValidRumours()
         {
             //given
-            IRumour[] rumours = target.GenerateOneRumourOfEachType(new JoyObject[] {left, right});
+            IRumour[] rumours = target.GenerateOneRumourOfEachType(new IJoyObject[] {left, right});
 
             //then
             foreach (IRumour rumour in rumours)
@@ -158,7 +106,6 @@ namespace Tests
         [TearDown]
         public void TearDown()
         {
-            GameObject.DestroyImmediate(inventoryManager);
         }
     }
 }
