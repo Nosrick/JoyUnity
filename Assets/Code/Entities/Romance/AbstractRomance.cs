@@ -48,7 +48,7 @@ namespace JoyLib.Code.Entities.Romance
             return false;
         }
 
-        public virtual bool Compatible(Entity me, Entity them, IRelationship[] relationships)
+        public virtual bool Compatible(IEntity me, IEntity them, IRelationship[] relationships)
         {
             throw new NotImplementedException("Someone forgot to override Compatible in " + this.GetType().Name);
         }

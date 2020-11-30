@@ -11,22 +11,19 @@ namespace JoyLib.Code.Entities.Romance
     {
         protected Dictionary<string, IRomance> RomanceTypes { get; set; }
         
-        protected ICultureHandler CultureHandler { get; set; }
-        
         public IRomance[] Romances => RomanceTypes.Values.ToArray();
 
-        public EntityRomanceHandler(ICultureHandler cultureHandler)
+        public EntityRomanceHandler()
         {
-            this.CultureHandler = cultureHandler;
             Initialise();
         }
 
         protected void Initialise()
         {
-            Load(CultureHandler.Cultures);
+            Load();
         }
 
-        protected bool Load(ICulture[] cultures)
+        protected bool Load()
         {
             if (RomanceTypes != null)
             {
@@ -34,20 +31,11 @@ namespace JoyLib.Code.Entities.Romance
             }
 
             RomanceTypes = new Dictionary<string, IRomance>();
-
-            foreach (CultureType culture in cultures)
+            
+            IRomance[] romanceTypes = ScriptingEngine.instance.FetchAndInitialiseChildren<IRomance>();
+            foreach (IRomance romance in romanceTypes)
             {
-                foreach (string romance in culture.RomanceTypes)
-                {
-                    if (RomanceTypes.ContainsKey(romance) == false)
-                    {
-                        IRomance romanceType = (IRomance)ScriptingEngine.instance.FetchAndInitialise(romance);
-                        if (!(romanceType is null))
-                        {
-                            RomanceTypes.Add(romance, romanceType);
-                        }
-                    }
-                }
+                RomanceTypes.Add(romance.Name, romance);
             }
 
             return true;

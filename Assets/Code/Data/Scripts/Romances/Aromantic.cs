@@ -9,7 +9,7 @@ namespace JoyLib.Code.Entities.Romances
 
         public override bool DecaysNeed => true;
 
-        public override bool Compatible(Entity me, Entity them, IRelationship[] relationships)
+        public override bool Compatible(IEntity me, IEntity them, IRelationship[] relationships)
         {
             return false;
         }

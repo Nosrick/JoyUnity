@@ -4,7 +4,7 @@ namespace JoyLib.Code.Entities.Romance
 {
     public interface IRomance : ITagged
     {
-        bool Compatible(Entity me, Entity them, IRelationship[] relationships);
+        bool Compatible(IEntity me, IEntity them, IRelationship[] relationships);
 
         string Name { get; }
         

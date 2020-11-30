@@ -16,7 +16,7 @@ namespace JoyLib.Code.Entities.Romances
             AddTag("hetero");
         }
 
-        public override bool Compatible(Entity me, Entity them, IRelationship[] relationships)
+        public override bool Compatible(IEntity me, IEntity them, IRelationship[] relationships)
         {
             foreach (IRelationship relationship in relationships)
             {

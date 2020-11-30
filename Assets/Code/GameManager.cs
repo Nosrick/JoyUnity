@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviour, IGameManager
         CultureHandler = new CultureHandler();
         BioSexHandler = new EntityBioSexHandler(CultureHandler);
         SexualityHandler = new EntitySexualityHandler(CultureHandler);
-        RomanceHandler = new EntityRomanceHandler(CultureHandler);
+        RomanceHandler = new EntityRomanceHandler();
         JobHandler = new JobHandler(Roller);
         GenderHandler = new GenderHandler();
         SkillHandler = new EntitySkillHandler(NeedHandler);
