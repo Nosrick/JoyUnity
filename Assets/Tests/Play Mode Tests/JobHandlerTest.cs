@@ -2,6 +2,7 @@ using System.Collections;
 using DevionGames.InventorySystem;
 using JoyLib.Code;
 using JoyLib.Code.Entities.Jobs;
+using JoyLib.Code.Rollers;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -12,20 +13,10 @@ namespace Tests
     {
         private IJobHandler target;
 
-        private IGameManager gameManager;
-
-        private GameObject inventoryManager;
-
         [SetUp]
         public void SetUp()
         {
-            inventoryManager = new GameObject();
-            inventoryManager.AddComponent<InventoryManager>();
-            gameManager = new GameObject("GameManager").AddComponent<GameManager>();
-
-            GlobalConstants.GameManager = gameManager;
-
-            target = gameManager.JobHandler;
+            target = new JobHandler(new RNG());
         }
 
         [UnityTest]
@@ -51,7 +42,6 @@ namespace Tests
         [TearDown]
         public void TearDown()
         {
-            GameObject.DestroyImmediate(gameManager.MyGameObject);
         }
     }
 }
