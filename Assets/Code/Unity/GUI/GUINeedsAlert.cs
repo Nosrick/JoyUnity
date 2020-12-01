@@ -23,16 +23,17 @@ namespace JoyLib.Code.Unity.GUI
 
         public void Awake()
         {
-            if (EntityHandler is null)
-            {
-                EntityHandler = GlobalConstants.GameManager.EntityHandler;
-                Text = this.gameObject.FindChild("NeedsText", true).GetComponent<TextMeshProUGUI>();
-            }
+            GetBits();
+            Text = this.gameObject.FindChild("NeedsText", true).GetComponent<TextMeshProUGUI>();
         }
 
-        public void SetPlayer(Entity player)
+        protected void GetBits()
         {
-            Player = player;
+            if (GlobalConstants.GameManager is null == false)
+            {
+                EntityHandler = EntityHandler ?? GlobalConstants.GameManager.EntityHandler;
+                Player = EntityHandler is null == false ? EntityHandler.GetPlayer() : Player;
+            }
         }
 
         public void Update()
@@ -49,14 +50,10 @@ namespace JoyLib.Code.Unity.GUI
         protected void DoText()
         {
             Text.text = "";
-            if(Player is null)
+            GetBits();
+            if (Player is null)
             {
-                Player = EntityHandler.GetPlayer();
-
-                if (Player is null)
-                {
-                    return;
-                }
+                return;
             }
 
             StringBuilder builder = new StringBuilder();

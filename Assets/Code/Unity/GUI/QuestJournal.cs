@@ -36,20 +36,29 @@ namespace JoyLib.Code.Unity.GUI
                 MenuItemRect = MenuItemPrefab.GetComponent<RectTransform>();
                 Container = this.gameObject.FindChild("Quest MenuContainer", true);
                 MenuItems = new List<MenuItem>();
-                QuestTracker = GlobalConstants.GameManager.QuestTracker;
-                EntityHandler = GlobalConstants.GameManager.EntityHandler;
-                Player = EntityHandler.GetPlayer();
+                FindBits();
             }
         }
 
         public void OnEnable()
         {
+            FindBits();
             Repaint();
+        }
+
+        protected void FindBits()
+        {
+            if (GlobalConstants.GameManager is null)
+            {
+                return;
+            }
+            QuestTracker = GlobalConstants.GameManager.QuestTracker ?? QuestTracker;
+            EntityHandler = GlobalConstants.GameManager.EntityHandler ?? EntityHandler;
+            Player = EntityHandler is null == false ? Player is null ? EntityHandler.GetPlayer() : Player : Player;
         }
 
         public void Repaint()
         {
-            Player = EntityHandler.GetPlayer();
             if (Player is null)
             {
                 return;
