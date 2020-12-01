@@ -298,6 +298,8 @@ namespace JoyLib.Code.Entities
                 0,
                 new JoyObject[0]);
 
+            this.Roller = copy.Roller;
+
             this.RegenTicker = Roller.Roll(0, REGEN_TICK_TIME - 1);
 
             this.MyWorld = copy.MyWorld;

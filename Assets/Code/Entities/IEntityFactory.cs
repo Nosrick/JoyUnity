@@ -18,7 +18,7 @@ namespace JoyLib.Code.Entities
     public interface IEntityFactory
     {
         IEntity CreateFromTemplate(
-            EntityTemplate template,
+            IEntityTemplate template,
             IGrowingValue level,
             Vector2Int position,
             List<ICulture> cultures = null,
@@ -32,7 +32,7 @@ namespace JoyLib.Code.Entities
             IDriver driver = null);
 
         IEntity CreateLong(
-            EntityTemplate template,
+            IEntityTemplate template,
             BasicValueContainer<INeed> needs,
             IGrowingValue level,
             float experience,

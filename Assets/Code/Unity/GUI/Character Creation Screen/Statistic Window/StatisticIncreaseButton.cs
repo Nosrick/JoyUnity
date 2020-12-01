@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace JoyLib.Code.Unity.GUI.StatisticWindow
+namespace JoyLib.Code.Unity.GUI
 {
     public class StatisticIncreaseButton : MonoBehaviour, IPointerClickHandler
     {

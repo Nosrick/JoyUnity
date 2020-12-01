@@ -20,8 +20,8 @@ namespace JoyLib.Code.Unity.GUI
         protected ILiveEntityHandler EntityHandler { get; set; }
         
         protected IQuestTracker QuestTracker { get; set; }
-        
-        protected GameObject MenuItemPrefab { get; set; }
+
+        [SerializeField] protected GameObject MenuItemPrefab;
         protected RectTransform MenuItemRect { get; set; }
         
         protected List<MenuItem> MenuItems { get; set; }
@@ -30,14 +30,10 @@ namespace JoyLib.Code.Unity.GUI
 
         public void Awake()
         {
-            if (MenuItemPrefab is null)
-            {
-                MenuItemPrefab = this.gameObject.FindChild("Menu Item", true);
-                MenuItemRect = MenuItemPrefab.GetComponent<RectTransform>();
-                Container = this.gameObject.FindChild("Quest MenuContainer", true);
-                MenuItems = new List<MenuItem>();
-                FindBits();
-            }
+            MenuItemRect = MenuItemPrefab.GetComponent<RectTransform>();
+            Container = this.gameObject.FindChild("Quest MenuContainer", true);
+            MenuItems = new List<MenuItem>();
+            FindBits();
         }
 
         public void OnEnable()

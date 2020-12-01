@@ -4,14 +4,14 @@ namespace Joy.Code.Managers
 {
     public class StateManager : IStateManager
     {
-        private GameState m_ActiveState;
+        private IGameState m_ActiveState;
 
         public StateManager()
         {
             m_ActiveState = new MainMenuState();
         }
 
-        public void ChangeState(GameState newState)
+        public void ChangeState(IGameState newState)
         {
             m_ActiveState.Stop();
             m_ActiveState = newState;
@@ -39,6 +39,12 @@ namespace Joy.Code.Managers
             {
                 ChangeState(m_ActiveState.GetNextState());
             }
+        }
+
+        public void NextState()
+        {
+            IGameState newState = m_ActiveState.GetNextState();
+            ChangeState(newState);
         }
     }
 }

@@ -107,6 +107,8 @@ namespace JoyLib.Code.States
             }
             
             m_World.Tick();
+
+            this.Done = true;
         }
 
         protected void SimulateWorld()

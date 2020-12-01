@@ -16,13 +16,13 @@ namespace JoyLib.Code.World.Generators.Interiors
         protected ILiveEntityHandler EntityHandler { get; set; }
         protected IEntityTemplateHandler EntityTemplateHandler { get; set; }
         protected IPhysicsManager PhysicsManager { get; set; }
-        protected EntityFactory EntityFactory { get; set; }
+        protected IEntityFactory EntityFactory { get; set; }
 
         public DungeonEntityPlacer(
             ILiveEntityHandler entityHandler,
             IEntityTemplateHandler templateHandler,
             IPhysicsManager physicsManager,
-            EntityFactory entityFactory)
+            IEntityFactory entityFactory)
         {
             EntityFactory = entityFactory;
             EntityTemplateHandler = templateHandler;
@@ -35,7 +35,7 @@ namespace JoyLib.Code.World.Generators.Interiors
             Roller = roller;
             List<IEntity> entities = new List<IEntity>();
 
-            List<EntityTemplate> templates = EntityTemplateHandler.Templates;
+            List<IEntityTemplate> templates = EntityTemplateHandler.Templates;
             templates = templates.Where(x => entityTypes.Contains(x.CreatureType)).ToList();
 
             int numberToPlace = (worldRef.Tiles.GetLength(0) * worldRef.Tiles.GetLength(1)) / 50;

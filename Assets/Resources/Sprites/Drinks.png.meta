@@ -11,6 +11,15 @@ TextureImporter:
   - first:
       213: 6466212649624665762
     second: Drinks_2
+  - first:
+      213: 8543735491913655313
+    second: Drinks_0
+  - first:
+      213: -6342326683696106855
+    second: Drinks_1
+  - first:
+      213: 20066034077707496
+    second: Drinks_2
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -127,15 +136,15 @@ TextureImporter:
         y: 0
         width: 16
         height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 6
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8559790462d11ab30800000000000000
-      internalID: 4296747569617802584
+      spriteID: 114296ac922719670800000000000000
+      internalID: 8543735491913655313
       vertices: []
       indices: 
       edges: []
@@ -148,15 +157,15 @@ TextureImporter:
         y: 0
         width: 16
         height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 6
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cc008eb9f31af8660800000000000000
-      internalID: 7390302808108957900
+      spriteID: 992ffc8fb778bf7a0800000000000000
+      internalID: -6342326683696106855
       vertices: []
       indices: 
       edges: []
@@ -169,15 +178,15 @@ TextureImporter:
         y: 0
         width: 16
         height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 6
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2aef307352a9cb950800000000000000
-      internalID: 6466212649624665762
+      spriteID: 8eca041a3f9474000800000000000000
+      internalID: 20066034077707496
       vertices: []
       indices: 
       edges: []

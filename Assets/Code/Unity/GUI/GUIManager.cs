@@ -24,21 +24,16 @@ namespace JoyLib.Code.Unity.GUI
             }
         }
 
-        public void AddGUI(
-            GUIData gui, 
-            bool removesControl = true,
-            bool closesOthers = false)
+        public void AddGUI(GUIData gui)
         {
             Initialise();
             if (GUIs.Contains(gui))
             {
-                GUIs.First(guiData => guiData.name.Equals(gui.name, StringComparison.OrdinalIgnoreCase)).Initialise(removesControl, closesOthers);
                 return;
             }
 
             gui.GUIManager = this;
             gui.gameObject.SetActive(false);
-            gui.Initialise(removesControl, closesOthers);
             GUIs.Add(gui);
         }
 

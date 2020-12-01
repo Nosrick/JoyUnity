@@ -34,8 +34,6 @@
 				<Data>default</Data>
 				<Frames>2</Frames>
 				<Filename>cultures/naga</Filename>
-				<X>0</X>
-				<Y>0</Y>
 			</Icon>
 		</TileSet>
 
@@ -801,8 +799,5 @@
 				<Chain>1</Chain>
 			</NameData>
 		</Names>
-
-		<TileSet>
-		</TileSet>
 	</Culture>
 </Cultures>

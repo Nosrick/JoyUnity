@@ -35,7 +35,7 @@ namespace Tests
         public IEnumerator LoadTypes_ShouldHaveValidData()
         {
             //given
-            List<EntityTemplate> entityTemplates = target.Templates;
+            List<IEntityTemplate> entityTemplates = target.Templates;
 
             //when
 

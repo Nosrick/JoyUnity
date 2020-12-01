@@ -5,6 +5,9 @@ TextureImporter:
   - first:
       213: 4368252466978641103
     second: obscure_0
+  - first:
+      213: -3649261181102871969
+    second: obscure_0
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -43,10 +46,10 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 0
-  alignment: 0
+  alignment: 6
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 16
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
@@ -97,15 +100,15 @@ TextureImporter:
         y: 0
         width: 16
         height: 16
-      alignment: 0
+      alignment: 6
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fc45c7789762f9c30800000000000000
-      internalID: 4368252466978641103
+      spriteID: f5aadb75a483b5dc0800000000000000
+      internalID: -3649261181102871969
       vertices: []
       indices: 
       edges: []

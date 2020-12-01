@@ -310,10 +310,18 @@ namespace JoyLib.Code.Graphics
 
             if(sprites.Count == 0)
             {
-                IconData[] icons = GetDefaultIconSet(tileSet);
-                foreach (IconData icon in icons)
+                if (query.Any(x => x.data.Equals("default", StringComparison.OrdinalIgnoreCase)))
                 {
-                    sprites.Add(icon.sprite);
+                    IconData[] defaultIcons = query.Where(x => x.data.Equals("default", StringComparison.OrdinalIgnoreCase)).ToArray();
+                    sprites.AddRange(defaultIcons.Select(icon => icon.sprite));
+                }
+                else
+                {
+                    IconData[] icons = GetDefaultIconSet(tileSet);
+                    foreach (IconData icon in icons)
+                    {
+                        sprites.Add(icon.sprite);
+                    }
                 }
             }
 

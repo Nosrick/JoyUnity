@@ -18,13 +18,12 @@ namespace JoyLib.Code.Unity.GUI
     {
         private IEntity m_Player;
 
-        private GameObject m_SlotPrefab;
+        [SerializeField] protected GameObject m_SlotPrefab;
         private GameObject m_Grid;
         private MutableItemContainer m_EquipmentContainer;
 
         public void Awake()
         {
-            m_SlotPrefab = Resources.Load<GameObject>("Prefabs/GUI/Inventory/Equipment Slot");
             m_EquipmentContainer = GameObject.Find("Equipment").GetComponent<MutableItemContainer>();
             m_Grid = GameObject.Find("EquipmentSlots");
         }

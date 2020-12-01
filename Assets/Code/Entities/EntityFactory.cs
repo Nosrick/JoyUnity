@@ -14,6 +14,7 @@ using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.AI.Drivers;
 using JoyLib.Code.Entities.Gender;
 using JoyLib.Code.Entities.Romance;
+using JoyLib.Code.Physics;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities
@@ -36,6 +37,8 @@ namespace JoyLib.Code.Entities
 
         protected IJobHandler JobHandler { get; set; }
         
+        protected IPhysicsManager PhysicsManager { get; set; }
+        
         protected RNG Roller { get; set; }
 
         public EntityFactory(
@@ -47,6 +50,7 @@ namespace JoyLib.Code.Entities
             IGenderHandler genderHandler,
             IEntityRomanceHandler romanceHandler,
             IJobHandler jobHandler,
+            IPhysicsManager physicsManager,
             RNG roller)
         {
             Roller = roller;
@@ -58,10 +62,11 @@ namespace JoyLib.Code.Entities
             JobHandler = jobHandler;
             RomanceHandler = romanceHandler;
             GenderHandler = genderHandler;
+            PhysicsManager = physicsManager;
         }
 
         public IEntity CreateFromTemplate(
-            EntityTemplate template,
+            IEntityTemplate template,
             IGrowingValue level,
             Vector2Int position,
             List<ICulture> cultures = null,
@@ -135,7 +140,7 @@ namespace JoyLib.Code.Entities
 
             if(selectedDriver is null)
             {
-                selectedDriver = new StandardDriver();
+                selectedDriver = new StandardDriver(PhysicsManager);
             }
 
             IEntity entity = new Entity(
@@ -158,7 +163,7 @@ namespace JoyLib.Code.Entities
         }
 
         public IEntity CreateLong(
-            EntityTemplate template,
+            IEntityTemplate template,
             BasicValueContainer<INeed> needs,
             IGrowingValue level,
             float experience,
@@ -192,7 +197,7 @@ namespace JoyLib.Code.Entities
             IDriver selectedDriver = driver;
             if(selectedDriver is null)
             {
-                selectedDriver = new StandardDriver();
+                selectedDriver = new StandardDriver(PhysicsManager);
             }
 
             IEntity entity = new Entity(

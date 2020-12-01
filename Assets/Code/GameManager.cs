@@ -82,7 +82,8 @@ public class GameManager : MonoBehaviour, IGameManager
             BioSexHandler,
             GenderHandler,
             RomanceHandler,
-            JobHandler,
+            JobHandler, 
+            PhysicsManager,
             Roller);
         
         ItemFactory = new ItemFactory(
@@ -111,6 +112,11 @@ public class GameManager : MonoBehaviour, IGameManager
         {
             m_StateManager.Update();
         }
+    }
+
+    public void NextState()
+    {
+        m_StateManager.NextState();
     }
     
     public IQuestTracker QuestTracker { get; protected set; }

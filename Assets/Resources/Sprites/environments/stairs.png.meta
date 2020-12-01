@@ -8,6 +8,12 @@ TextureImporter:
   - first:
       213: -8232476812802598434
     second: stairs_1
+  - first:
+      213: 2561695551595825439
+    second: stairs_0
+  - first:
+      213: 4302993188255604768
+    second: stairs_1
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -112,15 +118,15 @@ TextureImporter:
         y: 0
         width: 16
         height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 6
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: eaf8f9aea0256fac0800000000000000
-      internalID: -3821777026937811026
+      spriteID: f19419f1888fc8320800000000000000
+      internalID: 2561695551595825439
       vertices: []
       indices: 
       edges: []
@@ -133,15 +139,15 @@ TextureImporter:
         y: 0
         width: 16
         height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 6
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ed9d24fc4fd50cd80800000000000000
-      internalID: -8232476812802598434
+      spriteID: 020a6e8a18d47bb30800000000000000
+      internalID: 4302993188255604768
       vertices: []
       indices: 
       edges: []

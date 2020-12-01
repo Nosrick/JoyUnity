@@ -27,16 +27,7 @@ namespace JoyLib.Code.World.Generators.Interiors
                 gameManager.EntityHandler, 
                 gameManager.EntityTemplateHandler, 
                 gameManager.PhysicsManager, 
-                new EntityFactory(
-                    gameManager.NeedHandler,
-                    gameManager.ObjectIconHandler,
-                    gameManager.CultureHandler,
-                    gameManager.SexualityHandler,
-                    gameManager.BioSexHandler,
-                    gameManager.GenderHandler,
-                    gameManager.RomanceHandler,
-                    gameManager.JobHandler,
-                    roller));
+                gameManager.EntityFactory);
 
             List<string> entitiesToPlace = new List<string>();
             entitiesToPlace.AddRange(worldInfo.inhabitants);

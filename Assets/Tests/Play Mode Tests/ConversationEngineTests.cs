@@ -87,7 +87,7 @@ namespace Tests
                 true);
             tradeWindow.name = "Trade";
 
-            GUIManager.AddGUI(conversationWindow.GetComponent<GUIData>(), true, true);
+            GUIManager.AddGUI(conversationWindow.GetComponent<GUIData>());
             GUIManager.AddGUI(inventoryWindow.GetComponent<GUIData>());
             GUIManager.AddGUI(tradeWindow.GetComponent<GUIData>());
             GUIManager.OpenGUI(conversationWindow.name);

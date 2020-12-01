@@ -3,7 +3,7 @@ using System.Globalization;
 using TMPro;
 using UnityEngine;
 
-namespace JoyLib.Code.Unity.GUI.StatisticWindow
+namespace JoyLib.Code.Unity.GUI
 {
     public class StatisticItem : MonoBehaviour
     {

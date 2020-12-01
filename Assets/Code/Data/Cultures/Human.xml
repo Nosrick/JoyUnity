@@ -157,6 +157,13 @@
 
 		<TileSet>
 			<Name>human</Name>
+			
+			<Icon>
+				<Name>default</Name>
+				<Frames>2</Frames>
+				<Filename>cultures/human/default_human</Filename>
+				<Data>default</Data>
+			</Icon>
 
 			<Icon>
 				<Name>warrior</Name>

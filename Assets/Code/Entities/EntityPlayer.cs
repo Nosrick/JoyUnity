@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using DevionGames.InventorySystem;
 using DevionGames.UIWidgets;
+using JoyLib.Code.Entities.AI.Drivers;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Unity;
 using UnityEngine;
@@ -18,6 +19,9 @@ namespace JoyLib.Code.Entities
             {
                 m_Inventory = WidgetUtility.Find<MutableItemContainer>("Inventory");
             }
+
+            PlayerControlled = true;
+            m_Driver = new PlayerDriver();
         }
         
         public override bool EquipItem(string slotRef, IItemInstance itemRef)

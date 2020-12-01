@@ -4,10 +4,10 @@ namespace JoyLib.Code.Entities
 {
     public interface IEntityTemplateHandler
     {
-        List<EntityTemplate> Templates { get; }
+        List<IEntityTemplate> Templates { get; }
 
-        EntityTemplate Get(string type);
-        EntityTemplate GetRandom();
+        IEntityTemplate Get(string type);
+        IEntityTemplate GetRandom();
         
     }
 }

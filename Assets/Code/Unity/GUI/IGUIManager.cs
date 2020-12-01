@@ -4,10 +4,7 @@ namespace JoyLib.Code.Unity.GUI
 {
     public interface IGUIManager
     {
-        void AddGUI(
-            GUIData gui,
-            bool removesControl = true,
-            bool closesOthers = false);
+        void AddGUI(GUIData gui);
 
         void ToggleGUI(string name);
 

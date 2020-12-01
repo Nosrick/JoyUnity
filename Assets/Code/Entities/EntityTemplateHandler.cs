@@ -18,10 +18,10 @@ namespace JoyLib.Code.Entities
 {
     public class EntityTemplateHandler : IEntityTemplateHandler
     {
-        protected List<EntityTemplate> m_Templates;
+        protected List<IEntityTemplate> m_Templates;
         protected IEntitySkillHandler SkillHandler { get; set; }
 
-        public List<EntityTemplate> Templates
+        public List<IEntityTemplate> Templates
         {
             get
             {
@@ -40,11 +40,11 @@ namespace JoyLib.Code.Entities
             m_Templates = LoadTypes();
         }
 
-        private List<EntityTemplate> LoadTypes()
+        private List<IEntityTemplate> LoadTypes()
         {
             InventoryManager.Database.equipments.Clear();
             
-            List<EntityTemplate> entities = new List<EntityTemplate>();
+            List<IEntityTemplate> entities = new List<IEntityTemplate>();
             
             string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Entities", "*.xml", SearchOption.AllDirectories);
 
@@ -135,7 +135,7 @@ namespace JoyLib.Code.Entities
             return entities;
         }
 
-        public EntityTemplate Get(string type)
+        public IEntityTemplate Get(string type)
         {
             if(Templates.Any(x => x.CreatureType == type))
             {
@@ -145,7 +145,7 @@ namespace JoyLib.Code.Entities
             return null;
         }
 
-        public EntityTemplate GetRandom()
+        public IEntityTemplate GetRandom()
         {
             int result = GlobalConstants.GameManager.Roller.Roll(0, m_Templates.Count);
             return Templates[result];
