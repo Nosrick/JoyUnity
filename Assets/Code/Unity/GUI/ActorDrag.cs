@@ -2,57 +2,134 @@
 using Lean.Gui;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity.GUI
 {
     public class ActorDrag : LeanDrag
     {
+        [SerializeField] protected bool m_DynamicReconstrain;
         [SerializeField] protected bool m_ReverseHorizontal;
         [SerializeField] protected bool m_ReverseVertical;
-        [SerializeField] protected RectTransform m_DragActor;
+        [SerializeField] protected LayoutGroup m_Container;
+        protected RectTransform m_ContainerRect;
+        [SerializeField] protected RectTransform m_ContainerChild;
         [SerializeField] protected LerpType m_Lerp;
-        [SerializeField] protected LeanConstrainAnchoredPosition m_TargetConstraint;
-        [SerializeField] protected LeanConstrainAnchoredPosition m_DragActorConstraint;
+        [SerializeField] protected VerticalConstraint m_VerticalConstraint;
+        [SerializeField] protected HorizontalConstraint m_HorizontalConstraint;
+
+        protected RectTransform m_TargetParent;
+
+        [SerializeField] protected Vector2 TargetConstraintMin;
+        [SerializeField] protected Vector2 TargetConstraintMax;
+
+        protected Vector3 m_ContainerOriginalPosition;
+        protected Vector3 m_TargetOriginalPosition;
+
+        public void Awake()
+        {
+            m_ContainerRect = m_Container.GetComponent<RectTransform>();
+            m_TargetParent = Target.transform.parent.GetComponent<RectTransform>();
+            m_ContainerOriginalPosition = m_Container.transform.position;
+            m_TargetOriginalPosition = Target.position;
+        }
+
+        protected void CalculateConstraints()
+        {
+            if (m_DynamicReconstrain)
+            {
+                float verticalConstraint = 0;
+                float horizontalConstraint = 0;
+                if (m_Container is VerticalLayoutGroup vertical)
+                {
+                    verticalConstraint = vertical.transform.childCount * 
+                                         (m_ContainerChild.rect.height + vertical.spacing + vertical.padding.top + vertical.padding.bottom);
+                }
+                else if (m_Container is HorizontalLayoutGroup horizontal)
+                {
+                    horizontalConstraint = m_Container.transform.childCount *
+                                           (m_ContainerChild.rect.width + horizontal.spacing + horizontal.padding.left + horizontal.padding.right);
+                }
+
+                float xPositionMin, xPositionMax, yPositionMin, yPositionMax;
+                switch (m_HorizontalConstraint)
+                {
+                    case HorizontalConstraint.LEFT:
+                        xPositionMin = horizontalConstraint > m_ContainerRect.rect.width 
+                            ? m_ContainerOriginalPosition.x - horizontalConstraint 
+                            : m_ContainerOriginalPosition.x;
+                        xPositionMax = m_ContainerOriginalPosition.x;
+                        break;
+                    
+                    case HorizontalConstraint.RIGHT:
+                        xPositionMin = m_ContainerOriginalPosition.x;
+                        xPositionMax = horizontalConstraint > m_ContainerRect.rect.width 
+                            ? m_ContainerOriginalPosition.x + horizontalConstraint
+                            : m_ContainerOriginalPosition.x;
+                        break;
+                    
+                    default:
+                        xPositionMin = xPositionMax = m_ContainerOriginalPosition.x;
+                        break;
+                }
+
+                switch (m_VerticalConstraint)
+                {
+                    case VerticalConstraint.UP:
+                        yPositionMin = verticalConstraint > m_ContainerRect.rect.height 
+                            ? m_ContainerOriginalPosition.y - verticalConstraint
+                            : m_ContainerOriginalPosition.y;
+                        yPositionMax = m_ContainerOriginalPosition.y;
+                        break;
+                    
+                    case VerticalConstraint.DOWN:
+                        yPositionMin = m_ContainerOriginalPosition.y;
+                        yPositionMax = verticalConstraint > m_ContainerRect.rect.height 
+                            ? m_ContainerOriginalPosition.y + verticalConstraint
+                            : m_ContainerOriginalPosition.y;
+                        break;
+                    
+                    default:
+                        yPositionMin = yPositionMax = m_ContainerOriginalPosition.y;
+                        break;
+                }
+                
+                TargetConstraintMin = new Vector2(xPositionMin, yPositionMin);
+                TargetConstraintMax = new Vector2(xPositionMax, yPositionMax);
+            }
+            else
+            {
+                 throw new NotImplementedException("Haven't done static constraints yet!");
+            }
+        }
 
         public override void OnDrag(PointerEventData eventData)
         {
-            RectTransform targetRect = m_TargetConstraint.GetComponent<RectTransform>();
-            
-            Vector2 targetConstraintMin = new Vector2(
-                m_TargetConstraint.Horizontal ? m_TargetConstraint.HorizontalMin : targetRect.anchoredPosition.x, 
-                m_TargetConstraint.Vertical ? m_TargetConstraint.VerticalMin : targetRect.anchoredPosition.y);
-            
-            Vector2 targetConstraintMax = new Vector2(
-                m_TargetConstraint.Horizontal ? m_TargetConstraint.HorizontalMax : targetRect.anchoredPosition.x, 
-                m_TargetConstraint.Vertical ? m_TargetConstraint.VerticalMax : targetRect.anchoredPosition.y);
+            CalculateConstraints();
 
-            Vector2 dragActorConstraintMin =
-                new Vector2(
-                    m_DragActorConstraint.Horizontal ? m_DragActorConstraint.HorizontalMin : m_DragActor.anchoredPosition.x, 
-                    m_DragActorConstraint.Vertical ? m_DragActorConstraint.VerticalMin : m_DragActor.anchoredPosition.y);
+            if (TargetConstraintMin == TargetConstraintMax)
+            {
+                return;
+            }
             
-            Vector2 dragActorConstraintMax = new Vector2(
-                m_DragActorConstraint.Horizontal ? m_DragActorConstraint.HorizontalMax : m_DragActor.anchoredPosition.x,
-                m_DragActorConstraint.Vertical ? m_DragActorConstraint.VerticalMax : m_DragActor.anchoredPosition.y);
-
             // Only drag if OnBeginDrag was successful
             if (dragging == true)
             {
                 // Only allow dragging if certain conditions are met
                 if (MayDrag(eventData) == true)
                 {
-                    var oldVector = default(Vector2);
-                    var target    = TargetTransform;
+                    Vector2 oldVector = default(Vector2);
+                    RectTransform target = TargetTransform;
 
                     // Get the previous pointer position relative to this rect transform
                     if (RectTransformUtility.ScreenPointToLocalPointInRectangle(target, eventData.position - eventData.delta, eventData.pressEventCamera, out oldVector) == true)
                     {
-                        var newVector = default(Vector2);
+                        Vector2 newVector = default(Vector2);
 
                         // Get the current pointer position relative to this rect transform
                         if (RectTransformUtility.ScreenPointToLocalPointInRectangle(target, eventData.position, eventData.pressEventCamera, out newVector) == true)
                         {
-                            var anchoredPosition = target.anchoredPosition;
+                            Vector2 anchoredPosition = target.anchoredPosition;
 
                             int reverseX = m_ReverseHorizontal ? -1 : 1;
                             int reverseY = m_ReverseVertical ? -1 : 1;
@@ -64,15 +141,19 @@ namespace JoyLib.Code.Unity.GUI
                                 switch (m_Lerp)
                                 {
                                     case LerpType.VERTICAL:
-                                        float lerp = (target.localPosition.y - targetConstraintMin.y) /
-                                                     (targetConstraintMax.y - targetConstraintMin.y);
+                                        float lerp = (target.position.y - m_TargetOriginalPosition.y) /
+                                                     (TargetConstraintMax.y - TargetConstraintMin.y);
 
                                         lerp = Math.Abs(lerp);
+                                        Debug.Log("LERP BEFORE NORMALISATION: " + lerp);
+                                        
                                         lerp = m_ReverseVertical ? 1.0f - lerp : lerp;
                                         
                                         Debug.Log("LERP: " + lerp);
                                         
-                                        newDragActorOffset = Vector2.Lerp(dragActorConstraintMin, dragActorConstraintMax, lerp);
+                                        newDragActorOffset = m_ReverseHorizontal 
+                                            ? Vector2.Lerp(TargetConstraintMin, TargetConstraintMax, lerp)
+                                            : Vector2.Lerp(TargetConstraintMax, TargetConstraintMin, lerp);
                                         break;
                                     
                                     case LerpType.HORIZONTAL:
@@ -107,9 +188,9 @@ namespace JoyLib.Code.Unity.GUI
 
                             // Offset the anchored position by the difference
                             target.anchoredPosition = anchoredPosition;
-                            Debug.Log("OLD POSITION: " + m_DragActor.anchoredPosition);
+                            Debug.Log("OLD POSITION: " + m_ContainerRect.position);
                             Debug.Log("NEW POSITION: " + newDragActorOffset);
-                            m_DragActor.anchoredPosition = newDragActorOffset;
+                            m_ContainerRect.position = newDragActorOffset;
                         }
                     }
                 }
@@ -119,9 +200,23 @@ namespace JoyLib.Code.Unity.GUI
 
     public enum LerpType
     {
+        NONE,
         HORIZONTAL,
         VERTICAL,
-        BOTH,
-        NONE
+        BOTH
+    }
+
+    public enum VerticalConstraint
+    {
+        NONE,
+        UP,
+        DOWN
+    }
+
+    public enum HorizontalConstraint
+    {
+        NONE,
+        LEFT,
+        RIGHT
     }
 }
