@@ -2,7 +2,7 @@ using JoyLib.Code.States;
 
 namespace Joy.Code.Managers
 {
-    public class StateManager
+    public class StateManager : IStateManager
     {
         private GameState m_ActiveState;
 
@@ -39,20 +39,6 @@ namespace Joy.Code.Managers
             {
                 ChangeState(m_ActiveState.GetNextState());
             }
-        }
-
-        public void BeginDraw()
-        {
-        }
-
-        public void Draw()
-        {
-            m_ActiveState.Draw();
-        }
-
-        public void OnGui()
-        {
-            m_ActiveState.OnGui();
         }
     }
 }

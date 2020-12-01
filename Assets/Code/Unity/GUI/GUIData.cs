@@ -5,14 +5,14 @@ namespace JoyLib.Code.Unity.GUI
 {
     public class GUIData : MonoBehaviour, IPointerDownHandler
     {
-        public static IGUIManager GUIManager { get; set; }
+        public IGUIManager GUIManager { get; set; }
         
         public void Initialise(
             bool removesControl,
             bool closesOthers)
         {
-            this.ClosesOthers = closesOthers;
-            this.RemovesControl = removesControl;
+            this.m_ClosesOthers = closesOthers;
+            this.m_RemovesControl = removesControl;
         }
 
         public void OnPointerDown(PointerEventData eventData)
@@ -20,18 +20,10 @@ namespace JoyLib.Code.Unity.GUI
             GUIManager.BringToFront(this.name);
         }
 
-        public bool RemovesControl
-        {
-            get;
-            protected set;
-        }
+        public bool m_RemovesControl;
 
-        public bool ClosesOthers
-        {
-            get;
-            protected set;
-        }
+        public bool m_ClosesOthers;
 
-        public int Index { get; set; }
+        public int m_Index;
     }
 }

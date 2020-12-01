@@ -1,20 +1,28 @@
 using Joy.Code.Managers;
+using JoyLib.Code.Unity.GUI;
+using UnityEditor;
 using UnityEngine;
 
 namespace JoyLib.Code.States
 {
-    public abstract class GameState
+    public abstract class GameState : IGameState
     {
         protected GameState()
         {
+            GUIManager = GlobalConstants.GameManager.GUIManager;
         }
 
         public virtual void LoadContent()
         {
         }
 
-        protected virtual void SetUpUi()
+        public virtual void SetUpUi()
         {
+            GUIData[] guiData = GameObject.FindObjectsOfType<GUIData>();
+            foreach (GUIData data in guiData)
+            {
+                GUIManager.AddGUI(data);
+            }
         }
 
         public virtual void Start()
@@ -36,17 +44,6 @@ namespace JoyLib.Code.States
 
         public abstract GameState GetNextState();
 
-        /// <summary>
-        /// Should be called last, so as to draw the current GUI
-        /// </summary>
-        public virtual void Draw()
-        {
-        }
-
-        public virtual void OnGui()
-        {
-        }
-
         public static bool InFocus
         {
             get;
@@ -58,5 +55,7 @@ namespace JoyLib.Code.States
             get;
             protected set;
         }
+
+        public IGUIManager GUIManager { get; protected set; }
     }
 }

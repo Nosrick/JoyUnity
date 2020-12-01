@@ -36,13 +36,9 @@ namespace JoyLib.Code.States
             CreateWorld();
         }
 
-        protected override void SetUpUi()
+        public override void SetUpUi()
         {
             base.SetUpUi();
-        }
-
-        public override void OnGui()
-        {
         }
 
         private void CreateWorld()

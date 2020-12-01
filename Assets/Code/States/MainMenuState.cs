@@ -21,18 +21,9 @@ namespace JoyLib.Code.States
             base.LoadContent();
         }
 
-        protected override void SetUpUi()
+        public override void SetUpUi()
         {
             base.SetUpUi();
-        }
-
-        public override void Draw()
-        {
-        }
-
-        public override void OnGui()
-        {
-            base.OnGui();
         }
 
         public override void Update()

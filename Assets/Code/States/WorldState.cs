@@ -49,14 +49,6 @@ namespace JoyLib.Code.States
         
         protected IJoyObject PrimaryTarget { get; set; }
 
-        private const string NEEDSRECT = "NeedsRect";
-        private const string INVENTORY = "Inventory";
-        private const string EQUIPMENT = "Equipment";
-        private const string CONVERSATION = "Conversation Window";
-        private const string CONTEXT_MENU = "Context Menu";
-        private const string TRADE = "Trade";
-        private const string QUEST_JOURNAL = "Quest Journal";
-
         protected static bool SetUpGUI
         {
             get;
@@ -93,33 +85,10 @@ namespace JoyLib.Code.States
             base.LoadContent();
         }
 
-        protected override void SetUpUi()
+        public override void SetUpUi()
         {
-            base.SetUpUi();
-
-            if (!SetUpGUI)
-            {
-                GameObject needsGUIPrefab = GameObject.Find(NEEDSRECT);
-                GameObject inventoryGUIPrefab = GameObject.Find(INVENTORY);
-                GameObject equipmentGUIPrefab = GameObject.Find(EQUIPMENT);
-                GameObject conversationWindow = GameObject.Find(CONVERSATION);
-                GameObject contextMenu = GameObject.Find(CONTEXT_MENU);
-                GameObject tradeWindow = GameObject.Find(TRADE);
-                GameObject questJournal = GameObject.Find(QUEST_JOURNAL);
-    
-                GUIManager.AddGUI(needsGUIPrefab, false, false);
-                GUIManager.AddGUI(inventoryGUIPrefab, true, false);
-                GUIManager.AddGUI(equipmentGUIPrefab, true, false);
-                GUIManager.AddGUI(conversationWindow, true, true);
-                GUIManager.AddGUI(contextMenu, false, false);
-                GUIManager.AddGUI(tradeWindow, true, true);
-                GUIManager.AddGUI(questJournal, true, true);
-
-                SetUpGUI = true;
-            }
-            
             GUIManager.CloseAllOtherGUIs();
-            GUIManager.OpenGUI(NEEDSRECT);
+            GUIManager.OpenGUI(GlobalConstants.NEEDSRECT);
 
             EquipmentHandler equipmentHandler = WidgetUtility.Find<MutableItemContainer>("Equipment").gameObject.GetComponent<EquipmentHandler>();
             equipmentHandler.SetPlayer(m_ActiveWorld.Player);
@@ -192,7 +161,7 @@ namespace JoyLib.Code.States
 
         protected void SetUpContextMenu()
         {
-            ContextMenu contextMenu = GUIManager.GetGUI(CONTEXT_MENU).GetComponent<ContextMenu>();
+            ContextMenu contextMenu = GUIManager.GetGUI(GlobalConstants.CONTEXT_MENU).GetComponent<ContextMenu>();
 
             contextMenu.Clear();
 
@@ -210,7 +179,7 @@ namespace JoyLib.Code.States
 
             if (contextMenu.GetComponentsInChildren<MenuItem>(true).Length > 1)
             {
-                GUIManager.OpenGUI(CONTEXT_MENU);
+                GUIManager.OpenGUI(GlobalConstants.CONTEXT_MENU);
                 contextMenu.Show();
             }
         }
@@ -222,10 +191,10 @@ namespace JoyLib.Code.States
                 return;
             }
 
-            ContextMenu contextMenu = GUIManager.GetGUI(CONTEXT_MENU).GetComponent<ContextMenu>();
-            GUIManager.CloseGUI(CONTEXT_MENU);
+            ContextMenu contextMenu = GUIManager.GetGUI(GlobalConstants.CONTEXT_MENU).GetComponent<ContextMenu>();
+            GUIManager.CloseGUI(GlobalConstants.CONTEXT_MENU);
             contextMenu.Close();
-            GUIManager.OpenGUI(CONVERSATION);
+            GUIManager.OpenGUI(GlobalConstants.CONVERSATION);
             ConversationEngine.SetActors(m_ActiveWorld.Player, entity);
             ConversationEngine.Converse();
         }
@@ -311,26 +280,26 @@ namespace JoyLib.Code.States
             */
             if (Input.GetKeyUp(KeyCode.Escape))
             {
-                GUIManager.CloseAllOtherGUIs(NEEDSRECT);
-                GUIManager.OpenGUI(NEEDSRECT);
+                GUIManager.CloseAllOtherGUIs(GlobalConstants.NEEDSRECT);
+                GUIManager.OpenGUI(GlobalConstants.NEEDSRECT);
             }
             else if (Input.GetKeyUp(KeyCode.I))
             {
-                GUIManager.ToggleGUI(INVENTORY);
+                GUIManager.ToggleGUI(GlobalConstants.INVENTORY);
             }
             else if (Input.GetKeyUp(KeyCode.E))
             {
-                GUIManager.ToggleGUI(EQUIPMENT);
+                GUIManager.ToggleGUI(GlobalConstants.EQUIPMENT);
             }
             else if (Input.GetKeyUp(KeyCode.J))
             {
-                GUIManager.ToggleGUI(QUEST_JOURNAL);
+                GUIManager.ToggleGUI(GlobalConstants.QUEST_JOURNAL);
             }
             else if (Input.GetKeyUp(KeyCode.T))
             {
-                if (GUIManager.IsActive(CONVERSATION))
+                if (GUIManager.IsActive(GlobalConstants.CONVERSATION))
                 {
-                    GUIManager.CloseGUI(CONVERSATION);
+                    GUIManager.CloseGUI(GlobalConstants.CONVERSATION);
                 }
                 else
                 {
@@ -339,7 +308,7 @@ namespace JoyLib.Code.States
 
                     if (!(listener is null))
                     {
-                        GUIManager.OpenGUI(CONVERSATION);
+                        GUIManager.OpenGUI(GlobalConstants.CONVERSATION);
                         ConversationEngine.SetActors(this.PlayerWorld.Player, listener);
                         ConversationEngine.Converse(); 
                     }
@@ -348,7 +317,7 @@ namespace JoyLib.Code.States
 
             if (GUIManager.AreAnyOpen() == false)
             {
-                GUIManager.OpenGUI(NEEDSRECT);
+                GUIManager.OpenGUI(GlobalConstants.NEEDSRECT);
             }
 
             if (GUIManager.RemovesControl())
@@ -624,18 +593,6 @@ namespace JoyLib.Code.States
             tickCounter += 1;
             tickCounter %= 10;
             */
-        }
-
-        public override void OnGui()
-        {
-            base.OnGui();
-
-            GameObject needsText = GUIManager.GetGUI("NeedsText");
-            //needsText.GetComponent<TextMeshProUGUI>();
-        }
-
-        public override void Draw()
-        {
         }
 
         protected void DrawTargetCursor()

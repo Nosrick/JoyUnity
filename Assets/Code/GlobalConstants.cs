@@ -19,6 +19,15 @@ namespace JoyLib.Code
 
         public static readonly StringComparer STRING_COMPARER = StringComparer.OrdinalIgnoreCase;
 
+        public const string NEEDSRECT = "NeedsRect";
+        public const string INVENTORY = "Inventory";
+        public const string EQUIPMENT = "Equipment";
+        public const string CONVERSATION = "Conversation Window";
+        public const string CONTEXT_MENU = "Context Menu";
+        public const string TRADE = "Trade";
+        public const string QUEST_JOURNAL = "Quest Journal";
+        public const string CHARACTER_CREATION = "Character Creation";
+
         public static IGameManager GameManager
         {
             get => m_GameManager;

@@ -87,9 +87,9 @@ namespace Tests
                 true);
             tradeWindow.name = "Trade";
 
-            GUIManager.AddGUI(conversationWindow, true, true);
-            GUIManager.AddGUI(inventoryWindow);
-            GUIManager.AddGUI(tradeWindow);
+            GUIManager.AddGUI(conversationWindow.GetComponent<GUIData>(), true, true);
+            GUIManager.AddGUI(inventoryWindow.GetComponent<GUIData>());
+            GUIManager.AddGUI(tradeWindow.GetComponent<GUIData>());
             GUIManager.OpenGUI(conversationWindow.name);
 
             ILiveEntityHandler entityHandler = Mock.Of<ILiveEntityHandler>();
@@ -151,7 +151,6 @@ namespace Tests
 
             target = new ConversationEngine(relationshipHandler, GUIManager, conversationWindow);
 
-            GUIData.GUIManager = GUIManager;
             JoyItemSlot.ItemHolder = new GameObject("World Objects");
             JoyItemSlot.ConversationEngine = target;
             JoyItemSlot.GUIManager = GUIManager;

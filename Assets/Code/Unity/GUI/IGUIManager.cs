@@ -5,7 +5,7 @@ namespace JoyLib.Code.Unity.GUI
     public interface IGUIManager
     {
         void AddGUI(
-            GameObject gui,
+            GUIData gui,
             bool removesControl = true,
             bool closesOthers = false);
 
@@ -21,7 +21,7 @@ namespace JoyLib.Code.Unity.GUI
 
         bool RemovesControl();
 
-        GameObject GetGUI(string name);
+        GUIData GetGUI(string name);
 
         bool IsActive(string name);
 

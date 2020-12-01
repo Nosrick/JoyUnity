@@ -7,8 +7,8 @@ namespace JoyLib.Code.Unity.GUI
 {
     public class GUIManager : IGUIManager
     {
-        private List<GUIData> m_GUIs;
-        private List<GUIData> m_ActiveGUIs;
+        protected HashSet<GUIData> GUIs { get; set; }
+        protected HashSet<GUIData> ActiveGUIs { get; set; }
 
         public GUIManager()
         {
@@ -17,30 +17,36 @@ namespace JoyLib.Code.Unity.GUI
 
         protected void Initialise()
         {
-            if (m_GUIs is null)
+            if (GUIs is null)
             {
-                m_GUIs = new List<GUIData>();
-                m_ActiveGUIs = new List<GUIData>();
+                GUIs = new HashSet<GUIData>();
+                ActiveGUIs = new HashSet<GUIData>();
             }
         }
 
         public void AddGUI(
-            GameObject gui, 
+            GUIData gui, 
             bool removesControl = true,
             bool closesOthers = false)
         {
             Initialise();
-            gui.SetActive(false);
-            GUIData data = gui.AddComponent<GUIData>();
-            data.Initialise(removesControl, closesOthers);
-            m_GUIs.Add(data);
+            if (GUIs.Contains(gui))
+            {
+                GUIs.First(guiData => guiData.name.Equals(gui.name, StringComparison.OrdinalIgnoreCase)).Initialise(removesControl, closesOthers);
+                return;
+            }
+
+            gui.GUIManager = this;
+            gui.gameObject.SetActive(false);
+            gui.Initialise(removesControl, closesOthers);
+            GUIs.Add(gui);
         }
 
         public void ToggleGUI(string name)
         {
-            if (m_ActiveGUIs.Any(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+            if (ActiveGUIs.Any(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase)))
             {
-                GUIData[] toToggle = m_ActiveGUIs.Where(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase)).ToArray();
+                GUIData[] toToggle = ActiveGUIs.Where(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase)).ToArray();
                 foreach (GUIData data in toToggle)
                 {
                     CloseGUI(data.name);
@@ -54,49 +60,49 @@ namespace JoyLib.Code.Unity.GUI
 
         public void OpenGUI(string name)
         {
-            if (m_ActiveGUIs.Any(data => data.name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+            if (ActiveGUIs.Any(data => data.name.Equals(name, StringComparison.OrdinalIgnoreCase)))
             {
                 return;
             }
             
-            GUIData toOpen = m_GUIs.First(gui => 
+            GUIData toOpen = GUIs.First(gui => 
                     gui.name.Equals(name, StringComparison.OrdinalIgnoreCase));
 
-            if (toOpen.ClosesOthers)
+            if (toOpen.m_ClosesOthers)
             {
-                List<GUIData> activeCopy = new List<GUIData>(m_ActiveGUIs);
+                List<GUIData> activeCopy = new List<GUIData>(ActiveGUIs);
                 foreach (GUIData data in activeCopy)
                 {
                     CloseGUI(data.name);
                 }
             }
             
-            m_ActiveGUIs.Add(toOpen);
+            ActiveGUIs.Add(toOpen);
             toOpen.gameObject.SetActive(true);
         }
 
         public void CloseGUI(string activeName)
         {
-            if (m_ActiveGUIs.Any(data => data.name.Equals(activeName, StringComparison.OrdinalIgnoreCase)) == false)
+            if (ActiveGUIs.Any(data => data.name.Equals(activeName, StringComparison.OrdinalIgnoreCase)) == false)
             {
                 return;
             }
             
-            GUIData toClose = m_ActiveGUIs
+            GUIData toClose = ActiveGUIs
                 .First(gui => gui.name.Equals(activeName, StringComparison.OrdinalIgnoreCase));
             
             toClose.gameObject.SetActive(false);
-            m_ActiveGUIs.Remove(toClose);
+            ActiveGUIs.Remove(toClose);
         }
 
         public void BringToFront(string name)
         {
-            if (!m_ActiveGUIs.Any(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+            if (!ActiveGUIs.Any(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase)))
             {
                 return;
             }
-            GUIData toFront = m_ActiveGUIs.First(g => g.name.Equals(name, StringComparison.OrdinalIgnoreCase));
-            foreach (GUIData gui in m_ActiveGUIs)
+            GUIData toFront = ActiveGUIs.First(g => g.name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            foreach (GUIData gui in ActiveGUIs)
             {
                 if (toFront.Equals(gui))
                 {
@@ -111,34 +117,34 @@ namespace JoyLib.Code.Unity.GUI
 
         public void CloseAllOtherGUIs(string activeName = "")
         {
-            GUIData[] toClose = m_ActiveGUIs
+            GUIData[] toClose = ActiveGUIs
                 .Where(gui => gui.name.Equals(activeName, StringComparison.OrdinalIgnoreCase) == false).ToArray();
 
             foreach (GUIData data in toClose)
             {
                 data.gameObject.SetActive(false);
-                m_ActiveGUIs.Remove(data);
+                ActiveGUIs.Remove(data);
             }
         }
 
         public bool RemovesControl()
         {
-            return m_ActiveGUIs.Any(gui => gui.RemovesControl);
+            return ActiveGUIs.Any(gui => gui.m_RemovesControl);
         }
 
-        public GameObject GetGUI(string name)
+        public GUIData GetGUI(string name)
         {
-            return m_GUIs.First(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase)).gameObject;
+            return GUIs.First(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
 
         public bool IsActive(string name)
         {
-            return m_ActiveGUIs.Any(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            return ActiveGUIs.Any(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
 
         public bool AreAnyOpen()
         {
-            return m_ActiveGUIs.Count > 0;
+            return ActiveGUIs.Count > 0;
         }
     }
 }
