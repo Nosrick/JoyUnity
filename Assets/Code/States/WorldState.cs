@@ -221,7 +221,7 @@ namespace JoyLib.Code.States
 
             IEntity player = m_ActiveWorld.Player;
 
-            if (Input.GetKeyUp(KeyCode.Space))
+            if (Input.GetKeyUp(KeyCode.Space) && player.FulfillmentData.Counter <= 0)
             {
                 ManualAutoTurn = !ManualAutoTurn;
                 AutoTurn = !AutoTurn;
