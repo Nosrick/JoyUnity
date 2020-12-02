@@ -25,6 +25,7 @@ namespace JoyLib.Code.Unity.GUI
         [SerializeField] protected Image PlayerSprite;
         [SerializeField] protected TMP_InputField PlayerName;
         [SerializeField] protected ConstrainedValueContainer PlayerType;
+        [SerializeField] protected ConstrainedValueContainer CultureContainer;
         [SerializeField] protected ConstrainedValueContainer GenderContainer;
         [SerializeField] protected ConstrainedValueContainer SexContainer;
         [SerializeField] protected ConstrainedValueContainer SexualityContainer;
@@ -41,6 +42,7 @@ namespace JoyLib.Code.Unity.GUI
             }
         }
         protected List<ICulture> CurrentCultures { get; set; }
+        protected ICulture CurrentCulture { get; set; }
 
         protected IEntityTemplate m_CurrentTemplate;
         protected RNG Roller { get; set; }
@@ -61,7 +63,10 @@ namespace JoyLib.Code.Unity.GUI
         {
             CurrentTemplate = template;
             CurrentCultures = m_GameManager.CultureHandler.GetByCreatureType(m_CurrentTemplate.CreatureType);
-            //PlayerType.Container = Templates.Select(t => t.CreatureType).ToList();
+            CultureContainer.Container = CurrentCultures
+                                            .Select(culture => culture.CultureName)
+                                            .ToList();
+            CurrentCulture = CurrentCultures[CultureContainer.Value];
             GenderContainer.Container = CurrentCultures.SelectMany(culture => culture.Genders).ToList();
             SexContainer.Container = CurrentCultures.SelectMany(culture => culture.Sexes).ToList();
             SexualityContainer.Container = CurrentCultures.SelectMany(culture => culture.Sexualities).ToList();
@@ -69,7 +74,7 @@ namespace JoyLib.Code.Unity.GUI
             RomanceContainer.Container = CurrentCultures.SelectMany(culture => culture.RomanceTypes).ToList();
 
             PlayerSprite.sprite = m_GameManager.ObjectIconHandler.GetSprite(
-                m_CurrentTemplate.Tileset, 
+                CurrentCulture.Tileset, 
                 JobContainer.Selected);
             PlayerName.text = GetRandomName();
             SetStatistics();
@@ -84,6 +89,11 @@ namespace JoyLib.Code.Unity.GUI
         {
             PlayerSprite.sprite =
                 m_GameManager.ObjectIconHandler.GetSprite(CurrentTemplate.CreatureType, JobContainer.Selected);
+        }
+
+        protected void ChangeCultureHandler(object sender, EventArgs args)
+        {
+            ChangeTemplate(m_CurrentTemplate);
         }
 
         protected void SetStatistics()

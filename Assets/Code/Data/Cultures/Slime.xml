@@ -4,7 +4,7 @@
 		<CultureName>slime conglomerate</CultureName>
 
 		<Inhabitants>
-			<Inhabitant>dungeon slime</Inhabitant>
+			<Inhabitant>slime</Inhabitant>
 		</Inhabitants>
 
 		<Rulers>
@@ -22,8 +22,7 @@
 				<Data>default</Data>
 				<Frames>2</Frames>
 				<Filename>cultures/slime</Filename>
-				<X>0</X>
-				<Y>3</Y>
+				<Position>12</Position>
 			</Icon>
 		</TileSet>
 

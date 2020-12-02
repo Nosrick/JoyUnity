@@ -31,6 +31,8 @@ namespace JoyLib.Code.Cultures
 
         public int LastGroup { get; protected set; }
 
+        public string Tileset { get; protected set; }
+
         public string[] Inhabitants => m_Inhabitants.ToArray();
 
         public string CultureName
@@ -64,16 +66,25 @@ namespace JoyLib.Code.Cultures
         public CultureType()
         {}
 
-        public CultureType(string nameRef, List<string> rulersRef, List<string> crimesRef, List<NameData> namesRef,
-            Dictionary<string, int> jobRef, List<string> inhabitantsNameRef,
+        public CultureType(
+            string nameRef, 
+            string tileset,
+            List<string> rulersRef, 
+            List<string> crimesRef, 
+            List<NameData> namesRef,
+            Dictionary<string, int> jobRef, 
+            List<string> inhabitantsNameRef,
             Dictionary<string, int> sexualityPrevelenceRef,
-            Dictionary<string, int> sexPrevelence, Dictionary<string, Tuple<int, int>> statVariance,
+            Dictionary<string, int> sexPrevelence, 
+            Dictionary<string, Tuple<int, int>> statVariance,
             List<string> relationshipTypes,
-            Dictionary<string, int> romancePrevelence, Dictionary<string, int> genderPrevelence,
+            Dictionary<string, int> romancePrevelence,
+            Dictionary<string, int> genderPrevelence,
             int nonConformingGenderChance,
             RNG roller = null)
         {
-            Roller = roller is null ? new RNG() : roller; 
+            Roller = roller is null ? new RNG() : roller;
+            Tileset = tileset;
             CultureName = nameRef;
             m_RulerTypes = rulersRef;
             m_Crimes = crimesRef;

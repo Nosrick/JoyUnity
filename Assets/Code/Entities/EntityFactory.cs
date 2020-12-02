@@ -135,7 +135,7 @@ namespace JoyLib.Code.Entities
 
             if(selectedSprites is null)
             {
-                selectedSprites = ObjectIcons.GetSprites(template.Tileset, template.JoyType);
+                selectedSprites = ObjectIcons.GetSprites(dominantCulture.Tileset, template.JoyType);
             }
 
             if(selectedDriver is null)

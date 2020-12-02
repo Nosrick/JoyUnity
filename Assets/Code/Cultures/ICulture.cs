@@ -28,6 +28,8 @@ namespace JoyLib.Code.Cultures
 
         int GetStatVariance(string statistic);
         
+        string Tileset { get; }
+        
         int LastGroup { get; }
         
         string[] Inhabitants { get; }

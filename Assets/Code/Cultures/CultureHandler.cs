@@ -119,7 +119,8 @@ namespace JoyLib.Code.Cultures
                                                 name = cultureIcons.Element("Name").GetAs<string>(),
                                                 data = cultureIcons.Element("Data").DefaultIfEmpty(""),
                                                 frames = cultureIcons.Element("Frames").GetAs<int>(),
-                                                filename = cultureIcons.Element("Filename").GetAs<string>()
+                                                filename = cultureIcons.Element("Filename").GetAs<string>(),
+                                                position = cultureIcons.Element("Position").DefaultIfEmpty(0)
                                             }).ToArray();
 
                         objectIcons.AddIcons(tileSet, icons);
@@ -128,6 +129,7 @@ namespace JoyLib.Code.Cultures
                     cultures.Add(cultureName,
                         new CultureType(
                             cultureName,
+                            tileSet,
                             rulers,
                             crimes,
                             nameDataList,

@@ -281,7 +281,7 @@ namespace JoyLib.Code.Graphics
 
             if(query.Count > 0)
             {
-                if(query.Any(x => x.name.Equals(tileName, StringComparison.Ordinal)))
+                if(query.Any(x => x.name.Equals(tileName, StringComparison.OrdinalIgnoreCase)))
                 {
                     return query.First(x => x.name.Equals(tileName, StringComparison.OrdinalIgnoreCase) 
                                             || x.data.Equals(tileName, StringComparison.OrdinalIgnoreCase)).sprite;
@@ -312,8 +312,8 @@ namespace JoyLib.Code.Graphics
                 query.Add(pair.Key);
             }
 
-            List<IconData> find = query.FindAll(x => x.name.StartsWith(tileName, StringComparison.OrdinalIgnoreCase) 
-                                                                    || x.data.StartsWith(tileName, StringComparison.OrdinalIgnoreCase));
+            List<IconData> find = query.FindAll(x => x.name.Equals(tileName, StringComparison.OrdinalIgnoreCase) 
+                                                                    || x.data.Equals(tileName, StringComparison.OrdinalIgnoreCase));
             foreach(IconData found in find)
             {
                 sprites.Add(found.sprite);
