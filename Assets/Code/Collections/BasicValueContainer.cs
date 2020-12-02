@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code.Entities.Statistics;
 
 namespace JoyLib.Code.Collections
 {
-    public class BasicValueContainer<T> : IEnumerable<T> where T : IBasicValue
+    public class BasicValueContainer<T> : IDictionary<string, T> where T : IBasicValue
     {
         private Dictionary<string, T> m_Values;
 
@@ -28,19 +29,91 @@ namespace JoyLib.Code.Collections
             }
         }
 
-        public bool Add(T value)
+        public BasicValueContainer(IDictionary<string, T> collection)
         {
-            if(m_Values.ContainsKey(value.Name))
+            m_Values = new Dictionary<string, T>();
+            foreach (KeyValuePair<string, T> pair in collection)
             {
-                return false;
+                m_Values.Add(pair.Key, pair.Value);
             }
+        }
+
+        public void Add(KeyValuePair<string, T> item)
+        {
+            m_Values.Add(item.Key, item.Value);
+        }
+
+        public void Clear()
+        {
+            m_Values.Clear();
+        }
+
+        public bool Contains(KeyValuePair<string, T> item)
+        {
+            return m_Values.ContainsKey(item.Key);
+        }
+
+        public void CopyTo(KeyValuePair<string, T>[] array, int arrayIndex)
+        {
+            if (arrayIndex >= this.Count)
+            {
+                throw new InvalidOperationException("Cannot specify arrayIndex greater than the collection length");
+            }
+            
+            array = new KeyValuePair<string, T>[this.Count];
+
+            List<T> values = this.Values.ToList();
+            for (int i = arrayIndex; i < this.Count; i++)
+            {
+                T item = values[i];
+                array[i] = new KeyValuePair<string, T>(item.Name, item);
+            }
+        }
+
+        public bool Remove(KeyValuePair<string, T> item)
+        {
+            if (m_Values.ContainsKey(item.Key))
+            {
+                return m_Values.Remove(item.Key);
+            }
+
+            return false;
+        }
+
+        public int Count { get; }
+        public bool IsReadOnly { get; }
+
+
+        public void Add(string key, T value)
+        {
+            m_Values.Add(key, value);
+        }
+
+        public void Add(T value)
+        {
             m_Values.Add(value.Name, value);
-            return true;
+        }
+
+        public bool ContainsKey(string key)
+        {
+            return m_Values.ContainsKey(key);
         }
 
         public bool Remove(string value)
         {
             return m_Values.Remove(value);
+        }
+
+        public bool TryGetValue(string key, out T value)
+        {
+            if (m_Values.ContainsKey(key))
+            {
+                value = m_Values[key];
+                return true;
+            }
+
+            value = default(T);
+            return false;
         }
 
         public int Get(string name)
@@ -62,38 +135,23 @@ namespace JoyLib.Code.Collections
             throw new InvalidOperationException("Attempted to access " + this.GetType().Name + ".GetRawValue() with parameter of " + name);
         }
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        public IEnumerator<KeyValuePair<string, T>> GetEnumerator()
         {
-            return m_Values.Values.GetEnumerator();
-        }
-
-        IEnumerator<T> IEnumerable<T>.GetEnumerator()
-        {
-            return m_Values.Values.GetEnumerator();
+            return m_Values.GetEnumerator();
         }
 
         public T this[string index]
         {
-            get
-            {
-                return GetRawValue(index);
-            }
+            get => GetRawValue(index);
+            set => m_Values[index] = value;
         }
 
-        public List<T> Collection
-        {
-            get
-            {
-                return m_Values.Values.ToList();
-            }
-        }
+        public ICollection<string> Keys => m_Values.Keys;
+        public ICollection<T> Values => m_Values.Values;
 
-        public List<string> Names
+        IEnumerator IEnumerable.GetEnumerator()
         {
-            get
-            {
-                return m_Values.Keys.ToList();
-            }
+            return GetEnumerator();
         }
     }
 }

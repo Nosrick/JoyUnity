@@ -113,6 +113,7 @@ namespace JoyLib.Code.Entities
         /// <param name="driver"></param>
         public Entity(
             IEntityTemplate template,
+            BasicValueContainer<IRollableValue> statistics,
             BasicValueContainer<INeed> needs,
             List<ICulture> cultures,
             IGrowingValue level,
@@ -155,19 +156,19 @@ namespace JoyLib.Code.Entities
             this.Sexuality = sexuality;
             this.Romance = romance;
             this.m_IdentifiedItems = identifiedItems;
-            this.m_Statistics = template.Statistics;
+            this.m_Statistics = statistics;
 
             this.m_Skills = new BasicValueContainer<IGrowingValue>();
             this.m_Needs = needs;
 
-            foreach (IGrowingValue skill in template.Skills)
+            foreach (IGrowingValue skill in template.Skills.Values)
             {
                 this.m_Skills.Add(skill);
             }
 
             if (SkillHandler is null == false)
             {
-                foreach (IGrowingValue skill in SkillHandler.GetDefaultSkillBlock(this.m_Needs))
+                foreach (IGrowingValue skill in SkillHandler.GetDefaultSkillBlock(this.m_Needs).Values)
                 {
                     this.m_Skills.Add(skill);
                 }
@@ -228,6 +229,7 @@ namespace JoyLib.Code.Entities
         public Entity(
             IEntityTemplate template,
             BasicValueContainer<INeed> needs,
+            BasicValueContainer<IRollableValue> statistics,
             List<ICulture> cultures,
             IGrowingValue level,
             IJob job,
@@ -240,7 +242,7 @@ namespace JoyLib.Code.Entities
             IWorldInstance world,
             IDriver driver,
             RNG roller = null) :
-            this(template, needs, cultures, level, 0, job, gender, sex, sexuality, romance, position, sprites,
+            this(template, statistics, needs, cultures, level, 0, job, gender, sex, sexuality, romance, position, sprites,
                 NaturalWeaponHelper?.MakeNaturalWeapon(template.Size), new NonUniqueDictionary<string, IItemInstance>(),
                 new List<IItemInstance>(), new List<string>(), new Dictionary<string, int>(), world, driver, roller)
         {
@@ -386,7 +388,7 @@ namespace JoyLib.Code.Entities
 
                 RegenTicker = 0;
 
-                foreach (INeed need in m_Needs.Collection)
+                foreach (INeed need in m_Needs.Values)
                 {
                     need.Tick(this);
                 }
@@ -417,8 +419,8 @@ namespace JoyLib.Code.Entities
             //Fetch all statistics
             if (tags.Any(tag => tag.Equals("statistics", StringComparison.OrdinalIgnoreCase)))
             {
-                data.AddRange(m_Statistics.Select(statistic =>
-                    new Tuple<string, int>(statistic.Name, statistic.Value)));
+                data.AddRange(m_Statistics.Select(pair =>
+                    new Tuple<string, int>(pair.Key, pair.Value.Value)));
             }
 
             //Check skills

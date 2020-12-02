@@ -26,6 +26,7 @@ namespace JoyLib.Code.States
         {
             base.Start();
             SetUpUi();
+            CharacterCreationScreen.Initialise();
         }
 
         public override void SetUpUi()

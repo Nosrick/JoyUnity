@@ -77,8 +77,6 @@
         <Slot>Job Pin</Slot>
         <Slot>Throw</Slot>
 
-        <Need>thirst</Need>
-
         <Filename>Player0</Filename>
         <Tileset>Human</Tileset>
     </Entity>

@@ -34,7 +34,7 @@ namespace JoyLib.Code.Entities.AI.Drivers
             if (vehicle.CurrentTarget.idle == true)
             {
                 //Let's find something to do
-                List<INeed> needs = vehicle.Needs.Collection.OrderByDescending(x => x.Priority).ToList();
+                List<INeed> needs = vehicle.Needs.Values.OrderByDescending(x => x.Priority).ToList();
                 //Act on first need
 
                 bool idle = true;

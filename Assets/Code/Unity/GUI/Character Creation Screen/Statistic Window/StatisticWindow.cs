@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using JoyLib.Code.Collections;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Rollers;
 using JoyLib.Code.Unity.GUI;
 using UnityEngine;
 
@@ -21,6 +23,21 @@ namespace JoyLib.Code.Unity.GUI
             Items = new List<StatisticItem>();
             
             PointsRemaining = 12;
+        }
+
+        public BasicValueContainer<IRollableValue> GetStatistics()
+        {
+            BasicValueContainer<IRollableValue> stats = new BasicValueContainer<IRollableValue>();
+            foreach (StatisticItem item in Items)
+            {
+                stats.Add(new EntityStatistic(
+                    item.Name,
+                    item.Value,
+                    GlobalConstants.DEFAULT_SUCCESS_THRESHOLD,
+                    new StandardRoller()));
+            }
+
+            return stats;
         }
 
         public void SetStatistics(List<Tuple<string, int>> statistics)

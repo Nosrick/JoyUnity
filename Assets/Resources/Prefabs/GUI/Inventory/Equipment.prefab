@@ -233,6 +233,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae7426b9a54d79844b6b701d5ba47f9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_SlotPrefab: {fileID: 0}
+  m_Container: {fileID: 161253348}
+  m_EquipmentContainer: {fileID: 4484802662267518631}
 --- !u!114 &281378240067264750
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -245,6 +248,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79b34202c8a849cb81a9f40db85841f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_RemovesControl: 1
+  m_ClosesOthers: 0
+  m_Index: 0
 --- !u!1 &4484802662463132232
 GameObject:
   m_ObjectHideFlags: 0
@@ -255,8 +261,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4484802662463132235}
   - component: {fileID: 4484802662463132245}
-  - component: {fileID: 4484802662463132234}
   - component: {fileID: 4484802662463132244}
+  - component: {fileID: 161253348}
   m_Layer: 0
   m_Name: EquipmentSlots
   m_TagString: Untagged
@@ -291,30 +297,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4484802662463132232}
   m_CullTransparentMesh: 0
---- !u!114 &4484802662463132234
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4484802662463132232}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Padding:
-    m_Left: 0
-    m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
-  m_ChildAlignment: 0
-  m_StartCorner: 0
-  m_StartAxis: 1
-  m_CellSize: {x: 50, y: 50}
-  m_Spacing: {x: 0, y: 4}
-  m_Constraint: 1
-  m_ConstraintCount: 1
 --- !u!114 &4484802662463132244
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -333,6 +315,31 @@ MonoBehaviour:
   vertical: 1
   verticalMin: -50
   verticalMax: 100
+--- !u!114 &161253348
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4484802662463132232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 0
+  m_Spacing: 2
+  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandHeight: 0
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
 --- !u!1 &4484802662935803586
 GameObject:
   m_ObjectHideFlags: 0
@@ -664,8 +671,8 @@ GameObject:
   - component: {fileID: 4484802663871245971}
   - component: {fileID: 4484802663871245983}
   - component: {fileID: 4484802663871245980}
-  - component: {fileID: 4484802663871245970}
   - component: {fileID: 4484802663871245981}
+  - component: {fileID: 1671131910}
   m_Layer: 0
   m_Name: Equipment DragHandle
   m_TagString: Untagged
@@ -729,24 +736,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &4484802663871245970
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4484802663871245968}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7df474a8f97f6414fb888ed3a540e50d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  horizontal: 0
-  horizontalMin: -100
-  horizontalMax: 100
-  vertical: 1
-  verticalMin: -325
-  verticalMax: 0
 --- !u!114 &4484802663871245981
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -787,7 +776,7 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 4484802663871245980}
-  target: {fileID: 4484802663871245971}
+  target: {fileID: 4484802662463132235}
   horizontal: 0
   vertical: 1
   beginTransitions:
@@ -814,9 +803,27 @@ MonoBehaviour:
   onEnd:
     m_PersistentCalls:
       m_Calls: []
+  m_DynamicReconstrain: 1
   m_ReverseHorizontal: 0
   m_ReverseVertical: 1
-  m_DragActor: {fileID: 4484802662463132235}
-  m_Lerp: 1
-  m_TargetConstraint: {fileID: 4484802663871245970}
-  m_DragActorConstraint: {fileID: 4484802662463132244}
+  m_Container: {fileID: 161253348}
+  m_ContainerChild: {fileID: 0}
+  m_Lerp: 2
+  m_VerticalConstraint: 2
+  m_HorizontalConstraint: 0
+  TargetConstraintMin: {x: 0, y: 0}
+  TargetConstraintMax: {x: 0, y: 0}
+--- !u!114 &1671131910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4484802663871245968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c7a98e781356774db300f14898e7a55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  horizontal: 0
+  vertical: 1

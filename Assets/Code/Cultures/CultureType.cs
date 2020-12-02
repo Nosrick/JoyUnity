@@ -7,8 +7,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using Castle.Core.Internal;
+using JoyLib.Code.Collections;
 using JoyLib.Code.Entities.Gender;
 using JoyLib.Code.Entities.Romance;
+using JoyLib.Code.Entities.Statistics;
 using UnityEngine;
 
 namespace JoyLib.Code.Cultures
@@ -169,7 +171,7 @@ namespace JoyLib.Code.Cultures
             return names[result].name;
         }
 
-        public IBioSex ChooseSex(IBioSex[] sexes)
+        public IBioSex ChooseSex(IEnumerable<IBioSex> sexes)
         {
             int totalSex = 0;
             foreach(int value in m_SexPrevelence.Values)
@@ -190,7 +192,7 @@ namespace JoyLib.Code.Cultures
             throw new InvalidOperationException("Could not assign sex from culture " + this.CultureName + ".");
         }
 
-        public ISexuality ChooseSexuality(ISexuality[] sexualities)
+        public ISexuality ChooseSexuality(IEnumerable<ISexuality> sexualities)
         {
             int soFar = 0;
             int totalSexuality = 0;
@@ -211,7 +213,7 @@ namespace JoyLib.Code.Cultures
             throw new InvalidOperationException("Could not assign sexuality from culture " + this.CultureName + ".");
         }
 
-        public IRomance ChooseRomance(IRomance[] romances)
+        public IRomance ChooseRomance(IEnumerable<IRomance> romances)
         {
             int soFar = 0;
             int totalRomance = 0;
@@ -232,7 +234,7 @@ namespace JoyLib.Code.Cultures
             throw new InvalidOperationException("Could not assign romance from culture " + this.CultureName + ".");
         }
 
-        public IGender ChooseGender(IBioSex sex, IGender[] genders)
+        public IGender ChooseGender(IBioSex sex, IEnumerable<IGender> genders)
         {
             int nonConforming = Roller.Roll(0, 100);
             if (nonConforming < NonConformingGenderChance)
@@ -261,7 +263,7 @@ namespace JoyLib.Code.Cultures
             throw new InvalidOperationException("Could not assign gender from culture " + this.CultureName + ".");
         }
 
-        public IJob ChooseJob(IJob[] jobs)
+        public IJob ChooseJob(IEnumerable<IJob> jobs)
         {
             int soFar = 0;
             int totalJob = 0;
@@ -282,13 +284,24 @@ namespace JoyLib.Code.Cultures
             throw new InvalidOperationException("Could not assign job from culture " + this.CultureName + ".");
         }
 
+        public BasicValueContainer<IRollableValue> GetStats(BasicValueContainer<IRollableValue> baseStats)
+        {
+            BasicValueContainer<IRollableValue> stats = new BasicValueContainer<IRollableValue>(baseStats);
+            foreach (string stat in baseStats.Keys)
+            {
+                stats[stat].ModifyValue(GetStatVariance(stat));
+            }
+
+            return stats;
+        }
+
         public int GetStatVariance(string statistic)
         {
             if(m_StatVariance.ContainsKey(statistic))
             {
                 if(Roller.Roll(0, 100) < m_StatVariance[statistic].Item1)
                 {
-                    return Roller.Roll(-m_StatVariance[statistic].Item2, m_StatVariance[statistic].Item2);
+                    return Roller.Roll(-m_StatVariance[statistic].Item2, m_StatVariance[statistic].Item2 + 1);
                 }
             }
             return 0;

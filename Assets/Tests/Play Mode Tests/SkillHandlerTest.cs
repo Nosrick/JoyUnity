@@ -39,7 +39,7 @@ namespace Tests
     
             BasicValueContainer<IGrowingValue> skills = target.GetDefaultSkillBlock(needs);
     
-            foreach (IGrowingValue skill in skills)
+            foreach (IGrowingValue skill in skills.Values)
             {
                 Assert.That(skill.GoverningNeeds, Is.Not.Empty);
             }

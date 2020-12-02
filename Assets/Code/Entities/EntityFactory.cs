@@ -67,8 +67,9 @@ namespace JoyLib.Code.Entities
 
         public IEntity CreateFromTemplate(
             IEntityTemplate template,
-            IGrowingValue level,
             Vector2Int position,
+            IGrowingValue level = null,
+            BasicValueContainer<IRollableValue> statistics = null,
             List<ICulture> cultures = null,
             IGender gender = null,
             IBioSex sex = null,
@@ -87,6 +88,7 @@ namespace JoyLib.Code.Entities
             Sprite[] selectedSprites = sprites;
             List<ICulture> creatureCultures = new List<ICulture>();
             IDriver selectedDriver = driver;
+            BasicValueContainer<IRollableValue> selectedStatistics = statistics;
             if (!(cultures is null))
             {
                 creatureCultures.AddRange(cultures);
@@ -107,6 +109,11 @@ namespace JoyLib.Code.Entities
 
             int result = Roller.Roll(0, creatureCultures.Count);
             ICulture dominantCulture = creatureCultures[result];
+
+            if (selectedStatistics is null)
+            {
+                selectedStatistics = dominantCulture.GetStats(template.Statistics);
+            }
 
             if(selectedJob is null)
             {
@@ -146,6 +153,7 @@ namespace JoyLib.Code.Entities
             IEntity entity = new Entity(
                 template, 
                 needs, 
+                selectedStatistics,
                 creatureCultures, 
                 level, 
                 selectedJob, 
@@ -164,6 +172,7 @@ namespace JoyLib.Code.Entities
 
         public IEntity CreateLong(
             IEntityTemplate template,
+            BasicValueContainer<IRollableValue> statistics,
             BasicValueContainer<INeed> needs,
             IGrowingValue level,
             float experience,
@@ -201,7 +210,8 @@ namespace JoyLib.Code.Entities
             }
 
             IEntity entity = new Entity(
-                template, 
+                template,
+                statistics, 
                 needs, 
                 creatureCultures, 
                 level, 

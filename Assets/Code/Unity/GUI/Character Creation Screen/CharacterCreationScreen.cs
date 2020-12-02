@@ -6,7 +6,9 @@ using JoyLib.Code.Collections;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Gender;
+using JoyLib.Code.Entities.Jobs;
 using JoyLib.Code.Entities.Needs;
+using JoyLib.Code.Entities.Romance;
 using JoyLib.Code.Entities.Sexes;
 using JoyLib.Code.Entities.Sexuality;
 using JoyLib.Code.Entities.Statistics;
@@ -47,7 +49,7 @@ namespace JoyLib.Code.Unity.GUI
         protected IEntityTemplate m_CurrentTemplate;
         protected RNG Roller { get; set; }
 
-        public void Awake()
+        public void Initialise()
         {
             Templates = m_GameManager.EntityTemplateHandler.Templates;
             Roller = new RNG();
@@ -67,16 +69,48 @@ namespace JoyLib.Code.Unity.GUI
                                             .Select(culture => culture.CultureName)
                                             .ToList();
             CurrentCulture = CurrentCultures[CultureContainer.Value];
-            GenderContainer.Container = CurrentCultures.SelectMany(culture => culture.Genders).ToList();
-            SexContainer.Container = CurrentCultures.SelectMany(culture => culture.Sexes).ToList();
-            SexualityContainer.Container = CurrentCultures.SelectMany(culture => culture.Sexualities).ToList();
-            JobContainer.Container = CurrentCultures.SelectMany(culture => culture.Jobs).ToList();
-            RomanceContainer.Container = CurrentCultures.SelectMany(culture => culture.RomanceTypes).ToList();
+            
+            SexContainer.Container = CurrentCulture.Sexes.ToList();
+            IBioSex sex = CurrentCulture.ChooseSex(m_GameManager.BioSexHandler.Sexes);
+            Debug.Log("SEX: " + sex.Name);
+            SexContainer.Value =
+                SexContainer.Container.FindIndex(s => s.Equals(sex.Name, StringComparison.CurrentCulture));
+            
+            GenderContainer.Container = CurrentCulture.Genders.ToList();
+            IGender gender = CurrentCulture.ChooseGender(sex, m_GameManager.GenderHandler.Genders);
+            Debug.Log("GENDER: " + gender.Name);
+            GenderContainer.Value =
+                GenderContainer.Container.FindIndex(s => 
+                    s.Equals(gender.Name, StringComparison.Ordinal));
+            
+            
+            SexualityContainer.Container = CurrentCulture.Sexualities.ToList();
+            ISexuality sexuality = CurrentCulture.ChooseSexuality(m_GameManager.SexualityHandler.Sexualities);
+            Debug.Log("SEXUALITY: " + sexuality.Name);
+            SexualityContainer.Value =
+                SexualityContainer.Container.FindIndex(s => 
+                    s.Equals(sexuality.Name,
+                        StringComparison.OrdinalIgnoreCase));
+            
+            JobContainer.Container = CurrentCulture.Jobs.ToList();
+            IJob job = CurrentCulture.ChooseJob(m_GameManager.JobHandler.Jobs);
+            Debug.Log("JOB: "+ job.Name);
+            JobContainer.Value =
+                JobContainer.Container.FindIndex(s =>
+                    s.Equals(job.Name,
+                        StringComparison.OrdinalIgnoreCase));
+            
+            RomanceContainer.Container = CurrentCulture.RomanceTypes.ToList();
+            IRomance romance = CurrentCulture.ChooseRomance(m_GameManager.RomanceHandler.Romances);
+            Debug.Log("ROMANCE: " + romance.Name);
+            RomanceContainer.Value =
+                RomanceContainer.Container.FindIndex(s => s.Equals(
+                    romance.Name, StringComparison.OrdinalIgnoreCase));
 
             PlayerSprite.sprite = m_GameManager.ObjectIconHandler.GetSprite(
                 CurrentCulture.Tileset, 
                 JobContainer.Selected);
-            PlayerName.text = GetRandomName();
+            PlayerName.text = CurrentCulture.GetRandomName(GenderContainer.Selected);
             SetStatistics();
         }
 
@@ -98,14 +132,14 @@ namespace JoyLib.Code.Unity.GUI
 
         protected void SetStatistics()
         {
-            m_StatisticWindow.SetStatistics(CurrentTemplate.Statistics.Select(stat => new Tuple<string, int>(stat.Name, stat.Value)).ToList());
+            m_StatisticWindow.SetStatistics(CurrentTemplate.Statistics.Select(stat => new Tuple<string, int>(stat.Key, stat.Value.Value)).ToList());
         }
 
         public IEntity CreatePlayer()
         {
-            IEntityTemplate template = Templates[0];
             return m_GameManager.EntityFactory.CreateFromTemplate(
-                template,
+                CurrentTemplate,
+                GlobalConstants.NO_TARGET,
                 new ConcreteGrowingValue(
                     "level",
                     1,
@@ -114,24 +148,18 @@ namespace JoyLib.Code.Unity.GUI
                     GlobalConstants.DEFAULT_SUCCESS_THRESHOLD,
                     new StandardRoller(),
                     new NonUniqueDictionary<INeed, float>()),
-                GlobalConstants.NO_TARGET,
+                m_StatisticWindow.GetStatistics(),
                 CurrentCultures,
                 m_GameManager.GenderHandler.Get(GenderContainer.Selected),
                 m_GameManager.BioSexHandler.Get(SexContainer.Selected),
                 m_GameManager.SexualityHandler.Get(SexualityContainer.Selected),
                 m_GameManager.RomanceHandler.Get(RomanceContainer.Selected),
-                m_GameManager.JobHandler.Get(JobContainer.Selected),
-                m_GameManager.ObjectIconHandler.GetSprites(m_CurrentTemplate.CreatureType, JobContainer.Selected));
+                m_GameManager.JobHandler.Get(JobContainer.Selected), m_GameManager.ObjectIconHandler.GetSprites(CurrentTemplate.CreatureType, JobContainer.Selected));
         }
 
         public void SetRandomName()
         {
-            PlayerName.text = GetRandomName();
-        }
-
-        public string GetRandomName()
-        {
-            return CurrentCultures[Roller.Roll(0, CurrentCultures.Count)].GetRandomName(GenderContainer.Selected);
+            PlayerName.text = CurrentCulture.GetRandomName(GenderContainer.Selected);
         }
     }
 }

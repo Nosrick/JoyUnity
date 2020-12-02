@@ -57,7 +57,7 @@ namespace JoyLib.Code.Unity.GUI
             }
 
             StringBuilder builder = new StringBuilder();
-            foreach(INeed need in Player.Needs.Collection)
+            foreach(INeed need in Player.Needs.Values)
             {
                 if(!need.ContributingHappiness)
                 {

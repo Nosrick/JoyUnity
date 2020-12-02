@@ -72,7 +72,7 @@ namespace JoyLib.Code.Entities.Needs
 
             INeed chosenNeed = null;
             int bestMatch = int.MaxValue;
-            foreach (INeed need in needs)
+            foreach (INeed need in needs.Values)
             {
                 if (need == this)
                 {
@@ -141,8 +141,8 @@ namespace JoyLib.Code.Entities.Needs
                 BasicValueContainer<INeed> needs = actor.Needs;
 
                 int average = (int) Math.Ceiling(
-                    needs.Where(need => need.ContributingHappiness)
-                        .Average(need => need.Value));
+                    needs.Where(need => need.Value.ContributingHappiness)
+                        .Average(need => need.Value.Value));
 
                 this.Fulfill(average);
                 base.Tick(actor);

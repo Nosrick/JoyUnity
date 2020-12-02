@@ -74,8 +74,8 @@ namespace JoyLib.Code.World.Generators.Interiors
 
                 IEntity newEntity = EntityFactory.CreateFromTemplate(
                     templates[entityIndex], 
-                    level, 
                     availablePoints[pointIndex],
+                    level,
                     null,
                     null,
                     null,
@@ -83,6 +83,7 @@ namespace JoyLib.Code.World.Generators.Interiors
                     null, 
                     null,
                     null,
+                    null, 
                     worldRef);
 
                 EntityHandler.AddEntity(newEntity);

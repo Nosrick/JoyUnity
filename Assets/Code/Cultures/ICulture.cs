@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using JoyLib.Code.Collections;
 using JoyLib.Code.Entities.Gender;
 using JoyLib.Code.Entities.Jobs;
 using JoyLib.Code.Entities.Romance;
 using JoyLib.Code.Entities.Sexes;
 using JoyLib.Code.Entities.Sexuality;
+using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Rollers;
 
 namespace JoyLib.Code.Cultures
@@ -14,15 +17,17 @@ namespace JoyLib.Code.Cultures
 
         string GetNameForChain(int chain, string gender, int group = Int32.MinValue);
 
-        IBioSex ChooseSex(IBioSex[] sexes);
+        IBioSex ChooseSex(IEnumerable<IBioSex> sexes);
 
-        ISexuality ChooseSexuality(ISexuality[] sexualities);
+        ISexuality ChooseSexuality(IEnumerable<ISexuality> sexualities);
 
-        IRomance ChooseRomance(IRomance[] romances);
+        IRomance ChooseRomance(IEnumerable<IRomance> romances);
 
-        IGender ChooseGender(IBioSex sex, IGender[] genders);
+        IGender ChooseGender(IBioSex sex, IEnumerable<IGender> genders);
 
-        IJob ChooseJob(IJob[] jobs);
+        IJob ChooseJob(IEnumerable<IJob> jobs);
+
+        BasicValueContainer<IRollableValue> GetStats(BasicValueContainer<IRollableValue> baseStats);
 
         void ClearLastGroup();
 

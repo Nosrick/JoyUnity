@@ -19,8 +19,9 @@ namespace JoyLib.Code.Entities
     {
         IEntity CreateFromTemplate(
             IEntityTemplate template,
-            IGrowingValue level,
             Vector2Int position,
+            IGrowingValue level = null,
+            BasicValueContainer<IRollableValue> statistics = null,
             List<ICulture> cultures = null,
             IGender gender = null,
             IBioSex sex = null,
@@ -33,6 +34,7 @@ namespace JoyLib.Code.Entities
 
         IEntity CreateLong(
             IEntityTemplate template,
+            BasicValueContainer<IRollableValue> stats,
             BasicValueContainer<INeed> needs,
             IGrowingValue level,
             float experience,

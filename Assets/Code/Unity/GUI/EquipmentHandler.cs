@@ -9,6 +9,7 @@ using JoyLib.Code.Entities;
 using Lean.Gui;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using EquipmentRegion = DevionGames.InventorySystem.EquipmentRegion;
 
@@ -19,14 +20,8 @@ namespace JoyLib.Code.Unity.GUI
         private IEntity m_Player;
 
         [SerializeField] protected GameObject m_SlotPrefab;
-        private GameObject m_Grid;
-        private MutableItemContainer m_EquipmentContainer;
-
-        public void Awake()
-        {
-            m_EquipmentContainer = GameObject.Find("Equipment").GetComponent<MutableItemContainer>();
-            m_Grid = GameObject.Find("EquipmentSlots");
-        }
+        [SerializeField] protected LayoutGroup m_Container;
+        [SerializeField] protected MutableItemContainer m_EquipmentContainer;
 
         // Start is called before the first frame update
         void Start()
@@ -58,7 +53,7 @@ namespace JoyLib.Code.Unity.GUI
             }
             
             List<GameObject> children = new List<GameObject>();
-            foreach (Transform child in m_Grid.transform)
+            foreach (Transform child in m_Container.transform)
             {
                 children.Add(child.gameObject);
             }
@@ -70,7 +65,7 @@ namespace JoyLib.Code.Unity.GUI
             {
                 GameObject slotInstance = GameObject.Instantiate(
                     m_SlotPrefab,
-                    m_Grid.transform);
+                    m_Container.transform);
                 TextMeshProUGUI slotName = slotInstance.GetComponentInChildren<TextMeshProUGUI>();
                 slotName.text = slots[i];
                 ItemSlot slotScript = slotInstance.GetComponent<ItemSlot>();
@@ -84,10 +79,6 @@ namespace JoyLib.Code.Unity.GUI
             }
 
             m_EquipmentContainer.RefreshSlots();
-            GameObject equipmentSlots = this.gameObject.FindChild("EquipmentSlots", true);
-            LeanConstrainAnchoredPosition constrain = equipmentSlots.GetComponent<LeanConstrainAnchoredPosition>();
-            GridLayoutGroup grid = equipmentSlots.GetComponent<GridLayoutGroup>();
-            constrain.VerticalMax = (grid.transform.childCount * (grid.spacing.y + grid.cellSize.y)) / 2;
         }
     }
 }

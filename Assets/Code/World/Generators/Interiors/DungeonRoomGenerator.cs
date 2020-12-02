@@ -97,6 +97,8 @@ namespace JoyLib.Code.World.Generators.Interiors
 
                 Vector2Int bottomRight = new Vector2Int(topLeft.x + Roller.Roll(MIN_ROOM_SIZE, MAX_ROOM_SIZE),
                                                 topLeft.y + Roller.Roll(MIN_ROOM_SIZE, MAX_ROOM_SIZE));
+                
+                bottomRight.Clamp(Vector2Int.one, new Vector2Int(m_Size - 1, m_Size - 1));
 
                 if (!ValidateRoom(topLeft, bottomRight))
                     return false;

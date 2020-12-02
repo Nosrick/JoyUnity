@@ -78,9 +78,10 @@ namespace JoyLib.Code.Entities.Needs
         public override bool FindFulfilmentObject(IEntity actor)
         {
             INeed[] needs = actor.Needs.Where(need => 
-                need.Name.Equals("family", StringComparison.OrdinalIgnoreCase)
-                || need.Name.Equals("friendship", StringComparison.OrdinalIgnoreCase)
-                || need.Name.Equals("purpose", StringComparison.OrdinalIgnoreCase))
+                need.Key.Equals("family", StringComparison.OrdinalIgnoreCase)
+                || need.Key.Equals("friendship", StringComparison.OrdinalIgnoreCase)
+                || need.Key.Equals("purpose", StringComparison.OrdinalIgnoreCase))
+                .Select(n => n.Value)
                 .ToArray();
 
             INeed chosenNeed = null;

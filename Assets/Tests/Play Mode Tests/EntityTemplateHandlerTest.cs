@@ -43,7 +43,7 @@ namespace Tests
             Assert.That(entityTemplates, Is.Not.Empty);
             foreach(EntityTemplate template in entityTemplates)
             {
-                Assert.That(template.Statistics.Collection, Is.Not.Empty);
+                Assert.That(template.Statistics.Values, Is.Not.Empty);
                 Assert.That(template.Slots, Is.Not.Empty);
                 Assert.That(template.Tags, Is.Not.Empty);
                 Assert.False(template.JoyType == "DEFAULT");
