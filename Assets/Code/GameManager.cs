@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour, IGameManager
 
         MyGameObject = this.gameObject;
         
-        Roller = new RNG(AlgorithmsElf.ChopLong(DateTimeOffset.Now.ToUnixTimeMilliseconds()));
+        Roller = new RNG();
 
         PhysicsManager = new PhysicsManager();
 

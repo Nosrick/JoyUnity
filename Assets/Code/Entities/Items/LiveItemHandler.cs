@@ -126,7 +126,7 @@ namespace JoyLib.Code.Entities.Items
 
                     if (unidentifiedItems.Count != 0)
                     {
-                        int index = Roller.Roll(0, unidentifiedItems.Count - 1);
+                        int index = Roller.Roll(0, unidentifiedItems.Count);
                         chosenDescription = unidentifiedItems[index];
                         unidentifiedItems.RemoveAt(index);
                     }

@@ -162,7 +162,7 @@ namespace JoyLib.Code
             //If it's not animated, select a random icon to represent it
             if (!this.IsAnimated && sprites != null)
             {
-                this.ChosenSprite = Roller.Roll(0, sprites.Length - 1);
+                this.ChosenSprite = Roller.Roll(0, sprites.Length);
             }
             else
             {

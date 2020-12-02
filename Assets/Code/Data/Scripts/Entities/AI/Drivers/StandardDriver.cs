@@ -88,7 +88,7 @@ namespace JoyLib.Code.Entities.AI.Drivers
                 }
 
                 //Pick a random spot to wander to
-                int result = Roller.Roll(0, visibleSpots.Count - 1);
+                int result = Roller.Roll(0, visibleSpots.Count);
                 NeedAIData currentTarget = vehicle.CurrentTarget;
                 currentTarget.targetPoint = visibleSpots[result];
                 vehicle.CurrentTarget = currentTarget;

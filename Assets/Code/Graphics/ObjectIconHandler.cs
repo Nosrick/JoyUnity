@@ -236,7 +236,7 @@ namespace JoyLib.Code.Graphics
                 {
                     return ReturnDefaultArray();
                 }
-                int result = Roller.Roll(0, icons.Length - 1);
+                int result = Roller.Roll(0, icons.Length);
                 string[] nameToFind = Regex.Split(icons[result].name, @"^[^\d]+");
                 icons = icons.Where(x => x.name.StartsWith(nameToFind[0])).ToArray();
                 if(icons.Length == 0)

@@ -177,7 +177,7 @@ namespace JoyLib.Code.Cultures
                 totalSex += value;
             }
 
-            int result = Roller.Roll(0, totalSex - 1);
+            int result = Roller.Roll(0, totalSex);
             int soFar = 0;
             foreach(KeyValuePair<string, int> pair in m_SexPrevelence)
             {
@@ -193,12 +193,12 @@ namespace JoyLib.Code.Cultures
         public ISexuality ChooseSexuality(ISexuality[] sexualities)
         {
             int soFar = 0;
-            int totalSex = 0;
+            int totalSexuality = 0;
             foreach(int value in m_SexualityPrevelence.Values)
             {
-                totalSex += value;
+                totalSexuality += value;
             }
-            int result = Roller.Roll(0, totalSex - 1);
+            int result = Roller.Roll(0, totalSexuality);
 
             foreach (KeyValuePair<string, int> pair in m_SexualityPrevelence)
             {
@@ -219,7 +219,7 @@ namespace JoyLib.Code.Cultures
             {
                 totalRomance += value;
             }
-            int result = Roller.Roll(0, totalRomance - 1);
+            int result = Roller.Roll(0, totalRomance);
 
             foreach (KeyValuePair<string, int> pair in m_RomancePrevelence)
             {
@@ -243,7 +243,7 @@ namespace JoyLib.Code.Cultures
                 {
                     totalGender += value;
                 }
-                int result = Roller.Roll(0, totalGender - 1);
+                int result = Roller.Roll(0, totalGender);
 
                 foreach (KeyValuePair<string, int> pair in m_GenderPrevelence)
                 {
@@ -269,7 +269,7 @@ namespace JoyLib.Code.Cultures
             {
                 totalJob += value;
             }
-            int result = Roller.Roll(0, totalJob - 1);
+            int result = Roller.Roll(0, totalJob);
 
             foreach(KeyValuePair<string, int> pair in m_JobPrevelence)
             {

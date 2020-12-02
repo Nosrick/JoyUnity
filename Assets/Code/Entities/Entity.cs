@@ -202,7 +202,7 @@ namespace JoyLib.Code.Entities
                 0,
                 new JoyObject[0]);
 
-            this.RegenTicker = Roller.Roll(0, REGEN_TICK_TIME - 1);
+            this.RegenTicker = Roller.Roll(0, REGEN_TICK_TIME);
 
             this.MyWorld = world;
             this.JoyName = this.GetNameFromMultipleCultures();
@@ -300,7 +300,7 @@ namespace JoyLib.Code.Entities
 
             this.Roller = copy.Roller;
 
-            this.RegenTicker = Roller.Roll(0, REGEN_TICK_TIME - 1);
+            this.RegenTicker = Roller.Roll(0, REGEN_TICK_TIME);
 
             this.MyWorld = copy.MyWorld;
 

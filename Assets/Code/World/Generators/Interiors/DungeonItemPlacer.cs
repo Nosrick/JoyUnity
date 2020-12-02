@@ -49,11 +49,11 @@ namespace JoyLib.Code.World.Generators.Interiors
 
             for(int i = 0; i < itemsToPlace; i++)
             {
-                Vector2Int point = new Vector2Int(Roller.Roll(1, worldRef.Tiles.GetLength(0) - 1), Roller.Roll(1, worldRef.Tiles.GetLength(1) - 1));
+                Vector2Int point = new Vector2Int(Roller.Roll(1, worldRef.Tiles.GetLength(0)), Roller.Roll(1, worldRef.Tiles.GetLength(1)));
 
                 while(unavailablePoints.Contains(point))
                 {
-                    point = new Vector2Int(Roller.Roll(1, worldRef.Tiles.GetLength(0) - 1), Roller.Roll(1, worldRef.Tiles.GetLength(1) - 1));
+                    point = new Vector2Int(Roller.Roll(1, worldRef.Tiles.GetLength(0)), Roller.Roll(1, worldRef.Tiles.GetLength(1)));
                 }
 
                 IItemInstance item = ItemFactory.CreateCompletelyRandomItem();

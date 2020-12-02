@@ -50,13 +50,13 @@ namespace JoyLib.Code.World.Generators.Interiors
             while (m_NumberRoomsPlaced <= m_NumberOfRooms && loopCounter < LOOP_BREAK)
             {
                 Vector2Int topLeft = new Vector2Int();
-                topLeft.x = Roller.Roll(1, m_Size - 1);
+                topLeft.x = Roller.Roll(1, m_Size);
                 if (topLeft.x % 2 == 1)
                 {
                     topLeft.x += 1;
                 }
 
-                topLeft.y = Roller.Roll(1, m_Size - 1);
+                topLeft.y = Roller.Roll(1, m_Size);
                 if (topLeft.y % 2 == 1)
                 {
                     topLeft.y += 1;
@@ -149,7 +149,7 @@ namespace JoyLib.Code.World.Generators.Interiors
 
             for (int i = 0; i < doors; i++)
             {
-                int index = Roller.Roll(0, validDoors.Count - 1);
+                int index = Roller.Roll(0, validDoors.Count);
 
                 Vector2Int point = new Vector2Int(validDoors[index].x, validDoors[index].y);
 

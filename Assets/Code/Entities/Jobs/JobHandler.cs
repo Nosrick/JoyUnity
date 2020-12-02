@@ -35,7 +35,7 @@ namespace JoyLib.Code.Entities.Jobs
 
         public IJob GetRandom()
         {
-            return m_Jobs[Roller.Roll(0, m_Jobs.Count - 1)];
+            return m_Jobs[Roller.Roll(0, m_Jobs.Count)];
         }
 
         protected List<IJob> LoadTypes()
