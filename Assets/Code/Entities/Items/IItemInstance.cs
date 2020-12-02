@@ -5,15 +5,9 @@ namespace JoyLib.Code.Entities.Items
 {
     public interface IItemInstance : IJoyObject, IItemContainer, IOwnable
     {
-        long OwnerGUID { get; }
-        
-        string OwnerString { get; }
-        
         List<IAbility> UniqueAbilities { get; }
 
         IItemInstance Copy(IItemInstance copy);
-
-        void SetOwner(long newOwner, bool recursive = false);
 
         void Interact(IEntity user);
 

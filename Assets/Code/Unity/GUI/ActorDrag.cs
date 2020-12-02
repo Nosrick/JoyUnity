@@ -26,7 +26,7 @@ namespace JoyLib.Code.Unity.GUI
         protected Vector3 m_ContainerOriginalPosition;
         protected Vector3 m_TargetOriginalPosition;
 
-        public void Awake()
+        protected override void Awake()
         {
             m_ContainerRect = m_Container.GetComponent<RectTransform>();
             m_TargetParent = Target.transform.parent.GetComponent<RectTransform>();
@@ -158,12 +158,9 @@ namespace JoyLib.Code.Unity.GUI
                                     
                                     case LerpType.HORIZONTAL:
                                         throw new NotImplementedException("This hasn't been implemented yet!");
-                                        //newDragActorOffset = Vector2.Lerp(m_ConstrainMin, m_ConstrainMax, newVector.x / m_ConstrainMax.x);
-                                        break;
                                     
                                     case LerpType.BOTH:
                                         throw new NotImplementedException("This hasn't been implemented yet!");
-                                        break;
                                     
                                     default:
                                         throw new InvalidOperationException("Invalid LerpType on ConfigurableDrag component");

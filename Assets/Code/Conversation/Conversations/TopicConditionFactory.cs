@@ -23,19 +23,15 @@ namespace JoyLib.Code.Conversation.Conversations
             {
                 case "!":
                     return new NotEqualToCondition(condition, value);
-                    break;
 
                 case "=":
                     return new EqualToCondition(condition, value);
-                    break;
 
                 case ">":
                     return new GreaterThanCondition(condition, value);
-                    break;
 
                 case "<":
                     return new LessThanCondition(condition, value);
-                    break;
 
                 default:
                     throw new InvalidOperationException("Could not find the condition for operand " + operand);

@@ -11,8 +11,6 @@ namespace JoyLib.Code
 {
     public interface IJoyObject : ITagged, IPosition, IAnimated, IDerivedValueContainer, IDataContainer
     {
-        BasicValueContainer<IDerivedValue> DerivedValues { get; }
-        
         bool IsDestructible { get; }
         bool IsWall { get; }
         string JoyName { get; }

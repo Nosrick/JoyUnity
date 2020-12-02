@@ -36,8 +36,6 @@ namespace JoyLib.Code.States
         protected GameObject m_FogOfWarHolder;
         protected GameObject m_EntitiesHolder;
 
-        protected IGUIManager GUIManager { get; set; }
-
         protected readonly WorldSerialiser m_WorldSerialiser;
 
         protected IGameManager GameManager { get; set; }

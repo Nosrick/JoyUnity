@@ -2,6 +2,8 @@
 {
     public interface IOwnable
     {
+        string OwnerString { get; }
+        
         long OwnerGUID { get; }
 
         void SetOwner(long newOwner, bool recursive = false);
