@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Unity.GUI;
 using UnityEngine;
 
 namespace JoyLib.Code.Unity.GUI

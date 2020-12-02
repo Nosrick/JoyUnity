@@ -8,6 +8,12 @@ TextureImporter:
   - first:
       213: -8250692648091073042
     second: warrior_1
+  - first:
+      213: -502308841638353423
+    second: warrior_0
+  - first:
+      213: 6845578983554527534
+    second: warrior_1
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -100,15 +106,15 @@ TextureImporter:
         y: 0
         width: 16
         height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 6
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 293d5df81621eb630800000000000000
-      internalID: 3944610533857416082
+      spriteID: 1f5ab9615c07709f0800000000000000
+      internalID: -502308841638353423
       vertices: []
       indices: 
       edges: []
@@ -121,15 +127,15 @@ TextureImporter:
         y: 0
         width: 16
         height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 6
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ee5ca9720c6af7d80800000000000000
-      internalID: -8250692648091073042
+      spriteID: e21b5ace0d1600f50800000000000000
+      internalID: 6845578983554527534
       vertices: []
       indices: 
       edges: []

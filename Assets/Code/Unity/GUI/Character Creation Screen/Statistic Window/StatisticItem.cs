@@ -1,21 +1,45 @@
 ﻿using System;
 using System.Globalization;
+using JoyLib.Code.Unity.GUI;
 using TMPro;
 using UnityEngine;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public class StatisticItem : MonoBehaviour
+    public class StatisticItem : ValueContainer
     {
-        protected int m_Value;
         protected string m_Name;
+        [SerializeField] protected StatisticWindow Parent;
 
-        public int Value
+        [SerializeField] protected TextMeshProUGUI m_ValueText;
+        [SerializeField] protected TextMeshProUGUI m_NameText;
+
+        public override int DecreaseValue(int value = 1)
+        {
+            if (Value - value >= Minimum)
+            {
+                Parent.PointsRemaining += value;
+                Value -= value;
+            }
+            return Value;
+        }
+
+        public override int IncreaseValue(int value = 1)
+        {
+            if(Parent.PointsRemaining >= value && Value + value <= Maximum)
+            {
+                Parent.PointsRemaining -= value;
+                Value += value;
+            }
+            return Value;
+        }
+
+        public override int Value
         {
             get => m_Value;
             set
             {
-                m_Value = value;
+                base.Value = value;
                 m_ValueText.text = m_Value.ToString();
             }
         }
@@ -29,8 +53,5 @@ namespace JoyLib.Code.Unity.GUI
                 m_NameText.text = m_Name;
             }
         }
-
-        [SerializeField] protected TextMeshProUGUI m_ValueText;
-        [SerializeField] protected TextMeshProUGUI m_NameText;
     }
 }

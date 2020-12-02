@@ -52,6 +52,8 @@ namespace JoyLib.Code.Cultures
         public string[] Sexualities => m_SexualityPrevelence.Keys.ToArray();
 
         public string[] Genders => m_GenderPrevelence.Keys.ToArray();
+
+        public string[] Jobs => m_JobPrevelence.Keys.ToArray();
         
         public int NonConformingGenderChance { get; protected set; }
 
@@ -99,14 +101,15 @@ namespace JoyLib.Code.Cultures
         {
             string returnName = "";
 
-            int maxChain = m_NameData.Where(data => data.genders.Contains(genderRef, GlobalConstants.STRING_COMPARER))
+            int maxChain = m_NameData.Where(data => data.genders.Contains(genderRef, GlobalConstants.STRING_COMPARER)
+                || data.genders.Contains("all", GlobalConstants.STRING_COMPARER))
                 .SelectMany(data => data.chain)
                 .Distinct()
                 .Max(data => data);
 
-            for (int i = 0; i < maxChain; i++)
+            for (int i = 0; i <= maxChain; i++)
             {
-                returnName += GetNameForChain(i, genderRef, 25);
+                returnName = String.Join(" ", returnName, GetNameForChain(i, genderRef, 25));
             }
             
             returnName = returnName.TrimEnd();

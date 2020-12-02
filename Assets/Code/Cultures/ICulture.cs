@@ -48,6 +48,8 @@ namespace JoyLib.Code.Cultures
         
         string[] Genders { get; }
         
+        string[] Jobs { get; }
+        
         int NonConformingGenderChance { get; }
         
         NameData[] NameData { get; }

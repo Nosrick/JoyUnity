@@ -281,8 +281,19 @@ namespace JoyLib.Code.Graphics
 
             if(query.Count > 0)
             {
-                return query.First(x => x.name.Equals(tileName, StringComparison.OrdinalIgnoreCase) 
-                || x.data.Equals(tileName, StringComparison.OrdinalIgnoreCase)).sprite;
+                if(query.Any(x => x.name.Equals(tileName, StringComparison.Ordinal)))
+                {
+                    return query.First(x => x.name.Equals(tileName, StringComparison.OrdinalIgnoreCase) 
+                                            || x.data.Equals(tileName, StringComparison.OrdinalIgnoreCase)).sprite;
+                    
+                }
+                else
+                {
+                    if (query.Any(x => x.data.Equals("default", StringComparison.OrdinalIgnoreCase)))
+                    {
+                        return query.First(x => x.data.Equals("default", StringComparison.OrdinalIgnoreCase)).sprite;
+                    }
+                }
             }
             
             IconData[] icons = GetDefaultIconSet(tileSet);

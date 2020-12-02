@@ -8,6 +8,12 @@ TextureImporter:
   - first:
       213: -7849853614982203664
     second: hedge_wizard_1
+  - first:
+      213: -7371542661958267991
+    second: hedge_wizard_0
+  - first:
+      213: 3178497332766717209
+    second: hedge_wizard_1
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -100,15 +106,15 @@ TextureImporter:
         y: 0
         width: 16
         height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 6
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 91ba99454a0f0c540800000000000000
-      internalID: 5026281772730133273
+      spriteID: 9ab075b410503b990800000000000000
+      internalID: -7371542661958267991
       vertices: []
       indices: 
       edges: []
@@ -121,15 +127,15 @@ TextureImporter:
         y: 0
         width: 16
         height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 6
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0f67b2c3ab7bf0390800000000000000
-      internalID: -7849853614982203664
+      spriteID: 9153617db7a4c1c20800000000000000
+      internalID: 3178497332766717209
       vertices: []
       indices: 
       edges: []
