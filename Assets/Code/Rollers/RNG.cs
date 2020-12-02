@@ -1,23 +1,18 @@
 ﻿using System;
+using System.Security.Cryptography;
 using JoyLib.Code.Helpers;
+using UnityEngine;
 
 namespace JoyLib.Code.Rollers
 {
     public class RNG
     {
         protected int m_Seed;
-        protected Random m_Roller;
+        protected RNGCryptoServiceProvider m_Roller;
 
         public RNG()
         {
-            m_Seed = AlgorithmsElf.ChopLong(DateTime.UtcNow.ToFileTimeUtc());
-            m_Roller = new Random();
-        }
-
-        public RNG(int seed)
-        {
-            m_Seed = seed;
-            m_Roller = new Random(m_Seed);
+            m_Roller = new RNGCryptoServiceProvider();
         }
 
         /// <summary>
@@ -28,7 +23,11 @@ namespace JoyLib.Code.Rollers
         /// <returns></returns>
         public int Roll(int lower, int upper)
         {
-            return m_Roller.Next(lower, upper);
+            byte[] bytes = new byte[4];
+            m_Roller.GetBytes(bytes);
+            int result = BitConverter.ToInt32(bytes, 0) % upper;
+            result = Math.Abs(result);
+            return result;
         }
 
         /// <summary>
@@ -48,12 +47,6 @@ namespace JoyLib.Code.Rollers
                 }
             }
             return successes;
-        }
-
-        public void SetSeed(int seed)
-        {
-            m_Seed = seed;
-            m_Roller = new Random(m_Seed);
         }
     }
 }
