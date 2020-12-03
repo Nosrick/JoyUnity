@@ -110,6 +110,11 @@ namespace JoyLib.Code.Entities.Items
             IEnumerable<IAbility> uniqueAbilities = null,
             IEnumerable<IJoyAction> actions = null)
         {
+            if (this.Prefab is null)
+            {
+                this.Prefab = Resources.Load<GameObject>("Prefabs/ItemInstance");
+            }
+            
             this.Roller = roller is null ? new RNG() : roller;
             this.Data = new NonUniqueDictionary<object, object>();
 

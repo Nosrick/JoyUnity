@@ -69,9 +69,6 @@ namespace JoyLib.Code.Conversation
             IEntityRelationshipHandler relationshipHandler)
         {
             RelationshipHandler = relationshipHandler;
-
-            TopicData.ConversationEngine = this;
-            TopicData.RelationshipHandler = relationshipHandler;
                 
             m_Topics = LoadTopics();
             

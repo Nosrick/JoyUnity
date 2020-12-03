@@ -54,23 +54,6 @@ namespace JoyLib.Code.Conversation.Conversations
                 cachedActions,
                 speaker,
                 link);
-            
-            GetBits();
-        }
-
-        protected void GetBits()
-        {
-            if (GlobalConstants.GameManager is null == false)
-            {
-                if (ConversationEngine is null)
-                {
-                    ConversationEngine = GlobalConstants.GameManager.ConversationEngine;
-                }
-                if(RelationshipHandler is null)
-                {
-                    RelationshipHandler = GlobalConstants.GameManager.RelationshipHandler;
-                }
-            }
         }
         
         public string[] GetConditionTags()
@@ -237,8 +220,6 @@ namespace JoyLib.Code.Conversation.Conversations
 
         protected virtual ITopic[] FetchNextTopics()
         {
-            GetBits();
-            
             List<ITopic> nextTopics = ConversationEngine.AllTopics
                 .Where(topic => NextTopics.Contains(topic.ID))
                 .ToList();

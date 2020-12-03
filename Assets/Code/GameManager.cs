@@ -17,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using DevionGames.InventorySystem;
 using JoyLib.Code.Conversation;
+using JoyLib.Code.Conversation.Conversations;
 using JoyLib.Code.Conversation.Subengines.Rumours;
 using JoyLib.Code.Conversation.Subengines.Rumours.Parameters;
 using JoyLib.Code.Entities.Gender;
@@ -101,6 +102,10 @@ public class GameManager : MonoBehaviour, IGameManager
         ConversationEngine = new ConversationEngine(RelationshipHandler);
 
         m_StateManager = new StateManager();
+
+        TradeWindow.RelationshipHandler = RelationshipHandler;
+        TopicData.ConversationEngine = ConversationEngine;
+        TopicData.RelationshipHandler = RelationshipHandler;
         
         m_StateManager.ChangeState(new CharacterCreationState());
     }
