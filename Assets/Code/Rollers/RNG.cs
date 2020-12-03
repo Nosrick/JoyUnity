@@ -27,7 +27,7 @@ namespace JoyLib.Code.Rollers
             m_Roller.GetBytes(bytes);
             int result = BitConverter.ToInt32(bytes, 0) % upper;
             result = Math.Abs(result) + lower;
-            result = Mathf.Clamp(result, lower, upper - 1);
+            result = Mathf.Clamp(result, lower, upper <= lower ? lower : upper - 1);
             return result;
         }
 
