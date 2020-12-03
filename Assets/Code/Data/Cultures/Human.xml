@@ -161,26 +161,30 @@
 			<Icon>
 				<Name>default</Name>
 				<Frames>2</Frames>
-				<Filename>cultures/human/default_human</Filename>
+				<Filename>cultures/human</Filename>
 				<Data>default</Data>
+				<Position>0</Position>
 			</Icon>
 
 			<Icon>
 				<Name>warrior</Name>
 				<Frames>2</Frames>
-				<Filename>cultures/human/warrior</Filename>
+				<Filename>cultures/human</Filename>
+				<Position>2</Position>
 			</Icon>
 
 			<Icon>
 				<Name>thief</Name>
 				<Frames>2</Frames>
-				<Filename>cultures/human/thief</Filename>
+				<Filename>cultures/human</Filename>
+				<Position>30</Position>
 			</Icon>
 
 			<Icon>
 				<Name>hedge wizard</Name>
 				<Frames>2</Frames>
-				<Filename>cultures/human/hedge_wizard</Filename>
+				<Filename>cultures/human</Filename>
+				<Position>12</Position>
 			</Icon>
 		</TileSet>
 	</Culture>

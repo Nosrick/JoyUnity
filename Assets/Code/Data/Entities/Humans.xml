@@ -76,8 +76,5 @@
         <Slot>Ammo</Slot>
         <Slot>Job Pin</Slot>
         <Slot>Throw</Slot>
-
-        <Filename>Player0</Filename>
-        <Tileset>Human</Tileset>
     </Entity>
 </Entities>
