@@ -267,8 +267,11 @@ namespace JoyLib.Code.Conversation
             
             DoInteractions(currentTopic);
 
-            SetActors(Instigator, Listener);
-            OnConverse?.Invoke(this, EventArgs.Empty);
+            if (Instigator is null == false && Listener is null == false)
+            {
+                SetActors(Instigator, Listener);
+                OnConverse?.Invoke(this, EventArgs.Empty);
+            }
             return CurrentTopics;
         }
 

@@ -46,6 +46,7 @@ namespace JoyLib.Code.Unity.GUI
         protected void SetActors(object sender, EventArgs args)
         {
             LastSpokeIcon.sprite = ConversationEngine.Listener.Sprite;
+            LastSpokeName.text = ConversationEngine.ListenerInfo;
             LastSaidGUI.text = ConversationEngine.LastSaidWords;
         }
         
