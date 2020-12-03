@@ -57,6 +57,7 @@ namespace JoyLib.Code.Entities
         public void SetPlayer(IEntity entity)
         {
             m_Player = entity;
+            GlobalConstants.GameManager.Player = m_Player;
         }
 
         protected Dictionary<long, IEntity> Entities

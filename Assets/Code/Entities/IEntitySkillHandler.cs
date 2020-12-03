@@ -7,16 +7,17 @@ namespace JoyLib.Code.Entities
 {
     public interface IEntitySkillHandler
     {
-        BasicValueContainer<IGrowingValue> GetDefaultSkillBlock(BasicValueContainer<INeed> needs);
+        BasicValueContainer<IGrowingValue> GetDefaultSkillBlock(IEnumerable<INeed> needs);
         NonUniqueDictionary<INeed, float> GetEmptyCoefficients();
         NonUniqueDictionary<INeed, float> GetCoefficients(List<string> needNames, string skillName);
 
         /// <summary>
         /// Takes in the needs and skill name and spits out a NonUniqueDictionary for the skill
         /// </summary>
-        /// <param name="container">Container of the entity's needs</param>
+        /// <param name="needs"></param>
         /// <param name="skillName">The name of the skill in question</param>
+        /// <param name="container">Container of the entity's needs</param>
         /// <returns></returns>
-        NonUniqueDictionary<INeed, float> GetCoefficients(BasicValueContainer<INeed> needs, string skillName);
+        NonUniqueDictionary<INeed, float> GetCoefficients(IEnumerable<INeed> needs, string skillName);
     }
 }

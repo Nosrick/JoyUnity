@@ -95,12 +95,6 @@ namespace JoyLib.Code.Unity.GUI
                 MenuItems[0].GetComponentInChildren<Text>().text = "You have no quests.";
                 MenuItems[0].gameObject.SetActive(true);
             }
-
-            GameObject questMenuContainer = this.gameObject.FindChild("Quest MenuContainer", true);
-            LeanConstrainAnchoredPosition constraint = questMenuContainer.GetComponent<LeanConstrainAnchoredPosition>();
-            VerticalLayoutGroup layoutGroup = questMenuContainer.GetComponent<VerticalLayoutGroup>();
-            int activeMenuItems = MenuItems.Count(item => item.IsActive());
-            constraint.VerticalMax = (activeMenuItems * (MenuItemRect.rect.height + layoutGroup.spacing)) / 2;
         }
     }
 }

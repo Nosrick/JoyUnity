@@ -48,7 +48,6 @@ namespace Tests
                 Assert.That(template.Tags, Is.Not.Empty);
                 Assert.False(template.JoyType == "DEFAULT");
                 Assert.False(template.CreatureType == "DEFAULT");
-                Assert.False(template.Tileset == "DEFAULT");
             }
 
             return null;

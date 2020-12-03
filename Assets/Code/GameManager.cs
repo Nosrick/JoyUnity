@@ -98,7 +98,7 @@ public class GameManager : MonoBehaviour, IGameManager
             Roller);
         QuestTracker = new QuestTracker();
         
-        ConversationEngine = new ConversationEngine(RelationshipHandler, GUIManager);
+        ConversationEngine = new ConversationEngine(RelationshipHandler);
 
         m_StateManager = new StateManager();
         

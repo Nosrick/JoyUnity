@@ -139,7 +139,7 @@ namespace JoyLib.Code.Entities
                     template.Statistics[EntityStatistic.FOCUS],
                     template.Statistics[EntityStatistic.WIT]),
                 position,
-                template.Tileset,
+                cultures[GlobalConstants.GameManager.Roller.Roll(0, cultures.Count)].Tileset,
                 STANDARD_ACTIONS,
                 sprites,
                 roller,
@@ -168,7 +168,7 @@ namespace JoyLib.Code.Entities
 
             if (SkillHandler is null == false)
             {
-                foreach (IGrowingValue skill in SkillHandler.GetDefaultSkillBlock(this.m_Needs).Values)
+                foreach (IGrowingValue skill in SkillHandler.GetDefaultSkillBlock(this.m_Needs.Values).Values)
                 {
                     this.m_Skills.Add(skill);
                 }

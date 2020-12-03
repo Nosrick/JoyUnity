@@ -57,8 +57,8 @@ namespace JoyLib.Code.Unity.GUI
             ChangeTemplate(Templates[result]);
             PlayerType.Container = Templates.Select(t => t.CreatureType).ToList();
             PlayerType.Value = result;
-            PlayerType.ValueChanged += ChangeTemplateHandler;
-            JobContainer.ValueChanged += ChangeJobHandler;
+            PlayerType.ValueChanged += new EventHandler(ChangeTemplateHandler);
+            JobContainer.ValueChanged += new EventHandler(ChangeJobHandler);
         }
 
         protected void ChangeTemplate(IEntityTemplate template)

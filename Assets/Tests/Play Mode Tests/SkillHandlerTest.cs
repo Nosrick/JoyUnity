@@ -37,7 +37,7 @@ namespace Tests
             BasicValueContainer<INeed> needs =
                 new BasicValueContainer<INeed>(NeedHandler.GetManyRandomised(NeedHandler.NeedNames));
     
-            BasicValueContainer<IGrowingValue> skills = target.GetDefaultSkillBlock(needs);
+            BasicValueContainer<IGrowingValue> skills = target.GetDefaultSkillBlock(needs.Values);
     
             foreach (IGrowingValue skill in skills.Values)
             {

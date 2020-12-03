@@ -60,8 +60,7 @@ namespace Tests
                 g => g.PersonalSubject == "her");
 
             BasicValueContainer<IGrowingValue> skills = skillHandler.GetDefaultSkillBlock(
-                new BasicValueContainer<INeed>(
-                    needHandler.GetManyRandomised(needHandler.NeedNames)));
+                needHandler.GetManyRandomised(needHandler.NeedNames));
 
             left = Mock.Of<IEntity>(
                 entity => entity.PlayerControlled == true

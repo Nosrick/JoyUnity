@@ -22,7 +22,7 @@ namespace JoyLib.Code.Conversation.Subengines.Rumours
             set;
         }
 
-        protected BasicValueContainer<INeed> DefaultNeeds
+        protected BasicValueContainer<IGrowingValue> DefaultSkillBlock
         {
             get;
             set;
@@ -32,7 +32,7 @@ namespace JoyLib.Code.Conversation.Subengines.Rumours
         {
             SkillHandler = GlobalConstants.GameManager.SkillHandler;
             NeedHandler = GlobalConstants.GameManager.NeedHandler;
-            DefaultNeeds = new BasicValueContainer<INeed>(NeedHandler.Needs.ToArray());
+            DefaultSkillBlock = new BasicValueContainer<IGrowingValue>(SkillHandler.GetDefaultSkillBlock(NeedHandler.Needs));
         }
         
         public bool CanParse(string parameter)
@@ -41,8 +41,7 @@ namespace JoyLib.Code.Conversation.Subengines.Rumours
             {
                 return true;
             }
-            BasicValueContainer<IGrowingValue> skills = SkillHandler.GetDefaultSkillBlock(DefaultNeeds);
-            return skills.Has(parameter);
+            return DefaultSkillBlock.Has(parameter);
         }
 
         public string Parse(string parameter, IJoyObject participant)

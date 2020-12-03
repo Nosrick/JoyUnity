@@ -19,6 +19,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+using EventHandler = System.EventHandler;
 using MenuItem = DevionGames.UIWidgets.MenuItem;
 
 namespace JoyLib.Code.Conversation
@@ -36,57 +37,13 @@ namespace JoyLib.Code.Conversation
             set;
         }
 
-        protected List<ConversationMenu> MenuList
-        {
-            get;
-            set;
-        }
-
-        protected TextMeshProUGUI LastSaidGUI
-        {
-            get;
-            set;
-        }
-
         protected ITopic LastSaid
         {
             get;
             set;
         }
 
-        protected Image LastSpokeIcon
-        {
-            get;
-            set;
-        }
-
-        protected TextMeshProUGUI LastSpokeName
-        {
-            get;
-            set;
-        }
-
-        protected RectTransform ListenerSection
-        {
-            get;
-            set;
-        }
-
-        public GameObject Window
-        {
-            get => m_Window;
-            set
-            {
-                m_Window = value;
-                SetUpUI(m_Window);
-            }
-        }
-
-        protected GameObject MenuItem
-        {
-            get;
-            set;
-        }
+        public string LastSaidWords { get; protected set; }
 
         public IEntity Instigator
         {
@@ -99,19 +56,17 @@ namespace JoyLib.Code.Conversation
             get;
             protected set;
         }
+        
+        public string ListenerInfo { get; protected set; }
 
-        protected RectTransform TitleRect
-        {
-            get;
-            set;
-        }
+        public event EventHandler OnConverse;
+        public event EventHandler OnOpen;
+        public event EventHandler OnClose;
         
         protected IEntityRelationshipHandler RelationshipHandler { get; set; }
 
         public ConversationEngine(
-            IEntityRelationshipHandler relationshipHandler, 
-            IGUIManager guiManager,
-            GameObject window = null)
+            IEntityRelationshipHandler relationshipHandler)
         {
             RelationshipHandler = relationshipHandler;
 
@@ -121,29 +76,6 @@ namespace JoyLib.Code.Conversation
             m_Topics = LoadTopics();
             
             m_CurrentTopics = new List<ITopic>();
-
-            this.GUIManager = guiManager;
-
-            if (window is null == false)
-            {
-                SetUpUI(window);
-            }
-            
-            MenuList = new List<ConversationMenu>();
-        }
-
-        protected void SetUpUI(GameObject window)
-        {
-            m_Window = window;
-                
-            Transform title = Window.FindChild("Conversation Title", true).transform;
-            TitleRect = title.GetComponent<RectTransform>();
-            ListenerSection = TitleRect.gameObject.transform.Find("Listener Section").GetComponent<RectTransform>();
-            LastSaidGUI = title.Find("Last Said").GetComponent<TextMeshProUGUI>();
-            Transform listenerSection = title.Find("Listener Section");
-            LastSpokeName = listenerSection.Find("Listener Name").GetComponent<TextMeshProUGUI>();
-            LastSpokeIcon = listenerSection.Find("Listener Icon").GetComponent<Image>();
-            MenuItem = Window.FindChild("Topic Item", true);
         }
 
         protected List<ITopic> LoadTopics()
@@ -289,8 +221,6 @@ namespace JoyLib.Code.Conversation
             Instigator = instigator;
             Listener = listener;
 
-            LastSpokeIcon.sprite = Listener.Sprite;
-
             try
             {
                 IRelationship[] relationships = RelationshipHandler.Get(new IJoyObject[] {Instigator, Listener});
@@ -313,13 +243,14 @@ namespace JoyLib.Code.Conversation
                     }
                 }
                 
-                LastSpokeName.text = Listener.JoyName + ", " + chosenRelationship.DisplayName;
+                ListenerInfo = Listener.JoyName + ", " + chosenRelationship.DisplayName;
             }
             catch (Exception e)
             {
-                LastSpokeName.text = Listener.JoyName + ", acquaintance.";
+                ListenerInfo = Listener.JoyName + ", acquaintance.";
             }
-            LayoutRebuilder.ForceRebuildLayoutImmediate(TitleRect);
+            
+            OnOpen?.Invoke(this, EventArgs.Empty);
         }
 
         public ITopic[] Converse(string topic, int index = 0)
@@ -336,28 +267,14 @@ namespace JoyLib.Code.Conversation
             
             DoInteractions(currentTopic);
 
-            CreateMenuItems(CurrentTopics);
-
             SetActors(Instigator, Listener);
+            OnConverse?.Invoke(this, EventArgs.Empty);
             return CurrentTopics;
         }
 
         public ITopic[] Converse(int index = 0)
         {
-            if (CurrentTopics.Length == 0)
-            {
-                CurrentTopics = m_Topics.Where(t => t.ID.Equals("greeting", StringComparison.OrdinalIgnoreCase))
-                    .ToArray();
-
-                CurrentTopics = SanitiseTopics(CurrentTopics);
-            }
-            
-            ITopic currentTopic = CurrentTopics[index];
-            
-            DoInteractions(currentTopic);
-
-            CreateMenuItems(CurrentTopics);
-            return CurrentTopics;
+            return Converse("greeting", index);
         }
 
         protected void DoInteractions(ITopic currentTopic)
@@ -368,7 +285,7 @@ namespace JoyLib.Code.Conversation
 
             if (next.Length == 0)
             {
-                this.GUIManager.CloseGUI(Window.name);
+                OnClose?.Invoke(this, EventArgs.Empty);
                 CurrentTopics = next;
                 Listener = null;
                 Instigator = null;
@@ -379,7 +296,7 @@ namespace JoyLib.Code.Conversation
             {
                 case Speaker.LISTENER:
                     LastSaid = currentTopic;
-                    SetTitle(LastSaid.Words);
+                    LastSaidWords = LastSaid.Words;
                     break;
                 
                 case Speaker.INSTIGATOR:
@@ -389,7 +306,7 @@ namespace JoyLib.Code.Conversation
                         next = currentTopic.Interact(Instigator, Listener);
                         next = SanitiseTopics(next);
                         LastSaid = currentTopic;
-                        SetTitle(LastSaid.Words);
+                        LastSaidWords = LastSaid.Words;
                     }
                     break;
                 
@@ -434,15 +351,6 @@ namespace JoyLib.Code.Conversation
             return validTopics.ToArray();
         }
 
-        protected void SetTitle(string text)
-        {
-            double remainingWidth = TitleRect.rect.width - ListenerSection.rect.width;
-
-            //LastSaidGUI.text = WrapText(LastSaidGUI, text, remainingWidth);
-            LastSaidGUI.text = text;
-            LayoutRebuilder.ForceRebuildLayoutImmediate(TitleRect);
-        }
-
         protected ITopic[] SortByPriority(ITopic[] topics)
         {
             List<ITopic> sorting = new List<ITopic>(topics);
@@ -450,35 +358,7 @@ namespace JoyLib.Code.Conversation
             return sorting.OrderByDescending(t => t.Priority).ToArray();
         }
 
-        protected void CreateMenuItems(ITopic[] topics)
-        {
-            if (topics.Length > MenuList.Count)
-            {
-                for (int i = MenuList.Count; i < topics.Length; i++)
-                {
-                    ConversationMenu child = GameObject.Instantiate(MenuItem, Window.transform).GetComponent<ConversationMenu>();
-                    MenuList.Add(child);
-                }
-            }
-            
-            for(int i = 0; i < topics.Length; i++)
-            {
-                MenuList[i].TopicID = topics[i].ID;
-                MenuList[i].SetText(topics[i].Words);
-                MenuList[i].gameObject.SetActive(true);
-                MenuList[i].Index = i;
-                ConversationMenu menu = MenuList[i].GetComponent<ConversationMenu>();
-                MenuItem menuItem = MenuList[i].GetComponent<MenuItem>();
-                Button.ButtonClickedEvent buttonClickedEvent = new Button.ButtonClickedEvent();
-                buttonClickedEvent.AddListener(menu.OnMouseDown);
-                menuItem.onTrigger = buttonClickedEvent;
-            }
-
-            for (int i = topics.Length; i < MenuList.Count; i++)
-            {
-                MenuList[i].gameObject.SetActive(false);
-            }
-        }
+        
 
         protected ITopic[] TrimEmpty(ITopic[] topics)
         {

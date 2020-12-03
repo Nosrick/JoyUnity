@@ -41,9 +41,6 @@ namespace Tests
         private ScriptingEngine scriptingEngine;
 
         private IWorldInstance world;
-
-        private Canvas canvas;
-        private GameObject conversationWindow;
         
         private IEntity left;
         private IEntity right;
@@ -51,15 +48,6 @@ namespace Tests
         [SetUp]
         public void SetUp()
         {
-            canvas = new GameObject("Parent").AddComponent<Canvas>();
-
-            conversationWindow =
-                GameObject.Instantiate(
-                    Resources.Load<GameObject>("Prefabs/GUI/Conversation/Conversation Window"), 
-                    canvas.transform, 
-                    true);
-            conversationWindow.name = "Conversation Window";
-
             scriptingEngine = new ScriptingEngine();
 
             world = Mock.Of<IWorldInstance>(

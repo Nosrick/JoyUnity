@@ -12,13 +12,12 @@ namespace JoyLib.Code.Unity.GUI
 {
     public class StatisticWindow : MonoBehaviour
     {
+        [SerializeField] protected StatisticItem StatisticItem;
         public int PointsRemaining { get; set; }
-        protected StatisticItem StatisticItem { get; set; }
         protected List<StatisticItem> Items { get; set; } 
 
         public void Awake()
         {
-            StatisticItem = this.transform.Find("Statistic Item").gameObject.GetComponent<StatisticItem>();
             StatisticItem.gameObject.SetActive(false);
             Items = new List<StatisticItem>();
             

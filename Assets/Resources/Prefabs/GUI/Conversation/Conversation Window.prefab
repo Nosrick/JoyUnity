@@ -398,7 +398,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 295.00836, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6916863009102371799
@@ -475,7 +475,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 75.535, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3562050269258900026
@@ -719,6 +719,7 @@ GameObject:
   - component: {fileID: 8424994987622645027}
   - component: {fileID: 8424994987622645025}
   - component: {fileID: 6390488460418024691}
+  - component: {fileID: 3198197588467432652}
   m_Layer: 5
   m_Name: Conversation Window
   m_TagString: Untagged
@@ -822,6 +823,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79b34202c8a849cb81a9f40db85841f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_RemovesControl: 0
+  m_ClosesOthers: 0
+  m_Index: 0
+--- !u!114 &3198197588467432652
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8424994987622645055}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e6040ea07964acba372d04f29f88f05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GameManager: {fileID: 0}
+  LastSaidGUI: {fileID: 9014987977286830260}
+  LastSpokeIcon: {fileID: 29463697126662757}
+  LastSpokeName: {fileID: 1825980867185975322}
+  ListenerSection: {fileID: 7623997236991320388}
+  Window: {fileID: 8424994987622645055}
+  MenuItem: {fileID: 8424994988068797229}
+  TitleRect: {fileID: 835294647578703609}
 --- !u!1 &8424994988068797229
 GameObject:
   m_ObjectHideFlags: 0

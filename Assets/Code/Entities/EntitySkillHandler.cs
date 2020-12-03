@@ -24,7 +24,7 @@ namespace JoyLib.Code.Entities
             m_SkillCoefficients = LoadSkillCoefficients();
         }
 
-        public BasicValueContainer<IGrowingValue> GetDefaultSkillBlock(BasicValueContainer<INeed> needs)
+        public BasicValueContainer<IGrowingValue> GetDefaultSkillBlock(IEnumerable<INeed> needs)
         {
             BasicValueContainer<IGrowingValue> skills = new BasicValueContainer<IGrowingValue>();
 
@@ -35,7 +35,7 @@ namespace JoyLib.Code.Entities
                 NonUniqueDictionary<INeed, float> governingNeeds = new NonUniqueDictionary<INeed, float>();
                 foreach(Tuple<INeed, float> coefficient in coefficients)
                 {
-                    if(needs.Has(coefficient.Item1.Name))
+                    if(needs.Any(need => need.Name.Equals(coefficient.Item1.Name, StringComparison.OrdinalIgnoreCase)))
                     {
                         governingNeeds.Add(coefficient.Item1, coefficient.Item2);
                     }
@@ -60,17 +60,18 @@ namespace JoyLib.Code.Entities
                 needs.Add(NeedHandler.Get(needName));
             }
 
-            return GetCoefficients(needs, skillName);
+            return GetCoefficients((IEnumerable<INeed>) needs, skillName);
         }
 
 
         /// <summary>
         /// Takes in the needs and skill name and spits out a NonUniqueDictionary for the skill
         /// </summary>
-        /// <param name="container">Container of the entity's needs</param>
+        /// <param name="needs"></param>
         /// <param name="skillName">The name of the skill in question</param>
+        /// <param name="container">Container of the entity's needs</param>
         /// <returns></returns>
-        public NonUniqueDictionary<INeed, float> GetCoefficients(BasicValueContainer<INeed> needs, string skillName)
+        public NonUniqueDictionary<INeed, float> GetCoefficients(IEnumerable<INeed> needs, string skillName)
         {
             if(m_SkillCoefficients.ContainsKey(skillName))
             {
@@ -84,7 +85,7 @@ namespace JoyLib.Code.Entities
                         {
                             try
                             {
-                                INeed need = needs[tuple.Item1];
+                                INeed need = needs.First(n => n.Name.Equals(tuple.Item1, StringComparison.OrdinalIgnoreCase));
                                 coefficients.Add(need, tuple.Item2);
                             }
                             catch (Exception e)

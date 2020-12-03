@@ -17,6 +17,5 @@ namespace JoyLib.Code.Entities
         IVision VisionType { get; }
         string CreatureType { get; }
         string JoyType { get; }
-        string Tileset { get; }
     }
 }

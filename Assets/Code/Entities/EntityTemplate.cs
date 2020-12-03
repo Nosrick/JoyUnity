@@ -24,8 +24,6 @@ namespace JoyLib.Code.Entities
 
         protected readonly bool m_Sentient;
 
-        protected readonly string m_Tileset;
-
         public EntityTemplate(
             BasicValueContainer<IRollableValue> statistics, 
             BasicValueContainer<IGrowingValue> skills, 
@@ -36,7 +34,6 @@ namespace JoyLib.Code.Entities
             IVision visionType, 
             string creatureType, 
             string type, 
-            string tileset, 
             string[] tags)
         {
             m_Statistics = statistics;
@@ -53,8 +50,6 @@ namespace JoyLib.Code.Entities
 
             m_CreatureType = creatureType;
             m_Type = type;
-
-            m_Tileset = tileset;
 
             m_Tags = new HashSet<string>();
             for(int i = 0; i < tags.Length; i++)
@@ -161,14 +156,6 @@ namespace JoyLib.Code.Entities
             get
             {
                 return m_Type;
-            }
-        }
-
-        public string Tileset
-        {
-            get
-            {
-                return m_Tileset;
             }
         }
     }

@@ -42,18 +42,10 @@ namespace Tests
 
         private IConversationEngine target;
 
-        private IGUIManager GUIManager;
-
-        private GameObject conversationWindow;
-        private GameObject inventoryWindow;
-        private GameObject tradeWindow;
-
         private GameObject prefab;
 
         private IEntity instigator;
         private IEntity listener;
-
-        private Canvas canvas;
 
         private IWorldInstance world;
 
@@ -63,34 +55,6 @@ namespace Tests
             prefab = Resources.Load<GameObject>("Prefabs/MonoBehaviourHandler");
 
             scriptingEngine = new ScriptingEngine();
-
-            canvas = new GameObject("Parent").AddComponent<Canvas>();
-
-            conversationWindow =
-                GameObject.Instantiate(
-                    Resources.Load<GameObject>("Prefabs/GUI/Conversation/Conversation Window"),
-                    canvas.transform,
-                    true);
-            conversationWindow.name = "Conversation Window";
-
-            GUIManager = new GUIManager();
-
-            inventoryWindow = GameObject.Instantiate(
-                Resources.Load<GameObject>("Prefabs/GUI/Inventory/Inventory"),
-                canvas.transform,
-                true);
-            inventoryWindow.name = "Inventory";
-
-            tradeWindow = GameObject.Instantiate(
-                Resources.Load<GameObject>("Prefabs/GUI/Trade"),
-                canvas.transform,
-                true);
-            tradeWindow.name = "Trade";
-
-            GUIManager.AddGUI(conversationWindow.GetComponent<GUIData>());
-            GUIManager.AddGUI(inventoryWindow.GetComponent<GUIData>());
-            GUIManager.AddGUI(tradeWindow.GetComponent<GUIData>());
-            GUIManager.OpenGUI(conversationWindow.name);
 
             ILiveEntityHandler entityHandler = Mock.Of<ILiveEntityHandler>();
 
@@ -142,19 +106,10 @@ namespace Tests
                                                   && entity.Sentient == true
                                                   && entity.GUID == 2);
 
+            target = new ConversationEngine(relationshipHandler);
+
             IGameManager gameManager = Mock.Of<IGameManager>(
-                manager => manager.RelationshipHandler == relationshipHandler
-                        && manager.ConversationEngine == target
-                        && manager.Player == instigator);
-
-            GlobalConstants.GameManager = gameManager;
-
-            target = new ConversationEngine(relationshipHandler, GUIManager, conversationWindow);
-
-            JoyItemSlot.ItemHolder = new GameObject("World Objects");
-            JoyItemSlot.ConversationEngine = target;
-            JoyItemSlot.GUIManager = GUIManager;
-            TradeWindow.RelationshipHandler = relationshipHandler;
+                manager => manager.Player == instigator);
             
             friendship.AddParticipant(listener);
             friendship.AddParticipant(instigator);
@@ -217,7 +172,6 @@ namespace Tests
         [TearDown]
         public void TearDown()
         {
-            GameObject.DestroyImmediate(canvas);
             GlobalConstants.GameManager = null;
         }
     }

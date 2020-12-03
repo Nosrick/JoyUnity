@@ -301,14 +301,11 @@ namespace JoyLib.Code.States
                 }
                 else
                 {
-                    //TODO: Make a targeting system or something
-                    IEntity listener = this.m_ActiveWorld.GetRandomSentient();
+                    PrimaryTarget = this.m_ActiveWorld.GetRandomSentient();
 
-                    if (!(listener is null))
+                    if (!(PrimaryTarget is null))
                     {
-                        GUIManager.OpenGUI(GlobalConstants.CONVERSATION);
-                        ConversationEngine.SetActors(this.PlayerWorld.Player, listener);
-                        ConversationEngine.Converse(); 
+                        TalkToPlayer();
                     }
                 }
             }

@@ -83,7 +83,6 @@ namespace JoyLib.Code.Entities
                         string type = entity.Element("Type").DefaultIfEmpty("DEFAULT");
                         string visionType = entity.Element("VisionType").DefaultIfEmpty("DiurnalVisionProvider");
                         IVision vision = (IVision)ScriptingEngine.instance.FetchAndInitialise(visionType);
-                        string tileset = entity.Element("Tileset").DefaultIfEmpty("DEFAULT");
 
                         int size = entity.Element("Size").DefaultIfEmpty<int>(0);
 
@@ -117,7 +116,6 @@ namespace JoyLib.Code.Entities
                                             vision, 
                                             creatureType, 
                                             type, 
-                                            tileset, 
                                             tags.ToArray()));
                         
                         AddSlotsToDatabase(slots);

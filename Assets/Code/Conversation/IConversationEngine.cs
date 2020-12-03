@@ -1,4 +1,5 @@
-﻿using JoyLib.Code.Conversation.Conversations;
+﻿using System;
+using JoyLib.Code.Conversation.Conversations;
 using JoyLib.Code.Entities;
 using UnityEngine;
 
@@ -15,6 +16,11 @@ namespace JoyLib.Code.Conversation
         IEntity Instigator { get; }
         IEntity Listener { get; }
         
-        GameObject Window { get; set; }
+        string ListenerInfo { get; }
+        string LastSaidWords { get; }
+
+        event EventHandler OnConverse;
+        event EventHandler OnOpen;
+        event EventHandler OnClose;
     }
 }

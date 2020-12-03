@@ -75,8 +75,6 @@
         <Slot>Ammo</Slot>
         <Slot>Job Pin</Slot>
         <Slot>Throw</Slot>
-        
-        <Tileset>Naga</Tileset>
 
     </Entity>
 
