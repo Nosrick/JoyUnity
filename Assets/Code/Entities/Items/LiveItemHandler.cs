@@ -169,6 +169,16 @@ namespace JoyLib.Code.Entities.Items
                             itemSO.Region = regions;
                             InventoryManager.Database.items.Add(itemSO);
                         }
+
+                        foreach (string slot in identifiedItems.SelectMany(item => item.slots))
+                        {
+                            if (InventoryManager.Database.equipments.Any(region => region.Name.Equals(slot)) == false)
+                            {
+                                EquipmentRegion equipmentRegion = ScriptableObject.CreateInstance<EquipmentRegion>();
+                                equipmentRegion.Name = slot;
+                                InventoryManager.Database.equipments.Add(equipmentRegion);
+                            }
+                        }
                     }
                 }
             }

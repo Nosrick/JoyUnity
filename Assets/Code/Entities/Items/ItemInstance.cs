@@ -167,6 +167,12 @@ namespace JoyLib.Code.Entities.Items
             this.m_Contents = new List<long>();
 
             UniqueAbilities = uniqueAbilities is null == false ? new List<IAbility>(uniqueAbilities) : new List<IAbility>();
+            
+            this.Region = new List<EquipmentRegion>();
+            foreach (string slot in type.Slots)
+            {
+                this.Region.Add(InventoryManager.Database.equipments.First(region => region.Name.Equals(slot)));
+            }
 
             m_Icon = Sprite;
             CalculateValue();
