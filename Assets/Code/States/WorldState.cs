@@ -161,6 +161,7 @@ namespace JoyLib.Code.States
         {
             ContextMenu contextMenu = GUIManager.GetGUI(GlobalConstants.CONTEXT_MENU).GetComponent<ContextMenu>();
 
+            contextMenu.Close();
             contextMenu.Clear();
 
             if (PrimaryTarget.GUID != m_ActiveWorld.Player.GUID)
