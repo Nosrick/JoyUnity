@@ -17,7 +17,7 @@ namespace JoyLib.Code.World.Generators.Interiors
 
         protected const int PASSES = 3;
 
-        public DungeonCorridorGenerator(GeneratorTileType[,] tilesRef, List<Rect> roomsRef, int bendRef, RNG roller)
+        public DungeonCorridorGenerator(GeneratorTileType[,] tilesRef, List<RectInt> roomsRef, int bendRef, RNG roller)
         {
             Roller = roller;
             m_Tiles = tilesRef;

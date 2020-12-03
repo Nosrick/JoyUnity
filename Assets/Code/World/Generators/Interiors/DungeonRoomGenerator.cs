@@ -22,7 +22,7 @@ namespace JoyLib.Code.World.Generators.Interiors
         protected readonly int m_NumberOfRooms;
         protected int m_NumberRoomsPlaced;
 
-        protected readonly List<Rect> m_Rooms;
+        protected readonly List<RectInt> m_Rooms;
         
         protected RNG Roller { get; set; }
 
@@ -40,7 +40,7 @@ namespace JoyLib.Code.World.Generators.Interiors
             m_NumberOfRooms = CalculateRooms();
             m_NumberRoomsPlaced = 0;
 
-            m_Rooms = new List<Rect>(m_NumberOfRooms);
+            m_Rooms = new List<RectInt>(m_NumberOfRooms);
         }
 
         public GeneratorTileType[,] GenerateRooms()
@@ -95,22 +95,22 @@ namespace JoyLib.Code.World.Generators.Interiors
                 if (m_NumberOfRooms == m_NumberRoomsPlaced)
                     return false;
 
-                Vector2Int bottomRight = new Vector2Int(topLeft.x + Roller.Roll(MIN_ROOM_SIZE, MAX_ROOM_SIZE),
-                                                topLeft.y + Roller.Roll(MIN_ROOM_SIZE, MAX_ROOM_SIZE));
+                Vector2Int sizes = new Vector2Int(Roller.Roll(MIN_ROOM_SIZE, MAX_ROOM_SIZE),
+                                                Roller.Roll(MIN_ROOM_SIZE, MAX_ROOM_SIZE));
                 
-                bottomRight.Clamp(Vector2Int.one, new Vector2Int(m_Size - 1, m_Size - 1));
+                RectInt room = new RectInt(topLeft, sizes);
 
-                if (!ValidateRoom(topLeft, bottomRight))
+                if (!ValidateRoom(room))
                     return false;
 
-                if (CheckForRoom(topLeft, bottomRight))
+                if (CheckForRoom(room))
                     return false;
 
-                for (int i = topLeft.x; i <= bottomRight.x; i++)
+                for (int i = room.xMin; i <= room.xMax; i++)
                 {
-                    for (int j = topLeft.y; j <= bottomRight.y; j++)
+                    for (int j = room.yMin; j <= room.yMax; j++)
                     {
-                        if (i == topLeft.x || i == bottomRight.x || j == topLeft.y || j == bottomRight.y)
+                        if (i == room.xMin || i == room.xMax || j == room.yMin || j == room.yMax)
                         {
                             m_Tiles[i, j] = GeneratorTileType.Perimeter;
                         }
@@ -121,27 +121,26 @@ namespace JoyLib.Code.World.Generators.Interiors
                     }
                 }
 
-                m_Rooms.Add(new Rect(topLeft.x, topLeft.y, bottomRight.x - topLeft.x,
-                                          bottomRight.y - topLeft.y));
+                m_Rooms.Add(room);
                 m_NumberRoomsPlaced += 1;
                 return true;
             }
             return false;
         }
 
-        private void OpenRoom(Rect room)
+        private void OpenRoom(RectInt room)
         {
             int doors = CalculateDoors(room);
 
             List<Vector2Int> validDoors = new List<Vector2Int>();
-            for (int i = (int)room.xMin; i < (int)room.xMax + 1; i++)
+            for (int i = room.xMin; i < room.xMax + 1; i++)
             {
-                for (int j = (int)room.yMin; j < (int)room.yMax + 1; j++)
+                for (int j = room.yMin; j < room.yMax + 1; j++)
                 {
                     if (m_Tiles[i, j] != GeneratorTileType.Perimeter)
                         continue;
 
-                    if (((i != (int)room.xMin && i != (int)room.xMax) || (j != (int)room.yMin && j != (int)room.yMax)) &&
+                    if (((i != room.xMin && i != room.xMax) || (j != room.yMin && j != room.yMax)) &&
                         i > 1 && i < m_Size - 1 && j > 1 && j < m_Size - 1)
                     {
                         validDoors.Add(new Vector2Int(i, j));
@@ -178,19 +177,19 @@ namespace JoyLib.Code.World.Generators.Interiors
             }
         }
 
-        private int CalculateDoors(Rect room)
+        private int CalculateDoors(RectInt room)
         {
-            int roomArea = (int)(room.width * room.height);
+            int roomArea = (room.width * room.height);
             int maxDoors = (int)Math.Sqrt(roomArea);
 
             return Roller.Roll(1, maxDoors);
         }
 
-        private bool CheckForRoom(Vector2Int topLeft, Vector2Int bottomRight)
+        private bool CheckForRoom(RectInt room)
         {
-            for (int i = topLeft.x; i <= bottomRight.x; i++)
+            for (int i = room.xMin; i <= room.xMax; i++)
             {
-                for (int j = topLeft.y; j <= bottomRight.y; j++)
+                for (int j = room.yMin; j <= room.yMax; j++)
                 {
                     if (m_Tiles[i, j] != GeneratorTileType.None)
                         return true;
@@ -200,24 +199,34 @@ namespace JoyLib.Code.World.Generators.Interiors
             return false;
         }
 
-        private bool ValidateRoom(Vector2Int topLeft, Vector2Int bottomRight)
+        private bool ValidateRoom(RectInt room)
         {
-            if (bottomRight.x >= m_Size)
+            if (room.xMax >= m_Size)
                 return false;
 
-            if (topLeft.x < 1)
+            if (room.x < 1)
                 return false;
 
-            if (bottomRight.y >= m_Size)
+            if (room.yMax >= m_Size)
                 return false;
 
-            if (topLeft.y < 1)
+            if (room.y < 1)
                 return false;
+
+            if (room.width < MIN_ROOM_SIZE || room.width > MAX_ROOM_SIZE)
+            {
+                return false;
+            }
+
+            if (room.height < MIN_ROOM_SIZE || room.height > MAX_ROOM_SIZE)
+            {
+                return false;
+            }
 
             return true;
         }
 
-        public List<Rect> rooms
+        public List<RectInt> rooms
         {
             get
             {
