@@ -1,21 +1,22 @@
-﻿using JoyLib.Code.Entities;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using DevionGames;
+using DevionGames.UIWidgets;
+using JoyLib.Code.Conversation;
+using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Abilities;
+using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.IO;
 using JoyLib.Code.Physics;
 using JoyLib.Code.States.Gameplay;
-using JoyLib.Code.World;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using DevionGames.UIWidgets;
-using JoyLib.Code.Conversation;
 using JoyLib.Code.Unity;
 using JoyLib.Code.Unity.GUI;
+using JoyLib.Code.World;
 using UnityEngine;
 using ContextMenu = DevionGames.UIWidgets.ContextMenu;
-using EquipmentHandler = JoyLib.Code.Unity.GUI.EquipmentHandler;
 
 namespace JoyLib.Code.States
 {
@@ -166,17 +167,27 @@ namespace JoyLib.Code.States
             {
                 if (AdjacencyHelper.IsAdjacent(m_ActiveWorld.Player.WorldPosition, PrimaryTarget.WorldPosition))
                 {
-                    contextMenu.AddMenuItem("Talk", TalkToPlayer);
+                    if (PrimaryTarget is IEntity actor)
+                    {
+                        contextMenu.AddMenuItem("Talk", TalkToPlayer);
+                    }
+                    else if (PrimaryTarget is IItemInstance item)
+                    {
+                        contextMenu.AddMenuItem("Inspect", InspectItem);
+                    }
                 }
                 else
                 {
-                    contextMenu.AddMenuItem("Call Over", CallOver);
+                    if (PrimaryTarget is IEntity actor)
+                    {
+                        contextMenu.AddMenuItem("Call Over", CallOver);
+                    }
                 }
-            }
 
-            if (contextMenu.GetComponentsInChildren<MenuItem>(true).Length > 1)
-            {
-                GUIManager.OpenGUI(GlobalConstants.CONTEXT_MENU);
+                if (contextMenu.GetComponentsInChildren<MenuItem>(true).Length > 1)
+                {
+                    GUIManager.OpenGUI(GlobalConstants.CONTEXT_MENU);
+                }
             }
         }
 
@@ -187,11 +198,25 @@ namespace JoyLib.Code.States
                 return;
             }
 
-            ContextMenu contextMenu = GUIManager.GetGUI(GlobalConstants.CONTEXT_MENU).GetComponent<ContextMenu>();
             GUIManager.CloseGUI(GlobalConstants.CONTEXT_MENU);
             GUIManager.OpenGUI(GlobalConstants.CONVERSATION);
             ConversationEngine.SetActors(m_ActiveWorld.Player, entity);
             ConversationEngine.Converse();
+        }
+
+        protected void InspectItem()
+        {
+            if (!(PrimaryTarget is ItemInstance item))
+            {
+                return;
+            }
+
+            Tooltip tooltip = GUIManager.GetGUI(GlobalConstants.TOOLTIP).GetComponent<Tooltip>();
+            tooltip.Show(
+                UnityTools.ColorString(item.DisplayName, item.Rarity.Color), 
+                item.Description, 
+                item.Icon,
+                new List<KeyValuePair<string, string>>());
         }
 
         protected void CallOver()
@@ -326,7 +351,11 @@ namespace JoyLib.Code.States
                 PrimaryTarget = m_ActiveWorld.GetEntity(position);
                 if (PrimaryTarget is null)
                 {
-                    return;
+                    PrimaryTarget = m_ActiveWorld.GetObject(position);
+                    if (PrimaryTarget is null)
+                    {
+                        return;
+                    }
                 }
                 
                 SetUpContextMenu();

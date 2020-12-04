@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using System;
+﻿using System;
+using UnityEngine;
 
 namespace JoyLib.Code
 {
@@ -27,6 +27,7 @@ namespace JoyLib.Code
         public const string TRADE = "Trade";
         public const string QUEST_JOURNAL = "Quest Journal";
         public const string CHARACTER_CREATION = "Character Creation";
+        public const string TOOLTIP = "Tooltip";
 
         public static IGameManager GameManager
         {

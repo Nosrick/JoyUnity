@@ -1,13 +1,12 @@
-﻿using JoyLib.Code.Entities.Abilities;
-using JoyLib.Code.Entities.Statistics;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using Castle.Core.Internal;
 using DevionGames.InventorySystem;
 using JoyLib.Code.Collections;
+using JoyLib.Code.Entities.Abilities;
+using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Managers;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
@@ -207,6 +206,8 @@ namespace JoyLib.Code.Entities.Items
         {
             StringBuilder builder = new StringBuilder();
             builder.AppendLine(this.Identified ? this.ItemType.Description : this.ItemType.UnidentifiedDescription);
+            builder.AppendLine(this.WeightString);
+            builder.AppendLine(this.ItemType.MaterialDescription);
             if (this.ContentString.IsNullOrEmpty() == false)
             {
                 builder.AppendLine(this.ContentString);
