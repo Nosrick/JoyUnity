@@ -140,7 +140,7 @@ namespace Tests
         public IEnumerator Heterosexual_WillMateWith_AcceptsHeteroPartners()
         {
             IJoyObject[] participants = new [] { heterofemaleHuman, heteroMaleHuman };
-            IRelationship[] relationships = RelationshipHandler.Get(participants);
+            IEnumerable<IRelationship> relationships = RelationshipHandler.Get(participants);
             Assert.IsTrue(heterosexual.WillMateWith(heterofemaleHuman, heteroMaleHuman, relationships));
 
             return null;
@@ -150,7 +150,7 @@ namespace Tests
         public IEnumerator Heterosexual_WillMateWith_RejectsHomoPartners()
         {
             IJoyObject[] participants = new [] { heterofemaleHuman, homofemaleHumanLeft };
-            IRelationship[] relationships = RelationshipHandler.Get(participants);
+            IEnumerable<IRelationship> relationships = RelationshipHandler.Get(participants);
             Assert.IsFalse(heterosexual.WillMateWith(heterofemaleHuman, homofemaleHumanLeft, relationships));
 
             return null;
@@ -160,7 +160,7 @@ namespace Tests
         public IEnumerator Homosexual_WillMateWith_AcceptsHomoPartners()
         {
             IJoyObject[] participants = new [] { homoMaleHumanLeft, homoMaleHumanRight };
-            IRelationship[] relationships = RelationshipHandler.Get(participants);
+            IEnumerable<IRelationship> relationships = RelationshipHandler.Get(participants);
             Assert.IsTrue(homosexual.WillMateWith(homoMaleHumanLeft, homoMaleHumanRight, relationships));
 
             return null;
@@ -170,7 +170,7 @@ namespace Tests
         public IEnumerator Homosexual_WillMateWith_RejectsHeteroPartners()
         {
             IJoyObject[] participants = new[] { homofemaleHumanLeft, homofemaleHumanRight };
-            IRelationship[] relationships = RelationshipHandler.Get(participants);
+            IEnumerable<IRelationship> relationships = RelationshipHandler.Get(participants);
             Assert.IsFalse(homosexual.WillMateWith(homoMaleHumanLeft, homofemaleHumanRight, relationships));
 
             return null;
@@ -180,7 +180,7 @@ namespace Tests
         public IEnumerator Bisexual_WillMateWith_WillAcceptHomoPartners()
         {
             IJoyObject[] participants = new[] { bifemaleHuman, homofemaleHumanLeft };
-            IRelationship[] relationships = RelationshipHandler.Get(participants);
+            IEnumerable<IRelationship> relationships = RelationshipHandler.Get(participants);
             Assert.IsTrue(bisexual.WillMateWith(bifemaleHuman, homofemaleHumanLeft, relationships));
 
             return null;
@@ -190,7 +190,7 @@ namespace Tests
         public IEnumerator Bisexual_WillMateWith_WillAcceptHeteroPartners()
         {
             IJoyObject[] participants = new[] { bifemaleHuman, biMaleHuman };
-            IRelationship[] relationships = RelationshipHandler.Get(participants);
+            IEnumerable<IRelationship> relationships = RelationshipHandler.Get(participants);
             Assert.IsTrue(bisexual.WillMateWith(bifemaleHuman, biMaleHuman, relationships));
 
             return null;
@@ -200,7 +200,7 @@ namespace Tests
         public IEnumerator Asexual_WillMateWith_RejectsPartner()
         {
             IJoyObject[] participants = new IJoyObject[] { asexualMaleHuman, bifemaleHuman };
-            IRelationship[] relationships = RelationshipHandler.Get(participants);
+            IEnumerable<IRelationship> relationships = RelationshipHandler.Get(participants);
             Assert.IsFalse(asexual.WillMateWith(asexualMaleHuman, bifemaleHuman, relationships));
 
             return null;

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Entities.Romance;
 
@@ -15,7 +16,7 @@ namespace JoyLib.Code.Entities.Romances
             AddTag("bi");
         }
 
-        public override bool WillRomance(IEntity me, IEntity them, IRelationship[] relationships)
+        public override bool WillRomance(IEntity me, IEntity them, IEnumerable<IRelationship> relationships)
         {
             int highestValue = relationships.Max(relationship => relationship.GetRelationshipValue(me.GUID, them.GUID));
             if(highestValue < RomanceThreshold)

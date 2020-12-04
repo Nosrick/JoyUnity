@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Collections.Generic;
+using System.Globalization;
 using Castle.DynamicProxy;
 using DevionGames.InventorySystem;
 using DevionGames.UIWidgets;
@@ -113,7 +114,7 @@ namespace JoyLib.Code.Unity.GUI
             {
                 int difference = leftValue - rightValue;
 
-                IRelationship[] relationships = RelationshipHandler?.Get(new IJoyObject[] { Left, Right });
+                IEnumerable<IRelationship> relationships = RelationshipHandler?.Get(new IJoyObject[] { Left, Right });
                 foreach (IRelationship relationship in relationships)
                 {
                     relationship.ModifyValueOfParticipant(Left.GUID, Right.GUID, difference);

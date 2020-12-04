@@ -107,7 +107,7 @@ namespace JoyLib.Code.Entities.Needs
                 participants.Add(actor);
                 participants.Add(mate);
                 string[] relationshipTags = new string[] { "sexual" };
-                IRelationship[] relationships = EntityRelationshipHandler.Get(participants.ToArray(), relationshipTags);
+                IEnumerable<IRelationship> relationships = EntityRelationshipHandler.Get(participants, relationshipTags);
 
                 foreach (IRelationship relationship in relationships)
                 {

@@ -42,11 +42,11 @@ namespace JoyLib.Code.Scripting.Actions
                 return false;
             }
 
-            IRelationship[] relationships = RelationshipHandler?.Get(participants, tags, true);
+            IEnumerable<IRelationship> relationships = RelationshipHandler?.Get(participants, tags, true);
 
             bool doAll = args.Length >= 2 && (bool)args[1];
 
-            if(relationships.Length > 0)
+            if(relationships.Any())
             {
                 foreach(IRelationship relationship in relationships)
                 {
@@ -59,11 +59,13 @@ namespace JoyLib.Code.Scripting.Actions
                         relationship.ModifyValueOfOtherParticipants(participants[0].GUID, relationshipMod);
                     }
                 }
-            }
             
-            SetLastParameters(participants, tags, args);
+                SetLastParameters(participants, tags, args);
 
-            return true;
+                return true;
+            }
+
+            return false;
         }
     }
 }

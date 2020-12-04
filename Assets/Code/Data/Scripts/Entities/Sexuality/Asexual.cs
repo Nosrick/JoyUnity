@@ -1,4 +1,5 @@
-﻿using JoyLib.Code.Entities.Relationships;
+﻿using System.Collections.Generic;
+using JoyLib.Code.Entities.Relationships;
 
 namespace JoyLib.Code.Entities.Sexuality
 {
@@ -28,7 +29,7 @@ namespace JoyLib.Code.Entities.Sexuality
             }
         }
 
-        public override bool WillMateWith(IEntity me, IEntity them, IRelationship[] relationships)
+        public override bool WillMateWith(IEntity me, IEntity them, IEnumerable<IRelationship> relationships)
         {
             return false;
         }

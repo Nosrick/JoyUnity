@@ -220,7 +220,7 @@ namespace JoyLib.Code.Conversation
 
             try
             {
-                IRelationship[] relationships = RelationshipHandler.Get(new IJoyObject[] {Instigator, Listener});
+                IEnumerable<IRelationship> relationships = RelationshipHandler.Get(new IJoyObject[] {Instigator, Listener});
 
                 IRelationship chosenRelationship = null;
                 int best = Int32.MinValue;
@@ -315,6 +315,14 @@ namespace JoyLib.Code.Conversation
             }
 
             CurrentTopics = next;
+
+            if (next.Length == 0)
+            {
+                OnClose?.Invoke(this, EventArgs.Empty);
+                CurrentTopics = next;
+                Listener = null;
+                Instigator = null;
+            }
         }
 
         protected ITopic[] SanitiseTopics(ITopic[] topics)

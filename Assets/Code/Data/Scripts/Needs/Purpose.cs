@@ -102,7 +102,7 @@ namespace JoyLib.Code.Entities.Needs
                 List<IJoyObject> participants = new List<IJoyObject> {actor, possible};
 
                 string[] relationshipTags = new[] {"friendship"};
-                IRelationship[] relationships = RelationshipHandler?.Get(participants.ToArray(), relationshipTags);
+                IEnumerable<IRelationship> relationships = RelationshipHandler?.Get(participants, relationshipTags);
 
                 if (relationships is null)
                 {

@@ -561,9 +561,9 @@ namespace JoyLib.Code.Entities
                     continue;
                 }
 
-                IRelationship[] relationships = RelationshipHandler?.GetAllForObject(this);
+                IEnumerable<IRelationship> relationships = RelationshipHandler?.GetAllForObject(this);
 
-                if (relationships is null)
+                if (relationships.IsNullOrEmpty())
                 {
                     return data.ToArray();
                 }

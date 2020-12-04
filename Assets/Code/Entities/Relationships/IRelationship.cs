@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using DevionGames.InventorySystem;
 
 namespace JoyLib.Code.Entities.Relationships
 {
@@ -25,8 +26,8 @@ namespace JoyLib.Code.Entities.Relationships
         
         bool RemoveParticipant(long currentGUID);
 
-        long GenerateHash(IEnumerable<long> participants);
-        
+        long GenerateHashFromInstance();
+
         IRelationship Create(IEnumerable<IJoyObject> participants);
         IRelationship CreateWithValue(IEnumerable<IJoyObject> participants, int value);
 

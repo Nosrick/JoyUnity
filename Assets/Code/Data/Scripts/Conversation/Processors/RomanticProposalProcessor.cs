@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code.Conversation;
 using JoyLib.Code.Conversation.Conversations;
@@ -29,7 +30,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
         {
             IEntity listener = ConversationEngine.Listener;
             IEntity instigator = ConversationEngine.Instigator;
-            IRelationship[] relationships = RelationshipHandler.Get(new IJoyObject[] {instigator, listener});
+            IEnumerable<IRelationship> relationships = RelationshipHandler.Get(new IJoyObject[] {instigator, listener});
             if (listener.Romance.WillRomance(listener, instigator, relationships)
             && instigator.Romance.WillRomance(instigator, listener, relationships))
             {

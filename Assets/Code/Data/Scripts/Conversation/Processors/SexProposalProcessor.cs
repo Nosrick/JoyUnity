@@ -1,4 +1,6 @@
-﻿using Castle.Core.Internal;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Castle.Core.Internal;
 using JoyLib.Code.Conversation.Conversations;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Entities.Statistics;
@@ -27,14 +29,14 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
 
             IJoyObject[] participants = new[] {instigator, listener};
             
-            IRelationship[] relationships =
-                RelationshipHandler.Get(participants, new[] {"sexual"}, false);
+            List<IRelationship> relationships =
+                RelationshipHandler.Get(participants, new[] {"sexual"}, false).ToList();
 
             if (relationships.IsNullOrEmpty()
                 && listener.Sexuality.Compatible(listener, instigator)
                 && instigator.Sexuality.Compatible(instigator, listener))
             {
-                RelationshipHandler.CreateRelationship(participants, new string[] {"sexual"});
+                relationships.Add(RelationshipHandler.CreateRelationship(participants, new string[] {"sexual"}));
             }
             
             if (listener.Sexuality.WillMateWith(listener, instigator, relationships) == false

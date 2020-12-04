@@ -1,4 +1,5 @@
-﻿using JoyLib.Code.Entities.Relationships;
+﻿using System.Collections.Generic;
+using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Entities.Romance;
 
 namespace JoyLib.Code.Entities.Romances
@@ -10,7 +11,7 @@ namespace JoyLib.Code.Entities.Romances
 
         public override bool DecaysNeed => true;
 
-        public override bool WillRomance(IEntity me, IEntity them, IRelationship[] relationships)
+        public override bool WillRomance(IEntity me, IEntity them, IEnumerable<IRelationship> relationships)
         {
             return false;
         }

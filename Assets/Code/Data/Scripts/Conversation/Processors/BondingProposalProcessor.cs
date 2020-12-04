@@ -1,4 +1,6 @@
-﻿using JoyLib.Code.Conversation.Conversations;
+﻿using System.Collections.Generic;
+using System.Linq;
+using JoyLib.Code.Conversation.Conversations;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Rollers;
 
@@ -25,7 +27,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
         {
             IEntity listener = ConversationEngine.Listener;
             IEntity instigator = ConversationEngine.Instigator;
-            IRelationship[] relationships =
+            IEnumerable<IRelationship> relationships =
                 RelationshipHandler.Get(new IJoyObject[] {instigator, listener}, new[] {"romantic"});
             int highestValue = int.MinValue;
             IRelationship chosenRelationship = null;

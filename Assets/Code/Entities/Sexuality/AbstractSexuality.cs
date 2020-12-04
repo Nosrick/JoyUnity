@@ -47,7 +47,7 @@ namespace JoyLib.Code.Entities.Sexuality
             return false;
         }
 
-        public abstract bool WillMateWith(IEntity me, IEntity them, IRelationship[] relationships);
+        public abstract bool WillMateWith(IEntity me, IEntity them, IEnumerable<IRelationship> relationships);
         public abstract bool Compatible(IEntity me, IEntity them);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Graphics;
@@ -148,9 +149,9 @@ namespace JoyLib.Code.Entities.Needs
         {
             if (this.m_DecayCounter == 0 && m_DoesDecay)
             {
-                IRelationship[] relationships = RelationshipHandler.GetAllForObject(actor);
+                IEnumerable<IRelationship> relationships = RelationshipHandler.GetAllForObject(actor);
 
-                if (relationships.Length == 0)
+                if (relationships.Any() == false)
                 {
                     return false;
                 }

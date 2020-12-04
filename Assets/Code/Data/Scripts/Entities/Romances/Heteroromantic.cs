@@ -17,7 +17,7 @@ namespace JoyLib.Code.Entities.Romances
             AddTag("hetero");
         }
 
-        public override bool WillRomance(IEntity me, IEntity them, IRelationship[] relationships)
+        public override bool WillRomance(IEntity me, IEntity them, IEnumerable<IRelationship> relationships)
         {
             int highestValue = relationships.Max(relationship => relationship.GetRelationshipValue(me.GUID, them.GUID));
             if(highestValue < RomanceThreshold || me.Gender.Name.Equals(them.Gender.Name, StringComparison.OrdinalIgnoreCase))

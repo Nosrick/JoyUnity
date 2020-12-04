@@ -97,7 +97,7 @@ namespace JoyLib.Code.Entities.Needs
                 participants.Add(possible);
 
                 string[] relationshipTags = new[] {"family"};
-                IRelationship[] relationships = RelationshipHandler.Get(participants.ToArray(), relationshipTags);
+                IEnumerable<IRelationship> relationships = RelationshipHandler.Get(participants.ToArray(), relationshipTags);
 
                 foreach (IRelationship relationship in relationships)
                 {
@@ -119,7 +119,7 @@ namespace JoyLib.Code.Entities.Needs
                     participants.Add(possible);
 
                     string[] relationshipTags = new[] {"friendship"};
-                    IRelationship[] relationships = RelationshipHandler.Get(participants.ToArray(), relationshipTags);
+                    IEnumerable<IRelationship> relationships = RelationshipHandler.Get(participants, relationshipTags);
 
                     foreach (IRelationship relationship in relationships)
                     {

@@ -8,6 +8,7 @@ using JoyLib.Code.States.Gameplay;
 using JoyLib.Code.World;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using DevionGames.UIWidgets;
 using JoyLib.Code.Conversation;
 using JoyLib.Code.Unity;
@@ -501,7 +502,7 @@ namespace JoyLib.Code.States
                         {
                             //TODO: REDO COMBAT ENGINE
                             //CombatEngine.SwingWeapon(player, tempEntity);
-                            IRelationship[] relationships = RelationshipHandler.Get(new IJoyObject[] { tempEntity, player });
+                            IEnumerable<IRelationship> relationships = RelationshipHandler.Get(new IJoyObject[] { tempEntity, player });
                             foreach(IRelationship relationship in relationships)
                             {
                                 relationship.ModifyValueOfParticipant(player.GUID, tempEntity.GUID, -50);

@@ -48,7 +48,7 @@ namespace JoyLib.Code.Entities.Romance
             return false;
         }
 
-        public abstract bool WillRomance(IEntity me, IEntity them, IRelationship[] relationships);
+        public abstract bool WillRomance(IEntity me, IEntity them, IEnumerable<IRelationship> relationships);
         public abstract bool Compatible(IEntity me, IEntity them);
     }
 }

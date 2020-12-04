@@ -26,6 +26,11 @@ namespace JoyLib.Code.Entities.Relationships
             Tags = new List<string>();
         }
 
+        public long GenerateHashFromInstance()
+        {
+            return GenerateHash(this.m_Participants.Keys);
+        }
+
         public virtual bool AddParticipant(IJoyObject newParticipant)
         {
             if(m_Participants.ContainsKey(newParticipant.GUID) == false)
@@ -200,7 +205,7 @@ namespace JoyLib.Code.Entities.Relationships
             return false;
         }
 
-        public long GenerateHash(IEnumerable<long> participants)
+        public static long GenerateHash(IEnumerable<long> participants)
         {
             long hash = 0;
 

@@ -4,6 +4,7 @@ using JoyLib.Code.Collections;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Castle.Core.Internal;
 using JoyLib.Code.Helpers;
 using UnityEngine;
 
@@ -35,7 +36,7 @@ namespace JoyLib.Code.Entities.Relationships
 
         public bool AddRelationship(IRelationship relationship)
         {
-            m_Relationships.Add(relationship.GenerateHash(relationship.GetParticipants().Select(p => p.GUID)), relationship);
+            m_Relationships.Add(relationship.GenerateHashFromInstance(), relationship);
             return true;
         }
 
@@ -44,7 +45,7 @@ namespace JoyLib.Code.Entities.Relationships
             return m_Relationships.RemoveByKey(ID) > 0;
         }
 
-        public IRelationship CreateRelationship(IJoyObject[] participants, string[] tags)
+        public IRelationship CreateRelationship(IEnumerable<IJoyObject> participants, IEnumerable<string> tags)
         {
             if(m_RelationshipTypes.Any(t => tags.Any(tag => tag.Equals(t.Key, StringComparison.OrdinalIgnoreCase))))
             {
@@ -60,45 +61,30 @@ namespace JoyLib.Code.Entities.Relationships
 
                 newRelationship.ModifyValueOfAllParticipants(0);
 
-                m_Relationships.Add(newRelationship.GenerateHash(GUIDs.ToArray()), newRelationship);
+                m_Relationships.Add(newRelationship.GenerateHashFromInstance(), newRelationship);
                 return newRelationship;
             }
 
             throw new InvalidOperationException("Relationship type " + tags + " not found.");
         }
 
-        public IRelationship CreateRelationshipWithValue(IJoyObject[] participants, string[] tags, int value)
+        public IRelationship CreateRelationshipWithValue(IEnumerable<IJoyObject> participants, IEnumerable<string> tags,
+            int value)
         {
             IRelationship relationship = CreateRelationship(participants, tags);
-            if (relationship.GetRelationshipValue(participants[0].GUID, participants[1].GUID) == 0)
-            {
-                relationship.ModifyValueOfAllParticipants(value);
-            }
+            relationship.ModifyValueOfAllParticipants(value);
 
             return relationship;
         }
 
-        public IRelationship[] Get(IJoyObject[] participants, string[] tags = null, bool createNewIfNone = false)
+        public IEnumerable<IRelationship> Get(IEnumerable<IJoyObject> participants, IEnumerable<string> tags = null,
+            bool createNewIfNone = false)
         {
-            IRelationship query = null;
-            
-            foreach(IRelationship relationship in m_RelationshipTypes.Values)
-            {
-                query = relationship.Create(participants);
-                break;
-            }
-
-            List<long> GUIDs = new List<long>();
-            foreach (IJoyObject participant in participants)
-            {
-                GUIDs.Add(participant.GUID);
-            }
-            long hash = query.GenerateHash(GUIDs.ToArray());
+            IEnumerable<long> GUIDs = participants.Select(p => p.GUID);
+            long hash = AbstractRelationship.GenerateHash(GUIDs);
 
             List<IRelationship> relationships = new List<IRelationship>();
             
-            float bestPercentage = 0.0f;
-            IRelationship bestRelationship = null;
             foreach(Tuple<long, IRelationship> pair in m_Relationships)
             {
                 if(pair.Item1 != hash)
@@ -106,53 +92,30 @@ namespace JoyLib.Code.Entities.Relationships
                     continue;
                 }
                 
-                if (tags != null && tags.Length > 0)
+                if (tags != null && tags.Intersect(pair.Item2.Tags).Count() > 0)
                 {
-                    float tagsPercentage = 0.0f;
-                    int totalTags = 0;
-                    List<string> relationshipTags = pair.Item2.Tags;
-                    foreach (string tag in tags)
-                    {
-                        if (relationshipTags.Contains(tag))
-                        {
-                            totalTags += 1;
-                        }
-                    }
-
-                    tagsPercentage = ((float)totalTags / tags.Length);
-
-                    if(bestPercentage < tagsPercentage)
-                    {
-                        bestPercentage = tagsPercentage;
-                        bestRelationship = pair.Item2;
-                    }
-
-                    if(tagsPercentage == 100)
-                    {
-                       relationships.Add(pair.Item2);
-                       break; 
-                    }
+                    relationships.Add(pair.Item2);
                 }
-                else
+                else if (tags is null)
                 {
                     relationships.Add(pair.Item2);
                 }
             }
 
-            if((int)bestPercentage != 100 && !(bestRelationship is null))
-            {
-                relationships.Add(bestRelationship);
-            }
-
             if (relationships.Count == 0 && createNewIfNone)
             {
-                relationships.Add(CreateRelationship(participants, tags));
+                List<string> newTags = new List<string>(tags);
+                if (newTags.IsNullOrEmpty())
+                {
+                    newTags.Add("friendship");
+                }
+                relationships.Add(CreateRelationship(participants, newTags));
             }
 
             return relationships.ToArray();
         }
 
-        public int GetHighestRelationshipValue(IJoyObject speaker, IJoyObject listener, string[] tags = null)
+        public int GetHighestRelationshipValue(IJoyObject speaker, IJoyObject listener, IEnumerable<string> tags = null)
         {
             try
             {
@@ -169,10 +132,11 @@ namespace JoyLib.Code.Entities.Relationships
             }
         }
 
-        public IRelationship GetBestRelationship(IJoyObject speaker, IJoyObject listener, string[] tags = null)
+        public IRelationship GetBestRelationship(IJoyObject speaker, IJoyObject listener,
+            IEnumerable<string> tags = null)
         {
             IJoyObject[] participants = {speaker, listener};
-            IRelationship[] relationships = Get(participants, tags, false);
+            IEnumerable<IRelationship> relationships = Get(participants, tags, false);
 
             int highestValue = int.MinValue;
             IRelationship bestMatch = null;
@@ -194,7 +158,7 @@ namespace JoyLib.Code.Entities.Relationships
             return bestMatch;
         }
 
-        public IRelationship[] GetAllForObject(IJoyObject actor)
+        public IEnumerable<IRelationship> GetAllForObject(IJoyObject actor)
         {
             return m_Relationships.Where(tuple => tuple.Item2.GetParticipant(actor.GUID) is null == false)
                 .Select(tuple => tuple.Item2)
@@ -204,9 +168,9 @@ namespace JoyLib.Code.Entities.Relationships
         public bool IsFamily(IJoyObject speaker, IJoyObject listener)
         {
             IJoyObject[] participants = { speaker, listener };
-            IRelationship[] relationships = Get(participants, new[] {"family"});
+            IEnumerable<IRelationship> relationships = Get(participants, new[] {"family"});
 
-            return relationships.Length > 0;
+            return relationships.Any();
         }
 
         public NonUniqueDictionary<long, IRelationship> Relationships
