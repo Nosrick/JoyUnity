@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using DevionGames;
 using DevionGames.UIWidgets;
 using JoyLib.Code.Conversation;
 using JoyLib.Code.Entities;
@@ -232,10 +231,6 @@ namespace JoyLib.Code.States
                     {
                         contextMenu.AddMenuItem("Talk", TalkToPlayer);
                     }
-                    else if (PrimaryTarget is IItemInstance item)
-                    {
-                        contextMenu.AddMenuItem("Inspect", InspectItem);
-                    }
                 }
                 else
                 {
@@ -263,21 +258,6 @@ namespace JoyLib.Code.States
             GUIManager.OpenGUI(GlobalConstants.CONVERSATION);
             ConversationEngine.SetActors(m_ActiveWorld.Player, entity);
             ConversationEngine.Converse();
-        }
-
-        protected void InspectItem()
-        {
-            if (!(PrimaryTarget is ItemInstance item))
-            {
-                return;
-            }
-
-            Tooltip tooltip = GUIManager.GetGUI(GlobalConstants.TOOLTIP).GetComponent<Tooltip>();
-            tooltip.Show(
-                UnityTools.ColorString(item.DisplayName, item.Rarity.Color), 
-                item.Description, 
-                item.Icon,
-                new List<KeyValuePair<string, string>>());
         }
 
         protected void CallOver()
