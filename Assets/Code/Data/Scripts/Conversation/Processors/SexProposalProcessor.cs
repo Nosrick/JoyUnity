@@ -7,6 +7,8 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
 {
     public class SexProposalProcessor : TopicData
     {
+        protected bool Happening { get; set; }
+        
         public SexProposalProcessor()
             : base(
                 new ITopicCondition[0],
@@ -20,22 +22,13 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
 
         public override ITopic[] Interact(IEntity instigator, IEntity listener)
         {
+            Happening = false;
+            
             IRelationship[] relationships =
                 RelationshipHandler.Get(new IJoyObject[] {instigator, listener}, new[] {"sexual"});
-            int highestValue = int.MinValue;
-            IRelationship chosenRelationship = null;
 
-            foreach (IRelationship relationship in relationships)
-            {
-                int value = relationship.GetRelationshipValue(instigator.GUID, listener.GUID);
-                if (value > highestValue)
-                {
-                    highestValue = value;
-                    chosenRelationship = relationship;
-                }
-            }
-
-            if (highestValue < listener.Sexuality.MatingThreshold || chosenRelationship is null)
+            if (listener.Sexuality.WillMateWith(listener, instigator, relationships) == false
+            || instigator.Sexuality.WillMateWith(instigator, listener, relationships) == false)
             {
                 return base.Interact(instigator, listener);
             }
@@ -63,7 +56,41 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
                 new[] {"sex", "need"},
                 new object[] {"sex", listenerSatisfaction, 5});
 
+            Happening = true;
+
             return FetchNextTopics();
+        }
+
+        protected override ITopic[] FetchNextTopics()
+        {
+            if (!Happening)
+            {
+                return new ITopic[]
+                {
+                    new TopicData(
+                        new ITopicCondition[0],
+                        "SexRejection",
+                        new string[] {"BaseTopics"},
+                        "No thank you.",
+                        0,
+                        new string[0],
+                        Speaker.LISTENER)
+                };
+            }
+            else
+            {
+                return new ITopic[]
+                {
+                    new TopicData(
+                        new ITopicCondition[0],
+                        "SexAcceptance",
+                        new string[0],
+                        "words",
+                        0,
+                        new string[0],
+                        Speaker.LISTENER)
+                };
+            }
         }
     }
 }

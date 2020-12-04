@@ -27,8 +27,9 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
         {
             IEntity listener = ConversationEngine.Listener;
             IEntity instigator = ConversationEngine.Instigator;
-            int highestValue = RelationshipHandler.GetHighestRelationshipValue(instigator, listener);
-            if (highestValue > listener.Sexuality.MatingThreshold)
+            IRelationship[] relationships = RelationshipHandler.Get(new IJoyObject[] {instigator, listener});
+            if (listener.Romance.Compatible(listener, instigator, relationships)
+            && instigator.Romance.Compatible(instigator, listener, relationships))
             {
                 int cultureResult = Roller.Roll(0, listener.Cultures.Count);
                 int relationshipTypeResult = Roller.Roll(0, listener.Cultures[cultureResult].RelationshipTypes.Length);
