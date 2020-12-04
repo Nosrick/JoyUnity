@@ -65,7 +65,8 @@ namespace JoyLib.Code.Unity.GUI
             for(int i = 0; i < Items.Count; i++)
             {
                 Items[i].Name = statistics[i].Item1;
-                Items[i].Value = statistics[i].Item2;
+                Items[i].ValueChanged -= ChangeStatistic;
+                Items[i].DirectValueSet(statistics[i].Item2);
             }
 
             foreach (StatisticItem item in Items)
@@ -76,7 +77,7 @@ namespace JoyLib.Code.Unity.GUI
 
         protected void ChangeStatistic(object sender, ValueChangedEventArgs args)
         {
-            PointsRemaining += args.Delta;
+            PointsRemaining -= args.Delta;
         }
     }
 }

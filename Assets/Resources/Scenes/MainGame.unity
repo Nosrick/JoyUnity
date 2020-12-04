@@ -174,7 +174,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 1293420870}
+    m_TransformParent: {fileID: 696589718}
     m_Modifications:
     - target: {fileID: 321593076036725092, guid: 7435434ce2cd01846bbae819ddbb2414,
         type: 3}
@@ -219,17 +219,17 @@ PrefabInstance:
     - target: {fileID: 8604156886097528881, guid: 7435434ce2cd01846bbae819ddbb2414,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 8604156886097528881, guid: 7435434ce2cd01846bbae819ddbb2414,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 8604156886097528881, guid: 7435434ce2cd01846bbae819ddbb2414,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 8604156886097528881, guid: 7435434ce2cd01846bbae819ddbb2414,
         type: 3}
@@ -239,7 +239,7 @@ PrefabInstance:
     - target: {fileID: 8604156886097528881, guid: 7435434ce2cd01846bbae819ddbb2414,
         type: 3}
       propertyPath: m_RootOrder
-      value: 10
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8604156886097528881, guid: 7435434ce2cd01846bbae819ddbb2414,
         type: 3}
@@ -1465,6 +1465,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2036211358}
+  - {fileID: 136287639}
   m_Father: {fileID: 1293420870}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2053,7 +2054,7 @@ PrefabInstance:
     - target: {fileID: 2962101409046335170, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 75.535
       objectReference: {fileID: 0}
     - target: {fileID: 2962101409046335170, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
         type: 3}
@@ -2118,7 +2119,7 @@ PrefabInstance:
     - target: {fileID: 7623997236991320388, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 295.00836
       objectReference: {fileID: 0}
     - target: {fileID: 7623997236991320388, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
         type: 3}
@@ -2288,7 +2289,6 @@ RectTransform:
   - {fileID: 206369572}
   - {fileID: 950311962}
   - {fileID: 623449197}
-  - {fileID: 136287639}
   - {fileID: 1409219662}
   m_Father: {fileID: 205221783}
   m_RootOrder: 0

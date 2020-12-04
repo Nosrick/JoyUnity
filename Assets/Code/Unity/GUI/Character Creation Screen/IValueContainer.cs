@@ -6,6 +6,8 @@ namespace JoyLib.Code.Unity.GUI
     {
         int DecreaseValue(int delta = 1);
         int IncreaseValue(int delta = 1);
+
+        int DirectValueSet(int newValue);
         
         int Value { get; set; }
 

@@ -27,6 +27,13 @@ namespace JoyLib.Code.Unity.GUI
             return Value;
         }
 
+        public virtual int DirectValueSet(int newValue)
+        {
+            m_Value = newValue;
+            Value = m_Value;
+            return m_Value;
+        }
+
         public virtual int Value
         {
             get => m_Value;
@@ -34,7 +41,11 @@ namespace JoyLib.Code.Unity.GUI
             {
                 int previous = m_Value;
                 m_Value = value;
-                ValueChanged?.Invoke(this, new ValueChangedEventArgs() { Delta = previous - m_Value });
+                ValueChanged?.Invoke(this, new ValueChangedEventArgs()
+                {
+                    NewValue = m_Value,
+                    Delta = m_Value - previous
+                });
             }
         }
 

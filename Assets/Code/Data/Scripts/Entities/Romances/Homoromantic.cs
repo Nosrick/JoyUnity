@@ -19,6 +19,11 @@ namespace JoyLib.Code.Entities.Romances
 
         public override bool WillRomance(IEntity me, IEntity them, IEnumerable<IRelationship> relationships)
         {
+            if (relationships.Any() == false)
+            {
+                return false;
+            }
+
             int highestValue = relationships.Max(relationship => relationship.GetRelationshipValue(me.GUID, them.GUID));
             if(highestValue < RomanceThreshold 
             || me.Gender.Name.Equals(them.Gender.Name, StringComparison.OrdinalIgnoreCase) == false)

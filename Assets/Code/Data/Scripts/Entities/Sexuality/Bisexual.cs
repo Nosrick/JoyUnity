@@ -1,6 +1,6 @@
-﻿using JoyLib.Code.Entities.Relationships;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using JoyLib.Code.Entities.Relationships;
 
 namespace JoyLib.Code.Entities.Sexuality
 {
@@ -37,6 +37,11 @@ namespace JoyLib.Code.Entities.Sexuality
 
         public override bool WillMateWith(IEntity me, IEntity them, IEnumerable<IRelationship> relationships)
         {
+            if (relationships.Any() == false)
+            {
+                return false;
+            }
+            
             int highestValue = relationships.Max(relationship => relationship.GetRelationshipValue(me.GUID, them.GUID));
             if(highestValue < MatingThreshold)
             {
