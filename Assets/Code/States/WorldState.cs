@@ -195,23 +195,22 @@ namespace JoyLib.Code.States
             {
                 string relationshipName = "You";
                 StringBuilder builder = new StringBuilder(entity.Description);
-                try
-                {
-                     relationshipName = RelationshipHandler.GetBestRelationship(
-                        GlobalConstants.GameManager.Player,
-                        PrimaryTarget).DisplayName;
-                    
-                }
-                catch (Exception e)
-                {
-                    relationshipName = "Stranger";
-                }
-
                 if (PrimaryTarget.GUID != m_ActiveWorld.Player.GUID)
                 {
-                    builder.AppendLine(
-                        CultureInfo.CurrentCulture.TextInfo.ToTitleCase(relationshipName));
+                    try
+                    {
+                        relationshipName = RelationshipHandler.GetBestRelationship(
+                            GlobalConstants.GameManager.Player,
+                            PrimaryTarget).DisplayName;
+                    
+                    }
+                    catch (Exception e)
+                    {
+                        relationshipName = "Stranger";
+                    }
                 }
+                
+                builder.AppendLine(CultureInfo.CurrentCulture.TextInfo.ToTitleCase(relationshipName));
 
                 GUIManager.OpenGUI(GlobalConstants.TOOLTIP);
                 tooltip.Show(
