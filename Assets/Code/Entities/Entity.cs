@@ -157,14 +157,10 @@ namespace JoyLib.Code.Entities
             this.Romance = romance;
             this.m_IdentifiedItems = identifiedItems;
             this.m_Statistics = statistics;
-
-            this.m_Skills = new BasicValueContainer<IGrowingValue>();
+            
             this.m_Needs = needs;
 
-            foreach (IGrowingValue skill in template.Skills.Values)
-            {
-                this.m_Skills.Add(skill);
-            }
+            this.m_Skills = new BasicValueContainer<IGrowingValue>();
 
             if (SkillHandler is null == false)
             {
@@ -172,6 +168,11 @@ namespace JoyLib.Code.Entities
                 {
                     this.m_Skills.Add(skill);
                 }
+            }
+
+            foreach (IGrowingValue skill in template.Skills.Values)
+            {
+                this.m_Skills.Add(skill);
             }
 
             this.m_Abilities = template.Abilities.ToList();
@@ -435,7 +436,7 @@ namespace JoyLib.Code.Entities
             //Fetch all skills
             if (tags.Any(tag => tag.Equals("skills", StringComparison.OrdinalIgnoreCase)))
             {
-                data.AddRange(from EntitySkill skill in m_Skills
+                data.AddRange(from IGrowingValue skill in m_Skills.Values
                     select new Tuple<string, int>(skill.Name, skill.Value));
             }
 

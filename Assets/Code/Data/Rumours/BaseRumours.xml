@@ -13,7 +13,7 @@
         <Parameter>participant</Parameter>
         <Parameter>skills</Parameter>
         <Parameter>gender/personalobject</Parameter>
-        <Condition>skill &gt; 5</Condition>
+        <Condition>skills &gt; 5</Condition>
         <Tag>skill</Tag>
         <Tag>positive</Tag>
     </Line>

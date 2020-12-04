@@ -329,7 +329,7 @@
       <Value>0.02</Value>
     </Coefficient>
     <Coefficient>
-      <Name>Employment</Name>
+      <Name>Purpose</Name>
       <Value>0.04</Value>
     </Coefficient>
     <Coefficient>
@@ -345,7 +345,7 @@
       <Value>0.02</Value>
     </Coefficient>
     <Coefficient>
-      <Name>Employment</Name>
+      <Name>Purpose</Name>
       <Value>0.04</Value>
     </Coefficient>
     <Coefficient>
@@ -361,7 +361,7 @@
       <Value>0.06</Value>
     </Coefficient>
     <Coefficient>
-      <Name>Employment</Name>
+      <Name>Purpose</Name>
       <Value>0.04</Value>
     </Coefficient>
   </Skill>

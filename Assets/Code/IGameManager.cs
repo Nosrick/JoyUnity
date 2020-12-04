@@ -12,6 +12,7 @@ using JoyLib.Code.Entities.Romance;
 using JoyLib.Code.Entities.Sexes;
 using JoyLib.Code.Entities.Sexuality;
 using JoyLib.Code.Graphics;
+using JoyLib.Code.Helpers;
 using JoyLib.Code.Physics;
 using JoyLib.Code.Quests;
 using JoyLib.Code.Rollers;
@@ -45,6 +46,9 @@ namespace JoyLib.Code
         IPhysicsManager PhysicsManager { get; }
         IConversationEngine ConversationEngine { get; }
         IAbilityHandler AbilityHandler { get; }
+        
+        NaturalWeaponHelper NaturalWeaponHelper { get; }
+        
         RNG Roller { get; }
         
         IEntityFactory EntityFactory { get; }

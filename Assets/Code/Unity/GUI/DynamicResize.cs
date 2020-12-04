@@ -46,7 +46,8 @@ namespace JoyLib.Code.Unity.GUI
         protected void Resize()
         {
             if (ChildRectTransform is null 
-                || ChildLastSizes == ChildRectTransform.rect.size)
+                || ChildLastSizes == ChildRectTransform.rect.size
+                || ItemTransform is null)
             {
                 return;
             }

@@ -151,6 +151,24 @@ Transform:
   m_Father: {fileID: 1085594880}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &127590849 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5573507356558727690, guid: 7bd804c0116f9ee458ad95e65b8c1ab3,
+    type: 3}
+  m_PrefabInstance: {fileID: 5573507356910968768}
+  m_PrefabAsset: {fileID: 0}
+--- !u!225 &127590850
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 127590849}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1001 &136287638
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -720,6 +738,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79b34202c8a849cb81a9f40db85841f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
+  name: 
+  priority: 0
+  m_KeyCode: 0
+  m_EaseType: 28
+  m_Duration: 0.7
+  m_ShowSound: {fileID: 0}
+  m_CloseSound: {fileID: 0}
+  m_Focus: 1
+  m_DeactivateOnClose: 1
   m_RemovesControl: 0
   m_ClosesOthers: 0
   m_Index: 0
@@ -1511,6 +1539,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79b34202c8a849cb81a9f40db85841f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
+  name: 
+  priority: 0
+  m_KeyCode: 0
+  m_EaseType: 28
+  m_Duration: 0.7
+  m_ShowSound: {fileID: 0}
+  m_CloseSound: {fileID: 0}
+  m_Focus: 1
+  m_DeactivateOnClose: 1
   m_RemovesControl: 0
   m_ClosesOthers: 0
   m_Index: 0

@@ -46,7 +46,7 @@ namespace JoyLib.Code.Conversation.Subengines.Rumours
 
         public string Parse(string parameter, IJoyObject participant)
         {
-            if (!(participant is Entity entity))
+            if (!(participant is IEntity entity))
             {
                 return "";
             }

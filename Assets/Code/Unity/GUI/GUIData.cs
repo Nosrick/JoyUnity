@@ -1,23 +1,35 @@
-﻿using UnityEngine;
+﻿using System;
+using DevionGames.UIWidgets;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public class GUIData : MonoBehaviour, IPointerDownHandler
+    [RequireComponent(typeof(UIWidget))]
+    public class GUIData : MonoBehaviour
     {
         public IGUIManager GUIManager { get; set; }
         
-        public void Initialise(
-            bool removesControl,
-            bool closesOthers)
+        protected UIWidget Widget { get; set; }
+
+        public void Awake()
         {
-            this.m_ClosesOthers = closesOthers;
-            this.m_RemovesControl = removesControl;
+            Widget = this.GetComponent<UIWidget>();
         }
 
         public void OnPointerDown(PointerEventData eventData)
         {
             GUIManager.BringToFront(this.name);
+        }
+
+        public void Show()
+        {
+            Widget.Show();
+        }
+
+        public void Close()
+        {
+            Widget.Close();
         }
 
         public bool m_RemovesControl;

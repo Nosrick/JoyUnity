@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Text;
 using DevionGames;
+using DevionGames.UIWidgets;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Needs;
 using TMPro;
@@ -10,7 +11,7 @@ using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public class GUINeedsAlert : MonoBehaviour
+    public class GUINeedsAlert : UIWidget
     {
         protected TextMeshProUGUI Text { get; set; }
 
@@ -23,6 +24,7 @@ namespace JoyLib.Code.Unity.GUI
 
         public void Awake()
         {
+            base.Awake();
             GetBits();
             Text = this.gameObject.FindChild("NeedsText", true).GetComponent<TextMeshProUGUI>();
         }

@@ -13,7 +13,7 @@ using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public class QuestJournal : MonoBehaviour
+    public class QuestJournal : UIWidget
     {
         public IEntity Player { get; set; }
         
@@ -30,6 +30,7 @@ namespace JoyLib.Code.Unity.GUI
 
         public void Awake()
         {
+            base.Awake();
             MenuItemRect = MenuItemPrefab.GetComponent<RectTransform>();
             Container = this.gameObject.FindChild("Quest MenuContainer", true);
             MenuItems = new List<MenuItem>();

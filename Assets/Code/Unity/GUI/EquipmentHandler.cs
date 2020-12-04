@@ -5,6 +5,7 @@ using System.Linq;
 using DevionGames;
 using DevionGames.InventorySystem;
 using DevionGames.InventorySystem.Restrictions;
+using DevionGames.UIWidgets;
 using JoyLib.Code.Entities;
 using Lean.Gui;
 using TMPro;
@@ -15,7 +16,7 @@ using EquipmentRegion = DevionGames.InventorySystem.EquipmentRegion;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public class EquipmentHandler : MonoBehaviour
+    public class EquipmentHandler : UIWidget
     {
         private IEntity m_Player;
 

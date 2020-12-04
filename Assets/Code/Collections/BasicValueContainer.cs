@@ -80,9 +80,8 @@ namespace JoyLib.Code.Collections
             return false;
         }
 
-        public int Count { get; }
-        public bool IsReadOnly { get; }
-
+        public int Count => m_Values.Count;
+        public bool IsReadOnly => false;
 
         public void Add(string key, T value)
         {

@@ -100,12 +100,20 @@ public class GameManager : MonoBehaviour, IGameManager
         QuestTracker = new QuestTracker();
         
         ConversationEngine = new ConversationEngine(RelationshipHandler);
+        
+        NaturalWeaponHelper = new NaturalWeaponHelper(ObjectIconHandler, MaterialHandler);
 
         m_StateManager = new StateManager();
 
         TradeWindow.RelationshipHandler = RelationshipHandler;
+        
         TopicData.ConversationEngine = ConversationEngine;
         TopicData.RelationshipHandler = RelationshipHandler;
+
+        Entity.QuestTracker = QuestTracker;
+        Entity.RelationshipHandler = RelationshipHandler;
+        Entity.SkillHandler = SkillHandler;
+        Entity.NaturalWeaponHelper = NaturalWeaponHelper;
         
         m_StateManager.ChangeState(new CharacterCreationState());
     }
@@ -146,6 +154,8 @@ public class GameManager : MonoBehaviour, IGameManager
     public IPhysicsManager PhysicsManager { get; protected set; }
     public IConversationEngine ConversationEngine { get; protected set; }
     public IAbilityHandler AbilityHandler { get; protected set; }
+    
+    public NaturalWeaponHelper NaturalWeaponHelper { get; protected set; }
     public RNG Roller { get; protected set; }
 
     public IEntityFactory EntityFactory { get; protected set; }

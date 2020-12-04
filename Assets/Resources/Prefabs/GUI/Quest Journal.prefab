@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8862829972381363169}
   - component: {fileID: 1208727482}
   - component: {fileID: 2474087473471282966}
+  - component: {fileID: 718918997}
   m_Layer: 0
   m_Name: Quest Journal
   m_TagString: Untagged
@@ -104,9 +105,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79b34202c8a849cb81a9f40db85841f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
+  name: 
+  priority: 0
+  m_KeyCode: 0
+  m_EaseType: 28
+  m_Duration: 0.7
+  m_ShowSound: {fileID: 0}
+  m_CloseSound: {fileID: 0}
+  m_Focus: 1
+  m_DeactivateOnClose: 1
   m_RemovesControl: 1
   m_ClosesOthers: 0
   m_Index: 0
+--- !u!225 &718918997
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8862829972381363171}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &8862829972594165433
 GameObject:
   m_ObjectHideFlags: 0

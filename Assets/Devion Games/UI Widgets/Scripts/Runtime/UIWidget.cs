@@ -121,7 +121,7 @@ namespace DevionGames.UIWidgets
 		private TweenRunner<FloatTween> m_AlphaTweenRunner;
 		private TweenRunner<Vector3Tween> m_ScaleTweenRunner;
        
-        private void Awake ()
+        protected void Awake ()
 		{
 			//Register the KeyCode to show or close the widget.
 			WidgetInputHandler.RegisterInput(this.m_KeyCode, this);
@@ -147,7 +147,7 @@ namespace DevionGames.UIWidgets
 		{
 		}
 
-		private void Start ()
+		protected void Start ()
 		{
 			OnStart ();
 			StartCoroutine (OnDelayedStart ());

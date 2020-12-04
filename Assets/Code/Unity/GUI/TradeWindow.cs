@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using Castle.DynamicProxy;
 using DevionGames.InventorySystem;
+using DevionGames.UIWidgets;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Relationships;
@@ -10,7 +11,7 @@ using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public class TradeWindow : MonoBehaviour
+    public class TradeWindow : UIWidget
     {
         public IEntity Left { get; protected set; }
         public IEntity Right { get; protected set; }
@@ -34,6 +35,7 @@ namespace JoyLib.Code.Unity.GUI
 
         public void Awake()
         {
+            base.Awake();
             RectTransform = this.GetComponent<RectTransform>();
 
             LeftInventory.OnAddItem += Tally;

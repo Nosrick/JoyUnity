@@ -71,9 +71,6 @@ namespace JoyLib.Code.States
             ConversationEngine = GameManager.ConversationEngine;
             GUIManager = GameManager.GUIManager;
 
-            ContextMenu contextMenu = WidgetUtility.Find<ContextMenu>("ContextMenu");
-            contextMenu.Close();
-
             TickTimer = TickEvent();
             GameManager.MyGameObject.GetComponent<MonoBehaviour>().StartCoroutine(TickTimer);
         }
@@ -179,7 +176,6 @@ namespace JoyLib.Code.States
             if (contextMenu.GetComponentsInChildren<MenuItem>(true).Length > 1)
             {
                 GUIManager.OpenGUI(GlobalConstants.CONTEXT_MENU);
-                contextMenu.Show();
             }
         }
 
@@ -192,7 +188,6 @@ namespace JoyLib.Code.States
 
             ContextMenu contextMenu = GUIManager.GetGUI(GlobalConstants.CONTEXT_MENU).GetComponent<ContextMenu>();
             GUIManager.CloseGUI(GlobalConstants.CONTEXT_MENU);
-            contextMenu.Close();
             GUIManager.OpenGUI(GlobalConstants.CONVERSATION);
             ConversationEngine.SetActors(m_ActiveWorld.Player, entity);
             ConversationEngine.Converse();

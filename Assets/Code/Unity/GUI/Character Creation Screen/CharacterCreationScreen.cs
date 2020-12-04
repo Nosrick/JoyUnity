@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security;
+using DevionGames.UIWidgets;
 using JoyLib.Code.Collections;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities;
@@ -19,7 +20,7 @@ using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public class CharacterCreationScreen : MonoBehaviour
+    public class CharacterCreationScreen : UIWidget
     {
         [SerializeField] protected GameManager m_GameManager;
         [SerializeField] protected StatisticWindow m_StatisticWindow;

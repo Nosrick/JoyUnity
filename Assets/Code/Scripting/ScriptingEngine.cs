@@ -9,6 +9,7 @@ using System.Linq;
 using System.Reflection;
 using DevionGames;
 using DevionGames.InventorySystem;
+using DevionGames.UIWidgets;
 using UnityEngine;
 using JoyLib.Code.Helpers;
 
@@ -55,7 +56,8 @@ namespace JoyLib.Code.Scripting
                         MetadataReference.CreateFromFile(typeof(System.Linq.IQueryable).Assembly.Location),
                         MetadataReference.CreateFromFile(typeof(GlobalConstants).Assembly.Location),
                         MetadataReference.CreateFromFile(typeof(EquipmentItem).Assembly.Location),
-                        MetadataReference.CreateFromFile(typeof(INameable).Assembly.Location)
+                        MetadataReference.CreateFromFile(typeof(INameable).Assembly.Location),
+                        MetadataReference.CreateFromFile(typeof(UIWidget).Assembly.Location)
                     };
                     CSharpCompilation compilation = CSharpCompilation.Create("JoyScripts", builtFiles, libs,
                         new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));

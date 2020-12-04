@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DevionGames.UIWidgets;
 using UnityEngine;
 
 namespace JoyLib.Code.Unity.GUI
@@ -33,7 +34,7 @@ namespace JoyLib.Code.Unity.GUI
             }
 
             gui.GUIManager = this;
-            gui.gameObject.SetActive(false);
+            gui.Close();
             GUIs.Add(gui);
         }
 
@@ -44,7 +45,7 @@ namespace JoyLib.Code.Unity.GUI
                 GUIData[] toToggle = ActiveGUIs.Where(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase)).ToArray();
                 foreach (GUIData data in toToggle)
                 {
-                    CloseGUI(data.name);
+                    data.Close();
                 }
             }
             else
@@ -55,7 +56,7 @@ namespace JoyLib.Code.Unity.GUI
 
         public void OpenGUI(string name)
         {
-            if (ActiveGUIs.Any(data => data.name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+            if (ActiveGUIs.Any(widget => widget.name.Equals(name, StringComparison.OrdinalIgnoreCase)))
             {
                 return;
             }
@@ -66,14 +67,14 @@ namespace JoyLib.Code.Unity.GUI
             if (toOpen.m_ClosesOthers)
             {
                 List<GUIData> activeCopy = new List<GUIData>(ActiveGUIs);
-                foreach (GUIData data in activeCopy)
+                foreach (GUIData widget in activeCopy)
                 {
-                    CloseGUI(data.name);
+                    CloseGUI(widget.name);
                 }
             }
             
             ActiveGUIs.Add(toOpen);
-            toOpen.gameObject.SetActive(true);
+            toOpen.Show();
         }
 
         public void CloseGUI(string activeName)
@@ -86,7 +87,7 @@ namespace JoyLib.Code.Unity.GUI
             GUIData toClose = ActiveGUIs
                 .First(gui => gui.name.Equals(activeName, StringComparison.OrdinalIgnoreCase));
             
-            toClose.gameObject.SetActive(false);
+            toClose.Close();
             ActiveGUIs.Remove(toClose);
         }
 
@@ -117,14 +118,15 @@ namespace JoyLib.Code.Unity.GUI
 
             foreach (GUIData data in toClose)
             {
-                data.gameObject.SetActive(false);
+                data.Close();
                 ActiveGUIs.Remove(data);
             }
         }
 
         public bool RemovesControl()
         {
-            return ActiveGUIs.Any(gui => gui.m_RemovesControl);
+            IEnumerable<GUIData> data = ActiveGUIs.Where(gui => gui.GetType().Equals(typeof(GUIData))).Cast<GUIData>();
+            return data.Any(gui => gui.m_RemovesControl);
         }
 
         public GUIData GetGUI(string name)
