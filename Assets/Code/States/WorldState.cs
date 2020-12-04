@@ -166,8 +166,11 @@ namespace JoyLib.Code.States
 
         protected void OnMouseOverJoyObject(object sender, JoyObjectMouseOverEventArgs args)
         {
-            PrimaryTarget = args.Actor;
-            SetUpTooltip();
+            if (GUIManager.IsActive(GlobalConstants.CONTEXT_MENU) == false)
+            {
+                PrimaryTarget = args.Actor;
+                SetUpTooltip();
+            }
         }
 
         protected void OnMouseExitJoyObject(object sender, EventArgs args)
