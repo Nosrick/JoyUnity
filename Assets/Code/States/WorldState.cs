@@ -172,7 +172,10 @@ namespace JoyLib.Code.States
 
         protected void OnMouseExitJoyObject(object sender, EventArgs args)
         {
-            PrimaryTarget = null;
+            if (GUIManager.IsActive(GlobalConstants.CONTEXT_MENU) == false)
+            {
+                PrimaryTarget = null;
+            }
             GUIManager.CloseGUI(GlobalConstants.TOOLTIP);
         }
 
