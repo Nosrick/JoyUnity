@@ -232,6 +232,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae7426b9a54d79844b6b701d5ba47f9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
+  name: 
+  priority: 0
+  m_KeyCode: 0
+  m_EaseType: 28
+  m_Duration: 0.7
+  m_ShowSound: {fileID: 0}
+  m_CloseSound: {fileID: 0}
+  m_Focus: 1
+  m_DeactivateOnClose: 1
   m_SlotPrefab: {fileID: 0}
   m_Container: {fileID: 161253348}
   m_EquipmentContainer: {fileID: 4484802662267518631}
@@ -247,16 +257,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79b34202c8a849cb81a9f40db85841f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  delegates: []
-  name: 
-  priority: 0
-  m_KeyCode: 0
-  m_EaseType: 28
-  m_Duration: 0.7
-  m_ShowSound: {fileID: 0}
-  m_CloseSound: {fileID: 0}
-  m_Focus: 1
-  m_DeactivateOnClose: 1
   m_RemovesControl: 1
   m_ClosesOthers: 0
   m_Index: 0

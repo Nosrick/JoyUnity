@@ -47,6 +47,7 @@ namespace JoyLib.Code.Unity.GUI
                 GameObject slotInstance = GameObject.Instantiate(
                     m_SlotPrefab,
                     m_Container.transform);
+                slotInstance.SetActive(m_Container.enabled);
                 TextMeshProUGUI slotName = slotInstance.GetComponentInChildren<TextMeshProUGUI>();
                 slotName.text = slots[i];
                 ItemSlot slotScript = slotInstance.GetComponent<ItemSlot>();

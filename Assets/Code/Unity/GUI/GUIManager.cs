@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DevionGames.UIWidgets;
 using UnityEngine;
 
 namespace JoyLib.Code.Unity.GUI
@@ -45,7 +44,7 @@ namespace JoyLib.Code.Unity.GUI
                 GUIData[] toToggle = ActiveGUIs.Where(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase)).ToArray();
                 foreach (GUIData data in toToggle)
                 {
-                    data.Close();
+                    CloseGUI(data.name);
                 }
             }
             else

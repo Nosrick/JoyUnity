@@ -4882,6 +4882,7 @@ MonoBehaviour:
   Minimum: 1
   Maximum: 10
   Delta: 1
+  m_Parent: {fileID: 5573507356136866956}
   m_ValueText: {fileID: 5573507357027909532}
   m_NameText: {fileID: 5573507355688440217}
 --- !u!1 &5573507356290834977
