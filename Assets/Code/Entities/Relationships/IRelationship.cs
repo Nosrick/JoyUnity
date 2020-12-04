@@ -21,6 +21,7 @@ namespace JoyLib.Code.Entities.Relationships
         int ModifyValueOfAllParticipants(int value);
 
         bool AddParticipant(IJoyObject newParticipant);
+        bool AddParticipants(IEnumerable<IJoyObject> participants);
         
         bool RemoveParticipant(long currentGUID);
 

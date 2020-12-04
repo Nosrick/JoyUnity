@@ -1,4 +1,6 @@
-﻿using JoyLib.Code.Conversation;
+﻿using System;
+using System.Linq;
+using JoyLib.Code.Conversation;
 using JoyLib.Code.Conversation.Conversations;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Rollers;
@@ -28,17 +30,19 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
             IEntity listener = ConversationEngine.Listener;
             IEntity instigator = ConversationEngine.Instigator;
             IRelationship[] relationships = RelationshipHandler.Get(new IJoyObject[] {instigator, listener});
-            if (listener.Romance.Compatible(listener, instigator, relationships)
-            && instigator.Romance.Compatible(instigator, listener, relationships))
+            if (listener.Romance.WillRomance(listener, instigator, relationships)
+            && instigator.Romance.WillRomance(instigator, listener, relationships))
             {
                 int cultureResult = Roller.Roll(0, listener.Cultures.Count);
                 int relationshipTypeResult = Roller.Roll(0, listener.Cultures[cultureResult].RelationshipTypes.Length);
     
                 string relationshipType = listener.Cultures[cultureResult].RelationshipTypes[relationshipTypeResult];
-    
+                IRelationship selectedRelationship = RelationshipHandler.RelationshipTypes.First(relationship =>
+                    relationship.Name.Equals(relationshipType, StringComparison.OrdinalIgnoreCase));
+
                 return new ITopic[]
                 {
-                    new RomancePresentation(relationshipType)
+                    new RomancePresentation(selectedRelationship)
                 };
             }
             else

@@ -1,4 +1,5 @@
-﻿using JoyLib.Code.Conversation.Conversations;
+﻿using Castle.Core.Internal;
+using JoyLib.Code.Conversation.Conversations;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Scripting;
@@ -23,10 +24,19 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
         public override ITopic[] Interact(IEntity instigator, IEntity listener)
         {
             Happening = false;
+
+            IJoyObject[] participants = new[] {instigator, listener};
             
             IRelationship[] relationships =
-                RelationshipHandler.Get(new IJoyObject[] {instigator, listener}, new[] {"sexual"});
+                RelationshipHandler.Get(participants, new[] {"sexual"}, false);
 
+            if (relationships.IsNullOrEmpty()
+                && listener.Sexuality.Compatible(listener, instigator)
+                && instigator.Sexuality.Compatible(instigator, listener))
+            {
+                RelationshipHandler.CreateRelationship(participants, new string[] {"sexual"});
+            }
+            
             if (listener.Sexuality.WillMateWith(listener, instigator, relationships) == false
             || instigator.Sexuality.WillMateWith(instigator, listener, relationships) == false)
             {

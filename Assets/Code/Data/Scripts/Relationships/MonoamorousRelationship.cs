@@ -7,7 +7,6 @@ namespace JoyLib.Code.Entities.Relationships
         public MonoamorousRelationship()
         {
             AddTag("romantic");
-            AddTag("sexual");
         }
 
         public override bool AddParticipant(IJoyObject newParticipant)

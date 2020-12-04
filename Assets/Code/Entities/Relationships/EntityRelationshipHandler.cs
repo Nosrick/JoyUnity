@@ -33,12 +33,23 @@ namespace JoyLib.Code.Entities.Relationships
             return true;
         }
 
-        public IRelationship CreateRelationship(IJoyObject[] participants, string type = "friendship")
+        public bool AddRelationship(IRelationship relationship)
         {
-            if(m_RelationshipTypes.Any(t => t.Key.Equals(type, StringComparison.OrdinalIgnoreCase)))
+            m_Relationships.Add(relationship.GenerateHash(relationship.GetParticipants().Select(p => p.GUID)), relationship);
+            return true;
+        }
+
+        public bool RemoveRelationship(long ID)
+        {
+            return m_Relationships.RemoveByKey(ID) > 0;
+        }
+
+        public IRelationship CreateRelationship(IJoyObject[] participants, string[] tags)
+        {
+            if(m_RelationshipTypes.Any(t => tags.Any(tag => tag.Equals(t.Key, StringComparison.OrdinalIgnoreCase))))
             {
                 IRelationship newRelationship = m_RelationshipTypes
-                    .First(t => t.Key.Equals(type, StringComparison.OrdinalIgnoreCase)).Value
+                    .First(t => tags.Any(tag => tag.Equals(t.Key, StringComparison.OrdinalIgnoreCase))).Value
                     .Create(participants);
                 
                 List<long> GUIDs = new List<long>();
@@ -53,12 +64,12 @@ namespace JoyLib.Code.Entities.Relationships
                 return newRelationship;
             }
 
-            throw new InvalidOperationException("Relationship type " + type + " not found.");
+            throw new InvalidOperationException("Relationship type " + tags + " not found.");
         }
 
-        public IRelationship CreateRelationshipWithValue(IJoyObject[] participants, string type, int value)
+        public IRelationship CreateRelationshipWithValue(IJoyObject[] participants, string[] tags, int value)
         {
-            IRelationship relationship = CreateRelationship(participants, type);
+            IRelationship relationship = CreateRelationship(participants, tags);
             if (relationship.GetRelationshipValue(participants[0].GUID, participants[1].GUID) == 0)
             {
                 relationship.ModifyValueOfAllParticipants(value);
@@ -135,7 +146,7 @@ namespace JoyLib.Code.Entities.Relationships
 
             if (relationships.Count == 0 && createNewIfNone)
             {
-                relationships.Add(CreateRelationship(participants));
+                relationships.Add(CreateRelationship(participants, tags));
             }
 
             return relationships.ToArray();
@@ -210,5 +221,7 @@ namespace JoyLib.Code.Entities.Relationships
                 return m_Relationships;
             }
         }
+
+        public List<IRelationship> RelationshipTypes => m_RelationshipTypes.Values.ToList();
     }
 }

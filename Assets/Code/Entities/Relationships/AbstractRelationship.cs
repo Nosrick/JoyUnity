@@ -8,7 +8,6 @@ namespace JoyLib.Code.Entities.Relationships
 {
     public abstract class AbstractRelationship : IRelationship
     {
-
         public virtual string Name => "abstractrelationship";
 
         public List<string> Tags { get; protected set; }
@@ -51,20 +50,23 @@ namespace JoyLib.Code.Entities.Relationships
                         m_Values[pair.Key].Add(newParticipant.GUID, 0);
                     }
                 }
-                
-                if (newParticipant is Entity entity)
-                {
-                    foreach (string tag in entity.Sexuality.Tags)
-                    {
-                        AddTag(tag);
-                    }
-                }
 
                 return true;
             }
             return false;
         }
-        
+
+        public bool AddParticipants(IEnumerable<IJoyObject> participants)
+        {
+            bool result = true;
+            foreach (IJoyObject participant in participants)
+            {
+                result &= AddParticipant(participant);
+            }
+
+            return result;
+        }
+
         public bool HasTag(string tag)
         {
             return Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase));

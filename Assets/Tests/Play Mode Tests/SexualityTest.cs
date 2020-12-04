@@ -128,12 +128,12 @@ namespace Tests
             IEntity[] biCoupleRight = new IEntity[] { bifemaleHuman, biMaleHuman };
             IEntity[] asexualCouple = new IEntity[] {asexualMaleHuman, bifemaleHuman};
 
-            RelationshipHandler.CreateRelationshipWithValue(heteroCouple, "monoamorous", 500);
-            RelationshipHandler.CreateRelationshipWithValue(homofemaleCouple, "monoamorous", 500);
-            RelationshipHandler.CreateRelationshipWithValue(homoMaleCouple, "monoamorous", 500);
-            RelationshipHandler.CreateRelationshipWithValue(biCoupleLeft, "monoamorous", 500);
-            RelationshipHandler.CreateRelationshipWithValue(biCoupleRight, "monoamorous", 500);
-            RelationshipHandler.CreateRelationshipWithValue(asexualCouple, "monoamorous", 500);
+            RelationshipHandler.CreateRelationshipWithValue(heteroCouple, new []{"sexual"}, 500);
+            RelationshipHandler.CreateRelationshipWithValue(homofemaleCouple, new []{"sexual"}, 500);
+            RelationshipHandler.CreateRelationshipWithValue(homoMaleCouple, new []{"sexual"}, 500);
+            RelationshipHandler.CreateRelationshipWithValue(biCoupleLeft, new []{"sexual"}, 500);
+            RelationshipHandler.CreateRelationshipWithValue(biCoupleRight, new []{"sexual"}, 500);
+            RelationshipHandler.CreateRelationshipWithValue(asexualCouple, new []{"sexual"}, 500);
         }
 
         [UnityTest]

@@ -1,6 +1,7 @@
 ﻿using System;
 using JoyLib.Code.Entities.Relationships;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities.Sexuality
@@ -38,21 +39,19 @@ namespace JoyLib.Code.Entities.Sexuality
 
         public override bool WillMateWith(IEntity me, IEntity them, IRelationship[] relationships)
         {
-            foreach (IRelationship relationship in relationships)
+            int highestValue = relationships.Max(relationship => relationship.GetRelationshipValue(me.GUID, them.GUID));
+            if(highestValue < MatingThreshold
+               || me.Gender.Name.Equals(them.Gender.Name, StringComparison.OrdinalIgnoreCase) == false)
             {
-                if(relationship.GetRelationshipValue(me.GUID, them.GUID) < MatingThreshold)
-                {
-                    return false;
-                }
-
-                if(me.Gender.Name.Equals(them.Gender.Name, StringComparison.OrdinalIgnoreCase) == false)
-                {
-                    return false;
-                }
-
-                return me.Sentient == them.Sentient;
+                return false;
             }
-            return false;
+            return me.Sentient == them.Sentient;
+        }
+
+        public override bool Compatible(IEntity me, IEntity them)
+        {
+            return me.Sentient == them.Sentient
+                   && me.Gender.Name.Equals(them.Gender.Name);
         }
     }
 }

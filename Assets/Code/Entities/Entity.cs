@@ -579,7 +579,7 @@ namespace JoyLib.Code.Entities
                 {
                     data.Add(new Tuple<string, int>(
                         other.JoyName,
-                        this.Romance.Compatible(this, other, relationships) == true ? 1 : 0));
+                        this.Romance.WillRomance(this, other, relationships) == true ? 1 : 0));
                 }
 
                 //Check relationships

@@ -108,6 +108,9 @@ namespace Tests
 
             target = new ConversationEngine(relationshipHandler);
 
+            TopicData.ConversationEngine = target;
+            TopicData.RelationshipHandler = relationshipHandler;
+
             IGameManager gameManager = Mock.Of<IGameManager>(
                 manager => manager.Player == instigator);
             

@@ -55,7 +55,7 @@ namespace Tests
         public IEnumerator CreateRelationship_ShouldHave_ZeroValue()
         {
             //given
-            IRelationship relationship = target.CreateRelationship(new[] {left, right});
+            IRelationship relationship = target.CreateRelationship(new[] {left, right}, new []{"friendship"});
             
             //when
 
@@ -71,7 +71,7 @@ namespace Tests
             //given
             IRelationship relationship = target.CreateRelationshipWithValue(
                 new[] {left, right},
-                "friendship",
+                new [] {"friendship"},
                 50);
             
             //when

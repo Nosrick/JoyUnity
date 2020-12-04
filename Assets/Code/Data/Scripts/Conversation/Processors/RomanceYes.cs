@@ -6,9 +6,9 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
 {
     public class RomanceYes : TopicData
     {
-        protected string RelationshipName { get; set; }
+        protected IRelationship SelectedRelationship { get; set; }
         
-        public RomanceYes(string relationshipName)
+        public RomanceYes(IRelationship relationship)
         : base(
             new ITopicCondition[0],
             "RomanceYes",
@@ -19,18 +19,13 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
             Speaker.LISTENER,
             new RNG())
         {
-            this.RelationshipName = relationshipName;
+            this.SelectedRelationship = relationship;
         }
 
         public override ITopic[] Interact(IEntity instigator, IEntity listener)
         {
-            RelationshipHandler.CreateRelationship(
-                new IJoyObject[]
-                {
-                    instigator,
-                    listener
-                },
-                RelationshipName);
+            SelectedRelationship.Create(new IJoyObject[] {listener, instigator});
+            RelationshipHandler.AddRelationship(SelectedRelationship);
             
             return base.Interact(instigator, listener);
         }

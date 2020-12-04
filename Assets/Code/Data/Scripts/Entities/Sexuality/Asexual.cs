@@ -32,5 +32,10 @@ namespace JoyLib.Code.Entities.Sexuality
         {
             return false;
         }
+
+        public override bool Compatible(IEntity me, IEntity them)
+        {
+            return false;
+        }
     }
 }

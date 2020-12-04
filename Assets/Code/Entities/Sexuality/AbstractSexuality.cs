@@ -6,7 +6,7 @@ using JoyLib.Code.Entities.Relationships;
 
 namespace JoyLib.Code.Entities.Sexuality
 {
-    public class AbstractSexuality : ISexuality
+    public abstract class AbstractSexuality : ISexuality
     {
         public virtual string Name => throw new NotImplementedException("Someone forgot to override Name in " + this.GetType().Name);
 
@@ -47,9 +47,7 @@ namespace JoyLib.Code.Entities.Sexuality
             return false;
         }
 
-        public virtual bool WillMateWith(IEntity me, IEntity them, IRelationship[] relationships)
-        {
-            throw new NotImplementedException("Someone forgot to override WillMateWith in " + this.GetType().Name);
-        }
+        public abstract bool WillMateWith(IEntity me, IEntity them, IRelationship[] relationships);
+        public abstract bool Compatible(IEntity me, IEntity them);
     }
 }

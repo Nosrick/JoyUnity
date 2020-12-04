@@ -1,13 +1,14 @@
 ﻿using JoyLib.Code.Conversation.Conversations;
+using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Rollers;
 
 namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
 {
     public class RomancePresentation : TopicData
     {
-        protected string RelationshipType { get; set; }
+        protected IRelationship SelectedRelationship { get; set; }
         
-        public RomancePresentation(string relationshipType)
+        public RomancePresentation(IRelationship relationship)
         : base(
             new ITopicCondition[0], 
             "RomancePresentation",
@@ -22,15 +23,15 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
             Speaker.LISTENER,
             new RNG())
         {
-            this.RelationshipType = relationshipType;
-            Words = Words.Replace("<1>", RelationshipType);
+            this.SelectedRelationship = relationship;
+            Words = Words.Replace("<1>", SelectedRelationship.Name);
         }
 
         protected override ITopic[] FetchNextTopics()
         {
             return new ITopic[]
             {
-                new RomanceYes(RelationshipType),
+                new RomanceYes(SelectedRelationship),
                 new RomanceNo()
             };
         }

@@ -133,12 +133,12 @@ namespace Tests
             IEntity[] biCoupleRight = new IEntity[] { bifemaleHuman, biMaleHuman };
             IEntity[] asexualCouple = new IEntity[] {aroMaleHuman, bifemaleHuman};
 
-            RelationshipHandler.CreateRelationshipWithValue(heteroCouple, "monoamorous", 500);
-            RelationshipHandler.CreateRelationshipWithValue(homofemaleCouple, "monoamorous", 500);
-            RelationshipHandler.CreateRelationshipWithValue(homoMaleCouple, "monoamorous", 500);
-            RelationshipHandler.CreateRelationshipWithValue(biCoupleLeft, "monoamorous", 500);
-            RelationshipHandler.CreateRelationshipWithValue(biCoupleRight, "monoamorous", 500);
-            RelationshipHandler.CreateRelationshipWithValue(asexualCouple, "monoamorous", 500);
+            RelationshipHandler.CreateRelationshipWithValue(heteroCouple, new[]{ "monoamorous" }, 500);
+            RelationshipHandler.CreateRelationshipWithValue(homofemaleCouple, new[]{ "monoamorous" }, 500);
+            RelationshipHandler.CreateRelationshipWithValue(homoMaleCouple, new[]{ "monoamorous" }, 500);
+            RelationshipHandler.CreateRelationshipWithValue(biCoupleLeft, new[]{ "monoamorous" }, 500);
+            RelationshipHandler.CreateRelationshipWithValue(biCoupleRight, new[]{ "monoamorous" }, 500);
+            RelationshipHandler.CreateRelationshipWithValue(asexualCouple, new[]{ "monoamorous" }, 500);
         }
 
         [UnityTest]
@@ -146,7 +146,7 @@ namespace Tests
         {
             IJoyObject[] participants = new [] { heterofemaleHuman, heteroMaleHuman };
             IRelationship[] relationships = RelationshipHandler.Get(participants);
-            Assert.IsTrue(heteroromantic.Compatible(heterofemaleHuman, heteroMaleHuman, relationships));
+            Assert.IsTrue(heteroromantic.WillRomance(heterofemaleHuman, heteroMaleHuman, relationships));
 
             return null;
         }
@@ -156,7 +156,7 @@ namespace Tests
         {
             IJoyObject[] participants = new [] { heterofemaleHuman, homofemaleHumanLeft };
             IRelationship[] relationships = RelationshipHandler.Get(participants);
-            Assert.IsFalse(heteroromantic.Compatible(heterofemaleHuman, homofemaleHumanLeft, relationships));
+            Assert.IsFalse(heteroromantic.WillRomance(heterofemaleHuman, homofemaleHumanLeft, relationships));
 
             return null;
         }
@@ -166,7 +166,7 @@ namespace Tests
         {
             IJoyObject[] participants = new [] { homoMaleHumanLeft, homoMaleHumanRight };
             IRelationship[] relationships = RelationshipHandler.Get(participants);
-            Assert.IsTrue(homoromantic.Compatible(homoMaleHumanLeft, homoMaleHumanRight, relationships));
+            Assert.IsTrue(homoromantic.WillRomance(homoMaleHumanLeft, homoMaleHumanRight, relationships));
 
             return null;
         }
@@ -176,7 +176,7 @@ namespace Tests
         {
             IJoyObject[] participants = new[] { homofemaleHumanLeft, homofemaleHumanRight };
             IRelationship[] relationships = RelationshipHandler.Get(participants);
-            Assert.IsFalse(homoromantic.Compatible(homoMaleHumanLeft, homofemaleHumanRight, relationships));
+            Assert.IsFalse(homoromantic.WillRomance(homoMaleHumanLeft, homofemaleHumanRight, relationships));
 
             return null;
         }
@@ -186,7 +186,7 @@ namespace Tests
         {
             IJoyObject[] participants = new[] { bifemaleHuman, homofemaleHumanLeft };
             IRelationship[] relationships = RelationshipHandler.Get(participants);
-            Assert.IsTrue(biromantic.Compatible(bifemaleHuman, homofemaleHumanLeft, relationships));
+            Assert.IsTrue(biromantic.WillRomance(bifemaleHuman, homofemaleHumanLeft, relationships));
 
             return null;
         }
@@ -196,7 +196,7 @@ namespace Tests
         {
             IJoyObject[] participants = new[] { bifemaleHuman, biMaleHuman };
             IRelationship[] relationships = RelationshipHandler.Get(participants);
-            Assert.IsTrue(biromantic.Compatible(bifemaleHuman, biMaleHuman, relationships));
+            Assert.IsTrue(biromantic.WillRomance(bifemaleHuman, biMaleHuman, relationships));
 
             return null;
         }
@@ -206,7 +206,7 @@ namespace Tests
         {
             IJoyObject[] participants = new[] { aroMaleHuman, bifemaleHuman };
             IRelationship[] relationships = RelationshipHandler.Get(participants);
-            Assert.IsFalse(aromantic.Compatible(aroMaleHuman, bifemaleHuman, relationships));
+            Assert.IsFalse(aromantic.WillRomance(aroMaleHuman, bifemaleHuman, relationships));
 
             return null;
         }
