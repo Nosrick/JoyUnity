@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Text;
 using DevionGames.UIWidgets;
 using JoyLib.Code.Conversation;
 using JoyLib.Code.Entities;
@@ -185,7 +187,8 @@ namespace JoyLib.Code.States
             Tooltip tooltip = GUIManager.GetGUI(GlobalConstants.TOOLTIP).GetComponent<Tooltip>();
             if (PrimaryTarget is IEntity entity)
             {
-                string relationshipName = "Acquaintance";
+                string relationshipName = "You";
+                StringBuilder builder = new StringBuilder(entity.Description);
                 try
                 {
                      relationshipName = RelationshipHandler.GetBestRelationship(
@@ -195,13 +198,19 @@ namespace JoyLib.Code.States
                 }
                 catch (Exception e)
                 {
-                    //Ignore this exception
+                    relationshipName = "Stranger";
                 }
-                
+
+                if (PrimaryTarget.GUID != m_ActiveWorld.Player.GUID)
+                {
+                    builder.AppendLine(
+                        CultureInfo.CurrentCulture.TextInfo.ToTitleCase(relationshipName));
+                }
+
                 GUIManager.OpenGUI(GlobalConstants.TOOLTIP);
                 tooltip.Show(
                     entity.JoyName,
-                    relationshipName,
+                    builder.ToString(),
                     entity.Sprite,
                     new List<KeyValuePair<string, string>>());
             }

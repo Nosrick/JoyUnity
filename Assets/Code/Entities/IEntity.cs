@@ -15,7 +15,6 @@ using JoyLib.Code.Entities.Sexes;
 using JoyLib.Code.Entities.Sexuality;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Quests;
-using JoyLib.Code.Scripting;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities
@@ -64,6 +63,8 @@ namespace JoyLib.Code.Entities
         bool HasMoved { get; }
         
         bool Alive { get; }
+        
+        string Description { get; }
 
         void Tick();
         void AddQuest(IQuest quest);

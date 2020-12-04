@@ -1,13 +1,21 @@
-﻿using JoyLib.Code.Collections;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using Castle.Core.Internal;
+using JoyLib.Code.Collections;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.AI;
-using JoyLib.Code.Entities.AI.LOS.Providers;
 using JoyLib.Code.Entities.AI.Drivers;
+using JoyLib.Code.Entities.AI.LOS.Providers;
+using JoyLib.Code.Entities.Gender;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Jobs;
 using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Relationships;
+using JoyLib.Code.Entities.Romance;
 using JoyLib.Code.Entities.Sexes;
 using JoyLib.Code.Entities.Sexuality;
 using JoyLib.Code.Entities.Statistics;
@@ -17,13 +25,6 @@ using JoyLib.Code.Quests;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.World;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using Castle.Core.Internal;
-using JoyLib.Code.Entities.Gender;
-using JoyLib.Code.Entities.Romance;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities
@@ -63,6 +64,8 @@ namespace JoyLib.Code.Entities
         protected IPathfinder m_Pathfinder;
 
         protected Queue<Vector2Int> m_PathfindingData;
+
+        protected string m_Description;
 
         protected const int XP_PER_LEVEL = 100;
         protected const int NEED_FULFILMENT_COUNTER = 5;
@@ -310,6 +313,20 @@ namespace JoyLib.Code.Entities
             this.m_Driver = copy.Driver;
 
             SetCurrentTarget();
+        }
+
+        protected void ConstructDescription()
+        {
+            StringBuilder builder = new StringBuilder();
+
+            TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo; 
+
+            builder.AppendLine(textInfo.ToTitleCase(this.CreatureType));
+            builder.AppendLine(textInfo.ToTitleCase(this.Gender.Name));
+            builder.AppendLine(textInfo.ToTitleCase(this.Job.Name));
+            builder.AppendLine("Level " + this.Level.Value);
+
+            m_Description = builder.ToString();
         }
 
         protected string GetNameFromMultipleCultures()
@@ -1107,6 +1124,21 @@ namespace JoyLib.Code.Entities
         public IPathfinder Pathfinder
         {
             get { return m_Pathfinder; }
+        }
+
+
+
+        public string Description
+        {
+            get
+            {
+                if (m_Description.IsNullOrEmpty())
+                {
+                    ConstructDescription();
+                }
+
+                return m_Description;
+            }
         }
     }
 }
