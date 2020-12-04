@@ -1,6 +1,4 @@
-﻿using System;
-using System.Globalization;
-using JoyLib.Code.Unity.GUI;
+﻿using System.Globalization;
 using TMPro;
 using UnityEngine;
 
@@ -9,28 +7,18 @@ namespace JoyLib.Code.Unity.GUI
     public class StatisticItem : ValueContainer
     {
         protected string m_Name;
-        [SerializeField] protected StatisticWindow Parent;
 
+        [SerializeField] protected StatisticWindow m_Parent;
         [SerializeField] protected TextMeshProUGUI m_ValueText;
         [SerializeField] protected TextMeshProUGUI m_NameText;
 
-        public override int DecreaseValue(int value = 1)
+        public override int IncreaseValue(int delta = 1)
         {
-            if (Value - value >= Minimum)
+            if (m_Parent.PointsRemaining >= delta)
             {
-                Parent.PointsRemaining += value;
-                Value -= value;
+                return base.IncreaseValue(delta);
             }
-            return Value;
-        }
 
-        public override int IncreaseValue(int value = 1)
-        {
-            if(Parent.PointsRemaining >= value && Value + value <= Maximum)
-            {
-                Parent.PointsRemaining -= value;
-                Value += value;
-            }
             return Value;
         }
 

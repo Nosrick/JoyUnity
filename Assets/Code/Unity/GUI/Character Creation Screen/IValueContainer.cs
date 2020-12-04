@@ -1,15 +1,14 @@
-﻿using System;
-using UnityEngine;
+﻿using JoyLib.Code.Events;
 
 namespace JoyLib.Code.Unity.GUI
 {
     public interface IValueContainer
     {
-        int DecreaseValue(int value = 1);
-        int IncreaseValue(int value = 1);
+        int DecreaseValue(int delta = 1);
+        int IncreaseValue(int delta = 1);
         
         int Value { get; set; }
 
-        event EventHandler ValueChanged;
+        event ValueChangedEventHandler ValueChanged;
     }
 }

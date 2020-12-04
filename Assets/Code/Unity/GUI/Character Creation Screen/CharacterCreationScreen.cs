@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security;
 using DevionGames.UIWidgets;
 using JoyLib.Code.Collections;
 using JoyLib.Code.Cultures;
@@ -13,6 +12,7 @@ using JoyLib.Code.Entities.Romance;
 using JoyLib.Code.Entities.Sexes;
 using JoyLib.Code.Entities.Sexuality;
 using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Events;
 using JoyLib.Code.Rollers;
 using TMPro;
 using UnityEngine;
@@ -58,8 +58,9 @@ namespace JoyLib.Code.Unity.GUI
             ChangeTemplate(Templates[result]);
             PlayerType.Container = Templates.Select(t => t.CreatureType).ToList();
             PlayerType.Value = result;
-            PlayerType.ValueChanged += new EventHandler(ChangeTemplateHandler);
-            JobContainer.ValueChanged += new EventHandler(ChangeJobHandler);
+            PlayerType.ValueChanged += ChangeTemplateHandler;
+            CultureContainer.ValueChanged += ChangeCultureHandler;
+            JobContainer.ValueChanged += ChangeJobHandler;
         }
 
         protected void ChangeTemplate(IEntityTemplate template)
@@ -70,7 +71,29 @@ namespace JoyLib.Code.Unity.GUI
                                             .Select(culture => culture.CultureName)
                                             .ToList();
             CurrentCulture = CurrentCultures[CultureContainer.Value];
-            
+            SetCultureSpecificData(CurrentCulture);
+        }
+
+        protected void ChangeTemplateHandler(object sender, ValueChangedEventArgs args)
+        {
+            ChangeTemplate(m_GameManager.EntityTemplateHandler.Get(PlayerType.Selected));
+        }
+
+        protected void ChangeJobHandler(object sender, ValueChangedEventArgs args)
+        {
+            PlayerSprite.sprite =
+                m_GameManager.ObjectIconHandler.GetSprite(CurrentTemplate.CreatureType, JobContainer.Selected);
+        }
+
+        protected void ChangeCultureHandler(object sender, ValueChangedEventArgs args)
+        {
+            SetCultureSpecificData(CurrentCultures.First(
+                culture => culture.CultureName.Equals(CultureContainer.Selected)));
+        }
+
+        protected void SetCultureSpecificData(ICulture culture)
+        {
+            CurrentCulture = culture;
             SexContainer.Container = CurrentCulture.Sexes.ToList();
             IBioSex sex = CurrentCulture.ChooseSex(m_GameManager.BioSexHandler.Sexes);
             Debug.Log("SEX: " + sex.Name);
@@ -113,22 +136,6 @@ namespace JoyLib.Code.Unity.GUI
                 JobContainer.Selected);
             PlayerName.text = CurrentCulture.GetRandomName(GenderContainer.Selected);
             SetStatistics();
-        }
-
-        protected void ChangeTemplateHandler(object sender, EventArgs args)
-        {
-            ChangeTemplate(m_GameManager.EntityTemplateHandler.Get(PlayerType.Selected));
-        }
-
-        protected void ChangeJobHandler(object sender, EventArgs args)
-        {
-            PlayerSprite.sprite =
-                m_GameManager.ObjectIconHandler.GetSprite(CurrentTemplate.CreatureType, JobContainer.Selected);
-        }
-
-        protected void ChangeCultureHandler(object sender, EventArgs args)
-        {
-            ChangeTemplate(m_CurrentTemplate);
         }
 
         protected void SetStatistics()

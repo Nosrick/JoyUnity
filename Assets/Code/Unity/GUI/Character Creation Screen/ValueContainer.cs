@@ -1,5 +1,4 @@
-﻿using System;
-using JoyLib.Code.Unity.GUI;
+﻿using JoyLib.Code.Events;
 using UnityEngine;
 
 namespace JoyLib.Code.Unity.GUI
@@ -8,21 +7,22 @@ namespace JoyLib.Code.Unity.GUI
     {
         [SerializeField] public int Minimum = 1;
         [SerializeField] public int Maximum = 10;
+        [SerializeField] public int Delta = 1;
         
-        public virtual int DecreaseValue(int value = 1)
+        public virtual int DecreaseValue(int delta = 1)
         {
-            if (Value - value >= Minimum)
+            if (Value - delta >= Minimum)
             {
-                Value -= value;
+                Value -= delta;
             }
             return Value;
         }
 
-        public virtual int IncreaseValue(int value = 1)
+        public virtual int IncreaseValue(int delta = 1)
         {
-            if (Value + value <= Maximum)
+            if (Value + delta <= Maximum)
             {
-                Value += value;
+                Value += delta;
             }
             return Value;
         }
@@ -32,13 +32,14 @@ namespace JoyLib.Code.Unity.GUI
             get => m_Value;
             set
             {
+                int previous = m_Value;
                 m_Value = value;
-                ValueChanged?.Invoke(this, EventArgs.Empty);
+                ValueChanged?.Invoke(this, new ValueChangedEventArgs() { Delta = previous - m_Value });
             }
         }
 
         protected int m_Value;
         
-        public event EventHandler ValueChanged;
+        public event ValueChangedEventHandler ValueChanged;
     }
 }

@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using DevionGames;
+﻿using System.Collections.Generic;
 using DevionGames.InventorySystem;
-using DevionGames.InventorySystem.Restrictions;
 using DevionGames.UIWidgets;
 using JoyLib.Code.Entities;
-using Lean.Gui;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
-using EquipmentRegion = DevionGames.InventorySystem.EquipmentRegion;
 
 namespace JoyLib.Code.Unity.GUI
 {
@@ -24,22 +16,10 @@ namespace JoyLib.Code.Unity.GUI
         [SerializeField] protected LayoutGroup m_Container;
         [SerializeField] protected MutableItemContainer m_EquipmentContainer;
 
-        // Start is called before the first frame update
-        void Start()
-        {
-        
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-        
-        }
-
         public void SetPlayer(IEntity player, bool clearSlots = false)
         {
             m_Player = player;
-            CalculateSlots();
+            CalculateSlots(clearSlots);
         }
 
         private void CalculateSlots(bool clearSlots = false)

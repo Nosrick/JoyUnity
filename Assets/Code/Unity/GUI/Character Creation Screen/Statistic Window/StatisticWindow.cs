@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code.Collections;
-using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Events;
 using JoyLib.Code.Rollers;
-using JoyLib.Code.Unity.GUI;
+using TMPro;
 using UnityEngine;
 
 namespace JoyLib.Code.Unity.GUI
@@ -13,8 +13,18 @@ namespace JoyLib.Code.Unity.GUI
     public class StatisticWindow : MonoBehaviour
     {
         [SerializeField] protected StatisticItem StatisticItem;
-        public int PointsRemaining { get; set; }
-        protected List<StatisticItem> Items { get; set; } 
+        [SerializeField] protected TextMeshProUGUI m_PointsRemainingText;
+        public int PointsRemaining
+        {
+            get => m_PointsRemaining;
+            set
+            {
+                m_PointsRemaining = value;
+                m_PointsRemainingText.text = "Points Remaining: " + m_PointsRemaining;
+            }
+        }
+        protected int m_PointsRemaining;
+        protected List<StatisticItem> Items { get; set; }
 
         public void Awake()
         {
@@ -57,6 +67,16 @@ namespace JoyLib.Code.Unity.GUI
                 Items[i].Name = statistics[i].Item1;
                 Items[i].Value = statistics[i].Item2;
             }
+
+            foreach (StatisticItem item in Items)
+            {
+                item.ValueChanged += ChangeStatistic;
+            }
+        }
+
+        protected void ChangeStatistic(object sender, ValueChangedEventArgs args)
+        {
+            PointsRemaining += args.Delta;
         }
     }
 }

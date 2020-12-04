@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
-using Castle.DynamicProxy;
 using DevionGames.InventorySystem;
 using DevionGames.UIWidgets;
 using JoyLib.Code.Entities;
@@ -34,7 +33,7 @@ namespace JoyLib.Code.Unity.GUI
         
         protected RectTransform RectTransform { get; set; }
 
-        public void Awake()
+        public new void Awake()
         {
             base.Awake();
             RectTransform = this.GetComponent<RectTransform>();

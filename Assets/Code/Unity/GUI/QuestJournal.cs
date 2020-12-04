@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using DevionGames;
-using DevionGames.InventorySystem;
 using DevionGames.UIWidgets;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Quests;
-using Lean.Gui;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -28,7 +23,7 @@ namespace JoyLib.Code.Unity.GUI
         
         protected GameObject Container { get; set; }
 
-        public void Awake()
+        public new void Awake()
         {
             base.Awake();
             MenuItemRect = MenuItemPrefab.GetComponent<RectTransform>();
