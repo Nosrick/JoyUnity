@@ -1,4 +1,4 @@
-﻿using System;
+﻿using DevionGames;
 using DevionGames.UIWidgets;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -15,6 +15,8 @@ namespace JoyLib.Code.Unity.GUI
         public void Awake()
         {
             Widget = this.GetComponent<UIWidget>();
+            Widget.RegisterListener("OnClose", RemoveActiveGUI);
+            Widget.RegisterListener("OnOpen", ShowThis);
         }
 
         public void OnPointerDown(PointerEventData eventData)
@@ -24,11 +26,23 @@ namespace JoyLib.Code.Unity.GUI
 
         public void Show()
         {
+            GUIManager.OpenGUI(this.name);
             Widget.Show();
+        }
+
+        public void ShowThis(CallbackEventData data)
+        {
+            GUIManager.OpenGUI(this.name);
+        }
+
+        public void RemoveActiveGUI(CallbackEventData data)
+        {
+            GUIManager.RemoveActiveGUI(this.name);
         }
 
         public void Close()
         {
+            GUIManager.RemoveActiveGUI(this.name);
             Widget.Close();
         }
 

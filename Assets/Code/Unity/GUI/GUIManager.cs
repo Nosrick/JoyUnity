@@ -90,6 +90,17 @@ namespace JoyLib.Code.Unity.GUI
             ActiveGUIs.Remove(toClose);
         }
 
+        public bool RemoveActiveGUI(string name)
+        {
+            if (ActiveGUIs.Any(data => data.name.Equals(name, StringComparison.OrdinalIgnoreCase)) == false)
+            {
+                return false;
+            }
+
+            GUIData toClose = ActiveGUIs.First(data => data.name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            return ActiveGUIs.Remove(toClose);
+            }
+
         public void BringToFront(string name)
         {
             if (!ActiveGUIs.Any(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase)))

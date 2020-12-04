@@ -92,6 +92,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0000b79bc064fddb145affd9940e0c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delegates: []
+  name: 
+  priority: 0
+  m_KeyCode: 0
+  m_EaseType: 28
+  m_Duration: 0.7
+  m_ShowSound: {fileID: 0}
+  m_CloseSound: {fileID: 0}
+  m_Focus: 1
+  m_DeactivateOnClose: 1
   MenuItemPrefab: {fileID: 2363985745292612440}
 --- !u!114 &2474087473471282966
 MonoBehaviour:
@@ -105,16 +115,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79b34202c8a849cb81a9f40db85841f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  delegates: []
-  name: 
-  priority: 0
-  m_KeyCode: 0
-  m_EaseType: 28
-  m_Duration: 0.7
-  m_ShowSound: {fileID: 0}
-  m_CloseSound: {fileID: 0}
-  m_Focus: 1
-  m_DeactivateOnClose: 1
   m_RemovesControl: 1
   m_ClosesOthers: 0
   m_Index: 0
@@ -301,7 +301,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 177.5, y: -210.56567}
-  m_SizeDelta: {x: 355.0114, y: 421.1316}
+  m_SizeDelta: {x: 355.00876, y: 421.1316}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &8862829973209153596
 MonoBehaviour:
@@ -559,7 +559,7 @@ PrefabInstance:
     - target: {fileID: 6499125707579083668, guid: 42c1a7a5174d50a4f95259b8ebc00fa8,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 163.07288
+      value: 181.9
       objectReference: {fileID: 0}
     - target: {fileID: 6499125707579083668, guid: 42c1a7a5174d50a4f95259b8ebc00fa8,
         type: 3}
@@ -569,7 +569,7 @@ PrefabInstance:
     - target: {fileID: 6499125707579083668, guid: 42c1a7a5174d50a4f95259b8ebc00fa8,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 317.3676
+      value: 355.0152
       objectReference: {fileID: 0}
     - target: {fileID: 6499125707579083668, guid: 42c1a7a5174d50a4f95259b8ebc00fa8,
         type: 3}

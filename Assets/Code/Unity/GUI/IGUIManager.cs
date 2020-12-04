@@ -1,7 +1,4 @@
-﻿using DevionGames.UIWidgets;
-using UnityEngine;
-
-namespace JoyLib.Code.Unity.GUI
+﻿namespace JoyLib.Code.Unity.GUI
 {
     public interface IGUIManager
     {
@@ -18,6 +15,8 @@ namespace JoyLib.Code.Unity.GUI
         void CloseAllOtherGUIs(string activeName = "");
 
         bool RemovesControl();
+
+        bool RemoveActiveGUI(string name);
 
         GUIData GetGUI(string name);
 
