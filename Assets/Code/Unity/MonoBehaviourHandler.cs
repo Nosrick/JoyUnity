@@ -1,4 +1,6 @@
-﻿using JoyLib.Code.Entities.Items;
+﻿using System;
+using JoyLib.Code.Entities.Items;
+using JoyLib.Code.Events;
 using UnityEngine;
 
 namespace JoyLib.Code.Unity
@@ -10,6 +12,9 @@ namespace JoyLib.Code.Unity
         protected SpriteRenderer SpeechBubble { get; set; }
 
         public IJoyObject MyJoyObject => m_JoyObject;
+        
+        public event JoyObjectMouseOverHandler OnMouseOverEvent;
+        public event JoyObjectMouseExitHandler OnMouseExitEvent;
 
         public void Update()
         {
@@ -77,6 +82,16 @@ namespace JoyLib.Code.Unity
             {
                 SpeechBubble.sprite = need;
             }
+        }
+
+        public void OnMouseEnter()
+        {
+            OnMouseOverEvent?.Invoke(this, new JoyObjectMouseOverEventArgs() { Actor = MyJoyObject});
+        }
+
+        public void OnMouseExit()
+        {
+            OnMouseExitEvent?.Invoke(this, EventArgs.Empty);
         }
     }
 }

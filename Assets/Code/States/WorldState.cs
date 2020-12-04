@@ -8,6 +8,7 @@ using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Relationships;
+using JoyLib.Code.Events;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.IO;
 using JoyLib.Code.Physics;
@@ -49,12 +50,6 @@ namespace JoyLib.Code.States
         
         protected IJoyObject PrimaryTarget { get; set; }
 
-        protected static bool SetUpGUI
-        {
-            get;
-            set;
-        }
-
         public WorldState(IWorldInstance overworldRef, IWorldInstance activeWorldRef, GameplayFlags flagsRef) : base()
         {
             m_WorldSerialiser = new WorldSerialiser();
@@ -84,6 +79,18 @@ namespace JoyLib.Code.States
 
         public override void SetUpUi()
         {
+            foreach (IJoyObject joyObject in m_ActiveWorld.Objects)
+            {
+                joyObject.MonoBehaviourHandler.OnMouseOverEvent += OnMouseOverJoyObject;
+                joyObject.MonoBehaviourHandler.OnMouseExitEvent += OnMouseExitJoyObject;
+            }
+
+            foreach (IJoyObject joyObject in m_ActiveWorld.Entities)
+            {
+                joyObject.MonoBehaviourHandler.OnMouseOverEvent += OnMouseOverJoyObject;
+                joyObject.MonoBehaviourHandler.OnMouseExitEvent += OnMouseExitJoyObject;
+            }
+            
             GUIManager.CloseAllOtherGUIs();
             GUIManager.OpenGUI(GlobalConstants.NEEDSRECT);
 
@@ -153,6 +160,60 @@ namespace JoyLib.Code.States
                 {
                     Tick();
                 }
+            }
+        }
+
+        protected void OnMouseOverJoyObject(object sender, JoyObjectMouseOverEventArgs args)
+        {
+            PrimaryTarget = args.Actor;
+            SetUpTooltip();
+        }
+
+        protected void OnMouseExitJoyObject(object sender, EventArgs args)
+        {
+            PrimaryTarget = null;
+            GUIManager.CloseGUI(GlobalConstants.TOOLTIP);
+        }
+
+        protected void SetUpTooltip()
+        {
+            if (m_ActiveWorld.Player.VisionProvider.CanSee(m_ActiveWorld.Player, m_ActiveWorld,
+                PrimaryTarget.WorldPosition) == false)
+            {
+                return;
+            }
+            
+            Tooltip tooltip = GUIManager.GetGUI(GlobalConstants.TOOLTIP).GetComponent<Tooltip>();
+            if (PrimaryTarget is IEntity entity)
+            {
+                string relationshipName = "Acquaintance";
+                try
+                {
+                     relationshipName = RelationshipHandler.GetBestRelationship(
+                        GlobalConstants.GameManager.Player,
+                        PrimaryTarget).DisplayName;
+                    
+                }
+                catch (Exception e)
+                {
+                    //Ignore this exception
+                }
+                
+                GUIManager.OpenGUI(GlobalConstants.TOOLTIP);
+                tooltip.Show(
+                    entity.JoyName,
+                    relationshipName,
+                    entity.Sprite,
+                    new List<KeyValuePair<string, string>>());
+            }
+            else if (PrimaryTarget is ItemInstance item)
+            {
+                GUIManager.OpenGUI(GlobalConstants.TOOLTIP);
+                tooltip.Show(
+                    item.DisplayName,
+                    item.Description,
+                    item.Sprite,
+                    new List<KeyValuePair<string, string>>());
             }
         }
 
