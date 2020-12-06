@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Castle.Core.Internal;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Scripting;
@@ -219,7 +220,8 @@ namespace JoyLib.Code.Entities.Abilities
         public bool MeetsPrerequisites(IEnumerable<Tuple<string, int>> data)
         {
             return data.All(x => Prerequisites.Any(prereq =>
-                prereq.Key.Equals(x.Item1, StringComparison.OrdinalIgnoreCase) && x.Item2 >= prereq.Value));
+                prereq.Key.Equals(x.Item1, StringComparison.OrdinalIgnoreCase) && x.Item2 >= prereq.Value)
+                || Prerequisites.IsNullOrEmpty());
         }
 
         public string Name

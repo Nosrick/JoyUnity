@@ -177,7 +177,7 @@ namespace JoyLib.Code.Entities
                 template, 
                 needs, 
                 selectedStatistics, 
-                skills, 
+                selectedSkills, 
                 selectedAbilities,
                 creatureCultures, 
                 level, 

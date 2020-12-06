@@ -13,7 +13,7 @@ namespace JoyLib.Code.Unity.GUI
         [SerializeField] protected GameManager GameManager;
         [SerializeField] protected StatisticItem ValueContainerPrefab;
         [SerializeField] protected TextMeshProUGUI PointsRemainingText;
-        [SerializeField] protected BasicPlayerInfo Parent;
+        [SerializeField] protected BasicPlayerInfo PlayerInfo;
         protected List<StatisticItem> Items { get; set; }
         
         protected BasicValueContainer<IGrowingValue> Skills { get; set; }
@@ -32,7 +32,7 @@ namespace JoyLib.Code.Unity.GUI
         {
             Skills = GameManager.SkillHandler.GetDefaultSkillBlock(GameManager.NeedHandler.Needs);
 
-            Skills.AddRange(Parent.CurrentTemplate.Skills);
+            Skills.AddRange(PlayerInfo.CurrentTemplate.Skills);
             
             return Skills.Select(skill => new KeyValuePair<string, int>(skill.Key, skill.Value.Value)).ToList();
         }
