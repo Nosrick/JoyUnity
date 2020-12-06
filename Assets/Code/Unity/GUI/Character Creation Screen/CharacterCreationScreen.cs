@@ -28,9 +28,9 @@ namespace JoyLib.Code.Unity.GUI
         public void Initialise()
         {
             this.Awake();
-            PlayerInfo.Initialise();
             PlayerInfo.JobChanged += SetSprites;
             PlayerInfo.CultureChanged += SetRandomName;
+            PlayerInfo.Initialise();
         }
 
         public IEntity CreatePlayer()
