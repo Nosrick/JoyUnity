@@ -1,14 +1,13 @@
-﻿using JoyLib.Code.Rollers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
-using UnityEngine;
 using JoyLib.Code.Collections;
 using JoyLib.Code.Helpers;
-using UnityEngine.PlayerLoop;
+using JoyLib.Code.Rollers;
+using UnityEngine;
 
 namespace JoyLib.Code.Graphics
 {
@@ -56,24 +55,6 @@ namespace JoyLib.Code.Graphics
             };
 
             Icons.Add(iconData, "DEFAULT");
-
-            loadedSprite = Resources.Load<Texture2D>("Sprites/obscure");
-
-            iconData = new IconData()
-            {
-                data = "obscure",
-                name = "obscure",
-                texture = loadedSprite,
-                sprite = Sprite.Create(loadedSprite, new Rect(0,
-                                                                0,
-                                                                this.SpriteSize,
-                                                                this.SpriteSize),
-                                                                Vector2.zero,
-                                                                this.SpriteSize),
-                filename = "Sprites/obscure"
-            };
-
-            Icons.Add(iconData, "obscure");
 
             string[] files =
                 Directory.GetFiles(

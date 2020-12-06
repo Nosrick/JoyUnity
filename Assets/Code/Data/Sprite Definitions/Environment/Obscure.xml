@@ -5,8 +5,7 @@
 
 	<Icon>
 		<Name>Obscure</Name>
-		<X>0</X>
-		<Y>0</Y>
+		<Position>0</Position>
 		<Data>Default</Data>
 	</Icon>
 </Objects>
