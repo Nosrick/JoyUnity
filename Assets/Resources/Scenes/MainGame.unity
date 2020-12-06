@@ -1162,10 +1162,10 @@ RectTransform:
   m_Father: {fileID: 172406127}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: -0.000061035156, y: -0.0002746582}
-  m_SizeDelta: {x: -0.00012207031, y: 0.09991455}
+  m_SizeDelta: {x: 439.99988, y: 358.0999}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &572151441
 MonoBehaviour:
@@ -1185,7 +1185,7 @@ MonoBehaviour:
   GameManager: {fileID: 1629111815}
   ValueContainerPrefab: {fileID: 427711520}
   PointsRemainingText: {fileID: 2065530068}
-  Parent: {fileID: 5573507356910968769}
+  Parent: {fileID: 1978953643}
 --- !u!225 &572151442
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -1973,8 +1973,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -2743,7 +2743,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.20784314, g: 0.14901961, b: 0.14901961, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -3677,6 +3677,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 5573507356910968768}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1978953643 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3417643873459491674, guid: 7bd804c0116f9ee458ad95e65b8c1ab3,
+    type: 3}
+  m_PrefabInstance: {fileID: 5573507356910968768}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2739ca3bc0a464ea48044f93240d963, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &2036211358 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4484802662267518619, guid: 3e23de846bff60441822ee1d05e4ba68,
@@ -3695,7 +3707,7 @@ GameObject:
   - component: {fileID: 2065530069}
   - component: {fileID: 2065530068}
   m_Layer: 0
-  m_Name: Points Remaining Text
+  m_Name: Skill Points Remaining Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7381,6 +7393,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3417643873459491674, guid: 7bd804c0116f9ee458ad95e65b8c1ab3,
+        type: 3}
+      propertyPath: GameManager
+      value: 
+      objectReference: {fileID: 1629111815}
     - target: {fileID: 4473807028265453249, guid: 7bd804c0116f9ee458ad95e65b8c1ab3,
         type: 3}
       propertyPath: m_AnchorMin.y
@@ -7953,18 +7970,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7bd804c0116f9ee458ad95e65b8c1ab3, type: 3}
---- !u!114 &5573507356910968769 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5573507356558727695, guid: 7bd804c0116f9ee458ad95e65b8c1ab3,
-    type: 3}
-  m_PrefabInstance: {fileID: 5573507356910968768}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c976475fb4bf4ea9b061cd78dcc79483, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &7087841499049568107
 PrefabInstance:
   m_ObjectHideFlags: 0
