@@ -1,7 +1,7 @@
-﻿using JoyLib.Code.Conversation.Conversations;
-using JoyLib.Code.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using JoyLib.Code.Conversation.Conversations;
+using JoyLib.Code.Entities;
 
 namespace JoyLib.Code.Conversation.Subengines
 {
@@ -73,7 +73,7 @@ namespace JoyLib.Code.Conversation.Subengines
             foreach (ITopic topic in s_Greetings)
             {
                 string[] conditions = topic.GetConditionTags();
-                Tuple<string, int>[] data = instigator.GetData(conditions);
+                IEnumerable<Tuple<string, int>> data = instigator.GetData(conditions);
 
                 if (topic.FulfilsConditions(data))
                 {
