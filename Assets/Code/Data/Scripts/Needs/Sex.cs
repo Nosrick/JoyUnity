@@ -1,11 +1,8 @@
-﻿using System.Linq;
+﻿using System;
 using System.Collections.Generic;
-using JoyLib.Code.Rollers;
-using JoyLib.Code.Entities.Statistics;
+using System.Linq;
 using JoyLib.Code.Entities.Relationships;
-using System;
-using JoyLib.Code.Entities.AI;
-using JoyLib.Code.Graphics;
+using JoyLib.Code.Entities.Statistics;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities.Needs
@@ -189,13 +186,13 @@ namespace JoyLib.Code.Entities.Needs
             int total = 0;
             foreach (IEntity participant in participants)
             {
-                Tuple<string, int>[] data = participant.GetData(tags.ToArray());
+                IEnumerable<Tuple<string, int>> data = participant.GetData(tags.ToArray());
                 int subTotal = 0;
                 foreach (Tuple<string, int> tuple in data)
                 {
                     subTotal += tuple.Item2;
                 }
-                subTotal /= data.Length;
+                subTotal /= data.Count();
                 total += subTotal;
             }
 

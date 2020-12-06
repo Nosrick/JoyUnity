@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code.Collections;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Statistics;
-using UnityEngine;
 
 namespace JoyLib.Code.Conversation.Subengines.Rumours
 {
@@ -54,7 +54,7 @@ namespace JoyLib.Code.Conversation.Subengines.Rumours
             if (parameter.Equals("skills", StringComparison.OrdinalIgnoreCase)
                 || entity.Skills.Has(parameter))
             {
-                Tuple<string, int>[] values = entity.GetData(new string[] {parameter});
+                IEnumerable<Tuple<string, int>> values = entity.GetData(new string[] {parameter});
 
                 return values.OrderByDescending(tuple => tuple.Item2)
                     .First()

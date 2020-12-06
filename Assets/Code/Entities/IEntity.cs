@@ -68,11 +68,11 @@ namespace JoyLib.Code.Entities
 
         void Tick();
         void AddQuest(IQuest quest);
-        Tuple<string, int>[] GetData(string[] tags, params object[] args);
+        IEnumerable<Tuple<string, int>> GetData(IEnumerable<string> tags, params object[] args);
         void AddIdentifiedItem(string nameRef);
         bool RemoveItemFromPerson(IItemInstance item);
         bool RemoveEquipment(string slot, IItemInstance item = null);
-        IItemInstance[] SearchBackpackForItemType(string[] tags);
+        IItemInstance[] SearchBackpackForItemType(IEnumerable<string> tags);
         bool EquipItem(string slotRef, IItemInstance itemRef);
         IItemInstance GetEquipment(string slotRef);
         bool UnequipItem(string slot);

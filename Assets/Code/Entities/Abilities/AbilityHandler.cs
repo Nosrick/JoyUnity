@@ -1,7 +1,7 @@
-﻿using JoyLib.Code.Scripting;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using JoyLib.Code.Scripting;
 
 namespace JoyLib.Code.Entities.Abilities
 {
@@ -39,6 +39,18 @@ namespace JoyLib.Code.Entities.Abilities
                 return Abilities.First(x => x.InternalName.Equals(nameRef, StringComparison.OrdinalIgnoreCase));
             }
             throw new InvalidOperationException("Could not find IAbility with name " + nameRef);
+        }
+
+        public IEnumerable<IAbility> GetAvailableAbilities(IEntity actor)
+        {
+            Initialise();
+
+            IEnumerable<string> prereqs =
+                Abilities.SelectMany(ability => ability.Prerequisites.Select(pair => pair.Key)).Distinct();
+
+            IEnumerable<Tuple<string, int>> data = actor.GetData(prereqs);
+
+            return Abilities.Where(ability => ability.MeetsPrerequisites(data));
         }
     }
 }

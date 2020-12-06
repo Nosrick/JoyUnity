@@ -428,7 +428,7 @@ namespace JoyLib.Code.Entities
             QuestTracker?.AddQuest(GUID, quest);
         }
 
-        public Tuple<string, int>[] GetData(string[] tags, params object[] args)
+        public IEnumerable<Tuple<string, int>> GetData(IEnumerable<string> tags, params object[] args)
         {
             List<Tuple<string, int>> data = new List<Tuple<string, int>>();
 
@@ -696,7 +696,7 @@ namespace JoyLib.Code.Entities
             return false;
         }
 
-        public IItemInstance[] SearchBackpackForItemType(string[] tags)
+        public IItemInstance[] SearchBackpackForItemType(IEnumerable<string> tags)
         {
             try
             {
@@ -712,7 +712,7 @@ namespace JoyLib.Code.Entities
                         }
                     }
 
-                    if (matches == tags.Length || (tags.Length < item.Tags.Count && matches > 0))
+                    if (matches > 0)
                     {
                         matchingItems.Add(item);
                     }

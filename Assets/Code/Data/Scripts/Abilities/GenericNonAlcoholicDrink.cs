@@ -12,42 +12,21 @@ namespace JoyLib.Code.Entities.Abilities
             "genericnonalcoholicdrink",
             "Quench your thirst with a cool refreshment.",
             false,
-            1,
-            1,
-            1,
+            0,
+            0,
+            0,
             false,
             new string[] { "fulfillneedaction" },
-            new Tuple<IBasicValue, int>[0], 
-            new Dictionary<IBasicValue, int>(), 
+            new Tuple<string, int>[0], 
+            GetPrerequisites(), 
             AbilityTarget.Self)
         { }
 
-        public GenericNonAlcoholicDrink(
-            string name, 
-            string internalName, 
-            string description, 
-            bool stacking, 
-            int counter, 
-            int magnitude,
-            int priority, 
-            bool permanent, 
-            Tuple<IBasicValue, int>[] costs, 
-            Dictionary<IBasicValue, int> prerequisites,
-            AbilityTarget target) : 
-            base(
-                name, 
-                internalName, 
-                description, 
-                stacking, 
-                counter, 
-                magnitude, 
-                priority, 
-                permanent, 
-                new string[] { "fulfillneedaction" },
-                costs,
-                prerequisites, 
-                target)
+        protected static Dictionary<string, int> GetPrerequisites()
         {
+            Dictionary<string, int> prereqs = new Dictionary<string, int>();
+            prereqs.Add("drink", 1);
+            return prereqs;
         }
 
         public override bool OnAdd(IEntity entity)

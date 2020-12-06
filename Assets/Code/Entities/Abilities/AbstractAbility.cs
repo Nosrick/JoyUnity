@@ -25,8 +25,8 @@ namespace JoyLib.Code.Entities.Abilities
             int priority, 
             bool permanent, 
             string[] actions,
-            Tuple<IBasicValue, int>[] costs, 
-            Dictionary<IBasicValue, int> prerequisites,
+            Tuple<string, int>[] costs, 
+            Dictionary<string, int> prerequisites,
             AbilityTarget target, 
             params string[] tags)
         {
@@ -190,20 +190,36 @@ namespace JoyLib.Code.Entities.Abilities
 
         public bool EnactToll(IEntity caster)
         {
-            bool[] canCast = new bool[Costs.Length];
-            for(int i = 0; i < Costs.Length; i++)
-            {
-                Tuple<string, int>[] returnData = caster.GetData(new string[] { Costs[i].Item1.Name });
-                canCast[i] = returnData.All(x => x.Item2 >= Costs[i].Item2);
-            }
-            bool takeToll = canCast.All(x => x == true);
+            bool canCast = false;
+            IEnumerable<string> costs = Costs.Select(cost => cost.Item1);
+            IEnumerable<Tuple<string, int>> returnData = caster.GetData(costs);
+            canCast = returnData.All(x => Costs.Any(cost =>
+                cost.Item1.Equals(x.Item1, StringComparison.OrdinalIgnoreCase) && x.Item2 >= cost.Item2));
 
-            if(takeToll)
+            if(canCast)
             {
 
             }
 
-            return takeToll;
+            return canCast;
+        }
+
+        public bool MeetsPrerequisites(IEntity actor)
+        {
+            bool meetsPrereqs = false;
+
+            IEnumerable<string> prereqs = Prerequisites.Select(pair => pair.Key);
+            IEnumerable<Tuple<string, int>> returnData = actor.GetData(prereqs);
+            meetsPrereqs = returnData.All(x => Prerequisites.Any(prereq =>
+                prereq.Key.Equals(x.Item1, StringComparison.OrdinalIgnoreCase) && x.Item2 >= prereq.Value));
+
+            return meetsPrereqs;
+        }
+
+        public bool MeetsPrerequisites(IEnumerable<Tuple<string, int>> data)
+        {
+            return data.All(x => Prerequisites.Any(prereq =>
+                prereq.Key.Equals(x.Item1, StringComparison.OrdinalIgnoreCase) && x.Item2 >= prereq.Value));
         }
 
         public string Name
@@ -270,13 +286,13 @@ namespace JoyLib.Code.Entities.Abilities
             protected set;
         }
 
-        public Tuple<IBasicValue, int>[] Costs
+        public Tuple<string, int>[] Costs
         {
             get;
             protected set;
         }
 
-        public Dictionary<IBasicValue, int> Prerequisites { get; protected set; }
+        public Dictionary<string, int> Prerequisites { get; protected set; }
 
         public AbilityTarget TargetType
         {

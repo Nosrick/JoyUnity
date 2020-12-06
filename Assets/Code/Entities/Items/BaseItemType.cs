@@ -44,7 +44,7 @@ namespace JoyLib.Code.Entities.Items
             this.ActionString = actionStringRef;
             this.LightLevel = lightLevel;
             this.SpriteSheet = spriteSheet;
-            this.Effects = abilities;
+            this.Abilities = abilities;
         }
 
         public bool AddTag(string tag)
@@ -106,7 +106,7 @@ namespace JoyLib.Code.Entities.Items
             protected set;
         }
 
-        public IAbility[] Effects
+        public IAbility[] Abilities
         {
             get;
             protected set;

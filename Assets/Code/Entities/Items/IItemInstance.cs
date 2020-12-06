@@ -5,7 +5,9 @@ namespace JoyLib.Code.Entities.Items
 {
     public interface IItemInstance : IJoyObject, IItemContainer, IOwnable
     {
-        List<IAbility> UniqueAbilities { get; }
+        IEnumerable<IAbility> UniqueAbilities { get; }
+        
+        IEnumerable<IAbility> AllAbilities { get; }
 
         IItemInstance Copy(IItemInstance copy);
 

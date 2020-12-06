@@ -94,7 +94,7 @@ namespace JoyLib.Code.Entities.Items
             get => m_OwnerString;
         }
 
-        public List<IAbility> UniqueAbilities { get; protected set; }
+        public IEnumerable<IAbility> UniqueAbilities { get; protected set; }
 
         public static ILiveItemHandler ItemHandler { get; set; }
         public static ILiveEntityHandler EntityHandler { get; set; }
@@ -235,17 +235,12 @@ namespace JoyLib.Code.Entities.Items
 
         public override void Use()
         {
-            if ((this.UniqueAbilities.Count == 0 && this.ItemType.Effects.Length == 0) || User is null)
+            if ((this.AllAbilities.Count() == 0) || User is null)
             {
                 return;
             }
 
-            foreach (IAbility ability in this.UniqueAbilities)
-            {
-                ability.OnUse(User, this);
-            }
-
-            foreach (IAbility ability in this.ItemType.Effects)
+            foreach (IAbility ability in this.AllAbilities)
             {
                 ability.OnUse(User, this);
             }
@@ -714,6 +709,17 @@ namespace JoyLib.Code.Entities.Items
                 }
                 contentString = contentString.Substring(0, contentString.Length - 2) + ".";
                 return contentString;
+            }
+        }
+
+        public IEnumerable<IAbility> AllAbilities
+        {
+            get
+            {
+                List<IAbility> abilities = new List<IAbility>();
+                abilities.AddRange(UniqueAbilities);
+                abilities.AddRange(ItemType.Abilities);
+                return abilities;
             }
         }
 

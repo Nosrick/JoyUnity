@@ -66,6 +66,10 @@ namespace JoyLib.Code.Entities.Abilities
 
         bool EnactToll(IEntity caster);
 
+        bool MeetsPrerequisites(IEntity actor);
+
+        bool MeetsPrerequisites(IEnumerable<Tuple<string, int>> data);
+
         string Name
         {
             get;
@@ -111,12 +115,12 @@ namespace JoyLib.Code.Entities.Abilities
             get;
         }
 
-        Tuple<IBasicValue, int>[] Costs
+        Tuple<string, int>[] Costs
         {
             get;
         }
 
-        Dictionary<IBasicValue, int> Prerequisites
+        Dictionary<string, int> Prerequisites
         {
             get;
         }

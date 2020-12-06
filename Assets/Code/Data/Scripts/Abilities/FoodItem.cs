@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Entities.Statistics;
 
 namespace JoyLib.Code.Entities.Abilities
 {
@@ -17,37 +16,17 @@ namespace JoyLib.Code.Entities.Abilities
             1,
             false,
             new string[] { "fulfillneedaction" },
-            new Tuple<IBasicValue, int>[0],
-            new Dictionary<IBasicValue, int>(),
+            new Tuple<string, int>[0],
+            GetPrerequisites(),
             AbilityTarget.Self)
         { }
-        
-        public FoodItem(
-            string name, 
-            string internalName, 
-            string description, 
-            bool stacking, 
-            int counter, 
-            int magnitude,
-            int priority, 
-            bool permanent, 
-            Tuple<IBasicValue, int>[] costs, 
-            Dictionary<IBasicValue, int> prerequisites,
-            AbilityTarget target) : 
-            base(
-                name, 
-                internalName, 
-                description, 
-                stacking, 
-                counter, 
-                magnitude, 
-                priority, 
-                permanent, 
-                new string[] { "fulfillneedaction" },
-                costs, 
-                prerequisites,
-                target)
-        {}
+
+        protected static Dictionary<string, int> GetPrerequisites()
+        {
+            Dictionary<string, int> prereqs = new Dictionary<string, int>();
+            prereqs.Add("food", 1);
+            return prereqs;
+        }
         
         public override bool OnUse(IEntity user, IJoyObject target)
         {
