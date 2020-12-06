@@ -4722,6 +4722,7 @@ MonoBehaviour:
   StatisticWindow: {fileID: 5573507356136866956}
   SkillWindow: {fileID: 0}
   PlayerInfo: {fileID: 3417643873459491674}
+  AbilityWindow: {fileID: 0}
   PlayerSprite_Part1: {fileID: 5573507357351986283}
   PlayerSprite_Part2: {fileID: 0}
   PlayerName_Part1: {fileID: 5573507356913892059}

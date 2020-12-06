@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using DevionGames.UIWidgets;
 using JoyLib.Code.Collections;
 using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Rollers;
@@ -19,6 +17,7 @@ namespace JoyLib.Code.Unity.GUI
         [SerializeField] protected StatisticWindow StatisticWindow;
         [SerializeField] protected SkillWindow SkillWindow;
         [SerializeField] protected BasicPlayerInfo PlayerInfo;
+        [SerializeField] protected AbilityWindow AbilityWindow;
 
         [SerializeField] protected Image PlayerSprite_Part1;
         [SerializeField] protected Image PlayerSprite_Part2;
@@ -28,6 +27,7 @@ namespace JoyLib.Code.Unity.GUI
         public void Initialise()
         {
             this.Awake();
+            this.Close();
             PlayerInfo.JobChanged += SetSprites;
             PlayerInfo.CultureChanged += SetRandomName;
             PlayerInfo.Initialise();
@@ -48,7 +48,7 @@ namespace JoyLib.Code.Unity.GUI
                     new NonUniqueDictionary<INeed, float>()),
                 StatisticWindow.GetStatistics(),
                 SkillWindow.GetSkillsBlock(), 
-                new List<IAbility>(),
+                AbilityWindow.GetPickedAbilities(),
                 PlayerInfo.CurrentCultures,
                 GameManager.GenderHandler.Get(PlayerInfo.Gender),
                 GameManager.BioSexHandler.Get(PlayerInfo.Sex),
@@ -75,6 +75,7 @@ namespace JoyLib.Code.Unity.GUI
             GameManager.GUIManager.CloseGUI(this.name);
             GameManager.GUIManager.OpenGUI(GlobalConstants.CHARACTER_CREATION_PART_2);
             SkillWindow.SetSkills(SkillWindow.GetSkillNames());
+            AbilityWindow.GetAvailableAbilities(PlayerInfo.CurrentTemplate, StatisticWindow.GetStatistics(), SkillWindow.GetSkillsBlock());
         }
     }
 }
