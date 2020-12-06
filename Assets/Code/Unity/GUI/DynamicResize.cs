@@ -1,6 +1,4 @@
-﻿using System;
-using UnityEngine;
-using UnityEngine.EventSystems;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity.GUI
@@ -77,7 +75,9 @@ namespace JoyLib.Code.Unity.GUI
                 height = ChildRectTransform.rect.height;
             }
             
-            ChildRectTransform.sizeDelta = new Vector2(width, height);
+            
+            ChildRectTransform.SetSizeWithCurrentAnchors(UnityEngine.RectTransform.Axis.Horizontal, width);
+            ChildRectTransform.SetSizeWithCurrentAnchors(UnityEngine.RectTransform.Axis.Vertical, height);
 
             ChildLastSizes = ChildRectTransform.rect.size;
             if (ScrollRect.horizontalScrollbar is null == false)
