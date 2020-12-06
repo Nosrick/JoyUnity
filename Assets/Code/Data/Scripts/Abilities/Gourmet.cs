@@ -29,9 +29,10 @@ namespace JoyLib.Code.Entities.Abilities
                 && item.HasTag("food"))
             {
                 user.Needs["hunger"].ModifyValue(item.Value);
+                return true;
             }
 
-            return true;
+            return false;
         }
     }
 }

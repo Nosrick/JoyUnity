@@ -1,11 +1,10 @@
-﻿using System;
-using DevionGames;
+﻿using DevionGames;
 using DevionGames.InventorySystem;
-using UnityEngine.EventSystems;
 using JoyLib.Code.Conversation;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using ContextMenu = DevionGames.UIWidgets.ContextMenu;
 
 namespace JoyLib.Code.Unity.GUI
@@ -22,6 +21,23 @@ namespace JoyLib.Code.Unity.GUI
         
         protected static IEntity Player { get; set; }
 
+        public void Awake()
+        {
+            GetBits();
+        }
+
+        protected void GetBits()
+        {
+            if (GlobalConstants.GameManager is null)
+            {
+                return;
+            }
+            
+            ConversationEngine = GlobalConstants.GameManager.ConversationEngine;
+            GUIManager = GlobalConstants.GameManager.GUIManager;
+            EntityHandler = GlobalConstants.GameManager.EntityHandler;
+        }
+        
         public override void OnPointerUp(PointerEventData eventData)
         {
             if (eventData.dragging)
@@ -36,6 +52,8 @@ namespace JoyLib.Code.Unity.GUI
             }
             
             base.OnPointerUp(eventData);
+            
+            GetBits();
             
             if (Container.useButton.HasFlag((InputButton)Mathf.Clamp(((int)eventData.button * 2), 1, int.MaxValue)))
             {
@@ -76,6 +94,8 @@ namespace JoyLib.Code.Unity.GUI
 
         protected override void DropItem()
         {
+            GetBits();
+            
             //Get the item to drop
             ItemInstance item = dragObject != null ? (ItemInstance)dragObject.item : (ItemInstance)ObservedItem;
 

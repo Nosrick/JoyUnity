@@ -244,6 +244,11 @@ namespace JoyLib.Code.Entities.Items
             {
                 ability.OnUse(User, this);
             }
+
+            foreach (IAbility ability in User.Abilities)
+            {
+                ability.OnUse(User, this);
+            }
             
             CalculateValue();
             ConstructDescription();

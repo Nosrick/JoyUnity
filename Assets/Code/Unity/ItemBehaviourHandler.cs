@@ -1,5 +1,4 @@
-﻿using System;
-using DevionGames.InventorySystem;
+﻿using DevionGames.InventorySystem;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
 using UnityEngine;
@@ -33,6 +32,11 @@ namespace JoyLib.Code.Unity
 
         public void OnTriggerExit2D(Collider2D other)
         {
+            if (EntityInRange is null)
+            {
+                return;
+            }
+            
             IJoyObject otherObj = other.gameObject.GetComponent<MonoBehaviourHandler>().MyJoyObject;
 
             if (otherObj is Entity entity && entity.GUID.Equals(EntityInRange.GUID))
