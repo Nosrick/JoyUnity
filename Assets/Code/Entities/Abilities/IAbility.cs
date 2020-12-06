@@ -1,6 +1,7 @@
-﻿using JoyLib.Code.Entities.Items;
+﻿using System;
+using System.Collections.Generic;
+using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Statistics;
-using System;
 
 namespace JoyLib.Code.Entities.Abilities
 {
@@ -115,17 +116,17 @@ namespace JoyLib.Code.Entities.Abilities
             get;
         }
 
+        Dictionary<IBasicValue, int> Prerequisites
+        {
+            get;
+        }
+
         string[] Tags
         {
             get;
         }
 
         AbilityTarget TargetType
-        {
-            get;
-        }
-
-        AbilityTrigger AbilityTrigger
         {
             get;
         }

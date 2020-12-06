@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Statistics;
 
@@ -17,7 +18,7 @@ namespace JoyLib.Code.Entities.Abilities
             false,
             new string[] { "fulfillneedaction" },
             new Tuple<IBasicValue, int>[0],
-            AbilityTrigger.OnUse,
+            new Dictionary<IBasicValue, int>(),
             AbilityTarget.Self)
         { }
         
@@ -31,7 +32,7 @@ namespace JoyLib.Code.Entities.Abilities
             int priority, 
             bool permanent, 
             Tuple<IBasicValue, int>[] costs, 
-            AbilityTrigger trigger, 
+            Dictionary<IBasicValue, int> prerequisites,
             AbilityTarget target) : 
             base(
                 name, 
@@ -44,7 +45,7 @@ namespace JoyLib.Code.Entities.Abilities
                 permanent, 
                 new string[] { "fulfillneedaction" },
                 costs, 
-                trigger, 
+                prerequisites,
                 target)
         {}
         

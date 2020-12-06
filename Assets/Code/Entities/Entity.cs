@@ -853,10 +853,7 @@ namespace JoyLib.Code.Entities
                 if (damage == 0)
                     return;
 
-                if (ability.AbilityTrigger == AbilityTrigger.OnTakeHit)
-                {
-                    damage = ability.OnTakeHit(source, this, damage);
-                }
+                damage = ability.OnTakeHit(source, this, damage);
             }
 
             base.DamageValue(EntityDerivedValue.HITPOINTS, damage);

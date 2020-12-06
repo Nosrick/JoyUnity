@@ -1,8 +1,8 @@
-﻿using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Entities.Statistics;
-using System;
-using System.Linq;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using JoyLib.Code.Entities.Items;
+using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Scripting;
 
 namespace JoyLib.Code.Entities.Abilities
@@ -26,7 +26,7 @@ namespace JoyLib.Code.Entities.Abilities
             bool permanent, 
             string[] actions,
             Tuple<IBasicValue, int>[] costs, 
-            AbilityTrigger trigger, 
+            Dictionary<IBasicValue, int> prerequisites,
             AbilityTarget target, 
             params string[] tags)
         {
@@ -39,8 +39,8 @@ namespace JoyLib.Code.Entities.Abilities
             this.Priority = priority;
             this.Permanent = permanent;
             this.Costs = costs;
-            this.AbilityTrigger = trigger;
             this.TargetType = target;
+            this.Prerequisites = prerequisites;
             this.Tags = tags;
 
             this.m_CachedActions = new Dictionary<string, IJoyAction>(actions.Length);
@@ -276,13 +276,9 @@ namespace JoyLib.Code.Entities.Abilities
             protected set;
         }
 
-        public AbilityTarget TargetType
-        {
-            get;
-            protected set;
-        }
+        public Dictionary<IBasicValue, int> Prerequisites { get; protected set; }
 
-        public AbilityTrigger AbilityTrigger
+        public AbilityTarget TargetType
         {
             get;
             protected set;
