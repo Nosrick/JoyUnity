@@ -10,20 +10,10 @@ using UnityEngine;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public class StatisticWindow : MonoBehaviour
+    public class StatisticWindow : ValueContainer
     {
         [SerializeField] protected StatisticItem StatisticItem;
         [SerializeField] protected TextMeshProUGUI m_PointsRemainingText;
-        public int PointsRemaining
-        {
-            get => m_PointsRemaining;
-            set
-            {
-                m_PointsRemaining = value;
-                m_PointsRemainingText.text = "Points Remaining: " + m_PointsRemaining;
-            }
-        }
-        protected int m_PointsRemaining;
         protected List<StatisticItem> Items { get; set; }
 
         public void Awake()
@@ -31,7 +21,7 @@ namespace JoyLib.Code.Unity.GUI
             StatisticItem.gameObject.SetActive(false);
             Items = new List<StatisticItem>();
             
-            PointsRemaining = 12;
+            Value = Maximum;
         }
 
         public BasicValueContainer<IRollableValue> GetStatistics()
@@ -51,6 +41,8 @@ namespace JoyLib.Code.Unity.GUI
 
         public void SetStatistics(List<Tuple<string, int>> statistics)
         {
+            Value = Maximum;
+            
             if (Items.Count < statistics.Count())
             {
                 for (int i = Items.Count; i < statistics.Count(); i++)
@@ -77,7 +69,8 @@ namespace JoyLib.Code.Unity.GUI
 
         protected void ChangeStatistic(object sender, ValueChangedEventArgs args)
         {
-            PointsRemaining -= args.Delta;
+            Value -= args.Delta;
+            m_PointsRemainingText.text = "Points Remaining: " + Value;
         }
     }
 }

@@ -1,11 +1,11 @@
-﻿using JoyLib.Code.Collections;
+﻿using System.Collections.Generic;
+using System.Linq;
+using JoyLib.Code.Collections;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Physics;
 using JoyLib.Code.Rollers;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace JoyLib.Code.World.Generators.Interiors
@@ -76,6 +76,8 @@ namespace JoyLib.Code.World.Generators.Interiors
                     templates[entityIndex], 
                     availablePoints[pointIndex],
                     level,
+                    null,
+                    null, 
                     null,
                     null,
                     null,

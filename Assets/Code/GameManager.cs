@@ -1,32 +1,26 @@
 ﻿using Joy.Code.Managers;
 using JoyLib.Code;
-using JoyLib.Code.Collections;
-using JoyLib.Code.Cultures;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Abilities;
-using JoyLib.Code.Entities.Jobs;
-using JoyLib.Code.Entities.Needs;
-using JoyLib.Code.Entities.Sexes;
-using JoyLib.Code.Entities.Sexuality;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Entities.AI.Drivers;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Rollers;
-using JoyLib.Code.States;
-using System;
-using System.Collections.Generic;
-using DevionGames.InventorySystem;
 using JoyLib.Code.Conversation;
 using JoyLib.Code.Conversation.Conversations;
 using JoyLib.Code.Conversation.Subengines.Rumours;
 using JoyLib.Code.Conversation.Subengines.Rumours.Parameters;
+using JoyLib.Code.Cultures;
+using JoyLib.Code.Entities;
+using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.Gender;
 using JoyLib.Code.Entities.Items;
+using JoyLib.Code.Entities.Jobs;
+using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Entities.Romance;
+using JoyLib.Code.Entities.Sexes;
+using JoyLib.Code.Entities.Sexuality;
+using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Physics;
 using JoyLib.Code.Quests;
+using JoyLib.Code.Rollers;
+using JoyLib.Code.States;
 using JoyLib.Code.Unity.GUI;
 using JoyLib.Code.World;
 using UnityEngine;
@@ -84,7 +78,8 @@ public class GameManager : MonoBehaviour, IGameManager
             GenderHandler,
             RomanceHandler,
             JobHandler, 
-            PhysicsManager,
+            PhysicsManager, 
+            SkillHandler,
             Roller);
         
         ItemFactory = new ItemFactory(

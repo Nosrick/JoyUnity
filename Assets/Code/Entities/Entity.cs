@@ -98,13 +98,18 @@ namespace JoyLib.Code.Entities
         /// 
         /// </summary>
         /// <param name="template"></param>
+        /// <param name="statistics"></param>
         /// <param name="needs"></param>
+        /// <param name="skills"></param>
+        /// <param name="abilities"></param>
         /// <param name="cultures"></param>
         /// <param name="level"></param>
         /// <param name="experience"></param>
         /// <param name="job"></param>
+        /// <param name="gender"></param>
         /// <param name="sex"></param>
         /// <param name="sexuality"></param>
+        /// <param name="romance"></param>
         /// <param name="position"></param>
         /// <param name="sprites"></param>
         /// <param name="naturalWeapons"></param>
@@ -114,10 +119,13 @@ namespace JoyLib.Code.Entities
         /// <param name="jobLevels"></param>
         /// <param name="world"></param>
         /// <param name="driver"></param>
+        /// <param name="roller"></param>
         public Entity(
             IEntityTemplate template,
             BasicValueContainer<IRollableValue> statistics,
             BasicValueContainer<INeed> needs,
+            BasicValueContainer<IGrowingValue> skills,
+            IEnumerable<IAbility> abilities,
             List<ICulture> cultures,
             IGrowingValue level,
             float experience,
@@ -163,22 +171,10 @@ namespace JoyLib.Code.Entities
             
             this.m_Needs = needs;
 
-            this.m_Skills = new BasicValueContainer<IGrowingValue>();
-
-            if (SkillHandler is null == false)
-            {
-                foreach (IGrowingValue skill in SkillHandler.GetDefaultSkillBlock(this.m_Needs.Values).Values)
-                {
-                    this.m_Skills.Add(skill);
-                }
-            }
-
-            foreach (IGrowingValue skill in template.Skills.Values)
-            {
-                this.m_Skills.Add(skill);
-            }
+            this.m_Skills = skills;
 
             this.m_Abilities = template.Abilities.ToList();
+            this.m_Abilities.AddRange(abilities);
             this.m_Level = level;
             for (int i = 1; i < level.Value; i++)
             {
@@ -223,17 +219,28 @@ namespace JoyLib.Code.Entities
         /// </summary>
         /// <param name="template"></param>
         /// <param name="needs"></param>
+        /// <param name="statistics"></param>
+        /// <param name="skills"></param>
+        /// <param name="abilities"></param>
+        /// <param name="cultures"></param>
         /// <param name="level"></param>
         /// <param name="job"></param>
+        /// <param name="gender"></param>
         /// <param name="sex"></param>
         /// <param name="sexuality"></param>
+        /// <param name="romance"></param>
         /// <param name="position"></param>
-        /// <param name="icons"></param>
+        /// <param name="sprites"></param>
         /// <param name="world"></param>
+        /// <param name="driver"></param>
+        /// <param name="roller"></param>
+        /// <param name="icons"></param>
         public Entity(
             IEntityTemplate template,
             BasicValueContainer<INeed> needs,
             BasicValueContainer<IRollableValue> statistics,
+            BasicValueContainer<IGrowingValue> skills,
+            IEnumerable<IAbility> abilities,
             List<ICulture> cultures,
             IGrowingValue level,
             IJob job,
@@ -246,7 +253,7 @@ namespace JoyLib.Code.Entities
             IWorldInstance world,
             IDriver driver,
             RNG roller = null) :
-            this(template, statistics, needs, cultures, level, 0, job, gender, sex, sexuality, romance, position, sprites,
+            this(template, statistics, needs, skills, abilities, cultures, level, 0, job, gender, sex, sexuality, romance, position, sprites,
                 NaturalWeaponHelper?.MakeNaturalWeapon(template.Size), new NonUniqueDictionary<string, IItemInstance>(),
                 new List<IItemInstance>(), new List<string>(), new Dictionary<string, int>(), world, driver, roller)
         {

@@ -1,7 +1,5 @@
-using DevionGames.UIWidgets;
-using Joy.Code.Managers;
+using System.Threading;
 using JoyLib.Code.Unity.GUI;
-using UnityEditor;
 using UnityEngine;
 
 namespace JoyLib.Code.States
@@ -19,6 +17,8 @@ namespace JoyLib.Code.States
 
         public virtual void SetUpUi()
         {
+            Thread.Sleep(500);
+            
             GUIData[] guiData = GameObject.FindObjectsOfType<GUIData>();
             foreach (GUIData data in guiData)
             {

@@ -8,13 +8,13 @@ namespace JoyLib.Code.Unity.GUI
     {
         protected string m_Name;
 
-        [SerializeField] protected StatisticWindow m_Parent;
+        [SerializeField] protected ValueContainer m_Parent;
         [SerializeField] protected TextMeshProUGUI m_ValueText;
         [SerializeField] protected TextMeshProUGUI m_NameText;
 
         public override int IncreaseValue(int delta = 1)
         {
-            if (m_Parent.PointsRemaining >= delta)
+            if (m_Parent.Value >= delta)
             {
                 return base.IncreaseValue(delta);
             }

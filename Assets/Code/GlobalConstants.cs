@@ -26,7 +26,8 @@ namespace JoyLib.Code
         public const string CONTEXT_MENU = "Context Menu";
         public const string TRADE = "Trade";
         public const string QUEST_JOURNAL = "Quest Journal";
-        public const string CHARACTER_CREATION = "Character Creation";
+        public const string CHARACTER_CREATION_PART_1 = "Character Creation Part 1";
+        public const string CHARACTER_CREATION_PART_2 = "Character Creation Part 2";
         public const string TOOLTIP = "Tooltip";
 
         public static IGameManager GameManager

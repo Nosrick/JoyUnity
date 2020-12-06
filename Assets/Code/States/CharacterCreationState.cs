@@ -1,16 +1,5 @@
-﻿using JoyLib.Code.Collections;
-using JoyLib.Code.Cultures;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Jobs;
-using JoyLib.Code.Entities.Needs;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Rollers;
-using System;
-using System.Collections.Generic;
+﻿using JoyLib.Code.Entities;
 using JoyLib.Code.Unity.GUI;
-using UnityEngine;
 
 namespace JoyLib.Code.States
 {
@@ -26,16 +15,16 @@ namespace JoyLib.Code.States
         {
             base.Start();
             SetUpUi();
-            CharacterCreationScreen.Initialise();
         }
 
         public override void SetUpUi()
         {
             base.SetUpUi();
-            GUIManager.OpenGUI(GlobalConstants.CHARACTER_CREATION);
             CharacterCreationScreen = GUIManager
-                .GetGUI(GlobalConstants.CHARACTER_CREATION)
+                .GetGUI(GlobalConstants.CHARACTER_CREATION_PART_1)
                 .GetComponent<CharacterCreationScreen>();
+            CharacterCreationScreen.Initialise();
+            GUIManager.OpenGUI(GlobalConstants.CHARACTER_CREATION_PART_1);
         }
 
         public override void HandleInput()

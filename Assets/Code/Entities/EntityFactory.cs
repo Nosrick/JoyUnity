@@ -1,20 +1,21 @@
 using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Cultures;
 using JoyLib.Code.Collections;
-using JoyLib.Code.Entities.Needs;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.World;
-using JoyLib.Code.Rollers;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Entities.Jobs;
-using JoyLib.Code.Entities.Sexes;
-using JoyLib.Code.Entities.Sexuality;
-using JoyLib.Code.Entities.Items;
+using JoyLib.Code.Cultures;
+using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.AI.Drivers;
 using JoyLib.Code.Entities.Gender;
+using JoyLib.Code.Entities.Items;
+using JoyLib.Code.Entities.Jobs;
+using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Romance;
+using JoyLib.Code.Entities.Sexes;
+using JoyLib.Code.Entities.Sexuality;
+using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Graphics;
 using JoyLib.Code.Physics;
+using JoyLib.Code.Rollers;
+using JoyLib.Code.World;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities
@@ -39,6 +40,8 @@ namespace JoyLib.Code.Entities
         
         protected IPhysicsManager PhysicsManager { get; set; }
         
+        protected IEntitySkillHandler SkillHandler { get; set; }
+        
         protected RNG Roller { get; set; }
 
         public EntityFactory(
@@ -51,6 +54,7 @@ namespace JoyLib.Code.Entities
             IEntityRomanceHandler romanceHandler,
             IJobHandler jobHandler,
             IPhysicsManager physicsManager,
+            IEntitySkillHandler skillHandler,
             RNG roller)
         {
             Roller = roller;
@@ -63,6 +67,7 @@ namespace JoyLib.Code.Entities
             RomanceHandler = romanceHandler;
             GenderHandler = genderHandler;
             PhysicsManager = physicsManager;
+            SkillHandler = skillHandler;
         }
 
         public IEntity CreateFromTemplate(
@@ -70,6 +75,8 @@ namespace JoyLib.Code.Entities
             Vector2Int position,
             IGrowingValue level = null,
             BasicValueContainer<IRollableValue> statistics = null,
+            BasicValueContainer<IGrowingValue> skills = null,
+            IEnumerable<IAbility> abilities = null,
             List<ICulture> cultures = null,
             IGender gender = null,
             IBioSex sex = null,
@@ -89,6 +96,8 @@ namespace JoyLib.Code.Entities
             List<ICulture> creatureCultures = new List<ICulture>();
             IDriver selectedDriver = driver;
             BasicValueContainer<IRollableValue> selectedStatistics = statistics;
+            BasicValueContainer<IGrowingValue> selectedSkills = skills;
+            IEnumerable<IAbility> selectedAbilities = abilities;
             if (!(cultures is null))
             {
                 creatureCultures.AddRange(cultures);
@@ -113,6 +122,20 @@ namespace JoyLib.Code.Entities
             if (selectedStatistics is null)
             {
                 selectedStatistics = dominantCulture.GetStats(template.Statistics);
+            }
+
+            if (selectedSkills is null)
+            {
+                selectedSkills = SkillHandler.GetDefaultSkillBlock(needs.Values);
+                foreach (IGrowingValue skill in template.Skills.Values)
+                {
+                    selectedSkills.Add(skill);
+                }
+            }
+
+            if (selectedAbilities is null)
+            {
+                selectedAbilities = new List<IAbility>();
             }
 
             if(selectedJob is null)
@@ -153,7 +176,9 @@ namespace JoyLib.Code.Entities
             IEntity entity = new Entity(
                 template, 
                 needs, 
-                selectedStatistics,
+                selectedStatistics, 
+                skills, 
+                selectedAbilities,
                 creatureCultures, 
                 level, 
                 selectedJob, 
@@ -174,6 +199,8 @@ namespace JoyLib.Code.Entities
             IEntityTemplate template,
             BasicValueContainer<IRollableValue> statistics,
             BasicValueContainer<INeed> needs,
+            BasicValueContainer<IGrowingValue> skills,
+            IEnumerable<IAbility> abilities,
             IGrowingValue level,
             float experience,
             IJob job,
@@ -213,6 +240,8 @@ namespace JoyLib.Code.Entities
                 template,
                 statistics, 
                 needs, 
+                skills, 
+                abilities, 
                 creatureCultures, 
                 level, 
                 experience, 

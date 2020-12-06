@@ -93,6 +93,22 @@ namespace JoyLib.Code.Collections
             m_Values.Add(value.Name, value);
         }
 
+        public void AddRange(IEnumerable<T> values)
+        {
+            foreach (T value in values)
+            {
+                m_Values.Add(value.Name, value);
+            }
+        }
+
+        public void AddRange(IEnumerable<KeyValuePair<string, T>> values)
+        {
+            foreach (KeyValuePair<string, T> valuePair in values)
+            {
+                Add(valuePair);
+            }
+        }
+
         public bool ContainsKey(string key)
         {
             return m_Values.ContainsKey(key);
