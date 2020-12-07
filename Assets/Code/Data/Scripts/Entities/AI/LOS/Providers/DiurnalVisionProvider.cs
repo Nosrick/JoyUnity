@@ -11,7 +11,7 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
         private static int MinimumLightLevel => 5;
 
         public DiurnalVisionProvider() :
-            base(new FOVRecursiveShadowCasting())
+            base(new FOVShadowCasting())
         {
 
         }

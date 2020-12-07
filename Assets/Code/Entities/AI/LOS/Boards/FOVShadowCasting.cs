@@ -67,10 +67,11 @@ namespace JoyLib.Code.Entities.AI.LOS
 
                     if (blocked)
                     {
+                        m_Board.Visible(currentX, currentY);
                         if(m_Board.IsObstacle(currentX, currentY))
                         {
                             newStart = rightSlope;
-                            m_Board.Block(currentX, currentY);
+                            //m_Board.Block(currentX, currentY);
                         }
                         else
                         {
@@ -80,6 +81,7 @@ namespace JoyLib.Code.Entities.AI.LOS
                     }
                     else
                     {
+                        m_Board.Visible(currentX, currentY);
                         if (!m_Board.IsObstacle(currentX, currentY) || distance >= sightMod)
                         {
                             continue;
