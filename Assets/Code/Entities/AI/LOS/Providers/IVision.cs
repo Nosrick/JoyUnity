@@ -21,8 +21,8 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
         bool CanSee(IEntity viewer, IWorldInstance world, int x, int y);
         bool CanSee(IEntity viewer, IWorldInstance world, Vector2Int point);
 
-        bool HasVisibility(IEntity viewer, IWorldInstance world, int x, int y, IEnumerable<Vector2Int> vision);
-        bool HasVisibility(IEntity viewer, IWorldInstance world, Vector2Int point, IEnumerable<Vector2Int> vision);
+        bool HasVisibility(IEntity viewer, IWorldInstance world, int x, int y);
+        bool HasVisibility(IEntity viewer, IWorldInstance world, Vector2Int point);
 
         RectInt GetVisionRect(IEntity viewer);
 

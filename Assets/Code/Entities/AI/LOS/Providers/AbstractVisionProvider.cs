@@ -31,14 +31,12 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
             return CanSee(viewer, world, point.x, point.y);
         }
 
-        public virtual bool HasVisibility(IEntity viewer, IWorldInstance world, int x, int y,
-            IEnumerable<Vector2Int> vision)
+        public virtual bool HasVisibility(IEntity viewer, IWorldInstance world, int x, int y)
         {
             return CanSee(viewer, world, x, y);
         }
 
-        public virtual bool HasVisibility(IEntity viewer, IWorldInstance world, Vector2Int point,
-            IEnumerable<Vector2Int> vision)
+        public virtual bool HasVisibility(IEntity viewer, IWorldInstance world, Vector2Int point)
         {
             return CanSee(viewer, world, point.x, point.y);
         }

@@ -9,13 +9,13 @@ namespace JoyLib.Code.Entities.AI.LOS
         public virtual bool HasVisibility(IEntity viewer, IWorldInstance world, Vector2Int point,
             IEnumerable<Vector2Int> vision)
         {
-            return viewer.VisionProvider.HasVisibility(viewer, world, point, vision);
+            return viewer.VisionProvider.HasVisibility(viewer, world, point);
         }
 
         public virtual bool HasVisibility(IEntity viewer, IWorldInstance world, int x, int y,
             IEnumerable<Vector2Int> vision)
         {
-            return viewer.VisionProvider.HasVisibility(viewer, world, x, y, vision);
+            return viewer.VisionProvider.HasVisibility(viewer, world, x, y);
         }
 
         public virtual IFOVBoard Do(IEntity viewer, IWorldInstance world, Vector2Int dimensions,

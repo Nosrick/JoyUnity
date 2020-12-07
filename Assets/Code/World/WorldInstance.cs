@@ -150,17 +150,10 @@ namespace JoyLib.Code.World
             m_Light = new int[m_Light.GetLength(0), m_Light.GetLength(1)];
 
             //Do objects first
-            List<IJoyObject> objects = new List<IJoyObject>(m_Objects);
+            IEnumerable<IItemInstance> objects = m_Objects.Where(o => o is IItemInstance item && item.ItemType.LightLevel > 0).Cast<IItemInstance>();
 
-            for (int i = 0; i < objects.Count; i++)
+            foreach(IItemInstance item in objects)
             {
-                if (objects[i] is ItemInstance == false)
-                {
-                    continue;
-                }
-
-                ItemInstance item = (ItemInstance) objects[i];
-
                 int xMin, xMax;
                 int yMin, yMax;
 
@@ -188,10 +181,9 @@ namespace JoyLib.Code.World
             for (int i = 0; i < entities.Count; i++)
             {
                 IEntity entity = entities[i];
-                List<IItemInstance> backpack = entity.Backpack;
-                for (int j = 0; j < backpack.Count; j++)
+                IEnumerable<IItemInstance> lightObjects = entity.Backpack.Where(instance => instance.ItemType.LightLevel > 0);
+                foreach(IItemInstance item in lightObjects)
                 {
-                    IItemInstance item = backpack[j];
                     item.Move(entity.WorldPosition);
 
                     int xMin, xMax;
@@ -222,10 +214,8 @@ namespace JoyLib.Code.World
             int[,] vision = lightRef;
 
             int lightLevel = objectRef.ItemType.LightLevel;
-            Rect lightRect = new Rect(objectRef.WorldPosition.x - lightLevel, objectRef.WorldPosition.y - lightLevel,
-                lightLevel * 2, lightLevel * 2);
 
-            for (int i = 0; i < 360; i++)
+            for (int i = 0; i < 360; i += 6)
             {
                 float x = (float) Math.Cos(i * 0.01745f);
                 float y = (float) Math.Sin(i * 0.01745f);
@@ -336,11 +326,12 @@ namespace JoyLib.Code.World
             DateTime oldTime = s_DateTime;
             if (HasTag("overworld"))
             {
-                s_DateTime = s_DateTime.AddSeconds(6.0);
+                s_DateTime = s_DateTime.AddHours(1.0);
             }
             else
             {
-                s_DateTime = s_DateTime.AddHours(1.0);
+                CalculateLightLevels();
+                s_DateTime = s_DateTime.AddSeconds(6.0);
             }
 
             foreach (Entity entity in m_Entities)
