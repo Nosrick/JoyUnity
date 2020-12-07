@@ -41,13 +41,12 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
 
         public override bool HasVisibility(IEntity viewer, IWorldInstance world, int x, int y)
         {
-            //TODO: Fix this once lighting calculations are back in
             return HasVisibility(viewer, world, new Vector2Int(x, y));
         }
 
         public override bool HasVisibility(IEntity viewer, IWorldInstance world, Vector2Int point)
         {
-            return Vision.Contains(point) && world.Light[point.x, point.y] > MinimumLightLevel;
+            return Vision.Contains(point) && world.LightCalculator.Light.GetLight(point) > MinimumLightLevel;
         }
     }
 }

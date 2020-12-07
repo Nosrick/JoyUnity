@@ -6,6 +6,7 @@ using JoyLib.Code.Entities.AI;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Managers;
 using JoyLib.Code.Rollers;
+using JoyLib.Code.World.Lighting;
 using UnityEngine;
 
 namespace JoyLib.Code.World
@@ -15,7 +16,6 @@ namespace JoyLib.Code.World
     {
         protected WorldTile[,] m_Tiles;
         protected byte[,] m_Costs;
-        protected int[,] m_Light;
 
         [NonSerialized] protected int m_PlayerIndex;
 
@@ -37,6 +37,8 @@ namespace JoyLib.Code.World
 
         protected string m_Name;
         protected long m_GUID;
+        
+        public LightCalculator LightCalculator { get; protected set; }
 
         [NonSerialized] protected GameObject m_FogOfWarHolder;
         [NonSerialized] protected GameObject m_WallHolder;
@@ -71,7 +73,8 @@ namespace JoyLib.Code.World
             m_Objects = new List<IJoyObject>();
             m_Walls = new Dictionary<Vector2Int, IJoyObject>();
             GUID = GUIDManager.Instance.AssignGUID();
-            m_Light = new int[m_Tiles.GetLength(0), m_Tiles.GetLength(1)];
+            
+            LightCalculator = new LightCalculator();
 
             m_Costs = new byte[m_Tiles.GetLength(0), m_Tiles.GetLength(1)];
             for (int x = 0; x < m_Costs.GetLength(0); x++)
@@ -109,7 +112,6 @@ namespace JoyLib.Code.World
             m_Walls = walls;
             GUID = GUIDManager.Instance.AssignGUID();
             CalculatePlayerIndex();
-            m_Light = new int[m_Tiles.GetLength(0), m_Tiles.GetLength(1)];
 
             m_FogOfWarHolder = GameObject.Find("WorldFog");
             m_WallHolder = GameObject.Find("WorldWalls");
@@ -147,120 +149,15 @@ namespace JoyLib.Code.World
 
         protected void CalculateLightLevels()
         {
-            m_Light = new int[m_Light.GetLength(0), m_Light.GetLength(1)];
-
             //Do objects first
-            IEnumerable<IItemInstance> objects = m_Objects.Where(o => o is IItemInstance item && item.ItemType.LightLevel > 0).Cast<IItemInstance>();
+            List<IItemInstance> objects = m_Objects.Where(o => o is IItemInstance item && item.ItemType.LightLevel > 0)
+                .Cast<IItemInstance>()
+                .ToList();
 
-            foreach(IItemInstance item in objects)
-            {
-                int xMin, xMax;
-                int yMin, yMax;
+            objects.AddRange(m_Entities.SelectMany(entity =>
+                entity.Backpack.Where(instance => instance.ItemType.LightLevel > 0)));
 
-                xMin = Math.Max(0, item.WorldPosition.x - (item.ItemType.LightLevel));
-                xMax = Math.Min(m_Light.GetLength(0) - 1, item.WorldPosition.x + (item.ItemType.LightLevel));
-
-                yMin = Math.Max(0, item.WorldPosition.y - (item.ItemType.LightLevel));
-                yMax = Math.Min(m_Light.GetLength(1) - 1, item.WorldPosition.y + (item.ItemType.LightLevel));
-
-                if (item.ItemType.LightLevel > 0)
-                {
-                    for (int x = xMin; x < xMax; x++)
-                    {
-                        for (int y = yMin; y < yMax; y++)
-                        {
-                            m_Light = LightTiles(new Vector2Int(x, y), item, m_Light);
-                        }
-                    }
-                }
-            }
-
-            //Then the objects used by entities
-            List<IEntity> entities = m_Entities.ToList();
-
-            for (int i = 0; i < entities.Count; i++)
-            {
-                IEntity entity = entities[i];
-                IEnumerable<IItemInstance> lightObjects = entity.Backpack.Where(instance => instance.ItemType.LightLevel > 0);
-                foreach(IItemInstance item in lightObjects)
-                {
-                    item.Move(entity.WorldPosition);
-
-                    int xMin, xMax;
-                    int yMin, yMax;
-
-                    xMin = Math.Max(0, entity.WorldPosition.x - (item.ItemType.LightLevel));
-                    xMax = Math.Min(m_Light.GetLength(0) - 1, entity.WorldPosition.x + (item.ItemType.LightLevel));
-
-                    yMin = Math.Max(0, entity.WorldPosition.y - (item.ItemType.LightLevel));
-                    yMax = Math.Min(m_Light.GetLength(1) - 1, entity.WorldPosition.y + (item.ItemType.LightLevel));
-
-                    if (item.ItemType.LightLevel > 0)
-                    {
-                        for (int x = xMin; x < xMax; x++)
-                        {
-                            for (int y = yMin; y < yMax; y++)
-                            {
-                                m_Light = LightTiles(new Vector2Int(x, y), item, m_Light);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        protected int[,] LightTiles(Vector2Int pointRef, IItemInstance objectRef, int[,] lightRef)
-        {
-            int[,] vision = lightRef;
-
-            int lightLevel = objectRef.ItemType.LightLevel;
-
-            for (int i = 0; i < 360; i += 6)
-            {
-                float x = (float) Math.Cos(i * 0.01745f);
-                float y = (float) Math.Sin(i * 0.01745f);
-                vision = LightTile(x, y, objectRef, vision);
-            }
-
-            return vision;
-        }
-
-        protected int[,] LightTile(float x, float y, IItemInstance objectRef, int[,] visionRef)
-        {
-            int[,] vision = visionRef;
-            float oX, oY;
-
-            oX = objectRef.WorldPosition.x + 0.5f;
-            oY = objectRef.WorldPosition.y + 0.5f;
-
-            int itemPosX = objectRef.WorldPosition.x;
-            int itemPosY = objectRef.WorldPosition.y;
-
-            for (int i = 0; i < objectRef.ItemType.LightLevel; i++)
-            {
-                int posX = (int) oX;
-                int posY = (int) oY;
-                if (oX < 0.0f || oY < 0.0f || oX >= vision.GetLength(0) || oY >= vision.GetLength(1))
-                {
-                    return vision;
-                }
-
-                /*
-                if (Walls.ContainsKey(new Vector2Int(posX, posY)))
-                {
-                    return vision;
-                }
-                */
-
-                int lightLevel = (int) Math.Max(objectRef.ItemType.LightLevel,
-                    Math.Sqrt(((itemPosX - posX) * (itemPosX - posX) + (itemPosY - posY) * (itemPosY - posY))));
-                vision[posX, posY] = lightLevel;
-
-                oX += x;
-                oY += y;
-            }
-
-            return vision;
+            LightCalculator.Do(objects, this, this.Dimensions, this.Walls.Keys);
         }
 
         public void AddObject(IJoyObject objectRef)
@@ -716,8 +613,6 @@ namespace JoyLib.Code.World
         }
 
         public List<string> Tags { get; protected set; }
-
-        public int[,] Light => m_Light;
 
         public Dictionary<Vector2Int, IWorldInstance> Areas
         {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.AI;
 using JoyLib.Code.Entities.Items;
+using JoyLib.Code.World.Lighting;
 using UnityEngine;
 
 namespace JoyLib.Code.World
@@ -11,7 +12,7 @@ namespace JoyLib.Code.World
     {
         WorldTile[,] Tiles { get; }
         byte[,] Costs { get; }
-        int[,] Light { get; }
+        LightCalculator LightCalculator { get; }
         Dictionary<Vector2Int, IWorldInstance> Areas { get; }
         List<IEntity> Entities { get; }
         List<IJoyObject> Objects { get; }

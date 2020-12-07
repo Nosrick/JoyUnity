@@ -24,11 +24,7 @@ namespace JoyLib.Code.Entities.AI.LOS
 
         public bool HasVisited(int x, int y)
         {
-            if (x >= 0 && x < m_Width && y >= 0 && y < m_Height)
-            {
-                return Visited.Contains(new Vector2Int(x, y));
-            }
-            return true;
+            return Visited.Contains(new Vector2Int(x, y));
         }
 
         public void Visit(int x, int y)
