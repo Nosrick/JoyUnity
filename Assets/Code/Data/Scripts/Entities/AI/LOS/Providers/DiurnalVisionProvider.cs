@@ -1,6 +1,6 @@
+using System.Collections.Generic;
 using JoyLib.Code.World;
 using UnityEngine;
-using System.Linq;
 
 namespace JoyLib.Code.Entities.AI.LOS.Providers
 {
@@ -28,7 +28,7 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
                 Debug.Log("WORLD IS NULL");
             }
             
-            Vision = new bool[world.Dimensions.x, world.Dimensions.y];
+            Vision = new HashSet<Vector2Int>();
             
             Board = (FOVBasicBoard)Algorithm.Do(
                                     viewer,
@@ -39,13 +39,15 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
             Vision = Board.GetVision();
         }
 
-        public override bool HasVisibility(IEntity viewer, IWorldInstance world, int x, int y, bool[,] vision)
+        public override bool HasVisibility(IEntity viewer, IWorldInstance world, int x, int y,
+            IEnumerable<Vector2Int> vision)
         {
             //TODO: Fix this once lighting calculations are back in
             return true;/* && world.LightLevels[x, y] > MinimumLightLevel;*/
         }
 
-        public override bool HasVisibility(IEntity viewer, IWorldInstance world, Vector2Int point, bool[,] vision)
+        public override bool HasVisibility(IEntity viewer, IWorldInstance world, Vector2Int point,
+            IEnumerable<Vector2Int> vision)
         {
             return HasVisibility(viewer, world, point.x, point.y, vision);
         }

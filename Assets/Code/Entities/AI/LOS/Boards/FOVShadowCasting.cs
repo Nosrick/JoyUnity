@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 using JoyLib.Code.World;
+using UnityEngine;
 
 namespace JoyLib.Code.Entities.AI.LOS
 {
     public class FOVShadowCasting : AbstractFOVHandler
     {
-        private FOVBasicBoard m_Board;
+        protected FOVBasicBoard m_Board;
 
-        private readonly Vector2Int[] DIAGONALS = { new Vector2Int(1, -1), new Vector2Int(1, 1), new Vector2Int(-1, 1), new Vector2Int(-1, -1) };
+        protected readonly Vector2Int[] DIAGONALS = { new Vector2Int(1, -1), new Vector2Int(1, 1), new Vector2Int(-1, 1), new Vector2Int(-1, -1) };
 
-        public override IFOVBoard Do(IEntity viewer, IWorldInstance world, Vector2Int dimensions, Vector2Int[] walls)
+        public override IFOVBoard Do(IEntity viewer, IWorldInstance world, Vector2Int dimensions,
+            IEnumerable<Vector2Int> walls)
         {
             Vector2Int viewerPos = viewer.WorldPosition;
             
@@ -46,7 +47,7 @@ namespace JoyLib.Code.Entities.AI.LOS
                     float leftSlope = (deltaX - 0.5f) / (deltaY + 0.5f);
                     float rightSlope = (deltaX + 0.5f) / (deltaY - 0.5f);
 
-                    if (!(currentX >= 0 && currentY >= 0 && currentX < m_Board.GetVision().GetLength(0) && currentY < m_Board.GetVision().GetLength(1)) || start < rightSlope)
+                    if (!(currentX >= 0 && currentY >= 0 && currentX < m_Board.Width && currentY < m_Board.Height) || start < rightSlope)
                     {
                         continue;
                     }
@@ -69,6 +70,7 @@ namespace JoyLib.Code.Entities.AI.LOS
                         if(m_Board.IsObstacle(currentX, currentY))
                         {
                             newStart = rightSlope;
+                            m_Board.Block(currentX, currentY);
                         }
                         else
                         {
@@ -96,6 +98,6 @@ namespace JoyLib.Code.Entities.AI.LOS
             throw new NotImplementedException();
         }
 
-        public bool[,] Vision => m_Board.GetVision();
+        public IEnumerable<Vector2Int> Vision => m_Board.GetVision();
     }
 }

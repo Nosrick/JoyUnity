@@ -22,6 +22,7 @@ namespace JoyLib.Code.Unity.GUI
             Items = new List<StatisticItem>();
             
             Value = Maximum;
+            m_PointsRemainingText.text = "Points Remaining: " + Value;
         }
 
         public BasicValueContainer<IRollableValue> GetStatistics()

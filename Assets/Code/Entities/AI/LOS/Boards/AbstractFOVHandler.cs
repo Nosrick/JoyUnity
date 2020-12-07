@@ -1,22 +1,25 @@
 using System.Collections.Generic;
-using UnityEngine;
 using JoyLib.Code.World;
+using UnityEngine;
 
 namespace JoyLib.Code.Entities.AI.LOS
 {
     public abstract class AbstractFOVHandler : IFOVHandler
     {
-        public virtual bool HasVisibility(IEntity viewer, IWorldInstance world, Vector2Int point, bool[,] vision)
+        public virtual bool HasVisibility(IEntity viewer, IWorldInstance world, Vector2Int point,
+            IEnumerable<Vector2Int> vision)
         {
             return viewer.VisionProvider.HasVisibility(viewer, world, point, vision);
         }
 
-        public virtual bool HasVisibility(IEntity viewer, IWorldInstance world, int x, int y, bool[,] vision)
+        public virtual bool HasVisibility(IEntity viewer, IWorldInstance world, int x, int y,
+            IEnumerable<Vector2Int> vision)
         {
             return viewer.VisionProvider.HasVisibility(viewer, world, x, y, vision);
         }
 
-        public virtual IFOVBoard Do(IEntity viewer, IWorldInstance world, Vector2Int dimensions, Vector2Int[] walls)
+        public virtual IFOVBoard Do(IEntity viewer, IWorldInstance world, Vector2Int dimensions,
+            IEnumerable<Vector2Int> walls)
         {
             throw new System.NotImplementedException("Someone forgot to implement Do()");
         }

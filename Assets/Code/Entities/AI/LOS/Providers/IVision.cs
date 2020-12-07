@@ -1,5 +1,6 @@
-using UnityEngine;
+using System.Collections.Generic;
 using JoyLib.Code.World;
+using UnityEngine;
 
 namespace JoyLib.Code.Entities.AI.LOS.Providers
 {
@@ -10,7 +11,7 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
             get;
         }
 
-        bool[,] Vision
+        HashSet<Vector2Int> Vision
         {
             get;
         }
@@ -20,8 +21,8 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
         bool CanSee(IEntity viewer, IWorldInstance world, int x, int y);
         bool CanSee(IEntity viewer, IWorldInstance world, Vector2Int point);
 
-        bool HasVisibility(IEntity viewer, IWorldInstance world, int x, int y, bool[,] vision);
-        bool HasVisibility(IEntity viewer, IWorldInstance world, Vector2Int point, bool[,] vision);
+        bool HasVisibility(IEntity viewer, IWorldInstance world, int x, int y, IEnumerable<Vector2Int> vision);
+        bool HasVisibility(IEntity viewer, IWorldInstance world, Vector2Int point, IEnumerable<Vector2Int> vision);
 
         RectInt GetVisionRect(IEntity viewer);
 

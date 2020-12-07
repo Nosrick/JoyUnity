@@ -1,13 +1,12 @@
-using JoyLib.Code.World;
 using System.Collections.Generic;
-using JoyLib.Code.Entities.Needs;
 using System.Linq;
 using JoyLib.Code.Entities.Items;
+using JoyLib.Code.Entities.Needs;
+using JoyLib.Code.Helpers;
+using JoyLib.Code.Physics;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using UnityEngine;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Physics;
 
 namespace JoyLib.Code.Entities.AI.Drivers
 {
@@ -70,22 +69,7 @@ namespace JoyLib.Code.Entities.AI.Drivers
             //If we're wandering, select a point we can see and wander there
             if (vehicle.CurrentTarget.searching && vehicle.CurrentTarget.targetPoint == GlobalConstants.NO_TARGET)
             {
-                List<Vector2Int> visibleSpots = new List<Vector2Int>();
-                List<Vector2Int> visibleWalls = vehicle.MyWorld.GetVisibleWalls(vehicle);
-                //Check what we can see
-                for (int x = 0; x < vehicle.Vision.GetLength(0); x++)
-                {
-                    for (int y = 0; y < vehicle.Vision.GetLength(0); y++)
-                    {
-                        Vector2Int newPos = new Vector2Int(x, y);
-                        if (vehicle.VisionProvider.CanSee(vehicle, vehicle.MyWorld, x, y) 
-                            && visibleWalls.Contains(newPos) == false 
-                            && vehicle.WorldPosition != newPos)
-                        {
-                            visibleSpots.Add(newPos);
-                        }
-                    }
-                }
+                List<Vector2Int> visibleSpots = new List<Vector2Int>(vehicle.Vision);
 
                 //Pick a random spot to wander to
                 int result = Roller.Roll(0, visibleSpots.Count);

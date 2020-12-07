@@ -1015,7 +1015,7 @@ namespace JoyLib.Code.Entities
             get { return m_Size; }
         }
 
-        public bool[,] Vision
+        public HashSet<Vector2Int> Vision
         {
             get { return m_VisionProvider.Vision; }
         }

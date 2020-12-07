@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
 using JoyLib.Code.World;
+using UnityEngine;
 
 namespace JoyLib.Code.Entities.AI.LOS
 {
@@ -10,10 +10,10 @@ namespace JoyLib.Code.Entities.AI.LOS
             IEntity viewer, 
             IWorldInstance world, 
             Vector2Int dimensions,
-            Vector2Int[] walls);
+            IEnumerable<Vector2Int> walls);
 
-        bool HasVisibility(IEntity viewer, IWorldInstance world, Vector2Int point, bool[,] vision);
-        bool HasVisibility(IEntity viewer, IWorldInstance world, int x, int y, bool[,] vision);
+        bool HasVisibility(IEntity viewer, IWorldInstance world, Vector2Int point, IEnumerable<Vector2Int> vision);
+        bool HasVisibility(IEntity viewer, IWorldInstance world, int x, int y, IEnumerable<Vector2Int> vision);
         LinkedList<Vector2Int> HasLOS(Vector2Int origin, Vector2Int target);
     }
 }

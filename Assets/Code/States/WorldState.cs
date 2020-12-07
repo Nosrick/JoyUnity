@@ -691,14 +691,14 @@ namespace JoyLib.Code.States
         protected void DrawObjects()
         {
             IEntity player = m_ActiveWorld.Player;
-            bool[,] vision = player.VisionProvider.Vision;
+            HashSet<Vector2Int> vision = player.VisionProvider.Vision;
             for (int i = 0; i < m_FogOfWarHolder.transform.childCount; i++)
             {
                 GameObject fog = m_FogOfWarHolder.transform.GetChild(i).gameObject;
                 var transformPosition = fog.transform.position;
                 Vector2Int position = new Vector2Int((int)transformPosition.x, (int)transformPosition.y);
 
-                bool visible = vision[position.x, position.y];
+                bool visible = vision.Contains(position);
                 int lightLevel = visible ? 16 : 0;
 
                 fog.GetComponent<SpriteRenderer>().color = LightLevelHelper.GetColour(lightLevel);

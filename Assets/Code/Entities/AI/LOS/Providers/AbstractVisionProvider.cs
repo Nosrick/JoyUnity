@@ -1,7 +1,8 @@
-using UnityEngine;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code.World;
+using UnityEngine;
 
 namespace JoyLib.Code.Entities.AI.LOS.Providers
 {
@@ -9,7 +10,7 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
     {
         public string Name => "abstractvisionprovider";
 
-        protected bool[,] m_Vision;
+        protected HashSet<Vector2Int> m_Vision;
 
         protected AbstractVisionProvider(IFOVHandler algorithm)
         {
@@ -22,7 +23,7 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
             {
                 Debug.Log("VISION IS NULL");
             }
-            return m_Vision[x, y];
+            return m_Vision.Contains(new Vector2Int(x, y));
         }
 
         public virtual bool CanSee(IEntity viewer, IWorldInstance world, Vector2Int point)
@@ -30,19 +31,21 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
             return CanSee(viewer, world, point.x, point.y);
         }
 
-        public virtual bool HasVisibility(IEntity viewer, IWorldInstance world, int x, int y, bool[,] vision)
+        public virtual bool HasVisibility(IEntity viewer, IWorldInstance world, int x, int y,
+            IEnumerable<Vector2Int> vision)
         {
             return CanSee(viewer, world, x, y);
         }
 
-        public virtual bool HasVisibility(IEntity viewer, IWorldInstance world, Vector2Int point, bool[,] vision)
+        public virtual bool HasVisibility(IEntity viewer, IWorldInstance world, Vector2Int point,
+            IEnumerable<Vector2Int> vision)
         {
             return CanSee(viewer, world, point.x, point.y);
         }
 
         public virtual RectInt GetFullVisionRect(IEntity viewer)
         {
-            RectInt visionRect = new RectInt(0, 0, viewer.VisionProvider.Vision.GetLength(0), viewer.VisionProvider.Vision.GetLength(1));
+            RectInt visionRect = new RectInt(0, 0, viewer.MyWorld.Dimensions.x, viewer.MyWorld.Dimensions.y);
             return visionRect;
         }
 
@@ -65,7 +68,7 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
             throw new NotImplementedException("Someone forgot to implement Update()");
         }
 
-        public bool[,] Vision 
+        public HashSet<Vector2Int> Vision 
         { 
             get => m_Vision;
             protected set => m_Vision = value;

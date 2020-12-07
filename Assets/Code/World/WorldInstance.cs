@@ -1,13 +1,11 @@
-﻿using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.AI;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Managers;
-using JoyLib.Code.Rollers;
-using JoyLib.Code.States;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using JoyLib.Code.Entities;
+using JoyLib.Code.Entities.AI;
+using JoyLib.Code.Entities.Items;
+using JoyLib.Code.Managers;
+using JoyLib.Code.Rollers;
 using UnityEngine;
 
 namespace JoyLib.Code.World
@@ -365,7 +363,7 @@ namespace JoyLib.Code.World
         {
             List<IJoyObject> data = new List<IJoyObject>();
 
-            if (entityRef.VisionProvider.Vision.GetLength(0) == 1)
+            if (entityRef.VisionProvider.Vision.Count == 0)
             {
                 return data;
             }

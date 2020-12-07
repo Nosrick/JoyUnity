@@ -1,82 +1,87 @@
 ﻿using System;
-using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities.AI.LOS
 {
     public class FOVBasicBoard : IFOVBoard
     {
-        private bool[,] m_Visited;
+        protected HashSet<Vector2Int> Visited { get; set; } 
+        protected HashSet<Vector2Int> VisiblePoints { get; set; }
+        protected HashSet<Vector2Int> Walls { get; set; }
 
-        private bool[,] m_Visible;
-        private bool[,] m_Walls;
+        protected int m_Width, m_Height;
 
-        private int m_Width, m_Height;
-
-        public FOVBasicBoard(int width, int height, Vector2Int[] walls)
+        public FOVBasicBoard(int width, int height, IEnumerable<Vector2Int> walls)
         {
             m_Width = width;
             m_Height = height;
-
-            m_Visited = new bool[width, height];
-            m_Visible = new bool[width, height];
             
-            m_Walls = new bool[width, height];
-            foreach(Vector2Int point in walls)
-            {
-                m_Walls[point.x, point.y] = true;
-            }
+            Visited = new HashSet<Vector2Int>();
+            VisiblePoints = new HashSet<Vector2Int>();
+            Walls = new HashSet<Vector2Int>(walls);
         }
 
-        public bool Visited(int x, int y)
+        public bool HasVisited(int x, int y)
         {
             if (x >= 0 && x < m_Width && y >= 0 && y < m_Height)
             {
-                return m_Visited[x, y];
+                return Visited.Contains(new Vector2Int(x, y));
             }
             return true;
         }
 
         public void Visit(int x, int y)
         {
-            if (x >= 0 && x < m_Width && y >= 0 && y < m_Height)
+            Vector2Int point = new Vector2Int(x, y);
+            if (x >= 0 && x < m_Width 
+               && y >= 0 && y < m_Height 
+               && Visited.Contains(point) == false)
             {
-                m_Visited[x, y] = true;
-            }
-        }
-
-        public void Invisible(int x, int y)
-        {
-            if (x >= 0 && x < m_Width && y >= 0 && y < m_Height)
-            {
-                m_Visited[x, y] = true;
-                m_Visible[x, y] = false;
+                Visited.Add(point);
             }
         }
 
         public void Visible(int x, int y)
         {
-            if (x >= 0 && x < m_Width && y >= 0 && y < m_Height)
+            Vector2Int point = new Vector2Int(x, y);
+            if (x >= 0 && x < m_Width 
+                && y >= 0 && y < m_Height)
             {
-                m_Visited[x, y] = true;
-                m_Visible[x, y] = true;
+                Visited.Add(point);
+                VisiblePoints.Add(point);
+            }
+        }
+
+        public void Block(int x, int y)
+        {
+            Vector2Int point = new Vector2Int(x, y);
+            if (x >= 0 && x < m_Width 
+                && y >= 0 && y < m_Height)
+            {
+                Visited.Add(point);
+                VisiblePoints.Remove(point);
             }
         }
 
         public bool IsBlocked(int x, int y)
         {
-            if (x >= 0 && x < m_Width && y >= 0 && y < m_Height)
+            Vector2Int point = new Vector2Int(x, y);
+            if (x >= 0 && x < m_Width 
+                && y >= 0 && y < m_Height)
             {
-                return (m_Visible[x, y] == false) || IsObstacle(x, y);
+                return (VisiblePoints.Contains(point) == false) || IsObstacle(x, y);
             }
             return true;
         }
 
         public bool IsObstacle(int x, int y)
         {
-            if (x >= 0 && x < m_Width && y >= 0 && y < m_Height)
+            Vector2Int point = new Vector2Int(x, y);
+            if (x >= 0 && x < m_Width 
+                && y >= 0 && y < m_Height)
             {
-                return m_Walls[x, y];
+                return Walls.Contains(point);
             }
             return true;
         }
@@ -88,8 +93,8 @@ namespace JoyLib.Code.Entities.AI.LOS
 
         public void ClearBoard()
         {
-            m_Visible = new bool[m_Width, m_Height];
-            m_Visited = new bool[m_Width, m_Height];
+            VisiblePoints = new HashSet<Vector2Int>();
+            Visited = new HashSet<Vector2Int>();
         }
 
         public bool Contains(int x, int y)
@@ -97,9 +102,9 @@ namespace JoyLib.Code.Entities.AI.LOS
             return (x >= 0 && x < m_Width && y >= 0 && y < m_Height);
         }
 
-        public bool[,] GetVision()
+        public HashSet<Vector2Int> GetVision()
         {
-            return m_Visible;
+            return VisiblePoints;
         }
 
         public int Width
