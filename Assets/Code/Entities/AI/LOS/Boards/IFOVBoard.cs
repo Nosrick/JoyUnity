@@ -22,6 +22,7 @@ namespace JoyLib.Code.Entities.AI.LOS
         bool IsBlocked(int x, int y);
 
         bool IsObstacle(int x, int y);
+        bool IsVisible(int x, int y);
 
         double Radius(int deltaX, int deltaY);
     }

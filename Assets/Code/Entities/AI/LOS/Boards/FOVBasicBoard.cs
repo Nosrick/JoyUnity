@@ -53,6 +53,11 @@ namespace JoyLib.Code.Entities.AI.LOS
             }
         }
 
+        public bool IsVisible(int x, int y)
+        {
+            return VisiblePoints.Contains(new Vector2Int(x, y));
+        }
+
         public void Block(int x, int y)
         {
             Vector2Int point = new Vector2Int(x, y);

@@ -11,7 +11,7 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
         private static int MinimumLightLevel => 5;
 
         public DiurnalVisionProvider() :
-            base(new FOVShadowCasting())
+            base(new FOVRecursiveShadowCasting())
         {
 
         }
@@ -34,7 +34,7 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
                                     viewer,
                                     world,
                                     world.Dimensions,
-                                    GetVisibleWalls(viewer, world));
+                                    world.Walls.Keys);
 
             Vision = Board.GetVision();
         }
