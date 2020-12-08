@@ -136,25 +136,11 @@ namespace JoyLib.Code.Unity.GUI
                     position = position + forward;
                 }
 
-                //Instantiate the prefab at position
-                GameObject go = InventoryManager.Instantiate(prefab, position + Vector3.up * 0.3f, Quaternion.identity);
-                go.name = go.name.Replace("(Clone)", "");
-                
-                go.transform.parent = WorldObjects?.transform;
-                go.GetComponent<ItemBehaviourHandler>().AttachJoyObject(item);
-                SpriteRenderer renderer = go.GetComponent<SpriteRenderer>(); 
-                renderer.sprite = item.Sprite;
+                //Activate the game object
+                GameObject go = item.MonoBehaviourHandler.gameObject;
                 Player.FetchAction("placeiteminworldaction")
                     .Execute(new IJoyObject[] {Player, item});
-                renderer.sortingLayerName = "Objects";
-                
-                //Reset the item collection of the prefab with this item
-                ItemCollection collection = go.GetComponent<ItemCollection>();
-                if (collection != null)
-                {
-                    collection.Clear();
-                    collection.Add(item);
-                }
+                go.SetActive(true);
 
                 ItemContainer.RemoveItemCompletely(item);
                 Container.NotifyDropItem(item, go);

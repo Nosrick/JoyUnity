@@ -42,7 +42,7 @@ namespace JoyLib.Code.Unity
                     new object[] {true});
 
                 item.MyWorld.RemoveObject(item.WorldPosition, item);
-                item.Move(ItemBehaviourHandler.EntityInRange.WorldPosition);
+                //item.Move(ItemBehaviourHandler.EntityInRange.WorldPosition);
                 
                 //GameObject.DestroyImmediate(this.gameObject);
                 if (result)

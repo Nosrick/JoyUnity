@@ -952,6 +952,12 @@ namespace JoyLib.Code.Entities
 
             actor.MyWorld = this.MyWorld;
             actor.Move(this.WorldPosition);
+
+            if (actor is ItemInstance goItem)
+            {
+                goItem.MonoBehaviourHandler.gameObject.SetActive(false);
+            }
+            
             m_Backpack.Add(actor);
             return true;
         }

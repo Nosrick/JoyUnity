@@ -111,7 +111,7 @@ namespace JoyLib.Code.Entities.Items
         {
             if (this.Prefab is null)
             {
-                this.Prefab = Resources.Load<GameObject>("Prefabs/ItemInstance");
+                this.Prefab = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/ItemInstance"));
             }
             
             this.Roller = roller is null ? new RNG() : roller;
@@ -181,6 +181,8 @@ namespace JoyLib.Code.Entities.Items
             m_Icon = Sprite;
             CalculateValue();
             ConstructDescription();
+
+            this.Prefab.GetComponent<MonoBehaviourHandler>().AttachJoyObject(this);
         }
 
         public IItemInstance Copy(IItemInstance copy)

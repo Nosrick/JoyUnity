@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using JoyLib.Code.Unity;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Graphics;
+using JoyLib.Code.Unity;
 using JoyLib.Code.World;
 using UnityEngine;
 
@@ -33,9 +33,10 @@ namespace JoyLib.Code.States
             GameObject entityHolder = GameObject.Find("WorldEntities");
             GameObject fogOfWarHolder = GameObject.Find("WorldFog");
             GameObject wallHolder = GameObject.Find("WorldWalls");
+            GameObject floorHolder = GameObject.Find("WorldFloors");
 
             MonoBehaviourHandler prefab = Resources.Load<MonoBehaviourHandler>("Prefabs/MonoBehaviourHandler");
-            MonoBehaviourHandler itemPrefab = Resources.Load<MonoBehaviourHandler>("Prefabs/ItemInstance");
+            //MonoBehaviourHandler itemPrefab = Resources.Load<MonoBehaviourHandler>("Prefabs/ItemInstance");
             GameObject sprite = Resources.Load<GameObject>("Prefabs/Sprite");
 
             //Make the upstairs
@@ -75,6 +76,7 @@ namespace JoyLib.Code.States
                         m_ObjectIcons.GetSprite(m_ActiveWorld.Tiles[i, j].TileSet, 
                                                              //TODO: This will eventually be a tile direction selection algorithm
                                                              "surroundfloor");
+                    gameObject.transform.parent = floorHolder.transform;
 
                     //Make the fog of war
                     //TODO: MAKE THIS VIABLE
@@ -85,13 +87,6 @@ namespace JoyLib.Code.States
                     fogSpriteRenderer.sprite = m_ObjectIcons.GetSprite("Obscure", "Obscure");
                     fogOfWar.name = "Fog of War";
                 }
-            }
-
-            //Create the objects
-            foreach (IJoyObject obj in m_ActiveWorld.Objects)
-            {
-                MonoBehaviourHandler newObject = GameObject.Instantiate(itemPrefab, objectHolder.transform, true);
-                newObject.AttachJoyObject(obj);
             }
 
             //Create the walls

@@ -10,13 +10,27 @@ namespace JoyLib.Code.Unity
         protected ItemCollection m_Items;
         
         public Entity EntityInRange { get; protected set; }
+        
+        protected static GameObject WorldObjects { get; set; }
 
         public void Awake()
         {
-            m_Items = this.GetComponent<ItemCollection>();
+            Initialise();
+        }
+
+        protected void Initialise()
+        {
+            if (m_Items is null)
+            {
+                m_Items = this.GetComponent<ItemCollection>();
+            }
             if (LiveItemHandler is null)
             {
                 LiveItemHandler = GlobalConstants.GameManager.ItemHandler;
+            }
+            if (WorldObjects is null)
+            {
+                WorldObjects = GameObject.Find("WorldObjects");
             }
         }
 
@@ -47,7 +61,9 @@ namespace JoyLib.Code.Unity
 
         public override void AttachJoyObject(IJoyObject joyObject)
         {
+            Initialise();
             base.AttachJoyObject(joyObject);
+            this.transform.parent = WorldObjects.transform;
 
             if (joyObject is ItemInstance itemInstance)
             {
