@@ -65,6 +65,8 @@ namespace JoyLib.Code.Entities
 
         protected Queue<Vector2Int> m_PathfindingData;
 
+        protected IWorldInstance m_MyWorld;
+
         protected string m_Description;
 
         protected const int XP_PER_LEVEL = 100;
@@ -647,6 +649,15 @@ namespace JoyLib.Code.Entities
             m_IdentifiedItems.Add(nameRef);
         }
 
+        public new void Move(Vector2Int position)
+        {
+            base.Move(position);
+            foreach (IJoyObject joyObject in Backpack)
+            {
+                joyObject.Move(position);
+            }
+        }
+
         public virtual bool RemoveContents(IItemInstance item)
         {
             if (m_Backpack.Contains(item))
@@ -939,6 +950,8 @@ namespace JoyLib.Code.Entities
                 actor.IdentifyMe();
             }
 
+            actor.MyWorld = this.MyWorld;
+            actor.Move(this.WorldPosition);
             m_Backpack.Add(actor);
             return true;
         }
@@ -1130,7 +1143,18 @@ namespace JoyLib.Code.Entities
             get { return m_Pathfinder; }
         }
 
-
+        public new IWorldInstance MyWorld
+        {
+            get => m_MyWorld;
+            set
+            {
+                m_MyWorld = value;
+                foreach (IItemInstance item in Backpack)
+                {
+                    item.MyWorld = value;
+                }
+            }
+        }
 
         public string Description
         {

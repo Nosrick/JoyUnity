@@ -126,6 +126,8 @@ namespace JoyLib.Code.Entities.Items
             this.TileSet = type.SpriteSheet;
             this.Tags = type.Tags.ToList();
 
+            this.m_Contents = new List<long>();
+
             this.WorldPosition = position;
             this.Move(this.WorldPosition);
 
@@ -167,8 +169,6 @@ namespace JoyLib.Code.Entities.Items
             
             this.Identified = identified;
             //chosenIcon = RNG.instance.Roll(0, m_Icons.Length - 1);
-
-            this.m_Contents = new List<long>();
 
             UniqueAbilities = uniqueAbilities is null == false ? new List<IAbility>(uniqueAbilities) : new List<IAbility>();
             
@@ -289,6 +289,10 @@ namespace JoyLib.Code.Entities.Items
         public void Move(Vector2Int newPosition)
         {
             this.WorldPosition = newPosition;
+            foreach (IJoyObject joyObject in Contents)
+            {
+                joyObject.Move(newPosition);
+            }
         }
 
         public int DamageValue(string name, int value)

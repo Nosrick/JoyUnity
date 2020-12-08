@@ -1,5 +1,6 @@
 ﻿using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
+using UnityEngine;
 
 namespace JoyLib.Code.Scripting.Actions
 {
@@ -22,13 +23,20 @@ namespace JoyLib.Code.Scripting.Actions
                 return false;
             }
             
-            entity.RemoveContents(item);
+            bool result = entity.RemoveContents(item);
             item.Move(entity.WorldPosition);
             entity.MyWorld.AddObject(item);
-            
-            SetLastParameters(participants, tags, args);
 
-            return true;
+            if (result)
+            {
+                SetLastParameters(participants, tags, args);
+            }
+            else
+            {
+                Debug.Log("FAILED TO REMOVE ITEM");
+            }
+
+            return result;
         }
     }
 }

@@ -15,7 +15,7 @@ namespace JoyLib.Code.Unity.GUI
         
         public static IGUIManager GUIManager { get; set; }
         
-        public static GameObject ItemHolder { get; set;}
+        public static GameObject WorldObjects { get; set;}
         
         public static ILiveEntityHandler EntityHandler { get; set; }
         
@@ -28,7 +28,7 @@ namespace JoyLib.Code.Unity.GUI
 
         protected void GetBits()
         {
-            if (GlobalConstants.GameManager is null)
+            if (GlobalConstants.GameManager is null || GUIManager is null == false)
             {
                 return;
             }
@@ -36,6 +36,7 @@ namespace JoyLib.Code.Unity.GUI
             ConversationEngine = GlobalConstants.GameManager.ConversationEngine;
             GUIManager = GlobalConstants.GameManager.GUIManager;
             EntityHandler = GlobalConstants.GameManager.EntityHandler;
+            WorldObjects = GameObject.Find("WorldObjects");
         }
         
         public override void OnPointerUp(PointerEventData eventData)
@@ -139,11 +140,12 @@ namespace JoyLib.Code.Unity.GUI
                 GameObject go = InventoryManager.Instantiate(prefab, position + Vector3.up * 0.3f, Quaternion.identity);
                 go.name = go.name.Replace("(Clone)", "");
                 
-                go.transform.parent = ItemHolder?.transform;
+                go.transform.parent = WorldObjects?.transform;
                 go.GetComponent<ItemBehaviourHandler>().AttachJoyObject(item);
                 SpriteRenderer renderer = go.GetComponent<SpriteRenderer>(); 
                 renderer.sprite = item.Sprite;
-                item.Move(Vector2Int.FloorToInt(position));
+                Player.FetchAction("placeiteminworldaction")
+                    .Execute(new IJoyObject[] {Player, item});
                 renderer.sortingLayerName = "Objects";
                 
                 //Reset the item collection of the prefab with this item

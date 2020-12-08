@@ -171,6 +171,8 @@ namespace JoyLib.Code.World
                 m_Objects.Add(objectRef);
             }
 
+            objectRef.MyWorld = this;
+
             IsDirty = true;
         }
 
@@ -198,8 +200,6 @@ namespace JoyLib.Code.World
                 IsDirty = true;
 
                 seek.MyWorld = null;
-
-                itemRef.Move(new Vector2Int(-1, -1));
             }
 
             return removed;

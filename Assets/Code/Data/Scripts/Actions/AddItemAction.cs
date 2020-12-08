@@ -27,6 +27,7 @@ namespace JoyLib.Code.Scripting.Actions
 
             bool newOwner = args.Length > 0 && (bool)args[0];
 
+            bool result = true;
             if (newOwner && container is Entity owner)
             {
                 if (tags is null == false 
@@ -37,10 +38,11 @@ namespace JoyLib.Code.Scripting.Actions
                     item.SetOwner(owner.GUID);
                 }
             }
-            
+
+            result &= item.MyWorld is null ? true : item.MyWorld.RemoveObject(item.WorldPosition, item);
             SetLastParameters(participants, tags, args);
 
-            return container.AddContents(item);
+            return result && container.AddContents(item);
         }
     }
 }
