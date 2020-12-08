@@ -1,10 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Entities.AI;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Rollers;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities.Needs
@@ -109,16 +106,21 @@ namespace JoyLib.Code.Entities.Needs
                 }
             }
 
-            if (bestMatch is null)
+            if (bestMatch is null && possibleListeners.Count > 0)
             {
                 bestMatch = possibleListeners[Roller.Roll(0, possibleListeners.Count)];
+                m_CachedActions["seekaction"].Execute(
+                    new IJoyObject[] {actor, bestMatch},
+                    new[] {"need", "seek", "friendship"},
+                    new object[] {"friendship"});
+                return true;
             }
 
-            m_CachedActions["seekaction"].Execute(
-                new IJoyObject[] {actor, bestMatch},
-                new[] {"need", "seek", "friendship"},
-                new object[] {"friendship"});
-            return true;
+            m_CachedActions["wanderaction"].Execute(
+                new IJoyObject[] {actor},
+                new[] {"wander", "need", "family"},
+                new object[] {});
+            return false;
         }
 
         public override bool Interact(IEntity actor, IJoyObject obj)
