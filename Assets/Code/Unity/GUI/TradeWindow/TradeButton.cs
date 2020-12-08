@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using JoyLib.Code.Unity.GUI;
+﻿using JoyLib.Code.Unity.GUI;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class TradeButton : MonoBehaviour

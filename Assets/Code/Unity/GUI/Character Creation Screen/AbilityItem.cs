@@ -1,4 +1,6 @@
-﻿using JoyLib.Code.Events;
+﻿using Castle.Core.Internal;
+using DevionGames.InventorySystem;
+using JoyLib.Code.Events;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,7 +13,10 @@ namespace JoyLib.Code.Unity.GUI
         [SerializeField] protected ValueContainer Parent;
         [SerializeField] protected Color32 SelectedColour;
         [SerializeField] protected Color32 IdleColour;
+        [SerializeField] public int Delta = 1;
         public bool Selected { get; protected set; }
+        
+        public string Tooltip { get; set; }
 
         public string Name
         {
@@ -36,9 +41,23 @@ namespace JoyLib.Code.Unity.GUI
             Text = this.GetComponentInChildren<TextMeshProUGUI>();
         }
 
+        public void OnMouseEnter()
+        {
+            if (Tooltip.IsNullOrEmpty())
+            {
+                return;
+            }
+            InventoryManager.UI.tooltip.Show(Tooltip);
+        }
+
+        public void OnMouseExit()
+        {
+            InventoryManager.UI.tooltip.Close();
+        }
+
         public void ToggleMe()
         {
-            if (Parent.Value <= 0 && Selected == false)
+            if (Parent.Value < Delta && Selected == false)
             {
                 return;
             }
@@ -54,8 +73,8 @@ namespace JoyLib.Code.Unity.GUI
             }
             OnSelect?.Invoke(this, new ValueChangedEventArgs()
             {
-                NewValue = Selected ? 1 : -1,
-                Delta = Selected ? 1 : -1 
+                NewValue = Selected ? Delta : -Delta,
+                Delta = Selected ? Delta : -Delta 
             });
         }
     }

@@ -1,4 +1,5 @@
-﻿using JoyLib.Code.Events;
+﻿using DevionGames.InventorySystem;
+using JoyLib.Code.Events;
 using UnityEngine;
 
 namespace JoyLib.Code.Unity.GUI
@@ -7,8 +8,27 @@ namespace JoyLib.Code.Unity.GUI
     {
         [SerializeField] public int Minimum = 1;
         [SerializeField] public int Maximum = 10;
-        [SerializeField] public int Delta = 1;
+        [SerializeField] public int DecreaseDelta = 1;
+        [SerializeField] public int IncreaseDelta = 1;
+        [SerializeField] public bool AllowIncrease = true;
+        [SerializeField] public bool AllowDecrease = true;
         
+        public string Tooltip { get; set; }
+
+        public void OnMouseEnter()
+        {
+            if (Tooltip is null)
+            {
+                return;
+            }
+            InventoryManager.UI.tooltip.Show(Tooltip);
+        }
+
+        public void OnMouseExit()
+        {
+            InventoryManager.UI.tooltip.Close();
+        }
+
         public virtual int DecreaseValue(int delta = 1)
         {
             if (Value - delta >= Minimum)
