@@ -1,31 +1,14 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using DevionGames.InventorySystem;
-using DevionGames.InventorySystem.Configuration;
 using JoyLib.Code;
-using JoyLib.Code.Cultures;
-using JoyLib.Code.Entities.Sexuality;
 using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Relationships;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Scripting;
-using JoyLib.Code.Entities.Needs;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Entities.Jobs;
-using JoyLib.Code.Entities.Sexes;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Collections;
-using JoyLib.Code.Entities.AI.Drivers;
 using JoyLib.Code.Entities.Gender;
-using JoyLib.Code.Entities.Romance;
-using JoyLib.Code.Rollers;
-using JoyLib.Code.Unity.GUI;
-using JoyLib.Code.World;
-using NUnit.Framework;
+using JoyLib.Code.Entities.Relationships;
+using JoyLib.Code.Entities.Sexes;
+using JoyLib.Code.Entities.Sexuality;
+using JoyLib.Code.Scripting;
 using Moq;
-using UnityEngine;
+using NUnit.Framework;
 using UnityEngine.TestTools;
 
 namespace Tests
@@ -86,39 +69,48 @@ namespace Tests
 
             heterofemaleHuman = Mock.Of<IEntity>(
                 entity => entity.Gender == femaleGender
-                && entity.Sexuality == heterosexual);
+                && entity.Sexuality == heterosexual
+                && entity.GUID == 1);
 
             heteroMaleHuman = Mock.Of<IEntity>(
                 entity => entity.Gender == maleGender
-                          && entity.Sexuality == heterosexual);
+                          && entity.Sexuality == heterosexual
+                          && entity.GUID == 2);
 
             homoMaleHumanLeft = Mock.Of<IEntity>(
                 entity => entity.Gender == maleGender
-                          && entity.Sexuality == homosexual);
+                          && entity.Sexuality == homosexual
+                          && entity.GUID == 3);
 
             homoMaleHumanRight = Mock.Of<IEntity>(
                 entity => entity.Gender == maleGender
-                          && entity.Sexuality == homosexual);
+                          && entity.Sexuality == homosexual
+                          && entity.GUID == 4);
 
             homofemaleHumanLeft = Mock.Of<IEntity>(
                 entity => entity.Gender == femaleGender
-                          && entity.Sexuality == homosexual);
+                          && entity.Sexuality == homosexual
+                          && entity.GUID == 5);
 
             homofemaleHumanRight = Mock.Of<IEntity>(
                 entity => entity.Gender == femaleGender
-                          && entity.Sexuality == homosexual);
+                          && entity.Sexuality == homosexual
+                          && entity.GUID == 6);
 
             biMaleHuman = Mock.Of<IEntity>(
                 entity => entity.Gender == maleGender
-                          && entity.Sexuality == bisexual);
+                          && entity.Sexuality == bisexual
+                          && entity.GUID == 7);
 
             bifemaleHuman = Mock.Of<IEntity>(
                 entity => entity.Gender == femaleGender
-                          && entity.Sexuality == bisexual);
+                          && entity.Sexuality == bisexual
+                          && entity.GUID == 8);
 
             asexualMaleHuman = Mock.Of<IEntity>(
                 entity => entity.Gender == maleGender
-                          && entity.Sexuality == asexual);
+                          && entity.Sexuality == asexual
+                          && entity.GUID == 9);
 
 
             IEntity[] heteroCouple = new IEntity[] { heterofemaleHuman, heteroMaleHuman };
