@@ -1,13 +1,11 @@
-﻿using JoyLib.Code.Collections;
-using JoyLib.Code.Entities.Abilities;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Rollers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-using UnityEngine;
+using JoyLib.Code.Entities.Abilities;
+using JoyLib.Code.Helpers;
+using JoyLib.Code.Rollers;
 
 namespace JoyLib.Code.Entities.Jobs
 {
@@ -55,33 +53,28 @@ namespace JoyLib.Code.Entities.Jobs
 
                     foreach(XElement jobElement in doc.Elements("Job"))
                     {
-                        Dictionary<string, float> statGrowths = (from growth in jobElement.Elements("Statistic")
-                                                                 select new KeyValuePair<string, float>(
-                                                                     growth.Element("Name").GetAs<string>(),
-                                                                     growth.Element("Growth").GetAs<float>()))
+                        Dictionary<string, int> statDiscounts = (from discount in jobElement.Elements("Statistic")
+                                                                 select new KeyValuePair<string, int>(
+                                                                     discount.Element("Name").GetAs<string>(),
+                                                                     discount.Element("Discount").GetAs<int>()))
                                                                      .ToDictionary(x => x.Key, x => x.Value);
 
-                        Dictionary<string, int> skillGrowths = (from growth in jobElement.Elements("Skill")
+                        Dictionary<string, int> skillDiscounts = (from discount in jobElement.Elements("Skill")
                                                                 select new KeyValuePair<string, int>(
-                                                                    growth.Element("Name").GetAs<string>(),
-                                                                    growth.Element("Growth").GetAs<int>()))
+                                                                    discount.Element("Name").GetAs<string>(),
+                                                                    discount.Element("Growth").GetAs<int>()))
                                                                     .ToDictionary(x => x.Key, x => x.Value);
 
-                        NonUniqueDictionary<int, IAbility> abilities = new NonUniqueDictionary<int, IAbility>();
+                        Dictionary<IAbility, int> abilities = new Dictionary<IAbility, int>();
                         //TODO: Remove this nastiness
                         try
                         {
-
-                            List<Tuple<int, IAbility>> listAbilities = (from ability in jobElement.Elements("Ability")
-                                                                        select new Tuple<int, IAbility>(
-                                                                            ability.Element("Level").GetAs<int>(),
-                                                                            GlobalConstants.GameManager.AbilityHandler.GetAbility(
-                                                                                ability.Element("Name").GetAs<string>()))).ToList();
-
-                            foreach (Tuple<int, IAbility> ability in listAbilities)
-                            {
-                                abilities.Add(ability.Item1, ability.Item2);
-                            }
+                            abilities = (from ability in jobElement.Elements("Ability")
+                                select new KeyValuePair<IAbility, int>(
+                                    GlobalConstants.GameManager.AbilityHandler.GetAbility(
+                                        ability.Element("Name").GetAs<string>()),
+                                    ability.Element("Cost").GetAs<int>()))
+                                .ToDictionary(x => x.Key, x => x.Value);
                         }
                         catch(Exception e)
                         {
@@ -94,7 +87,7 @@ namespace JoyLib.Code.Entities.Jobs
                         string name = jobElement.Element("Name").GetAs<string>();
                         string description = jobElement.Element("Description").DefaultIfEmpty("NO DESCRIPTION PROVIDED.");
 
-                        jobTypes.Add(new JobType(name, description, statGrowths, skillGrowths, abilities));
+                        jobTypes.Add(new JobType(name, description, statDiscounts, skillDiscounts, abilities));
                     }
                 }
                 catch(Exception e)

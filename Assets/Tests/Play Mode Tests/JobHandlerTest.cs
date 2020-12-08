@@ -1,10 +1,8 @@
 using System.Collections;
-using DevionGames.InventorySystem;
 using JoyLib.Code;
 using JoyLib.Code.Entities.Jobs;
 using JoyLib.Code.Rollers;
 using NUnit.Framework;
-using UnityEngine;
 using UnityEngine.TestTools;
 
 namespace Tests
@@ -31,8 +29,8 @@ namespace Tests
             Assert.That(jobs, Is.Not.Empty);
             foreach(IJob job in jobs)
             {
-                Assert.That(job.SkillGrowths, Is.Not.Empty);
-                Assert.That(job.StatisticGrowths, Is.Not.Empty);
+                Assert.That(job.SkillDiscounts, Is.Not.Empty);
+                Assert.That(job.StatisticDiscounts, Is.Not.Empty);
                 Assert.IsNotEmpty(job.Name);
             }
 

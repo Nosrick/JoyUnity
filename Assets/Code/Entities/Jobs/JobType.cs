@@ -1,90 +1,102 @@
-﻿using JoyLib.Code.Collections;
-using JoyLib.Code.Entities.Abilities;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using JoyLib.Code.Entities.Abilities;
 
 namespace JoyLib.Code.Entities.Jobs
 {
     public class JobType : IJob
     {
-        protected NonUniqueDictionary<int, IAbility> m_Abilities;
-        protected Dictionary<string, float> m_StatisticGrowths;
-        protected Dictionary<string, int> m_SkillGrowths;
+        protected Dictionary<IAbility, int> m_Abilities;
+        protected Dictionary<string, int> m_StatisticDiscounts;
+        protected Dictionary<string, int> m_SkillDiscounts;
 
         public JobType()
         {
         }
 
-        public JobType(string name, string description, Dictionary<string, float> statGrowths, Dictionary<string, int> skillGrowths,
-            NonUniqueDictionary<int, IAbility> abilities)
+        public JobType(
+            string name, 
+            string description, 
+            Dictionary<string, int> statDiscounts, 
+            Dictionary<string, int> skillDiscounts,
+            Dictionary<IAbility, int> abilities)
         {
             this.Name = name;
             this.Description = description;
-            this.m_Abilities = abilities;
-            this.m_StatisticGrowths = statGrowths;
-            this.m_SkillGrowths = skillGrowths;
+            this.Abilities = abilities;
+            this.m_StatisticDiscounts = statDiscounts;
+            this.m_SkillDiscounts = skillDiscounts;
         }
 
-        public int GetSkillGrowth(string skillName)
+        public int GetSkillDiscount(string skillName)
         {
-            if(m_SkillGrowths.ContainsKey(skillName))
+            if(m_SkillDiscounts.ContainsKey(skillName))
             {
-                return m_SkillGrowths[skillName];
+                return m_SkillDiscounts[skillName];
             }
             return 0;
         }
 
-        public float GetStatisticGrowth(string statisticName)
+        public float GetStatisticDiscount(string statisticName)
         {
-            if(m_StatisticGrowths.ContainsKey(statisticName))
+            if(m_StatisticDiscounts.ContainsKey(statisticName))
             {
-                return m_StatisticGrowths[statisticName];
+                return m_StatisticDiscounts[statisticName];
             }
             return 0.0f;
         }
 
-        public IAbility[] GetAbilitiesForLevel(int level)
+        public int AddExperience(int value)
         {
-            List<IAbility> abilities = new List<IAbility>();
+            Experience += value;
+            return Experience;
+        }
 
-            foreach(Tuple<int, IAbility> tuple in m_Abilities)
+        public bool SpendExperience(int value)
+        {
+            if (Experience < value)
             {
-                if(tuple.Item1 == level)
-                {
-                    abilities.Add(tuple.Item2);
-                }
+                return false;
             }
 
-            return abilities.ToArray();
+            Experience -= value;
+            return true;
         }
 
         public string Name
         {
             get;
-            private set;
+            protected set;
         }
 
         public string Description
         {
             get;
-            private set;
+            protected set;
         }
 
-        public Dictionary<string, float> StatisticGrowths
+        public int Experience { get; protected set; }
+
+        public Dictionary<string, int> StatisticDiscounts
         {
             get
             {
-                return m_StatisticGrowths.ToDictionary(k => k.Key, v => v.Value);
+                return m_StatisticDiscounts;
             }
         }
 
-        public Dictionary<string, int> SkillGrowths
+        public Dictionary<string, int> SkillDiscounts
         {
             get
             {
-                return m_SkillGrowths.ToDictionary(k => k.Key, v => v.Value);
+                return m_SkillDiscounts.ToDictionary(k => k.Key, v => v.Value);
             }
+        }
+
+        public Dictionary<IAbility, int> Abilities
+        {
+            get => m_Abilities;
+            protected set => m_Abilities = value;
         }
     }
 }

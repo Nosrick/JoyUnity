@@ -37,7 +37,7 @@ namespace JoyLib.Code.Entities
         IEntity CreateLong(IEntityTemplate template,
             BasicValueContainer<IRollableValue> stats,
             BasicValueContainer<INeed> needs,
-            BasicValueContainer<IGrowingValue> skills, 
+            BasicValueContainer<IGrowingValue> skills,
             IEnumerable<IAbility> abilities,
             IGrowingValue level,
             float experience,
@@ -52,7 +52,7 @@ namespace JoyLib.Code.Entities
             NonUniqueDictionary<string, IItemInstance> equipment,
             List<IItemInstance> backpack,
             List<string> identifiedItems,
-            Dictionary<string, int> jobLevels,
+            IEnumerable<IJob> jobs,
             IWorldInstance world,
             List<ICulture> cultures = null,
             IDriver driver = null);

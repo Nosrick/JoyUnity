@@ -5,18 +5,23 @@ namespace JoyLib.Code.Entities.Jobs
 {
     public interface IJob
     {
-        int GetSkillGrowth(string skillName);
+        int GetSkillDiscount(string skillName);
 
-        float GetStatisticGrowth(string statisticName);
+        float GetStatisticDiscount(string statisticName);
 
-        IAbility[] GetAbilitiesForLevel(int level);
+        int AddExperience(int value);
+        bool SpendExperience(int value);
+
+        Dictionary<IAbility, int> Abilities { get; }
         
         string Name { get; }
         
         string Description { get; }
         
-        Dictionary<string, float> StatisticGrowths { get; }
+        int Experience { get; }
         
-        Dictionary<string, int> SkillGrowths { get; }
+        Dictionary<string, int> StatisticDiscounts { get; }
+        
+        Dictionary<string, int> SkillDiscounts { get; }
     }
 }

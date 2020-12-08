@@ -44,7 +44,6 @@ namespace JoyLib.Code.Entities
         protected List<string> m_IdentifiedItems;
 
         protected IJob m_CurrentJob;
-        protected Dictionary<string, int> m_JobLevels;
 
         protected List<string> m_Slots;
 
@@ -52,7 +51,6 @@ namespace JoyLib.Code.Entities
 
         protected int m_Size;
 
-        protected IGrowingValue m_Level;
         protected IVision m_VisionProvider;
 
         protected FulfillmentData m_FulfillmentData;
@@ -105,8 +103,6 @@ namespace JoyLib.Code.Entities
         /// <param name="skills"></param>
         /// <param name="abilities"></param>
         /// <param name="cultures"></param>
-        /// <param name="level"></param>
-        /// <param name="experience"></param>
         /// <param name="job"></param>
         /// <param name="gender"></param>
         /// <param name="sex"></param>
@@ -118,10 +114,11 @@ namespace JoyLib.Code.Entities
         /// <param name="equipment"></param>
         /// <param name="backpack"></param>
         /// <param name="identifiedItems"></param>
-        /// <param name="jobLevels"></param>
+        /// <param name="jobs"></param>
         /// <param name="world"></param>
         /// <param name="driver"></param>
         /// <param name="roller"></param>
+        /// <param name="jobLevels"></param>
         public Entity(
             IEntityTemplate template,
             BasicValueContainer<IRollableValue> statistics,
@@ -129,8 +126,6 @@ namespace JoyLib.Code.Entities
             BasicValueContainer<IGrowingValue> skills,
             IEnumerable<IAbility> abilities,
             List<ICulture> cultures,
-            IGrowingValue level,
-            float experience,
             IJob job,
             IGender gender,
             IBioSex sex,
@@ -142,7 +137,7 @@ namespace JoyLib.Code.Entities
             NonUniqueDictionary<string, IItemInstance> equipment,
             List<IItemInstance> backpack,
             List<string> identifiedItems,
-            Dictionary<string, int> jobLevels,
+            IEnumerable<IJob> jobs,
             IWorldInstance world,
             IDriver driver,
             RNG roller = null) :
@@ -165,7 +160,7 @@ namespace JoyLib.Code.Entities
 
             this.Gender = gender;
 
-            this.m_JobLevels = jobLevels;
+            this.Jobs = new List<IJob>(jobs);
             this.Sexuality = sexuality;
             this.Romance = romance;
             this.m_IdentifiedItems = identifiedItems;
@@ -177,11 +172,6 @@ namespace JoyLib.Code.Entities
 
             this.m_Abilities = template.Abilities.ToList();
             this.m_Abilities.AddRange(abilities);
-            this.m_Level = level;
-            for (int i = 1; i < level.Value; i++)
-            {
-                this.LevelUp();
-            }
 
             this.m_CurrentJob = job;
 
@@ -225,7 +215,6 @@ namespace JoyLib.Code.Entities
         /// <param name="skills"></param>
         /// <param name="abilities"></param>
         /// <param name="cultures"></param>
-        /// <param name="level"></param>
         /// <param name="job"></param>
         /// <param name="gender"></param>
         /// <param name="sex"></param>
@@ -244,7 +233,6 @@ namespace JoyLib.Code.Entities
             BasicValueContainer<IGrowingValue> skills,
             IEnumerable<IAbility> abilities,
             List<ICulture> cultures,
-            IGrowingValue level,
             IJob job,
             IGender gender,
             IBioSex sex,
@@ -255,9 +243,9 @@ namespace JoyLib.Code.Entities
             IWorldInstance world,
             IDriver driver,
             RNG roller = null) :
-            this(template, statistics, needs, skills, abilities, cultures, level, 0, job, gender, sex, sexuality, romance, position, sprites,
+            this(template, statistics, needs, skills, abilities, cultures, job, gender, sex, sexuality, romance, position, sprites,
                 NaturalWeaponHelper?.MakeNaturalWeapon(template.Size), new NonUniqueDictionary<string, IItemInstance>(),
-                new List<IItemInstance>(), new List<string>(), new Dictionary<string, int>(), world, driver, roller)
+                new List<IItemInstance>(), new List<string>(), new List<IJob> { job }, world, driver, roller)
         {
         }
 
@@ -276,7 +264,7 @@ namespace JoyLib.Code.Entities
 
             this.m_Size = copy.Size;
 
-            this.m_JobLevels = copy.JobLevels;
+            this.Jobs = copy.Jobs;
             this.m_IdentifiedItems = copy.IdentifiedItems;
             this.m_Statistics = copy.Statistics;
 
@@ -284,11 +272,6 @@ namespace JoyLib.Code.Entities
 
             this.m_Needs = copy.Needs;
             this.m_Abilities = copy.Abilities;
-            this.m_Level = copy.Level;
-            for (int i = 1; i < this.m_Level.Value; i++)
-            {
-                this.LevelUp();
-            }
 
             this.m_CurrentJob = copy.CurrentJob;
 
@@ -333,7 +316,6 @@ namespace JoyLib.Code.Entities
             builder.AppendLine(textInfo.ToTitleCase(this.CreatureType));
             builder.AppendLine(textInfo.ToTitleCase(this.Gender.Name));
             builder.AppendLine(textInfo.ToTitleCase(this.Job.Name));
-            builder.AppendLine("Level " + this.Level.Value);
 
             m_Description = builder.ToString();
         }
@@ -523,12 +505,13 @@ namespace JoyLib.Code.Entities
             //Check job levels
             foreach (string tag in tags)
             {
-                KeyValuePair<string, int> jobLevel = new KeyValuePair<string, int>(tag, 0);
-
                 try
                 {
-                    jobLevel = m_JobLevels.First(job => job.Key.Equals(tag, StringComparison.OrdinalIgnoreCase));
-                    data.Add(new Tuple<string, int>(jobLevel.Key, jobLevel.Value));
+                    IJob job = Jobs.First(j => j.Name.Equals(tag, StringComparison.OrdinalIgnoreCase));
+                    if (job is null == false)
+                    {
+                        data.Add(new Tuple<string, int>(job.Name, 1));
+                    }
                 }
                 catch (Exception e)
                 {
@@ -539,7 +522,7 @@ namespace JoyLib.Code.Entities
             //Fetch all job levels
             if (tags.Any(tag => tag.Equals("jobs", StringComparison.OrdinalIgnoreCase)))
             {
-                data.AddRange(from int level in m_JobLevels select new Tuple<string, int>("jobs", level));
+                data.AddRange(from job in Jobs select new Tuple<string, int>(job.Name, 1));
             }
 
             //Fetch gender data
@@ -821,38 +804,9 @@ namespace JoyLib.Code.Entities
             DerivedValues[EntityDerivedValue.CONCENTRATION].ModifyValue(value);
         }
 
-        public void AddExperience(float value)
+        public void AddExperience(int value)
         {
-            float previousXP = m_Level.Experience;
-
-            if (previousXP < m_Level.AddExperience(value))
-            {
-                LevelUp();
-            }
-        }
-
-        public void LevelUp()
-        {
-            if (m_JobLevels.ContainsKey(m_CurrentJob.Name))
-            {
-                m_JobLevels[m_CurrentJob.Name] += 1;
-            }
-            else
-            {
-                m_JobLevels.Add(m_CurrentJob.Name, 1);
-            }
-
-            IAbility[] newAbilities = m_CurrentJob.GetAbilitiesForLevel(m_Level.Value);
-
-            foreach (IAbility ability in newAbilities)
-            {
-                if (m_Abilities.Contains(ability) == false)
-                {
-                    m_Abilities.Add(ability);
-                }
-            }
-
-            CalculateDerivatives();
+            CurrentJob.AddExperience(value);
         }
 
         public void DamageMe(int value, Entity source)
@@ -1113,8 +1067,6 @@ namespace JoyLib.Code.Entities
 
         protected int RegenTicker { get; set; }
 
-        public IGrowingValue Level => m_Level;
-
         public Quest QuestOffered { get; set; }
 
         public List<ICulture> Cultures => m_Cultures;
@@ -1124,11 +1076,6 @@ namespace JoyLib.Code.Entities
         public IJob Job
         {
             get { return m_CurrentJob; }
-        }
-
-        public Dictionary<string, int> JobLevels
-        {
-            get { return m_JobLevels; }
         }
 
         public List<string> Slots => m_Slots;
@@ -1174,5 +1121,7 @@ namespace JoyLib.Code.Entities
                 return m_Description;
             }
         }
+
+        public IEnumerable<IJob> Jobs { get; protected set; }
     }
 }

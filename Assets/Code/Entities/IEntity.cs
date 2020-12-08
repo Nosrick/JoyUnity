@@ -37,11 +37,10 @@ namespace JoyLib.Code.Entities
         List<string> IdentifiedItems { get; }
 
         IJob CurrentJob { get; }
-        Dictionary<string, int> JobLevels { get; }
+        IEnumerable<IJob> Jobs { get; }
         List<string> Slots { get; }
         List<ICulture> Cultures { get; }
         int Size { get; }
-        IGrowingValue Level { get; }
         
         IVision VisionProvider { get; }
         FulfillmentData FulfillmentData { get; }
@@ -86,8 +85,7 @@ namespace JoyLib.Code.Entities
         void DecreaseConcentration(int value);
         void IncreaseConcentration(int value);
 
-        void AddExperience(float value);
-        void LevelUp();
+        void AddExperience(int value);
         
         void DamageMe(int value, Entity source);
         void DirectDVModification(int value, string index = EntityDerivedValue.HITPOINTS);
