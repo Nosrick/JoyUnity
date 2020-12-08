@@ -1,12 +1,10 @@
-using System;
-using UnityEngine;
-using JoyLib.Code.Rollers;
-using JoyLib.Code.Graphics;
 using System.Collections.Generic;
-using System.Linq;
-using DevionGames.InventorySystem;
+using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Unity;
+using JoyLib.Code.Graphics;
+using JoyLib.Code.Rollers;
+using JoyLib.Code.Scripting;
+using UnityEngine;
 
 namespace JoyLib.Code.Entities.Items
 {
@@ -26,7 +24,7 @@ namespace JoyLib.Code.Entities.Items
             Roller = roller;
         }
 
-        public IItemInstance CreateRandomItemOfType(string[] tags, bool identified = false)
+        public IItemInstance CreateRandomItemOfType(string[] tags, bool identified = false, bool instantiate = false)
         {
             BaseItemType[] matchingTypes = ItemHandler.FindItemsOfType(tags);
             if (matchingTypes.Length > 0)
@@ -46,14 +44,17 @@ namespace JoyLib.Code.Entities.Items
                         ObjectIcons.GetSprites(
                             itemType.SpriteSheet,
                             itemType.UnidentifiedName),
-                        new RNG());
+                        new RNG(),
+                        new List<IAbility>(),
+                        new List<IJoyAction>(),
+                        instantiate);
                 return itemInstance;
             }
 
             return null;
         }
 
-        public IItemInstance CreateSpecificType(string name, string[] tags, bool identified = false)
+        public IItemInstance CreateSpecificType(string name, string[] tags, bool identified = false, bool instantiate = false)
         {
             BaseItemType[] matchingTypes = ItemHandler.FindItemsOfType(tags);
             List<BaseItemType> secondRound = new List<BaseItemType>();
@@ -90,7 +91,10 @@ namespace JoyLib.Code.Entities.Items
                         ObjectIcons.GetSprites(
                             type.SpriteSheet,
                             type.UnidentifiedName),
-                        new RNG());
+                        new RNG(),
+                        new List<IAbility>(),
+                        new List<IJoyAction>(),
+                        instantiate);
                     
                 return itemInstance;
             }
@@ -98,7 +102,8 @@ namespace JoyLib.Code.Entities.Items
             throw new ItemTypeNotFoundException(name, "Could not find an item type by the name of " + name);
         }
 
-        public IItemInstance CreateCompletelyRandomItem(bool identified = false, bool withAbility = false)
+        public IItemInstance CreateCompletelyRandomItem(bool identified = false,
+            bool withAbility = false, bool instantiate = false)
         {
             List<BaseItemType> itemDatabase = ItemHandler.ItemDatabase;
 
@@ -115,7 +120,10 @@ namespace JoyLib.Code.Entities.Items
                     ObjectIcons.GetSprites(
                         itemType.SpriteSheet,
                         itemType.UnidentifiedName),
-                    new RNG());
+                    new RNG(),
+                    new List<IAbility>(),
+                    new List<IJoyAction>(),
+                    instantiate);
                 
             return itemInstance;
         }

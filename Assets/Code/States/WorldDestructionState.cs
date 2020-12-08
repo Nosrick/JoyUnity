@@ -26,6 +26,7 @@ namespace JoyLib.Code.States
             GameObject worldEntities = GameObject.Find("WorldEntities");
             GameObject worldWalls = GameObject.Find("WorldWalls");
             GameObject worldFog = GameObject.Find("WorldFog");
+            GameObject worldFloors = GameObject.Find("WorldFloors");
 
             for(int i = 0; i < worldObjects.transform.childCount; i++)
             {
@@ -45,6 +46,11 @@ namespace JoyLib.Code.States
             for(int i = 0; i < worldFog.transform.childCount; i++)
             {
                 GameObject.Destroy(worldFog.transform.GetChild(i).gameObject);
+            }
+
+            for (int i = 0; i < worldFloors.transform.childCount; i++)
+            {
+                GameObject.Destroy(worldFloors.transform.GetChild(i).gameObject);
             }
 
             Done = true;

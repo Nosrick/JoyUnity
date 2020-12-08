@@ -1,32 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using DevionGames.InventorySystem;
 using JoyLib.Code;
-using JoyLib.Code.Collections;
-using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Abilities;
-using JoyLib.Code.Entities.AI.Drivers;
-using JoyLib.Code.Entities.Gender;
 using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Entities.Jobs;
-using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Relationships;
-using JoyLib.Code.Entities.Romance;
-using JoyLib.Code.Entities.Sexes;
-using JoyLib.Code.Entities.Sexuality;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Graphics;
 using JoyLib.Code.Quests;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.World;
 using Moq;
 using NUnit.Framework;
-using UnityEngine;
 using UnityEngine.TestTools;
-using Friendship = JoyLib.Code.Entities.Relationships.Friendship;
 
 namespace Tests
 {
@@ -80,9 +65,19 @@ namespace Tests
                 == new IRelationship[] { friendship });
             ILiveItemHandler itemHandler = Mock.Of<ILiveItemHandler>();
             IItemFactory itemFactory = Mock.Of<IItemFactory>(
-                factory => factory.CreateRandomItemOfType(It.IsAny<string[]>(), It.IsAny<bool>()) == item
-                && factory.CreateSpecificType(It.IsAny<string>(), It.IsAny<string[]>(), It.IsAny<bool>())== item
-                && factory.CreateCompletelyRandomItem(It.IsAny<bool>(), It.IsAny<bool>()) == item);
+                factory => factory.CreateRandomItemOfType(
+                               It.IsAny<string[]>(), 
+                               It.IsAny<bool>(),
+                               It.IsAny<bool>()) == item
+                && factory.CreateSpecificType(
+                    It.IsAny<string>(), 
+                    It.IsAny<string[]>(), 
+                    It.IsAny<bool>(), 
+                    It.IsAny<bool>())== item
+                && factory.CreateCompletelyRandomItem(
+                    It.IsAny<bool>(), 
+                    It.IsAny<bool>(),
+                    It.IsAny<bool>()) == item);
 
             gameManager = Mock.Of<IGameManager>(
                 manager => manager.ItemFactory == itemFactory);

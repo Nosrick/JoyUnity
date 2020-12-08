@@ -1,12 +1,12 @@
-﻿using JoyLib.Code.Entities;
+﻿using System;
+using System.Collections.Generic;
+using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
+using JoyLib.Code.Scripting;
 using JoyLib.Code.World;
 using JoyLib.Code.World.Generators;
 using JoyLib.Code.World.Generators.Interiors;
 using JoyLib.Code.World.Generators.Overworld;
-using System;
-using System.Collections.Generic;
-using JoyLib.Code.Scripting;
 using UnityEngine;
 
 namespace JoyLib.Code.States
@@ -91,7 +91,7 @@ namespace JoyLib.Code.States
 
             GlobalConstants.GameManager.EntityHandler.AddEntity(m_Player);
             
-            IItemInstance lightSource = GlobalConstants.GameManager.ItemFactory.CreateRandomItemOfType(new string[] { "light source" });
+            IItemInstance lightSource = GlobalConstants.GameManager.ItemFactory.CreateRandomItemOfType(new string[] { "light source" }, true, true);
             IJoyAction addItemAction = m_Player.FetchAction("additemaction");
             addItemAction.Execute(
                 new IJoyObject[] {m_Player, lightSource},
@@ -101,7 +101,7 @@ namespace JoyLib.Code.States
             for (int i = 0; i < 4; i++)
             {
                 addItemAction.Execute(
-                    new IJoyObject[] {m_Player, GlobalConstants.GameManager.ItemFactory.CreateCompletelyRandomItem(true)},
+                    new IJoyObject[] {m_Player, GlobalConstants.GameManager.ItemFactory.CreateCompletelyRandomItem(identified: true, instantiate: true)},
                     new []{"pickup"},
                     new object[] { true });
             }

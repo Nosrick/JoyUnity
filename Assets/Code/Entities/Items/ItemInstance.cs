@@ -107,11 +107,12 @@ namespace JoyLib.Code.Entities.Items
             Sprite[] sprites,
             RNG roller = null,
             IEnumerable<IAbility> uniqueAbilities = null,
-            IEnumerable<IJoyAction> actions = null)
+            IEnumerable<IJoyAction> actions = null,
+            bool instantiate = false)
         {
             if (this.Prefab is null)
             {
-                this.Prefab = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/ItemInstance"));
+                this.Prefab = Resources.Load<GameObject>("Prefabs/ItemInstance");
             }
             
             this.Roller = roller is null ? new RNG() : roller;
@@ -182,7 +183,25 @@ namespace JoyLib.Code.Entities.Items
             CalculateValue();
             ConstructDescription();
 
-            this.Prefab.GetComponent<MonoBehaviourHandler>().AttachJoyObject(this);
+            if (instantiate)
+            {
+                Instantiate();
+            }
+        }
+
+        public bool IsInstantiated()
+        {
+            return this.MonoBehaviourHandler is null == false;
+        }
+
+        public void Instantiate()
+        {
+            if (IsInstantiated())
+            {
+                return;
+            }
+            this.AttachMonoBehaviourHandler(GameObject.Instantiate(Prefab).GetComponent<MonoBehaviourHandler>());
+            this.MonoBehaviourHandler.AttachJoyObject(this);
         }
 
         public IItemInstance Copy(IItemInstance copy)

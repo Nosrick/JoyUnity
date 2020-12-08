@@ -1,11 +1,6 @@
-﻿using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Helpers;
+﻿using System.Collections.Generic;
+using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Rollers;
-using JoyLib.Code.States;
-using System.Collections.Generic;
-using System.Linq;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Unity;
 using UnityEngine;
 
 namespace JoyLib.Code.World.Generators.Interiors
@@ -41,25 +36,26 @@ namespace JoyLib.Code.World.Generators.Interiors
             int dungeonArea = worldRef.Tiles.GetLength(0) * worldRef.Tiles.GetLength(1);
             int itemsToPlace = dungeonArea / prosperity;
 
-            List<Vector2Int> unavailablePoints = new List<Vector2Int>();
-            foreach(IJoyObject wall in worldRef.Walls.Values)
+            List<Vector2Int> availablePoints = new List<Vector2Int>();
+
+            for (int i = 0; i < worldRef.Tiles.GetLength(0); i++)
             {
-                unavailablePoints.Add(wall.WorldPosition);
+                for (int j = 0; j < worldRef.Tiles.GetLength(1); j++)
+                {
+                    Vector2Int position = new Vector2Int(i, j);
+                    if (worldRef.Walls.ContainsKey(position) == false)
+                    {
+                        availablePoints.Add(position);
+                    }
+                }
             }
 
             for(int i = 0; i < itemsToPlace; i++)
             {
-                Vector2Int point = new Vector2Int(Roller.Roll(1, worldRef.Tiles.GetLength(0) - 1), 
-                    Roller.Roll(1, worldRef.Tiles.GetLength(1) - 1));
-
-                while(unavailablePoints.Contains(point))
-                {
-                    point = new Vector2Int(Roller.Roll(1, worldRef.Tiles.GetLength(0) - 1), 
-                        Roller.Roll(1, worldRef.Tiles.GetLength(1) - 1));
-                }
+                Vector2Int point = availablePoints[Roller.Roll(0, availablePoints.Count)];
 
                 IItemInstance item = ItemFactory.CreateCompletelyRandomItem();
-                item.MyWorld = worldRef;
+                worldRef.AddObject(item);
                 ItemHandler.AddItem(item, true);
                 item.Move(point);
                 placedItems.Add(item);

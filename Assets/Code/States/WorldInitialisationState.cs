@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using JoyLib.Code.Entities;
+using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Unity;
 using JoyLib.Code.World;
@@ -94,6 +95,14 @@ namespace JoyLib.Code.States
             {
                 MonoBehaviourHandler newObject = GameObject.Instantiate(prefab, wallHolder.transform, true);
                 newObject.AttachJoyObject(wall);
+            }
+
+            foreach (IItemInstance item in m_ActiveWorld.Objects)
+            {
+                if (item is ItemInstance itemInstance)
+                {
+                    itemInstance.Instantiate();
+                }
             }
 
             //Create the entities

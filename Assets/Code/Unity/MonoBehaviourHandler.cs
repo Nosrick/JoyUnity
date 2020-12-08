@@ -61,7 +61,7 @@ namespace JoyLib.Code.Unity
             }
             else
             {
-                if(m_JoyObject.GetType() == typeof(ItemInstance))
+                if(m_JoyObject is ItemInstance)
                 {
                     m_SpriteRenderer.sortingLayerName = "Objects";
                 }
