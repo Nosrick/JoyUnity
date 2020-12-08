@@ -22,8 +22,8 @@ namespace JoyLib.Code.World.Lighting
                 m_Board.AddLight(item.WorldPosition, item.ItemType.LightLevel);
                 foreach (Vector2Int direction in DIAGONALS)
                 {
-                    CastLight(item, world, item.WorldPosition, 1, 1, 1, 0, 0, direction.x,direction.y);
-                    CastLight(item, world, item.WorldPosition, 1, 1, 1, 0, direction.x, 0, 0);
+                    CastLight(item, world, item.WorldPosition, 1, 1, 0, 0, direction.x,direction.y, 0);
+                    CastLight(item, world, item.WorldPosition, 1, 1, 0, direction.x, 0, 0, direction.y);
                 }
             }
 
@@ -70,7 +70,7 @@ namespace JoyLib.Code.World.Lighting
 
                     if (blocked)
                     {
-                        m_Board.AddLight(new Vector2Int(currentX, currentY), lightLevel);
+                        m_Board.AddLight(currentPosition, lightLevel);
                         if(m_Board.IsObstacle(currentPosition))
                         {
                             newStart = rightSlope;
