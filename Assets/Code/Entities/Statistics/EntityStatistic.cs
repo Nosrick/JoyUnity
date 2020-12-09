@@ -1,5 +1,5 @@
-﻿using JoyLib.Code.Rollers;
-using System;
+﻿using System;
+using JoyLib.Code.Rollers;
 
 namespace JoyLib.Code.Entities.Statistics
 {
@@ -41,7 +41,7 @@ namespace JoyLib.Code.Entities.Statistics
 
         public int SetValue(int value)
         {
-            Value = Math.Max(1, Value);
+            Value = Math.Max(1, value);
             return Value;
         }
 
