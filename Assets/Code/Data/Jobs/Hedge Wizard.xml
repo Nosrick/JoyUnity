@@ -6,68 +6,38 @@
 		<Description>The most basic of the wizards. Has basic training in Crossbows and Nature Magic, as well as specialisation in Sorcery, Law and Chaos Magics.</Description>
 
 		<Statistic>
-			<Name>Strength</Name>
-			<Growth>0.2</Growth>
-		</Statistic>
-		<Statistic>
-			<Name>Agility</Name>
-			<Growth>0.3</Growth>
-		</Statistic>
-		<Statistic>
-			<Name>Endurance</Name>
-			<Growth>0.3</Growth>
-		</Statistic>
-
-		<Statistic>
 			<Name>Cognition</Name>
-			<Growth>0.7</Growth>
-		</Statistic>
-		<Statistic>
-			<Name>Cunning</Name>
-			<Growth>0.5</Growth>
+			<Discount>2</Discount>
 		</Statistic>
 		<Statistic>
 			<Name>Focus</Name>
-			<Growth>0.6</Growth>
-		</Statistic>
-
-		<Statistic>
-			<Name>Personality</Name>
-			<Growth>0.4</Growth>
-		</Statistic>
-		<Statistic>
-			<Name>Suavity</Name>
-			<Growth>0.3</Growth>
-		</Statistic>
-		<Statistic>
-			<Name>Wit</Name>
-			<Growth>0.4</Growth>
+			<Discount>1</Discount>
 		</Statistic>
 
 		<Skill>
-			<Name>Crossbow</Name>
-			<Growth>30</Growth>
+			<Name>Crossbows</Name>
+			<Discount>1</Discount>
 		</Skill>
 		<Skill>
 			<Name>Sorcery Magic</Name>
-			<Growth>50</Growth>
+			<Discount>2</Discount>
 		</Skill>
 		<Skill>
 			<Name>Nature Magic</Name>
-			<Growth>25</Growth>
+			<Discount>1</Discount>
 		</Skill>
 		<Skill>
 			<Name>Law Magic</Name>
-			<Growth>35</Growth>
+			<Discount>2</Discount>
 		</Skill>
 		<Skill>
 			<Name>Chaos Magic</Name>
-			<Growth>35</Growth>
+			<Discount>2</Discount>
 		</Skill>
 
 		<Ability>
 			<Name>ChaosBolt</Name>
-			<Level>1</Level>
+			<Cost>100</Cost>
 		</Ability>
 	</Job>
 </Jobs>

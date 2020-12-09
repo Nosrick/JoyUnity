@@ -7,7 +7,7 @@ namespace JoyLib.Code.Entities.Jobs
     {
         int GetSkillDiscount(string skillName);
 
-        float GetStatisticDiscount(string statisticName);
+        int GetStatisticDiscount(string statisticName);
 
         int AddExperience(int value);
         bool SpendExperience(int value);

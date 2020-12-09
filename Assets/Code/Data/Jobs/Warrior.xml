@@ -7,80 +7,50 @@
 
 		<Statistic>
 			<Name>Strength</Name>
-			<Growth>0.7</Growth>
-		</Statistic>
-		<Statistic>
-			<Name>Agility</Name>
-			<Growth>0.5</Growth>
+			<Discount>2</Discount>
 		</Statistic>
 		<Statistic>
 			<Name>Endurance</Name>
-			<Growth>0.6</Growth>
-		</Statistic>
-
-		<Statistic>
-			<Name>Cognition</Name>
-			<Growth>0.4</Growth>
-		</Statistic>
-		<Statistic>
-			<Name>Cunning</Name>
-			<Growth>0.5</Growth>
-		</Statistic>
-		<Statistic>
-			<Name>Focus</Name>
-			<Growth>0.3</Growth>
-		</Statistic>
-
-		<Statistic>
-			<Name>Personality</Name>
-			<Growth>0.4</Growth>
-		</Statistic>
-		<Statistic>
-			<Name>Suavity</Name>
-			<Growth>0.3</Growth>
-		</Statistic>
-		<Statistic>
-			<Name>Wit</Name>
-			<Growth>0.3</Growth>
+			<Discount>1</Discount>
 		</Statistic>
 
 		<Skill>
 			<Name>Light Blades</Name>
-			<Growth>30</Growth>
+			<Discount>1</Discount>
 		</Skill>
 		<Skill>
 			<Name>Heavy Blades</Name>
-			<Growth>30</Growth>
+			<Discount>1</Discount>
 		</Skill>
 		<Skill>
 			<Name>Axes</Name>
-			<Growth>30</Growth>
+			<Discount>1</Discount>
 		</Skill>
 		<Skill>
 			<Name>Polearms</Name>
-			<Growth>30</Growth>
+			<Discount>1</Discount>
 		</Skill>
 		<Skill>
 			<Name>Blunt Weapons</Name>
-			<Growth>30</Growth>
+			<Discount>1</Discount>
 		</Skill>
 		<Skill>
 			<Name>Martial Arts</Name>
-			<Growth>30</Growth>
+			<Discount>1</Discount>
 		</Skill>
 
 		<Ability>
 			<Name>PowerAttack</Name>
-			<Level>1</Level>
+			<Cost>100</Cost>
 		</Ability>
 		<Ability>
 			<Name>LightArmour</Name>
-			<Level>1</Level>
+			<Cost>100</Cost>
 		</Ability>
 
 		<Ability>
 			<Name>Backdraft</Name>
-			<Level>3</Level>
+			<Cost>300</Cost>
 		</Ability>
 	</Job>
 </Jobs>

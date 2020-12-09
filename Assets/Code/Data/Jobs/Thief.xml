@@ -6,84 +6,50 @@
 		<Description>The quintessential thief. Average in most respects, but excels at stealth, pickpocketing and lockpicking.</Description>
 
 		<Statistic>
-			<Name>Strength</Name>
-			<Growth>0.4</Growth>
-		</Statistic>
-		<Statistic>
 			<Name>Agility</Name>
-			<Growth>0.7</Growth>
-		</Statistic>
-		<Statistic>
-			<Name>Endurance</Name>
-			<Growth>0.4</Growth>
-		</Statistic>
-
-		<Statistic>
-			<Name>Cognition</Name>
-			<Growth>0.4</Growth>
-		</Statistic>
-		<Statistic>
-			<Name>Cunning</Name>
-			<Growth>0.5</Growth>
-		</Statistic>
-		<Statistic>
-			<Name>Focus</Name>
-			<Growth>0.4</Growth>
-		</Statistic>
-
-		<Statistic>
-			<Name>Personality</Name>
-			<Growth>0.5</Growth>
-		</Statistic>
-		<Statistic>
-			<Name>Suavity</Name>
-			<Growth>0.5</Growth>
-		</Statistic>
-		<Statistic>
-			<Name>Wit</Name>
-			<Growth>0.5</Growth>
+			<Discount>2</Discount>
 		</Statistic>
 
 		<Skill>
 			<Name>Light Blades</Name>
-			<Growth>30</Growth>
+			<Discount>1</Discount>
 		</Skill>
 		<Skill>
 			<Name>Evasion</Name>
-			<Growth>40</Growth>
+			<Discount>2</Discount>
 		</Skill>
 		<Skill>
 			<Name>Crossbows</Name>
-			<Growth>30</Growth>
+			<Discount>1</Discount>
 		</Skill>
 		<Skill>
 			<Name>Mercantile</Name>
-			<Growth>30</Growth>
+			<Discount>1</Discount>
 		</Skill>
 		<Skill>
 			<Name>Deception</Name>
-			<Growth>40</Growth>
+			<Discount>2</Discount>
 		</Skill>
 		<Skill>
 			<Name>Stealth</Name>
-			<Growth>50</Growth>
+			<Discount>2</Discount>
 		</Skill>
 		<Skill>
 			<Name>Lockpicking</Name>
-			<Growth>50</Growth>
+			<Discount>2</Discount>
 		</Skill>
 		<Skill>
 			<Name>Pickpocketing</Name>
-			<Growth>50</Growth>
+			<Discount>2</Discount>
 		</Skill>
 
 		<Ability>
 			<Name>LightArmour</Name>
-			<Level>1</Level>
+			<Cost>100</Cost>
 		</Ability>
 		<Ability>
 			<Name>Feint</Name>
-			<Level>1</Level>
+			<Cost>100</Cost>
 		</Ability>
 	</Job>
 </Jobs>

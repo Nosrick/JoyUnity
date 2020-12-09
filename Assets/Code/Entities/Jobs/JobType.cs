@@ -37,13 +37,13 @@ namespace JoyLib.Code.Entities.Jobs
             return 0;
         }
 
-        public float GetStatisticDiscount(string statisticName)
+        public int GetStatisticDiscount(string statisticName)
         {
             if(m_StatisticDiscounts.ContainsKey(statisticName))
             {
                 return m_StatisticDiscounts[statisticName];
             }
-            return 0.0f;
+            return 0;
         }
 
         public int AddExperience(int value)

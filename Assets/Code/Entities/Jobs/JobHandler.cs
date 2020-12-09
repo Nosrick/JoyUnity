@@ -6,6 +6,7 @@ using System.Xml.Linq;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Rollers;
+using UnityEngine;
 
 namespace JoyLib.Code.Entities.Jobs
 {
@@ -62,7 +63,7 @@ namespace JoyLib.Code.Entities.Jobs
                         Dictionary<string, int> skillDiscounts = (from discount in jobElement.Elements("Skill")
                                                                 select new KeyValuePair<string, int>(
                                                                     discount.Element("Name").GetAs<string>(),
-                                                                    discount.Element("Growth").GetAs<int>()))
+                                                                    discount.Element("Discount").GetAs<int>()))
                                                                     .ToDictionary(x => x.Key, x => x.Value);
 
                         Dictionary<IAbility, int> abilities = new Dictionary<IAbility, int>();
@@ -95,6 +96,9 @@ namespace JoyLib.Code.Entities.Jobs
                     ActionLog.instance.AddText("ERROR LOADING JOBS, FILE " + file);
                     ActionLog.instance.AddText(e.Message);
                     ActionLog.instance.AddText(e.StackTrace);
+                    Debug.LogWarning("ERROR LOADING JOB FROM FILE " + file);
+                    Debug.LogWarning(e.Message);
+                    Debug.LogWarning(e.StackTrace);
                 }
             }
 

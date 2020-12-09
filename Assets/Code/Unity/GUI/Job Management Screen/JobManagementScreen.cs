@@ -39,6 +39,11 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
 
         public void Awake()
         {
+            if (GameManager.Player is null)
+            {
+                return;
+            }
+            
             Player = GameManager.Player;
             CurrentJob = Player.CurrentJob;
             Value = CurrentJob.Experience;
@@ -101,7 +106,7 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
                 Statistics[i].ValueChanged -= OnValueChange;
                 Statistics[i].DirectValueSet(stats[i].Value);
                 Statistics[i].ValueChanged += OnValueChange;
-                Statistics[i].Tooltip = "Cost: " + Math.Max(1, stats[i].Value - CurrentJob.StatisticDiscounts[stats[i].Name]);
+                Statistics[i].Tooltip = "Cost: " + Math.Max(1, stats[i].Value - CurrentJob.GetStatisticDiscount(stats[i].Name));
             }
         }
 
@@ -127,7 +132,7 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
                 Skills[i].ValueChanged -= OnValueChange;
                 Skills[i].DirectValueSet(skills[i].Value);
                 Skills[i].ValueChanged += OnValueChange;
-                Skills[i].Tooltip = "Cost: " + Math.Max(1, skills[i].Value - CurrentJob.SkillDiscounts[skills[i].Name]);
+                Skills[i].Tooltip = "Cost: " + Math.Max(1, skills[i].Value - CurrentJob.GetSkillDiscount(skills[i].Name));
             }
         }
 
