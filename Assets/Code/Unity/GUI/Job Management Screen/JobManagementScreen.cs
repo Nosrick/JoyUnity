@@ -16,7 +16,7 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
     {
         [SerializeField] protected GameManager GameManager;
         [SerializeField] protected TextMeshProUGUI ExperienceRemaining;
-        [SerializeField] protected StatisticItem StatisticItemPrefab;
+        [SerializeField] protected GrowingStatisticItem StatisticItemPrefab;
         [SerializeField] protected AbilityItem AbilityItemPrefab;
         [SerializeField] protected Image PlayerSprite;
         [SerializeField] protected TextMeshProUGUI PlayerName;
@@ -26,8 +26,8 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
         [SerializeField] protected GameObject SkillsPanel;
         [SerializeField] protected GameObject AbilitiesPanel;
         
-        protected List<StatisticItem> Statistics { get; set; }
-        protected List<StatisticItem> Skills { get; set; }
+        protected List<GrowingStatisticItem> Statistics { get; set; }
+        protected List<GrowingStatisticItem> Skills { get; set; }
         protected List<AbilityItem> Abilities { get; set; }
 
         protected IEntity Player;
@@ -50,12 +50,12 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
 
             if (Statistics is null)
             {
-                Statistics = new List<StatisticItem>();
+                Statistics = new List<GrowingStatisticItem>();
             }
 
             if (Skills is null)
             {
-                Skills = new List<StatisticItem>();
+                Skills = new List<GrowingStatisticItem>();
             }
 
             if (Abilities is null)
@@ -84,12 +84,12 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
 
             foreach (IRollableValue stat in OriginalStatistics)
             {
-                StatisticsDeltas.Add(stat.Name, 0);
+                StatisticsDeltas.Add(stat.Name.ToLower(), stat.Value * 10);
             }
 
             foreach (IGrowingValue skill in OriginalSkills)
             {
-                SkillsDeltas.Add(skill.Name, 0);
+                SkillsDeltas.Add(skill.Name.ToLower(), skill.Value * 10);
             }
             
             SetUp();
@@ -98,30 +98,30 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
         protected void OnAbilityChange(object sender, ValueChangedEventArgs args)
         {
             Value -= args.Delta;
-            if(PurchasedAbilities.ContainsKey(args.Name))
+            if(PurchasedAbilities.ContainsKey(args.Name.ToLower()))
             {
-                PurchasedAbilities.Remove(args.Name);
+                PurchasedAbilities.Remove(args.Name.ToLower());
             }
             else
             {
-                PurchasedAbilities.Add(args.Name,
-                CurrentJob.Abilities.First(ability =>
-                    ability.Key.Name.Equals(args.Name, StringComparison.OrdinalIgnoreCase)).Key);
+                KeyValuePair<IAbility, int> ability = CurrentJob.Abilities.First(a =>
+                    a.Key.Name.Equals(args.Name, StringComparison.OrdinalIgnoreCase));
+                PurchasedAbilities.Add(args.Name.ToLower(), ability.Key);
             }
         }
 
         protected void OnSkillChange(object sender, ValueChangedEventArgs args)
         {
             Value -= args.Delta;
-            SkillsDeltas[args.Name] += args.Delta;
-            SetUpSkills();
+            
+            SetUpSkillDeltas();
         }
 
         protected void OnStatisticChange(object senver, ValueChangedEventArgs args)
         {
             Value -= args.Delta;
-            StatisticsDeltas[args.Name] += args.Delta;
-            SetUpStatistics();
+            
+            SetUpStatisticDeltas();
         }
 
         protected void ChangeJob(object sender, ValueChangedEventArgs args)
@@ -152,8 +152,8 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
             {
                 for (int i = Statistics.Count; i < OriginalStatistics.Count(); i++)
                 {
-                    StatisticItem newItem =
-                        GameObject.Instantiate(StatisticItemPrefab, StatisticsPanel.transform).GetComponent<StatisticItem>();
+                    GrowingStatisticItem newItem =
+                        GameObject.Instantiate(StatisticItemPrefab, StatisticsPanel.transform).GetComponent<GrowingStatisticItem>();
                     newItem.gameObject.SetActive(true);
                     Statistics.Add(newItem);
                 }
@@ -163,17 +163,10 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
             {
                 Statistics[i].Name = OriginalStatistics[i].Name;
                 Statistics[i].ValueChanged -= OnStatisticChange;
-                Statistics[i].DirectValueSet(OriginalStatistics[i].Value + StatisticsDeltas[OriginalStatistics[i].Name]);
+                Statistics[i].DirectValueSet(OriginalStatistics[i].Value);
                 Statistics[i].ValueChanged += OnStatisticChange;
                 Statistics[i].Minimum = OriginalStatistics[i].Value;
-                
-                Statistics[i].IncreaseDelta =
-                    Math.Max(1,
-                        1 + OriginalStatistics[i].Value + StatisticsDeltas[OriginalStatistics[i].Name] -
-                        CurrentJob.GetStatisticDiscount(OriginalStatistics[i].Name));
-                
-                Statistics[i].DecreaseDelta = Statistics[i].IncreaseDelta - 2;
-                Statistics[i].Tooltip = "Cost: " + Statistics[i].IncreaseDelta;
+                SetUpStatisticDeltas();
             }
         }
 
@@ -183,9 +176,9 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
             {
                 for (int i = Skills.Count; i < OriginalSkills.Count(); i++)
                 {
-                    StatisticItem newItem =
+                    GrowingStatisticItem newItem =
                         GameObject.Instantiate(StatisticItemPrefab, SkillsPanel.transform)
-                            .GetComponent<StatisticItem>();
+                            .GetComponent<GrowingStatisticItem>();
                     newItem.gameObject.SetActive(true);
                     Skills.Add(newItem);
                 }
@@ -195,16 +188,10 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
             {
                 Skills[i].Name = OriginalSkills[i].Name;
                 Skills[i].ValueChanged -= OnSkillChange;
-                Skills[i].DirectValueSet(OriginalSkills[i].Value + SkillsDeltas[OriginalSkills[i].Name]);
+                Skills[i].DirectValueSet(OriginalSkills[i].Value);
                 Skills[i].ValueChanged += OnSkillChange;
                 Skills[i].Minimum = OriginalSkills[i].Value;
-                
-                Skills[i].IncreaseDelta = Math.Max(1,
-                    1 + OriginalSkills[i].Value + SkillsDeltas[OriginalSkills[i].Name] -
-                    CurrentJob.GetSkillDiscount(OriginalSkills[i].Name));
-                
-                Skills[i].DecreaseDelta = Skills[i].IncreaseDelta - 2;
-                Skills[i].Tooltip = "Cost: " + Skills[i].IncreaseDelta;
+                SetUpSkillDeltas();
             }
         }
 
@@ -234,6 +221,30 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
                 Abilities[i].OnSelect -= OnAbilityChange;
                 Abilities[i].OnSelect += OnAbilityChange;
                 Abilities[i].Tooltip = "Cost: " + abilities[i].Item2;
+            }
+        }
+
+        protected void SetUpSkillDeltas()
+        {
+            for (int i = 0; i < OriginalSkills.Count; i++)
+            {
+                int delta = SkillsDeltas[OriginalSkills[i].Name.ToLower()] =
+                    (Skills[i].Value * 10) - CurrentJob.GetSkillDiscount(OriginalSkills[i].Name);
+                Skills[i].IncreaseCost = delta + 10;
+                Skills[i].DecreaseCost = -delta;
+                Skills[i].Tooltip = "Cost: " + (delta + 10);
+            }
+        }
+
+        protected void SetUpStatisticDeltas()
+        {
+            for (int i = 0; i < OriginalStatistics.Count; i++)
+            {
+                int delta = StatisticsDeltas[OriginalStatistics[i].Name.ToLower()] =
+                    (Statistics[i].Value * 10) - CurrentJob.GetStatisticDiscount(OriginalStatistics[i].Name);
+                Statistics[i].IncreaseCost = delta + 10;
+                Statistics[i].DecreaseCost = -delta;
+                Statistics[i].Tooltip = "Cost: " + (delta + 10);
             }
         }
 

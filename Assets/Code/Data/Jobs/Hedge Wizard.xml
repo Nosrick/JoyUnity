@@ -6,7 +6,7 @@
 		<Description>The most basic of the wizards. Has basic training in Crossbows and Nature Magic, as well as specialisation in Sorcery, Law and Chaos Magics.</Description>
 
 		<Statistic>
-			<Name>Cognition</Name>
+			<Name>Intellect</Name>
 			<Discount>2</Discount>
 		</Statistic>
 		<Statistic>

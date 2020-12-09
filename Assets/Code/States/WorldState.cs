@@ -71,6 +71,8 @@ namespace JoyLib.Code.States
 
             TickTimer = TickEvent();
             GameManager.MyGameObject.GetComponent<MonoBehaviour>().StartCoroutine(TickTimer);
+
+            GlobalConstants.GameManager.Player = m_ActiveWorld.Player;
             
             m_ActiveWorld.Tick();
         }
@@ -106,6 +108,8 @@ namespace JoyLib.Code.States
             base.Start();
             m_ActiveWorld.Player.Tick();
             m_GameplayFlags = GameplayFlags.Moving;
+
+            m_ActiveWorld.Player.AddExperience(500);
 
             SetEntityWorld(Overworld);
 
