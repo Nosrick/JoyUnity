@@ -209,7 +209,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ValueContainer: {fileID: 272295329559688975}
   ValueChange: 1
-  Delta: 1
 --- !u!1 &272295328799682861
 GameObject:
   m_ObjectHideFlags: 0
@@ -500,7 +499,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ValueContainer: {fileID: 272295329559688975}
   ValueChange: 0
-  Delta: 1
 --- !u!1 &272295329296506154
 GameObject:
   m_ObjectHideFlags: 0
@@ -668,7 +666,7 @@ GameObject:
   - component: {fileID: 272295329559688960}
   - component: {fileID: 272295329559688975}
   m_Layer: 0
-  m_Name: Statistic Item
+  m_Name: Value Item
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -711,7 +709,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Minimum: 1
   Maximum: 10
-  Delta: 1
+  DecreaseDelta: 1
+  IncreaseDelta: 1
+  AllowIncrease: 1
+  AllowDecrease: 1
   m_Parent: {fileID: 0}
   m_ValueText: {fileID: 272295328799682859}
   m_NameText: {fileID: 272295330146475822}

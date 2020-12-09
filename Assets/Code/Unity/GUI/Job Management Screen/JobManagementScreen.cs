@@ -33,32 +33,95 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
         protected IEntity Player;
         protected IJob CurrentJob; 
         
-        protected Dictionary<IAbility, int> PurchasedAbilities { get; set; }
-        protected Dictionary<string, int> PurchasedStatistics { get; set; }
-        protected Dictionary<string, int> PurchasedSkills { get; set; }
+        protected Dictionary<string, IAbility> PurchasedAbilities { get; set; }
+        
+        protected List<IRollableValue> OriginalStatistics { get; set; }
+        protected List<IGrowingValue> OriginalSkills { get; set; }
+        
+        protected Dictionary<string, int> StatisticsDeltas { get; set; }
+        protected Dictionary<string, int> SkillsDeltas { get; set; }
 
-        public void Awake()
+        public void OnEnable()
         {
             if (GameManager.Player is null)
             {
                 return;
             }
+
+            if (Statistics is null)
+            {
+                Statistics = new List<StatisticItem>();
+            }
+
+            if (Skills is null)
+            {
+                Skills = new List<StatisticItem>();
+            }
+
+            if (Abilities is null)
+            {
+                Abilities = new List<AbilityItem>();
+            }
             
             Player = GameManager.Player;
             CurrentJob = Player.CurrentJob;
-            Value = CurrentJob.Experience;
+            Minimum = 0;
+            Maximum = CurrentJob.Experience;
+            Value = Maximum;
             PlayerSprite.sprite = Player.Sprite;
             PlayerName.text = Player.JoyName;
             JobSelection.Container = Player.Cultures.SelectMany(culture => culture.Jobs)
                 .Distinct()
                 .ToList();
-            JobSelection.Value = JobSelection.Container.IndexOf(CurrentJob.Name);
+            JobSelection.Value =
+                JobSelection.Container.FindIndex(job =>
+                    job.Equals(CurrentJob.Name, StringComparison.OrdinalIgnoreCase));
+            OriginalStatistics = Player.Statistics.Values.ToList();
+            OriginalSkills = Player.Skills.Values.ToList();
+            
+            StatisticsDeltas = new Dictionary<string, int>();
+            SkillsDeltas = new Dictionary<string, int>();
+
+            foreach (IRollableValue stat in OriginalStatistics)
+            {
+                StatisticsDeltas.Add(stat.Name, 0);
+            }
+
+            foreach (IGrowingValue skill in OriginalSkills)
+            {
+                SkillsDeltas.Add(skill.Name, 0);
+            }
+            
             SetUp();
         }
 
-        protected void OnValueChange(object sender, ValueChangedEventArgs args)
+        protected void OnAbilityChange(object sender, ValueChangedEventArgs args)
         {
             Value -= args.Delta;
+            if(PurchasedAbilities.ContainsKey(args.Name))
+            {
+                PurchasedAbilities.Remove(args.Name);
+            }
+            else
+            {
+                PurchasedAbilities.Add(args.Name,
+                CurrentJob.Abilities.First(ability =>
+                    ability.Key.Name.Equals(args.Name, StringComparison.OrdinalIgnoreCase)).Key);
+            }
+        }
+
+        protected void OnSkillChange(object sender, ValueChangedEventArgs args)
+        {
+            Value -= args.Delta;
+            SkillsDeltas[args.Name] += args.Delta;
+            SetUpSkills();
+        }
+
+        protected void OnStatisticChange(object senver, ValueChangedEventArgs args)
+        {
+            Value -= args.Delta;
+            StatisticsDeltas[args.Name] += args.Delta;
+            SetUpStatistics();
         }
 
         protected void ChangeJob(object sender, ValueChangedEventArgs args)
@@ -76,9 +139,7 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
 
         protected void SetUp()
         {
-            PurchasedAbilities = new Dictionary<IAbility, int>();
-            PurchasedSkills = new Dictionary<string, int>();
-            PurchasedStatistics = new Dictionary<string, int>();
+            PurchasedAbilities = new Dictionary<string, IAbility>();
             
             SetUpStatistics();
             SetUpSkills();
@@ -87,11 +148,9 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
 
         protected void SetUpStatistics()
         {
-            List<IRollableValue> stats = Player.Statistics.Values.ToList();
-
-            if (Statistics.Count < stats.Count)
+            if (Statistics.Count < OriginalStatistics.Count)
             {
-                for (int i = Statistics.Count; i < stats.Count(); i++)
+                for (int i = Statistics.Count; i < OriginalStatistics.Count(); i++)
                 {
                     StatisticItem newItem =
                         GameObject.Instantiate(StatisticItemPrefab, StatisticsPanel.transform).GetComponent<StatisticItem>();
@@ -100,23 +159,29 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
                 }
             }
         
-            for(int i = 0; i < stats.Count; i++)
+            for(int i = 0; i < OriginalStatistics.Count; i++)
             {
-                Statistics[i].Name = stats[i].Name;
-                Statistics[i].ValueChanged -= OnValueChange;
-                Statistics[i].DirectValueSet(stats[i].Value);
-                Statistics[i].ValueChanged += OnValueChange;
-                Statistics[i].Tooltip = "Cost: " + Math.Max(1, stats[i].Value - CurrentJob.GetStatisticDiscount(stats[i].Name));
+                Statistics[i].Name = OriginalStatistics[i].Name;
+                Statistics[i].ValueChanged -= OnStatisticChange;
+                Statistics[i].DirectValueSet(OriginalStatistics[i].Value + StatisticsDeltas[OriginalStatistics[i].Name]);
+                Statistics[i].ValueChanged += OnStatisticChange;
+                Statistics[i].Minimum = OriginalStatistics[i].Value;
+                
+                Statistics[i].IncreaseDelta =
+                    Math.Max(1,
+                        1 + OriginalStatistics[i].Value + StatisticsDeltas[OriginalStatistics[i].Name] -
+                        CurrentJob.GetStatisticDiscount(OriginalStatistics[i].Name));
+                
+                Statistics[i].DecreaseDelta = Statistics[i].IncreaseDelta - 2;
+                Statistics[i].Tooltip = "Cost: " + Statistics[i].IncreaseDelta;
             }
         }
 
         protected void SetUpSkills()
         {
-            List<IGrowingValue> skills = Player.Skills.Values.ToList();
-
-            if (Skills.Count < skills.Count)
+            if (Skills.Count < OriginalSkills.Count)
             {
-                for (int i = Skills.Count; i < skills.Count(); i++)
+                for (int i = Skills.Count; i < OriginalSkills.Count(); i++)
                 {
                     StatisticItem newItem =
                         GameObject.Instantiate(StatisticItemPrefab, SkillsPanel.transform)
@@ -126,13 +191,20 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
                 }
             }
 
-            for (int i = 0; i < skills.Count; i++)
+            for (int i = 0; i < OriginalSkills.Count; i++)
             {
-                Skills[i].Name = skills[i].Name;
-                Skills[i].ValueChanged -= OnValueChange;
-                Skills[i].DirectValueSet(skills[i].Value);
-                Skills[i].ValueChanged += OnValueChange;
-                Skills[i].Tooltip = "Cost: " + Math.Max(1, skills[i].Value - CurrentJob.GetSkillDiscount(skills[i].Name));
+                Skills[i].Name = OriginalSkills[i].Name;
+                Skills[i].ValueChanged -= OnSkillChange;
+                Skills[i].DirectValueSet(OriginalSkills[i].Value + SkillsDeltas[OriginalSkills[i].Name]);
+                Skills[i].ValueChanged += OnSkillChange;
+                Skills[i].Minimum = OriginalSkills[i].Value;
+                
+                Skills[i].IncreaseDelta = Math.Max(1,
+                    1 + OriginalSkills[i].Value + SkillsDeltas[OriginalSkills[i].Name] -
+                    CurrentJob.GetSkillDiscount(OriginalSkills[i].Name));
+                
+                Skills[i].DecreaseDelta = Skills[i].IncreaseDelta - 2;
+                Skills[i].Tooltip = "Cost: " + Skills[i].IncreaseDelta;
             }
         }
 
@@ -159,23 +231,15 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
             {
                 Abilities[i].Name = abilities[i].Item1.Name;
                 Abilities[i].Delta = abilities[i].Item2;
-                Abilities[i].OnSelect -= OnValueChange;
-                Abilities[i].OnSelect += OnValueChange;
+                Abilities[i].OnSelect -= OnAbilityChange;
+                Abilities[i].OnSelect += OnAbilityChange;
                 Abilities[i].Tooltip = "Cost: " + abilities[i].Item2;
             }
         }
 
         public void MakeChanges()
         {
-            int totalCost = PurchasedAbilities.Sum(pair => pair.Value)
-                            + PurchasedSkills.Sum(pair => pair.Value)
-                            + PurchasedStatistics.Sum(pair => pair.Value);
-            if (totalCost > CurrentJob.Experience)
-            {
-                return;
-            }
-            
-            Player.Abilities.AddRange(PurchasedAbilities.Keys);
+            Player.Abilities.AddRange(PurchasedAbilities.Values);
             foreach (StatisticItem item in Statistics)
             {
                 Player.Statistics[item.Name].SetValue(item.Value);

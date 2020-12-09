@@ -175,7 +175,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ResizeChild: 1
-  ChildLayoutGroup: {fileID: 0}
+  ChildLayoutGroup: {fileID: 686880119}
   ScrollRect: {fileID: 5229404}
 --- !u!114 &5229404
 MonoBehaviour:
@@ -990,7 +990,6 @@ GameObject:
   m_Component:
   - component: {fileID: 337293668}
   - component: {fileID: 337293671}
-  - component: {fileID: 337293670}
   - component: {fileID: 337293669}
   m_Layer: 0
   m_Name: JobManagementCanvas
@@ -1036,28 +1035,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &337293670
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 337293667}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
-  m_ReferencePixelsPerUnit: 100
-  m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
-  m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
-  m_PhysicalUnit: 3
-  m_FallbackScreenDPI: 96
-  m_DefaultSpriteDPI: 96
-  m_DynamicPixelsPerUnit: 1
 --- !u!223 &337293671
 Canvas:
   m_ObjectHideFlags: 0
@@ -1221,7 +1198,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ResizeChild: 1
-  ChildLayoutGroup: {fileID: 0}
+  ChildLayoutGroup: {fileID: 1549472075}
   ScrollRect: {fileID: 485990788}
 --- !u!114 &485990788
 MonoBehaviour:
@@ -1357,7 +1334,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ResizeChild: 1
-  ChildLayoutGroup: {fileID: 0}
+  ChildLayoutGroup: {fileID: 323683273}
   ScrollRect: {fileID: 528516901}
 --- !u!114 &528516901
 MonoBehaviour:
@@ -3633,7 +3610,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 7146581881294671723}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1521684249}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e1503c41869b4de2b7aebb696bb6f0f8, type: 3}
@@ -3916,6 +3893,38 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!1 &1521684249 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7146581879945301893, guid: 6229c614b0c8a034486bd88788e61a0d,
+    type: 3}
+  m_PrefabInstance: {fileID: 7146581881294671723}
+  m_PrefabAsset: {fileID: 0}
+--- !u!61 &1521684254
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1521684249}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 165, y: -16}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 330, y: 32}
+  m_EdgeRadius: 0
 --- !u!224 &1525572196 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7146581879840419087, guid: 6229c614b0c8a034486bd88788e61a0d,
@@ -8203,6 +8212,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Character Creation Part 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5573507356558727690, guid: 7bd804c0116f9ee458ad95e65b8c1ab3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5573507356558727691, guid: 7bd804c0116f9ee458ad95e65b8c1ab3,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -11012,6 +11026,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7146581879945301893, guid: 6229c614b0c8a034486bd88788e61a0d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7146581880329319997, guid: 6229c614b0c8a034486bd88788e61a0d,
         type: 3}

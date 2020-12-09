@@ -29,6 +29,7 @@ namespace JoyLib.Code
         public const string CHARACTER_CREATION_PART_1 = "Character Creation Part 1";
         public const string CHARACTER_CREATION_PART_2 = "Character Creation Part 2";
         public const string TOOLTIP = "Tooltip";
+        public const string JOB_MANAGEMENT = "Job Management";
 
         public static IGameManager GameManager
         {

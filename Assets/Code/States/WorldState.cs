@@ -310,39 +310,6 @@ namespace JoyLib.Code.States
             }
 
             /*
-            if (m_Input.currentMouseState.ScrollWheelValue > m_Input.lastMouseState.ScrollWheelValue)
-            {
-                m_Camera.zoom += 0.05f;
-            }
-
-            if (m_Input.currentMouseState.ScrollWheelValue < m_Input.lastMouseState.ScrollWheelValue)
-            {
-                m_Camera.zoom -= 0.05f;
-            }
-
-            if(m_Input.IsOldPress(MouseButtons.RightButton))
-            {
-                m_GUIManager.Screen.Desktop.Children.Remove(m_ContextMenu);
-                m_ContextMenu.MoveTo(m_Input.currentMouseState.Position);
-                m_GUIManager.Screen.Desktop.Children.Add(m_ContextMenu);
-
-                Vector2 mouseVector = (m_Input.currentMouseState.Position - (new Point(m_Renderer.m_ScreenWidth / 2, m_Renderer.m_ScreenHeight / 2))).ToVector2();
-                m_MenuTile = new Point((int)Math.Floor(mouseVector.X / (ObjectIcons.SPRITE_SIZE * m_Camera.zoom)), (int)Math.Floor(mouseVector.Y / (ObjectIcons.SPRITE_SIZE * m_Camera.zoom))) + s_ActiveWorld.player.position;
-            }
-
-            if(m_Input.IsOldPress(Keys.Space))
-            {
-                autoTurn = !autoTurn;
-            }
-
-            if(m_Input.IsOldPress(Keys.L))
-            {
-                s_ActiveWorld.player.LevelUp();
-            }
-            
-            */
-
-            /*
             if(Input.GetMouseButtonDown(0))
             {
                 Vector3 mouseWorld = m_Camera.ScreenToWorldPoint(Input.mousePosition);
@@ -371,6 +338,10 @@ namespace JoyLib.Code.States
             else if (Input.GetKeyUp(KeyCode.J))
             {
                 GUIManager.ToggleGUI(GlobalConstants.QUEST_JOURNAL);
+            }
+            else if (Input.GetKeyUp(KeyCode.C))
+            {
+                GUIManager.ToggleGUI(GlobalConstants.JOB_MANAGEMENT);
             }
             else if (Input.GetKeyUp(KeyCode.T))
             {

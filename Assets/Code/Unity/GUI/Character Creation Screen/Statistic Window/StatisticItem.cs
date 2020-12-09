@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using JoyLib.Code.Events;
 using TMPro;
 using UnityEngine;
 
@@ -27,8 +28,15 @@ namespace JoyLib.Code.Unity.GUI
             get => m_Value;
             set
             {
-                base.Value = value;
+                int previous = m_Value;
+                m_Value = value;
                 m_ValueText.text = m_Value.ToString();
+                ValueChanged?.Invoke(this, new ValueChangedEventArgs()
+                {
+                    Name = this.Name,
+                    NewValue = m_Value,
+                    Delta = m_Value - previous
+                });
             }
         }
 
@@ -41,5 +49,7 @@ namespace JoyLib.Code.Unity.GUI
                 m_NameText.text = m_Name;
             }
         }
+        
+        public virtual event ValueChangedEventHandler ValueChanged;
     }
 }

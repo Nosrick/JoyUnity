@@ -73,6 +73,7 @@ namespace JoyLib.Code.Unity.GUI
             }
             OnSelect?.Invoke(this, new ValueChangedEventArgs()
             {
+                Name = this.Name,
                 NewValue = Selected ? Delta : -Delta,
                 Delta = Selected ? Delta : -Delta 
             });

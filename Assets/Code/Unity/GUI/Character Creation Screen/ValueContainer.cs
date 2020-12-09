@@ -1,10 +1,11 @@
 ﻿using DevionGames.InventorySystem;
 using JoyLib.Code.Events;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public class ValueContainer : MonoBehaviour, IValueContainer
+    public class ValueContainer : MonoBehaviour, IValueContainer, IPointerEnterHandler, IPointerExitHandler
     {
         [SerializeField] public int Minimum = 1;
         [SerializeField] public int Maximum = 10;
@@ -15,7 +16,7 @@ namespace JoyLib.Code.Unity.GUI
         
         public string Tooltip { get; set; }
 
-        public void OnMouseEnter()
+        public void OnPointerEnter(PointerEventData data)
         {
             if (Tooltip is null)
             {
@@ -24,7 +25,7 @@ namespace JoyLib.Code.Unity.GUI
             InventoryManager.UI.tooltip.Show(Tooltip);
         }
 
-        public void OnMouseExit()
+        public void OnPointerExit(PointerEventData data)
         {
             InventoryManager.UI.tooltip.Close();
         }
@@ -71,6 +72,6 @@ namespace JoyLib.Code.Unity.GUI
 
         protected int m_Value;
         
-        public event ValueChangedEventHandler ValueChanged;
+        public virtual event ValueChangedEventHandler ValueChanged;
     }
 }

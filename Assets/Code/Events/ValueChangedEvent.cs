@@ -6,6 +6,7 @@ namespace JoyLib.Code.Events
     
     public class ValueChangedEventArgs : EventArgs
     {
+        public string Name { get; set; }
         public int NewValue { get; set; }
         public int Delta { get; set; }
     }
