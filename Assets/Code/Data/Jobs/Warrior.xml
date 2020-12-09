@@ -39,6 +39,7 @@
 			<Discount>1</Discount>
 		</Skill>
 
+		<!--
 		<Ability>
 			<Name>PowerAttack</Name>
 			<Cost>100</Cost>
@@ -47,6 +48,7 @@
 			<Name>LightArmour</Name>
 			<Cost>100</Cost>
 		</Ability>
+		-->
 
 		<Ability>
 			<Name>Backdraft</Name>

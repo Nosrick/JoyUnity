@@ -502,7 +502,7 @@ namespace JoyLib.Code.Entities
                 }
             }
 
-            //Check job levels
+            //Check jobs
             foreach (string tag in tags)
             {
                 try

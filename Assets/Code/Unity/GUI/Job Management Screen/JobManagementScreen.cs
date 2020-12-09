@@ -70,8 +70,7 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
             Value = Maximum;
             PlayerSprite.sprite = Player.Sprite;
             PlayerName.text = Player.JoyName;
-            JobSelection.Container = Player.Cultures.SelectMany(culture => culture.Jobs)
-                .Distinct()
+            JobSelection.Container = Player.Jobs.Select(job => job.Name)
                 .ToList();
             JobSelection.Value =
                 JobSelection.Container.FindIndex(job =>
@@ -81,6 +80,8 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
             
             StatisticsDeltas = new Dictionary<string, int>();
             SkillsDeltas = new Dictionary<string, int>();
+            JobSelection.ValueChanged -= ChangeJob;
+            JobSelection.ValueChanged += ChangeJob;
 
             foreach (IRollableValue stat in OriginalStatistics)
             {

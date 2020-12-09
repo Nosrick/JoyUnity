@@ -82,6 +82,9 @@ namespace JoyLib.Code.Entities.Jobs
                             ActionLog.instance.AddText("ERROR LOADING ABILITIES FOR JOB, FILE " + file);
                             ActionLog.instance.AddText(e.Message);
                             ActionLog.instance.AddText(e.StackTrace);
+                            Debug.LogWarning("ERROR LOADING ABILITIES FOR JOB, FILE " + file);
+                            Debug.LogWarning(e.Message);
+                            Debug.LogWarning(e.StackTrace);
                         }
                                                                         
 

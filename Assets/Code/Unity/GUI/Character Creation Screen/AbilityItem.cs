@@ -1,4 +1,5 @@
-﻿using Castle.Core.Internal;
+﻿using System.Globalization;
+using Castle.Core.Internal;
 using DevionGames.InventorySystem;
 using JoyLib.Code.Events;
 using TMPro;
@@ -26,7 +27,7 @@ namespace JoyLib.Code.Unity.GUI
             }
             set
             {
-                Text.text = value;
+                Text.text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(value);
             }
         }
         protected Image Image { get; set; }
