@@ -288,7 +288,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5616cd6aadf1478aa786005296b68b9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ValueContainer: {fileID: 0}
+  ValueContainer: {fileID: 3329086532230608727}
   ValueChange: 1
 --- !u!1 &6665615501808216171
 GameObject:
@@ -422,7 +422,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5616cd6aadf1478aa786005296b68b9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ValueContainer: {fileID: 0}
+  ValueContainer: {fileID: 3329086532230608727}
   ValueChange: 0
 --- !u!1 &6665615501869021042
 GameObject:

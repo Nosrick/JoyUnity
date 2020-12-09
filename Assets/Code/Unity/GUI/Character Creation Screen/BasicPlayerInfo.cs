@@ -78,6 +78,7 @@ namespace JoyLib.Code.Unity.GUI
 
         protected void ChangeJobHandler(object sender, ValueChangedEventArgs args)
         {
+            JobChanged?.Invoke(this, args);
         }
 
         protected void ChangeCultureHandler(object sender, ValueChangedEventArgs args)
