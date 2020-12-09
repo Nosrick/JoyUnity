@@ -241,6 +241,25 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
                 Abilities[i].OnSelect += OnAbilityChange;
                 Abilities[i].Tooltip = "Cost: " + abilities[i].Item2;
             }
+
+            
+            if (abilities.Count == 0)
+            {
+                if (Abilities.Count == 0)
+                {
+                    AbilityItem newItem =
+                        GameObject.Instantiate(AbilityItemPrefab, AbilitiesPanel.transform)
+                            .GetComponent<AbilityItem>();
+                    Abilities.Add(newItem);
+                }
+
+                Abilities[0].gameObject.SetActive(true);
+                Abilities[0].OnSelect -= OnAbilityChange;
+                Abilities[0].Name = "No Abilities Available";
+                Abilities[0].Delta = 0;
+                Abilities[0].Tooltip =
+                    "You either have all of the abilities from this class, or do not qualify for any more.";
+            }
         }
 
         protected void SetUpSkillDeltas()
