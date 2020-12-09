@@ -37,7 +37,7 @@ namespace JoyLib.Code.Entities
         List<string> IdentifiedItems { get; }
 
         IJob CurrentJob { get; }
-        IEnumerable<IJob> Jobs { get; }
+        List<IJob> Jobs { get; }
         List<string> Slots { get; }
         List<ICulture> Cultures { get; }
         int Size { get; }
@@ -86,6 +86,8 @@ namespace JoyLib.Code.Entities
         void IncreaseConcentration(int value);
 
         void AddExperience(int value);
+
+        bool AddJob(IJob job);
         
         void DamageMe(int value, Entity source);
         void DirectDVModification(int value, string index = EntityDerivedValue.HITPOINTS);

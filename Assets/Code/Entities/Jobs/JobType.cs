@@ -63,6 +63,18 @@ namespace JoyLib.Code.Entities.Jobs
             return true;
         }
 
+        public IJob Copy(IJob original)
+        {
+            IJob job = new JobType(
+                original.Name,
+                original.Description,
+                original.StatisticDiscounts,
+                original.SkillDiscounts,
+                original.Abilities);
+
+            return job;
+        }
+
         public string Name
         {
             get;

@@ -109,8 +109,6 @@ namespace JoyLib.Code.States
             m_ActiveWorld.Player.Tick();
             m_GameplayFlags = GameplayFlags.Moving;
 
-            m_ActiveWorld.Player.AddExperience(500);
-
             SetEntityWorld(Overworld);
 
             SetUpUi();

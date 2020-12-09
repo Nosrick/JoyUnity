@@ -26,7 +26,8 @@ namespace JoyLib.Code.Entities.Jobs
         {
             if (m_Jobs.Any(x => x.Name.Equals(jobName, StringComparison.OrdinalIgnoreCase)))
             {
-                return m_Jobs.First(x => x.Name.Equals(jobName, StringComparison.OrdinalIgnoreCase));
+                IJob job = m_Jobs.First(x => x.Name.Equals(jobName, StringComparison.OrdinalIgnoreCase));
+                return job.Copy(job);
             }
 
             return null;
@@ -34,7 +35,8 @@ namespace JoyLib.Code.Entities.Jobs
 
         public IJob GetRandom()
         {
-            return m_Jobs[Roller.Roll(0, m_Jobs.Count)];
+            int result = Roller.Roll(0, m_Jobs.Count);
+            return m_Jobs[result].Copy(m_Jobs[result]);
         }
 
         protected List<IJob> LoadTypes()
@@ -108,7 +110,7 @@ namespace JoyLib.Code.Entities.Jobs
             return jobTypes;
         }
 
-        public IJob[] Jobs
+        public IEnumerable<IJob> Jobs
         {
             get
             {
@@ -117,7 +119,7 @@ namespace JoyLib.Code.Entities.Jobs
                     m_Jobs = LoadTypes();
                 }
 
-                return m_Jobs.ToArray();
+                return m_Jobs;
             }
         }
     }

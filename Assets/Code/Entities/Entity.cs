@@ -412,6 +412,16 @@ namespace JoyLib.Code.Entities
             QuestTracker?.AddQuest(GUID, quest);
         }
 
+        public bool AddJob(IJob job)
+        {
+            if (Jobs.Any(j => j.Name.Equals(job.Name, StringComparison.OrdinalIgnoreCase)))
+            {
+                return false;
+            }
+            Jobs.Add(job);
+            return true;
+        }
+
         public IEnumerable<Tuple<string, int>> GetData(IEnumerable<string> tags, params object[] args)
         {
             List<Tuple<string, int>> data = new List<Tuple<string, int>>();
@@ -1122,6 +1132,6 @@ namespace JoyLib.Code.Entities
             }
         }
 
-        public IEnumerable<IJob> Jobs { get; protected set; }
+        public List<IJob> Jobs { get; protected set; }
     }
 }

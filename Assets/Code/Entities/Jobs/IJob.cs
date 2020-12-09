@@ -12,6 +12,8 @@ namespace JoyLib.Code.Entities.Jobs
         int AddExperience(int value);
         bool SpendExperience(int value);
 
+        IJob Copy(IJob original);
+
         Dictionary<IAbility, int> Abilities { get; }
         
         string Name { get; }

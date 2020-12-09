@@ -1,9 +1,11 @@
-﻿namespace JoyLib.Code.Entities.Jobs
+﻿using System.Collections.Generic;
+
+namespace JoyLib.Code.Entities.Jobs
 {
     public interface IJobHandler
     {
         IJob Get(string jobName);
         IJob GetRandom();
-        IJob[] Jobs { get; }
+        IEnumerable<IJob> Jobs { get; }
     }
 }

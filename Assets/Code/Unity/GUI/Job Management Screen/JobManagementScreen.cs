@@ -149,6 +149,11 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
 
         protected void SetUpStatistics()
         {
+            foreach (GrowingStatisticItem item in Statistics)
+            {
+                item.gameObject.SetActive(false);
+            }
+            
             if (Statistics.Count < OriginalStatistics.Count)
             {
                 for (int i = Statistics.Count; i < OriginalStatistics.Count(); i++)
@@ -162,6 +167,7 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
         
             for(int i = 0; i < OriginalStatistics.Count; i++)
             {
+                Statistics[i].gameObject.SetActive(true);
                 Statistics[i].Name = OriginalStatistics[i].Name;
                 Statistics[i].ValueChanged -= OnStatisticChange;
                 Statistics[i].DirectValueSet(OriginalStatistics[i].Value);
@@ -173,6 +179,11 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
 
         protected void SetUpSkills()
         {
+            foreach (GrowingStatisticItem item in Skills)
+            {
+                item.gameObject.SetActive(false);
+            }
+            
             if (Skills.Count < OriginalSkills.Count)
             {
                 for (int i = Skills.Count; i < OriginalSkills.Count(); i++)
@@ -187,6 +198,7 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
 
             for (int i = 0; i < OriginalSkills.Count; i++)
             {
+                Skills[i].gameObject.SetActive(true);
                 Skills[i].Name = OriginalSkills[i].Name;
                 Skills[i].ValueChanged -= OnSkillChange;
                 Skills[i].DirectValueSet(OriginalSkills[i].Value);
@@ -203,6 +215,11 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
                     .Select(pair => new Tuple<IAbility, int>(pair.Key, pair.Value))
                     .ToList();
 
+            foreach (AbilityItem item in Abilities)
+            {
+                item.gameObject.SetActive(false);
+            }
+
             if (Abilities.Count < abilities.Count)
             {
                 for (int i = Abilities.Count; i < abilities.Count; i++)
@@ -217,6 +234,7 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
             
             for (int i = 0; i < abilities.Count; i++)
             {
+                Abilities[i].gameObject.SetActive(true);
                 Abilities[i].Name = abilities[i].Item1.Name;
                 Abilities[i].Delta = abilities[i].Item2;
                 Abilities[i].OnSelect -= OnAbilityChange;

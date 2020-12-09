@@ -1,4 +1,6 @@
-﻿using JoyLib.Code.Entities;
+﻿using System.Linq;
+using JoyLib.Code.Entities;
+using JoyLib.Code.Entities.Jobs;
 using JoyLib.Code.Unity.GUI;
 
 namespace JoyLib.Code.States
@@ -39,7 +41,16 @@ namespace JoyLib.Code.States
 
         public override GameState GetNextState()
         {
-            return new WorldCreationState(new EntityPlayer(CharacterCreationScreen.CreatePlayer()));
+            IEntity player = CharacterCreationScreen.CreatePlayer();
+            player.AddExperience(500);
+            foreach (string jobName in player.Cultures.SelectMany(culture => culture.Jobs))
+            {
+                IJob job = GlobalConstants.GameManager.JobHandler.Get(jobName);
+                job.AddExperience(300);
+                player.AddJob(job);
+            }
+            
+            return new WorldCreationState(new EntityPlayer(player));
         }
     }
 }

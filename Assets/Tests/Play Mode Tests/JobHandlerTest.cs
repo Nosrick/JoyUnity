@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using JoyLib.Code;
 using JoyLib.Code.Entities.Jobs;
 using JoyLib.Code.Rollers;
@@ -23,7 +24,7 @@ namespace Tests
             //given
 
             //when
-            IJob[] jobs = target.Jobs;
+            IJob[] jobs = target.Jobs.ToArray();
 
             //then
             Assert.That(jobs, Is.Not.Empty);
