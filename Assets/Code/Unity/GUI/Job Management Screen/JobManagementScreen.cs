@@ -269,6 +269,9 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
 
         public void MakeChanges()
         {
+            int index = Player.Jobs.FindIndex(job => job.Name.Equals(CurrentJob.Name, StringComparison.OrdinalIgnoreCase));
+            int cost = -(Value - CurrentJob.Experience);
+            Player.Jobs[index].SpendExperience(cost);
             Player.Abilities.AddRange(PurchasedAbilities.Values);
             foreach (StatisticItem item in Statistics)
             {

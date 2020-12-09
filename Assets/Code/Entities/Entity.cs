@@ -315,7 +315,7 @@ namespace JoyLib.Code.Entities
 
             builder.AppendLine(textInfo.ToTitleCase(this.CreatureType));
             builder.AppendLine(textInfo.ToTitleCase(this.Gender.Name));
-            builder.AppendLine(textInfo.ToTitleCase(this.Job.Name));
+            builder.AppendLine(textInfo.ToTitleCase(this.CurrentJob.Name));
 
             m_Description = builder.ToString();
         }
@@ -1082,11 +1082,6 @@ namespace JoyLib.Code.Entities
         public List<ICulture> Cultures => m_Cultures;
 
         public IVision VisionProvider => m_VisionProvider;
-
-        public IJob Job
-        {
-            get { return m_CurrentJob; }
-        }
 
         public List<string> Slots => m_Slots;
 
