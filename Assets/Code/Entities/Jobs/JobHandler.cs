@@ -24,9 +24,9 @@ namespace JoyLib.Code.Entities.Jobs
 
         public IJob Get(string jobName)
         {
-            if (m_Jobs.Any(x => x.Name == jobName))
+            if (m_Jobs.Any(x => x.Name.Equals(jobName, StringComparison.OrdinalIgnoreCase)))
             {
-                return m_Jobs.First(x => x.Name == jobName);
+                return m_Jobs.First(x => x.Name.Equals(jobName, StringComparison.OrdinalIgnoreCase));
             }
 
             return null;
