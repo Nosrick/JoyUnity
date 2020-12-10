@@ -1600,8 +1600,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3874516a424f40c29394edbc83cad59d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Minimum: 1
-  Maximum: 10
+  m_Minimum: 1
+  m_Maximum: 10
   DecreaseDelta: 1
   IncreaseDelta: 1
   AllowIncrease: 1
@@ -2989,8 +2989,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3874516a424f40c29394edbc83cad59d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Minimum: 1
-  Maximum: 10
+  m_Minimum: 1
+  m_Maximum: 10
   DecreaseDelta: 1
   IncreaseDelta: 1
   AllowIncrease: 1
@@ -3070,13 +3070,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab1a9f9da21f4d0696d999379dab971e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Minimum: 0
-  Maximum: 12
+  m_Minimum: 0
+  m_Maximum: 12
   DecreaseDelta: 1
   IncreaseDelta: 1
   AllowIncrease: 1
   AllowDecrease: 1
-  StatisticItem: {fileID: 5573507356275374520}
+  namedItem: {fileID: 5573507356275374520}
   m_PointsRemainingText: {fileID: 2020081595463428417}
 --- !u!1 &5573507356159650838
 GameObject:
@@ -3861,8 +3861,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3874516a424f40c29394edbc83cad59d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Minimum: 1
-  Maximum: 10
+  m_Minimum: 1
+  m_Maximum: 10
   DecreaseDelta: 1
   IncreaseDelta: 1
   AllowIncrease: 1
@@ -5121,8 +5121,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3874516a424f40c29394edbc83cad59d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Minimum: 1
-  Maximum: 10
+  m_Minimum: 1
+  m_Maximum: 10
   DecreaseDelta: 1
   IncreaseDelta: 1
   AllowIncrease: 1
@@ -6130,8 +6130,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3874516a424f40c29394edbc83cad59d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Minimum: 1
-  Maximum: 10
+  m_Minimum: 1
+  m_Maximum: 10
   DecreaseDelta: 1
   IncreaseDelta: 1
   AllowIncrease: 1
@@ -6225,8 +6225,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3874516a424f40c29394edbc83cad59d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Minimum: 1
-  Maximum: 10
+  m_Minimum: 1
+  m_Maximum: 10
   DecreaseDelta: 1
   IncreaseDelta: 1
   AllowIncrease: 1

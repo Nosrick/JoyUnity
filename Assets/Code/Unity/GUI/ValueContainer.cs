@@ -7,8 +7,8 @@ namespace JoyLib.Code.Unity.GUI
 {
     public class ValueContainer : MonoBehaviour, IValueContainer, IPointerEnterHandler, IPointerExitHandler
     {
-        [SerializeField] public int Minimum = 1;
-        [SerializeField] public int Maximum = 10;
+        [SerializeField] protected int m_Minimum = 1;
+        [SerializeField] protected int m_Maximum = 10;
         [SerializeField] public int DecreaseDelta = 1;
         [SerializeField] public int IncreaseDelta = 1;
         [SerializeField] public bool AllowIncrease = true;
@@ -16,7 +16,19 @@ namespace JoyLib.Code.Unity.GUI
 
         protected string m_Tooltip;
 
-        public string Tooltip
+        public virtual int Maximum
+        {
+            get => m_Maximum;
+            set => m_Maximum = value;
+        }
+
+        public virtual int Minimum
+        {
+            get => m_Minimum;
+            set => m_Minimum = value;
+        }
+
+        public virtual string Tooltip
         {
             get => m_Tooltip;
             set
@@ -28,6 +40,12 @@ namespace JoyLib.Code.Unity.GUI
                     InventoryManager.UI.tooltip.Show(m_Tooltip);
                 }
             }
+        }
+
+        public virtual string Name
+        {
+            get;
+            set;
         }
 
         public void OnPointerEnter(PointerEventData data)

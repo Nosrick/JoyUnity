@@ -1147,15 +1147,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1417e8753054a3aac7f04450a99a51b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Minimum: 1
-  Maximum: 10
+  m_Minimum: 1
+  m_Maximum: 10
   DecreaseDelta: 1
   IncreaseDelta: 1
   AllowIncrease: 1
   AllowDecrease: 1
   GameManager: {fileID: 0}
   ExperienceRemaining: {fileID: 6811491301286461720}
-  StatisticItemPrefab: {fileID: 6811491301331242290}
+  namedItemPrefab: {fileID: 6811491301331242290}
   AbilityItemPrefab: {fileID: 6410114518452124743}
   PlayerSprite: {fileID: 6811491300947413283}
   PlayerName: {fileID: 6811491300141843029}
@@ -2592,7 +2592,7 @@ PrefabInstance:
     - target: {fileID: 3180189430275618511, guid: fee4bcfc3560ff64686c9554f5f77728,
         type: 3}
       propertyPath: m_Name
-      value: Growing Value Item
+      value: Named Value Item
       objectReference: {fileID: 0}
     - target: {fileID: 3451215572570767825, guid: fee4bcfc3560ff64686c9554f5f77728,
         type: 3}

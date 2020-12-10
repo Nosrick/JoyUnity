@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public class StatisticItem : ValueContainer
+    public class NamedItem : ValueContainer
     {
         protected string m_Name;
 
@@ -40,7 +40,7 @@ namespace JoyLib.Code.Unity.GUI
             }
         }
 
-        public string Name
+        public override string Name
         {
             get => m_Name;
             set
@@ -50,6 +50,6 @@ namespace JoyLib.Code.Unity.GUI
             }
         }
         
-        public virtual event ValueChangedEventHandler ValueChanged;
+        public override event ValueChangedEventHandler ValueChanged;
     }
 }

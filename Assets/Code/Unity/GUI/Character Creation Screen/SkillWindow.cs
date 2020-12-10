@@ -11,17 +11,17 @@ namespace JoyLib.Code.Unity.GUI
     public class SkillWindow : ValueContainer
     {
         [SerializeField] protected GameManager GameManager;
-        [SerializeField] protected StatisticItem ValueContainerPrefab;
+        [SerializeField] protected NamedItem ValueContainerPrefab;
         [SerializeField] protected TextMeshProUGUI PointsRemainingText;
         [SerializeField] protected BasicPlayerInfo PlayerInfo;
-        protected List<StatisticItem> Items { get; set; }
+        protected List<NamedItem> Items { get; set; }
         
         protected BasicValueContainer<IGrowingValue> Skills { get; set; }
 
         public void Awake()
         {
             ValueContainerPrefab.gameObject.SetActive(false);
-            Items = new List<StatisticItem>();
+            Items = new List<NamedItem>();
             Skills = new BasicValueContainer<IGrowingValue>();
             
             Value = Maximum;
@@ -53,8 +53,8 @@ namespace JoyLib.Code.Unity.GUI
             {
                 for (int i = Items.Count; i < skills.Count(); i++)
                 {
-                    StatisticItem newItem =
-                        GameObject.Instantiate(ValueContainerPrefab, this.transform).GetComponent<StatisticItem>();
+                    NamedItem newItem =
+                        GameObject.Instantiate(ValueContainerPrefab, this.transform).GetComponent<NamedItem>();
                     newItem.gameObject.SetActive(true);
                     Items.Add(newItem);
                 }
@@ -66,6 +66,7 @@ namespace JoyLib.Code.Unity.GUI
                 Items[i].ValueChanged -= ChangeSkill;
                 Items[i].DirectValueSet(skills[i].Value);
                 Items[i].Minimum = skills[i].Value;
+                Items[i].ValueChanged += ChangeSkill;
                 //Items[i].Tooltip = skills[i].Key;
             }
         }
