@@ -341,9 +341,13 @@ namespace JoyLib.Code.States
             {
                 GUIManager.ToggleGUI(GlobalConstants.QUEST_JOURNAL);
             }
-            else if (Input.GetKeyUp(KeyCode.C))
+            else if (Input.GetKeyUp(KeyCode.M))
             {
                 GUIManager.ToggleGUI(GlobalConstants.JOB_MANAGEMENT);
+            }
+            else if (Input.GetKeyUp(KeyCode.C))
+            {
+                GUIManager.ToggleGUI(GlobalConstants.CHARACTER_SHEET);
             }
             else if (Input.GetKeyUp(KeyCode.T))
             {
