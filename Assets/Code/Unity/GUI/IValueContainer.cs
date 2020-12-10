@@ -10,6 +10,8 @@ namespace JoyLib.Code.Unity.GUI
         int DirectValueSet(int newValue);
         
         int Value { get; set; }
+        
+        string Tooltip { get; set; }
 
         event ValueChangedEventHandler ValueChanged;
     }

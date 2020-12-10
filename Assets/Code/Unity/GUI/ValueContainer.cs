@@ -13,8 +13,22 @@ namespace JoyLib.Code.Unity.GUI
         [SerializeField] public int IncreaseDelta = 1;
         [SerializeField] public bool AllowIncrease = true;
         [SerializeField] public bool AllowDecrease = true;
-        
-        public string Tooltip { get; set; }
+
+        protected string m_Tooltip;
+
+        public string Tooltip
+        {
+            get => m_Tooltip;
+            set
+            {
+                m_Tooltip = value;
+                if (InventoryManager.UI.tooltip.IsVisible)
+                {
+                    InventoryManager.UI.tooltip.Close();
+                    InventoryManager.UI.tooltip.Show(m_Tooltip);
+                }
+            }
+        }
 
         public void OnPointerEnter(PointerEventData data)
         {
