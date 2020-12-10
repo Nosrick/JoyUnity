@@ -60,17 +60,13 @@ namespace JoyLib.Code.Unity.GUI
                 }
             }
             
-            for(int i = 0; i < Items.Count; i++)
+            for(int i = 0; i < skills.Count; i++)
             {
                 Items[i].Name = skills[i].Key;
                 Items[i].ValueChanged -= ChangeSkill;
                 Items[i].DirectValueSet(skills[i].Value);
                 Items[i].Minimum = skills[i].Value;
-            }
-
-            foreach (StatisticItem item in Items)
-            {
-                item.ValueChanged += ChangeSkill;
+                //Items[i].Tooltip = skills[i].Key;
             }
         }
 

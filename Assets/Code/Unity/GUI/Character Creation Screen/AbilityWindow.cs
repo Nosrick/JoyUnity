@@ -71,7 +71,7 @@ namespace JoyLib.Code.Unity.GUI
                                                 skills)
                                             .ToList();
 
-            if (Items.Count < abilities.Count())
+            if (Items.Count < abilities.Count)
             {
                 for (int i = Items.Count; i < abilities.Count(); i++)
                 {
@@ -82,15 +82,12 @@ namespace JoyLib.Code.Unity.GUI
                 }
             }
             
-            for(int i = 0; i < Items.Count; i++)
+            for(int i = 0; i < abilities.Count; i++)
             {
                 Items[i].Name = abilities[i].Name;
                 Items[i].OnSelect -= ChangePicksRemaining;
-            }
-
-            foreach (AbilityItem item in Items)
-            {
-                item.OnSelect += ChangePicksRemaining;
+                Items[i].Tooltip = abilities[i].Description;
+                Items[i].OnSelect += ChangePicksRemaining;
             }
         }
     }
