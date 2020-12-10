@@ -55,16 +55,12 @@ namespace JoyLib.Code.Unity.GUI
                 }
             }
             
-            for(int i = 0; i < Items.Count; i++)
+            for(int i = 0; i < statistics.Count; i++)
             {
                 Items[i].Name = statistics[i].Item1;
                 Items[i].ValueChanged -= ChangeStatistic;
                 Items[i].DirectValueSet(statistics[i].Item2);
-            }
-
-            foreach (StatisticItem item in Items)
-            {
-                item.ValueChanged += ChangeStatistic;
+                Items[i].ValueChanged += ChangeStatistic;
             }
         }
 
