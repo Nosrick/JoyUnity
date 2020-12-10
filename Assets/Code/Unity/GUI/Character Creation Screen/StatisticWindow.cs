@@ -16,10 +16,13 @@ namespace JoyLib.Code.Unity.GUI
         [SerializeField] protected TextMeshProUGUI m_PointsRemainingText;
         protected List<NamedItem> Items { get; set; }
 
-        public void Awake()
+        public void OnEnable()
         {
             namedItem.gameObject.SetActive(false);
-            Items = new List<NamedItem>();
+            if (Items is null)
+            {
+                Items = new List<NamedItem>();
+            }
             
             Value = Maximum;
             SetRemainingPointsText();
@@ -74,7 +77,7 @@ namespace JoyLib.Code.Unity.GUI
 
         protected void SetRemainingPointsText()
         {
-            m_PointsRemainingText.text = "Points Remaining: " + Value;
+            m_PointsRemainingText.text = "Statistic Points Remaining: " + Value;
         }
     }
 }
