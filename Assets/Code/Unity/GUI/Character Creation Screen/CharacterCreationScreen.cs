@@ -15,6 +15,7 @@ namespace JoyLib.Code.Unity.GUI
     {
         [SerializeField] protected GameManager GameManager;
         [SerializeField] protected StatisticWindow StatisticWindow;
+        [SerializeField] protected DerivedValuesWindow DerivedValuesWindow;
         [SerializeField] protected SkillWindow SkillWindow;
         [SerializeField] protected BasicPlayerInfo PlayerInfo;
         [SerializeField] protected AbilityWindow AbilityWindow;
@@ -24,13 +25,12 @@ namespace JoyLib.Code.Unity.GUI
         [SerializeField] protected TMP_InputField PlayerName_Part1;
         [SerializeField] protected TMP_InputField PlayerName_Part2;
 
-        public void Initialise()
+        public void OnEnable()
         {
             this.Awake();
-            this.Close();
             PlayerInfo.JobChanged += SetSprites;
             PlayerInfo.CultureChanged += SetRandomName;
-            PlayerInfo.Initialise();
+            StatisticWindow.ValueChanged += ChangedStatistics;
         }
 
         public IEntity CreatePlayer()
@@ -56,6 +56,22 @@ namespace JoyLib.Code.Unity.GUI
                 GameManager.RomanceHandler.Get(PlayerInfo.Romance),
                 GameManager.JobHandler.Get(PlayerInfo.Job), 
                 GameManager.ObjectIconHandler.GetSprites(PlayerInfo.CurrentTemplate.CreatureType, PlayerInfo.Job));
+        }
+
+        protected void ChangedStatistics(object sender, EventArgs args)
+        {
+            BasicValueContainer<IRollableValue> stats = StatisticWindow.GetStatistics();
+            if (stats.Count == 0)
+            {
+                return;
+            }
+            
+            DerivedValuesWindow.SetDerivedValues(
+                EntityDerivedValue.GetDefault(
+                        stats.GetRawValue(EntityStatistic.ENDURANCE),
+                        stats.GetRawValue(EntityStatistic.FOCUS),
+                        stats.GetRawValue(EntityStatistic.WIT))
+                    .Values);
         }
 
         public void SetRandomName(object sender, EventArgs args)

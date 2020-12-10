@@ -45,8 +45,6 @@ namespace JoyLib.Code.Unity.GUI
 
         public void SetStatistics(List<Tuple<string, int>> statistics)
         {
-            Value = Maximum;
-            
             if (Items.Count < statistics.Count())
             {
                 for (int i = Items.Count; i < statistics.Count(); i++)
@@ -66,6 +64,7 @@ namespace JoyLib.Code.Unity.GUI
                 Items[i].ValueChanged += ChangeStatistic;
             }
             
+            Value = Maximum;
             SetRemainingPointsText();
         }
 
