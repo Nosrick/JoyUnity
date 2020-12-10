@@ -9722,6 +9722,31 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 163868863}
     m_Modifications:
+    - target: {fileID: 171958239884119111, guid: 6229c614b0c8a034486bd88788e61a0d,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 171958239884119111, guid: 6229c614b0c8a034486bd88788e61a0d,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 551857720805017984, guid: 6229c614b0c8a034486bd88788e61a0d,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 551857720805017984, guid: 6229c614b0c8a034486bd88788e61a0d,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 551857720805017984, guid: 6229c614b0c8a034486bd88788e61a0d,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4126566721185678554, guid: 6229c614b0c8a034486bd88788e61a0d,
         type: 3}
       propertyPath: m_AnchorMin.y
@@ -9892,6 +9917,11 @@ PrefabInstance:
       propertyPath: GameManager
       value: 
       objectReference: {fileID: 1629111815}
+    - target: {fileID: 7146581881894016784, guid: 6229c614b0c8a034486bd88788e61a0d,
+        type: 3}
+      propertyPath: PlayerInfo
+      value: 
+      objectReference: {fileID: 1637755937}
     - target: {fileID: 7146581881894016784, guid: 6229c614b0c8a034486bd88788e61a0d,
         type: 3}
       propertyPath: StatisticWindow

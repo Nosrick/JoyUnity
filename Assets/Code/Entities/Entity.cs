@@ -99,6 +99,7 @@ namespace JoyLib.Code.Entities
         /// </summary>
         /// <param name="template"></param>
         /// <param name="statistics"></param>
+        /// <param name="derivedValues"></param>
         /// <param name="needs"></param>
         /// <param name="skills"></param>
         /// <param name="abilities"></param>
@@ -122,6 +123,7 @@ namespace JoyLib.Code.Entities
         public Entity(
             IEntityTemplate template,
             BasicValueContainer<IRollableValue> statistics,
+            BasicValueContainer<IDerivedValue> derivedValues,
             BasicValueContainer<INeed> needs,
             BasicValueContainer<IGrowingValue> skills,
             IEnumerable<IAbility> abilities,
@@ -142,10 +144,7 @@ namespace JoyLib.Code.Entities
             IDriver driver,
             RNG roller = null) :
             base("",
-                EntityDerivedValue.GetDefault(
-                    template.Statistics[EntityStatistic.ENDURANCE],
-                    template.Statistics[EntityStatistic.FOCUS],
-                    template.Statistics[EntityStatistic.WIT]),
+                derivedValues,
                 position,
                 cultures[GlobalConstants.GameManager.Roller.Roll(0, cultures.Count)].Tileset,
                 STANDARD_ACTIONS,
@@ -185,8 +184,6 @@ namespace JoyLib.Code.Entities
 
             this.m_Cultures = cultures;
 
-            this.CalculateDerivatives();
-
             this.m_Pathfinder = (IPathfinder) ScriptingEngine.instance.FetchAndInitialise("custompathfinder");
             this.m_PathfindingData = new Queue<Vector2Int>();
 
@@ -212,6 +209,7 @@ namespace JoyLib.Code.Entities
         /// <param name="template"></param>
         /// <param name="needs"></param>
         /// <param name="statistics"></param>
+        /// <param name="derivedValues"></param>
         /// <param name="skills"></param>
         /// <param name="abilities"></param>
         /// <param name="cultures"></param>
@@ -230,6 +228,7 @@ namespace JoyLib.Code.Entities
             IEntityTemplate template,
             BasicValueContainer<INeed> needs,
             BasicValueContainer<IRollableValue> statistics,
+            BasicValueContainer<IDerivedValue> derivedValues,
             BasicValueContainer<IGrowingValue> skills,
             IEnumerable<IAbility> abilities,
             List<ICulture> cultures,
@@ -243,7 +242,7 @@ namespace JoyLib.Code.Entities
             IWorldInstance world,
             IDriver driver,
             RNG roller = null) :
-            this(template, statistics, needs, skills, abilities, cultures, job, gender, sex, sexuality, romance, position, sprites,
+            this(template, statistics, derivedValues, needs, skills, abilities, cultures, job, gender, sex, sexuality, romance, position, sprites,
                 NaturalWeaponHelper?.MakeNaturalWeapon(template.Size), new NonUniqueDictionary<string, IItemInstance>(),
                 new List<IItemInstance>(), new List<string>(), new List<IJob> { job }, world, driver, roller)
         {
@@ -267,6 +266,7 @@ namespace JoyLib.Code.Entities
             this.Jobs = copy.Jobs;
             this.m_IdentifiedItems = copy.IdentifiedItems;
             this.m_Statistics = copy.Statistics;
+            this.DerivedValues = copy.DerivedValues;
 
             this.m_Skills = copy.Skills;
 
@@ -285,8 +285,6 @@ namespace JoyLib.Code.Entities
             this.m_VisionProvider = copy.VisionProvider;
 
             this.m_Cultures = copy.Cultures;
-
-            this.CalculateDerivatives();
 
             this.m_Pathfinder = (IPathfinder) ScriptingEngine.instance.FetchAndInitialise("custompathfinder");
             this.m_PathfindingData = new Queue<Vector2Int>();

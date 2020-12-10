@@ -48,6 +48,7 @@ namespace JoyLib.Code.Unity.GUI
                     new StandardRoller(),
                     new NonUniqueDictionary<INeed, float>()),
                 StatisticWindow.GetStatistics(),
+                DerivedValuesWindow.GetDerivedValues(),
                 SkillWindow.GetSkillsBlock(), 
                 AbilityWindow.GetPickedAbilities(),
                 PlayerInfo.CurrentCultures,

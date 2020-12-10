@@ -75,6 +75,7 @@ namespace JoyLib.Code.Entities
             Vector2Int position,
             IGrowingValue level = null,
             BasicValueContainer<IRollableValue> statistics = null,
+            BasicValueContainer<IDerivedValue> derivedValues = null,
             BasicValueContainer<IGrowingValue> skills = null,
             IEnumerable<IAbility> abilities = null,
             List<ICulture> cultures = null,
@@ -96,6 +97,7 @@ namespace JoyLib.Code.Entities
             List<ICulture> creatureCultures = new List<ICulture>();
             IDriver selectedDriver = driver;
             BasicValueContainer<IRollableValue> selectedStatistics = statistics;
+            BasicValueContainer<IDerivedValue> selectedDVs = derivedValues;
             BasicValueContainer<IGrowingValue> selectedSkills = skills;
             IEnumerable<IAbility> selectedAbilities = abilities;
             if (!(cultures is null))
@@ -122,6 +124,14 @@ namespace JoyLib.Code.Entities
             if (selectedStatistics is null)
             {
                 selectedStatistics = dominantCulture.GetStats(template.Statistics);
+            }
+
+            if (selectedDVs is null)
+            {
+                selectedDVs = EntityDerivedValue.GetDefault(
+                    selectedStatistics[EntityStatistic.ENDURANCE],
+                    selectedStatistics[EntityStatistic.FOCUS],
+                    selectedStatistics[EntityStatistic.WIT]);
             }
 
             if (selectedSkills is null)
@@ -177,6 +187,7 @@ namespace JoyLib.Code.Entities
                 template, 
                 needs, 
                 selectedStatistics, 
+                selectedDVs, 
                 selectedSkills, 
                 selectedAbilities,
                 creatureCultures, 
@@ -197,6 +208,7 @@ namespace JoyLib.Code.Entities
         public IEntity CreateLong(
             IEntityTemplate template,
             BasicValueContainer<IRollableValue> statistics,
+            BasicValueContainer<IDerivedValue> derivedValues,
             BasicValueContainer<INeed> needs,
             BasicValueContainer<IGrowingValue> skills,
             IEnumerable<IAbility> abilities,
@@ -238,6 +250,7 @@ namespace JoyLib.Code.Entities
             IEntity entity = new Entity(
                 template,
                 statistics, 
+                derivedValues, 
                 needs, 
                 skills, 
                 abilities, 

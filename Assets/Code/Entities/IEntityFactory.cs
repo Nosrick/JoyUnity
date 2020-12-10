@@ -22,6 +22,7 @@ namespace JoyLib.Code.Entities
             Vector2Int position,
             IGrowingValue level = null,
             BasicValueContainer<IRollableValue> statistics = null,
+            BasicValueContainer<IDerivedValue> derivedValues = null,
             BasicValueContainer<IGrowingValue> skills = null,
             IEnumerable<IAbility> abilities = null,
             List<ICulture> cultures = null,
@@ -36,6 +37,7 @@ namespace JoyLib.Code.Entities
 
         IEntity CreateLong(IEntityTemplate template,
             BasicValueContainer<IRollableValue> stats,
+            BasicValueContainer<IDerivedValue> derivedValues,
             BasicValueContainer<INeed> needs,
             BasicValueContainer<IGrowingValue> skills,
             IEnumerable<IAbility> abilities,

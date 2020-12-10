@@ -86,6 +86,7 @@ namespace JoyLib.Code.World.Generators.Interiors
                     null,
                     null,
                     null, 
+                    null,
                     worldRef);
 
                 EntityHandler.AddEntity(newEntity);
