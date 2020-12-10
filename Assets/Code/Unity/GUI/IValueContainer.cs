@@ -12,6 +12,8 @@ namespace JoyLib.Code.Unity.GUI
         int Value { get; set; }
         
         string Tooltip { get; set; }
+        
+        string Name { get; set; }
 
         event ValueChangedEventHandler ValueChanged;
     }

@@ -2,7 +2,7 @@
 
 namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
 {
-    public class GrowingStatisticItem : StatisticItem
+    public class GrowingNamedItem : NamedItem
     {
         public int IncreaseCost;
         public int DecreaseCost;

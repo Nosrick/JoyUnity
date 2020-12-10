@@ -18,7 +18,7 @@ namespace JoyLib.Code.Unity.GUI.Character_Sheet
             }
         }
 
-        public void SetValues(IEnumerable<IAbility> abilities)
+        public virtual void SetValues(IEnumerable<IAbility> abilities)
         {
             List<IAbility> listAbilities = abilities.ToList();
             

@@ -5,25 +5,25 @@ using UnityEngine;
 
 namespace JoyLib.Code.Unity.GUI.Character_Sheet
 {
-    public class StaticValueDisplay : MonoBehaviour
+    public class StaticDerivedValueDisplay : MonoBehaviour
     {
-        [SerializeField] protected StaticValueContainer ValueContainerPrefab;
+        [SerializeField] protected DerivedValueContainer ValueContainerPrefab;
         
-        protected List<StaticValueContainer> Items { get; set; }
+        protected List<DerivedValueContainer> Items { get; set; }
 
         public void OnEnable()
         {
             if (Items is null)
             {
-                Items = new List<StaticValueContainer>();
+                Items = new List<DerivedValueContainer>();
             }
         }
 
-        public virtual void SetValues(IEnumerable<IBasicValue> values)
+        public void SetValues(IEnumerable<IDerivedValue> values)
         {
-            List<IBasicValue> listValues = values.ToList();
+            List<IDerivedValue> listValues = values.ToList();
             
-            foreach (StaticValueContainer item in Items)
+            foreach (DerivedValueContainer item in Items)
             {
                 item.gameObject.SetActive(false);
             }
@@ -32,8 +32,8 @@ namespace JoyLib.Code.Unity.GUI.Character_Sheet
             {
                 for (int i = Items.Count; i < listValues.Count; i++)
                 {
-                    StaticValueContainer newItem =
-                        GameObject.Instantiate(ValueContainerPrefab, this.transform).GetComponent<StaticValueContainer>();
+                    DerivedValueContainer newItem =
+                        GameObject.Instantiate(ValueContainerPrefab, this.transform).GetComponent<DerivedValueContainer>();
                     newItem.gameObject.SetActive(true);
                     Items.Add(newItem);
                 }
@@ -43,6 +43,7 @@ namespace JoyLib.Code.Unity.GUI.Character_Sheet
             {
                 Items[i].Name = listValues[i].Name;
                 Items[i].DirectValueSet(listValues[i].Value);
+                Items[i].Maximum = listValues[i].Maximum;
                 Items[i].gameObject.SetActive(true);
             }
         }

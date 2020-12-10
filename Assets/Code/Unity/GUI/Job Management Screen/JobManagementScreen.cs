@@ -16,7 +16,7 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
     {
         [SerializeField] protected GameManager GameManager;
         [SerializeField] protected TextMeshProUGUI ExperienceRemaining;
-        [SerializeField] protected GrowingStatisticItem StatisticItemPrefab;
+        [SerializeField] protected GrowingNamedItem namedItemPrefab;
         [SerializeField] protected AbilityItem AbilityItemPrefab;
         [SerializeField] protected Image PlayerSprite;
         [SerializeField] protected TextMeshProUGUI PlayerName;
@@ -26,8 +26,8 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
         [SerializeField] protected GameObject SkillsPanel;
         [SerializeField] protected GameObject AbilitiesPanel;
         
-        protected List<GrowingStatisticItem> Statistics { get; set; }
-        protected List<GrowingStatisticItem> Skills { get; set; }
+        protected List<GrowingNamedItem> Statistics { get; set; }
+        protected List<GrowingNamedItem> Skills { get; set; }
         protected List<AbilityItem> Abilities { get; set; }
 
         protected IEntity Player;
@@ -50,12 +50,12 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
 
             if (Statistics is null)
             {
-                Statistics = new List<GrowingStatisticItem>();
+                Statistics = new List<GrowingNamedItem>();
             }
 
             if (Skills is null)
             {
-                Skills = new List<GrowingStatisticItem>();
+                Skills = new List<GrowingNamedItem>();
             }
 
             if (Abilities is null)
@@ -149,7 +149,7 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
 
         protected void SetUpStatistics()
         {
-            foreach (GrowingStatisticItem item in Statistics)
+            foreach (GrowingNamedItem item in Statistics)
             {
                 item.gameObject.SetActive(false);
             }
@@ -158,8 +158,8 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
             {
                 for (int i = Statistics.Count; i < OriginalStatistics.Count(); i++)
                 {
-                    GrowingStatisticItem newItem =
-                        GameObject.Instantiate(StatisticItemPrefab, StatisticsPanel.transform).GetComponent<GrowingStatisticItem>();
+                    GrowingNamedItem newItem =
+                        GameObject.Instantiate(namedItemPrefab, StatisticsPanel.transform).GetComponent<GrowingNamedItem>();
                     newItem.gameObject.SetActive(true);
                     Statistics.Add(newItem);
                 }
@@ -179,7 +179,7 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
 
         protected void SetUpSkills()
         {
-            foreach (GrowingStatisticItem item in Skills)
+            foreach (GrowingNamedItem item in Skills)
             {
                 item.gameObject.SetActive(false);
             }
@@ -188,9 +188,9 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
             {
                 for (int i = Skills.Count; i < OriginalSkills.Count(); i++)
                 {
-                    GrowingStatisticItem newItem =
-                        GameObject.Instantiate(StatisticItemPrefab, SkillsPanel.transform)
-                            .GetComponent<GrowingStatisticItem>();
+                    GrowingNamedItem newItem =
+                        GameObject.Instantiate(namedItemPrefab, SkillsPanel.transform)
+                            .GetComponent<GrowingNamedItem>();
                     newItem.gameObject.SetActive(true);
                     Skills.Add(newItem);
                 }
@@ -292,12 +292,12 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
             int cost = -(Value - CurrentJob.Experience);
             Player.Jobs[index].SpendExperience(cost);
             Player.Abilities.AddRange(PurchasedAbilities.Values);
-            foreach (StatisticItem item in Statistics)
+            foreach (NamedItem item in Statistics)
             {
                 Player.Statistics[item.Name].SetValue(item.Value);
             }
 
-            foreach (StatisticItem item in Skills)
+            foreach (NamedItem item in Skills)
             {
                 Player.Skills[item.Name].SetValue(item.Value);
             }

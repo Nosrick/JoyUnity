@@ -11,6 +11,7 @@ namespace JoyLib.Code.Unity.GUI.Character_Sheet
         [SerializeField] protected Image PlayerSprite;
         [SerializeField] protected TextMeshProUGUI PlayerName;
         [SerializeField] protected TextMeshProUGUI PlayerJobAndSpecies;
+        [SerializeField] protected StaticDerivedValueDisplay DerivedValues;
         [SerializeField] protected StaticValueDisplay Statistics;
         [SerializeField] protected StaticValueDisplay Skills;
         [SerializeField] protected StaticAbilityDisplay Abilities;
@@ -19,10 +20,16 @@ namespace JoyLib.Code.Unity.GUI.Character_Sheet
 
         public void OnEnable()
         {
+            if (GlobalConstants.GameManager is null)
+            {
+                return;
+            }
+            
             Player = GlobalConstants.GameManager.Player;
             Statistics.SetValues(Player.Statistics.Values);
             Skills.SetValues(Player.Skills.Values);
             Abilities.SetValues(Player.Abilities);
+            DerivedValues.SetValues(Player.DerivedValues.Values);
             PlayerSprite.sprite = Player.Sprite;
             PlayerName.text = Player.JoyName;
             PlayerJobAndSpecies.text = Player.CreatureType + " " + Player.CurrentJob.Name;

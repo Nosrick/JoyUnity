@@ -12,23 +12,23 @@ namespace JoyLib.Code.Unity.GUI
 {
     public class StatisticWindow : ValueContainer
     {
-        [SerializeField] protected StatisticItem StatisticItem;
+        [SerializeField] protected NamedItem namedItem;
         [SerializeField] protected TextMeshProUGUI m_PointsRemainingText;
-        protected List<StatisticItem> Items { get; set; }
+        protected List<NamedItem> Items { get; set; }
 
         public void Awake()
         {
-            StatisticItem.gameObject.SetActive(false);
-            Items = new List<StatisticItem>();
+            namedItem.gameObject.SetActive(false);
+            Items = new List<NamedItem>();
             
             Value = Maximum;
-            m_PointsRemainingText.text = "Points Remaining: " + Value;
+            SetRemainingPointsText();
         }
 
         public BasicValueContainer<IRollableValue> GetStatistics()
         {
             BasicValueContainer<IRollableValue> stats = new BasicValueContainer<IRollableValue>();
-            foreach (StatisticItem item in Items)
+            foreach (NamedItem item in Items)
             {
                 stats.Add(new EntityStatistic(
                     item.Name,
@@ -48,8 +48,8 @@ namespace JoyLib.Code.Unity.GUI
             {
                 for (int i = Items.Count; i < statistics.Count(); i++)
                 {
-                    StatisticItem newItem =
-                        GameObject.Instantiate(StatisticItem, this.transform).GetComponent<StatisticItem>();
+                    NamedItem newItem =
+                        GameObject.Instantiate(namedItem, this.transform).GetComponent<NamedItem>();
                     newItem.gameObject.SetActive(true);
                     Items.Add(newItem);
                 }
@@ -62,11 +62,18 @@ namespace JoyLib.Code.Unity.GUI
                 Items[i].DirectValueSet(statistics[i].Item2);
                 Items[i].ValueChanged += ChangeStatistic;
             }
+            
+            SetRemainingPointsText();
         }
 
         protected void ChangeStatistic(object sender, ValueChangedEventArgs args)
         {
             Value -= args.Delta;
+            SetRemainingPointsText();
+        }
+
+        protected void SetRemainingPointsText()
+        {
             m_PointsRemainingText.text = "Points Remaining: " + Value;
         }
     }
