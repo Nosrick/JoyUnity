@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.Jobs;
@@ -210,6 +211,8 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
 
         protected void SetUpAbilities()
         {
+            StringBuilder builder = new StringBuilder();
+            
             List<Tuple<IAbility, int>> abilities =
                 CurrentJob.Abilities.Where(pair => Player.Abilities.Contains(pair.Key) == false)
                     .Select(pair => new Tuple<IAbility, int>(pair.Key, pair.Value))
@@ -234,12 +237,19 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
             
             for (int i = 0; i < abilities.Count; i++)
             {
+                builder.AppendLine(abilities[i].Item1.Description);
+                builder.AppendLine("Cost: " + abilities[i].Item2);
                 Abilities[i].gameObject.SetActive(true);
                 Abilities[i].Name = abilities[i].Item1.Name;
                 Abilities[i].Delta = abilities[i].Item2;
                 Abilities[i].OnSelect -= OnAbilityChange;
                 Abilities[i].OnSelect += OnAbilityChange;
-                Abilities[i].Tooltip = "Cost: " + abilities[i].Item2;
+                Abilities[i].Tooltip = builder.ToString();
+                if (Abilities[i].Selected)
+                {
+                    Abilities[i].ToggleMe();
+                }
+                builder.Clear();
             }
 
             

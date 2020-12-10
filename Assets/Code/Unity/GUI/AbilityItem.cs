@@ -4,12 +4,13 @@ using DevionGames.InventorySystem;
 using JoyLib.Code.Events;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity.GUI
 {
     [RequireComponent(typeof(Image))]
-    public class AbilityItem : MonoBehaviour
+    public class AbilityItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         [SerializeField] protected ValueContainer Parent;
         [SerializeField] protected Color32 SelectedColour;
@@ -42,7 +43,7 @@ namespace JoyLib.Code.Unity.GUI
             Text = this.GetComponentInChildren<TextMeshProUGUI>();
         }
 
-        public void OnMouseEnter()
+        public void OnPointerEnter(PointerEventData eventData)
         {
             if (Tooltip.IsNullOrEmpty())
             {
@@ -51,7 +52,7 @@ namespace JoyLib.Code.Unity.GUI
             InventoryManager.UI.tooltip.Show(Tooltip);
         }
 
-        public void OnMouseExit()
+        public void OnPointerExit(PointerEventData eventData)
         {
             InventoryManager.UI.tooltip.Close();
         }
