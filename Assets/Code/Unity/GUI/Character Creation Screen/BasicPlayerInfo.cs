@@ -47,7 +47,7 @@ namespace JoyLib.Code.Unity.GUI
         public event EventHandler JobChanged;
         public event EventHandler CultureChanged;
 
-        public void OnEnable()
+        public void Initialise()
         {
             Templates = GameManager.EntityTemplateHandler.Templates;
             Roller = new RNG();

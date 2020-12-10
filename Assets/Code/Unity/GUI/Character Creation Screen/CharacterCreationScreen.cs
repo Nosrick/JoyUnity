@@ -25,12 +25,13 @@ namespace JoyLib.Code.Unity.GUI
         [SerializeField] protected TMP_InputField PlayerName_Part1;
         [SerializeField] protected TMP_InputField PlayerName_Part2;
 
-        public void OnEnable()
+        public void Initialise()
         {
             this.Awake();
             PlayerInfo.JobChanged += SetSprites;
             PlayerInfo.CultureChanged += SetRandomName;
             StatisticWindow.ValueChanged += ChangedStatistics;
+            PlayerInfo.Initialise();
         }
 
         public IEntity CreatePlayer()

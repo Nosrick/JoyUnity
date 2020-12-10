@@ -48,6 +48,8 @@ namespace JoyLib.Code.Unity.GUI
                 Items[i].Name = valueList[i].Name;
                 Items[i].ValueChanged -= ChangeDerivedValue;
                 Items[i].DirectValueSet(valueList[i].Value);
+                Items[i].Minimum = valueList[i].Value;
+                Items[i].Maximum = valueList[i].Value + 5;
                 Items[i].ValueChanged += ChangeDerivedValue;
             }
             
