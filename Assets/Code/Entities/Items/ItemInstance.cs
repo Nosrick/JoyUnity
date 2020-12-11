@@ -346,6 +346,16 @@ namespace JoyLib.Code.Entities.Items
             throw new InvalidOperationException("Derived value of " + name + " not found on JoyObject " + this.ToString());
         }
 
+        public int ModifyMaximum(string name, int value)
+        {
+            if (this.DerivedValues.Has(name))
+            {
+                return this.DerivedValues.GetRawValue(name).ModifyMaximum(value);
+            }
+            
+            throw new InvalidOperationException("Derived value of " + name + " not found on JoyObject " + this.ToString());
+        }
+
         public int ModifyValue(string name, int value)
         {
             if (DerivedValues.Has(name))

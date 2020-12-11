@@ -19,7 +19,7 @@ using JoyLib.Code.Entities.Romance;
 using JoyLib.Code.Entities.Sexes;
 using JoyLib.Code.Entities.Sexuality;
 using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Entities.Statistics.Formulas;
+using JoyLib.Code.Events;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Quests;
 using JoyLib.Code.Rollers;
@@ -31,6 +31,11 @@ namespace JoyLib.Code.Entities
 {
     public class Entity : JoyObject, IEntity
     {
+        public event ValueChangedEventHandler DerivedValueChange;
+        public event ValueChangedEventHandler DerivedValueMaximumChange;
+        public event ValueChangedEventHandler StatisticChange;
+        public event ValueChangedEventHandler SkillChange;
+        public event ValueChangedEventHandler ExperienceChange;
         protected BasicValueContainer<IRollableValue> m_Statistics;
         protected BasicValueContainer<IGrowingValue> m_Skills;
         protected BasicValueContainer<INeed> m_Needs;
@@ -784,37 +789,55 @@ namespace JoyLib.Code.Entities
 
         public void DecreaseMana(int value)
         {
-            DerivedValues[EntityDerivedValue.MANA].ModifyValue(-value);
+            this.ModifyValue(EntityDerivedValue.MANA, -value);
         }
 
         public void IncreaseMana(int value)
         {
-            DerivedValues[EntityDerivedValue.MANA].ModifyValue(value);
+            this.ModifyValue(EntityDerivedValue.MANA, value);
         }
 
         public void DecreaseComposure(int value)
         {
-            DerivedValues[EntityDerivedValue.COMPOSURE].ModifyValue(-value);
+            this.ModifyValue(EntityDerivedValue.COMPOSURE, -value);
         }
 
         public void IncreaseComposure(int value)
         {
-            DerivedValues[EntityDerivedValue.COMPOSURE].ModifyValue(value);
+            this.ModifyValue(EntityDerivedValue.COMPOSURE, value);
         }
 
         public void DecreaseConcentration(int value)
         {
-            DerivedValues[EntityDerivedValue.CONCENTRATION].ModifyValue(-value);
+            this.ModifyValue(EntityDerivedValue.CONCENTRATION, -value);
         }
 
         public void IncreaseConcentration(int value)
         {
-            DerivedValues[EntityDerivedValue.CONCENTRATION].ModifyValue(value);
+            this.ModifyValue(EntityDerivedValue.CONCENTRATION, value);
+        }
+
+        public override int ModifyValue(string name, int value)
+        {
+            int result = base.ModifyValue(name, value);
+            this.DerivedValueChange?.Invoke(this, new ValueChangedEventArgs()
+            {
+                Delta = value,
+                Name = name,
+                NewValue = result
+            });
+            return result;
         }
 
         public void AddExperience(int value)
         {
-            CurrentJob.AddExperience(value);
+            int result = this.CurrentJob.AddExperience(value);
+            this.ExperienceChange?.Invoke(this, new ValueChangedEventArgs()
+            {
+                Delta = value,
+                Name = "experience",
+                NewValue = result
+            });
         }
 
         public void DamageMe(int value, Entity source)
@@ -829,52 +852,37 @@ namespace JoyLib.Code.Entities
                 damage = ability.OnTakeHit(source, this, damage);
             }
 
-            base.DamageValue(EntityDerivedValue.HITPOINTS, damage);
+            int result = base.DamageValue(EntityDerivedValue.HITPOINTS, damage);
+            this.DerivedValueChange?.Invoke(this, new ValueChangedEventArgs()
+            {
+                Delta = damage,
+                Name = EntityDerivedValue.HITPOINTS,
+                NewValue = result
+            });
         }
 
-        public void DirectDVModification(int value, string index = EntityDerivedValue.HITPOINTS)
+        public int DirectDVModification(int value, string index = EntityDerivedValue.HITPOINTS)
         {
-            DerivedValues[index].ModifyValue(value);
+            int result = this.DerivedValues[index].ModifyValue(value);
+            this.DerivedValueChange?.Invoke(this, new ValueChangedEventArgs()
+            {
+                Delta = value,
+                Name = index,
+                NewValue = result
+            });
+            return result;
         }
 
-        protected void CalculateDerivatives()
+        public virtual int ModifyMaximum(string name, int value)
         {
-            IDerivedValue hitpoints = DerivedValues[EntityDerivedValue.HITPOINTS];
-            int lastHP = hitpoints.Value;
-
-            IDerivedValue concentration = DerivedValues[EntityDerivedValue.CONCENTRATION];
-            int lastConc = concentration.Value;
-
-            IDerivedValue composure = DerivedValues[EntityDerivedValue.COMPOSURE];
-            int lastComp = composure.Value;
-
-            IDerivedValue mana = DerivedValues[EntityDerivedValue.MANA];
-            int lastMana = mana.Value;
-
-            IValueFormula valueFormula = new BasicDerivedValueFormula();
-            IValueFormula manaFormula = new ManaFormula();
-
-            hitpoints.SetMaximum(valueFormula.Calculate(
-                new IBasicValue[] {m_Statistics[EntityStatistic.ENDURANCE]}));
-
-            concentration.SetMaximum(valueFormula.Calculate(
-                new IBasicValue[] {m_Statistics[EntityStatistic.FOCUS]}));
-
-            composure.SetMaximum(valueFormula.Calculate(
-                new IBasicValue[] {m_Statistics[EntityStatistic.WIT]}));
-
-            mana.SetMaximum(valueFormula.Calculate(
-                new IBasicValue[]
-                {
-                    m_Statistics[EntityStatistic.ENDURANCE],
-                    m_Statistics[EntityStatistic.FOCUS],
-                    m_Statistics[EntityStatistic.WIT]
-                }));
-
-            hitpoints.ModifyValue(hitpoints.Maximum - lastHP);
-            concentration.ModifyValue(concentration.Maximum - lastConc);
-            composure.ModifyValue(composure.Maximum - lastComp);
-            mana.ModifyValue(mana.Maximum - lastMana);
+            int result = this.DerivedValues[name].ModifyMaximum(value);
+            this.DerivedValueMaximumChange?.Invoke(this, new ValueChangedEventArgs()
+            {
+                Delta = value,
+                Name = name,
+                NewValue = result
+            });
+            return result;
         }
 
         public IItemInstance GetEquipment(string slotRef)

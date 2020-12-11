@@ -1,11 +1,11 @@
-﻿using JoyLib.Code.Entities.Statistics;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using JoyLib.Code.Collections;
+using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Managers;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
-using System;
-using System.Collections.Generic;
-using JoyLib.Code.Collections;
-using System.Linq;
 using JoyLib.Code.Unity;
 using JoyLib.Code.World;
 using UnityEngine;
@@ -247,7 +247,17 @@ namespace JoyLib.Code
             throw new InvalidOperationException("Derived value of " + name + " not found on JoyObject " + this.ToString());
         }
 
-        public int ModifyValue(string name, int value)
+        public virtual int ModifyMaximum(string name, int value)
+        {
+            if (DerivedValues.Has(name))
+            {
+                return DerivedValues[name].ModifyMaximum(value);
+            }
+            
+            throw new InvalidOperationException("Derived value of " + name + " not found on JoyObject " + this.ToString());
+        }
+
+        public virtual int ModifyValue(string name, int value)
         {
             if (DerivedValues.Has(name))
             {

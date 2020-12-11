@@ -14,6 +14,7 @@ using JoyLib.Code.Entities.Romance;
 using JoyLib.Code.Entities.Sexes;
 using JoyLib.Code.Entities.Sexuality;
 using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Events;
 using JoyLib.Code.Quests;
 using UnityEngine;
 
@@ -90,6 +91,13 @@ namespace JoyLib.Code.Entities
         bool AddJob(IJob job);
         
         void DamageMe(int value, Entity source);
-        void DirectDVModification(int value, string index = EntityDerivedValue.HITPOINTS);
+        int DirectDVModification(int value, string index = EntityDerivedValue.HITPOINTS);
+
+        event ValueChangedEventHandler DerivedValueChange;
+        event ValueChangedEventHandler DerivedValueMaximumChange;
+        event ValueChangedEventHandler StatisticChange;
+        event ValueChangedEventHandler SkillChange;
+        event ValueChangedEventHandler ExperienceChange;
+        
     }
 }

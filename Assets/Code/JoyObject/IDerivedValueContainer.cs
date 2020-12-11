@@ -11,5 +11,6 @@ namespace JoyLib.Code
         int ModifyValue(string name, int value);
         int GetValue(string name);
         int GetMaximum(string name);
+        int ModifyMaximum(string name, int value);
     }
 }
