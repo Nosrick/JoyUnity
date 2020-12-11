@@ -1,36 +1,39 @@
-﻿using JoyLib.Code.Collections;
-using JoyLib.Code.Entities.Needs;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Rollers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using JoyLib.Code.Collections;
+using JoyLib.Code.Entities.Needs;
+using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Helpers;
+using JoyLib.Code.Rollers;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities
 {
     public class EntitySkillHandler : IEntitySkillHandler
     {
-        private Dictionary<string, List<Tuple<string, float>>> m_SkillCoefficients;
+        public IEnumerable<string> SkillsNames { get; protected set; }
+
+        protected Dictionary<string, List<Tuple<string, float>>> m_SkillCoefficients;
 
         protected INeedHandler NeedHandler { get; set; }
         
         public EntitySkillHandler(INeedHandler needHandler)
         {
-            NeedHandler = needHandler;
-            m_SkillCoefficients = LoadSkillCoefficients();
+            this.NeedHandler = needHandler;
+            this.m_SkillCoefficients = this.LoadSkillCoefficients();
+            this.SkillsNames = this.m_SkillCoefficients.Keys;
         }
 
         public BasicValueContainer<IGrowingValue> GetDefaultSkillBlock(IEnumerable<INeed> needs)
         {
             BasicValueContainer<IGrowingValue> skills = new BasicValueContainer<IGrowingValue>();
 
-            foreach(string key in m_SkillCoefficients.Keys)
+            foreach(string key in this.m_SkillCoefficients.Keys)
             {
-                NonUniqueDictionary<INeed, float> coefficients = GetCoefficients(needs, key);
+                NonUniqueDictionary<INeed, float> coefficients = this.GetCoefficients(needs, key);
 
                 NonUniqueDictionary<INeed, float> governingNeeds = new NonUniqueDictionary<INeed, float>();
                 foreach(Tuple<INeed, float> coefficient in coefficients)
@@ -52,15 +55,15 @@ namespace JoyLib.Code.Entities
             return new NonUniqueDictionary<INeed, float>();
         }
         
-        public NonUniqueDictionary<INeed, float> GetCoefficients(List<string> needNames, string skillName)
+        public NonUniqueDictionary<INeed, float> GetCoefficients(IEnumerable<string> needNames, string skillName)
         {
             BasicValueContainer<INeed> needs = new BasicValueContainer<INeed>();
             foreach(string needName in needNames)
             {
-                needs.Add(NeedHandler.Get(needName));
+                needs.Add(this.NeedHandler.Get(needName));
             }
 
-            return GetCoefficients((IEnumerable<INeed>) needs, skillName);
+            return this.GetCoefficients((IEnumerable<INeed>) needs, skillName);
         }
 
 
@@ -73,15 +76,15 @@ namespace JoyLib.Code.Entities
         /// <returns></returns>
         public NonUniqueDictionary<INeed, float> GetCoefficients(IEnumerable<INeed> needs, string skillName)
         {
-            if(m_SkillCoefficients.ContainsKey(skillName))
+            if(this.m_SkillCoefficients.ContainsKey(skillName))
             {
                 NonUniqueDictionary<INeed, float> coefficients = new NonUniqueDictionary<INeed, float>();
 
-                foreach(string key in m_SkillCoefficients.Keys)
+                foreach(string key in this.m_SkillCoefficients.Keys)
                 {
                     if(key.Equals(skillName, StringComparison.OrdinalIgnoreCase))
                     {
-                        foreach(Tuple<string, float> tuple in m_SkillCoefficients[key])
+                        foreach(Tuple<string, float> tuple in this.m_SkillCoefficients[key])
                         {
                             try
                             {
@@ -108,7 +111,7 @@ namespace JoyLib.Code.Entities
             throw new InvalidOperationException("Attempted to get coefficients for non-existent skill " + skillName);
         }
 
-        private Dictionary<string, List<Tuple<string, float>>> LoadSkillCoefficients()
+        protected Dictionary<string, List<Tuple<string, float>>> LoadSkillCoefficients()
         {
             Dictionary<string, List<Tuple<string, float>>> skillCoefficients = new Dictionary<string, List<Tuple<string, float>>>();
 
