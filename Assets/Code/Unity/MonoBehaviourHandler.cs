@@ -2,30 +2,31 @@
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Events;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace JoyLib.Code.Unity
 {
-    public class MonoBehaviourHandler : MonoBehaviour
+    public class MonoBehaviourHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         protected IJoyObject m_JoyObject;
         protected SpriteRenderer m_SpriteRenderer;
         protected SpriteRenderer SpeechBubble { get; set; }
 
-        public IJoyObject MyJoyObject => m_JoyObject;
+        public IJoyObject MyJoyObject => this.m_JoyObject;
         
         public event JoyObjectMouseOverHandler OnMouseOverEvent;
         public event JoyObjectMouseExitHandler OnMouseExitEvent;
 
         public void Update()
         {
-            if (m_JoyObject == null)
+            if (this.m_JoyObject == null)
             {
                 return;
             }
             
-            m_JoyObject.Update();
-            m_SpriteRenderer.sprite = m_JoyObject.Sprite;
-            this.transform.position = new Vector3(m_JoyObject.WorldPosition.x, m_JoyObject.WorldPosition.y);
+            this.m_JoyObject.Update();
+            this.m_SpriteRenderer.sprite = this.m_JoyObject.Sprite;
+            this.transform.position = new Vector3(this.m_JoyObject.WorldPosition.x, this.m_JoyObject.WorldPosition.y);
         }
 
         public void Start()
@@ -34,64 +35,64 @@ namespace JoyLib.Code.Unity
 
         public virtual void AttachJoyObject(IJoyObject joyObject)
         {
-            m_JoyObject = joyObject;
-            m_JoyObject.AttachMonoBehaviourHandler(this);
-            m_SpriteRenderer = this.GetComponent<SpriteRenderer>();
+            this.m_JoyObject = joyObject;
+            this.m_JoyObject.AttachMonoBehaviourHandler(this);
+            this.m_SpriteRenderer = this.GetComponent<SpriteRenderer>();
             Transform transform = this.transform.Find("Speech Bubble");
             if (transform is null == false)
             {
-                SpeechBubble = transform.GetComponent<SpriteRenderer>();
-                SpeechBubble.gameObject.SetActive(false);
+                this.SpeechBubble = transform.GetComponent<SpriteRenderer>();
+                this.SpeechBubble.gameObject.SetActive(false);
             }
 
-            if(m_JoyObject.JoyName.StartsWith("Downstairs") || m_JoyObject.JoyName.StartsWith("Upstairs"))
+            if(this.m_JoyObject.JoyName.StartsWith("Downstairs") || m_JoyObject.JoyName.StartsWith("Upstairs"))
             {
-                m_SpriteRenderer.sortingLayerName = "Walls";
+                this.m_SpriteRenderer.sortingLayerName = "Walls";
             }
-            else if (m_JoyObject.GetType() == typeof(JoyObject))
+            else if (this.m_JoyObject.GetType() == typeof(JoyObject))
             {
-                if(m_JoyObject.IsWall)
+                if(this.m_JoyObject.IsWall)
                 {
-                    m_SpriteRenderer.sortingLayerName = "Walls";
+                    this.m_SpriteRenderer.sortingLayerName = "Walls";
                 }
                 else
                 {
-                    m_SpriteRenderer.sortingLayerName = "Terrain";
+                    this.m_SpriteRenderer.sortingLayerName = "Terrain";
                 }
             }
             else
             {
-                if(m_JoyObject is ItemInstance)
+                if(this.m_JoyObject is ItemInstance)
                 {
-                    m_SpriteRenderer.sortingLayerName = "Objects";
+                    this.m_SpriteRenderer.sortingLayerName = "Objects";
                 }
                 else
                 {
-                    m_SpriteRenderer.sortingLayerName = "Entities";
+                    this.m_SpriteRenderer.sortingLayerName = "Entities";
                 }
             }
-            this.name = m_JoyObject.JoyName + ":" + m_JoyObject.GUID;
-            this.transform.position = new Vector3(m_JoyObject.WorldPosition.x, m_JoyObject.WorldPosition.y, 0.0f);
-            m_SpriteRenderer.sprite = joyObject.Sprite;
+            this.name = this.m_JoyObject.JoyName + ":" + this.m_JoyObject.GUID;
+            this.transform.position = new Vector3(this.m_JoyObject.WorldPosition.x, this.m_JoyObject.WorldPosition.y, 0.0f);
+            this.m_SpriteRenderer.sprite = joyObject.Sprite;
         }
 
         public void SetSpeechBubble(bool on, Sprite need = null)
         {
-            SpeechBubble.gameObject.SetActive(on);
+            this.SpeechBubble.gameObject.SetActive(on);
             if (on)
             {
-                SpeechBubble.sprite = need;
+                this.SpeechBubble.sprite = need;
             }
         }
 
-        public void OnMouseEnter()
+        public void OnPointerEnter(PointerEventData eventData)
         {
-            OnMouseOverEvent?.Invoke(this, new JoyObjectMouseOverEventArgs() { Actor = MyJoyObject});
+            this.OnMouseOverEvent?.Invoke(this, new JoyObjectMouseOverEventArgs() { Actor = this.MyJoyObject });
         }
 
-        public void OnMouseExit()
+        public void OnPointerExit(PointerEventData eventData)
         {
-            OnMouseExitEvent?.Invoke(this, EventArgs.Empty);
+            this.OnMouseExitEvent?.Invoke(this, EventArgs.Empty);
         }
     }
 }
