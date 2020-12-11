@@ -65,7 +65,7 @@ namespace JoyLib.Code.Entities
         bool Alive { get; }
         
         string Description { get; }
-
+        
         void Tick();
         void AddQuest(IQuest quest);
         IEnumerable<Tuple<string, int>> GetData(IEnumerable<string> tags, params object[] args);
@@ -89,6 +89,8 @@ namespace JoyLib.Code.Entities
         void AddExperience(int value);
 
         bool AddJob(IJob job);
+        bool ChangeJob(string job);
+        bool ChangeJob(IJob job);
         
         void DamageMe(int value, Entity source);
         int DirectDVModification(int value, string index = EntityDerivedValue.HITPOINTS);
@@ -98,6 +100,7 @@ namespace JoyLib.Code.Entities
         event ValueChangedEventHandler StatisticChange;
         event ValueChangedEventHandler SkillChange;
         event ValueChangedEventHandler ExperienceChange;
-        
+        event JobChangedEventHandler JobChange;
+
     }
 }

@@ -36,6 +36,7 @@ namespace JoyLib.Code.Entities
         public event ValueChangedEventHandler StatisticChange;
         public event ValueChangedEventHandler SkillChange;
         public event ValueChangedEventHandler ExperienceChange;
+        public event JobChangedEventHandler JobChange;
         protected BasicValueContainer<IRollableValue> m_Statistics;
         protected BasicValueContainer<IGrowingValue> m_Skills;
         protected BasicValueContainer<INeed> m_Needs;
@@ -417,11 +418,43 @@ namespace JoyLib.Code.Entities
 
         public bool AddJob(IJob job)
         {
-            if (Jobs.Any(j => j.Name.Equals(job.Name, StringComparison.OrdinalIgnoreCase)))
+            if (this.Jobs.Any(j => j.Name.Equals(job.Name, StringComparison.OrdinalIgnoreCase)))
             {
                 return false;
             }
-            Jobs.Add(job);
+            this.Jobs.Add(job);
+            return true;
+        }
+
+        public bool ChangeJob(string job)
+        {
+            if (this.Jobs.Any(j => j.Name.Equals(job, StringComparison.OrdinalIgnoreCase)))
+            {
+                this.m_CurrentJob = this.Jobs.First(j => j.Name.Equals(job, StringComparison.OrdinalIgnoreCase));
+                this.JobChange?.Invoke(this, new JobChangedEventArgs()
+                {
+                    GUID = this.GUID,
+                    NewJob = this.m_CurrentJob
+                });
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool ChangeJob(IJob job)
+        {
+            if (this.Jobs.Any(j => j.Name.Equals(job.Name, StringComparison.OrdinalIgnoreCase)) == false)
+            {
+                this.Jobs.Add(job);
+            }
+            this.m_CurrentJob = job;
+            this.JobChange?.Invoke(this, new JobChangedEventArgs()
+            {
+                GUID = this.GUID,
+                NewJob = this.m_CurrentJob
+            });
+
             return true;
         }
 
