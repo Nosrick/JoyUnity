@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-using Castle.Core.Internal;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Scripting;
 using UnityEngine;
@@ -100,7 +99,7 @@ namespace JoyLib.Code.Entities.Statistics
                 string formula = this.Formulas.First(pair => pair.Key.Equals(name, StringComparison.OrdinalIgnoreCase))
                     .Value;
 
-                string value = this.Calculate<T>(components, formula);
+                string value = this.Calculate<T>(components, formula).ToString();
                 IDerivedValue<K> derivedValue = this.CreateDerivedValue<K>();
                 derivedValue.Name = name;
                 derivedValue.SetValue(value);
@@ -121,7 +120,7 @@ namespace JoyLib.Code.Entities.Statistics
             Dictionary<string, IDerivedValue<int>> values = new Dictionary<string, IDerivedValue<int>>();
             foreach (KeyValuePair<string, string> pair in this.EntityStandardFormulas)
             {
-                int result = int.Parse(this.Calculate(components, pair.Value)); 
+                int result = this.Calculate<int>(components, pair.Value); 
                 values.Add(
                     pair.Key,
                     new ConcreteDerivedIntValue(
@@ -138,7 +137,7 @@ namespace JoyLib.Code.Entities.Statistics
             Dictionary<string, IDerivedValue<int>> values = new Dictionary<string, IDerivedValue<int>>();
             foreach (KeyValuePair<string, string> pair in this.ItemStandardFormulas)
             {
-                int result = int.Parse(this.Calculate(components, pair.Value)); 
+                int result = (int)this.Calculate<float>(components, pair.Value); 
                 values.Add(
                     pair.Key,
                     new ConcreteDerivedIntValue(
@@ -176,7 +175,7 @@ namespace JoyLib.Code.Entities.Statistics
             return false;
         }
 
-        public string Calculate<T>(IEnumerable<IBasicValue<T>> components, string formula)
+        public T Calculate<T>(IEnumerable<IBasicValue<T>> components, string formula)
             where T : struct
         {
             string eval = formula;
@@ -195,13 +194,7 @@ namespace JoyLib.Code.Entities.Statistics
                 eval = eval.Replace(value.Name, value.Value.ToString());
             }
 
-            string stringResult = ScriptingEngine.instance.Evaluate<T>(eval);
-            if (stringResult.IsNullOrEmpty())
-            {
-                throw new InvalidOperationException("Could not evaluate formula " + formula);
-            }
-
-            return stringResult;
+            return ScriptingEngine.instance.Evaluate<T>(eval);
         }
     }
 }

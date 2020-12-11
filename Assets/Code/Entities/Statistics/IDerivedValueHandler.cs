@@ -11,7 +11,7 @@ namespace JoyLib.Code.Entities.Statistics
         IDerivedValue<T> Calculate<T>(string name, IEnumerable<IBasicValue<T>> components)
             where T : struct;
 
-        string Calculate<T>(IEnumerable<IBasicValue<T>> components, string formula)
+        T Calculate<T>(IEnumerable<IBasicValue<T>> components, string formula)
             where T : struct;
 
         Dictionary<string, IDerivedValue<int>> GetEntityStandardBlock(IEnumerable<IBasicValue<int>> components);

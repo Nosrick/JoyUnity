@@ -10,6 +10,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
 using UnityEngine;
+using Z.Expressions;
 
 namespace JoyLib.Code.Scripting
 {
@@ -217,9 +218,9 @@ namespace JoyLib.Code.Scripting
             return actions.ToArray();
         }
 
-        public string Evaluate<T>(string code)
+        public T Evaluate<T>(string code)
         {
-            return default(T).ToString();
+            return Eval.Execute<T>(code);
         }
     }
 }
