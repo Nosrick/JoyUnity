@@ -92,14 +92,14 @@ namespace JoyLib.Code.Entities.Abilities
 
         //Triggered when an entity reduces another entity to zero of a Derived Value
         //Returns true when the effect takes place
-        public virtual bool OnReduceToZero(IEntity attacker, IEntity target, IDerivedValue value)
+        public virtual bool OnReduceToZero(IEntity attacker, IEntity target, IDerivedValue<int> value)
         {
             return false;
         }
 
         //Triggered when an entity reduces another entity to the "disabled" of a Derived Value
         //Returns true when the effect takes place
-        public virtual bool OnDisable(IEntity attacker, IEntity target, IDerivedValue value)
+        public virtual bool OnDisable(IEntity attacker, IEntity target, IDerivedValue<int> value)
         {
             return false;
         }
@@ -136,14 +136,14 @@ namespace JoyLib.Code.Entities.Abilities
         //When the entity uses a skill
         //This returns the success threshold modification for the roll
         //The second parameter is for checking against other possible stat/skill values
-        public virtual int OnCheckRollModifyThreshold(int successThreshold, params IBasicValue[] values)
+        public virtual int OnCheckRollModifyThreshold(int successThreshold, params IBasicValue<int>[] values)
         {
             return successThreshold;
         }
 
         //This returns bonus/penalty dice for the roll
         //The second parameter is for checking against other possible stat/skill values
-        public virtual int OnCheckRollModifyDice(int dicePool, params IBasicValue[] values)
+        public virtual int OnCheckRollModifyDice(int dicePool, params IBasicValue<int>[] values)
         {
             return dicePool;
         }
@@ -151,7 +151,7 @@ namespace JoyLib.Code.Entities.Abilities
         //This is used for directly modifying the successes of the check
         //And should return the new successes
         //The second parameter is for checking against other possible stat/skill values
-        public virtual int OnCheckSuccess(int successes, params IBasicValue[] values)
+        public virtual int OnCheckSuccess(int successes, params IBasicValue<int>[] values)
         {
             return successes;
         }
@@ -192,9 +192,9 @@ namespace JoyLib.Code.Entities.Abilities
         public bool EnactToll(IEntity caster)
         {
             bool canCast = false;
-            IEnumerable<string> costs = Costs.Select(cost => cost.Item1);
+            IEnumerable<string> costs = this.Costs.Select(cost => cost.Item1);
             IEnumerable<Tuple<string, int>> returnData = caster.GetData(costs);
-            canCast = returnData.All(x => Costs.Any(cost =>
+            canCast = returnData.All(x => this.Costs.Any(cost =>
                 cost.Item1.Equals(x.Item1, StringComparison.OrdinalIgnoreCase) && x.Item2 >= cost.Item2));
 
             if(canCast)
@@ -209,9 +209,9 @@ namespace JoyLib.Code.Entities.Abilities
         {
             bool meetsPrereqs = false;
 
-            IEnumerable<string> prereqs = Prerequisites.Select(pair => pair.Key);
+            IEnumerable<string> prereqs = this.Prerequisites.Select(pair => pair.Key);
             IEnumerable<Tuple<string, int>> returnData = actor.GetData(prereqs);
-            meetsPrereqs = returnData.All(x => Prerequisites.Any(prereq =>
+            meetsPrereqs = returnData.All(x => this.Prerequisites.Any(prereq =>
                 prereq.Key.Equals(x.Item1, StringComparison.OrdinalIgnoreCase) && x.Item2 >= prereq.Value));
 
             return meetsPrereqs;
@@ -219,9 +219,9 @@ namespace JoyLib.Code.Entities.Abilities
 
         public bool MeetsPrerequisites(IEnumerable<Tuple<string, int>> data)
         {
-            return data.All(x => Prerequisites.Any(prereq =>
+            return data.All(x => this.Prerequisites.Any(prereq =>
                 prereq.Key.Equals(x.Item1, StringComparison.OrdinalIgnoreCase) && x.Item2 >= prereq.Value)
-                || Prerequisites.IsNullOrEmpty());
+                || this.Prerequisites.IsNullOrEmpty());
         }
 
         public string Name
@@ -288,13 +288,13 @@ namespace JoyLib.Code.Entities.Abilities
             protected set;
         }
 
-        public Tuple<string, int>[] Costs
+        public IEnumerable<Tuple<string, int>> Costs
         {
             get;
             protected set;
         }
 
-        public Dictionary<string, int> Prerequisites { get; protected set; }
+        public IDictionary<string, int> Prerequisites { get; protected set; }
 
         public AbilityTarget TargetType
         {

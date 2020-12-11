@@ -1,9 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Collections;
-using JoyLib.Code.Entities.AI;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Rollers;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities.Needs
@@ -68,7 +65,7 @@ namespace JoyLib.Code.Entities.Needs
         //So go for your lowest need
         public override bool FindFulfilmentObject(IEntity actor)
         {
-            BasicValueContainer<INeed> needs = actor.Needs;
+            IDictionary<string, INeed> needs = actor.Needs;
 
             INeed chosenNeed = null;
             int bestMatch = int.MaxValue;
@@ -138,7 +135,7 @@ namespace JoyLib.Code.Entities.Needs
         {
             if (this.m_DecayCounter == 0 && this.m_DoesDecay)
             {
-                BasicValueContainer<INeed> needs = actor.Needs;
+                IDictionary<string, INeed> needs = actor.Needs;
 
                 int average = (int) Math.Ceiling(
                     needs.Where(need => need.Value.ContributingHappiness)

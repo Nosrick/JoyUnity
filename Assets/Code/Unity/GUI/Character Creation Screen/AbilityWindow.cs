@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Collections;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.Statistics;
@@ -57,8 +56,8 @@ namespace JoyLib.Code.Unity.GUI
 
         public void GetAvailableAbilities(
             IEntityTemplate template,
-            BasicValueContainer<IRollableValue> stats,
-            BasicValueContainer<IGrowingValue> skills)
+            IDictionary<string, EntityStatistic> stats,
+            IDictionary<string, EntitySkill> skills)
         {
             if (GameManager.AbilityHandler is null)
             {

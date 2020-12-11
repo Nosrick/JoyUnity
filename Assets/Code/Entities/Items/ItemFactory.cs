@@ -15,13 +15,20 @@ namespace JoyLib.Code.Entities.Items
         protected ILiveItemHandler ItemHandler { get; set; }
 
         protected IObjectIconHandler ObjectIcons { get; set; }
+        
+        protected IDerivedValueHandler DerivedValueHandler { get; set; }
         protected RNG Roller { get; set; }
 
-        public ItemFactory(ILiveItemHandler itemHandler, IObjectIconHandler objectIconHandler, RNG roller)
+        public ItemFactory(
+            ILiveItemHandler itemHandler, 
+            IObjectIconHandler objectIconHandler,
+            IDerivedValueHandler derivedValueHandler,
+            RNG roller)
         {
-            ItemHandler = itemHandler;
-            ObjectIcons = objectIconHandler;
-            Roller = roller;
+            this.ItemHandler = itemHandler;
+            this.ObjectIcons = objectIconHandler;
+            this.DerivedValueHandler = derivedValueHandler;
+            this.Roller = roller;
         }
 
         public IItemInstance CreateRandomItemOfType(string[] tags, bool identified = false, bool instantiate = false)
@@ -32,13 +39,23 @@ namespace JoyLib.Code.Entities.Items
                 int result = Roller.Roll(0, matchingTypes.Length);
                 BaseItemType itemType = matchingTypes[result];
 
-                ItemInstance itemInstance = ScriptableObject.CreateInstance<ItemInstance>(); 
-                    
-                    itemInstance.Initialise(
-                        itemType, 
-                        EntityDerivedValue.GetDefaultForItem(
-                            itemType.Material.Bonus,
-                            itemType.Weight),
+                List<IBasicValue<float>> values = new List<IBasicValue<float>>();
+                values.Add(new ConcreteBasicFloatValue(
+                    "weight", itemType.Weight));
+                values.Add(new ConcreteBasicFloatValue(
+                    "bonus", itemType.Material.Bonus));
+                values.Add(new ConcreteBasicFloatValue(
+                    "size", itemType.Size));
+                values.Add(new ConcreteBasicFloatValue(
+                    "hardness", itemType.Material.Hardness));
+                values.Add(new ConcreteBasicFloatValue(
+                    "density", itemType.Material.Density));
+                
+                ItemInstance itemInstance = ScriptableObject.CreateInstance<ItemInstance>();
+                
+                itemInstance.Initialise(
+                    itemType,
+                    this.DerivedValueHandler.GetItemStandardBlock(values),
                         new Vector2Int(-1, -1), 
                         identified, 
                         ObjectIcons.GetSprites(
@@ -80,12 +97,22 @@ namespace JoyLib.Code.Entities.Items
                 int result = Roller.Roll(0, secondRound.Count);
                 BaseItemType type = secondRound[result];
                 ItemInstance itemInstance = ScriptableObject.CreateInstance<ItemInstance>(); 
+
+                List<IBasicValue<float>> values = new List<IBasicValue<float>>();
+                values.Add(new ConcreteBasicFloatValue(
+                    "weight", type.Weight));
+                values.Add(new ConcreteBasicFloatValue(
+                    "bonus", type.Material.Bonus));
+                values.Add(new ConcreteBasicFloatValue(
+                    "size", type.Size));
+                values.Add(new ConcreteBasicFloatValue(
+                    "hardness", type.Material.Hardness));
+                values.Add(new ConcreteBasicFloatValue(
+                    "density", type.Material.Density));
                     
                     itemInstance.Initialise(
                         type, 
-                        EntityDerivedValue.GetDefaultForItem(
-                            type.Material.Bonus,
-                            type.Weight),
+                        this.DerivedValueHandler.GetItemStandardBlock(values),
                         new Vector2Int(-1, -1), 
                         identified, 
                         ObjectIcons.GetSprites(
@@ -110,11 +137,22 @@ namespace JoyLib.Code.Entities.Items
             int result = Roller.Roll(0, itemDatabase.Count);
             BaseItemType itemType = itemDatabase[result];
             ItemInstance itemInstance = ScriptableObject.CreateInstance<ItemInstance>(); 
+
+            List<IBasicValue<float>> values = new List<IBasicValue<float>>();
+            values.Add(new ConcreteBasicFloatValue(
+                "weight", itemType.Weight));
+            values.Add(new ConcreteBasicFloatValue(
+                "bonus", itemType.Material.Bonus));
+            values.Add(new ConcreteBasicFloatValue(
+                "size", itemType.Size));
+            values.Add(new ConcreteBasicFloatValue(
+                "hardness", itemType.Material.Hardness));
+            values.Add(new ConcreteBasicFloatValue(
+                "density", itemType.Material.Density));
+            
                 itemInstance.Initialise(
                     itemType, 
-                    EntityDerivedValue.GetDefaultForItem(
-                        itemType.Material.Bonus,
-                        itemType.Weight),
+                    this.DerivedValueHandler.GetItemStandardBlock(values),
                     new Vector2Int(-1, -1), 
                     identified, 
                     ObjectIcons.GetSprites(

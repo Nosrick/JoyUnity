@@ -1,16 +1,11 @@
 ﻿using System.Collections;
-using System.Linq;
-using DevionGames.InventorySystem;
+using System.Collections.Generic;
 using JoyLib.Code;
-using JoyLib.Code.Collections;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Graphics;
 using JoyLib.Code.Scripting;
-using JoyLib.Code.Unity.GUI;
 using NUnit.Framework;
-using UnityEngine;
 using UnityEngine.TestTools;
 
 namespace Tests
@@ -34,12 +29,16 @@ namespace Tests
         [UnityTest]
         public IEnumerator GetDefaultSkillBlock_ShouldHave_ValidData()
         {
-            BasicValueContainer<INeed> needs =
-                new BasicValueContainer<INeed>(NeedHandler.GetManyRandomised(NeedHandler.NeedNames));
+            IDictionary<string, INeed> needs = new Dictionary<string, INeed>();
+            ICollection<INeed> collection = NeedHandler.GetManyRandomised(NeedHandler.NeedNames);
+            foreach (INeed need in collection)
+            {
+                needs.Add(need.Name, need);
+            }
     
-            BasicValueContainer<IGrowingValue> skills = target.GetDefaultSkillBlock(needs.Values);
+            IDictionary<string, EntitySkill> skills = target.GetDefaultSkillBlock(needs.Values);
     
-            foreach (IGrowingValue skill in skills.Values)
+            foreach (EntitySkill skill in skills.Values)
             {
                 Assert.That(skill.GoverningNeeds, Is.Not.Empty);
             }

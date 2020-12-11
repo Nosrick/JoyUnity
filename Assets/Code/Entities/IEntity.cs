@@ -22,9 +22,9 @@ namespace JoyLib.Code.Entities
 {
     public interface IEntity : IJoyObject, IItemContainer
     {
-        BasicValueContainer<IRollableValue> Statistics { get; }
-        BasicValueContainer<IGrowingValue> Skills { get; }
-        BasicValueContainer<INeed> Needs { get; }
+        IDictionary<string, EntityStatistic> Statistics { get; }
+        IDictionary<string, EntitySkill> Skills { get; }
+        IDictionary<string, INeed> Needs { get; }
         List<IAbility> Abilities { get; }
         NonUniqueDictionary<string, IItemInstance> Equipment { get; }
         List<IItemInstance> Backpack { get; }
@@ -93,7 +93,6 @@ namespace JoyLib.Code.Entities
         bool ChangeJob(IJob job);
         
         void DamageMe(int value, Entity source);
-        int DirectDVModification(int value, string index = EntityDerivedValue.HITPOINTS);
 
         event ValueChangedEventHandler DerivedValueChange;
         event ValueChangedEventHandler DerivedValueMaximumChange;

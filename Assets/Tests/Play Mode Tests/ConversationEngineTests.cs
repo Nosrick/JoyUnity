@@ -1,33 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Management.Instrumentation;
-using Castle.Core.Internal;
-using DevionGames.InventorySystem;
 using JoyLib.Code;
-using JoyLib.Code.Collections;
 using JoyLib.Code.Conversation;
 using JoyLib.Code.Conversation.Conversations;
-using JoyLib.Code.Conversation.Subengines.Rumours.Parameters;
-using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.AI.Drivers;
-using JoyLib.Code.Entities.Gender;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Entities.Jobs;
 using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Relationships;
-using JoyLib.Code.Entities.Romance;
-using JoyLib.Code.Entities.Sexes;
-using JoyLib.Code.Entities.Sexuality;
 using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Quests;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
-using JoyLib.Code.Unity;
-using JoyLib.Code.Unity.GUI;
 using JoyLib.Code.World;
 using Moq;
 using NUnit.Framework;
@@ -84,13 +66,23 @@ namespace Tests
                          && mock.GetRandomSentientWorldWide() == questObject)
                      && w.Name == "TEST");
 
-            BasicValueContainer<INeed> needs = new BasicValueContainer<INeed> { Mock.Of<INeed>(
+            INeed friendshipMock = Mock.Of<INeed>(
                 need => need.Fulfill(It.IsAny<int>()) == 1
-                        && need.Name == "friendship") };
+                        && need.Name == "friendship");
+            IDictionary<string, INeed> needs = new Dictionary<string, INeed>();
+            needs.Add("friendship", friendshipMock);
             
-            BasicValueContainer<IRollableValue> stats = new BasicValueContainer<IRollableValue> { Mock.Of<IRollableValue>(
+            IRollableValue<int> mockPersonality = Mock.Of<IRollableValue<int>>(
                 value => value.Value == 4
-                         && value.Name == "personality") };
+                         && value.Name == "personality");
+            IDictionary<string, EntityStatistic> stats = new Dictionary<string, EntityStatistic>();
+            stats.Add(
+                "personality", 
+                new EntityStatistic(
+                    "personality",
+                    4,
+                    GlobalConstants.DEFAULT_SUCCESS_THRESHOLD,
+                    new StandardRoller()));
 
             instigator = Mock.Of<IEntity>(
                 entity => entity.PlayerControlled == true

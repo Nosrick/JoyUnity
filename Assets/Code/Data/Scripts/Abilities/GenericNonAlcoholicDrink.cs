@@ -49,12 +49,12 @@ namespace JoyLib.Code.Entities.Abilities
             return false;
         }
 
-        public override bool OnReduceToZero(IEntity attacker, IEntity target, IDerivedValue value)
+        public override bool OnReduceToZero(IEntity attacker, IEntity target, IDerivedValue<int> value)
         {
             return false;
         }
 
-        public override bool OnDisable(IEntity attacker, IEntity target, IDerivedValue value)
+        public override bool OnDisable(IEntity attacker, IEntity target, IDerivedValue<int> value)
         {
             return false;
         }
@@ -69,17 +69,17 @@ namespace JoyLib.Code.Entities.Abilities
             return false;
         }
 
-        public override int OnCheckRollModifyDice(int dicePool, params IBasicValue[] values)
+        public override int OnCheckRollModifyDice(int dicePool, params IBasicValue<int>[] values)
         {
             return dicePool;
         }
 
-        public override int OnCheckRollModifyThreshold(int successThreshold, params IBasicValue[] values)
+        public override int OnCheckRollModifyThreshold(int successThreshold, params IBasicValue<int>[] values)
         {
             return successThreshold;
         }
 
-        public override int OnCheckSuccess(int successes, params IBasicValue[] values)
+        public override int OnCheckSuccess(int successes, params IBasicValue<int>[] values)
         {
             return successes;
         }

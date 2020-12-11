@@ -42,6 +42,8 @@ namespace JoyLib.Code.Entities
         
         protected IEntitySkillHandler SkillHandler { get; set; }
         
+        protected IDerivedValueHandler DerivedValueHandler { get; set; }
+        
         protected RNG Roller { get; set; }
 
         public EntityFactory(
@@ -55,28 +57,28 @@ namespace JoyLib.Code.Entities
             IJobHandler jobHandler,
             IPhysicsManager physicsManager,
             IEntitySkillHandler skillHandler,
+            IDerivedValueHandler derivedValueHandler,
             RNG roller)
         {
-            Roller = roller;
-            NeedHandler = needHandler;
-            ObjectIcons = objectIconHandler;
-            CultureHandler = cultureHandler;
-            SexualityHandler = sexualityHandler;
-            BioSexHandler = sexHandler;
-            JobHandler = jobHandler;
-            RomanceHandler = romanceHandler;
-            GenderHandler = genderHandler;
-            PhysicsManager = physicsManager;
-            SkillHandler = skillHandler;
+            this.Roller = roller;
+            this.NeedHandler = needHandler;
+            this.ObjectIcons = objectIconHandler;
+            this.CultureHandler = cultureHandler;
+            this.SexualityHandler = sexualityHandler;
+            this.BioSexHandler = sexHandler;
+            this.JobHandler = jobHandler;
+            this.RomanceHandler = romanceHandler;
+            this.GenderHandler = genderHandler;
+            this.PhysicsManager = physicsManager;
+            this.SkillHandler = skillHandler;
+            this.DerivedValueHandler = derivedValueHandler;
         }
 
-        public IEntity CreateFromTemplate(
-            IEntityTemplate template,
+        public IEntity CreateFromTemplate(IEntityTemplate template,
             Vector2Int position,
-            IGrowingValue level = null,
-            BasicValueContainer<IRollableValue> statistics = null,
-            BasicValueContainer<IDerivedValue> derivedValues = null,
-            BasicValueContainer<IGrowingValue> skills = null,
+            IDictionary<string, EntityStatistic> statistics = null,
+            IDictionary<string, IDerivedValue<int>> derivedValues = null,
+            IDictionary<string, EntitySkill> skills = null,
             IEnumerable<IAbility> abilities = null,
             List<ICulture> cultures = null,
             IGender gender = null,
@@ -96,9 +98,9 @@ namespace JoyLib.Code.Entities
             Sprite[] selectedSprites = sprites;
             List<ICulture> creatureCultures = new List<ICulture>();
             IDriver selectedDriver = driver;
-            BasicValueContainer<IRollableValue> selectedStatistics = statistics;
-            BasicValueContainer<IDerivedValue> selectedDVs = derivedValues;
-            BasicValueContainer<IGrowingValue> selectedSkills = skills;
+            IDictionary<string, EntityStatistic> selectedStatistics = statistics;
+            IDictionary<string, IDerivedValue<int>>  selectedDVs = derivedValues;
+            IDictionary<string, EntitySkill> selectedSkills = skills;
             IEnumerable<IAbility> selectedAbilities = abilities;
             if (!(cultures is null))
             {
@@ -111,11 +113,11 @@ namespace JoyLib.Code.Entities
                 creatureCultures.AddRange(cultureTypes);
             }
 
-            BasicValueContainer<INeed> needs = new BasicValueContainer<INeed>();
+            IDictionary<string, INeed> needs = new Dictionary<string, INeed>();
 
             foreach (string need in template.Needs)
             {
-                needs.Add(NeedHandler.GetRandomised(need));
+                needs.Add(need, this.NeedHandler.GetRandomised(need));
             }
 
             int result = Roller.Roll(0, creatureCultures.Count);
@@ -128,18 +130,17 @@ namespace JoyLib.Code.Entities
 
             if (selectedDVs is null)
             {
-                selectedDVs = EntityDerivedValue.GetDefault(
-                    selectedStatistics[EntityStatistic.ENDURANCE],
-                    selectedStatistics[EntityStatistic.FOCUS],
-                    selectedStatistics[EntityStatistic.WIT]);
+                selectedDVs = new Dictionary<string, IDerivedValue<int>>(
+                    this.DerivedValueHandler.GetEntityStandardBlock(
+                        selectedStatistics.Values));
             }
 
             if (selectedSkills is null)
             {
                 selectedSkills = SkillHandler.GetDefaultSkillBlock(needs.Values);
-                foreach (IGrowingValue skill in template.Skills.Values)
+                foreach (EntitySkill skill in template.Skills.Values)
                 {
-                    selectedSkills.Add(skill);
+                    selectedSkills.Add(skill.Name, skill);
                 }
             }
 
@@ -185,9 +186,9 @@ namespace JoyLib.Code.Entities
 
             IEntity entity = new Entity(
                 template, 
-                needs, 
                 selectedStatistics, 
                 selectedDVs, 
+                needs, 
                 selectedSkills, 
                 selectedAbilities,
                 creatureCultures, 
@@ -205,14 +206,12 @@ namespace JoyLib.Code.Entities
             return entity;
         }
 
-        public IEntity CreateLong(
-            IEntityTemplate template,
-            BasicValueContainer<IRollableValue> statistics,
-            BasicValueContainer<IDerivedValue> derivedValues,
-            BasicValueContainer<INeed> needs,
-            BasicValueContainer<IGrowingValue> skills,
+        public IEntity CreateLong(IEntityTemplate template,
+            IDictionary<string, INeed> needs,
+            IDictionary<string, EntityStatistic> statistics,
+            IDictionary<string, IDerivedValue<int>> derivedValues,
+            IDictionary<string, EntitySkill> skills,
             IEnumerable<IAbility> abilities,
-            IGrowingValue level,
             float experience,
             IJob job,
             IGender gender,

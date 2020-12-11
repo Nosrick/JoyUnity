@@ -1,8 +1,8 @@
-﻿using JoyLib.Code.Entities.Abilities;
+﻿using System.Collections.Generic;
+using System.Linq;
+using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Helpers;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace JoyLib.Code.Rollers
 {
@@ -15,7 +15,11 @@ namespace JoyLib.Code.Rollers
             Roller = roller is null ? new RNG() : roller;
         }
 
-    public int Roll(IRollableValue[] statistics, IGrowingValue[] skills, IAbility[] modifiers, params string[] tags)
+        public int Roll(
+            IEnumerable<IRollableValue<int>> statistics, 
+            IEnumerable<IRollableValue<int>> skills,
+            IEnumerable<IAbility> modifiers, 
+            params string[] tags)
         {
             int successes = 0;
 
@@ -30,6 +34,7 @@ namespace JoyLib.Code.Rollers
                         matches += 1;
                     }
                 }
+
                 if (matches == tags.Length)
                 {
                     applicableAbilities.Add(ability);
@@ -37,18 +42,19 @@ namespace JoyLib.Code.Rollers
             }
 
             int newThreshold = GlobalConstants.DEFAULT_SUCCESS_THRESHOLD;
-            foreach(IRollableValue statistic in statistics)
+            foreach (IRollableValue<int> statistic in statistics)
             {
-                if(statistic.SuccessThreshold != GlobalConstants.DEFAULT_SUCCESS_THRESHOLD)
+                if (statistic.SuccessThreshold != GlobalConstants.DEFAULT_SUCCESS_THRESHOLD)
                 {
-                    newThreshold += AlgorithmsElf.Difference(newThreshold, 
-                        AlgorithmsElf.Difference(GlobalConstants.DEFAULT_SUCCESS_THRESHOLD, statistic.SuccessThreshold));
+                    newThreshold += AlgorithmsElf.Difference(newThreshold,
+                        AlgorithmsElf.Difference(GlobalConstants.DEFAULT_SUCCESS_THRESHOLD,
+                            statistic.SuccessThreshold));
                 }
             }
 
-            foreach(IGrowingValue skill in skills)
+            foreach (IRollableValue<int> skill in skills)
             {
-                if(skill.SuccessThreshold != GlobalConstants.DEFAULT_SUCCESS_THRESHOLD)
+                if (skill.SuccessThreshold != GlobalConstants.DEFAULT_SUCCESS_THRESHOLD)
                 {
                     newThreshold += AlgorithmsElf.Difference(newThreshold,
                         AlgorithmsElf.Difference(GlobalConstants.DEFAULT_SUCCESS_THRESHOLD, skill.SuccessThreshold));
@@ -65,7 +71,7 @@ namespace JoyLib.Code.Rollers
 
             for (int i = 0; i < newNumber; i++)
             {
-                int result = Roller.Roll(1, 10);
+                int result = this.Roller.Roll(1, 11);
 
                 if (result == 1)
                 {

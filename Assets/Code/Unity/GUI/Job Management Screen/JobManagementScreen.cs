@@ -36,8 +36,8 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
         
         protected Dictionary<string, IAbility> PurchasedAbilities { get; set; }
         
-        protected List<IRollableValue> OriginalStatistics { get; set; }
-        protected List<IGrowingValue> OriginalSkills { get; set; }
+        protected List<EntityStatistic> OriginalStatistics { get; set; }
+        protected List<EntitySkill> OriginalSkills { get; set; }
         
         protected Dictionary<string, int> StatisticsDeltas { get; set; }
         protected Dictionary<string, int> SkillsDeltas { get; set; }
@@ -84,12 +84,12 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
             JobSelection.ValueChanged -= ChangeJob;
             JobSelection.ValueChanged += ChangeJob;
 
-            foreach (IRollableValue stat in OriginalStatistics)
+            foreach (IRollableValue<int> stat in OriginalStatistics)
             {
                 StatisticsDeltas.Add(stat.Name.ToLower(), stat.Value * 10);
             }
 
-            foreach (IGrowingValue skill in OriginalSkills)
+            foreach (IRollableValue<int> skill in OriginalSkills)
             {
                 SkillsDeltas.Add(skill.Name.ToLower(), skill.Value * 10);
             }
@@ -304,12 +304,12 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
             Player.Abilities.AddRange(PurchasedAbilities.Values);
             foreach (NamedItem item in Statistics)
             {
-                Player.Statistics[item.Name].SetValue(item.Value);
+                Player.Statistics[item.Name].Value = item.Value;
             }
 
             foreach (NamedItem item in Skills)
             {
-                Player.Skills[item.Name].SetValue(item.Value);
+                Player.Skills[item.Name].Value = item.Value;
             }
         }
 

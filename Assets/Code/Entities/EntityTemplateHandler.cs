@@ -1,18 +1,16 @@
-﻿using JoyLib.Code.Entities.Abilities;
-using JoyLib.Code.Entities.Needs;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Rollers;
-using JoyLib.Code.Collections;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using DevionGames.InventorySystem;
-using UnityEngine;
+using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.AI.LOS.Providers;
+using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Helpers;
+using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
+using UnityEngine;
 
 namespace JoyLib.Code.Entities
 {
@@ -56,28 +54,28 @@ namespace JoyLib.Code.Entities
 
                     foreach(XElement entity in doc.Elements("Entity"))
                     {
-                        List<EntityStatistic> statistics = (from stat in entity.Elements("Statistic")
-                                                                          select new EntityStatistic(stat.Element("Name").DefaultIfEmpty("DEFAULT"), 
-                                                                          stat.Element("Value").DefaultIfEmpty(4), 
-                                                                          stat.Element("Threshold").DefaultIfEmpty(7), new StandardRoller(new RNG()))).ToList();
-
-                        //TODO: FIX THIS NASTY CAST
-                        List<IRollableValue> statFudge = new List<IRollableValue>(statistics);
-                        BasicValueContainer<IRollableValue> statisticContainer = new BasicValueContainer<IRollableValue>(statFudge);
+                        Dictionary<string, EntityStatistic> statistics = (from stat in entity.Elements("Statistic")
+                                select new KeyValuePair<string, EntityStatistic>(
+                                    stat.Element("Name").GetAs<string>(),
+                                    new EntityStatistic(
+                                        stat.Element("Name").DefaultIfEmpty("DEFAULT"),
+                                        stat.Element("Value").DefaultIfEmpty(4),
+                                        stat.Element("Threshold").DefaultIfEmpty(GlobalConstants.DEFAULT_SUCCESS_THRESHOLD),
+                                        new StandardRoller(new RNG()))))
+                            .ToDictionary(x => x.Key, x => x.Value);
 
                         List<string> needs = (from need in entity.Elements("Need")
                                                 select need.DefaultIfEmpty("DEFAULT")).ToList();
 
-                        List<EntitySkill> skills = (from skill in entity.Elements("Skill")
-                                                                  select new EntitySkill(skill.Element("Name").DefaultIfEmpty("DEFAULT"),
-                                                                  skill.Element("Value").DefaultIfEmpty(0),
-                                                                  skill.Element("Threshold").DefaultIfEmpty(7),
-                                                                  skill.Element("Experience").DefaultIfEmpty(0),
-                                                                  SkillHandler.GetCoefficients(needs, skill.Element("Name").DefaultIfEmpty("DEFAULT")), new StandardRoller(new RNG()))).ToList();
-
-                        //TODO: FIX THIS NASTY CAST
-                        List<IGrowingValue> skillFudge = new List<IGrowingValue>(skills);
-                        BasicValueContainer<IGrowingValue> skillContainer = new BasicValueContainer<IGrowingValue>(skillFudge);
+                        Dictionary<string, EntitySkill> skills = (from skill in entity.Elements("Skill")
+                                                                  select new KeyValuePair<string, EntitySkill>(
+                                                                      skill.Element("Name").GetAs<string>(), 
+                                                                      new EntitySkill(skill.Element("Name").DefaultIfEmpty("DEFAULT"),
+                                                                          skill.Element("Value").DefaultIfEmpty(0),
+                                                                          skill.Element("Threshold").DefaultIfEmpty(GlobalConstants.DEFAULT_SUCCESS_THRESHOLD),
+                                                                          SkillHandler.GetCoefficients(needs, skill.Element("Name").DefaultIfEmpty("DEFAULT")), 
+                                                                          new StandardRoller())))
+                                                                .ToDictionary(x => x.Key, x => x.Value);
 
                         string creatureType = entity.Element("CreatureType").DefaultIfEmpty("DEFAULT");
                         string type = entity.Element("Type").DefaultIfEmpty("DEFAULT");
@@ -107,8 +105,8 @@ namespace JoyLib.Code.Entities
                         
 
                         entities.Add(new EntityTemplate(
-                                            statisticContainer, 
-                                            skillContainer,
+                                            statistics, 
+                                            skills,
                                             needs.ToArray(), 
                                             abilities.ToArray(), 
                                             slots.ToArray(),

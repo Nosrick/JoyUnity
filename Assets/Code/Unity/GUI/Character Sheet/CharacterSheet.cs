@@ -26,10 +26,10 @@ namespace JoyLib.Code.Unity.GUI.Character_Sheet
             }
             
             Player = GlobalConstants.GameManager.Player;
-            Statistics.SetValues(Player.Statistics.Values);
-            Skills.SetValues(Player.Skills.Values);
+            Statistics.SetValues(this.Player.Statistics.Values);
+            Skills.SetValues(this.Player.Skills.Values);
             Abilities.SetValues(Player.Abilities);
-            DerivedValues.SetValues(Player.DerivedValues.Values);
+            DerivedValues.SetValues(Player.DerivedValues);
             PlayerSprite.sprite = Player.Sprite;
             PlayerName.text = Player.JoyName;
             PlayerJobAndSpecies.text = Player.CreatureType + " " + Player.CurrentJob.Name;

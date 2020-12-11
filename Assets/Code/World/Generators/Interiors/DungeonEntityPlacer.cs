@@ -1,9 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Collections;
 using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Needs;
-using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Physics;
 using JoyLib.Code.Rollers;
 using UnityEngine;
@@ -62,20 +59,10 @@ namespace JoyLib.Code.World.Generators.Interiors
                 int entityIndex = Roller.Roll(0, templates.Count);
 
                 RNG newRoller = makeNewRollers ? new RNG() : roller; 
-                
-                IGrowingValue level = new ConcreteGrowingValue(
-                    "level", 
-                    1, 
-                    100, 
-                    0, 
-                    GlobalConstants.DEFAULT_SUCCESS_THRESHOLD,
-                    new StandardRoller(newRoller), 
-                    new NonUniqueDictionary<INeed, float>());
 
                 IEntity newEntity = EntityFactory.CreateFromTemplate(
                     templates[entityIndex], 
                     availablePoints[pointIndex],
-                    level,
                     null,
                     null, 
                     null,

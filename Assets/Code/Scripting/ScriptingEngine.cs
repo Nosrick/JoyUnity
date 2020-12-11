@@ -1,7 +1,3 @@
-using JoyLib.Code.Entities.AI;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.Emit;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,8 +6,10 @@ using System.Reflection;
 using DevionGames;
 using DevionGames.InventorySystem;
 using DevionGames.UIWidgets;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Emit;
 using UnityEngine;
-using JoyLib.Code.Helpers;
 
 namespace JoyLib.Code.Scripting
 {
@@ -217,6 +215,11 @@ namespace JoyLib.Code.Scripting
             }
 
             return actions.ToArray();
+        }
+
+        public string Evaluate<T>(string code)
+        {
+            return default(T).ToString();
         }
     }
 }

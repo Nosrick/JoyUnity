@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Collections;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Events;
 using JoyLib.Code.Rollers;
@@ -28,16 +27,18 @@ namespace JoyLib.Code.Unity.GUI
             SetRemainingPointsText();
         }
 
-        public BasicValueContainer<IRollableValue> GetStatistics()
+        public IDictionary<string, EntityStatistic> GetStatistics()
         {
-            BasicValueContainer<IRollableValue> stats = new BasicValueContainer<IRollableValue>();
+            IDictionary<string, EntityStatistic> stats = new Dictionary<string, EntityStatistic>();
             foreach (NamedItem item in Items)
             {
-                stats.Add(new EntityStatistic(
-                    item.Name,
-                    item.Value,
-                    GlobalConstants.DEFAULT_SUCCESS_THRESHOLD,
-                    new StandardRoller()));
+                stats.Add(
+                    item.Name.ToLower(),
+                    new EntityStatistic(
+                        item.Name.ToLower(),
+                        item.Value,
+                        GlobalConstants.DEFAULT_SUCCESS_THRESHOLD,
+                        new StandardRoller()));
             }
 
             return stats;

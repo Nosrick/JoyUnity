@@ -1,4 +1,4 @@
-﻿using JoyLib.Code.Collections;
+﻿using System.Collections.Generic;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.AI.LOS.Providers;
 using JoyLib.Code.Entities.Statistics;
@@ -7,11 +7,11 @@ namespace JoyLib.Code.Entities
 {
     public interface IEntityTemplate : ITagged
     {
-        string[] Slots { get; }
-        BasicValueContainer<IRollableValue> Statistics { get; }
-        BasicValueContainer<IGrowingValue> Skills { get; }
-        string[] Needs { get; }
-        IAbility[] Abilities { get; }
+        IEnumerable<string> Slots { get; }
+        IDictionary<string, EntityStatistic> Statistics { get; }
+        IDictionary<string, EntitySkill> Skills { get; }
+        IEnumerable<string> Needs { get; }
+        IEnumerable<IAbility> Abilities { get; }
         int Size { get; }
         bool Sentient { get; }
         IVision VisionType { get; }

@@ -19,9 +19,9 @@ namespace JoyLib.Code.Unity.GUI.Character_Sheet
             }
         }
 
-        public virtual void SetValues(IEnumerable<IBasicValue> values)
+        public virtual void SetValues(IEnumerable<IRollableValue<int>> values)
         {
-            List<IBasicValue> listValues = values.ToList();
+            List<IRollableValue<int>> listValues = values.ToList();
             
             foreach (StaticValueContainer item in Items)
             {

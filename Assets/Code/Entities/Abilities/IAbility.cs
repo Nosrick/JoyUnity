@@ -29,10 +29,10 @@ namespace JoyLib.Code.Entities.Abilities
         bool OnTick(IEntity entity);
 
         //When the entity reduces another entity to zero of a Derived Value
-        bool OnReduceToZero(IEntity attacker, IEntity target, IDerivedValue value);
+        bool OnReduceToZero(IEntity attacker, IEntity target, IDerivedValue<int> value);
 
         //When the entity reduces another entity to the "disabled" status of a Derived Value
-        bool OnDisable(IEntity attacker, IEntity target, IDerivedValue value);
+        bool OnDisable(IEntity attacker, IEntity target, IDerivedValue<int> value);
 
         //When the entity uses an item
         bool OnUse(IEntity user, IJoyObject target);
@@ -43,16 +43,16 @@ namespace JoyLib.Code.Entities.Abilities
         //When the entity uses a skill
         //This returns the success threshold modification for the roll
         //The second parameter is for checking against other possible stat/skill values
-        int OnCheckRollModifyThreshold(int successThreshold, params IBasicValue[] values);
+        int OnCheckRollModifyThreshold(int successThreshold, params IBasicValue<int>[] values);
 
         //This returns bonus/penalty dice for the roll
         //The second parameter is for checking against other possible stat/skill values
-        int OnCheckRollModifyDice(int dicePool, params IBasicValue[] values);
+        int OnCheckRollModifyDice(int dicePool, params IBasicValue<int>[] values);
 
         //This is used for directly modifying the successes of the check
         //And should return the new successes
         //The second parameter is for checking against other possible stat/skill values
-        int OnCheckSuccess(int successes, params IBasicValue[] values);
+        int OnCheckSuccess(int successes, params IBasicValue<int>[] values);
 
         bool DecrementCounter(int value);
 
@@ -115,12 +115,12 @@ namespace JoyLib.Code.Entities.Abilities
             get;
         }
 
-        Tuple<string, int>[] Costs
+        IEnumerable<Tuple<string, int>> Costs
         {
             get;
         }
 
-        Dictionary<string, int> Prerequisites
+        IDictionary<string, int> Prerequisites
         {
             get;
         }

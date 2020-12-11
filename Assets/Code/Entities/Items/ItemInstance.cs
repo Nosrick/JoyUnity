@@ -19,7 +19,7 @@ namespace JoyLib.Code.Entities.Items
     [Serializable]
     public class ItemInstance : EquipmentItem, IItemInstance
     {
-        public BasicValueContainer<IDerivedValue> DerivedValues { get; protected set; }
+        public IDictionary<string, IDerivedValue<int>> DerivedValues { get; protected set; }
 
         public string TileSet { get; protected set; }
         
@@ -101,7 +101,7 @@ namespace JoyLib.Code.Entities.Items
 
         public void Initialise(
             BaseItemType type, 
-            BasicValueContainer<IDerivedValue> derivedValues,
+            IDictionary<string, IDerivedValue<int>> derivedValues,
             Vector2Int position, 
             bool identified, 
             Sprite[] sprites,
@@ -328,9 +328,9 @@ namespace JoyLib.Code.Entities.Items
 
         public int GetValue(string name)
         {
-            if (DerivedValues.Has(name))
+            if (this.DerivedValues.ContainsKey(name))
             {
-                return DerivedValues.Get(name);
+                return this.DerivedValues[name].Value;
             }
             
             throw new InvalidOperationException("Derived value of " + name + " not found on JoyObject " + this.ToString());
@@ -338,31 +338,31 @@ namespace JoyLib.Code.Entities.Items
 
         public int GetMaximum(string name)
         {
-            if (DerivedValues.Has(name))
+            if (this.DerivedValues.ContainsKey(name))
             {
-                return DerivedValues.GetRawValue(name).Maximum;
+                return this.DerivedValues[name].Maximum;
             }
             
             throw new InvalidOperationException("Derived value of " + name + " not found on JoyObject " + this.ToString());
         }
 
-        public int ModifyMaximum(string name, int value)
+        public virtual int ModifyMaximum(string name, int value)
         {
-            if (this.DerivedValues.Has(name))
+            if (this.DerivedValues.ContainsKey(name))
             {
-                return this.DerivedValues.GetRawValue(name).ModifyMaximum(value);
+                this.DerivedValues[name].Maximum += value;
+                return this.DerivedValues[name].Maximum;
             }
             
             throw new InvalidOperationException("Derived value of " + name + " not found on JoyObject " + this.ToString());
         }
 
-        public int ModifyValue(string name, int value)
+        public virtual int ModifyValue(string name, int value)
         {
-            if (DerivedValues.Has(name))
+            if (this.DerivedValues.ContainsKey(name))
             {
-                int result = DerivedValues[name].ModifyValue(value);
-                ConstructDescription();
-                return result;
+                this.DerivedValues[name].Value += value;
+                return this.DerivedValues[name].Value;
             }
 
             throw new InvalidOperationException("Derived value of " + name + " not found on JoyObject " + this.ToString());

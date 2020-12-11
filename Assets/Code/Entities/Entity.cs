@@ -37,9 +37,9 @@ namespace JoyLib.Code.Entities
         public event ValueChangedEventHandler SkillChange;
         public event ValueChangedEventHandler ExperienceChange;
         public event JobChangedEventHandler JobChange;
-        protected BasicValueContainer<IRollableValue> m_Statistics;
-        protected BasicValueContainer<IGrowingValue> m_Skills;
-        protected BasicValueContainer<INeed> m_Needs;
+        protected IDictionary<string, EntityStatistic> m_Statistics;
+        protected IDictionary<string, EntitySkill> m_Skills;
+        protected IDictionary<string, INeed> m_Needs;
         protected List<IAbility> m_Abilities;
         protected NonUniqueDictionary<string, IItemInstance> m_Equipment;
         protected List<IItemInstance> m_Backpack;
@@ -128,10 +128,10 @@ namespace JoyLib.Code.Entities
         /// <param name="jobLevels"></param>
         public Entity(
             IEntityTemplate template,
-            BasicValueContainer<IRollableValue> statistics,
-            BasicValueContainer<IDerivedValue> derivedValues,
-            BasicValueContainer<INeed> needs,
-            BasicValueContainer<IGrowingValue> skills,
+            IDictionary<string, EntityStatistic> statistics,
+            IDictionary<string, IDerivedValue<int>> derivedValues,
+            IDictionary<string, INeed> needs,
+            IDictionary<string, EntitySkill> skills,
             IEnumerable<IAbility> abilities,
             List<ICulture> cultures,
             IJob job,
@@ -232,10 +232,10 @@ namespace JoyLib.Code.Entities
         /// <param name="icons"></param>
         public Entity(
             IEntityTemplate template,
-            BasicValueContainer<INeed> needs,
-            BasicValueContainer<IRollableValue> statistics,
-            BasicValueContainer<IDerivedValue> derivedValues,
-            BasicValueContainer<IGrowingValue> skills,
+            IDictionary<string, EntityStatistic> statistics,
+            IDictionary<string, IDerivedValue<int>> derivedValues,
+            IDictionary<string, INeed> needs,
+            IDictionary<string, EntitySkill> skills,
             IEnumerable<IAbility> abilities,
             List<ICulture> cultures,
             IJob job,
@@ -394,10 +394,10 @@ namespace JoyLib.Code.Entities
             RegenTicker += 1;
             if (RegenTicker == REGEN_TICK_TIME)
             {
-                DerivedValues[EntityDerivedValue.HITPOINTS].ModifyValue(1);
-                DerivedValues[EntityDerivedValue.CONCENTRATION].ModifyValue(1);
-                DerivedValues[EntityDerivedValue.COMPOSURE].ModifyValue(1);
-                DerivedValues[EntityDerivedValue.MANA].ModifyValue(1);
+                this.ModifyValue(ConcreteDerivedIntValue.HITPOINTS, 1);
+                this.ModifyValue(ConcreteDerivedIntValue.CONCENTRATION, 1);
+                this.ModifyValue(ConcreteDerivedIntValue.COMPOSURE, 1);
+                this.ModifyValue(ConcreteDerivedIntValue.MANA, 1);
 
                 RegenTicker = 0;
 
@@ -465,7 +465,7 @@ namespace JoyLib.Code.Entities
             //Check statistics
             foreach (string tag in tags)
             {
-                if (m_Statistics.Has(tag))
+                if (m_Statistics.ContainsKey(tag))
                 {
                     data.Add(new Tuple<string, int>(tag, m_Statistics[tag].Value));
                 }
@@ -481,7 +481,7 @@ namespace JoyLib.Code.Entities
             //Check skills
             foreach (string tag in tags)
             {
-                if (m_Skills.Has(tag))
+                if (m_Skills.ContainsKey(tag))
                 {
                     data.Add(new Tuple<string, int>(tag, m_Skills[tag].Value));
                 }
@@ -490,14 +490,14 @@ namespace JoyLib.Code.Entities
             //Fetch all skills
             if (tags.Any(tag => tag.Equals("skills", StringComparison.OrdinalIgnoreCase)))
             {
-                data.AddRange(from IGrowingValue skill in m_Skills.Values
+                data.AddRange(from IRollableValue<int> skill in m_Skills.Values
                     select new Tuple<string, int>(skill.Name, skill.Value));
             }
 
             //Check needs
             foreach (string tag in tags)
             {
-                if (m_Needs.Has(tag))
+                if (m_Needs.ContainsKey(tag))
                 {
                     data.Add(new Tuple<string, int>(tag, m_Needs[tag].Value));
                 }
@@ -822,32 +822,32 @@ namespace JoyLib.Code.Entities
 
         public void DecreaseMana(int value)
         {
-            this.ModifyValue(EntityDerivedValue.MANA, -value);
+            this.ModifyValue(ConcreteDerivedIntValue.MANA, -value);
         }
 
         public void IncreaseMana(int value)
         {
-            this.ModifyValue(EntityDerivedValue.MANA, value);
+            this.ModifyValue(ConcreteDerivedIntValue.MANA, value);
         }
 
         public void DecreaseComposure(int value)
         {
-            this.ModifyValue(EntityDerivedValue.COMPOSURE, -value);
+            this.ModifyValue(ConcreteDerivedIntValue.COMPOSURE, -value);
         }
 
         public void IncreaseComposure(int value)
         {
-            this.ModifyValue(EntityDerivedValue.COMPOSURE, value);
+            this.ModifyValue(ConcreteDerivedIntValue.COMPOSURE, value);
         }
 
         public void DecreaseConcentration(int value)
         {
-            this.ModifyValue(EntityDerivedValue.CONCENTRATION, -value);
+            this.ModifyValue(ConcreteDerivedIntValue.CONCENTRATION, -value);
         }
 
         public void IncreaseConcentration(int value)
         {
-            this.ModifyValue(EntityDerivedValue.CONCENTRATION, value);
+            this.ModifyValue(ConcreteDerivedIntValue.CONCENTRATION, value);
         }
 
         public override int ModifyValue(string name, int value)
@@ -885,37 +885,13 @@ namespace JoyLib.Code.Entities
                 damage = ability.OnTakeHit(source, this, damage);
             }
 
-            int result = base.DamageValue(EntityDerivedValue.HITPOINTS, damage);
+            int result = base.DamageValue(ConcreteDerivedIntValue.HITPOINTS, damage);
             this.DerivedValueChange?.Invoke(this, new ValueChangedEventArgs()
             {
                 Delta = damage,
-                Name = EntityDerivedValue.HITPOINTS,
+                Name = ConcreteDerivedIntValue.HITPOINTS,
                 NewValue = result
             });
-        }
-
-        public int DirectDVModification(int value, string index = EntityDerivedValue.HITPOINTS)
-        {
-            int result = this.DerivedValues[index].ModifyValue(value);
-            this.DerivedValueChange?.Invoke(this, new ValueChangedEventArgs()
-            {
-                Delta = value,
-                Name = index,
-                NewValue = result
-            });
-            return result;
-        }
-
-        public virtual int ModifyMaximum(string name, int value)
-        {
-            int result = this.DerivedValues[name].ModifyMaximum(value);
-            this.DerivedValueMaximumChange?.Invoke(this, new ValueChangedEventArgs()
-            {
-                Delta = value,
-                Name = name,
-                NewValue = result
-            });
-            return result;
         }
 
         public IItemInstance GetEquipment(string slotRef)
@@ -1005,17 +981,17 @@ namespace JoyLib.Code.Entities
             get { return new NonUniqueDictionary<string, IItemInstance>(m_Equipment); }
         }
 
-        public BasicValueContainer<IRollableValue> Statistics
+        public IDictionary<string, EntityStatistic> Statistics
         {
             get { return m_Statistics; }
         }
 
-        public BasicValueContainer<IGrowingValue> Skills
+        public IDictionary<string, EntitySkill> Skills
         {
             get { return m_Skills; }
         }
 
-        public BasicValueContainer<INeed> Needs
+        public IDictionary<string, INeed> Needs
         {
             get { return m_Needs; }
         }
@@ -1084,32 +1060,32 @@ namespace JoyLib.Code.Entities
 
         public int Mana
         {
-            get { return DerivedValues[EntityDerivedValue.MANA].Maximum; }
+            get { return this.DerivedValues[ConcreteDerivedIntValue.MANA].Maximum; }
         }
 
         public int ManaRemaining
         {
-            get { return DerivedValues[EntityDerivedValue.MANA].Value; }
+            get { return this.DerivedValues[ConcreteDerivedIntValue.MANA].Value; }
         }
 
         public int ComposureRemaining
         {
-            get { return DerivedValues[EntityDerivedValue.COMPOSURE].Value; }
+            get { return this.DerivedValues[ConcreteDerivedIntValue.COMPOSURE].Value; }
         }
 
         public int Composure
         {
-            get { return DerivedValues[EntityDerivedValue.COMPOSURE].Maximum; }
+            get { return this.DerivedValues[ConcreteDerivedIntValue.COMPOSURE].Maximum; }
         }
 
         public int Concentration
         {
-            get { return DerivedValues[EntityDerivedValue.CONCENTRATION].Maximum; }
+            get { return this.DerivedValues[ConcreteDerivedIntValue.CONCENTRATION].Maximum; }
         }
 
         public int ConcentrationRemaining
         {
-            get { return DerivedValues[EntityDerivedValue.CONCENTRATION].Value; }
+            get { return this.DerivedValues[ConcreteDerivedIntValue.CONCENTRATION].Value; }
         }
 
         public Vector2Int TargetPoint { get; set; }

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Collections;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Events;
 using TMPro;
@@ -16,13 +15,13 @@ namespace JoyLib.Code.Unity.GUI
         [SerializeField] protected BasicPlayerInfo PlayerInfo;
         protected List<NamedItem> Items { get; set; }
         
-        protected BasicValueContainer<IGrowingValue> Skills { get; set; }
+        protected IDictionary<string, EntitySkill> Skills { get; set; }
 
         public void Awake()
         {
             ValueContainerPrefab.gameObject.SetActive(false);
             Items = new List<NamedItem>();
-            Skills = new BasicValueContainer<IGrowingValue>();
+            Skills = new Dictionary<string, EntitySkill>();
             
             Value = Maximum;
             SetPointsRemaining();
@@ -30,18 +29,21 @@ namespace JoyLib.Code.Unity.GUI
 
         public List<KeyValuePair<string, int>> GetSkillNames()
         {
-            Skills = GameManager.SkillHandler.GetDefaultSkillBlock(GameManager.NeedHandler.Needs);
+            Skills = GameManager.SkillHandler.GetDefaultSkillBlock(this.GameManager.NeedHandler.Needs);
 
-            Skills.AddRange(PlayerInfo.CurrentTemplate.Skills);
-            
+            foreach (KeyValuePair<string, EntitySkill> pair in this.PlayerInfo.CurrentTemplate.Skills)
+            {
+                Skills.Add(pair);
+            }
+
             return Skills.Select(skill => new KeyValuePair<string, int>(skill.Key, skill.Value.Value)).ToList();
         }
 
-        public BasicValueContainer<IGrowingValue> GetSkillsBlock()
+        public IDictionary<string, EntitySkill> GetSkillsBlock()
         {
             for (int i = 0; i < Items.Count; i++)
             {
-                Skills[Items[i].Name].SetValue(Items[i].Value);
+                Skills[Items[i].Name.ToLower()].Value = Items[i].Value;
             }
 
             return Skills;

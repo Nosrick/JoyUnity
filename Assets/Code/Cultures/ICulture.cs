@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using JoyLib.Code.Collections;
 using JoyLib.Code.Entities.Gender;
 using JoyLib.Code.Entities.Jobs;
 using JoyLib.Code.Entities.Romance;
@@ -27,7 +26,7 @@ namespace JoyLib.Code.Cultures
 
         IJob ChooseJob(IEnumerable<IJob> jobs);
 
-        BasicValueContainer<IRollableValue> GetStats(BasicValueContainer<IRollableValue> baseStats);
+        IDictionary<string, EntityStatistic> GetStats(IDictionary<string, EntityStatistic> baseStats);
 
         void ClearLastGroup();
 

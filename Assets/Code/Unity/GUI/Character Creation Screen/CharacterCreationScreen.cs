@@ -1,10 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using DevionGames.UIWidgets;
-using JoyLib.Code.Collections;
 using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Rollers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -37,43 +35,30 @@ namespace JoyLib.Code.Unity.GUI
         public IEntity CreatePlayer()
         {
             return GameManager.EntityFactory.CreateFromTemplate(
-                PlayerInfo.CurrentTemplate,
+                this.PlayerInfo.CurrentTemplate,
                 GlobalConstants.NO_TARGET,
-                new ConcreteGrowingValue(
-                    "level",
-                    1,
-                    0,
-                    0,
-                    GlobalConstants.DEFAULT_SUCCESS_THRESHOLD,
-                    new StandardRoller(),
-                    new NonUniqueDictionary<INeed, float>()),
-                StatisticWindow.GetStatistics(),
-                DerivedValuesWindow.GetDerivedValues(),
-                SkillWindow.GetSkillsBlock(), 
-                AbilityWindow.GetPickedAbilities(),
-                PlayerInfo.CurrentCultures,
-                GameManager.GenderHandler.Get(PlayerInfo.Gender),
-                GameManager.BioSexHandler.Get(PlayerInfo.Sex),
-                GameManager.SexualityHandler.Get(PlayerInfo.Sexuality),
-                GameManager.RomanceHandler.Get(PlayerInfo.Romance),
-                GameManager.JobHandler.Get(PlayerInfo.Job), 
-                GameManager.ObjectIconHandler.GetSprites(PlayerInfo.CurrentTemplate.CreatureType, PlayerInfo.Job));
+                this.StatisticWindow.GetStatistics(),
+                this.DerivedValuesWindow.GetDerivedValues(),
+                this.SkillWindow.GetSkillsBlock(), 
+                this.AbilityWindow.GetPickedAbilities(),
+                this.PlayerInfo.CurrentCultures,
+                this.GameManager.GenderHandler.Get(this.PlayerInfo.Gender),
+                this.GameManager.BioSexHandler.Get(this.PlayerInfo.Sex),
+                this.GameManager.SexualityHandler.Get(this.PlayerInfo.Sexuality),
+                this.GameManager.RomanceHandler.Get(this.PlayerInfo.Romance),
+                this.GameManager.JobHandler.Get(this.PlayerInfo.Job), 
+                this.GameManager.ObjectIconHandler.GetSprites(this.PlayerInfo.CurrentTemplate.CreatureType, this.PlayerInfo.Job));
         }
 
         protected void ChangedStatistics(object sender, EventArgs args)
         {
-            BasicValueContainer<IRollableValue> stats = StatisticWindow.GetStatistics();
+            IDictionary<string, EntityStatistic> stats = StatisticWindow.GetStatistics();
             if (stats.Count == 0)
             {
                 return;
             }
-            
-            DerivedValuesWindow.SetDerivedValues(
-                EntityDerivedValue.GetDefault(
-                        stats.GetRawValue(EntityStatistic.ENDURANCE),
-                        stats.GetRawValue(EntityStatistic.FOCUS),
-                        stats.GetRawValue(EntityStatistic.WIT))
-                    .Values);
+
+            DerivedValuesWindow.SetDerivedValues(this.GameManager.DerivedValueHandler.GetEntityStandardBlock(stats.Values));
         }
 
         public void SetRandomName(object sender, EventArgs args)

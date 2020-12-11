@@ -28,7 +28,7 @@ namespace JoyLib.Code.Entities.Abilities
             if (target is IItemInstance item 
                 && item.HasTag("food"))
             {
-                user.Needs["hunger"].ModifyValue(item.Value);
+                user.Needs["hunger"].Value += item.Value;
                 return true;
             }
 

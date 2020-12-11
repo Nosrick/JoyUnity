@@ -1,17 +1,14 @@
-﻿using JoyLib.Code.Entities.Jobs;
-using JoyLib.Code.Entities.Sexes;
-using JoyLib.Code.Entities.Sexuality;
-using JoyLib.Code.Rollers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
 using Castle.Core.Internal;
-using JoyLib.Code.Collections;
 using JoyLib.Code.Entities.Gender;
+using JoyLib.Code.Entities.Jobs;
 using JoyLib.Code.Entities.Romance;
+using JoyLib.Code.Entities.Sexes;
+using JoyLib.Code.Entities.Sexuality;
 using JoyLib.Code.Entities.Statistics;
-using UnityEngine;
+using JoyLib.Code.Rollers;
 
 namespace JoyLib.Code.Cultures
 {
@@ -284,12 +281,12 @@ namespace JoyLib.Code.Cultures
             throw new InvalidOperationException("Could not assign job from culture " + this.CultureName + ".");
         }
 
-        public BasicValueContainer<IRollableValue> GetStats(BasicValueContainer<IRollableValue> baseStats)
+        public IDictionary<string, EntityStatistic> GetStats(IDictionary<string, EntityStatistic> baseStats)
         {
-            BasicValueContainer<IRollableValue> stats = new BasicValueContainer<IRollableValue>(baseStats);
+            Dictionary<string, EntityStatistic> stats = new Dictionary<string, EntityStatistic>(baseStats);
             foreach (string stat in baseStats.Keys)
             {
-                stats[stat].ModifyValue(GetStatVariance(stat));
+                stats[stat].Value += this.GetStatVariance(stat);
             }
 
             return stats;

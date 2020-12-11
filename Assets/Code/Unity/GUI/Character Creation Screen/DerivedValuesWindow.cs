@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using JoyLib.Code.Collections;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Events;
 using TMPro;
@@ -26,11 +25,11 @@ namespace JoyLib.Code.Unity.GUI
             SetRemainingPointsText();
         }
 
-        public void SetDerivedValues(IEnumerable<IDerivedValue> values)
+        public void SetDerivedValues(IDictionary<string, IDerivedValue<int>> values)
         {
             Value = Maximum;
             
-            List<IDerivedValue> valueList = new List<IDerivedValue>(values);
+            List<IDerivedValue<int>> valueList = new List<IDerivedValue<int>>(values.Values);
             
             if (Items.Count < valueList.Count)
             {
@@ -56,16 +55,18 @@ namespace JoyLib.Code.Unity.GUI
             SetRemainingPointsText();
         }
 
-        public BasicValueContainer<IDerivedValue> GetDerivedValues()
+        public IDictionary<string, IDerivedValue<int>> GetDerivedValues()
         {
-            BasicValueContainer<IDerivedValue> values = new BasicValueContainer<IDerivedValue>();
+            IDictionary<string, IDerivedValue<int>> values = new Dictionary<string, IDerivedValue<int>>();
 
             foreach (NamedItem item in Items)
             {
-                values.Add(new EntityDerivedValue(
+                values.Add(
                     item.Name,
-                    item.Value,
-                    item.Value));
+                    new ConcreteDerivedIntValue(
+                        item.Name,
+                        item.Value,
+                        item.Value));
             }
 
             return values;

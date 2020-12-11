@@ -15,7 +15,7 @@ namespace JoyLib.Code
     [Serializable]
     public class JoyObject : IComparable, IJoyObject
     {
-        public BasicValueContainer<IDerivedValue> DerivedValues { get; protected set; }
+        public IDictionary<string, IDerivedValue<int>> DerivedValues { get; protected set; }
 
         public string TileSet { get; protected set; }
         
@@ -76,7 +76,7 @@ namespace JoyLib.Code
         /// <param name="isWall"></param>
         public JoyObject(
             string name, 
-            BasicValueContainer<IDerivedValue> derivedValues, 
+            IDictionary<string, IDerivedValue<int>> derivedValues, 
             Vector2Int position, 
             string tileSet, 
             string[] actions,
@@ -103,7 +103,7 @@ namespace JoyLib.Code
 
         public JoyObject(
             string name, 
-            BasicValueContainer<IDerivedValue> derivedValues, 
+            IDictionary<string, IDerivedValue<int>> derivedValues, 
             Vector2Int position, 
             string tileSet, 
             IJoyAction[] actions,
@@ -122,7 +122,7 @@ namespace JoyLib.Code
 
         protected void Initialise(
             string name, 
-            BasicValueContainer<IDerivedValue> derivedValues, 
+            IDictionary<string, IDerivedValue<int>> derivedValues, 
             Vector2Int position, 
             string tileSet, 
             IJoyAction[] actions,
@@ -229,9 +229,9 @@ namespace JoyLib.Code
 
         public int GetValue(string name)
         {
-            if (DerivedValues.Has(name))
+            if (this.DerivedValues.Keys.Any(key => key.Equals(name, StringComparison.OrdinalIgnoreCase)))
             {
-                return DerivedValues.Get(name);
+                return this.DerivedValues.First(pair => pair.Key.Equals(name, StringComparison.OrdinalIgnoreCase)).Value.Value;
             }
             
             throw new InvalidOperationException("Derived value of " + name + " not found on JoyObject " + this.ToString());
@@ -239,9 +239,9 @@ namespace JoyLib.Code
 
         public int GetMaximum(string name)
         {
-            if (DerivedValues.Has(name))
+            if (this.DerivedValues.Keys.Any(key => key.Equals(name, StringComparison.OrdinalIgnoreCase)))
             {
-                return DerivedValues.GetRawValue(name).Maximum;
+                return this.DerivedValues.First(pair => pair.Key.Equals(name, StringComparison.OrdinalIgnoreCase)).Value.Maximum;
             }
             
             throw new InvalidOperationException("Derived value of " + name + " not found on JoyObject " + this.ToString());
@@ -249,9 +249,10 @@ namespace JoyLib.Code
 
         public virtual int ModifyMaximum(string name, int value)
         {
-            if (DerivedValues.Has(name))
+            if (this.DerivedValues.ContainsKey(name))
             {
-                return DerivedValues[name].ModifyMaximum(value);
+                this.DerivedValues[name].Maximum += value;
+                return this.DerivedValues[name].Maximum;
             }
             
             throw new InvalidOperationException("Derived value of " + name + " not found on JoyObject " + this.ToString());
@@ -259,9 +260,10 @@ namespace JoyLib.Code
 
         public virtual int ModifyValue(string name, int value)
         {
-            if (DerivedValues.Has(name))
+            if (this.DerivedValues.ContainsKey(name))
             {
-                return DerivedValues[name].ModifyValue(value);
+                this.DerivedValues[name].Value += value;
+                return this.DerivedValues[name].Value;
             }
 
             throw new InvalidOperationException("Derived value of " + name + " not found on JoyObject " + this.ToString());

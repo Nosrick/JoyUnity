@@ -27,9 +27,9 @@ namespace JoyLib.Code.Entities
             this.SkillsNames = this.m_SkillCoefficients.Keys;
         }
 
-        public BasicValueContainer<IGrowingValue> GetDefaultSkillBlock(IEnumerable<INeed> needs)
+        public IDictionary<string, EntitySkill> GetDefaultSkillBlock(IEnumerable<INeed> needs)
         {
-            BasicValueContainer<IGrowingValue> skills = new BasicValueContainer<IGrowingValue>();
+            IDictionary<string, EntitySkill> skills = new Dictionary<string, EntitySkill>();
 
             foreach(string key in this.m_SkillCoefficients.Keys)
             {
@@ -44,7 +44,14 @@ namespace JoyLib.Code.Entities
                     }
                 }
 
-                skills.Add(new EntitySkill(key, 0, GlobalConstants.DEFAULT_SUCCESS_THRESHOLD, 0, governingNeeds, new StandardRoller(new RNG())));
+                skills.Add(
+                    key,
+                    new EntitySkill(
+                        key, 
+                        0, 
+                        GlobalConstants.DEFAULT_SUCCESS_THRESHOLD, 
+                        governingNeeds, 
+                        new StandardRoller(new RNG())));
             }
 
             return skills;
@@ -57,11 +64,7 @@ namespace JoyLib.Code.Entities
         
         public NonUniqueDictionary<INeed, float> GetCoefficients(IEnumerable<string> needNames, string skillName)
         {
-            BasicValueContainer<INeed> needs = new BasicValueContainer<INeed>();
-            foreach(string needName in needNames)
-            {
-                needs.Add(this.NeedHandler.Get(needName));
-            }
+            List<INeed> needs = this.NeedHandler.GetMany(needNames).ToList();
 
             return this.GetCoefficients((IEnumerable<INeed>) needs, skillName);
         }

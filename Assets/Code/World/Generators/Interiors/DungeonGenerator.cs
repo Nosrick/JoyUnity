@@ -1,8 +1,6 @@
-﻿using JoyLib.Code.Entities;
+﻿using System.Collections.Generic;
+using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
-using System.Collections.Generic;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Physics;
 using JoyLib.Code.Rollers;
 
 namespace JoyLib.Code.World.Generators.Interiors
@@ -16,12 +14,19 @@ namespace JoyLib.Code.World.Generators.Interiors
             IGameManager gameManager,
             RNG roller)
         {
-            DungeonInteriorGenerator interiorGenerator = new DungeonInteriorGenerator(gameManager.ObjectIconHandler, roller);
+            DungeonInteriorGenerator interiorGenerator = new DungeonInteriorGenerator(
+                gameManager.ObjectIconHandler,
+                gameManager.DerivedValueHandler,
+                roller);
             SpawnPointPlacer spawnPointPlacer = new SpawnPointPlacer(roller);
             DungeonItemPlacer itemPlacer = new DungeonItemPlacer(
                 gameManager.ItemHandler, 
                 roller,
-                new ItemFactory(gameManager.ItemHandler, gameManager.ObjectIconHandler, roller));
+                new ItemFactory(
+                    gameManager.ItemHandler, 
+                    gameManager.ObjectIconHandler,
+                    gameManager.DerivedValueHandler,
+                    roller));
             
             DungeonEntityPlacer entityPlacer = new DungeonEntityPlacer(
                 gameManager.EntityHandler, 

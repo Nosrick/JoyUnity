@@ -1,18 +1,17 @@
 ﻿namespace JoyLib.Code.Entities.Statistics
 {
-    public interface IBasicValue
+    public interface IBasicValue<T> where T : struct 
     {
         string Name
         {
             get;
+            set;
         }
 
-        int Value
+        T Value
         {
             get;
+            set;
         }
-
-        int ModifyValue(int value);
-        int SetValue(int value);
     }
 }

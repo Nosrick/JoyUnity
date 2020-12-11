@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using JoyLib.Code.Entities.Abilities;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Entities.AI.LOS.Providers;
-using JoyLib.Code.Collections;
 using System.Linq;
+using JoyLib.Code.Entities.Abilities;
+using JoyLib.Code.Entities.AI.LOS.Providers;
+using JoyLib.Code.Entities.Statistics;
 
 namespace JoyLib.Code.Entities
 {
@@ -13,8 +12,8 @@ namespace JoyLib.Code.Entities
         protected readonly string m_CreatureType;
         protected readonly string m_Type;
 
-        protected readonly BasicValueContainer<IRollableValue> m_Statistics;
-        protected readonly BasicValueContainer<IGrowingValue> m_Skills;
+        protected readonly Dictionary<string, EntityStatistic> m_Statistics;
+        protected readonly Dictionary<string, EntitySkill> m_Skills;
         protected readonly string[] m_Needs;
         protected readonly IAbility[] m_Abilities;
         protected readonly string[] m_Slots;
@@ -25,8 +24,8 @@ namespace JoyLib.Code.Entities
         protected readonly bool m_Sentient;
 
         public EntityTemplate(
-            BasicValueContainer<IRollableValue> statistics, 
-            BasicValueContainer<IGrowingValue> skills, 
+            Dictionary<string, EntityStatistic> statistics, 
+            Dictionary<string, EntitySkill> skills, 
             string[] needs,
             IAbility[] abilities,
             string[] slots, 
@@ -81,7 +80,7 @@ namespace JoyLib.Code.Entities
             return m_Tags.Remove(tag);
         }
 
-        public string[] Slots
+        public IEnumerable<string> Slots
         {
             get
             {
@@ -89,7 +88,7 @@ namespace JoyLib.Code.Entities
             }
         }
 
-        public BasicValueContainer<IRollableValue> Statistics
+        public IDictionary<string, EntityStatistic> Statistics
         {
             get
             {
@@ -97,7 +96,7 @@ namespace JoyLib.Code.Entities
             }
         }
 
-        public BasicValueContainer<IGrowingValue> Skills
+        public IDictionary<string, EntitySkill> Skills
         {
             get
             {
@@ -105,7 +104,7 @@ namespace JoyLib.Code.Entities
             }
         }
 
-        public string[] Needs
+        public IEnumerable<string> Needs
         {
             get
             {
@@ -113,7 +112,7 @@ namespace JoyLib.Code.Entities
             }
         }
 
-        public IAbility[] Abilities
+        public IEnumerable<IAbility> Abilities
         {
             get
             {

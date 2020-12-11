@@ -1,15 +1,18 @@
 ﻿using System;
-using JoyLib.Code.Scripting;
 using System.Collections.Generic;
-using JoyLib.Code.Graphics;
 using JoyLib.Code.Rollers;
+using JoyLib.Code.Scripting;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities.Needs
 {
     public abstract class AbstractNeed : INeed
     {
-        public virtual string Name => "abstractneed";
+        public virtual string Name
+        {
+            get => "abstractneed";
+            set {}
+        }
 
         public Sprite FulfillingSprite { get; protected set; }
 
@@ -172,7 +175,7 @@ namespace JoyLib.Code.Entities.Needs
             {
                 return m_Value;
             }
-            protected set
+            set
             {
                 m_Value = value;
             }

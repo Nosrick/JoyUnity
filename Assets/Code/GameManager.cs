@@ -15,6 +15,7 @@ using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Entities.Romance;
 using JoyLib.Code.Entities.Sexes;
 using JoyLib.Code.Entities.Sexuality;
+using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Physics;
@@ -52,6 +53,7 @@ public class GameManager : MonoBehaviour, IGameManager
         MaterialHandler = new MaterialHandler();
         ObjectIconHandler = new ObjectIconHandler(Roller);
 
+        this.StatisticHandler = new EntityStatisticHandler();
         NeedHandler = new NeedHandler();
         CultureHandler = new CultureHandler();
         BioSexHandler = new EntityBioSexHandler();
@@ -61,6 +63,8 @@ public class GameManager : MonoBehaviour, IGameManager
         GenderHandler = new GenderHandler();
         SkillHandler = new EntitySkillHandler(NeedHandler);
         EntityTemplateHandler = new EntityTemplateHandler(SkillHandler);
+        
+        this.DerivedValueHandler = new DerivedValueHandler(this.StatisticHandler, this.SkillHandler);
         
         WorldInfoHandler = new WorldInfoHandler(ObjectIconHandler);
         
@@ -80,11 +84,13 @@ public class GameManager : MonoBehaviour, IGameManager
             JobHandler, 
             PhysicsManager, 
             SkillHandler,
+            this.DerivedValueHandler,
             Roller);
         
         ItemFactory = new ItemFactory(
             ItemHandler,
             ObjectIconHandler,
+            this.DerivedValueHandler,
             Roller);
 
         QuestProvider = new QuestProvider(
@@ -96,7 +102,10 @@ public class GameManager : MonoBehaviour, IGameManager
         
         ConversationEngine = new ConversationEngine(RelationshipHandler);
         
-        NaturalWeaponHelper = new NaturalWeaponHelper(ObjectIconHandler, MaterialHandler);
+        NaturalWeaponHelper = new NaturalWeaponHelper(
+            this.ObjectIconHandler, 
+            this.DerivedValueHandler, 
+            this.MaterialHandler);
 
         m_StateManager = new StateManager();
 
@@ -133,6 +142,7 @@ public class GameManager : MonoBehaviour, IGameManager
     public IObjectIconHandler ObjectIconHandler { get; protected set; }
     public IMaterialHandler MaterialHandler { get; protected set; }
     public ICultureHandler CultureHandler { get; protected set; }
+    public IEntityStatisticHandler StatisticHandler { get; protected set; }
     public IEntityTemplateHandler EntityTemplateHandler { get; protected set; }
     public IEntityBioSexHandler BioSexHandler { get; protected set; }
     public IEntitySexualityHandler SexualityHandler { get; protected set; }
@@ -149,7 +159,7 @@ public class GameManager : MonoBehaviour, IGameManager
     public IPhysicsManager PhysicsManager { get; protected set; }
     public IConversationEngine ConversationEngine { get; protected set; }
     public IAbilityHandler AbilityHandler { get; protected set; }
-    
+    public IDerivedValueHandler DerivedValueHandler { get; protected set; }
     public NaturalWeaponHelper NaturalWeaponHelper { get; protected set; }
     public RNG Roller { get; protected set; }
 

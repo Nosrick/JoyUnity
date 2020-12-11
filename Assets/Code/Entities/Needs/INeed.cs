@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace JoyLib.Code.Entities.Needs
 {
-    public interface INeed : IBasicValue
+    public interface INeed : IBasicValue<int>
     {
 
         bool FindFulfilmentObject(IEntity actor);

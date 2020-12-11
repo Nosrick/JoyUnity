@@ -3,7 +3,7 @@ using JoyLib.Code.Rollers;
 
 namespace JoyLib.Code.Entities.Statistics
 {
-    public class EntityStatistic : IRollableValue
+    public class EntityStatistic : IRollableValue<int>
     {
         public const string STRENGTH    =   "strength";
         public const string AGILITY     =   "agility";
@@ -21,16 +21,17 @@ namespace JoyLib.Code.Entities.Statistics
                                                     INTELLECT, CUNNING, FOCUS,
                                                     PERSONALITY, SUAVITY, WIT };
 
+        public EntityStatistic()
+        {
+            this.Roller = new StandardRoller();
+        }
+        
         public EntityStatistic(string name, int value, int successThreshold, IRollable rollable)
         {
             Name = name;
             Value = value;
             SuccessThreshold = successThreshold;
             Roller = rollable;
-        }
-
-        public EntityStatistic()
-        {
         }
 
         public int ModifyValue(int value)
@@ -48,19 +49,19 @@ namespace JoyLib.Code.Entities.Statistics
         public string Name
         {
             get;
-            protected set;
+            set;
         }
 
         public int Value
         {
             get;
-            protected set;
+            set;
         }
 
         public int SuccessThreshold
         {
             get;
-            protected set;
+            set;
         }
 
         public IRollable Roller

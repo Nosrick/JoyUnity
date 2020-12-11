@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DerivedValues>
+    <DerivedValue>
+        <Name>item hitpoints</Name>
+        <Formula>Math.Sqrt(weight) + bonus</Formula>
+    </DerivedValue>
+</DerivedValues>

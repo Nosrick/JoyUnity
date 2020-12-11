@@ -11,6 +11,7 @@ using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Entities.Romance;
 using JoyLib.Code.Entities.Sexes;
 using JoyLib.Code.Entities.Sexuality;
+using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Physics;
@@ -27,6 +28,7 @@ namespace JoyLib.Code
         IQuestTracker QuestTracker { get; }
         IQuestProvider QuestProvider { get; }
         IEntityRelationshipHandler RelationshipHandler { get; }
+        IEntityStatisticHandler StatisticHandler { get; }
         IMaterialHandler MaterialHandler { get; }
         IObjectIconHandler ObjectIconHandler { get; }
         ICultureHandler CultureHandler { get; }
@@ -46,6 +48,7 @@ namespace JoyLib.Code
         IPhysicsManager PhysicsManager { get; }
         IConversationEngine ConversationEngine { get; }
         IAbilityHandler AbilityHandler { get; }
+        IDerivedValueHandler DerivedValueHandler { get; }
         
         NaturalWeaponHelper NaturalWeaponHelper { get; }
         

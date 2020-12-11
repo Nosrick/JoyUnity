@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Collections;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Scripting;
 
@@ -55,10 +54,9 @@ namespace JoyLib.Code.Entities.Abilities
             return Abilities.Where(ability => ability.MeetsPrerequisites(data));
         }
 
-        public IEnumerable<IAbility> GetAvailableAbilities(
-            IEntityTemplate template, 
-            BasicValueContainer<IRollableValue> stats, 
-            BasicValueContainer<IGrowingValue> skills)
+        public IEnumerable<IAbility> GetAvailableAbilities(IEntityTemplate template,
+            IDictionary<string, EntityStatistic> stats,
+            IDictionary<string, EntitySkill> skills)
         {
             Initialise();
 

@@ -7,9 +7,9 @@ namespace JoyLib.Code.Rollers
     public interface IRollable
     {
         int Roll(
-            IEnumerable<IRollableValue> statistics, 
-            IEnumerable<IGrowingValue> skills, 
-            IEnumerable<IAbility> modifiers, 
+            IEnumerable<IRollableValue<int>> statistics, 
+            IEnumerable<IRollableValue<int>> skills,
+            IEnumerable<IAbility> modifiers,  
             params string[] tags);
     }
 }

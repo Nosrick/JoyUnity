@@ -19,9 +19,9 @@ namespace JoyLib.Code.Unity.GUI.Character_Sheet
             }
         }
 
-        public void SetValues(IEnumerable<IDerivedValue> values)
+        public void SetValues(IDictionary<string, IDerivedValue<int>> values)
         {
-            List<IDerivedValue> listValues = values.ToList();
+            List<IDerivedValue<int>> listValues = values.Values.ToList();
             
             foreach (DerivedValueContainer item in Items)
             {

@@ -1,25 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using DevionGames.InventorySystem;
 using JoyLib.Code;
-using JoyLib.Code.Collections;
 using JoyLib.Code.Conversation.Conversations;
 using JoyLib.Code.Conversation.Subengines.Rumours;
-using JoyLib.Code.Conversation.Subengines.Rumours.Parameters;
-using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.AI.Drivers;
 using JoyLib.Code.Entities.Gender;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Entities.Jobs;
 using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Relationships;
-using JoyLib.Code.Entities.Romance;
-using JoyLib.Code.Entities.Sexes;
-using JoyLib.Code.Entities.Sexuality;
 using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.World;
 using Moq;
@@ -59,7 +47,7 @@ namespace Tests
             IGender gender = Mock.Of<IGender>(
                 g => g.PersonalSubject == "her");
 
-            BasicValueContainer<IGrowingValue> skills = skillHandler.GetDefaultSkillBlock(
+            IDictionary<string, EntitySkill> skills = skillHandler.GetDefaultSkillBlock(
                 needHandler.GetManyRandomised(needHandler.NeedNames));
 
             left = Mock.Of<IEntity>(

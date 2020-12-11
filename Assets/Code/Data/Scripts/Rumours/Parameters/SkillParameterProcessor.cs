@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Collections;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Statistics;
@@ -22,7 +21,7 @@ namespace JoyLib.Code.Conversation.Subengines.Rumours
             set;
         }
 
-        protected BasicValueContainer<IGrowingValue> DefaultSkillBlock
+        protected IDictionary<string, EntitySkill> DefaultSkillBlock
         {
             get;
             set;
@@ -32,7 +31,7 @@ namespace JoyLib.Code.Conversation.Subengines.Rumours
         {
             SkillHandler = GlobalConstants.GameManager.SkillHandler;
             NeedHandler = GlobalConstants.GameManager.NeedHandler;
-            DefaultSkillBlock = new BasicValueContainer<IGrowingValue>(SkillHandler.GetDefaultSkillBlock(NeedHandler.Needs));
+            DefaultSkillBlock = SkillHandler.GetDefaultSkillBlock(this.NeedHandler.Needs);
         }
         
         public bool CanParse(string parameter)
@@ -41,7 +40,7 @@ namespace JoyLib.Code.Conversation.Subengines.Rumours
             {
                 return true;
             }
-            return DefaultSkillBlock.Has(parameter);
+            return DefaultSkillBlock.ContainsKey(parameter);
         }
 
         public string Parse(string parameter, IJoyObject participant)
@@ -52,7 +51,7 @@ namespace JoyLib.Code.Conversation.Subengines.Rumours
             }
 
             if (parameter.Equals("skills", StringComparison.OrdinalIgnoreCase)
-                || entity.Skills.Has(parameter))
+                || entity.Skills.ContainsKey(parameter))
             {
                 IEnumerable<Tuple<string, int>> values = entity.GetData(new string[] {parameter});
 

@@ -1,43 +1,31 @@
-﻿using JoyLib.Code.Collections;
+﻿using System;
+using JoyLib.Code.Collections;
 using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Rollers;
-using System;
 
 namespace JoyLib.Code.Entities.Statistics
 {
-    public class EntitySkill : IGrowingValue
+    public class EntitySkill : IRollableValue<int>
     {
         protected const int MAXIMUM_XP = 100;
 
-        public EntitySkill(string name, int value, int successThreshold, float experience, NonUniqueDictionary<INeed, float> governingNeeds,
+        public EntitySkill()
+        {
+            this.Roller = new StandardRoller();
+        }
+        
+        public EntitySkill(
+            string name, 
+            int value, 
+            int successThreshold, 
+            NonUniqueDictionary<INeed, float> governingNeeds,
             IRollable rollable)
         {
             Name = name;
             Value = value;
             SuccessThreshold = successThreshold;
-            Experience = experience;
             GoverningNeeds = governingNeeds;
             Roller = rollable;
-
-            Threshold = MAXIMUM_XP;
-        }
-
-        public int AddExperience(float value)
-        {
-            Experience += value;
-            foreach (Tuple<INeed, float> pair in GoverningNeeds)
-            {
-                if (pair.Item1.ContributingHappiness)
-                {
-                    Experience += pair.Item2 * value;
-                }
-            }
-            while (Experience / MAXIMUM_XP >= 1)
-            {
-                Value += 1;
-                Experience -= MAXIMUM_XP;
-            }
-            return Value;
         }
 
         public int ModifyValue(int value)
@@ -55,25 +43,19 @@ namespace JoyLib.Code.Entities.Statistics
         public string Name
         {
             get;
-            protected set;
+            set;
         }
 
         public int Value
         {
             get;
-            protected set;
+            set;
         }
 
         public int SuccessThreshold
         {
             get;
-            protected set;
-        }
-
-        public float Experience
-        {
-            get;
-            protected set;
+            set;
         }
 
         public NonUniqueDictionary<INeed, float> GoverningNeeds
@@ -83,12 +65,6 @@ namespace JoyLib.Code.Entities.Statistics
         }
 
         public IRollable Roller
-        {
-            get;
-            protected set;
-        }
-
-        public int Threshold
         {
             get;
             protected set;
