@@ -1,19 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <DerivedValues>
     <DerivedValue>
-        <Name>Hitpoints</Name>
+        <Name>hitpoints</Name>
         <Formula>endurance * 3</Formula>
     </DerivedValue>
     <DerivedValue>
-        <Name>Concentration</Name>
+        <Name>concentration</Name>
         <Formula>focus * 3</Formula>
     </DerivedValue>
     <DerivedValue>
-        <Name>Composure</Name>
+        <Name>composure</Name>
         <Formula>wit * 3</Formula>
     </DerivedValue>
     <DerivedValue>
-        <Name>Mana</Name>
+        <Name>mana</Name>
         <Formula>endurance + focus + wit</Formula>
     </DerivedValue>    
 </DerivedValues>

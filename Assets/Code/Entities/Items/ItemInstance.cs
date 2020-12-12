@@ -19,6 +19,8 @@ namespace JoyLib.Code.Entities.Items
     [Serializable]
     public class ItemInstance : EquipmentItem, IItemInstance
     {
+        private const string DURABILITY = "durability";
+        
         public IDictionary<string, IDerivedValue<int>> DerivedValues { get; protected set; }
 
         public string TileSet { get; protected set; }
@@ -50,9 +52,9 @@ namespace JoyLib.Code.Entities.Items
 
         public string JoyName { get; protected set; }
 
-        public int HitPointsRemaining => GetValue("hitpoints");
+        public int HitPointsRemaining => GetValue(DURABILITY);
 
-        public int HitPoints => GetMaximum("hitpoints");
+        public int HitPoints => GetMaximum(DURABILITY);
 
         public bool Conscious => HitPointsRemaining > 0;
 

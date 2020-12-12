@@ -62,9 +62,9 @@ namespace JoyLib.Code.Unity.GUI
             foreach (NamedItem item in Items)
             {
                 values.Add(
-                    item.Name,
+                    item.Name.ToLower(),
                     new ConcreteDerivedIntValue(
-                        item.Name,
+                        item.Name.ToLower(),
                         item.Value,
                         item.Value));
             }

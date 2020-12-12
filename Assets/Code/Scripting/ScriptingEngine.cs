@@ -222,5 +222,10 @@ namespace JoyLib.Code.Scripting
         {
             return Eval.Execute<T>(code);
         }
+
+        public T Compile<T>(string code)
+        {
+            return Eval.Compile<T>(code);
+        }
     }
 }

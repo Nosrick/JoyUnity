@@ -77,8 +77,8 @@ namespace JoyLib.Code.Entities.Statistics
                 try
                 {
                     formulas.Add(
-                        dv.Element("Name").GetAs<string>(),
-                        dv.Element("Formula").GetAs<string>()); 
+                        dv.Element("Name").GetAs<string>().ToLower(),
+                        dv.Element("Formula").GetAs<string>().ToLower()); 
                 }
                 catch (Exception e)
                 {
@@ -137,7 +137,7 @@ namespace JoyLib.Code.Entities.Statistics
             Dictionary<string, IDerivedValue<int>> values = new Dictionary<string, IDerivedValue<int>>();
             foreach (KeyValuePair<string, string> pair in this.ItemStandardFormulas)
             {
-                int result = (int)this.Calculate<float>(components, pair.Value); 
+                int result = (int)Math.Ceiling(this.Calculate<float>(components, pair.Value)); 
                 values.Add(
                     pair.Key,
                     new ConcreteDerivedIntValue(
@@ -179,21 +179,13 @@ namespace JoyLib.Code.Entities.Statistics
             where T : struct
         {
             string eval = formula;
-            List<IBasicValue<T>> relevantValues = components.Where(value =>
-                    StatisticHandler.StatisticNames.Any(stat =>
-                        stat.Equals(value.Name, StringComparison.OrdinalIgnoreCase)))
-                .ToList();
-
-            relevantValues.AddRange(components.Where(value =>
-                SkillHandler.SkillsNames.Any(skill =>
-                    skill.Equals(value.Name, StringComparison.OrdinalIgnoreCase))));
-
-            List<string> valueNames = new List<string>();
-            foreach (IBasicValue<T> value in relevantValues)
+            foreach (IBasicValue<T> value in components)
             {
                 eval = eval.Replace(value.Name, value.Value.ToString());
             }
 
+            //return ScriptingEngine.instance.Compile<T>(eval);
+            
             return ScriptingEngine.instance.Evaluate<T>(eval);
         }
     }
