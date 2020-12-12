@@ -12,11 +12,11 @@ namespace JoyLib.Code.Entities.Statistics
     public class DerivedValueHandler : IDerivedValueHandler
     {
         protected Dictionary<string, string> Formulas { get; set; }
-        
         protected Dictionary<string, string> EntityStandardFormulas { get; set; }
         protected Dictionary<string, string> ItemStandardFormulas { get; set; }
         
         protected Dictionary<string, Type> DerivedValueTypes { get; set; } 
+        protected Dictionary<string, Color> DerivedValueColours { get; set; }
         
         protected static IEntityStatisticHandler StatisticHandler { get; set; }
         protected static IEntitySkillHandler SkillHandler { get; set; }
@@ -42,6 +42,7 @@ namespace JoyLib.Code.Entities.Statistics
 
             this.ITEM_FILE = Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "ItemDerivedValues.xml";
             
+            this.DerivedValueColours = new Dictionary<string, Color>();
             this.EntityStandardFormulas = this.LoadFormulasFromFile(this.ENTITY_FILE);
             this.ItemStandardFormulas = this.LoadFormulasFromFile(this.ITEM_FILE);
             this.Formulas = new Dictionary<string, string>(this.EntityStandardFormulas);
@@ -76,9 +77,16 @@ namespace JoyLib.Code.Entities.Statistics
             {
                 try
                 {
+                    string name = dv.Element("Name").GetAs<string>().ToLower();
+                    string colourCode = dv.Element("Colour").DefaultIfEmpty("888888FF");
+                    Color colour = new Color();
+                    ColorUtility.TryParseHtmlString(colourCode, out colour);
                     formulas.Add(
-                        dv.Element("Name").GetAs<string>().ToLower(),
+                        name,
                         dv.Element("Formula").GetAs<string>().ToLower()); 
+                    DerivedValueColours.Add(
+                        name,
+                        colour);
                 }
                 catch (Exception e)
                 {
@@ -173,6 +181,15 @@ namespace JoyLib.Code.Entities.Statistics
             }
 
             return false;
+        }
+
+        public Color GetColour(string name)
+        {
+            if (DerivedValueColours.ContainsKey(name))
+            {
+                return DerivedValueColours[name];
+            }
+            return Color.gray;
         }
 
         public T Calculate<T>(IEnumerable<IBasicValue<T>> components, string formula)

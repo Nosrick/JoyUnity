@@ -20,6 +20,7 @@ namespace JoyLib.Code
         public static readonly StringComparer STRING_COMPARER = StringComparer.OrdinalIgnoreCase;
 
         public const string NEEDSRECT = "NeedsRect";
+        public const string DERIVED_VALUES = "Derived Values Container";
         public const string INVENTORY = "Inventory";
         public const string EQUIPMENT = "Equipment";
         public const string CONVERSATION = "Conversation Window";

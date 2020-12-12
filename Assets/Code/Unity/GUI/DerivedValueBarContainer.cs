@@ -7,6 +7,8 @@ namespace JoyLib.Code.Unity.GUI
     {
         [SerializeField] protected Image BarImage;
 
+        [SerializeField] public Color Color;
+
         public override int DecreaseValue(int delta = 1)
         {
             if (this.m_Parent is null)
@@ -38,6 +40,7 @@ namespace JoyLib.Code.Unity.GUI
 
         protected void SetFillAmount()
         {
+            this.BarImage.color = this.Color;
             this.BarImage.fillAmount = (float)this.Value / (float)this.Maximum;
         }
 

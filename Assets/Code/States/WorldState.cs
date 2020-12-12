@@ -98,6 +98,7 @@ namespace JoyLib.Code.States
             
             GUIManager.CloseAllOtherGUIs();
             GUIManager.OpenGUI(GlobalConstants.NEEDSRECT);
+            GUIManager.OpenGUI(GlobalConstants.DERIVED_VALUES);
 
             EquipmentHandler equipmentHandler = WidgetUtility.Find<MutableItemContainer>("Equipment").gameObject.GetComponent<EquipmentHandler>();
             equipmentHandler.SetPlayer(m_ActiveWorld.Player);
@@ -328,6 +329,7 @@ namespace JoyLib.Code.States
             {
                 GUIManager.CloseAllOtherGUIs(GlobalConstants.NEEDSRECT);
                 GUIManager.OpenGUI(GlobalConstants.NEEDSRECT);
+                GUIManager.OpenGUI(GlobalConstants.DERIVED_VALUES);
             }
             else if (Input.GetKeyUp(KeyCode.I))
             {
@@ -369,6 +371,7 @@ namespace JoyLib.Code.States
             if (GUIManager.AreAnyOpen() == false)
             {
                 GUIManager.OpenGUI(GlobalConstants.NEEDSRECT);
+                GUIManager.OpenGUI(GlobalConstants.DERIVED_VALUES);
             }
 
             if (GUIManager.RemovesControl())

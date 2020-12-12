@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace JoyLib.Code.Entities.Statistics
 {
@@ -19,5 +20,7 @@ namespace JoyLib.Code.Entities.Statistics
         Dictionary<string, IDerivedValue<int>> GetItemStandardBlock(IEnumerable<IBasicValue<float>> components);
 
         bool AddFormula(string name, string formula);
+
+        Color GetColour(string name);
     }
 }

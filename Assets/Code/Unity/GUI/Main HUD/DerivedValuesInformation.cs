@@ -4,6 +4,7 @@ using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Events;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity.GUI
 {
@@ -27,6 +28,10 @@ namespace JoyLib.Code.Unity.GUI
                 this.Items = new Dictionary<string, DerivedValueBarContainer>();
             }
 
+            if (this.GameManager.Player is null)
+            {
+                return;
+            }
             this.Player = this.GameManager.Player;
             this.Player.DerivedValueChange -= this.DerivedValueChange;
             this.Player.DerivedValueChange += this.DerivedValueChange;
@@ -62,11 +67,29 @@ namespace JoyLib.Code.Unity.GUI
             
             for(int i = 0; i < valueList.Count; i++)
             {
+                this.Items[valueList[i].Name].Color = this.GameManager.DerivedValueHandler.GetColour(valueList[i].Name);
                 this.Items[valueList[i].Name].Name = valueList[i].Name;
                 this.Items[valueList[i].Name].DirectValueSet(valueList[i].Value);
                 this.Items[valueList[i].Name].Minimum = -valueList[i].Maximum;
                 this.Items[valueList[i].Name].Maximum = valueList[i].Maximum;
             }
+            
+            this.ResizeMe();
+        }
+
+        protected void ResizeMe()
+        {
+            VerticalLayoutGroup layoutGroup = this.GetComponent<VerticalLayoutGroup>();
+            RectTransform childRect = this.DerivedValuePrefab.GetComponent<RectTransform>();
+            float height = this.transform.childCount *
+                           (childRect.rect.height
+                            + layoutGroup.padding.top
+                            + layoutGroup.padding.bottom
+                            + layoutGroup.spacing);
+
+            float width = childRect.rect.width + layoutGroup.padding.left + layoutGroup.padding.right;
+            this.m_RectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
+            this.m_RectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
         }
     }
 }
