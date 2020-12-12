@@ -2,382 +2,382 @@
 <Coefficients>
   <!--Martial Skills-->
   <Skill>
-    <Name>Light Blades</Name>
+    <Name>light blades</Name>
     <Coefficient>
-      <Name>Health</Name>
+      <Name>health</Name>
       <Value>0.05</Value>
     </Coefficient>
     <Coefficient>
-      <Name>Confidence</Name>
-      <Value>0.05</Value>
-    </Coefficient>
-  </Skill>
-
-  <Skill>
-    <Name>Heavy Blades</Name>
-    <Coefficient>
-      <Name>Health</Name>
-      <Value>0.05</Value>
-    </Coefficient>
-    <Coefficient>
-      <Name>Confidence</Name>
+      <Name>confidence</Name>
       <Value>0.05</Value>
     </Coefficient>
   </Skill>
 
   <Skill>
-    <Name>Axes</Name>
+    <Name>heavy blades</Name>
     <Coefficient>
-      <Name>Health</Name>
+      <Name>health</Name>
       <Value>0.05</Value>
     </Coefficient>
     <Coefficient>
-      <Name>Confidence</Name>
-      <Value>0.05</Value>
-    </Coefficient>
-  </Skill>
-
-  <Skill>
-    <Name>Polearms</Name>
-    <Coefficient>
-      <Name>Health</Name>
-      <Value>0.05</Value>
-    </Coefficient>
-    <Coefficient>
-      <Name>Confidence</Name>
+      <Name>confidence</Name>
       <Value>0.05</Value>
     </Coefficient>
   </Skill>
 
   <Skill>
-    <Name>Bows</Name>
+    <Name>axes</Name>
     <Coefficient>
-      <Name>Health</Name>
+      <Name>health</Name>
       <Value>0.05</Value>
     </Coefficient>
     <Coefficient>
-      <Name>Confidence</Name>
-      <Value>0.05</Value>
-    </Coefficient>
-  </Skill>
-
-  <Skill>
-    <Name>Crossbows</Name>
-    <Coefficient>
-      <Name>Health</Name>
-      <Value>0.05</Value>
-    </Coefficient>
-    <Coefficient>
-      <Name>Confidence</Name>
+      <Name>confidence</Name>
       <Value>0.05</Value>
     </Coefficient>
   </Skill>
 
   <Skill>
-    <Name>Martial Arts</Name>
+    <Name>polearms</Name>
     <Coefficient>
-      <Name>Health</Name>
+      <Name>health</Name>
       <Value>0.05</Value>
     </Coefficient>
     <Coefficient>
-      <Name>Confidence</Name>
+      <Name>confidence</Name>
       <Value>0.05</Value>
     </Coefficient>
   </Skill>
 
   <Skill>
-    <Name>Throwing</Name>
+    <Name>bows</Name>
     <Coefficient>
-      <Name>Health</Name>
+      <Name>health</Name>
       <Value>0.05</Value>
     </Coefficient>
     <Coefficient>
-      <Name>Confidence</Name>
+      <Name>confidence</Name>
+      <Value>0.05</Value>
+    </Coefficient>
+  </Skill>
+
+  <Skill>
+    <Name>crossbows</Name>
+    <Coefficient>
+      <Name>health</Name>
+      <Value>0.05</Value>
+    </Coefficient>
+    <Coefficient>
+      <Name>confidence</Name>
+      <Value>0.05</Value>
+    </Coefficient>
+  </Skill>
+
+  <Skill>
+    <Name>martial arts</Name>
+    <Coefficient>
+      <Name>health</Name>
+      <Value>0.05</Value>
+    </Coefficient>
+    <Coefficient>
+      <Name>confidence</Name>
+      <Value>0.05</Value>
+    </Coefficient>
+  </Skill>
+
+  <Skill>
+    <Name>throwing</Name>
+    <Coefficient>
+      <Name>health</Name>
+      <Value>0.05</Value>
+    </Coefficient>
+    <Coefficient>
+      <Name>confidence</Name>
       <Value>0.05</Value>
     </Coefficient>
   </Skill>
 
   <!--Defensive Skills-->
   <Skill>
-    <Name>Evasion</Name>
+    <Name>evasion</Name>
     <Coefficient>
-      <Name>Health</Name>
+      <Name>health</Name>
       <Value>0.03</Value>
     </Coefficient>
     <Coefficient>
-      <Name>Confidence</Name>
+      <Name>confidence</Name>
       <Value>0.07</Value>
     </Coefficient>
   </Skill>
 
   <Skill>
-    <Name>Light Armour</Name>
+    <Name>light armour</Name>
     <Coefficient>
-      <Name>Health</Name>
+      <Name>health</Name>
       <Value>0.04</Value>
     </Coefficient>
     <Coefficient>
-      <Name>Confidence</Name>
+      <Name>confidence</Name>
       <Value>0.06</Value>
     </Coefficient>
   </Skill>
 
   <Skill>
-    <Name>Medium Armour</Name>
+    <Name>medium armour</Name>
     <Coefficient>
-      <Name>Health</Name>
+      <Name>health</Name>
       <Value>0.05</Value>
     </Coefficient>
     <Coefficient>
-      <Name>Confidence</Name>
+      <Name>confidence</Name>
       <Value>0.05</Value>
     </Coefficient>
   </Skill>
 
   <Skill>
-    <Name>Heavy Armour</Name>
+    <Name>heavy armour</Name>
     <Coefficient>
-      <Name>Health</Name>
+      <Name>health</Name>
       <Value>0.06</Value>
     </Coefficient>
     <Coefficient>
-      <Name>Confidence</Name>
+      <Name>confidence</Name>
       <Value>0.04</Value>
     </Coefficient>
   </Skill>
 
   <!--Magic Skills-->
   <Skill>
-    <Name>Life Magic</Name>
+    <Name>life magic</Name>
     <Coefficient>
-      <Name>Friendship</Name>
+      <Name>friendship</Name>
       <Value>0.07</Value>
     </Coefficient>
     <Coefficient>
-      <Name>Family</Name>
+      <Name>family</Name>
       <Value>0.03</Value>
     </Coefficient>
   </Skill>
 
   <Skill>
-    <Name>Death Magic</Name>
+    <Name>death magic</Name>
     <Coefficient>
-      <Name>Morality</Name>
+      <Name>morality</Name>
       <Value>0.1</Value>
     </Coefficient>
   </Skill>
 
   <Skill>
-    <Name>Law Magic</Name>
+    <Name>law magic</Name>
     <Coefficient>
-      <Name>Morality</Name>
+      <Name>morality</Name>
       <Value>0.05</Value>
     </Coefficient>
     <Coefficient>
-      <Name>Respect</Name>
+      <Name>respect</Name>
       <Value>0.05</Value>
     </Coefficient>
   </Skill>
 
   <Skill>
-    <Name>Chaos Magic</Name>
+    <Name>chaos magic</Name>
     <Coefficient>
-      <Name>Confidence</Name>
+      <Name>confidence</Name>
       <Value>0.1</Value>
     </Coefficient>
   </Skill>
 
   <Skill>
-    <Name>Nature Magic</Name>
+    <Name>nature magic</Name>
     <Coefficient>
-      <Name>Hunger</Name>
+      <Name>hunger</Name>
       <Value>0.025</Value>
     </Coefficient>
     <Coefficient>
-      <Name>Thirst</Name>
+      <Name>thirst</Name>
       <Value>0.025</Value>
     </Coefficient>
     <Coefficient>
-      <Name>Sleep</Name>
+      <Name>sleep</Name>
       <Value>0.025</Value>
     </Coefficient>
     <Coefficient>
-      <Name>Sex</Name>
+      <Name>sex</Name>
       <Value>0.025</Value>
     </Coefficient>
   </Skill>
 
   <Skill>
-    <Name>Sorcery Magic</Name>
+    <Name>sorcery magic</Name>
     <Coefficient>
-      <Name>Confidence</Name>
+      <Name>confidence</Name>
       <Value>0.05</Value>
     </Coefficient>
     <Coefficient>
-      <Name>Respect</Name>
+      <Name>respect</Name>
       <Value>0.05</Value>
     </Coefficient>
   </Skill>
 
   <Skill>
-    <Name>The Verse</Name>
+    <Name>the verse</Name>
     <Coefficient>
-      <Name>Confidence</Name>
+      <Name>confidence</Name>
       <Value>0.025</Value>
     </Coefficient>
     <Coefficient>
-      <Name>Friendship</Name>
+      <Name>friendship</Name>
       <Value>0.025</Value>
     </Coefficient>
     <Coefficient>
-      <Name>Family</Name>
+      <Name>family</Name>
       <Value>0.025</Value>
     </Coefficient>
     <Coefficient>
-      <Name>Respect</Name>
+      <Name>respect</Name>
       <Value>0.025</Value>
     </Coefficient>
   </Skill>
 
   <!--Speech Skills-->
   <Skill>
-    <Name>Mercantile</Name>
+    <Name>mercantile</Name>
     <Coefficient>
-      <Name>Confidence</Name>
+      <Name>confidence</Name>
       <Value>0.07</Value>
     </Coefficient>
     <Coefficient>
-      <Name>Property</Name>
+      <Name>property</Name>
       <Value>0.03</Value>
     </Coefficient>
   </Skill>
 
   <Skill>
-    <Name>Persuasion</Name>
+    <Name>persuasion</Name>
     <Coefficient>
-      <Name>Confidence</Name>
+      <Name>confidence</Name>
       <Value>0.05</Value>
     </Coefficient>
     <Coefficient>
-      <Name>Friendship</Name>
+      <Name>friendship</Name>
       <Value>0.05</Value>
     </Coefficient>
   </Skill>
 
   <Skill>
-    <Name>Intimidate</Name>
+    <Name>intimidate</Name>
     <Coefficient>
-      <Name>Confidence</Name>
+      <Name>confidence</Name>
       <Value>0.07</Value>
     </Coefficient>
     <Coefficient>
-      <Name>Health</Name>
+      <Name>health</Name>
       <Value>0.03</Value>
     </Coefficient>
   </Skill>
 
   <Skill>
-    <Name>Deception</Name>
+    <Name>deception</Name>
     <Coefficient>
-      <Name>Confidence</Name>
+      <Name>confidence</Name>
       <Value>0.1</Value>
     </Coefficient>
   </Skill>
 
   <!--Stealth Skills-->
   <Skill>
-    <Name>Stealth</Name>
+    <Name>stealth</Name>
     <Coefficient>
-      <Name>Confidence</Name>
+      <Name>confidence</Name>
       <Value>0.05</Value>
     </Coefficient>
     <Coefficient>
-      <Name>Health</Name>
-      <Value>0.05</Value>
-    </Coefficient>
-  </Skill>
-
-  <Skill>
-    <Name>Lockpicking</Name>
-    <Coefficient>
-      <Name>Confidence</Name>
-      <Value>0.05</Value>
-    </Coefficient>
-    <Coefficient>
-      <Name>Health</Name>
+      <Name>health</Name>
       <Value>0.05</Value>
     </Coefficient>
   </Skill>
 
   <Skill>
-    <Name>Sleight of Hand</Name>
+    <Name>lockpicking</Name>
     <Coefficient>
-      <Name>Confidence</Name>
+      <Name>confidence</Name>
       <Value>0.05</Value>
     </Coefficient>
     <Coefficient>
-      <Name>Health</Name>
+      <Name>health</Name>
+      <Value>0.05</Value>
+    </Coefficient>
+  </Skill>
+
+  <Skill>
+    <Name>sleight of hand</Name>
+    <Coefficient>
+      <Name>confidence</Name>
+      <Value>0.05</Value>
+    </Coefficient>
+    <Coefficient>
+      <Name>health</Name>
       <Value>0.05</Value>
     </Coefficient>
   </Skill>
 
   <!--Profession Skills-->
   <Skill>
-    <Name>Farming</Name>
+    <Name>farming</Name>
     <Coefficient>
-      <Name>Property</Name>
+      <Name>property</Name>
       <Value>0.02</Value>
     </Coefficient>
     <Coefficient>
-      <Name>Purpose</Name>
+      <Name>purpose</Name>
       <Value>0.04</Value>
     </Coefficient>
     <Coefficient>
-      <Name>Health</Name>
+      <Name>health</Name>
       <Value>0.04</Value>
     </Coefficient>
   </Skill>
 
   <Skill>
-    <Name>Mining</Name>
+    <Name>mining</Name>
     <Coefficient>
-      <Name>Property</Name>
+      <Name>property</Name>
       <Value>0.02</Value>
     </Coefficient>
     <Coefficient>
-      <Name>Purpose</Name>
+      <Name>purpose</Name>
       <Value>0.04</Value>
     </Coefficient>
     <Coefficient>
-      <Name>Health</Name>
+      <Name>health</Name>
       <Value>0.04</Value>
     </Coefficient>
   </Skill>
 
   <Skill>
-    <Name>Cooking</Name>
+    <Name>cooking</Name>
     <Coefficient>
-      <Name>Confidence</Name>
+      <Name>confidence</Name>
       <Value>0.06</Value>
     </Coefficient>
     <Coefficient>
-      <Name>Purpose</Name>
+      <Name>purpose</Name>
       <Value>0.04</Value>
     </Coefficient>
   </Skill>
 
   <Skill>
-    <Name>Performance</Name>
+    <Name>performance</Name>
     <Coefficient>
-      <Name>Confidence</Name>
+      <Name>confidence</Name>
       <Value>0.06</Value>
     </Coefficient>
     <Coefficient>
-      <Name>Respect</Name>
+      <Name>respect</Name>
       <Value>0.02</Value>
     </Coefficient>
     <Coefficient>
-      <Name>Friendship</Name>
+      <Name>friendship</Name>
       <Value>0.02</Value>
     </Coefficient>
   </Skill>
