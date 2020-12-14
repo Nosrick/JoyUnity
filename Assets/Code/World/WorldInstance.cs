@@ -127,6 +127,8 @@ namespace JoyLib.Code.World
                 }
             }
 
+            this.LightCalculator = new LightCalculator();
+
             foreach (Vector2Int position in m_Walls.Keys)
             {
                 m_Costs[position.x, position.y] = byte.MaxValue;
@@ -221,13 +223,13 @@ namespace JoyLib.Code.World
         public void Tick()
         {
             DateTime oldTime = s_DateTime;
+            this.CalculateLightLevels();
             if (HasTag("overworld"))
             {
                 s_DateTime = s_DateTime.AddHours(1.0);
             }
             else
             {
-                CalculateLightLevels();
                 s_DateTime = s_DateTime.AddSeconds(6.0);
             }
 
