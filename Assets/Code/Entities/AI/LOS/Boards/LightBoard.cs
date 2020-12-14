@@ -13,8 +13,6 @@ namespace JoyLib.Code.Entities.AI.LOS
         public int Width { get; protected set; }
         public int Height { get; protected set; }
 
-        public const int MAX_LIGHT = 16;
-
         public LightBoard(int width, int height, IEnumerable<Vector2Int> walls)
         {
             Width = width;
@@ -38,7 +36,7 @@ namespace JoyLib.Code.Entities.AI.LOS
 
             if (LightLevels.ContainsKey(position))
             {
-                LightLevels[position] = Mathf.Min(LightLevels[position] + lightLevel, MAX_LIGHT);
+                LightLevels[position] = Mathf.Min(LightLevels[position] + lightLevel, GlobalConstants.MAX_LIGHT);
             }
             else
             {

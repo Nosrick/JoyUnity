@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Helpers;
 using JoyLib.Code.World;
 using UnityEngine;
 
@@ -12,7 +11,7 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
         public string Name => "abstractvisionprovider";
 
         public virtual int MinimumLightLevel => 0;
-        public virtual int MaximumLightLevel => (int)LightLevelHelper.MAX_LIGHT;
+        public virtual int MaximumLightLevel => GlobalConstants.MAX_LIGHT;
 
         protected HashSet<Vector2Int> m_Vision;
 

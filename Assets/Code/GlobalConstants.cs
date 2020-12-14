@@ -7,6 +7,8 @@ namespace JoyLib.Code
     {
         public const string DATA_FOLDER = "/Assets/Code/Data/";
         public const string SCRIPTS_FOLDER = DATA_FOLDER + "Scripts/";
+        
+        public const int MAX_LIGHT = 32;
 
         public const int SPRITE_SIZE = 16;
         public const int DEFAULT_SUCCESS_THRESHOLD = 7;
