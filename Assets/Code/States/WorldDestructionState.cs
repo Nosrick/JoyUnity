@@ -1,5 +1,4 @@
 ﻿using JoyLib.Code.World;
-using UnityEngine;
 
 namespace JoyLib.Code.States
 {
@@ -22,36 +21,12 @@ namespace JoyLib.Code.States
 
         protected void DestroyWorld()
         {
-            GameObject worldObjects = GameObject.Find("WorldObjects");
-            GameObject worldEntities = GameObject.Find("WorldEntities");
-            GameObject worldWalls = GameObject.Find("WorldWalls");
-            GameObject worldFog = GameObject.Find("WorldFog");
-            GameObject worldFloors = GameObject.Find("WorldFloors");
-
-            for(int i = 0; i < worldObjects.transform.childCount; i++)
-            {
-                worldObjects.transform.GetChild(i).gameObject.SetActive(false);
-            }
-
-            for(int i = 0; i < worldEntities.transform.childCount; i++)
-            {
-                worldEntities.transform.GetChild(i).gameObject.SetActive(false);
-            }
-
-            for(int i = 0; i < worldWalls.transform.childCount; i++)
-            {
-                worldWalls.transform.GetChild(i).gameObject.SetActive(false);
-            }
-
-            for(int i = 0; i < worldFog.transform.childCount; i++)
-            {
-                worldFog.transform.GetChild(i).gameObject.SetActive(false);
-            }
-
-            for (int i = 0; i < worldFloors.transform.childCount; i++)
-            {
-                worldFloors.transform.GetChild(i).gameObject.SetActive(false);
-            }
+            IGameManager gameManager = GlobalConstants.GameManager;
+            gameManager.EntityPool.RetireAll();
+            gameManager.ItemPool.RetireAll();
+            gameManager.FogPool.RetireAll();
+            gameManager.FloorPool.RetireAll();
+            gameManager.WallPool.RetireAll();
 
             Done = true;
         }

@@ -115,6 +115,11 @@ namespace JoyLib.Code.States
                     new []{"pickup"},
                     new object[] { true });
             }
+
+            foreach (IItemInstance item in this.m_Player.Backpack)
+            {
+                GlobalConstants.GameManager.ItemPool.Retire(item.MonoBehaviourHandler.gameObject);
+            }
             
             m_World.Tick();
 

@@ -221,7 +221,7 @@ namespace JoyLib.Code.Entities.Items
             }
             
             IItemInstance item = GetItem(GUID);
-            item.MyWorld.RemoveObject(item.WorldPosition, item);
+            item.MyWorld?.RemoveObject(item.WorldPosition, item);
             //LiveItems.Remove(GUID);
             return true;
 

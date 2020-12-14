@@ -583,7 +583,7 @@ namespace JoyLib.Code.States
                                 {
                                     if(m_EntitiesHolder.transform.GetChild(i).name.Contains(tempEntity.GUID.ToString()))
                                     {
-                                        GameObject.Destroy(m_EntitiesHolder.transform.GetChild(i).gameObject);
+                                        this.GameManager.EntityPool.Retire(m_EntitiesHolder.transform.GetChild(i).gameObject);
                                         break;
                                     }
                                 }

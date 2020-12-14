@@ -41,10 +41,6 @@ namespace JoyLib.Code.Unity
                     new string[] {"pickup"},
                     new object[] {true});
 
-                item.MyWorld.RemoveObject(item.WorldPosition, item);
-                //item.Move(ItemBehaviourHandler.EntityInRange.WorldPosition);
-                
-                //GameObject.DestroyImmediate(this.gameObject);
                 if (result)
                 {
                     return ActionStatus.Success;

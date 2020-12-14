@@ -204,7 +204,8 @@ namespace JoyLib.Code.Entities.Items
             }
             else
             {
-                gameObject.GetComponent<MonoBehaviourHandler>().AttachJoyObject(this);
+                MonoBehaviourHandler monoBehaviourHandler = gameObject.GetComponent<MonoBehaviourHandler>();
+                monoBehaviourHandler.AttachJoyObject(this);
             }
         }
 

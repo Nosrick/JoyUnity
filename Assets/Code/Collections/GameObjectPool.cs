@@ -42,5 +42,15 @@ namespace Code.Collections
 
             return result;
         }
+
+        public void RetireAll()
+        {
+            foreach (GameObject gameObject in this.Objects)
+            {
+                gameObject.SetActive(false);
+            }
+            this.InactiveObjects.AddRange(this.Objects);
+            this.Objects.Clear();
+        }
     }
 }

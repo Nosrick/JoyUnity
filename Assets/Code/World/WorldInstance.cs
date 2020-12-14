@@ -432,29 +432,21 @@ namespace JoyLib.Code.World
 
         public void RemoveEntity(Vector2Int positionRef)
         {
-            long entityGUID = -1;
+            IEntity entity = null;
             for (int i = 0; i < m_Entities.Count; i++)
             {
                 if (m_Entities[i].WorldPosition.Equals(positionRef))
                 {
-                    entityGUID = m_Entities[i].GUID;
+                    entity = m_Entities[i];
                     m_Entities.RemoveAt(i);
                     break;
                 }
             }
 
             CalculatePlayerIndex();
-            EntityHandler.Remove(entityGUID);
+            EntityHandler.Remove(entity.GUID);
 
-            for (int i = 0; i < m_EntityHolder.transform.childCount; i++)
-            {
-                GameObject temp = m_EntityHolder.transform.GetChild(i).gameObject;
-                if (temp.name.Contains(entityGUID.ToString()))
-                {
-                    GameObject.Destroy(temp);
-                    break;
-                }
-            }
+            GlobalConstants.GameManager?.EntityPool.Retire(entity.MonoBehaviourHandler.gameObject);
 
             IsDirty = true;
         }

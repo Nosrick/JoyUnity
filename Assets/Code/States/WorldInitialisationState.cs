@@ -45,19 +45,20 @@ namespace JoyLib.Code.States
             //Make the upstairs
             if (m_ActiveWorld.GUID != m_Overworld.GUID)
             {
-                GameObject child = gameManager.ItemPool.Get();
+                GameObject child = gameManager.FloorPool.Get();
 
                 child.transform.position = new Vector3(m_ActiveWorld.SpawnPoint.x, m_ActiveWorld.SpawnPoint.y, 0.0f);
                 SpriteRenderer spriteRenderer = child.GetComponent<SpriteRenderer>();
                 spriteRenderer.sortingLayerName = "Walls";
                 spriteRenderer.sprite = m_ObjectIcons.GetSprite("Stairs", "UpStairs");
                 child.transform.name = m_ActiveWorld.Parent.Name + " stairs";
+                child.SetActive(true);
             }
 
             //Make each downstairs
             foreach(KeyValuePair<Vector2Int, IWorldInstance> pair in m_ActiveWorld.Areas)
             {
-                GameObject child = gameManager.ItemPool.Get();
+                GameObject child = gameManager.FloorPool.Get();
                 
                 Vector2Int position = pair.Key;
                 child.transform.position = new Vector3(position.x, position.y, 0.0f);
@@ -65,6 +66,7 @@ namespace JoyLib.Code.States
                 spriteRenderer.sortingLayerName = "Walls";
                 spriteRenderer.sprite = m_ObjectIcons.GetSprite("Stairs", "Downstairs");
                 child.transform.name = m_ActiveWorld.Parent.Name + " stairs";
+                child.SetActive(true);
             }
 
             int index = 0;
@@ -95,7 +97,7 @@ namespace JoyLib.Code.States
                             //TODO: This will eventually be a tile direction selection algorithm
                             "surroundfloor");
                     floor.name = this.m_ActiveWorld.Name + " floor";
-                    fog.SetActive(true);
+                    floor.SetActive(true);
 
                     index += 1;
                 }
@@ -125,7 +127,7 @@ namespace JoyLib.Code.States
                 {
                     newEntity.tag = "Player";
                 }
-                this.CreateItems(entity.Backpack);
+                this.CreateItems(entity.Backpack, false);
             }
 
             Camera camera = GameObject.Find("Main Camera").GetComponent<Camera>();
@@ -136,7 +138,7 @@ namespace JoyLib.Code.States
             Done = true;
         }
 
-        protected void CreateItems(IEnumerable<IJoyObject> items)
+        protected void CreateItems(IEnumerable<IJoyObject> items, bool active = true)
         {
             IGameManager gameManager = GlobalConstants.GameManager;
             foreach (IItemInstance item in items)
@@ -144,6 +146,7 @@ namespace JoyLib.Code.States
                 if (item is ItemInstance itemInstance)
                 {
                     itemInstance.Instantiate(gameManager.ItemPool.Get());
+                    itemInstance.MonoBehaviourHandler.gameObject.SetActive(active);
                 }
             }
         }
