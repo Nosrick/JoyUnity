@@ -35,6 +35,8 @@ namespace JoyLib.Code.Unity
 
         public virtual void AttachJoyObject(IJoyObject joyObject)
         {
+            this.OnMouseExitEvent = null;
+            this.OnMouseOverEvent = null;
             this.m_JoyObject = joyObject;
             this.m_JoyObject.AttachMonoBehaviourHandler(this);
             this.m_SpriteRenderer = this.GetComponent<SpriteRenderer>();
