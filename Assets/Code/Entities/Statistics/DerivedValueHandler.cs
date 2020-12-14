@@ -201,8 +201,6 @@ namespace JoyLib.Code.Entities.Statistics
                 eval = eval.Replace(value.Name, value.Value.ToString());
             }
 
-            //return ScriptingEngine.instance.Compile<T>(eval);
-            
             return ScriptingEngine.instance.Evaluate<T>(eval);
         }
     }

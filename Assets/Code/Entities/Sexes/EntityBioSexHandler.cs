@@ -1,9 +1,7 @@
-﻿using JoyLib.Code.Cultures;
-using JoyLib.Code.Scripting;
-using System;
-using System.Linq;
+﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
+using System.Linq;
+using JoyLib.Code.Scripting;
 
 namespace JoyLib.Code.Entities.Sexes
 {
@@ -30,7 +28,7 @@ namespace JoyLib.Code.Entities.Sexes
 
             m_Sexes = new Dictionary<string, IBioSex>();
             
-            IBioSex[] sexes = ScriptingEngine.instance.FetchAndInitialiseChildren<IBioSex>();
+            IEnumerable<IBioSex> sexes = ScriptingEngine.instance.FetchAndInitialiseChildren<IBioSex>();
             foreach(IBioSex sex in sexes)
             {
                 m_Sexes.Add(sex.Name, sex);

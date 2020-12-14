@@ -1,9 +1,7 @@
-﻿using JoyLib.Code.Cultures;
-using JoyLib.Code.Scripting;
-using System;
-using System.Linq;
+﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
+using System.Linq;
+using JoyLib.Code.Scripting;
 
 namespace JoyLib.Code.Entities.Sexuality
 {
@@ -30,7 +28,7 @@ namespace JoyLib.Code.Entities.Sexuality
 
             m_Sexualities = new Dictionary<string, ISexuality>();
 
-            ISexuality[] sexualities = ScriptingEngine.instance.FetchAndInitialiseChildren<ISexuality>();
+            IEnumerable<ISexuality> sexualities = ScriptingEngine.instance.FetchAndInitialiseChildren<ISexuality>();
 
             foreach (ISexuality sexuality in sexualities)
             {

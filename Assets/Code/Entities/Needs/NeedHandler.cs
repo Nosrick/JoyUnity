@@ -20,7 +20,7 @@ namespace JoyLib.Code.Entities.Needs
             {
                 Dictionary<string, INeed> needs = new Dictionary<string, INeed>();
 
-                INeed[] needTypes = Scripting.ScriptingEngine.instance.FetchAndInitialiseChildren<INeed>();
+                IEnumerable<INeed> needTypes = Scripting.ScriptingEngine.instance.FetchAndInitialiseChildren<INeed>();
 
                 foreach (INeed type in needTypes)
                 {

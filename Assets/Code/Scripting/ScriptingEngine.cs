@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using CodingSeb.ExpressionEvaluator;
 using DevionGames;
 using DevionGames.InventorySystem;
 using DevionGames.UIWidgets;
@@ -10,7 +11,6 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
 using UnityEngine;
-using Z.Expressions;
 
 namespace JoyLib.Code.Scripting
 {
@@ -23,6 +23,8 @@ namespace JoyLib.Code.Scripting
         private Assembly m_ScriptDLL;
 
         private Type[] m_Types;
+
+        private ExpressionEvaluator Eval;
 
         private const string ABILITY_NAMESPACE = "JoyLib.Code.Entities.Abilities.";
         private const string NEED_NAMESPACE = "JoyLib.Code.Entities.Needs.";
@@ -81,6 +83,9 @@ namespace JoyLib.Code.Scripting
                     m_ScriptDLL = Assembly.Load(memory.ToArray());
 
                     m_Types = m_ScriptDLL.GetTypes();
+                    
+                    this.Eval = new ExpressionEvaluator();
+                    this.Eval.OptionForceIntegerNumbersEvaluationsAsDoubleByDefault = true;
                 }
                 catch (Exception ex)
                 {
@@ -123,7 +128,7 @@ namespace JoyLib.Code.Scripting
             }
         }
 
-        public T[] FetchAndInitialiseChildren<T>()
+        public IEnumerable<T> FetchAndInitialiseChildren<T>()
         {
             try
             {
@@ -134,7 +139,7 @@ namespace JoyLib.Code.Scripting
                     children.Add((T) Activator.CreateInstance(tempType));
                 }
 
-                return children.ToArray();
+                return children;
             }
             catch (Exception e)
             {
@@ -145,7 +150,7 @@ namespace JoyLib.Code.Scripting
             }
         }
 
-        public Type[] FetchTypeAndChildren(string typeName)
+        public IEnumerable<Type> FetchTypeAndChildren(string typeName)
         {
             try
             {
@@ -163,7 +168,7 @@ namespace JoyLib.Code.Scripting
                     children = children.Where(t => t.IsAbstract == false && t.IsInterface == false).ToList();
                 }
 
-                return children.ToArray();
+                return children;
             }
             catch (Exception ex)
             {
@@ -173,7 +178,7 @@ namespace JoyLib.Code.Scripting
             }
         }
 
-        public Type[] FetchTypeAndChildren(Type type)
+        public IEnumerable<Type> FetchTypeAndChildren(Type type)
         {
             try
             {
@@ -207,7 +212,7 @@ namespace JoyLib.Code.Scripting
             }
         }
 
-        public IJoyAction[] FetchActions(string[] actionNames)
+        public IEnumerable<IJoyAction> FetchActions(string[] actionNames)
         {
             List<IJoyAction> actions = new List<IJoyAction>();
             foreach (string name in actionNames)
@@ -215,17 +220,12 @@ namespace JoyLib.Code.Scripting
                 actions.Add(FetchAction(name));
             }
 
-            return actions.ToArray();
+            return actions;
         }
 
         public T Evaluate<T>(string code)
         {
-            return Eval.Execute<T>(code);
-        }
-
-        public T Compile<T>(string code)
-        {
-            return Eval.Compile<T>(code);
+            return this.Eval.Evaluate<T>(code);
         }
     }
 }

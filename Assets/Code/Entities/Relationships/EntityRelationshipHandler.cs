@@ -1,11 +1,10 @@
-﻿using JoyLib.Code.Scripting;
-using JoyLib.Code.Collections;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
+using JoyLib.Code.Collections;
 using JoyLib.Code.Helpers;
+using JoyLib.Code.Scripting;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities.Relationships
@@ -25,7 +24,7 @@ namespace JoyLib.Code.Entities.Relationships
             m_RelationshipTypes = new Dictionary<string, IRelationship>();
             m_Relationships = new NonUniqueDictionary<long, IRelationship>();
 
-            IRelationship[] types = ScriptingEngine.instance.FetchAndInitialiseChildren<IRelationship>();
+            IEnumerable<IRelationship> types = ScriptingEngine.instance.FetchAndInitialiseChildren<IRelationship>();
             foreach(IRelationship type in types)
             {
                 m_RelationshipTypes.Add(type.Name, type);

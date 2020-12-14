@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Cultures;
 using JoyLib.Code.Scripting;
-using UnityEngine;
 
 namespace JoyLib.Code.Entities.Romance
 {
@@ -32,7 +30,7 @@ namespace JoyLib.Code.Entities.Romance
 
             RomanceTypes = new Dictionary<string, IRomance>();
             
-            IRomance[] romanceTypes = ScriptingEngine.instance.FetchAndInitialiseChildren<IRomance>();
+            IEnumerable<IRomance> romanceTypes = ScriptingEngine.instance.FetchAndInitialiseChildren<IRomance>();
             foreach (IRomance romance in romanceTypes)
             {
                 RomanceTypes.Add(romance.Name, romance);

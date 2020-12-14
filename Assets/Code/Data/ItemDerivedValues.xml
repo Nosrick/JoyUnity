@@ -2,6 +2,6 @@
 <DerivedValues>
     <DerivedValue>
         <Name>durability</Name>
-        <Formula>(hardness * size) + bonus</Formula>
+        <Formula>(size * hardness) + bonus</Formula>
     </DerivedValue>
 </DerivedValues>
