@@ -155,7 +155,7 @@ MonoBehaviour:
   delegates: []
   useDistance: 0.5
   triggerType: 2
-  key: 102
+  key: 13
   actions:
   - id: 0
   references:

@@ -13,9 +13,9 @@ namespace JoyLib.Code.Helpers
         {
             float normalised = 0f;
             Color colour;
-            if (light > minValue)
+            if (light >= minValue)
             {
-                normalised = Normalise(light, maxValue);
+                normalised = Normalise(light == 0 ? 1 : light, maxValue);
                 colour = new Color(normalised, normalised, normalised, 1.0f - normalised);
             }
             else if (light > maxValue)

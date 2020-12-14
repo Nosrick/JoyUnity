@@ -65,7 +65,7 @@ namespace JoyLib.Code.States
                 SpriteRenderer spriteRenderer = child.GetComponent<SpriteRenderer>();
                 spriteRenderer.sortingLayerName = "Walls";
                 spriteRenderer.sprite = m_ObjectIcons.GetSprite("Stairs", "Downstairs");
-                child.transform.name = m_ActiveWorld.Parent.Name + " stairs";
+                child.transform.name = pair.Value.Name + " stairs";
                 child.SetActive(true);
             }
 

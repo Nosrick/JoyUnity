@@ -7,7 +7,7 @@
 		<Material>Copper</Material>
 		<Material>Iron</Material>
 		<Size>150</Size>
-		<LightLevel>24</LightLevel>
+		<LightLevel>18</LightLevel>
 		<SpawnWeight>2</SpawnWeight>
 		<Tag>light source</Tag>
 		<Tileset>Light Source</Tileset>

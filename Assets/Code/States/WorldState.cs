@@ -86,12 +86,16 @@ namespace JoyLib.Code.States
         {
             foreach (IJoyObject joyObject in m_ActiveWorld.Objects)
             {
+                joyObject.MonoBehaviourHandler.OnMouseOverEvent -= this.OnMouseOverJoyObject;
+                joyObject.MonoBehaviourHandler.OnMouseExitEvent -= this.OnMouseExitJoyObject;
                 joyObject.MonoBehaviourHandler.OnMouseOverEvent += OnMouseOverJoyObject;
                 joyObject.MonoBehaviourHandler.OnMouseExitEvent += OnMouseExitJoyObject;
             }
 
             foreach (IJoyObject joyObject in m_ActiveWorld.Entities)
             {
+                joyObject.MonoBehaviourHandler.OnMouseOverEvent -= this.OnMouseOverJoyObject;
+                joyObject.MonoBehaviourHandler.OnMouseExitEvent -= this.OnMouseExitJoyObject;
                 joyObject.MonoBehaviourHandler.OnMouseOverEvent += OnMouseOverJoyObject;
                 joyObject.MonoBehaviourHandler.OnMouseExitEvent += OnMouseExitJoyObject;
             }

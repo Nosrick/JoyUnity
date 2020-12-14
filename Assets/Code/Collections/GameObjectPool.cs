@@ -24,6 +24,7 @@ namespace Code.Collections
             {
                 GameObject returnObject = this.InactiveObjects[0];
                 this.InactiveObjects.RemoveAt(0);
+                this.Objects.Add(returnObject);
                 return returnObject;
             }
 
