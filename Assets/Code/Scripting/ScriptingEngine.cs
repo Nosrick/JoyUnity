@@ -225,7 +225,12 @@ namespace JoyLib.Code.Scripting
 
         public T Evaluate<T>(string code)
         {
-            return this.Eval.Evaluate<T>(code);
+            return (T)Convert.ChangeType(this.Eval.Evaluate(code), typeof(T));
+        }
+
+        public int Evaluate(string code)
+        {
+            return int.Parse(Math.Floor(this.Eval.Evaluate<double>(code)).ToString());
         }
     }
 }
