@@ -7,8 +7,20 @@
 		<Material>Copper</Material>
 		<Material>Iron</Material>
 		<Size>150</Size>
-		<LightLevel>10</LightLevel>
+		<LightLevel>24</LightLevel>
 		<SpawnWeight>2</SpawnWeight>
+		<Tag>light source</Tag>
+		<Tileset>Light Source</Tileset>
+	</IdentifiedItem>
+
+	<IdentifiedItem>
+		<Name>Torch</Name>
+		<Description>Basically a stick on fire.</Description>
+		<Value>5</Value>
+		<Material>White Pine</Material>
+		<Size>150</Size>
+		<LightLevel>12</LightLevel>
+		<SpawnWeight>5</SpawnWeight>
 		<Tag>light source</Tag>
 		<Tileset>Light Source</Tileset>
 	</IdentifiedItem>
@@ -17,9 +29,13 @@
 		<Filename>Light</Filename>
 		<Name>Light Source</Name>
 		<Icon>
+			<Name>Torch</Name>
+			<Position>0</Position>
+			<Data>Default</Data>
+		</Icon>
+		<Icon>
 			<Name>Lantern</Name>
 			<Position>3</Position>
-			<Data>Default</Data>
 		</Icon>
 	</TileSet>
 </Items>

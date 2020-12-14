@@ -6,6 +6,9 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
 {
     public interface IVision
     {
+        int MinimumLightLevel { get; }
+        int MaximumLightLevel { get; }
+        
         string Name
         {
             get;

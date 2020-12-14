@@ -4,17 +4,32 @@ namespace JoyLib.Code.Helpers
 {
     public static class LightLevelHelper
     {
-        private const float MAX_LIGHT = 16.0f;
+        public const float MAX_LIGHT = 32.0f;
 
-        private static float Normalise(int light)
+        private static float Normalise(int light, int maxValue)
         {
-            return light / MAX_LIGHT;
+            return (float)light / (float)maxValue;
         }
 
-        public static Color GetColour(int light)
+        public static Color GetColour(int light, int minValue, int maxValue)
         {
-            float normalised = Normalise(light);
-            return new Color(normalised, normalised, normalised, 1.0f - normalised);
+            float normalised = 0f;
+            Color colour;
+            if (light > minValue)
+            {
+                normalised = Normalise(light, maxValue);
+                colour = new Color(normalised, normalised, normalised, 1.0f - normalised);
+            }
+            else if (light > maxValue)
+            {
+                colour = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+            }
+            else
+            {
+                colour = Color.black;
+            }
+            
+            return colour;
         }
     }
 }

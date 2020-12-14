@@ -682,7 +682,10 @@ namespace JoyLib.Code.States
                 bool visible = player.VisionProvider.HasVisibility(player, m_ActiveWorld, position);
                 int lightLevel = visible ? m_ActiveWorld.LightCalculator.Light.GetLight(position) : 0;
 
-                fog.GetComponent<SpriteRenderer>().color = LightLevelHelper.GetColour(lightLevel);
+                fog.GetComponent<SpriteRenderer>().color = LightLevelHelper.GetColour(
+                    lightLevel, 
+                    player.VisionProvider.MinimumLightLevel,
+                    player.VisionProvider.MaximumLightLevel);
             }
         }
 

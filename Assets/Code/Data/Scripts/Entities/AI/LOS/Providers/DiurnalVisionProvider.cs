@@ -8,7 +8,7 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
     {
         public new string Name => "diurnalvision";
 
-        private static int MinimumLightLevel => 5;
+        public override int MinimumLightLevel => 8;
 
         public DiurnalVisionProvider() :
             base(new FOVShadowCasting())
@@ -46,7 +46,7 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
 
         public override bool HasVisibility(IEntity viewer, IWorldInstance world, Vector2Int point)
         {
-            return Vision.Contains(point) && world.LightCalculator.Light.GetLight(point) > MinimumLightLevel;
+            return this.Vision.Contains(point) && world.LightCalculator.Light.GetLight(point) > this.MinimumLightLevel;
         }
     }
 }
