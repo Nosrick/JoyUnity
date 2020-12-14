@@ -97,6 +97,36 @@ namespace JoyLib.Code.World.Lighting
             }
         }
 
+        private void DoDiffuse()
+        {
+            m_Board.ClearVisited();
+            foreach (KeyValuePair<Vector2Int, int> pair in m_Board.LightLevels)
+            {
+                this.DoAdjacent(pair.Key, pair.Value);
+            }
+        }
+
+        private void DoAdjacent(Vector2Int position, int lightlevel)
+        {
+            List<Vector2Int> adjacent = new List<Vector2Int>
+            {
+                new Vector2Int(position.x - 1, position.y),
+                new Vector2Int(position.x + 1, position.y),
+                new Vector2Int(position.x, position.y + 1),
+                new Vector2Int(position.x, position.y - 1)
+            };
+            foreach (Vector2Int point in adjacent)
+            {
+                if (point.x > 0 && point.x < this.m_Board.Width
+                                && point.y > 0 && point.y < this.m_Board.Height
+                                && lightlevel > 0)
+                {
+                    this.m_Board.AddLight(point, lightlevel - 1);
+                    this.DoAdjacent(point, lightlevel - 1);
+                }
+            }
+        }
+
         public LightBoard Light => m_Board;
     }
 }

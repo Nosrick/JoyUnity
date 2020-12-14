@@ -91,7 +91,10 @@ namespace JoyLib.Code.States
 
             GlobalConstants.GameManager.EntityHandler.AddEntity(m_Player);
             
-            IItemInstance lightSource = GlobalConstants.GameManager.ItemFactory.CreateRandomItemOfType(new string[] { "light source" }, true, true);
+            IItemInstance lightSource = GlobalConstants.GameManager.ItemFactory.CreateRandomItemOfType(
+                new string[] { "light source" }, 
+                true, 
+                GlobalConstants.GameManager.ItemPool.Get());
             IJoyAction addItemAction = m_Player.FetchAction("additemaction");
             addItemAction.Execute(
                 new IJoyObject[] {m_Player, lightSource},
@@ -101,7 +104,14 @@ namespace JoyLib.Code.States
             for (int i = 0; i < 4; i++)
             {
                 addItemAction.Execute(
-                    new IJoyObject[] {m_Player, GlobalConstants.GameManager.ItemFactory.CreateCompletelyRandomItem(identified: true, instantiate: true)},
+                    new IJoyObject[]
+                    {
+                        m_Player, 
+                        GlobalConstants.GameManager.ItemFactory.CreateCompletelyRandomItem(
+                            true, 
+                            false, 
+                            GlobalConstants.GameManager.ItemPool.Get())
+                    },
                     new []{"pickup"},
                     new object[] { true });
             }

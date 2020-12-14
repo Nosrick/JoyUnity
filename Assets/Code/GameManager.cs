@@ -1,4 +1,5 @@
-﻿using Joy.Code.Managers;
+﻿using Code.Collections;
+using Joy.Code.Managers;
 using JoyLib.Code;
 using JoyLib.Code.Conversation;
 using JoyLib.Code.Conversation.Conversations;
@@ -37,6 +38,20 @@ public class GameManager : MonoBehaviour, IGameManager
         {
             GlobalConstants.GameManager = this;
         }
+        GameObject objectHolder = GameObject.Find("WorldObjects");
+        GameObject entityHolder = GameObject.Find("WorldEntities");
+        GameObject fogHolder = GameObject.Find("WorldFog");
+        GameObject wallHolder = GameObject.Find("WorldWalls");
+        GameObject floorHolder = GameObject.Find("WorldFloors");
+            
+        GameObject prefab = Resources.Load<GameObject>("Prefabs/MonoBehaviourHandler");
+        GameObject itemPrefab = Resources.Load<GameObject>("Prefabs/ItemInstance");
+        GameObject sprite = Resources.Load<GameObject>("Prefabs/Sprite");
+        FloorPool = new GameObjectPool(sprite, floorHolder);
+        WallPool = new GameObjectPool(sprite, wallHolder);
+        EntityPool = new GameObjectPool(prefab, entityHolder);
+        ItemPool = new GameObjectPool(itemPrefab, objectHolder);
+        FogPool = new GameObjectPool(sprite, fogHolder);
 
         MyGameObject = this.gameObject;
         
@@ -168,4 +183,10 @@ public class GameManager : MonoBehaviour, IGameManager
     public GameObject MyGameObject { get; protected set; }
 
     public IEntity Player { get; set; }
+    
+    public GameObjectPool FloorPool { get; protected set; }
+    public GameObjectPool WallPool { get; protected set; }
+    public GameObjectPool EntityPool { get; protected set; }
+    public GameObjectPool ItemPool { get; protected set; }
+    public GameObjectPool FogPool { get; protected set; }
 }

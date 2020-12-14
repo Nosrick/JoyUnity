@@ -31,7 +31,7 @@ namespace JoyLib.Code.Entities.Items
             this.Roller = roller;
         }
 
-        public IItemInstance CreateRandomItemOfType(string[] tags, bool identified = false, bool instantiate = false)
+        public IItemInstance CreateRandomItemOfType(string[] tags, bool identified = false, GameObject gameObject = null)
         {
             BaseItemType[] matchingTypes = ItemHandler.FindItemsOfType(tags);
             if (matchingTypes.Length > 0)
@@ -64,14 +64,14 @@ namespace JoyLib.Code.Entities.Items
                         new RNG(),
                         new List<IAbility>(),
                         new List<IJoyAction>(),
-                        instantiate);
+                        gameObject);
                 return itemInstance;
             }
 
             return null;
         }
 
-        public IItemInstance CreateSpecificType(string name, string[] tags, bool identified = false, bool instantiate = false)
+        public IItemInstance CreateSpecificType(string name, string[] tags, bool identified = false, GameObject gameObject = null)
         {
             BaseItemType[] matchingTypes = ItemHandler.FindItemsOfType(tags);
             List<BaseItemType> secondRound = new List<BaseItemType>();
@@ -121,7 +121,7 @@ namespace JoyLib.Code.Entities.Items
                         new RNG(),
                         new List<IAbility>(),
                         new List<IJoyAction>(),
-                        instantiate);
+                        gameObject);
                     
                 return itemInstance;
             }
@@ -130,7 +130,7 @@ namespace JoyLib.Code.Entities.Items
         }
 
         public IItemInstance CreateCompletelyRandomItem(bool identified = false,
-            bool withAbility = false, bool instantiate = false)
+            bool withAbility = false, GameObject gameObject = null)
         {
             List<BaseItemType> itemDatabase = ItemHandler.ItemDatabase;
 
@@ -161,7 +161,7 @@ namespace JoyLib.Code.Entities.Items
                     new RNG(),
                     new List<IAbility>(),
                     new List<IJoyAction>(),
-                    instantiate);
+                    gameObject);
                 
             return itemInstance;
         }

@@ -1,4 +1,5 @@
-﻿using JoyLib.Code.Conversation;
+﻿using Code.Collections;
+using JoyLib.Code.Conversation;
 using JoyLib.Code.Conversation.Subengines.Rumours;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities;
@@ -60,5 +61,11 @@ namespace JoyLib.Code
         GameObject MyGameObject { get; }
         
         IEntity Player { get; set; }
+        
+        GameObjectPool FloorPool { get; }
+        GameObjectPool WallPool { get; }
+        GameObjectPool EntityPool { get; }
+        GameObjectPool ItemPool { get; }
+        GameObjectPool FogPool { get; }
     }
 }

@@ -30,27 +30,27 @@ namespace JoyLib.Code.States
 
             for(int i = 0; i < worldObjects.transform.childCount; i++)
             {
-                GameObject.Destroy(worldObjects.transform.GetChild(i).gameObject);
+                worldObjects.transform.GetChild(i).gameObject.SetActive(false);
             }
 
             for(int i = 0; i < worldEntities.transform.childCount; i++)
             {
-                GameObject.Destroy(worldEntities.transform.GetChild(i).gameObject);
+                worldEntities.transform.GetChild(i).gameObject.SetActive(false);
             }
 
             for(int i = 0; i < worldWalls.transform.childCount; i++)
             {
-                GameObject.Destroy(worldWalls.transform.GetChild(i).gameObject);
+                worldWalls.transform.GetChild(i).gameObject.SetActive(false);
             }
 
             for(int i = 0; i < worldFog.transform.childCount; i++)
             {
-                GameObject.Destroy(worldFog.transform.GetChild(i).gameObject);
+                worldFog.transform.GetChild(i).gameObject.SetActive(false);
             }
 
             for (int i = 0; i < worldFloors.transform.childCount; i++)
             {
-                GameObject.Destroy(worldFloors.transform.GetChild(i).gameObject);
+                worldFloors.transform.GetChild(i).gameObject.SetActive(false);
             }
 
             Done = true;

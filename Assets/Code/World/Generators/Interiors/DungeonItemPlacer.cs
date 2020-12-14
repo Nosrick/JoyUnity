@@ -56,7 +56,7 @@ namespace JoyLib.Code.World.Generators.Interiors
 
                 IItemInstance item = ItemFactory.CreateCompletelyRandomItem();
                 worldRef.AddObject(item);
-                ItemHandler.AddItem(item, true);
+                ItemHandler.AddItem(item);
                 item.Move(point);
                 placedItems.Add(item);
             }

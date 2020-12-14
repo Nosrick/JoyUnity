@@ -110,7 +110,7 @@ namespace JoyLib.Code.Entities.Items
             RNG roller = null,
             IEnumerable<IAbility> uniqueAbilities = null,
             IEnumerable<IJoyAction> actions = null,
-            bool instantiate = false)
+            GameObject gameObject = null)
         {
             if (this.Prefab is null)
             {
@@ -185,9 +185,9 @@ namespace JoyLib.Code.Entities.Items
             CalculateValue();
             ConstructDescription();
 
-            if (instantiate)
+            if (gameObject is null == false)
             {
-                Instantiate();
+                this.Instantiate(gameObject);
             }
         }
 
@@ -196,14 +196,16 @@ namespace JoyLib.Code.Entities.Items
             return this.MonoBehaviourHandler is null == false;
         }
 
-        public void Instantiate()
+        public void Instantiate(GameObject gameObject = null)
         {
-            if (IsInstantiated())
+            if (gameObject is null)
             {
-                return;
+                GameObject.Instantiate(Prefab).GetComponent<MonoBehaviourHandler>().AttachJoyObject(this);
             }
-            this.AttachMonoBehaviourHandler(GameObject.Instantiate(Prefab).GetComponent<MonoBehaviourHandler>());
-            this.MonoBehaviourHandler.AttachJoyObject(this);
+            else
+            {
+                gameObject.GetComponent<MonoBehaviourHandler>().AttachJoyObject(this);
+            }
         }
 
         public IItemInstance Copy(IItemInstance copy)

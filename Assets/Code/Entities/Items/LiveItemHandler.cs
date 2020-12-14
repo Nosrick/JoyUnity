@@ -1,18 +1,15 @@
 ﻿using System;
-using JoyLib.Code.Entities.Abilities;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Rollers;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-using Castle.Core.Internal;
-using UnityEngine;
 using DevionGames.InventorySystem;
-using JoyLib.Code.Unity;
+using JoyLib.Code.Entities.Abilities;
+using JoyLib.Code.Graphics;
+using JoyLib.Code.Helpers;
+using JoyLib.Code.Rollers;
 using JoyLib.Code.World;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+using UnityEngine;
 
 namespace JoyLib.Code.Entities.Items
 {
@@ -207,7 +204,9 @@ namespace JoyLib.Code.Entities.Items
             }
 
             LiveItems.Add(item.GUID, item);
-            if (addToWorld)
+            if (addToWorld 
+                && item.MyWorld is null == false 
+                && item.MyWorld.Objects.Any(o => o.GUID == item.GUID) == false)
             {
                 item.MyWorld.AddObject(item);
             }
