@@ -262,7 +262,7 @@ namespace JoyLib.Code
         {
             if (this.DerivedValues.ContainsKey(name))
             {
-                this.DerivedValues[name].Value += value;
+                this.DerivedValues[name].Value = Math.Min(this.DerivedValues[name].Maximum, this.DerivedValues[name].Value + value);
                 return this.DerivedValues[name].Value;
             }
 
