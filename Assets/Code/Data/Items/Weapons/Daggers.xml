@@ -17,7 +17,7 @@
 		<Slot>Hand</Slot>
 		<Tag>weapon</Tag>
 		<Tag>dagger</Tag>
-		<Tag>one handed</Tag>
+		<Tag>one-handed</Tag>
 		<Tileset>Weapons</Tileset>
 	</IdentifiedItem>
 

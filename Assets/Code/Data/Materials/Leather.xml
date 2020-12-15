@@ -3,7 +3,7 @@
   <Material>
     <Name>Leather</Name>
     <Hardness>1</Hardness>
-    <Bonus>0</Bonus>
+    <Bonus>1</Bonus>
     <Weight>2</Weight>
   </Material>
 </Materials>

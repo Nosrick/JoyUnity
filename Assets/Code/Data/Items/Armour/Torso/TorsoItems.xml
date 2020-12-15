@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Items>
+    <Category>Armour</Category>
+    <IdentifiedItem>
+        <Name>Breastplate</Name>
+        <Description>A piece of torso armour.</Description>
+        <Value>150</Value>
+        <Material>steel</Material>
+        <Material>iron</Material>
+        <Material>bronze</Material>
+        <Size>300</Size>
+        <Tileset>armour</Tileset>
+        <SpawnWeight>2</SpawnWeight>
+        <Slot>torso</Slot>
+        <Tag>armour</Tag>
+        <Tag>torso</Tag>
+        <Tag>metal</Tag>
+    </IdentifiedItem>
+    
+    <IdentifiedItem>
+        <Name>Leather Armour</Name>
+        <Description>A basic piece of leather torso armour.</Description>
+        <Value>90</Value>
+        <Material>leather</Material>
+        <Size>300</Size>
+        <Tileset>armour</Tileset>
+        <SpawnWeight>4</SpawnWeight>
+        <Slot>torso</Slot>
+        <Tag>armour</Tag>
+        <Tag>torso</Tag>
+        <Tag>leather</Tag>
+    </IdentifiedItem>
+    
+    <TileSet>
+        <Filename>Armor</Filename>
+        <Name>Armour</Name>
+        
+        <Icon>
+            <Name>Breastplate</Name>
+            <Position>5</Position>
+        </Icon>
+        
+        <Icon>
+            <Name>Leather Armour</Name>
+            <Position>1</Position>
+        </Icon>
+    </TileSet>
+</Items>

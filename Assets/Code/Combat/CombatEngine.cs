@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code.Entities;
+using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Rollers;
 
@@ -34,9 +35,15 @@ namespace JoyLib.Code.Combat
                 .Where(pair => defenderTags.Any(tag => tag.Equals(pair.Key, StringComparison.OrdinalIgnoreCase)))
                 .Select(pair => pair.Value).ToList();
 
-            List<EntitySkill> defenderskills = defender.Skills
+            List<EntitySkill> defenderSkills = defender.Skills
                 .Where(pair => defenderTags.Any(tag => tag.Equals(pair.Key, StringComparison.OrdinalIgnoreCase)))
                 .Select(pair => pair.Value).ToList();
+
+            List<IItemInstance> attackerWeapons = attacker.Equipment.Select(tuple => tuple.Item2).Where(instance =>
+                instance.Tags.Any(tag => tag.Equals("weapon", StringComparison.OrdinalIgnoreCase))).ToList();
+            List<IItemInstance> defenderArmour = defender.Equipment.Select(tuple => tuple.Item2).Where(instance =>
+                instance.Tags.Any(tag => tag.Equals("armour", StringComparison.OrdinalIgnoreCase)))
+                .ToList();
 
             int attackerSuccesses = 0;
             foreach(EntityStatistic stat in attackerStatistics)
@@ -59,14 +66,22 @@ namespace JoyLib.Code.Combat
                     stat.Value,
                     stat.SuccessThreshold);
             }
-            foreach (EntitySkill skill in defenderskills)
+            foreach (EntitySkill skill in defenderSkills)
             {
                 defenderSuccesses += this.Roller.RollSuccesses(
                     skill.Value,
                     skill.SuccessThreshold);
             }
+            
+            int result = attackerSuccesses - defenderSuccesses;
+            if (result > 0)
+            {
+                result += attackerWeapons.Select(instance => instance.Efficiency).Sum();
+                result -= defenderArmour.Select(instance => instance.Efficiency).Sum();
+                result = Math.Max(0, result);
+            }
 
-            return attackerSuccesses - defenderSuccesses;
+            return result;
         }
     }
 }
