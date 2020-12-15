@@ -1,6 +1,7 @@
 ﻿using Code.Collections;
 using Joy.Code.Managers;
 using JoyLib.Code;
+using JoyLib.Code.Combat;
 using JoyLib.Code.Conversation;
 using JoyLib.Code.Conversation.Conversations;
 using JoyLib.Code.Conversation.Subengines.Rumours;
@@ -56,6 +57,8 @@ public class GameManager : MonoBehaviour, IGameManager
         MyGameObject = this.gameObject;
         
         Roller = new RNG();
+
+        this.CombatEngine = new CombatEngine();
 
         PhysicsManager = new PhysicsManager();
 
@@ -151,6 +154,7 @@ public class GameManager : MonoBehaviour, IGameManager
         m_StateManager.NextState();
     }
     
+    public ICombatEngine CombatEngine { get; protected set; }
     public IQuestTracker QuestTracker { get; protected set; }
     public IQuestProvider QuestProvider { get; protected set; }
     public IEntityRelationshipHandler RelationshipHandler { get; protected set; }

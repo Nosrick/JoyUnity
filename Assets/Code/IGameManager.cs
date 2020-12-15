@@ -1,4 +1,5 @@
 ﻿using Code.Collections;
+using JoyLib.Code.Combat;
 using JoyLib.Code.Conversation;
 using JoyLib.Code.Conversation.Subengines.Rumours;
 using JoyLib.Code.Cultures;
@@ -26,6 +27,7 @@ namespace JoyLib.Code
 {
     public interface IGameManager
     {
+        ICombatEngine CombatEngine { get; }
         IQuestTracker QuestTracker { get; }
         IQuestProvider QuestProvider { get; }
         IEntityRelationshipHandler RelationshipHandler { get; }
