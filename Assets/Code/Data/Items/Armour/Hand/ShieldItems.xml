@@ -31,6 +31,7 @@
         <Tag>one handed</Tag>
         <Tag>armour</Tag>
         <Tag>leather</Tag>
+        <Tag>weapon</Tag>
     </IdentifiedItem>
     
     <TileSet>
