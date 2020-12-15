@@ -110,7 +110,7 @@ namespace JoyLib.Code.Entities
             get
             {
                 IDictionary<string, EntitySkill> skills = new Dictionary<string, EntitySkill>();
-                foreach (KeyValuePair<string, EntitySkill> skill in this.Skills)
+                foreach (KeyValuePair<string, EntitySkill> skill in this.m_Skills)
                 {
                     skills.Add(new KeyValuePair<string, EntitySkill>(
                         ObjectExtensions.Copy(skill.Key),
