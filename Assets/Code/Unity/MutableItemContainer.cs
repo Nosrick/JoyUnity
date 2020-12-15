@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DevionGames.InventorySystem;
-using DevionGames.InventorySystem.Restrictions;
-using EquipmentRegion = DevionGames.InventorySystem.Restrictions.EquipmentRegion;
 
 namespace JoyLib.Code.Unity
 {
@@ -40,7 +38,9 @@ namespace JoyLib.Code.Unity
                 {
                     foreach(KeyValuePair<string, int> pair in requiredSlots)
                     {
-                        if (pair.Key.Equals(restriction.region.Name, StringComparison.OrdinalIgnoreCase) && copySlots[pair.Key] > 0)
+                        if (pair.Key.Equals(restriction.region.Name, StringComparison.OrdinalIgnoreCase)
+                            && this.Slots[i].IsEmpty
+                            && copySlots[pair.Key] > 0)
                         {
                             copySlots[pair.Key] -= 1;
                             slots.Add(this.m_Slots[i]);
