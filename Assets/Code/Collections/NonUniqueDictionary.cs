@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using JoyLib.Code.Helpers;
 
 namespace JoyLib.Code.Collections
 {
@@ -182,6 +183,18 @@ namespace JoyLib.Code.Collections
             {
                 return m_KeyValues.Select(x => x.Item2).ToList();
             }
+        }
+
+        public NonUniqueDictionary<K, T> Copy()
+        {
+            NonUniqueDictionary<K, T> clone = new NonUniqueDictionary<K, T>();
+            foreach(Tuple<K, T> tuple in this)
+            {
+                clone.Add(
+                    ObjectExtensions.Copy(tuple.Item1), 
+                    ObjectExtensions.Copy(tuple.Item2));
+            }
+            return clone;
         }
     }
 }
