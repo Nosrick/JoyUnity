@@ -3209,7 +3209,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Minimum: 0
-  m_Maximum: 12
+  m_Maximum: 8
   DecreaseDelta: 1
   IncreaseDelta: 1
   AllowIncrease: 1
