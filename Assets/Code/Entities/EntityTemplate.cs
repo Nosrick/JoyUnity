@@ -4,6 +4,7 @@ using System.Linq;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.AI.LOS.Providers;
 using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Helpers;
 
 namespace JoyLib.Code.Entities
 {
@@ -92,7 +93,15 @@ namespace JoyLib.Code.Entities
         {
             get
             {
-                return m_Statistics;
+                IDictionary<string, EntityStatistic> stats = new Dictionary<string, EntityStatistic>();
+                foreach (KeyValuePair<string, EntityStatistic> stat in this.m_Statistics)
+                {
+                    stats.Add(new KeyValuePair<string, EntityStatistic>(
+                        ObjectExtensions.Copy(stat.Key), 
+                        ObjectExtensions.Copy(stat.Value)));
+                }
+
+                return stats;
             }
         }
 
@@ -100,7 +109,14 @@ namespace JoyLib.Code.Entities
         {
             get
             {
-                return m_Skills;
+                IDictionary<string, EntitySkill> skills = new Dictionary<string, EntitySkill>();
+                foreach (KeyValuePair<string, EntitySkill> skill in this.Skills)
+                {
+                    skills.Add(new KeyValuePair<string, EntitySkill>(
+                        ObjectExtensions.Copy(skill.Key),
+                        ObjectExtensions.Copy(skill.Value)));
+                }
+                return skills;
             }
         }
 
