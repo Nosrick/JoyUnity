@@ -86,5 +86,11 @@ namespace JoyLib.Code.Unity.GUI
             SkillWindow.SetSkills(SkillWindow.GetSkillNames());
             AbilityWindow.GetAvailableAbilities(PlayerInfo.CurrentTemplate, StatisticWindow.GetStatistics(), SkillWindow.GetSkillsBlock());
         }
+
+        public void GoToPlayerInfo()
+        {
+            this.GameManager.GUIManager.CloseGUI(GlobalConstants.CHARACTER_CREATION_PART_2);
+            this.GameManager.GUIManager.OpenGUI(this.name);
+        }
     }
 }
