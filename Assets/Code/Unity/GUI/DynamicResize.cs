@@ -46,6 +46,7 @@ namespace JoyLib.Code.Unity.GUI
         protected void Resize()
         {
             if (ChildRectTransform is null 
+                || ChildLastChildren == this.ChildRectTransform.transform.childCount
                 || ItemTransform is null)
             {
                 return;
@@ -87,7 +88,7 @@ namespace JoyLib.Code.Unity.GUI
                 ChildRectTransform.SetSizeWithCurrentAnchors(UnityEngine.RectTransform.Axis.Vertical, height);
             }
 
-            ChildLastChildren = ChildRectTransform.transform.childCount;
+            ChildLastChildren = this.ChildRectTransform.transform.childCount;
             if (ScrollRect.horizontalScrollbar is null == false)
             {
                 ScrollRect.horizontalScrollbar.numberOfSteps = ChildLayoutGroup.transform.childCount;
