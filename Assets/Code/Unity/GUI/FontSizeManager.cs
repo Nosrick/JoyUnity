@@ -14,23 +14,28 @@ namespace JoyLib.Code.Unity.GUI
             
             if (this.TextsToManage is null)
             {
-                this.TextsToManage = this.GetComponentsInChildren<TextMeshProUGUI>();
+                this.ResizeFonts();
+            }
+        }
 
-                float minSize = float.MaxValue;
-                foreach (TextMeshProUGUI text in this.TextsToManage)
-                {
-                    //text.enableAutoSizing = false;
-                    if (text.fontSize < minSize)
-                    {
-                        minSize = text.fontSize;
-                    }
-                }
+        public void ResizeFonts()
+        {
+            this.TextsToManage = this.GetComponentsInChildren<TextMeshProUGUI>();
 
-                foreach (TextMeshProUGUI text in this.TextsToManage)
+            float minSize = float.MaxValue;
+            foreach (TextMeshProUGUI text in this.TextsToManage)
+            {
+                //text.enableAutoSizing = false;
+                if (text.fontSize < minSize)
                 {
-                    text.fontSize = minSize;
-                    text.enableAutoSizing = false;
+                    minSize = text.fontSize;
                 }
+            }
+
+            foreach (TextMeshProUGUI text in this.TextsToManage)
+            {
+                text.fontSize = minSize;
+                text.enableAutoSizing = false;
             }
         }
     }

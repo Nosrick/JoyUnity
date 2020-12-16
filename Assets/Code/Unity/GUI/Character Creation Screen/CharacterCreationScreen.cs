@@ -30,6 +30,7 @@ namespace JoyLib.Code.Unity.GUI
             PlayerInfo.CultureChanged += SetRandomName;
             StatisticWindow.ValueChanged += ChangedStatistics;
             PlayerInfo.Initialise();
+            //this.GetComponent<FontSizeManager>().ResizeFonts();
         }
 
         public IEntity CreatePlayer()
