@@ -81,6 +81,7 @@ namespace JoyLib.Code.Unity.GUI
         {
             VerticalLayoutGroup layoutGroup = this.GetComponent<VerticalLayoutGroup>();
             RectTransform childRect = this.DerivedValuePrefab.GetComponent<RectTransform>();
+            RectTransform parentRect = this.transform.parent.GetComponent<RectTransform>();
             float height = this.transform.childCount *
                            (childRect.rect.height
                             + layoutGroup.padding.top
@@ -88,6 +89,11 @@ namespace JoyLib.Code.Unity.GUI
                             + layoutGroup.spacing);
 
             float width = childRect.rect.width + layoutGroup.padding.left + layoutGroup.padding.right;
+
+            this.m_RectTransform.anchorMin = new Vector2(1.0f - (width / parentRect.rect.width), 0);
+
+            this.m_RectTransform.anchorMax = new Vector2(1, (height/ parentRect.rect.height));
+            
             this.m_RectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
             this.m_RectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
         }
