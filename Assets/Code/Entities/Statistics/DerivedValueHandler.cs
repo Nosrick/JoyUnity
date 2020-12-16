@@ -16,7 +16,8 @@ namespace JoyLib.Code.Entities.Statistics
         protected Dictionary<string, string> ItemStandardFormulas { get; set; }
         
         protected Dictionary<string, Type> DerivedValueTypes { get; set; } 
-        protected Dictionary<string, Color> DerivedValueColours { get; set; }
+        protected Dictionary<string, Color> DerivedValueBackgroundColours { get; set; }
+        protected Dictionary<string, Color> DerivedValueTextColours { get; set; }
         
         protected static IEntityStatisticHandler StatisticHandler { get; set; }
         protected static IEntitySkillHandler SkillHandler { get; set; }
@@ -42,7 +43,8 @@ namespace JoyLib.Code.Entities.Statistics
 
             this.ITEM_FILE = Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "ItemDerivedValues.xml";
             
-            this.DerivedValueColours = new Dictionary<string, Color>();
+            this.DerivedValueBackgroundColours = new Dictionary<string, Color>();
+            this.DerivedValueTextColours = new Dictionary<string, Color>();
             this.EntityStandardFormulas = this.LoadFormulasFromFile(this.ENTITY_FILE);
             this.ItemStandardFormulas = this.LoadFormulasFromFile(this.ITEM_FILE);
             this.Formulas = new Dictionary<string, string>(this.EntityStandardFormulas);
@@ -78,13 +80,19 @@ namespace JoyLib.Code.Entities.Statistics
                 try
                 {
                     string name = dv.Element("Name").GetAs<string>().ToLower();
-                    string colourCode = dv.Element("Colour").DefaultIfEmpty("888888FF");
+                    string colourCode = dv.Element("BackgroundColour").DefaultIfEmpty("#888888FF");
                     Color colour = new Color();
                     ColorUtility.TryParseHtmlString(colourCode, out colour);
                     formulas.Add(
                         name,
                         dv.Element("Formula").GetAs<string>().ToLower()); 
-                    DerivedValueColours.Add(
+                    this.DerivedValueBackgroundColours.Add(
+                        name,
+                        colour);
+
+                    colourCode = dv.Element("TextColour").DefaultIfEmpty("#FFFFFFFF");
+                    ColorUtility.TryParseHtmlString(colourCode, out colour);
+                    this.DerivedValueTextColours.Add(
                         name,
                         colour);
                 }
@@ -183,11 +191,20 @@ namespace JoyLib.Code.Entities.Statistics
             return false;
         }
 
-        public Color GetColour(string name)
+        public Color GetBackgroundColour(string name)
         {
-            if (DerivedValueColours.ContainsKey(name))
+            if (this.DerivedValueBackgroundColours.ContainsKey(name))
             {
-                return DerivedValueColours[name];
+                return this.DerivedValueBackgroundColours[name];
+            }
+            return Color.gray;
+        }
+        
+        public Color GetTextColour(string name)
+        {
+            if (this.DerivedValueTextColours.ContainsKey(name))
+            {
+                return this.DerivedValueTextColours[name];
             }
             return Color.gray;
         }

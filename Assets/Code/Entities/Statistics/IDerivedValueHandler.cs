@@ -21,6 +21,7 @@ namespace JoyLib.Code.Entities.Statistics
 
         bool AddFormula(string name, string formula);
 
-        Color GetColour(string name);
+        Color GetBackgroundColour(string name);
+        Color GetTextColour(string name);
     }
 }

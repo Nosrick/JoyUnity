@@ -3,21 +3,25 @@
     <DerivedValue>
         <Name>hitpoints</Name>
         <Formula>endurance * 3</Formula>
-        <Colour>#FF0000FF</Colour>
+        <BackgroundColour>#FF0000FF</BackgroundColour>
+        <TextColour>#EEEEEEFF</TextColour>
     </DerivedValue>
     <DerivedValue>
         <Name>concentration</Name>
         <Formula>focus * 3</Formula>
-        <Colour>#00FF00FF</Colour>
+        <BackgroundColour>#00FF00FF</BackgroundColour>
+        <TextColour>#EEEEEEFF</TextColour>
     </DerivedValue>
     <DerivedValue>
         <Name>composure</Name>
         <Formula>wit * 3</Formula>
-        <Colour>#0000FFFF</Colour>
+        <BackgroundColour>#0000FFFF</BackgroundColour>
+        <TextColour>#EEEEEEFF</TextColour>
     </DerivedValue>
     <DerivedValue>
         <Name>mana</Name>
         <Formula>endurance + focus + wit</Formula>
-        <Colour>#00FFFFFF</Colour>
+        <BackgroundColour>#00FFFFFF</BackgroundColour>
+        <TextColour>#EEEEEEFF</TextColour>
     </DerivedValue>    
 </DerivedValues>

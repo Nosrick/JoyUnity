@@ -67,7 +67,12 @@ namespace JoyLib.Code.Unity.GUI
             
             for(int i = 0; i < valueList.Count; i++)
             {
-                this.Items[valueList[i].Name].Color = this.GameManager.DerivedValueHandler.GetColour(valueList[i].Name);
+                this.Items[valueList[i].Name].BackgroundColour =
+                    this.GameManager.DerivedValueHandler.GetBackgroundColour(valueList[i].Name);
+                
+                this.Items[valueList[i].Name].TextColour =
+                    this.GameManager.DerivedValueHandler.GetTextColour(valueList[i].Name);
+                
                 this.Items[valueList[i].Name].Name = valueList[i].Name;
                 this.Items[valueList[i].Name].DirectValueSet(valueList[i].Value);
                 this.Items[valueList[i].Name].Minimum = -valueList[i].Maximum;

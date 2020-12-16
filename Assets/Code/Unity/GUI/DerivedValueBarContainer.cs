@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity.GUI
@@ -6,8 +7,11 @@ namespace JoyLib.Code.Unity.GUI
     public class DerivedValueBarContainer : DerivedValueContainer
     {
         [SerializeField] protected Image BarImage;
+        [SerializeField] protected TextMeshProUGUI NameText;
+        [SerializeField] protected TextMeshProUGUI ValueText;
 
-        [SerializeField] public Color Color;
+        [SerializeField] public Color BackgroundColour;
+        [SerializeField] public Color TextColour;
 
         public override int DecreaseValue(int delta = 1)
         {
@@ -40,7 +44,9 @@ namespace JoyLib.Code.Unity.GUI
 
         protected void SetFillAmount()
         {
-            this.BarImage.color = this.Color;
+            this.BarImage.color = this.BackgroundColour;
+            this.NameText.color = this.TextColour;
+            this.ValueText.color = this.TextColour;
             this.BarImage.fillAmount = (float)this.Value / (float)this.Maximum;
         }
 
