@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Code.Collections;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
@@ -17,21 +18,26 @@ namespace JoyLib.Code.Entities.Items
         protected IObjectIconHandler ObjectIcons { get; set; }
         
         protected IDerivedValueHandler DerivedValueHandler { get; set; }
+        
+        protected GameObjectPool ItemPool { get; set; }
+        
         protected RNG Roller { get; set; }
 
         public ItemFactory(
             ILiveItemHandler itemHandler, 
             IObjectIconHandler objectIconHandler,
             IDerivedValueHandler derivedValueHandler,
-            RNG roller)
+            GameObjectPool itemPool,
+            RNG roller = null)
         {
             this.ItemHandler = itemHandler;
             this.ObjectIcons = objectIconHandler;
             this.DerivedValueHandler = derivedValueHandler;
-            this.Roller = roller;
+            this.ItemPool = itemPool;
+            this.Roller = roller is null ? new RNG() : roller;
         }
 
-        public IItemInstance CreateRandomItemOfType(string[] tags, bool identified = false, GameObject gameObject = null)
+        public IItemInstance CreateRandomItemOfType(string[] tags, bool identified = false)
         {
             BaseItemType[] matchingTypes = ItemHandler.FindItemsOfType(tags);
             if (matchingTypes.Length > 0)
@@ -64,14 +70,14 @@ namespace JoyLib.Code.Entities.Items
                         new RNG(),
                         new List<IAbility>(),
                         new List<IJoyAction>(),
-                        gameObject);
+                        ItemPool.Get());
                 return itemInstance;
             }
 
             return null;
         }
 
-        public IItemInstance CreateSpecificType(string name, string[] tags, bool identified = false, GameObject gameObject = null)
+        public IItemInstance CreateSpecificType(string name, string[] tags, bool identified = false)
         {
             BaseItemType[] matchingTypes = ItemHandler.FindItemsOfType(tags);
             List<BaseItemType> secondRound = new List<BaseItemType>();
@@ -121,7 +127,7 @@ namespace JoyLib.Code.Entities.Items
                         new RNG(),
                         new List<IAbility>(),
                         new List<IJoyAction>(),
-                        gameObject);
+                        this.ItemPool.Get());
                     
                 return itemInstance;
             }
@@ -129,8 +135,9 @@ namespace JoyLib.Code.Entities.Items
             throw new ItemTypeNotFoundException(name, "Could not find an item type by the name of " + name);
         }
 
-        public IItemInstance CreateCompletelyRandomItem(bool identified = false,
-            bool withAbility = false, GameObject gameObject = null)
+        public IItemInstance CreateCompletelyRandomItem(
+            bool identified = false,
+            bool withAbility = false)
         {
             List<BaseItemType> itemDatabase = ItemHandler.ItemDatabase;
 
@@ -161,7 +168,7 @@ namespace JoyLib.Code.Entities.Items
                     new RNG(),
                     new List<IAbility>(),
                     new List<IJoyAction>(),
-                    gameObject);
+                    this.ItemPool.Get());
                 
             return itemInstance;
         }

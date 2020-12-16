@@ -10,8 +10,6 @@ namespace JoyLib.Code.Unity
         protected ItemCollection m_Items;
         
         public Entity EntityInRange { get; protected set; }
-        
-        protected static GameObject WorldObjects { get; set; }
 
         public void Awake()
         {
@@ -27,10 +25,6 @@ namespace JoyLib.Code.Unity
             if (LiveItemHandler is null)
             {
                 LiveItemHandler = GlobalConstants.GameManager.ItemHandler;
-            }
-            if (WorldObjects is null)
-            {
-                WorldObjects = GameObject.Find("WorldObjects");
             }
         }
 
@@ -63,7 +57,6 @@ namespace JoyLib.Code.Unity
         {
             Initialise();
             base.AttachJoyObject(joyObject);
-            this.transform.parent = WorldObjects.transform;
 
             if (joyObject is ItemInstance itemInstance)
             {
@@ -74,7 +67,7 @@ namespace JoyLib.Code.Unity
         public static ILiveItemHandler LiveItemHandler
         {
             get;
-            protected set;
+            set;
         }
     }
 }

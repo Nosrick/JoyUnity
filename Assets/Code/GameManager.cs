@@ -114,6 +114,7 @@ public class GameManager : MonoBehaviour, IGameManager
             ItemHandler,
             ObjectIconHandler,
             this.DerivedValueHandler,
+            this.ItemPool,
             Roller);
 
         QuestProvider = new QuestProvider(

@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Code.Collections;
 using DevionGames.InventorySystem;
+using JoyLib.Code;
 using JoyLib.Code.Collections;
 using JoyLib.Code.Combat;
 using JoyLib.Code.Entities;
@@ -10,7 +12,9 @@ using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
+using JoyLib.Code.Helpers;
 using JoyLib.Code.Rollers;
+using JoyLib.Code.Unity;
 using Moq;
 using NUnit.Framework;
 using UnityEngine;
@@ -36,6 +40,9 @@ namespace Tests
 
         private GameObject inventoryManager;
 
+        private GameObjectPool itemPool;
+        private ActionLog logger;
+
         private IEntityTemplate template;
         private IEntity attacker;
         private IEntity defender;
@@ -54,6 +61,13 @@ namespace Tests
         {
             this.inventoryManager = new GameObject();
             this.inventoryManager.AddComponent<InventoryManager>();
+
+            this.itemPool = new GameObjectPool(
+                Resources.Load<GameObject>("Prefabs/ItemInstance"),
+                this.inventoryManager);
+
+            this.logger = new ActionLog();
+            GlobalConstants.ActionLog = this.logger;
             
             this.target = new CombatEngine();
             this.needHandler = new NeedHandler();
@@ -76,7 +90,10 @@ namespace Tests
                 this.itemHandler, 
                 this.objectIconHandler, 
                 this.derivedValueHandler,
+                this.itemPool,
                 new RNG());
+
+            ItemBehaviourHandler.LiveItemHandler = this.itemHandler;
         }
 
         public void DefenderAdvantage()
@@ -257,9 +274,11 @@ namespace Tests
 
             NonUniqueDictionary<string, IItemInstance> attackerEquipment = new NonUniqueDictionary<string, IItemInstance>();
             NonUniqueDictionary<string, IItemInstance> defenderEquipment = new NonUniqueDictionary<string, IItemInstance>();
-
+            
             attackerEquipment.Add("hand",
-                this.itemFactory.CreateRandomItemOfType(new string[] { "weapon", "two-handed" }, true, null));
+                Mock.Of<IItemInstance>(
+                    item => item.Efficiency == 6
+                            && item.Tags == new List<string> { "weapon" }));
             
             this.attacker = Mock.Of<IEntity>(
                 entity => entity.Statistics == attackerStats
@@ -306,22 +325,29 @@ namespace Tests
             NonUniqueDictionary<string, IItemInstance> defenderEquipment = new NonUniqueDictionary<string, IItemInstance>();
 
             attackerEquipment.Add("hand",
-                this.itemFactory.CreateRandomItemOfType(new string[] { "weapon", "one-handed" }, true, null));
+                Mock.Of<IItemInstance>(
+                    item => item.Efficiency == 2
+                    && item.Tags == new List<string> { "weapon" }));
             
             defenderEquipment.Add("torso",
-                this.itemFactory.CreateRandomItemOfType(new string[] { "armour", "torso", "metal" }, true, null));
+                Mock.Of<IItemInstance>(
+                    item => item.Efficiency == 6
+                            && item.Tags == new List<string> { "armour" }));
             defenderEquipment.Add("hand",
-                this.itemFactory.CreateRandomItemOfType(new string[] { "shield", "metal" }, true, null));
+                Mock.Of<IItemInstance>(
+                    item => item.Efficiency == 6
+                            && item.Tags == new List<string> { "armour" }));
 
             this.attacker = Mock.Of<IEntity>(
                 entity => entity.Statistics == attackerStats
                           && entity.Skills == attackerSkills
                           && entity.Equipment == attackerEquipment);
+
             this.defender = Mock.Of<IEntity>(
                 entity => entity.Statistics == defenderStats
                           && entity.Skills == defenderSkills
                           && entity.Equipment == defenderEquipment);
-            
+
             List<int> results = new List<int>();
             
             //when
@@ -345,10 +371,19 @@ namespace Tests
             yield return null;
         }
 
+        [UnityTest]
+        public IEnumerator MakeAttack_AttackerAdvantage_Melee_WithAbilityAndEquipment()
+        {
+            
+            
+            yield return null;
+        }
+
         [TearDown]
         public void TearDown()
         {
             GameObject.DestroyImmediate(this.inventoryManager);
+            GlobalConstants.ActionLog = null;
         }
     }
 }

@@ -11,7 +11,6 @@ using JoyLib.Code.Scripting;
 using JoyLib.Code.World;
 using Moq;
 using NUnit.Framework;
-using UnityEngine;
 using UnityEngine.TestTools;
 
 namespace Tests
@@ -68,17 +67,14 @@ namespace Tests
             IItemFactory itemFactory = Mock.Of<IItemFactory>(
                 factory => factory.CreateRandomItemOfType(
                                It.IsAny<string[]>(), 
-                               It.IsAny<bool>(),
-                               It.IsAny<GameObject>()) == item
+                               It.IsAny<bool>()) == item
                 && factory.CreateSpecificType(
                     It.IsAny<string>(), 
                     It.IsAny<string[]>(), 
-                    It.IsAny<bool>(), 
-                    It.IsAny<GameObject>())== item
+                    It.IsAny<bool>())== item
                 && factory.CreateCompletelyRandomItem(
                     It.IsAny<bool>(), 
-                    It.IsAny<bool>(),
-                    It.IsAny<GameObject>()) == item);
+                    It.IsAny<bool>()) == item);
 
             gameManager = Mock.Of<IGameManager>(
                 manager => manager.ItemFactory == itemFactory);

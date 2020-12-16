@@ -2,6 +2,7 @@ using System.Collections;
 using System.Linq;
 using JoyLib.Code;
 using JoyLib.Code.Entities.Jobs;
+using JoyLib.Code.Helpers;
 using JoyLib.Code.Rollers;
 using NUnit.Framework;
 using UnityEngine.TestTools;
@@ -12,9 +13,13 @@ namespace Tests
     {
         private IJobHandler target;
 
+        private ActionLog log;
+
         [SetUp]
         public void SetUp()
         {
+            log = new ActionLog();
+            GlobalConstants.ActionLog = this.log;
             target = new JobHandler(new RNG());
         }
 
@@ -41,7 +46,7 @@ namespace Tests
         [TearDown]
         public void TearDown()
         {
-            GlobalConstants.GameManager = null;
+            GlobalConstants.ActionLog = null;
         }
     }
 }

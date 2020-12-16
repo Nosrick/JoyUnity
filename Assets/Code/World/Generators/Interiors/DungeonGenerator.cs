@@ -22,11 +22,7 @@ namespace JoyLib.Code.World.Generators.Interiors
             DungeonItemPlacer itemPlacer = new DungeonItemPlacer(
                 gameManager.ItemHandler, 
                 roller,
-                new ItemFactory(
-                    gameManager.ItemHandler, 
-                    gameManager.ObjectIconHandler,
-                    gameManager.DerivedValueHandler,
-                    roller));
+                gameManager.ItemFactory);
             
             DungeonEntityPlacer entityPlacer = new DungeonEntityPlacer(
                 gameManager.EntityHandler, 
