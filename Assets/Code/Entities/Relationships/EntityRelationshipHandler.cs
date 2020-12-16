@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
 using JoyLib.Code.Collections;
-using JoyLib.Code.Helpers;
 using JoyLib.Code.Scripting;
 using UnityEngine;
 
@@ -123,7 +122,7 @@ namespace JoyLib.Code.Entities.Relationships
             }
             catch (Exception e)
             {
-                ActionLog.instance.AddText("No relationship found for " + speaker + " and " + listener + ".");
+                GlobalConstants.ActionLog.AddText("No relationship found for " + speaker + " and " + listener + ".");
                 Debug.LogWarning("No relationship found for " + speaker + " and " + listener + ".");
                 Debug.LogWarning(e.Message);
                 Debug.LogWarning(e.StackTrace);

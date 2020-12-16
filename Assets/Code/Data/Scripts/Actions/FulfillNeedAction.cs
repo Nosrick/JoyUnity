@@ -1,7 +1,5 @@
-using JoyLib.Code.Entities;
-using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Helpers;
+using JoyLib.Code.Entities;
 
 namespace JoyLib.Code.Scripting.Actions
 {
@@ -52,7 +50,7 @@ namespace JoyLib.Code.Scripting.Actions
                 }
             }
 
-            ActionLog.instance.LogAction(actor, ActionString + need);
+            GlobalConstants.ActionLog.LogAction(actor, ActionString + need);
             
             SetLastParameters(participants, tags, args);
 

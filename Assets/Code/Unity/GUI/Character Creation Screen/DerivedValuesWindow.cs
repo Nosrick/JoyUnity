@@ -50,6 +50,10 @@ namespace JoyLib.Code.Unity.GUI
                 Items[i].Minimum = valueList[i].Value;
                 Items[i].Maximum = valueList[i].Value + 5;
                 Items[i].ValueChanged += ChangeDerivedValue;
+                Items[i].gameObject.GetComponent<RectTransform>()
+                    .SetSizeWithCurrentAnchors(
+                        RectTransform.Axis.Horizontal, 
+                        this.GetComponent<RectTransform>().rect.width);
             }
             
             SetRemainingPointsText();

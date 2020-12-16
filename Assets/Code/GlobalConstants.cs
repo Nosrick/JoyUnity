@@ -1,4 +1,5 @@
 ﻿using System;
+using JoyLib.Code.Helpers;
 using UnityEngine;
 
 namespace JoyLib.Code
@@ -39,6 +40,12 @@ namespace JoyLib.Code
         {
             get => m_GameManager;
             set => m_GameManager = value;
+        }
+
+        public static ActionLog ActionLog
+        {
+            get;
+            set;
         }
 
         private static IGameManager m_GameManager;

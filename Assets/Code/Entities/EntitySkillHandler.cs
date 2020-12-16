@@ -96,7 +96,7 @@ namespace JoyLib.Code.Entities
                             }
                             catch (Exception e)
                             {
-                                ActionLog.instance.AddText(
+                                GlobalConstants.ActionLog.AddText(
                                     "Suppressing Exception when trying to add Skill Coefficient. Skill is "
                                     + skillName + ", with need name " + tuple.Item1);
                                 Debug.LogWarning(

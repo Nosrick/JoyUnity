@@ -39,6 +39,11 @@ public class GameManager : MonoBehaviour, IGameManager
         {
             GlobalConstants.GameManager = this;
         }
+
+        this.ActionLog = new ActionLog();
+
+        GlobalConstants.ActionLog = this.ActionLog;
+        
         GameObject objectHolder = GameObject.Find("WorldObjects");
         GameObject entityHolder = GameObject.Find("WorldEntities");
         GameObject fogHolder = GameObject.Find("WorldFog");
@@ -154,6 +159,7 @@ public class GameManager : MonoBehaviour, IGameManager
         m_StateManager.NextState();
     }
     
+    public ActionLog ActionLog { get; protected set; }
     public ICombatEngine CombatEngine { get; protected set; }
     public IQuestTracker QuestTracker { get; protected set; }
     public IQuestProvider QuestProvider { get; protected set; }

@@ -27,6 +27,7 @@ namespace JoyLib.Code
 {
     public interface IGameManager
     {
+        ActionLog ActionLog { get; }
         ICombatEngine CombatEngine { get; }
         IQuestTracker QuestTracker { get; }
         IQuestProvider QuestProvider { get; }

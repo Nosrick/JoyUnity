@@ -1,20 +1,16 @@
-﻿using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Items;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using JoyLib.Code.Entities;
+using JoyLib.Code.Entities.Items;
 
 namespace JoyLib.Code.Helpers
 {
     public class ActionLog
     {
-        private static Lazy<ActionLog> lazy = new Lazy<ActionLog>(() => new ActionLog());
-
-        public static ActionLog instance = lazy.Value;
-
         private Queue<string> m_Log = new Queue<string>(10);
 
         private BlockingCollection<string> m_Queue = new BlockingCollection<string>();
@@ -31,13 +27,16 @@ namespace JoyLib.Code.Helpers
             OpenLog();
         }
 
+        public void Update()
+        {
+            this.ServiceQueue();
+        }
+
         public bool OpenLog()
         {
             try
             {
                 File.Delete(FILENAME);
-                m_LogProcess = new Thread(new ThreadStart(ServiceQueue));
-                m_LogProcess.Start();
                 WriteToLog("Log Process Started");
                 return true;
             }
@@ -60,14 +59,11 @@ namespace JoyLib.Code.Helpers
             AddText(actor.JoyName + " is " + actionString);
         }
 
-        public void ServiceQueue()
+        protected void ServiceQueue()
         {
-            while(true)
+            foreach(string message in m_Queue.GetConsumingEnumerable())
             {
-                foreach(string message in m_Queue.GetConsumingEnumerable())
-                {
-                    File.AppendAllText(FILENAME, message);
-                }
+                File.AppendAllText(FILENAME, message);
             }
         }
 

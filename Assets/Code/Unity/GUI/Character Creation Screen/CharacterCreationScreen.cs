@@ -63,6 +63,11 @@ namespace JoyLib.Code.Unity.GUI
 
         public void SetRandomName(object sender, EventArgs args)
         {
+            this.SetRandomName();
+        }
+
+        public void SetRandomName()
+        {
             PlayerName_Part1.text = PlayerInfo.CurrentCulture.GetRandomName(PlayerInfo.Gender);
             PlayerName_Part2.text = PlayerName_Part1.text;
         }

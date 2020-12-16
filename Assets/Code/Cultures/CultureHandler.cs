@@ -1,11 +1,10 @@
-﻿using JoyLib.Code.Helpers;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.IO;
+using System.Linq;
 using System.Xml.Linq;
 using JoyLib.Code.Graphics;
-using UnityEngine;
+using JoyLib.Code.Helpers;
 
 namespace JoyLib.Code.Cultures
 {
@@ -180,7 +179,7 @@ namespace JoyLib.Code.Cultures
             }
             catch (Exception e)
             {
-                ActionLog.instance.AddText("Could not find a culture for creature type " + type);
+                GlobalConstants.ActionLog.AddText("Could not find a culture for creature type " + type);
                 throw new InvalidOperationException("Could not find a culture for creature type " + type, e);
             }
         }

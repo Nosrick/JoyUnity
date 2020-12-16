@@ -5,11 +5,9 @@ using System.Linq;
 using System.Xml.Linq;
 using JoyLib.Code.Conversation.Conversations.Rumours;
 using JoyLib.Code.Conversation.Subengines.Rumours;
-using JoyLib.Code.Entities;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
-using JoyLib.Code.Unity;
 using JoyLib.Code.World;
 using UnityEngine;
 
@@ -107,7 +105,7 @@ namespace JoyLib.Code.Conversation.Conversations
                 }
                 catch (Exception e)
                 {
-                    ActionLog.instance.AddText("Could not load rumours from file " + file);
+                    GlobalConstants.ActionLog.AddText("Could not load rumours from file " + file);
                     Debug.LogWarning("Could not load rumours from file " + file);
                     Debug.LogWarning(e.Message);
                     Debug.LogWarning(e.StackTrace);

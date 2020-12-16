@@ -1,26 +1,16 @@
 ﻿using System;
-using JoyLib.Code.Conversation.Conversations;
-using JoyLib.Code.Entities;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Xml.Linq;
 using Castle.Core.Internal;
-using DevionGames;
+using JoyLib.Code.Conversation.Conversations;
+using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.Unity.GUI;
-using TMPro;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.UI;
-using EventHandler = System.EventHandler;
-using MenuItem = DevionGames.UIWidgets.MenuItem;
 
 namespace JoyLib.Code.Conversation
 {
@@ -170,7 +160,7 @@ namespace JoyLib.Code.Conversation
                 }
                 catch (Exception e)
                 {
-                    ActionLog.instance.AddText("Could not load conversations from file " + file);
+                    GlobalConstants.ActionLog.AddText("Could not load conversations from file " + file);
                     Debug.LogWarning("Could not load conversations from file " + file);
                     Debug.LogWarning(e.Message);
                     Debug.LogWarning(e.StackTrace);

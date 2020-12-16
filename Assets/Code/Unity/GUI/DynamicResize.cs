@@ -8,6 +8,8 @@ namespace JoyLib.Code.Unity.GUI
         [SerializeField] protected bool ResizeChild = true;
         [SerializeField] protected LayoutGroup ChildLayoutGroup;
         [SerializeField] protected ScrollRect ScrollRect;
+        [SerializeField] protected bool ResizeHorizontal = false;
+        [SerializeField] protected bool ResizeVertical = false;
         
         protected RectTransform ChildRectTransform { get; set; }
         protected RectTransform ItemTransform { get; set; }
@@ -74,10 +76,17 @@ namespace JoyLib.Code.Unity.GUI
                 width = ChildRectTransform.rect.width;
                 height = ChildRectTransform.rect.height;
             }
-            
-            
-            ChildRectTransform.SetSizeWithCurrentAnchors(UnityEngine.RectTransform.Axis.Horizontal, width);
-            ChildRectTransform.SetSizeWithCurrentAnchors(UnityEngine.RectTransform.Axis.Vertical, height);
+
+
+            if (this.ResizeHorizontal)
+            {
+                ChildRectTransform.SetSizeWithCurrentAnchors(UnityEngine.RectTransform.Axis.Horizontal, width);
+            }
+
+            if (this.ResizeVertical)
+            {
+                ChildRectTransform.SetSizeWithCurrentAnchors(UnityEngine.RectTransform.Axis.Vertical, height);
+            }
 
             ChildLastSizes = ChildRectTransform.rect.size;
             if (ScrollRect.horizontalScrollbar is null == false)

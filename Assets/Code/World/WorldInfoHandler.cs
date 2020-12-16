@@ -1,11 +1,10 @@
-﻿using System.Xml.Linq;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Helpers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using UnityEngine;
+using System.Xml.Linq;
+using JoyLib.Code.Graphics;
+using JoyLib.Code.Helpers;
 
 namespace JoyLib.Code.World
 {
@@ -97,9 +96,9 @@ namespace JoyLib.Code.World
             }
             catch (Exception e)
             {
-                ActionLog.instance.AddText("ERROR GETTING WORLD INFO");
-                ActionLog.instance.AddText(e.Message);
-                ActionLog.instance.AddText(e.StackTrace);
+                GlobalConstants.ActionLog.AddText("ERROR GETTING WORLD INFO");
+                GlobalConstants.ActionLog.AddText(e.Message);
+                GlobalConstants.ActionLog.AddText(e.StackTrace);
                 throw new InvalidOperationException("Error getting world info for " + name);
             }
         }

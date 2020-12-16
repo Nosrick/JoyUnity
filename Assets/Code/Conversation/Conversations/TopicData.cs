@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Castle.Components.DictionaryAdapter;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using UnityEngine;
 
 namespace JoyLib.Code.Conversation.Conversations
 {

@@ -63,6 +63,10 @@ namespace JoyLib.Code.Unity.GUI
                 Items[i].ValueChanged -= ChangeStatistic;
                 Items[i].DirectValueSet(statistics[i].Item2);
                 Items[i].ValueChanged += ChangeStatistic;
+                Items[i].gameObject.GetComponent<RectTransform>()
+                    .SetSizeWithCurrentAnchors(
+                        RectTransform.Axis.Horizontal, 
+                        this.GetComponent<RectTransform>().rect.width);
             }
             
             Value = Maximum;
