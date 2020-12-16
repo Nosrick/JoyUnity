@@ -13,7 +13,7 @@ namespace JoyLib.Code.Unity.GUI
         
         protected RectTransform ChildRectTransform { get; set; }
         protected RectTransform ItemTransform { get; set; }
-        protected Vector2 ChildLastSizes { get; set; }
+        protected int ChildLastChildren { get; set; }
         
         protected void Awake()
         {
@@ -46,7 +46,6 @@ namespace JoyLib.Code.Unity.GUI
         protected void Resize()
         {
             if (ChildRectTransform is null 
-                || ChildLastSizes == ChildRectTransform.rect.size
                 || ItemTransform is null)
             {
                 return;
@@ -88,7 +87,7 @@ namespace JoyLib.Code.Unity.GUI
                 ChildRectTransform.SetSizeWithCurrentAnchors(UnityEngine.RectTransform.Axis.Vertical, height);
             }
 
-            ChildLastSizes = ChildRectTransform.rect.size;
+            ChildLastChildren = ChildRectTransform.transform.childCount;
             if (ScrollRect.horizontalScrollbar is null == false)
             {
                 ScrollRect.horizontalScrollbar.numberOfSteps = ChildLayoutGroup.transform.childCount;
