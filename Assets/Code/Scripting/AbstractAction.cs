@@ -1,6 +1,5 @@
 ﻿using JoyLib.Code.Entities;
 using JoyLib.Code.Quests;
-using UnityEngine;
 
 namespace JoyLib.Code.Scripting
 {
@@ -10,7 +9,7 @@ namespace JoyLib.Code.Scripting
         {
             if (GlobalConstants.GameManager is null == false)
             {
-                QuestTracker = questTracker is null ? null : questTracker;
+                QuestTracker = questTracker is null ? GlobalConstants.GameManager.QuestTracker : questTracker;
             }
         }
         
@@ -40,6 +39,6 @@ namespace JoyLib.Code.Scripting
         public string[] LastTags { get; protected set; }
         public object[] LastArgs { get; protected set; }
         public bool Successful { get; protected set; }
-        protected static IQuestTracker QuestTracker { get; set; }
+        public static IQuestTracker QuestTracker { get; set; }
     }
 }
