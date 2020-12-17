@@ -14,13 +14,27 @@ namespace JoyLib.Code.Entities.Abilities
         bool OnRemove(IEntity entity);
 
         //When the entity attacks
-        bool OnAttack(IEntity attacker, IEntity target);
+        bool OnAttack(
+            IEntity attacker, 
+            IEntity target, 
+            IEnumerable<string> attackerTags, 
+            IEnumerable<string> defenderTags);
 
         //When the entity is hit
-        int OnTakeHit(IEntity attacker, IEntity defender, int damage);
+        int OnTakeHit(
+            IEntity attacker, 
+            IEntity defender, 
+            int damage, 
+            IEnumerable<string> attackerTags, 
+            IEnumerable<string> defenderTags);
 
         //When the entity heals
-        int OnHeal(IEntity receiver, IEntity healer, int healing);
+        int OnHeal(
+            IEntity receiver, 
+            IEntity healer, 
+            int healing, 
+            IEnumerable<string> receiverTags, 
+            IEnumerable<string> healerTags);
 
         //When the entity picks up an item
         bool OnPickup(IEntity entity, IItemInstance item);
@@ -43,16 +57,28 @@ namespace JoyLib.Code.Entities.Abilities
         //When the entity uses a skill
         //This returns the success threshold modification for the roll
         //The second parameter is for checking against other possible stat/skill values
-        int OnCheckRollModifyThreshold(int successThreshold, IEnumerable<IBasicValue<int>> values = null);
+        int OnCheckRollModifyThreshold(
+            int successThreshold, 
+            IEnumerable<IBasicValue<int>> values, 
+            IEnumerable<string> attackerTags, 
+            IEnumerable<string> defenderTags);
 
         //This returns bonus/penalty dice for the roll
         //The second parameter is for checking against other possible stat/skill values
-        int OnCheckRollModifyDice(int dicePool, IEnumerable<IBasicValue<int>> values = null);
+        int OnCheckRollModifyDice(
+            int dicePool, 
+            IEnumerable<IBasicValue<int>> values, 
+            IEnumerable<string> attackerTags, 
+            IEnumerable<string> defenderTags);
 
         //This is used for directly modifying the successes of the check
         //And should return the new successes
         //The second parameter is for checking against other possible stat/skill values
-        int OnCheckSuccess(int successes, IEnumerable<IBasicValue<int>> values = null);
+        int OnCheckSuccess(
+            int successes, 
+            IEnumerable<IBasicValue<int>> values, 
+            IEnumerable<string> attackerTags, 
+            IEnumerable<string> defenderTags);
 
         bool DecrementCounter(int value);
 

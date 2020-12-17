@@ -21,7 +21,7 @@ namespace JoyLib.Code.Entities.Abilities
                 new Tuple<string, int>[0],
                 GetPrerequisites(),
                 AbilityTarget.Self,
-                new[] {"defend", "success", "agility"})
+                new[] {"defend", "success", "agility", "physical"})
         {}
         
         protected static Dictionary<string, int> GetPrerequisites()
@@ -31,9 +31,13 @@ namespace JoyLib.Code.Entities.Abilities
             return prereqs;
         }
 
-        public override int OnCheckRollModifyThreshold(int successThreshold, IEnumerable<IBasicValue<int>> values)
+        public override int OnCheckRollModifyThreshold(int successThreshold, IEnumerable<IBasicValue<int>> values,
+            IEnumerable<string> attackerTags, IEnumerable<string> defenderTags)
         {
-            if (values.Any(value => value.Name.Equals(EntityStatistic.AGILITY, StringComparison.OrdinalIgnoreCase)))
+            if(defenderTags.Any(tag => tag.Equals("agility", StringComparison.OrdinalIgnoreCase))
+            && defenderTags.Any(tag => tag.Equals("defend", StringComparison.OrdinalIgnoreCase))
+            && defenderTags.Any(tag => tag.Equals("physical", StringComparison.OrdinalIgnoreCase))
+            && values.Any(value => value.Name.Equals(EntityStatistic.AGILITY, StringComparison.OrdinalIgnoreCase)))
             {
                 return Math.Max(GlobalConstants.MINIMUM_SUCCESS_THRESHOLD, successThreshold - 1);
             }

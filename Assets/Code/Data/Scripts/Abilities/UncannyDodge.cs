@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using JoyLib.Code.Entities.Statistics;
 
 namespace JoyLib.Code.Entities.Abilities
@@ -10,7 +11,7 @@ namespace JoyLib.Code.Entities.Abilities
             :base(
                 "keen reflexes",
                 "keenreflexes",
-                "Reduces any incoming damage by your Cunning value.",
+                "Reduces any incoming physical damage by your Cunning value.",
                 false,
                 0,
                 0,
@@ -20,7 +21,7 @@ namespace JoyLib.Code.Entities.Abilities
                 new Tuple<string, int>[0],
                 GetPrerequisites(),
                 AbilityTarget.Self,
-                new[] {"defend", "success", "cunning"})
+                new[] {"defend", "success", "cunning", "physical"})
         {}
         
         protected static Dictionary<string, int> GetPrerequisites()
@@ -31,10 +32,14 @@ namespace JoyLib.Code.Entities.Abilities
             return prereqs;
         }
 
-        public override int OnTakeHit(IEntity attacker, IEntity defender, int damage)
+        public override int OnTakeHit(IEntity attacker, IEntity defender, int damage, IEnumerable<string> attackerTags,
+            IEnumerable<string> defenderTags)
         {
-            damage -= (defender.Statistics[EntityStatistic.AGILITY].Value +
-                       defender.Statistics[EntityStatistic.CUNNING].Value);
+            if (defenderTags.Any(tag => tag.Equals("defend", StringComparison.OrdinalIgnoreCase))
+                && defenderTags.Any(tag => tag.Equals("physical", StringComparison.OrdinalIgnoreCase)))
+            {
+                damage -= defender.Statistics[EntityStatistic.CUNNING].Value;
+            }
 
             return damage;
         }

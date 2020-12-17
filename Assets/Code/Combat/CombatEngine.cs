@@ -48,18 +48,16 @@ namespace JoyLib.Code.Combat
                 .ToList();
 
             List<IAbility> attackerAbilities = attacker.Abilities.Where(ability =>
-                ability.Tags.Any(tag => tag.Equals("attack", StringComparison.OrdinalIgnoreCase)
-                                        || tag.Equals("threshold", StringComparison.OrdinalIgnoreCase)
-                                        || tag.Equals("success", StringComparison.OrdinalIgnoreCase)
-                                        || attackerTags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase)))).ToList();
+                ability.Tags.Intersect(attackerTags).Count() > 0).ToList();
 
             List<IAbility> defenderAbilities = defender.Abilities.Where(ability =>
-                ability.Tags.Any(tag => tag.Equals("defend", StringComparison.OrdinalIgnoreCase)
-                                        || tag.Equals("threshold", StringComparison.OrdinalIgnoreCase)
-                                        || tag.Equals("success", StringComparison.OrdinalIgnoreCase)
-                                        || defenderTags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase)))).ToList();
+                ability.Tags.Intersect(attackerTags).Count() > 0).ToList();
 
-            attackerAbilities.ForEach(ability => ability.OnAttack(attacker, defender));
+            attackerAbilities.ForEach(ability => ability.OnAttack(
+                attacker, 
+                defender, 
+                attackerTags, 
+                defenderTags));
             
             int attackerSuccesses = 0;
             int totalDice = 0;
@@ -70,16 +68,28 @@ namespace JoyLib.Code.Combat
                 successThreshold = Math.Min(successThreshold, stat.SuccessThreshold);
             }
             
-            attackerAbilities.ForEach(ability => totalDice = ability.OnCheckRollModifyDice(totalDice, attackerStuff));
+            attackerAbilities.ForEach(ability => totalDice = ability.OnCheckRollModifyDice(
+                totalDice, 
+                attackerStuff, 
+                attackerTags, 
+                defenderTags));
             attackerAbilities.ForEach(ability =>
-                successThreshold = ability.OnCheckRollModifyThreshold(successThreshold, attackerStuff));
+                successThreshold = ability.OnCheckRollModifyThreshold(
+                    successThreshold, 
+                    attackerStuff, 
+                    attackerTags, 
+                    defenderTags));
                 
             attackerSuccesses = this.Roller.RollSuccesses(
                 totalDice,
                 successThreshold);
             
             attackerAbilities.ForEach(ability =>
-                attackerSuccesses = ability.OnCheckSuccess(attackerSuccesses, attackerStuff));
+                attackerSuccesses = ability.OnCheckSuccess(
+                    attackerSuccesses, 
+                    attackerStuff, 
+                    attackerTags, 
+                    defenderTags));
 
             int defenderSuccesses = 0;
             totalDice = 0;
@@ -90,18 +100,35 @@ namespace JoyLib.Code.Combat
                 successThreshold = Math.Min(successThreshold, stat.SuccessThreshold);
             }
 
-            defenderAbilities.ForEach(ability => totalDice = ability.OnCheckRollModifyDice(totalDice, defenderStuff));
+            defenderAbilities.ForEach(ability => totalDice = ability.OnCheckRollModifyDice(
+                totalDice, 
+                defenderStuff, 
+                attackerTags, 
+                defenderTags));
             defenderAbilities.ForEach(ability =>
-                successThreshold = ability.OnCheckRollModifyThreshold(successThreshold, defenderStuff));
+                successThreshold = ability.OnCheckRollModifyThreshold(
+                    successThreshold, 
+                    defenderStuff, 
+                    attackerTags, 
+                    defenderTags));
 
             defenderSuccesses = this.Roller.RollSuccesses(
                 totalDice,
                 successThreshold);
 
             defenderAbilities.ForEach(ability =>
-                defenderSuccesses = ability.OnCheckSuccess(defenderSuccesses, defenderStuff));
+                defenderSuccesses = ability.OnCheckSuccess(
+                    defenderSuccesses, 
+                    defenderStuff, 
+                    attackerTags, 
+                    defenderTags));
 
-            defenderAbilities.ForEach(ability => attackerSuccesses = ability.OnTakeHit(attacker, defender, attackerSuccesses));
+            defenderAbilities.ForEach(ability => defenderSuccesses = ability.OnTakeHit(
+                attacker, 
+                defender, 
+                attackerSuccesses, 
+                attackerTags, 
+                defenderTags));
 
             int result = attackerSuccesses - defenderSuccesses;
             if (result > 0)

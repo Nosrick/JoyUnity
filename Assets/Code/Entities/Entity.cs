@@ -877,14 +877,6 @@ namespace JoyLib.Code.Entities
         {
             int damage = value;
 
-            foreach (IAbility ability in m_Abilities)
-            {
-                if (damage == 0)
-                    return;
-
-                damage = ability.OnTakeHit(source, this, damage);
-            }
-
             int result = base.DamageValue(ConcreteDerivedIntValue.HITPOINTS, damage);
             this.DerivedValueChange?.Invoke(this, new ValueChangedEventArgs()
             {

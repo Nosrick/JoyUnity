@@ -55,7 +55,8 @@ namespace JoyLib.Code.Entities.Abilities
 
         //When the entity attacks, before any resolution occurs
         //Returns false to denote no effect took place
-        public virtual bool OnAttack(IEntity attacker, IEntity target)
+        public virtual bool OnAttack(IEntity attacker, IEntity target, IEnumerable<string> attackerTags,
+            IEnumerable<string> defenderTags)
         {
             return false;
         }
@@ -63,14 +64,20 @@ namespace JoyLib.Code.Entities.Abilities
         //When the entity is hit, after resolution
         //Triggers even when no damage happens
         //Returns the damage by default
-        public virtual int OnTakeHit(IEntity attacker, IEntity defender, int damage)
+        public virtual int OnTakeHit(
+            IEntity attacker, 
+            IEntity defender, 
+            int damage, 
+            IEnumerable<string> attackerTags, 
+            IEnumerable<string> defenderTags)
         {
             return damage;
         }
 
         //When the entity is healed
         //Returns the amount healed
-        public virtual int OnHeal(IEntity receiver, IEntity healer, int value)
+        public virtual int OnHeal(IEntity receiver, IEntity healer, int value, IEnumerable<string> receiverTags,
+            IEnumerable<string> healerTags)
         {
             return value;
         }
@@ -137,14 +144,16 @@ namespace JoyLib.Code.Entities.Abilities
         //When the entity uses a skill
         //This returns the success threshold modification for the roll
         //The second parameter is for checking against other possible stat/skill values
-        public virtual int OnCheckRollModifyThreshold(int successThreshold, IEnumerable<IBasicValue<int>> values)
+        public virtual int OnCheckRollModifyThreshold(int successThreshold, IEnumerable<IBasicValue<int>> values,
+            IEnumerable<string> attackerTags, IEnumerable<string> defenderTags)
         {
             return successThreshold;
         }
 
         //This returns bonus/penalty dice for the roll
         //The second parameter is for checking against other possible stat/skill values
-        public virtual int OnCheckRollModifyDice(int dicePool, IEnumerable<IBasicValue<int>> values)
+        public virtual int OnCheckRollModifyDice(int dicePool, IEnumerable<IBasicValue<int>> values,
+            IEnumerable<string> attackerTags, IEnumerable<string> defenderTags)
         {
             return dicePool;
         }
@@ -152,7 +161,8 @@ namespace JoyLib.Code.Entities.Abilities
         //This is used for directly modifying the successes of the check
         //And should return the new successes
         //The second parameter is for checking against other possible stat/skill values
-        public virtual int OnCheckSuccess(int successes, IEnumerable<IBasicValue<int>> values)
+        public virtual int OnCheckSuccess(int successes, IEnumerable<IBasicValue<int>> values,
+            IEnumerable<string> attackerTags, IEnumerable<string> defenderTags)
         {
             return successes;
         }
