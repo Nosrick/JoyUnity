@@ -47,5 +47,10 @@
 			<Name>Feint</Name>
 			<Cost>100</Cost>
 		</Ability>
+		
+		<Ability>
+			<Name>distraction</Name>
+			<Cost>200</Cost>
+		</Ability>
 	</Job>
 </Jobs>
