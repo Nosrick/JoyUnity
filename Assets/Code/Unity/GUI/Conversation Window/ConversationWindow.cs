@@ -27,6 +27,8 @@ namespace JoyLib.Code.Unity.GUI
 
         protected void OnEnable()
         {
+            this.MenuItem.SetActive(false);
+            
             if (GameManager.ConversationEngine is null == false && ConversationEngine is null)
             {
                 MenuList = new List<ConversationMenu>();
