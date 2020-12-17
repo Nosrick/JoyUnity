@@ -11,6 +11,7 @@ namespace JoyLib.Code.Entities.Abilities
     public abstract class AbstractAbility : IAbility
     {
         protected readonly Dictionary<string, IJoyAction> m_CachedActions;
+        private List<string> m_Tags;
 
         public AbstractAbility()
         {
@@ -92,14 +93,14 @@ namespace JoyLib.Code.Entities.Abilities
 
         //Triggered when an entity reduces another entity to zero of a Derived Value
         //Returns true when the effect takes place
-        public virtual bool OnReduceToZero(IEntity attacker, IEntity target, IDerivedValue<int> value)
+        public virtual bool OnReduceToZero(IEntity attacker, IEntity target, IDerivedValue value)
         {
             return false;
         }
 
         //Triggered when an entity reduces another entity to the "disabled" of a Derived Value
         //Returns true when the effect takes place
-        public virtual bool OnDisable(IEntity attacker, IEntity target, IDerivedValue<int> value)
+        public virtual bool OnDisable(IEntity attacker, IEntity target, IDerivedValue value)
         {
             return false;
         }
@@ -136,14 +137,14 @@ namespace JoyLib.Code.Entities.Abilities
         //When the entity uses a skill
         //This returns the success threshold modification for the roll
         //The second parameter is for checking against other possible stat/skill values
-        public virtual int OnCheckRollModifyThreshold(int successThreshold, params IBasicValue<int>[] values)
+        public virtual int OnCheckRollModifyThreshold(int successThreshold, IEnumerable<IBasicValue<int>> values)
         {
             return successThreshold;
         }
 
         //This returns bonus/penalty dice for the roll
         //The second parameter is for checking against other possible stat/skill values
-        public virtual int OnCheckRollModifyDice(int dicePool, params IBasicValue<int>[] values)
+        public virtual int OnCheckRollModifyDice(int dicePool, IEnumerable<IBasicValue<int>> values)
         {
             return dicePool;
         }
@@ -151,14 +152,36 @@ namespace JoyLib.Code.Entities.Abilities
         //This is used for directly modifying the successes of the check
         //And should return the new successes
         //The second parameter is for checking against other possible stat/skill values
-        public virtual int OnCheckSuccess(int successes, params IBasicValue<int>[] values)
+        public virtual int OnCheckSuccess(int successes, IEnumerable<IBasicValue<int>> values)
         {
             return successes;
         }
 
         public bool HasTag(string tag)
         {
-            return Tags.Contains(tag);
+            return this.Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public bool AddTag(string tag)
+        {
+            if (this.HasTag(tag))
+            {
+                return true;
+            }
+
+            this.m_Tags.Add(tag);
+            return true;
+        }
+
+        public bool RemoveTag(string tag)
+        {
+            if (this.HasTag(tag))
+            {
+                this.m_Tags.RemoveAt(this.m_Tags.FindIndex(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase)));
+                return true;
+            }
+
+            return false;
         }
 
         public bool DecrementCounter(int value)
@@ -302,10 +325,11 @@ namespace JoyLib.Code.Entities.Abilities
             protected set;
         }
 
-        public string[] Tags
+        public IEnumerable<string> Tags
         {
-            get;
-            protected set;
+            get => this.m_Tags;
+            protected set => this.m_Tags = new List<string>(value);
         }
+            
     }
 }

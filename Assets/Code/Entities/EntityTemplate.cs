@@ -58,7 +58,7 @@ namespace JoyLib.Code.Entities
             }
         }
 
-        public List<string> Tags
+        public IEnumerable<string> Tags
         {
             get
             {

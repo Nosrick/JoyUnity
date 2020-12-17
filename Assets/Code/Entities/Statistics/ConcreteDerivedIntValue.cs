@@ -1,6 +1,6 @@
 ﻿namespace JoyLib.Code.Entities.Statistics
 {
-    public class ConcreteDerivedIntValue : IDerivedValue<int>
+    public class ConcreteDerivedIntValue : IDerivedValue
     {
         public const string HITPOINTS = "hitpoints";
         public const string CONCENTRATION = "concentration";

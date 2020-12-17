@@ -65,8 +65,8 @@ namespace JoyLib.Code.Rollers
 
             foreach (IAbility ability in applicableAbilities)
             {
-                newThreshold = ability.OnCheckRollModifyThreshold(newThreshold);
-                newNumber = ability.OnCheckRollModifyDice(newNumber);
+                newThreshold = ability.OnCheckRollModifyThreshold(newThreshold, null);
+                newNumber = ability.OnCheckRollModifyDice(newNumber, null);
             }
 
             for (int i = 0; i < newNumber; i++)
@@ -89,7 +89,7 @@ namespace JoyLib.Code.Rollers
 
             foreach (IAbility ability in applicableAbilities)
             {
-                successes = ability.OnCheckSuccess(successes);
+                successes = ability.OnCheckSuccess(successes, null);
             }
 
             return successes;

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Entities.Statistics;
 
 namespace JoyLib.Code.Entities.Abilities
 {
@@ -27,71 +26,6 @@ namespace JoyLib.Code.Entities.Abilities
             Dictionary<string, int> prereqs = new Dictionary<string, int>();
             prereqs.Add("drink", 1);
             return prereqs;
-        }
-
-        public override bool OnAdd(IEntity entity)
-        {
-            return false;
-        }
-
-        public override bool OnAttack(IEntity attacker, IEntity target)
-        {
-            return false;
-        }
-
-        public override int OnHeal(IEntity receiver, IEntity healer, int healing)
-        {
-            return healing;
-        }
-
-        public override bool OnInteract(IEntity actor, IJoyObject observer)
-        {
-            return false;
-        }
-
-        public override bool OnReduceToZero(IEntity attacker, IEntity target, IDerivedValue<int> value)
-        {
-            return false;
-        }
-
-        public override bool OnDisable(IEntity attacker, IEntity target, IDerivedValue<int> value)
-        {
-            return false;
-        }
-
-        public override bool OnPickup(IEntity entity, IItemInstance item)
-        {
-            return false;
-        }
-
-        public override bool OnRemove(IEntity entity)
-        {
-            return false;
-        }
-
-        public override int OnCheckRollModifyDice(int dicePool, params IBasicValue<int>[] values)
-        {
-            return dicePool;
-        }
-
-        public override int OnCheckRollModifyThreshold(int successThreshold, params IBasicValue<int>[] values)
-        {
-            return successThreshold;
-        }
-
-        public override int OnCheckSuccess(int successes, params IBasicValue<int>[] values)
-        {
-            return successes;
-        }
-
-        public override int OnTakeHit(IEntity attacker, IEntity defender, int damage)
-        {
-            return damage;
-        }
-
-        public override bool OnTick(IEntity entity)
-        {
-            return false;
         }
 
         public override bool OnUse(IEntity user, IJoyObject target)

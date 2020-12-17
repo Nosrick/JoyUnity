@@ -25,11 +25,11 @@ namespace JoyLib.Code.Unity.GUI
             SetRemainingPointsText();
         }
 
-        public void SetDerivedValues(IDictionary<string, IDerivedValue<int>> values)
+        public void SetDerivedValues(IDictionary<string, IDerivedValue> values)
         {
             Value = Maximum;
             
-            List<IDerivedValue<int>> valueList = new List<IDerivedValue<int>>(values.Values);
+            List<IDerivedValue> valueList = new List<IDerivedValue>(values.Values);
             
             if (Items.Count < valueList.Count)
             {
@@ -59,9 +59,9 @@ namespace JoyLib.Code.Unity.GUI
             SetRemainingPointsText();
         }
 
-        public IDictionary<string, IDerivedValue<int>> GetDerivedValues()
+        public IDictionary<string, IDerivedValue> GetDerivedValues()
         {
-            IDictionary<string, IDerivedValue<int>> values = new Dictionary<string, IDerivedValue<int>>();
+            IDictionary<string, IDerivedValue> values = new Dictionary<string, IDerivedValue>();
 
             foreach (NamedItem item in Items)
             {

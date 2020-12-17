@@ -129,7 +129,7 @@ namespace JoyLib.Code.Entities
         public Entity(
             IEntityTemplate template,
             IDictionary<string, IRollableValue<int>> statistics,
-            IDictionary<string, IDerivedValue<int>> derivedValues,
+            IDictionary<string, IDerivedValue> derivedValues,
             IDictionary<string, INeed> needs,
             IDictionary<string, IEntitySkill> skills,
             IEnumerable<IAbility> abilities,
@@ -233,7 +233,7 @@ namespace JoyLib.Code.Entities
         public Entity(
             IEntityTemplate template,
             IDictionary<string, IRollableValue<int>> statistics,
-            IDictionary<string, IDerivedValue<int>> derivedValues,
+            IDictionary<string, IDerivedValue> derivedValues,
             IDictionary<string, INeed> needs,
             IDictionary<string, IEntitySkill> skills,
             IEnumerable<IAbility> abilities,
@@ -1005,7 +1005,7 @@ namespace JoyLib.Code.Entities
 
         public bool Sentient
         {
-            get { return Tags.Any(tag => tag.Equals("sentient", StringComparison.OrdinalIgnoreCase)); }
+            get { return this.Tags.Any(tag => tag.Equals("sentient", StringComparison.OrdinalIgnoreCase)); }
         }
 
         public int Size

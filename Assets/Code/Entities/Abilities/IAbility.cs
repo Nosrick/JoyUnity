@@ -5,7 +5,7 @@ using JoyLib.Code.Entities.Statistics;
 
 namespace JoyLib.Code.Entities.Abilities
 {
-    public interface IAbility
+    public interface IAbility : ITagged
     {
         //When the ability is added to the user
         bool OnAdd(IEntity entity);
@@ -29,10 +29,10 @@ namespace JoyLib.Code.Entities.Abilities
         bool OnTick(IEntity entity);
 
         //When the entity reduces another entity to zero of a Derived Value
-        bool OnReduceToZero(IEntity attacker, IEntity target, IDerivedValue<int> value);
+        bool OnReduceToZero(IEntity attacker, IEntity target, IDerivedValue value);
 
         //When the entity reduces another entity to the "disabled" status of a Derived Value
-        bool OnDisable(IEntity attacker, IEntity target, IDerivedValue<int> value);
+        bool OnDisable(IEntity attacker, IEntity target, IDerivedValue value);
 
         //When the entity uses an item
         bool OnUse(IEntity user, IJoyObject target);
@@ -43,16 +43,16 @@ namespace JoyLib.Code.Entities.Abilities
         //When the entity uses a skill
         //This returns the success threshold modification for the roll
         //The second parameter is for checking against other possible stat/skill values
-        int OnCheckRollModifyThreshold(int successThreshold, params IBasicValue<int>[] values);
+        int OnCheckRollModifyThreshold(int successThreshold, IEnumerable<IBasicValue<int>> values = null);
 
         //This returns bonus/penalty dice for the roll
         //The second parameter is for checking against other possible stat/skill values
-        int OnCheckRollModifyDice(int dicePool, params IBasicValue<int>[] values);
+        int OnCheckRollModifyDice(int dicePool, IEnumerable<IBasicValue<int>> values = null);
 
         //This is used for directly modifying the successes of the check
         //And should return the new successes
         //The second parameter is for checking against other possible stat/skill values
-        int OnCheckSuccess(int successes, params IBasicValue<int>[] values);
+        int OnCheckSuccess(int successes, IEnumerable<IBasicValue<int>> values = null);
 
         bool DecrementCounter(int value);
 
@@ -125,7 +125,7 @@ namespace JoyLib.Code.Entities.Abilities
             get;
         }
 
-        string[] Tags
+        IEnumerable<string> Tags
         {
             get;
         }

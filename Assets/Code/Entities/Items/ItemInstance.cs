@@ -19,9 +19,11 @@ namespace JoyLib.Code.Entities.Items
     [Serializable]
     public class ItemInstance : EquipmentItem, IItemInstance
     {
-        private const string DURABILITY = "durability";
+        protected const string DURABILITY = "durability";
+
+        protected List<string> m_Tags;
         
-        public IDictionary<string, IDerivedValue<int>> DerivedValues { get; protected set; }
+        public IDictionary<string, IDerivedValue> DerivedValues { get; protected set; }
 
         public string TileSet { get; protected set; }
         
@@ -35,7 +37,11 @@ namespace JoyLib.Code.Entities.Items
 
         public int FramesSinceLastChange { get; protected set; }
 
-        public List<string> Tags { get; protected set; }
+        public IEnumerable<string> Tags
+        {
+            get => this.m_Tags;
+            protected set => this.m_Tags = new List<string>(value);
+        }
 
         public bool IsWall { get; protected set; }
 
@@ -103,7 +109,7 @@ namespace JoyLib.Code.Entities.Items
 
         public void Initialise(
             BaseItemType type, 
-            IDictionary<string, IDerivedValue<int>> derivedValues,
+            IDictionary<string, IDerivedValue> derivedValues,
             Vector2Int position, 
             bool identified, 
             Sprite[] sprites,
@@ -287,29 +293,29 @@ namespace JoyLib.Code.Entities.Items
 
         public bool AddTag(string tag)
         {
-            if (Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase)) != false)
+            if (HasTag(tag) == false)
             {
                 return false;
             }
             
-            Tags.Add(tag);
+            this.m_Tags.Add(tag);
             return true;
         }
 
         public bool RemoveTag(string tag)
         {
-            if (!Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase)))
+            if (!HasTag(tag))
             {
                 return false;
             }
             
-            Tags.Remove(tag);
+            this.m_Tags.Remove(tag);
             return true;
         }
 
         public bool HasTag(string tag)
         {
-            return Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase));
+            return this.m_Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase));
         }
 
         public void Move(Vector2Int newPosition)

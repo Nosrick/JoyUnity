@@ -1,29 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 using JoyLib.Code.Entities.Relationships;
 
 namespace JoyLib.Code.Entities.Sexuality
 {
     public abstract class AbstractSexuality : ISexuality
     {
+        protected List<string> m_Tags;
+        
         public virtual string Name => throw new NotImplementedException("Someone forgot to override Name in " + this.GetType().Name);
 
         public virtual bool DecaysNeed => throw new NotImplementedException("Someone forgot to override DecaysNeed in " + this.GetType().Name);
 
         public virtual int MatingThreshold { get; set; }
-        
-        public List<string> Tags { get; protected set; }
+
+        public IEnumerable<string> Tags
+        {
+            get => this.m_Tags;
+            protected set => this.m_Tags = new List<string>(value);
+        }
 
         public AbstractSexuality()
         {
-            Tags = new List<string>();
+            this.Tags = new List<string>();
         }
         
         public bool HasTag(string tag)
         {
-            return Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase));
+            return this.m_Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase));
         }
 
         public bool AddTag(string tag)
@@ -32,7 +37,7 @@ namespace JoyLib.Code.Entities.Sexuality
             {
                 return false;
             }
-            Tags.Add(tag);
+            this.m_Tags.Add(tag);
             return true;
         }
 
@@ -40,7 +45,7 @@ namespace JoyLib.Code.Entities.Sexuality
         {
             if (HasTag(tag))
             {
-                Tags.Remove(tag);
+                this.m_Tags.Remove(tag);
                 return true;
             }
 

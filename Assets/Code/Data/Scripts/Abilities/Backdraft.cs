@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using JoyLib.Code.Entities.Statistics;
 
 namespace JoyLib.Code.Entities.Abilities
 {
@@ -18,7 +19,8 @@ namespace JoyLib.Code.Entities.Abilities
                 new string[0], 
                 GetCosts(),
                 GetPrerequisites(), 
-                AbilityTarget.Adjacent)
+                AbilityTarget.Adjacent,
+                new []{ "attack", "success" })
         {}
 
         protected static Tuple<string, int>[] GetCosts()
@@ -33,6 +35,19 @@ namespace JoyLib.Code.Entities.Abilities
             Dictionary<string, int> prereqs = new Dictionary<string, int>();
             prereqs.Add("warrior", 1);
             return prereqs;
+        }
+
+        public override bool OnAttack(IEntity attacker, IEntity target)
+        {
+            int hp = attacker.DerivedValues[ConcreteDerivedIntValue.HITPOINTS].Value;
+            hp -= (hp / 5);
+            attacker.ModifyValue(ConcreteDerivedIntValue.HITPOINTS, hp);
+            return true;
+        }
+
+        public override int OnCheckSuccess(int successes, IEnumerable<IBasicValue<int>> values)
+        {
+            return successes *= 2;
         }
     }
 }

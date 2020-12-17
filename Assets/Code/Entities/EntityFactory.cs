@@ -77,7 +77,7 @@ namespace JoyLib.Code.Entities
         public IEntity CreateFromTemplate(IEntityTemplate template,
             Vector2Int position,
             IDictionary<string, IRollableValue<int>> statistics = null,
-            IDictionary<string, IDerivedValue<int>> derivedValues = null,
+            IDictionary<string, IDerivedValue> derivedValues = null,
             IDictionary<string, IEntitySkill> skills = null,
             IEnumerable<IAbility> abilities = null,
             List<ICulture> cultures = null,
@@ -99,7 +99,7 @@ namespace JoyLib.Code.Entities
             List<ICulture> creatureCultures = new List<ICulture>();
             IDriver selectedDriver = driver;
             IDictionary<string, IRollableValue<int>> selectedStatistics = statistics;
-            IDictionary<string, IDerivedValue<int>>  selectedDVs = derivedValues;
+            IDictionary<string, IDerivedValue>  selectedDVs = derivedValues;
             IDictionary<string, IEntitySkill> selectedSkills = skills;
             IEnumerable<IAbility> selectedAbilities = abilities;
             if (!(cultures is null))
@@ -130,7 +130,7 @@ namespace JoyLib.Code.Entities
 
             if (selectedDVs is null)
             {
-                selectedDVs = new Dictionary<string, IDerivedValue<int>>(
+                selectedDVs = new Dictionary<string, IDerivedValue>(
                     this.DerivedValueHandler.GetEntityStandardBlock(
                         selectedStatistics.Values));
             }
@@ -209,7 +209,7 @@ namespace JoyLib.Code.Entities
         public IEntity CreateLong(IEntityTemplate template,
             IDictionary<string, INeed> needs,
             IDictionary<string, IRollableValue<int>> statistics,
-            IDictionary<string, IDerivedValue<int>> derivedValues,
+            IDictionary<string, IDerivedValue> derivedValues,
             IDictionary<string, IEntitySkill> skills,
             IEnumerable<IAbility> abilities,
             float experience,
