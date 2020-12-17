@@ -1,6 +1,4 @@
-﻿using JoyLib.Code.Rollers;
-
-namespace JoyLib.Code.Entities.Statistics
+﻿namespace JoyLib.Code.Entities.Statistics
 {
     public interface IRollableValue<T> : IBasicValue<T> where T : struct
     {
@@ -8,11 +6,6 @@ namespace JoyLib.Code.Entities.Statistics
         {
             get;
             set;
-        }
-
-        IRollable Roller
-        {
-            get;
         }
     }
 }

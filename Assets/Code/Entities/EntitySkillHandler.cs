@@ -7,7 +7,6 @@ using JoyLib.Code.Collections;
 using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Helpers;
-using JoyLib.Code.Rollers;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities
@@ -50,8 +49,7 @@ namespace JoyLib.Code.Entities
                         key, 
                         0, 
                         GlobalConstants.DEFAULT_SUCCESS_THRESHOLD, 
-                        governingNeeds, 
-                        new StandardRoller(new RNG())));
+                        governingNeeds));
             }
 
             return skills;

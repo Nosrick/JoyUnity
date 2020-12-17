@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Events;
-using JoyLib.Code.Rollers;
 using TMPro;
 using UnityEngine;
 
@@ -37,8 +36,7 @@ namespace JoyLib.Code.Unity.GUI
                     new EntityStatistic(
                         item.Name.ToLower(),
                         item.Value,
-                        GlobalConstants.DEFAULT_SUCCESS_THRESHOLD,
-                        new StandardRoller()));
+                        GlobalConstants.DEFAULT_SUCCESS_THRESHOLD));
             }
 
             return stats;

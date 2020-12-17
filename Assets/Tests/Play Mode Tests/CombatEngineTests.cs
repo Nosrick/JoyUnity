@@ -11,6 +11,7 @@ using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Helpers;
+using JoyLib.Code.Rollers;
 using Moq;
 using NUnit.Framework;
 using UnityEngine;
@@ -57,7 +58,10 @@ namespace Tests
             this.logger = new ActionLog();
             GlobalConstants.ActionLog = this.logger;
             
-            this.target = new CombatEngine();
+            this.target = new CombatEngine(Mock.Of<IRollable>(
+                roller => roller.RollSuccesses(
+                    It.IsAny<int>(),
+                    It.IsAny<int>()) == 1));
 
             this.needHandler = new NeedHandler();
             this.statisticHandler = new EntityStatisticHandler();
@@ -73,6 +77,11 @@ namespace Tests
 
             this.attackerDVs = new Dictionary<string, IDerivedValue>();
             this.defenderDVs = new Dictionary<string, IDerivedValue>();
+        }
+
+        public void LiveFireRolling()
+        {
+            this.target = new CombatEngine();
         }
 
         public void InitialiseDVs()
@@ -100,6 +109,10 @@ namespace Tests
                 ["endurance"] = Mock.Of<IRollableValue<int>>(
                     stat => stat.Name == "endurance"
                             && stat.Value == 3
+                            && stat.SuccessThreshold == GlobalConstants.DEFAULT_SUCCESS_THRESHOLD),
+                ["cunning"] = Mock.Of<IRollableValue<int>>(
+                    stat => stat.Name == "cunning"
+                            && stat.Value == 3
                             && stat.SuccessThreshold == GlobalConstants.DEFAULT_SUCCESS_THRESHOLD)
             };
             this.defenderStats = new Dictionary<string, IRollableValue<int>>
@@ -114,6 +127,10 @@ namespace Tests
                             && stat.SuccessThreshold == 6),
                 ["endurance"] = Mock.Of<IRollableValue<int>>(
                     stat => stat.Name == "endurance"
+                            && stat.Value == 5
+                            && stat.SuccessThreshold == 6),
+                ["cunning"] = Mock.Of<IRollableValue<int>>(
+                    stat => stat.Name == "cunning"
                             && stat.Value == 5
                             && stat.SuccessThreshold == 6)
             };
@@ -155,6 +172,10 @@ namespace Tests
                 ["endurance"] = Mock.Of<IRollableValue<int>>(
                     stat => stat.Name == "endurance"
                             && stat.Value == 5
+                            && stat.SuccessThreshold == 6),
+                ["cunning"] = Mock.Of<IRollableValue<int>>(
+                    stat => stat.Name == "cunning"
+                            && stat.Value == 5
                             && stat.SuccessThreshold == 6)
             };
             this.defenderStats = new Dictionary<string, IRollableValue<int>>
@@ -169,6 +190,10 @@ namespace Tests
                             && stat.SuccessThreshold == GlobalConstants.DEFAULT_SUCCESS_THRESHOLD),
                 ["endurance"] = Mock.Of<IRollableValue<int>>(
                     stat => stat.Name == "endurance"
+                            && stat.Value == 3
+                            && stat.SuccessThreshold == GlobalConstants.DEFAULT_SUCCESS_THRESHOLD),
+                ["cunning"] = Mock.Of<IRollableValue<int>>(
+                    stat => stat.Name == "cunning"
                             && stat.Value == 3
                             && stat.SuccessThreshold == GlobalConstants.DEFAULT_SUCCESS_THRESHOLD)
             };
@@ -210,6 +235,10 @@ namespace Tests
                 ["endurance"] = Mock.Of<IRollableValue<int>>(
                     stat => stat.Name == "endurance"
                             && stat.Value == 5
+                            && stat.SuccessThreshold == 6),
+                ["cunning"] = Mock.Of<IRollableValue<int>>(
+                    stat => stat.Name == "cunning"
+                            && stat.Value == 5
                             && stat.SuccessThreshold == 6)
             };
             this.defenderStats = new Dictionary<string, IRollableValue<int>>
@@ -224,6 +253,10 @@ namespace Tests
                             && stat.SuccessThreshold == 6),
                 ["endurance"] = Mock.Of<IRollableValue<int>>(
                     stat => stat.Name == "endurance"
+                            && stat.Value == 5
+                            && stat.SuccessThreshold == 6),
+                ["cunning"] = Mock.Of<IRollableValue<int>>(
+                    stat => stat.Name == "cunning"
                             && stat.Value == 5
                             && stat.SuccessThreshold == 6)
             };
@@ -289,7 +322,7 @@ namespace Tests
                 Assert.That(result, Is.Not.NaN);
             }
 
-            Assert.That(results.Sum(), Is.LessThan(0));
+            Assert.That(results.Sum(), Is.EqualTo(0));
             yield return null;
         }
 
@@ -336,7 +369,7 @@ namespace Tests
                 Assert.That(result, Is.Not.NaN);
             }
 
-            Assert.That(results.Sum(), Is.GreaterThan(0));
+            Assert.That(results.Sum(), Is.EqualTo(0));
             yield return null;
         }
 
@@ -345,6 +378,7 @@ namespace Tests
         {
             //given
             this.EvenMatch();
+            this.LiveFireRolling();
 
             this.attackerTags = new[] {"agility", "strength", "light blades"};
             this.defenderTags = new[] {"agility", "light armour", "evasion"};
@@ -398,6 +432,7 @@ namespace Tests
         {
             //given
             this.EvenMatch();
+            this.LiveFireRolling();
             
             this.attackerTags = new[] {"agility", "strength", "light blades"};
             this.defenderTags = new[] {"agility", "light armour", "evasion"};
@@ -459,6 +494,7 @@ namespace Tests
         public IEnumerator MakeAttack_AttackerAdvantage_Melee_WithAbilityAndEquipment()
         {
             this.AttackerAdvantage();
+            this.LiveFireRolling();
 
             this.attackerTags = new[] {"agility", "strength", "light blades"};
             this.defenderTags = new[] {"agility", "light armour", "evasion"};
@@ -487,6 +523,94 @@ namespace Tests
                           && entity.Equipment == defenderEquipment
                           && entity.Abilities == this.defenderAbilities
                           && entity.DerivedValues == this.defenderDVs);
+
+            List<int> results = new List<int>();
+            
+            //when
+            for (int i = 0; i < 10; i++)
+            {
+                results.Add(this.target.MakeAttack(
+                    this.attacker, 
+                    this.defender, 
+                    this.attackerTags, 
+                    this.defenderTags));
+            }
+            
+            //then
+            foreach (int result in results)
+            {
+                Assert.That(result, Is.Not.NaN);
+            }
+
+            Assert.That(results.Sum(), Is.GreaterThan(0));
+            
+            yield return null;
+        }
+
+        [UnityTest]
+        public IEnumerator MakeAttack_DefenderAdvantage_Melee_WithAbilityAndEquipment()
+        {
+            this.DefenderAdvantage();
+            this.LiveFireRolling();
+
+            this.attackerTags = new[] {"agility", "strength", "light blades"};
+            this.defenderTags = new[] {"agility", "light armour", "evasion"};
+
+            NonUniqueDictionary<string, IItemInstance> attackerEquipment = new NonUniqueDictionary<string, IItemInstance>();
+            NonUniqueDictionary<string, IItemInstance> defenderEquipment = new NonUniqueDictionary<string, IItemInstance>();
+
+            IAbility keenReflexes = new KeenReflexes();
+            IAbility uncannyDodge = new UncannyDodge();
+
+            this.defenderAbilities.Add(keenReflexes);
+            this.defenderAbilities.Add(uncannyDodge);
+            
+            attackerEquipment.Add("hand",
+                Mock.Of<IItemInstance>(
+                    item => item.Efficiency == 6
+                            && item.Tags == new List<string> { "weapon" }));
+            
+            defenderEquipment.Add("torso",
+                Mock.Of<IItemInstance>(
+                    item => item.Efficiency == 6
+                            && item.Tags == new List<string> { "armour" }));
+            defenderEquipment.Add("hand",
+                Mock.Of<IItemInstance>(
+                    item => item.Efficiency == 6
+                            && item.Tags == new List<string> { "armour" }));
+            
+            this.attacker = Mock.Of<IEntity>(
+                entity => entity.Statistics == attackerStats
+                          && entity.Skills == attackerSkills
+                          && entity.Equipment == attackerEquipment
+                          && entity.Abilities == this.attackerAbilities
+                          && entity.DerivedValues == this.attackerDVs);
+            this.defender = Mock.Of<IEntity>(
+                entity => entity.Statistics == defenderStats
+                          && entity.Skills == defenderSkills
+                          && entity.Equipment == defenderEquipment
+                          && entity.Abilities == this.defenderAbilities
+                          && entity.DerivedValues == this.defenderDVs);
+
+            List<int> results = new List<int>();
+            
+            //when
+            for (int i = 0; i < 10; i++)
+            {
+                results.Add(this.target.MakeAttack(
+                    this.attacker, 
+                    this.defender, 
+                    this.attackerTags, 
+                    this.defenderTags));
+            }
+            
+            //then
+            foreach (int result in results)
+            {
+                Assert.That(result, Is.LessThanOrEqualTo(0));
+            }
+
+            Assert.That(results.Sum(), Is.LessThan(0));
             
             yield return null;
         }
