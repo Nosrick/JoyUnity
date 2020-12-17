@@ -34,10 +34,5 @@
 			<Name>Chaos Magic</Name>
 			<Discount>2</Discount>
 		</Skill>
-
-		<Ability>
-			<Name>ChaosBolt</Name>
-			<Cost>100</Cost>
-		</Ability>
 	</Job>
 </Jobs>
