@@ -42,11 +42,6 @@
 			<Name>Pickpocketing</Name>
 			<Discount>2</Discount>
 		</Skill>
-
-		<Ability>
-			<Name>Feint</Name>
-			<Cost>100</Cost>
-		</Ability>
 		
 		<Ability>
 			<Name>distraction</Name>
