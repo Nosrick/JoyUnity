@@ -9,8 +9,8 @@ namespace JoyLib.Code.Entities.Abilities
     {
         public UncannyDodge()
             :base(
-                "keen reflexes",
-                "keenreflexes",
+                "uncanny dodge",
+                "uncannydodge",
                 "Reduces any incoming physical damage by your Cunning value.",
                 false,
                 0,
