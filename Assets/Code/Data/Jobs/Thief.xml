@@ -44,10 +44,6 @@
 		</Skill>
 
 		<Ability>
-			<Name>LightArmour</Name>
-			<Cost>100</Cost>
-		</Ability>
-		<Ability>
 			<Name>Feint</Name>
 			<Cost>100</Cost>
 		</Ability>

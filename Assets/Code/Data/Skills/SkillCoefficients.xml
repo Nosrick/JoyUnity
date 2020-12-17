@@ -109,40 +109,36 @@
       <Value>0.07</Value>
     </Coefficient>
   </Skill>
-
+  
   <Skill>
-    <Name>light armour</Name>
-    <Coefficient>
-      <Name>health</Name>
-      <Value>0.04</Value>
-    </Coefficient>
-    <Coefficient>
-      <Name>confidence</Name>
-      <Value>0.06</Value>
-    </Coefficient>
-  </Skill>
-
-  <Skill>
-    <Name>medium armour</Name>
-    <Coefficient>
-      <Name>health</Name>
-      <Value>0.05</Value>
-    </Coefficient>
+    <Name>poise</Name>
     <Coefficient>
       <Name>confidence</Name>
       <Value>0.05</Value>
     </Coefficient>
+    <Coefficient>
+      <Name>respect</Name>
+      <Value>0.05</Value>
+    </Coefficient>
   </Skill>
-
+  
   <Skill>
-    <Name>heavy armour</Name>
+    <Name>grit</Name>
     <Coefficient>
       <Name>health</Name>
-      <Value>0.06</Value>
+      <Value>0.08</Value>
     </Coefficient>
     <Coefficient>
       <Name>confidence</Name>
-      <Value>0.04</Value>
+      <Value>0.02</Value>
+    </Coefficient>
+  </Skill>
+  
+  <Skill>
+    <Name>willpower</Name>
+    <Coefficient>
+      <Name>confidence</Name>
+      <Value>0.1</Value>
     </Coefficient>
   </Skill>
 
