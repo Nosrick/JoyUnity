@@ -14,9 +14,11 @@
 		<Material>Glass</Material>
 		<Material>Bone</Material>
 		<Size>60</Size>
+		<Skill>light blades</Skill>
 		<Slot>Hand</Slot>
 		<Tag>weapon</Tag>
 		<Tag>dagger</Tag>
+		<Tag>physical</Tag>
 		<Tag>one-handed</Tag>
 		<Tileset>Weapons</Tileset>
 	</IdentifiedItem>
