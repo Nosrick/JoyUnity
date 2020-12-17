@@ -108,7 +108,7 @@ namespace JoyLib.Code.Entities.Statistics
             Dictionary<string, IDerivedValue> values = new Dictionary<string, IDerivedValue>();
             foreach (KeyValuePair<string, string> pair in this.EntityStandardFormulas)
             {
-                int result = this.Calculate<int>(components, pair.Value); 
+                int result = Math.Max(1, this.Calculate<int>(components, pair.Value)); 
                 values.Add(
                     pair.Key,
                     new ConcreteDerivedIntValue(
@@ -125,7 +125,7 @@ namespace JoyLib.Code.Entities.Statistics
             Dictionary<string, IDerivedValue> values = new Dictionary<string, IDerivedValue>();
             foreach (KeyValuePair<string, string> pair in this.ItemStandardFormulas)
             {
-                int result = this.Calculate(components, pair.Value); 
+                int result = Math.Max(1, this.Calculate(components, pair.Value)); 
                 values.Add(
                     pair.Key,
                     new ConcreteDerivedIntValue(
