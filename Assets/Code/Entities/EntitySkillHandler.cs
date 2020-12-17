@@ -27,9 +27,9 @@ namespace JoyLib.Code.Entities
             this.SkillsNames = this.m_SkillCoefficients.Keys;
         }
 
-        public IDictionary<string, EntitySkill> GetDefaultSkillBlock(IEnumerable<INeed> needs)
+        public IDictionary<string, IEntitySkill> GetDefaultSkillBlock(IEnumerable<INeed> needs)
         {
-            IDictionary<string, EntitySkill> skills = new Dictionary<string, EntitySkill>();
+            IDictionary<string, IEntitySkill> skills = new Dictionary<string, IEntitySkill>();
 
             foreach(string key in this.m_SkillCoefficients.Keys)
             {

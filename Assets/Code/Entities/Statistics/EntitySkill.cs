@@ -5,7 +5,7 @@ using JoyLib.Code.Rollers;
 
 namespace JoyLib.Code.Entities.Statistics
 {
-    public class EntitySkill : IRollableValue<int>
+    public class EntitySkill : IEntitySkill
     {
         protected const int MAXIMUM_XP = 100;
 

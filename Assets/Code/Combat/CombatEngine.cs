@@ -23,19 +23,19 @@ namespace JoyLib.Code.Combat
             string[] attackerTags,
             string[] defenderTags)
         {
-            List<EntityStatistic> attackerStatistics = attacker.Statistics
+            List<IRollableValue<int>> attackerStatistics = attacker.Statistics
                 .Where(pair => attackerTags.Any(tag => tag.Equals(pair.Key, StringComparison.OrdinalIgnoreCase)))
                 .Select(pair => pair.Value).ToList();
 
-            List<EntitySkill> attackerSkills = attacker.Skills
+            List<IEntitySkill> attackerSkills = attacker.Skills
                 .Where(pair => attackerTags.Any(tag => tag.Equals(pair.Key, StringComparison.OrdinalIgnoreCase)))
                 .Select(pair => pair.Value).ToList();
             
-            List<EntityStatistic> defenderStatistics = defender.Statistics
+            List<IRollableValue<int>> defenderStatistics = defender.Statistics
                 .Where(pair => defenderTags.Any(tag => tag.Equals(pair.Key, StringComparison.OrdinalIgnoreCase)))
                 .Select(pair => pair.Value).ToList();
 
-            List<EntitySkill> defenderSkills = defender.Skills
+            List<IEntitySkill> defenderSkills = defender.Skills
                 .Where(pair => defenderTags.Any(tag => tag.Equals(pair.Key, StringComparison.OrdinalIgnoreCase)))
                 .Select(pair => pair.Value).ToList();
 
@@ -46,13 +46,13 @@ namespace JoyLib.Code.Combat
                 .ToList();
 
             int attackerSuccesses = 0;
-            foreach(EntityStatistic stat in attackerStatistics)
+            foreach(IRollableValue<int> stat in attackerStatistics)
             {
                 attackerSuccesses += this.Roller.RollSuccesses(
                     stat.Value,
                     stat.SuccessThreshold);
             }
-            foreach (EntitySkill skill in attackerSkills)
+            foreach (IEntitySkill skill in attackerSkills)
             {
                 attackerSuccesses += this.Roller.RollSuccesses(
                     skill.Value,
@@ -60,13 +60,13 @@ namespace JoyLib.Code.Combat
             }
 
             int defenderSuccesses = 0;
-            foreach(EntityStatistic stat in defenderStatistics)
+            foreach(IRollableValue<int> stat in defenderStatistics)
             {
                 defenderSuccesses += this.Roller.RollSuccesses(
                     stat.Value,
                     stat.SuccessThreshold);
             }
-            foreach (EntitySkill skill in defenderSkills)
+            foreach (IEntitySkill skill in defenderSkills)
             {
                 defenderSuccesses += this.Roller.RollSuccesses(
                     skill.Value,

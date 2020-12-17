@@ -36,7 +36,7 @@ namespace Tests
                 needs.Add(need.Name, need);
             }
     
-            IDictionary<string, EntitySkill> skills = target.GetDefaultSkillBlock(needs.Values);
+            IDictionary<string, IEntitySkill> skills = target.GetDefaultSkillBlock(needs.Values);
     
             foreach (EntitySkill skill in skills.Values)
             {

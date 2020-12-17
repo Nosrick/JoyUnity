@@ -47,7 +47,7 @@ namespace Tests
             IGender gender = Mock.Of<IGender>(
                 g => g.PersonalSubject == "her");
 
-            IDictionary<string, EntitySkill> skills = skillHandler.GetDefaultSkillBlock(
+            IDictionary<string, IEntitySkill> skills = skillHandler.GetDefaultSkillBlock(
                 needHandler.GetManyRandomised(needHandler.NeedNames));
 
             left = Mock.Of<IEntity>(

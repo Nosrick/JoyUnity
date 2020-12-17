@@ -13,8 +13,8 @@ namespace JoyLib.Code.Entities
         protected readonly string m_CreatureType;
         protected readonly string m_Type;
 
-        protected readonly Dictionary<string, EntityStatistic> m_Statistics;
-        protected readonly Dictionary<string, EntitySkill> m_Skills;
+        protected readonly Dictionary<string, IRollableValue<int>> m_Statistics;
+        protected readonly Dictionary<string, IEntitySkill> m_Skills;
         protected readonly string[] m_Needs;
         protected readonly IAbility[] m_Abilities;
         protected readonly string[] m_Slots;
@@ -25,8 +25,8 @@ namespace JoyLib.Code.Entities
         protected readonly bool m_Sentient;
 
         public EntityTemplate(
-            Dictionary<string, EntityStatistic> statistics, 
-            Dictionary<string, EntitySkill> skills, 
+            Dictionary<string, IRollableValue<int>> statistics, 
+            Dictionary<string, IEntitySkill> skills, 
             string[] needs,
             IAbility[] abilities,
             string[] slots, 
@@ -89,14 +89,14 @@ namespace JoyLib.Code.Entities
             }
         }
 
-        public IDictionary<string, EntityStatistic> Statistics
+        public IDictionary<string, IRollableValue<int>> Statistics
         {
             get
             {
-                IDictionary<string, EntityStatistic> stats = new Dictionary<string, EntityStatistic>();
-                foreach (KeyValuePair<string, EntityStatistic> stat in this.m_Statistics)
+                IDictionary<string, IRollableValue<int>> stats = new Dictionary<string, IRollableValue<int>>();
+                foreach (KeyValuePair<string, IRollableValue<int>> stat in this.m_Statistics)
                 {
-                    stats.Add(new KeyValuePair<string, EntityStatistic>(
+                    stats.Add(new KeyValuePair<string, IRollableValue<int>>(
                         ObjectExtensions.Copy(stat.Key), 
                         ObjectExtensions.Copy(stat.Value)));
                 }
@@ -105,14 +105,14 @@ namespace JoyLib.Code.Entities
             }
         }
 
-        public IDictionary<string, EntitySkill> Skills
+        public IDictionary<string, IEntitySkill> Skills
         {
             get
             {
-                IDictionary<string, EntitySkill> skills = new Dictionary<string, EntitySkill>();
-                foreach (KeyValuePair<string, EntitySkill> skill in this.m_Skills)
+                IDictionary<string, IEntitySkill> skills = new Dictionary<string, IEntitySkill>();
+                foreach (KeyValuePair<string, IEntitySkill> skill in this.m_Skills)
                 {
-                    skills.Add(new KeyValuePair<string, EntitySkill>(
+                    skills.Add(new KeyValuePair<string, IEntitySkill>(
                         ObjectExtensions.Copy(skill.Key),
                         ObjectExtensions.Copy(skill.Value)));
                 }

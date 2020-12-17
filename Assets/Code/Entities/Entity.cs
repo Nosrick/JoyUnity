@@ -37,8 +37,8 @@ namespace JoyLib.Code.Entities
         public event ValueChangedEventHandler SkillChange;
         public event ValueChangedEventHandler ExperienceChange;
         public event JobChangedEventHandler JobChange;
-        protected IDictionary<string, EntityStatistic> m_Statistics;
-        protected IDictionary<string, EntitySkill> m_Skills;
+        protected IDictionary<string, IRollableValue<int>> m_Statistics;
+        protected IDictionary<string, IEntitySkill> m_Skills;
         protected IDictionary<string, INeed> m_Needs;
         protected List<IAbility> m_Abilities;
         protected NonUniqueDictionary<string, IItemInstance> m_Equipment;
@@ -128,10 +128,10 @@ namespace JoyLib.Code.Entities
         /// <param name="jobLevels"></param>
         public Entity(
             IEntityTemplate template,
-            IDictionary<string, EntityStatistic> statistics,
+            IDictionary<string, IRollableValue<int>> statistics,
             IDictionary<string, IDerivedValue<int>> derivedValues,
             IDictionary<string, INeed> needs,
-            IDictionary<string, EntitySkill> skills,
+            IDictionary<string, IEntitySkill> skills,
             IEnumerable<IAbility> abilities,
             List<ICulture> cultures,
             IJob job,
@@ -232,10 +232,10 @@ namespace JoyLib.Code.Entities
         /// <param name="icons"></param>
         public Entity(
             IEntityTemplate template,
-            IDictionary<string, EntityStatistic> statistics,
+            IDictionary<string, IRollableValue<int>> statistics,
             IDictionary<string, IDerivedValue<int>> derivedValues,
             IDictionary<string, INeed> needs,
-            IDictionary<string, EntitySkill> skills,
+            IDictionary<string, IEntitySkill> skills,
             IEnumerable<IAbility> abilities,
             List<ICulture> cultures,
             IJob job,
@@ -981,12 +981,12 @@ namespace JoyLib.Code.Entities
             get { return new NonUniqueDictionary<string, IItemInstance>(m_Equipment); }
         }
 
-        public IDictionary<string, EntityStatistic> Statistics
+        public IDictionary<string, IRollableValue<int>> Statistics
         {
             get { return m_Statistics; }
         }
 
-        public IDictionary<string, EntitySkill> Skills
+        public IDictionary<string, IEntitySkill> Skills
         {
             get { return m_Skills; }
         }

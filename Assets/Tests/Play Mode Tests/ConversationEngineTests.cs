@@ -75,7 +75,7 @@ namespace Tests
             IRollableValue<int> mockPersonality = Mock.Of<IRollableValue<int>>(
                 value => value.Value == 4
                          && value.Name == "personality");
-            IDictionary<string, EntityStatistic> stats = new Dictionary<string, EntityStatistic>();
+            IDictionary<string, IRollableValue<int>> stats = new Dictionary<string, IRollableValue<int>>();
             stats.Add(
                 "personality", 
                 new EntityStatistic(

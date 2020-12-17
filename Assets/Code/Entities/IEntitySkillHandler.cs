@@ -9,7 +9,7 @@ namespace JoyLib.Code.Entities
     {
         IEnumerable<string> SkillsNames { get; }
         
-        IDictionary<string, EntitySkill> GetDefaultSkillBlock(IEnumerable<INeed> needs);
+        IDictionary<string, IEntitySkill> GetDefaultSkillBlock(IEnumerable<INeed> needs);
         NonUniqueDictionary<INeed, float> GetEmptyCoefficients();
         NonUniqueDictionary<INeed, float> GetCoefficients(IEnumerable<string> needNames, string skillName);
 

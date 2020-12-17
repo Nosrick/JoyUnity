@@ -54,8 +54,8 @@ namespace JoyLib.Code.Entities
 
                     foreach(XElement entity in doc.Elements("Entity"))
                     {
-                        Dictionary<string, EntityStatistic> statistics = (from stat in entity.Elements("Statistic")
-                                select new KeyValuePair<string, EntityStatistic>(
+                        Dictionary<string, IRollableValue<int>> statistics = (from stat in entity.Elements("Statistic")
+                                select new KeyValuePair<string, IRollableValue<int>>(
                                     stat.Element("Name").GetAs<string>(),
                                     new EntityStatistic(
                                         stat.Element("Name").DefaultIfEmpty("DEFAULT"),
@@ -67,8 +67,8 @@ namespace JoyLib.Code.Entities
                         List<string> needs = (from need in entity.Elements("Need")
                                                 select need.DefaultIfEmpty("DEFAULT")).ToList();
 
-                        Dictionary<string, EntitySkill> skills = (from skill in entity.Elements("Skill")
-                                                                  select new KeyValuePair<string, EntitySkill>(
+                        Dictionary<string, IEntitySkill> skills = (from skill in entity.Elements("Skill")
+                                                                  select new KeyValuePair<string, IEntitySkill>(
                                                                       skill.Element("Name").GetAs<string>(), 
                                                                       new EntitySkill(skill.Element("Name").DefaultIfEmpty("DEFAULT"),
                                                                           skill.Element("Value").DefaultIfEmpty(0),

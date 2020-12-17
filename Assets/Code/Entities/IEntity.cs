@@ -22,8 +22,8 @@ namespace JoyLib.Code.Entities
 {
     public interface IEntity : IJoyObject, IItemContainer
     {
-        IDictionary<string, EntityStatistic> Statistics { get; }
-        IDictionary<string, EntitySkill> Skills { get; }
+        IDictionary<string, IRollableValue<int>> Statistics { get; }
+        IDictionary<string, IEntitySkill> Skills { get; }
         IDictionary<string, INeed> Needs { get; }
         List<IAbility> Abilities { get; }
         NonUniqueDictionary<string, IItemInstance> Equipment { get; }

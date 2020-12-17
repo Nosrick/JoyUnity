@@ -10,7 +10,7 @@ namespace JoyLib.Code.Entities.Abilities
 
         IEnumerable<IAbility> GetAvailableAbilities(
             IEntityTemplate template, 
-            IDictionary<string, EntityStatistic> stats, 
-            IDictionary<string, EntitySkill> skills);
+            IDictionary<string, IRollableValue<int>> stats, 
+            IDictionary<string, IEntitySkill> skills);
     }
 }
