@@ -27,18 +27,21 @@ namespace JoyLib.Code.Entities.Abilities
             {
                 Load();
             }
-                
+
             return true;
         }
 
         public IAbility GetAbility(string nameRef)
         {
             Initialise();
-            
-            if(Abilities.Any(x => x.InternalName.Equals(nameRef, StringComparison.OrdinalIgnoreCase)))
+
+            if (Abilities.Any(x => x.InternalName.Equals(nameRef, StringComparison.OrdinalIgnoreCase)
+                                   || x.Name.Equals(nameRef, StringComparison.OrdinalIgnoreCase)))
             {
-                return Abilities.First(x => x.InternalName.Equals(nameRef, StringComparison.OrdinalIgnoreCase));
+                return Abilities.First(x => x.InternalName.Equals(nameRef, StringComparison.OrdinalIgnoreCase)
+                || x.Name.Equals(nameRef, StringComparison.OrdinalIgnoreCase));
             }
+
             throw new InvalidOperationException("Could not find IAbility with name " + nameRef);
         }
 

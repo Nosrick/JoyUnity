@@ -252,9 +252,10 @@ namespace JoyLib.Code.Entities.Abilities
 
         public bool MeetsPrerequisites(IEnumerable<Tuple<string, int>> data)
         {
-            return data.All(x => this.Prerequisites.Any(prereq =>
-                prereq.Key.Equals(x.Item1, StringComparison.OrdinalIgnoreCase) && x.Item2 >= prereq.Value)
-                || this.Prerequisites.IsNullOrEmpty());
+            return this.Prerequisites.IsNullOrEmpty()
+                   || this.Prerequisites.All(prereq => data.Any(
+                       datum => datum.Item1.Equals(prereq.Key, StringComparison.OrdinalIgnoreCase)
+                                && datum.Item2 >= prereq.Value));
         }
 
         public string Name
