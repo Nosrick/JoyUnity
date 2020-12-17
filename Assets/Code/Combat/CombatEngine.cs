@@ -18,11 +18,10 @@ namespace JoyLib.Code.Combat
             this.Roller = roller is null ? new RNG() : roller;
         }
 
-        public int MakeAttack(
-            IEntity attacker,
+        public int MakeAttack(IEntity attacker,
             IEntity defender,
-            string[] attackerTags,
-            string[] defenderTags)
+            IEnumerable<string> attackerTags,
+            IEnumerable<string> defenderTags)
         {
             List<IRollableValue<int>> attackerStuff = attacker.Statistics
                 .Where(pair => attackerTags.Any(tag => tag.Equals(pair.Key, StringComparison.OrdinalIgnoreCase)))

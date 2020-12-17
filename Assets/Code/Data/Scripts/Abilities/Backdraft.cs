@@ -38,12 +38,11 @@ namespace JoyLib.Code.Entities.Abilities
             return prereqs;
         }
 
-        public override bool OnAttack(IEntity attacker, IEntity target, IEnumerable<string> attackerTags,
-            IEnumerable<string> defenderTags)
+        public override bool OnUse(IEntity user, IJoyObject target)
         {
-            int hp = attacker.DerivedValues[DerivedValueName.HITPOINTS].Value;
+            int hp = user.DerivedValues[DerivedValueName.HITPOINTS].Value;
             hp -= (hp / 5);
-            attacker.ModifyValue(DerivedValueName.HITPOINTS, hp);
+            user.ModifyValue(DerivedValueName.HITPOINTS, hp);
             return true;
         }
 
@@ -51,7 +50,8 @@ namespace JoyLib.Code.Entities.Abilities
             IEnumerable<string> attackerTags, IEnumerable<string> defenderTags)
         {
             if (attackerTags.Any(tag => tag.Equals("physical", StringComparison.OrdinalIgnoreCase))
-            && attackerTags.Any(tag => tag.Equals("attack", StringComparison.OrdinalIgnoreCase)))
+            && attackerTags.Any(tag => tag.Equals("attack", StringComparison.OrdinalIgnoreCase))
+            && attackerTags.Any(tag => tag.Equals(this.InternalName, StringComparison.OrdinalIgnoreCase)))
             {
                 return successes *= 2;
             }

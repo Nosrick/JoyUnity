@@ -49,8 +49,8 @@ namespace Tests
         private NonUniqueDictionary<string, IItemInstance> attackerEquipment;
         private NonUniqueDictionary<string, IItemInstance> defenderEquipment;
 
-        private string[] attackerTags;
-        private string[] defenderTags;
+        private List<string> attackerTags;
+        private List<string> defenderTags;
 
         [SetUp]
         public void SetUp()
@@ -176,14 +176,14 @@ namespace Tests
 
         public void SetPhysicalTags()
         {
-            this.attackerTags = new[] {"light blades", "strength", "agility", "physical", "attack"};
-            this.defenderTags = new[] {"agility", "grit", "evasion", "physical", "defend"};
+            this.attackerTags = new List<string> {"light blades", "strength", "agility", "physical", "attack"};
+            this.defenderTags = new List<string> {"agility", "grit", "evasion", "physical", "defend"};
         }
 
         public void SetMentalTags()
         {
-            this.attackerTags = new[] {"chaos magic", "intellect", "focus", "mental", "attack"};
-            this.defenderTags = new[] {"focus", "willpower", "evasion", "mental", "defend"};
+            this.attackerTags = new List<string> {"chaos magic", "intellect", "focus", "mental", "attack"};
+            this.defenderTags = new List<string> {"focus", "willpower", "evasion", "mental", "defend"};
         }
 
         [UnityTest]
@@ -317,6 +317,8 @@ namespace Tests
             IAbility backdraft = new Backdraft();
 
             this.attackerAbilities.Add(backdraft);
+            this.attackerTags.Add("backdraft");
+            
             this.MakeEntities();
 
             List<int> results = new List<int>();
@@ -512,6 +514,48 @@ namespace Tests
                 1,
                 6,
                 2);
+            this.MakeEntities();
+            this.LiveFireRolling();
+            
+            //given
+            List<int> results = new List<int>();
+            
+            //when
+            for (int i = 0; i < 10; i++)
+            {
+                results.Add(this.target.MakeAttack(
+                    this.attacker, 
+                    this.defender, 
+                    this.attackerTags, 
+                    this.defenderTags));
+            }
+
+            //then
+            foreach (int result in results)
+            {
+                Assert.That(result, Is.Not.NaN);
+            }
+
+            Assert.That(results.Sum(), Is.LessThanOrEqualTo(0));
+            Debug.Log(results.Sum());
+            
+            yield return null;
+        }
+
+        [UnityTest]
+        public IEnumerator MakeAttack_AttackerAdvantage_Mental_WithAbilityAndEquipment()
+        {
+            this.SetStatsAndSkills(5, 6, 3, 7);
+            this.SetMentalTags();
+            this.SetUpEquipment(
+                "mental",
+                6,
+                1,
+                0,
+                0);
+            
+            this.defenderAbilities.Add(new IronWill());
+            
             this.MakeEntities();
             this.LiveFireRolling();
             

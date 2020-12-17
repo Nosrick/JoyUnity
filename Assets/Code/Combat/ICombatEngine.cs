@@ -1,4 +1,5 @@
-﻿using JoyLib.Code.Entities;
+﻿using System.Collections.Generic;
+using JoyLib.Code.Entities;
 
 namespace JoyLib.Code.Combat
 {
@@ -6,7 +7,7 @@ namespace JoyLib.Code.Combat
     {
         int MakeAttack(IEntity attacker,
             IEntity defender,
-            string[] attackerTags,
-            string[] defenderTags);
+            IEnumerable<string> attackerTags,
+            IEnumerable<string> defenderTags);
     }
 }
