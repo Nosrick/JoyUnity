@@ -41,9 +41,9 @@ namespace JoyLib.Code.Entities.Abilities
         public override bool OnAttack(IEntity attacker, IEntity target, IEnumerable<string> attackerTags,
             IEnumerable<string> defenderTags)
         {
-            int hp = attacker.DerivedValues[ConcreteDerivedIntValue.HITPOINTS].Value;
+            int hp = attacker.DerivedValues[DerivedValueName.HITPOINTS].Value;
             hp -= (hp / 5);
-            attacker.ModifyValue(ConcreteDerivedIntValue.HITPOINTS, hp);
+            attacker.ModifyValue(DerivedValueName.HITPOINTS, hp);
             return true;
         }
 

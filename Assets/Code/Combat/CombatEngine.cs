@@ -26,7 +26,8 @@ namespace JoyLib.Code.Combat
         {
             List<IRollableValue<int>> attackerStuff = attacker.Statistics
                 .Where(pair => attackerTags.Any(tag => tag.Equals(pair.Key, StringComparison.OrdinalIgnoreCase)))
-                .Select(pair => pair.Value).ToList();
+                .Select(pair => pair.Value)
+                .ToList();
 
             attackerStuff.AddRange(attacker.Skills
                 .Where(pair => attackerTags.Any(tag => tag.Equals(pair.Key, StringComparison.OrdinalIgnoreCase)))
@@ -34,17 +35,21 @@ namespace JoyLib.Code.Combat
 
             List<IRollableValue<int>> defenderStuff = defender.Statistics
                 .Where(pair => defenderTags.Any(tag => tag.Equals(pair.Key, StringComparison.OrdinalIgnoreCase)))
-                .Select(pair => pair.Value).ToList();
+                .Select(pair => pair.Value)
+                .ToList();
 
             defenderStuff.AddRange(defender.Skills
                 .Where(pair => defenderTags.Any(tag => tag.Equals(pair.Key, StringComparison.OrdinalIgnoreCase)))
                 .Select(pair => pair.Value));
 
             List<IItemInstance> attackerWeapons = attacker.Equipment.Select(tuple => tuple.Item2).Where(instance =>
-                instance.Tags.Any(tag => tag.Equals("weapon", StringComparison.OrdinalIgnoreCase))).ToList();
+                instance.Tags.Any(tag => tag.Equals("weapon", StringComparison.OrdinalIgnoreCase))
+                && instance.Tags.Intersect(attackerTags).Count() > 0)
+                .ToList();
 
             List<IItemInstance> defenderArmour = defender.Equipment.Select(tuple => tuple.Item2).Where(instance =>
-                    instance.Tags.Any(tag => tag.Equals("armour", StringComparison.OrdinalIgnoreCase)))
+                    instance.Tags.Any(tag => tag.Equals("armour", StringComparison.OrdinalIgnoreCase)
+                    && instance.Tags.Intersect(defenderTags).Count() > 0))
                 .ToList();
 
             List<IAbility> attackerAbilities = attacker.Abilities.Where(ability =>

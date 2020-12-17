@@ -46,6 +46,9 @@ namespace Tests
         private IDictionary<string, IDerivedValue> attackerDVs;
         private IDictionary<string, IDerivedValue> defenderDVs;
 
+        private NonUniqueDictionary<string, IItemInstance> attackerEquipment;
+        private NonUniqueDictionary<string, IItemInstance> defenderEquipment;
+
         private string[] attackerTags;
         private string[] defenderTags;
 
@@ -86,12 +89,8 @@ namespace Tests
 
         public void InitialiseDVs()
         {
-            this.attackerDVs.Add(
-                ConcreteDerivedIntValue.HITPOINTS, 
-                this.derivedValueHandler.Calculate(ConcreteDerivedIntValue.HITPOINTS, this.attackerStats.Values));
-            this.defenderDVs.Add(
-                ConcreteDerivedIntValue.HITPOINTS,
-                this.derivedValueHandler.Calculate(ConcreteDerivedIntValue.HITPOINTS, this.defenderStats.Values));
+            this.attackerDVs = this.derivedValueHandler.GetEntityStandardBlock(this.attackerStats.Values);
+            this.defenderDVs = this.derivedValueHandler.GetEntityStandardBlock(this.defenderStats.Values);
         }
 
         public void SetStatsAndSkills(
@@ -132,6 +131,49 @@ namespace Tests
             this.InitialiseDVs();
         }
 
+        public void SetUpEquipment(
+            string attackTypeTag, 
+            int attackerValue = 2, 
+            int attackerQuantity = 1, 
+            int defenderValue = 2,
+            int defenderQuantity = 1)
+        {
+            this.attackerEquipment = new NonUniqueDictionary<string, IItemInstance>();
+            this.defenderEquipment = new NonUniqueDictionary<string, IItemInstance>();
+
+            for (int i = 0; i < attackerQuantity; i++)
+            {
+                this.attackerEquipment.Add("hand",
+                    Mock.Of<IItemInstance>(
+                        item => item.Efficiency == attackerValue
+                                && item.Tags == new List<string> { "weapon", attackTypeTag }));
+            }
+
+            for (int i = 0; i < defenderQuantity; i++)
+            {
+                this.defenderEquipment.Add("torso",
+                    Mock.Of<IItemInstance>(
+                        item => item.Efficiency == defenderValue
+                        && item.Tags == new List<string> { "armour", attackTypeTag }));
+            }
+        }
+
+        public void MakeEntities()
+        {
+            this.attacker = Mock.Of<IEntity>(
+                entity => entity.Statistics == attackerStats
+                          && entity.Skills == attackerSkills
+                          && entity.Equipment == attackerEquipment
+                          && entity.Abilities == this.attackerAbilities
+                          && entity.DerivedValues == this.attackerDVs);
+            this.defender = Mock.Of<IEntity>(
+                entity => entity.Statistics == defenderStats
+                          && entity.Skills == defenderSkills
+                          && entity.Equipment == defenderEquipment
+                          && entity.Abilities == this.defenderAbilities
+                          && entity.DerivedValues == this.defenderDVs);
+        }
+
         public void SetPhysicalTags()
         {
             this.attackerTags = new[] {"light blades", "strength", "agility", "physical", "attack"};
@@ -149,22 +191,13 @@ namespace Tests
         {
             this.SetStatsAndSkills(3, 7, 5, 6);
             this.SetPhysicalTags();
-            
-            NonUniqueDictionary<string, IItemInstance> attackerEquipment = new NonUniqueDictionary<string, IItemInstance>();
-            NonUniqueDictionary<string, IItemInstance> defenderEquipment = new NonUniqueDictionary<string, IItemInstance>();
-            
-            this.attacker = Mock.Of<IEntity>(
-                entity => entity.Statistics == attackerStats
-                          && entity.Skills == attackerSkills
-                          && entity.Equipment == attackerEquipment
-                          && entity.Abilities == this.attackerAbilities
-                          && entity.DerivedValues == this.attackerDVs);
-            this.defender = Mock.Of<IEntity>(
-                entity => entity.Statistics == defenderStats
-                          && entity.Skills == defenderSkills
-                          && entity.Equipment == defenderEquipment
-                          && entity.Abilities == this.defenderAbilities
-                          && entity.DerivedValues == this.defenderDVs);
+            this.SetUpEquipment(
+                "physical",
+                0,
+                0,
+                0,
+                0);
+            this.MakeEntities();
 
             //given
             List<int> results = new List<int>();
@@ -190,22 +223,13 @@ namespace Tests
         {
             this.SetStatsAndSkills(5, 6, 3, 7);
             this.SetPhysicalTags();
-            
-            NonUniqueDictionary<string, IItemInstance> attackerEquipment = new NonUniqueDictionary<string, IItemInstance>();
-            NonUniqueDictionary<string, IItemInstance> defenderEquipment = new NonUniqueDictionary<string, IItemInstance>();
-            
-            this.attacker = Mock.Of<IEntity>(
-                entity => entity.Statistics == attackerStats
-                          && entity.Skills == attackerSkills
-                          && entity.Equipment == attackerEquipment
-                          && entity.Abilities == this.attackerAbilities
-                          && entity.DerivedValues == this.attackerDVs);
-            this.defender = Mock.Of<IEntity>(
-                entity => entity.Statistics == defenderStats
-                          && entity.Skills == defenderSkills
-                          && entity.Equipment == defenderEquipment
-                          && entity.Abilities == this.defenderAbilities
-                          && entity.DerivedValues == this.defenderDVs);
+            this.SetUpEquipment(
+                "physical",
+                0,
+                0,
+                0,
+                0);
+            this.MakeEntities();
             
             //given
             List<int> results = new List<int>();
@@ -237,27 +261,13 @@ namespace Tests
             this.SetStatsAndSkills(5, 6, 5, 6);
             this.LiveFireRolling();
             this.SetPhysicalTags();
-
-            NonUniqueDictionary<string, IItemInstance> attackerEquipment = new NonUniqueDictionary<string, IItemInstance>();
-            NonUniqueDictionary<string, IItemInstance> defenderEquipment = new NonUniqueDictionary<string, IItemInstance>();
-            
-            attackerEquipment.Add("hand",
-                Mock.Of<IItemInstance>(
-                    item => item.Efficiency == 6
-                            && item.Tags == new List<string> { "weapon" }));
-            
-            this.attacker = Mock.Of<IEntity>(
-                entity => entity.Statistics == attackerStats
-                          && entity.Skills == attackerSkills
-                          && entity.Equipment == attackerEquipment
-                          && entity.Abilities == this.attackerAbilities
-                          && entity.DerivedValues == this.attackerDVs);
-            this.defender = Mock.Of<IEntity>(
-                entity => entity.Statistics == defenderStats
-                          && entity.Skills == defenderSkills
-                          && entity.Equipment == defenderEquipment
-                          && entity.Abilities == this.defenderAbilities
-                          && entity.DerivedValues == this.defenderDVs);
+            this.SetUpEquipment(
+                "physical",
+                6,
+                1,
+                0,
+                0);
+            this.MakeEntities();
             
             List<int> results = new List<int>();
             
@@ -289,36 +299,13 @@ namespace Tests
             this.SetStatsAndSkills(3, 7, 5, 6);
             this.LiveFireRolling();
             this.SetPhysicalTags();
-
-            NonUniqueDictionary<string, IItemInstance> attackerEquipment = new NonUniqueDictionary<string, IItemInstance>();
-            NonUniqueDictionary<string, IItemInstance> defenderEquipment = new NonUniqueDictionary<string, IItemInstance>();
-
-            attackerEquipment.Add("hand",
-                Mock.Of<IItemInstance>(
-                    item => item.Efficiency == 2
-                    && item.Tags == new List<string> { "weapon" }));
-            
-            defenderEquipment.Add("torso",
-                Mock.Of<IItemInstance>(
-                    item => item.Efficiency == 6
-                            && item.Tags == new List<string> { "armour" }));
-            defenderEquipment.Add("hand",
-                Mock.Of<IItemInstance>(
-                    item => item.Efficiency == 6
-                            && item.Tags == new List<string> { "armour" }));
-
-            this.attacker = Mock.Of<IEntity>(
-                entity => entity.Statistics == attackerStats
-                          && entity.Skills == attackerSkills
-                          && entity.Equipment == attackerEquipment
-                          && entity.Abilities == this.attackerAbilities
-                          && entity.DerivedValues == this.attackerDVs);
-            this.defender = Mock.Of<IEntity>(
-                entity => entity.Statistics == defenderStats
-                          && entity.Skills == defenderSkills
-                          && entity.Equipment == defenderEquipment
-                          && entity.Abilities == this.defenderAbilities
-                          && entity.DerivedValues == this.defenderDVs);
+            this.SetUpEquipment(
+                "physical",
+                2,
+                1,
+                6,
+                2);
+            this.MakeEntities();
 
             List<int> results = new List<int>();
             
@@ -349,31 +336,17 @@ namespace Tests
             this.SetStatsAndSkills(5, 6, 3, 7);
             this.LiveFireRolling();
             this.SetPhysicalTags();
-
-            NonUniqueDictionary<string, IItemInstance> attackerEquipment = new NonUniqueDictionary<string, IItemInstance>();
-            NonUniqueDictionary<string, IItemInstance> defenderEquipment = new NonUniqueDictionary<string, IItemInstance>();
+            this.SetUpEquipment(
+                "physical",
+                6,
+                1,
+                0,
+                0);
 
             IAbility backdraft = new Backdraft();
 
             this.attackerAbilities.Add(backdraft);
-            
-            attackerEquipment.Add("hand",
-                Mock.Of<IItemInstance>(
-                    item => item.Efficiency == 6
-                            && item.Tags == new List<string> { "weapon" }));
-            
-            this.attacker = Mock.Of<IEntity>(
-                entity => entity.Statistics == attackerStats
-                          && entity.Skills == attackerSkills
-                          && entity.Equipment == attackerEquipment
-                          && entity.Abilities == this.attackerAbilities
-                          && entity.DerivedValues == this.attackerDVs);
-            this.defender = Mock.Of<IEntity>(
-                entity => entity.Statistics == defenderStats
-                          && entity.Skills == defenderSkills
-                          && entity.Equipment == defenderEquipment
-                          && entity.Abilities == this.defenderAbilities
-                          && entity.DerivedValues == this.defenderDVs);
+            this.MakeEntities();
 
             List<int> results = new List<int>();
             
@@ -404,42 +377,19 @@ namespace Tests
             this.SetStatsAndSkills(3, 7, 5, 6);
             this.LiveFireRolling();
             this.SetPhysicalTags();
-
-            NonUniqueDictionary<string, IItemInstance> attackerEquipment = new NonUniqueDictionary<string, IItemInstance>();
-            NonUniqueDictionary<string, IItemInstance> defenderEquipment = new NonUniqueDictionary<string, IItemInstance>();
+            this.SetUpEquipment(
+                "physical",
+                2,
+                1,
+                6,
+                2);
 
             IAbility keenReflexes = new KeenReflexes();
             IAbility uncannyDodge = new UncannyDodge();
 
             this.defenderAbilities.Add(keenReflexes);
             this.defenderAbilities.Add(uncannyDodge);
-            
-            attackerEquipment.Add("hand",
-                Mock.Of<IItemInstance>(
-                    item => item.Efficiency == 6
-                            && item.Tags == new List<string> { "weapon" }));
-            
-            defenderEquipment.Add("torso",
-                Mock.Of<IItemInstance>(
-                    item => item.Efficiency == 6
-                            && item.Tags == new List<string> { "armour" }));
-            defenderEquipment.Add("hand",
-                Mock.Of<IItemInstance>(
-                    item => item.Efficiency == 6
-                            && item.Tags == new List<string> { "armour" }));
-            
-            this.attacker = Mock.Of<IEntity>(
-                entity => entity.Statistics == attackerStats
-                          && entity.Skills == attackerSkills
-                          && entity.Equipment == attackerEquipment
-                          && entity.Abilities == this.attackerAbilities
-                          && entity.DerivedValues == this.attackerDVs);
-            this.defender = Mock.Of<IEntity>(
-                entity => entity.Statistics == defenderStats
-                          && entity.Skills == defenderSkills
-                          && entity.Equipment == defenderEquipment
-                          && entity.Abilities == this.defenderAbilities
-                          && entity.DerivedValues == this.defenderDVs);
+            this.MakeEntities();
 
             List<int> results = new List<int>();
             
@@ -465,13 +415,52 @@ namespace Tests
         }
 
         [UnityTest]
+        public IEnumerator MakeAttack_EvenMatch_Physical_NonPhysicalEquipmentNotAdded()
+        {
+            this.SetStatsAndSkills();
+            this.SetPhysicalTags();
+            this.SetUpEquipment(
+                "mental",
+                2,
+                2,
+                0,
+                0);
+            this.MakeEntities();
+
+            List<int> results = new List<int>();
+            
+            //when
+            for (int i = 0; i < 10; i++)
+            {
+                results.Add(this.target.MakeAttack(
+                    this.attacker, 
+                    this.defender, 
+                    this.attackerTags, 
+                    this.defenderTags));
+            }
+            
+            //then
+            foreach (int result in results)
+            {
+                Assert.That(result, Is.EqualTo(0));
+            }
+
+            Assert.That(results.Sum(), Is.EqualTo(0));
+            
+            yield return null;
+        }
+
+        [UnityTest]
         public IEnumerator MakeAttack_DefenderAdvantage_Mental_NoEquipment()
         {
             this.SetStatsAndSkills(3, 7, 5, 6);
             this.SetMentalTags();
-            
-            NonUniqueDictionary<string, IItemInstance> attackerEquipment = new NonUniqueDictionary<string, IItemInstance>();
-            NonUniqueDictionary<string, IItemInstance> defenderEquipment = new NonUniqueDictionary<string, IItemInstance>();
+            this.SetUpEquipment(
+                "mental",
+                0,
+                0,
+                0,
+                0);
             
             this.attacker = Mock.Of<IEntity>(
                 entity => entity.Statistics == attackerStats

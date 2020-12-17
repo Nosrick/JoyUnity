@@ -2,11 +2,6 @@
 {
     public class ConcreteDerivedIntValue : IDerivedValue
     {
-        public const string HITPOINTS = "hitpoints";
-        public const string CONCENTRATION = "concentration";
-        public const string COMPOSURE = "composure";
-        public const string MANA = "mana";
-
         public const string ITEM_HITPOINTS = "item hitpoints";
 
         public string Name
@@ -48,5 +43,13 @@
             this.Maximum = int.Parse(data);
             return this.Maximum;
         }
+    }
+
+    public static class DerivedValueName
+    {
+        public const string HITPOINTS = "hitpoints";
+        public const string CONCENTRATION = "concentration";
+        public const string COMPOSURE = "composure";
+        public const string MANA = "mana";
     }
 }
