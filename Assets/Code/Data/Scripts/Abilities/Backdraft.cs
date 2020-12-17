@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using JoyLib.Code.Entities.Statistics;
 
 namespace JoyLib.Code.Entities.Abilities
@@ -47,7 +48,14 @@ namespace JoyLib.Code.Entities.Abilities
 
         public override int OnCheckSuccess(int successes, IEnumerable<IBasicValue<int>> values)
         {
-            return successes *= 2;
+            if (values.Any(value => value.Name.Equals(EntityStatistic.STRENGTH, StringComparison.OrdinalIgnoreCase)))
+            {
+                return successes *= 2;
+            }
+            else
+            {
+                return successes;
+            }
         }
     }
 }
