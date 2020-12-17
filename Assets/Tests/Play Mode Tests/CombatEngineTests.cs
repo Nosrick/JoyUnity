@@ -64,7 +64,10 @@ namespace Tests
             this.target = new CombatEngine(Mock.Of<IRollable>(
                 roller => roller.RollSuccesses(
                     It.IsAny<int>(),
-                    It.IsAny<int>()) == 1));
+                    It.IsIn<int>(7)) == 1
+                && roller.RollSuccesses(
+                    It.IsAny<int>(),
+                    It.IsNotIn(7)) == 2));
 
             this.needHandler = new NeedHandler();
             this.statisticHandler = new EntityStatisticHandler();
@@ -82,11 +85,6 @@ namespace Tests
             this.defenderDVs = new Dictionary<string, IDerivedValue>();
         }
 
-        public void LiveFireRolling()
-        {
-            this.target = new CombatEngine();
-        }
-
         public void InitialiseDVs()
         {
             this.attackerDVs = this.derivedValueHandler.GetEntityStandardBlock(this.attackerStats.Values);
@@ -95,9 +93,9 @@ namespace Tests
 
         public void SetStatsAndSkills(
             int attackerValue = 3, 
-            int attackerThreshold = GlobalConstants.DEFAULT_SUCCESS_THRESHOLD, 
+            int attackerThreshold = 6, 
             int defenderValue = 3, 
-            int defenderThreshold = GlobalConstants.DEFAULT_SUCCESS_THRESHOLD)
+            int defenderThreshold = 7)
         {
             this.attackerStats = new Dictionary<string, IRollableValue<int>>();
             this.defenderStats = new Dictionary<string, IRollableValue<int>>();
@@ -182,14 +180,20 @@ namespace Tests
 
         public void SetMentalTags()
         {
-            this.attackerTags = new List<string> {"chaos magic", "intellect", "focus", "mental", "attack"};
-            this.defenderTags = new List<string> {"focus", "willpower", "evasion", "mental", "defend"};
+            this.attackerTags = new List<string> {"chaos magic", "intellect",  "mental", "attack"};
+            this.defenderTags = new List<string> {"focus", "willpower", "mental", "defend"};
+        }
+
+        public void SetSocialTags()
+        {
+            this.attackerTags = new List<string> {"intimidate", "personality", "social", "attack"};
+            this.defenderTags = new List<string> {"poise", "wit", "social", "defend"};
         }
 
         [UnityTest]
         public IEnumerator MakeAttack_EvenMatch_Physical_NoEquipment()
         {
-            this.SetStatsAndSkills(5, 6, 3, 7);
+            this.SetStatsAndSkills(3, 7, 3, 7);
             this.SetPhysicalTags();
             this.SetUpEquipment(
                 "physical",
@@ -227,8 +231,7 @@ namespace Tests
         public IEnumerator MakeAttack_AttackerAdvantage_Physical_Equipment()
         {
             //given
-            this.SetStatsAndSkills(5, 6, 5, 6);
-            this.LiveFireRolling();
+            this.SetStatsAndSkills();
             this.SetPhysicalTags();
             this.SetUpEquipment(
                 "physical",
@@ -256,7 +259,7 @@ namespace Tests
                 Assert.That(result, Is.Not.NaN);
             }
 
-            Assert.That(results.Sum(), Is.GreaterThan(0));
+            Assert.That(results.Sum(), Is.EqualTo(70));
             Debug.Log(results.Sum());
             
             yield return null;
@@ -266,8 +269,7 @@ namespace Tests
         public IEnumerator MakeAttack_DefenderAdvantage_Physical_Equipment()
         {
             //given
-            this.SetStatsAndSkills(3, 7, 5, 6);
-            this.LiveFireRolling();
+            this.SetStatsAndSkills();
             this.SetPhysicalTags();
             this.SetUpEquipment(
                 "physical",
@@ -295,7 +297,7 @@ namespace Tests
                 Assert.That(result, Is.Not.NaN);
             }
 
-            Assert.That(results.Sum(), Is.LessThanOrEqualTo(0));
+            Assert.That(results.Sum(), Is.EqualTo(0));
             Debug.Log(results.Sum());
             
             yield return null;
@@ -304,8 +306,7 @@ namespace Tests
         [UnityTest]
         public IEnumerator MakeAttack_AttackerAdvantage_Physical_WithAbilityAndEquipment()
         {
-            this.SetStatsAndSkills(5, 6, 3, 7);
-            this.LiveFireRolling();
+            this.SetStatsAndSkills();
             this.SetPhysicalTags();
             this.SetUpEquipment(
                 "physical",
@@ -339,7 +340,7 @@ namespace Tests
                 Assert.That(result, Is.Not.NaN);
             }
 
-            Assert.That(results.Sum(), Is.GreaterThan(0));
+            Assert.That(results.Sum(), Is.EqualTo(90));
             Debug.Log(results.Sum());
             
             yield return null;
@@ -348,8 +349,7 @@ namespace Tests
         [UnityTest]
         public IEnumerator MakeAttack_DefenderAdvantage_Physical_WithAbilityAndEquipment()
         {
-            this.SetStatsAndSkills(3, 7, 5, 6);
-            this.LiveFireRolling();
+            this.SetStatsAndSkills();
             this.SetPhysicalTags();
             this.SetUpEquipment(
                 "physical",
@@ -392,7 +392,7 @@ namespace Tests
         [UnityTest]
         public IEnumerator MakeAttack_EvenMatch_Physical_NonPhysicalEquipmentNotAdded()
         {
-            this.SetStatsAndSkills();
+            this.SetStatsAndSkills(3, 7, 3, 7);
             this.SetPhysicalTags();
             this.SetUpEquipment(
                 "mental",
@@ -429,7 +429,7 @@ namespace Tests
         [UnityTest]
         public IEnumerator MakeAttack_EvenMatch_Physical_NonPhysicalAbilitiesNotAdded()
         {
-            this.SetStatsAndSkills();
+            this.SetStatsAndSkills(3, 7, 3, 7);
             this.SetPhysicalTags();
             this.SetUpEquipment(
                 "mental",
@@ -469,7 +469,7 @@ namespace Tests
         [UnityTest]
         public IEnumerator MakeAttack_EvenMatch_Mental_NoEquipment()
         {
-            this.SetStatsAndSkills();
+            this.SetStatsAndSkills(3, 7, 3, 7);
             this.SetMentalTags();
             this.SetUpEquipment(
                 "mental",
@@ -507,7 +507,7 @@ namespace Tests
         [UnityTest]
         public IEnumerator MakeAttack_AttackerAdvantage_Mental_WithEquipment()
         {
-            this.SetStatsAndSkills(5, 6, 3, 7);
+            this.SetStatsAndSkills();
             this.SetMentalTags();
             this.SetUpEquipment(
                 "mental",
@@ -516,7 +516,6 @@ namespace Tests
                 0,
                 0);
             this.MakeEntities();
-            this.LiveFireRolling();
             
             //given
             List<int> results = new List<int>();
@@ -537,7 +536,7 @@ namespace Tests
                 Assert.That(result, Is.Not.NaN);
             }
 
-            Assert.That(results.Sum(), Is.GreaterThan(0));
+            Assert.That(results.Sum(), Is.EqualTo(70));
             Debug.Log(results.Sum());
             
             yield return null;
@@ -546,7 +545,7 @@ namespace Tests
         [UnityTest]
         public IEnumerator MakeAttack_DefenderAdvantage_Mental_WithEquipment()
         {
-            this.SetStatsAndSkills(3, 7, 5, 6);
+            this.SetStatsAndSkills();
             this.SetMentalTags();
             this.SetUpEquipment(
                 "mental",
@@ -555,7 +554,6 @@ namespace Tests
                 6,
                 2);
             this.MakeEntities();
-            this.LiveFireRolling();
             
             //given
             List<int> results = new List<int>();
@@ -576,7 +574,7 @@ namespace Tests
                 Assert.That(result, Is.Not.NaN);
             }
 
-            Assert.That(results.Sum(), Is.LessThanOrEqualTo(0));
+            Assert.That(results.Sum(), Is.EqualTo(0));
             Debug.Log(results.Sum());
             
             yield return null;
@@ -585,7 +583,7 @@ namespace Tests
         [UnityTest]
         public IEnumerator MakeAttack_AttackerAdvantage_Mental_WithAbilityAndEquipment()
         {
-            this.SetStatsAndSkills(5, 6, 3, 7);
+            this.SetStatsAndSkills();
             this.SetMentalTags();
             this.SetUpEquipment(
                 "mental",
@@ -598,7 +596,6 @@ namespace Tests
             this.attackerTags.Add("distraction");
             
             this.MakeEntities();
-            this.LiveFireRolling();
             
             //given
             List<int> results = new List<int>();
@@ -619,7 +616,7 @@ namespace Tests
                 Assert.That(result, Is.Not.NaN);
             }
 
-            Assert.That(results.Sum(), Is.GreaterThan(0));
+            Assert.That(results.Sum(), Is.EqualTo(70));
             Debug.Log(results.Sum());
             
             yield return null;
@@ -628,7 +625,7 @@ namespace Tests
         [UnityTest]
         public IEnumerator MakeAttack_DefenderAdvantage_Mental_WithAbilityAndEquipment()
         {
-            this.SetStatsAndSkills(3, 7, 5, 6);
+            this.SetStatsAndSkills();
             this.SetMentalTags();
             this.SetUpEquipment(
                 "mental",
@@ -640,7 +637,6 @@ namespace Tests
             this.defenderAbilities.Add(new IronWill());
             
             this.MakeEntities();
-            this.LiveFireRolling();
             
             //given
             List<int> results = new List<int>();
@@ -661,7 +657,178 @@ namespace Tests
                 Assert.That(result, Is.Not.NaN);
             }
 
-            Assert.That(results.Sum(), Is.LessThanOrEqualTo(0));
+            Assert.That(results.Sum(), Is.EqualTo(0));
+            Debug.Log(results.Sum());
+            
+            yield return null;
+        }
+
+        [UnityTest]
+        public IEnumerator MakeAttack_EvenMatch_Social_NoEquipment()
+        {
+            //given
+            this.SetStatsAndSkills(3, 7, 3, 7);
+            this.SetUpEquipment("social", 0, 0, 0, 0);
+            this.SetSocialTags();
+            this.MakeEntities();
+            
+            List<int> results = new List<int>();
+            
+            //when
+            for (int i = 0; i < 10; i++)
+            {
+                results.Add(this.target.MakeAttack(
+                    this.attacker, 
+                    this.defender, 
+                    this.attackerTags, 
+                    this.defenderTags));
+            }
+
+            //then
+            foreach (int result in results)
+            {
+                Assert.That(result, Is.Not.NaN);
+            }
+
+            Assert.That(results.Sum(), Is.EqualTo(0));
+            Debug.Log(results.Sum());
+            
+            yield return null;
+        }
+
+        [UnityTest]
+        public IEnumerator MakeAttack_AttackerAdvantage_Social_Equipment()
+        {
+            //given
+            this.SetStatsAndSkills();
+            this.SetUpEquipment("social", 6, 1, 0, 0);
+            this.SetSocialTags();
+            this.MakeEntities();
+            
+            List<int> results = new List<int>();
+            
+            //when
+            for (int i = 0; i < 10; i++)
+            {
+                results.Add(this.target.MakeAttack(
+                    this.attacker, 
+                    this.defender, 
+                    this.attackerTags, 
+                    this.defenderTags));
+            }
+
+            //then
+            foreach (int result in results)
+            {
+                Assert.That(result, Is.Not.NaN);
+            }
+
+            Assert.That(results.Sum(), Is.EqualTo(70));
+            Debug.Log(results.Sum());
+            
+            yield return null;
+        }
+
+        [UnityTest]
+        public IEnumerator MakeAttack_DefenderAdvantage_Social_Equipment()
+        {
+            //given
+            this.SetStatsAndSkills();
+            this.SetUpEquipment("social", 2, 1, 6, 2);
+            this.SetSocialTags();
+            this.MakeEntities();
+            
+            List<int> results = new List<int>();
+            
+            //when
+            for (int i = 0; i < 10; i++)
+            {
+                results.Add(this.target.MakeAttack(
+                    this.attacker, 
+                    this.defender, 
+                    this.attackerTags, 
+                    this.defenderTags));
+            }
+
+            //then
+            foreach (int result in results)
+            {
+                Assert.That(result, Is.Not.NaN);
+            }
+
+            Assert.That(results.Sum(), Is.EqualTo(0));
+            Debug.Log(results.Sum());
+            
+            yield return null;
+        }
+
+        [UnityTest]
+        public IEnumerator MakeAttack_AttackerAdvantage_Social_WithAbilityAndEquipment()
+        {
+            //given
+            this.SetStatsAndSkills();
+            this.SetUpEquipment("social", 6, 1, 0, 0);
+            this.SetSocialTags();
+            
+            this.attackerAbilities.Add(new PiercingGaze());
+
+            this.MakeEntities();
+            
+            List<int> results = new List<int>();
+            
+            //when
+            for (int i = 0; i < 10; i++)
+            {
+                results.Add(this.target.MakeAttack(
+                    this.attacker, 
+                    this.defender, 
+                    this.attackerTags, 
+                    this.defenderTags));
+            }
+
+            //then
+            foreach (int result in results)
+            {
+                Assert.That(result, Is.Not.NaN);
+            }
+
+            Assert.That(results.Sum(), Is.EqualTo(70));
+            Debug.Log(results.Sum());
+            
+            yield return null;
+        }
+        
+        [UnityTest]
+        public IEnumerator MakeAttack_DefenderAdvantage_Social_WithAbilityAndEquipment()
+        {
+            //given
+            this.SetStatsAndSkills();
+            this.SetUpEquipment("social", 2, 1, 6, 2);
+            this.SetSocialTags();
+            
+            this.defenderAbilities.Add(new Indomitable());
+
+            this.MakeEntities();
+            
+            List<int> results = new List<int>();
+            
+            //when
+            for (int i = 0; i < 10; i++)
+            {
+                results.Add(this.target.MakeAttack(
+                    this.attacker, 
+                    this.defender, 
+                    this.attackerTags, 
+                    this.defenderTags));
+            }
+
+            //then
+            foreach (int result in results)
+            {
+                Assert.That(result, Is.Not.NaN);
+            }
+
+            Assert.That(results.Sum(), Is.EqualTo(0));
             Debug.Log(results.Sum());
             
             yield return null;
