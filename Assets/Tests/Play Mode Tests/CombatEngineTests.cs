@@ -427,6 +427,46 @@ namespace Tests
         }
 
         [UnityTest]
+        public IEnumerator MakeAttack_EvenMatch_Physical_NonPhysicalAbilitiesNotAdded()
+        {
+            this.SetStatsAndSkills();
+            this.SetPhysicalTags();
+            this.SetUpEquipment(
+                "mental",
+                0,
+                0,
+                0,
+                0);
+            this.attackerAbilities.Add(new Distraction());
+            this.attackerTags.Add("distraction");
+            this.defenderAbilities.Add(new IronWill());
+            this.MakeEntities();
+
+            List<int> results = new List<int>();
+            
+            //when
+            for (int i = 0; i < 10; i++)
+            {
+                results.Add(this.target.MakeAttack(
+                    this.attacker, 
+                    this.defender, 
+                    this.attackerTags, 
+                    this.defenderTags));
+            }
+            
+            //then
+            foreach (int result in results)
+            {
+                Assert.That(result, Is.EqualTo(0));
+            }
+
+            Assert.That(results.Sum(), Is.EqualTo(0));
+            Debug.Log(results.Sum());
+            
+            yield return null;
+        }
+
+        [UnityTest]
         public IEnumerator MakeAttack_EvenMatch_Mental_NoEquipment()
         {
             this.SetStatsAndSkills();
@@ -553,6 +593,49 @@ namespace Tests
                 1,
                 0,
                 0);
+            
+            this.attackerAbilities.Add(new Distraction());
+            this.attackerTags.Add("distraction");
+            
+            this.MakeEntities();
+            this.LiveFireRolling();
+            
+            //given
+            List<int> results = new List<int>();
+            
+            //when
+            for (int i = 0; i < 10; i++)
+            {
+                results.Add(this.target.MakeAttack(
+                    this.attacker, 
+                    this.defender, 
+                    this.attackerTags, 
+                    this.defenderTags));
+            }
+
+            //then
+            foreach (int result in results)
+            {
+                Assert.That(result, Is.Not.NaN);
+            }
+
+            Assert.That(results.Sum(), Is.GreaterThan(0));
+            Debug.Log(results.Sum());
+            
+            yield return null;
+        }
+
+        [UnityTest]
+        public IEnumerator MakeAttack_DefenderAdvantage_Mental_WithAbilityAndEquipment()
+        {
+            this.SetStatsAndSkills(3, 7, 5, 6);
+            this.SetMentalTags();
+            this.SetUpEquipment(
+                "mental",
+                2,
+                1,
+                6,
+                2);
             
             this.defenderAbilities.Add(new IronWill());
             
