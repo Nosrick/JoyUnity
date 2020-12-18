@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Lean.Transition.Method
 {
@@ -20,11 +20,11 @@ namespace Lean.Transition.Method
 
 		public static LeanState Register(CanvasGroup target, bool interactable, float duration)
 		{
-			var data = LeanTransition.RegisterWithTarget(State.Pool, duration, target);
+			var state = LeanTransition.SpawnWithTarget(State.Pool, target);
 
-			data.Interactable = interactable;
+			state.Interactable = interactable;
 
-			return data;
+			return LeanTransition.Register(state, duration);
 		}
 
 		[System.Serializable]

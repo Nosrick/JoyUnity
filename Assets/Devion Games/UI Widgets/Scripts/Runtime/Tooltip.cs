@@ -1,8 +1,6 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
-using System.Collections.Generic;
-using System;
 
 namespace DevionGames.UIWidgets{
 	public class Tooltip : UIWidget {
@@ -61,8 +59,9 @@ namespace DevionGames.UIWidgets{
             }
         }
 
-        protected virtual void Update()
+        protected override void Update()
         {
+            base.Update();
             if (this.m_UpdatePosition && m_CanvasGroup.alpha > 0f && _updatePosition)
             {
                 UpdatePosition();

@@ -1,10 +1,8 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Collections.Generic;
 using Lean.Common;
-#if UNITY_EDITOR
 using UnityEditor;
-#endif
+using UnityEngine;
 
 namespace Lean.Transition
 {
@@ -28,7 +26,7 @@ namespace Lean.Transition
 		{
 			public Transform Root { set { root = value; } get { return root; } } [SerializeField] private Transform root;
 
-			public float Speed { set { speed = value; } get { return speed; } } [SerializeField] private float speed;
+			public float Speed { set { speed = value; } get { return speed; } } [SerializeField] private float speed = -1.0f;
 
 			public List<Alias> Aliases { get { if (aliases == null) aliases = new List<Alias>(); return aliases; } } [SerializeField] private List<Alias> aliases;
 
@@ -200,7 +198,7 @@ namespace Lean.Transition
 }
 
 #if UNITY_EDITOR
-namespace Lean.Transition
+namespace Lean.Transition.Inspector
 {
 	[CustomPropertyDrawer(typeof(LeanPlayer))]
 	public class LeanPlayerDrawer : PropertyDrawer

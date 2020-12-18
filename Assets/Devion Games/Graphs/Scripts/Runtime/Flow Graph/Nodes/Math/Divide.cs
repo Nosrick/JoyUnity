@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace DevionGames.Graphs
+﻿namespace DevionGames.Graphs
 {
     [NodeStyle("Icons/Divide",false,"Math")]
     public class Divide : FlowNode

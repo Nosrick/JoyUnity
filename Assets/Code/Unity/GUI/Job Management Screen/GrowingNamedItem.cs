@@ -34,6 +34,6 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
             }
         }
         
-        public virtual event ValueChangedEventHandler ValueChanged;
+        public override event ValueChangedEventHandler ValueChanged;
     }
 }

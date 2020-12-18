@@ -1,7 +1,6 @@
-﻿using DevionGames.UIWidgets;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
+using DevionGames.UIWidgets;
 using UnityEngine;
 
 namespace DevionGames.InventorySystem
@@ -10,7 +9,7 @@ namespace DevionGames.InventorySystem
     [Icon("Component")]
     [ComponentMenu("Component/Invoke Notify")]
     [System.Serializable]
-    public class InvokeNotify : Action
+    public class InvokeNotify : Action, ICondition
     {
         [SerializeField]
         private TargetType m_Target = TargetType.Player;

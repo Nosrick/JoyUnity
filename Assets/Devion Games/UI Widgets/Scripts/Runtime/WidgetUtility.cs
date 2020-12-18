@@ -1,7 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Collections;
-using System.Collections.Generic;
+using UnityEngine;
 
 namespace DevionGames.UIWidgets
 {
@@ -49,6 +48,7 @@ namespace DevionGames.UIWidgets
 					T[] windows = canvas[c].GetComponentsInChildren<T>(true);
 					current.AddRange(windows.Where(x => x.Name == name).OrderByDescending(y => y.priority).Cast<UIWidget>());
 				}
+				current = current.Distinct().ToList();
 				if (!widgetCache.ContainsKey(name))
 				{
 					widgetCache.Add(name, current);
@@ -70,7 +70,7 @@ namespace DevionGames.UIWidgets
                 current.AddRange(windows.OrderByDescending(y => y.priority).Cast<UIWidget>());
             }
 
-            return current.Where(x => typeof(T).IsAssignableFrom(x.GetType())).Cast<T>().ToArray();
+            return current.Distinct().Where(x => typeof(T).IsAssignableFrom(x.GetType())).Cast<T>().ToArray();
         }
 
 

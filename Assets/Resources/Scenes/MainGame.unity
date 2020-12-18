@@ -4527,7 +4527,7 @@ PrefabInstance:
     - target: {fileID: 7410754596117065574, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
         type: 3}
       propertyPath: m_AspectRatio
-      value: 0.001
+      value: 2.1566074
       objectReference: {fileID: 0}
     - target: {fileID: 7623997236991320388, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
         type: 3}
@@ -6022,6 +6022,10 @@ MonoBehaviour:
   m_CloseSound: {fileID: 0}
   m_Focus: 1
   m_DeactivateOnClose: 1
+  m_ShowAndHideCursor: 0
+  m_CloseOnMove: 1
+  m_Deactivate: 306
+  m_FocusPlayer: 0
   useButton: 2
   m_DynamicContainer: 0
   m_SlotParent: {fileID: 782505454}

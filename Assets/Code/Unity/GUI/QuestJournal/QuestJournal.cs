@@ -23,7 +23,7 @@ namespace JoyLib.Code.Unity.GUI
         
         protected GameObject Container { get; set; }
 
-        public new void Awake()
+        public void Awake()
         {
             base.Awake();
             MenuItemRect = MenuItemPrefab.GetComponent<RectTransform>();

@@ -1,10 +1,8 @@
-using UnityEngine;
-using UnityEngine.Events;
 using Lean.Common;
 using Lean.Transition;
-#if UNITY_EDITOR
 using UnityEditor;
-#endif
+using UnityEngine;
+using UnityEngine.Events;
 
 namespace Lean.Gui
 {
@@ -226,11 +224,11 @@ namespace Lean.Gui
 }
 
 #if UNITY_EDITOR
-namespace Lean.Gui
+namespace Lean.Gui.Inspector
 {
 	[CanEditMultipleObjects]
 	[CustomEditor(typeof(LeanOrientation))]
-	public class LeanOrientation_Editor : LeanInspector<LeanOrientation>
+	public class LeanOrientation_Inspector : LeanInspector<LeanOrientation>
 	{
 		protected override void DrawInspector()
 		{

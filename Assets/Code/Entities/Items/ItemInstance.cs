@@ -188,7 +188,7 @@ namespace JoyLib.Code.Entities.Items
                 this.Region.Add(InventoryManager.Database.equipments.First(region => region.Name.Equals(slot)));
             }
 
-            m_Icon = Sprite;
+            Icon = Sprite;
             CalculateValue();
             ConstructDescription();
 
@@ -261,7 +261,7 @@ namespace JoyLib.Code.Entities.Items
 
             builder.AppendLine("It is worth " + this.Value + ".");
             
-            m_Description = builder.ToString();
+            Description = builder.ToString();
         }
         
         public void SetUser(IEntity user)
@@ -409,7 +409,7 @@ namespace JoyLib.Code.Entities.Items
 
             FramesSinceLastChange = 0;
 
-            m_Icon = Sprite;
+            Icon = Sprite;
         }
 
         public int CompareTo(object obj)

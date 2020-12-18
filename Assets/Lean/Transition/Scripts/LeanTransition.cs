@@ -1,9 +1,7 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
 using Lean.Common;
-using System.Collections.Generic;
-#if UNITY_EDITOR
 using UnityEditor;
-#endif
+using UnityEngine;
 
 namespace Lean.Transition
 {
@@ -340,19 +338,19 @@ namespace Lean.Transition
 			}
 		}
 
-		public static T RegisterWithTarget<T, U>(Stack<T> pool, float duration, U target)
-				where T : LeanStateWithTarget<U>, new()
-				where U : Object
+		public static T SpawnWithTarget<T, U>(Stack<T> pool, U target)
+			where T : LeanStateWithTarget<U>, new()
+			where U : Object
 		{
-			var data = Register(pool, duration);
+			var data = Spawn(pool);
 
 			data.Target = target;
 
 			return data;
 		}
 
-		public static T Register<T>(Stack<T> pool, float duration)
-				where T : LeanState, new()
+		public static T Spawn<T>(Stack<T> pool)
+			where T : LeanState, new()
 		{
 			// Make sure the transition manager exists
 			if (Instances.Count == 0)
@@ -363,14 +361,8 @@ namespace Lean.Transition
 			// Setup initial data
 			var state = pool.Count > 0 ? pool.Pop() : new T();
 
-			state.Age      = -1.0f;
-			state.Duration = duration;
-			state.Skip     = false;
-
-			if (currentSpeed > 0.0f)
-			{
-				state.Duration /= currentSpeed;
-			}
+			state.Age  = -1.0f;
+			state.Skip = false;
 
 			state.Prev.Clear();
 			state.Next.Clear();
@@ -386,17 +378,40 @@ namespace Lean.Transition
 			// Make this the new head
 			currentHead = state;
 
-			// Register data with the correct list
-			var finalUpdate = GetTiming(currentTiming);
+			return state;
+		}
 
-			switch (finalUpdate)
+		public static LeanState Register(LeanState state, float duration)
+		{
+			state.Duration = duration;
+
+			// Execute immediately?
+			if (duration == 0.0f && state.Prev.Count == 0)
 			{
-				case LeanTiming.UnscaledFixedUpdate: unscaledFixedUpdateStates.Add(state); break;
-				case LeanTiming.UnscaledLateUpdate:   unscaledLateUpdateStates.Add(state); break;
-				case LeanTiming.UnscaledUpdate:           unscaledUpdateStates.Add(state); break;
-				case LeanTiming.Update:                           updateStates.Add(state); break;
-				case LeanTiming.LateUpdate:                   lateUpdateStates.Add(state); break;
-				case LeanTiming.FixedUpdate:                 fixedUpdateStates.Add(state); break;
+				FinishState(state);
+
+				return null;
+			}
+			// Register for later execution?
+			else
+			{
+				if (currentSpeed > 0.0f)
+				{
+					state.Duration /= currentSpeed;
+				}
+
+				// Convert currentTiming if it's set to default, then register the state in the correct list
+				var finalUpdate = GetTiming(currentTiming);
+
+				switch (finalUpdate)
+				{
+					case LeanTiming.UnscaledFixedUpdate: unscaledFixedUpdateStates.Add(state); break;
+					case LeanTiming.UnscaledLateUpdate:   unscaledLateUpdateStates.Add(state); break;
+					case LeanTiming.UnscaledUpdate:           unscaledUpdateStates.Add(state); break;
+					case LeanTiming.Update:                           updateStates.Add(state); break;
+					case LeanTiming.LateUpdate:                   lateUpdateStates.Add(state); break;
+					case LeanTiming.FixedUpdate:                 fixedUpdateStates.Add(state); break;
+				}
 			}
 
 			return state;
@@ -408,8 +423,8 @@ namespace Lean.Transition
 
 			ResetState();
 #if UNITY_EDITOR
-			EditorApplication.delayCall -= DelayCall;
-			EditorApplication.delayCall += DelayCall;
+			UnityEditor.EditorApplication.delayCall -= DelayCall;
+			UnityEditor.EditorApplication.delayCall += DelayCall;
 #endif
 		}
 
@@ -417,7 +432,7 @@ namespace Lean.Transition
 		{
 			Instances.Remove(this);
 #if UNITY_EDITOR
-			EditorApplication.delayCall -= DelayCall;
+			UnityEditor.EditorApplication.delayCall -= DelayCall;
 #endif
 			if (Instances.Count == 0)
 			{
@@ -429,11 +444,12 @@ namespace Lean.Transition
 				        fixedUpdateStates.Clear();
 			}
 		}
+
 #if UNITY_EDITOR
 		private void DelayCall()
 		{
-			EditorApplication.delayCall -= DelayCall;
-			EditorApplication.delayCall += DelayCall;
+			UnityEditor.EditorApplication.delayCall -= DelayCall;
+			UnityEditor.EditorApplication.delayCall += DelayCall;
 
 			var delta = Time.deltaTime;
 
@@ -448,6 +464,7 @@ namespace Lean.Transition
 			}
 		}
 #endif
+
 		protected virtual void Update()
 		{
 			if (this == Instances[0] && Application.isPlaying == true && started == true)
@@ -556,23 +573,7 @@ namespace Lean.Transition
 					// Finished?
 					if (state.Age >= state.Duration)
 					{
-						// Activate all chained states and clear them
-						for (var j = state.Next.Count - 1; j >= 0; j--)
-						{
-							state.Next[j].Prev.Remove(state);
-						}
-
-						state.Next.Clear();
-
-						// Make sure we call update one final time with a progress value of exactly 1.0
-						if (state.Skip == false)
-						{
-							state.Update(1.0f);
-						}
-#if UNITY_EDITOR
-						DirtyTarget(state);
-#endif
-						state.Despawn();
+						FinishState(state);
 
 						states.RemoveAt(i);
 					}
@@ -583,6 +584,7 @@ namespace Lean.Transition
 						{
 							state.Update(state.Age / state.Duration);
 						}
+
 #if UNITY_EDITOR
 						DirtyTarget(state);
 #endif
@@ -590,6 +592,30 @@ namespace Lean.Transition
 				}
 			}
 		}
+
+		private static void FinishState(LeanState state)
+		{
+			// Activate all chained states and clear them
+			for (var j = state.Next.Count - 1; j >= 0; j--)
+			{
+				state.Next[j].Prev.Remove(state);
+			}
+
+			state.Next.Clear();
+
+			// Make sure we call update one final time with a progress value of exactly 1.0
+			if (state.Skip == false)
+			{
+				state.Update(1.0f);
+			}
+
+#if UNITY_EDITOR
+			DirtyTarget(state);
+#endif
+
+			state.Despawn();
+		}
+
 #if UNITY_EDITOR
 		/// <summary>If a transition is being animated in the editor, then the target object may not update, so this method will automatically dirty it so that it will.</summary>
 		private static void DirtyTarget(LeanState transition)
@@ -604,7 +630,7 @@ namespace Lean.Transition
 
 					if (target != null)
 					{
-						EditorUtility.SetDirty(target);
+						UnityEditor.EditorUtility.SetDirty(target);
 					}
 				}
 			}
@@ -614,7 +640,7 @@ namespace Lean.Transition
 }
 
 #if UNITY_EDITOR
-namespace Lean.Transition
+namespace Lean.Transition.Inspector
 {
 	[CanEditMultipleObjects]
 	[CustomEditor(typeof(LeanTransition))]

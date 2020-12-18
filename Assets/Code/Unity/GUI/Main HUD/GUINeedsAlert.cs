@@ -19,7 +19,7 @@ namespace JoyLib.Code.Unity.GUI
         protected int Counter { get; set; }
         protected const int MAXIMUM_FRAMES = 90;
 
-        public new void Awake()
+        public void Awake()
         {
             base.Awake();
             GetBits();
@@ -35,8 +35,9 @@ namespace JoyLib.Code.Unity.GUI
             }
         }
 
-        public void Update()
+        protected override void Update()
         {
+            base.Update();
             Counter += 1;
             Counter %= MAXIMUM_FRAMES;
 

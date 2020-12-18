@@ -1,11 +1,8 @@
+using Lean.Transition;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using Lean.Common;
-using Lean.Transition;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 namespace Lean.Gui
 {
@@ -40,9 +37,6 @@ namespace Lean.Gui
 			Press
 		}
 
-		/// <summary>This allows you to control how the tooltip will behave when it goes outside the screen bounds.</summary>
-		public BoundaryType Boundary { set { boundary = value; } get { return boundary; } } [SerializeField] private BoundaryType boundary;
-
 		/// <summary>This allows you to control when the tooltip will appear.
 		/// HoverOrPress = When the mouse is hovering, or when the mouse/finger is pressing.
 		/// Hover = Only when the mouse is hovering.
@@ -51,6 +45,12 @@ namespace Lean.Gui
 
 		/// <summary>This allows you to delay how quickly the tooltip will appear or switch.</summary>
 		public float ShowDelay { set { showDelay = value; } get { return showDelay; } } [SerializeField] private float showDelay;
+
+		/// <summary>Move the attached Transform when the tooltip is open?</summary>
+		public bool Move { set { move = value; } get { return move; } } [SerializeField] private bool move = true;
+
+		/// <summary>This allows you to control how the tooltip will behave when it goes outside the screen bounds.</summary>
+		public BoundaryType Boundary { set { boundary = value; } get { return boundary; } } [SerializeField] private BoundaryType boundary;
 
 		/// <summary>This allows you to perform a transition when this tooltip appears.
 		/// You can create a new transition GameObject by right clicking the transition name, and selecting <b>Create</b>.
@@ -150,11 +150,14 @@ namespace Lean.Gui
 						Show();
 					}
 
-					cachedRectTransform.position = finalPoint;
+					if (move == true)
+					{
+						cachedRectTransform.position = finalPoint;
+					}
 				}
 			}
 
-			if (boundary != BoundaryType.None)
+			if (move == true && boundary != BoundaryType.None)
 			{
 				cachedRectTransform.GetWorldCorners(corners);
 
@@ -214,17 +217,26 @@ namespace Lean.Gui
 }
 
 #if UNITY_EDITOR
-namespace Lean.Gui
+namespace Lean.Gui.Inspector
 {
 	[CanEditMultipleObjects]
 	[CustomEditor(typeof(LeanTooltip))]
-	public class LeanTooltip_Editor : LeanInspector<LeanTooltip>
+	public class LeanTooltip_Inspector : Lean.Common.LeanInspector<LeanTooltip>
 	{
 		protected override void DrawInspector()
 		{
-			Draw("boundary", "This allows you to control how the tooltip will behave when it goes outside the screen bounds.");
 			Draw("activation", "This allows you to control when the tooltip will appear.\nHoverOrPress = When the mouse is hovering, or when the mouse/finger is pressing.\nHover = Only when the mouse is hovering.\nPress = Only when the mouse/finger is pressing.");
 			Draw("showDelay", "This allows you to delay how quickly the tooltip will appear or switch.");
+
+			EditorGUILayout.Separator();
+
+			Draw("move", "Move the attached Transform when the tooltip is open?");
+			if (Any(t => t.Move == true))
+			{
+				EditorGUI.indentLevel++;
+					Draw("boundary", "This allows you to control how the tooltip will behave when it goes outside the screen bounds.");
+				EditorGUI.indentLevel--;
+			}
 
 			EditorGUILayout.Separator();
 

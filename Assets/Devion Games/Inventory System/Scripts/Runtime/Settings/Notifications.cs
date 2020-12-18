@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using DevionGames.UIWidgets;
+﻿using DevionGames.UIWidgets;
 using UnityEngine;
 
 namespace DevionGames.InventorySystem
@@ -45,6 +43,12 @@ namespace DevionGames.InventorySystem.Configuration
         {
             text = "This action requires {0}."
         };
+
+        public NotificationOptions missingCategoryItem = new NotificationOptions()
+        {
+            text = "This action requires {0}."
+        };
+
         public NotificationOptions inCooldown = new NotificationOptions()
         {
             text = "{0} is in cooldown for {1} seconds!"

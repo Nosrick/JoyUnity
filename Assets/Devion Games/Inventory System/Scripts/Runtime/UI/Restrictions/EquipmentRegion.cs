@@ -21,30 +21,12 @@ namespace DevionGames.InventorySystem.Restrictions
             Restrictions.EquipmentRegion[] restrictions = GetComponents<Restrictions.EquipmentRegion>();
             for (int i = requiredRegions.Count - 1; i >= 0; i--)
             {
-                //if (restrictions.Select(x => x.region).Contains(requiredRegions[i]))
-                if(restrictions.Any(x => x.region.Name.Equals(requiredRegions[i].Name, StringComparison.OrdinalIgnoreCase)))
+                if (restrictions.Select(x => x.region.Name).Contains(requiredRegions[i].Name, StringComparer.OrdinalIgnoreCase))
                 {
                     return true;
                 }
             }
             return false;
-
-            /*if (item.GetType() != typeof(EquipmentItem))
-            {
-                return false;
-            }
-            EquipmentItem mItem = item as EquipmentItem;
-          
-
-            for (int i = 0; i < mItem.Region.Count; i++)
-            {
-                if (mItem.Region[i].Name == region.Name)
-                {
-                    return true;
-                }
-            }
-
-            return false;*/
         }
     }
 }

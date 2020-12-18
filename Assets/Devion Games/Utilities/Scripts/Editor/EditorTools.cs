@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-using UnityEditor;
+﻿using System;
 using System.Collections;
-using System.IO;
-using System.Reflection;
-using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
+using UnityEditor;
+using UnityEngine;
 
 namespace DevionGames{
 	/// <summary>
@@ -129,6 +128,19 @@ namespace DevionGames{
         {
             bool result = false;
             if (GUILayout.Button(content, Styles.leftTextButton, options))
+            {
+                result = true;
+            }
+            Rect rect = GUILayoutUtility.GetLastRect();
+            rect.x += rect.width - 20f;
+            GUI.Label(rect, Styles.rightArrow);
+            return result;
+        }
+
+        public static bool RightArrowToolbarButton(GUIContent content, params GUILayoutOption[] options)
+        {
+            bool result = false;
+            if (GUILayout.Button(content, Styles.leftTextToolbarButton, options))
             {
                 result = true;
             }
@@ -287,7 +299,6 @@ namespace DevionGames{
             int controlID = EditorGUIUtility.GetControlID(FocusType.Passive);
 
             Rect position = GUILayoutUtility.GetRect(GUIContent.none, Styles.inspectorTitle, GUILayout.ExpandWidth(true));
-
             if (Event.current.type == EventType.Repaint)
             {
                 Color color = GUI.color;
@@ -1610,6 +1621,7 @@ namespace DevionGames{
             public static GUIStyle seperator;
             public static Texture2D rightArrow;
             public static GUIStyle leftTextButton;
+            public static GUIStyle leftTextToolbarButton;
             public static GUIStyle inspectorTitle;
             public static GUIStyle inspectorTitleText;
             public static GUIStyle inspectorBigTitle;
@@ -1621,6 +1633,10 @@ namespace DevionGames{
                 };
                 Styles.rightArrow = ((GUIStyle)"AC RightArrow").normal.background;
                 Styles.leftTextButton = new GUIStyle("Button"){
+                    alignment = TextAnchor.MiddleLeft
+                };
+                Styles.leftTextToolbarButton = new GUIStyle(EditorStyles.toolbarButton)
+                {
                     alignment = TextAnchor.MiddleLeft
                 };
                 Styles.inspectorTitle = new GUIStyle("IN Foldout")

@@ -1,8 +1,6 @@
-﻿using UnityEngine;
-using UnityEditor;
-using System.Collections;
+﻿using UnityEditor;
 using UnityEditorInternal;
-using System.Collections.Generic;
+using UnityEngine;
 
 namespace DevionGames.StatSystem
 {
@@ -141,6 +139,8 @@ namespace DevionGames.StatSystem
 			SerializedProperty maxValue = element.FindPropertyRelative ("m_MaxValue");
 			SerializedProperty regenerate = element.FindPropertyRelative("m_Regenerate");
 			SerializedProperty regenerationRate = element.FindPropertyRelative("m_Rate");
+			SerializedProperty displayDamage = element.FindPropertyRelative("m_DisplayDamage");
+
 
 			EditorGUILayout.PropertyField (name);
 			EditorGUILayout.PropertyField(formula);
@@ -150,6 +150,13 @@ namespace DevionGames.StatSystem
 			if (regenerate.boolValue)
 			{
 				EditorGUILayout.PropertyField(regenerationRate);
+			}
+			EditorGUILayout.PropertyField(displayDamage);
+			if (displayDamage.boolValue) {
+				EditorGUI.indentLevel += 1;
+				EditorGUILayout.PropertyField(element.FindPropertyRelative("m_DamageColor"));
+				EditorGUILayout.PropertyField(element.FindPropertyRelative("m_CriticalDamageColor"));
+				EditorGUI.indentLevel -= 1;
 			}
 
 		}

@@ -1,9 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEditor.Compilation;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace DevionGames
 {

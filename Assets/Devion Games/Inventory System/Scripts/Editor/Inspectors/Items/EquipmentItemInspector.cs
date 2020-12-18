@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
-using UnityEngine;
+﻿using UnityEditor;
 using UnityEditorInternal;
+using UnityEngine;
 
 namespace DevionGames.InventorySystem
 {
@@ -14,6 +12,7 @@ namespace DevionGames.InventorySystem
         protected override void OnEnable()
         {
             base.OnEnable();
+            if (target == null) return;
             this.regionList = new ReorderableList(serializedObject, serializedObject.FindProperty("m_Region"), true, true, true, true);
             this.regionList.drawHeaderCallback = (Rect rect) => {
                 EditorGUI.LabelField(rect, "Equipment Region");
@@ -26,9 +25,11 @@ namespace DevionGames.InventorySystem
             };
         }
 
+
         private void DrawInspector() {
             GUILayout.Space(3f);
             GUILayout.Label("Equipment:", EditorStyles.boldLabel);
+            EditorGUILayout.HelpBox("The equipment region defines where the item should be equiped to. Use Left Hand and Right Hand for two-handed weapons.", MessageType.Info);
             regionList.DoLayoutList();
         }
 

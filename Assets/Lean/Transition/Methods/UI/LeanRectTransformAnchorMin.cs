@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Lean.Transition.Method
 {
@@ -20,12 +20,12 @@ namespace Lean.Transition.Method
 
 		public static LeanState Register(RectTransform target, Vector2 anchorMin, float duration, LeanEase ease = LeanEase.Smooth)
 		{
-			var data = LeanTransition.RegisterWithTarget(State.Pool, duration, target);
+			var state = LeanTransition.SpawnWithTarget(State.Pool, target);
 
-			data.AnchorMin = anchorMin;
-			data.Ease      = ease;
+			state.AnchorMin = anchorMin;
+			state.Ease      = ease;
 
-			return data;
+			return LeanTransition.Register(state, duration);
 		}
 
 		[System.Serializable]

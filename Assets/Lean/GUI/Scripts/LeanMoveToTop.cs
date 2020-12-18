@@ -1,10 +1,8 @@
-﻿using UnityEngine;
-using UnityEngine.EventSystems;
+﻿using System.Collections.Generic;
 using Lean.Common;
-using System.Collections.Generic;
-#if UNITY_EDITOR
 using UnityEditor;
-#endif
+using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Lean.Gui
 {
@@ -70,11 +68,11 @@ namespace Lean.Gui
 }
 
 #if UNITY_EDITOR
-namespace Lean.Gui
+namespace Lean.Gui.Inspector
 {
 	[CanEditMultipleObjects]
 	[CustomEditor(typeof(LeanMoveToTop))]
-	public class LeanMoveToTop_Editor : LeanInspector<LeanMoveToTop>
+	public class LeanMoveToTop_Inspector : LeanInspector<LeanMoveToTop>
 	{
 		protected override void DrawInspector()
 		{

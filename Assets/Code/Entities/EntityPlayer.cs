@@ -6,18 +6,18 @@ namespace JoyLib.Code.Entities
 {
     public class EntityPlayer : Entity
     {
-        protected static MutableItemContainer Inventory { get; set; }
-        protected static MutableItemContainer Equipment { get; set; }
+        protected static MutableItemContainer InventoryContainer { get; set; }
+        protected static MutableItemContainer EquipmentContainer { get; set; }
 
         public EntityPlayer(IEntity baseEntity) :
             base(baseEntity)
         {
-            if (Inventory is null)
+            if (InventoryContainer is null)
             {
-                Inventory = WidgetUtility.Find<MutableItemContainer>("Inventory");
-                Inventory.Owner = this;
-                Equipment = WidgetUtility.Find<MutableItemContainer>("Equipment");
-                Equipment.Owner = this;
+                InventoryContainer = WidgetUtility.Find<MutableItemContainer>("Inventory");
+                InventoryContainer.Owner = this;
+                EquipmentContainer = WidgetUtility.Find<MutableItemContainer>("Equipment");
+                EquipmentContainer.Owner = this;
             }
 
             PlayerControlled = true;
@@ -68,7 +68,7 @@ namespace JoyLib.Code.Entities
 
         public override void Clear()
         {
-            Inventory.RemoveItems();
+            InventoryContainer.RemoveItems();
             base.Clear();
         }
     }

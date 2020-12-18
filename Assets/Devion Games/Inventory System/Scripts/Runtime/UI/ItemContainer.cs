@@ -84,24 +84,29 @@ namespace DevionGames.InventorySystem
         /// The button to use item in slot
         /// </summary>
         [Header("Behaviour")]
+        [Tooltip("The button to use item in slot.")]
         [EnumFlags]
         public InputButton useButton = InputButton.Right;
         /// <summary>
         /// Sets the container as dynamic. Slots are instantiated at runtime.
         /// </summary>
+        [Tooltip("Sets the container as dynamic. Slots are instantiated at runtime.")]
         [SerializeField]
         protected bool m_DynamicContainer = false;
         /// <summary>
         /// The parent transform of slots. 
         /// </summary>
+        [Tooltip("The parent transform of slots.")]
         [SerializeField]
         protected Transform m_SlotParent;
         /// <summary>
         /// The slot prefab. This game object should contain the Slot component or a child class of Slot. 
         /// </summary>
+        [Tooltip("The slot prefab. This game object should contain the Slot component or a child class of Slot.")]
         [SerializeField]
         protected GameObject m_SlotPrefab;
 
+        [Tooltip("If true this container will be used as reference. Referenced containers don't hold the items itself, they are only referencing an item.")]
         [SerializeField]
         private bool m_UseReferences = false;
         /// <summary>
@@ -112,6 +117,7 @@ namespace DevionGames.InventorySystem
             protected set { this.m_UseReferences = value; }
         }
 
+        [Tooltip("Can the items be dragged into this container.")]
         [SerializeField]
         private bool m_CanDragIn = false;
         /// <summary>
@@ -123,6 +129,7 @@ namespace DevionGames.InventorySystem
             protected set { this.m_CanDragIn = value; }
         }
 
+        [Tooltip("Can the items be dragged out from this container.")]
         [SerializeField]
         private bool m_CanDragOut = false;
         /// <summary>
@@ -134,6 +141,7 @@ namespace DevionGames.InventorySystem
             protected set { this.m_CanDragOut = value; }
         }
 
+        [Tooltip("Can the items be dropped from this container to ground.")]
         [SerializeField]
         private bool m_CanDropItems = false;
         /// <summary>
@@ -145,6 +153,7 @@ namespace DevionGames.InventorySystem
             protected set { this.m_CanDropItems = value; }
         }
 
+        [Tooltip("Can the items be referenced from this container.")]
         [SerializeField]
         private bool m_CanReferenceItems = false;
         /// <summary>
@@ -156,6 +165,7 @@ namespace DevionGames.InventorySystem
             protected set { this.m_CanReferenceItems = value; }
         }
 
+        [Tooltip("Can the items be sold from this container.")]
         [SerializeField]
         private bool m_CanSellItems = false;
         /// <summary>
@@ -167,6 +177,7 @@ namespace DevionGames.InventorySystem
             protected set { this.m_CanSellItems = value; }
         }
 
+        [Tooltip("Can items be used from this container.")]
         [SerializeField]
         private bool m_CanUseItems = false;
         /// <summary>
@@ -178,6 +189,7 @@ namespace DevionGames.InventorySystem
             protected set { this.m_CanUseItems = value; }
         }
 
+        [Tooltip("Use context menu for item interaction.")]
         [SerializeField]
         private bool m_UseContextMenu = false;
         /// <summary>
@@ -189,6 +201,7 @@ namespace DevionGames.InventorySystem
             protected set { this.m_UseContextMenu = value; }
         }
 
+        [Tooltip("Show item tooltips?")]
         [SerializeField]
         private bool m_ShowTooltips = false;
         /// <summary>
@@ -200,11 +213,11 @@ namespace DevionGames.InventorySystem
             protected set { this.m_ShowTooltips = value; }
         }
 
-
+        [Tooltip("If true move used item. Move Conditions needs to be defined!")]
         [SerializeField]
         private bool m_MoveUsedItem = false;
         /// <summary>
-        /// If true this container will be used as reference.
+        /// If true move used item. Move Conditions needs to be defined!
         /// </summary>
         public bool MoveUsedItem
         {
@@ -307,6 +320,11 @@ namespace DevionGames.InventorySystem
         /// <param name="s2">Slot 2</param>
         /// <returns>True if stacking or swaping possible.</returns>
         public bool StackOrSwap(Slot s1, Slot s2) {
+            if (s1 is ItemSlot s1Slot && s1Slot.IsCooldown)
+                return false;
+            if (s2 is ItemSlot s2Slot && s2Slot.IsCooldown)
+                return false;
+
             if (s1 == s2) {
                 return false;
             }
@@ -337,7 +355,10 @@ namespace DevionGames.InventorySystem
         /// <param name="s2">Second slot</param>
         /// <returns>True if swapped.</returns>
         public bool SwapItems(Slot s1, Slot s2) {
-
+            if (s1 is ItemSlot s1Slot && s1Slot.IsCooldown)
+                return false;
+            if (s2 is ItemSlot s2Slot && s2Slot.IsCooldown)
+                return false;
             if (s2.Container.UseReferences && !s1.Container.UseReferences) {
                 return false;
             }
@@ -421,6 +442,11 @@ namespace DevionGames.InventorySystem
         /// <param name="s2">Slot 2</param>
         /// <returns>True if items can be swapped.</returns>
         public bool CanSwapItems(Slot s1, Slot s2) {
+            if (s1 is ItemSlot s1Slot && s1Slot.IsCooldown)
+                return false;
+            if (s2 is ItemSlot s2Slot && s2Slot.IsCooldown)
+                return false;
+
             List<Slot> requiredSlotsObserved = s2.Container.GetRequiredSlots(s1.ObservedItem,s2);
             if (requiredSlotsObserved.Count == 0)
             {
@@ -452,7 +478,6 @@ namespace DevionGames.InventorySystem
         {
             if (!StackItem(item) && !AddItem(item)){
 
-                Debug.Log("False");
                 return false;
             }
             return true;
@@ -980,6 +1005,23 @@ namespace DevionGames.InventorySystem
         }
 
         /// <summary>
+        /// Check if the container has an item with category
+        /// </summary>
+        public bool HasCategoryItem(Category category)
+        {
+            for (int i = 0; i < this.m_Slots.Count; i++)
+            {
+                Slot slot = this.m_Slots[i];
+                if (!slot.IsEmpty && slot.ObservedItem.Category.Name == category.Name)
+                {
+
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
         /// Get an array of items with given id in this container.
         /// </summary>
         /// <param name="id">Item id</param>
@@ -1197,6 +1239,7 @@ namespace DevionGames.InventorySystem
         {
             if (index < this.m_Slots.Count)
             {
+                this.m_Slots[index].StopAllCoroutines();
                 DestroyImmediate(this.m_Slots[index].gameObject);
                 RefreshSlots();
             }
@@ -1490,6 +1533,24 @@ namespace DevionGames.InventorySystem
         }
 
         /// <summary>
+        /// Checks in all containers named by windowName if an item with category exists.
+        /// </summary>
+        public static bool HasCategoryItem(string windowName, Category category)
+        {
+            ItemContainer[] windows = WidgetUtility.FindAll<ItemContainer>(windowName);
+            for (int j = 0; j < windows.Length; j++)
+            {
+                ItemContainer current = windows[j];
+                if (current.HasCategoryItem(category))
+                {
+                    return true;
+                }
+
+            }
+            return false;
+        }
+
+        /// <summary>
         /// Get the first item in container by name.
         /// </summary>
         /// <param name="windowName"></param>
@@ -1507,6 +1568,31 @@ namespace DevionGames.InventorySystem
                     return item;
             }
             return null;
+        }
+
+        /// <summary>
+        /// Get the item amount
+        /// </summary>
+        /// <param name="windowName"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static int GetItemAmount(string windowName, string nameOrId)
+        {
+            int currentAmount = 0;
+            ItemContainer[] windows = WidgetUtility.FindAll<ItemContainer>(windowName);
+            for (int j = 0; j < windows.Length; j++)
+            {
+                ItemContainer current = windows[j];
+
+              
+                Item[] items = current.GetItems(nameOrId);
+                for (int i = 0; i < items.Length; i++)
+                {
+                    if (items[i] != null)
+                        currentAmount += items[i].Stack;
+                }
+            }
+            return currentAmount;
         }
 
         /// <summary>
@@ -1703,7 +1789,7 @@ namespace DevionGames.InventorySystem
             ItemContainer container = WidgetUtility.Find<ItemContainer>(windowName);
             for (int i = 0; i < items.Length; i++)
             {
-                if (container.AddItem(items[i])) {
+                if (container.StackOrAdd(items[i])) {
                
                     RemoveItem(items[i]);
                 }

@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
 using DevionGames.UIWidgets;
+using UnityEngine;
 
 namespace DevionGames.InventorySystem
 {
@@ -37,7 +36,7 @@ namespace DevionGames.InventorySystem
             return PickupItems() ;
         }
 
-        protected virtual ActionStatus  PickupItems()
+        protected virtual ActionStatus PickupItems()
         {
             if (this.m_ItemCollection.Count == 0) {
                 InventoryManager.Notifications.empty.Show(gameObject.name.Replace("(Clone)", "").ToLower());
@@ -91,7 +90,12 @@ namespace DevionGames.InventorySystem
             float angle = Random.Range(0f, 360f);
             float x = (float)(InventoryManager.DefaultSettings.maxDropDistance * Mathf.Cos(angle * Mathf.PI / 180f)) + gameObject.transform.position.x;
             float z = (float)(InventoryManager.DefaultSettings.maxDropDistance * Mathf.Sin(angle * Mathf.PI / 180f)) + gameObject.transform.position.z;
-            Vector3 position = new Vector3(x, 1f, z);
+            Vector3 position = new Vector3(x, gameObject.transform.position.y, z);
+
+            RaycastHit hit;
+            if (Physics.Raycast(position, Vector3.down, out hit)) {
+                position = hit.point+ Vector3.up;
+            }
 
             GameObject go = InventoryManager.Instantiate(prefab, position, Random.rotation);
             ItemCollection collection = go.GetComponent<ItemCollection>();

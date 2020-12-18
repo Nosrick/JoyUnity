@@ -1,10 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
 using UnityEditor;
-using System.Collections;
-using System.Collections.Generic;
-using System;
-using System.Linq;
-using System.Runtime.Remoting.Contexts;
+using UnityEngine;
 
 namespace DevionGames{
 	/// <summary>

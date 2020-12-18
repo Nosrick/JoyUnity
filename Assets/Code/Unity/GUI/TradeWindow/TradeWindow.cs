@@ -33,7 +33,7 @@ namespace JoyLib.Code.Unity.GUI
         
         protected RectTransform RectTransform { get; set; }
 
-        public new void Awake()
+        public void Awake()
         {
             base.Awake();
             RectTransform = this.GetComponent<RectTransform>();

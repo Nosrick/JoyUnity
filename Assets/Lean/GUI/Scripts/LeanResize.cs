@@ -1,12 +1,8 @@
+using Lean.Transition;
+using UnityEditor;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using Lean.Common;
-using Lean.Transition;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 namespace Lean.Gui
 {
@@ -14,7 +10,7 @@ namespace Lean.Gui
 	[RequireComponent(typeof(RectTransform))]
 	[HelpURL(LeanGui.HelpUrlPrefix + "LeanResize")]
 	[AddComponentMenu(LeanGui.ComponentMenuPrefix + "Resize")]
-	public class LeanResize : Selectable, IBeginDragHandler, IDragHandler, IEndDragHandler
+	public class LeanResize : LeanSelectable, IBeginDragHandler, IDragHandler, IEndDragHandler
 	{
 		/// <summary>If you want this GameObject to act as a resize handle, and for a different object to actually be resized then specify the target object here.</summary>
 		public RectTransform Target { set { target = value; } get { return target; } } [SerializeField] private RectTransform target;
@@ -227,15 +223,18 @@ namespace Lean.Gui
 }
 
 #if UNITY_EDITOR
-namespace Lean.Gui
+namespace Lean.Gui.Inspector
 {
 	[CanEditMultipleObjects]
 	[CustomEditor(typeof(LeanResize))]
-	public class LeanResize_Editor : LeanInspector<LeanResize>
+	public class LeanResize_Inspector : LeanSelectable_Inspector<LeanResize>
 	{
 		protected override void DrawInspector()
 		{
-			Draw("m_Navigation");
+			base.DrawInspector();
+
+			EditorGUILayout.Separator();
+
 			Draw("target", "If you want this GameObject to act as a resize handle, and for a different object to actually be resized then specify the target object here.");
 
 			EditorGUILayout.Separator();

@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Lean.Transition.Method
 {
@@ -15,9 +15,9 @@ namespace Lean.Transition.Method
 
 		public static LeanState Register(float duration)
 		{
-			var data = LeanTransition.Register(State.Pool, duration);
+			var state = LeanTransition.Spawn(State.Pool);
 
-			return data;
+			return LeanTransition.Register(state, duration);
 		}
 
 		[System.Serializable]

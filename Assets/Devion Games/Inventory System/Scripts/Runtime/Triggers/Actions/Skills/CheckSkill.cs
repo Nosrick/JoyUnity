@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using DevionGames.UIWidgets;
 using UnityEngine;
 
@@ -8,7 +6,7 @@ namespace DevionGames.InventorySystem
 {
     [Icon("Item")]
     [ComponentMenu("Inventory System/Check Skill")]
-    public class CheckSkill : Action
+    public class CheckSkill : Action, ICondition
     {
         [Tooltip("The name of the window to lock.")]
         [SerializeField]

@@ -88,8 +88,6 @@ namespace JoyLib.Code.Entities.Abilities
 
         void IncrementCounter(int value);
 
-        bool HasTag(string tag);
-
         bool EnactToll(IEntity caster);
 
         bool MeetsPrerequisites(IEntity actor);
@@ -147,11 +145,6 @@ namespace JoyLib.Code.Entities.Abilities
         }
 
         IDictionary<string, int> Prerequisites
-        {
-            get;
-        }
-
-        IEnumerable<string> Tags
         {
             get;
         }

@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Lean.Transition.Method
 {
@@ -27,26 +27,26 @@ namespace Lean.Transition.Method
 
 		public static LeanState Register(Transform target, Vector3 translation, Transform relativeTo, float duration, LeanEase ease = LeanEase.Smooth)
 		{
-			var data = LeanTransition.RegisterWithTarget(State.Pool, duration, target);
+			var state = LeanTransition.SpawnWithTarget(State.Pool, target);
 
-			data.Translation = translation;
-			data.Space       = Space.Self;
-			data.RelativeTo  = relativeTo;
-			data.Ease        = ease;
+			state.Translation = translation;
+			state.Space       = Space.Self;
+			state.RelativeTo  = relativeTo;
+			state.Ease        = ease;
 
-			return data;
+			return LeanTransition.Register(state, duration);
 		}
 
 		public static LeanState Register(Transform target, Vector3 translation, Space space, float duration, LeanEase ease = LeanEase.Smooth)
 		{
-			var data = LeanTransition.RegisterWithTarget(State.Pool, duration, target);
+			var state = LeanTransition.SpawnWithTarget(State.Pool, target);
 
-			data.Translation = translation;
-			data.Space       = space;
-			data.RelativeTo  = null;
-			data.Ease        = ease;
+			state.Translation = translation;
+			state.Space       = space;
+			state.RelativeTo  = null;
+			state.Ease        = ease;
 
-			return data;
+			return LeanTransition.Register(state, duration);
 		}
 
 		[System.Serializable]

@@ -1,12 +1,12 @@
-﻿using UnityEngine;
-using UnityEngine.Events;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System;
-using DevionGames.UIWidgets;
 using DevionGames.InventorySystem.Configuration;
+using DevionGames.UIWidgets;
+using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
 namespace DevionGames.InventorySystem
@@ -36,11 +36,7 @@ namespace DevionGames.InventorySystem
 		public static ItemDatabase Database {
 			get {
 				if (InventoryManager.current != null) {
-                    //Assert.IsNotNull(InventoryManager.current.m_Database, "Please assign ItemDatabase to the Inventory Manager!");
-                    if (current.m_Database is null)
-                    {
-                        current.m_Database = ScriptableObject.CreateInstance<ItemDatabase>();
-                    }
+                    Assert.IsNotNull(InventoryManager.current.m_Database, "Please assign ItemDatabase to the Inventory Manager!");
                     return InventoryManager.current.m_Database;
 				}
 				return null;
@@ -50,7 +46,7 @@ namespace DevionGames.InventorySystem
         private static Default m_DefaultSettings;
         public static Default DefaultSettings {
             get {
-                if (m_DefaultSettings is null)
+                if (m_DefaultSettings== null)
                 {
                     m_DefaultSettings = GetSetting<Default>();
                 }
@@ -113,12 +109,7 @@ namespace DevionGames.InventorySystem
         private static T GetSetting<T>() where T: Configuration.Settings{
             if (InventoryManager.Database != null)
             {
-                T obj = (T) InventoryManager.Database.settings.Where(x => x.GetType() == typeof(T)).FirstOrDefault();
-                if (obj is null)
-                {
-                    obj = ScriptableObject.CreateInstance<T>();
-                }
-                return obj;
+                return (T)InventoryManager.Database.settings.Where(x => x.GetType() == typeof(T)).FirstOrDefault();
             }
             return default(T);
         }
@@ -317,6 +308,15 @@ namespace DevionGames.InventorySystem
 
         }
 
+        public static bool HasSavedData() {
+            string key = PlayerPrefs.GetString(InventoryManager.SavingLoading.savingKey, InventoryManager.SavingLoading.savingKey);
+            return InventoryManager.HasSavedData(key);
+        }
+
+        public static bool HasSavedData(string key) {
+            return !string.IsNullOrEmpty(PlayerPrefs.GetString(key + ".UI"));
+        }
+
         private static void LoadUI(string json)
         {
             if (string.IsNullOrEmpty(json)) return;
@@ -495,7 +495,8 @@ namespace DevionGames.InventorySystem
                 Item item = items[i];
                 item = Instantiate(item);
                 item.Stack = amounts[i];
-                modifierLists[i].Modify(item); 
+                if(i < modifierLists.Length)
+                    modifierLists[i].Modify(item); 
 
                 if (item.IsCraftable)
                 {

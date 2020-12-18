@@ -115,6 +115,8 @@ namespace DevionGames.InventorySystem
                 }
             };
 
+            if (this.m_Stack != null)
+                this.m_Stack.raycastTarget = false;
         }
 
         /// <summary>
@@ -139,7 +141,7 @@ namespace DevionGames.InventorySystem
             }
 
             if (this.m_Stack != null) {
-                if (!IsEmpty){
+                if (!IsEmpty && ObservedItem.MaxStack > 1 ){
                     //Updates the stack and enables it.
                     this.m_Stack.text = ObservedItem.Stack.ToString();
                     this.m_Stack.enabled = true;
@@ -206,8 +208,15 @@ namespace DevionGames.InventorySystem
                     {
                         if (!moveToContainer.UseReferences || !Container.CanReferenceItems){
                            // Debug.Log("Move Item from "+Container.Name+" to "+moveToContainer.Name);
+
+                            if (!moveToContainer.CanReferenceItems)
+                            {
+                                ItemContainer.RemoveItemReferences(ObservedItem);
+                            }
                             Container.RemoveItem(Index);
                         }
+
+
                         return true;
                     }
                     for (int j = 0; j < moveToContainer.Slots.Count; j++)

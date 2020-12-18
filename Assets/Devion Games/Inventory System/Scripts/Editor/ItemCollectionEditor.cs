@@ -1,9 +1,8 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
-using UnityEditor;
 using System.Linq;
-using System;
+using UnityEditor;
+using UnityEngine;
 
 namespace DevionGames.InventorySystem
 {

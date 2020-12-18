@@ -1,9 +1,7 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
 using Lean.Common;
-using System.Collections.Generic;
-#if UNITY_EDITOR
 using UnityEditor;
-#endif
+using UnityEngine;
 
 namespace Lean.Transition
 {
@@ -33,71 +31,191 @@ namespace Lean.Transition
 		}
 
 		/// <summary>This will take the input linear 0..1 value, and return a transformed version based on the specified easing function.</summary>
-		public static float Smooth(LeanEase ease, float progress)
+		public static float Smooth(LeanEase ease, float x)
 		{
 			switch (ease)
 			{
 				case LeanEase.Smooth:
 				{
-					progress = progress * progress * (3.0f - 2.0f * progress);
+					x = x * x * (3.0f - 2.0f * x);
 				}
 				break;
 
 				case LeanEase.Accelerate:
 				{
-					progress *= progress;
+					x *= x;
 				}
 				break;
 
 				case LeanEase.Decelerate:
 				{
-					progress = 1.0f - progress;
-					progress *= progress;
-					progress = 1.0f - progress;
+					x = 1.0f - x;
+					x *= x;
+					x = 1.0f - x;
 				}
 				break;
 
 				case LeanEase.Elastic:
 				{
-					var angle   = progress * Mathf.PI * 4.0f;
-					var weightA = 1.0f - Mathf.Pow(progress, 0.125f);
-					var weightB = 1.0f - Mathf.Pow(1.0f - progress, 8.0f);
+					var angle   = x * Mathf.PI * 4.0f;
+					var weightA = 1.0f - Mathf.Pow(x, 0.125f);
+					var weightB = 1.0f - Mathf.Pow(1.0f - x, 8.0f);
 
-					progress = Mathf.LerpUnclamped(0.0f, 1.0f - Mathf.Cos(angle) * weightA, weightB);
+					x = Mathf.LerpUnclamped(0.0f, 1.0f - Mathf.Cos(angle) * weightA, weightB);
 				}
 				break;
 
 				case LeanEase.Back:
 				{
-					progress = 1.0f - progress;
-					progress = progress * progress * progress - progress * Mathf.Sin(progress * Mathf.PI);
-					progress = 1.0f - progress;
+					x = 1.0f - x;
+					x = x * x * x - x * Mathf.Sin(x * Mathf.PI);
+					x = 1.0f - x;
 				}
 				break;
 
 				case LeanEase.Bounce:
 				{
-					if (progress < (4f/11f))
+					if (x < (4f/11f))
 					{
-						progress = (121f/16f) * progress * progress;
+						x = (121f/16f) * x * x;
 					}
-					else if (progress < (8f/11f))
+					else if (x < (8f/11f))
 					{
-						progress = (121f/16f) * (progress - (6f/11f)) * (progress - (6f/11f)) + 0.75f;
+						x = (121f/16f) * (x - (6f/11f)) * (x - (6f/11f)) + 0.75f;
 					}
-					else if (progress < (10f/11f))
+					else if (x < (10f/11f))
 					{
-						progress = (121f/16f) * (progress - (9f/11f)) * (progress - (9f/11f)) + (15f/16f);
+						x = (121f/16f) * (x - (9f/11f)) * (x - (9f/11f)) + (15f/16f);
 					}
 					else
 					{
-						progress = (121f/16f) * (progress - (21f/22f)) * (progress - (21f/22f)) + (63f/64f);
+						x = (121f/16f) * (x - (21f/22f)) * (x - (21f/22f)) + (63f/64f);
 					}
 				}
 				break;
+
+				case LeanEase.SineIn: return 1 - Mathf.Cos((x * Mathf.PI) / 2.0f);
+
+				case LeanEase.SineOut: return Mathf.Sin((x * Mathf.PI) / 2.0f);
+
+				case LeanEase.SineInOut: return -(Mathf.Cos(Mathf.PI * x) - 1.0f) / 2.0f;
+
+				case LeanEase.QuadIn: return SmoothQuad(x);
+
+				case LeanEase.QuadOut: return 1 - SmoothQuad(1 - x);
+
+				case LeanEase.QuadInOut: return x < 0.5f ? SmoothQuad(x * 2) / 2 : 1 - SmoothQuad(2 - x * 2) / 2;
+
+				case LeanEase.CubicIn: return SmoothCubic(x);
+
+				case LeanEase.CubicOut: return 1 - SmoothCubic(1 - x);
+
+				case LeanEase.CubicInOut: return x < 0.5f ? SmoothCubic(x * 2) / 2 : 1 - SmoothCubic(2 - x * 2) / 2;
+
+				case LeanEase.QuartIn: return SmoothQuart(x);
+
+				case LeanEase.QuartOut: return 1 - SmoothQuart(1 - x);
+
+				case LeanEase.QuartInOut: return x < 0.5f ? SmoothQuart(x * 2) / 2 : 1 - SmoothQuart(2 - x * 2) / 2;
+
+				case LeanEase.QuintIn: return SmoothQuint(x);
+
+				case LeanEase.QuintOut: return 1 - SmoothQuint(1 - x);
+
+				case LeanEase.QuintInOut: return x < 0.5f ? SmoothQuint(x * 2) / 2 : 1 - SmoothQuint(2 - x * 2) / 2;
+
+				case LeanEase.ExpoIn: return SmoothExpo(x);
+
+				case LeanEase.ExpoOut: return 1 - SmoothExpo(1 - x);
+
+				case LeanEase.ExpoInOut: return x < 0.5f ? SmoothExpo(x * 2) / 2 : 1 - SmoothExpo(2 - x * 2) / 2;
+
+				case LeanEase.CircIn: return SmoothCirc(x);
+
+				case LeanEase.CircOut: return 1 - SmoothCirc(1 - x);
+
+				case LeanEase.CircInOut: return x < 0.5f ? SmoothCirc(x * 2) / 2 : 1 - SmoothCirc(2 - x * 2) / 2;
+
+				case LeanEase.BackIn: return SmoothBack(x);
+
+				case LeanEase.BackOut: return 1 - SmoothBack(1 - x);
+
+				case LeanEase.BackInOut: return x < 0.5f ? SmoothBack(x * 2) / 2 : 1 - SmoothBack(2 - x * 2) / 2;
+
+				case LeanEase.ElasticIn: return SmoothElastic(x);
+
+				case LeanEase.ElasticOut: return 1 - SmoothElastic(1 - x);
+
+				case LeanEase.ElasticInOut: return x < 0.5f ? SmoothElastic(x * 2) / 2 : 1 - SmoothElastic(2 - x * 2) / 2;
+
+				case LeanEase.BounceIn: return 1 - SmoothBounce(1 - x);
+
+				case LeanEase.BounceOut: return SmoothBounce(x);
+
+				case LeanEase.BounceInOut: return x < 0.5f ? 0.5f - SmoothBounce(1 - x * 2) / 2 : 0.5f + SmoothBounce(x * 2 - 1) / 2;
 			}
 
-			return progress;
+			return x;
+		}
+
+		private static float SmoothQuad(float x)
+		{
+			return x * x;
+		}
+
+		private static float SmoothCubic(float x)
+		{
+			return x * x * x;
+		}
+
+		private static float SmoothQuart(float x)
+		{
+			return x * x * x * x;
+		}
+
+		private static float SmoothQuint(float x)
+		{
+			return x * x * x * x * x;
+		}
+
+		private static float SmoothExpo(float x)
+		{
+			return x == 0.0f ? 0.0f : Mathf.Pow(2.0f, 10.0f * x - 10.0f);
+		}
+
+		private static float SmoothCirc(float x)
+		{
+			return 1.0f - Mathf.Sqrt(1.0f - Mathf.Pow(x, 2.0f));
+		}
+
+		private static float SmoothBack(float x)
+		{
+			return 2.70158f * x * x * x - 1.70158f * x * x;
+		}
+
+		private static float SmoothElastic(float x)
+		{
+			return x == 0.0f ? 0.0f : x == 1.0f ? 1.0f : -Mathf.Pow(2.0f, 10.0f * x - 10.0f) * Mathf.Sin((x * 10.0f - 10.75f) * ((2.0f * Mathf.PI) / 3.0f));
+		}
+
+		private static float SmoothBounce(float x)
+		{
+			if (x < (4f/11f))
+			{
+				return (121f/16f) * x * x;
+			}
+			else if (x < (8f/11f))
+			{
+				return (121f/16f) * (x - (6f/11f)) * (x - (6f/11f)) + 0.75f;
+			}
+			else if (x < (10f/11f))
+			{
+				return (121f/16f) * (x - (9f/11f)) * (x - (9f/11f)) + (15f/16f);
+			}
+			else
+			{
+				return (121f/16f) * (x - (21f/22f)) * (x - (21f/22f)) + (63f/64f);
+			}
 		}
 	}
 
@@ -143,7 +261,7 @@ namespace Lean.Transition
 }
 
 #if UNITY_EDITOR
-namespace Lean.Transition
+namespace Lean.Transition.Inspector
 {
 	[CanEditMultipleObjects]
 	[CustomEditor(typeof(LeanMethod), true)]

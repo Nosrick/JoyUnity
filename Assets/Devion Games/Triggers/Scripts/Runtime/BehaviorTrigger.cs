@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -55,7 +54,6 @@ namespace DevionGames
 
         protected override void OnTriggerUsed()
         {
-
             CacheAnimatorStates();
         }
 
@@ -108,7 +106,7 @@ namespace DevionGames
                 {
                     if (animator.GetCurrentAnimatorStateInfo(j).shortNameHash != this.m_LayerStateMap[j].shortNameHash && !animator.IsInTransition(j))
                     {
-                        animator.CrossFadeInFixedTime(this.m_LayerStateMap[j].shortNameHash, 0.2f);
+                        animator.CrossFadeInFixedTime(this.m_LayerStateMap[j].shortNameHash, 0.15f);
                     }
                 }
             }

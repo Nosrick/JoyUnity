@@ -1,6 +1,4 @@
 using UnityEngine;
-using System.Collections;
-using DevionGames.UIWidgets;
 
 namespace DevionGames.InventorySystem.ItemActions{
     [UnityEngine.Scripting.APIUpdating.MovedFromAttribute(true, null, "Assembly-CSharp")]

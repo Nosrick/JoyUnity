@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
 namespace DevionGames
 {
     [UnityEngine.Scripting.APIUpdating.MovedFromAttribute(true, null, "Assembly-CSharp")]
     [Icon("Component")]
     [ComponentMenu("Component/Invoke")]
     [System.Serializable]
-    public class Invoke : Action
+    public class Invoke : Action, ICondition
     {
         [SerializeField]
         private TargetType m_Target = TargetType.Player;
