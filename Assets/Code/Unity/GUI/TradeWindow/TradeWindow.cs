@@ -73,6 +73,12 @@ namespace JoyLib.Code.Unity.GUI
                 RightInventory.StackOrAdd(item);
             }
 
+            this.LeftInventory.Owner = Left;
+            this.LeftOffering.Owner = Left;
+
+            this.RightInventory.Owner = Right;
+            this.RightOffering.Owner = Right;
+
             RightName.text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Right.Gender.PersonalSubject) + " " + Right.Gender.IsOrAre + " offering";
             LayoutRebuilder.ForceRebuildLayoutImmediate(RectTransform);
         }

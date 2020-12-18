@@ -7,6 +7,8 @@ namespace JoyLib.Code.Unity.GUI
     [RequireComponent(typeof(GridLayoutGroup))]
     public class ResizeGridLayoutCells : MonoBehaviour
     {
+        [SerializeField] protected GameObject ChildPrefab;
+        
         protected int Columns { get; set; }
         protected int Rows { get; set; }
 
@@ -14,7 +16,7 @@ namespace JoyLib.Code.Unity.GUI
         {
             GridLayoutGroup grid = this.GetComponent<GridLayoutGroup>();
             RectTransform rectTransform = this.GetComponent<RectTransform>();
-            RectTransform childRect = this.transform.GetChild(0).GetComponent<RectTransform>();
+            RectTransform childRect = this.ChildPrefab.GetComponent<RectTransform>();
             float thisAspect = rectTransform.rect.width / rectTransform.rect.height;
             float childAspect = (grid.spacing.x + grid.cellSize.x) / (grid.spacing.y + grid.cellSize.y);
             float newSize = 0;

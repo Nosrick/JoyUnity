@@ -100,8 +100,11 @@ namespace JoyLib.Code.States
             GUIManager.OpenGUI(GUINames.NEEDSRECT);
             GUIManager.OpenGUI(GUINames.DERIVED_VALUES);
 
+            GUIManager.GetGUI(GUINames.INVENTORY).GetComponent<MutableItemContainer>().Owner = this.PlayerWorld.Player;
+            GUIManager.GetGUI(GUINames.EQUIPMENT).GetComponent<MutableItemContainer>().Owner = this.PlayerWorld.Player;
+
             EquipmentHandler equipmentHandler = WidgetUtility.Find<MutableItemContainer>("Equipment").gameObject.GetComponent<EquipmentHandler>();
-            equipmentHandler.SetPlayer(m_ActiveWorld.Player, true);
+            equipmentHandler.SetPlayer(m_ActiveWorld.Player);
         }
 
         public override void Start()

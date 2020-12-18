@@ -15,6 +15,8 @@ namespace JoyLib.Code.Unity.GUI
         [SerializeField] protected GameObject m_SlotPrefab;
         [SerializeField] protected LayoutGroup m_Container;
         [SerializeField] protected MutableItemContainer m_EquipmentContainer;
+        
+        public bool Initialised { get; protected set; }
 
         public void SetPlayer(IEntity player, bool clearSlots = false)
         {
@@ -24,9 +26,14 @@ namespace JoyLib.Code.Unity.GUI
 
         private void CalculateSlots(bool clearSlots = false)
         {
-            if (clearSlots)
+            if (clearSlots || this.Initialised == false)
             {
-                m_EquipmentContainer.Slots.Clear();
+                this.Initialised = false;
+                for (int i = 0; i < this.m_Container.transform.childCount; i++)
+                {
+                    DestroyImmediate(this.m_Container.transform.GetChild(i).gameObject);
+                }
+                this.m_EquipmentContainer.Slots.Clear();
             }
             else if (!clearSlots && m_EquipmentContainer.Slots.Count > 0)
             {
@@ -60,7 +67,8 @@ namespace JoyLib.Code.Unity.GUI
                 slotScript.restrictions.Add(region);
             }
 
-            m_EquipmentContainer.RefreshSlots();
+            this.m_EquipmentContainer.RefreshSlots();
+            this.Initialised = true;
         }
     }
 }
