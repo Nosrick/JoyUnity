@@ -97,8 +97,8 @@ namespace JoyLib.Code.States
             }
             
             GUIManager.CloseAllOtherGUIs();
-            GUIManager.OpenGUI(GlobalConstants.NEEDSRECT);
-            GUIManager.OpenGUI(GlobalConstants.DERIVED_VALUES);
+            GUIManager.OpenGUI(GUINames.NEEDSRECT);
+            GUIManager.OpenGUI(GUINames.DERIVED_VALUES);
 
             EquipmentHandler equipmentHandler = WidgetUtility.Find<MutableItemContainer>("Equipment").gameObject.GetComponent<EquipmentHandler>();
             equipmentHandler.SetPlayer(m_ActiveWorld.Player, true);
@@ -171,7 +171,7 @@ namespace JoyLib.Code.States
 
         protected void OnMouseOverJoyObject(object sender, JoyObjectMouseOverEventArgs args)
         {
-            if (GUIManager.IsActive(GlobalConstants.CONTEXT_MENU) == false)
+            if (GUIManager.IsActive(GUINames.CONTEXT_MENU) == false)
             {
                 PrimaryTarget = args.Actor;
                 SetUpTooltip();
@@ -180,11 +180,11 @@ namespace JoyLib.Code.States
 
         protected void OnMouseExitJoyObject(object sender, EventArgs args)
         {
-            if (GUIManager.IsActive(GlobalConstants.CONTEXT_MENU) == false)
+            if (GUIManager.IsActive(GUINames.CONTEXT_MENU) == false)
             {
                 PrimaryTarget = null;
             }
-            GUIManager.CloseGUI(GlobalConstants.TOOLTIP);
+            GUIManager.CloseGUI(GUINames.TOOLTIP);
         }
 
         protected void SetUpTooltip()
@@ -195,7 +195,7 @@ namespace JoyLib.Code.States
                 return;
             }
             
-            Tooltip tooltip = GUIManager.GetGUI(GlobalConstants.TOOLTIP).GetComponent<Tooltip>();
+            Tooltip tooltip = GUIManager.GetGUI(GUINames.TOOLTIP).GetComponent<Tooltip>();
             if (PrimaryTarget is IEntity entity)
             {
                 string relationshipName = "You";
@@ -217,7 +217,7 @@ namespace JoyLib.Code.States
                 
                 builder.AppendLine(CultureInfo.CurrentCulture.TextInfo.ToTitleCase(relationshipName));
 
-                GUIManager.OpenGUI(GlobalConstants.TOOLTIP);
+                GUIManager.OpenGUI(GUINames.TOOLTIP);
                 tooltip.Show(
                     entity.JoyName,
                     builder.ToString(),
@@ -226,7 +226,7 @@ namespace JoyLib.Code.States
             }
             else if (PrimaryTarget is ItemInstance item)
             {
-                GUIManager.OpenGUI(GlobalConstants.TOOLTIP);
+                GUIManager.OpenGUI(GUINames.TOOLTIP);
                 tooltip.Show(
                     item.DisplayName,
                     item.Description,
@@ -237,7 +237,7 @@ namespace JoyLib.Code.States
 
         protected void SetUpContextMenu()
         {
-            ContextMenu contextMenu = GUIManager.GetGUI(GlobalConstants.CONTEXT_MENU).GetComponent<ContextMenu>();
+            ContextMenu contextMenu = GUIManager.GetGUI(GUINames.CONTEXT_MENU).GetComponent<ContextMenu>();
 
             contextMenu.Close();
             contextMenu.Clear();
@@ -261,7 +261,7 @@ namespace JoyLib.Code.States
 
                 if (contextMenu.GetComponentsInChildren<MenuItem>(true).Length > 1)
                 {
-                    GUIManager.OpenGUI(GlobalConstants.CONTEXT_MENU);
+                    GUIManager.OpenGUI(GUINames.CONTEXT_MENU);
                 }
             }
         }
@@ -273,8 +273,8 @@ namespace JoyLib.Code.States
                 return;
             }
 
-            GUIManager.CloseGUI(GlobalConstants.CONTEXT_MENU);
-            GUIManager.OpenGUI(GlobalConstants.CONVERSATION);
+            GUIManager.CloseGUI(GUINames.CONTEXT_MENU);
+            GUIManager.OpenGUI(GUINames.CONVERSATION);
             ConversationEngine.SetActors(m_ActiveWorld.Player, entity);
             ConversationEngine.Converse();
         }
@@ -327,35 +327,35 @@ namespace JoyLib.Code.States
             */
             if (Input.GetKeyUp(KeyCode.Escape))
             {
-                GUIManager.CloseAllOtherGUIs(GlobalConstants.NEEDSRECT);
-                GUIManager.OpenGUI(GlobalConstants.NEEDSRECT);
-                GUIManager.OpenGUI(GlobalConstants.DERIVED_VALUES);
+                GUIManager.CloseAllOtherGUIs(GUINames.NEEDSRECT);
+                GUIManager.OpenGUI(GUINames.NEEDSRECT);
+                GUIManager.OpenGUI(GUINames.DERIVED_VALUES);
             }
             else if (Input.GetKeyUp(KeyCode.I))
             {
-                GUIManager.ToggleGUI(GlobalConstants.INVENTORY);
+                GUIManager.ToggleGUI(GUINames.INVENTORY);
             }
             else if (Input.GetKeyUp(KeyCode.E))
             {
-                GUIManager.ToggleGUI(GlobalConstants.EQUIPMENT);
+                GUIManager.ToggleGUI(GUINames.EQUIPMENT);
             }
             else if (Input.GetKeyUp(KeyCode.J))
             {
-                GUIManager.ToggleGUI(GlobalConstants.QUEST_JOURNAL);
+                GUIManager.ToggleGUI(GUINames.QUEST_JOURNAL);
             }
             else if (Input.GetKeyUp(KeyCode.M))
             {
-                GUIManager.ToggleGUI(GlobalConstants.JOB_MANAGEMENT);
+                GUIManager.ToggleGUI(GUINames.JOB_MANAGEMENT);
             }
             else if (Input.GetKeyUp(KeyCode.C))
             {
-                GUIManager.ToggleGUI(GlobalConstants.CHARACTER_SHEET);
+                GUIManager.ToggleGUI(GUINames.CHARACTER_SHEET);
             }
             else if (Input.GetKeyUp(KeyCode.T))
             {
-                if (GUIManager.IsActive(GlobalConstants.CONVERSATION))
+                if (GUIManager.IsActive(GUINames.CONVERSATION))
                 {
-                    GUIManager.CloseGUI(GlobalConstants.CONVERSATION);
+                    GUIManager.CloseGUI(GUINames.CONVERSATION);
                 }
                 else
                 {
@@ -370,8 +370,8 @@ namespace JoyLib.Code.States
 
             if (GUIManager.AreAnyOpen() == false)
             {
-                GUIManager.OpenGUI(GlobalConstants.NEEDSRECT);
-                GUIManager.OpenGUI(GlobalConstants.DERIVED_VALUES);
+                GUIManager.OpenGUI(GUINames.NEEDSRECT);
+                GUIManager.OpenGUI(GUINames.DERIVED_VALUES);
             }
 
             if (GUIManager.RemovesControl())

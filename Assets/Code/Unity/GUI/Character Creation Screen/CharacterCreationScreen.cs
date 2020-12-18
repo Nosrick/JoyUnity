@@ -82,14 +82,14 @@ namespace JoyLib.Code.Unity.GUI
         public void GoToSkillsAndAbilities()
         {
             GameManager.GUIManager.CloseGUI(this.name);
-            GameManager.GUIManager.OpenGUI(GlobalConstants.CHARACTER_CREATION_PART_2);
+            GameManager.GUIManager.OpenGUI(GUINames.CHARACTER_CREATION_PART_2);
             SkillWindow.SetSkills(SkillWindow.GetSkillNames());
             AbilityWindow.GetAvailableAbilities(PlayerInfo.CurrentTemplate, StatisticWindow.GetStatistics(), SkillWindow.GetSkillsBlock());
         }
 
         public void GoToPlayerInfo()
         {
-            this.GameManager.GUIManager.CloseGUI(GlobalConstants.CHARACTER_CREATION_PART_2);
+            this.GameManager.GUIManager.CloseGUI(GUINames.CHARACTER_CREATION_PART_2);
             this.GameManager.GUIManager.OpenGUI(this.name);
         }
     }

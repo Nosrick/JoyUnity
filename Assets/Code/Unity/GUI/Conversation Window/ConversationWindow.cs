@@ -42,7 +42,7 @@ namespace JoyLib.Code.Unity.GUI
 
         protected void CloseMe(object sender, EventArgs args)
         {
-            GameManager.GUIManager.CloseGUI(GlobalConstants.CONVERSATION);
+            GameManager.GUIManager.CloseGUI(GUINames.CONVERSATION);
         }
 
         protected void SetActors(object sender, EventArgs args)

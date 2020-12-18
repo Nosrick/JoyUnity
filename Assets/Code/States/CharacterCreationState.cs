@@ -23,10 +23,10 @@ namespace JoyLib.Code.States
         {
             base.SetUpUi();
             CharacterCreationScreen = GUIManager
-                .GetGUI(GlobalConstants.CHARACTER_CREATION_PART_1)
+                .GetGUI(GUINames.CHARACTER_CREATION_PART_1)
                 .GetComponent<CharacterCreationScreen>();
             CharacterCreationScreen.Initialise();
-            GUIManager.OpenGUI(GlobalConstants.CHARACTER_CREATION_PART_1);
+            GUIManager.OpenGUI(GUINames.CHARACTER_CREATION_PART_1);
         }
 
         public override void HandleInput()
