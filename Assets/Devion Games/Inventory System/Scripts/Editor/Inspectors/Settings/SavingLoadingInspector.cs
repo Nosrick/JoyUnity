@@ -1,11 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEditor.AnimatedValues;
+using UnityEngine;
 using UnityEngine.Events;
-using System.Linq;
-using System;
 
 namespace DevionGames.InventorySystem.Configuration
 {

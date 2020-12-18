@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace DevionGames.Graphs
+﻿namespace DevionGames.Graphs
 {
     [NodeStyle("Icons/Multiply",false,"Math")]
     public class Multiply : FlowNode

@@ -1,10 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
 using System.Collections;
-using UnityEngine.Events;
 using System.Collections.Generic;
-using System;
-using DevionGames.Graphs;
 using System.Linq;
+using DevionGames.Graphs;
+using UnityEngine;
 
 namespace DevionGames.StatSystem
 {
@@ -41,7 +40,7 @@ namespace DevionGames.StatSystem
 
                     this.m_Value = Mathf.Clamp(this.m_Value, this.MinValue, this.MaxValue);
                     this.CurrentValue = Mathf.Clamp(this.m_CurrentValue, this.MinValue, this.MaxValue);
-
+                    //GameState.MarkDirty();
                     this.m_Dirty = false;
                 }
                 return this.m_Value;
@@ -53,7 +52,12 @@ namespace DevionGames.StatSystem
         {
             get { return this.m_CurrentValue; }
             set
-            {this.m_CurrentValue = value; }
+            {
+                if (this.m_CurrentValue != value)
+                {
+                    this.m_CurrentValue = value;
+                }
+            }
         }
 
         [SerializeField]
@@ -101,6 +105,31 @@ namespace DevionGames.StatSystem
         public float Rate {
             get { return this.m_Rate; }
             set { this.m_Rate = value; }
+        }
+
+        [SerializeField]
+        private bool m_DisplayDamage;
+        public bool DisplayDamage
+        {
+            get { return this.m_DisplayDamage; }
+            set { this.m_DisplayDamage=value; }
+        }
+
+        [InspectorLabel("Default")]
+        [SerializeField]
+        private Color m_DamageColor = Color.white;
+        public Color DamageColor {
+            get { return this.m_DamageColor; }
+            set { this.m_DamageColor = value; }
+        }
+
+        [InspectorLabel("Critical")]
+        [SerializeField]
+        private Color m_CriticalDamageColor = Color.red;
+        public Color CriticalDamageColor
+        {
+            get { return this.m_CriticalDamageColor; }
+            set { this.m_CriticalDamageColor = value; }
         }
 
         private StatsHandler m_Handler;

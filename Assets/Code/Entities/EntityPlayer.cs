@@ -1,29 +1,30 @@
-﻿using System.Collections.Generic;
-using DevionGames.InventorySystem;
-using DevionGames.UIWidgets;
+﻿using DevionGames.UIWidgets;
 using JoyLib.Code.Entities.AI.Drivers;
-using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Unity;
-using UnityEngine;
 
 namespace JoyLib.Code.Entities
 {
     public class EntityPlayer : Entity
     {
-        protected static ItemContainer m_Inventory;
+        protected static MutableItemContainer InventoryContainer { get; set; }
+        protected static MutableItemContainer EquipmentContainer { get; set; }
 
         public EntityPlayer(IEntity baseEntity) :
             base(baseEntity)
         {
-            if (m_Inventory is null)
+            if (InventoryContainer is null)
             {
-                m_Inventory = WidgetUtility.Find<MutableItemContainer>("Inventory");
+                InventoryContainer = WidgetUtility.Find<MutableItemContainer>("Inventory");
+                InventoryContainer.Owner = this;
+                EquipmentContainer = WidgetUtility.Find<MutableItemContainer>("Equipment");
+                EquipmentContainer.Owner = this;
             }
 
             PlayerControlled = true;
             m_Driver = new PlayerDriver();
         }
         
+        /*
         public override bool EquipItem(string slotRef, IItemInstance itemRef)
         {
             return base.EquipItem(slotRef, itemRef);
@@ -34,7 +35,7 @@ namespace JoyLib.Code.Entities
             if (actor is ItemInstance item)
             {
                 bool result = true;
-                result &= m_Inventory.StackOrAdd(item);
+                //result &= Inventory.StackOrAdd(item);
                 return result && base.AddContents(actor);
             }
 
@@ -46,7 +47,7 @@ namespace JoyLib.Code.Entities
             bool result = true;
             foreach (ItemInstance item in actors)
             {
-                result &= m_Inventory.StackOrAdd(item);
+                //result &= Inventory.StackOrAdd(item);
             }
             
             return result && base.AddContents(actors);
@@ -57,16 +58,17 @@ namespace JoyLib.Code.Entities
             if (item is ItemInstance instance)
             {
                 bool result = true;
-                result &= m_Inventory.RemoveItem(instance);
+                result &= Inventory.RemoveItem(instance);
                 return result && base.RemoveContents(item);
             }
 
             return false;
         }
+        */
 
         public override void Clear()
         {
-            m_Inventory.RemoveItems();
+            InventoryContainer.RemoveItems();
             base.Clear();
         }
     }

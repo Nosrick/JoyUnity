@@ -1,7 +1,7 @@
-﻿using UnityEngine;
-using UnityEditor;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Collections.Generic;
+using UnityEditor;
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace DevionGames.InventorySystem
@@ -152,7 +152,7 @@ namespace DevionGames.InventorySystem
 						Database = databases[i];
 						if (Database.categories.Count == 0)
 							CreateDefaultCategory(Database);
-						onSelect.Invoke();
+						onSelect?.Invoke();
 					}
 				}
 				GUILayout.FlexibleSpace();
@@ -187,6 +187,8 @@ namespace DevionGames.InventorySystem
 		private void ResetChildEditors ()
 		{
 			if (database != null) {
+				database.items.RemoveAll(x=> x == null);
+				EditorUtility.SetDirty(database);
                 childEditors = new List<ICollectionEditor> ();
 				childEditors.Add (new ItemCollectionEditor (database, database.items, database.categories.Select (x => x.Name).ToList ()));
                 childEditors.Add(new ScriptableObjectCollectionEditor<Currency>(database, database.currencies));

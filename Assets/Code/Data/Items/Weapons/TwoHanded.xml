@@ -16,9 +16,11 @@
         <Size>500</Size>
         <Slot>Hand</Slot>
         <Slot>Hand</Slot>
+        <Skill>heavy blades</Skill>
         <Tag>weapon</Tag>
         <Tag>two-handed</Tag>
         <Tag>sword</Tag>
+        <Tag>physical</Tag>
         <Tileset>Weapons</Tileset>
     </IdentifiedItem>
 

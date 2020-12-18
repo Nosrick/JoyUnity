@@ -1,9 +1,6 @@
-﻿using UnityEngine;
+﻿using UnityEditor;
+using UnityEngine;
 using UnityEngine.EventSystems;
-using Lean.Common;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 namespace Lean.Gui
 {
@@ -75,12 +72,14 @@ namespace Lean.Gui
 				Target.sizeDelta = targetSize;
 			}
 		}
+
 #if UNITY_EDITOR
 		protected override void OnValidate()
 		{
 			UpdateSize();
 		}
 #endif
+
 		protected override void OnRectTransformDimensionsChange()
 		{
 			UpdateSize();
@@ -89,11 +88,11 @@ namespace Lean.Gui
 }
 
 #if UNITY_EDITOR
-namespace Lean.Gui
+namespace Lean.Gui.Inspector
 {
 	[CanEditMultipleObjects]
 	[CustomEditor(typeof(LeanSizer))]
-	public class LeanSizer_Editor : LeanInspector<LeanSizer>
+	public class LeanSizer_Inspector : Lean.Common.LeanInspector<LeanSizer>
 	{
 		protected override void DrawInspector()
 		{

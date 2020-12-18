@@ -24,11 +24,6 @@ namespace DevionGames.InventorySystem
 
         protected override void CreateTriggerCollider()
         {
-            if (this.GetComponent<Collider2D>() is null == false)
-            {
-                return;
-            }
-            
             Vector2 position = Vector2.zero;
 
             Collider2D collider = GetComponent<Collider2D>();

@@ -47,6 +47,7 @@ namespace JoyLib.Code.World
 
         [NonSerialized] protected ILiveEntityHandler EntityHandler;
         [NonSerialized] protected RNG Roller;
+        protected List<string> m_Tags;
 
         /// <summary>
         /// A template for adding stuff to later. A blank WorldInstance.
@@ -564,7 +565,7 @@ namespace JoyLib.Code.World
                     }
                 }
 
-                if (matches == tags.Length || (tags.Length < joyObject.Tags.Count && matches > 0))
+                if (matches == tags.Length || (tags.Length < joyObject.Tags.Count() && matches > 0))
                 {
                     objects.Add(joyObject.WorldPosition, joyObject);
                 }
@@ -581,32 +582,36 @@ namespace JoyLib.Code.World
 
         public bool HasTag(string tag)
         {
-            return Tags.Contains(tag.ToLower());
+            return this.m_Tags.Contains(tag.ToLower());
         }
 
         public bool AddTag(string tag)
         {
-            if (Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase)))
+            if (this.m_Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase)))
             {
                 return true;
             }
 
-            Tags.Add(tag);
+            this.m_Tags.Add(tag);
             return true;
         }
 
         public bool RemoveTag(string tag)
         {
-            if (Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase)))
+            if (this.Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase)))
             {
-                string match = Tags.First(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase));
-                return Tags.Remove(match);
+                string match = this.Tags.First(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase));
+                return this.m_Tags.Remove(match);
             }
 
             return false;
         }
 
-        public List<string> Tags { get; protected set; }
+        public IEnumerable<string> Tags
+        {
+            get => this.m_Tags;
+            protected set => this.m_Tags = new List<string>(value);
+        }
 
         public Dictionary<Vector2Int, IWorldInstance> Areas
         {

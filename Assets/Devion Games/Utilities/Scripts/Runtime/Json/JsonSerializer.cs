@@ -1,9 +1,6 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Text;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
+using UnityEngine;
 
 namespace DevionGames{
 	public static class JsonSerializer {

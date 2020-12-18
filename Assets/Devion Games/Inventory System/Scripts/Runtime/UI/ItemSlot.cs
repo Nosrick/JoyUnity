@@ -1,11 +1,8 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
+using DevionGames.UIWidgets;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using DevionGames.UIWidgets;
-using System.Linq;
-using UnityEngine.Events;
 
 namespace DevionGames.InventorySystem
 {
@@ -25,6 +22,11 @@ namespace DevionGames.InventorySystem
 		/// </summary>
 		[SerializeField]
         protected Image m_CooldownOverlay;
+        /// <summary>
+        /// The image to display cooldown.
+        /// </summary>
+        [SerializeField]
+        protected Text m_Cooldown;
         /// <summary>
 		/// The text to display item description.
 		/// </summary>
@@ -76,14 +78,20 @@ namespace DevionGames.InventorySystem
         }
         protected Coroutine m_DelayTooltipCoroutine;
         protected ScrollRect m_ParentScrollRect;
+        protected bool m_IsMouseKey;
+
 
         protected override void Start()
         {
             base.Start();
+            if (this.m_CooldownOverlay != null)
+                this.m_CooldownOverlay.raycastTarget = false;
+
             this.m_ParentScrollRect = GetComponentInParent<ScrollRect>();
             if (this.m_Key != null){
                 this.m_Key.text = UnityTools.KeyToCaption(this.m_UseKey);
             }
+            this.m_IsMouseKey = m_UseKey == KeyCode.Mouse0 || m_UseKey == KeyCode.Mouse1 || m_UseKey == KeyCode.Mouse2;
         }
 
         /// <summary>
@@ -91,9 +99,10 @@ namespace DevionGames.InventorySystem
 		/// </summary>
 		protected virtual void Update()
         {
-            if (Input.GetKeyDown(m_UseKey))
+            if (Input.GetKeyDown(m_UseKey) && !UnityTools.IsPointerOverUI())
             {
-                Use();
+                if(!(this.m_IsMouseKey && TriggerRaycaster.IsPointerOverTrigger()))
+                    Use();
             }
             if (Container != null && Container.IsVisible)
             {
@@ -171,7 +180,7 @@ namespace DevionGames.InventorySystem
         }
 
         private void ShowTooltip() {
-            if (isActiveAndEnabled && Container.ShowTooltips && dragObject == null && ObservedItem != null)
+            if (Container.ShowTooltips && this.isActiveAndEnabled && dragObject == null && ObservedItem != null)
             {
                 if (this.m_DelayTooltipCoroutine != null)
                 {
@@ -208,12 +217,19 @@ namespace DevionGames.InventorySystem
                 Stack stack = InventoryManager.UI.stack;
 
                 bool isUnstacking = stack != null && stack.item != null;
+
+                if (!isUnstacking && InventoryManager.Input.unstackEvent.HasFlag<Configuration.Input.UnstackInput>(Configuration.Input.UnstackInput.OnClick) && Input.GetKey(InventoryManager.Input.unstackKeyCode) && ObservedItem.Stack > 1)
+                {
+                    Unstack();
+                    return;
+                }
+               
                 //Check if we are currently unstacking the item
                 if (isUnstacking && Container.StackOrAdd(this, stack.item) ){
                     
                     stack.item = null;
                     UICursor.Clear();
-
+         
                 }
 
                 if (isUnstacking){
@@ -266,15 +282,18 @@ namespace DevionGames.InventorySystem
             if (ObservedItem != null && !IsCooldown && Container.CanDragOut)
             {
                 //If key for unstacking items is pressed and if the stack is greater then 1, show the unstack ui.
-                if (Input.GetKey(InventoryManager.Input.unstackKeyCode) && ObservedItem.Stack > 1){
+                if (InventoryManager.Input.unstackEvent.HasFlag<Configuration.Input.UnstackInput>(Configuration.Input.UnstackInput.OnDrag) && Input.GetKey(InventoryManager.Input.unstackKeyCode) && ObservedItem.Stack > 1){
                     Unstack();
                 }else{
                     //Set the dragging slot
                     // draggedSlot = this;
-                    dragObject = new DragObject(this);
+                    Debug.Log(eventData.pointerCurrentRaycast.gameObject);
+                    if(base.m_Ícon == null || !base.m_Ícon.raycastTarget || eventData.pointerCurrentRaycast.gameObject == base.m_Ícon.gameObject)
+                        dragObject = new DragObject(this);
+    
                 }
             }
-            if (this.m_ParentScrollRect != null)
+            if (this.m_ParentScrollRect != null && dragObject == null)
             {
                 this.m_ParentScrollRect.OnBeginDrag(eventData);
             }
@@ -324,6 +343,9 @@ namespace DevionGames.InventorySystem
         //Try to drop the item to ground
         protected virtual void DropItem()
         {
+            if (IsCooldown)
+                return;
+
             //Get the item to drop
             Item item = dragObject != null ? dragObject.item : ObservedItem;
 
@@ -403,16 +425,24 @@ namespace DevionGames.InventorySystem
         /// <summary>
         /// Updates the cooldown image and sets if the slot is in cooldown.
         /// </summary>
-        protected void UpdateCooldown()
+        private void UpdateCooldown()
         {
             if (this.m_IsCooldown && this.m_CooldownOverlay != null)
             {
                 if (Time.time - cooldownInitTime < cooldownDuration)
                 {
+                    if (this.m_Cooldown != null) {
+                        this.m_Cooldown.text = (cooldownDuration - (Time.time - cooldownInitTime)).ToString("f1");
+                    }
                     this.m_CooldownOverlay.fillAmount = Mathf.Clamp01(1f - ((Time.time - cooldownInitTime) / cooldownDuration));
                 }else{
+                    if(this.m_Cooldown != null)
+                        this.m_Cooldown.text = string.Empty;
+
                     this.m_CooldownOverlay.fillAmount = 0f;
                 }
+
+
             }
             this.m_IsCooldown = (cooldownDuration - (Time.time - cooldownInitTime)) > 0f;
         }

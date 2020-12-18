@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
-using System.Collections;
 using UnityEngine.UI;
 
 namespace DevionGames
@@ -11,7 +10,7 @@ namespace DevionGames
 		private bool m_DontDestroyOnLoad = true;
 		[SerializeField]
 		private Transform m_Target = null;
-        private Transform Target {
+        public Transform Target {
             get {
                 GameObject target = GameObject.FindGameObjectWithTag("Player");
                 if (target != null)
@@ -50,8 +49,9 @@ namespace DevionGames
 
 		private Canvas m_CrosshairCanvas;
 		private Image m_CrosshairImage;
+        private bool m_CrosshairActive;
         private bool m_RotatedLastFrame;
-        private bool m_ControllerActive=true;
+        private bool m_CharacterControllerActive=true;
 
 		private void Start ()
 		{
@@ -86,20 +86,39 @@ namespace DevionGames
             
 		}
 
+        private void OnEnable()
+        {
+            //SendMessage("Focus", false, SendMessageOptions.DontRequireReceiver);
+            if (this.m_CrosshairImage != null)
+            {
+                this.m_CrosshairImage.gameObject.SetActive(this.m_CrosshairActive);
+            }
+                
+        }
+
+        private void OnDisable()
+        {
+           // SendMessage("Focus", true, SendMessageOptions.DontRequireReceiver);
+            if (this.m_CrosshairImage != null) {
+                this.m_CrosshairActive = this.m_CrosshairImage.gameObject.activeSelf;
+                this.m_CrosshairImage.gameObject.SetActive(false);
+            }
+        }
+
         private void OnSetControllerActive(bool active) {
-            this.m_ControllerActive = active;
+            this.m_CharacterControllerActive = active;
         }
 
 		private void LateUpdate ()
 		{
-             UpdateInput();
-            if(!this.m_ControllerActive)
+            UpdateInput();
+            if(!this.m_CharacterControllerActive)
                 UpdateTransform();
         }
 
 		public void FixedUpdate ()
 		{
-            if(this.m_ControllerActive)
+            if (this.m_CharacterControllerActive)
                UpdateTransform();
 		}
 
@@ -125,7 +144,7 @@ namespace DevionGames
 
         private void UpdateInput() {
             this.m_ConsumeTurn = false;
-            this.m_ConsumeZoom = false;
+            this.m_ConsumeZoom = this.m_ActivePreset.ConsumeInputOverUI?UnityTools.IsPointerOverUI():false;
 
             if ((Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)) && EventSystem.current != null && UnityTools.IsPointerOverUI())
             {
@@ -185,6 +204,7 @@ namespace DevionGames
                 this.m_ConsumeTurn = true;
                 this.m_ConsumeZoom = true;
             }
+            this.m_ConsumeTurn = this.m_ActivePreset.TurnButton == "None" ? true : this.m_ConsumeTurn;
 
             if (!this.m_ConsumeTurn && (string.IsNullOrEmpty(this.m_ActivePreset.TurnButton) || Input.GetButton(this.m_ActivePreset.TurnButton)))
             {
@@ -206,7 +226,6 @@ namespace DevionGames
                     this.m_MouseX = ClampAngle(this.m_MouseX, this.m_ActivePreset.YawLimit.x, this.m_ActivePreset.YawLimit.y);
                 }
                 this.m_MouseY = ClampAngle(this.m_MouseY, this.m_ActivePreset.PitchLimit.x, this.m_ActivePreset.PitchLimit.y);
-
             }
             else if (this.m_RotatedLastFrame)
             {
@@ -221,7 +240,6 @@ namespace DevionGames
                 this.m_ActivePreset.Zoom = Mathf.Clamp(this.m_ActivePreset.Zoom, this.m_ActivePreset.ZoomLimit.x - this.m_ActivePreset.Distance, this.m_ActivePreset.ZoomLimit.y - this.m_ActivePreset.Distance);
             }
         }
-
 
         private float ClampAngle (float angle, float min, float max)
 		{

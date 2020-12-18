@@ -8,7 +8,6 @@ using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.AI.LOS.Providers;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Helpers;
-using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using UnityEngine;
 
@@ -54,27 +53,25 @@ namespace JoyLib.Code.Entities
 
                     foreach(XElement entity in doc.Elements("Entity"))
                     {
-                        Dictionary<string, EntityStatistic> statistics = (from stat in entity.Elements("Statistic")
-                                select new KeyValuePair<string, EntityStatistic>(
+                        Dictionary<string, IRollableValue<int>> statistics = (from stat in entity.Elements("Statistic")
+                                select new KeyValuePair<string, IRollableValue<int>>(
                                     stat.Element("Name").GetAs<string>(),
                                     new EntityStatistic(
                                         stat.Element("Name").DefaultIfEmpty("DEFAULT"),
                                         stat.Element("Value").DefaultIfEmpty(4),
-                                        stat.Element("Threshold").DefaultIfEmpty(GlobalConstants.DEFAULT_SUCCESS_THRESHOLD),
-                                        new StandardRoller(new RNG()))))
+                                        stat.Element("Threshold").DefaultIfEmpty(GlobalConstants.DEFAULT_SUCCESS_THRESHOLD))))
                             .ToDictionary(x => x.Key, x => x.Value);
 
                         List<string> needs = (from need in entity.Elements("Need")
                                                 select need.DefaultIfEmpty("DEFAULT")).ToList();
 
-                        Dictionary<string, EntitySkill> skills = (from skill in entity.Elements("Skill")
-                                                                  select new KeyValuePair<string, EntitySkill>(
+                        Dictionary<string, IEntitySkill> skills = (from skill in entity.Elements("Skill")
+                                                                  select new KeyValuePair<string, IEntitySkill>(
                                                                       skill.Element("Name").GetAs<string>(), 
                                                                       new EntitySkill(skill.Element("Name").DefaultIfEmpty("DEFAULT"),
                                                                           skill.Element("Value").DefaultIfEmpty(0),
                                                                           skill.Element("Threshold").DefaultIfEmpty(GlobalConstants.DEFAULT_SUCCESS_THRESHOLD),
-                                                                          SkillHandler.GetCoefficients(needs, skill.Element("Name").DefaultIfEmpty("DEFAULT")), 
-                                                                          new StandardRoller())))
+                                                                          this.SkillHandler.GetCoefficients(needs, skill.Element("Name").DefaultIfEmpty("DEFAULT")))))
                                                                 .ToDictionary(x => x.Key, x => x.Value);
 
                         string creatureType = entity.Element("CreatureType").DefaultIfEmpty("DEFAULT");

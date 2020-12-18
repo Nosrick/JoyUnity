@@ -1,10 +1,8 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.EventSystems;
 using System.Linq;
-using System;
+using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace DevionGames
 {
@@ -494,6 +492,9 @@ namespace DevionGames
 					IsAiming = !IsAiming;
 				}
 				break;
+				case AimType.Selectable:
+					IsAiming = SelectableObject.current != null;
+					break;
 			}
 
 
@@ -690,15 +691,10 @@ namespace DevionGames
 						}
 					}
 					if (!active && this.m_Animator.GetCurrentAnimatorStateInfo (j).shortNameHash != this.m_LayerStateMap [j].shortNameHash && !this.m_Animator.IsInTransition (j)) {
-#if Proxy
-						Proxy.SendToAll (gameObject, "CrossFadeInFixedTime", this.m_LayerStateMap [j].shortNameHash, 0.2f);
-#else
-
 						//Debug.Log("Current: "+this.m_Animator.GetCurrentAnimatorClipInfo(j)[0].clip.name);
                         this.m_Animator.CrossFadeInFixedTime (this.m_LayerStateMap [j].shortNameHash, 0.2f);
 						//this.m_Animator.Update(0f);
-					//	Debug.Log("Next: " + this.m_Animator.GetNextAnimatorClipInfo(j)[0].clip.name);
-#endif
+						//Debug.Log("Next: " + this.m_Animator.GetNextAnimatorClipInfo(j)[0].clip.name);
 					}
 				}
 			}
@@ -728,6 +724,15 @@ namespace DevionGames
 
 		public void CheckStep ()
 		{
+			for (int i = 0; i < this.m_Motions.Count; i++)
+			{
+				MotionState motion = this.m_Motions[i];
+				if (motion.IsActive && !motion.CheckStep())
+				{
+					this.m_Slope = -1f;
+					return;
+				}
+			}
 			Vector3 velocity = this.m_Velocity;
 			velocity.y = 0f;
 			if (this.RelativeInput.sqrMagnitude > velocity.sqrMagnitude) {
@@ -840,14 +845,13 @@ namespace DevionGames
 
 
 		private void PlayFootstepSound(AnimationEvent evt) {
-			if (RelativeInput.sqrMagnitude > 0.5f && evt.animatorClipInfo.weight > 0.5f)
-				PlaySound(evt.objectReferenceParameter as AudioClip, evt.floatParameter);
+			if (RelativeInput.sqrMagnitude > 0.5f && evt.animatorClipInfo.weight > 0.5f && m_Rigidbody.velocity.sqrMagnitude > 0.5f)
+				PlaySound(evt.objectReferenceParameter as AudioClip, evt.floatParameter*0.5f);
 		}
 
 		private void PlaySound(AnimationEvent evt)
 		{
-			if (RelativeInput.sqrMagnitude > 0.5f && evt.animatorClipInfo.weight > 0.5f)
-				PlaySound(evt.objectReferenceParameter as AudioClip, evt.floatParameter);
+			PlaySound(evt.objectReferenceParameter as AudioClip, evt.floatParameter);
 		}
 
 		private void PlaySound(AudioClip clip, float volume)
@@ -928,6 +932,7 @@ namespace DevionGames
 		None,
 		Button,
 		Axis,
-		Toggle
+		Toggle,
+		Selectable
 	}
 }

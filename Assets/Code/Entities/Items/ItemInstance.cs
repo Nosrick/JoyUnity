@@ -19,9 +19,11 @@ namespace JoyLib.Code.Entities.Items
     [Serializable]
     public class ItemInstance : EquipmentItem, IItemInstance
     {
-        private const string DURABILITY = "durability";
+        protected const string DURABILITY = "durability";
+
+        protected List<string> m_Tags;
         
-        public IDictionary<string, IDerivedValue<int>> DerivedValues { get; protected set; }
+        public IDictionary<string, IDerivedValue> DerivedValues { get; protected set; }
 
         public string TileSet { get; protected set; }
         
@@ -35,7 +37,11 @@ namespace JoyLib.Code.Entities.Items
 
         public int FramesSinceLastChange { get; protected set; }
 
-        public List<string> Tags { get; protected set; }
+        public IEnumerable<string> Tags
+        {
+            get => this.m_Tags;
+            protected set => this.m_Tags = new List<string>(value);
+        }
 
         public bool IsWall { get; protected set; }
 
@@ -103,14 +109,15 @@ namespace JoyLib.Code.Entities.Items
 
         public void Initialise(
             BaseItemType type, 
-            IDictionary<string, IDerivedValue<int>> derivedValues,
+            IDictionary<string, IDerivedValue> derivedValues,
             Vector2Int position, 
             bool identified, 
             Sprite[] sprites,
             RNG roller = null,
             IEnumerable<IAbility> uniqueAbilities = null,
             IEnumerable<IJoyAction> actions = null,
-            GameObject gameObject = null)
+            GameObject gameObject = null,
+            bool active = false)
         {
             if (this.Prefab is null)
             {
@@ -181,13 +188,13 @@ namespace JoyLib.Code.Entities.Items
                 this.Region.Add(InventoryManager.Database.equipments.First(region => region.Name.Equals(slot)));
             }
 
-            m_Icon = Sprite;
+            Icon = Sprite;
             CalculateValue();
             ConstructDescription();
 
             if (gameObject is null == false)
             {
-                this.Instantiate(gameObject);
+                this.Instantiate(gameObject, active);
             }
         }
 
@@ -196,16 +203,19 @@ namespace JoyLib.Code.Entities.Items
             return this.MonoBehaviourHandler is null == false;
         }
 
-        public void Instantiate(GameObject gameObject = null)
+        public void Instantiate(GameObject gameObject = null, bool active = false)
         {
             if (gameObject is null)
             {
-                GameObject.Instantiate(Prefab).GetComponent<MonoBehaviourHandler>().AttachJoyObject(this);
+                GameObject newOne = GameObject.Instantiate(Prefab);
+                newOne.GetComponent<MonoBehaviourHandler>().AttachJoyObject(this);
+                newOne.SetActive(active);
             }
             else
             {
                 MonoBehaviourHandler monoBehaviourHandler = gameObject.GetComponent<MonoBehaviourHandler>();
                 monoBehaviourHandler.AttachJoyObject(this);
+                monoBehaviourHandler.gameObject.SetActive(active);
             }
         }
 
@@ -225,6 +235,7 @@ namespace JoyLib.Code.Entities.Items
                 copy.UniqueAbilities,
                 copy.CachedActions.ToArray());
 
+            ItemHandler.AddItem(newItem);
             return newItem;
         }
 
@@ -251,7 +262,7 @@ namespace JoyLib.Code.Entities.Items
 
             builder.AppendLine("It is worth " + this.Value + ".");
             
-            m_Description = builder.ToString();
+            Description = builder.ToString();
         }
         
         public void SetUser(IEntity user)
@@ -287,29 +298,29 @@ namespace JoyLib.Code.Entities.Items
 
         public bool AddTag(string tag)
         {
-            if (Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase)) != false)
+            if (HasTag(tag) == false)
             {
                 return false;
             }
             
-            Tags.Add(tag);
+            this.m_Tags.Add(tag);
             return true;
         }
 
         public bool RemoveTag(string tag)
         {
-            if (!Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase)))
+            if (!HasTag(tag))
             {
                 return false;
             }
             
-            Tags.Remove(tag);
+            this.m_Tags.Remove(tag);
             return true;
         }
 
         public bool HasTag(string tag)
         {
-            return Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase));
+            return this.m_Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase));
         }
 
         public void Move(Vector2Int newPosition)
@@ -399,7 +410,7 @@ namespace JoyLib.Code.Entities.Items
 
             FramesSinceLastChange = 0;
 
-            m_Icon = Sprite;
+            Icon = Sprite;
         }
 
         public int CompareTo(object obj)
@@ -510,6 +521,9 @@ namespace JoyLib.Code.Entities.Items
         public void IdentifyMe()
         {
             Identified = true;
+            this.Name = this.IdentifiedName;
+            
+            this.ConstructDescription();
         }
 
         public IItemInstance TakeMyItem(int index)
@@ -524,19 +538,57 @@ namespace JoyLib.Code.Entities.Items
             return null;
         }
 
-        public bool AddContents(IItemInstance actor)
+        public bool Contains(IItemInstance actor)
         {
-            m_Contents.Add(actor.GUID);
+            if (this.Contents.Contains(actor))
+            {
+                return true;
+            }
 
-            CalculateValue();
-            ConstructDescription();
+            bool result = false;
+            IEnumerable<IItemInstance> items = this.Contents.Where(instance => instance.HasTag("container"));
+            foreach (IItemInstance c in items)
+            {
+                result |= c.Contains(actor);
+                if (result)
+                {
+                    return result;
+                }
+            }
+
+            return result;
+        }
+
+        public bool CanAddContents(IItemInstance actor)
+        {
+            if (actor.GUID == this.GUID 
+            || this.Contains(actor) 
+            || actor.Contains(this))
+            {
+                return false;
+            }
 
             return true;
         }
 
+        public bool AddContents(IItemInstance actor)
+        {
+            if(this.CanAddContents(actor))
+            {
+                m_Contents.Add(actor.GUID);
+
+                CalculateValue();
+                ConstructDescription();
+                return true;
+            }
+
+            return false;
+        }
+
         public bool AddContents(IEnumerable<IItemInstance> actors)
         {
-            m_Contents.AddRange(actors.Select(instance => instance.GUID));
+            m_Contents.AddRange(actors.Where(actor => this.m_Contents.Any(GUID => GUID == actor.GUID) == false)
+                .Select(actor => actor.GUID));
             
             CalculateValue();
             ConstructDescription();

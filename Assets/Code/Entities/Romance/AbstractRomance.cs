@@ -15,16 +15,22 @@ namespace JoyLib.Code.Entities.Romance
 
         public virtual int BondingThreshold { get; set; }
 
-        public List<string> Tags { get; protected set; }
+        public IEnumerable<string> Tags
+        {
+            get => this.m_Tags;
+            protected set => this.m_Tags = new List<string>(value);
+        }
+
+        protected List<string> m_Tags;
 
         public AbstractRomance()
         {
-            Tags = new List<string>();
+            this.Tags = new List<string>();
         }
         
         public bool HasTag(string tag)
         {
-            return Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase));
+            return this.m_Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase));
         }
 
         public bool AddTag(string tag)
@@ -33,7 +39,7 @@ namespace JoyLib.Code.Entities.Romance
             {
                 return false;
             }
-            Tags.Add(tag);
+            this.m_Tags.Add(tag);
             return true;
         }
 
@@ -41,7 +47,7 @@ namespace JoyLib.Code.Entities.Romance
         {
             if (HasTag(tag))
             {
-                Tags.Remove(tag);
+                this.m_Tags.Remove(tag);
                 return true;
             }
 

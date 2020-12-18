@@ -1,12 +1,10 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using Lean.Common;
+using Lean.Transition;
+using UnityEditor;
+using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using System.Collections.Generic;
-using Lean.Transition;
-using Lean.Common;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 namespace Lean.Gui
 {
@@ -89,7 +87,7 @@ namespace Lean.Gui
 }
 
 #if UNITY_EDITOR
-namespace Lean.Gui
+namespace Lean.Gui.Inspector
 {
 	[CanEditMultipleObjects]
 	[CustomEditor(typeof(LeanHover))]

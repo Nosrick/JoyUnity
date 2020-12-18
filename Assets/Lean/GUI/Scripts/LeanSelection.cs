@@ -1,11 +1,9 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
-using Lean.Common;
+﻿using Lean.Common;
 using Lean.Transition;
-#if UNITY_EDITOR
 using UnityEditor;
-#endif
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace Lean.Gui
 {
@@ -66,7 +64,7 @@ namespace Lean.Gui
 }
 
 #if UNITY_EDITOR
-namespace Lean.Gui
+namespace Lean.Gui.Inspector
 {
 	[CanEditMultipleObjects]
 	[CustomEditor(typeof(LeanSelection))]

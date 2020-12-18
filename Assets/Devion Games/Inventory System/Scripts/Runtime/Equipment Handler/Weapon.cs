@@ -1,11 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace DevionGames.InventorySystem
 {
     public abstract class Weapon : VisibleItem
     {
+
+        public override string[] Callbacks => new string[] {"OnUse","OnEndUse" };
+
         [Header("Activation:")]
         [InspectorLabel("Input Name")]
         [SerializeField]
@@ -32,6 +33,8 @@ namespace DevionGames.InventorySystem
         protected StartType m_StartType;
         [SerializeField]
         protected StopType m_StopType;
+
+
 
         [Header("Animator IK:")]
         [SerializeField]
@@ -112,6 +115,7 @@ namespace DevionGames.InventorySystem
             }
             if (!IsActive) { return; }
 
+            if (string.IsNullOrEmpty(this.m_UseInputName)) return;
 
             if (this.m_StartType != StartType.Down || !Input.GetButtonDown(this.m_UseInputName))
             {
@@ -161,7 +165,7 @@ namespace DevionGames.InventorySystem
             Ray  ray = this.m_Camera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit)) {
-                return hit.collider.GetComponent<Trigger>() ==null;
+                return hit.collider.GetComponent<BaseTrigger>() ==null;
             }
 
             return true; 
@@ -181,6 +185,9 @@ namespace DevionGames.InventorySystem
                 OnStopUse();
                 this.m_InUse = false;
                 this.m_CharacterAnimator.CrossFadeInFixedTime(this.m_IdleState, 0.15f);
+                CallbackEventData data = new CallbackEventData();
+                data.AddData("Item", this.m_CurrentEquipedItem);
+                Execute("OnEndUse", data);
             }
         }
 
@@ -198,7 +205,9 @@ namespace DevionGames.InventorySystem
         protected virtual void Use() {
             this.m_CharacterAnimator.CrossFadeInFixedTime(this.m_UseState, 0.15f);
             this.m_CharacterAnimator.Update(0f);
-
+            CallbackEventData data = new CallbackEventData();
+            data.AddData("Item", this.m_CurrentEquipedItem);
+            Execute("OnUse", data);
         }
 
         private void OnEndUse() {
@@ -210,6 +219,12 @@ namespace DevionGames.InventorySystem
         protected bool m_Pause;
         private void PauseItemUpdate(bool state) {
             this.m_Pause = state;
+
+            ItemContainer[] containers = UIWidgets.WidgetUtility.FindAll<ItemContainer>();
+            for (int i = 0; i < containers.Length; i++)
+            {
+                containers[i].Lock(this.m_Pause);
+            }
         }
    
         protected virtual void OnItemActivated(bool activated) {
@@ -224,7 +239,6 @@ namespace DevionGames.InventorySystem
                  }
                 this.m_CharacterAnimator.SetInteger("Item ID", this.m_ItemID);
                 this.m_CharacterAnimator.CrossFadeInFixedTime(this.m_IdleState, 0.15f);
-
                 this.m_InUse = false;
             } else {
                 this.m_CharacterAnimator.SetInteger("Item ID",0);

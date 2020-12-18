@@ -1,7 +1,7 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Collections.Generic;
-using DevionGames.Graphs;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace DevionGames.StatSystem
 {
@@ -17,6 +17,9 @@ namespace DevionGames.StatSystem
         public float freeStatPoints = 3;
 
 		public List<Stat> stats = new List<Stat> ();
+
+        [SerializeField]
+        private GameObject m_DamageText=null;
 
         private void Awake()
         {
@@ -42,6 +45,60 @@ namespace DevionGames.StatSystem
             {
                 Stat stat = stats[i];
                 stat.UpdateBaseValue(this);
+            }
+        }
+
+        protected void TriggerAnimationEvent(AnimationEvent ev)
+        {
+            SendMessage(ev.stringParameter,ev.objectReferenceParameter, SendMessageOptions.DontRequireReceiver);
+        }
+
+        //This is for testing
+        private void SendDamage(Object data)
+        {
+            DamageData damageData = data as DamageData;
+            Stat sendingStat = stats.FirstOrDefault(x => x.Name == damageData.sendingStat);
+            if (sendingStat == null) return;
+
+            Collider[] colliders = Physics.OverlapSphere(transform.position, damageData.maxDistance);
+            for (int i = 0; i < colliders.Length; i++)
+            {
+                if (colliders[i].transform != transform)
+                {
+                    Vector3 direction = colliders[i].transform.position - transform.position;
+                    float angle = Vector3.Angle(direction, transform.forward);
+                    if (Mathf.Abs(angle) < damageData.maxAngle)
+                    {
+                        StatsHandler receiver = colliders[i].GetComponent<StatsHandler>();
+                        if(receiver != null)
+                        {
+                            Stat criticalStrikeStat = stats.FirstOrDefault(x => x.Name == damageData.criticalStrikeStat);
+
+                            bool criticaleStrike = criticalStrikeStat!= null && criticalStrikeStat.Value > UnityEngine.Random.Range(0f, 100f);
+                            float damage = sendingStat.Value;
+                            if (criticaleStrike)
+                                damage *= 2f;
+
+                            receiver.ApplyDamageInternal(damageData.receivingStat, damage, 0, criticaleStrike);
+                            if (damageData.particleEffect != null)
+                            {
+                                Vector3 pos = colliders[i].ClosestPoint(transform.position + damageData.offset);
+                                Vector3 right = UnityEngine.Random.Range(-damageData.randomize.x, damageData.randomize.x)*transform.right;
+                                Vector3 up = UnityEngine.Random.Range(-damageData.randomize.y, damageData.randomize.y) * transform.up ;
+                                Vector3 forward = UnityEngine.Random.Range(-damageData.randomize.z, damageData.randomize.z)*transform.forward;
+
+                                Vector3 relativePos = (transform.position + damageData.offset + right + up + forward) - pos;
+                                GameObject effect = Instantiate(damageData.particleEffect, pos, Quaternion.LookRotation(relativePos, Vector3.up));
+                                Destroy(effect, damageData.lifeTime);
+                            }
+
+                            CameraEffects.Shake(damageData.duration, damageData.speed, damageData.amount);
+                            if(damageData.hitSounds.Length > 0)
+                                UnityTools.PlaySound(damageData.hitSounds[UnityEngine.Random.Range(0,damageData.hitSounds.Length)],damageData.volume);
+                        }
+                       
+                    }
+                }
             }
         }
 
@@ -75,7 +132,7 @@ namespace DevionGames.StatSystem
             ApplyDamageInternal(name, damage, valueType);
         }
 
-        private void ApplyDamageInternal(string name, float damage, int valueType)
+        private void ApplyDamageInternal(string name, float damage, int valueType, bool isCriticalStrike = false)
         {
             Stat stat = GetStat(name);
             if (stat != null)
@@ -94,6 +151,9 @@ namespace DevionGames.StatSystem
                         break;
                 }
                 UpdateStats();
+                if (stat.DisplayDamage)
+                    DisplayDamage(damage, isCriticalStrike? stat.CriticalDamageColor:stat.DamageColor);
+
                 if (StatsManager.DefaultSettings.debugMessages && mValue < maxValue)
                 {
                     Debug.Log("[StatusSystem]Apply Damage: " + gameObject.name + " " + stat.Name + " CurrentValue:" + stat.CurrentValue + " Value:" + stat.Value +" IncrementalValue: "+stat.IncrementalValue +" Damage: " + damage);
@@ -116,6 +176,19 @@ namespace DevionGames.StatSystem
                 }
             }
             return false;
+        }
+
+        private void DisplayDamage(float damage, Color color) {
+            //TODO Pooling
+            GameObject go = Instantiate(this.m_DamageText, this.m_DamageText.transform.parent);
+            Vector3 randomizeIntensity = new Vector3(3f,2f,0f);
+            go.transform.localPosition += new Vector3(UnityEngine.Random.Range(-randomizeIntensity.x,randomizeIntensity.x), UnityEngine.Random.Range(-randomizeIntensity.y, randomizeIntensity.y), UnityEngine.Random.Range(-randomizeIntensity.z, randomizeIntensity.z));
+            Text text = go.GetComponentInChildren<Text>();
+            text.color = color;
+            text.text = (damage>0?"-":"+")+Mathf.Abs(damage).ToString();
+
+            go.SetActive(true);
+            Destroy(go, 4f);
         }
 
         public void AddModifier(object[] data)

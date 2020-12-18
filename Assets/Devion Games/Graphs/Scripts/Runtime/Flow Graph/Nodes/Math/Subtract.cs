@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace DevionGames.Graphs
+﻿namespace DevionGames.Graphs
 {
     [NodeStyle("Icons/Subtract",false,"Math")]
     public class Subtract : FlowNode

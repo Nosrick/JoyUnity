@@ -7,7 +7,6 @@ using JoyLib.Code.Collections;
 using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Helpers;
-using JoyLib.Code.Rollers;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities
@@ -27,9 +26,9 @@ namespace JoyLib.Code.Entities
             this.SkillsNames = this.m_SkillCoefficients.Keys;
         }
 
-        public IDictionary<string, EntitySkill> GetDefaultSkillBlock(IEnumerable<INeed> needs)
+        public IDictionary<string, IEntitySkill> GetDefaultSkillBlock(IEnumerable<INeed> needs)
         {
-            IDictionary<string, EntitySkill> skills = new Dictionary<string, EntitySkill>();
+            IDictionary<string, IEntitySkill> skills = new Dictionary<string, IEntitySkill>();
 
             foreach(string key in this.m_SkillCoefficients.Keys)
             {
@@ -50,8 +49,7 @@ namespace JoyLib.Code.Entities
                         key, 
                         0, 
                         GlobalConstants.DEFAULT_SUCCESS_THRESHOLD, 
-                        governingNeeds, 
-                        new StandardRoller(new RNG())));
+                        governingNeeds));
             }
 
             return skills;

@@ -1,14 +1,14 @@
 ﻿namespace JoyLib.Code.Entities.Statistics
 {
-    public interface IDerivedValue<T> : IBasicValue<T> where T : struct
+    public interface IDerivedValue : IBasicValue<int>
     {
-        T Maximum
+        int Maximum
         {
             get;
             set;
         }
 
-        T SetValue(string data);
-        T SetMaximum(string data);
+        int SetValue(string data);
+        int SetMaximum(string data);
     }
 }

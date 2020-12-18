@@ -2,12 +2,13 @@
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace JoyLib.Code.Unity.GUI
 {
     public class ConstrainedValueContainer : ValueContainer
     {
-        [SerializeField] protected TextMeshProUGUI Name;
+        [FormerlySerializedAs("Name")] [SerializeField] protected TextMeshProUGUI NameText;
         
         public List<string> Container
         {
@@ -30,7 +31,7 @@ namespace JoyLib.Code.Unity.GUI
             set
             {
                 base.Value = value;
-                Name.text = Selected;
+                this.NameText.text = Selected;
             }
         }
     }

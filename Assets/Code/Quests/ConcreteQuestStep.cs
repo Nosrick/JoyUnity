@@ -1,17 +1,23 @@
 ﻿using System;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.World;
 using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code.Entities;
+using JoyLib.Code.Entities.Items;
+using JoyLib.Code.World;
 
 namespace JoyLib.Code.Quests
 {
     public class ConcreteQuestStep : IQuestStep
     {
         protected string Description { get; set; }
-        
-        public List<string> Tags { get; protected set; }
+
+        protected List<string> m_Tags;
+
+        public IEnumerable<string> Tags
+        {
+            get => this.m_Tags;
+            protected set => this.m_Tags = new List<string>(value);
+        }
         
         public ConcreteQuestStep(
             IQuestAction action, 
@@ -63,29 +69,29 @@ namespace JoyLib.Code.Quests
         
         public bool AddTag(string tag)
         {
-            if (Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase)) != false)
+            if (this.m_Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase)) != false)
             {
                 return false;
             }
             
-            Tags.Add(tag);
+            this.m_Tags.Add(tag);
             return true;
         }
 
         public bool RemoveTag(string tag)
         {
-            if (!Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase)))
+            if (!this.m_Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase)))
             {
                 return false;
             }
             
-            Tags.Remove(tag);
+            this.m_Tags.Remove(tag);
             return true;
         }
 
         public bool HasTag(string tag)
         {
-            return Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase));
+            return this.Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase));
         }
     }
 }

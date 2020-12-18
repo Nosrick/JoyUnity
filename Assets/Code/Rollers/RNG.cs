@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Security.Cryptography;
-using JoyLib.Code.Helpers;
 using UnityEngine;
 
 namespace JoyLib.Code.Rollers
 {
-    public class RNG
+    public class RNG : IRollable
     {
         protected int m_Seed;
         protected RNGCryptoServiceProvider m_Roller;

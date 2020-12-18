@@ -1,6 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
-using System.Collections.Generic;
 
 namespace Lean.Transition.Method
 {
@@ -21,12 +21,12 @@ namespace Lean.Transition.Method
 
 		public static LeanState Register(Graphic target, Color color, float duration, LeanEase ease = LeanEase.Smooth)
 		{
-			var data = LeanTransition.RegisterWithTarget(State.Pool, duration, target);
+			var state = LeanTransition.SpawnWithTarget(State.Pool, target);
 
-			data.Color  = color;
-			data.Ease   = ease;
+			state.Color  = color;
+			state.Ease   = ease;
 
-			return data;
+			return LeanTransition.Register(state, duration);
 		}
 
 		[System.Serializable]

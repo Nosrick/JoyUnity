@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace DevionGames
 {
@@ -20,7 +18,8 @@ namespace DevionGames
 			StartJump ();
 		}
 
-		public override bool UpdateAnimator ()
+
+        public override bool UpdateAnimator ()
 		{
             this.m_Animator.SetFloat ("Float Value", this.m_Rigidbody.velocity.y, 0.15f, Time.deltaTime);
 			return true;
@@ -59,13 +58,16 @@ namespace DevionGames
 			return false;
 		}
 
-		public void OnControllerGrounded (bool grounded)
-		{
+        public override bool CheckStep()
+        {
+			return false;
+        }
 
+        public void OnControllerGrounded (bool grounded)
+		{
 			if (grounded) {
 				this.lastJumpTime = Time.time;
 				this.StopMotion (true);
-			
 			}
 		}
 
@@ -77,7 +79,7 @@ namespace DevionGames
 		public override bool CanStop ()
 		{
 		
-			return !this.m_Controller.IsGrounded && this.m_Rigidbody.velocity.y < 0.01f; 
+			return !this.m_Controller.IsGrounded && this.m_Rigidbody.velocity.y < 0.01f && Time.time > jumpTime + 0.2f; 
 		}
 	}
 }

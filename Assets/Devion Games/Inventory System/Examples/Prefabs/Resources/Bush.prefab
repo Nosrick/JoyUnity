@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8182773773601587906}
   - component: {fileID: 6072243048757048728}
   - component: {fileID: 6410022881207189298}
+  - component: {fileID: 1901774327}
   - component: {fileID: 1165384963586084222}
   - component: {fileID: 8431522341766763773}
   - component: {fileID: 379513609958229008}
@@ -20,7 +21,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &3434277709719987087
 Transform:
@@ -29,7 +30,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8637995669017434483}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -3.0519466, y: -4.314418, z: 6.3845396}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -91,12 +92,27 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8637995669017434483}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 4
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300004, guid: dfbca7c1b32489d419cf375566fae25a, type: 3}
+--- !u!114 &1901774327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8637995669017434483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cda3b9d89a55f143bf4546d43b708d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_DisplayType: 8
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Offset: {x: 0, y: 0, z: 0}
 --- !u!114 &1165384963586084222
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -111,7 +127,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   delegates: []
   useDistance: 1.2
-  triggerType: 3
+  triggerType: 43
   key: 102
   actions:
   - id: 0
@@ -172,11 +188,12 @@ MonoBehaviour:
         m_AnimatorState: Pickup Plant
         m_TransitionDuration: 0.2
     00000005:
-      type: {class: Wait, ns: DevionGames, asm: DevionGames.Triggers}
+      type: {class: ShowProgressbar, ns: DevionGames.InventorySystem, asm: DevionGames.InventorySystem}
       data:
-        m_Type: DevionGames.Wait
+        m_Type: DevionGames.InventorySystem.ShowProgressbar
         m_Enabled: 1
-        duration: 6
+        m_WidgetName: General Progressbar
+        m_Duration: 6
     00000006:
       type: {class: Pickup, ns: DevionGames.InventorySystem, asm: DevionGames.InventorySystem}
       data:
@@ -251,7 +268,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 126
   m_CollisionDetection: 0

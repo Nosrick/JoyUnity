@@ -1,12 +1,9 @@
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.Events;
-using UnityEngine.EventSystems;
 using Lean.Common;
 using Lean.Transition;
-#if UNITY_EDITOR
 using UnityEditor;
-#endif
+using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
 namespace Lean.Gui
 {
@@ -14,14 +11,15 @@ namespace Lean.Gui
 	[RequireComponent(typeof(RectTransform))]
 	[HelpURL(LeanGui.HelpUrlPrefix + "LeanJoystick")]
 	[AddComponentMenu(LeanGui.ComponentMenuPrefix + "Joystick")]
-	public class LeanJoystick : Selectable, IPointerDownHandler, IPointerUpHandler
+	public class LeanJoystick : LeanSelectable, IPointerDownHandler, IPointerUpHandler
 	{
 		[System.Serializable] public class Vector2Event : UnityEvent<Vector2> {}
 
 		public enum ShapeType
 		{
 			Box,
-			Circle
+			Circle,
+			CircleEdge
 		}
 
 		/// <summary>This allows you to control the shape of the josytick movement.
@@ -102,14 +100,7 @@ namespace Lean.Gui
 				return cachedRectTransform;
 			}
 		}
-#if UNITY_EDITOR
-		protected override void Reset()
-		{
-			base.Reset();
 
-			transition = Selectable.Transition.None;
-		}
-#endif
 		protected virtual void Update()
 		{
 			var value = Vector2.zero;
@@ -135,6 +126,10 @@ namespace Lean.Gui
 								value = value.normalized * radius;
 							}
 						}
+						else if (shape == ShapeType.CircleEdge)
+						{
+							value = value.normalized * radius;
+						}
 					}
 				}
 				else
@@ -152,6 +147,10 @@ namespace Lean.Gui
 			else if (shape == ShapeType.Circle)
 			{
 				scaledValue = radius > 0.0f ? value / radius : Vector2.zero;
+			}
+			else if (shape == ShapeType.CircleEdge)
+			{
+				scaledValue = value.normalized;
 			}
 
 			// Update handle position
@@ -232,17 +231,15 @@ namespace Lean.Gui
 }
 
 #if UNITY_EDITOR
-namespace Lean.Gui
+namespace Lean.Gui.Inspector
 {
 	[CanEditMultipleObjects]
 	[CustomEditor(typeof(LeanJoystick))]
-	public class LeanJoystick_Inspector : LeanInspector<LeanJoystick>
+	public class LeanJoystick_Inspector : LeanSelectable_Inspector<LeanJoystick>
 	{
 		protected override void DrawInspector()
 		{
-			Draw("m_Interactable");
-			Draw("m_Transition");
-			Draw("m_Navigation");
+			base.DrawInspector();
 
 			EditorGUILayout.Separator();
 
@@ -254,6 +251,10 @@ namespace Lean.Gui
 			if (Any(t => t.Shape == LeanJoystick.ShapeType.Circle))
 			{
 				Draw("radius", "The allows you to control the maximum distance the joystick handle can move across the x and y axes.");
+			}
+			if (Any(t => t.Shape == LeanJoystick.ShapeType.CircleEdge))
+			{
+				Draw("radius", "The allows you to control the distance the joystick handle can move across the x and y axes.");
 			}
 
 			Draw("scaledValue", "The -1..1 x/y position of the joystick relative to the Size or Radius.\n\nNOTE: When using a circle joystick, these values are normalized, and thus will never reach 1,1 on both axes. This prevents faster diagonal movement.");

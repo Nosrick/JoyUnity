@@ -18,12 +18,11 @@ namespace JoyLib.Code.Entities
 {
     public interface IEntityFactory
     {
-        IEntity CreateFromTemplate(
-            IEntityTemplate template,
+        IEntity CreateFromTemplate(IEntityTemplate template,
             Vector2Int position,
-            IDictionary<string, EntityStatistic> statistics = null,
-            IDictionary<string, IDerivedValue<int>> derivedValues = null,
-            IDictionary<string, EntitySkill> skills = null,
+            IDictionary<string, IRollableValue<int>> statistics = null,
+            IDictionary<string, IDerivedValue> derivedValues = null,
+            IDictionary<string, IEntitySkill> skills = null,
             IEnumerable<IAbility> abilities = null,
             List<ICulture> cultures = null,
             IGender gender = null,
@@ -35,12 +34,11 @@ namespace JoyLib.Code.Entities
             IWorldInstance world = null,
             IDriver driver = null);
 
-        IEntity CreateLong(
-            IEntityTemplate template,
+        IEntity CreateLong(IEntityTemplate template,
             IDictionary<string, INeed> needs,
-            IDictionary<string, EntityStatistic> statistics,
-            IDictionary<string, IDerivedValue<int>> derivedValues,
-            IDictionary<string, EntitySkill> skills,
+            IDictionary<string, IRollableValue<int>> statistics,
+            IDictionary<string, IDerivedValue> derivedValues,
+            IDictionary<string, IEntitySkill> skills,
             IEnumerable<IAbility> abilities,
             float experience,
             IJob job,

@@ -21,7 +21,7 @@ namespace JoyLib.Code.Conversation.Subengines.Rumours
             set;
         }
 
-        protected IDictionary<string, EntitySkill> DefaultSkillBlock
+        protected IDictionary<string, IEntitySkill> DefaultSkillBlock
         {
             get;
             set;

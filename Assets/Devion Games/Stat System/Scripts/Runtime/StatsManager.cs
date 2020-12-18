@@ -1,10 +1,9 @@
-﻿using UnityEngine;
-using System.Collections;
-using UnityEngine.Events;
+﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.Assertions;
 using System.Linq;
 using DevionGames.StatSystem.Configuration;
+using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace DevionGames.StatSystem
 {

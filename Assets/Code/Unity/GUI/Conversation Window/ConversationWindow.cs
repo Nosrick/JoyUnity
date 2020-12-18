@@ -27,6 +27,8 @@ namespace JoyLib.Code.Unity.GUI
 
         protected void OnEnable()
         {
+            this.MenuItem.SetActive(false);
+            
             if (GameManager.ConversationEngine is null == false && ConversationEngine is null)
             {
                 MenuList = new List<ConversationMenu>();
@@ -40,7 +42,7 @@ namespace JoyLib.Code.Unity.GUI
 
         protected void CloseMe(object sender, EventArgs args)
         {
-            GameManager.GUIManager.CloseGUI(GlobalConstants.CONVERSATION);
+            GameManager.GUIManager.CloseGUI(GUINames.CONVERSATION);
         }
 
         protected void SetActors(object sender, EventArgs args)

@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using DevionGames.UIWidgets;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace DevionGames.InventorySystem
 {

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using JoyLib.Code.Entities.Statistics;
 
 namespace JoyLib.Code.Entities.Abilities
 {
@@ -18,7 +20,8 @@ namespace JoyLib.Code.Entities.Abilities
                 new string[0], 
                 GetCosts(),
                 GetPrerequisites(), 
-                AbilityTarget.Adjacent)
+                AbilityTarget.Adjacent,
+                new []{ "attack", "success" })
         {}
 
         protected static Tuple<string, int>[] GetCosts()
@@ -33,6 +36,29 @@ namespace JoyLib.Code.Entities.Abilities
             Dictionary<string, int> prereqs = new Dictionary<string, int>();
             prereqs.Add("warrior", 1);
             return prereqs;
+        }
+
+        public override bool OnUse(IEntity user, IJoyObject target)
+        {
+            int hp = user.DerivedValues[DerivedValueName.HITPOINTS].Value;
+            hp -= (hp / 5);
+            user.ModifyValue(DerivedValueName.HITPOINTS, hp);
+            return true;
+        }
+
+        public override int OnCheckSuccess(int successes, IEnumerable<IBasicValue<int>> values,
+            IEnumerable<string> attackerTags, IEnumerable<string> defenderTags)
+        {
+            if (attackerTags.Any(tag => tag.Equals("physical", StringComparison.OrdinalIgnoreCase))
+            && attackerTags.Any(tag => tag.Equals("attack", StringComparison.OrdinalIgnoreCase))
+            && attackerTags.Any(tag => tag.Equals(this.InternalName, StringComparison.OrdinalIgnoreCase)))
+            {
+                return successes *= 2;
+            }
+            else
+            {
+                return successes;
+            }
         }
     }
 }

@@ -37,8 +37,8 @@ namespace JoyLib.Code.Entities
         public event ValueChangedEventHandler SkillChange;
         public event ValueChangedEventHandler ExperienceChange;
         public event JobChangedEventHandler JobChange;
-        protected IDictionary<string, EntityStatistic> m_Statistics;
-        protected IDictionary<string, EntitySkill> m_Skills;
+        protected IDictionary<string, IRollableValue<int>> m_Statistics;
+        protected IDictionary<string, IEntitySkill> m_Skills;
         protected IDictionary<string, INeed> m_Needs;
         protected List<IAbility> m_Abilities;
         protected NonUniqueDictionary<string, IItemInstance> m_Equipment;
@@ -128,10 +128,10 @@ namespace JoyLib.Code.Entities
         /// <param name="jobLevels"></param>
         public Entity(
             IEntityTemplate template,
-            IDictionary<string, EntityStatistic> statistics,
-            IDictionary<string, IDerivedValue<int>> derivedValues,
+            IDictionary<string, IRollableValue<int>> statistics,
+            IDictionary<string, IDerivedValue> derivedValues,
             IDictionary<string, INeed> needs,
-            IDictionary<string, EntitySkill> skills,
+            IDictionary<string, IEntitySkill> skills,
             IEnumerable<IAbility> abilities,
             List<ICulture> cultures,
             IJob job,
@@ -232,10 +232,10 @@ namespace JoyLib.Code.Entities
         /// <param name="icons"></param>
         public Entity(
             IEntityTemplate template,
-            IDictionary<string, EntityStatistic> statistics,
-            IDictionary<string, IDerivedValue<int>> derivedValues,
+            IDictionary<string, IRollableValue<int>> statistics,
+            IDictionary<string, IDerivedValue> derivedValues,
             IDictionary<string, INeed> needs,
-            IDictionary<string, EntitySkill> skills,
+            IDictionary<string, IEntitySkill> skills,
             IEnumerable<IAbility> abilities,
             List<ICulture> cultures,
             IJob job,
@@ -394,10 +394,10 @@ namespace JoyLib.Code.Entities
             RegenTicker += 1;
             if (RegenTicker == REGEN_TICK_TIME)
             {
-                this.ModifyValue(ConcreteDerivedIntValue.HITPOINTS, 1);
-                this.ModifyValue(ConcreteDerivedIntValue.CONCENTRATION, 1);
-                this.ModifyValue(ConcreteDerivedIntValue.COMPOSURE, 1);
-                this.ModifyValue(ConcreteDerivedIntValue.MANA, 1);
+                this.ModifyValue(DerivedValueName.HITPOINTS, 1);
+                this.ModifyValue(DerivedValueName.CONCENTRATION, 1);
+                this.ModifyValue(DerivedValueName.COMPOSURE, 1);
+                this.ModifyValue(DerivedValueName.MANA, 1);
 
                 RegenTicker = 0;
 
@@ -822,32 +822,32 @@ namespace JoyLib.Code.Entities
 
         public void DecreaseMana(int value)
         {
-            this.ModifyValue(ConcreteDerivedIntValue.MANA, -value);
+            this.ModifyValue(DerivedValueName.MANA, -value);
         }
 
         public void IncreaseMana(int value)
         {
-            this.ModifyValue(ConcreteDerivedIntValue.MANA, value);
+            this.ModifyValue(DerivedValueName.MANA, value);
         }
 
         public void DecreaseComposure(int value)
         {
-            this.ModifyValue(ConcreteDerivedIntValue.COMPOSURE, -value);
+            this.ModifyValue(DerivedValueName.COMPOSURE, -value);
         }
 
         public void IncreaseComposure(int value)
         {
-            this.ModifyValue(ConcreteDerivedIntValue.COMPOSURE, value);
+            this.ModifyValue(DerivedValueName.COMPOSURE, value);
         }
 
         public void DecreaseConcentration(int value)
         {
-            this.ModifyValue(ConcreteDerivedIntValue.CONCENTRATION, -value);
+            this.ModifyValue(DerivedValueName.CONCENTRATION, -value);
         }
 
         public void IncreaseConcentration(int value)
         {
-            this.ModifyValue(ConcreteDerivedIntValue.CONCENTRATION, value);
+            this.ModifyValue(DerivedValueName.CONCENTRATION, value);
         }
 
         public override int ModifyValue(string name, int value)
@@ -877,19 +877,11 @@ namespace JoyLib.Code.Entities
         {
             int damage = value;
 
-            foreach (IAbility ability in m_Abilities)
-            {
-                if (damage == 0)
-                    return;
-
-                damage = ability.OnTakeHit(source, this, damage);
-            }
-
-            int result = base.DamageValue(ConcreteDerivedIntValue.HITPOINTS, damage);
+            int result = base.DamageValue(DerivedValueName.HITPOINTS, damage);
             this.DerivedValueChange?.Invoke(this, new ValueChangedEventArgs()
             {
                 Delta = damage,
-                Name = ConcreteDerivedIntValue.HITPOINTS,
+                Name = DerivedValueName.HITPOINTS,
                 NewValue = result
             });
         }
@@ -936,9 +928,38 @@ namespace JoyLib.Code.Entities
             {
                 goItem.MonoBehaviourHandler.gameObject.SetActive(false);
             }
-            
-            m_Backpack.Add(actor);
+
+            if (this.m_Backpack.Contains(actor) == false)
+            {
+                m_Backpack.Add(actor);
+            }
             return true;
+        }
+
+        public virtual bool CanAddContents(IItemInstance actor)
+        {
+            return true;
+        }
+
+        public virtual bool Contains(IItemInstance actor)
+        {
+            bool result = false;
+            result |= this.Backpack.Contains(actor);
+            if (result)
+            {
+                return result;
+            }
+
+            foreach (IItemInstance item in this.Backpack)
+            {
+                result |= item.Contains(actor);
+                if (result)
+                {
+                    return result;
+                }
+            }
+
+            return result;
         }
 
         public virtual bool AddContents(IEnumerable<IItemInstance> actors)
@@ -951,7 +972,8 @@ namespace JoyLib.Code.Entities
                 }
             }
 
-            m_Backpack.AddRange(actors);
+            this.m_Backpack.AddRange(
+                actors.Where(actor => this.m_Backpack.Any(item => item.GUID == actor.GUID) == false));
             return true;
         }
 
@@ -981,12 +1003,12 @@ namespace JoyLib.Code.Entities
             get { return new NonUniqueDictionary<string, IItemInstance>(m_Equipment); }
         }
 
-        public IDictionary<string, EntityStatistic> Statistics
+        public IDictionary<string, IRollableValue<int>> Statistics
         {
             get { return m_Statistics; }
         }
 
-        public IDictionary<string, EntitySkill> Skills
+        public IDictionary<string, IEntitySkill> Skills
         {
             get { return m_Skills; }
         }
@@ -1005,7 +1027,7 @@ namespace JoyLib.Code.Entities
 
         public bool Sentient
         {
-            get { return Tags.Any(tag => tag.Equals("sentient", StringComparison.OrdinalIgnoreCase)); }
+            get { return this.Tags.Any(tag => tag.Equals("sentient", StringComparison.OrdinalIgnoreCase)); }
         }
 
         public int Size
@@ -1060,32 +1082,32 @@ namespace JoyLib.Code.Entities
 
         public int Mana
         {
-            get { return this.DerivedValues[ConcreteDerivedIntValue.MANA].Maximum; }
+            get { return this.DerivedValues[DerivedValueName.MANA].Maximum; }
         }
 
         public int ManaRemaining
         {
-            get { return this.DerivedValues[ConcreteDerivedIntValue.MANA].Value; }
+            get { return this.DerivedValues[DerivedValueName.MANA].Value; }
         }
 
         public int ComposureRemaining
         {
-            get { return this.DerivedValues[ConcreteDerivedIntValue.COMPOSURE].Value; }
+            get { return this.DerivedValues[DerivedValueName.COMPOSURE].Value; }
         }
 
         public int Composure
         {
-            get { return this.DerivedValues[ConcreteDerivedIntValue.COMPOSURE].Maximum; }
+            get { return this.DerivedValues[DerivedValueName.COMPOSURE].Maximum; }
         }
 
         public int Concentration
         {
-            get { return this.DerivedValues[ConcreteDerivedIntValue.CONCENTRATION].Maximum; }
+            get { return this.DerivedValues[DerivedValueName.CONCENTRATION].Maximum; }
         }
 
         public int ConcentrationRemaining
         {
-            get { return this.DerivedValues[ConcreteDerivedIntValue.CONCENTRATION].Value; }
+            get { return this.DerivedValues[DerivedValueName.CONCENTRATION].Value; }
         }
 
         public Vector2Int TargetPoint { get; set; }

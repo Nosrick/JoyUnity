@@ -50,9 +50,9 @@ namespace JoyLib.Code.Unity.GUI
             this.Items[args.Name].Maximum = args.NewValue;
         }
 
-        public void SetUpDerivedValues(IDictionary<string, IDerivedValue<int>> values)
+        public void SetUpDerivedValues(IDictionary<string, IDerivedValue> values)
         {
-            List<IDerivedValue<int>> valueList = new List<IDerivedValue<int>>(values.Values);
+            List<IDerivedValue> valueList = new List<IDerivedValue>(values.Values);
             
             if (this.Items.Count < valueList.Count)
             {

@@ -1,9 +1,7 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Lean.Common;
-#if UNITY_EDITOR
 using UnityEditor;
-#endif
+using UnityEngine;
 
 namespace Lean.Gui
 {
@@ -105,7 +103,7 @@ namespace Lean.Gui
 }
 
 #if UNITY_EDITOR
-namespace Lean.Gui
+namespace Lean.Gui.Inspector
 {
 	[CanEditMultipleObjects]
 	[CustomEditor(typeof(LeanWindowCloser))]

@@ -1,12 +1,10 @@
-﻿using System.Collections;
-using UnityEditor;
-using UnityEngine;
-using System;
-using System.Linq;
+﻿using System;
+using System.Collections;
 using System.Reflection;
+using UnityEditor;
 using UnityEditor.AnimatedValues;
+using UnityEngine;
 using UnityEngine.Events;
-using System.Collections.Generic;
 
 namespace DevionGames.InventorySystem
 {

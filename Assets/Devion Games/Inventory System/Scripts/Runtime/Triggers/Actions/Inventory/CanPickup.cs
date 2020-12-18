@@ -1,15 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Linq;
 using UnityEngine;
-using DevionGames.UIWidgets;
-using System.Linq;
 
 namespace DevionGames.InventorySystem
 {
     [UnityEngine.Scripting.APIUpdating.MovedFromAttribute(true, null, "Assembly-CSharp")]
     [Icon("Condition Item")]
     [ComponentMenu("Inventory System/Can Pickup")]
-    public class CanPickup : Action
+    public class CanPickup : Action, ICondition
     {
         [SerializeField]
         private string m_WindowName = "Inventory";

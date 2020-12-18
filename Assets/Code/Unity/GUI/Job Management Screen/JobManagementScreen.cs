@@ -36,8 +36,8 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
         
         protected Dictionary<string, IAbility> PurchasedAbilities { get; set; }
         
-        protected List<EntityStatistic> OriginalStatistics { get; set; }
-        protected List<EntitySkill> OriginalSkills { get; set; }
+        protected List<IRollableValue<int>> OriginalStatistics { get; set; }
+        protected List<IEntitySkill> OriginalSkills { get; set; }
         
         protected Dictionary<string, int> StatisticsDeltas { get; set; }
         protected Dictionary<string, int> SkillsDeltas { get; set; }
@@ -304,12 +304,12 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
             Player.Abilities.AddRange(PurchasedAbilities.Values);
             foreach (NamedItem item in Statistics)
             {
-                Player.Statistics[item.Name].Value = item.Value;
+                Player.Statistics[item.Name.ToLower()].Value = item.Value;
             }
 
             foreach (NamedItem item in Skills)
             {
-                Player.Skills[item.Name].Value = item.Value;
+                Player.Skills[item.Name.ToLower()].Value = item.Value;
             }
         }
 

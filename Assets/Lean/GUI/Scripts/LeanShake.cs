@@ -1,8 +1,6 @@
-﻿using UnityEngine;
-using Lean.Common;
-#if UNITY_EDITOR
+﻿using Lean.Common;
 using UnityEditor;
-#endif
+using UnityEngine;
 
 namespace Lean.Gui
 {
@@ -150,11 +148,11 @@ namespace Lean.Gui
 }
 
 #if UNITY_EDITOR
-namespace Lean.Gui
+namespace Lean.Gui.Inspector
 {
 	[CanEditMultipleObjects]
 	[CustomEditor(typeof(LeanShake))]
-	public class LeanShake_Editor : LeanInspector<LeanShake>
+	public class LeanShake_Inspector : LeanInspector<LeanShake>
 	{
 		private static bool expandSpeed;
 

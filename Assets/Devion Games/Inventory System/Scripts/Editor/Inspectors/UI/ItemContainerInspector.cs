@@ -1,12 +1,11 @@
 ﻿
-using UnityEngine;
-using UnityEditor;
-using UnityEditorInternal;
 using DevionGames.UIWidgets;
+using UnityEditor;
 using UnityEditor.AnimatedValues;
+using UnityEditorInternal;
+using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
-
 
 namespace DevionGames.InventorySystem
 {

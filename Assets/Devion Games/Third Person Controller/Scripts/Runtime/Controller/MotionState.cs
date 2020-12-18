@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -183,7 +182,8 @@ namespace DevionGames
 				SendMessage("PauseItemUpdate", false, SendMessageOptions.DontRequireReceiver);
 			this.m_IsActive = false;
 			OnStop ();
-            m_Controller.CheckDefaultAnimatorStates();
+			if(!string.IsNullOrEmpty(GetDestinationState()))
+				m_Controller.CheckDefaultAnimatorStates();
 			CameraSettings preset = this.m_Camera.Presets.Where(x => x.Name == CameraPreset).FirstOrDefault();
 			if (preset != null && preset.Name != "Default")
 			{
@@ -192,6 +192,8 @@ namespace DevionGames
 			//Debug.Log("Stop Motion "+FriendlyName);
 
 		}
+
+
 
 		public void StartMotion ()
 		{
@@ -210,11 +212,8 @@ namespace DevionGames
 
 			string destinationState = GetDestinationState ();
 			if (!string.IsNullOrEmpty (destinationState)) {
-				#if Proxy
-				Proxy.SendToAll (gameObject, "CrossFadeInFixedTime", destinationState, TransitionDuration);
-				#else
 				m_Animator.CrossFadeInFixedTime (destinationState, TransitionDuration);
-				#endif
+
 			}
 	
 			//Debug.Log("Start Motion " + FriendlyName);
@@ -253,6 +252,11 @@ namespace DevionGames
 		}
 
 		public virtual bool CheckGround ()
+		{
+			return true;
+		}
+
+		public virtual bool CheckStep()
 		{
 			return true;
 		}

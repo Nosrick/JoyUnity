@@ -5,7 +5,7 @@ using JoyLib.Code.Entities.Statistics;
 
 namespace JoyLib.Code.Entities.Abilities
 {
-    public interface IAbility
+    public interface IAbility : ITagged
     {
         //When the ability is added to the user
         bool OnAdd(IEntity entity);
@@ -14,13 +14,27 @@ namespace JoyLib.Code.Entities.Abilities
         bool OnRemove(IEntity entity);
 
         //When the entity attacks
-        bool OnAttack(IEntity attacker, IEntity target);
+        bool OnAttack(
+            IEntity attacker, 
+            IEntity target, 
+            IEnumerable<string> attackerTags, 
+            IEnumerable<string> defenderTags);
 
         //When the entity is hit
-        int OnTakeHit(IEntity attacker, IEntity defender, int damage);
+        int OnTakeHit(
+            IEntity attacker, 
+            IEntity defender, 
+            int damage, 
+            IEnumerable<string> attackerTags, 
+            IEnumerable<string> defenderTags);
 
         //When the entity heals
-        int OnHeal(IEntity receiver, IEntity healer, int healing);
+        int OnHeal(
+            IEntity receiver, 
+            IEntity healer, 
+            int healing, 
+            IEnumerable<string> receiverTags, 
+            IEnumerable<string> healerTags);
 
         //When the entity picks up an item
         bool OnPickup(IEntity entity, IItemInstance item);
@@ -29,10 +43,10 @@ namespace JoyLib.Code.Entities.Abilities
         bool OnTick(IEntity entity);
 
         //When the entity reduces another entity to zero of a Derived Value
-        bool OnReduceToZero(IEntity attacker, IEntity target, IDerivedValue<int> value);
+        bool OnReduceToZero(IEntity attacker, IEntity target, IDerivedValue value);
 
         //When the entity reduces another entity to the "disabled" status of a Derived Value
-        bool OnDisable(IEntity attacker, IEntity target, IDerivedValue<int> value);
+        bool OnDisable(IEntity attacker, IEntity target, IDerivedValue value);
 
         //When the entity uses an item
         bool OnUse(IEntity user, IJoyObject target);
@@ -43,16 +57,28 @@ namespace JoyLib.Code.Entities.Abilities
         //When the entity uses a skill
         //This returns the success threshold modification for the roll
         //The second parameter is for checking against other possible stat/skill values
-        int OnCheckRollModifyThreshold(int successThreshold, params IBasicValue<int>[] values);
+        int OnCheckRollModifyThreshold(
+            int successThreshold, 
+            IEnumerable<IBasicValue<int>> values, 
+            IEnumerable<string> attackerTags, 
+            IEnumerable<string> defenderTags);
 
         //This returns bonus/penalty dice for the roll
         //The second parameter is for checking against other possible stat/skill values
-        int OnCheckRollModifyDice(int dicePool, params IBasicValue<int>[] values);
+        int OnCheckRollModifyDice(
+            int dicePool, 
+            IEnumerable<IBasicValue<int>> values, 
+            IEnumerable<string> attackerTags, 
+            IEnumerable<string> defenderTags);
 
         //This is used for directly modifying the successes of the check
         //And should return the new successes
         //The second parameter is for checking against other possible stat/skill values
-        int OnCheckSuccess(int successes, params IBasicValue<int>[] values);
+        int OnCheckSuccess(
+            int successes, 
+            IEnumerable<IBasicValue<int>> values, 
+            IEnumerable<string> attackerTags, 
+            IEnumerable<string> defenderTags);
 
         bool DecrementCounter(int value);
 
@@ -61,8 +87,6 @@ namespace JoyLib.Code.Entities.Abilities
         void IncrementMagnitude(int value);
 
         void IncrementCounter(int value);
-
-        bool HasTag(string tag);
 
         bool EnactToll(IEntity caster);
 
@@ -121,11 +145,6 @@ namespace JoyLib.Code.Entities.Abilities
         }
 
         IDictionary<string, int> Prerequisites
-        {
-            get;
-        }
-
-        string[] Tags
         {
             get;
         }

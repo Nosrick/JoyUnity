@@ -11,6 +11,7 @@ namespace JoyLib.Code.Entities.Abilities
     public abstract class AbstractAbility : IAbility
     {
         protected readonly Dictionary<string, IJoyAction> m_CachedActions;
+        private List<string> m_Tags;
 
         public AbstractAbility()
         {
@@ -54,7 +55,8 @@ namespace JoyLib.Code.Entities.Abilities
 
         //When the entity attacks, before any resolution occurs
         //Returns false to denote no effect took place
-        public virtual bool OnAttack(IEntity attacker, IEntity target)
+        public virtual bool OnAttack(IEntity attacker, IEntity target, IEnumerable<string> attackerTags,
+            IEnumerable<string> defenderTags)
         {
             return false;
         }
@@ -62,14 +64,20 @@ namespace JoyLib.Code.Entities.Abilities
         //When the entity is hit, after resolution
         //Triggers even when no damage happens
         //Returns the damage by default
-        public virtual int OnTakeHit(IEntity attacker, IEntity defender, int damage)
+        public virtual int OnTakeHit(
+            IEntity attacker, 
+            IEntity defender, 
+            int damage, 
+            IEnumerable<string> attackerTags, 
+            IEnumerable<string> defenderTags)
         {
             return damage;
         }
 
         //When the entity is healed
         //Returns the amount healed
-        public virtual int OnHeal(IEntity receiver, IEntity healer, int value)
+        public virtual int OnHeal(IEntity receiver, IEntity healer, int value, IEnumerable<string> receiverTags,
+            IEnumerable<string> healerTags)
         {
             return value;
         }
@@ -92,14 +100,14 @@ namespace JoyLib.Code.Entities.Abilities
 
         //Triggered when an entity reduces another entity to zero of a Derived Value
         //Returns true when the effect takes place
-        public virtual bool OnReduceToZero(IEntity attacker, IEntity target, IDerivedValue<int> value)
+        public virtual bool OnReduceToZero(IEntity attacker, IEntity target, IDerivedValue value)
         {
             return false;
         }
 
         //Triggered when an entity reduces another entity to the "disabled" of a Derived Value
         //Returns true when the effect takes place
-        public virtual bool OnDisable(IEntity attacker, IEntity target, IDerivedValue<int> value)
+        public virtual bool OnDisable(IEntity attacker, IEntity target, IDerivedValue value)
         {
             return false;
         }
@@ -136,14 +144,16 @@ namespace JoyLib.Code.Entities.Abilities
         //When the entity uses a skill
         //This returns the success threshold modification for the roll
         //The second parameter is for checking against other possible stat/skill values
-        public virtual int OnCheckRollModifyThreshold(int successThreshold, params IBasicValue<int>[] values)
+        public virtual int OnCheckRollModifyThreshold(int successThreshold, IEnumerable<IBasicValue<int>> values,
+            IEnumerable<string> attackerTags, IEnumerable<string> defenderTags)
         {
             return successThreshold;
         }
 
         //This returns bonus/penalty dice for the roll
         //The second parameter is for checking against other possible stat/skill values
-        public virtual int OnCheckRollModifyDice(int dicePool, params IBasicValue<int>[] values)
+        public virtual int OnCheckRollModifyDice(int dicePool, IEnumerable<IBasicValue<int>> values,
+            IEnumerable<string> attackerTags, IEnumerable<string> defenderTags)
         {
             return dicePool;
         }
@@ -151,14 +161,37 @@ namespace JoyLib.Code.Entities.Abilities
         //This is used for directly modifying the successes of the check
         //And should return the new successes
         //The second parameter is for checking against other possible stat/skill values
-        public virtual int OnCheckSuccess(int successes, params IBasicValue<int>[] values)
+        public virtual int OnCheckSuccess(int successes, IEnumerable<IBasicValue<int>> values,
+            IEnumerable<string> attackerTags, IEnumerable<string> defenderTags)
         {
             return successes;
         }
 
         public bool HasTag(string tag)
         {
-            return Tags.Contains(tag);
+            return this.Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public bool AddTag(string tag)
+        {
+            if (this.HasTag(tag))
+            {
+                return true;
+            }
+
+            this.m_Tags.Add(tag);
+            return true;
+        }
+
+        public bool RemoveTag(string tag)
+        {
+            if (this.HasTag(tag))
+            {
+                this.m_Tags.RemoveAt(this.m_Tags.FindIndex(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase)));
+                return true;
+            }
+
+            return false;
         }
 
         public bool DecrementCounter(int value)
@@ -219,9 +252,10 @@ namespace JoyLib.Code.Entities.Abilities
 
         public bool MeetsPrerequisites(IEnumerable<Tuple<string, int>> data)
         {
-            return data.All(x => this.Prerequisites.Any(prereq =>
-                prereq.Key.Equals(x.Item1, StringComparison.OrdinalIgnoreCase) && x.Item2 >= prereq.Value)
-                || this.Prerequisites.IsNullOrEmpty());
+            return this.Prerequisites.IsNullOrEmpty()
+                   || this.Prerequisites.All(prereq => data.Any(
+                       datum => datum.Item1.Equals(prereq.Key, StringComparison.OrdinalIgnoreCase)
+                                && datum.Item2 >= prereq.Value));
         }
 
         public string Name
@@ -302,10 +336,11 @@ namespace JoyLib.Code.Entities.Abilities
             protected set;
         }
 
-        public string[] Tags
+        public IEnumerable<string> Tags
         {
-            get;
-            protected set;
+            get => this.m_Tags;
+            protected set => this.m_Tags = new List<string>(value);
         }
+            
     }
 }

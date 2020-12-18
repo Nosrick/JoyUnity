@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEditor;
+﻿using UnityEditor;
 
 namespace DevionGames
 {
@@ -25,6 +22,19 @@ namespace DevionGames
 				AddAxis (new InputAxis () {
 					name = "Crouch",
 					positiveButton = "c",
+					gravity = 1000,
+					dead = 0.1f,
+					sensitivity = 1000f,
+					type = AxisType.KeyOrMouseButton,
+					axis = 1
+				});
+			}
+			if (!AxisDefined("No Control"))
+			{
+				AddAxis(new InputAxis()
+				{
+					name = "No Control",
+					positiveButton = "left ctrl",
 					gravity = 1000,
 					dead = 0.1f,
 					sensitivity = 1000f,

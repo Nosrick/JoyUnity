@@ -42,14 +42,10 @@
 			<Name>Pickpocketing</Name>
 			<Discount>2</Discount>
 		</Skill>
-
+		
 		<Ability>
-			<Name>LightArmour</Name>
-			<Cost>100</Cost>
-		</Ability>
-		<Ability>
-			<Name>Feint</Name>
-			<Cost>100</Cost>
+			<Name>distraction</Name>
+			<Cost>200</Cost>
 		</Ability>
 	</Job>
 </Jobs>

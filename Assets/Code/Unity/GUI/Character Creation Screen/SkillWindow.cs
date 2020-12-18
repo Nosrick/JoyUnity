@@ -15,13 +15,13 @@ namespace JoyLib.Code.Unity.GUI
         [SerializeField] protected BasicPlayerInfo PlayerInfo;
         protected List<NamedItem> Items { get; set; }
         
-        protected IDictionary<string, EntitySkill> Skills { get; set; }
+        protected IDictionary<string, IEntitySkill> Skills { get; set; }
 
         public void Awake()
         {
             ValueContainerPrefab.gameObject.SetActive(false);
             Items = new List<NamedItem>();
-            Skills = new Dictionary<string, EntitySkill>();
+            Skills = new Dictionary<string, IEntitySkill>();
             
             Value = Maximum;
             SetPointsRemaining();
@@ -31,7 +31,7 @@ namespace JoyLib.Code.Unity.GUI
         {
             Skills = GameManager.SkillHandler.GetDefaultSkillBlock(this.GameManager.NeedHandler.Needs);
 
-            foreach (KeyValuePair<string, EntitySkill> pair in this.PlayerInfo.CurrentTemplate.Skills)
+            foreach (KeyValuePair<string, IEntitySkill> pair in this.PlayerInfo.CurrentTemplate.Skills)
             {
                 Skills.Add(pair);
             }
@@ -39,7 +39,7 @@ namespace JoyLib.Code.Unity.GUI
             return Skills.Select(skill => new KeyValuePair<string, int>(skill.Key, skill.Value.Value)).ToList();
         }
 
-        public IDictionary<string, EntitySkill> GetSkillsBlock()
+        public IDictionary<string, IEntitySkill> GetSkillsBlock()
         {
             for (int i = 0; i < Items.Count; i++)
             {

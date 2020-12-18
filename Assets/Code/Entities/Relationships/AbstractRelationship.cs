@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using UnityEngine;
 
@@ -8,9 +7,15 @@ namespace JoyLib.Code.Entities.Relationships
 {
     public abstract class AbstractRelationship : IRelationship
     {
+        protected List<string> m_Tags;
+        
         public virtual string Name => "abstractrelationship";
 
-        public List<string> Tags { get; protected set; }
+        public IEnumerable<string> Tags
+        {
+            get => this.m_Tags;
+            protected set => this.m_Tags = new List<string>(value);
+        }
 
         public virtual string DisplayName => "SOMEONE FORGOT TO OVERRIDE THE DISPLAYNAME";
         
@@ -23,7 +28,7 @@ namespace JoyLib.Code.Entities.Relationships
         {
             m_Participants = new SortedDictionary<long, IJoyObject>();
             m_Values = new SortedDictionary<long, Dictionary<long, int>>();
-            Tags = new List<string>();
+            this.Tags = new List<string>();
         }
 
         public long GenerateHashFromInstance()
@@ -74,7 +79,7 @@ namespace JoyLib.Code.Entities.Relationships
 
         public bool HasTag(string tag)
         {
-            return Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase));
+            return this.m_Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase));
         }
 
         public bool AddTag(string tag)
@@ -83,7 +88,7 @@ namespace JoyLib.Code.Entities.Relationships
             {
                 return false;
             }
-            Tags.Add(tag);
+            this.m_Tags.Add(tag);
             return true;
         }
 
@@ -91,7 +96,7 @@ namespace JoyLib.Code.Entities.Relationships
         {
             if (HasTag(tag))
             {
-                Tags.Remove(tag);
+                this.m_Tags.Remove(tag);
                 return true;
             }
 

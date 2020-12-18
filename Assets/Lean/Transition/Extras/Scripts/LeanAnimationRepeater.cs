@@ -1,8 +1,6 @@
-﻿using UnityEngine;
-using UnityEngine.Events;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
+﻿using UnityEditor;
+using UnityEngine;
+using FSA = UnityEngine.Serialization.FormerlySerializedAsAttribute;
 
 namespace Lean.Transition.Extras
 {
@@ -12,7 +10,7 @@ namespace Lean.Transition.Extras
 	public class LeanAnimationRepeater : LeanAnimationOnce
 	{
 		/// <summary>The time in seconds between each animation.</summary>
-		public float TimeInterval { set { timeInterval = value; } get { return timeInterval; } } [SerializeField] [UnityEngine.Serialization.FormerlySerializedAs("TimeInterval")] private float timeInterval = 3.0f;
+		public float TimeInterval { set { timeInterval = value; } get { return timeInterval; } } [SerializeField] [FSA("TimeInterval")] private float timeInterval = 3.0f;
 
 		protected override void Start()
 		{

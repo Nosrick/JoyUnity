@@ -8,7 +8,6 @@ using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.World;
 using Moq;
@@ -75,14 +74,13 @@ namespace Tests
             IRollableValue<int> mockPersonality = Mock.Of<IRollableValue<int>>(
                 value => value.Value == 4
                          && value.Name == "personality");
-            IDictionary<string, EntityStatistic> stats = new Dictionary<string, EntityStatistic>();
+            IDictionary<string, IRollableValue<int>> stats = new Dictionary<string, IRollableValue<int>>();
             stats.Add(
                 "personality", 
                 new EntityStatistic(
                     "personality",
                     4,
-                    GlobalConstants.DEFAULT_SUCCESS_THRESHOLD,
-                    new StandardRoller()));
+                    GlobalConstants.DEFAULT_SUCCESS_THRESHOLD));
 
             instigator = Mock.Of<IEntity>(
                 entity => entity.PlayerControlled == true

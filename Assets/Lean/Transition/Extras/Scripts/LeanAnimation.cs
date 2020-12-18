@@ -1,7 +1,5 @@
-﻿using UnityEngine;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
+﻿using UnityEditor;
+using UnityEngine;
 
 namespace Lean.Transition.Extras
 {
@@ -26,7 +24,7 @@ namespace Lean.Transition.Extras
 }
 
 #if UNITY_EDITOR
-namespace Lean.Transition.Extras
+namespace Lean.Transition.Extras.Inspector
 {
 	[CanEditMultipleObjects]
 	[CustomEditor(typeof(LeanAnimation))]

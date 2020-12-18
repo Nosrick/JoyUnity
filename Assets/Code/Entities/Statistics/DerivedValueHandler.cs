@@ -14,8 +14,6 @@ namespace JoyLib.Code.Entities.Statistics
         protected Dictionary<string, string> Formulas { get; set; }
         protected Dictionary<string, string> EntityStandardFormulas { get; set; }
         protected Dictionary<string, string> ItemStandardFormulas { get; set; }
-        
-        protected Dictionary<string, Type> DerivedValueTypes { get; set; } 
         protected Dictionary<string, Color> DerivedValueBackgroundColours { get; set; }
         protected Dictionary<string, Color> DerivedValueTextColours { get; set; }
         
@@ -52,22 +50,6 @@ namespace JoyLib.Code.Entities.Statistics
             {
                 this.Formulas.Add(pair.Key, pair.Value);
             }
-
-            if (StatisticHandler is null == false)
-            {
-                Type[] assemblyTypes = StatisticHandler.GetType().Assembly.GetTypes();
-                this.DerivedValueTypes = new Dictionary<string, Type>();
-                List<Type> types = assemblyTypes.Where(type => type.IsAssignableFrom(typeof(IDerivedValue<int>)))
-                    .ToList();
-                
-                types.AddRange(assemblyTypes.Where(type => type.IsAssignableFrom(typeof(IDerivedValue<float>))));
-
-                foreach (Type type in types)
-                {
-                    this.DerivedValueTypes.Add(type.Name, type);
-                }
-            }
-            
         }
 
         public Dictionary<string, string> LoadFormulasFromFile(string file)
@@ -106,37 +88,27 @@ namespace JoyLib.Code.Entities.Statistics
             return formulas;
         }
         
-        public IDerivedValue<K> Calculate<T, K>(string name, IEnumerable<IBasicValue<T>> components) 
+        public IDerivedValue Calculate<T>(string name, IEnumerable<IBasicValue<T>> components) 
             where T : struct
-            where K : struct
         {
-            if (this.Formulas.Any(pair => pair.Key.Equals(name, StringComparison.Ordinal)))
+            if (this.Formulas.Any(pair => pair.Key.Equals(name, StringComparison.OrdinalIgnoreCase)))
             {
                 string formula = this.Formulas.First(pair => pair.Key.Equals(name, StringComparison.OrdinalIgnoreCase))
                     .Value;
 
-                string value = this.Calculate<T>(components, formula).ToString();
-                IDerivedValue<K> derivedValue = this.CreateDerivedValue<K>();
-                derivedValue.Name = name;
-                derivedValue.SetValue(value);
-                derivedValue.SetMaximum(value);
+                int value = this.Calculate(components, formula);
+                return new ConcreteDerivedIntValue(name, value, value);
             }
             
             throw new InvalidOperationException("Could not find formula for name of value " + name);
         }
 
-        public IDerivedValue<T> Calculate<T>(string name, IEnumerable<IBasicValue<T>> components)
-            where T : struct
+        public Dictionary<string, IDerivedValue> GetEntityStandardBlock(IEnumerable<IBasicValue<int>> components)
         {
-            return this.Calculate<T, T>(name, components);
-        }
-
-        public Dictionary<string, IDerivedValue<int>> GetEntityStandardBlock(IEnumerable<IBasicValue<int>> components)
-        {
-            Dictionary<string, IDerivedValue<int>> values = new Dictionary<string, IDerivedValue<int>>();
+            Dictionary<string, IDerivedValue> values = new Dictionary<string, IDerivedValue>();
             foreach (KeyValuePair<string, string> pair in this.EntityStandardFormulas)
             {
-                int result = this.Calculate<int>(components, pair.Value); 
+                int result = Math.Max(1, this.Calculate<int>(components, pair.Value)); 
                 values.Add(
                     pair.Key,
                     new ConcreteDerivedIntValue(
@@ -148,12 +120,12 @@ namespace JoyLib.Code.Entities.Statistics
             return values;
         }
 
-        public Dictionary<string, IDerivedValue<int>> GetItemStandardBlock(IEnumerable<IBasicValue<float>> components)
+        public Dictionary<string, IDerivedValue> GetItemStandardBlock(IEnumerable<IBasicValue<float>> components)
         {
-            Dictionary<string, IDerivedValue<int>> values = new Dictionary<string, IDerivedValue<int>>();
+            Dictionary<string, IDerivedValue> values = new Dictionary<string, IDerivedValue>();
             foreach (KeyValuePair<string, string> pair in this.ItemStandardFormulas)
             {
-                int result = (int)Math.Ceiling(this.Calculate<float>(components, pair.Value)); 
+                int result = Math.Max(1, this.Calculate(components, pair.Value)); 
                 values.Add(
                     pair.Key,
                     new ConcreteDerivedIntValue(
@@ -163,22 +135,6 @@ namespace JoyLib.Code.Entities.Statistics
             }
 
             return values;
-        }
-
-        protected IDerivedValue<K> CreateDerivedValue<K>() 
-            where K : struct
-        {
-            if(this.DerivedValueTypes.Any(t => t.Key.Equals(typeof(K).Name, StringComparison.Ordinal)))
-            {
-                Type type = this.DerivedValueTypes.First(t =>
-                    t.Key.Equals(typeof(K).Name, StringComparison.OrdinalIgnoreCase)).Value;
-
-                IDerivedValue<K> derivedValue = (IDerivedValue<K>) Activator.CreateInstance(type);
-
-                return derivedValue;
-            }
-            
-            throw new InvalidOperationException("Type " + typeof(K).Name + " not supported for derived values");
         }
 
         public bool AddFormula(string name, string formula)
@@ -209,7 +165,7 @@ namespace JoyLib.Code.Entities.Statistics
             return Color.gray;
         }
 
-        public T Calculate<T>(IEnumerable<IBasicValue<T>> components, string formula)
+        public int Calculate<T>(IEnumerable<IBasicValue<T>> components, string formula)
             where T : struct
         {
             string eval = formula;
@@ -218,7 +174,7 @@ namespace JoyLib.Code.Entities.Statistics
                 eval = eval.Replace(value.Name, value.Value.ToString());
             }
 
-            return ScriptingEngine.instance.Evaluate<T>(eval);
+            return ScriptingEngine.instance.Evaluate<int>(eval);
         }
     }
 }

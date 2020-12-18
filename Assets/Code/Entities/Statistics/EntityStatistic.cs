@@ -1,5 +1,4 @@
 ﻿using System;
-using JoyLib.Code.Rollers;
 
 namespace JoyLib.Code.Entities.Statistics
 {
@@ -23,15 +22,13 @@ namespace JoyLib.Code.Entities.Statistics
 
         public EntityStatistic()
         {
-            this.Roller = new StandardRoller();
         }
         
-        public EntityStatistic(string name, int value, int successThreshold, IRollable rollable)
+        public EntityStatistic(string name, int value, int successThreshold)
         {
             Name = name;
             Value = value;
             SuccessThreshold = successThreshold;
-            Roller = rollable;
         }
 
         public int ModifyValue(int value)
@@ -62,12 +59,6 @@ namespace JoyLib.Code.Entities.Statistics
         {
             get;
             set;
-        }
-
-        public IRollable Roller
-        {
-            get;
-            protected set;
         }
     }
 }

@@ -65,11 +65,11 @@ namespace JoyLib.Code.World.Generators.Interiors
             List<JoyObject> walls = new List<JoyObject>();
             Sprite[] sprites = ObjectIcons.GetSprites(TileSet, "surroundwall");
             List<IBasicValue<float>> values = new List<IBasicValue<float>>();
-            values.Add(new ConcreteBasicFloatValue("weight", float.MaxValue));
-            values.Add(new ConcreteBasicFloatValue("bonus", float.MaxValue));
-            values.Add(new ConcreteBasicFloatValue("size", float.MaxValue));
-            values.Add(new ConcreteBasicFloatValue("hardness", float.MaxValue));
-            values.Add(new ConcreteBasicFloatValue("density", float.MaxValue));
+            values.Add(new ConcreteBasicFloatValue("weight", 1));
+            values.Add(new ConcreteBasicFloatValue("bonus", 1));
+            values.Add(new ConcreteBasicFloatValue("size", 1));
+            values.Add(new ConcreteBasicFloatValue("hardness", 1));
+            values.Add(new ConcreteBasicFloatValue("density", 1));
 
             for (int i = 0; i < m_UntreatedTiles.GetLength(0); i++)
             {

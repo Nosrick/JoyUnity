@@ -1,20 +1,17 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using System.Collections.Generic;
+using Lean.Transition;
+using UnityEditor;
+using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using System.Collections.Generic;
-using Lean.Common;
-using Lean.Transition;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
+using UnityEngine.UI;
 
 namespace Lean.Gui
 {
 	/// <summary>This component provides an alternative to Unity's UI button, allowing you to easily add custom transitions, as well as add an OnDown event.</summary>
 	[HelpURL(LeanGui.HelpUrlPrefix + "LeanButton")]
 	[AddComponentMenu(LeanGui.ComponentMenuPrefix + "Button")]
-	public class LeanButton : Selectable, IPointerDownHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, ISubmitHandler
+	public class LeanButton : LeanSelectable, IPointerDownHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, ISubmitHandler
 	{
 		/// <summary>If you enable this then OnDown + DownTransition be invoked once for each finger that begins touching the button.
 		/// If you disable this then OnDown + DownTransition will only be invoked for the first finger that begins touching the button.</summary>
@@ -148,14 +145,7 @@ namespace Lean.Gui
 				TryNormal();
 			}
 		}
-#if UNITY_EDITOR
-		protected override void Reset()
-		{
-			base.Reset();
 
-			transition = Selectable.Transition.None;
-		}
-#endif
 		private void TryNormal()
 		{
 			if (downPointers.Count == 0)
@@ -183,17 +173,15 @@ namespace Lean.Gui
 }
 
 #if UNITY_EDITOR
-namespace Lean.Gui
+namespace Lean.Gui.Inspector
 {
 	[CanEditMultipleObjects]
 	[CustomEditor(typeof(LeanButton))]
-	public class LeanButton_Inspector : LeanInspector<LeanButton>
+	public class LeanButton_Inspector : LeanSelectable_Inspector<LeanButton>
 	{
 		protected override void DrawInspector()
 		{
-			Draw("m_Interactable");
-			Draw("m_Transition");
-			Draw("m_Navigation");
+			base.DrawInspector();
 
 			EditorGUILayout.Separator();
 

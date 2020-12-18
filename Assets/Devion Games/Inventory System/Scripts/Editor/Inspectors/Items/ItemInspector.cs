@@ -1,13 +1,12 @@
-﻿using UnityEngine;
-using UnityEditor;
-using UnityEditor.AnimatedValues;
-using System;
-using UnityEditorInternal;
-using System.Collections;
-using UnityEngine.Events;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Collections.Generic;
+using UnityEditor;
+using UnityEditor.AnimatedValues;
+using UnityEditorInternal;
+using UnityEngine;
+using UnityEngine.Events;
 
 namespace DevionGames.InventorySystem
 {
@@ -39,6 +38,7 @@ namespace DevionGames.InventorySystem
         protected SerializedProperty m_Ingredients;
         protected SerializedProperty m_Properties;
         protected SerializedProperty m_IsSellable;
+        protected SerializedProperty m_CanBuyBack;
 
         protected SerializedProperty m_UseCraftingSkill;
         protected SerializedProperty m_SkillWindow;
@@ -92,6 +92,7 @@ namespace DevionGames.InventorySystem
             this.m_IsSellable = serializedObject.FindProperty("m_IsSellable");
             this.m_ShowSellOptions = new AnimBool(this.m_IsSellable.boolValue);
             this.m_ShowSellOptions.valueChanged.AddListener(new UnityAction(Repaint));
+            this.m_CanBuyBack = serializedObject.FindProperty("m_CanBuyBack");
             this.m_BuyPrice = serializedObject.FindProperty("m_BuyPrice");
             this.m_BuyCurrency = serializedObject.FindProperty("m_BuyCurrency");
             this.m_SellPrice = serializedObject.FindProperty("m_SellPrice");
@@ -239,6 +240,7 @@ namespace DevionGames.InventorySystem
                 this.m_SkillWindow.propertyPath,
                 this.m_RemoveIngredientsWhenFailed.propertyPath,
                 this.m_MinCraftingSkillValue.propertyPath,
+                this.m_CanBuyBack.propertyPath,
             };
 
 
@@ -318,6 +320,7 @@ namespace DevionGames.InventorySystem
 
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Properties:", EditorStyles.boldLabel);
+            EditorGUILayout.HelpBox("Properties can be used to define item specific information like stats or any custom information you want to change and save at runtime.", MessageType.Info);
             this.m_PropertyList.elementHeight = this.m_PropertyList.count == 0 ? (EditorGUIUtility.singleLineHeight + 4f) : (EditorGUIUtility.singleLineHeight + 4f) * 3;
             this.m_PropertyList.DoLayoutList();
 
@@ -329,6 +332,7 @@ namespace DevionGames.InventorySystem
             if (EditorGUILayout.BeginFadeGroup(this.m_ShowSellOptions.faded))
             {
                 EditorGUI.indentLevel = EditorGUI.indentLevel + 1;
+                EditorGUILayout.PropertyField(this.m_CanBuyBack);
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.PropertyField(this.m_BuyPrice);
                 EditorGUILayout.PropertyField(this.m_BuyCurrency, GUIContent.none);
@@ -387,8 +391,10 @@ namespace DevionGames.InventorySystem
                 GUILayout.BeginHorizontal();
                 GUILayout.Space(16f);
                 GUILayout.BeginVertical();
+                EditorGUILayout.HelpBox("Crafting item modifiers can be used to randomize the item when crafting.", MessageType.Info);
                 this.m_CraftingModifierList.DoLayoutList();
                 EditorGUILayout.Space();
+                EditorGUILayout.HelpBox("Required ingredients to craft this item.", MessageType.Info);
                 this.m_IngredientList.DoLayoutList();
                 GUILayout.EndVertical();
                 GUILayout.EndHorizontal();

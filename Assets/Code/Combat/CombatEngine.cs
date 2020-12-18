@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code.Entities;
+using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Rollers;
@@ -10,69 +11,129 @@ namespace JoyLib.Code.Combat
 {
     public class CombatEngine : ICombatEngine
     {
-        protected RNG Roller { get; set; }
+        protected IRollable Roller { get; set; }
 
-        public CombatEngine(RNG roller = null)
+        public CombatEngine(IRollable roller = null)
         {
             this.Roller = roller is null ? new RNG() : roller;
         }
 
-        public int MakeAttack(
-            IEntity attacker,
+        public int MakeAttack(IEntity attacker,
             IEntity defender,
-            string[] attackerTags,
-            string[] defenderTags)
+            IEnumerable<string> attackerTags,
+            IEnumerable<string> defenderTags)
         {
-            List<EntityStatistic> attackerStatistics = attacker.Statistics
+            List<IRollableValue<int>> attackerStuff = attacker.Statistics
                 .Where(pair => attackerTags.Any(tag => tag.Equals(pair.Key, StringComparison.OrdinalIgnoreCase)))
-                .Select(pair => pair.Value).ToList();
-
-            List<EntitySkill> attackerSkills = attacker.Skills
-                .Where(pair => attackerTags.Any(tag => tag.Equals(pair.Key, StringComparison.OrdinalIgnoreCase)))
-                .Select(pair => pair.Value).ToList();
-            
-            List<EntityStatistic> defenderStatistics = defender.Statistics
-                .Where(pair => defenderTags.Any(tag => tag.Equals(pair.Key, StringComparison.OrdinalIgnoreCase)))
-                .Select(pair => pair.Value).ToList();
-
-            List<EntitySkill> defenderSkills = defender.Skills
-                .Where(pair => defenderTags.Any(tag => tag.Equals(pair.Key, StringComparison.OrdinalIgnoreCase)))
-                .Select(pair => pair.Value).ToList();
-
-            List<IItemInstance> attackerWeapons = attacker.Equipment.Select(tuple => tuple.Item2).Where(instance =>
-                instance.Tags.Any(tag => tag.Equals("weapon", StringComparison.OrdinalIgnoreCase))).ToList();
-            List<IItemInstance> defenderArmour = defender.Equipment.Select(tuple => tuple.Item2).Where(instance =>
-                instance.Tags.Any(tag => tag.Equals("armour", StringComparison.OrdinalIgnoreCase)))
+                .Select(pair => pair.Value)
                 .ToList();
 
-            int attackerSuccesses = 0;
-            foreach(EntityStatistic stat in attackerStatistics)
-            {
-                attackerSuccesses += this.Roller.RollSuccesses(
-                    stat.Value,
-                    stat.SuccessThreshold);
-            }
-            foreach (EntitySkill skill in attackerSkills)
-            {
-                attackerSuccesses += this.Roller.RollSuccesses(
-                    skill.Value,
-                    skill.SuccessThreshold);
-            }
+            attackerStuff.AddRange(attacker.Skills
+                .Where(pair => attackerTags.Any(tag => tag.Equals(pair.Key, StringComparison.OrdinalIgnoreCase)))
+                .Select(pair => pair.Value));
 
-            int defenderSuccesses = 0;
-            foreach(EntityStatistic stat in defenderStatistics)
+            List<IRollableValue<int>> defenderStuff = defender.Statistics
+                .Where(pair => defenderTags.Any(tag => tag.Equals(pair.Key, StringComparison.OrdinalIgnoreCase)))
+                .Select(pair => pair.Value)
+                .ToList();
+
+            defenderStuff.AddRange(defender.Skills
+                .Where(pair => defenderTags.Any(tag => tag.Equals(pair.Key, StringComparison.OrdinalIgnoreCase)))
+                .Select(pair => pair.Value));
+
+            List<IItemInstance> attackerWeapons = attacker.Equipment.Select(tuple => tuple.Item2).Where(instance =>
+                instance.Tags.Any(tag => tag.Equals("weapon", StringComparison.OrdinalIgnoreCase))
+                && instance.Tags.Intersect(attackerTags).Count() > 0)
+                .ToList();
+
+            List<IItemInstance> defenderArmour = defender.Equipment.Select(tuple => tuple.Item2).Where(instance =>
+                    instance.Tags.Any(tag => tag.Equals("armour", StringComparison.OrdinalIgnoreCase)
+                    && instance.Tags.Intersect(defenderTags).Count() > 0))
+                .ToList();
+
+            List<IAbility> attackerAbilities = attacker.Abilities.Where(ability =>
+                ability.Tags.Intersect(attackerTags).Count() > 0).ToList();
+
+            List<IAbility> defenderAbilities = defender.Abilities.Where(ability =>
+                ability.Tags.Intersect(attackerTags).Count() > 0).ToList();
+
+            attackerAbilities.ForEach(ability => ability.OnAttack(
+                attacker, 
+                defender, 
+                attackerTags, 
+                defenderTags));
+            
+            int attackerSuccesses = 0;
+            int totalDice = 0;
+            int successThreshold = GlobalConstants.DEFAULT_SUCCESS_THRESHOLD;
+            foreach (IRollableValue<int> stat in attackerStuff)
             {
-                defenderSuccesses += this.Roller.RollSuccesses(
-                    stat.Value,
-                    stat.SuccessThreshold);
-            }
-            foreach (EntitySkill skill in defenderSkills)
-            {
-                defenderSuccesses += this.Roller.RollSuccesses(
-                    skill.Value,
-                    skill.SuccessThreshold);
+                totalDice += stat.Value;
+                successThreshold = Math.Min(successThreshold, stat.SuccessThreshold);
             }
             
+            attackerAbilities.ForEach(ability => totalDice = ability.OnCheckRollModifyDice(
+                totalDice, 
+                attackerStuff, 
+                attackerTags, 
+                defenderTags));
+            attackerAbilities.ForEach(ability =>
+                successThreshold = ability.OnCheckRollModifyThreshold(
+                    successThreshold, 
+                    attackerStuff, 
+                    attackerTags, 
+                    defenderTags));
+                
+            attackerSuccesses = this.Roller.RollSuccesses(
+                totalDice,
+                successThreshold);
+            
+            attackerAbilities.ForEach(ability =>
+                attackerSuccesses = ability.OnCheckSuccess(
+                    attackerSuccesses, 
+                    attackerStuff, 
+                    attackerTags, 
+                    defenderTags));
+
+            int defenderSuccesses = 0;
+            totalDice = 0;
+            successThreshold = GlobalConstants.DEFAULT_SUCCESS_THRESHOLD;
+            foreach (IRollableValue<int> stat in defenderStuff)
+            {
+                totalDice += stat.Value;
+                successThreshold = Math.Min(successThreshold, stat.SuccessThreshold);
+            }
+
+            defenderAbilities.ForEach(ability => totalDice = ability.OnCheckRollModifyDice(
+                totalDice, 
+                defenderStuff, 
+                attackerTags, 
+                defenderTags));
+            defenderAbilities.ForEach(ability =>
+                successThreshold = ability.OnCheckRollModifyThreshold(
+                    successThreshold, 
+                    defenderStuff, 
+                    attackerTags, 
+                    defenderTags));
+
+            defenderSuccesses = this.Roller.RollSuccesses(
+                totalDice,
+                successThreshold);
+
+            defenderAbilities.ForEach(ability =>
+                defenderSuccesses = ability.OnCheckSuccess(
+                    defenderSuccesses, 
+                    defenderStuff, 
+                    attackerTags, 
+                    defenderTags));
+
+            defenderAbilities.ForEach(ability => defenderSuccesses = ability.OnTakeHit(
+                attacker, 
+                defender, 
+                attackerSuccesses, 
+                attackerTags, 
+                defenderTags));
+
             int result = attackerSuccesses - defenderSuccesses;
             if (result > 0)
             {

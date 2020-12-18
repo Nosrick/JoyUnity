@@ -1,9 +1,7 @@
+using Lean.Common;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using Lean.Common;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 namespace Lean.Gui
 {
@@ -66,11 +64,11 @@ namespace Lean.Gui
 }
 
 #if UNITY_EDITOR
-namespace Lean.Gui
+namespace Lean.Gui.Inspector
 {
 	[CanEditMultipleObjects]
 	[CustomEditor(typeof(LeanTooltipData))]
-	public class LeanTooltipData_Editor : LeanInspector<LeanTooltipData>
+	public class LeanTooltipData_Inspector : LeanInspector<LeanTooltipData>
 	{
 		protected override void DrawInspector()
 		{

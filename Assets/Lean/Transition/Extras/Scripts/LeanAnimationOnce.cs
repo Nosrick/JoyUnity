@@ -1,8 +1,7 @@
-﻿using UnityEngine;
+﻿using UnityEditor;
+using UnityEngine;
 using UnityEngine.Events;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
+using FSA = UnityEngine.Serialization.FormerlySerializedAsAttribute;
 
 namespace Lean.Transition.Extras
 {
@@ -12,10 +11,10 @@ namespace Lean.Transition.Extras
 	public class LeanAnimationOnce : LeanAnimation
 	{
 		/// <summary>When this reaches 0, the transitions will begin.</summary>
-		public float RemainingTime { set { remainingTime = value; } get { return remainingTime; } } [SerializeField] [UnityEngine.Serialization.FormerlySerializedAs("RemainingTime")] protected float remainingTime = 1.0f;
+		public float RemainingTime { set { remainingTime = value; } get { return remainingTime; } } [SerializeField] [FSA("RemainingTime")] protected float remainingTime = 1.0f;
 
 		/// <summary>The event will execute when the transitions begin.</summary>
-		public UnityEvent OnAnimation { get { if (onAnimation == null) onAnimation = new UnityEvent(); return onAnimation; } } [SerializeField] [UnityEngine.Serialization.FormerlySerializedAs("OnAnimation")] protected UnityEvent onAnimation;
+		public UnityEvent OnAnimation { get { if (onAnimation == null) onAnimation = new UnityEvent(); return onAnimation; } } [SerializeField] [FSA("OnAnimation")] protected UnityEvent onAnimation;
 
 		protected virtual void Start()
 		{
@@ -53,7 +52,7 @@ namespace Lean.Transition.Extras
 }
 
 #if UNITY_EDITOR
-namespace Lean.Transition.Extras
+namespace Lean.Transition.Extras.Inspector
 {
 	[CanEditMultipleObjects]
 	[CustomEditor(typeof(LeanAnimationOnce))]

@@ -1,9 +1,7 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using Lean.Common;
-#if UNITY_EDITOR
+﻿using Lean.Common;
 using UnityEditor;
-#endif
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace Lean.Gui
 {
@@ -50,7 +48,7 @@ namespace Lean.Gui
 }
 
 #if UNITY_EDITOR
-namespace Lean.Gui
+namespace Lean.Gui.Inspector
 {
 	[CanEditMultipleObjects]
 	[CustomEditor(typeof(LeanHitbox))]

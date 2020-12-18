@@ -1,10 +1,5 @@
-﻿using UnityEngine;
-using UnityEditor;
-using UnityEditor.AnimatedValues;
-using UnityEngine.Events;
-using UnityEditorInternal;
-using System.Linq;
-
+﻿using UnityEditor;
+using UnityEngine;
 
 namespace DevionGames
 {

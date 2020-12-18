@@ -56,8 +56,8 @@ namespace JoyLib.Code.Unity.GUI
 
         public void GetAvailableAbilities(
             IEntityTemplate template,
-            IDictionary<string, EntityStatistic> stats,
-            IDictionary<string, EntitySkill> skills)
+            IDictionary<string, IRollableValue<int>> stats,
+            IDictionary<string, IEntitySkill> skills)
         {
             if (GameManager.AbilityHandler is null)
             {
