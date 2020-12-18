@@ -116,7 +116,8 @@ namespace JoyLib.Code.Entities.Items
             RNG roller = null,
             IEnumerable<IAbility> uniqueAbilities = null,
             IEnumerable<IJoyAction> actions = null,
-            GameObject gameObject = null)
+            GameObject gameObject = null,
+            bool active = false)
         {
             if (this.Prefab is null)
             {
@@ -193,7 +194,7 @@ namespace JoyLib.Code.Entities.Items
 
             if (gameObject is null == false)
             {
-                this.Instantiate(gameObject);
+                this.Instantiate(gameObject, active);
             }
         }
 
@@ -202,16 +203,19 @@ namespace JoyLib.Code.Entities.Items
             return this.MonoBehaviourHandler is null == false;
         }
 
-        public void Instantiate(GameObject gameObject = null)
+        public void Instantiate(GameObject gameObject = null, bool active = false)
         {
             if (gameObject is null)
             {
-                GameObject.Instantiate(Prefab).GetComponent<MonoBehaviourHandler>().AttachJoyObject(this);
+                GameObject newOne = GameObject.Instantiate(Prefab);
+                newOne.GetComponent<MonoBehaviourHandler>().AttachJoyObject(this);
+                newOne.SetActive(active);
             }
             else
             {
                 MonoBehaviourHandler monoBehaviourHandler = gameObject.GetComponent<MonoBehaviourHandler>();
                 monoBehaviourHandler.AttachJoyObject(this);
+                monoBehaviourHandler.gameObject.SetActive(active);
             }
         }
 
