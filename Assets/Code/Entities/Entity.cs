@@ -936,6 +936,32 @@ namespace JoyLib.Code.Entities
             return true;
         }
 
+        public virtual bool CanAddContents(IItemInstance actor)
+        {
+            return true;
+        }
+
+        public virtual bool Contains(IItemInstance actor)
+        {
+            bool result = false;
+            result |= this.Backpack.Contains(actor);
+            if (result)
+            {
+                return result;
+            }
+
+            foreach (IItemInstance item in this.Backpack)
+            {
+                result |= item.Contains(actor);
+                if (result)
+                {
+                    return result;
+                }
+            }
+
+            return result;
+        }
+
         public virtual bool AddContents(IEnumerable<IItemInstance> actors)
         {
             foreach (ItemInstance actor in actors)

@@ -538,9 +538,42 @@ namespace JoyLib.Code.Entities.Items
             return null;
         }
 
+        public bool Contains(IItemInstance actor)
+        {
+            if (this.Contents.Contains(actor))
+            {
+                return true;
+            }
+
+            bool result = false;
+            IEnumerable<IItemInstance> items = this.Contents.Where(instance => instance.HasTag("container"));
+            foreach (IItemInstance c in items)
+            {
+                result |= c.Contains(actor);
+                if (result)
+                {
+                    return result;
+                }
+            }
+
+            return result;
+        }
+
+        public bool CanAddContents(IItemInstance actor)
+        {
+            if (actor.GUID == this.GUID 
+            || this.Contains(actor) 
+            || actor.Contains(this))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public bool AddContents(IItemInstance actor)
         {
-            if(this.m_Contents.Contains(actor.GUID) == false)
+            if(this.CanAddContents(actor))
             {
                 m_Contents.Add(actor.GUID);
 

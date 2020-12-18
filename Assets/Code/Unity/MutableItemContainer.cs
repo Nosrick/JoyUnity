@@ -93,12 +93,12 @@ namespace JoyLib.Code.Unity
                 bool result = false;
                 if (this.Owner is IItemContainer container)
                 {
-                    result = base.StackOrAdd(item);
-                    if (result && this.UseReferences == false)
+                    result = container.CanAddContents(instance) | container.Contains(instance);
+                    if (result)
                     {
                         result &= container.AddContents(instance);
+                        result &= base.StackOrAdd(item);
                     }
-                    
                 }
 
                 return result;
@@ -119,10 +119,11 @@ namespace JoyLib.Code.Unity
                 bool result = false;
                 if (this.Owner is IItemContainer container)
                 {
-                    result = base.StackOrAdd(item);
-                    if (result && this.UseReferences == false)
+                    result = container.CanAddContents(instance) | container.Contains(instance);
+                    if (result)
                     {
                         result &= container.AddContents(instance);
+                        result &= base.StackOrAdd(item);
                     }
                 }
 
@@ -178,8 +179,11 @@ namespace JoyLib.Code.Unity
                 bool result = false;
                 if (this.Owner is IItemContainer container)
                 {
-                    result = base.RemoveItem(item);
-                    result &= container.RemoveContents(instance);
+                    result = container.RemoveContents(instance);
+                    if (result)
+                    {
+                        result &= base.RemoveItem(item);
+                    }
                 }
 
                 return result;
@@ -215,12 +219,37 @@ namespace JoyLib.Code.Unity
 
                 if (item is ItemInstance instance)
                 {
-                    result = base.RemoveItem(instance);
-                    result &= container.RemoveContents(instance);
+                    result = container.RemoveContents(instance);
+                    if (result)
+                    {
+                        result &= base.RemoveItem(instance);
+                    }
                 }
             }
 
             return result;
+        }
+
+        public override bool StackOrSwap(Slot s1, Slot s2)
+        {
+            if (s1.Container is MutableItemContainer m1)
+            {
+                ItemInstance i2 = s2.ObservedItem as ItemInstance;
+
+                if (i2.GUID != m1.Owner.GUID)
+                {
+                    if (m1.Owner is ItemInstance i1)
+                    {
+                        if (i1.CanAddContents(i2) == false)
+                        {
+                            return false;
+                        }
+                    }
+                    return base.StackOrSwap(s1, s2);
+                }
+            }
+            
+            return false;
         }
 
         public new ItemCollection Collection
