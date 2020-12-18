@@ -90,10 +90,15 @@ namespace JoyLib.Code.Unity
 
             if (item is ItemInstance instance && instance.GUID != this.Owner.GUID)
             {
-                bool result = base.StackOrAdd(slot, item);
-                if (result && this.Owner is IItemContainer container)
+                bool result = false;
+                if (this.Owner is IItemContainer container)
                 {
-                    result &= container.AddContents(instance);
+                    result = base.StackOrAdd(item);
+                    if (result && this.UseReferences == false)
+                    {
+                        result &= container.AddContents(instance);
+                    }
+                    
                 }
 
                 return result;
@@ -115,6 +120,10 @@ namespace JoyLib.Code.Unity
                 if (this.Owner is IItemContainer container)
                 {
                     result = base.StackOrAdd(item);
+                    if (result && this.UseReferences == false)
+                    {
+                        result &= container.AddContents(instance);
+                    }
                 }
 
                 return result;
@@ -142,11 +151,14 @@ namespace JoyLib.Code.Unity
                             StringComparison.OrdinalIgnoreCase)).ToList();
 
                     result = true;
-                    for (int i = 0; i < amount; i++)
+                    if (this.UseReferences == false)
                     {
-                        result &= container.RemoveContents(matches[i]);
+                        for (int i = 0; i < amount; i++)
+                        {
+                            result &= container.RemoveContents(matches[i]);
+                        }
                     }
-                    
+
                     result &= base.RemoveItem(item, amount);
                 }
             }

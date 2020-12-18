@@ -9,22 +9,22 @@ using UnityEngine;
 
 namespace JoyLib.Code.Entities.Items
 {
-    public class ItemFactory :IItemFactory
+    public class ItemFactory : IItemFactory
     {
         protected IGameManager GameManager { get; set; }
 
         protected ILiveItemHandler ItemHandler { get; set; }
 
         protected IObjectIconHandler ObjectIcons { get; set; }
-        
+
         protected IDerivedValueHandler DerivedValueHandler { get; set; }
-        
+
         protected GameObjectPool ItemPool { get; set; }
-        
+
         protected RNG Roller { get; set; }
 
         public ItemFactory(
-            ILiveItemHandler itemHandler, 
+            ILiveItemHandler itemHandler,
             IObjectIconHandler objectIconHandler,
             IDerivedValueHandler derivedValueHandler,
             GameObjectPool itemPool,
@@ -56,21 +56,23 @@ namespace JoyLib.Code.Entities.Items
                     "hardness", itemType.Material.Hardness));
                 values.Add(new ConcreteBasicFloatValue(
                     "density", itemType.Material.Density));
-                
+
                 ItemInstance itemInstance = ScriptableObject.CreateInstance<ItemInstance>();
-                
+
                 itemInstance.Initialise(
                     itemType,
                     this.DerivedValueHandler.GetItemStandardBlock(values),
-                        new Vector2Int(-1, -1), 
-                        identified, 
-                        ObjectIcons.GetSprites(
-                            itemType.SpriteSheet,
-                            itemType.UnidentifiedName),
-                        new RNG(),
-                        new List<IAbility>(),
-                        new List<IJoyAction>(),
-                        ItemPool.Get());
+                    new Vector2Int(-1, -1),
+                    identified,
+                    ObjectIcons.GetSprites(
+                        itemType.SpriteSheet,
+                        itemType.UnidentifiedName),
+                    new RNG(),
+                    new List<IAbility>(),
+                    new List<IJoyAction>(),
+                    ItemPool.Get());
+
+                ItemHandler.AddItem(itemInstance);
                 return itemInstance;
             }
 
@@ -98,11 +100,12 @@ namespace JoyLib.Code.Entities.Items
                     }
                 }
             }
+
             if (secondRound.Count > 0)
             {
                 int result = Roller.Roll(0, secondRound.Count);
                 BaseItemType type = secondRound[result];
-                ItemInstance itemInstance = ScriptableObject.CreateInstance<ItemInstance>(); 
+                ItemInstance itemInstance = ScriptableObject.CreateInstance<ItemInstance>();
 
                 List<IBasicValue<float>> values = new List<IBasicValue<float>>();
                 values.Add(new ConcreteBasicFloatValue(
@@ -115,20 +118,21 @@ namespace JoyLib.Code.Entities.Items
                     "hardness", type.Material.Hardness));
                 values.Add(new ConcreteBasicFloatValue(
                     "density", type.Material.Density));
-                    
-                    itemInstance.Initialise(
-                        type, 
-                        this.DerivedValueHandler.GetItemStandardBlock(values),
-                        new Vector2Int(-1, -1), 
-                        identified, 
-                        ObjectIcons.GetSprites(
-                            type.SpriteSheet,
-                            type.UnidentifiedName),
-                        new RNG(),
-                        new List<IAbility>(),
-                        new List<IJoyAction>(),
-                        this.ItemPool.Get());
-                    
+
+                itemInstance.Initialise(
+                    type,
+                    this.DerivedValueHandler.GetItemStandardBlock(values),
+                    new Vector2Int(-1, -1),
+                    identified,
+                    ObjectIcons.GetSprites(
+                        type.SpriteSheet,
+                        type.UnidentifiedName),
+                    new RNG(),
+                    new List<IAbility>(),
+                    new List<IJoyAction>(),
+                    this.ItemPool.Get());
+
+                ItemHandler.AddItem(itemInstance);
                 return itemInstance;
             }
 
@@ -143,7 +147,7 @@ namespace JoyLib.Code.Entities.Items
 
             int result = Roller.Roll(0, itemDatabase.Count);
             BaseItemType itemType = itemDatabase[result];
-            ItemInstance itemInstance = ScriptableObject.CreateInstance<ItemInstance>(); 
+            ItemInstance itemInstance = ScriptableObject.CreateInstance<ItemInstance>();
 
             List<IBasicValue<float>> values = new List<IBasicValue<float>>();
             values.Add(new ConcreteBasicFloatValue(
@@ -156,20 +160,21 @@ namespace JoyLib.Code.Entities.Items
                 "hardness", itemType.Material.Hardness));
             values.Add(new ConcreteBasicFloatValue(
                 "density", itemType.Material.Density));
-            
-                itemInstance.Initialise(
-                    itemType, 
-                    this.DerivedValueHandler.GetItemStandardBlock(values),
-                    new Vector2Int(-1, -1), 
-                    identified, 
-                    ObjectIcons.GetSprites(
-                        itemType.SpriteSheet,
-                        itemType.UnidentifiedName),
-                    new RNG(),
-                    new List<IAbility>(),
-                    new List<IJoyAction>(),
-                    this.ItemPool.Get());
-                
+
+            itemInstance.Initialise(
+                itemType,
+                this.DerivedValueHandler.GetItemStandardBlock(values),
+                new Vector2Int(-1, -1),
+                identified,
+                ObjectIcons.GetSprites(
+                    itemType.SpriteSheet,
+                    itemType.UnidentifiedName),
+                new RNG(),
+                new List<IAbility>(),
+                new List<IJoyAction>(),
+                this.ItemPool.Get());
+
+            ItemHandler.AddItem(itemInstance);
             return itemInstance;
         }
     }

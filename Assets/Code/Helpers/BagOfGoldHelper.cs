@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using JoyLib.Code.Entities.Items;
-using UnityEngine;
 
 namespace JoyLib.Code.Helpers
 {
@@ -26,7 +24,6 @@ namespace JoyLib.Code.Helpers
             }
             
             IItemInstance bag = ItemFactory.CreateRandomItemOfType(new string[] { "container", "leather" }, true);
-            ItemHandler.AddItem(bag);
             List<IItemInstance> coins = new List<IItemInstance>();
             int gold = count / 100;
             int silver = (count - (gold * 100))  / 10;
@@ -59,10 +56,6 @@ namespace JoyLib.Code.Helpers
                 }
             }
             
-            foreach(IItemInstance coin in coins)
-            {
-                ItemHandler.AddItem(coin);
-            }
             bag.AddContents(coins);
 
             return bag;

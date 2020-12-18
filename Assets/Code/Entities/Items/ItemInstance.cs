@@ -235,6 +235,7 @@ namespace JoyLib.Code.Entities.Items
                 copy.UniqueAbilities,
                 copy.CachedActions.ToArray());
 
+            ItemHandler.AddItem(newItem);
             return newItem;
         }
 
@@ -520,6 +521,9 @@ namespace JoyLib.Code.Entities.Items
         public void IdentifyMe()
         {
             Identified = true;
+            this.Name = this.IdentifiedName;
+            
+            this.ConstructDescription();
         }
 
         public IItemInstance TakeMyItem(int index)
@@ -536,17 +540,22 @@ namespace JoyLib.Code.Entities.Items
 
         public bool AddContents(IItemInstance actor)
         {
-            m_Contents.Add(actor.GUID);
+            if(this.m_Contents.Contains(actor.GUID) == false)
+            {
+                m_Contents.Add(actor.GUID);
 
-            CalculateValue();
-            ConstructDescription();
+                CalculateValue();
+                ConstructDescription();
+                return true;
+            }
 
-            return true;
+            return false;
         }
 
         public bool AddContents(IEnumerable<IItemInstance> actors)
         {
-            m_Contents.AddRange(actors.Select(instance => instance.GUID));
+            m_Contents.AddRange(actors.Where(actor => this.m_Contents.Any(GUID => GUID == actor.GUID) == false)
+                .Select(actor => actor.GUID));
             
             CalculateValue();
             ConstructDescription();

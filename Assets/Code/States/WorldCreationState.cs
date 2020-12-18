@@ -48,8 +48,8 @@ namespace JoyLib.Code.States
 
             //Generate the basic overworld
             m_World = new WorldInstance(
-                overworldGen.GenerateWorldSpace(WORLD_SIZE, "plains"), 
-                new string[] { "overworld", "exterior" }, 
+                overworldGen.GenerateWorldSpace(WORLD_SIZE, "plains"),
+                new string[] {"overworld", "exterior"},
                 "Everse",
                 GlobalConstants.GameManager.EntityHandler,
                 GlobalConstants.GameManager.Roller);
@@ -60,10 +60,11 @@ namespace JoyLib.Code.States
             //Do the spawn point
             SpawnPointPlacer spawnPlacer = new SpawnPointPlacer(GlobalConstants.GameManager.Roller);
             Vector2Int spawnPoint = spawnPlacer.PlaceSpawnPoint(m_World);
-            while((spawnPoint.x == -1 && spawnPoint.y == -1))
+            while ((spawnPoint.x == -1 && spawnPoint.y == -1))
             {
                 spawnPoint = spawnPlacer.PlaceSpawnPoint(m_World);
             }
+
             m_World.SpawnPoint = spawnPoint;
 
             //Set up the player
@@ -75,10 +76,10 @@ namespace JoyLib.Code.States
 
             DungeonGenerator dungeonGenerator = new DungeonGenerator();
             WorldInstance dungeon = dungeonGenerator.GenerateDungeon(
-                worldInfo, 
-                WORLD_SIZE, 
-                3, 
-                GlobalConstants.GameManager, 
+                worldInfo,
+                WORLD_SIZE,
+                3,
+                GlobalConstants.GameManager,
                 GlobalConstants.GameManager.Roller);
 
             Vector2Int transitionPoint = spawnPlacer.PlaceTransitionPoint(m_World);
@@ -90,35 +91,36 @@ namespace JoyLib.Code.States
             dungeon.AddEntity(m_Player);
 
             GlobalConstants.GameManager.EntityHandler.AddEntity(m_Player);
-            
+
             IItemInstance lightSource = GlobalConstants.GameManager.ItemFactory.CreateRandomItemOfType(
-                new string[] { "light source" }, 
+                new string[] {"light source"},
                 true);
             IJoyAction addItemAction = m_Player.FetchAction("additemaction");
             addItemAction.Execute(
                 new IJoyObject[] {m_Player, lightSource},
-                new []{"pickup"},
-                new object[] { true });
+                new[] {"pickup"},
+                new object[] {true});
 
             for (int i = 0; i < 4; i++)
             {
+                IItemInstance newItem = GlobalConstants.GameManager.ItemFactory.CreateCompletelyRandomItem(
+                    true,
+                    false);
                 addItemAction.Execute(
                     new IJoyObject[]
                     {
-                        m_Player, 
-                        GlobalConstants.GameManager.ItemFactory.CreateCompletelyRandomItem(
-                            true, 
-                            false)
+                        m_Player,
+                        newItem
                     },
-                    new []{"pickup"},
-                    new object[] { true });
+                    new[] {"pickup"},
+                    new object[] {true});
             }
 
             foreach (IItemInstance item in this.m_Player.Backpack)
             {
                 GlobalConstants.GameManager.ItemPool.Retire(item.MonoBehaviourHandler.gameObject);
             }
-            
+
             m_World.Tick();
 
             this.Done = true;

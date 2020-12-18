@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-using DevionGames.UIWidgets;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using DevionGames.UIWidgets;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using System.Collections.ObjectModel;
-using System;
 
 namespace DevionGames.InventorySystem
 {

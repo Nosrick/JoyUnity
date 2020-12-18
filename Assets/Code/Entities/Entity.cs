@@ -928,8 +928,11 @@ namespace JoyLib.Code.Entities
             {
                 goItem.MonoBehaviourHandler.gameObject.SetActive(false);
             }
-            
-            m_Backpack.Add(actor);
+
+            if (this.m_Backpack.Contains(actor) == false)
+            {
+                m_Backpack.Add(actor);
+            }
             return true;
         }
 
@@ -943,7 +946,8 @@ namespace JoyLib.Code.Entities
                 }
             }
 
-            m_Backpack.AddRange(actors);
+            this.m_Backpack.AddRange(
+                actors.Where(actor => this.m_Backpack.Any(item => item.GUID == actor.GUID) == false));
             return true;
         }
 
