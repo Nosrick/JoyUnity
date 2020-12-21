@@ -147,7 +147,7 @@ namespace DevionGames.UIWidgets
 
 		protected Scrollbar[] m_Scrollbars;
 
-		protected virtual void Awake ()
+		private void Awake ()
 		{
 			//Register the KeyCode to show or close the widget.
 			WidgetInputHandler.RegisterInput(this.m_KeyCode, this);

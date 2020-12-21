@@ -341,7 +341,7 @@ namespace DevionGames.InventorySystem
         }
 
         //Try to drop the item to ground
-        protected virtual void DropItem()
+        private void DropItem()
         {
             if (IsCooldown)
                 return;

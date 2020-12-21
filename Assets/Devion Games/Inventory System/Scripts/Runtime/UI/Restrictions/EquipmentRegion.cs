@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace DevionGames.InventorySystem.Restrictions
@@ -19,7 +18,7 @@ namespace DevionGames.InventorySystem.Restrictions
             Restrictions.EquipmentRegion[] restrictions = GetComponents<Restrictions.EquipmentRegion>();
             for (int i = requiredRegions.Count - 1; i >= 0; i--)
             {
-                if (restrictions.Select(x => x.region.Name).Contains(requiredRegions[i].Name, StringComparer.OrdinalIgnoreCase))
+                if (restrictions.Select(x => x.region.Name).Contains(requiredRegions[i].Name))
                 {
                     return true;
                 }

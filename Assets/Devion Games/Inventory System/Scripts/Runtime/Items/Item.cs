@@ -71,11 +71,9 @@ namespace DevionGames.InventorySystem
 		[Multiline (4)]
 		private string m_Description = string.Empty;
 
-		public string Description
-        {
-            get => this.m_Description;
-            set => this.m_Description = value;
-        }
+		public string Description {
+			get{ return this.m_Description; }
+		}
 
 
         [Tooltip("The category the item belongs to. Used to sort the items collection in editor or also at runtime in the UI.")]

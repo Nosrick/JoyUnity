@@ -36,7 +36,7 @@ namespace DevionGames.InventorySystem
             return PickupItems() ;
         }
 
-        protected virtual ActionStatus PickupItems()
+        private ActionStatus  PickupItems()
         {
             if (this.m_ItemCollection.Count == 0) {
                 InventoryManager.Notifications.empty.Show(gameObject.name.Replace("(Clone)", "").ToLower());
@@ -84,7 +84,7 @@ namespace DevionGames.InventorySystem
             return ActionStatus.Success;
         }
 
-        protected virtual void DropItem(Item item)
+        private void DropItem(Item item)
         {
             GameObject prefab = item.OverridePrefab != null ? item.OverridePrefab : item.Prefab;
             float angle = Random.Range(0f, 360f);

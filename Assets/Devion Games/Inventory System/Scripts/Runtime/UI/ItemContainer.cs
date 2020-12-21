@@ -319,7 +319,7 @@ namespace DevionGames.InventorySystem
         /// <param name="s1">Slot 1</param>
         /// <param name="s2">Slot 2</param>
         /// <returns>True if stacking or swaping possible.</returns>
-        public virtual bool StackOrSwap(Slot s1, Slot s2) {
+        public bool StackOrSwap(Slot s1, Slot s2) {
             if (s1 is ItemSlot s1Slot && s1Slot.IsCooldown)
                 return false;
             if (s2 is ItemSlot s2Slot && s2Slot.IsCooldown)
@@ -354,7 +354,7 @@ namespace DevionGames.InventorySystem
         /// <param name="s1">First slot</param>
         /// <param name="s2">Second slot</param>
         /// <returns>True if swapped.</returns>
-        public virtual bool SwapItems(Slot s1, Slot s2) {
+        public bool SwapItems(Slot s1, Slot s2) {
             if (s1 is ItemSlot s1Slot && s1Slot.IsCooldown)
                 return false;
             if (s2 is ItemSlot s2Slot && s2Slot.IsCooldown)
@@ -441,7 +441,7 @@ namespace DevionGames.InventorySystem
         /// <param name="s1">Slot 1</param>
         /// <param name="s2">Slot 2</param>
         /// <returns>True if items can be swapped.</returns>
-        public virtual bool CanSwapItems(Slot s1, Slot s2) {
+        public bool CanSwapItems(Slot s1, Slot s2) {
             if (s1 is ItemSlot s1Slot && s1Slot.IsCooldown)
                 return false;
             if (s2 is ItemSlot s2Slot && s2Slot.IsCooldown)
@@ -536,7 +536,7 @@ namespace DevionGames.InventorySystem
         /// <summary>
         /// Try to stack the item to any item in collection.
         /// </summary>
-        public virtual bool StackItem(Item item)
+        public bool StackItem(Item item)
         {
             //Check if item or collection is null
             if (item == null || this.m_Collection == null)
@@ -584,7 +584,7 @@ namespace DevionGames.InventorySystem
         /// <summary>
         /// Condition method if swapping is possible
         /// </summary>
-        protected virtual bool CanMoveItems(Item[] items, Slot[] slotsWillBeFree, Slot preferredSlot, ItemContainer container, ref Dictionary<Slot, Item> moveLocations)
+        private bool CanMoveItems(Item[] items, Slot[] slotsWillBeFree, Slot preferredSlot, ItemContainer container, ref Dictionary<Slot, Item> moveLocations)
         {
             List<Slot> reservedSlots = new List<Slot>();
             List<Item> checkedItems = new List<Item>(items);
@@ -976,7 +976,7 @@ namespace DevionGames.InventorySystem
         /// <param name="item">Item to check</param>
         /// <param name="amount">Amount/Stack of items</param>
         /// <returns></returns>
-        public virtual bool HasItem(Item item, int amount)
+        public bool HasItem(Item item, int amount)
         {
             int existingAmount = 0;
             return HasItem(item,amount,out existingAmount);
@@ -988,7 +988,7 @@ namespace DevionGames.InventorySystem
         /// <param name="item">Item to check</param>
         /// <param name="amount">Amount/Stack of items</param>
         /// <returns></returns>
-        public virtual bool HasItem(Item item, int amount, out int existingAmount)
+        public bool HasItem(Item item, int amount, out int existingAmount)
         {
             int stack = existingAmount =  0;
             for (int i = 0; i < this.m_Slots.Count; i++)
@@ -1007,7 +1007,7 @@ namespace DevionGames.InventorySystem
         /// <summary>
         /// Check if the container has an item with category
         /// </summary>
-        public virtual bool HasCategoryItem(Category category)
+        public bool HasCategoryItem(Category category)
         {
             for (int i = 0; i < this.m_Slots.Count; i++)
             {
@@ -1026,7 +1026,7 @@ namespace DevionGames.InventorySystem
         /// </summary>
         /// <param name="id">Item id</param>
         /// <returns>Array of items with given id</returns>
-        public virtual Item[] GetItems(string idOrName)
+        public Item[] GetItems(string idOrName)
         {
             List<Item> items = new List<Item>();
             if (!this.m_UseReferences)
@@ -1056,7 +1056,7 @@ namespace DevionGames.InventorySystem
         /// <summary>
         /// Returns an array of items of type this container is holding. 
         /// </summary>
-        public virtual T[] GetItems<T>(bool inherit = false) where T : Item
+        public T[] GetItems<T>(bool inherit = false) where T : Item
         {
             return GetItems(typeof(T), inherit).Cast<T>().ToArray();
         }
@@ -1064,7 +1064,7 @@ namespace DevionGames.InventorySystem
         /// <summary>
         /// Returns an array of items of type this container is holding. 
         /// </summary>
-        public virtual Item[] GetItems(Type type, bool inherit = false)
+        public Item[] GetItems(Type type, bool inherit = false)
         {
             List<Item> items = new List<Item>();
             if (!this.m_UseReferences)
@@ -1157,7 +1157,7 @@ namespace DevionGames.InventorySystem
         /// </summary>
         /// <param name="item">The item in slots</param>
         /// <returns>Array of slots in this container, the item is currently located.</returns>
-        public virtual Slot[] GetSlots(Item item)
+        public Slot[] GetSlots(Item item)
         {
             List<Slot> list = new List<Slot>();
             for (int i = 0; i < this.m_Slots.Count; i++)
@@ -1173,7 +1173,7 @@ namespace DevionGames.InventorySystem
         /// <summary>
         /// Refreshs the slot list and reorganize indices. This method is slow!
         /// </summary>
-        public virtual void RefreshSlots()
+        public void RefreshSlots()
         {
             if (this.m_DynamicContainer && this.m_SlotParent != null)
             {
@@ -1197,7 +1197,7 @@ namespace DevionGames.InventorySystem
         /// <summary>
         /// Returns an array of slots of type this container is providing.
         /// </summary>
-        public virtual T[] GetSlots<T>() where T : Slot
+        public T[] GetSlots<T>() where T : Slot
         {
             return GetSlots(typeof(T)).Cast<T>().ToArray();
         }
@@ -1205,7 +1205,7 @@ namespace DevionGames.InventorySystem
         /// <summary>
         /// Returns an array of slots of type this container is providing.
         /// </summary>
-        public virtual Slot[] GetSlots(Type type)
+        public Slot[] GetSlots(Type type)
         {
             return this.m_Slots.Where(x => x.GetType() == type).ToArray(); ;
         }
@@ -1251,7 +1251,7 @@ namespace DevionGames.InventorySystem
         /// <param name="slot">Slot where to stack the item to.</param>
         /// <param name="item">Item to stack</param>
         /// <returns>Returns true if item can be stacked with the item in slot</returns>
-        public virtual bool CanStack(Slot slot, Item item)
+        public bool CanStack(Slot slot, Item item)
         {
             Item slotItem = slot.ObservedItem;
             return (slotItem != null &&
@@ -1265,7 +1265,7 @@ namespace DevionGames.InventorySystem
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public virtual bool CanStack(Item item) {
+        public bool CanStack(Item item) {
             //Check if item or collection is null
             if (item == null || this.m_Collection == null)
             {
@@ -1286,7 +1286,7 @@ namespace DevionGames.InventorySystem
             return false;
         }
 
-        public virtual void ShowByCategory(Dropdown dropdown) {
+        public void ShowByCategory(Dropdown dropdown) {
             int current = dropdown.value;
             string category = dropdown.options[current].text;
             if (current != 0)
@@ -1311,7 +1311,7 @@ namespace DevionGames.InventorySystem
         /// <summary>
         /// Try to convert currency based on currency conversation set in the editor
         /// </summary>
-        protected virtual void TryConvertCurrency(Currency currency)
+        private void TryConvertCurrency(Currency currency)
         {
             if (currency == null) { return; }
             Currency[] currencies = GetItems<Currency>();
@@ -1338,7 +1338,7 @@ namespace DevionGames.InventorySystem
         /// <param name="payCurrency"></param>
         /// <param name="price"></param>
         /// <returns></returns>
-        protected virtual bool TryRemove(Currency current, Currency payCurrency, int price)
+        private bool TryRemove(Currency current, Currency payCurrency, int price)
         {
             if (current == null)
             {
@@ -1375,7 +1375,7 @@ namespace DevionGames.InventorySystem
         /// <summary>
         /// Convert all currencies to smallest currency value -> Sliver and Gold to Copper
         /// </summary>
-        protected virtual void ConvertToSmallestCurrency()
+        private void ConvertToSmallestCurrency()
         {
             Currency[] currencies = GetItems<Currency>();
 
@@ -1728,7 +1728,7 @@ namespace DevionGames.InventorySystem
             }
         }
 
-        protected virtual void CooldownSlots(Item item, float globalCooldown)
+        private void CooldownSlots(Item item, float globalCooldown)
         {
             for (int i = 0; i < this.m_Slots.Count; i++)
             {
@@ -1750,7 +1750,7 @@ namespace DevionGames.InventorySystem
             }
         }
 
-        public virtual void OnDrop(PointerEventData eventData)
+        public void OnDrop(PointerEventData eventData)
         {
             if (CanDragIn && ItemSlot.dragObject != null) {
                 for (int j = 0; j < this.m_Slots.Count; j++)
@@ -1765,25 +1765,25 @@ namespace DevionGames.InventorySystem
             }
         }
 
-        public virtual void NotifyDropItem(Item item, GameObject instance) {
+        public void NotifyDropItem(Item item, GameObject instance) {
             OnDropItem(item, instance);
         }
 
-        public virtual void NotifyUseItem(Item item, Slot slot)
+        public void NotifyUseItem(Item item, Slot slot)
         {
             OnUseItem(item, slot);
         }
 
-        public virtual void NotifyTryUseItem(Item item, Slot slot)
+        public void NotifyTryUseItem(Item item, Slot slot)
         {
             OnTryUseItem(item, slot);
         }
 
-        public virtual void Lock(bool state) {
+        public void Lock(bool state) {
             this.m_IsLocked = state;
         }
 
-        public virtual void MoveTo(string windowName)
+        public void MoveTo(string windowName)
         {
             Item[] items = GetItems<Item>(true);
             ItemContainer container = WidgetUtility.Find<ItemContainer>(windowName);
