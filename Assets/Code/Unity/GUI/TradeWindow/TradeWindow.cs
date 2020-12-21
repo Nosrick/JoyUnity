@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
-using DevionGames.InventorySystem;
-using DevionGames.UIWidgets;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Relationships;
@@ -23,17 +21,17 @@ namespace JoyLib.Code.Unity.GUI
 
         [SerializeField] protected TextMeshProUGUI RightName;
 
-        [SerializeField] protected MutableItemContainer LeftInventory;
-        [SerializeField] protected MutableItemContainer LeftOffering;
+        [SerializeField] protected ItemContainer LeftInventory;
+        [SerializeField] protected ItemContainer LeftOffering;
 
-        [SerializeField] protected MutableItemContainer RightInventory;
-        [SerializeField] protected MutableItemContainer RightOffering;
+        [SerializeField] protected ItemContainer RightInventory;
+        [SerializeField] protected ItemContainer RightOffering;
 
         public static IEntityRelationshipHandler RelationshipHandler { get; set; }
         
         protected RectTransform RectTransform { get; set; }
 
-        public void Awake()
+        protected void Awake()
         {
             base.Awake();
             RectTransform = this.GetComponent<RectTransform>();

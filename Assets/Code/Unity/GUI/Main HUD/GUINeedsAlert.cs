@@ -1,7 +1,5 @@
 ﻿using System.Globalization;
 using System.Text;
-using DevionGames;
-using DevionGames.UIWidgets;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Needs;
 using TMPro;
@@ -19,7 +17,7 @@ namespace JoyLib.Code.Unity.GUI
         protected int Counter { get; set; }
         protected const int MAXIMUM_FRAMES = 90;
 
-        public void Awake()
+        public override void Awake()
         {
             base.Awake();
             GetBits();

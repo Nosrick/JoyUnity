@@ -32,6 +32,7 @@ namespace JoyLib.Code.Unity.GUI
                 return;
             }
 
+            gui.Awake();
             gui.GUIManager = this;
             gui.Close();
             GUIs.Add(gui);
@@ -41,7 +42,8 @@ namespace JoyLib.Code.Unity.GUI
         {
             if (ActiveGUIs.Any(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase)))
             {
-                GUIData[] toToggle = ActiveGUIs.Where(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase)).ToArray();
+                GUIData[] toToggle = ActiveGUIs.Where(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase))
+                    .ToArray();
                 foreach (GUIData data in toToggle)
                 {
                     CloseGUI(data.name);
@@ -59,9 +61,9 @@ namespace JoyLib.Code.Unity.GUI
             {
                 return;
             }
-            
-            GUIData toOpen = GUIs.First(gui => 
-                    gui.name.Equals(name, StringComparison.OrdinalIgnoreCase));
+
+            GUIData toOpen = GUIs.First(gui =>
+                gui.name.Equals(name, StringComparison.OrdinalIgnoreCase));
 
             if (toOpen.m_ClosesOthers)
             {
@@ -71,9 +73,9 @@ namespace JoyLib.Code.Unity.GUI
                     CloseGUI(widget.name);
                 }
             }
-            
-            ActiveGUIs.Add(toOpen);
+
             toOpen.Show();
+            ActiveGUIs.Add(toOpen);
         }
 
         public void CloseGUI(string activeName)
@@ -82,10 +84,10 @@ namespace JoyLib.Code.Unity.GUI
             {
                 return;
             }
-            
+
             GUIData toClose = ActiveGUIs
                 .First(gui => gui.name.Equals(activeName, StringComparison.OrdinalIgnoreCase));
-            
+
             toClose.Close();
             ActiveGUIs.Remove(toClose);
         }
@@ -98,8 +100,9 @@ namespace JoyLib.Code.Unity.GUI
             }
 
             GUIData toClose = ActiveGUIs.First(data => data.name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            toClose.Close();
             return ActiveGUIs.Remove(toClose);
-            }
+        }
 
         public void BringToFront(string name)
         {
@@ -107,6 +110,7 @@ namespace JoyLib.Code.Unity.GUI
             {
                 return;
             }
+
             GUIData toFront = ActiveGUIs.First(g => g.name.Equals(name, StringComparison.OrdinalIgnoreCase));
             foreach (GUIData gui in ActiveGUIs)
             {
@@ -128,8 +132,8 @@ namespace JoyLib.Code.Unity.GUI
 
             foreach (GUIData data in toClose)
             {
-                data.Close();
                 ActiveGUIs.Remove(data);
+                data.Close();
             }
         }
 

@@ -1,22 +1,21 @@
-﻿using DevionGames.UIWidgets;
-using JoyLib.Code.Entities.AI.Drivers;
+﻿using JoyLib.Code.Entities.AI.Drivers;
 using JoyLib.Code.Unity;
 
 namespace JoyLib.Code.Entities
 {
     public class EntityPlayer : Entity
     {
-        protected static MutableItemContainer InventoryContainer { get; set; }
-        protected static MutableItemContainer EquipmentContainer { get; set; }
+        protected static ItemContainer InventoryContainer { get; set; }
+        protected static ItemContainer EquipmentContainer { get; set; }
 
         public EntityPlayer(IEntity baseEntity) :
             base(baseEntity)
         {
             if (InventoryContainer is null)
             {
-                InventoryContainer = WidgetUtility.Find<MutableItemContainer>("Inventory");
+                InventoryContainer = WidgetUtility.Find<ItemContainer>("Inventory");
                 InventoryContainer.Owner = this;
-                EquipmentContainer = WidgetUtility.Find<MutableItemContainer>("Equipment");
+                EquipmentContainer = WidgetUtility.Find<ItemContainer>("Equipment");
                 EquipmentContainer.Owner = this;
             }
 

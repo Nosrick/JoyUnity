@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
-using DevionGames.UIWidgets;
 using JoyLib.Code.Conversation;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Abilities;
@@ -100,10 +99,10 @@ namespace JoyLib.Code.States
             GUIManager.OpenGUI(GUINames.NEEDSRECT);
             GUIManager.OpenGUI(GUINames.DERIVED_VALUES);
 
-            GUIManager.GetGUI(GUINames.INVENTORY).GetComponent<MutableItemContainer>().Owner = this.PlayerWorld.Player;
-            GUIManager.GetGUI(GUINames.EQUIPMENT).GetComponent<MutableItemContainer>().Owner = this.PlayerWorld.Player;
+            GUIManager.GetGUI(GUINames.INVENTORY).GetComponent<ItemContainer>().Owner = this.PlayerWorld.Player;
+            GUIManager.GetGUI(GUINames.EQUIPMENT).GetComponent<ItemContainer>().Owner = this.PlayerWorld.Player;
 
-            EquipmentHandler equipmentHandler = WidgetUtility.Find<MutableItemContainer>("Equipment").gameObject.GetComponent<EquipmentHandler>();
+            EquipmentHandler equipmentHandler = WidgetUtility.Find<ItemContainer>("Equipment").gameObject.GetComponent<EquipmentHandler>();
             equipmentHandler.SetPlayer(m_ActiveWorld.Player);
         }
 

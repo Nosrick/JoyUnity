@@ -1,5 +1,4 @@
-﻿using DevionGames.InventorySystem;
-using JoyLib.Code.Events;
+﻿using JoyLib.Code.Events;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -14,14 +13,25 @@ namespace JoyLib.Code.Unity.GUI
         protected string m_Tooltip;
         protected int m_Value;
         protected string m_Name;
-        
+
+        protected static IGUIManager GUIManager { get; set; }
+
+        public void OnEnable()
+        {
+            if (GUIManager is null)
+            {
+                GUIManager = GlobalConstants.GameManager.GUIManager;
+            }
+        }
+
         public void OnPointerEnter(PointerEventData data)
         {
-            if (Tooltip is null)
+            if (this.Tooltip is null)
             {
                 return;
             }
-            InventoryManager.UI.tooltip.Show(Tooltip);
+
+            GUIData tooltip = GUIManager.GetGUI(GUINames.TOOLTIP);
         }
 
         public void OnPointerExit(PointerEventData data)

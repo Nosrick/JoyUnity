@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using DevionGames.InventorySystem;
-using DevionGames.UIWidgets;
 using JoyLib.Code.Entities;
 using TMPro;
 using UnityEngine;
@@ -14,7 +12,7 @@ namespace JoyLib.Code.Unity.GUI
 
         [SerializeField] protected GameObject m_SlotPrefab;
         [SerializeField] protected LayoutGroup m_Container;
-        [SerializeField] protected MutableItemContainer m_EquipmentContainer;
+        [SerializeField] protected ItemContainer m_EquipmentContainer;
         
         public bool Initialised { get; protected set; }
 
