@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using JoyLib.Code.Events;
 
 namespace JoyLib.Code.Entities.Items
 {
@@ -19,5 +20,8 @@ namespace JoyLib.Code.Entities.Items
         void Clear();
         
         string ContentString { get; }
+
+        event ItemRemovedEventHandler ItemRemoved;
+        event ItemAddedEventHandler ItemAdded;
     }
 }
