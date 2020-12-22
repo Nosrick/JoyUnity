@@ -11,9 +11,7 @@ GameObject:
   - component: {fileID: 4794871474551134}
   - component: {fileID: 212276263493951536}
   - component: {fileID: -7515236653226157045}
-  - component: {fileID: 4354684559669362448}
   - component: {fileID: -8787154815911901543}
-  - component: {fileID: 5989858818690563341}
   - component: {fileID: 760176320974673959}
   m_Layer: 0
   m_Name: ItemInstance
@@ -99,25 +97,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a578807b5ff04846a860847f5fc60d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &4354684559669362448
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1949383421893784}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68165cdf1896c89479a91b2478670c0a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  saveable: 0
-  m_Items: []
-  m_Amounts: 
-  m_Modifiers: []
-  onChange:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!50 &-8787154815911901543
 Rigidbody2D:
   serializedVersion: 4
@@ -139,34 +118,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 7
---- !u!114 &5989858818690563341
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1949383421893784}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dafdf741c875fb54ca278d6908cfbeee, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  delegates: []
-  useDistance: 0.5
-  triggerType: 8
-  key: 13
-  actions:
-  - id: 0
-  references:
-    version: 1
-    00000000:
-      type: {class: JoyPickup, ns: JoyLib.Code.Unity, asm: JoyUnity}
-      data:
-        m_Type: JoyLib.Code.Unity.JoyPickup
-        m_Enabled: 1
-        m_WindowName: Inventory
-        m_DestroyWhenEmpty: 0
-        m_Amount: -1
 --- !u!61 &760176320974673959
 BoxCollider2D:
   m_ObjectHideFlags: 0

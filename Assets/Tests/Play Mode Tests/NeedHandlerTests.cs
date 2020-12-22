@@ -1,10 +1,8 @@
 ﻿using System.Collections;
 using JoyLib.Code;
 using JoyLib.Code.Entities.Needs;
-using JoyLib.Code.Graphics;
 using JoyLib.Code.Scripting;
 using NUnit.Framework;
-using UnityEngine;
 using UnityEngine.TestTools;
 
 namespace Tests

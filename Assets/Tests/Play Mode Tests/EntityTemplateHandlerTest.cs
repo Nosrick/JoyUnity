@@ -1,14 +1,12 @@
-﻿using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Needs;
-using NUnit.Framework;
-using UnityEngine;
-using UnityEngine.TestTools;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using JoyLib.Code;
 using JoyLib.Code.Collections;
-using JoyLib.Code.Graphics;
+using JoyLib.Code.Entities;
+using JoyLib.Code.Entities.Needs;
 using Moq;
+using NUnit.Framework;
+using UnityEngine.TestTools;
 
 namespace Tests
 {

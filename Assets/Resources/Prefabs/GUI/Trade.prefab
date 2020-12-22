@@ -288,7 +288,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 52.65
+  m_fontSize: 30
   m_fontSizeBase: 16
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -421,7 +421,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 27.1
+  m_fontSize: 18
   m_fontSizeBase: 16
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -554,7 +554,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 26.9
+  m_fontSize: 18
   m_fontSizeBase: 16
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -795,7 +795,6 @@ GameObject:
   - component: {fileID: 2333912726033209117}
   - component: {fileID: 2333912726033209118}
   - component: {fileID: 2333912726033209119}
-  - component: {fileID: 28319583}
   m_Layer: 0
   m_Name: Player Window
   m_TagString: Untagged
@@ -885,53 +884,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b886057594c6471c9e3301af0910e0c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  delegates: []
-  name: PlayerTradeInventory
-  priority: 0
-  m_KeyCode: 0
-  m_EaseType: 28
-  m_Duration: 0.7
-  m_ShowSound: {fileID: 0}
-  m_CloseSound: {fileID: 0}
-  m_Focus: 1
-  m_DeactivateOnClose: 1
-  useButton: 2
-  m_DynamicContainer: 0
-  m_SlotParent: {fileID: 2333912725361723184}
+  m_RemovesControl: 0
+  m_ClosesOthers: 0
+  m_Index: 0
+  m_UseKey: 0
+  m_ClearAndFillOnEnable: 0
+  m_SlotParent: {fileID: 0}
   m_SlotPrefab: {fileID: 0}
-  m_UseReferences: 0
-  m_CanDragIn: 1
-  m_CanDragOut: 1
+  m_CanDrag: 0
   m_CanDropItems: 0
-  m_CanReferenceItems: 0
-  m_CanSellItems: 0
   m_CanUseItems: 0
   m_UseContextMenu: 0
   m_ShowTooltips: 0
   m_MoveUsedItem: 1
-  moveItemConditions:
-  - window: PlayerOffering
-    requiresVisibility: 0
-  restrictions: []
---- !u!114 &28319583
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2333912726033209123}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68165cdf1896c89479a91b2478670c0a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  saveable: 0
-  m_Items: []
-  m_Amounts: 
-  m_Modifiers: []
-  onChange:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &2333912726042680041
 GameObject:
   m_ObjectHideFlags: 0
@@ -1156,7 +1121,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 49.6
+  m_fontSize: 27.7
   m_fontSizeBase: 16
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1320,16 +1285,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 415ac2a761fa4f2bad081f6c0179ac63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  delegates: []
-  name: 
-  priority: 0
-  m_KeyCode: 0
-  m_EaseType: 21
-  m_Duration: 0
-  m_ShowSound: {fileID: 0}
-  m_CloseSound: {fileID: 0}
-  m_Focus: 1
-  m_DeactivateOnClose: 1
+  m_RemovesControl: 0
+  m_ClosesOthers: 0
+  m_Index: 0
   LeftValue: {fileID: 2333912725600333599}
   RightValue: {fileID: 2333912726121193145}
   RightName: {fileID: 2333912725601075038}
@@ -1455,7 +1413,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 47.35
+  m_fontSize: 25.1
   m_fontSizeBase: 16
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1700,7 +1658,6 @@ GameObject:
   - component: {fileID: 2333912726576562483}
   - component: {fileID: 2333912726576562477}
   - component: {fileID: 2333912726576562482}
-  - component: {fileID: 1712654668}
   m_Layer: 0
   m_Name: Player Offering
   m_TagString: Untagged
@@ -1762,53 +1719,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b886057594c6471c9e3301af0910e0c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  delegates: []
-  name: PlayerOffering
-  priority: 0
-  m_KeyCode: 0
-  m_EaseType: 28
-  m_Duration: 0.7
-  m_ShowSound: {fileID: 0}
-  m_CloseSound: {fileID: 0}
-  m_Focus: 1
-  m_DeactivateOnClose: 1
-  useButton: 2
-  m_DynamicContainer: 0
-  m_SlotParent: {fileID: 2333912726183872303}
+  m_RemovesControl: 0
+  m_ClosesOthers: 0
+  m_Index: 0
+  m_UseKey: 0
+  m_ClearAndFillOnEnable: 0
+  m_SlotParent: {fileID: 0}
   m_SlotPrefab: {fileID: 0}
-  m_UseReferences: 0
-  m_CanDragIn: 1
-  m_CanDragOut: 1
+  m_CanDrag: 0
   m_CanDropItems: 0
-  m_CanReferenceItems: 0
-  m_CanSellItems: 0
   m_CanUseItems: 0
   m_UseContextMenu: 0
   m_ShowTooltips: 0
   m_MoveUsedItem: 1
-  moveItemConditions:
-  - window: PlayerTradeInventory
-    requiresVisibility: 0
-  restrictions: []
---- !u!114 &1712654668
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2333912726576562486}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68165cdf1896c89479a91b2478670c0a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  saveable: 0
-  m_Items: []
-  m_Amounts: 
-  m_Modifiers: []
-  onChange:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &2333912726655709343
 GameObject:
   m_ObjectHideFlags: 0
@@ -1900,7 +1823,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 26.6
+  m_fontSize: 18
   m_fontSizeBase: 16
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2033,7 +1956,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 26.9
+  m_fontSize: 18
   m_fontSizeBase: 16
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2087,7 +2010,6 @@ GameObject:
   - component: {fileID: 2333912726850887791}
   - component: {fileID: 2333912726850887785}
   - component: {fileID: 2333912726850887790}
-  - component: {fileID: 1459415056}
   m_Layer: 0
   m_Name: Other Offering
   m_TagString: Untagged
@@ -2149,53 +2071,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b886057594c6471c9e3301af0910e0c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  delegates: []
-  name: OtherOffering
-  priority: 0
-  m_KeyCode: 0
-  m_EaseType: 28
-  m_Duration: 0.7
-  m_ShowSound: {fileID: 0}
-  m_CloseSound: {fileID: 0}
-  m_Focus: 1
-  m_DeactivateOnClose: 1
-  useButton: 2
-  m_DynamicContainer: 0
-  m_SlotParent: {fileID: 2333912725364287207}
+  m_RemovesControl: 0
+  m_ClosesOthers: 0
+  m_Index: 0
+  m_UseKey: 0
+  m_ClearAndFillOnEnable: 0
+  m_SlotParent: {fileID: 0}
   m_SlotPrefab: {fileID: 0}
-  m_UseReferences: 0
-  m_CanDragIn: 1
-  m_CanDragOut: 1
+  m_CanDrag: 0
   m_CanDropItems: 0
-  m_CanReferenceItems: 0
-  m_CanSellItems: 0
   m_CanUseItems: 0
   m_UseContextMenu: 0
   m_ShowTooltips: 0
   m_MoveUsedItem: 1
-  moveItemConditions:
-  - window: OtherTradeInventory
-    requiresVisibility: 0
-  restrictions: []
---- !u!114 &1459415056
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2333912726850887794}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68165cdf1896c89479a91b2478670c0a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  saveable: 0
-  m_Items: []
-  m_Amounts: 
-  m_Modifiers: []
-  onChange:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &2333912727104761477
 GameObject:
   m_ObjectHideFlags: 0
@@ -2209,7 +2097,6 @@ GameObject:
   - component: {fileID: 2333912727104761473}
   - component: {fileID: 2333912727104761478}
   - component: {fileID: 2333912727104761479}
-  - component: {fileID: 1100916473}
   m_Layer: 0
   m_Name: Other Window
   m_TagString: Untagged
@@ -2262,34 +2149,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b886057594c6471c9e3301af0910e0c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  delegates: []
-  name: OtherTradeInventory
-  priority: 0
-  m_KeyCode: 0
-  m_EaseType: 28
-  m_Duration: 0.7
-  m_ShowSound: {fileID: 0}
-  m_CloseSound: {fileID: 0}
-  m_Focus: 1
-  m_DeactivateOnClose: 1
-  useButton: 2
-  m_DynamicContainer: 0
-  m_SlotParent: {fileID: 2333912725858335130}
+  m_RemovesControl: 0
+  m_ClosesOthers: 0
+  m_Index: 0
+  m_UseKey: 0
+  m_ClearAndFillOnEnable: 0
+  m_SlotParent: {fileID: 0}
   m_SlotPrefab: {fileID: 0}
-  m_UseReferences: 0
-  m_CanDragIn: 1
-  m_CanDragOut: 1
+  m_CanDrag: 0
   m_CanDropItems: 0
-  m_CanReferenceItems: 0
-  m_CanSellItems: 0
   m_CanUseItems: 0
   m_UseContextMenu: 0
   m_ShowTooltips: 0
   m_MoveUsedItem: 1
-  moveItemConditions:
-  - window: OtherOffering
-    requiresVisibility: 0
-  restrictions: []
 --- !u!222 &2333912727104761478
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2327,25 +2199,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &1100916473
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2333912727104761477}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68165cdf1896c89479a91b2478670c0a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  saveable: 0
-  m_Items: []
-  m_Amounts: 
-  m_Modifiers: []
-  onChange:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1001 &2333912725033943678
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3561,15 +3414,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c91df744336ef4641921f1d3a3cdb97e, type: 3}
---- !u!1 &6272285421718056210 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8604156886097528880, guid: c91df744336ef4641921f1d3a3cdb97e,
-    type: 3}
-  m_PrefabInstance: {fileID: 2333912725174789410}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &6272285421718056211 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8604156886097528881, guid: c91df744336ef4641921f1d3a3cdb97e,
+    type: 3}
+  m_PrefabInstance: {fileID: 2333912725174789410}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6272285421718056210 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8604156886097528880, guid: c91df744336ef4641921f1d3a3cdb97e,
     type: 3}
   m_PrefabInstance: {fileID: 2333912725174789410}
   m_PrefabAsset: {fileID: 0}
@@ -5592,15 +5445,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c91df744336ef4641921f1d3a3cdb97e, type: 3}
---- !u!224 &6272285421943048465 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 8604156886097528881, guid: c91df744336ef4641921f1d3a3cdb97e,
-    type: 3}
-  m_PrefabInstance: {fileID: 2333912725485633824}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &6272285421943048464 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8604156886097528880, guid: c91df744336ef4641921f1d3a3cdb97e,
+    type: 3}
+  m_PrefabInstance: {fileID: 2333912725485633824}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &6272285421943048465 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8604156886097528881, guid: c91df744336ef4641921f1d3a3cdb97e,
     type: 3}
   m_PrefabInstance: {fileID: 2333912725485633824}
   m_PrefabAsset: {fileID: 0}
@@ -6408,15 +6261,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c91df744336ef4641921f1d3a3cdb97e, type: 3}
---- !u!1 &6272285421116133201 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8604156886097528880, guid: c91df744336ef4641921f1d3a3cdb97e,
-    type: 3}
-  m_PrefabInstance: {fileID: 2333912725646608225}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &6272285421116133200 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8604156886097528881, guid: c91df744336ef4641921f1d3a3cdb97e,
+    type: 3}
+  m_PrefabInstance: {fileID: 2333912725646608225}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6272285421116133201 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8604156886097528880, guid: c91df744336ef4641921f1d3a3cdb97e,
     type: 3}
   m_PrefabInstance: {fileID: 2333912725646608225}
   m_PrefabAsset: {fileID: 0}
