@@ -364,7 +364,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 1274803826109484194}
+        - m_Target: {fileID: 0}
           m_MethodName: StartIncrease
           m_Mode: 1
           m_Arguments:
@@ -379,7 +379,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 1274803826109484194}
+        - m_Target: {fileID: 0}
           m_MethodName: Stop
           m_Mode: 1
           m_Arguments:
@@ -675,7 +675,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 1274803826109484194}
+        - m_Target: {fileID: 0}
           m_MethodName: StartDecrease
           m_Mode: 1
           m_Arguments:
@@ -690,7 +690,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 1274803826109484194}
+        - m_Target: {fileID: 0}
           m_MethodName: Stop
           m_Mode: 1
           m_Arguments:
@@ -1068,7 +1068,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1274803826109484221}
+      - m_Target: {fileID: 0}
         m_MethodName: Close
         m_Mode: 1
         m_Arguments:
@@ -1079,7 +1079,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1274803826109484221}
+      - m_Target: {fileID: 0}
         m_MethodName: Cancel
         m_Mode: 1
         m_Arguments:
@@ -1219,7 +1219,7 @@ MonoBehaviour:
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1274803826109484194}
+      - m_Target: {fileID: 0}
         m_MethodName: SetCurrent
         m_Mode: 0
         m_Arguments:
@@ -1252,8 +1252,6 @@ GameObject:
   - component: {fileID: 1274803826109484195}
   - component: {fileID: 1274803826109484192}
   - component: {fileID: 1274803826109484193}
-  - component: {fileID: 1274803826109484221}
-  - component: {fileID: 1274803826109484194}
   m_Layer: 5
   m_Name: Stack
   m_TagString: Untagged
@@ -1333,69 +1331,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &1274803826109484221
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1274803826109484199}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db1c33589553a36409249de03339fb94, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  delegates: []
-  name: Stack
-  priority: 0
-  m_KeyCode: 0
-  m_EaseType: 28
-  m_Duration: 0.4
-  showSound: {fileID: 0}
-  closeSound: {fileID: 0}
-  m_Focus: 1
-  m_DeactivateOnClose: 1
-  onShow:
-    m_PersistentCalls:
-      m_Calls: []
-  onClose:
-    m_PersistentCalls:
-      m_Calls: []
-  item: {fileID: 0}
---- !u!114 &1274803826109484194
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1274803826109484199}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f0d900f24272a24f8ccae592107deb9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  changeDelay: 0.2
-  m_Current: 1
-  step: 1
-  min: 1
-  max: 10
-  onChange:
-    m_PersistentCalls:
-      m_Calls: []
-  m_OnChange:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1274803826074134668}
-        m_MethodName: set_text
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!1 &1274803826115966037
 GameObject:
   m_ObjectHideFlags: 0
@@ -1742,7 +1677,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1274803826109484221}
+      - m_Target: {fileID: 0}
         m_MethodName: Unstack
         m_Mode: 1
         m_Arguments:

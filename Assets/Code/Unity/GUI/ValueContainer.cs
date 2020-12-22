@@ -19,7 +19,7 @@ namespace JoyLib.Code.Unity.GUI
 
         public virtual void OnEnable()
         {
-            if (GUIManager is null)
+            if (GUIManager is null && GlobalConstants.GameManager is null == false)
             {
                 GUIManager = GlobalConstants.GameManager.GUIManager;
             }

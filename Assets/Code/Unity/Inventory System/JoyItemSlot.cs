@@ -51,14 +51,6 @@ namespace JoyLib.Code.Unity.GUI
         }
 
         public bool IsEmpty => this.Item is null;
-
-        [SerializeField] protected string m_Name;
-
-        public string Name
-        {
-            get => this.m_Name;
-            protected set => this.m_Name = value;
-        }
         
         public static IConversationEngine ConversationEngine { get; set; }
 

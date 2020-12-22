@@ -446,7 +446,6 @@ GameObject:
   - component: {fileID: 8604156886097528882}
   - component: {fileID: 8604156886097528885}
   - component: {fileID: -8336268010190734863}
-  - component: {fileID: 5045158283623413625}
   - component: {fileID: 6845158268629664666}
   m_Layer: 5
   m_Name: Equipment Slot
@@ -571,31 +570,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0641692108564ac39651851503d52a32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  delegates: []
+  m_UseKey: 0
+  m_CooldownOverlay: {fileID: 8604156884983650608}
+  m_Cooldown: {fileID: 0}
   m_ItemName: {fileID: 0}
   m_UseRarityColor: 0
-  "m_\xCDcon": {fileID: 8604156885990248955}
+  m_Icon: {fileID: 8604156885990248955}
   m_Stack: {fileID: 8604156884670249676}
-  restrictions: []
-  m_UseKey: 0
-  m_Key: {fileID: 0}
-  m_CooldownOverlay: {fileID: 8604156884983650608}
-  m_Description: {fileID: 0}
-  m_Ingredients: {fileID: 0}
-  m_BuyPrice: {fileID: 0}
---- !u!114 &5045158283623413625
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8604156886097528880}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b07e1223690277b41b6429079f960954, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  region: {fileID: 0}
+  m_Slot: 
 --- !u!114 &6845158268629664666
 MonoBehaviour:
   m_ObjectHideFlags: 0

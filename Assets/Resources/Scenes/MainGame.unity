@@ -3993,7 +3993,7 @@ PrefabInstance:
     - target: {fileID: 7410754596117065574, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
         type: 3}
       propertyPath: m_AspectRatio
-      value: 2.1566074
+      value: 0.001
       objectReference: {fileID: 0}
     - target: {fileID: 7623997236991320388, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
         type: 3}
@@ -5310,7 +5310,6 @@ GameObject:
   - component: {fileID: 1710458159}
   - component: {fileID: 1710458166}
   - component: {fileID: 1710458165}
-  - component: {fileID: 1710458164}
   - component: {fileID: 1710458163}
   - component: {fileID: 1710458162}
   - component: {fileID: 1710458161}
@@ -5462,18 +5461,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1710458158}
   m_CullTransparentMesh: 0
---- !u!114 &1710458164
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1710458158}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68165cdf1896c89479a91b2478670c0a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1710458165
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10788,7 +10775,8 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -0.0949707
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6811491300632675652, guid: 69e87f40ba8abb445b6be4949c353366, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 69e87f40ba8abb445b6be4949c353366, type: 3}
 --- !u!1001 &7087841499049568107
 PrefabInstance:
@@ -12900,7 +12888,7 @@ PrefabInstance:
     - target: {fileID: 7087841497910087753, guid: 9c35b03af1fc36949a51da64477b007f,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.0860405
+      value: 0.08604431
       objectReference: {fileID: 0}
     - target: {fileID: 7087841497948643081, guid: 9c35b03af1fc36949a51da64477b007f,
         type: 3}
@@ -13030,7 +13018,7 @@ PrefabInstance:
     - target: {fileID: 7087841499281627286, guid: 9c35b03af1fc36949a51da64477b007f,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.08628464
+      value: 0.08628845
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9c35b03af1fc36949a51da64477b007f, type: 3}
@@ -13250,11 +13238,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1293420870}
     m_Modifications:
-    - target: {fileID: 2363985745292612443, guid: cb718d0b0b9991847b3681001ad72723,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -30.074219
-      objectReference: {fileID: 0}
     - target: {fileID: 8862829972381363170, guid: cb718d0b0b9991847b3681001ad72723,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -13364,26 +13347,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Quest Journal
-      objectReference: {fileID: 0}
-    - target: {fileID: 8862829972381363171, guid: cb718d0b0b9991847b3681001ad72723,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8862829972594165432, guid: cb718d0b0b9991847b3681001ad72723,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0.49023438
-      objectReference: {fileID: 0}
-    - target: {fileID: 8862829972594165432, guid: cb718d0b0b9991847b3681001ad72723,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 1.5097656
-      objectReference: {fileID: 0}
-    - target: {fileID: 8862829973209153587, guid: cb718d0b0b9991847b3681001ad72723,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -0.5654297
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cb718d0b0b9991847b3681001ad72723, type: 3}

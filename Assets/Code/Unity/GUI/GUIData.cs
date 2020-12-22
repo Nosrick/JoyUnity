@@ -3,6 +3,7 @@ using UnityEngine.EventSystems;
 
 namespace JoyLib.Code.Unity.GUI
 {
+    [DisallowMultipleComponent]
     public class GUIData : MonoBehaviour, IPointerDownHandler
     {
         public IGUIManager GUIManager { get; set; }

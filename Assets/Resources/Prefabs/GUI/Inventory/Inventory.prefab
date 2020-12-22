@@ -91,7 +91,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 65.4
+  m_fontSize: 36.05
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -147,7 +147,6 @@ GameObject:
   - component: {fileID: 7087841497948643083}
   - component: {fileID: 7087841497948643080}
   - component: {fileID: 7087841497948643081}
-  - component: {fileID: 7087841497948643087}
   - component: {fileID: 1243341763670094703}
   m_Layer: 5
   m_Name: Inventory
@@ -305,53 +304,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b886057594c6471c9e3301af0910e0c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  delegates: []
-  name: Inventory
-  priority: 0
-  m_KeyCode: 0
-  m_EaseType: 21
-  m_Duration: 0
-  m_ShowSound: {fileID: 0}
-  m_CloseSound: {fileID: 0}
-  m_Focus: 1
-  m_DeactivateOnClose: 1
-  useButton: 2
-  m_DynamicContainer: 0
-  m_SlotParent: {fileID: 7087841499281627286}
+  m_RemovesControl: 0
+  m_ClosesOthers: 0
+  m_Index: 0
+  m_UseKey: 0
+  m_ClearAndFillOnEnable: 0
+  m_SlotParent: {fileID: 0}
   m_SlotPrefab: {fileID: 0}
-  m_UseReferences: 0
-  m_CanDragIn: 1
-  m_CanDragOut: 1
+  m_CanDrag: 0
   m_CanDropItems: 0
-  m_CanReferenceItems: 0
-  m_CanSellItems: 0
   m_CanUseItems: 0
   m_UseContextMenu: 1
   m_ShowTooltips: 1
   m_MoveUsedItem: 1
-  moveItemConditions:
-  - window: Equipment
-    requiresVisibility: 1
-  restrictions: []
---- !u!114 &7087841497948643087
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7087841497948643126}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68165cdf1896c89479a91b2478670c0a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  saveable: 1
-  m_Items: []
-  m_Amounts: 
-  m_Modifiers: []
-  onChange:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &1243341763670094703
 MonoBehaviour:
   m_ObjectHideFlags: 0

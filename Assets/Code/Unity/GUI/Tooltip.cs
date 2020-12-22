@@ -4,6 +4,7 @@ using System.Linq;
 using Castle.Core.Internal;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity.GUI
@@ -40,16 +41,17 @@ namespace JoyLib.Code.Unity.GUI
 
         protected void UpdatePosition()
         {
+            Vector2 mousePosition = Mouse.current.position.ReadValue();
             Vector2 pos;
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
                 this.Canvas.transform as RectTransform,
-                Input.mousePosition, 
+                mousePosition, 
                 this.Canvas.worldCamera, 
                 out pos);
             
             Vector2 offset = Vector2.zero;
 
-            if (Input.mousePosition.x < this.RectTransform.sizeDelta.x)
+            if (mousePosition.x < this.RectTransform.sizeDelta.x)
             {
                 offset += new Vector2(this.RectTransform.sizeDelta.x * 0.5f, 0);
             }
@@ -58,7 +60,7 @@ namespace JoyLib.Code.Unity.GUI
                 offset += new Vector2(-this.RectTransform.sizeDelta.x * 0.5f, 0);
             }
 
-            if (Screen.height - Input.mousePosition.y > this.RectTransform.sizeDelta.y)
+            if (Screen.height - mousePosition.y > this.RectTransform.sizeDelta.y)
             {
                 offset += new Vector2(0, this.RectTransform.sizeDelta.y * 0.5f);
             }
@@ -101,7 +103,6 @@ namespace JoyLib.Code.Unity.GUI
 
             if (data.IsNullOrEmpty() == false && data.Count() > 0)
             {
-
                 if (this.ItemCache.Count < data.Count())
                 {
                     for (int i = this.ItemCache.Count; i < data.Count(); i++)

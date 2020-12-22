@@ -182,13 +182,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.10980393, g: 0.1254902, b: 0.13725491, a: 0.69803923}
+  m_Color: {r: 0.10980393, g: 0.1254902, b: 0.13725491, a: 0.72156864}
   m_RaycastTarget: 0
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 10645e95a9c6dac4c994eff825984384, type: 3}
+  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -758,7 +758,6 @@ GameObject:
   - component: {fileID: 4629525015547152220}
   - component: {fileID: 4629525015547152163}
   - component: {fileID: 4629525015547152162}
-  - component: {fileID: 8900384526065578207}
   m_Layer: 5
   m_Name: Tooltip
   m_TagString: Untagged
@@ -819,8 +818,8 @@ MonoBehaviour:
   m_Text: {fileID: 4787529504822613358}
   m_Icon: {fileID: 8651356770118766927}
   m_Background: {fileID: 3465835691303430890}
-  m_ItemPrefab: {fileID: 0}
-  m_ParentLayout: {fileID: 0}
+  m_ItemPrefab: {fileID: 3465835691670505972}
+  m_ParentLayout: {fileID: 4629525015547152163}
 --- !u!114 &4629525015547152163
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -860,21 +859,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 0
   m_VerticalFit: 2
---- !u!114 &8900384526065578207
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4629525015547152160}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79b34202c8a849cb81a9f40db85841f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_RemovesControl: 0
-  m_ClosesOthers: 0
-  m_Index: 0
 --- !u!1 &5265142299931609955
 GameObject:
   m_ObjectHideFlags: 0

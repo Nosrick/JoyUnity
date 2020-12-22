@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 4484802662267518618}
   - component: {fileID: 4484802662267518628}
   - component: {fileID: 4484802662267518629}
-  - component: {fileID: 4484802662267518625}
   - component: {fileID: 4484802662267518630}
   - component: {fileID: 4484802662267518631}
   - component: {fileID: 4484802662267518624}
@@ -149,25 +148,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &4484802662267518625
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4484802662267518616}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68165cdf1896c89479a91b2478670c0a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  saveable: 1
-  m_Items: []
-  m_Amounts: 
-  m_Modifiers: []
-  onChange:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!225 &4484802662267518630
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -192,34 +172,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b886057594c6471c9e3301af0910e0c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  delegates: []
-  name: Equipment
-  priority: 0
-  m_KeyCode: 0
-  m_EaseType: 21
-  m_Duration: 0
-  m_ShowSound: {fileID: 0}
-  m_CloseSound: {fileID: 0}
-  m_Focus: 1
-  m_DeactivateOnClose: 1
-  useButton: 2
-  m_DynamicContainer: 0
-  m_SlotParent: {fileID: 4484802662463132235}
+  m_RemovesControl: 0
+  m_ClosesOthers: 0
+  m_Index: 0
+  m_UseKey: 0
+  m_ClearAndFillOnEnable: 0
+  m_SlotParent: {fileID: 0}
   m_SlotPrefab: {fileID: 0}
-  m_UseReferences: 0
-  m_CanDragIn: 1
-  m_CanDragOut: 1
+  m_CanDrag: 0
   m_CanDropItems: 0
-  m_CanReferenceItems: 0
-  m_CanSellItems: 0
   m_CanUseItems: 1
   m_UseContextMenu: 0
   m_ShowTooltips: 1
   m_MoveUsedItem: 1
-  moveItemConditions:
-  - window: Inventory
-    requiresVisibility: 1
-  restrictions: []
 --- !u!114 &4484802662267518624
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -232,16 +197,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae7426b9a54d79844b6b701d5ba47f9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  delegates: []
-  name: 
-  priority: 0
-  m_KeyCode: 0
-  m_EaseType: 28
-  m_Duration: 0.7
-  m_ShowSound: {fileID: 0}
-  m_CloseSound: {fileID: 0}
-  m_Focus: 1
-  m_DeactivateOnClose: 1
+  m_RemovesControl: 0
+  m_ClosesOthers: 0
+  m_Index: 0
   m_SlotPrefab: {fileID: 0}
   m_Container: {fileID: 161253348}
   m_EquipmentContainer: {fileID: 4484802662267518631}
@@ -421,7 +379,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 39.95
+  m_fontSize: 37.35
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1

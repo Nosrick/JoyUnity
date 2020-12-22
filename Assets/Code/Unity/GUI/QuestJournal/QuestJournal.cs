@@ -15,17 +15,15 @@ namespace JoyLib.Code.Unity.GUI
         protected IQuestTracker QuestTracker { get; set; }
 
         [SerializeField] protected GameObject MenuItemPrefab;
+        [SerializeField] protected LayoutGroup MenuContainer;
         protected RectTransform MenuItemRect { get; set; }
         
         protected List<MenuItem> MenuItems { get; set; }
-        
-        protected GameObject Container { get; set; }
 
         public override void Awake()
         {
             base.Awake();
             MenuItemRect = MenuItemPrefab.GetComponent<RectTransform>();
-            Container = this.gameObject.transform.Find("Quest MenuContainer").gameObject;
             MenuItems = new List<MenuItem>();
             FindBits();
         }
@@ -61,7 +59,7 @@ namespace JoyLib.Code.Unity.GUI
                 for (int i = 0; i < difference; i++)
                 {
                     MenuItems.Add(
-                        GameObject.Instantiate(MenuItemPrefab, Container.transform)
+                        GameObject.Instantiate(MenuItemPrefab, this.MenuContainer.transform)
                             .GetComponent<MenuItem>());
                 }
             }
@@ -82,7 +80,7 @@ namespace JoyLib.Code.Unity.GUI
                 if (MenuItems.Count == 0)
                 {
                     MenuItems.Add(
-                        GameObject.Instantiate(MenuItemPrefab, Container.transform)
+                        GameObject.Instantiate(MenuItemPrefab, this.MenuContainer.transform)
                             .GetComponent<MenuItem>());
                 }
 

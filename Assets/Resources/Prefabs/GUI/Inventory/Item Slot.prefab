@@ -435,15 +435,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0641692108564ac39651851503d52a32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  delegates: []
+  m_UseKey: 0
+  m_CooldownOverlay: {fileID: 8604156884983650608}
+  m_Cooldown: {fileID: 0}
   m_ItemName: {fileID: 0}
   m_UseRarityColor: 0
-  "m_\xCDcon": {fileID: 8604156885990248955}
+  m_Icon: {fileID: 8604156885990248955}
   m_Stack: {fileID: 8604156884670249676}
-  restrictions: []
-  m_UseKey: 0
-  m_Key: {fileID: 0}
-  m_CooldownOverlay: {fileID: 8604156884983650608}
-  m_Description: {fileID: 0}
-  m_Ingredients: {fileID: 0}
-  m_BuyPrice: {fileID: 0}
+  m_Slot: 
+  m_Name: 

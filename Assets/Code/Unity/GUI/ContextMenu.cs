@@ -3,6 +3,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 namespace JoyLib.Code.Unity.GUI
 {
@@ -30,10 +31,10 @@ namespace JoyLib.Code.Unity.GUI
 
         public void Update()
         {
-            if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1) || Input.GetMouseButtonDown(2)) 
+            if (Mouse.current.leftButton.wasReleasedThisFrame) 
             {
                 var pointer = new PointerEventData (EventSystem.current);
-                pointer.position = Input.mousePosition;
+                pointer.position = Mouse.current.position.ReadValue();
                 var raycastResults = new List<RaycastResult> ();
                 EventSystem.current.RaycastAll (pointer, raycastResults);
 
