@@ -22,8 +22,9 @@ namespace JoyLib.Code.Unity.GUI
         
         protected List<StringPairContainer> ItemCache { get; set; }
 
-        public void Awake()
+        public override void Awake()
         {
+            base.Awake();
             if (this.Canvas is null)
             {
                 this.ItemCache = new List<StringPairContainer>();

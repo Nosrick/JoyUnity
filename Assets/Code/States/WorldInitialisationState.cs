@@ -5,6 +5,7 @@ using JoyLib.Code.Graphics;
 using JoyLib.Code.Unity;
 using JoyLib.Code.World;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace JoyLib.Code.States
 {
@@ -32,10 +33,25 @@ namespace JoyLib.Code.States
             m_ActiveWorld = activeWorld;
         }
 
+        public override void LoadContent()
+        {
+        }
+
         public override void Start()
         {
-            base.Start();
             InstantiateWorld();
+        }
+
+        public override void Stop()
+        {
+        }
+
+        public override void Update()
+        {
+        }
+
+        public override void HandleInput(InputValue inputValue)
+        {
         }
 
         protected void InstantiateWorld()

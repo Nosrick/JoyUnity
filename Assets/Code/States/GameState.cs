@@ -1,6 +1,7 @@
 using System.Threading;
 using JoyLib.Code.Unity.GUI;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace JoyLib.Code.States
 {
@@ -11,9 +12,7 @@ namespace JoyLib.Code.States
             GUIManager = GlobalConstants.GameManager.GUIManager;
         }
 
-        public virtual void LoadContent()
-        {
-        }
+        public abstract void LoadContent();
 
         public virtual void SetUpUi()
         {
@@ -26,22 +25,14 @@ namespace JoyLib.Code.States
             }
         }
 
-        public virtual void Start()
-        {
-        }
+        public abstract void Start();
 
-        public virtual void Stop()
-        {
-        }
+        public abstract void Stop();
 
         //ALWAYS call base.Update() from derived classes
-        public virtual void Update()
-        {
-        }
+        public abstract void Update();
 
-        public virtual void HandleInput()
-        {
-        }
+        public abstract void HandleInput(InputValue inputValue);
 
         public abstract GameState GetNextState();
 

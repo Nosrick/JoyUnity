@@ -13,8 +13,9 @@ namespace JoyLib.Code.Unity.GUI
         
         protected List<NamedItem> Items { get; set; }
 
-        public void OnEnable()
+        public override void OnEnable()
         {
+            base.OnEnable();
             DerivedValuePrefab.gameObject.SetActive(false);
             if (Items is null)
             {

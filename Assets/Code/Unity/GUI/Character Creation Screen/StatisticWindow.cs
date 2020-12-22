@@ -14,8 +14,9 @@ namespace JoyLib.Code.Unity.GUI
         [SerializeField] protected TextMeshProUGUI m_PointsRemainingText;
         protected List<NamedItem> Items { get; set; }
 
-        public void OnEnable()
+        public override void OnEnable()
         {
+            base.OnEnable();
             namedItem.gameObject.SetActive(false);
             if (Items is null)
             {

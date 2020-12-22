@@ -692,6 +692,7 @@ namespace JoyLib.Code.Entities
             if (m_Backpack.Contains(item))
             {
                 m_Backpack.Remove(item);
+                this.ItemRemoved?.Invoke(this, new ItemChangedEventArgs(){ Item = item });
                 return true;
             }
 
@@ -933,6 +934,8 @@ namespace JoyLib.Code.Entities
             {
                 m_Backpack.Add(actor);
             }
+            
+            this.ItemAdded?.Invoke(this, new ItemChangedEventArgs(){ Item = actor });
             return true;
         }
 
@@ -974,6 +977,10 @@ namespace JoyLib.Code.Entities
 
             this.m_Backpack.AddRange(
                 actors.Where(actor => this.m_Backpack.Any(item => item.GUID == actor.GUID) == false));
+            foreach (IItemInstance actor in actors)
+            {
+                this.ItemAdded?.Invoke(this, new ItemChangedEventArgs() { Item = actor });
+            }
             return true;
         }
 
@@ -983,6 +990,8 @@ namespace JoyLib.Code.Entities
         }
 
         public string ContentString { get; }
+        public event ItemRemovedEventHandler ItemRemoved;
+        public event ItemAddedEventHandler ItemAdded;
 
         public string CreatureType { get; protected set; }
 

@@ -6,7 +6,7 @@ using TMPro;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public class GUINeedsAlert : UIWidget
+    public class GUINeedsAlert : GUIData
     {
         protected TextMeshProUGUI Text { get; set; }
 
@@ -21,7 +21,7 @@ namespace JoyLib.Code.Unity.GUI
         {
             base.Awake();
             GetBits();
-            Text = this.gameObject.FindChild("NeedsText", true).GetComponent<TextMeshProUGUI>();
+            Text = this.gameObject.transform.Find("NeedsText").GetComponent<TextMeshProUGUI>();
         }
 
         protected void GetBits()
@@ -33,9 +33,8 @@ namespace JoyLib.Code.Unity.GUI
             }
         }
 
-        protected override void Update()
+        protected void Update()
         {
-            base.Update();
             Counter += 1;
             Counter %= MAXIMUM_FRAMES;
 

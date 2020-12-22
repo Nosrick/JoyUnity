@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using DevionGames.UIWidgets;
 using JoyLib.Code.Conversation;
 using TMPro;
 using UnityEngine;
@@ -8,7 +7,7 @@ using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public class ConversationWindow : UIWidget
+    public class ConversationWindow : GUIData
     {
         [SerializeField] protected GameManager GameManager;
         [SerializeField] protected TextMeshProUGUI LastSaidGUI;
@@ -82,7 +81,7 @@ namespace JoyLib.Code.Unity.GUI
                 MenuItem menuItem = MenuList[i].GetComponent<MenuItem>();
                 Button.ButtonClickedEvent buttonClickedEvent = new Button.ButtonClickedEvent();
                 buttonClickedEvent.AddListener(menu.OnMouseDown);
-                menuItem.onTrigger = buttonClickedEvent;
+                menuItem.Trigger = buttonClickedEvent;
             }
 
             for (int i = ConversationEngine.CurrentTopics.Length; i < MenuList.Count; i++)

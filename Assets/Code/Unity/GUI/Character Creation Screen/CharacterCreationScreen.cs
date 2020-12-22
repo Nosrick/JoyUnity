@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using DevionGames.UIWidgets;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Statistics;
 using TMPro;
@@ -9,7 +8,7 @@ using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public class CharacterCreationScreen : UIWidget
+    public class CharacterCreationScreen : GUIData
     {
         [SerializeField] protected GameManager GameManager;
         [SerializeField] protected StatisticWindow StatisticWindow;

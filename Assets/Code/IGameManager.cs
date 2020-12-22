@@ -19,6 +19,7 @@ using JoyLib.Code.Helpers;
 using JoyLib.Code.Physics;
 using JoyLib.Code.Quests;
 using JoyLib.Code.Rollers;
+using JoyLib.Code.Unity;
 using JoyLib.Code.Unity.GUI;
 using JoyLib.Code.World;
 using UnityEngine;
@@ -64,7 +65,7 @@ namespace JoyLib.Code
         GameObject MyGameObject { get; }
         
         IEntity Player { get; set; }
-        
+        PlayerInputHandler PlayerInputHandler { get; }
         GameObjectPool FloorPool { get; }
         GameObjectPool WallPool { get; }
         GameObjectPool EntityPool { get; }

@@ -3,13 +3,14 @@ using System.Globalization;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Relationships;
+using JoyLib.Code.Events;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public class TradeWindow : UIWidget
+    public class TradeWindow : GUIData
     {
         public IEntity Left { get; protected set; }
         public IEntity Right { get; protected set; }
@@ -31,54 +32,36 @@ namespace JoyLib.Code.Unity.GUI
         
         protected RectTransform RectTransform { get; set; }
 
-        protected void Awake()
+        public override void Awake()
         {
             base.Awake();
-            RectTransform = this.GetComponent<RectTransform>();
+            this.RectTransform = this.GetComponent<RectTransform>();
 
-            LeftInventory.OnAddItem += Tally;
-            LeftOffering.OnAddItem += Tally;
-            LeftOffering.OnRemoveItem += Tally;
-            RightInventory.OnAddItem += Tally;
-            RightOffering.OnAddItem += Tally;
-            RightOffering.OnRemoveItem += Tally;
+            this.LeftOffering.OnAddItem -= Tally;
+            this.LeftOffering.OnRemoveItem -= Tally;
+
+            this.RightOffering.OnAddItem -= this.Tally;
+            this.RightOffering.OnRemoveItem -= this.Tally;
+            
+            this.LeftOffering.OnAddItem += Tally;
+            this.LeftOffering.OnRemoveItem += Tally;
+            this.RightOffering.OnAddItem += Tally;
+            this.RightOffering.OnRemoveItem += Tally;
         }
 
         public void SetActors(IEntity left, IEntity right)
         {
-            Left = left;
-            Right = right;
+            this.Left = left;
+            this.Right = right;
 
-            for (int i = LeftInventory.Collection.Count - 1; i >= 0; i--)
-            {
-                Item item = LeftInventory.Collection[i];
-                LeftInventory.RemoveItem(item);
-            }
+            this.LeftInventory.Owner = this.Left;
+            this.LeftOffering.Owner = this.Left;
 
-            for (int i = RightInventory.Collection.Count - 1; i >= 0; i--)
-            {
-                Item item = RightInventory.Collection[i];
-                RightInventory.RemoveItem(item);
-            }
+            this.RightInventory.Owner = this.Right;
+            this.RightOffering.Owner = this.Right;
 
-            foreach (ItemInstance item in Left.Backpack)
-            {
-                LeftInventory.StackOrAdd(item);
-            }
-
-            foreach (ItemInstance item in Right.Backpack)
-            {
-                RightInventory.StackOrAdd(item);
-            }
-
-            this.LeftInventory.Owner = Left;
-            this.LeftOffering.Owner = Left;
-
-            this.RightInventory.Owner = Right;
-            this.RightOffering.Owner = Right;
-
-            RightName.text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Right.Gender.PersonalSubject) + " " + Right.Gender.IsOrAre + " offering";
-            LayoutRebuilder.ForceRebuildLayoutImmediate(RectTransform);
+            this.RightName.text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(this.Right.Gender.PersonalSubject) + " " + this.Right.Gender.IsOrAre + " offering";
+            LayoutRebuilder.ForceRebuildLayoutImmediate(this.RectTransform);
         }
 
         public bool Trade()
@@ -86,24 +69,14 @@ namespace JoyLib.Code.Unity.GUI
             int leftValue = 0;
             int rightValue = 0;
             
-            foreach (Item item in LeftOffering.Collection)
+            foreach (IItemInstance item in LeftOffering.Contents)
             {
-                if (!(item is IItemInstance joyItem))
-                {
-                    continue;
-                }
-
-                leftValue += joyItem.Value;
+                leftValue += item.Value;
             }
 
-            foreach (Item item in RightOffering.Collection)
+            foreach (IItemInstance item in RightOffering.Contents)
             {
-                if (!(item is IItemInstance joyItem))
-                {
-                    continue;
-                }
-
-                rightValue += joyItem.Value;
+                rightValue += item.Value;
             }
 
             int? relationshipValue = RelationshipHandler?.GetHighestRelationshipValue(Right, Left);
@@ -123,28 +96,18 @@ namespace JoyLib.Code.Unity.GUI
                     relationship.ModifyValueOfParticipant(Left.GUID, Right.GUID, difference);
                 }
 
-                for(int i = LeftOffering.Collection.Count - 1; i >= 0; i--)
+                foreach(IItemInstance item in this.LeftOffering.Contents)
                 {
-                    if (!(LeftOffering.Collection[i] is ItemInstance joyItem))
-                    {
-                        continue;
-                    }
-
-                    LeftOffering.RemoveItem(joyItem);
-                    Left.RemoveContents(joyItem);
-                    Right.AddContents(joyItem);
+                    LeftOffering.RemoveItem(item);
+                    Left.RemoveContents(item);
+                    Right.AddContents(item);
                 }
 
-                for(int i = RightOffering.Collection.Count - 1; i >= 0; i--)
+                foreach(IItemInstance item in this.RightOffering.Contents)
                 {
-                    if (!(RightOffering.Collection[i] is ItemInstance joyItem))
-                    {
-                        continue;
-                    }
-
-                    RightOffering.RemoveItem(joyItem);
-                    Right.RemoveContents(joyItem);
-                    Left.AddContents(joyItem);
+                    RightOffering.RemoveItem(item);
+                    Right.RemoveContents(item);
+                    Left.AddContents(item);
                 }
                 
                 SetActors(Left, Right);
@@ -155,38 +118,23 @@ namespace JoyLib.Code.Unity.GUI
             return false;
         }
 
-        protected void Tally(Item itemRef, Slot slot)
+        protected void Tally(IItemContainer container, ItemChangedEventArgs args)
         {
             int leftValue = 0;
             int rightValue = 0;
             
-            foreach (Item item in LeftOffering.Collection)
+            foreach (IItemInstance item in this.LeftOffering.Contents)
             {
-                if (!(item is ItemInstance joyItem))
-                {
-                    continue;
-                }
-
-                leftValue += joyItem.Value;
+                leftValue += item.Value;
             }
 
-            foreach (Item item in RightOffering.Collection)
+            foreach (IItemInstance item in this.RightOffering.Contents)
             {
-                if (!(item is ItemInstance joyItem))
-                {
-                    continue;
-                }
-
-                rightValue += joyItem.Value;
+                rightValue += item.Value;
             }
 
-            LeftValue.text = "Your value: " + leftValue;
-            RightValue.text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Right.Gender.Possessive) + " value: " + rightValue;
-        }
-
-        protected void Tally(Item itemRef, int value, Slot slot)
-        {
-            Tally(itemRef, slot);
+            this.LeftValue.text = "Your value: " + leftValue;
+            this.RightValue.text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Right.Gender.Possessive) + " value: " + rightValue;
         }
     }
 }

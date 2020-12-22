@@ -1,4 +1,5 @@
 ﻿using JoyLib.Code.World;
+using UnityEngine.InputSystem;
 
 namespace JoyLib.Code.States
 {
@@ -13,10 +14,25 @@ namespace JoyLib.Code.States
             m_NextWorld = nextWorld;
         }
 
+        public override void LoadContent()
+        {
+        }
+
         public override void Start()
         {
-            base.Start();
             DestroyWorld();
+        }
+
+        public override void Stop()
+        {
+        }
+
+        public override void Update()
+        {
+        }
+
+        public override void HandleInput(InputValue inputValue)
+        {
         }
 
         protected void DestroyWorld()

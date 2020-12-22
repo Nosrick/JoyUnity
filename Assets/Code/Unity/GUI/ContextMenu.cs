@@ -21,8 +21,9 @@ namespace JoyLib.Code.Unity.GUI
             }
         }
 
-        public void Show()
+        public override void Show()
         {
+            base.Show();
             this.RectTransform.position = Input.mousePosition;
             base.Show ();
         }

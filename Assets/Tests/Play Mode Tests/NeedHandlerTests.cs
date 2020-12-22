@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using DevionGames.InventorySystem;
 using JoyLib.Code;
 using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Graphics;

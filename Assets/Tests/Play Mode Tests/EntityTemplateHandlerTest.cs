@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.TestTools;
 using System.Collections;
 using System.Collections.Generic;
-using DevionGames.InventorySystem;
 using JoyLib.Code;
 using JoyLib.Code.Collections;
 using JoyLib.Code.Graphics;
@@ -17,12 +16,9 @@ namespace Tests
     {
         private IEntityTemplateHandler target;
         
-        private GameObject inventoryManager;
         [SetUp]
         public void SetUp()
         {
-            inventoryManager = new GameObject();
-            inventoryManager.AddComponent<InventoryManager>();
             
             IEntitySkillHandler skillHandler = Mock.Of<IEntitySkillHandler>(
                 handler => handler.GetCoefficients(It.IsAny<List<string>>(), It.IsAny<string>())
@@ -56,7 +52,6 @@ namespace Tests
         [TearDown]
         public void TearDown()
         {
-            GameObject.DestroyImmediate(inventoryManager);
             GlobalConstants.GameManager = null;
         }
     }

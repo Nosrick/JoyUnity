@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public class EquipmentHandler : UIWidget
+    public class EquipmentHandler : GUIData
     {
         private IEntity m_Player;
 
@@ -22,50 +22,25 @@ namespace JoyLib.Code.Unity.GUI
             CalculateSlots(clearSlots);
         }
 
-        private void CalculateSlots(bool clearSlots = false)
+        protected virtual void CalculateSlots(bool clearSlots = false)
         {
-            if (clearSlots || this.Initialised == false)
-            {
-                this.Initialised = false;
-                for (int i = 0; i < this.m_Container.transform.childCount; i++)
-                {
-                    DestroyImmediate(this.m_Container.transform.GetChild(i).gameObject);
-                }
-                this.m_EquipmentContainer.Slots.Clear();
-            }
-            else if (!clearSlots && m_EquipmentContainer.Slots.Count > 0)
-            {
-                return;
-            }
+            this.m_EquipmentContainer.RemoveAllSlots();
             
-            List<GameObject> children = new List<GameObject>();
-            foreach (Transform child in m_Container.transform)
-            {
-                children.Add(child.gameObject);
-            }
-            children.ForEach(child => Destroy(child));
-            
-            List<string> slots = m_Player.Slots;
+            List<string> slots = this.m_Player.Slots;
             
             for(int i = 0; i < slots.Count; i++)
             {
                 GameObject slotInstance = GameObject.Instantiate(
-                    m_SlotPrefab,
-                    m_Container.transform);
-                slotInstance.SetActive(m_Container.enabled);
+                    this.m_SlotPrefab,
+                    this.m_Container.transform);
+                slotInstance.SetActive(this.m_Container.enabled);
                 TextMeshProUGUI slotName = slotInstance.GetComponentInChildren<TextMeshProUGUI>();
                 slotName.text = slots[i];
-                ItemSlot slotScript = slotInstance.GetComponent<ItemSlot>();
-                slotScript.Container = m_EquipmentContainer;
-                DevionGames.InventorySystem.Restrictions.EquipmentRegion region = slotInstance.GetComponent<DevionGames.InventorySystem.Restrictions.EquipmentRegion>();
-                DevionGames.InventorySystem.EquipmentRegion regionSO =
-                    ScriptableObject.CreateInstance<DevionGames.InventorySystem.EquipmentRegion>();
-                regionSO.Name = slots[i];
-                region.region = regionSO;
-                slotScript.restrictions.Add(region);
+                JoyItemSlot slotScript = slotInstance.GetComponent<JoyItemSlot>();
+                slotScript.Container = this.m_EquipmentContainer;
+                slotScript.m_Slot = slots[i];
             }
 
-            this.m_EquipmentContainer.RefreshSlots();
             this.Initialised = true;
         }
     }

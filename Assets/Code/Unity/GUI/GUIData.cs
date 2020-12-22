@@ -3,26 +3,25 @@ using UnityEngine.EventSystems;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    [RequireComponent(typeof(CanvasGroup))]
     public class GUIData : MonoBehaviour, IPointerDownHandler
     {
         public IGUIManager GUIManager { get; set; }
 
-        public void Awake()
+        public virtual void Awake()
         {
         }
 
-        public void OnPointerDown(PointerEventData eventData)
+        public virtual void OnPointerDown(PointerEventData eventData)
         {
             GUIManager.BringToFront(this.name);
         }
 
-        public void Show()
+        public virtual void Show()
         {
             this.gameObject.SetActive(true);
         }
 
-        public void Close()
+        public virtual void Close()
         {
             this.gameObject.SetActive(false);
         }

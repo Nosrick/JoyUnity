@@ -1,4 +1,5 @@
 using JoyLib.Code.States;
+using UnityEngine.InputSystem;
 
 namespace Joy.Code.Managers
 {
@@ -33,12 +34,16 @@ namespace Joy.Code.Managers
         public void Update()
         {
             m_ActiveState.Update();
-            m_ActiveState.HandleInput();
 
             if(m_ActiveState.Done)
             {
                 ChangeState(m_ActiveState.GetNextState());
             }
+        }
+
+        public void OnMove(InputValue inputValue)
+        {
+            this.m_ActiveState.HandleInput(inputValue);
         }
 
         public void NextState()

@@ -31,12 +31,14 @@ namespace JoyLib.Code.Unity.GUI
                 return;
             }
 
-            GUIData tooltip = GUIManager.GetGUI(GUINames.TOOLTIP);
+            Tooltip tooltip = GUIManager.GetGUI(GUINames.TOOLTIP).GetComponent<Tooltip>();
+            GUIManager.OpenGUI(GUINames.CURSOR);
+            tooltip.Show(null, this.Tooltip);
         }
 
         public void OnPointerExit(PointerEventData data)
         {
-            InventoryManager.UI.tooltip.Close();
+            GUIManager.CloseGUI(GUINames.TOOLTIP);
         }
         
         public int DecreaseValue(int delta = 1)
@@ -77,14 +79,15 @@ namespace JoyLib.Code.Unity.GUI
         
         public string Tooltip
         {
-            get => m_Tooltip;
+            get => this.m_Tooltip;
             set
             {
-                m_Tooltip = value;
-                if (InventoryManager.UI.tooltip.IsVisible)
+                this.m_Tooltip = value;
+                if (GUIManager.IsActive(GUINames.TOOLTIP))
                 {
-                    InventoryManager.UI.tooltip.Close();
-                    InventoryManager.UI.tooltip.Show(m_Tooltip);
+                    GUIManager.CloseGUI(GUINames.TOOLTIP);
+                    GUIManager.OpenGUI(GUINames.TOOLTIP);
+                    GUIManager.GetGUI(GUINames.TOOLTIP).GetComponent<Tooltip>().Show(null, this.Tooltip);
                 }
             }
         }

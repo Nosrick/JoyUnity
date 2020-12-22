@@ -17,7 +17,7 @@ using JoyLib.Code.Unity;
 using JoyLib.Code.Unity.GUI;
 using JoyLib.Code.World;
 using UnityEngine;
-using ContextMenu = DevionGames.UIWidgets.ContextMenu;
+using UnityEngine.InputSystem;
 
 namespace JoyLib.Code.States
 {
@@ -78,7 +78,6 @@ namespace JoyLib.Code.States
 
         public override void LoadContent()
         {
-            base.LoadContent();
         }
 
         public override void SetUpUi()
@@ -102,13 +101,12 @@ namespace JoyLib.Code.States
             GUIManager.GetGUI(GUINames.INVENTORY).GetComponent<ItemContainer>().Owner = this.PlayerWorld.Player;
             GUIManager.GetGUI(GUINames.EQUIPMENT).GetComponent<ItemContainer>().Owner = this.PlayerWorld.Player;
 
-            EquipmentHandler equipmentHandler = WidgetUtility.Find<ItemContainer>("Equipment").gameObject.GetComponent<EquipmentHandler>();
+            EquipmentHandler equipmentHandler = GUIManager.GetGUI(GUINames.EQUIPMENT).GetComponent<EquipmentHandler>();
             equipmentHandler.SetPlayer(m_ActiveWorld.Player);
         }
 
         public override void Start()
         {
-            base.Start();
             m_ActiveWorld.Player.Tick();
             m_GameplayFlags = GameplayFlags.Moving;
 
@@ -119,7 +117,6 @@ namespace JoyLib.Code.States
 
         public override void Stop()
         {
-            base.Stop();
             m_WorldSerialiser.Serialise(m_Overworld);
         }
 
@@ -223,23 +220,21 @@ namespace JoyLib.Code.States
                 tooltip.Show(
                     entity.JoyName,
                     builder.ToString(),
-                    entity.Sprite,
-                    new List<KeyValuePair<string, string>>());
+                    entity.Sprite);
             }
-            else if (PrimaryTarget is ItemInstance item)
+            else if (PrimaryTarget is IItemInstance item)
             {
                 GUIManager.OpenGUI(GUINames.TOOLTIP);
                 tooltip.Show(
-                    item.DisplayName,
-                    item.Description,
-                    item.Sprite,
-                    new List<KeyValuePair<string, string>>());
+                    item.JoyName,
+                    item.DisplayDescription,
+                    item.Sprite);
             }
         }
 
         protected void SetUpContextMenu()
         {
-            ContextMenu contextMenu = GUIManager.GetGUI(GUINames.CONTEXT_MENU).GetComponent<ContextMenu>();
+            JoyLib.Code.Unity.GUI.ContextMenu contextMenu = GUIManager.GetGUI(GUINames.CONTEXT_MENU).GetComponent<JoyLib.Code.Unity.GUI.ContextMenu>();
 
             contextMenu.Close();
             contextMenu.Clear();
@@ -295,15 +290,15 @@ namespace JoyLib.Code.States
                 new object[] {"friendship"});
         }
 
-        public override void HandleInput()
+        public override void HandleInput(InputValue inputValue)
         {
-            base.HandleInput();
-
             bool hasMoved = false;
 
-            IEntity player = m_ActiveWorld.Player;
+            IEntity player = this.m_ActiveWorld.Player;
 
-            if (Input.GetKeyUp(KeyCode.Space) && player.FulfillmentData.Counter <= 0)
+            Vector2 movement = inputValue.Get<Vector2>();
+
+            if (player.FulfillmentData.Counter <= 0)
             {
                 ManualAutoTurn = !ManualAutoTurn;
                 AutoTurn = !AutoTurn;
@@ -708,7 +703,6 @@ namespace JoyLib.Code.States
                 AutoTurn = false;
             }
             
-            base.Update();
             DrawObjects();
         }
 

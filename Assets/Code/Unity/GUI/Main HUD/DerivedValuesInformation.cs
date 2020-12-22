@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using DevionGames.UIWidgets;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Events;
@@ -8,13 +7,15 @@ using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public class DerivedValuesInformation : UIWidget
+    public class DerivedValuesInformation : GUIData
     {
         [SerializeField] protected DerivedValueBarContainer DerivedValuePrefab;
         [SerializeField] protected GameManager GameManager;
 
         protected Dictionary<string, DerivedValueBarContainer> Items { get; set; }
         protected IEntity Player { get; set; }
+        
+        protected RectTransform RectTransform { get; set; }
 
         public void OnEnable()
         {
@@ -32,6 +33,9 @@ namespace JoyLib.Code.Unity.GUI
             {
                 return;
             }
+
+            this.RectTransform = this.GetComponent<RectTransform>();
+            
             this.Player = this.GameManager.Player;
             this.Player.DerivedValueChange -= this.DerivedValueChange;
             this.Player.DerivedValueChange += this.DerivedValueChange;
@@ -95,12 +99,12 @@ namespace JoyLib.Code.Unity.GUI
 
             float width = childRect.rect.width + layoutGroup.padding.left + layoutGroup.padding.right;
 
-            this.m_RectTransform.anchorMin = new Vector2(1.0f - (width / parentRect.rect.width), 0);
+            this.RectTransform.anchorMin = new Vector2(1.0f - (width / parentRect.rect.width), 0);
 
-            this.m_RectTransform.anchorMax = new Vector2(1, (height/ parentRect.rect.height));
+            this.RectTransform.anchorMax = new Vector2(1, (height/ parentRect.rect.height));
             
-            this.m_RectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
-            this.m_RectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
+            this.RectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
+            this.RectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
         }
     }
 }

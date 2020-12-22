@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public class QuestJournal : UIWidget
+    public class QuestJournal : GUIData
     {
         public IEntity Player { get; set; }
         
@@ -25,7 +25,7 @@ namespace JoyLib.Code.Unity.GUI
         {
             base.Awake();
             MenuItemRect = MenuItemPrefab.GetComponent<RectTransform>();
-            Container = this.gameObject.FindChild("Quest MenuContainer", true);
+            Container = this.gameObject.transform.Find("Quest MenuContainer").gameObject;
             MenuItems = new List<MenuItem>();
             FindBits();
         }

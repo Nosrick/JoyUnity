@@ -3,6 +3,7 @@ using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity.GUI
@@ -58,17 +59,6 @@ namespace JoyLib.Code.Unity.GUI
             get => this.m_Name;
             protected set => this.m_Name = value;
         }
-
-
-        /// <summary>
-        /// Gets a value indicating whether this slot is in cooldown.
-        /// </summary>
-        /// <value><c>true</c> if this slot is in cooldown; otherwise, <c>false</c>.</value>
-        public bool IsCooldown
-        {
-            get;
-        }
-        
         
         public static IConversationEngine ConversationEngine { get; set; }
 
@@ -77,6 +67,10 @@ namespace JoyLib.Code.Unity.GUI
         public static ILiveEntityHandler EntityHandler { get; set; }
 
         protected static IEntity Player { get; set; }
+        
+        protected static PlayerInputHandler PlayerInputHandler { get; set; }
+        
+        protected static DragObject DragObject { get; set; }
 
         public void Awake()
         {
@@ -90,6 +84,7 @@ namespace JoyLib.Code.Unity.GUI
                 return;
             }
 
+            PlayerInputHandler = GlobalConstants.GameManager.PlayerInputHandler;
             ConversationEngine = GlobalConstants.GameManager.ConversationEngine;
             GUIManager = GlobalConstants.GameManager.GUIManager;
             EntityHandler = GlobalConstants.GameManager.EntityHandler;
@@ -134,7 +129,7 @@ namespace JoyLib.Code.Unity.GUI
             */
         }
 
-        public void OnPointerUp(PointerEventData eventData)
+        public virtual void OnPointerUp(PointerEventData eventData)
         {
             if (eventData.dragging)
             {
@@ -159,12 +154,12 @@ namespace JoyLib.Code.Unity.GUI
             }
         }
         
-        public void OnPointerEnter(PointerEventData eventData)
+        public virtual void OnPointerEnter(PointerEventData eventData)
         {
             this.ShowTooltip();
         }
 
-        public void OnPointerExit(PointerEventData eventData)
+        public virtual void OnPointerExit(PointerEventData eventData)
         {
             this.CloseTooltip();
         }
@@ -190,7 +185,7 @@ namespace JoyLib.Code.Unity.GUI
             }
         }
 
-        protected void OpenContainer()
+        protected virtual void OpenContainer()
         {
             if (this.Item.HasTag("container"))
             {
@@ -206,7 +201,7 @@ namespace JoyLib.Code.Unity.GUI
             }
         }
 
-        protected void DropItem()
+        protected virtual void DropItem()
         {
             this.GetBits();
 
@@ -222,47 +217,72 @@ namespace JoyLib.Code.Unity.GUI
             }
         }
 
-        public void OnBeginDrag(PointerEventData eventData)
+        public virtual void Unstack()
+        {
+            
+        }
+
+        public virtual void OnBeginDrag(PointerEventData eventData)
         {
             //Check if we can start dragging
             if (this.Item is null == false && this.Container.CanDrag)
             {
-                //If key for unstacking items is pressed and if the stack is greater then 1, show the unstack ui.
-                if (InventoryManager.Input.unstackEvent.HasFlag<Configuration.Input.UnstackInput>(Configuration.Input.UnstackInput.OnDrag) && Input.GetKey(InventoryManager.Input.unstackKeyCode) && ObservedItem.Stack > 1){
-                    Unstack();
-                }else{
-                    //Set the dragging slot
-                    // draggedSlot = this;
-                    Debug.Log(eventData.pointerCurrentRaycast.gameObject);
-                    if(base.m_Ícon == null || !base.m_Ícon.raycastTarget || eventData.pointerCurrentRaycast.gameObject == base.m_Ícon.gameObject)
-                        dragObject = new DragObject(this);
-    
+                if (Keyboard.current.shiftKey.isPressed)
+                {
+                    this.Unstack();
+                }
+                else
+                {
+                    GUIManager.GetGUI(GUINames.CURSOR).GetComponent<Image>().sprite = this.Item.Sprite;
+                    DragObject = new DragObject
+                    {
+                        Item = this.Item,
+                        SourceContainer = this.Container,
+                        SourceSlot = this
+                    };
                 }
             }
-            if (this.m_ParentScrollRect != null && dragObject == null)
+        }
+
+        public virtual void OnDrag(PointerEventData eventData)
+        {
+        }
+
+        public virtual void OnEndDrag(PointerEventData eventData)
+        {
+            RaycastHit hit;
+            if (UnityEngine.Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), 100.0f, LayerMask.GetMask("UI")) == false)
             {
-                this.m_ParentScrollRect.OnBeginDrag(eventData);
+                if (this.Container.CanDropItems)
+                {
+                    this.DropItem();
+                }
+                else if (this.Container.CanDrag)
+                {
+                    this.Container.RemoveItem(this.Item);
+                }
+            }
+            //Repaint the slot
+            this.Repaint();
+        }
+
+        public virtual void OnDrop(PointerEventData eventData)
+        {
+            if (DragObject.Item is null == false && this.Container.CanDrag)
+            {
+                this.Container.StackOrSwap(this, DragObject.SourceSlot);
             }
         }
 
-        public void OnDrag(PointerEventData eventData)
+        public virtual void OnPointerDown(PointerEventData eventData)
         {
-            throw new System.NotImplementedException();
         }
+    }
 
-        public void OnEndDrag(PointerEventData eventData)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void OnDrop(PointerEventData eventData)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void OnPointerDown(PointerEventData eventData)
-        {
-            throw new System.NotImplementedException();
-        }
+    public struct DragObject
+    {
+        public IItemInstance Item { get; set; }
+        public JoyItemSlot SourceSlot { get; set; }
+        public ItemContainer SourceContainer { get; set; }
     }
 }

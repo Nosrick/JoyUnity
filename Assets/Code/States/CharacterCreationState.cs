@@ -2,6 +2,8 @@
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Jobs;
 using JoyLib.Code.Unity.GUI;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
 
 namespace JoyLib.Code.States
 {
@@ -15,8 +17,15 @@ namespace JoyLib.Code.States
 
         public override void Start()
         {
-            base.Start();
             SetUpUi();
+        }
+
+        public override void Stop()
+        {
+        }
+
+        public override void LoadContent()
+        {
         }
 
         public override void SetUpUi()
@@ -29,19 +38,17 @@ namespace JoyLib.Code.States
             GUIManager.OpenGUI(GUINames.CHARACTER_CREATION_PART_1);
         }
 
-        public override void HandleInput()
+        public override void HandleInput(InputValue inputValue)
         {
-            base.HandleInput();
         }
 
         public override void Update()
         {
-            base.Update();
         }
 
         public override GameState GetNextState()
         {
-            IEntity player = CharacterCreationScreen.CreatePlayer();
+            IEntity player = this.CharacterCreationScreen.CreatePlayer();
             player.AddExperience(500);
             foreach (string jobName in player.Cultures.SelectMany(culture => culture.Jobs))
             {
@@ -50,7 +57,7 @@ namespace JoyLib.Code.States
                 player.AddJob(job);
             }
             
-            return new WorldCreationState(new EntityPlayer(player));
+            return new WorldCreationState(player);
         }
     }
 }

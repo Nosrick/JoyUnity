@@ -1,4 +1,5 @@
 ﻿using JoyLib.Code.Unity.GUI;
+using UnityEngine.InputSystem;
 
 namespace JoyLib.Code.States
 {
@@ -6,13 +7,12 @@ namespace JoyLib.Code.States
     {
         bool Done { get; }
         IGUIManager GUIManager { get; }
-        
         void LoadContent();
         void SetUpUi();
         void Start();
         void Stop();
         void Update();
-        void HandleInput();
+        void HandleInput(InputValue inputValue);
         GameState GetNextState();
     }
 }

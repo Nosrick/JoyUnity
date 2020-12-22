@@ -24,6 +24,7 @@ using JoyLib.Code.Physics;
 using JoyLib.Code.Quests;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.States;
+using JoyLib.Code.Unity;
 using JoyLib.Code.Unity.GUI;
 using JoyLib.Code.World;
 using UnityEngine;
@@ -62,6 +63,8 @@ public class GameManager : MonoBehaviour, IGameManager
         MyGameObject = this.gameObject;
         
         Roller = new RNG();
+
+        this.PlayerInputHandler = GameObject.Find("EventSystem").GetComponent<PlayerInputHandler>();
 
         this.CombatEngine = new CombatEngine();
 
@@ -126,10 +129,7 @@ public class GameManager : MonoBehaviour, IGameManager
         
         ConversationEngine = new ConversationEngine(RelationshipHandler);
         
-        NaturalWeaponHelper = new NaturalWeaponHelper(
-            this.ObjectIconHandler, 
-            this.DerivedValueHandler, 
-            this.MaterialHandler);
+        NaturalWeaponHelper = new NaturalWeaponHelper(this.MaterialHandler, this.ItemFactory);
 
         m_StateManager = new StateManager();
 
@@ -192,6 +192,7 @@ public class GameManager : MonoBehaviour, IGameManager
     public IEntityFactory EntityFactory { get; protected set; }
     public IItemFactory ItemFactory { get; protected set; }
     public GameObject MyGameObject { get; protected set; }
+    public PlayerInputHandler PlayerInputHandler { get; protected set; }
 
     public IEntity Player { get; set; }
     

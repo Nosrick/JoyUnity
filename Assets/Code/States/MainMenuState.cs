@@ -1,6 +1,7 @@
-﻿using JoyLib.Code.IO;
+﻿using System;
+using JoyLib.Code.IO;
 using JoyLib.Code.World;
-using System;
+using UnityEngine.InputSystem;
 
 namespace JoyLib.Code.States
 {
@@ -18,7 +19,6 @@ namespace JoyLib.Code.States
 
         public override void LoadContent()
         {
-            base.LoadContent();
         }
 
         public override void SetUpUi()
@@ -26,9 +26,20 @@ namespace JoyLib.Code.States
             base.SetUpUi();
         }
 
+        public override void Start()
+        {
+        }
+
+        public override void Stop()
+        {
+        }
+
         public override void Update()
         {
-            base.Update();
+        }
+
+        public override void HandleInput(InputValue inputValue)
+        {
         }
 
         private void NewGame(object sender, EventArgs eventArgs)
