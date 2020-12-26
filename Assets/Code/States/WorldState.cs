@@ -95,7 +95,6 @@ namespace JoyLib.Code.States
             GUIManager.CloseAllOtherGUIs();
             GUIManager.OpenGUI(GUINames.NEEDSRECT);
             GUIManager.OpenGUI(GUINames.DERIVED_VALUES);
-            GUIManager.OpenGUI(GUINames.CURSOR);
 
             GUIManager.GetGUI(GUINames.INVENTORY).GetComponent<ItemContainer>().Owner = this.PlayerWorld.Player;
             GUIManager.GetGUI(GUINames.EQUIPMENT).GetComponent<ItemContainer>().Owner = this.PlayerWorld.Player;

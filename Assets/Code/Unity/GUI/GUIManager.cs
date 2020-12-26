@@ -50,15 +50,15 @@ namespace JoyLib.Code.Unity.GUI
             }
             else
             {
-                OpenGUI(name);
+                this.OpenGUI(name);
             }
         }
 
-        public void OpenGUI(string name)
+        public GUIData OpenGUI(string name)
         {
             if (ActiveGUIs.Any(widget => widget.name.Equals(name, StringComparison.OrdinalIgnoreCase)))
             {
-                return;
+                return this.ActiveGUIs.First(ui => ui.name.Equals(name, StringComparison.OrdinalIgnoreCase));
             }
 
             GUIData toOpen = GUIs.First(gui =>
@@ -75,6 +75,7 @@ namespace JoyLib.Code.Unity.GUI
 
             toOpen.Show();
             ActiveGUIs.Add(toOpen);
+            return toOpen;
         }
 
         public void CloseGUI(string activeName)

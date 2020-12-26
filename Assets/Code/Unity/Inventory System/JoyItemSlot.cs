@@ -163,8 +163,7 @@ namespace JoyLib.Code.Unity.GUI
         {
             if (this.Container.ShowTooltips && this.Item is null == false)
             {
-                GUIManager.OpenGUI(GUINames.TOOLTIP);
-                GUIManager.GetGUI(GUINames.TOOLTIP)
+                GUIManager.OpenGUI(GUINames.TOOLTIP)
                     .GetComponent<Tooltip>()
                     .Show(
                         this.Item.JoyName,
@@ -225,7 +224,8 @@ namespace JoyLib.Code.Unity.GUI
                 }
                 else
                 {
-                    GUIManager.GetGUI(GUINames.CURSOR).GetComponent<Image>().sprite = this.Item.Sprite;
+                    GUIManager.OpenGUI(GUINames.CURSOR)
+                        .GetComponent<Image>().sprite = this.Item.Sprite;
                     DragObject = new DragObject
                     {
                         Item = this.Item,
@@ -263,6 +263,7 @@ namespace JoyLib.Code.Unity.GUI
             if (DragObject.Item is null == false && this.Container.CanDrag)
             {
                 this.Container.StackOrSwap(this, DragObject.SourceSlot);
+                GUIManager.CloseGUI(GUINames.CURSOR);
             }
         }
 

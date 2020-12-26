@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2934162237568890718}
   - component: {fileID: 2934162237568890716}
   - component: {fileID: 2934162237568890717}
-  - component: {fileID: 8639739694294246677}
+  - component: {fileID: 3087105847453020188}
   m_Layer: 5
   m_Name: UICursor
   m_TagString: Untagged
@@ -108,7 +108,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &8639739694294246677
+--- !u!114 &3087105847453020188
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -117,7 +117,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2934162237568890715}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79b34202c8a849cb81a9f40db85841f1, type: 3}
+  m_Script: {fileID: 11500000, guid: 307dbd0cd6f54e84a28e850902b136f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_RemovesControl: 0
