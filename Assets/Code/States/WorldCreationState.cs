@@ -38,7 +38,6 @@ namespace JoyLib.Code.States
 
         public override void Stop()
         {
-            throw new NotImplementedException();
         }
 
         public override void LoadContent()

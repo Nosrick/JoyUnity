@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using JoyLib.Code.Entities;
+using JoyLib.Code.Entities.AI.Drivers;
 using JoyLib.Code.Entities.Statistics;
 using TMPro;
 using UnityEngine;
@@ -34,7 +35,7 @@ namespace JoyLib.Code.Unity.GUI
 
         public IEntity CreatePlayer()
         {
-            return GameManager.EntityFactory.CreateFromTemplate(
+            return this.GameManager.EntityFactory.CreateFromTemplate(
                 this.PlayerInfo.CurrentTemplate,
                 GlobalConstants.NO_TARGET,
                 this.StatisticWindow.GetStatistics(),
@@ -47,7 +48,11 @@ namespace JoyLib.Code.Unity.GUI
                 this.GameManager.SexualityHandler.Get(this.PlayerInfo.Sexuality),
                 this.GameManager.RomanceHandler.Get(this.PlayerInfo.Romance),
                 this.GameManager.JobHandler.Get(this.PlayerInfo.Job), 
-                this.GameManager.ObjectIconHandler.GetSprites(this.PlayerInfo.CurrentTemplate.CreatureType, this.PlayerInfo.Job));
+                this.GameManager.ObjectIconHandler.GetSprites(
+                    this.PlayerInfo.CurrentTemplate.CreatureType, 
+                    this.PlayerInfo.Job),
+                null,
+                new PlayerDriver());
         }
 
         protected void ChangedStatistics(object sender, EventArgs args)

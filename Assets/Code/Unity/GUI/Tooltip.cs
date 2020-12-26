@@ -17,6 +17,7 @@ namespace JoyLib.Code.Unity.GUI
         [SerializeField] protected Image m_Background;
         [SerializeField] protected StringPairContainer m_ItemPrefab;
         [SerializeField] protected LayoutGroup m_ParentLayout;
+        [SerializeField] protected Vector2 m_PositionOffset;
 
         protected Canvas Canvas { get; set; }
         protected RectTransform RectTransform { get; set; }
@@ -42,34 +43,34 @@ namespace JoyLib.Code.Unity.GUI
         protected void UpdatePosition()
         {
             Vector2 mousePosition = Mouse.current.position.ReadValue();
-            Vector2 pos;
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
                 this.Canvas.transform as RectTransform,
                 mousePosition, 
                 this.Canvas.worldCamera, 
-                out pos);
+                out Vector2 pos);
+
             
             Vector2 offset = Vector2.zero;
 
-            if (mousePosition.x < this.RectTransform.sizeDelta.x)
+            if (pos.x < this.RectTransform.sizeDelta.x)
             {
-                offset += new Vector2(this.RectTransform.sizeDelta.x * 0.5f, 0);
+                offset += new Vector2(this.RectTransform.sizeDelta.x * 0.5f, 0) + this.m_PositionOffset;
             }
             else
             {
-                offset += new Vector2(-this.RectTransform.sizeDelta.x * 0.5f, 0);
+                offset -= new Vector2(this.RectTransform.sizeDelta.x * 0.5f, 0) + this.m_PositionOffset;
             }
 
-            if (Screen.height - mousePosition.y > this.RectTransform.sizeDelta.y)
+            if (pos.y > Screen.height - this.RectTransform.sizeDelta.y)
             {
-                offset += new Vector2(0, this.RectTransform.sizeDelta.y * 0.5f);
+                offset -= new Vector2(0, this.RectTransform.sizeDelta.y * 0.5f) + this.m_PositionOffset;
             }
             else
             {
-                offset += new Vector2(0, -this.RectTransform.sizeDelta.y * 0.5f);
+                offset += new Vector2(0, this.RectTransform.sizeDelta.y * 0.5f) + this.m_PositionOffset;
             }
 
-            this.transform.position = this.Canvas.transform.TransformPoint(pos);
+            this.transform.position = this.Canvas.transform.TransformPoint(pos + offset);
         }
 
         public virtual void Show(

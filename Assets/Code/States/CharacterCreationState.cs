@@ -48,6 +48,7 @@ namespace JoyLib.Code.States
         public override GameState GetNextState()
         {
             IEntity player = this.CharacterCreationScreen.CreatePlayer();
+            player.PlayerControlled = true;
             player.AddExperience(500);
             foreach (string jobName in player.Cultures.SelectMany(culture => culture.Jobs))
             {
