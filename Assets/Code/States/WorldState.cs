@@ -359,7 +359,7 @@ namespace JoyLib.Code.States
                 if (inputAction.name.Equals("interact", StringComparison.OrdinalIgnoreCase))
                 {
                     IJoyObject joyObject = this.m_ActiveWorld.GetObject(this.m_ActiveWorld.Player.WorldPosition);
-                    if (joyObject.MonoBehaviourHandler is ItemBehaviourHandler itemBehaviourHandler)
+                    if (joyObject is null == false && joyObject.MonoBehaviourHandler is ItemBehaviourHandler itemBehaviourHandler)
                     {
                         itemBehaviourHandler.PickupItems();
                     }
@@ -558,7 +558,7 @@ namespace JoyLib.Code.States
                     }
                 }
                 
-                if (inputAction.name.Equals("open context menu", StringComparison.OrdinalIgnoreCase))
+                if (inputAction.name.Equals("right mouse", StringComparison.OrdinalIgnoreCase))
                 {
                     Vector3 temp = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
                     Vector2Int position = new Vector2Int((int) Math.Ceiling(temp.x), (int) Math.Ceiling(temp.y));

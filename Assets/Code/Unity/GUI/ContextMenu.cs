@@ -25,8 +25,11 @@ namespace JoyLib.Code.Unity.GUI
 
         public override void Show()
         {
-            this.RectTransform.position = Mouse.current.position.ReadValue();
-            base.Show ();
+            if (this.ItemCache.Any(item => item.gameObject.activeSelf))
+            {
+                this.RectTransform.position = Mouse.current.position.ReadValue();
+                base.Show();
+            }
         }
 
         public void Update()

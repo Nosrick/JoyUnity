@@ -12,7 +12,7 @@ namespace JoyLib.Code.Unity
 {
     public class ItemContainer : GUIData
     {
-        [SerializeField] protected KeyCode m_UseKey;
+        [SerializeField] protected string m_UseAction;
         [SerializeField] protected LayoutGroup m_SlotParent;
         [SerializeField] protected JoyItemSlot m_SlotPrefab;
         
@@ -38,6 +38,9 @@ namespace JoyLib.Code.Unity
         
         [SerializeField]
         protected bool m_MoveUsedItem = false;
+
+        [SerializeField] protected List<MoveContainerPriority> m_ContainerNames;
+        protected List<ItemContainer> MoveToContainers { get; set; }
         public bool MoveUsedItem => this.m_MoveUsedItem;
         
         protected List<JoyItemSlot> Slots { get; set; }
@@ -54,6 +57,8 @@ namespace JoyLib.Code.Unity
             }
         }
 
+        public string UseAction => this.m_UseAction;
+
         public List<IItemInstance> Contents
         {
             get
@@ -67,19 +72,48 @@ namespace JoyLib.Code.Unity
             }
         }
 
+        protected int ComparePriorities(Tuple<string, int> left, Tuple<string, int> right)
+        {
+            if (left.Item2 > right.Item2)
+            {
+                return 1;
+            }
+            if (left.Item2 < right.Item2)
+            {
+                return -1;
+            }
+
+            return 0;
+        }
+
         public void OnEnable()
         {
+            if (GlobalConstants.GameManager is null)
+            {
+                return;
+            }
+            if (this.Slots is null)
+            {
+                this.Slots = this.GetComponentsInChildren<JoyItemSlot>().ToList();
+            }
+            this.MoveToContainers = new List<ItemContainer>();
+            if (this.m_ContainerNames is null)
+            {
+                this.m_ContainerNames = new List<MoveContainerPriority>();
+            }
+            else
+            {
+                foreach (MoveContainerPriority priority in this.m_ContainerNames)
+                {
+                    this.MoveToContainers.Add(this.GUIManager.GetGUI(priority.m_ContainerName).GetComponent<ItemContainer>());
+                }
+            }
             if (this.Owner is null)
             {
                 this.Owner = new VirtualStorage();
             }
             if (this.Owner is IItemContainer container)
             {
-                if (this.Slots is null)
-                {
-                    this.Slots = this.GetComponentsInChildren<JoyItemSlot>().ToList();
-                }
-
                 foreach (JoyItemSlot slot in this.Slots)
                 {
                     slot.Container = this;
@@ -103,11 +137,36 @@ namespace JoyLib.Code.Unity
 
         public void RemoveAllItems()
         {
+            if (this.Slots is null)
+            {
+                return;
+            }
+            
             foreach (JoyItemSlot slot in this.Slots)
             {
                 slot.Item = null;
                 slot.Repaint();
             }
+        }
+
+        public bool MoveItem(IItemInstance item)
+        {
+            var sorted = (from priority in this.m_ContainerNames
+                orderby priority.m_Priority descending
+                select priority);
+            
+            foreach (MoveContainerPriority priority in sorted)
+            {
+                if (this.MoveToContainers
+                    .First(container => container.name.Equals(priority.m_ContainerName, StringComparison.OrdinalIgnoreCase))
+                    .StackOrAdd(item))
+                {
+                    this.RemoveItem(item);
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public List<JoyItemSlot> GetRequiredSlots(IItemInstance item, JoyItemSlot preferedSlot = null)
@@ -377,5 +436,12 @@ namespace JoyLib.Code.Unity
 
         public event ItemAddedEventHandler OnAddItem;
         public event ItemRemovedEventHandler OnRemoveItem;
+    }
+
+    [Serializable]
+    public class MoveContainerPriority
+    {
+        public string m_ContainerName;
+        public int m_Priority;
     }
 }

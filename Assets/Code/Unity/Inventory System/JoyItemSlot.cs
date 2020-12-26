@@ -14,8 +14,6 @@ namespace JoyLib.Code.Unity.GUI
     public class JoyItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerDownHandler,
         IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler
     {
-        [SerializeField] protected KeyCode m_UseKey;
-        
         [SerializeField]
         protected Image m_CooldownOverlay;
         
@@ -86,7 +84,6 @@ namespace JoyLib.Code.Unity.GUI
             {
                 return;
             }
-
             UnstackKey = InputSystem.ListEnabledActions().First(action => action.name.Equals("unstack", StringComparison.OrdinalIgnoreCase));
             ConversationEngine = GlobalConstants.GameManager.ConversationEngine;
             GUIManager = GlobalConstants.GameManager.GUIManager;
@@ -149,12 +146,17 @@ namespace JoyLib.Code.Unity.GUI
 
             if (this.Item is null == false)
             {
+                menu.Clear();
                 if (this.Item.HasTag("container"))
                 {
-                    menu.Clear();
                     menu.AddMenuItem("Open", this.OpenContainer);
-                    menu.Show();
                 }
+
+                if (this.Container.CanUseItems)
+                {
+                    menu.AddMenuItem("Use", this.OnUse);
+                }
+                menu.Show();
             }
         }
         
@@ -325,6 +327,35 @@ namespace JoyLib.Code.Unity.GUI
 
         public virtual void OnPointerDown(PointerEventData eventData)
         {
+            if (eventData.button != PointerEventData.InputButton.Right)
+            {
+                return;
+            }
+            
+            List<RaycastResult> results = new List<RaycastResult>();
+            Raycaster.Raycast(eventData, results);
+            if (results.Count > 0)
+            {
+                this.Container.MoveItem(this.Item);
+            }
+        }
+
+        public virtual void OnUse()
+        {
+            if (this.Item is null)
+            {
+                return;
+            }
+
+            if (this.Container.CanUseItems && this.Container.Owner is IEntity entity)
+            {
+                this.Item.Interact(entity);
+                this.Container.OnEnable();
+            }
+            else if (this.Container.MoveUsedItem)
+            {
+                this.Container.MoveItem(this.Item);
+            }
         }
     }
 

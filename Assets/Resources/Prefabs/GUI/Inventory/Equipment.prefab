@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4484802662267518630}
   - component: {fileID: 4484802662267518631}
   - component: {fileID: 4484802662267518624}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Equipment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -174,8 +174,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_RemovesControl: 0
   m_ClosesOthers: 0
+  m_AlwaysOpen: 0
   m_Index: 0
-  m_UseKey: 0
+  m_UseAction: 
   m_SlotParent: {fileID: 161253348}
   m_SlotPrefab: {fileID: 3635135160908564448}
   m_CanDrag: 1
@@ -184,6 +185,9 @@ MonoBehaviour:
   m_UseContextMenu: 0
   m_ShowTooltips: 1
   m_MoveUsedItem: 1
+  m_ContainerNames:
+  - m_ContainerName: Inventory
+    m_Priority: 5
 --- !u!114 &4484802662267518624
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -210,7 +214,7 @@ GameObject:
   - component: {fileID: 4484802662463132235}
   - component: {fileID: 4484802662463132245}
   - component: {fileID: 161253348}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: EquipmentSlots
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -280,7 +284,7 @@ GameObject:
   - component: {fileID: 4484802662935803597}
   - component: {fileID: 4484802662935803599}
   - component: {fileID: 4484802662935803596}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -416,7 +420,7 @@ GameObject:
   - component: {fileID: 4484802663421619783}
   - component: {fileID: 4484802664301879305}
   - component: {fileID: 4484802664301879307}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: SlotsMask
   m_TagString: Untagged
   m_Icon: {fileID: 0}

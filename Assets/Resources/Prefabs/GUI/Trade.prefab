@@ -898,15 +898,18 @@ MonoBehaviour:
   m_ClosesOthers: 0
   m_AlwaysOpen: 0
   m_Index: 0
-  m_UseKey: 0
+  m_UseAction: right mouse
   m_SlotParent: {fileID: 0}
   m_SlotPrefab: {fileID: 0}
-  m_CanDrag: 1
+  m_CanDrag: 0
   m_CanDropItems: 0
   m_CanUseItems: 0
   m_UseContextMenu: 0
   m_ShowTooltips: 1
   m_MoveUsedItem: 1
+  m_ContainerNames:
+  - m_ContainerName: Player Offering
+    m_Priority: 5
 --- !u!1 &2333912726042680041
 GameObject:
   m_ObjectHideFlags: 0
@@ -1721,15 +1724,18 @@ MonoBehaviour:
   m_ClosesOthers: 0
   m_AlwaysOpen: 0
   m_Index: 0
-  m_UseKey: 0
+  m_UseAction: right mouse
   m_SlotParent: {fileID: 0}
   m_SlotPrefab: {fileID: 0}
-  m_CanDrag: 1
+  m_CanDrag: 0
   m_CanDropItems: 0
   m_CanUseItems: 0
   m_UseContextMenu: 0
   m_ShowTooltips: 1
   m_MoveUsedItem: 1
+  m_ContainerNames:
+  - m_ContainerName: Player Window
+    m_Priority: 5
 --- !u!1 &2333912726655709343
 GameObject:
   m_ObjectHideFlags: 0
@@ -2073,15 +2079,18 @@ MonoBehaviour:
   m_ClosesOthers: 0
   m_AlwaysOpen: 0
   m_Index: 0
-  m_UseKey: 0
+  m_UseAction: right mouse
   m_SlotParent: {fileID: 0}
   m_SlotPrefab: {fileID: 0}
-  m_CanDrag: 1
+  m_CanDrag: 0
   m_CanDropItems: 0
   m_CanUseItems: 0
   m_UseContextMenu: 0
   m_ShowTooltips: 1
   m_MoveUsedItem: 1
+  m_ContainerNames:
+  - m_ContainerName: Other Window
+    m_Priority: 5
 --- !u!1 &2333912727104761477
 GameObject:
   m_ObjectHideFlags: 0
@@ -2151,15 +2160,18 @@ MonoBehaviour:
   m_ClosesOthers: 0
   m_AlwaysOpen: 0
   m_Index: 0
-  m_UseKey: 0
+  m_UseAction: right mouse
   m_SlotParent: {fileID: 0}
   m_SlotPrefab: {fileID: 0}
-  m_CanDrag: 1
+  m_CanDrag: 0
   m_CanDropItems: 0
   m_CanUseItems: 0
   m_UseContextMenu: 0
   m_ShowTooltips: 1
   m_MoveUsedItem: 1
+  m_ContainerNames:
+  - m_ContainerName: Other Offering
+    m_Priority: 5
 --- !u!222 &2333912727104761478
 CanvasRenderer:
   m_ObjectHideFlags: 0

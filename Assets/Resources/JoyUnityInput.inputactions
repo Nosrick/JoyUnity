@@ -134,7 +134,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Open Context Menu",
+                    "name": "Right Mouse",
                     "type": "Button",
                     "id": "38ce540a-5c4a-4ed5-967d-533d3a4fdb36",
                     "expectedControlType": "Button",
@@ -345,7 +345,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "Open Context Menu",
+                    "action": "Right Mouse",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
