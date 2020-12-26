@@ -358,14 +358,18 @@ namespace JoyLib.Code.States
 
                 if (inputAction.name.Equals("interact", StringComparison.OrdinalIgnoreCase))
                 {
+                    IJoyObject joyObject = this.m_ActiveWorld.GetObject(this.m_ActiveWorld.Player.WorldPosition);
+                    if (joyObject.MonoBehaviourHandler is ItemBehaviourHandler itemBehaviourHandler)
+                    {
+                        itemBehaviourHandler.PickupItems();
+                    }
                     //Going up a level
-                    if (m_ActiveWorld.Parent != null && player.WorldPosition == m_ActiveWorld.SpawnPoint &&
+                    else if (m_ActiveWorld.Parent != null && player.WorldPosition == m_ActiveWorld.SpawnPoint &&
                         !player.HasMoved)
                     {
                         ChangeWorld(m_ActiveWorld.Parent, m_ActiveWorld.GetTransitionPointForParent());
                         return;
                     }
-
                     //Going down a level
                     else if (m_ActiveWorld.Areas.ContainsKey(player.WorldPosition) && !player.HasMoved)
                     {

@@ -194,15 +194,13 @@ namespace JoyLib.Code.World
                 return false;
             }
 
-            IJoyObject seek =
-                m_Objects.First(obj => obj.WorldPosition.Equals(positionRef) && itemRef.GUID.Equals(obj.GUID));
-            removed = m_Objects.Remove(seek);
+            removed = m_Objects.Remove(itemRef);
 
             if (removed)
             {
                 IsDirty = true;
 
-                seek.MyWorld = null;
+                itemRef.MyWorld = null;
             }
 
             return removed;
