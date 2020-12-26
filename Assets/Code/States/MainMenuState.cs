@@ -54,7 +54,7 @@ namespace JoyLib.Code.States
             Done = true;
 
             IWorldInstance playerWorld = overworld.Player.MyWorld;
-            m_NextState = new WorldState(overworld, playerWorld, Gameplay.GameplayFlags.Moving);
+            m_NextState = new WorldState(overworld, playerWorld);
         }
 
         public override GameState GetNextState()

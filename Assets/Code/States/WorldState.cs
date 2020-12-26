@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using JoyLib.Code.Conversation;
@@ -11,7 +10,6 @@ using JoyLib.Code.Events;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.IO;
 using JoyLib.Code.Physics;
-using JoyLib.Code.States.Gameplay;
 using JoyLib.Code.Unity;
 using JoyLib.Code.Unity.GUI;
 using JoyLib.Code.World;
@@ -26,8 +24,6 @@ namespace JoyLib.Code.States
 
         protected IWorldInstance m_Overworld;
 
-        protected GameplayFlags m_GameplayFlags;
-
         protected Camera m_Camera;
 
         protected DateTime m_DateTime;
@@ -36,7 +32,6 @@ namespace JoyLib.Code.States
         protected double m_TickTimer;
 
         protected GameObject m_FogOfWarHolder;
-        protected GameObject m_EntitiesHolder;
 
         protected readonly WorldSerialiser m_WorldSerialiser;
 
@@ -49,17 +44,15 @@ namespace JoyLib.Code.States
 
         protected IJoyObject PrimaryTarget { get; set; }
 
-        public WorldState(IWorldInstance overworldRef, IWorldInstance activeWorldRef, GameplayFlags flagsRef) : base()
+        public WorldState(IWorldInstance overworldRef, IWorldInstance activeWorldRef) : base()
         {
             m_WorldSerialiser = new WorldSerialiser();
 
             m_ActiveWorld = activeWorldRef;
-            m_GameplayFlags = flagsRef;
             m_Overworld = overworldRef;
 
             m_Camera = GameObject.Find("Main Camera").GetComponent<Camera>();
             m_FogOfWarHolder = GameObject.Find("WorldFog");
-            m_EntitiesHolder = GameObject.Find("WorldEntities");
 
             GameManager = GlobalConstants.GameManager;
             PhysicsManager = GameManager.PhysicsManager;
@@ -106,7 +99,6 @@ namespace JoyLib.Code.States
         public override void Start()
         {
             m_ActiveWorld.Player.Tick();
-            m_GameplayFlags = GameplayFlags.Moving;
 
             SetEntityWorld(Overworld);
 
@@ -149,8 +141,7 @@ namespace JoyLib.Code.States
 
             player.Move(spawnPoint);
             player.Tick();
-
-            m_GameplayFlags = GameplayFlags.Moving;
+            
             Tick();
         }
 
@@ -387,110 +378,54 @@ namespace JoyLib.Code.States
                 //North
                 else if (inputAction.name.Equals("N", StringComparison.OrdinalIgnoreCase))
                 {
-                    if (this.m_GameplayFlags == GameplayFlags.Targeting)
-                    {
-                        player.TargetPoint = new Vector2Int(player.TargetPoint.x, player.TargetPoint.y - 1);
-                    }
-                    else
-                    {
-                        newPlayerPoint.y += 1;
+                    newPlayerPoint.y += 1;
                         hasMoved = true;
-                    }
                 }
                 //North east
                 else if (inputAction.name.Equals("NE", StringComparison.OrdinalIgnoreCase))
                 {
-                    if (m_GameplayFlags == GameplayFlags.Targeting)
-                    {
-                        player.TargetPoint = new Vector2Int(player.TargetPoint.x + 1, player.TargetPoint.y - 1);
-                    }
-                    else
-                    {
-                        newPlayerPoint.x += 1;
+                    newPlayerPoint.x += 1;
                         newPlayerPoint.y += 1;
                         hasMoved = true;
-                    }
                 }
                 //East
                 else if (inputAction.name.Equals("E", StringComparison.OrdinalIgnoreCase))
                 {
-                    if (m_GameplayFlags == GameplayFlags.Targeting)
-                    {
-                        player.TargetPoint = new Vector2Int(player.TargetPoint.x + 1, player.TargetPoint.y);
-                    }
-                    else
-                    {
-                        newPlayerPoint.x += 1;
+                    newPlayerPoint.x += 1;
                         hasMoved = true;
-                    }
                 }
                 //South east
                 else if (inputAction.name.Equals("SE", StringComparison.OrdinalIgnoreCase))
                 {
-                    if (m_GameplayFlags == GameplayFlags.Targeting)
-                    {
-                        player.TargetPoint = new Vector2Int(player.TargetPoint.x + 1, player.TargetPoint.y + 1);
-                    }
-                    else
-                    {
                         newPlayerPoint.x += 1;
                         newPlayerPoint.y -= 1;
                         hasMoved = true;
-                    }
                 }
                 //South
                 else if (inputAction.name.Equals("S", StringComparison.OrdinalIgnoreCase))
                 {
-                    if (m_GameplayFlags == GameplayFlags.Targeting)
-                    {
-                        player.TargetPoint = new Vector2Int(player.TargetPoint.x, player.TargetPoint.y + 1);
-                    }
-                    else
-                    {
                         newPlayerPoint.y -= 1;
                         hasMoved = true;
-                    }
                 }
                 //South west
                 else if (inputAction.name.Equals("SW", StringComparison.OrdinalIgnoreCase))
                 {
-                    if (m_GameplayFlags == GameplayFlags.Targeting)
-                    {
-                        player.TargetPoint = new Vector2Int(player.TargetPoint.x - 1, player.TargetPoint.y + 1);
-                    }
-                    else
-                    {
                         newPlayerPoint.x -= 1;
                         newPlayerPoint.y -= 1;
                         hasMoved = true;
-                    }
                 }
                 //West
                 else if (inputAction.name.Equals("W", StringComparison.OrdinalIgnoreCase))
                 {
-                    if (m_GameplayFlags == GameplayFlags.Targeting)
-                    {
-                        player.TargetPoint = new Vector2Int(player.TargetPoint.x - 1, player.TargetPoint.y);
-                    }
-                    else
-                    {
                         newPlayerPoint.x -= 1;
                         hasMoved = true;
-                    }
                 }
                 //North west
                 else if (inputAction.name.Equals("NW", StringComparison.OrdinalIgnoreCase))
                 {
-                    if (m_GameplayFlags == GameplayFlags.Targeting)
-                    {
-                        player.TargetPoint = new Vector2Int(player.TargetPoint.x - 1, player.TargetPoint.y - 1);
-                    }
-                    else
-                    {
-                        newPlayerPoint.x -= 1;
-                        newPlayerPoint.y += 1;
-                        hasMoved = true;
-                    }
+                    newPlayerPoint.x -= 1;
+                    newPlayerPoint.y += 1;
+                    hasMoved = true;
                 }
 
                 if (hasMoved)
@@ -501,14 +436,17 @@ namespace JoyLib.Code.States
                     if (physicsResult == PhysicsResult.EntityCollision)
                     {
                         IEntity tempEntity = m_ActiveWorld.GetEntity(newPlayerPoint);
+                        PlayerWorld.SwapPosition(player, tempEntity);
+                        Tick();
+                        
+                        /*
                         if (m_GameplayFlags == GameplayFlags.Interacting)
                         { }
                         else if (m_GameplayFlags == GameplayFlags.Giving)
                         { }
                         else if (m_GameplayFlags == GameplayFlags.Moving)
                         {
-                            PlayerWorld.SwapPosition(player, tempEntity);
-                            Tick();
+                            
                         }
                         else if (m_GameplayFlags == GameplayFlags.Attacking)
                         {
@@ -540,8 +478,7 @@ namespace JoyLib.Code.States
                                 }
                             }
                         }
-
-                        Tick();
+                        */
                     }
                     else if (physicsResult == PhysicsResult.WallCollision)
                     {
@@ -642,8 +579,7 @@ namespace JoyLib.Code.States
 
         protected void DrawTargetCursor()
         {
-            if (m_GameplayFlags != GameplayFlags.Targeting)
-                return;
+            
         }
 
         protected void DrawTiles()

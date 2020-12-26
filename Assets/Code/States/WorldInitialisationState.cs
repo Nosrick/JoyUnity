@@ -169,7 +169,7 @@ namespace JoyLib.Code.States
 
         public override GameState GetNextState()
         {
-            return new WorldState(m_Overworld, m_ActiveWorld, Gameplay.GameplayFlags.Moving);
+            return new WorldState(m_Overworld, m_ActiveWorld);
         }
     }
 }
