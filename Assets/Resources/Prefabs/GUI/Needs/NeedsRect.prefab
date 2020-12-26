@@ -107,6 +107,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_RemovesControl: 0
   m_ClosesOthers: 0
+  m_AlwaysOpen: 1
   m_Index: 0
   m_Text: {fileID: 605077352051847497}
 --- !u!1 &605077351876519291

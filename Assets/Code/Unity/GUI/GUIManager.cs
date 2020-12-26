@@ -87,6 +87,11 @@ namespace JoyLib.Code.Unity.GUI
             GUIData toClose = ActiveGUIs
                 .First(gui => gui.name.Equals(activeName, StringComparison.OrdinalIgnoreCase));
 
+            if (toClose.m_AlwaysOpen)
+            {
+                return;
+            }
+            
             toClose.Close();
             ActiveGUIs.Remove(toClose);
         }
@@ -99,6 +104,12 @@ namespace JoyLib.Code.Unity.GUI
             }
 
             GUIData toClose = ActiveGUIs.First(data => data.name.Equals(name, StringComparison.OrdinalIgnoreCase));
+
+            if (toClose.m_AlwaysOpen)
+            {
+                return false;
+            }
+            
             toClose.Close();
             return ActiveGUIs.Remove(toClose);
         }
@@ -131,6 +142,10 @@ namespace JoyLib.Code.Unity.GUI
 
             foreach (GUIData data in toClose)
             {
+                if (data.m_AlwaysOpen)
+                {
+                    continue;
+                }
                 ActiveGUIs.Remove(data);
                 data.Close();
             }

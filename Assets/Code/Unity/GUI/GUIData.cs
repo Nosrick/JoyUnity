@@ -31,6 +31,8 @@ namespace JoyLib.Code.Unity.GUI
 
         public bool m_ClosesOthers;
 
+        public bool m_AlwaysOpen;
+
         public int m_Index;
     }
 }

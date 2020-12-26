@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public class EquipmentHandler : GUIData
+    public class EquipmentHandler : MonoBehaviour
     {
         private IEntity m_Player;
 

@@ -212,14 +212,9 @@ namespace JoyLib.Code.Unity
                 bool result = false;
                 if (this.Owner is IItemContainer container)
                 {
-                    result = container.CanAddContents(instance) | container.Contains(instance);
-                    if (result)
+                    if(container.CanAddContents(instance) | container.Contains(instance))
                     {
                         result &= container.AddContents(instance);
-                    }
-
-                    if (result)
-                    {
                         slot.Item = instance;
                         this.OnAddItem?.Invoke(container, new ItemChangedEventArgs() { Item = item });
                     }
@@ -313,7 +308,7 @@ namespace JoyLib.Code.Unity
                 bool result = false;
                 if (this.Owner is IItemContainer container)
                 {
-                    if (container.Contains(item) == false || this.Slots.Any(slot => slot.Item.GUID == item.GUID) == false)
+                    if (container.Contains(item) == false || this.Slots.Any(slot => !(slot.Item is null) && slot.Item.GUID == item.GUID) == false)
                     {
                         return result;
                     }
@@ -322,7 +317,7 @@ namespace JoyLib.Code.Unity
                 
                     if (result)
                     {
-                        this.Slots.First(slot => slot.Item.GUID == item.GUID).Item = null;
+                        this.Slots.First(slot => !(slot.Item is null) && slot.Item.GUID == item.GUID).Item = null;
                         this.OnRemoveItem?.Invoke(container, new ItemChangedEventArgs() { Item = item });
                     }
                 }

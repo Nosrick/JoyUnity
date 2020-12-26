@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 8862829972381363168}
   - component: {fileID: 8862829972381363169}
   - component: {fileID: 1208727482}
-  - component: {fileID: 2474087473471282966}
   - component: {fileID: 718918997}
   m_Layer: 0
   m_Name: Quest Journal
@@ -97,21 +96,6 @@ MonoBehaviour:
   m_Index: 0
   MenuItemPrefab: {fileID: 2363985745292612440}
   MenuContainer: {fileID: 8862829973209153596}
---- !u!114 &2474087473471282966
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8862829972381363171}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79b34202c8a849cb81a9f40db85841f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_RemovesControl: 1
-  m_ClosesOthers: 0
-  m_Index: 0
 --- !u!225 &718918997
 CanvasGroup:
   m_ObjectHideFlags: 0
