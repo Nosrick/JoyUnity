@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code.Conversation;
 using JoyLib.Code.Entities;
@@ -65,10 +66,18 @@ namespace JoyLib.Code.Unity.GUI
         protected static IEntity Player { get; set; }
         
         protected static DragObject DragObject { get; set; }
+        
+        protected static GraphicRaycaster Raycaster { get; set; }
 
         public void OnEnable()
         {
             this.GetBits();
+            this.m_CooldownOverlay.gameObject.SetActive(false);
+
+            if (Raycaster is null)
+            {
+                Raycaster = this.GetComponentInParent<GraphicRaycaster>();
+            }
         }
 
         protected void GetBits()
@@ -197,7 +206,7 @@ namespace JoyLib.Code.Unity.GUI
             this.GetBits();
 
             //Check if the item is droppable
-            if (this.Item is null == false)
+            if (this.Item is null == false && this.Container.CanDropItems)
             {
                 if (this.Item.MonoBehaviourHandler is ItemBehaviourHandler itemBehaviourHandler)
                 {
@@ -205,6 +214,7 @@ namespace JoyLib.Code.Unity.GUI
                 }
 
                 this.Container.RemoveItem(this.Item);
+                this.Item = null;
             }
         }
 
@@ -242,29 +252,47 @@ namespace JoyLib.Code.Unity.GUI
 
         public virtual void OnEndDrag(PointerEventData eventData)
         {
-            RaycastHit hit;
-            if (UnityEngine.Physics.Raycast(Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue()), 100.0f, LayerMask.GetMask("UI")) == false)
+            List<RaycastResult> results = new List<RaycastResult>();
+            Raycaster.Raycast(eventData, results);
+            if (results.Count > 0)
+            {
+                foreach (RaycastResult result in results)
+                {
+                    ItemContainer target = result.gameObject.GetComponent<ItemContainer>();
+                    if (target is null)
+                    {
+                        continue;
+                    }
+                    
+                    if (target != this.Container && this.Container.CanDrag && target.CanDrag)
+                    {
+                        this.Container.RemoveItem(this.Item);
+                        //target.StackOrAdd(this.Item);
+                        break;
+                    }
+                }
+            }
+            else
             {
                 if (this.Container.CanDropItems)
                 {
                     this.DropItem();
                 }
-                else if (this.Container.CanDrag)
-                {
-                    this.Container.RemoveItem(this.Item);
-                }
             }
+            GUIManager.CloseGUI(GUINames.CURSOR);
             //Repaint the slot
             this.Repaint();
         }
 
         public virtual void OnDrop(PointerEventData eventData)
         {
-            if (DragObject.Item is null == false && this.Container.CanDrag)
+            if (DragObject.SourceContainer != this.Container 
+                && DragObject.Item is null == false 
+                && this.Container.CanDrag)
             {
                 this.Container.StackOrSwap(this, DragObject.SourceSlot);
-                GUIManager.CloseGUI(GUINames.CURSOR);
             }
+            GUIManager.CloseGUI(GUINames.CURSOR);
         }
 
         public virtual void OnPointerDown(PointerEventData eventData)

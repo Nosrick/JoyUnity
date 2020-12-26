@@ -122,5 +122,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_RemovesControl: 0
   m_ClosesOthers: 0
-  m_AlwaysOpen: 1
+  m_AlwaysOpen: 0
   m_Index: 0

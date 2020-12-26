@@ -4593,10 +4593,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreReversedGraphics: 1
-  m_BlockingObjects: 0
+  m_BlockingObjects: 3
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
 --- !u!1 &1310051279
 GameObject:
   m_ObjectHideFlags: 0
@@ -6942,6 +6942,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1293420870}
     m_Modifications:
+    - target: {fileID: 2333912726033209119, guid: cb47d4ae3794a5d459854e271187b17f,
+        type: 3}
+      propertyPath: m_CanDrag
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2333912726177758946, guid: cb47d4ae3794a5d459854e271187b17f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7051,6 +7056,31 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Trade
+      objectReference: {fileID: 0}
+    - target: {fileID: 2333912726576562482, guid: cb47d4ae3794a5d459854e271187b17f,
+        type: 3}
+      propertyPath: m_CanDrag
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2333912726576562482, guid: cb47d4ae3794a5d459854e271187b17f,
+        type: 3}
+      propertyPath: m_ShowTooltips
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2333912726850887790, guid: cb47d4ae3794a5d459854e271187b17f,
+        type: 3}
+      propertyPath: m_CanDrag
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2333912726850887790, guid: cb47d4ae3794a5d459854e271187b17f,
+        type: 3}
+      propertyPath: m_ShowTooltips
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2333912727104761473, guid: cb47d4ae3794a5d459854e271187b17f,
+        type: 3}
+      propertyPath: m_CanDrag
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6272285419930031125, guid: cb47d4ae3794a5d459854e271187b17f,
         type: 3}
@@ -13795,11 +13825,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7087841497910087752, guid: 9c35b03af1fc36949a51da64477b007f,
-        type: 3}
-      propertyPath: m_fontSize
-      value: 40.45
       objectReference: {fileID: 0}
     - target: {fileID: 7087841497910087753, guid: 9c35b03af1fc36949a51da64477b007f,
         type: 3}

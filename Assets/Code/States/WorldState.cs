@@ -333,7 +333,6 @@ namespace JoyLib.Code.States
                 {
                     this.GUIManager.CloseAllOtherGUIs(GUINames.NEEDSRECT);
                     this.GUIManager.OpenGUI(GUINames.DERIVED_VALUES);
-                    this.GUIManager.OpenGUI(GUINames.CURSOR);
                 }
 
                 if (inputAction.name.Equals("toggle inventory", StringComparison.OrdinalIgnoreCase))

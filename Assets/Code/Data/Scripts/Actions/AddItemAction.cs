@@ -28,7 +28,7 @@ namespace JoyLib.Code.Scripting.Actions
             bool newOwner = args.Length > 0 && (bool)args[0];
 
             bool result = true;
-            if (newOwner && container is Entity owner)
+            if (newOwner && container is IEntity owner)
             {
                 if (tags is null == false 
                     && (tags.Any(tag => tag.Equals("theft", StringComparison.OrdinalIgnoreCase)) 
@@ -39,7 +39,7 @@ namespace JoyLib.Code.Scripting.Actions
                 }
             }
 
-            result &= item.MyWorld is null ? true : item.MyWorld.RemoveObject(item.WorldPosition, item);
+            result &= item.MyWorld?.RemoveObject(item.WorldPosition, item) ?? true;
             SetLastParameters(participants, tags, args);
 
             return result && container.AddContents(item);

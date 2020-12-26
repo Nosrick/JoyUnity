@@ -305,13 +305,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_RemovesControl: 0
   m_ClosesOthers: 0
+  m_AlwaysOpen: 0
   m_Index: 0
   m_UseKey: 0
   m_SlotParent: {fileID: 0}
   m_SlotPrefab: {fileID: 0}
   m_CanDrag: 1
-  m_CanDropItems: 0
-  m_CanUseItems: 0
+  m_CanDropItems: 1
+  m_CanUseItems: 1
   m_UseContextMenu: 1
   m_ShowTooltips: 1
   m_MoveUsedItem: 1

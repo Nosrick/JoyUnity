@@ -62,6 +62,7 @@ namespace JoyLib.Code.Unity
                     new IJoyObject[] {this.EntityInRange, item},
                     new string[] {"pickup"},
                     new object[] {true});
+                this.gameObject.SetActive(false);
             }
 
             return result;
@@ -79,6 +80,7 @@ namespace JoyLib.Code.Unity
                 placeInWorldAction.Execute(
                     new IJoyObject[] {dropper, itemInstance},
                     new string[] { "drop" });
+                this.gameObject.SetActive(true);
             }
         }
 
