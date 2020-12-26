@@ -607,7 +607,11 @@ namespace JoyLib.Code.Entities.Items
 
         public void Clear()
         {
-            m_Contents.Clear();
+            List<IItemInstance> copy = new List<IItemInstance>(this.Contents);
+            foreach (IItemInstance item in copy)
+            {
+                this.RemoveContents(item);
+            }
             CalculateValue();
             ConstructDescription();
         }

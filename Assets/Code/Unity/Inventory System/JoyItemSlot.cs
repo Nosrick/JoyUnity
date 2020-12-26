@@ -253,7 +253,11 @@ namespace JoyLib.Code.Unity.GUI
         public virtual void OnEndDrag(PointerEventData eventData)
         {
             List<RaycastResult> results = new List<RaycastResult>();
-            Raycaster.Raycast(eventData, results);
+            RaycastResult result = eventData.pointerCurrentRaycast;
+            EventSystem eventSystem = EventSystem.current;
+            eventSystem.RaycastAll(eventData, results);
+            //Raycaster.Raycast(eventData, results);
+            /*
             if (results.Count > 0)
             {
                 foreach (RaycastResult result in results)
@@ -270,6 +274,30 @@ namespace JoyLib.Code.Unity.GUI
                         //target.StackOrAdd(this.Item);
                         break;
                     }
+                }
+            }
+            */
+            
+            //TODO: Fix this hack, it's temporary while I figure out why the sub-containers aren't being hit by raycasts.
+            ItemContainer container = result.gameObject.GetComponent<ItemContainer>();
+            JoyItemSlot slot = result.gameObject.GetComponent<JoyItemSlot>();
+
+            if (container is null == false)
+            {
+                if (container != this.Container
+                    && this.Container.CanDrag
+                    && container.CanDrag)
+                {
+                    this.Container.RemoveItem(this.Item);
+                }
+            }
+            else if (slot is null == false)
+            {
+                if (slot.Container != this.Container
+                    && this.Container.CanDrag
+                    && slot.Container.CanDrag)
+                {
+                    this.Container.RemoveItem(this.Item);
                 }
             }
             else

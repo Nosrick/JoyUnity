@@ -20,11 +20,27 @@ namespace JoyLib.Code.Unity.GUI
         public virtual void Show()
         {
             this.gameObject.SetActive(true);
+            GUIData[] children = this.gameObject.GetComponentsInChildren<GUIData>(true);
+            foreach (GUIData child in children)
+            {
+                if (child.Equals(this) == false)
+                {
+                    child.Show();
+                }
+            }
         }
 
         public virtual void Close()
         {
             this.gameObject.SetActive(false);
+            GUIData[] children = this.gameObject.GetComponentsInChildren<GUIData>(true);
+            foreach (GUIData child in children)
+            {
+                if (child.Equals(this) == false)
+                {
+                    child.Close();
+                }
+            }
         }
 
         public bool m_RemovesControl;

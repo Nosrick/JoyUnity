@@ -42,7 +42,17 @@ namespace JoyLib.Code.Unity
         
         protected List<JoyItemSlot> Slots { get; set; }
 
-        public IJoyObject Owner { get; set; }
+        protected IJoyObject m_Owner;
+
+        public IJoyObject Owner
+        {
+            get => this.m_Owner;
+            set
+            {
+                this.m_Owner = value;
+                this.OnEnable();
+            }
+        }
 
         public List<IItemInstance> Contents
         {
@@ -61,7 +71,7 @@ namespace JoyLib.Code.Unity
         {
             if (this.Owner is null)
             {
-                return;
+                this.Owner = new VirtualStorage();
             }
             if (this.Owner is IItemContainer container)
             {
@@ -96,6 +106,7 @@ namespace JoyLib.Code.Unity
             foreach (JoyItemSlot slot in this.Slots)
             {
                 slot.Item = null;
+                slot.Repaint();
             }
         }
 

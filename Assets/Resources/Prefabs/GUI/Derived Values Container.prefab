@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 2906199194861797134}
   - component: {fileID: 2906199194861797129}
   - component: {fileID: 2906199194861797128}
-  - component: {fileID: 2906199194861797135}
   - component: {fileID: 2906199194861797130}
   m_Layer: 0
   m_Name: Derived Values Container
@@ -69,22 +68,6 @@ MonoBehaviour:
   m_Index: 0
   DerivedValuePrefab: {fileID: 0}
   GameManager: {fileID: 0}
---- !u!114 &2906199194861797135
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2906199194861797133}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79b34202c8a849cb81a9f40db85841f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_RemovesControl: 0
-  m_ClosesOthers: 0
-  m_AlwaysOpen: 1
-  m_Index: 0
 --- !u!114 &2906199194861797130
 MonoBehaviour:
   m_ObjectHideFlags: 0

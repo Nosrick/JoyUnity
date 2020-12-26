@@ -366,7 +366,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0.38431373}
   m_RaycastTarget: 1
-  m_Maskable: 1
+  m_Maskable: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -443,4 +443,3 @@ MonoBehaviour:
   m_Icon: {fileID: 8604156885990248955}
   m_Stack: {fileID: 8604156884670249676}
   m_Slot: 
-  m_Name: 

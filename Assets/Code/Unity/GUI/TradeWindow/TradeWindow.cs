@@ -15,10 +15,8 @@ namespace JoyLib.Code.Unity.GUI
         public IEntity Left { get; protected set; }
         public IEntity Right { get; protected set; }
 
-        [SerializeField]
-        protected TextMeshProUGUI LeftValue;
-        [SerializeField]
-        protected TextMeshProUGUI RightValue;
+        [SerializeField] protected TextMeshProUGUI LeftValue;
+        [SerializeField] protected TextMeshProUGUI RightValue;
 
         [SerializeField] protected TextMeshProUGUI RightName;
 
@@ -29,7 +27,7 @@ namespace JoyLib.Code.Unity.GUI
         [SerializeField] protected ItemContainer RightOffering;
 
         public static IEntityRelationshipHandler RelationshipHandler { get; set; }
-        
+
         protected RectTransform RectTransform { get; set; }
 
         public override void Awake()
@@ -42,11 +40,29 @@ namespace JoyLib.Code.Unity.GUI
 
             this.RightOffering.OnAddItem -= this.Tally;
             this.RightOffering.OnRemoveItem -= this.Tally;
-            
+
             this.LeftOffering.OnAddItem += Tally;
             this.LeftOffering.OnRemoveItem += Tally;
             this.RightOffering.OnAddItem += Tally;
             this.RightOffering.OnRemoveItem += Tally;
+        }
+
+        public override void Close()
+        {
+            base.Close();
+            foreach (IItemInstance item in this.LeftOffering.Contents)
+            {
+                this.LeftInventory.StackOrAdd(item);
+            }
+
+            this.LeftOffering.RemoveAllItems();
+
+            foreach (IItemInstance item in this.RightOffering.Contents)
+            {
+                this.RightOffering.StackOrAdd(item);
+            }
+
+            this.RightOffering.RemoveAllItems();
         }
 
         public void SetActors(IEntity left, IEntity right)
@@ -55,12 +71,14 @@ namespace JoyLib.Code.Unity.GUI
             this.Right = right;
 
             this.LeftInventory.Owner = this.Left;
-            this.LeftOffering.Owner = this.Left;
+            this.LeftOffering.Owner = new VirtualStorage();
 
             this.RightInventory.Owner = this.Right;
-            this.RightOffering.Owner = this.Right;
+            this.RightOffering.Owner = new VirtualStorage();
 
-            this.RightName.text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(this.Right.Gender.PersonalSubject) + " " + this.Right.Gender.IsOrAre + " offering";
+            this.RightName.text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(this.Right.Gender.PersonalSubject) +
+                                  " " + this.Right.Gender.IsOrAre + " offering";
+            
             LayoutRebuilder.ForceRebuildLayoutImmediate(this.RectTransform);
         }
 
@@ -68,7 +86,7 @@ namespace JoyLib.Code.Unity.GUI
         {
             int leftValue = 0;
             int rightValue = 0;
-            
+
             foreach (IItemInstance item in LeftOffering.Contents)
             {
                 leftValue += item.Value;
@@ -86,43 +104,45 @@ namespace JoyLib.Code.Unity.GUI
                 return false;
             }
 
-            if (leftValue + relationshipValue >= rightValue)
+            if (!(leftValue + relationshipValue >= rightValue))
             {
-                int difference = leftValue - rightValue;
-
-                IEnumerable<IRelationship> relationships = RelationshipHandler?.Get(new IJoyObject[] { Left, Right });
-                foreach (IRelationship relationship in relationships)
-                {
-                    relationship.ModifyValueOfParticipant(Left.GUID, Right.GUID, difference);
-                }
-
-                foreach(IItemInstance item in this.LeftOffering.Contents)
-                {
-                    LeftOffering.RemoveItem(item);
-                    Left.RemoveContents(item);
-                    Right.AddContents(item);
-                }
-
-                foreach(IItemInstance item in this.RightOffering.Contents)
-                {
-                    RightOffering.RemoveItem(item);
-                    Right.RemoveContents(item);
-                    Left.AddContents(item);
-                }
-                
-                SetActors(Left, Right);
-
-                return true;
+                return false;
             }
 
-            return false;
+            int difference = leftValue - rightValue;
+
+            IEnumerable<IRelationship> relationships =
+                RelationshipHandler?.Get(new IJoyObject[] {this.Left, this.Right});
+            foreach (IRelationship relationship in relationships)
+            {
+                relationship.ModifyValueOfParticipant(this.Left.GUID, this.Right.GUID, difference);
+            }
+
+            foreach (IItemInstance item in this.LeftOffering.Contents)
+            {
+                this.Right.AddContents(item);
+            }
+
+            this.LeftOffering.RemoveAllItems();
+
+            foreach (IItemInstance item in this.RightOffering.Contents)
+            {
+                this.Left.AddContents(item);
+            }
+
+            this.RightOffering.RemoveAllItems();
+
+            this.SetActors(this.Left, this.Right);
+            this.Tally();
+
+            return true;
         }
 
-        protected void Tally(IItemContainer container, ItemChangedEventArgs args)
+        protected void Tally()
         {
             int leftValue = 0;
             int rightValue = 0;
-            
+
             foreach (IItemInstance item in this.LeftOffering.Contents)
             {
                 leftValue += item.Value;
@@ -134,7 +154,13 @@ namespace JoyLib.Code.Unity.GUI
             }
 
             this.LeftValue.text = "Your value: " + leftValue;
-            this.RightValue.text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Right.Gender.Possessive) + " value: " + rightValue;
+            this.RightValue.text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Right.Gender.Possessive) +
+                                   " value: " + rightValue;
+        }
+
+        protected void Tally(IItemContainer container, ItemChangedEventArgs args)
+        {
+            this.Tally();
         }
     }
 }
