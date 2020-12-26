@@ -37,7 +37,7 @@ namespace JoyLib.Code.States
             GUIManager.OpenGUI(GUINames.CHARACTER_CREATION_PART_1);
         }
 
-        public override void HandleInput(InputValue inputValue)
+        public override void HandleInput(object data, InputActionChange action)
         {
         }
 

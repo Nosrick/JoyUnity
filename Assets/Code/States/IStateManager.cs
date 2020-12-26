@@ -10,6 +10,6 @@ namespace Joy.Code.Managers
         void Start();
         void Update();
         void NextState();
-        void OnMove(InputValue inputValue);
+        void OnMove(object data, InputActionChange change);
     }
 }

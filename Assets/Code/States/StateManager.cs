@@ -10,6 +10,9 @@ namespace Joy.Code.Managers
         public StateManager()
         {
             m_ActiveState = new MainMenuState();
+
+            InputSystem.onActionChange -= this.OnMove;
+            InputSystem.onActionChange += this.OnMove;
         }
 
         public void ChangeState(IGameState newState)
@@ -41,9 +44,9 @@ namespace Joy.Code.Managers
             }
         }
 
-        public void OnMove(InputValue inputValue)
+        public void OnMove(object data, InputActionChange change)
         {
-            this.m_ActiveState.HandleInput(inputValue);
+            this.m_ActiveState.HandleInput(data, change);
         }
 
         public void NextState()

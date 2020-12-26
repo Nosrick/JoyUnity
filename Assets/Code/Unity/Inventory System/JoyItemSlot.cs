@@ -1,4 +1,6 @@
-﻿using JoyLib.Code.Conversation;
+﻿using System;
+using System.Linq;
+using JoyLib.Code.Conversation;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
 using UnityEngine;
@@ -52,6 +54,8 @@ namespace JoyLib.Code.Unity.GUI
 
         public bool IsEmpty => this.Item is null;
         
+        protected static InputAction UnstackKey { get; set; }
+        
         public static IConversationEngine ConversationEngine { get; set; }
 
         public static IGUIManager GUIManager { get; set; }
@@ -60,11 +64,9 @@ namespace JoyLib.Code.Unity.GUI
 
         protected static IEntity Player { get; set; }
         
-        protected static PlayerInputHandler PlayerInputHandler { get; set; }
-        
         protected static DragObject DragObject { get; set; }
 
-        public void Awake()
+        public void OnEnable()
         {
             this.GetBits();
         }
@@ -76,7 +78,7 @@ namespace JoyLib.Code.Unity.GUI
                 return;
             }
 
-            PlayerInputHandler = GlobalConstants.GameManager.PlayerInputHandler;
+            UnstackKey = InputSystem.ListEnabledActions().First(action => action.name.Equals("unstack", StringComparison.OrdinalIgnoreCase));
             ConversationEngine = GlobalConstants.GameManager.ConversationEngine;
             GUIManager = GlobalConstants.GameManager.GUIManager;
             EntityHandler = GlobalConstants.GameManager.EntityHandler;
@@ -123,7 +125,7 @@ namespace JoyLib.Code.Unity.GUI
 
         public virtual void OnPointerUp(PointerEventData eventData)
         {
-            if (eventData.dragging)
+            if (eventData.dragging || eventData.button != PointerEventData.InputButton.Right)
             {
                 return;
             }
@@ -140,6 +142,7 @@ namespace JoyLib.Code.Unity.GUI
             {
                 if (this.Item.HasTag("container"))
                 {
+                    menu.Clear();
                     menu.AddMenuItem("Open", this.OpenContainer);
                     menu.Show();
                 }
@@ -160,6 +163,7 @@ namespace JoyLib.Code.Unity.GUI
         {
             if (this.Container.ShowTooltips && this.Item is null == false)
             {
+                GUIManager.OpenGUI(GUINames.TOOLTIP);
                 GUIManager.GetGUI(GUINames.TOOLTIP)
                     .GetComponent<Tooltip>()
                     .Show(
@@ -185,11 +189,7 @@ namespace JoyLib.Code.Unity.GUI
                 ItemContainer container = GUIManager?.GetGUI(GUINames.INVENTORY_CONTAINER)
                     .GetComponent<ItemContainer>();
                 container.Owner = this.Item;
-                container.RemoveAllItems();
-                foreach (IItemInstance content in this.Item.Contents)
-                {
-                    container.StackOrAdd(content);
-                }
+                container.OnEnable();
             }
         }
 
@@ -219,7 +219,7 @@ namespace JoyLib.Code.Unity.GUI
             //Check if we can start dragging
             if (this.Item is null == false && this.Container.CanDrag)
             {
-                if (Keyboard.current.shiftKey.isPressed)
+                if (UnstackKey.triggered)
                 {
                     this.Unstack();
                 }
@@ -243,7 +243,7 @@ namespace JoyLib.Code.Unity.GUI
         public virtual void OnEndDrag(PointerEventData eventData)
         {
             RaycastHit hit;
-            if (UnityEngine.Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), 100.0f, LayerMask.GetMask("UI")) == false)
+            if (UnityEngine.Physics.Raycast(Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue()), 100.0f, LayerMask.GetMask("UI")) == false)
             {
                 if (this.Container.CanDropItems)
                 {

@@ -13,7 +13,6 @@ namespace JoyLib.Code.Unity
     public class ItemContainer : GUIData
     {
         [SerializeField] protected KeyCode m_UseKey;
-        [SerializeField] protected bool m_ClearAndFillOnEnable = false;
         [SerializeField] protected LayoutGroup m_SlotParent;
         [SerializeField] protected JoyItemSlot m_SlotPrefab;
         
@@ -60,13 +59,16 @@ namespace JoyLib.Code.Unity
 
         public void OnEnable()
         {
-            if (this.Owner is null || this.m_ClearAndFillOnEnable == false)
+            if (this.Owner is null)
             {
                 return;
             }
             if (this.Owner is IItemContainer container)
             {
-                this.Slots = this.GetComponentsInChildren<JoyItemSlot>().ToList();
+                if (this.Slots is null)
+                {
+                    this.Slots = this.GetComponentsInChildren<JoyItemSlot>().ToList();
+                }
 
                 if (this.Slots.Count < container.Contents.Count)
                 {
@@ -74,6 +76,11 @@ namespace JoyLib.Code.Unity
                     {
                         this.Slots.Add(Instantiate(this.m_SlotPrefab, this.m_SlotParent.transform, false).GetComponent<JoyItemSlot>());
                     }
+                }
+
+                foreach (JoyItemSlot slot in this.Slots)
+                {
+                    slot.Container = this;
                 }
                 
                 for(int i = 0; i < container.Contents.Count; i++)

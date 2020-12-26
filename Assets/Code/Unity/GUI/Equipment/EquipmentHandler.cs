@@ -24,7 +24,10 @@ namespace JoyLib.Code.Unity.GUI
 
         protected virtual void CalculateSlots(bool clearSlots = false)
         {
-            this.m_EquipmentContainer.RemoveAllSlots();
+            if (clearSlots)
+            {
+                this.m_EquipmentContainer.RemoveAllSlots();
+            }
             
             List<string> slots = this.m_Player.Slots;
             

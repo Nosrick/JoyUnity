@@ -31,7 +31,7 @@ namespace JoyLib.Code.Unity.GUI
 
         public void OnPointerClick (PointerEventData eventData)
         {
-            if (!this.IsActive() || !this.IsInteractable())
+            if (!this.IsActive() || !this.IsInteractable() || eventData.button != PointerEventData.InputButton.Left)
             {
                 return;
             }

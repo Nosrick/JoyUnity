@@ -287,9 +287,9 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9212209383375231398}
   m_Enabled: 1
-  m_Alpha: 0
-  m_Interactable: 0
-  m_BlocksRaycasts: 0
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
 --- !u!114 &9212209383375231421
 MonoBehaviour:
@@ -306,7 +306,7 @@ MonoBehaviour:
   m_RemovesControl: 0
   m_ClosesOthers: 0
   m_Index: 0
-  m_MenuItemPrefab: {fileID: 0}
+  m_MenuItemPrefab: {fileID: 9212209383858053046}
 --- !u!114 &9212209383375231418
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -12,7 +12,7 @@ namespace JoyLib.Code.States
         void Start();
         void Stop();
         void Update();
-        void HandleInput(InputValue inputValue);
+        void HandleInput(object data, InputActionChange change);
         GameState GetNextState();
     }
 }

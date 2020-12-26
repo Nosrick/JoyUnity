@@ -19,13 +19,13 @@ namespace JoyLib.Code.Unity.GUI
             if (this.RectTransform is null)
             {
                 this.RectTransform = this.GetComponent<RectTransform>();
+                this.ItemCache = new List<MenuItem>();
             }
         }
 
         public override void Show()
         {
-            base.Show();
-            this.RectTransform.position = Input.mousePosition;
+            this.RectTransform.position = Mouse.current.position.ReadValue();
             base.Show ();
         }
 
@@ -48,7 +48,7 @@ namespace JoyLib.Code.Unity.GUI
                     }
                 }
 
-                this.Close ();
+                //this.Close ();
             }
         }
 
@@ -62,14 +62,17 @@ namespace JoyLib.Code.Unity.GUI
 
         public virtual MenuItem AddMenuItem (string text, UnityAction used)
         {
-            MenuItem item = this.ItemCache.First(x => !x.gameObject.activeSelf);
-
-            if (item is null) 
+            MenuItem item = null;
+            if (this.ItemCache.All(x => x.gameObject.activeSelf))
             {
-                Debug.Log(text);
-                item = Instantiate(this.m_MenuItemPrefab) as MenuItem;
+                item = Instantiate(this.m_MenuItemPrefab);
                 this.ItemCache.Add(item);
             }
+            else
+            {
+                item = this.ItemCache.First(x => !x.gameObject.activeSelf);
+            }
+
             item.Text.text = text;
             item.Trigger.RemoveAllListeners();
             item.gameObject.SetActive(true);

@@ -32,7 +32,7 @@ namespace JoyLib.Code.States
         //ALWAYS call base.Update() from derived classes
         public abstract void Update();
 
-        public abstract void HandleInput(InputValue inputValue);
+        public abstract void HandleInput(object data, InputActionChange action);
 
         public abstract GameState GetNextState();
 

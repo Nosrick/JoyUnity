@@ -161,7 +161,7 @@ namespace JoyLib.Code.States
         {
         }
 
-        public override void HandleInput(InputValue inputValue)
+        public override void HandleInput(object data, InputActionChange action)
         {
         }
 

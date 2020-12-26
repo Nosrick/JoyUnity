@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace JoyLib.Code.Unity.GUI
 {
@@ -119,10 +118,10 @@ namespace JoyLib.Code.Unity.GUI
                     continue;
                 }
 
-                gui.transform.parent.GetComponent<Canvas>().sortingOrder = int.MinValue;
+                //gui.transform.parent.GetComponent<CanvasGroup>() = int.MinValue;
             }
 
-            toFront.transform.parent.GetComponent<Canvas>().sortingOrder = 1;
+            //toFront.transform.parent.GetComponent<Canvas>().sortingOrder = 1;
         }
 
         public void CloseAllOtherGUIs(string activeName = "")
