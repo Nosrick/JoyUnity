@@ -146,10 +146,7 @@ public class GameManager : MonoBehaviour, IGameManager
 	// Update is called once per frame
 	protected void Update ()
     {
-        if(!(m_StateManager is null))
-        {
-            m_StateManager.Update();
-        }
+        this.m_StateManager?.Update();
     }
 
     public void NextState()

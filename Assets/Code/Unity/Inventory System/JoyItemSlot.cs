@@ -297,8 +297,10 @@ namespace JoyLib.Code.Unity.GUI
             {
                 if (slot.Container != this.Container
                     && this.Container.CanDrag
-                    && slot.Container.CanDrag)
+                    && slot.Container.CanDrag
+                    && slot.Container.CanAddItem(this.Item))
                 {
+                    slot.Container.StackOrAdd(this.Item);
                     this.Container.RemoveItem(this.Item);
                 }
             }
@@ -316,6 +318,7 @@ namespace JoyLib.Code.Unity.GUI
 
         public virtual void OnDrop(PointerEventData eventData)
         {
+            /*
             if (DragObject.SourceContainer != this.Container 
                 && DragObject.Item is null == false 
                 && this.Container.CanDrag)
@@ -323,6 +326,7 @@ namespace JoyLib.Code.Unity.GUI
                 this.Container.StackOrSwap(this, DragObject.SourceSlot);
             }
             GUIManager.CloseGUI(GUINames.CURSOR);
+            */
         }
 
         public virtual void OnPointerDown(PointerEventData eventData)

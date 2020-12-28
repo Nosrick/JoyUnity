@@ -157,13 +157,17 @@ namespace JoyLib.Code.Unity
             
             foreach (MoveContainerPriority priority in sorted)
             {
-                if (this.MoveToContainers
-                    .First(container => container.name.Equals(priority.m_ContainerName, StringComparison.OrdinalIgnoreCase))
+                if (!this.MoveToContainers
+                    .First(container =>
+                        container.name.Equals(priority.m_ContainerName, StringComparison.OrdinalIgnoreCase)
+                        && (priority.m_RequiresVisibility && container.isActiveAndEnabled)
+                        || priority.m_RequiresVisibility == false)
                     .StackOrAdd(item))
                 {
-                    this.RemoveItem(item);
-                    return true;
+                    continue;
                 }
+                
+                return this.RemoveItem(item);
             }
 
             return false;
@@ -266,6 +270,16 @@ namespace JoyLib.Code.Unity
             
             this.Slots.ForEach(slot => Destroy(slot));
             return true;
+        }
+
+        public bool CanAddItem(IItemInstance item)
+        {
+            if (this.Owner is IItemContainer container)
+            {
+                return container.CanAddContents(item);
+            }
+
+            return false;
         }
 
         public bool StackOrAdd(JoyItemSlot slot, IItemInstance item)
@@ -443,5 +457,6 @@ namespace JoyLib.Code.Unity
     {
         public string m_ContainerName;
         public int m_Priority;
+        public bool m_RequiresVisibility;
     }
 }
