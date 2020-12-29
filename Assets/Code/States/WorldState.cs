@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
+using Castle.Core.Internal;
 using JoyLib.Code.Conversation;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
@@ -184,11 +185,9 @@ namespace JoyLib.Code.States
                 return;
             }
 
-            Tooltip tooltip = GUIManager.GetGUI(GUINames.TOOLTIP).GetComponent<Tooltip>();
             if (PrimaryTarget is IEntity entity)
             {
                 string relationshipName = "You";
-                StringBuilder builder = new StringBuilder(entity.Description);
                 if (PrimaryTarget.GUID != m_ActiveWorld.Player.GUID)
                 {
                     try
@@ -203,21 +202,48 @@ namespace JoyLib.Code.States
                     }
                 }
 
-                builder.AppendLine(CultureInfo.CurrentCulture.TextInfo.ToTitleCase(relationshipName));
+                List<Tuple<string, string>> data = new List<Tuple<string, string>>
+                {
+                    new Tuple<string, string>("Relationship: ", CultureInfo.CurrentCulture.TextInfo.ToTitleCase(relationshipName)),
+                    new Tuple<string, string>("Gender: ", entity.Gender.Name),
+                    new Tuple<string, string>("Job: ", CultureInfo.CurrentCulture.TextInfo.ToTitleCase(entity.CurrentJob.Name)),
+                    new Tuple<string, string>("Species: ", CultureInfo.CurrentCulture.TextInfo.ToTitleCase(entity.CreatureType))
+                };
 
-                GUIManager.OpenGUI(GUINames.TOOLTIP);
-                tooltip.Show(
-                    entity.JoyName,
-                    builder.ToString(),
-                    entity.Sprite);
+                this.GUIManager.OpenGUI(GUINames.TOOLTIP)
+                    .GetComponent<Tooltip>()
+                    .Show(
+                        entity.JoyName,
+                        null,
+                        entity.Sprite,
+                        data);
             }
             else if (PrimaryTarget is IItemInstance item)
             {
-                GUIManager.OpenGUI(GUINames.TOOLTIP);
-                tooltip.Show(
-                    item.JoyName,
-                    item.DisplayDescription,
-                    item.Sprite);
+                List<Tuple<string, string>> data = new List<Tuple<string, string>>
+                {
+                    new Tuple<string, string>("", item.ConditionString),
+                    new Tuple<string, string>("", item.WeightString),
+                    new Tuple<string, string>("", item.ItemType.MaterialDescription)
+                };
+
+                if (item.OwnerString.IsNullOrEmpty() == false)
+                {
+                    data.Add(new Tuple<string, string>("Owner: ", item.OwnerString));
+                }
+
+                if (item.Contents.Count > 0)
+                {
+                    data.Add(new Tuple<string, string>("", item.ContentString));
+                }
+                
+                this.GUIManager.OpenGUI(GUINames.TOOLTIP)
+                    .GetComponent<Tooltip>()
+                    .Show(
+                        item.JoyName,
+                        null,
+                        item.Sprite,
+                        data);
             }
         }
 

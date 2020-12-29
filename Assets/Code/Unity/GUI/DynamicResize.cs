@@ -5,6 +5,7 @@ namespace JoyLib.Code.Unity.GUI
 {
     public class DynamicResize : MonoBehaviour
     {
+        [SerializeField] protected bool ResizeThis = false;
         [SerializeField] protected bool ResizeChild = true;
         [SerializeField] protected LayoutGroup ChildLayoutGroup;
         [SerializeField] protected ScrollRect ScrollRect;
@@ -13,10 +14,16 @@ namespace JoyLib.Code.Unity.GUI
         
         protected RectTransform ChildRectTransform { get; set; }
         protected RectTransform ItemTransform { get; set; }
+        protected RectTransform MyRectTransform { get; set; }
         protected int ChildLastChildren { get; set; }
+        
+        protected Vector2 OriginalSize { get; set; }
+        protected Vector2 LastChildSize { get; set; }
         
         protected void Awake()
         {
+            this.MyRectTransform = this.GetComponent<RectTransform>();
+            this.OriginalSize = this.MyRectTransform.sizeDelta;
             if (ChildLayoutGroup is null == false)
             {
                 ChildRectTransform = ChildLayoutGroup.GetComponent<RectTransform>();
@@ -37,15 +44,13 @@ namespace JoyLib.Code.Unity.GUI
                 ItemTransform = ChildLayoutGroup.transform.GetChild(0).GetComponent<RectTransform>();
             }
 
-            if (ResizeChild && ChildLayoutGroup is null == false)
-            {
-                Resize();
-            }
+            this.Resize();
         }
 
         protected void Resize()
         {
-            if (ChildRectTransform is null 
+            if (this.ResizeChild 
+                && (ChildRectTransform is null || this.ChildRectTransform.sizeDelta == this.LastChildSize) 
                 || ChildLastChildren == this.ChildRectTransform.transform.childCount
                 || ItemTransform is null)
             {
@@ -80,23 +85,59 @@ namespace JoyLib.Code.Unity.GUI
 
             if (this.ResizeHorizontal)
             {
-                ChildRectTransform.SetSizeWithCurrentAnchors(UnityEngine.RectTransform.Axis.Horizontal, width);
+                if (this.ResizeThis)
+                {
+                    switch (this.ResizeChild)
+                    {
+                        case true when this.MyRectTransform.sizeDelta.x != this.LastChildSize.x:
+                            this.MyRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, this.LastChildSize.x);
+                            break;
+                        case true:
+                            this.MyRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
+                            break;
+                    }
+                }
+                if (this.ResizeChild)
+                {
+                    this.ChildRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
+                }
             }
 
             if (this.ResizeVertical)
             {
-                ChildRectTransform.SetSizeWithCurrentAnchors(UnityEngine.RectTransform.Axis.Vertical, height);
+                if (this.ResizeThis)
+                {
+                    switch (this.ResizeChild)
+                    {
+                        case true when this.MyRectTransform.sizeDelta.y != this.LastChildSize.y:
+                            this.MyRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, this.LastChildSize.y);
+                            break;
+                        case true:
+                            this.MyRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
+                            break;
+                    }
+                }
+                if (this.ResizeChild)
+                {
+                    this.ChildRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
+                }
             }
 
-            ChildLastChildren = this.ChildRectTransform.transform.childCount;
-            if (ScrollRect.horizontalScrollbar is null == false)
+            this.ChildLastChildren = this.ChildRectTransform.transform.childCount;
+            this.LastChildSize = this.ChildRectTransform.sizeDelta;
+            
+            if (this.ScrollRect is null)
             {
-                ScrollRect.horizontalScrollbar.numberOfSteps = ChildLayoutGroup.transform.childCount;
+                return;
+            }
+            if (this.ScrollRect.horizontalScrollbar is null == false)
+            {
+                this.ScrollRect.horizontalScrollbar.numberOfSteps = this.ChildLayoutGroup.transform.childCount;
             }
 
-            if (ScrollRect.verticalScrollbar is null == false)
+            if (this.ScrollRect.verticalScrollbar is null == false)
             {
-                ScrollRect.verticalScrollbar.numberOfSteps = ChildLayoutGroup.transform.childCount;
+                this.ScrollRect.verticalScrollbar.numberOfSteps = this.ChildLayoutGroup.transform.childCount;
             }
         }
     }
