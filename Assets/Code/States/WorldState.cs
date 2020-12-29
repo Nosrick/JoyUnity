@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
-using Castle.Core.Internal;
 using JoyLib.Code.Conversation;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
@@ -220,30 +219,13 @@ namespace JoyLib.Code.States
             }
             else if (PrimaryTarget is IItemInstance item)
             {
-                List<Tuple<string, string>> data = new List<Tuple<string, string>>
-                {
-                    new Tuple<string, string>("", item.ConditionString),
-                    new Tuple<string, string>("", item.WeightString),
-                    new Tuple<string, string>("", item.ItemType.MaterialDescription)
-                };
-
-                if (item.OwnerString.IsNullOrEmpty() == false)
-                {
-                    data.Add(new Tuple<string, string>("Owner: ", item.OwnerString));
-                }
-
-                if (item.Contents.Count > 0)
-                {
-                    data.Add(new Tuple<string, string>("", item.ContentString));
-                }
-                
                 this.GUIManager.OpenGUI(GUINames.TOOLTIP)
                     .GetComponent<Tooltip>()
                     .Show(
                         item.JoyName,
                         null,
                         item.Sprite,
-                        data);
+                        item.Tooltip);
             }
         }
 

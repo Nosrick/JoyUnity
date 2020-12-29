@@ -178,8 +178,9 @@ namespace JoyLib.Code.Unity.GUI
                     .GetComponent<Tooltip>()
                     .Show(
                         this.Item.JoyName,
-                        this.Item.DisplayDescription,
-                        this.Item.Sprite);
+                        null,
+                        this.Item.Sprite,
+                        this.Item.Tooltip);
             }
         }
 

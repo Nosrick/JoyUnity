@@ -155,18 +155,13 @@ namespace JoyLib.Code.Unity
                 orderby priority.m_Priority descending
                 select priority);
             
-            foreach (MoveContainerPriority priority in sorted)
+            if (sorted.Any(priority => this.MoveToContainers.Count != 0 && this.MoveToContainers
+                .First(container =>
+                    container.name.Equals(priority.m_ContainerName, StringComparison.OrdinalIgnoreCase)
+                    && (priority.m_RequiresVisibility && container.isActiveAndEnabled)
+                    || priority.m_RequiresVisibility == false)
+                .StackOrAdd(item)))
             {
-                if (!this.MoveToContainers
-                    .First(container =>
-                        container.name.Equals(priority.m_ContainerName, StringComparison.OrdinalIgnoreCase)
-                        && (priority.m_RequiresVisibility && container.isActiveAndEnabled)
-                        || priority.m_RequiresVisibility == false)
-                    .StackOrAdd(item))
-                {
-                    continue;
-                }
-                
                 return this.RemoveItem(item);
             }
 
