@@ -1,6 +1,7 @@
-﻿using JoyLib.Code.IO;
+﻿using System;
+using JoyLib.Code.IO;
 using JoyLib.Code.World;
-using System;
+using UnityEngine.InputSystem;
 
 namespace JoyLib.Code.States
 {
@@ -18,7 +19,6 @@ namespace JoyLib.Code.States
 
         public override void LoadContent()
         {
-            base.LoadContent();
         }
 
         public override void SetUpUi()
@@ -26,9 +26,20 @@ namespace JoyLib.Code.States
             base.SetUpUi();
         }
 
+        public override void Start()
+        {
+        }
+
+        public override void Stop()
+        {
+        }
+
         public override void Update()
         {
-            base.Update();
+        }
+
+        public override void HandleInput(object data, InputActionChange action)
+        {
         }
 
         private void NewGame(object sender, EventArgs eventArgs)
@@ -43,7 +54,7 @@ namespace JoyLib.Code.States
             Done = true;
 
             IWorldInstance playerWorld = overworld.Player.MyWorld;
-            m_NextState = new WorldState(overworld, playerWorld, Gameplay.GameplayFlags.Moving);
+            m_NextState = new WorldState(overworld, playerWorld);
         }
 
         public override GameState GetNextState()

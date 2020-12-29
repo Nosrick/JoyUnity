@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using DevionGames;
-using DevionGames.UIWidgets;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Quests;
 using UnityEngine;
@@ -8,7 +6,7 @@ using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public class QuestJournal : UIWidget
+    public class QuestJournal : GUIData
     {
         public IEntity Player { get; set; }
         
@@ -17,17 +15,15 @@ namespace JoyLib.Code.Unity.GUI
         protected IQuestTracker QuestTracker { get; set; }
 
         [SerializeField] protected GameObject MenuItemPrefab;
+        [SerializeField] protected LayoutGroup MenuContainer;
         protected RectTransform MenuItemRect { get; set; }
         
         protected List<MenuItem> MenuItems { get; set; }
-        
-        protected GameObject Container { get; set; }
 
-        public void Awake()
+        public override void Awake()
         {
             base.Awake();
             MenuItemRect = MenuItemPrefab.GetComponent<RectTransform>();
-            Container = this.gameObject.FindChild("Quest MenuContainer", true);
             MenuItems = new List<MenuItem>();
             FindBits();
         }
@@ -63,7 +59,7 @@ namespace JoyLib.Code.Unity.GUI
                 for (int i = 0; i < difference; i++)
                 {
                     MenuItems.Add(
-                        GameObject.Instantiate(MenuItemPrefab, Container.transform)
+                        GameObject.Instantiate(MenuItemPrefab, this.MenuContainer.transform)
                             .GetComponent<MenuItem>());
                 }
             }
@@ -84,7 +80,7 @@ namespace JoyLib.Code.Unity.GUI
                 if (MenuItems.Count == 0)
                 {
                     MenuItems.Add(
-                        GameObject.Instantiate(MenuItemPrefab, Container.transform)
+                        GameObject.Instantiate(MenuItemPrefab, this.MenuContainer.transform)
                             .GetComponent<MenuItem>());
                 }
 

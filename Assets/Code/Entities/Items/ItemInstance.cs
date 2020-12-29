@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Castle.Core.Internal;
-using DevionGames.InventorySystem;
 using JoyLib.Code.Collections;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Events;
 using JoyLib.Code.Managers;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
@@ -17,7 +17,7 @@ using UnityEngine;
 namespace JoyLib.Code.Entities.Items
 {
     [Serializable]
-    public class ItemInstance : EquipmentItem, IItemInstance
+    public class ItemInstance : IItemInstance
     {
         protected const string DURABILITY = "durability";
 
@@ -103,11 +103,13 @@ namespace JoyLib.Code.Entities.Items
         }
 
         public IEnumerable<IAbility> UniqueAbilities { get; protected set; }
+        
+        protected GameObject Prefab { get; set; }
 
         public static ILiveItemHandler ItemHandler { get; set; }
         public static ILiveEntityHandler EntityHandler { get; set; }
 
-        public void Initialise(
+        public ItemInstance(
             BaseItemType type, 
             IDictionary<string, IDerivedValue> derivedValues,
             Vector2Int position, 
@@ -121,6 +123,10 @@ namespace JoyLib.Code.Entities.Items
         {
             if (this.Prefab is null)
             {
+                if (gameObject is null == false)
+                {
+                    this.Prefab = gameObject;
+                }
                 this.Prefab = Resources.Load<GameObject>("Prefabs/ItemInstance");
             }
             
@@ -128,7 +134,6 @@ namespace JoyLib.Code.Entities.Items
             this.Data = new NonUniqueDictionary<object, object>();
 
             this.JoyName = identified ? type.IdentifiedName : type.UnidentifiedName;
-            this.Name = this.JoyName;
             this.GUID = GUIDManager.Instance.AssignGUID();
 
             this.DerivedValues = derivedValues;
@@ -182,13 +187,6 @@ namespace JoyLib.Code.Entities.Items
 
             UniqueAbilities = uniqueAbilities is null == false ? new List<IAbility>(uniqueAbilities) : new List<IAbility>();
             
-            this.Region = new List<EquipmentRegion>();
-            foreach (string slot in type.Slots)
-            {
-                this.Region.Add(InventoryManager.Database.equipments.First(region => region.Name.Equals(slot)));
-            }
-
-            Icon = Sprite;
             CalculateValue();
             ConstructDescription();
 
@@ -196,11 +194,6 @@ namespace JoyLib.Code.Entities.Items
             {
                 this.Instantiate(gameObject, active);
             }
-        }
-
-        public bool IsInstantiated()
-        {
-            return this.MonoBehaviourHandler is null == false;
         }
 
         public void Instantiate(GameObject gameObject = null, bool active = false)
@@ -223,9 +216,7 @@ namespace JoyLib.Code.Entities.Items
         {
             Initialise();
 
-            ItemInstance newItem = ScriptableObject.CreateInstance<ItemInstance>();
-            
-            newItem.Initialise(
+            ItemInstance newItem = new ItemInstance(
                 copy.ItemType,
                 copy.DerivedValues,
                 copy.WorldPosition,
@@ -262,15 +253,15 @@ namespace JoyLib.Code.Entities.Items
 
             builder.AppendLine("It is worth " + this.Value + ".");
             
-            Description = builder.ToString();
+            this.Tooltip = builder.ToString();
         }
         
         public void SetUser(IEntity user)
         {
-            User = user;
+            this.User = user;
         }
 
-        public override void Use()
+        public void Use()
         {
             if ((this.AllAbilities.Count() == 0) || User is null)
             {
@@ -409,8 +400,6 @@ namespace JoyLib.Code.Entities.Items
             ChosenSprite %= Sprites.Length;
 
             FramesSinceLastChange = 0;
-
-            Icon = Sprite;
         }
 
         public int CompareTo(object obj)
@@ -520,8 +509,8 @@ namespace JoyLib.Code.Entities.Items
 
         public void IdentifyMe()
         {
-            Identified = true;
-            this.Name = this.IdentifiedName;
+            this.Identified = true;
+            this.JoyName = this.IdentifiedName;
             
             this.ConstructDescription();
         }
@@ -579,6 +568,8 @@ namespace JoyLib.Code.Entities.Items
 
                 CalculateValue();
                 ConstructDescription();
+                
+                this.ItemAdded?.Invoke(this, new ItemChangedEventArgs() { Item = actor });
                 return true;
             }
 
@@ -592,6 +583,10 @@ namespace JoyLib.Code.Entities.Items
             
             CalculateValue();
             ConstructDescription();
+            foreach (IItemInstance actor in actors)
+            {
+                this.ItemAdded?.Invoke(this, new ItemChangedEventArgs() { Item = actor });
+            }
 
             return true;
         }
@@ -605,13 +600,18 @@ namespace JoyLib.Code.Entities.Items
             }
             CalculateValue();
             ConstructDescription();
+            this.ItemRemoved?.Invoke(this, new ItemChangedEventArgs() { Item = actor });
 
             return result;
         }
 
         public void Clear()
         {
-            m_Contents.Clear();
+            List<IItemInstance> copy = new List<IItemInstance>(this.Contents);
+            foreach (IItemInstance item in copy)
+            {
+                this.RemoveContents(item);
+            }
             CalculateValue();
             ConstructDescription();
         }
@@ -696,7 +696,7 @@ namespace JoyLib.Code.Entities.Items
             }
         }
 
-        public new string DisplayName
+        public string DisplayName
         {
             get
             {
@@ -757,6 +757,8 @@ namespace JoyLib.Code.Entities.Items
             }
         }
 
+        public string Tooltip { get; protected set; }
+
         public List<IItemInstance> Contents
         {
             get
@@ -808,6 +810,9 @@ namespace JoyLib.Code.Entities.Items
                 return contentString;
             }
         }
+
+        public event ItemRemovedEventHandler ItemRemoved;
+        public event ItemAddedEventHandler ItemAdded;
 
         public IEnumerable<IAbility> AllAbilities
         {

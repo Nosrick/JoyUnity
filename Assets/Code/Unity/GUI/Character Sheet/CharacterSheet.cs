@@ -1,12 +1,11 @@
-﻿using DevionGames.UIWidgets;
-using JoyLib.Code.Entities;
+﻿using JoyLib.Code.Entities;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity.GUI.Character_Sheet
 {
-    public class CharacterSheet : UIWidget
+    public class CharacterSheet : GUIData
     {
         [SerializeField] protected Image PlayerSprite;
         [SerializeField] protected TextMeshProUGUI PlayerName;

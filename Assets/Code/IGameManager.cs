@@ -64,7 +64,6 @@ namespace JoyLib.Code
         GameObject MyGameObject { get; }
         
         IEntity Player { get; set; }
-        
         GameObjectPool FloorPool { get; }
         GameObjectPool WallPool { get; }
         GameObjectPool EntityPool { get; }

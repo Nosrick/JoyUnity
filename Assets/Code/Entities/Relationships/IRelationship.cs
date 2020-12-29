@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using DevionGames.InventorySystem;
 
 namespace JoyLib.Code.Entities.Relationships
 {

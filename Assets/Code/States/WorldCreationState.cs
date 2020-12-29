@@ -8,12 +8,13 @@ using JoyLib.Code.World.Generators;
 using JoyLib.Code.World.Generators.Interiors;
 using JoyLib.Code.World.Generators.Overworld;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace JoyLib.Code.States
 {
     public class WorldCreationState : GameState
     {
-        protected EntityPlayer m_Player;
+        protected IEntity m_Player;
 
         protected IWorldInstance m_World;
         protected IWorldInstance m_ActiveWorld;
@@ -24,16 +25,23 @@ namespace JoyLib.Code.States
 
         protected const int WORLD_SIZE = 20;
 
-        public WorldCreationState(EntityPlayer playerRef) : base()
+        public WorldCreationState(IEntity playerRef) : base()
         {
             m_Player = playerRef;
         }
 
         public override void Start()
         {
-            base.Start();
             SetUpUi();
             CreateWorld();
+        }
+
+        public override void Stop()
+        {
+        }
+
+        public override void LoadContent()
+        {
         }
 
         public override void SetUpUi()
@@ -151,7 +159,10 @@ namespace JoyLib.Code.States
 
         public override void Update()
         {
-            base.Update();
+        }
+
+        public override void HandleInput(object data, InputActionChange action)
+        {
         }
 
         public override GameState GetNextState()

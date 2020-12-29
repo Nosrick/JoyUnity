@@ -42,8 +42,9 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
         protected Dictionary<string, int> StatisticsDeltas { get; set; }
         protected Dictionary<string, int> SkillsDeltas { get; set; }
 
-        public void OnEnable()
+        public override void OnEnable()
         {
+            base.OnEnable();
             if (GameManager.Player is null)
             {
                 return;

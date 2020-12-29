@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-using DevionGames.InventorySystem;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
@@ -57,9 +56,6 @@ namespace JoyLib.Code.Entities.Items
 
         protected List<BaseItemType> LoadItems()
         {
-            InventoryManager.Database.items.Clear();
-            InventoryManager.Database.equipments.Clear();
-            
             List<BaseItemType> items = new List<BaseItemType>();
 
             string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Items", "*.xml", SearchOption.AllDirectories);
@@ -139,43 +135,6 @@ namespace JoyLib.Code.Entities.Items
                             identifiedItems[j].lightLevel, 
                             identifiedItems[j].abilities);
                         items.Add(baseItemType);
-                        
-                        if(baseItemType.Slots.Any(slot => slot.Equals("none", StringComparison.OrdinalIgnoreCase)))
-                        {
-                            ItemInstance itemSO = ScriptableObject.CreateInstance<ItemInstance>();
-                            itemSO.Name = baseItemType.IdentifiedName;
-                            itemSO.Icon = m_ObjectIcons.GetSprite(baseItemType.SpriteSheet, baseItemType.IdentifiedName);
-                            itemSO.Prefab = s_ItemPrefab;
-
-                            InventoryManager.Database.items.Add(itemSO);
-                        }
-                        else
-                        {
-                            ItemInstance itemSO = ScriptableObject.CreateInstance<ItemInstance>();
-                            itemSO.Name = baseItemType.IdentifiedName;
-                            itemSO.Icon = m_ObjectIcons.GetSprite(baseItemType.SpriteSheet, baseItemType.IdentifiedName);
-                            itemSO.Prefab = s_ItemPrefab;
-                            List<EquipmentRegion> regions = new List<EquipmentRegion>();
-                            foreach (string slot in baseItemType.Slots)
-                            {
-                                EquipmentRegion region = ScriptableObject.CreateInstance<EquipmentRegion>();
-                                region.Name = slot;
-                                regions.Add(region);
-                            }
-
-                            itemSO.Region = regions;
-                            InventoryManager.Database.items.Add(itemSO);
-                        }
-
-                        foreach (string slot in identifiedItems.SelectMany(item => item.slots))
-                        {
-                            if (InventoryManager.Database.equipments.Any(region => region.Name.Equals(slot)) == false)
-                            {
-                                EquipmentRegion equipmentRegion = ScriptableObject.CreateInstance<EquipmentRegion>();
-                                equipmentRegion.Name = slot;
-                                InventoryManager.Database.equipments.Add(equipmentRegion);
-                            }
-                        }
                     }
                 }
             }

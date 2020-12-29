@@ -1,5 +1,4 @@
-﻿using DevionGames.InventorySystem;
-using JoyLib.Code.Events;
+﻿using JoyLib.Code.Events;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -14,19 +13,31 @@ namespace JoyLib.Code.Unity.GUI
         protected string m_Tooltip;
         protected int m_Value;
         protected string m_Name;
-        
+
+        protected static IGUIManager GUIManager { get; set; }
+
+        public void OnEnable()
+        {
+            if (GUIManager is null)
+            {
+                GUIManager = GlobalConstants.GameManager.GUIManager;
+            }
+        }
+
         public void OnPointerEnter(PointerEventData data)
         {
-            if (Tooltip is null)
+            if (this.Tooltip is null)
             {
                 return;
             }
-            InventoryManager.UI.tooltip.Show(Tooltip);
+
+            Tooltip tooltip = GUIManager.OpenGUI(GUINames.TOOLTIP).GetComponent<Tooltip>();
+            tooltip.Show(null, this.Tooltip);
         }
 
         public void OnPointerExit(PointerEventData data)
         {
-            InventoryManager.UI.tooltip.Close();
+            GUIManager.CloseGUI(GUINames.TOOLTIP);
         }
         
         public int DecreaseValue(int delta = 1)
@@ -67,14 +78,14 @@ namespace JoyLib.Code.Unity.GUI
         
         public string Tooltip
         {
-            get => m_Tooltip;
+            get => this.m_Tooltip;
             set
             {
-                m_Tooltip = value;
-                if (InventoryManager.UI.tooltip.IsVisible)
+                this.m_Tooltip = value;
+                if (GUIManager.IsActive(GUINames.TOOLTIP))
                 {
-                    InventoryManager.UI.tooltip.Close();
-                    InventoryManager.UI.tooltip.Show(m_Tooltip);
+                    GUIManager.CloseGUI(GUINames.TOOLTIP);
+                    GUIManager.OpenGUI(GUINames.TOOLTIP).GetComponent<Tooltip>().Show(null, this.Tooltip);
                 }
             }
         }

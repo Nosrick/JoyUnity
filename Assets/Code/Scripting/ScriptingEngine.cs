@@ -4,9 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using CodingSeb.ExpressionEvaluator;
-using DevionGames;
-using DevionGames.InventorySystem;
-using DevionGames.UIWidgets;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
@@ -56,9 +53,6 @@ namespace JoyLib.Code.Scripting
                         MetadataReference.CreateFromFile(typeof(Queue<bool>).Assembly.Location),
                         MetadataReference.CreateFromFile(typeof(System.Linq.IQueryable).Assembly.Location),
                         MetadataReference.CreateFromFile(typeof(GlobalConstants).Assembly.Location),
-                        MetadataReference.CreateFromFile(typeof(EquipmentItem).Assembly.Location),
-                        MetadataReference.CreateFromFile(typeof(INameable).Assembly.Location),
-                        MetadataReference.CreateFromFile(typeof(UIWidget).Assembly.Location),
                         MetadataReference.CreateFromFile(typeof(Castle.Core.Internal.CollectionExtensions).Assembly.Location)
                     };
                     CSharpCompilation compilation = CSharpCompilation.Create("JoyScripts", builtFiles, libs,

@@ -6,7 +6,7 @@
 
         void ToggleGUI(string name);
 
-        void OpenGUI(string name);
+        GUIData OpenGUI(string name);
 
         void CloseGUI(string activeName);
 

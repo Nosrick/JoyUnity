@@ -35,6 +35,8 @@ namespace JoyLib.Code.Entities.Items
         
         string WeightString { get; }
         
+        string Tooltip { get; }
+        
         BaseItemType ItemType { get; }
         
         int Value { get; }

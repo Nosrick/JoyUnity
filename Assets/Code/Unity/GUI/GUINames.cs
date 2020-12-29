@@ -16,5 +16,6 @@
         public const string JOB_MANAGEMENT = "Job Management";
         public const string CHARACTER_SHEET = "Character Sheet";
         public const string INVENTORY_CONTAINER = "Inventory Container";
+        public const string CURSOR = "UICursor";
     }
 }

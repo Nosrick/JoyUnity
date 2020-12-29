@@ -37,7 +37,7 @@ namespace JoyLib.Code.Entities.Abilities
                     new string[] { "thirst", "need", "fulfill" },
                     new object[] { "thirst", item.ItemType.Value, 10 }
                 );
-                user.RemoveItemFromPerson(item);
+                user.RemoveContents(item);
                 return true;
             }
             return false;

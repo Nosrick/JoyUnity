@@ -4,10 +4,7 @@
         "Unity.TextMeshPro",
         "Unity.TextMeshPro.Editor",
         "LeanGUI",
-        "DevionGames.InventorySystem",
-        "DevionGames.UIWidgets",
-        "DevionGames.Utilities",
-        "DevionGames.Triggers"
+        "Unity.InputSystem"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

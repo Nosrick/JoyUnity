@@ -1,11 +1,11 @@
-using System;
 using JoyLib.Code.Conversation;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public class ConversationMenu : MonoBehaviour
+    public class ConversationMenu : MonoBehaviour, IPointerDownHandler
     {
         public string TopicID
         {
@@ -41,7 +41,7 @@ namespace JoyLib.Code.Unity.GUI
             }
         }
 
-        public void OnMouseDown()
+        public void OnPointerDown(PointerEventData eventData)
         {
             ConversationEngine.Converse(Index);
         }

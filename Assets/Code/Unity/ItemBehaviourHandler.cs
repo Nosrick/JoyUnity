@@ -1,27 +1,24 @@
-﻿using DevionGames.InventorySystem;
-using JoyLib.Code.Entities;
+﻿using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
+using JoyLib.Code.Scripting;
 using UnityEngine;
 
 namespace JoyLib.Code.Unity
 {
     public class ItemBehaviourHandler : MonoBehaviourHandler
     {
-        protected ItemCollection m_Items;
-        
-        public Entity EntityInRange { get; protected set; }
+        public IEntity EntityInRange { get; protected set; }
+
+        public static ILiveItemHandler LiveItemHandler { get; set; }
+        public static ILiveEntityHandler LiveEntityHandler { get; set; }
 
         public void Awake()
         {
-            Initialise();
+            this.Initialise();
         }
 
         protected void Initialise()
         {
-            if (m_Items is null)
-            {
-                m_Items = this.GetComponent<ItemCollection>();
-            }
             if (LiveItemHandler is null)
             {
                 LiveItemHandler = GlobalConstants.GameManager.ItemHandler;
@@ -32,24 +29,58 @@ namespace JoyLib.Code.Unity
         {
             IJoyObject otherObj = other.gameObject.GetComponent<MonoBehaviourHandler>().MyJoyObject;
 
-            if (otherObj is Entity entity)
+            if (otherObj is IEntity entity)
             {
-                EntityInRange = entity;
+                this.EntityInRange = entity;
             }
         }
 
         public void OnTriggerExit2D(Collider2D other)
         {
-            if (EntityInRange is null)
+            if (this.EntityInRange is null)
             {
                 return;
             }
             
             IJoyObject otherObj = other.gameObject.GetComponent<MonoBehaviourHandler>().MyJoyObject;
 
-            if (otherObj is Entity entity && entity.GUID.Equals(EntityInRange.GUID))
+            if (otherObj is IEntity entity && entity.GUID.Equals(this.EntityInRange.GUID))
             {
-                EntityInRange = null;
+                this.EntityInRange = null;
+            }
+        }
+        
+        public bool PickupItems()
+        {
+            this.Initialise();
+            bool result = false;
+            if (this.MyJoyObject is IItemInstance item)
+            {
+                result = LiveItemHandler.RemoveItemFromWorld(item.GUID);
+                IJoyAction addItemAction = this.EntityInRange.FetchAction("additemaction");
+                result &= addItemAction.Execute(
+                    new IJoyObject[] {this.EntityInRange, item},
+                    new string[] {"pickup"},
+                    new object[] {true});
+                this.gameObject.SetActive(false);
+            }
+
+            return result;
+        }
+
+        public void DropItem(IItemInstance item)
+        {
+            this.Initialise();
+            
+            if (this.MyJoyObject is IItemInstance itemInstance)
+            {
+                IEntity dropper = this.MyJoyObject.MyWorld.GetEntity(this.MyJoyObject.WorldPosition);
+                this.gameObject.transform.position = new Vector3(this.MyJoyObject.WorldPosition.x, this.MyJoyObject.WorldPosition.y);
+                IJoyAction placeInWorldAction = dropper.FetchAction("placeiteminworldaction");
+                placeInWorldAction.Execute(
+                    new IJoyObject[] {dropper, itemInstance},
+                    new string[] { "drop" });
+                this.gameObject.SetActive(true);
             }
         }
 
@@ -57,17 +88,6 @@ namespace JoyLib.Code.Unity
         {
             Initialise();
             base.AttachJoyObject(joyObject);
-
-            if (joyObject is ItemInstance itemInstance)
-            {
-                m_Items.Add(itemInstance);
-            }
-        }
-
-        public static ILiveItemHandler LiveItemHandler
-        {
-            get;
-            set;
         }
     }
 }

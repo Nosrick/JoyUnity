@@ -1,111 +1,100 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
-using DevionGames.InventorySystem;
-using DevionGames.UIWidgets;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Relationships;
+using JoyLib.Code.Events;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public class TradeWindow : UIWidget
+    public class TradeWindow : GUIData
     {
         public IEntity Left { get; protected set; }
         public IEntity Right { get; protected set; }
 
-        [SerializeField]
-        protected TextMeshProUGUI LeftValue;
-        [SerializeField]
-        protected TextMeshProUGUI RightValue;
+        [SerializeField] protected TextMeshProUGUI LeftValue;
+        [SerializeField] protected TextMeshProUGUI RightValue;
 
         [SerializeField] protected TextMeshProUGUI RightName;
 
-        [SerializeField] protected MutableItemContainer LeftInventory;
-        [SerializeField] protected MutableItemContainer LeftOffering;
+        [SerializeField] protected ItemContainer LeftInventory;
+        [SerializeField] protected ItemContainer LeftOffering;
 
-        [SerializeField] protected MutableItemContainer RightInventory;
-        [SerializeField] protected MutableItemContainer RightOffering;
+        [SerializeField] protected ItemContainer RightInventory;
+        [SerializeField] protected ItemContainer RightOffering;
 
         public static IEntityRelationshipHandler RelationshipHandler { get; set; }
-        
+
         protected RectTransform RectTransform { get; set; }
 
-        public void Awake()
+        public override void Awake()
         {
             base.Awake();
-            RectTransform = this.GetComponent<RectTransform>();
+            this.RectTransform = this.GetComponent<RectTransform>();
 
-            LeftInventory.OnAddItem += Tally;
-            LeftOffering.OnAddItem += Tally;
-            LeftOffering.OnRemoveItem += Tally;
-            RightInventory.OnAddItem += Tally;
-            RightOffering.OnAddItem += Tally;
-            RightOffering.OnRemoveItem += Tally;
+            this.LeftOffering.OnAddItem -= Tally;
+            this.LeftOffering.OnRemoveItem -= Tally;
+
+            this.RightOffering.OnAddItem -= this.Tally;
+            this.RightOffering.OnRemoveItem -= this.Tally;
+
+            this.LeftOffering.OnAddItem += Tally;
+            this.LeftOffering.OnRemoveItem += Tally;
+            this.RightOffering.OnAddItem += Tally;
+            this.RightOffering.OnRemoveItem += Tally;
+        }
+
+        public override void Close()
+        {
+            base.Close();
+            foreach (IItemInstance item in this.LeftOffering.Contents)
+            {
+                this.LeftInventory.StackOrAdd(item);
+            }
+
+            this.LeftOffering.RemoveAllItems();
+
+            foreach (IItemInstance item in this.RightOffering.Contents)
+            {
+                this.RightOffering.StackOrAdd(item);
+            }
+
+            this.RightOffering.RemoveAllItems();
         }
 
         public void SetActors(IEntity left, IEntity right)
         {
-            Left = left;
-            Right = right;
+            this.Left = left;
+            this.Right = right;
 
-            for (int i = LeftInventory.Collection.Count - 1; i >= 0; i--)
-            {
-                Item item = LeftInventory.Collection[i];
-                LeftInventory.RemoveItem(item);
-            }
+            this.LeftInventory.Owner = this.Left;
+            this.LeftOffering.Owner = new VirtualStorage();
 
-            for (int i = RightInventory.Collection.Count - 1; i >= 0; i--)
-            {
-                Item item = RightInventory.Collection[i];
-                RightInventory.RemoveItem(item);
-            }
+            this.RightInventory.Owner = this.Right;
+            this.RightOffering.Owner = new VirtualStorage();
 
-            foreach (ItemInstance item in Left.Backpack)
-            {
-                LeftInventory.StackOrAdd(item);
-            }
-
-            foreach (ItemInstance item in Right.Backpack)
-            {
-                RightInventory.StackOrAdd(item);
-            }
-
-            this.LeftInventory.Owner = Left;
-            this.LeftOffering.Owner = Left;
-
-            this.RightInventory.Owner = Right;
-            this.RightOffering.Owner = Right;
-
-            RightName.text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Right.Gender.PersonalSubject) + " " + Right.Gender.IsOrAre + " offering";
-            LayoutRebuilder.ForceRebuildLayoutImmediate(RectTransform);
+            this.RightName.text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(this.Right.Gender.PersonalSubject) +
+                                  " " + this.Right.Gender.IsOrAre + " offering";
+            
+            LayoutRebuilder.ForceRebuildLayoutImmediate(this.RectTransform);
         }
 
         public bool Trade()
         {
             int leftValue = 0;
             int rightValue = 0;
-            
-            foreach (Item item in LeftOffering.Collection)
-            {
-                if (!(item is IItemInstance joyItem))
-                {
-                    continue;
-                }
 
-                leftValue += joyItem.Value;
+            foreach (IItemInstance item in LeftOffering.Contents)
+            {
+                leftValue += item.Value;
             }
 
-            foreach (Item item in RightOffering.Collection)
+            foreach (IItemInstance item in RightOffering.Contents)
             {
-                if (!(item is IItemInstance joyItem))
-                {
-                    continue;
-                }
-
-                rightValue += joyItem.Value;
+                rightValue += item.Value;
             }
 
             int? relationshipValue = RelationshipHandler?.GetHighestRelationshipValue(Right, Left);
@@ -115,80 +104,63 @@ namespace JoyLib.Code.Unity.GUI
                 return false;
             }
 
-            if (leftValue + relationshipValue >= rightValue)
+            if (!(leftValue + relationshipValue >= rightValue))
             {
-                int difference = leftValue - rightValue;
-
-                IEnumerable<IRelationship> relationships = RelationshipHandler?.Get(new IJoyObject[] { Left, Right });
-                foreach (IRelationship relationship in relationships)
-                {
-                    relationship.ModifyValueOfParticipant(Left.GUID, Right.GUID, difference);
-                }
-
-                for(int i = LeftOffering.Collection.Count - 1; i >= 0; i--)
-                {
-                    if (!(LeftOffering.Collection[i] is ItemInstance joyItem))
-                    {
-                        continue;
-                    }
-
-                    LeftOffering.RemoveItem(joyItem);
-                    Left.RemoveContents(joyItem);
-                    Right.AddContents(joyItem);
-                }
-
-                for(int i = RightOffering.Collection.Count - 1; i >= 0; i--)
-                {
-                    if (!(RightOffering.Collection[i] is ItemInstance joyItem))
-                    {
-                        continue;
-                    }
-
-                    RightOffering.RemoveItem(joyItem);
-                    Right.RemoveContents(joyItem);
-                    Left.AddContents(joyItem);
-                }
-                
-                SetActors(Left, Right);
-
-                return true;
+                return false;
             }
 
-            return false;
+            int difference = leftValue - rightValue;
+
+            IEnumerable<IRelationship> relationships =
+                RelationshipHandler?.Get(new IJoyObject[] {this.Left, this.Right});
+            foreach (IRelationship relationship in relationships)
+            {
+                relationship.ModifyValueOfParticipant(this.Left.GUID, this.Right.GUID, difference);
+            }
+
+            foreach (IItemInstance item in this.LeftOffering.Contents)
+            {
+                this.Right.AddContents(item);
+            }
+
+            this.LeftOffering.RemoveAllItems();
+
+            foreach (IItemInstance item in this.RightOffering.Contents)
+            {
+                this.Left.AddContents(item);
+            }
+
+            this.RightOffering.RemoveAllItems();
+
+            this.SetActors(this.Left, this.Right);
+            this.Tally();
+
+            return true;
         }
 
-        protected void Tally(Item itemRef, Slot slot)
+        protected void Tally()
         {
             int leftValue = 0;
             int rightValue = 0;
-            
-            foreach (Item item in LeftOffering.Collection)
-            {
-                if (!(item is ItemInstance joyItem))
-                {
-                    continue;
-                }
 
-                leftValue += joyItem.Value;
+            foreach (IItemInstance item in this.LeftOffering.Contents)
+            {
+                leftValue += item.Value;
             }
 
-            foreach (Item item in RightOffering.Collection)
+            foreach (IItemInstance item in this.RightOffering.Contents)
             {
-                if (!(item is ItemInstance joyItem))
-                {
-                    continue;
-                }
-
-                rightValue += joyItem.Value;
+                rightValue += item.Value;
             }
 
-            LeftValue.text = "Your value: " + leftValue;
-            RightValue.text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Right.Gender.Possessive) + " value: " + rightValue;
+            this.LeftValue.text = "Your value: " + leftValue;
+            this.RightValue.text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Right.Gender.Possessive) +
+                                   " value: " + rightValue;
         }
 
-        protected void Tally(Item itemRef, int value, Slot slot)
+        protected void Tally(IItemContainer container, ItemChangedEventArgs args)
         {
-            Tally(itemRef, slot);
+            this.Tally();
         }
     }
 }

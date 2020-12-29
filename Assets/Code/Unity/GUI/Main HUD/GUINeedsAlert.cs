@@ -1,16 +1,15 @@
 ﻿using System.Globalization;
 using System.Text;
-using DevionGames;
-using DevionGames.UIWidgets;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Needs;
 using TMPro;
+using UnityEngine;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public class GUINeedsAlert : UIWidget
+    public class GUINeedsAlert : GUIData
     {
-        protected TextMeshProUGUI Text { get; set; }
+        [SerializeField] protected TextMeshProUGUI m_Text;
 
         protected IEntity Player { get; set; }
         
@@ -19,11 +18,10 @@ namespace JoyLib.Code.Unity.GUI
         protected int Counter { get; set; }
         protected const int MAXIMUM_FRAMES = 90;
 
-        public void Awake()
+        public override void Awake()
         {
             base.Awake();
             GetBits();
-            Text = this.gameObject.FindChild("NeedsText", true).GetComponent<TextMeshProUGUI>();
         }
 
         protected void GetBits()
@@ -35,9 +33,8 @@ namespace JoyLib.Code.Unity.GUI
             }
         }
 
-        protected override void Update()
+        protected void Update()
         {
-            base.Update();
             Counter += 1;
             Counter %= MAXIMUM_FRAMES;
 
@@ -49,7 +46,7 @@ namespace JoyLib.Code.Unity.GUI
 
         protected void DoText()
         {
-            Text.text = "";
+            m_Text.text = "";
             GetBits();
             if (Player is null)
             {
@@ -72,7 +69,7 @@ namespace JoyLib.Code.Unity.GUI
                 }
             }
 
-            Text.text = builder.ToString();
+            m_Text.text = builder.ToString();
         }
     }
 }

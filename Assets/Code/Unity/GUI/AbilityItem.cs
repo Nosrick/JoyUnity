@@ -1,6 +1,4 @@
 ﻿using System.Globalization;
-using Castle.Core.Internal;
-using DevionGames.InventorySystem;
 using JoyLib.Code.Events;
 using TMPro;
 using UnityEngine;
@@ -33,28 +31,37 @@ namespace JoyLib.Code.Unity.GUI
         }
         protected Image Image { get; set; }
         protected TextMeshProUGUI Text { get; set; }
+        
+        protected static IGUIManager GUIManager { get; set; }
 
         public event ValueChangedEventHandler OnSelect;
 
         public void Awake()
         {
+            if (GUIManager is null)
+            {
+                GUIManager = GlobalConstants.GameManager.GUIManager;
+            }
+            
             Image = this.GetComponent<Image>();
             Image.color = IdleColour;
             Text = this.GetComponentInChildren<TextMeshProUGUI>();
         }
-
-        public void OnPointerEnter(PointerEventData eventData)
+        
+        public void OnPointerEnter(PointerEventData data)
         {
-            if (Tooltip.IsNullOrEmpty())
+            if (Tooltip is null)
             {
                 return;
             }
-            InventoryManager.UI.tooltip.Show(Tooltip);
+
+            Tooltip tooltip = GUIManager.OpenGUI(GUINames.TOOLTIP).GetComponent<Tooltip>();
+            tooltip.Show(null, this.Tooltip);
         }
 
-        public void OnPointerExit(PointerEventData eventData)
+        public void OnPointerExit(PointerEventData data)
         {
-            InventoryManager.UI.tooltip.Close();
+            GUIManager.CloseGUI(GUINames.TOOLTIP);
         }
 
         public void ToggleMe()

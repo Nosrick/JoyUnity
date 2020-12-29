@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using DevionGames.InventorySystem;
 using JoyLib.Code;
 using JoyLib.Code.Collections;
 using JoyLib.Code.Combat;
@@ -28,7 +27,6 @@ namespace Tests
         private IEntitySkillHandler skillHandler;
         private IDerivedValueHandler derivedValueHandler;
 
-        private GameObject inventoryManager;
         private ActionLog logger;
 
         private IEntity attacker;
@@ -55,8 +53,6 @@ namespace Tests
         [SetUp]
         public void SetUp()
         {
-            this.inventoryManager = new GameObject();
-            this.inventoryManager.AddComponent<InventoryManager>();
 
             this.logger = new ActionLog();
             GlobalConstants.ActionLog = this.logger;
@@ -837,7 +833,6 @@ namespace Tests
         [TearDown]
         public void TearDown()
         {
-            GameObject.DestroyImmediate(this.inventoryManager);
             GlobalConstants.ActionLog = null;
         }
     }

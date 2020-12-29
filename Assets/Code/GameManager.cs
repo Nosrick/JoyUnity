@@ -126,10 +126,7 @@ public class GameManager : MonoBehaviour, IGameManager
         
         ConversationEngine = new ConversationEngine(RelationshipHandler);
         
-        NaturalWeaponHelper = new NaturalWeaponHelper(
-            this.ObjectIconHandler, 
-            this.DerivedValueHandler, 
-            this.MaterialHandler);
+        NaturalWeaponHelper = new NaturalWeaponHelper(this.MaterialHandler, this.ItemFactory);
 
         m_StateManager = new StateManager();
 
@@ -149,10 +146,7 @@ public class GameManager : MonoBehaviour, IGameManager
 	// Update is called once per frame
 	protected void Update ()
     {
-        if(!(m_StateManager is null))
-        {
-            m_StateManager.Update();
-        }
+        this.m_StateManager?.Update();
     }
 
     public void NextState()

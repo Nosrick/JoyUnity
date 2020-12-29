@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-using DevionGames.InventorySystem;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.AI.LOS.Providers;
 using JoyLib.Code.Entities.Statistics;
@@ -39,8 +38,6 @@ namespace JoyLib.Code.Entities
 
         private List<IEntityTemplate> LoadTypes()
         {
-            InventoryManager.Database.equipments.Clear();
-            
             List<IEntityTemplate> entities = new List<IEntityTemplate>();
             
             string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Entities", "*.xml", SearchOption.AllDirectories);
@@ -112,8 +109,6 @@ namespace JoyLib.Code.Entities
                                             creatureType, 
                                             type, 
                                             tags.ToArray()));
-                        
-                        AddSlotsToDatabase(slots);
                     }
                 }
                 catch (Exception e)
@@ -142,22 +137,6 @@ namespace JoyLib.Code.Entities
         {
             int result = GlobalConstants.GameManager.Roller.Roll(0, m_Templates.Count);
             return Templates[result];
-        }
-
-        protected void AddSlotsToDatabase(List<string> slots)
-        {
-            foreach (string slot in slots)
-            {
-                if (InventoryManager.Database.equipments.Any(equipmentSlot =>
-                    equipmentSlot.Name.Equals(slot, StringComparison.OrdinalIgnoreCase)))
-                {
-                    continue;
-                }
-
-                EquipmentRegion region = ScriptableObject.CreateInstance<EquipmentRegion>();
-                region.Name = slot;
-                InventoryManager.Database.equipments.Add(region);                
-            }
         }
     }
 }

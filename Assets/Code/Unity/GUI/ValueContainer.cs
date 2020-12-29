@@ -1,5 +1,4 @@
-﻿using DevionGames.InventorySystem;
-using JoyLib.Code.Events;
+﻿using JoyLib.Code.Events;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -13,8 +12,18 @@ namespace JoyLib.Code.Unity.GUI
         [SerializeField] public int IncreaseDelta = 1;
         [SerializeField] public bool AllowIncrease = true;
         [SerializeField] public bool AllowDecrease = true;
+        
+        protected static IGUIManager GUIManager { get; set; }
 
         protected string m_Tooltip;
+
+        public virtual void OnEnable()
+        {
+            if (GUIManager is null && GlobalConstants.GameManager is null == false)
+            {
+                GUIManager = GlobalConstants.GameManager.GUIManager;
+            }
+        }
 
         public virtual int Maximum
         {
@@ -33,11 +42,12 @@ namespace JoyLib.Code.Unity.GUI
             get => m_Tooltip;
             set
             {
-                m_Tooltip = value;
-                if (InventoryManager.UI.tooltip.IsVisible)
+                this.m_Tooltip = value;
+                if (GUIManager.IsActive(GUINames.TOOLTIP))
                 {
-                    InventoryManager.UI.tooltip.Close();
-                    InventoryManager.UI.tooltip.Show(m_Tooltip);
+                    GUIManager.CloseGUI(GUINames.TOOLTIP);
+                    GUIManager.OpenGUI(GUINames.TOOLTIP);
+                    GUIManager.GetGUI(GUINames.TOOLTIP).GetComponent<Tooltip>().Show(null, this.Tooltip);
                 }
             }
         }
@@ -54,12 +64,15 @@ namespace JoyLib.Code.Unity.GUI
             {
                 return;
             }
-            InventoryManager.UI.tooltip.Show(Tooltip);
+
+            Tooltip tooltip = GUIManager.GetGUI(GUINames.TOOLTIP).GetComponent<Tooltip>();
+            GUIManager.OpenGUI(GUINames.TOOLTIP);
+            tooltip.Show(null, this.Tooltip);
         }
 
         public void OnPointerExit(PointerEventData data)
         {
-            InventoryManager.UI.tooltip.Close();
+            GUIManager.CloseGUI(GUINames.TOOLTIP);
         }
 
         public virtual int DecreaseValue(int delta = 1)
