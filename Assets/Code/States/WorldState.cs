@@ -577,20 +577,6 @@ namespace JoyLib.Code.States
             */
         }
 
-        protected void DrawTargetCursor()
-        {
-            
-        }
-
-        protected void DrawTiles()
-        {
-            lock (m_ActiveWorld.Tiles)
-            { }
-        }
-
-        protected void DrawStairs()
-        { }
-
         protected void DrawObjects()
         {
             IEntity player = m_ActiveWorld.Player;
@@ -610,9 +596,6 @@ namespace JoyLib.Code.States
             }
         }
 
-        protected void DrawEntities()
-        { }
-
         public override void Update()
         {
             IEntity player = m_ActiveWorld.Player;
@@ -627,16 +610,6 @@ namespace JoyLib.Code.States
             }
 
             DrawObjects();
-        }
-
-        private void GainFocus()
-        {
-            InFocus = true;
-        }
-
-        private void LoseFocus()
-        {
-            InFocus = false;
         }
 
         public override GameState GetNextState()
