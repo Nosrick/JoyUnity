@@ -314,11 +314,6 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
             }
         }
 
-        public void ButtonClose()
-        {
-            this.GameManager.GUIManager.CloseGUI(this.name);
-        }
-
         public override int Value
         {
             get => m_Value;

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Quests;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -66,7 +67,7 @@ namespace JoyLib.Code.Unity.GUI
             
             for (int i = 0; i < quests.Count; i++)
             {
-                MenuItems[i].GetComponentInChildren<Text>().text = quests[i].ToString();
+                MenuItems[i].GetComponentInChildren<TextMeshProUGUI>().text = quests[i].ToString();
                 MenuItems[i].gameObject.SetActive(true);
             }
 
@@ -84,7 +85,7 @@ namespace JoyLib.Code.Unity.GUI
                             .GetComponent<MenuItem>());
                 }
 
-                MenuItems[0].GetComponentInChildren<Text>().text = "You have no quests.";
+                MenuItems[0].GetComponentInChildren<TextMeshProUGUI>().text = "You have no quests.";
                 MenuItems[0].gameObject.SetActive(true);
             }
         }
