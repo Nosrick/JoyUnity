@@ -1,7 +1,7 @@
 using JoyLib.Code.Conversation;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity.GUI
 {
@@ -19,7 +19,7 @@ namespace JoyLib.Code.Unity.GUI
             set;
         }
 
-        protected Text Text
+        protected TextMeshProUGUI Text
         {
             get;
             set;
@@ -37,7 +37,7 @@ namespace JoyLib.Code.Unity.GUI
             {
                 ConversationEngine = GlobalConstants.GameManager.ConversationEngine;
 
-                Text = this.transform.GetChild(0).GetComponent<Text>();
+                Text = this.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
             }
         }
 
@@ -50,7 +50,7 @@ namespace JoyLib.Code.Unity.GUI
         {
             if (Text is null)
             {
-                Text = this.transform.GetChild(0).GetComponent<Text>();
+                Text = this.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
             }
             
             Text.text = text;
