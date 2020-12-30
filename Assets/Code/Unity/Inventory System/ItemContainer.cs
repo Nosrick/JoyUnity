@@ -15,34 +15,28 @@ namespace JoyLib.Code.Unity
         [SerializeField] protected string m_UseAction;
         [SerializeField] protected LayoutGroup m_SlotParent;
         [SerializeField] protected JoyItemSlot m_SlotPrefab;
-        
-        [SerializeField]
-        protected bool m_CanDrag = false;
+
+        [SerializeField] protected bool m_CanDrag = false;
         public bool CanDrag => this.m_CanDrag;
 
-        [SerializeField]
-        protected bool m_CanDropItems = false;
+        [SerializeField] protected bool m_CanDropItems = false;
         public bool CanDropItems => this.m_CanDropItems;
 
-        [SerializeField]
-        protected bool m_CanUseItems = false;
+        [SerializeField] protected bool m_CanUseItems = false;
         public bool CanUseItems => this.m_CanUseItems;
-        
-        [SerializeField]
-        protected bool m_UseContextMenu = false;
+
+        [SerializeField] protected bool m_UseContextMenu = false;
         public bool UseContextMenu => this.m_UseContextMenu;
 
-        [SerializeField]
-        protected bool m_ShowTooltips = false;
+        [SerializeField] protected bool m_ShowTooltips = false;
         public bool ShowTooltips => this.m_ShowTooltips;
-        
-        [SerializeField]
-        protected bool m_MoveUsedItem = false;
+
+        [SerializeField] protected bool m_MoveUsedItem = false;
 
         [SerializeField] protected List<MoveContainerPriority> m_ContainerNames;
         protected List<ItemContainer> MoveToContainers { get; set; }
         public bool MoveUsedItem => this.m_MoveUsedItem;
-        
+
         protected List<JoyItemSlot> Slots { get; set; }
 
         protected IJoyObject m_Owner;
@@ -78,6 +72,7 @@ namespace JoyLib.Code.Unity
             {
                 return 1;
             }
+
             if (left.Item2 < right.Item2)
             {
                 return -1;
@@ -92,10 +87,12 @@ namespace JoyLib.Code.Unity
             {
                 return;
             }
+
             if (this.Slots is null)
             {
                 this.Slots = this.GetComponentsInChildren<JoyItemSlot>().ToList();
             }
+
             this.MoveToContainers = new List<ItemContainer>();
             if (this.m_ContainerNames is null)
             {
@@ -105,13 +102,16 @@ namespace JoyLib.Code.Unity
             {
                 foreach (MoveContainerPriority priority in this.m_ContainerNames)
                 {
-                    this.MoveToContainers.Add(this.GUIManager.GetGUI(priority.m_ContainerName).GetComponent<ItemContainer>());
+                    this.MoveToContainers.Add(this.GUIManager.GetGUI(priority.m_ContainerName)
+                        .GetComponent<ItemContainer>());
                 }
             }
+
             if (this.Owner is null)
             {
                 this.Owner = new VirtualStorage();
             }
+
             if (this.Owner is IItemContainer container)
             {
                 foreach (JoyItemSlot slot in this.Slots)
@@ -124,11 +124,12 @@ namespace JoyLib.Code.Unity
                 {
                     for (int i = this.Slots.Count; i < container.Contents.Count; i++)
                     {
-                        this.Slots.Add(Instantiate(this.m_SlotPrefab, this.m_SlotParent.transform, false).GetComponent<JoyItemSlot>());
+                        this.Slots.Add(Instantiate(this.m_SlotPrefab, this.m_SlotParent.transform, false)
+                            .GetComponent<JoyItemSlot>());
                     }
                 }
-                
-                for(int i = 0; i < container.Contents.Count; i++)
+
+                for (int i = 0; i < container.Contents.Count; i++)
                 {
                     this.Slots[i].Item = container.Contents[i];
                 }
@@ -141,7 +142,7 @@ namespace JoyLib.Code.Unity
             {
                 return;
             }
-            
+
             foreach (JoyItemSlot slot in this.Slots)
             {
                 slot.Item = null;
@@ -154,15 +155,26 @@ namespace JoyLib.Code.Unity
             var sorted = (from priority in this.m_ContainerNames
                 orderby priority.m_Priority descending
                 select priority);
+
+            if (this.MoveToContainers.Count == 0)
+            {
+                return false;
+            }
             
-            if (sorted.Any(priority => this.MoveToContainers.Count != 0 && this.MoveToContainers
-                .First(container =>
-                    container.name.Equals(priority.m_ContainerName, StringComparison.OrdinalIgnoreCase)
-                    && (priority.m_RequiresVisibility && container.isActiveAndEnabled)
-                    || priority.m_RequiresVisibility == false)
-                .StackOrAdd(item)))
+            ItemContainer target = this.MoveToContainers.FirstOrDefault(container => sorted.Any(sort =>
+                sort.m_ContainerName.Equals(container.name, StringComparison.OrdinalIgnoreCase)
+                && (sort.m_RequiresVisibility && container.isActiveAndEnabled)
+                || sort.m_RequiresVisibility == false));
+                
+            if (target is null != false)
+            {
+                return false;
+            }
+
+            if (target.StackOrAdd(item))
             {
                 return this.RemoveItem(item);
+
             }
 
             return false;
@@ -262,7 +274,7 @@ namespace JoyLib.Code.Unity
                 this.Slots.ForEach(slot => slot.gameObject.SetActive(false));
                 return true;
             }
-            
+
             this.Slots.ForEach(slot => Destroy(slot));
             return true;
         }
@@ -288,11 +300,11 @@ namespace JoyLib.Code.Unity
             {
                 if (this.Owner is IItemContainer container)
                 {
-                    if(container.CanAddContents(instance) | container.Contains(instance))
+                    if (container.CanAddContents(instance) | container.Contains(instance))
                     {
                         container.AddContents(instance);
                         slot.Item = instance;
-                        this.OnAddItem?.Invoke(container, new ItemChangedEventArgs() { Item = item });
+                        this.OnAddItem?.Invoke(container, new ItemChangedEventArgs() {Item = item});
                         return true;
                     }
                 }
@@ -318,12 +330,12 @@ namespace JoyLib.Code.Unity
                     {
                         return false;
                     }
-                    
-                    if(container.CanAddContents(instance) | container.Contains(instance))
+
+                    if (container.CanAddContents(instance) | container.Contains(instance))
                     {
                         container.AddContents(instance);
                         this.Slots.First(slot => slot.Item is null).Item = item;
-                        this.OnAddItem?.Invoke(container, new ItemChangedEventArgs() { Item = item });
+                        this.OnAddItem?.Invoke(container, new ItemChangedEventArgs() {Item = item});
                     }
                 }
 
@@ -355,10 +367,10 @@ namespace JoyLib.Code.Unity
                         result |= container.RemoveContents(matches[i]);
                         result |= this.RemoveItem(matches[i]);
                     }
-                
+
                     if (result)
                     {
-                        this.OnRemoveItem?.Invoke(container, new ItemChangedEventArgs { Item = item });
+                        this.OnRemoveItem?.Invoke(container, new ItemChangedEventArgs {Item = item});
                     }
                 }
             }
@@ -377,14 +389,15 @@ namespace JoyLib.Code.Unity
             {
                 if (this.Owner is IItemContainer container)
                 {
-                    if (container.Contains(item) == false || this.Slots.Any(slot => !(slot.Item is null) && slot.Item.GUID == item.GUID) == false)
+                    if (container.Contains(item) == false ||
+                        this.Slots.Any(slot => !(slot.Item is null) && slot.Item.GUID == item.GUID) == false)
                     {
                         return false;
                     }
-                    
+
                     container.RemoveContents(item);
                     this.Slots.First(slot => !(slot.Item is null) && slot.Item.GUID == item.GUID).Item = null;
-                    this.OnRemoveItem?.Invoke(container, new ItemChangedEventArgs() { Item = item });
+                    this.OnRemoveItem?.Invoke(container, new ItemChangedEventArgs() {Item = item});
                 }
 
                 return true;
@@ -412,7 +425,7 @@ namespace JoyLib.Code.Unity
 
                 container.RemoveContents(item);
                 slot.Item = null;
-                this.OnRemoveItem?.Invoke(container, new ItemChangedEventArgs() { Item = item });
+                this.OnRemoveItem?.Invoke(container, new ItemChangedEventArgs() {Item = item});
             }
 
             return true;
@@ -434,12 +447,12 @@ namespace JoyLib.Code.Unity
                     if (i1.AddContents(i2))
                     {
                         this.StackOrAdd(s1, i2);
-                        this.OnAddItem?.Invoke(i1, new ItemChangedEventArgs() { Item = i2 });
+                        this.OnAddItem?.Invoke(i1, new ItemChangedEventArgs() {Item = i2});
                         return true;
                     }
                 }
             }
-            
+
             return false;
         }
 
