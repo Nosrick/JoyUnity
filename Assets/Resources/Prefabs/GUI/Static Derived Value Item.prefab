@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6419558160874721577}
   - component: {fileID: 2027446143425722988}
   - component: {fileID: 8739657119768882345}
+  - component: {fileID: 7945240248463743913}
   m_Layer: 0
   m_Name: Static Derived Value Item
   m_TagString: Untagged
@@ -73,7 +74,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AspectMode: 1
-  m_AspectRatio: 9.375
+  m_AspectRatio: 10
+--- !u!114 &7945240248463743913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6419558160874721576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: 30
+  m_PreferredWidth: -1
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
 --- !u!1 &6419558161032276359
 GameObject:
   m_ObjectHideFlags: 0
@@ -165,7 +186,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 28.6
+  m_fontSize: 26.85
   m_fontSizeBase: 16
   m_fontWeight: 400
   m_enableAutoSizing: 1
