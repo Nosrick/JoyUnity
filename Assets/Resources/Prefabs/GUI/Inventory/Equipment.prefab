@@ -216,6 +216,7 @@ GameObject:
   - component: {fileID: 4484802662463132235}
   - component: {fileID: 4484802662463132245}
   - component: {fileID: 161253348}
+  - component: {fileID: 6319054570482489718}
   m_Layer: 5
   m_Name: EquipmentSlots
   m_TagString: Untagged
@@ -240,7 +241,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 1}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &4484802662463132245
 CanvasRenderer:
@@ -275,6 +276,20 @@ MonoBehaviour:
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
+--- !u!114 &6319054570482489718
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4484802662463132232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 0
+  m_VerticalFit: 2
 --- !u!1 &4484802662935803586
 GameObject:
   m_ObjectHideFlags: 0
@@ -421,7 +436,6 @@ GameObject:
   - component: {fileID: 4484802663421619782}
   - component: {fileID: 4484802663421619783}
   - component: {fileID: 4484802664301879305}
-  - component: {fileID: 4484802664301879307}
   m_Layer: 5
   m_Name: SlotsMask
   m_TagString: Untagged
@@ -529,24 +543,6 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &4484802664301879307
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4484802663421619781}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 867d326ab2fd40058983c457e8d23c6a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ResizeThis: 0
-  ResizeChild: 1
-  ChildLayoutGroup: {fileID: 161253348}
-  ScrollRect: {fileID: 4484802664301879305}
-  ResizeHorizontal: 0
-  ResizeVertical: 1
 --- !u!1001 &2093179654560242499
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -637,12 +633,12 @@ PrefabInstance:
     - target: {fileID: 45986810656440416, guid: 170a10e9e51de134b9b56ec34ceaebf2,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.4000244
+      value: -0.39941406
       objectReference: {fileID: 0}
     - target: {fileID: 45986810656440416, guid: 170a10e9e51de134b9b56ec34ceaebf2,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.29992676
+      value: 0.2998047
       objectReference: {fileID: 0}
     - target: {fileID: 45986810656440416, guid: 170a10e9e51de134b9b56ec34ceaebf2,
         type: 3}
