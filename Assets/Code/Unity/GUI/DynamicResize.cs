@@ -20,7 +20,7 @@ namespace JoyLib.Code.Unity.GUI
         protected Vector2 OriginalSize { get; set; }
         protected Vector2 LastChildSize { get; set; }
         
-        protected void Awake()
+        protected void OnEnable()
         {
             this.MyRectTransform = this.GetComponent<RectTransform>();
             this.OriginalSize = this.MyRectTransform.sizeDelta;
@@ -87,15 +87,7 @@ namespace JoyLib.Code.Unity.GUI
             {
                 if (this.ResizeThis)
                 {
-                    switch (this.ResizeChild)
-                    {
-                        case true when this.MyRectTransform.sizeDelta.x != this.LastChildSize.x:
-                            this.MyRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, this.LastChildSize.x);
-                            break;
-                        case true:
-                            this.MyRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
-                            break;
-                    }
+                    this.MyRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
                 }
                 if (this.ResizeChild)
                 {
@@ -107,15 +99,7 @@ namespace JoyLib.Code.Unity.GUI
             {
                 if (this.ResizeThis)
                 {
-                    switch (this.ResizeChild)
-                    {
-                        case true when this.MyRectTransform.sizeDelta.y != this.LastChildSize.y:
-                            this.MyRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, this.LastChildSize.y);
-                            break;
-                        case true:
-                            this.MyRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
-                            break;
-                    }
+                    this.MyRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
                 }
                 if (this.ResizeChild)
                 {

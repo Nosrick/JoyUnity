@@ -136,6 +136,8 @@ namespace JoyLib.Code.Unity.GUI
             }
            
             this.m_Background.gameObject.SetActive(showBackground);
+            
+            LayoutRebuilder.ForceRebuildLayoutImmediate(this.RectTransform);
 
             base.Show();
         }
