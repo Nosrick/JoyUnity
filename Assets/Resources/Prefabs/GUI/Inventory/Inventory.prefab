@@ -91,7 +91,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 65.4
+  m_fontSize: 60.65
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -10019,7 +10019,7 @@ PrefabInstance:
     - target: {fileID: 45986810656440416, guid: 170a10e9e51de134b9b56ec34ceaebf2,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 1.2141113
+      value: 1.2128906
       objectReference: {fileID: 0}
     - target: {fileID: 45986810656440416, guid: 170a10e9e51de134b9b56ec34ceaebf2,
         type: 3}
