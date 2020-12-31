@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using Castle.Core.Internal;
-using JoyLib.Code.Collections;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.AI;
@@ -41,7 +40,7 @@ namespace JoyLib.Code.Entities
         protected IDictionary<string, IEntitySkill> m_Skills;
         protected IDictionary<string, INeed> m_Needs;
         protected List<IAbility> m_Abilities;
-        protected NonUniqueDictionary<string, IItemInstance> m_Equipment;
+        protected EquipmentStorage m_Equipment;
         protected List<IItemInstance> m_Backpack;
         protected IItemInstance m_NaturalWeapons;
         protected ISexuality m_Sexuality;
@@ -142,7 +141,7 @@ namespace JoyLib.Code.Entities
             Vector2Int position,
             Sprite[] sprites,
             IItemInstance naturalWeapons,
-            NonUniqueDictionary<string, IItemInstance> equipment,
+            EquipmentStorage equipment,
             List<IItemInstance> backpack,
             List<string> identifiedItems,
             IEnumerable<IJob> jobs,
@@ -249,7 +248,7 @@ namespace JoyLib.Code.Entities
             IDriver driver,
             RNG roller = null) :
             this(template, statistics, derivedValues, needs, skills, abilities, cultures, job, gender, sex, sexuality, romance, position, sprites,
-                NaturalWeaponHelper?.MakeNaturalWeapon(template.Size), new NonUniqueDictionary<string, IItemInstance>(),
+                NaturalWeaponHelper?.MakeNaturalWeapon(template.Size), new EquipmentStorage(),
                 new List<IItemInstance>(), new List<string>(), new List<IJob> { job }, world, driver, roller)
         {
         }
@@ -510,11 +509,11 @@ namespace JoyLib.Code.Entities
             }
 
             //Check equipment
-            List<IItemInstance> items = m_Equipment.Values;
+            IEnumerable<IItemInstance> items = m_Equipment.Contents;
 
             foreach (string tag in tags)
             {
-                int result = m_Equipment.KeyCount(tag);
+                int result = this.m_Equipment.Contents.Count(item => item.HasTag(tag));
                 if (result > 0)
                 {
                     data.Add(new Tuple<string, int>(tag, result));
@@ -702,16 +701,11 @@ namespace JoyLib.Code.Entities
         public virtual bool RemoveItemFromPerson(IItemInstance item)
         {
             //Check slots first
-            foreach (Tuple<string, IItemInstance> tuple in m_Equipment)
+            foreach (IItemInstance search in m_Equipment.Contents)
             {
-                if (tuple.Item2 == null)
-                {
-                    continue;
-                }
-
                 foreach (string slot in this.Slots)
                 {
-                    if (tuple.Item2.GUID == item.GUID)
+                    if (search.GUID == item.GUID)
                     {
                         return RemoveEquipment(slot);
                     }
@@ -724,17 +718,7 @@ namespace JoyLib.Code.Entities
 
         public virtual bool RemoveEquipment(string slot, IItemInstance item = null)
         {
-            foreach (Tuple<string, IItemInstance> tuple in m_Equipment)
-            {
-                if (tuple.Item1.Equals(slot) && (item != null && tuple.Item2.GUID == item.GUID))
-                {
-                    m_Equipment.Add(slot, null);
-                    m_Equipment.Remove(tuple.Item1, tuple.Item2);
-                    return true;
-                }
-            }
-
-            return false;
+            return this.Equipment.RemoveContents(slot, item);
         }
 
         public IItemInstance[] SearchBackpackForItemType(IEnumerable<string> tags)
@@ -772,53 +756,17 @@ namespace JoyLib.Code.Entities
 
         public virtual bool EquipItem(string slotRef, IItemInstance itemRef)
         {
-            bool contains = false;
-            Tuple<string, IItemInstance> firstEmptySlot = null;
-            foreach (Tuple<string, IItemInstance> tuple in m_Equipment)
-            {
-                if (tuple.Item1.Equals(slotRef))
-                {
-                    contains = true;
-                    if (tuple.Item2 == null)
-                    {
-                        firstEmptySlot = tuple;
-                    }
-
-                    break;
-                }
-            }
-
-            if (contains == false)
+            if (!this.Equipment.CanAddContents(itemRef))
             {
                 return false;
             }
 
-            if (firstEmptySlot != null)
-            {
-                m_Backpack.Add(firstEmptySlot.Item2);
-            }
-
-            m_Equipment.Remove(firstEmptySlot.Item1, firstEmptySlot.Item2);
-            m_Equipment.Add(firstEmptySlot.Item1, itemRef);
-            m_Backpack.Remove(itemRef);
-            return true;
+            return this.Equipment.AddContents(itemRef, slotRef);
         }
 
-        public virtual bool UnequipItem(string slot)
+        public virtual bool UnequipItem(IItemInstance actor)
         {
-            foreach (Tuple<string, IItemInstance> tuple in m_Equipment)
-            {
-                if (tuple.Item1.Equals(slot))
-                {
-                    AddContents(tuple.Item2);
-                    //TODO: Make this better
-                    m_Equipment.Remove(tuple.Item1, tuple.Item2);
-                    m_Equipment.Add(tuple.Item1, null);
-                    return true;
-                }
-            }
-
-            return false;
+            return this.Equipment.Contains(actor) && this.Equipment.RemoveContents(actor);
         }
 
         public void DecreaseMana(int value)
@@ -887,27 +835,12 @@ namespace JoyLib.Code.Entities
             });
         }
 
-        public IItemInstance GetEquipment(string slotRef)
+        public IEnumerable<IItemInstance> GetEquipment(string slotRef)
         {
-            foreach (Tuple<string, IItemInstance> tuple in m_Equipment)
-            {
-                if (tuple.Item1.Equals(slotRef))
-                {
-                    if (slotRef.StartsWith("Hand") && tuple.Item2 == null)
-                    {
-                        return m_NaturalWeapons;
-                    }
-                }
-                else
-                {
-                    return tuple.Item2;
-                }
-            }
-
-            return null;
+            return this.Equipment.GetSlotContents(slotRef);
         }
 
-        public List<IItemInstance> Contents
+        public IEnumerable<IItemInstance> Contents
         {
             get
             {
@@ -1007,10 +940,7 @@ namespace JoyLib.Code.Entities
 
         public IDriver Driver => m_Driver;
 
-        public NonUniqueDictionary<string, IItemInstance> Equipment
-        {
-            get { return new NonUniqueDictionary<string, IItemInstance>(m_Equipment); }
-        }
+        public EquipmentStorage Equipment => this.m_Equipment;
 
         public IDictionary<string, IRollableValue<int>> Statistics
         {

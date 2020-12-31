@@ -41,21 +41,21 @@ namespace JoyLib.Code.Combat
                 .Where(pair => defenderTags.Any(tag => tag.Equals(pair.Key, StringComparison.OrdinalIgnoreCase)))
                 .Select(pair => pair.Value));
 
-            List<IItemInstance> attackerWeapons = attacker.Equipment.Select(tuple => tuple.Item2).Where(instance =>
+            List<IItemInstance> attackerWeapons = attacker.Equipment.Contents.Where(instance =>
                 instance.Tags.Any(tag => tag.Equals("weapon", StringComparison.OrdinalIgnoreCase))
-                && instance.Tags.Intersect(attackerTags).Count() > 0)
+                && instance.Tags.Intersect(attackerTags).Any())
                 .ToList();
 
-            List<IItemInstance> defenderArmour = defender.Equipment.Select(tuple => tuple.Item2).Where(instance =>
+            List<IItemInstance> defenderArmour = defender.Equipment.Contents.Where(instance =>
                     instance.Tags.Any(tag => tag.Equals("armour", StringComparison.OrdinalIgnoreCase)
-                    && instance.Tags.Intersect(defenderTags).Count() > 0))
+                    && instance.Tags.Intersect(defenderTags).Any()))
                 .ToList();
 
             List<IAbility> attackerAbilities = attacker.Abilities.Where(ability =>
-                ability.Tags.Intersect(attackerTags).Count() > 0).ToList();
+                ability.Tags.Intersect(attackerTags).Any()).ToList();
 
             List<IAbility> defenderAbilities = defender.Abilities.Where(ability =>
-                ability.Tags.Intersect(attackerTags).Count() > 0).ToList();
+                ability.Tags.Intersect(attackerTags).Any()).ToList();
 
             attackerAbilities.ForEach(ability => ability.OnAttack(
                 attacker, 

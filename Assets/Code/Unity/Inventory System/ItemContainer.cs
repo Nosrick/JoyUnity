@@ -53,7 +53,7 @@ namespace JoyLib.Code.Unity
 
         public string UseAction => this.m_UseAction;
 
-        public List<IItemInstance> Contents
+        public IEnumerable<IItemInstance> Contents
         {
             get
             {
@@ -120,18 +120,19 @@ namespace JoyLib.Code.Unity
                     slot.Item = null;
                 }
 
-                if (this.Slots.Count < container.Contents.Count)
+                if (this.Slots.Count < container.Contents.Count())
                 {
-                    for (int i = this.Slots.Count; i < container.Contents.Count; i++)
+                    for (int i = this.Slots.Count; i < container.Contents.Count(); i++)
                     {
                         this.Slots.Add(Instantiate(this.m_SlotPrefab, this.m_SlotParent.transform, false)
                             .GetComponent<JoyItemSlot>());
                     }
                 }
 
-                for (int i = 0; i < container.Contents.Count; i++)
+                List<IItemInstance> contents = container.Contents.ToList();
+                for (int i = 0; i < contents.Count; i++)
                 {
-                    this.Slots[i].Item = container.Contents[i];
+                    this.Slots[i].Item = contents[i];
                 }
             }
         }

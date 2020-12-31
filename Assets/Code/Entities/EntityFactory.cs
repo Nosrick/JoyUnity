@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Collections;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.AI.Drivers;
@@ -221,7 +220,7 @@ namespace JoyLib.Code.Entities
             Vector2Int position,
             Sprite[] sprites,
             IItemInstance naturalWeapons,
-            NonUniqueDictionary<string, IItemInstance> equipment,
+            EquipmentStorage equipment,
             List<IItemInstance> backpack,
             List<string> identifiedItems,
             IEnumerable<IJob> jobs,

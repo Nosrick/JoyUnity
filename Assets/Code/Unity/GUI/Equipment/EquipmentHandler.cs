@@ -1,20 +1,19 @@
 ﻿using System.Collections.Generic;
 using JoyLib.Code.Entities;
+using JoyLib.Code.Entities.Items;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public class EquipmentHandler : MonoBehaviour
+    public class EquipmentHandler : ItemContainer
     {
         private IEntity m_Player;
 
-        [SerializeField] protected GameObject m_SlotPrefab;
-        [SerializeField] protected LayoutGroup m_Container;
-        [SerializeField] protected ItemContainer m_EquipmentContainer;
-        
-        public bool Initialised { get; protected set; }
+        public void Awake()
+        {
+            this.Owner = new VirtualStorage();
+        }
 
         public void SetPlayer(IEntity player, bool clearSlots = false)
         {
@@ -26,25 +25,23 @@ namespace JoyLib.Code.Unity.GUI
         {
             if (clearSlots)
             {
-                this.m_EquipmentContainer.RemoveAllSlots();
+                this.RemoveAllSlots();
             }
             
             List<string> slots = this.m_Player.Slots;
             
             for(int i = 0; i < slots.Count; i++)
             {
-                GameObject slotInstance = GameObject.Instantiate(
+                JoyItemSlot slotInstance = GameObject.Instantiate(
                     this.m_SlotPrefab,
-                    this.m_Container.transform);
-                slotInstance.SetActive(this.m_Container.enabled);
+                    this.transform);
+                slotInstance.gameObject.SetActive(this.enabled);
                 TextMeshProUGUI slotName = slotInstance.GetComponentInChildren<TextMeshProUGUI>();
                 slotName.text = slots[i];
                 JoyItemSlot slotScript = slotInstance.GetComponent<JoyItemSlot>();
-                slotScript.Container = this.m_EquipmentContainer;
+                slotScript.Container = this;
                 slotScript.m_Slot = slots[i];
             }
-
-            this.Initialised = true;
         }
     }
 }

@@ -334,7 +334,7 @@ namespace JoyLib.Code.Entities.Items
         public void Move(Vector2Int newPosition)
         {
             this.WorldPosition = newPosition;
-            foreach (IJoyObject joyObject in Contents)
+            foreach (IJoyObject joyObject in this.Contents)
             {
                 joyObject.Move(newPosition);
             }
@@ -642,6 +642,16 @@ namespace JoyLib.Code.Entities.Items
             }
         }
 
+        public override bool Equals(object obj)
+        {
+            if (!(obj is IItemInstance other))
+            {
+                return false;
+            }
+
+            return other.GUID == this.GUID;
+        }
+
         public bool Identified
         {
             get
@@ -756,10 +766,9 @@ namespace JoyLib.Code.Entities.Items
             get
             {
                 float weight = m_Type.Weight;
-                List<IItemInstance> contents = Contents;
-                for(int i = 0; i < contents.Count; i++)
+                foreach(IItemInstance item in this.Contents)
                 {
-                    weight += contents[i].Weight;
+                    weight += item.Weight;
                 }
 
                 return weight;
@@ -776,7 +785,7 @@ namespace JoyLib.Code.Entities.Items
 
         public IEnumerable<Tuple<string, string>> Tooltip { get; protected set; }
 
-        public List<IItemInstance> Contents
+        public IEnumerable<IItemInstance> Contents
         {
             get
             {
@@ -795,9 +804,8 @@ namespace JoyLib.Code.Entities.Items
             {
                 string contentString = "It contains ";
 
-                List<IItemInstance> items = Contents;
-
-                if (items.Count == 0)
+                List<IItemInstance> items = this.Contents.ToList();
+                if (items.Any() == false)
                 {
                     contentString = "";
                     return contentString;

@@ -124,7 +124,7 @@ namespace JoyLib.Code.Quests
             for (int i = 0; i < Rewards.Count; i++)
             {
                 rewardString += Rewards[i].JoyName;
-                if(Rewards[i].Contents.Count != 0)
+                if(Rewards[i].Contents.Any())
                 {
                     rewardString += ", " + Rewards[i].ContentString;
                 }

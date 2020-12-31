@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using JoyLib.Code.Collections;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.AI;
@@ -26,7 +25,7 @@ namespace JoyLib.Code.Entities
         IDictionary<string, IEntitySkill> Skills { get; }
         IDictionary<string, INeed> Needs { get; }
         List<IAbility> Abilities { get; }
-        NonUniqueDictionary<string, IItemInstance> Equipment { get; }
+        EquipmentStorage Equipment { get; }
         List<IItemInstance> Backpack { get; }
         IItemInstance NaturalWeapons { get; }
         IBioSex Sex { get; }
@@ -74,8 +73,8 @@ namespace JoyLib.Code.Entities
         bool RemoveEquipment(string slot, IItemInstance item = null);
         IItemInstance[] SearchBackpackForItemType(IEnumerable<string> tags);
         bool EquipItem(string slotRef, IItemInstance itemRef);
-        IItemInstance GetEquipment(string slotRef);
-        bool UnequipItem(string slot);
+        IEnumerable<IItemInstance> GetEquipment(string slotRef);
+        bool UnequipItem(IItemInstance actor);
 
         void DecreaseMana(int value);
         void IncreaseMana(int value);

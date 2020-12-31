@@ -5,7 +5,7 @@ namespace JoyLib.Code.Entities.Items
 {
     public interface IItemContainer
     {
-        List<IItemInstance> Contents { get; }
+        IEnumerable<IItemInstance> Contents { get; }
 
         bool Contains(IItemInstance actor);
 
