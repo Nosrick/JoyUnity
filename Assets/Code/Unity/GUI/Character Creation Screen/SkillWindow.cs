@@ -17,8 +17,9 @@ namespace JoyLib.Code.Unity.GUI
         
         protected IDictionary<string, IEntitySkill> Skills { get; set; }
 
-        public void Awake()
+        public void Initialise()
         {
+            base.OnEnable();
             ValueContainerPrefab.gameObject.SetActive(false);
             Items = new List<NamedItem>();
             Skills = new Dictionary<string, IEntitySkill>();
