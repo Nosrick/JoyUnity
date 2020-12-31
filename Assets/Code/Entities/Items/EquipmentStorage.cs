@@ -7,32 +7,42 @@ namespace JoyLib.Code.Entities.Items
 {
     public class EquipmentStorage : JoyObject, IItemContainer
     {
-        protected List<Tuple<string, IItemInstance>> Slots { get; set; }
+        protected List<Tuple<string, IItemInstance>> m_Slots;
+        public IReadOnlyList<Tuple<string, IItemInstance>> Slots => this.m_Slots.AsReadOnly();
 
         public IEnumerable<IItemInstance> Contents =>
-            this.Slots.Where(tuple => tuple.Item2 is null == false)
+            this.m_Slots.Where(tuple => tuple.Item2 is null == false)
                 .Select(tuple => tuple.Item2);
 
         public EquipmentStorage()
         {
-            this.Slots = new List<Tuple<string, IItemInstance>>();
+            this.m_Slots = new List<Tuple<string, IItemInstance>>();
+        }
+
+        public EquipmentStorage(IEnumerable<string> slots)
+        {
+            this.m_Slots = new List<Tuple<string, IItemInstance>>();
+            foreach (string slot in slots)
+            {
+                this.m_Slots.Add(new Tuple<string, IItemInstance>(slot, null));
+            }
         }
         
         public bool Contains(IItemInstance actor)
         {
-            return this.Slots.Any(tuple => actor.Equals(tuple.Item2));
+            return this.m_Slots.Any(tuple => actor.Equals(tuple.Item2));
         }
 
         public IEnumerable<IItemInstance> GetSlotContents(string slot)
         {
-            return this.Slots.Where(tuple => tuple.Item1.Equals(slot, StringComparison.OrdinalIgnoreCase))
+            return this.m_Slots.Where(tuple => tuple.Item1.Equals(slot, StringComparison.OrdinalIgnoreCase))
                 .Select(tuple => tuple.Item2);
         }
 
         public bool CanAddContents(IItemInstance actor)
         {
             return !this.Contains(actor) 
-                   && this.Slots.Any(slot => 
+                   && this.m_Slots.Any(slot => 
                        actor.ItemType.Slots.Any(s => s.Equals(slot.Item1, StringComparison.OrdinalIgnoreCase))
                        && slot.Item2 is null);
         }
@@ -44,7 +54,7 @@ namespace JoyLib.Code.Entities.Items
                 return false;
             }
 
-            string slot = this.Slots.First(s =>
+            string slot = this.m_Slots.First(s =>
                 actor.ItemType.Slots.Any(i => i.Equals(s.Item1, StringComparison.OrdinalIgnoreCase))
                 && s.Item2 is null).Item1;
 
@@ -58,7 +68,7 @@ namespace JoyLib.Code.Entities.Items
                 return false;
             }
 
-            int index = this.Slots.FindIndex(tuple =>
+            int index = this.m_Slots.FindIndex(tuple =>
                 tuple.Item1.Equals(slot, StringComparison.OrdinalIgnoreCase)
                 && tuple.Item2 is null);
 
@@ -67,8 +77,8 @@ namespace JoyLib.Code.Entities.Items
                 return false;
             }
             
-            this.Slots.RemoveAt(index);
-            this.Slots.Insert(index, new Tuple<string, IItemInstance>(slot, actor));
+            this.m_Slots.RemoveAt(index);
+            this.m_Slots.Insert(index, new Tuple<string, IItemInstance>(slot, actor));
             
             this.ItemAdded?.Invoke(this, new ItemChangedEventArgs() { Item = actor });
             return true;
@@ -83,17 +93,19 @@ namespace JoyLib.Code.Entities.Items
 
         public bool RemoveContents(IItemInstance actor)
         {
-            if (this.Slots.All(s => s.Item2.GUID != actor.GUID))
+            if (this.m_Slots.All(s => actor.Equals(s.Item2) == false))
             {
                 return false;
             }
-            int index = this.Slots.FindIndex(s => s.Item2.GUID == actor.GUID);
+            int index = this.m_Slots.FindIndex(s => actor.Equals(s.Item2));
             if (index == -1)
             {
                 return false;
             }
-            
-            this.Slots.RemoveAt(index);
+
+            string slot = this.m_Slots[index].Item1;
+            this.m_Slots.RemoveAt(index);
+            this.m_Slots.Insert(index, new Tuple<string, IItemInstance>(slot, null));
             this.ItemRemoved?.Invoke(this, new ItemChangedEventArgs() { Item = actor });
 
             return true;
@@ -101,20 +113,20 @@ namespace JoyLib.Code.Entities.Items
 
         public bool RemoveContents(string slot, IItemInstance actor)
         {
-            if (this.Slots.All(s => s.Item2.GUID != actor.GUID
+            if (this.m_Slots.All(s => s.Item2.GUID != actor.GUID
                                     && s.Item1.Equals(slot, StringComparison.OrdinalIgnoreCase) == false))
             {
                 return false;
             }
 
-            int index = this.Slots.FindIndex(tuple =>
+            int index = this.m_Slots.FindIndex(tuple =>
                                                 tuple.Item1.Equals(slot, StringComparison.OrdinalIgnoreCase)
                                                 && tuple.Item2.Equals(actor));
             if (index == -1)
             {
                 return false;
             }
-            this.Slots.RemoveAt(index);
+            this.m_Slots.RemoveAt(index);
             this.ItemRemoved?.Invoke(this, new ItemChangedEventArgs { Item = actor });
             return true;
         }
@@ -130,9 +142,9 @@ namespace JoyLib.Code.Entities.Items
 
         public int AddSlot(string slot)
         {
-            this.Slots.Add(new Tuple<string, IItemInstance>(slot, null));
+            this.m_Slots.Add(new Tuple<string, IItemInstance>(slot, null));
 
-            return this.Slots.Count(s => s.Item1.Equals(slot, StringComparison.OrdinalIgnoreCase));
+            return this.m_Slots.Count(s => s.Item1.Equals(slot, StringComparison.OrdinalIgnoreCase));
         }
 
         public string ContentString { get; }

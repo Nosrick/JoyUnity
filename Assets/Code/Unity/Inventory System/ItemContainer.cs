@@ -81,7 +81,7 @@ namespace JoyLib.Code.Unity
             return 0;
         }
 
-        public void OnEnable()
+        public virtual void OnEnable()
         {
             if (GlobalConstants.GameManager is null)
             {
@@ -137,7 +137,7 @@ namespace JoyLib.Code.Unity
             }
         }
 
-        public void RemoveAllItems()
+        public virtual void RemoveAllItems()
         {
             if (this.Slots is null)
             {
@@ -151,7 +151,7 @@ namespace JoyLib.Code.Unity
             }
         }
 
-        public bool MoveItem(IItemInstance item)
+        public virtual bool MoveItem(IItemInstance item)
         {
             var sorted = (from priority in this.m_ContainerNames
                 orderby priority.m_Priority descending
@@ -181,7 +181,7 @@ namespace JoyLib.Code.Unity
             return false;
         }
 
-        public List<JoyItemSlot> GetRequiredSlots(IItemInstance item, JoyItemSlot preferedSlot = null)
+        public virtual List<JoyItemSlot> GetRequiredSlots(IItemInstance item, JoyItemSlot preferedSlot = null)
         {
             List<JoyItemSlot> slots = new List<JoyItemSlot>();
             if (item == null)
@@ -225,7 +225,7 @@ namespace JoyLib.Code.Unity
             return slots;
         }
 
-        public bool AddSlot(JoyItemSlot slot, bool pool = true)
+        public virtual bool AddSlot(JoyItemSlot slot, bool pool = true)
         {
             if (pool)
             {
@@ -247,7 +247,7 @@ namespace JoyLib.Code.Unity
             }
         }
 
-        public bool RemoveSlot(JoyItemSlot slot, bool pool = true)
+        public virtual bool RemoveSlot(JoyItemSlot slot, bool pool = true)
         {
             if (this.Slots.Any(itemSlot => itemSlot == slot))
             {
@@ -268,7 +268,7 @@ namespace JoyLib.Code.Unity
             return false;
         }
 
-        public bool RemoveAllSlots(bool pool = true)
+        public virtual bool RemoveAllSlots(bool pool = true)
         {
             if (pool)
             {
@@ -280,7 +280,7 @@ namespace JoyLib.Code.Unity
             return true;
         }
 
-        public bool CanAddItem(IItemInstance item)
+        public virtual bool CanAddItem(IItemInstance item)
         {
             if (this.Owner is IItemContainer container)
             {
@@ -290,7 +290,12 @@ namespace JoyLib.Code.Unity
             return false;
         }
 
-        public bool StackOrAdd(JoyItemSlot slot, IItemInstance item)
+        public virtual bool StackOrAdd(JoyItemSlot slot, IItemInstance item)
+        {
+            return this.StackOrAdd(new[] {slot}, item);
+        }
+
+        protected virtual bool StackOrAdd(IEnumerable<JoyItemSlot> slots, IItemInstance item)
         {
             if (this.Owner is null)
             {
@@ -304,7 +309,10 @@ namespace JoyLib.Code.Unity
                     if (container.CanAddContents(instance) | container.Contains(instance))
                     {
                         container.AddContents(instance);
-                        slot.Item = instance;
+                        foreach (JoyItemSlot slot in slots)
+                        {
+                            slot.Item = instance;
+                        }
                         this.OnAddItem?.Invoke(container, new ItemChangedEventArgs() {Item = item});
                         return true;
                     }
@@ -316,37 +324,23 @@ namespace JoyLib.Code.Unity
             return false;
         }
 
-        public bool StackOrAdd(IItemInstance item)
+        public virtual bool StackOrAdd(IItemInstance item)
         {
-            if (this.Owner is null)
+            IEnumerable<JoyItemSlot> slots = null;
+
+            if (item.ItemType.Slots.Length == 0)
             {
-                return false;
+                slots = new []{ this.Slots.First(slot => slot.IsEmpty) };
+            }
+            else
+            {
+                slots = this.GetRequiredSlots(item);
             }
 
-            if (item is ItemInstance instance && instance.GUID != this.Owner.GUID)
-            {
-                if (this.Owner is IItemContainer container)
-                {
-                    if (this.Slots.All(slot => slot.Item is null == false))
-                    {
-                        return false;
-                    }
-
-                    if (container.CanAddContents(instance) | container.Contains(instance))
-                    {
-                        container.AddContents(instance);
-                        this.Slots.First(slot => slot.Item is null).Item = item;
-                        this.OnAddItem?.Invoke(container, new ItemChangedEventArgs() {Item = item});
-                    }
-                }
-
-                return true;
-            }
-
-            return false;
+            return this.StackOrAdd(slots, item);
         }
 
-        public bool RemoveItem(IItemInstance item, int amount)
+        public virtual bool RemoveItem(IItemInstance item, int amount)
         {
             if (this.Owner is null)
             {
@@ -379,7 +373,7 @@ namespace JoyLib.Code.Unity
             return result;
         }
 
-        public bool RemoveItem(IItemInstance item)
+        public virtual bool RemoveItem(IItemInstance item)
         {
             if (this.Owner is null)
             {
@@ -407,7 +401,7 @@ namespace JoyLib.Code.Unity
             return false;
         }
 
-        public bool RemoveItem(int index)
+        public virtual bool RemoveItem(int index)
         {
             if (this.Owner is null)
             {
@@ -432,7 +426,7 @@ namespace JoyLib.Code.Unity
             return true;
         }
 
-        public bool StackOrSwap(JoyItemSlot s1, JoyItemSlot s2)
+        public virtual bool StackOrSwap(JoyItemSlot s1, JoyItemSlot s2)
         {
             IItemInstance i2 = s2.Item as IItemInstance;
 
@@ -457,8 +451,8 @@ namespace JoyLib.Code.Unity
             return false;
         }
 
-        public event ItemAddedEventHandler OnAddItem;
-        public event ItemRemovedEventHandler OnRemoveItem;
+        public virtual event ItemAddedEventHandler OnAddItem;
+        public virtual event ItemRemovedEventHandler OnRemoveItem;
     }
 
     [Serializable]

@@ -1,24 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Items;
 using TMPro;
-using UnityEngine;
 
 namespace JoyLib.Code.Unity.GUI
 {
     public class EquipmentHandler : ItemContainer
     {
-        private IEntity m_Player;
-
-        public void Awake()
-        {
-            this.Owner = new VirtualStorage();
-        }
+        protected IEntity Player { get; set; }
 
         public void SetPlayer(IEntity player, bool clearSlots = false)
         {
-            m_Player = player;
-            CalculateSlots(clearSlots);
+            this.Player = player;
+            this.Owner = this.Player.Equipment;
+            this.CalculateSlots(clearSlots);
         }
 
         protected virtual void CalculateSlots(bool clearSlots = false)
@@ -28,19 +22,20 @@ namespace JoyLib.Code.Unity.GUI
                 this.RemoveAllSlots();
             }
             
-            List<string> slots = this.m_Player.Slots;
+            var slots = this.Player.Equipment.Slots;
             
-            for(int i = 0; i < slots.Count; i++)
+            foreach ((string slot, var item) in slots)
             {
-                JoyItemSlot slotInstance = GameObject.Instantiate(
+                JoyItemSlot slotInstance = Instantiate(
                     this.m_SlotPrefab,
-                    this.transform);
-                slotInstance.gameObject.SetActive(this.enabled);
+                    this.m_SlotParent.transform);
+                slotInstance.gameObject.SetActive(true);
                 TextMeshProUGUI slotName = slotInstance.GetComponentInChildren<TextMeshProUGUI>();
-                slotName.text = slots[i];
-                JoyItemSlot slotScript = slotInstance.GetComponent<JoyItemSlot>();
-                slotScript.Container = this;
-                slotScript.m_Slot = slots[i];
+                slotName.text = slot;
+                slotInstance.Container = this;
+                slotInstance.m_Slot = slot;
+                slotInstance.Item = item;
+                this.Slots.Add(slotInstance);
             }
         }
     }

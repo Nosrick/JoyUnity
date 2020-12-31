@@ -248,7 +248,7 @@ namespace JoyLib.Code.Entities
             IDriver driver,
             RNG roller = null) :
             this(template, statistics, derivedValues, needs, skills, abilities, cultures, job, gender, sex, sexuality, romance, position, sprites,
-                NaturalWeaponHelper?.MakeNaturalWeapon(template.Size), new EquipmentStorage(),
+                NaturalWeaponHelper?.MakeNaturalWeapon(template.Size), new EquipmentStorage(template.Slots),
                 new List<IItemInstance>(), new List<string>(), new List<IJob> { job }, world, driver, roller)
         {
         }

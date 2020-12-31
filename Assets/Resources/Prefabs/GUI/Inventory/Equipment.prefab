@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 4484802662267518628}
   - component: {fileID: 4484802662267518629}
   - component: {fileID: 4484802662267518630}
-  - component: {fileID: 4484802662267518631}
   - component: {fileID: 4484802662267518624}
   m_Layer: 5
   m_Name: Equipment
@@ -161,35 +160,6 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!114 &4484802662267518631
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4484802662267518616}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b886057594c6471c9e3301af0910e0c0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_RemovesControl: 0
-  m_ClosesOthers: 0
-  m_AlwaysOpen: 0
-  m_Index: 0
-  m_UseAction: 
-  m_SlotParent: {fileID: 161253348}
-  m_SlotPrefab: {fileID: 3635135160908564448}
-  m_CanDrag: 1
-  m_CanDropItems: 0
-  m_CanUseItems: 1
-  m_UseContextMenu: 0
-  m_ShowTooltips: 1
-  m_MoveUsedItem: 1
-  m_ContainerNames:
-  - m_ContainerName: Inventory
-    m_Priority: 5
-    m_RequiresVisibility: 0
 --- !u!114 &4484802662267518624
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -202,9 +172,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae7426b9a54d79844b6b701d5ba47f9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SlotPrefab: {fileID: 5284168612340250145}
-  m_Container: {fileID: 161253348}
-  m_EquipmentContainer: {fileID: 4484802662267518631}
+  m_RemovesControl: 1
+  m_ClosesOthers: 0
+  m_AlwaysOpen: 0
+  m_Index: 0
+  m_UseAction: right mouse
+  m_SlotParent: {fileID: 161253348}
+  m_SlotPrefab: {fileID: 3635135160908564448}
+  m_CanDrag: 1
+  m_CanDropItems: 0
+  m_CanUseItems: 0
+  m_UseContextMenu: 0
+  m_ShowTooltips: 1
+  m_MoveUsedItem: 1
+  m_ContainerNames:
+  - m_ContainerName: Inventory
+    m_Priority: 1
+    m_RequiresVisibility: 1
 --- !u!1 &4484802662463132232
 GameObject:
   m_ObjectHideFlags: 0
@@ -669,7 +653,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 4484802662267518631}
+      objectReference: {fileID: 0}
     - target: {fileID: 5672350621991433020, guid: 170a10e9e51de134b9b56ec34ceaebf2,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
@@ -837,12 +821,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7435434ce2cd01846bbae819ddbb2414, type: 3}
---- !u!1 &5284168612340250145 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8604156886097528880, guid: 7435434ce2cd01846bbae819ddbb2414,
-    type: 3}
-  m_PrefabInstance: {fileID: 4484802663478476305}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &5284168612340250144 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8604156886097528881, guid: 7435434ce2cd01846bbae819ddbb2414,
@@ -855,7 +833,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 4484802663478476305}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5284168612340250145}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0641692108564ac39651851503d52a32, type: 3}
