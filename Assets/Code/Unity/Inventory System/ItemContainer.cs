@@ -174,15 +174,10 @@ namespace JoyLib.Code.Unity
                 return false;
             }
 
-            if (target.StackOrAdd(item))
-            {
-                return this.RemoveItem(item);
-            }
-
-            return false;
+            return this.StackOrSwap(target, item);
         }
 
-        public virtual List<JoyItemSlot> GetRequiredSlots(IItemInstance item, JoyItemSlot preferedSlot = null)
+        public virtual List<JoyItemSlot> GetRequiredSlots(IItemInstance item, bool takeFilledSlots = false)
         {
             List<JoyItemSlot> slots = new List<JoyItemSlot>();
             if (item == null)
@@ -212,12 +207,21 @@ namespace JoyLib.Code.Unity
                 {
                     foreach (KeyValuePair<string, int> pair in requiredSlots)
                     {
-                        if (pair.Key.Equals(this.Slots[i].m_Slot, StringComparison.OrdinalIgnoreCase)
-                            && this.Slots[i].IsEmpty
-                            && copySlots[pair.Key] > 0)
+                        if (pair.Key.Equals(this.Slots[i].m_Slot, StringComparison.OrdinalIgnoreCase))
                         {
-                            copySlots[pair.Key] -= 1;
-                            slots.Add(this.Slots[i]);
+                            if (takeFilledSlots == false 
+                                && this.Slots[i].IsEmpty
+                                && copySlots[pair.Key] > 0)
+                            {
+                                copySlots[pair.Key] -= 1;
+                                slots.Add(this.Slots[i]);
+                            }
+                            else if (takeFilledSlots == true
+                                     && copySlots[pair.Key] > 0)
+                            {
+                                copySlots[pair.Key] -= 1;
+                                slots.Add(this.Slots[i]);
+                            }
                         }
                     }
                 }
@@ -445,29 +449,44 @@ namespace JoyLib.Code.Unity
             return true;
         }
 
-        public virtual bool StackOrSwap(JoyItemSlot s1, JoyItemSlot s2)
+        public virtual bool StackOrSwap(ItemContainer destination, IItemInstance item)
         {
-            IItemInstance i2 = s2.Item as IItemInstance;
-
-            if (i2.GUID != s1.Container.Owner.GUID)
+            if (this.Owner.Equals(destination.Owner) != false)
             {
-                if (s1.Container.Owner is IItemContainer i1)
+                return false;
+            }
+            
+            if (destination.CanAddItem(item) == false)
+            {
+                IEnumerable<JoyItemSlot> filledSlots = destination.GetRequiredSlots(item, true);
+                bool result = true;
+                foreach (JoyItemSlot slot in filledSlots)
                 {
-                    if (i1.CanAddContents(i2) == false)
+                    if (slot.Item is null == false && this.CanAddItem(slot.Item))
                     {
-                        return false;
+                        result &= this.StackOrAdd(slot.Item);
+                        result &= slot.Container.RemoveItem(slot.Item);
                     }
 
-                    if (i1.AddContents(i2))
+                    if (!result)
                     {
-                        this.StackOrAdd(s1, i2);
-                        this.OnAddItem?.Invoke(i1, new ItemChangedEventArgs() {Item = i2});
-                        return true;
+                        break;
                     }
                 }
+
+                if (!result || !destination.CanAddItem(item))
+                {
+                    return false;
+                }
+                if (this.RemoveItem(item) == false)
+                {
+                    return false;
+                }
+                destination.StackOrAdd(item);
+                return true;
             }
 
-            return false;
+            return this.RemoveItem(item) && destination.StackOrAdd(item);
         }
 
         public virtual event ItemAddedEventHandler OnAddItem;

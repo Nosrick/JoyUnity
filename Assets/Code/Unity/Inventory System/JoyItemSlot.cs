@@ -303,8 +303,7 @@ namespace JoyLib.Code.Unity.GUI
                 && container.CanDrag
                 && container.CanAddItem(this.Item))
             {
-                container.StackOrAdd(this.Item);
-                this.Container.RemoveItem(this.Item);
+                this.Container.StackOrSwap(container, this.Item);
             }
                 
             this.EndDrag();
@@ -327,12 +326,7 @@ namespace JoyLib.Code.Unity.GUI
                 return;
             }
             
-            List<RaycastResult> results = new List<RaycastResult>();
-            Raycaster.Raycast(eventData, results);
-            if (results.Count > 0)
-            {
-                this.Container.MoveItem(this.Item);
-            }
+            this.Container.MoveItem(this.Item);
         }
 
         public virtual void OnUse()
