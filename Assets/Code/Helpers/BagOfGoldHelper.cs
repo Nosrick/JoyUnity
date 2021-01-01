@@ -23,7 +23,7 @@ namespace JoyLib.Code.Helpers
                 ItemFactory = GlobalConstants.GameManager.ItemFactory;
             }
             
-            IItemInstance bag = ItemFactory.CreateRandomItemOfType(new string[] { "container", "leather" }, true);
+            IItemInstance bag = ItemFactory.CreateRandomItemOfType(new string[] { "container"}, true);
             List<IItemInstance> coins = new List<IItemInstance>();
             int gold = count / 100;
             int silver = (count - (gold * 100))  / 10;

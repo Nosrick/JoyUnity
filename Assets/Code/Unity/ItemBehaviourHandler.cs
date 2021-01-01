@@ -56,12 +56,12 @@ namespace JoyLib.Code.Unity
             bool result = false;
             if (this.MyJoyObject is IItemInstance item)
             {
-                result = LiveItemHandler.RemoveItemFromWorld(item.GUID);
                 IJoyAction addItemAction = this.EntityInRange.FetchAction("additemaction");
-                result &= addItemAction.Execute(
+                result = addItemAction.Execute(
                     new IJoyObject[] {this.EntityInRange, item},
                     new string[] {"pickup"},
                     new object[] {true});
+                result &= LiveItemHandler.RemoveItemFromWorld(item.GUID);
             }
 
             return result;

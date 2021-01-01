@@ -39,7 +39,7 @@ namespace JoyLib.Code.Entities.Items
 
         public IItemInstance CreateRandomItemOfType(string[] tags, bool identified = false)
         {
-            BaseItemType[] matchingTypes = ItemHandler.FindItemsOfType(tags);
+            BaseItemType[] matchingTypes = this.ItemHandler.FindItemsOfType(tags, tags.Length);
             if (matchingTypes.Length > 0)
             {
                 int result = Roller.Roll(0, matchingTypes.Length);

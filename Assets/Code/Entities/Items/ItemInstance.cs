@@ -191,7 +191,7 @@ namespace JoyLib.Code.Entities.Items
             CalculateValue();
             ConstructDescription();
 
-            if (gameObject is null == false)
+            if (this.Prefab is null == false)
             {
                 this.Instantiate(gameObject, active);
             }
