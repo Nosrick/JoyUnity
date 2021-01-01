@@ -302,7 +302,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33d6c94d542f469fa833fb64a10990b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ChildPrefab: {fileID: 2456808777096450131}
+  ChildPrefab: {fileID: 0}
 --- !u!1 &6156505942358185207
 GameObject:
   m_ObjectHideFlags: 0
@@ -337,7 +337,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -14.999, y: 0}
+  m_AnchoredPosition: {x: -14.999023, y: 0}
   m_SizeDelta: {x: -29.992157, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6156505942358185204
@@ -394,7 +394,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 26.6
+  m_fontSize: 48.55
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -515,7 +515,10 @@ MonoBehaviour:
   m_UseContextMenu: 0
   m_ShowTooltips: 1
   m_MoveUsedItem: 1
-  m_ContainerNames: []
+  m_ContainerNames:
+  - m_ContainerName: Inventory
+    m_Priority: 5
+    m_RequiresVisibility: 1
 --- !u!222 &6156505943501508156
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -656,7 +659,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.90700006, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.13999939, y: 0}
+  m_AnchoredPosition: {x: 0.14013672, y: 0}
   m_SizeDelta: {x: -1, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &32950551323075252
@@ -1044,12 +1047,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c91df744336ef4641921f1d3a3cdb97e, type: 3}
---- !u!1 &2456808777096450131 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8604156886097528880, guid: c91df744336ef4641921f1d3a3cdb97e,
-    type: 3}
-  m_PrefabInstance: {fileID: 6156505941496191075}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &2456808777096450130 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8604156886097528881, guid: c91df744336ef4641921f1d3a3cdb97e,

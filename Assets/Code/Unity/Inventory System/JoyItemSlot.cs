@@ -273,21 +273,19 @@ namespace JoyLib.Code.Unity.GUI
             MoveContainerPriority chosen = null;
             int highestPriority = Int32.MinValue;
             foreach (MoveContainerPriority priority in results.Select(result => this.Container.ContainerPriorities.FirstOrDefault(p =>
-                p.m_ContainerName.Equals(result.gameObject.name, StringComparison.OrdinalIgnoreCase))))
+                p.m_ContainerName.Equals(result.gameObject.name, StringComparison.OrdinalIgnoreCase)))
+                .Where(p => p is null == false))
             {
-                if (priority is null == false && priority.m_Priority > highestPriority)
+                if (priority.m_Priority <= highestPriority)
                 {
-                    chosen = priority;
+                    continue;
                 }
+                chosen = priority;
+                highestPriority = priority.m_Priority;
             }
 
             if (chosen is null)
             {
-                if (this.Container.CanDropItems)
-                {
-                    this.DropItem();
-                }
-                
                 this.EndDrag();
                 return;
             }

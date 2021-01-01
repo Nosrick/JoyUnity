@@ -451,7 +451,7 @@ namespace JoyLib.Code.Unity
 
         public virtual bool StackOrSwap(ItemContainer destination, IItemInstance item)
         {
-            if (this.Owner.Equals(destination.Owner) != false)
+            if (this.Owner.Equals(destination.Owner))
             {
                 return false;
             }
