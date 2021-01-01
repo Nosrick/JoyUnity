@@ -201,6 +201,7 @@ namespace JoyLib.Code.World
                 IsDirty = true;
 
                 itemRef.MyWorld = null;
+                itemRef.MonoBehaviourHandler.gameObject.SetActive(false);
             }
 
             return removed;

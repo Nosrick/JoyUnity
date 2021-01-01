@@ -62,7 +62,6 @@ namespace JoyLib.Code.Unity
                     new IJoyObject[] {this.EntityInRange, item},
                     new string[] {"pickup"},
                     new object[] {true});
-                this.gameObject.SetActive(false);
             }
 
             return result;
