@@ -1,33 +1,113 @@
 ﻿using System;
 using System.Security.Cryptography;
-using UnityEngine;
 
 namespace JoyLib.Code.Rollers
 {
     public class RNG : IRollable
     {
-        protected int m_Seed;
-        protected RNGCryptoServiceProvider m_Roller;
+        protected RNGCryptoServiceProvider RandomEngine { get; set; }
+        protected byte[] Buffer { get; set; }
+        protected int BufferPosition { get; set; }
 
-        public RNG()
+        public bool IsRandomPoolEnabled { get; protected set; }
+
+        public RNG() : this(true) { }
+
+        public RNG(bool enableRandomPool)
         {
-            m_Roller = new RNGCryptoServiceProvider();
+            this.RandomEngine = new RNGCryptoServiceProvider();
+            this.IsRandomPoolEnabled = enableRandomPool;
+        }
+
+        protected virtual void InitBuffer()
+        {
+            if (this.IsRandomPoolEnabled)
+            {
+                if (this.Buffer == null || this.Buffer.Length != 512)
+                    this.Buffer = new byte[512];
+            }
+            else
+            {
+                if (this.Buffer == null || this.Buffer.Length != 4)
+                    this.Buffer = new byte[4];
+            }
+
+            this.RandomEngine.GetBytes(this.Buffer);
+            this.BufferPosition = 0;
         }
 
         /// <summary>
-        /// Returns a random number between the two specified numbers.
+        /// Rolls a value between a minimum, and a maximum.
         /// </summary>
-        /// <param name="lower">Inclusive.</param>
-        /// <param name="upper">Exclusive.</param>
-        /// <returns></returns>
-        public int Roll(int lower, int upper)
+        /// <param name="minValue">Inclusive.</param>
+        /// <param name="maxValue">Exclusive.</param>
+        /// <returns>The integer result of the roll.</returns>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        public int Roll(int minValue, int maxValue)
         {
-            byte[] bytes = new byte[4];
-            m_Roller.GetBytes(bytes);
-            int result = BitConverter.ToInt32(bytes, 0) % upper;
-            result = Math.Abs(result) + lower;
-            result = Mathf.Clamp(result, lower, upper <= lower ? lower : upper - 1);
-            return result;
+            if (minValue > maxValue)
+            {
+                throw new ArgumentOutOfRangeException(nameof(minValue));
+            }
+
+            if (minValue == maxValue)
+            {
+                return minValue;
+            }
+
+            long diff = maxValue - minValue;
+
+            while (true)
+            {
+                uint rand = this.GetRandomUInt32();
+
+                long max = 1 + (long)uint.MaxValue;
+                long remainder = max % diff;
+
+                if (rand < max - remainder)
+                {
+                    return (int)(minValue + (rand % diff));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets one random unsigned 32bit integer in a thread safe manner.
+        /// </summary>
+        private uint GetRandomUInt32()
+        {
+            lock (this)
+            {
+                this.EnsureRandomBuffer(4);
+
+                uint rand = BitConverter.ToUInt32(this.Buffer, this.BufferPosition);
+
+                this.BufferPosition += 4;
+
+                return rand;
+            }
+        }
+
+        /// <summary>
+        /// Ensures that we have enough bytes in the random buffer.
+        /// </summary>
+        /// <param name="requiredBytes">The number of required bytes.</param>
+        private void EnsureRandomBuffer(int requiredBytes)
+        {
+            if (this.Buffer == null)
+            {
+                this.InitBuffer();
+            }
+
+            if (requiredBytes > this.Buffer.Length)
+            {
+                throw new ArgumentOutOfRangeException(nameof(requiredBytes), "cannot be greater than random buffer");
+            }
+
+            if (this.Buffer.Length - this.BufferPosition < requiredBytes)
+            {
+                this.InitBuffer();
+            }
         }
 
         /// <summary>
@@ -41,7 +121,7 @@ namespace JoyLib.Code.Rollers
             int successes = 0;
             for(int i = 0; i < number; i++)
             {
-                if(Roll(1, 10) >= threshold)
+                if(this.Roll(1, 10) >= threshold)
                 {
                     successes += 1;
                 }
