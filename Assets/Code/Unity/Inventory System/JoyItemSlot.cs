@@ -256,48 +256,68 @@ namespace JoyLib.Code.Unity.GUI
         public virtual void OnEndDrag(PointerEventData eventData)
         {
             List<RaycastResult> results = new List<RaycastResult>();
-            RaycastResult result = eventData.pointerCurrentRaycast;
             EventSystem eventSystem = EventSystem.current;
             eventSystem.RaycastAll(eventData, results);
-            
-            //TODO: Fix this hack, it's temporary while I figure out why the sub-containers aren't being hit by raycasts.
-            ItemContainer container = result.gameObject.GetComponent<ItemContainer>();
-            JoyItemSlot slot = result.gameObject.GetComponent<JoyItemSlot>();
 
-            if (container is null == false)
-            {
-                if (container != this.Container
-                    && this.Container.CanDrag
-                    && container.CanDrag)
-                {
-                    this.Container.RemoveItem(this.Item);
-                }
-            }
-            else if (slot is null == false)
-            {
-                if (slot.Container != this.Container
-                    && this.Container.CanDrag
-                    && slot.Container.CanDrag
-                    && slot.Container.CanAddItem(this.Item))
-                {
-                    slot.Container.StackOrAdd(this.Item);
-                    this.Container.RemoveItem(this.Item);
-                }
-            }
-            else
+            if (results.Count == 0)
             {
                 if (this.Container.CanDropItems)
                 {
                     this.DropItem();
                 }
+                
+                this.EndDrag();
+                return;
             }
-            GUIManager.CloseGUI(GUINames.CURSOR);
-            //Repaint the slot
-            this.Repaint();
+
+            MoveContainerPriority chosen = null;
+            int highestPriority = Int32.MinValue;
+            foreach (MoveContainerPriority priority in results.Select(result => this.Container.ContainerPriorities.FirstOrDefault(p =>
+                p.m_ContainerName.Equals(result.gameObject.name, StringComparison.OrdinalIgnoreCase))))
+            {
+                if (priority is null == false && priority.m_Priority > highestPriority)
+                {
+                    chosen = priority;
+                }
+            }
+
+            if (chosen is null)
+            {
+                if (this.Container.CanDropItems)
+                {
+                    this.DropItem();
+                }
+                
+                this.EndDrag();
+                return;
+            }
+
+            ItemContainer container = results.First(result =>
+                    result.gameObject.name.Equals(chosen.m_ContainerName, StringComparison.OrdinalIgnoreCase))
+                .gameObject
+                .GetComponent<ItemContainer>();
+
+            if (container is null == false
+                && container != this.Container
+                && this.Container.CanDrag
+                && container.CanDrag
+                && container.CanAddItem(this.Item))
+            {
+                container.StackOrAdd(this.Item);
+                this.Container.RemoveItem(this.Item);
+            }
+                
+            this.EndDrag();
         }
 
         public virtual void OnDrop(PointerEventData eventData)
         {
+        }
+
+        protected virtual void EndDrag()
+        {
+            this.Repaint();
+            GUIManager.CloseGUI(GUINames.CURSOR);
         }
 
         public virtual void OnPointerDown(PointerEventData eventData)

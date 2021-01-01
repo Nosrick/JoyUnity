@@ -701,24 +701,16 @@ namespace JoyLib.Code.Entities
         public virtual bool RemoveItemFromPerson(IItemInstance item)
         {
             //Check slots first
-            foreach (IItemInstance search in m_Equipment.Contents)
-            {
-                foreach (string slot in this.Slots)
-                {
-                    if (search.GUID == item.GUID)
-                    {
-                        return RemoveEquipment(slot);
-                    }
-                }
-            }
+            bool result = this.Equipment.RemoveContents(item);
 
             //Then the backpack
-            return RemoveContents(item);
+            result |=  RemoveContents(item);
+            return result;
         }
 
-        public virtual bool RemoveEquipment(string slot, IItemInstance item = null)
+        public virtual bool RemoveEquipment(IItemInstance item)
         {
-            return this.Equipment.RemoveContents(slot, item);
+            return this.Equipment.RemoveContents(item);
         }
 
         public IItemInstance[] SearchBackpackForItemType(IEnumerable<string> tags)
@@ -754,14 +746,14 @@ namespace JoyLib.Code.Entities
             }
         }
 
-        public virtual bool EquipItem(string slotRef, IItemInstance itemRef)
+        public virtual bool EquipItem(IItemInstance itemRef)
         {
             if (!this.Equipment.CanAddContents(itemRef))
             {
                 return false;
             }
 
-            return this.Equipment.AddContents(itemRef, slotRef);
+            return this.Equipment.AddContents(itemRef);
         }
 
         public virtual bool UnequipItem(IItemInstance actor)

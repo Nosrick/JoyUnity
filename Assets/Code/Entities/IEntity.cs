@@ -70,9 +70,9 @@ namespace JoyLib.Code.Entities
         IEnumerable<Tuple<string, int>> GetData(IEnumerable<string> tags, params object[] args);
         void AddIdentifiedItem(string nameRef);
         bool RemoveItemFromPerson(IItemInstance item);
-        bool RemoveEquipment(string slot, IItemInstance item = null);
+        bool RemoveEquipment(IItemInstance item);
         IItemInstance[] SearchBackpackForItemType(IEnumerable<string> tags);
-        bool EquipItem(string slotRef, IItemInstance itemRef);
+        bool EquipItem(IItemInstance itemRef);
         IEnumerable<IItemInstance> GetEquipment(string slotRef);
         bool UnequipItem(IItemInstance actor);
 

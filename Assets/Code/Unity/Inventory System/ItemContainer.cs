@@ -41,6 +41,8 @@ namespace JoyLib.Code.Unity
 
         protected IJoyObject m_Owner;
 
+        public List<MoveContainerPriority> ContainerPriorities => this.m_ContainerNames;
+
         public IJoyObject Owner
         {
             get => this.m_Owner;
@@ -309,9 +311,17 @@ namespace JoyLib.Code.Unity
                     if (container.CanAddContents(instance) | container.Contains(instance))
                     {
                         container.AddContents(instance);
-                        foreach (JoyItemSlot slot in slots)
+                        IEnumerable<JoyItemSlot> joyItemSlots = slots.ToList();
+                        if (joyItemSlots.Any())
                         {
-                            slot.Item = instance;
+                            foreach (JoyItemSlot slot in joyItemSlots)
+                            {
+                                slot.Item = instance;
+                            }
+                        }
+                        else
+                        {
+                            this.Slots.First(slot => slot.IsEmpty).Item = instance;
                         }
                         this.OnAddItem?.Invoke(container, new ItemChangedEventArgs() {Item = item});
                         return true;
@@ -391,7 +401,10 @@ namespace JoyLib.Code.Unity
                     }
 
                     container.RemoveContents(item);
-                    this.Slots.First(slot => !(slot.Item is null) && slot.Item.GUID == item.GUID).Item = null;
+                    foreach (JoyItemSlot joyItemSlot in this.Slots.Where(slot => !(slot.Item is null) && item.Equals(slot.Item)))
+                    {
+                        joyItemSlot.Item = null;
+                    }
                     this.OnRemoveItem?.Invoke(container, new ItemChangedEventArgs() {Item = item});
                 }
 
