@@ -132,9 +132,9 @@ namespace JoyLib.Code.Unity
                 }
 
                 List<IItemInstance> contents = container.Contents.ToList();
-                for (int i = 0; i < contents.Count; i++)
+                foreach (IItemInstance item in contents)
                 {
-                    this.Slots[i].Item = contents[i];
+                    this.StackOrAdd(item);
                 }
             }
         }

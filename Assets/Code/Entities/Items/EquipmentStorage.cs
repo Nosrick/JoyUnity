@@ -12,7 +12,8 @@ namespace JoyLib.Code.Entities.Items
 
         public IEnumerable<IItemInstance> Contents =>
             this.m_Slots.Where(tuple => tuple.Item2 is null == false)
-                .Select(tuple => tuple.Item2);
+                .Select(tuple => tuple.Item2)
+                .Distinct();
 
         public EquipmentStorage()
         {
