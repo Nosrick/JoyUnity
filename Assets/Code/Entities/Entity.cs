@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using Castle.Core.Internal;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities.Abilities;
@@ -69,8 +68,6 @@ namespace JoyLib.Code.Entities
         protected Queue<Vector2Int> m_PathfindingData;
 
         protected IWorldInstance m_MyWorld;
-
-        protected string m_Description;
 
         protected const int XP_PER_LEVEL = 100;
         protected const int NEED_FULFILMENT_COUNTER = 5;
@@ -203,8 +200,10 @@ namespace JoyLib.Code.Entities
             this.JoyName = this.GetNameFromMultipleCultures();
 
             this.m_Driver = driver;
+            this.PlayerControlled = driver.PlayerControlled;
 
-            SetCurrentTarget();
+            this.SetCurrentTarget();
+            this.ConstructDescription();
         }
 
         /// <summary>
@@ -253,74 +252,40 @@ namespace JoyLib.Code.Entities
         {
         }
 
-        protected Entity(IEntity copy) :
-            base(
-                copy.JoyName,
-                copy.DerivedValues,
-                copy.WorldPosition,
-                copy.TileSet,
-                copy.CachedActions.ToArray(),
-                copy.Sprites,
-                copy.Tags.ToArray())
+        protected IEnumerable<Tuple<string, string>> ConstructDescription()
         {
-            this.CreatureType = copy.CreatureType;
-            this.m_Slots = copy.Slots;
+            TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
 
-            this.m_Size = copy.Size;
+            Tuple<string, string> relationship = null;
+            if (this.PlayerControlled)
+            {
+                relationship = new Tuple<string, string>("", "This is You");
+            }
+            else
+            {
+                string relationshipName = "Stranger";
+                try
+                {
+                    relationshipName = RelationshipHandler.GetBestRelationship(this, GlobalConstants.GameManager.Player)
+                        .Name;
+                }
+                catch (Exception e)
+                {
+                }
+                relationship = new Tuple<string, string>(
+                    "Relationship:",
+                    relationshipName);
+            }
 
-            this.Jobs = copy.Jobs;
-            this.m_IdentifiedItems = copy.IdentifiedItems;
-            this.m_Statistics = copy.Statistics;
-            this.DerivedValues = copy.DerivedValues;
+            List<Tuple<string, string>> data = new List<Tuple<string, string>>
+            {
+                new Tuple<string, string>("Species:", textInfo.ToTitleCase(this.CreatureType)),
+                new Tuple<string, string>("Job:", textInfo.ToTitleCase(this.CurrentJob.Name)),
+                new Tuple<string, string>("Gender:", textInfo.ToTitleCase(this.Gender.Name)),
+                relationship
+            };
 
-            this.m_Skills = copy.Skills;
-
-            this.m_Needs = copy.Needs;
-            this.m_Abilities = copy.Abilities;
-
-            this.m_CurrentJob = copy.CurrentJob;
-
-            this.m_NaturalWeapons = copy.NaturalWeapons;
-            this.m_Equipment = copy.Equipment;
-            this.m_Backpack = copy.Backpack;
-            this.Gender = copy.Gender;
-            this.Sex = copy.Sex;
-            this.Sexuality = copy.Sexuality;
-            this.Romance = copy.Romance;
-            this.m_VisionProvider = copy.VisionProvider;
-
-            this.m_Cultures = copy.Cultures;
-
-            this.m_Pathfinder = (IPathfinder) ScriptingEngine.instance.FetchAndInitialise("custompathfinder");
-            this.m_PathfindingData = new Queue<Vector2Int>();
-
-            this.m_FulfillmentData = new FulfillmentData(
-                "none",
-                0,
-                new JoyObject[0]);
-
-            this.Roller = copy.Roller;
-
-            this.RegenTicker = Roller.Roll(0, REGEN_TICK_TIME);
-
-            this.MyWorld = copy.MyWorld;
-
-            this.m_Driver = copy.Driver;
-
-            SetCurrentTarget();
-        }
-
-        protected void ConstructDescription()
-        {
-            StringBuilder builder = new StringBuilder();
-
-            TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo; 
-
-            builder.AppendLine(textInfo.ToTitleCase(this.CreatureType));
-            builder.AppendLine(textInfo.ToTitleCase(this.Gender.Name));
-            builder.AppendLine(textInfo.ToTitleCase(this.CurrentJob.Name));
-
-            m_Description = builder.ToString();
+            return data;
         }
 
         protected string GetNameFromMultipleCultures()
@@ -654,11 +619,6 @@ namespace JoyLib.Code.Entities
             return data.ToArray();
         }
 
-        public override void Update()
-        {
-            base.Update();
-        }
-
         public void UpdateMe()
         {
             HasMoved = false;
@@ -892,7 +852,7 @@ namespace JoyLib.Code.Entities
 
         public virtual bool AddContents(IEnumerable<IItemInstance> actors)
         {
-            foreach (ItemInstance actor in actors)
+            foreach (IItemInstance actor in actors)
             {
                 if (m_IdentifiedItems.Any(i => i.Equals(actor.JoyName, StringComparison.OrdinalIgnoreCase)))
                 {
@@ -1082,19 +1042,8 @@ namespace JoyLib.Code.Entities
             }
         }
 
-        public string Description
-        {
-            get
-            {
-                if (m_Description.IsNullOrEmpty())
-                {
-                    ConstructDescription();
-                }
-
-                return m_Description;
-            }
-        }
-
         public List<IJob> Jobs { get; protected set; }
+
+        public override IEnumerable<Tuple<string, string>> Tooltip => this.ConstructDescription();
     }
 }

@@ -1,12 +1,13 @@
-using JoyLib.Code.World;
-using UnityEngine;
 using JoyLib.Code.Physics;
+using UnityEngine;
 
 namespace JoyLib.Code.Entities.AI.Drivers
 {
     public class PlayerDriver : AbstractDriver
     {
         protected static IPhysicsManager s_PhysicsManager;
+
+        public override bool PlayerControlled => true;
 
         public PlayerDriver()
         {

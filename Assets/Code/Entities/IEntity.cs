@@ -63,8 +63,6 @@ namespace JoyLib.Code.Entities
         
         bool Alive { get; }
         
-        string Description { get; }
-        
         void Tick();
         void AddQuest(IQuest quest);
         IEnumerable<Tuple<string, int>> GetData(IEnumerable<string> tags, params object[] args);

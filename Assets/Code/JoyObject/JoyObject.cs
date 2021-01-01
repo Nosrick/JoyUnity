@@ -67,6 +67,8 @@ namespace JoyLib.Code
 
         public RNG Roller { get; protected set; }
 
+        public virtual IEnumerable<Tuple<string, string>> Tooltip { get; protected set; }
+
         public JoyObject()
         {
             this.GUID = GUIDManager.Instance.AssignGUID();
@@ -181,6 +183,8 @@ namespace JoyLib.Code
             this.FramesSinceLastChange = 0;
 
             this.CachedActions = new List<IJoyAction>(actions);
+
+            this.Tooltip = new List<Tuple<string, string>>();
         }
 
         ~JoyObject()

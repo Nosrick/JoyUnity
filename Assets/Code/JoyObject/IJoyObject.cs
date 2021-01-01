@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using JoyLib.Code.Collections;
-using JoyLib.Code.Entities.Statistics;
+﻿using System;
+using System.Collections.Generic;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
@@ -23,6 +22,8 @@ namespace JoyLib.Code
         MonoBehaviourHandler MonoBehaviourHandler { get; }
         
         List<IJoyAction> CachedActions { get; }
+        
+        IEnumerable<Tuple<string, string>> Tooltip { get; }
         
         void Update();
 

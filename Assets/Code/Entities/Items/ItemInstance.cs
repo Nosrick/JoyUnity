@@ -70,6 +70,8 @@ namespace JoyLib.Code.Entities.Items
         public List<IJoyAction> CachedActions { get; protected set; }
         
         public MonoBehaviourHandler MonoBehaviourHandler { get; protected set; }
+
+        public IEnumerable<Tuple<string, string>> Tooltip { get; protected set; }
         
         protected IEntity User { get; set; }
         
@@ -782,8 +784,6 @@ namespace JoyLib.Code.Entities.Items
                 return "It weighs " + Weight + " grams.";
             }
         }
-
-        public IEnumerable<Tuple<string, string>> Tooltip { get; protected set; }
 
         public IEnumerable<IItemInstance> Contents
         {

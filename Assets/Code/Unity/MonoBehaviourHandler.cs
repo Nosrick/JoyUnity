@@ -1,6 +1,5 @@
-﻿using System;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Events;
+﻿using JoyLib.Code.Entities.Items;
+using JoyLib.Code.Unity.GUI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -14,8 +13,7 @@ namespace JoyLib.Code.Unity
 
         public IJoyObject MyJoyObject => this.m_JoyObject;
         
-        public event JoyObjectMouseOverHandler OnMouseOverEvent;
-        public event JoyObjectMouseExitHandler OnMouseExitEvent;
+        protected static IGUIManager GUIManager { get; set; }
 
         public void Update()
         {
@@ -35,8 +33,11 @@ namespace JoyLib.Code.Unity
 
         public virtual void AttachJoyObject(IJoyObject joyObject)
         {
-            this.OnMouseExitEvent = null;
-            this.OnMouseOverEvent = null;
+            if (GUIManager is null)
+            {
+                GUIManager = GlobalConstants.GameManager.GUIManager;
+            }
+            
             this.m_JoyObject = joyObject;
             this.m_JoyObject.AttachMonoBehaviourHandler(this);
             this.m_SpriteRenderer = this.GetComponent<SpriteRenderer>();
@@ -89,12 +90,19 @@ namespace JoyLib.Code.Unity
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            this.OnMouseOverEvent?.Invoke(this, new JoyObjectMouseOverEventArgs() { Actor = this.MyJoyObject });
+            if (GUIManager.IsActive(GUINames.CONTEXT_MENU) == false)
+            {
+                GUIManager.OpenGUI(GUINames.TOOLTIP).GetComponent<Tooltip>().Show(
+                    this.m_JoyObject.JoyName,
+                    null,
+                    this.m_JoyObject.Sprite,
+                    this.m_JoyObject.Tooltip);
+            }
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            this.OnMouseExitEvent?.Invoke(this, EventArgs.Empty);
+            GUIManager.CloseGUI(GUINames.TOOLTIP);
         }
     }
 }

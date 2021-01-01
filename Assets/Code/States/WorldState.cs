@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Globalization;
 using JoyLib.Code.Conversation;
 using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Relationships;
-using JoyLib.Code.Events;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.IO;
 using JoyLib.Code.Physics;
@@ -63,7 +59,7 @@ namespace JoyLib.Code.States
             TickTimer = TickEvent();
             GameManager.MyGameObject.GetComponent<MonoBehaviour>().StartCoroutine(TickTimer);
 
-            GlobalConstants.GameManager.Player = m_ActiveWorld.Player;
+            //GlobalConstants.GameManager.Player = m_ActiveWorld.Player;
 
             m_ActiveWorld.Tick();
         }
@@ -73,18 +69,6 @@ namespace JoyLib.Code.States
 
         public override void SetUpUi()
         {
-            foreach (IJoyObject joyObject in m_ActiveWorld.Objects)
-            {
-                joyObject.MonoBehaviourHandler.OnMouseOverEvent += OnMouseOverJoyObject;
-                joyObject.MonoBehaviourHandler.OnMouseExitEvent += OnMouseExitJoyObject;
-            }
-
-            foreach (IJoyObject joyObject in m_ActiveWorld.Entities)
-            {
-                joyObject.MonoBehaviourHandler.OnMouseOverEvent += OnMouseOverJoyObject;
-                joyObject.MonoBehaviourHandler.OnMouseExitEvent += OnMouseExitJoyObject;
-            }
-
             GUIManager.CloseAllOtherGUIs();
             GUIManager.OpenGUI(GUINames.NEEDSRECT);
             GUIManager.OpenGUI(GUINames.DERIVED_VALUES);
@@ -156,7 +140,8 @@ namespace JoyLib.Code.States
                 }
             }
         }
-
+        
+        /*
         protected void OnMouseOverJoyObject(object sender, JoyObjectMouseOverEventArgs args)
         {
             if (GUIManager.IsActive(GUINames.CONTEXT_MENU) == false)
@@ -228,6 +213,7 @@ namespace JoyLib.Code.States
                         item.Tooltip);
             }
         }
+        */
 
         protected void SetUpContextMenu()
         {
