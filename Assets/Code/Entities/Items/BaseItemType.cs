@@ -9,6 +9,9 @@ namespace JoyLib.Code.Entities.Items
     {
         protected string m_ClassName;
         protected List<string> m_Tags;
+        
+        public BaseItemType()
+        {}
 
         public BaseItemType(
             string[] tags, 

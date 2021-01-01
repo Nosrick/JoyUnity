@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code;
-using JoyLib.Code.Collections;
 using JoyLib.Code.Combat;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Abilities;
@@ -10,6 +9,7 @@ using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Helpers;
+using JoyLib.Code.Managers;
 using JoyLib.Code.Rollers;
 using Moq;
 using NUnit.Framework;
@@ -44,8 +44,8 @@ namespace Tests
         private IDictionary<string, IDerivedValue> attackerDVs;
         private IDictionary<string, IDerivedValue> defenderDVs;
 
-        private NonUniqueDictionary<string, IItemInstance> attackerEquipment;
-        private NonUniqueDictionary<string, IItemInstance> defenderEquipment;
+        private EquipmentStorage attackerEquipment;
+        private EquipmentStorage defenderEquipment;
 
         private List<string> attackerTags;
         private List<string> defenderTags;
@@ -132,23 +132,31 @@ namespace Tests
             int defenderValue = 2,
             int defenderQuantity = 1)
         {
-            this.attackerEquipment = new NonUniqueDictionary<string, IItemInstance>();
-            this.defenderEquipment = new NonUniqueDictionary<string, IItemInstance>();
+            this.attackerEquipment = new EquipmentStorage();
+            this.defenderEquipment = new EquipmentStorage();
 
             for (int i = 0; i < attackerQuantity; i++)
             {
-                this.attackerEquipment.Add("hand",
+                this.attackerEquipment.AddSlot("hand");
+                this.attackerEquipment.AddContents(
                     Mock.Of<IItemInstance>(
-                        item => item.Efficiency == attackerValue
-                                && item.Tags == new List<string> { "weapon", attackTypeTag }));
+                            item => item.Efficiency == attackerValue
+                                    && item.GUID == GUIDManager.Instance.AssignGUID()
+                                    && item.Tags == new[] { "weapon", attackTypeTag }
+                                    && item.ItemType == Mock.Of<BaseItemType>(
+                                        type => type.Slots == new[] { "hand" })));
             }
 
             for (int i = 0; i < defenderQuantity; i++)
             {
-                this.defenderEquipment.Add("torso",
+                this.defenderEquipment.AddSlot("torso");
+                this.defenderEquipment.AddContents(
                     Mock.Of<IItemInstance>(
-                        item => item.Efficiency == defenderValue
-                        && item.Tags == new List<string> { "armour", attackTypeTag }));
+                            item => item.Efficiency == defenderValue
+                                    && item.GUID == GUIDManager.Instance.AssignGUID()
+                                    && item.Tags == new[] {"armour", attackTypeTag}
+                                    && item.ItemType == Mock.Of<BaseItemType>(
+                                        type => type.Slots == new[] { "torso" })));
             }
         }
 

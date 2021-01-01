@@ -91,6 +91,7 @@ namespace JoyLib.Code.Unity.GUI
             }
 
             this.m_Text.text = content;
+            this.m_Text.gameObject.SetActive(!content.IsNullOrEmpty());
 
             if (sprite is null == false)
             {
@@ -126,8 +127,17 @@ namespace JoyLib.Code.Unity.GUI
                     this.ItemCache[i].gameObject.SetActive(true);
                 }
             }
+            else
+            {
+                foreach(var item in this.ItemCache)
+                {
+                    item.gameObject.SetActive(false);
+                }
+            }
            
             this.m_Background.gameObject.SetActive(showBackground);
+            
+            LayoutRebuilder.ForceRebuildLayoutImmediate(this.RectTransform);
 
             base.Show();
         }

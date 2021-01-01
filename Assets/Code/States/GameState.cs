@@ -36,12 +36,6 @@ namespace JoyLib.Code.States
 
         public abstract GameState GetNextState();
 
-        public static bool InFocus
-        {
-            get;
-            set;
-        }
-
         public bool Done
         {
             get;

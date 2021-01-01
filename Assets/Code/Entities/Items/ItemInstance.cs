@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Castle.Core.Internal;
 using JoyLib.Code.Collections;
 using JoyLib.Code.Entities.Abilities;
@@ -232,28 +231,46 @@ namespace JoyLib.Code.Entities.Items
 
         protected void ConstructDescription()
         {
-            StringBuilder builder = new StringBuilder();
-            builder.AppendLine(this.Identified ? this.ItemType.Description : this.ItemType.UnidentifiedDescription);
-            builder.AppendLine(this.WeightString);
-            builder.AppendLine(this.ItemType.MaterialDescription);
+            List<Tuple<string, string>> data = new List<Tuple<string, string>>();
+            data.Add(new Tuple<string, string>(
+                "",
+                this.Identified
+                ? this.ItemType.Description
+                : this.ItemType.UnidentifiedDescription));
+            data.Add(new Tuple<string, string>(
+                "",
+                this.ConditionString));
+            data.Add(new Tuple<string, string>(
+                "",
+                this.WeightString));
+            data.Add(new Tuple<string, string>(
+                "",
+                this.ItemType.MaterialDescription));
             if (this.ContentString.IsNullOrEmpty() == false)
             {
-                builder.AppendLine(this.ContentString);
+                data.Add(new Tuple<string, string>(
+                    "",
+                    this.ContentString));
             }
-            builder.AppendLine(this.ConditionString);
             
             if (this.OwnerString.IsNullOrEmpty() == false)
             {
-                builder.AppendLine("Owned by " + this.OwnerString + ".");
+                data.Add(new Tuple<string, string>(
+                    "Owner:",
+                    this.OwnerString));
             }
             else
             {
-                builder.AppendLine("This item is not owned.");
+                data.Add(new Tuple<string, string>(
+                    "",
+                    "Unowned"));
             }
 
-            builder.AppendLine("It is worth " + this.Value + ".");
-            
-            this.Tooltip = builder.ToString();
+            data.Add(new Tuple<string, string>(
+                "Value:",
+                this.Value.ToString()));
+
+            this.Tooltip = data;
         }
         
         public void SetUser(IEntity user)
@@ -317,7 +334,7 @@ namespace JoyLib.Code.Entities.Items
         public void Move(Vector2Int newPosition)
         {
             this.WorldPosition = newPosition;
-            foreach (IJoyObject joyObject in Contents)
+            foreach (IJoyObject joyObject in this.Contents)
             {
                 joyObject.Move(newPosition);
             }
@@ -625,6 +642,16 @@ namespace JoyLib.Code.Entities.Items
             }
         }
 
+        public override bool Equals(object obj)
+        {
+            if (!(obj is IItemInstance other))
+            {
+                return false;
+            }
+
+            return other.GUID == this.GUID;
+        }
+
         public bool Identified
         {
             get
@@ -739,10 +766,9 @@ namespace JoyLib.Code.Entities.Items
             get
             {
                 float weight = m_Type.Weight;
-                List<IItemInstance> contents = Contents;
-                for(int i = 0; i < contents.Count; i++)
+                foreach(IItemInstance item in this.Contents)
                 {
-                    weight += contents[i].Weight;
+                    weight += item.Weight;
                 }
 
                 return weight;
@@ -757,9 +783,9 @@ namespace JoyLib.Code.Entities.Items
             }
         }
 
-        public string Tooltip { get; protected set; }
+        public IEnumerable<Tuple<string, string>> Tooltip { get; protected set; }
 
-        public List<IItemInstance> Contents
+        public IEnumerable<IItemInstance> Contents
         {
             get
             {
@@ -778,9 +804,8 @@ namespace JoyLib.Code.Entities.Items
             {
                 string contentString = "It contains ";
 
-                List<IItemInstance> items = Contents;
-
-                if (items.Count == 0)
+                List<IItemInstance> items = this.Contents.ToList();
+                if (items.Any() == false)
                 {
                     contentString = "";
                     return contentString;

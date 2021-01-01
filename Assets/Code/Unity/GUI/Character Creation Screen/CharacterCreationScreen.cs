@@ -25,11 +25,14 @@ namespace JoyLib.Code.Unity.GUI
 
         public void Initialise()
         {
-            this.Awake();
             PlayerInfo.JobChanged += SetSprites;
             PlayerInfo.CultureChanged += SetRandomName;
             StatisticWindow.ValueChanged += ChangedStatistics;
+            this.StatisticWindow.Initialise();
+            this.SkillWindow.Initialise();
+            this.DerivedValuesWindow.Initialise();
             PlayerInfo.Initialise();
+            this.AbilityWindow.Initialise();
             //this.GetComponent<FontSizeManager>().ResizeFonts();
         }
 

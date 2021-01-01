@@ -68,7 +68,9 @@ namespace JoyLib.Code
         public RNG Roller { get; protected set; }
 
         public JoyObject()
-        {}
+        {
+            this.GUID = GUIDManager.Instance.AssignGUID();
+        }
 
         /// <summary>
         /// Creation of a JoyObject (MonoBehaviour) using a List of Sprites

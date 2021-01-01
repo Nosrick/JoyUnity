@@ -20,8 +20,9 @@ namespace JoyLib.Code.Unity.GUI
         
         protected List<AbilityItem> Items { get; set; }
 
-        public void Awake()
+        public void Initialise()
         {
+            base.OnEnable();
             Items = new List<AbilityItem>();
             Value = Maximum;
             PointsRemainingText.text = "Picks Remaining: " + Value;

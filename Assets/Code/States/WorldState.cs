@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
 using JoyLib.Code.Conversation;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
@@ -90,7 +90,7 @@ namespace JoyLib.Code.States
             GUIManager.OpenGUI(GUINames.DERIVED_VALUES);
 
             GUIManager.GetGUI(GUINames.INVENTORY).GetComponent<ItemContainer>().Owner = this.PlayerWorld.Player;
-            GUIManager.GetGUI(GUINames.EQUIPMENT).GetComponent<ItemContainer>().Owner = this.PlayerWorld.Player;
+            //GUIManager.GetGUI(GUINames.EQUIPMENT).GetComponent<ItemContainer>().Owner = this.PlayerWorld.Player;
 
             EquipmentHandler equipmentHandler = GUIManager.GetGUI(GUINames.EQUIPMENT).GetComponent<EquipmentHandler>();
             equipmentHandler.SetPlayer(m_ActiveWorld.Player);
@@ -184,11 +184,9 @@ namespace JoyLib.Code.States
                 return;
             }
 
-            Tooltip tooltip = GUIManager.GetGUI(GUINames.TOOLTIP).GetComponent<Tooltip>();
             if (PrimaryTarget is IEntity entity)
             {
                 string relationshipName = "You";
-                StringBuilder builder = new StringBuilder(entity.Description);
                 if (PrimaryTarget.GUID != m_ActiveWorld.Player.GUID)
                 {
                     try
@@ -203,21 +201,31 @@ namespace JoyLib.Code.States
                     }
                 }
 
-                builder.AppendLine(CultureInfo.CurrentCulture.TextInfo.ToTitleCase(relationshipName));
+                List<Tuple<string, string>> data = new List<Tuple<string, string>>
+                {
+                    new Tuple<string, string>("Relationship: ", CultureInfo.CurrentCulture.TextInfo.ToTitleCase(relationshipName)),
+                    new Tuple<string, string>("Gender: ", entity.Gender.Name),
+                    new Tuple<string, string>("Job: ", CultureInfo.CurrentCulture.TextInfo.ToTitleCase(entity.CurrentJob.Name)),
+                    new Tuple<string, string>("Species: ", CultureInfo.CurrentCulture.TextInfo.ToTitleCase(entity.CreatureType))
+                };
 
-                GUIManager.OpenGUI(GUINames.TOOLTIP);
-                tooltip.Show(
-                    entity.JoyName,
-                    builder.ToString(),
-                    entity.Sprite);
+                this.GUIManager.OpenGUI(GUINames.TOOLTIP)
+                    .GetComponent<Tooltip>()
+                    .Show(
+                        entity.JoyName,
+                        null,
+                        entity.Sprite,
+                        data);
             }
             else if (PrimaryTarget is IItemInstance item)
             {
-                GUIManager.OpenGUI(GUINames.TOOLTIP);
-                tooltip.Show(
-                    item.JoyName,
-                    item.DisplayDescription,
-                    item.Sprite);
+                this.GUIManager.OpenGUI(GUINames.TOOLTIP)
+                    .GetComponent<Tooltip>()
+                    .Show(
+                        item.JoyName,
+                        null,
+                        item.Sprite,
+                        item.Tooltip);
             }
         }
 
@@ -577,20 +585,6 @@ namespace JoyLib.Code.States
             */
         }
 
-        protected void DrawTargetCursor()
-        {
-            
-        }
-
-        protected void DrawTiles()
-        {
-            lock (m_ActiveWorld.Tiles)
-            { }
-        }
-
-        protected void DrawStairs()
-        { }
-
         protected void DrawObjects()
         {
             IEntity player = m_ActiveWorld.Player;
@@ -610,9 +604,6 @@ namespace JoyLib.Code.States
             }
         }
 
-        protected void DrawEntities()
-        { }
-
         public override void Update()
         {
             IEntity player = m_ActiveWorld.Player;
@@ -627,16 +618,6 @@ namespace JoyLib.Code.States
             }
 
             DrawObjects();
-        }
-
-        private void GainFocus()
-        {
-            InFocus = true;
-        }
-
-        private void LoseFocus()
-        {
-            InFocus = false;
         }
 
         public override GameState GetNextState()

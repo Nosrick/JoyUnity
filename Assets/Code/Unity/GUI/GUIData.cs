@@ -43,6 +43,11 @@ namespace JoyLib.Code.Unity.GUI
             }
         }
 
+        public virtual void ButtonClose()
+        {
+            this.GUIManager.CloseGUI(this.name);
+        }
+
         public bool m_RemovesControl;
 
         public bool m_ClosesOthers;
