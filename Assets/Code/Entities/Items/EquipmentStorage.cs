@@ -18,6 +18,7 @@ namespace JoyLib.Code.Entities.Items
         public EquipmentStorage()
         {
             this.m_Slots = new List<Tuple<string, IItemInstance>>();
+            this.JoyName = "Equipment";
         }
 
         public EquipmentStorage(IEnumerable<string> slots)
@@ -27,6 +28,7 @@ namespace JoyLib.Code.Entities.Items
             {
                 this.m_Slots.Add(new Tuple<string, IItemInstance>(slot, null));
             }
+            this.JoyName = "Equipment";
         }
         
         protected virtual IEnumerable<string> GetRequiredSlots(IItemInstance item)
