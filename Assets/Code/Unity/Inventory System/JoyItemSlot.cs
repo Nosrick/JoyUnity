@@ -300,8 +300,7 @@ namespace JoyLib.Code.Unity.GUI
             if (container is null == false
                 && container != this.Container
                 && this.Container.CanDrag
-                && container.CanDrag
-                && container.CanAddItem(this.Item))
+                && container.CanDrag)
             {
                 this.Container.StackOrSwap(container, this.Item);
             }
