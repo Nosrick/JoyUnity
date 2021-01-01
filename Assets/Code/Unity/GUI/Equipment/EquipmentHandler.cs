@@ -1,5 +1,7 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using Castle.Core.Internal;
 using JoyLib.Code.Entities;
+using JoyLib.Code.Entities.Items;
 using TMPro;
 
 namespace JoyLib.Code.Unity.GUI
@@ -21,22 +23,37 @@ namespace JoyLib.Code.Unity.GUI
             {
                 this.RemoveAllSlots();
             }
+
+            foreach (JoyItemSlot slot in this.Slots)
+            {
+                slot.gameObject.SetActive(false);
+            }
             
             var slots = this.Player.Equipment.Slots;
-            
-            foreach ((string slot, var item) in slots)
+
+            for (int i = this.Slots.Count; i < slots.Count; i++)
             {
                 JoyItemSlot slotInstance = Instantiate(
                     this.m_SlotPrefab,
                     this.m_SlotParent.transform);
-                slotInstance.gameObject.SetActive(true);
-                TextMeshProUGUI slotName = slotInstance.GetComponentInChildren<TextMeshProUGUI>();
-                slotName.text = slot;
-                slotInstance.Container = this;
-                slotInstance.m_Slot = slot;
-                slotInstance.Item = item;
                 this.Slots.Add(slotInstance);
             }
+            
+            for (int i = 0; i < slots.Count; i++)
+            {
+                this.Slots[i].gameObject.SetActive(true);
+                TextMeshProUGUI slotName = this.Slots[i].GetComponentInChildren<TextMeshProUGUI>();
+                slotName.text = slots[i].Item1;
+                this.Slots[i].name = slots[i].Item1;
+                this.Slots[i].Container = this;
+                this.Slots[i].m_Slot = slots[i].Item1;
+                this.Slots[i].Item = slots[i].Item2;
+            }
+        }
+
+        protected override bool StackOrAdd(IEnumerable<JoyItemSlot> slots, IItemInstance item)
+        {
+            return !slots.IsNullOrEmpty() && base.StackOrAdd(slots, item);
         }
     }
 }

@@ -177,7 +177,6 @@ namespace JoyLib.Code.Unity
             if (target.StackOrAdd(item))
             {
                 return this.RemoveItem(item);
-
             }
 
             return false;
@@ -336,11 +335,18 @@ namespace JoyLib.Code.Unity
 
         public virtual bool StackOrAdd(IItemInstance item)
         {
-            IEnumerable<JoyItemSlot> slots = null;
+            List<JoyItemSlot> slots = null;
 
             if (item.ItemType.Slots.Length == 0)
             {
-                slots = new []{ this.Slots.First(slot => slot.IsEmpty) };
+                if (this.Slots.Any(slot => slot.IsEmpty && slot.m_Slot.IsNullOrEmpty()))
+                {
+                    slots = new List<JoyItemSlot> { this.Slots.First(slot => slot.IsEmpty && slot.m_Slot.IsNullOrEmpty()) };
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
             {

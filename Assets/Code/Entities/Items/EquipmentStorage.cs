@@ -83,10 +83,10 @@ namespace JoyLib.Code.Entities.Items
 
         public virtual bool CanAddContents(IItemInstance actor)
         {
-            return !this.Contains(actor) 
-                   && this.m_Slots.Any(slot => 
-                       actor.ItemType.Slots.Any(s => s.Equals(slot.Item1, StringComparison.OrdinalIgnoreCase))
-                       && slot.Item2 is null);
+            int slots = this.GetRequiredSlots(actor).Count();
+            return !this.Contains(actor)
+                   && slots > 0
+                   && slots == actor.ItemType.Slots.Length;
         }
 
         public virtual bool AddContents(IItemInstance actor)
