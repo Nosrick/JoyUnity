@@ -10306,26 +10306,6 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4876804132964342644, guid: cb718d0b0b9991847b3681001ad72723,
-        type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4876804132964342644, guid: cb718d0b0b9991847b3681001ad72723,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: -0.000038146973
-      objectReference: {fileID: 0}
-    - target: {fileID: 4876804132964342644, guid: cb718d0b0b9991847b3681001ad72723,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4876804132964342644, guid: cb718d0b0b9991847b3681001ad72723,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8862829972381363170, guid: cb718d0b0b9991847b3681001ad72723,
         type: 3}
       propertyPath: m_Pivot.x
@@ -10435,31 +10415,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Quest Journal
-      objectReference: {fileID: 0}
-    - target: {fileID: 8862829972381363171, guid: cb718d0b0b9991847b3681001ad72723,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8862829972594165432, guid: cb718d0b0b9991847b3681001ad72723,
-        type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8862829972594165432, guid: cb718d0b0b9991847b3681001ad72723,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8862829972594165432, guid: cb718d0b0b9991847b3681001ad72723,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8862829972594165432, guid: cb718d0b0b9991847b3681001ad72723,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cb718d0b0b9991847b3681001ad72723, type: 3}
