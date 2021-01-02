@@ -231,7 +231,7 @@ namespace JoyLib.Code.Entities.Items
 
         public void Use()
         {
-            if (this.AllAbilities.Any() || this.User is null)
+            if (this.AllAbilities.Any() == false || this.User is null)
             {
                 return;
             }
@@ -436,23 +436,27 @@ namespace JoyLib.Code.Entities.Items
         {
             get
             {
-                if (this.HitPointsRemaining / this.HitPoints == 1)
+                float durability = this.GetValue(DURABILITY);
+                float maximum = this.GetMaximum(DURABILITY);
+                if (durability == 0)
                 {
-                    return "It is in great condition.";
+                    return "This is broken.";
                 }
-                if (this.HitPointsRemaining / (float)this.HitPoints > 0.75)
-                {
-                    return "It is in good condition.";
-                }
-                if (this.HitPointsRemaining / (float)this.HitPoints > 0.5)
-                {
-                    return "It is in fair condition.";
-                }
-                if (this.HitPointsRemaining / (float)this.HitPoints > 0.25)
+                if (durability / maximum < 0.25)
                 {
                     return "It is in poor condition.";
                 }
-                return "It is close to breaking.";
+
+                if (durability / maximum < 0.5)
+                {
+                    return "It is in fair condition.";
+                }
+                if (durability / maximum < 0.75)
+                {
+                    return "It is in good condition.";
+                }
+
+                return "It is in great condition";
             }
         }
 
