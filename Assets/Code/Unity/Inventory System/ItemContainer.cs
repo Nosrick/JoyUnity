@@ -169,7 +169,7 @@ namespace JoyLib.Code.Unity
                 && (sort.m_RequiresVisibility && container.isActiveAndEnabled)
                 || sort.m_RequiresVisibility == false));
                 
-            if (target is null != false)
+            if (target is null || item is null)
             {
                 return false;
             }

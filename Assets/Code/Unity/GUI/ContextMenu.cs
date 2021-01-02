@@ -51,7 +51,7 @@ namespace JoyLib.Code.Unity.GUI
                     }
                 }
 
-                //this.Close ();
+                GUIManager.CloseGUI(this.name);
             }
         }
 
