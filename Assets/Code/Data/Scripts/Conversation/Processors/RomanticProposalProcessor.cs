@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Conversation;
 using JoyLib.Code.Conversation.Conversations;
 using JoyLib.Code.Entities.Relationships;
-using JoyLib.Code.Rollers;
-using UnityEngine;
 
 namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
 {
@@ -34,8 +31,8 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
             if (listener.Romance.WillRomance(listener, instigator, relationships)
             && instigator.Romance.WillRomance(instigator, listener, relationships))
             {
-                int cultureResult = Roller.Roll(0, listener.Cultures.Count);
-                int relationshipTypeResult = Roller.Roll(0, listener.Cultures[cultureResult].RelationshipTypes.Length);
+                int cultureResult = this.Roller.Roll(0, listener.Cultures.Count);
+                int relationshipTypeResult = this.Roller.Roll(0, listener.Cultures[cultureResult].RelationshipTypes.Length);
     
                 string relationshipType = listener.Cultures[cultureResult].RelationshipTypes[relationshipTypeResult];
                 IRelationship selectedRelationship = RelationshipHandler.RelationshipTypes.First(relationship =>

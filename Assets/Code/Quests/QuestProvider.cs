@@ -1,13 +1,12 @@
-﻿using JoyLib.Code.Entities;
+﻿using System.Collections.Generic;
+using System.Linq;
+using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Rollers;
-using JoyLib.Code.World;
-using System.Collections.Generic;
-using System.Linq;
 using JoyLib.Code.Scripting;
-using UnityEngine;
+using JoyLib.Code.World;
 
 namespace JoyLib.Code.Quests
 {
@@ -28,17 +27,17 @@ namespace JoyLib.Code.Quests
             RNG roller)
         {
             BagOfGoldHelper = new BagOfGoldHelper(itemHandler, itemFactory);
-            Roller = roller;
-            EntityRelationshipHandler = entityRelationshipHandler;
+            this.Roller = roller;
+            this.EntityRelationshipHandler = entityRelationshipHandler;
 
-            Actions = ScriptingEngine.instance.FetchAndInitialiseChildren<IQuestAction>().ToList();
+            this.Actions = ScriptingEngine.instance.FetchAndInitialiseChildren<IQuestAction>().ToList();
         }
 
         protected void Initialise()
         {
-            EntityRelationshipHandler = GlobalConstants.GameManager.RelationshipHandler;
+            this.EntityRelationshipHandler = GlobalConstants.GameManager.RelationshipHandler;
 
-            Actions = ScriptingEngine.instance.FetchAndInitialiseChildren<IQuestAction>().ToList();
+            this.Actions = ScriptingEngine.instance.FetchAndInitialiseChildren<IQuestAction>().ToList();
         }
 
         public IQuest MakeRandomQuest(IEntity questor, IEntity provider, IWorldInstance overworldRef)
@@ -49,8 +48,8 @@ namespace JoyLib.Code.Quests
             int numberOfSteps = 1;
             for (int i = 0; i < numberOfSteps; i++)
             {
-                int result = Roller.Roll(0, Actions.Count);
-                IQuestAction action = Actions[result].Create(
+                int result = this.Roller.Roll(0, this.Actions.Count);
+                IQuestAction action = this.Actions[result].Create(
                     new string[0],
                     new List<IItemInstance>(),
                     new List<IJoyObject>(),
@@ -60,14 +59,14 @@ namespace JoyLib.Code.Quests
 
             IEnumerable<string> tagsForAllSteps = steps.SelectMany(step => step.Tags);
             
-            return new Quest(steps, QuestMorality.Neutral, GetRewards(questor, provider, steps), provider, tagsForAllSteps);
+            return new Quest(steps, QuestMorality.Neutral, this.GetRewards(questor, provider, steps), provider, tagsForAllSteps);
         }
 
         public IEnumerable<IQuest> MakeOneOfEachType(IEntity questor, IEntity provider, IWorldInstance overworldRef)
         {
             List<IQuest> quests = new List<IQuest>();
 
-            foreach (IQuestAction action in Actions)
+            foreach (IQuestAction action in this.Actions)
             {
                 IQuestAction newAction = action.Create(
                     new string[0],
@@ -75,7 +74,7 @@ namespace JoyLib.Code.Quests
                     new List<IJoyObject>(),
                     new List<IWorldInstance>());
                 List<IQuestStep> steps = new List<IQuestStep>{newAction.Make(questor, provider, overworldRef, new string[0])};
-                quests.Add(new Quest(steps, QuestMorality.Neutral, GetRewards(questor, provider, steps), provider, new string[0]));
+                quests.Add(new Quest(steps, QuestMorality.Neutral, this.GetRewards(questor, provider, steps), provider, new string[0]));
             }
 
             return quests;
@@ -89,7 +88,7 @@ namespace JoyLib.Code.Quests
         private List<IItemInstance> GetRewards(IEntity questor, IEntity provider, List<IQuestStep> steps)
         {
             List<IItemInstance> rewards = new List<IItemInstance>();
-            int reward = ((steps.Count * 100) + (EntityRelationshipHandler.GetHighestRelationshipValue(provider, questor)));
+            int reward = ((steps.Count * 100) + (this.EntityRelationshipHandler.GetHighestRelationshipValue(provider, questor)));
             rewards.Add(BagOfGoldHelper.GetBagOfGold(reward));
             foreach (IItemInstance item in rewards)
             {

@@ -28,7 +28,7 @@ namespace JoyLib.Code.Scripting
 
         public ScriptingEngine()
         {
-            if (m_Types is null)
+            if (this.m_Types is null)
             {
                 try
                 {
@@ -51,7 +51,7 @@ namespace JoyLib.Code.Scripting
                         MetadataReference.CreateFromFile(typeof(Entities.Entity).Assembly.Location),
                         MetadataReference.CreateFromFile(typeof(Vector2Int).Assembly.Location),
                         MetadataReference.CreateFromFile(typeof(Queue<bool>).Assembly.Location),
-                        MetadataReference.CreateFromFile(typeof(System.Linq.IQueryable).Assembly.Location),
+                        MetadataReference.CreateFromFile(typeof(IQueryable).Assembly.Location),
                         MetadataReference.CreateFromFile(typeof(GlobalConstants).Assembly.Location),
                         MetadataReference.CreateFromFile(typeof(Castle.Core.Internal.CollectionExtensions).Assembly.Location)
                     };
@@ -74,9 +74,9 @@ namespace JoyLib.Code.Scripting
                     }
 
                     memory.Seek(0, SeekOrigin.Begin);
-                    m_ScriptDLL = Assembly.Load(memory.ToArray());
+                    this.m_ScriptDLL = Assembly.Load(memory.ToArray());
 
-                    m_Types = m_ScriptDLL.GetTypes();
+                    this.m_Types = this.m_ScriptDLL.GetTypes();
                     
                     this.Eval = new ExpressionEvaluator();
                     this.Eval.OptionForceIntegerNumbersEvaluationsAsDoubleByDefault = true;
@@ -93,8 +93,7 @@ namespace JoyLib.Code.Scripting
         {
             try
             {
-                Type directType =
-                    m_Types.Single(type => type.Name.Equals(typeName, StringComparison.OrdinalIgnoreCase));
+                Type directType = this.m_Types.Single(type => type.Name.Equals(typeName, StringComparison.OrdinalIgnoreCase));
                 return directType;
             }
             catch (Exception ex)
@@ -109,7 +108,7 @@ namespace JoyLib.Code.Scripting
         {
             try
             {
-                Type directType = m_Types.First(t => t.Name.Equals(type, StringComparison.OrdinalIgnoreCase));
+                Type directType = this.m_Types.First(t => t.Name.Equals(type, StringComparison.OrdinalIgnoreCase));
 
                 return Activator.CreateInstance(directType);
             }
@@ -126,7 +125,7 @@ namespace JoyLib.Code.Scripting
         {
             try
             {
-                Type[] types = m_Types.Where(t => typeof(T).IsAssignableFrom(t) && t.IsAbstract == false).ToArray();
+                Type[] types = this.m_Types.Where(t => typeof(T).IsAssignableFrom(t) && t.IsAbstract == false).ToArray();
                 List<T> children = new List<T>();
                 foreach (Type tempType in types)
                 {
@@ -148,17 +147,17 @@ namespace JoyLib.Code.Scripting
         {
             try
             {
-                Type directType = m_Types.First(type => type.Name.Equals(typeName, StringComparison.OrdinalIgnoreCase));
+                Type directType = this.m_Types.First(type => type.Name.Equals(typeName, StringComparison.OrdinalIgnoreCase));
 
                 List<Type> children = new List<Type>();
                 if (directType != null)
                 {
-                    children = m_Types.Where(type => directType.IsAssignableFrom(type)).ToList();
+                    children = this.m_Types.Where(type => directType.IsAssignableFrom(type)).ToList();
                 }
                 else
                 {
                     directType = Type.GetType(typeName, true, true);
-                    children = m_Types.Where(type => directType.IsAssignableFrom(type)).ToList();
+                    children = this.m_Types.Where(type => directType.IsAssignableFrom(type)).ToList();
                     children = children.Where(t => t.IsAbstract == false && t.IsInterface == false).ToList();
                 }
 
@@ -176,7 +175,7 @@ namespace JoyLib.Code.Scripting
         {
             try
             {
-                Type[] types = m_Types.Where(t => type.IsAssignableFrom(t) && t.IsAbstract == false).ToArray();
+                Type[] types = this.m_Types.Where(t => type.IsAssignableFrom(t) && t.IsAbstract == false).ToArray();
 
                 return types;
             }
@@ -193,7 +192,7 @@ namespace JoyLib.Code.Scripting
         {
             try
             {
-                Type type = m_Types.Single(t => t.Name.Equals(actionName, StringComparison.OrdinalIgnoreCase));
+                Type type = this.m_Types.Single(t => t.Name.Equals(actionName, StringComparison.OrdinalIgnoreCase));
 
                 IJoyAction action = (IJoyAction) Activator.CreateInstance(type);
                 return action;
@@ -211,7 +210,7 @@ namespace JoyLib.Code.Scripting
             List<IJoyAction> actions = new List<IJoyAction>();
             foreach (string name in actionNames)
             {
-                actions.Add(FetchAction(name));
+                actions.Add(this.FetchAction(name));
             }
 
             return actions;

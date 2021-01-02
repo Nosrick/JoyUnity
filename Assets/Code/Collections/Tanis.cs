@@ -55,7 +55,7 @@ namespace Tanis.Collections
         /// </summary>
         public Heap()
         {
-            InitProperties(null, 0);
+            this.InitProperties(null, 0);
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace Tanis.Collections
         /// <param name="Capacity">Capacity of the list (<see cref="ArrayList.Capacity">ArrayList.Capacity</see>)</param>
         public Heap(int Capacity)
         {
-            InitProperties(null, Capacity);
+            this.InitProperties(null, Capacity);
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace Tanis.Collections
         /// <param name="Comparer">Will be used to compare added elements for sort and search operations.</param>
         public Heap(IComparer Comparer)
         {
-            InitProperties(Comparer, 0);
+            this.InitProperties(Comparer, 0);
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace Tanis.Collections
         /// <param name="Capacity">Capacity of the list (<see cref="ArrayList.Capacity">ArrayList.Capacity</see>)</param>
         public Heap(IComparer Comparer, int Capacity)
         {
-            InitProperties(Comparer, Capacity);
+            this.InitProperties(Comparer, Capacity);
         }
 
         #endregion
@@ -98,11 +98,11 @@ namespace Tanis.Collections
         {
             set
             {
-                FAddDuplicates = value;
+                this.FAddDuplicates = value;
             }
             get
             {
-                return FAddDuplicates;
+                return this.FAddDuplicates;
             }
         }
         private bool FAddDuplicates;
@@ -114,11 +114,11 @@ namespace Tanis.Collections
         {
             get
             {
-                return FList.Capacity;
+                return this.FList.Capacity;
             }
             set
             {
-                FList.Capacity = value;
+                this.FList.Capacity = value;
             }
         }
 
@@ -137,9 +137,9 @@ namespace Tanis.Collections
         {
             get
             {
-                if (Index >= FList.Count || Index < 0)
+                if (Index >= this.FList.Count || Index < 0)
                     throw new ArgumentOutOfRangeException("Index is less than zero or Index is greater than Count.");
-                return FList[Index];
+                return this.FList[Index];
             }
             set
             {
@@ -157,12 +157,14 @@ namespace Tanis.Collections
         public int Add(object O)
         {
             int Return = -1;
-            if (ObjectIsCompliant(O))
+            if (this.ObjectIsCompliant(O))
             {
-                int Index = IndexOf(O);
+                int Index = this.IndexOf(O);
                 int NewIndex = Index >= 0 ? Index : -Index - 1;
-                if (NewIndex >= Count) FList.Add(O);
-                else FList.Insert(NewIndex, O);
+                if (NewIndex >= this.Count)
+                    this.FList.Add(O);
+                else
+                    this.FList.Insert(NewIndex, O);
                 Return = NewIndex;
             }
             return Return;
@@ -178,7 +180,7 @@ namespace Tanis.Collections
         /// <returns>true if the object is in the list, otherwise false.</returns>
         public bool Contains(object O)
         {
-            return FList.BinarySearch(O, FComparer) >= 0;
+            return this.FList.BinarySearch(O, this.FComparer) >= 0;
         }
 
         /// <summary>
@@ -195,8 +197,8 @@ namespace Tanis.Collections
         public int IndexOf(object O)
         {
             int Result = -1;
-            Result = FList.BinarySearch(O, FComparer);
-            while (Result > 0 && FList[Result - 1].Equals(O))
+            Result = this.FList.BinarySearch(O, this.FComparer);
+            while (Result > 0 && this.FList[Result - 1].Equals(O))
                 Result--;
             return Result;
         }
@@ -209,7 +211,7 @@ namespace Tanis.Collections
         {
             get
             {
-                return FList.IsFixedSize;
+                return this.FList.IsFixedSize;
             }
         }
 
@@ -221,7 +223,7 @@ namespace Tanis.Collections
         {
             get
             {
-                return FList.IsReadOnly;
+                return this.FList.IsReadOnly;
             }
         }
 
@@ -231,7 +233,7 @@ namespace Tanis.Collections
         /// </summary>
         public void Clear()
         {
-            FList.Clear();
+            this.FList.Clear();
         }
 
         /// <summary>
@@ -253,7 +255,7 @@ namespace Tanis.Collections
         /// <param name="Value">The object whose value must be removed if found in the list.</param>
         public void Remove(object Value)
         {
-            FList.Remove(Value);
+            this.FList.Remove(Value);
         }
 
         /// <summary>
@@ -263,7 +265,7 @@ namespace Tanis.Collections
         /// <param name="Index">Index of object to remove.</param>
         public void RemoveAt(int Index)
         {
-            FList.RemoveAt(Index);
+            this.FList.RemoveAt(Index);
         }
 
         #endregion
@@ -276,25 +278,26 @@ namespace Tanis.Collections
         /// </summary>
         /// <param name="array"></param>
         /// <param name="arrayIndex"></param>
-        public void CopyTo(Array array, int arrayIndex) { FList.CopyTo(array, arrayIndex); }
+        public void CopyTo(Array array, int arrayIndex) {
+            this.FList.CopyTo(array, arrayIndex); }
 
         /// <summary>
         /// IList.ICollection implementation.
         /// Idem <see cref="ArrayList">ArrayList</see>
         /// </summary>
-        public int Count { get { return FList.Count; } }
+        public int Count { get { return this.FList.Count; } }
 
         /// <summary>
         /// IList.ICollection implementation.
         /// Idem <see cref="ArrayList">ArrayList</see>
         /// </summary>
-        public bool IsSynchronized { get { return FList.IsSynchronized; } }
+        public bool IsSynchronized { get { return this.FList.IsSynchronized; } }
 
         /// <summary>
         /// IList.ICollection implementation.
         /// Idem <see cref="ArrayList">ArrayList</see>
         /// </summary>
-        public object SyncRoot { get { return FList.SyncRoot; } }
+        public object SyncRoot { get { return this.FList.SyncRoot; } }
 
         #endregion
 
@@ -307,7 +310,7 @@ namespace Tanis.Collections
         /// <returns>Enumerator on the list.</returns>
         public IEnumerator GetEnumerator()
         {
-            return FList.GetEnumerator();
+            return this.FList.GetEnumerator();
         }
 
         #endregion
@@ -321,9 +324,9 @@ namespace Tanis.Collections
         /// <returns>Cloned object.</returns>
         public object Clone()
         {
-            Heap Clone = new Heap(FComparer, FList.Capacity);
-            Clone.FList = (ArrayList)FList.Clone();
-            Clone.FAddDuplicates = FAddDuplicates;
+            Heap Clone = new Heap(this.FComparer, this.FList.Capacity);
+            Clone.FList = (ArrayList) this.FList.Clone();
+            Clone.FAddDuplicates = this.FAddDuplicates;
             return Clone;
         }
 
@@ -348,8 +351,8 @@ namespace Tanis.Collections
         public override string ToString()
         {
             string OutString = "{";
-            for (int i = 0; i < FList.Count; i++)
-                OutString += FList[i].ToString() + (i != FList.Count - 1 ? "; " : "}");
+            for (int i = 0; i < this.FList.Count; i++)
+                OutString += this.FList[i].ToString() + (i != this.FList.Count - 1 ? "; " : "}");
             return OutString;
         }
 
@@ -360,9 +363,9 @@ namespace Tanis.Collections
         public override bool Equals(object Object)
         {
             Heap SL = (Heap)Object;
-            if (SL.Count != Count)
+            if (SL.Count != this.Count)
                 return false;
-            for (int i = 0; i < Count; i++)
+            for (int i = 0; i < this.Count; i++)
                 if (!SL[i].Equals(this[i]))
                     return false;
             return true;
@@ -374,7 +377,7 @@ namespace Tanis.Collections
         /// <returns>Hash code for this.</returns>
         public override int GetHashCode()
         {
-            return FList.GetHashCode();
+            return this.FList.GetHashCode();
         }
 
         #endregion
@@ -390,8 +393,8 @@ namespace Tanis.Collections
         public int IndexOf(object Object, int Start)
         {
             int Result = -1;
-            Result = FList.BinarySearch(Start, FList.Count - Start, Object, FComparer);
-            while (Result > Start && FList[Result - 1].Equals(Object))
+            Result = this.FList.BinarySearch(Start, this.FList.Count - Start, Object, this.FComparer);
+            while (Result > Start && this.FList[Result - 1].Equals(Object))
                 Result--;
             return Result;
         }
@@ -404,8 +407,8 @@ namespace Tanis.Collections
         /// <returns></returns>
         public int IndexOf(object Object, Equality AreEqual)
         {
-            for (int i = 0; i < FList.Count; i++)
-                if (AreEqual(FList[i], Object)) return i;
+            for (int i = 0; i < this.FList.Count; i++)
+                if (AreEqual(this.FList[i], Object)) return i;
             return -1;
         }
 
@@ -418,9 +421,9 @@ namespace Tanis.Collections
         /// <returns></returns>
         public int IndexOf(object Object, int Start, Equality AreEqual)
         {
-            if (Start < 0 || Start >= FList.Count) throw new ArgumentException("Start index must belong to [0; Count-1].");
-            for (int i = Start; i < FList.Count; i++)
-                if (AreEqual(FList[i], Object)) return i;
+            if (Start < 0 || Start >= this.FList.Count) throw new ArgumentException("Start index must belong to [0; Count-1].");
+            for (int i = Start; i < this.FList.Count; i++)
+                if (AreEqual(this.FList[i], Object)) return i;
             return -1;
         }
 
@@ -432,8 +435,7 @@ namespace Tanis.Collections
         /// <exception cref="ArgumentException">The Heap is set to use object's IComparable interface, and the specifed object does not implement this interface.</exception>
         public void AddRange(ICollection C)
         {
-            foreach (object Object in C)
-                Add(Object);
+            foreach (object Object in C) this.Add(Object);
         }
 
         /// <summary>
@@ -459,16 +461,16 @@ namespace Tanis.Collections
             if (Value == null)
                 throw new ArgumentNullException("Value");
             int Pos = 0;
-            while ((Pos = IndexOf(Value, Pos)) >= 0)
+            while ((Pos = this.IndexOf(Value, Pos)) >= 0)
             {
                 if (NumberToKeep <= 0)
-                    FList.RemoveAt(Pos);
+                    this.FList.RemoveAt(Pos);
                 else
                 {
                     Pos++;
                     NumberToKeep--;
                 }
-                if (FComparer.Compare(FList[Pos], Value) > 0)
+                if (this.FComparer.Compare(this.FList[Pos], Value) > 0)
                     break;
             }
         }
@@ -481,10 +483,10 @@ namespace Tanis.Collections
         {
             int PosIt;
             PosIt = 0;
-            while (PosIt < Count - 1)
+            while (PosIt < this.Count - 1)
             {
-                if (FComparer.Compare(this[PosIt], this[PosIt + 1]) == 0)
-                    RemoveAt(PosIt);
+                if (this.FComparer.Compare(this[PosIt], this[PosIt + 1]) == 0)
+                    this.RemoveAt(PosIt);
                 else
                     PosIt++;
             }
@@ -497,7 +499,7 @@ namespace Tanis.Collections
         public int IndexOfMin()
         {
             int RetInt = -1;
-            if (FList.Count > 0)
+            if (this.FList.Count > 0)
                 RetInt = 0;
             return RetInt;
         }
@@ -509,9 +511,9 @@ namespace Tanis.Collections
         public int IndexOfMax()
         {
             int RetInt = -1;
-            if (FList.Count > 0)
+            if (this.FList.Count > 0)
             {
-                RetInt = FList.Count - 1;
+                RetInt = this.FList.Count - 1;
             }
             return RetInt;
         }
@@ -522,10 +524,10 @@ namespace Tanis.Collections
         /// <returns>Returns the topmost object on the list</returns>
         public object Pop()
         {
-            if (FList.Count == 0)
+            if (this.FList.Count == 0)
                 throw new InvalidOperationException("The heap is empty.");
-            object Object = FList[Count - 1];
-            FList.RemoveAt(Count - 1);
+            object Object = this.FList[this.Count - 1];
+            this.FList.RemoveAt(this.Count - 1);
             return (Object);
         }
 
@@ -536,7 +538,7 @@ namespace Tanis.Collections
         /// <returns></returns>
         public int Push(object Object)
         {
-            return (Add(Object));
+            return (this.Add(Object));
         }
 
         #endregion
@@ -545,9 +547,9 @@ namespace Tanis.Collections
 
         private bool ObjectIsCompliant(object Object)
         {
-            if (FUseObjectsComparison && !(Object is IComparable))
+            if (this.FUseObjectsComparison && !(Object is IComparable))
                 throw new ArgumentException("The Heap is set to use the IComparable interface of objects, and the object to add does not implement the IComparable interface.");
-            if (!FAddDuplicates && Contains(Object))
+            if (!this.FAddDuplicates && this.Contains(Object))
                 return false;
             return true;
         }
@@ -565,16 +567,17 @@ namespace Tanis.Collections
         {
             if (Comparer != null)
             {
-                FComparer = Comparer;
-                FUseObjectsComparison = false;
+                this.FComparer = Comparer;
+                this.FUseObjectsComparison = false;
             }
             else
             {
-                FComparer = new Comparison();
-                FUseObjectsComparison = true;
+                this.FComparer = new Comparison();
+                this.FUseObjectsComparison = true;
             }
-            FList = Capacity > 0 ? new ArrayList(Capacity) : new ArrayList();
-            FAddDuplicates = true;
+
+            this.FList = Capacity > 0 ? new ArrayList(Capacity) : new ArrayList();
+            this.FAddDuplicates = true;
         }
 
         #endregion

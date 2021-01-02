@@ -1,7 +1,6 @@
-using JoyLib.Code.Entities.Relationships;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
+using JoyLib.Code.Entities.Relationships;
 
 namespace JoyLib.Code.Scripting.Actions
 {
@@ -23,7 +22,7 @@ namespace JoyLib.Code.Scripting.Actions
 
         public override bool Execute(IJoyObject[] participants, string[] tags = null, params object[] args)
         {
-            ClearLastParameters();
+            this.ClearLastParameters();
             
             if (args.Length == 0)
             {
@@ -59,8 +58,8 @@ namespace JoyLib.Code.Scripting.Actions
                         relationship.ModifyValueOfOtherParticipants(participants[0].GUID, relationshipMod);
                     }
                 }
-            
-                SetLastParameters(participants, tags, args);
+
+                this.SetLastParameters(participants, tags, args);
 
                 return true;
             }

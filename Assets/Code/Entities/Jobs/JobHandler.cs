@@ -18,15 +18,15 @@ namespace JoyLib.Code.Entities.Jobs
 
         public JobHandler(RNG roller)
         {
-            Roller = roller;
-            m_Jobs = LoadTypes();
+            this.Roller = roller;
+            this.m_Jobs = this.LoadTypes();
         }
 
         public IJob Get(string jobName)
         {
-            if (m_Jobs.Any(x => x.Name.Equals(jobName, StringComparison.OrdinalIgnoreCase)))
+            if (this.m_Jobs.Any(x => x.Name.Equals(jobName, StringComparison.OrdinalIgnoreCase)))
             {
-                IJob job = m_Jobs.First(x => x.Name.Equals(jobName, StringComparison.OrdinalIgnoreCase));
+                IJob job = this.m_Jobs.First(x => x.Name.Equals(jobName, StringComparison.OrdinalIgnoreCase));
                 return job.Copy(job);
             }
 
@@ -35,8 +35,8 @@ namespace JoyLib.Code.Entities.Jobs
 
         public IJob GetRandom()
         {
-            int result = Roller.Roll(0, m_Jobs.Count);
-            return m_Jobs[result].Copy(m_Jobs[result]);
+            int result = this.Roller.Roll(0, this.m_Jobs.Count);
+            return this.m_Jobs[result].Copy(this.m_Jobs[result]);
         }
 
         protected List<IJob> LoadTypes()
@@ -114,12 +114,12 @@ namespace JoyLib.Code.Entities.Jobs
         {
             get
             {
-                if(m_Jobs is null)
+                if(this.m_Jobs is null)
                 {
-                    m_Jobs = LoadTypes();
+                    this.m_Jobs = this.LoadTypes();
                 }
 
-                return m_Jobs;
+                return this.m_Jobs;
             }
         }
     }

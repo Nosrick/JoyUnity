@@ -13,7 +13,7 @@ namespace JoyLib.Code.Conversation.Subengines.Rumours
 
         public string Parse(string parameter, IJoyObject participant)
         {
-            if (!CanParse(parameter))
+            if (!this.CanParse(parameter))
             {
                 return "";
             }

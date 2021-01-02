@@ -20,33 +20,33 @@ namespace JoyLib.Code.World.Generators.Interiors
             IDerivedValueHandler derivedValueHandler,
             RNG roller)
         {
-            DerivedValueHandler = derivedValueHandler;
-            Roller = roller;
-            ObjectIcons = objectIconHandler;
+            this.DerivedValueHandler = derivedValueHandler;
+            this.Roller = roller;
+            this.ObjectIcons = objectIconHandler;
         }
 
         public WorldTile[,] GenerateWorldSpace(int sizeRef, string tileSet)
         {
-            TileSet = tileSet;
+            this.TileSet = tileSet;
             WorldTile[,] tiles = new WorldTile[sizeRef, sizeRef];
 
-            DungeonRoomGenerator roomGen = new DungeonRoomGenerator(sizeRef, Roller);
+            DungeonRoomGenerator roomGen = new DungeonRoomGenerator(sizeRef, this.Roller);
 
-            m_UntreatedTiles = roomGen.GenerateRooms();
+            this.m_UntreatedTiles = roomGen.GenerateRooms();
 
-            DungeonCorridorGenerator corrGen = new DungeonCorridorGenerator(m_UntreatedTiles, roomGen.rooms, 50, Roller);
-            m_UntreatedTiles = corrGen.GenerateCorridors();
+            DungeonCorridorGenerator corrGen = new DungeonCorridorGenerator(this.m_UntreatedTiles, roomGen.rooms, 50, this.Roller);
+            this.m_UntreatedTiles = corrGen.GenerateCorridors();
 
-            tiles = TreatTiles();
+            tiles = this.TreatTiles();
 
             return tiles;
         }
 
         private WorldTile[,] TreatTiles()
         {
-            WorldTile[,] tiles = new WorldTile[m_UntreatedTiles.GetLength(0), m_UntreatedTiles.GetLength(1)];
+            WorldTile[,] tiles = new WorldTile[this.m_UntreatedTiles.GetLength(0), this.m_UntreatedTiles.GetLength(1)];
 
-            WorldTile[] templates = StandardWorldTiles.instance.GetByTileSet(TileSet).ToArray();
+            WorldTile[] templates = StandardWorldTiles.instance.GetByTileSet(this.TileSet).ToArray();
 
             for (int i = 0; i < tiles.GetLength(0); i++)
             {
@@ -63,7 +63,7 @@ namespace JoyLib.Code.World.Generators.Interiors
         public List<JoyObject> GenerateWalls(WorldTile[,] worldTiles)
         {
             List<JoyObject> walls = new List<JoyObject>();
-            Sprite[] sprites = ObjectIcons.GetSprites(TileSet, "surroundwall");
+            Sprite[] sprites = this.ObjectIcons.GetSprites(this.TileSet, "surroundwall");
             List<IBasicValue<float>> values = new List<IBasicValue<float>>();
             values.Add(new ConcreteBasicFloatValue("weight", 1));
             values.Add(new ConcreteBasicFloatValue("bonus", 1));
@@ -71,20 +71,17 @@ namespace JoyLib.Code.World.Generators.Interiors
             values.Add(new ConcreteBasicFloatValue("hardness", 1));
             values.Add(new ConcreteBasicFloatValue("density", 1));
 
-            for (int i = 0; i < m_UntreatedTiles.GetLength(0); i++)
+            for (int i = 0; i < this.m_UntreatedTiles.GetLength(0); i++)
             {
-                for (int j = 0; j < m_UntreatedTiles.GetLength(1); j++)
+                for (int j = 0; j < this.m_UntreatedTiles.GetLength(1); j++)
                 {
-                    if (m_UntreatedTiles[i, j] == GeneratorTileType.Perimeter ||
-                        m_UntreatedTiles[i, j] == GeneratorTileType.Wall ||
-                        m_UntreatedTiles[i, j] == GeneratorTileType.None)
+                    if (this.m_UntreatedTiles[i, j] == GeneratorTileType.Perimeter || this.m_UntreatedTiles[i, j] == GeneratorTileType.Wall || this.m_UntreatedTiles[i, j] == GeneratorTileType.None)
                     {
                         walls.Add(
                             new JoyObject(
                                 "Surround", 
                                 this.DerivedValueHandler.GetItemStandardBlock(values), 
-                                new Vector2Int(i, j), 
-                                TileSet, 
+                                new Vector2Int(i, j), this.TileSet, 
                                 new string[] {}, 
                                 sprites,
                                 null,

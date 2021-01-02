@@ -15,16 +15,16 @@ namespace JoyLib.Code.Entities.AI.LOS
             IEnumerable<Vector2Int> walls)
         {
             Vector2Int viewerPos = viewer.WorldPosition;
-            
-            m_Board = new FOVBasicBoard(dimensions.x, dimensions.y, walls);
-            m_Board.Visible(viewerPos.x, viewerPos.y);
-            foreach(Vector2Int direction in DIAGONALS)
+
+            this.m_Board = new FOVBasicBoard(dimensions.x, dimensions.y, walls);
+            this.m_Board.Visible(viewerPos.x, viewerPos.y);
+            foreach(Vector2Int direction in this.DIAGONALS)
             {
-                CastLight(viewer, world, viewerPos, viewer.VisionMod, 1, 1, 0, 0, direction.x, direction.y, 0);
-                CastLight(viewer, world, viewerPos, viewer.VisionMod, 1, 1, 0, direction.x, 0, 0, direction.y);
+                this.CastLight(viewer, world, viewerPos, viewer.VisionMod, 1, 1, 0, 0, direction.x, direction.y, 0);
+                this.CastLight(viewer, world, viewerPos, viewer.VisionMod, 1, 1, 0, direction.x, 0, 0, direction.y);
             }
 
-            return m_Board;
+            return this.m_Board;
         }
 
         private void CastLight(IEntity viewer, IWorldInstance world, Vector2Int origin, int sightMod, int row, float start, float end, int xx, int xy, int yx, int yy)
@@ -47,7 +47,7 @@ namespace JoyLib.Code.Entities.AI.LOS
                     float leftSlope = (deltaX - 0.5f) / (deltaY + 0.5f);
                     float rightSlope = (deltaX + 0.5f) / (deltaY - 0.5f);
 
-                    if (!(currentX >= 0 && currentY >= 0 && currentX < m_Board.Width && currentY < m_Board.Height) || start < rightSlope)
+                    if (!(currentX >= 0 && currentY >= 0 && currentX < this.m_Board.Width && currentY < this.m_Board.Height) || start < rightSlope)
                     {
                         continue;
                     }
@@ -61,14 +61,14 @@ namespace JoyLib.Code.Entities.AI.LOS
                     {
                         if(viewer.VisionProvider.HasVisibility(viewer, world, currentX, currentY))
                         {
-                            m_Board.Visible(currentX, currentY);
+                            this.m_Board.Visible(currentX, currentY);
                         }
                     }
 
                     if (blocked)
                     {
-                        m_Board.Visible(currentX, currentY);
-                        if(m_Board.IsObstacle(currentX, currentY))
+                        this.m_Board.Visible(currentX, currentY);
+                        if(this.m_Board.IsObstacle(currentX, currentY))
                         {
                             newStart = rightSlope;
                             //m_Board.Block(currentX, currentY);
@@ -81,14 +81,14 @@ namespace JoyLib.Code.Entities.AI.LOS
                     }
                     else
                     {
-                        m_Board.Visible(currentX, currentY);
-                        if (!m_Board.IsObstacle(currentX, currentY) || distance >= sightMod)
+                        this.m_Board.Visible(currentX, currentY);
+                        if (!this.m_Board.IsObstacle(currentX, currentY) || distance >= sightMod)
                         {
                             continue;
                         }
                         
                         blocked = true;
-                        CastLight(viewer, world, origin, sightMod, distance + 1, start, leftSlope, xx, xy, yx, yy);
+                        this.CastLight(viewer, world, origin, sightMod, distance + 1, start, leftSlope, xx, xy, yx, yy);
                         newStart = rightSlope;
                     }
                 }
@@ -100,6 +100,6 @@ namespace JoyLib.Code.Entities.AI.LOS
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Vector2Int> Vision => m_Board.GetVision();
+        public IEnumerable<Vector2Int> Vision => this.m_Board.GetVision();
     }
 }

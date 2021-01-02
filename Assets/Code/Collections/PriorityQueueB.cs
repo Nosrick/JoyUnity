@@ -9,6 +9,7 @@
 //
 //  Copyright (C) 2006 Franco, Gustavo 
 //
+
 using System.Collections.Generic;
 
 namespace Algorithms
@@ -28,30 +29,30 @@ namespace Algorithms
         
         public PriorityQueue()
 		{
-			mComparer = Comparer<T>.Default;
+			this.mComparer = Comparer<T>.Default;
 		}
 
         public PriorityQueue(IComparer<T> comparer)
 		{
-			mComparer = comparer;
+			this.mComparer = comparer;
 		}
 
 		public PriorityQueue(IComparer<T> comparer, int capacity)
 		{
-			mComparer = comparer;
-			InnerList.Capacity = capacity;
+			this.mComparer = comparer;
+			this.InnerList.Capacity = capacity;
 		}
         
         protected void SwitchElements(int i, int j)
 		{
-			T h = InnerList[i];
-			InnerList[i] = InnerList[j];
-			InnerList[j] = h;
+			T h = this.InnerList[i];
+			this.InnerList[i] = this.InnerList[j];
+			this.InnerList[j] = h;
 		}
 
         protected virtual int OnCompare(int i, int j)
         {
-            return mComparer.Compare(InnerList[i],InnerList[j]);
+            return this.mComparer.Compare(this.InnerList[i], this.InnerList[j]);
         }
 
 		/// <summary>
@@ -61,16 +62,16 @@ namespace Algorithms
 		/// <returns>The index in the list where the object is _now_. This will change when objects are taken from or put onto the PQ.</returns>
 		public int Push(T item)
 		{
-			int p = InnerList.Count,p2;
-			InnerList.Add(item); // E[p] = O
+			int p = this.InnerList.Count,p2;
+			this.InnerList.Add(item); // E[p] = O
 			do
 			{
 				if(p==0)
 					break;
 				p2 = (p-1)/2;
-				if(OnCompare(p,p2)<0)
+				if(this.OnCompare(p,p2)<0)
 				{
-					SwitchElements(p,p2);
+					this.SwitchElements(p,p2);
 					p = p2;
 				}
 				else
@@ -85,23 +86,23 @@ namespace Algorithms
 		/// <returns>The smallest object</returns>
 		public T Pop()
 		{
-			T result = InnerList[0];
+			T result = this.InnerList[0];
 			int p = 0,p1,p2,pn;
-			InnerList[0] = InnerList[InnerList.Count-1];
-			InnerList.RemoveAt(InnerList.Count-1);
+			this.InnerList[0] = this.InnerList[this.InnerList.Count-1];
+			this.InnerList.RemoveAt(this.InnerList.Count-1);
 			do
 			{
 				pn = p;
 				p1 = 2*p+1;
 				p2 = 2*p+2;
-				if(InnerList.Count>p1 && OnCompare(p,p1)>0) // links kleiner
+				if(this.InnerList.Count>p1 && this.OnCompare(p,p1)>0) // links kleiner
 					p = p1;
-				if(InnerList.Count>p2 && OnCompare(p,p2)>0) // rechts noch kleiner
+				if(this.InnerList.Count>p2 && this.OnCompare(p,p2)>0) // rechts noch kleiner
 					p = p2;
 				
 				if(p==pn)
 					break;
-				SwitchElements(p,pn);
+				this.SwitchElements(p,pn);
 			}while(true);
 
             return result;
@@ -124,9 +125,9 @@ namespace Algorithms
 				if(p==0)
 					break;
 				p2 = (p-1)/2;
-				if(OnCompare(p,p2)<0)
+				if(this.OnCompare(p,p2)<0)
 				{
-					SwitchElements(p,p2);
+					this.SwitchElements(p,p2);
 					p = p2;
 				}
 				else
@@ -139,14 +140,14 @@ namespace Algorithms
 				pn = p;
 				p1 = 2*p+1;
 				p2 = 2*p+2;
-				if(InnerList.Count>p1 && OnCompare(p,p1)>0) // links kleiner
+				if(this.InnerList.Count>p1 && this.OnCompare(p,p1)>0) // links kleiner
 					p = p1;
-				if(InnerList.Count>p2 && OnCompare(p,p2)>0) // rechts noch kleiner
+				if(this.InnerList.Count>p2 && this.OnCompare(p,p2)>0) // rechts noch kleiner
 					p = p2;
 				
 				if(p==pn)
 					break;
-				SwitchElements(p,pn);
+				this.SwitchElements(p,pn);
 			}while(true);
 		}
 
@@ -156,42 +157,41 @@ namespace Algorithms
 		/// <returns>The smallest object</returns>
 		public T Peek()
 		{
-			if(InnerList.Count>0)
-				return InnerList[0];
+			if(this.InnerList.Count>0)
+				return this.InnerList[0];
 			return default(T);
 		}
 
 		public void Clear()
 		{
-			InnerList.Clear();
+			this.InnerList.Clear();
 		}
 
 		public int Count
 		{
-			get{ return InnerList.Count; }
+			get{ return this.InnerList.Count; }
 		}
 
         public void RemoveLocation(T item)
         {
             int index = -1;
-            for(int i=0; i<InnerList.Count; i++)
+            for(int i=0; i< this.InnerList.Count; i++)
             {
                 
-                if (mComparer.Compare(InnerList[i], item) == 0)
+                if (this.mComparer.Compare(this.InnerList[i], item) == 0)
                     index = i;
             }
 
-            if (index != -1)
-                InnerList.RemoveAt(index);
+            if (index != -1) this.InnerList.RemoveAt(index);
         }
 
         public T this[int index]
         {
-            get { return InnerList[index]; }
+            get { return this.InnerList[index]; }
             set 
-            { 
-                InnerList[index] = value;
-				Update(index);
+            {
+	            this.InnerList[index] = value;
+	            this.Update(index);
             }
         }
     }

@@ -18,12 +18,12 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
                 new string[0],
                 Speaker.LISTENER)
         {
-            Happening = happening;
+            this.Happening = happening;
         }
 
         public override ITopic[] Interact(IEntity instigator, IEntity listener)
         {
-            if (Happening == false)
+            if (this.Happening == false)
             {
                 return base.Interact(instigator, listener);
             }
@@ -51,12 +51,12 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
                 new[] {"sex", "need"},
                 new object[] {"sex", listenerSatisfaction, 5});
 
-            return FetchNextTopics();
+            return this.FetchNextTopics();
         }
 
         protected override ITopic[] FetchNextTopics()
         {
-            if (Happening)
+            if (this.Happening)
             {
                 return new ITopic[0];
             }

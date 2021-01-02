@@ -13,16 +13,16 @@ namespace JoyLib.Code.World
 
         public InteriorRoom(RectInt sizesRef, List<InteriorRoom> neighboursRef)
         {
-            m_Sizes = sizesRef;
-            m_Neighbours = neighboursRef;
-            m_UsedEntrances = new List<string>();
+            this.m_Sizes = sizesRef;
+            this.m_Neighbours = neighboursRef;
+            this.m_UsedEntrances = new List<string>();
         }
 
         public RectInt sizes
         {
             get
             {
-                return m_Sizes;
+                return this.m_Sizes;
             }
         }
 
@@ -30,7 +30,7 @@ namespace JoyLib.Code.World
         {
             get
             {
-                return m_Neighbours;
+                return this.m_Neighbours;
             }
         }
 
@@ -38,7 +38,7 @@ namespace JoyLib.Code.World
         {
             get
             {
-                return m_UsedEntrances;
+                return this.m_UsedEntrances;
             }
         }
     }

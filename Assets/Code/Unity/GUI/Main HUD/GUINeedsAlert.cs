@@ -21,40 +21,40 @@ namespace JoyLib.Code.Unity.GUI
         public override void Awake()
         {
             base.Awake();
-            GetBits();
+            this.GetBits();
         }
 
         protected void GetBits()
         {
             if (GlobalConstants.GameManager is null == false)
             {
-                EntityHandler = EntityHandler ?? GlobalConstants.GameManager.EntityHandler;
-                Player = EntityHandler is null == false ? EntityHandler.GetPlayer() : Player;
+                this.EntityHandler = this.EntityHandler ?? GlobalConstants.GameManager.EntityHandler;
+                this.Player = this.EntityHandler is null == false ? this.EntityHandler.GetPlayer() : this.Player;
             }
         }
 
         protected void Update()
         {
-            Counter += 1;
-            Counter %= MAXIMUM_FRAMES;
+            this.Counter += 1;
+            this.Counter %= MAXIMUM_FRAMES;
 
-            if(Counter == 0)
+            if(this.Counter == 0)
             {
-                DoText();
+                this.DoText();
             }
         }
 
         protected void DoText()
         {
-            m_Text.text = "";
-            GetBits();
-            if (Player is null)
+            this.m_Text.text = "";
+            this.GetBits();
+            if (this.Player is null)
             {
                 return;
             }
 
             StringBuilder builder = new StringBuilder();
-            foreach(INeed need in Player.Needs.Values)
+            foreach(INeed need in this.Player.Needs.Values)
             {
                 if(!need.ContributingHappiness)
                 {
@@ -69,7 +69,7 @@ namespace JoyLib.Code.Unity.GUI
                 }
             }
 
-            m_Text.text = builder.ToString();
+            this.m_Text.text = builder.ToString();
         }
     }
 }

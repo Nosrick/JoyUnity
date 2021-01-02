@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Rollers;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities.Needs
@@ -79,7 +77,7 @@ namespace JoyLib.Code.Entities.Needs
 
         public override bool FindFulfilmentObject(IEntity actor)
         {
-            ActingNeed = null;
+            this.ActingNeed = null;
             
             List<INeed> needs = new List<INeed>();
             needs.Add(actor.Needs["hunger"]);
@@ -102,19 +100,19 @@ namespace JoyLib.Code.Entities.Needs
                 return false;
             }
 
-            ActingNeed = chosen;
+            this.ActingNeed = chosen;
 
             return chosen.FindFulfilmentObject(actor);
         }
 
         public override bool Interact(IEntity actor, IJoyObject obj)
         {
-            if (ActingNeed is null)
+            if (this.ActingNeed is null)
             {
                 return false;
             }
 
-            return ActingNeed.Interact(actor, obj);
+            return this.ActingNeed.Interact(actor, obj);
         }
 
         public override INeed Copy()
@@ -134,12 +132,12 @@ namespace JoyLib.Code.Entities.Needs
 
         public override INeed Randomise()
         {
-            int decay = Roller.Roll(DECAY_MIN, DECAY_MAX);
-            int decayCounter = Roller.Roll(0, DECAY_MAX);
-            int priority = Roller.Roll(PRIORITY_MIN, PRIORITY_MAX);
-            int happinessThreshold = Roller.Roll(HAPPINESS_THRESHOLD_MIN, HAPPINESS_THRESHOLD_MAX);
-            int value = Roller.Roll(0, HAPPINESS_THRESHOLD_MAX);
-            int maxValue = Roller.Roll(MAX_VALUE_MIN, MAX_VALUE_MAX);
+            int decay = this.Roller.Roll(DECAY_MIN, DECAY_MAX);
+            int decayCounter = this.Roller.Roll(0, DECAY_MAX);
+            int priority = this.Roller.Roll(PRIORITY_MIN, PRIORITY_MAX);
+            int happinessThreshold = this.Roller.Roll(HAPPINESS_THRESHOLD_MIN, HAPPINESS_THRESHOLD_MAX);
+            int value = this.Roller.Roll(0, HAPPINESS_THRESHOLD_MAX);
+            int maxValue = this.Roller.Roll(MAX_VALUE_MIN, MAX_VALUE_MAX);
             
             return new Health(
                 decay,
@@ -160,14 +158,14 @@ namespace JoyLib.Code.Entities.Needs
                 ability => ability.Tags.Any(
                     tag => tag.Equals("disease", StringComparison.OrdinalIgnoreCase)));
             
-            if (diseaseFree == true && CleanBonusApplied == false)
+            if (diseaseFree == true && this.CleanBonusApplied == false)
             {
-                CleanBonusApplied = true;
+                this.CleanBonusApplied = true;
                 this.Value += CLEAN_BONUS;
             }
-            else if (diseaseFree == false && CleanBonusApplied == true)
+            else if (diseaseFree == false && this.CleanBonusApplied == true)
             {
-                CleanBonusApplied = false;
+                this.CleanBonusApplied = false;
                 this.Value -= CLEAN_BONUS;
             }
 

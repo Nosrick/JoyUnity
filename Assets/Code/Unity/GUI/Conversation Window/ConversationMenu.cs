@@ -37,23 +37,23 @@ namespace JoyLib.Code.Unity.GUI
             {
                 ConversationEngine = GlobalConstants.GameManager.ConversationEngine;
 
-                Text = this.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+                this.Text = this.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
             }
         }
 
         public void OnPointerDown(PointerEventData eventData)
         {
-            ConversationEngine.Converse(Index);
+            ConversationEngine.Converse(this.Index);
         }
 
         public void SetText(string text)
         {
-            if (Text is null)
+            if (this.Text is null)
             {
-                Text = this.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+                this.Text = this.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
             }
-            
-            Text.text = text;
+
+            this.Text.text = text;
         }
     }
 }

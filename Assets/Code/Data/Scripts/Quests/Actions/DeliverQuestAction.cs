@@ -7,7 +7,6 @@ using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.World;
-using UnityEngine;
 
 namespace JoyLib.Code.Quests
 {
@@ -44,10 +43,10 @@ namespace JoyLib.Code.Quests
             this.Actors = actors;
             this.Areas = areas;
             this.Tags = tempTags.ToArray();
-            Description = AssembleDescription();
+            this.Description = this.AssembleDescription();
 
-            Roller = roller is null ? new RNG() : roller; 
-            ItemFactory = itemFactory is null || GlobalConstants.GameManager is null == false ? GlobalConstants.GameManager.ItemFactory : itemFactory;
+            this.Roller = roller is null ? new RNG() : roller;
+            this.ItemFactory = itemFactory is null || GlobalConstants.GameManager is null == false ? GlobalConstants.GameManager.ItemFactory : itemFactory;
         }
         
         public IQuestStep Make(IEntity questor, IEntity provider, IWorldInstance overworld, IEnumerable<string> tags)
@@ -56,14 +55,14 @@ namespace JoyLib.Code.Quests
             List<IItemInstance> backpack = provider.Backpack;
             if (backpack.Count > 0)
             {
-                int result = Roller.Roll(0, backpack.Count);
+                int result = this.Roller.Roll(0, backpack.Count);
 
                 deliveryItem = backpack[result];
             }
             IEntity endPoint = overworld.GetRandomSentientWorldWide();
             if(deliveryItem == null)
             {
-                deliveryItem = ItemFactory.CreateCompletelyRandomItem();
+                deliveryItem = this.ItemFactory.CreateCompletelyRandomItem();
             }
 
             this.Items = new List<IItemInstance> {deliveryItem};
@@ -81,7 +80,7 @@ namespace JoyLib.Code.Quests
 
         public void ExecutePrerequisites(IEntity questor)
         {
-            foreach (IItemInstance item in Items)
+            foreach (IItemInstance item in this.Items)
             {
                 questor.AddContents(item);
             }
@@ -94,12 +93,12 @@ namespace JoyLib.Code.Quests
                 return false;
             }
 
-            if (action.LastParticipants.Intersect(Actors).Count() != Actors.Count)
+            if (action.LastParticipants.Intersect(this.Actors).Count() != this.Actors.Count)
             {
                 return false;
             }
 
-            if (action.LastArgs.Intersect(Items).Count() != Items.Count)
+            if (action.LastArgs.Intersect(this.Items).Count() != this.Items.Count)
             {
                 return false;
             }
@@ -110,33 +109,33 @@ namespace JoyLib.Code.Quests
         public string AssembleDescription()
         {
             StringBuilder itemBuilder = new StringBuilder();
-            for (int i = 0; i < Items.Count; i++)
+            for (int i = 0; i < this.Items.Count; i++)
             {
-                if (i > 0 && i < Items.Count - 1)
+                if (i > 0 && i < this.Items.Count - 1)
                 {
                     itemBuilder.Append(", ");
                 }
-                if (Items.Count > 1 && i == Items.Count - 1)
+                if (this.Items.Count > 1 && i == this.Items.Count - 1)
                 {
                     itemBuilder.Append("and ");
                 }
-                itemBuilder.Append(Items[i].JoyName);
+                itemBuilder.Append(this.Items[i].JoyName);
             }
             
             StringBuilder actorBuilder = new StringBuilder();
-            for(int i = 0; i < Actors.Count; i++)
+            for(int i = 0; i < this.Actors.Count; i++)
             {
-                if (i > 0 && i < Actors.Count - 1)
+                if (i > 0 && i < this.Actors.Count - 1)
                 {
                     actorBuilder.Append(", ");
                 }
-                if (Actors.Count > 1 && i == Actors.Count - 1)
+                if (this.Actors.Count > 1 && i == this.Actors.Count - 1)
                 {
                     actorBuilder.Append("or ");
                 }
-                actorBuilder.Append(Actors[i].JoyName);
+                actorBuilder.Append(this.Actors[i].JoyName);
                 actorBuilder.Append(" in ");
-                actorBuilder.Append(Actors[i].MyWorld.Name);
+                actorBuilder.Append(this.Actors[i].MyWorld.Name);
             }
 
             return "Deliver " + itemBuilder.ToString() + " to " + actorBuilder.ToString() + ".";

@@ -8,6 +8,6 @@ public class ItemCreationException : Exception
     public ItemCreationException(BaseItemType itemType, string message) :
         base(message)
     {
-        ItemType = itemType;
+        this.ItemType = itemType;
     }
 }

@@ -14,64 +14,64 @@ namespace JoyLib.Code.Entities.AI.LOS
 
         public FOVBasicBoard(int width, int height, IEnumerable<Vector2Int> walls)
         {
-            m_Width = width;
-            m_Height = height;
-            
-            Visited = new HashSet<Vector2Int>();
-            VisiblePoints = new HashSet<Vector2Int>();
-            Walls = new HashSet<Vector2Int>(walls);
+            this.m_Width = width;
+            this.m_Height = height;
+
+            this.Visited = new HashSet<Vector2Int>();
+            this.VisiblePoints = new HashSet<Vector2Int>();
+            this.Walls = new HashSet<Vector2Int>(walls);
         }
 
         public bool HasVisited(int x, int y)
         {
-            return Visited.Contains(new Vector2Int(x, y));
+            return this.Visited.Contains(new Vector2Int(x, y));
         }
 
         public void Visit(int x, int y)
         {
             Vector2Int point = new Vector2Int(x, y);
-            if (x >= 0 && x < m_Width 
-               && y >= 0 && y < m_Height 
-               && Visited.Contains(point) == false)
+            if (x >= 0 && x < this.m_Width 
+               && y >= 0 && y < this.m_Height 
+               && this.Visited.Contains(point) == false)
             {
-                Visited.Add(point);
+                this.Visited.Add(point);
             }
         }
 
         public void Visible(int x, int y)
         {
             Vector2Int point = new Vector2Int(x, y);
-            if (x >= 0 && x < m_Width 
-                && y >= 0 && y < m_Height)
+            if (x >= 0 && x < this.m_Width 
+                && y >= 0 && y < this.m_Height)
             {
-                Visited.Add(point);
-                VisiblePoints.Add(point);
+                this.Visited.Add(point);
+                this.VisiblePoints.Add(point);
             }
         }
 
         public bool IsVisible(int x, int y)
         {
-            return VisiblePoints.Contains(new Vector2Int(x, y));
+            return this.VisiblePoints.Contains(new Vector2Int(x, y));
         }
 
         public void Block(int x, int y)
         {
             Vector2Int point = new Vector2Int(x, y);
-            if (x >= 0 && x < m_Width 
-                && y >= 0 && y < m_Height)
+            if (x >= 0 && x < this.m_Width 
+                && y >= 0 && y < this.m_Height)
             {
-                Visited.Add(point);
-                VisiblePoints.Remove(point);
+                this.Visited.Add(point);
+                this.VisiblePoints.Remove(point);
             }
         }
 
         public bool IsBlocked(int x, int y)
         {
             Vector2Int point = new Vector2Int(x, y);
-            if (x >= 0 && x < m_Width 
-                && y >= 0 && y < m_Height)
+            if (x >= 0 && x < this.m_Width 
+                && y >= 0 && y < this.m_Height)
             {
-                return (VisiblePoints.Contains(point) == false) || IsObstacle(x, y);
+                return (this.VisiblePoints.Contains(point) == false) || this.IsObstacle(x, y);
             }
             return true;
         }
@@ -79,10 +79,10 @@ namespace JoyLib.Code.Entities.AI.LOS
         public bool IsObstacle(int x, int y)
         {
             Vector2Int point = new Vector2Int(x, y);
-            if (x >= 0 && x < m_Width 
-                && y >= 0 && y < m_Height)
+            if (x >= 0 && x < this.m_Width 
+                && y >= 0 && y < this.m_Height)
             {
-                return Walls.Contains(point);
+                return this.Walls.Contains(point);
             }
             return true;
         }
@@ -94,25 +94,25 @@ namespace JoyLib.Code.Entities.AI.LOS
 
         public void ClearBoard()
         {
-            VisiblePoints = new HashSet<Vector2Int>();
-            Visited = new HashSet<Vector2Int>();
+            this.VisiblePoints = new HashSet<Vector2Int>();
+            this.Visited = new HashSet<Vector2Int>();
         }
 
         public bool Contains(int x, int y)
         {
-            return (x >= 0 && x < m_Width && y >= 0 && y < m_Height);
+            return (x >= 0 && x < this.m_Width && y >= 0 && y < this.m_Height);
         }
 
         public HashSet<Vector2Int> GetVision()
         {
-            return VisiblePoints;
+            return this.VisiblePoints;
         }
 
         public int Width
         {
             get
             {
-                return m_Width;
+                return this.m_Width;
             }
         }
 
@@ -120,7 +120,7 @@ namespace JoyLib.Code.Entities.AI.LOS
         {
             get
             {
-                return m_Height;
+                return this.m_Height;
             }
         }
     }

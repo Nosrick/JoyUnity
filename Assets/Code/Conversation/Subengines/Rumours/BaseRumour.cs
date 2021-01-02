@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using JoyLib.Code.Conversation.Subengines.Rumours;
-using JoyLib.Code.Conversation.Subengines.Rumours.Parameters;
 using JoyLib.Code.Entities;
-using TMPro;
-using UnityEngine;
 
 namespace JoyLib.Code.Conversation.Conversations.Rumours
 {
@@ -23,22 +19,23 @@ namespace JoyLib.Code.Conversation.Conversations.Rumours
 
         public int Lifetime { get; protected set; }
 
-        public bool IsAlive => Lifetime > 0;
+        public bool IsAlive => this.Lifetime > 0;
 
         public string Words
         {
             get
             {
-                if (m_Words.Contains("<") == false)
+                if (this.m_Words.Contains("<") == false)
                 {
-                    return m_Words;
+                    return this.m_Words;
                 }
-                m_Words = ConstructString();
-                return m_Words;
+
+                this.m_Words = this.ConstructString();
+                return this.m_Words;
             }
             protected set
             {
-                m_Words = value;
+                this.m_Words = value;
             }
         }
         public bool Baseless { get; protected set; }
@@ -53,7 +50,7 @@ namespace JoyLib.Code.Conversation.Conversations.Rumours
 
         public BaseRumour()
         {
-            Initialise();
+            this.Initialise();
         }
 
         public BaseRumour(
@@ -76,8 +73,8 @@ namespace JoyLib.Code.Conversation.Conversations.Rumours
             this.LifetimeMultiplier = lifetimeMultiplier;
             this.Lifetime = (int)Math.Ceiling(lifetime * this.LifetimeMultiplier);
             this.Baseless = baseless;
-            
-            Initialise();
+
+            this.Initialise();
         }
 
         protected void Initialise()
@@ -90,12 +87,12 @@ namespace JoyLib.Code.Conversation.Conversations.Rumours
 
         public bool FulfilsConditions(IEnumerable<Tuple<string, int>> values)
         {
-            if (Baseless)
+            if (this.Baseless)
             {
                 return true;
             }
             
-            foreach (ITopicCondition condition in Conditions)
+            foreach (ITopicCondition condition in this.Conditions)
             {
                 if (values.Any() == false)
                 {
@@ -130,12 +127,12 @@ namespace JoyLib.Code.Conversation.Conversations.Rumours
         
         public bool FulfilsConditions(IEnumerable<IJoyObject> participants)
         {
-            if (Baseless)
+            if (this.Baseless)
             {
                 return true;
             }
             
-            string[] criteria = Conditions.Select(c => c.Criteria).ToArray();
+            string[] criteria = this.Conditions.Select(c => c.Criteria).ToArray();
 
             List<Tuple<string, int>> values = new List<Tuple<string, int>>();
             foreach (IJoyObject participant in participants)
@@ -152,49 +149,49 @@ namespace JoyLib.Code.Conversation.Conversations.Rumours
 
         public int Tick()
         {
-            return --Lifetime;
+            return --this.Lifetime;
         }
 
         public string ConstructString()
         {
-            if (Participants is null)
+            if (this.Participants is null)
             {
-                return m_Words;
+                return this.m_Words;
             }
             
             int count = 0;
-            for (int i = 1; i <= Parameters.Length; i++)
+            for (int i = 1; i <= this.Parameters.Length; i++)
             {
-                if (m_Words.Contains("<" + i + ">"))
+                if (this.m_Words.Contains("<" + i + ">"))
                 {
                     count++;
                 }
             }
             
-            if (count != Parameters.Length)
+            if (count != this.Parameters.Length)
             {
-                m_Words = "PARAMETER NUMBER MISMATCH. SOMEONE ENTERED THE WRONG NUMBER OF PARAMETER REPLACEMENTS.";
-                return m_Words;
+                this.m_Words = "PARAMETER NUMBER MISMATCH. SOMEONE ENTERED THE WRONG NUMBER OF PARAMETER REPLACEMENTS.";
+                return this.m_Words;
             }
 
             int participantNumber = 0;
             IJoyObject obj = null;
             for (int i = 0; i < count; i++)
             {
-                if (Parameters[i].Equals("participant", StringComparison.OrdinalIgnoreCase))
+                if (this.Parameters[i].Equals("participant", StringComparison.OrdinalIgnoreCase))
                 {
-                    obj = Participants[participantNumber];
+                    obj = this.Participants[participantNumber];
                     participantNumber++;
                 }
 
                 string replacement = ProcessorHandler?
-                    .Get(Parameters[i])
-                    .Parse(Parameters[i], obj);
+                    .Get(this.Parameters[i])
+                    .Parse(this.Parameters[i], obj);
 
-                m_Words = m_Words.Replace("<" + (i + 1) + ">", replacement);
+                this.m_Words = this.m_Words.Replace("<" + (i + 1) + ">", replacement);
             }
 
-            return m_Words;
+            return this.m_Words;
         }
 
         public IRumour Create(IJoyObject[] participants,

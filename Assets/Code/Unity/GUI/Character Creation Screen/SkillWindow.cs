@@ -20,69 +20,69 @@ namespace JoyLib.Code.Unity.GUI
         public void Initialise()
         {
             base.OnEnable();
-            ValueContainerPrefab.gameObject.SetActive(false);
-            Items = new List<NamedItem>();
-            Skills = new Dictionary<string, IEntitySkill>();
-            
-            Value = Maximum;
-            SetPointsRemaining();
+            this.ValueContainerPrefab.gameObject.SetActive(false);
+            this.Items = new List<NamedItem>();
+            this.Skills = new Dictionary<string, IEntitySkill>();
+
+            this.Value = this.Maximum;
+            this.SetPointsRemaining();
         }
 
         public List<KeyValuePair<string, int>> GetSkillNames()
         {
-            Skills = GameManager.SkillHandler.GetDefaultSkillBlock(this.GameManager.NeedHandler.Needs);
+            this.Skills = this.GameManager.SkillHandler.GetDefaultSkillBlock(this.GameManager.NeedHandler.Needs);
 
             foreach (KeyValuePair<string, IEntitySkill> pair in this.PlayerInfo.CurrentTemplate.Skills)
             {
-                Skills.Add(pair);
+                this.Skills.Add(pair);
             }
 
-            return Skills.Select(skill => new KeyValuePair<string, int>(skill.Key, skill.Value.Value)).ToList();
+            return this.Skills.Select(skill => new KeyValuePair<string, int>(skill.Key, skill.Value.Value)).ToList();
         }
 
         public IDictionary<string, IEntitySkill> GetSkillsBlock()
         {
-            for (int i = 0; i < Items.Count; i++)
+            for (int i = 0; i < this.Items.Count; i++)
             {
-                Skills[Items[i].Name.ToLower()].Value = Items[i].Value;
+                this.Skills[this.Items[i].Name.ToLower()].Value = this.Items[i].Value;
             }
 
-            return Skills;
+            return this.Skills;
         }
 
         public void SetSkills(List<KeyValuePair<string, int>> skills)
         {
-            if (Items.Count < skills.Count())
+            if (this.Items.Count < skills.Count())
             {
-                for (int i = Items.Count; i < skills.Count(); i++)
+                for (int i = this.Items.Count; i < skills.Count(); i++)
                 {
                     NamedItem newItem =
-                        GameObject.Instantiate(ValueContainerPrefab, this.transform).GetComponent<NamedItem>();
+                        Instantiate(this.ValueContainerPrefab, this.transform).GetComponent<NamedItem>();
                     newItem.gameObject.SetActive(true);
-                    Items.Add(newItem);
+                    this.Items.Add(newItem);
                 }
             }
             
             for(int i = 0; i < skills.Count; i++)
             {
-                Items[i].Name = skills[i].Key;
-                Items[i].ValueChanged -= ChangeSkill;
-                Items[i].DirectValueSet(skills[i].Value);
-                Items[i].Minimum = skills[i].Value;
-                Items[i].ValueChanged += ChangeSkill;
+                this.Items[i].Name = skills[i].Key;
+                this.Items[i].ValueChanged -= this.ChangeSkill;
+                this.Items[i].DirectValueSet(skills[i].Value);
+                this.Items[i].Minimum = skills[i].Value;
+                this.Items[i].ValueChanged += this.ChangeSkill;
                 //Items[i].Tooltip = skills[i].Key;
             }
         }
 
         public void SetPointsRemaining()
         {
-            PointsRemainingText.text = "Points Remaining: " + Value;
+            this.PointsRemainingText.text = "Points Remaining: " + this.Value;
         }
 
         protected void ChangeSkill(object sender, ValueChangedEventArgs args)
         {
-            Value -= args.Delta;
-            SetPointsRemaining();
+            this.Value -= args.Delta;
+            this.SetPointsRemaining();
         }
     }
 }

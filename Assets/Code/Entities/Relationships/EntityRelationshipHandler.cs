@@ -15,18 +15,18 @@ namespace JoyLib.Code.Entities.Relationships
 
         public EntityRelationshipHandler()
         {
-            Initialise();
+            this.Initialise();
         }
 
         public bool Initialise()
         {
-            m_RelationshipTypes = new Dictionary<string, IRelationship>();
-            m_Relationships = new NonUniqueDictionary<long, IRelationship>();
+            this.m_RelationshipTypes = new Dictionary<string, IRelationship>();
+            this.m_Relationships = new NonUniqueDictionary<long, IRelationship>();
 
             IEnumerable<IRelationship> types = ScriptingEngine.instance.FetchAndInitialiseChildren<IRelationship>();
             foreach(IRelationship type in types)
             {
-                m_RelationshipTypes.Add(type.Name, type);
+                this.m_RelationshipTypes.Add(type.Name, type);
             }
 
             return true;
@@ -34,20 +34,20 @@ namespace JoyLib.Code.Entities.Relationships
 
         public bool AddRelationship(IRelationship relationship)
         {
-            m_Relationships.Add(relationship.GenerateHashFromInstance(), relationship);
+            this.m_Relationships.Add(relationship.GenerateHashFromInstance(), relationship);
             return true;
         }
 
         public bool RemoveRelationship(long ID)
         {
-            return m_Relationships.RemoveByKey(ID) > 0;
+            return this.m_Relationships.RemoveByKey(ID) > 0;
         }
 
         public IRelationship CreateRelationship(IEnumerable<IJoyObject> participants, IEnumerable<string> tags)
         {
-            if(m_RelationshipTypes.Any(t => tags.Any(tag => tag.Equals(t.Key, StringComparison.OrdinalIgnoreCase))))
+            if(this.m_RelationshipTypes.Any(t => tags.Any(tag => tag.Equals(t.Key, StringComparison.OrdinalIgnoreCase))))
             {
-                IRelationship newRelationship = m_RelationshipTypes
+                IRelationship newRelationship = this.m_RelationshipTypes
                     .First(t => tags.Any(tag => tag.Equals(t.Key, StringComparison.OrdinalIgnoreCase))).Value
                     .Create(participants);
                 
@@ -59,7 +59,7 @@ namespace JoyLib.Code.Entities.Relationships
 
                 newRelationship.ModifyValueOfAllParticipants(0);
 
-                m_Relationships.Add(newRelationship.GenerateHashFromInstance(), newRelationship);
+                this.m_Relationships.Add(newRelationship.GenerateHashFromInstance(), newRelationship);
                 return newRelationship;
             }
 
@@ -69,7 +69,7 @@ namespace JoyLib.Code.Entities.Relationships
         public IRelationship CreateRelationshipWithValue(IEnumerable<IJoyObject> participants, IEnumerable<string> tags,
             int value)
         {
-            IRelationship relationship = CreateRelationship(participants, tags);
+            IRelationship relationship = this.CreateRelationship(participants, tags);
             relationship.ModifyValueOfAllParticipants(value);
 
             return relationship;
@@ -83,7 +83,7 @@ namespace JoyLib.Code.Entities.Relationships
 
             List<IRelationship> relationships = new List<IRelationship>();
             
-            foreach(Tuple<long, IRelationship> pair in m_Relationships)
+            foreach(Tuple<long, IRelationship> pair in this.m_Relationships)
             {
                 if(pair.Item1 != hash)
                 {
@@ -107,7 +107,7 @@ namespace JoyLib.Code.Entities.Relationships
                 {
                     newTags.Add("friendship");
                 }
-                relationships.Add(CreateRelationship(participants, newTags));
+                relationships.Add(this.CreateRelationship(participants, newTags));
             }
 
             return relationships.ToArray();
@@ -117,7 +117,7 @@ namespace JoyLib.Code.Entities.Relationships
         {
             try
             {
-                return GetBestRelationship(speaker, listener, tags)
+                return this.GetBestRelationship(speaker, listener, tags)
                     .GetRelationshipValue(speaker.GUID, listener.GUID);
             }
             catch (Exception e)
@@ -134,7 +134,7 @@ namespace JoyLib.Code.Entities.Relationships
             IEnumerable<string> tags = null)
         {
             IJoyObject[] participants = {speaker, listener};
-            IEnumerable<IRelationship> relationships = Get(participants, tags, false);
+            IEnumerable<IRelationship> relationships = this.Get(participants, tags, false);
 
             int highestValue = int.MinValue;
             IRelationship bestMatch = null;
@@ -158,7 +158,7 @@ namespace JoyLib.Code.Entities.Relationships
 
         public IEnumerable<IRelationship> GetAllForObject(IJoyObject actor)
         {
-            return m_Relationships.Where(tuple => tuple.Item2.GetParticipant(actor.GUID) is null == false)
+            return this.m_Relationships.Where(tuple => tuple.Item2.GetParticipant(actor.GUID) is null == false)
                 .Select(tuple => tuple.Item2)
                 .ToArray();
         }
@@ -166,7 +166,7 @@ namespace JoyLib.Code.Entities.Relationships
         public bool IsFamily(IJoyObject speaker, IJoyObject listener)
         {
             IJoyObject[] participants = { speaker, listener };
-            IEnumerable<IRelationship> relationships = Get(participants, new[] {"family"});
+            IEnumerable<IRelationship> relationships = this.Get(participants, new[] {"family"});
 
             return relationships.Any();
         }
@@ -175,15 +175,15 @@ namespace JoyLib.Code.Entities.Relationships
         {
             get
             {
-                if(m_Relationships is null)
+                if(this.m_Relationships is null)
                 {
-                    Initialise();
+                    this.Initialise();
                 }
                 
-                return m_Relationships;
+                return this.m_Relationships;
             }
         }
 
-        public List<IRelationship> RelationshipTypes => m_RelationshipTypes.Values.ToList();
+        public List<IRelationship> RelationshipTypes => this.m_RelationshipTypes.Values.ToList();
     }
 }

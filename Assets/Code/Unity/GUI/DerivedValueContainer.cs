@@ -4,21 +4,21 @@
     {
         public override int Value
         {
-            get => m_Value;
+            get => this.m_Value;
             set
             {
                 base.Value = value;
-                m_ValueText.text = m_Value + "/" + m_Maximum;
+                this.m_ValueText.text = this.m_Value + "/" + this.m_Maximum;
             }
         }
 
         public override int Maximum
         {
-            get => m_Maximum;
+            get => this.m_Maximum;
             set
             {
                 base.Maximum = value;
-                m_ValueText.text = m_Value + "/" + m_Maximum;
+                this.m_ValueText.text = this.m_Value + "/" + this.m_Maximum;
             }
         }
     }

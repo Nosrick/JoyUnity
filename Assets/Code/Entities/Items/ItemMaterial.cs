@@ -5,20 +5,20 @@
     {
         public ItemMaterial()
         {
-            Name = "DEFAULT MATERIAL";
-            Hardness = 1.0f;
-            Bonus = 0;
-            Density = 1.0f;
-            ValueMod = 1.0f;
+            this.Name = "DEFAULT MATERIAL";
+            this.Hardness = 1.0f;
+            this.Bonus = 0;
+            this.Density = 1.0f;
+            this.ValueMod = 1.0f;
         }
 
         public ItemMaterial(string nameRef, float hardnessRef, int bonusRef, float weightRef, float valueMod)
         {
-            Name = nameRef;
-            Hardness = hardnessRef;
-            Bonus = bonusRef;
-            Density = weightRef;
-            ValueMod = valueMod;
+            this.Name = nameRef;
+            this.Hardness = hardnessRef;
+            this.Bonus = bonusRef;
+            this.Density = weightRef;
+            this.ValueMod = valueMod;
         }
 
         public string Name

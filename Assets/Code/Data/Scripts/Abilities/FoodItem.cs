@@ -32,7 +32,7 @@ namespace JoyLib.Code.Entities.Abilities
         {
             if(target is IItemInstance item)
             {
-                m_CachedActions["fulfillneedaction"].Execute(
+                this.m_CachedActions["fulfillneedaction"].Execute(
                     new IJoyObject[] { user },
                     new string[] { "hunger", "need", "fulfill" },
                     new object[] { "hunger", item.ItemType.Value, 10 }

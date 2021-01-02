@@ -29,8 +29,8 @@ namespace JoyLib.Code.States
 
         public WorldInitialisationState(IWorldInstance overWorld, IWorldInstance activeWorld)
         {
-            m_Overworld = overWorld;
-            m_ActiveWorld = activeWorld;
+            this.m_Overworld = overWorld;
+            this.m_ActiveWorld = activeWorld;
         }
 
         public override void LoadContent()
@@ -39,7 +39,7 @@ namespace JoyLib.Code.States
 
         public override void Start()
         {
-            InstantiateWorld();
+            this.InstantiateWorld();
         }
 
         public override void Stop()
@@ -59,20 +59,20 @@ namespace JoyLib.Code.States
             IGameManager gameManager = GlobalConstants.GameManager;
             
             //Make the upstairs
-            if (m_ActiveWorld.GUID != m_Overworld.GUID)
+            if (this.m_ActiveWorld.GUID != this.m_Overworld.GUID)
             {
                 GameObject child = gameManager.FloorPool.Get();
 
-                child.transform.position = new Vector3(m_ActiveWorld.SpawnPoint.x, m_ActiveWorld.SpawnPoint.y, 0.0f);
+                child.transform.position = new Vector3(this.m_ActiveWorld.SpawnPoint.x, this.m_ActiveWorld.SpawnPoint.y, 0.0f);
                 SpriteRenderer spriteRenderer = child.GetComponent<SpriteRenderer>();
                 spriteRenderer.sortingLayerName = "Walls";
-                spriteRenderer.sprite = m_ObjectIcons.GetSprite("Stairs", "UpStairs");
-                child.transform.name = m_ActiveWorld.Parent.Name + " stairs";
+                spriteRenderer.sprite = this.m_ObjectIcons.GetSprite("Stairs", "UpStairs");
+                child.transform.name = this.m_ActiveWorld.Parent.Name + " stairs";
                 child.SetActive(true);
             }
 
             //Make each downstairs
-            foreach(KeyValuePair<Vector2Int, IWorldInstance> pair in m_ActiveWorld.Areas)
+            foreach(KeyValuePair<Vector2Int, IWorldInstance> pair in this.m_ActiveWorld.Areas)
             {
                 GameObject child = gameManager.FloorPool.Get();
                 
@@ -80,16 +80,16 @@ namespace JoyLib.Code.States
                 child.transform.position = new Vector3(position.x, position.y, 0.0f);
                 SpriteRenderer spriteRenderer = child.GetComponent<SpriteRenderer>();
                 spriteRenderer.sortingLayerName = "Walls";
-                spriteRenderer.sprite = m_ObjectIcons.GetSprite("Stairs", "Downstairs");
+                spriteRenderer.sprite = this.m_ObjectIcons.GetSprite("Stairs", "Downstairs");
                 child.transform.name = pair.Value.Name + " stairs";
                 child.SetActive(true);
             }
 
             int index = 0;
             Vector3 pos = Vector3.zero;
-            for(int i = 0; i < m_ActiveWorld.Tiles.GetLength(0); i++)
+            for(int i = 0; i < this.m_ActiveWorld.Tiles.GetLength(0); i++)
             {
-                for(int j = 0; j < m_ActiveWorld.Tiles.GetLength(1); j++)
+                for(int j = 0; j < this.m_ActiveWorld.Tiles.GetLength(1); j++)
                 {
                     pos.x = i;
                     pos.y = j;
@@ -99,7 +99,7 @@ namespace JoyLib.Code.States
                     fog.transform.position = pos;
                     SpriteRenderer goSpriteRenderer = fog.GetComponent<SpriteRenderer>();
                     goSpriteRenderer.sortingLayerName = "Fog of War";
-                    goSpriteRenderer.sprite = m_ObjectIcons.GetSprite("Obscure", "Obscure");
+                    goSpriteRenderer.sprite = this.m_ObjectIcons.GetSprite("Obscure", "Obscure");
                     fog.name = "Fog of War";
                     fog.SetActive(true);
                     
@@ -108,8 +108,7 @@ namespace JoyLib.Code.States
                     floor.transform.position = pos;
                     SpriteRenderer fogSpriteRenderer = floor.GetComponent<SpriteRenderer>();
                     fogSpriteRenderer.sortingLayerName = "Terrain";
-                    fogSpriteRenderer.sprite = 
-                        m_ObjectIcons.GetSprite(m_ActiveWorld.Tiles[i, j].TileSet, 
+                    fogSpriteRenderer.sprite = this.m_ObjectIcons.GetSprite(this.m_ActiveWorld.Tiles[i, j].TileSet, 
                             //TODO: This will eventually be a tile direction selection algorithm
                             "surroundfloor");
                     floor.name = this.m_ActiveWorld.Name + " floor";
@@ -120,7 +119,7 @@ namespace JoyLib.Code.States
             }
 
             //Create the walls
-            foreach(IJoyObject wall in m_ActiveWorld.Walls.Values)
+            foreach(IJoyObject wall in this.m_ActiveWorld.Walls.Values)
             {
                 GameObject gameObject = gameManager.WallPool.Get();
                 gameObject.GetComponent<MonoBehaviourHandler>()
@@ -132,7 +131,7 @@ namespace JoyLib.Code.States
             this.CreateItems(this.m_ActiveWorld.Objects);
             
             //Create the entities
-            foreach(Entity entity in m_ActiveWorld.Entities)
+            foreach(Entity entity in this.m_ActiveWorld.Entities)
             {
                 GameObject gameObject = gameManager.EntityPool.Get();
                 gameObject.SetActive(true);
@@ -147,11 +146,11 @@ namespace JoyLib.Code.States
             }
 
             Camera camera = GameObject.Find("Main Camera").GetComponent<Camera>();
-            IEntity player = m_ActiveWorld.Player;
+            IEntity player = this.m_ActiveWorld.Player;
             Transform transform = camera.transform;
             transform.position = new Vector3(player.WorldPosition.x, player.WorldPosition.y, transform.position.z);
 
-            Done = true;
+            this.Done = true;
         }
 
         protected void CreateItems(IEnumerable<IJoyObject> items, bool active = true)
@@ -169,7 +168,7 @@ namespace JoyLib.Code.States
 
         public override GameState GetNextState()
         {
-            return new WorldState(m_Overworld, m_ActiveWorld);
+            return new WorldState(this.m_Overworld, this.m_ActiveWorld);
         }
     }
 }

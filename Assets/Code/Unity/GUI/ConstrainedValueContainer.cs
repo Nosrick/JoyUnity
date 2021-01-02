@@ -12,26 +12,26 @@ namespace JoyLib.Code.Unity.GUI
         
         public List<string> Container
         {
-            get => m_Container;
+            get => this.m_Container;
             set
             {
-                m_Container = value;
+                this.m_Container = value;
                 this.Minimum = 0;
-                this.Maximum = m_Container.Count() - 1;
+                this.Maximum = this.m_Container.Count() - 1;
                 this.Value = this.Minimum;
             }
         }
         protected List<string> m_Container;
 
-        public string Selected => m_Container[Value];
+        public string Selected => this.m_Container[this.Value];
 
         public override int Value
         {
-            get => m_Value;
+            get => this.m_Value;
             set
             {
                 base.Value = value;
-                this.NameText.text = Selected;
+                this.NameText.text = this.Selected;
             }
         }
     }

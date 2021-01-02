@@ -48,7 +48,7 @@ namespace JoyLib.Code.Unity
                 this.SpeechBubble.gameObject.SetActive(false);
             }
 
-            if(this.m_JoyObject.JoyName.StartsWith("Downstairs") || m_JoyObject.JoyName.StartsWith("Upstairs"))
+            if(this.m_JoyObject.JoyName.StartsWith("Downstairs") || this.m_JoyObject.JoyName.StartsWith("Upstairs"))
             {
                 this.m_SpriteRenderer.sortingLayerName = "Walls";
             }

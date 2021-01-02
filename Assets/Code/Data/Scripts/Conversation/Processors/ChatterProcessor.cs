@@ -23,7 +23,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
                 Speaker.LISTENER,
                 new RNG())
         {
-            Initialise();
+            this.Initialise();
         }
 
         protected void Initialise()

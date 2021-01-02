@@ -27,13 +27,13 @@ namespace JoyLib.Code.States
 
         public WorldCreationState(IEntity playerRef) : base()
         {
-            m_Player = playerRef;
+            this.m_Player = playerRef;
         }
 
         public override void Start()
         {
-            SetUpUi();
-            CreateWorld();
+            this.SetUpUi();
+            this.CreateWorld();
         }
 
         public override void Stop()
@@ -55,7 +55,7 @@ namespace JoyLib.Code.States
             OverworldGenerator overworldGen = new OverworldGenerator();
 
             //Generate the basic overworld
-            m_World = new WorldInstance(
+            this.m_World = new WorldInstance(
                 overworldGen.GenerateWorldSpace(WORLD_SIZE, "plains"),
                 new string[] {"overworld", "exterior"},
                 "Everse",
@@ -63,24 +63,24 @@ namespace JoyLib.Code.States
                 GlobalConstants.GameManager.Roller);
 
             //Set the date and time for 1/1/1555, 12:00pm
-            m_World.SetDateTime(new DateTime(1555, 1, 1, 12, 0, 0));
+            this.m_World.SetDateTime(new DateTime(1555, 1, 1, 12, 0, 0));
 
             //Do the spawn point
             SpawnPointPlacer spawnPlacer = new SpawnPointPlacer(GlobalConstants.GameManager.Roller);
-            Vector2Int spawnPoint = spawnPlacer.PlaceSpawnPoint(m_World);
+            Vector2Int spawnPoint = spawnPlacer.PlaceSpawnPoint(this.m_World);
             while ((spawnPoint.x == -1 && spawnPoint.y == -1))
             {
-                spawnPoint = spawnPlacer.PlaceSpawnPoint(m_World);
+                spawnPoint = spawnPlacer.PlaceSpawnPoint(this.m_World);
             }
 
-            m_World.SpawnPoint = spawnPoint;
+            this.m_World.SpawnPoint = spawnPoint;
 
             //Set up the player
             //m_Player.Move(m_World.SpawnPoint);
             //m_World.AddEntity(m_Player);
 
             //Begin the first floor of the Naga Pits
-            WorldInfo worldInfo = m_WorldInfoHandler.GetWorldInfo("naga pits")[0];
+            WorldInfo worldInfo = this.m_WorldInfoHandler.GetWorldInfo("naga pits")[0];
 
             DungeonGenerator dungeonGenerator = new DungeonGenerator();
             WorldInstance dungeon = dungeonGenerator.GenerateDungeon(
@@ -90,22 +90,22 @@ namespace JoyLib.Code.States
                 GlobalConstants.GameManager,
                 GlobalConstants.GameManager.Roller);
 
-            Vector2Int transitionPoint = spawnPlacer.PlaceTransitionPoint(m_World);
-            m_World.AddArea(transitionPoint, dungeon);
-            Done = true;
+            Vector2Int transitionPoint = spawnPlacer.PlaceTransitionPoint(this.m_World);
+            this.m_World.AddArea(transitionPoint, dungeon);
+            this.Done = true;
 
-            m_ActiveWorld = dungeon;
-            m_Player.Move(dungeon.SpawnPoint);
-            dungeon.AddEntity(m_Player);
+            this.m_ActiveWorld = dungeon;
+            this.m_Player.Move(dungeon.SpawnPoint);
+            dungeon.AddEntity(this.m_Player);
 
-            GlobalConstants.GameManager.EntityHandler.AddEntity(m_Player);
+            GlobalConstants.GameManager.EntityHandler.AddEntity(this.m_Player);
 
             IItemInstance lightSource = GlobalConstants.GameManager.ItemFactory.CreateRandomItemOfType(
                 new string[] {"light source"},
                 true);
-            IJoyAction addItemAction = m_Player.FetchAction("additemaction");
+            IJoyAction addItemAction = this.m_Player.FetchAction("additemaction");
             addItemAction.Execute(
-                new IJoyObject[] {m_Player, lightSource},
+                new IJoyObject[] {this.m_Player, lightSource},
                 new[] {"pickup"},
                 new object[] {true});
 
@@ -117,7 +117,7 @@ namespace JoyLib.Code.States
                 addItemAction.Execute(
                     new IJoyObject[]
                     {
-                        m_Player,
+                        this.m_Player,
                         newItem
                     },
                     new[] {"pickup"},
@@ -140,14 +140,14 @@ namespace JoyLib.Code.States
                 GlobalConstants.GameManager.ItemPool.Retire(item.MonoBehaviourHandler.gameObject);
             }
 
-            m_World.Tick();
+            this.m_World.Tick();
 
             this.Done = true;
         }
 
         protected void SimulateWorld()
         {
-            List<IWorldInstance> worlds = m_World.GetWorlds(m_World);
+            List<IWorldInstance> worlds = this.m_World.GetWorlds(this.m_World);
             for (int a = 0; a < worlds.Count; a++)
             {
                 for (int i = 0; i < SIMULATION_TICKS; i++)
@@ -168,7 +168,7 @@ namespace JoyLib.Code.States
         public override GameState GetNextState()
         {
             //return new WorldInitialisationState(m_World, m_World);
-            return new WorldInitialisationState(m_World, m_ActiveWorld);
+            return new WorldInitialisationState(this.m_World, this.m_ActiveWorld);
         }
     }
 }

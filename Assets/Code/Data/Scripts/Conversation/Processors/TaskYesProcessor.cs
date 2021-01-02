@@ -21,7 +21,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
                 new string[0], 
                 Speaker.INSTIGATOR)
         {
-            Initialise();
+            this.Initialise();
             this.OfferedQuest = offeredQuest;
         }
 
@@ -44,16 +44,16 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
                 instigator.GUID,
                 this.OfferedQuest);
 
-            foreach (string next in NextTopics)
+            foreach (string next in this.NextTopics)
             {
                 Debug.Log(next);
             }
-            
-            OfferedQuest.StartQuest(instigator);
+
+            this.OfferedQuest.StartQuest(instigator);
 
             this.Words = this.OfferedQuest.ToString();
 
-            return FetchNextTopics();
+            return this.FetchNextTopics();
         }
     }
 }

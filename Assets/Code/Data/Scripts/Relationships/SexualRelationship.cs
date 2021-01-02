@@ -10,7 +10,7 @@ namespace JoyLib.Code.Entities.Relationships
         
         public SexualRelationship()
         {
-            AddTag("sexual");
+            this.AddTag("sexual");
         }
 
         public override IRelationship Create(IEnumerable<IJoyObject> participants)

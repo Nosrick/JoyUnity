@@ -20,7 +20,7 @@ namespace JoyLib.Code.Entities.AI.Drivers
 
         public StandardDriver(IPhysicsManager physicsManager = null, RNG roller = null)
         {
-            Roller = roller is null ? new RNG() : roller;
+            this.Roller = roller is null ? new RNG() : roller;
             if(s_PhysicsManager is null)
             {
                 s_PhysicsManager = physicsManager is null ? null : physicsManager;
@@ -51,7 +51,7 @@ namespace JoyLib.Code.Entities.AI.Drivers
 
                 if(idle == true)
                 {
-                    int result = Roller.Roll(0, 10);
+                    int result = this.Roller.Roll(0, 10);
                     if (result < 1)
                     {
                         wander = true;
@@ -72,7 +72,7 @@ namespace JoyLib.Code.Entities.AI.Drivers
                 List<Vector2Int> visibleSpots = new List<Vector2Int>(vehicle.Vision);
 
                 //Pick a random spot to wander to
-                int result = Roller.Roll(0, visibleSpots.Count);
+                int result = this.Roller.Roll(0, visibleSpots.Count);
                 NeedAIData currentTarget = vehicle.CurrentTarget;
                 currentTarget.targetPoint = visibleSpots[result];
                 vehicle.CurrentTarget = currentTarget;
@@ -98,17 +98,18 @@ namespace JoyLib.Code.Entities.AI.Drivers
                         };
                         vehicle.CurrentTarget = newData;
                     }
-                    MoveToTarget(vehicle);
+
+                    this.MoveToTarget(vehicle);
                 }
                 else if(vehicle.CurrentTarget.target is Entity
                     && AdjacencyHelper.IsAdjacent(vehicle.WorldPosition, vehicle.CurrentTarget.target.WorldPosition) == false)
                 {
-                    MoveToTarget(vehicle);
+                    this.MoveToTarget(vehicle);
                 }
                 else if (vehicle.CurrentTarget.target is null 
                 && vehicle.CurrentTarget.targetPoint.Equals(GlobalConstants.NO_TARGET) == false)
                 {
-                    MoveToTarget(vehicle);
+                    this.MoveToTarget(vehicle);
                 }
             }
             //If we've arrived at our destination, then we do our thing

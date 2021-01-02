@@ -36,25 +36,25 @@ namespace JoyLib.Code.Entities
             string type, 
             string[] tags)
         {
-            m_Statistics = statistics;
-            m_Skills = skills;
-            m_Abilities = abilities;
-            m_Slots = slots;
-            m_Needs = needs;
+            this.m_Statistics = statistics;
+            this.m_Skills = skills;
+            this.m_Abilities = abilities;
+            this.m_Slots = slots;
+            this.m_Needs = needs;
 
-            m_Size = size;
+            this.m_Size = size;
 
-            m_Sentient = tags.Any(tag => tag.Equals("sentient", StringComparison.OrdinalIgnoreCase));
+            this.m_Sentient = tags.Any(tag => tag.Equals("sentient", StringComparison.OrdinalIgnoreCase));
 
-            VisionType = visionType;
+            this.VisionType = visionType;
 
-            m_CreatureType = creatureType;
-            m_Type = type;
+            this.m_CreatureType = creatureType;
+            this.m_Type = type;
 
-            m_Tags = new HashSet<string>();
+            this.m_Tags = new HashSet<string>();
             for(int i = 0; i < tags.Length; i++)
             {
-                m_Tags.Add(tags[i]);
+                this.m_Tags.Add(tags[i]);
             }
         }
 
@@ -62,30 +62,30 @@ namespace JoyLib.Code.Entities
         {
             get
             {
-                return new List<string>(m_Tags);
+                return new List<string>(this.m_Tags);
             }
         }
 
         public bool HasTag(string tag)
         {
-            return m_Tags.Contains(tag);
+            return this.m_Tags.Contains(tag);
         }
 
         public bool AddTag(string tag)
         {
-            return m_Tags.Add(tag);
+            return this.m_Tags.Add(tag);
         }
 
         public bool RemoveTag(string tag)
         {
-            return m_Tags.Remove(tag);
+            return this.m_Tags.Remove(tag);
         }
 
         public IEnumerable<string> Slots
         {
             get
             {
-                return m_Slots;
+                return this.m_Slots;
             }
         }
 
@@ -124,7 +124,7 @@ namespace JoyLib.Code.Entities
         {
             get
             {
-                return m_Needs;
+                return this.m_Needs;
             }
         }
 
@@ -132,7 +132,7 @@ namespace JoyLib.Code.Entities
         {
             get
             {
-                return m_Abilities;
+                return this.m_Abilities;
             }
         }
 
@@ -140,7 +140,7 @@ namespace JoyLib.Code.Entities
         {
             get
             {
-                return m_Size;
+                return this.m_Size;
             }
         }
 
@@ -148,7 +148,7 @@ namespace JoyLib.Code.Entities
         {
             get
             {
-                return m_Sentient;
+                return this.m_Sentient;
             }
         }
 
@@ -162,7 +162,7 @@ namespace JoyLib.Code.Entities
         {
             get
             {
-                return m_CreatureType;
+                return this.m_CreatureType;
             }
         }
 
@@ -170,7 +170,7 @@ namespace JoyLib.Code.Entities
         {
             get
             {
-                return m_Type;
+                return this.m_Type;
             }
         }
     }

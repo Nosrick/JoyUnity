@@ -12,9 +12,9 @@ namespace JoyLib.Code.Unity.GUI.Character_Sheet
 
         public void OnEnable()
         {
-            if (Items is null)
+            if (this.Items is null)
             {
-                Items = new List<StaticValueContainer>();
+                this.Items = new List<StaticValueContainer>();
             }
         }
 
@@ -22,27 +22,27 @@ namespace JoyLib.Code.Unity.GUI.Character_Sheet
         {
             List<IAbility> listAbilities = abilities.ToList();
             
-            foreach (StaticValueContainer item in Items)
+            foreach (StaticValueContainer item in this.Items)
             {
                 item.gameObject.SetActive(false);
             }
             
-            if (Items.Count < listAbilities.Count)
+            if (this.Items.Count < listAbilities.Count)
             {
-                for (int i = Items.Count; i < listAbilities.Count; i++)
+                for (int i = this.Items.Count; i < listAbilities.Count; i++)
                 {
                     StaticValueContainer newItem =
-                        GameObject.Instantiate(ValueContainerPrefab, this.transform).GetComponent<StaticValueContainer>();
+                        Instantiate(this.ValueContainerPrefab, this.transform).GetComponent<StaticValueContainer>();
                     newItem.gameObject.SetActive(true);
-                    Items.Add(newItem);
+                    this.Items.Add(newItem);
                 }
             }
             
             for(int i = 0; i < listAbilities.Count; i++)
             {
-                Items[i].Name = listAbilities[i].Name;
-                Items[i].Tooltip = listAbilities[i].Description;
-                Items[i].gameObject.SetActive(true);
+                this.Items[i].Name = listAbilities[i].Name;
+                this.Items[i].Tooltip = listAbilities[i].Description;
+                this.Items[i].gameObject.SetActive(true);
             }
         }
     }

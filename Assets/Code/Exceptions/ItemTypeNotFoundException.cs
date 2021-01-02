@@ -7,6 +7,6 @@ public class ItemTypeNotFoundException : Exception
     public ItemTypeNotFoundException(string itemType, string message) :
         base(message)
     {
-        m_ItemType = itemType;
+        this.m_ItemType = itemType;
     }
 }

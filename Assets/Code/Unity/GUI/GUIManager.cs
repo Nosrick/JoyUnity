@@ -11,22 +11,22 @@ namespace JoyLib.Code.Unity.GUI
 
         public GUIManager()
         {
-            Initialise();
+            this.Initialise();
         }
 
         protected void Initialise()
         {
-            if (GUIs is null)
+            if (this.GUIs is null)
             {
-                GUIs = new HashSet<GUIData>();
-                ActiveGUIs = new HashSet<GUIData>();
+                this.GUIs = new HashSet<GUIData>();
+                this.ActiveGUIs = new HashSet<GUIData>();
             }
         }
 
         public void AddGUI(GUIData gui)
         {
-            Initialise();
-            if (GUIs.Contains(gui))
+            this.Initialise();
+            if (this.GUIs.Contains(gui))
             {
                 return;
             }
@@ -34,18 +34,18 @@ namespace JoyLib.Code.Unity.GUI
             gui.Awake();
             gui.GUIManager = this;
             gui.Close();
-            GUIs.Add(gui);
+            this.GUIs.Add(gui);
         }
 
         public void ToggleGUI(string name)
         {
-            if (ActiveGUIs.Any(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+            if (this.ActiveGUIs.Any(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase)))
             {
-                GUIData[] toToggle = ActiveGUIs.Where(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase))
+                GUIData[] toToggle = this.ActiveGUIs.Where(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase))
                     .ToArray();
                 foreach (GUIData data in toToggle)
                 {
-                    CloseGUI(data.name);
+                    this.CloseGUI(data.name);
                 }
             }
             else
@@ -56,36 +56,36 @@ namespace JoyLib.Code.Unity.GUI
 
         public GUIData OpenGUI(string name)
         {
-            if (ActiveGUIs.Any(widget => widget.name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+            if (this.ActiveGUIs.Any(widget => widget.name.Equals(name, StringComparison.OrdinalIgnoreCase)))
             {
                 return this.ActiveGUIs.First(ui => ui.name.Equals(name, StringComparison.OrdinalIgnoreCase));
             }
 
-            GUIData toOpen = GUIs.First(gui =>
+            GUIData toOpen = this.GUIs.First(gui =>
                 gui.name.Equals(name, StringComparison.OrdinalIgnoreCase));
 
             if (toOpen.m_ClosesOthers)
             {
-                List<GUIData> activeCopy = new List<GUIData>(ActiveGUIs);
+                List<GUIData> activeCopy = new List<GUIData>(this.ActiveGUIs);
                 foreach (GUIData widget in activeCopy)
                 {
-                    CloseGUI(widget.name);
+                    this.CloseGUI(widget.name);
                 }
             }
 
             toOpen.Show();
-            ActiveGUIs.Add(toOpen);
+            this.ActiveGUIs.Add(toOpen);
             return toOpen;
         }
 
         public void CloseGUI(string activeName)
         {
-            if (ActiveGUIs.Any(data => data.name.Equals(activeName, StringComparison.OrdinalIgnoreCase)) == false)
+            if (this.ActiveGUIs.Any(data => data.name.Equals(activeName, StringComparison.OrdinalIgnoreCase)) == false)
             {
                 return;
             }
 
-            GUIData toClose = ActiveGUIs
+            GUIData toClose = this.ActiveGUIs
                 .First(gui => gui.name.Equals(activeName, StringComparison.OrdinalIgnoreCase));
 
             if (toClose.m_AlwaysOpen)
@@ -94,17 +94,17 @@ namespace JoyLib.Code.Unity.GUI
             }
             
             toClose.Close();
-            ActiveGUIs.Remove(toClose);
+            this.ActiveGUIs.Remove(toClose);
         }
 
         public bool RemoveActiveGUI(string name)
         {
-            if (ActiveGUIs.Any(data => data.name.Equals(name, StringComparison.OrdinalIgnoreCase)) == false)
+            if (this.ActiveGUIs.Any(data => data.name.Equals(name, StringComparison.OrdinalIgnoreCase)) == false)
             {
                 return false;
             }
 
-            GUIData toClose = ActiveGUIs.First(data => data.name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            GUIData toClose = this.ActiveGUIs.First(data => data.name.Equals(name, StringComparison.OrdinalIgnoreCase));
 
             if (toClose.m_AlwaysOpen)
             {
@@ -112,18 +112,18 @@ namespace JoyLib.Code.Unity.GUI
             }
             
             toClose.Close();
-            return ActiveGUIs.Remove(toClose);
+            return this.ActiveGUIs.Remove(toClose);
         }
 
         public void BringToFront(string name)
         {
-            if (!ActiveGUIs.Any(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+            if (!this.ActiveGUIs.Any(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase)))
             {
                 return;
             }
 
-            GUIData toFront = ActiveGUIs.First(g => g.name.Equals(name, StringComparison.OrdinalIgnoreCase));
-            foreach (GUIData gui in ActiveGUIs)
+            GUIData toFront = this.ActiveGUIs.First(g => g.name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            foreach (GUIData gui in this.ActiveGUIs)
             {
                 if (toFront.Equals(gui))
                 {
@@ -138,7 +138,7 @@ namespace JoyLib.Code.Unity.GUI
 
         public void CloseAllOtherGUIs(string activeName = "")
         {
-            GUIData[] toClose = ActiveGUIs
+            GUIData[] toClose = this.ActiveGUIs
                 .Where(gui => gui.name.Equals(activeName, StringComparison.OrdinalIgnoreCase) == false).ToArray();
 
             foreach (GUIData data in toClose)
@@ -147,30 +147,31 @@ namespace JoyLib.Code.Unity.GUI
                 {
                     continue;
                 }
-                ActiveGUIs.Remove(data);
+
+                this.ActiveGUIs.Remove(data);
                 data.Close();
             }
         }
 
         public bool RemovesControl()
         {
-            IEnumerable<GUIData> data = ActiveGUIs.Where(gui => gui.GetType().Equals(typeof(GUIData))).Cast<GUIData>();
+            IEnumerable<GUIData> data = this.ActiveGUIs.Where(gui => gui.GetType().Equals(typeof(GUIData))).Cast<GUIData>();
             return data.Any(gui => gui.m_RemovesControl);
         }
 
         public GUIData GetGUI(string name)
         {
-            return GUIs.First(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            return this.GUIs.First(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
 
         public bool IsActive(string name)
         {
-            return ActiveGUIs.Any(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            return this.ActiveGUIs.Any(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
 
         public bool AreAnyOpen()
         {
-            return ActiveGUIs.Count > 0;
+            return this.ActiveGUIs.Count > 0;
         }
     }
 }

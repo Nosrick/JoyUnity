@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Entities.AI;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Graphics;
 using JoyLib.Code.Quests;
-using JoyLib.Code.Rollers;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities.Needs
@@ -122,13 +119,13 @@ namespace JoyLib.Code.Entities.Needs
 
             if (bestMatch is null)
             {
-                m_CachedActions["wanderaction"].Execute(
+                this.m_CachedActions["wanderaction"].Execute(
                     new IJoyObject[] {actor},
                     new[] {"wander", "need", "purpose"});
                 return false;
             }
 
-            m_CachedActions["seekaction"].Execute(
+            this.m_CachedActions["seekaction"].Execute(
                 new IJoyObject[] {actor, bestMatch},
                 new[] {"need", "seek", "purpose"},
                 new object[] {"purpose"});
@@ -143,14 +140,14 @@ namespace JoyLib.Code.Entities.Needs
             }
             
             //Asking to do something for your friend increases your relationship
-            m_CachedActions["fulfillneedaction"].Execute(
+            this.m_CachedActions["fulfillneedaction"].Execute(
                 new IJoyObject[] {actor, listener},
                 new[] {"need", "friendship", "fulfill"},
                 new object[] {"friendship", actor.Statistics[EntityStatistic.PERSONALITY].Value, 0, true});
 
             if (RelationshipHandler.IsFamily(actor, listener))
             {
-                m_CachedActions["fulfillneedaction"].Execute(
+                this.m_CachedActions["fulfillneedaction"].Execute(
                     new IJoyObject[] {actor, listener},
                     new[] {"need", "family", "fulfill"},
                     new object[] {"family", actor.Statistics[EntityStatistic.PERSONALITY].Value, 0, true});
@@ -165,7 +162,7 @@ namespace JoyLib.Code.Entities.Needs
                         actor.MyWorld.GetOverworld()));
             }
 
-            m_CachedActions["fulfillneedaction"].Execute(
+            this.m_CachedActions["fulfillneedaction"].Execute(
                 new IJoyObject[] {actor},
                 new[] {"need", "purpose", "fulfill"},
                 new object[] {"purpose", listener.Statistics[EntityStatistic.PERSONALITY].Value, 0, false});
@@ -189,12 +186,12 @@ namespace JoyLib.Code.Entities.Needs
 
         public override INeed Randomise()
         {
-            int decay = Roller.Roll(DECAY_MIN, DECAY_MAX);
-            int decayCounter = Roller.Roll(0, DECAY_MAX);
-            int priority = Roller.Roll(PRIORITY_MIN, PRIORITY_MAX);
-            int happinessThreshold = Roller.Roll(HAPPINESS_THRESHOLD_MIN, HAPPINESS_THRESHOLD_MAX);
-            int value = Roller.Roll(0, HAPPINESS_THRESHOLD_MAX);
-            int maxValue = Roller.Roll(MAX_VALUE_MIN, MAX_VALUE_MAX);
+            int decay = this.Roller.Roll(DECAY_MIN, DECAY_MAX);
+            int decayCounter = this.Roller.Roll(0, DECAY_MAX);
+            int priority = this.Roller.Roll(PRIORITY_MIN, PRIORITY_MAX);
+            int happinessThreshold = this.Roller.Roll(HAPPINESS_THRESHOLD_MIN, HAPPINESS_THRESHOLD_MAX);
+            int value = this.Roller.Roll(0, HAPPINESS_THRESHOLD_MAX);
+            int maxValue = this.Roller.Roll(MAX_VALUE_MIN, MAX_VALUE_MAX);
             
             return new Purpose(
                 decay,

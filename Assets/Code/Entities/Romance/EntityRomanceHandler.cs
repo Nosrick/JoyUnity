@@ -9,31 +9,31 @@ namespace JoyLib.Code.Entities.Romance
     {
         protected Dictionary<string, IRomance> RomanceTypes { get; set; }
         
-        public IRomance[] Romances => RomanceTypes.Values.ToArray();
+        public IRomance[] Romances => this.RomanceTypes.Values.ToArray();
 
         public EntityRomanceHandler()
         {
-            Initialise();
+            this.Initialise();
         }
 
         protected void Initialise()
         {
-            Load();
+            this.Load();
         }
 
         protected bool Load()
         {
-            if (RomanceTypes != null)
+            if (this.RomanceTypes != null)
             {
                 return true;
             }
 
-            RomanceTypes = new Dictionary<string, IRomance>();
+            this.RomanceTypes = new Dictionary<string, IRomance>();
             
             IEnumerable<IRomance> romanceTypes = ScriptingEngine.instance.FetchAndInitialiseChildren<IRomance>();
             foreach (IRomance romance in romanceTypes)
             {
-                RomanceTypes.Add(romance.Name, romance);
+                this.RomanceTypes.Add(romance.Name, romance);
             }
 
             return true;
@@ -41,14 +41,14 @@ namespace JoyLib.Code.Entities.Romance
         
         public IRomance Get(string romance)
         {
-            if (RomanceTypes is null)
+            if (this.RomanceTypes is null)
             {
                 throw new InvalidOperationException("Sexuality search was null.");
             }
 
-            if (RomanceTypes.Any(r => r.Key.Equals(romance, StringComparison.OrdinalIgnoreCase)))
+            if (this.RomanceTypes.Any(r => r.Key.Equals(romance, StringComparison.OrdinalIgnoreCase)))
             {
-                return RomanceTypes.First(r => r.Key.Equals(romance, StringComparison.OrdinalIgnoreCase)).Value;
+                return this.RomanceTypes.First(r => r.Key.Equals(romance, StringComparison.OrdinalIgnoreCase)).Value;
             }
             throw new InvalidOperationException("Sexuality of type " + romance + " not found.");
         }

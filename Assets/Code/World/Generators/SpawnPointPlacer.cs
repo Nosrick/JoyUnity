@@ -1,8 +1,7 @@
-﻿using JoyLib.Code.Entities.AI;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Rollers;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using JoyLib.Code.Entities.AI;
+using JoyLib.Code.Rollers;
 using UnityEngine;
 
 namespace JoyLib.Code.World.Generators
@@ -20,15 +19,15 @@ namespace JoyLib.Code.World.Generators
         {
             int x, y;
 
-            x = Roller.Roll(1, worldRef.Tiles.GetLength(0));
-            y = Roller.Roll(1, worldRef.Tiles.GetLength(1));
+            x = this.Roller.Roll(1, worldRef.Tiles.GetLength(0));
+            y = this.Roller.Roll(1, worldRef.Tiles.GetLength(1));
 
             Vector2Int point = new Vector2Int(x, y);
 
             while (worldRef.Walls.Keys.Any(l => l.Equals(point)))
             {
-                x = Roller.Roll(1, worldRef.Tiles.GetLength(0));
-                y = Roller.Roll(1, worldRef.Tiles.GetLength(1));
+                x = this.Roller.Roll(1, worldRef.Tiles.GetLength(0));
+                y = this.Roller.Roll(1, worldRef.Tiles.GetLength(1));
                 point = new Vector2Int(x, y);
             }
 
@@ -40,8 +39,8 @@ namespace JoyLib.Code.World.Generators
             int breakout = (worldRef.Tiles.GetLength(0) * worldRef.Tiles.GetLength(1)) / 4;
             int x, y;
 
-            x = Roller.Roll(1, worldRef.Tiles.GetLength(0));
-            y = Roller.Roll(1, worldRef.Tiles.GetLength(1));
+            x = this.Roller.Roll(1, worldRef.Tiles.GetLength(0));
+            y = this.Roller.Roll(1, worldRef.Tiles.GetLength(1));
 
             Vector2Int point = new Vector2Int(x, y);
 
@@ -49,8 +48,8 @@ namespace JoyLib.Code.World.Generators
             while (worldRef.Walls.Keys.Any(l => l == point) && 
                 (point.Equals(worldRef.SpawnPoint) || count < breakout))
             {
-                x = Roller.Roll(1, worldRef.Tiles.GetLength(0));
-                y = Roller.Roll(1, worldRef.Tiles.GetLength(1));
+                x = this.Roller.Roll(1, worldRef.Tiles.GetLength(0));
+                y = this.Roller.Roll(1, worldRef.Tiles.GetLength(1));
                 point = new Vector2Int(x, y);
                 count += 1;
             }
@@ -69,8 +68,8 @@ namespace JoyLib.Code.World.Generators
                         && (point.Equals(worldRef.SpawnPoint) || count < breakout) 
                         && pathfinder.FindPath(point, worldRef.SpawnPoint, worldRef).Count == 0)
                 {
-                    x = Roller.Roll(1, worldRef.Tiles.GetLength(0));
-                    y = Roller.Roll(1, worldRef.Tiles.GetLength(1));
+                    x = this.Roller.Roll(1, worldRef.Tiles.GetLength(0));
+                    y = this.Roller.Roll(1, worldRef.Tiles.GetLength(1));
                     point = new Vector2Int(x, y);
                     count += 1;
                 }
@@ -100,7 +99,7 @@ namespace JoyLib.Code.World.Generators
                 }
             }
 
-            return ReachOut(fromRef, toRef, blocked, blocked);
+            return this.ReachOut(fromRef, toRef, blocked, blocked);
         }
 
         private bool ReachOut(Vector2Int point, Vector2Int destination, bool[,] blockedTiles, bool[,] steppedTiles)
@@ -130,42 +129,42 @@ namespace JoyLib.Code.World.Generators
 
                 //North
                 if(!steppedTiles[point.x, point.y - 1])
-                    if (ReachOut(new Vector2Int(point.x, point.y - 1), destination, blockedTiles, steppedTiles))
+                    if (this.ReachOut(new Vector2Int(point.x, point.y - 1), destination, blockedTiles, steppedTiles))
                         return true;
 
                 //North East
                 if (!steppedTiles[point.x + 1, point.y - 1])
-                    if (ReachOut(new Vector2Int(point.x + 1, point.y - 1), destination, blockedTiles, steppedTiles))
+                    if (this.ReachOut(new Vector2Int(point.x + 1, point.y - 1), destination, blockedTiles, steppedTiles))
                          return true;
 
                 //East
                 if (!steppedTiles[point.x + 1, point.y])
-                    if (ReachOut(new Vector2Int(point.x + 1, point.y), destination, blockedTiles, steppedTiles))
+                    if (this.ReachOut(new Vector2Int(point.x + 1, point.y), destination, blockedTiles, steppedTiles))
                         return true;
 
                 //South East
                 if (!steppedTiles[point.x + 1, point.y + 1])
-                    if (ReachOut(new Vector2Int(point.x + 1, point.y + 1), destination, blockedTiles, steppedTiles))
+                    if (this.ReachOut(new Vector2Int(point.x + 1, point.y + 1), destination, blockedTiles, steppedTiles))
                         return true;
 
                 //South
                 if (!steppedTiles[point.x, point.y + 1])
-                    if (ReachOut(new Vector2Int(point.x, point.y + 1), destination, blockedTiles, steppedTiles))
+                    if (this.ReachOut(new Vector2Int(point.x, point.y + 1), destination, blockedTiles, steppedTiles))
                         return true;
 
                 //South West
                 if (!steppedTiles[point.x - 1, point.y + 1])
-                    if (ReachOut(new Vector2Int(point.x - 1, point.y + 1), destination, blockedTiles, steppedTiles))
+                    if (this.ReachOut(new Vector2Int(point.x - 1, point.y + 1), destination, blockedTiles, steppedTiles))
                         return true;
 
                 //West
                 if (!steppedTiles[point.x - 1, point.y])
-                    if (ReachOut(new Vector2Int(point.x - 1, point.y), destination, blockedTiles, steppedTiles))
+                    if (this.ReachOut(new Vector2Int(point.x - 1, point.y), destination, blockedTiles, steppedTiles))
                         return true;
 
                 //North West
                 if (!steppedTiles[point.x - 1, point.y - 1])
-                    if (ReachOut(new Vector2Int(point.x - 1, point.y - 1), destination, blockedTiles, steppedTiles))
+                    if (this.ReachOut(new Vector2Int(point.x - 1, point.y - 1), destination, blockedTiles, steppedTiles))
                         return true;
             }
             return false;

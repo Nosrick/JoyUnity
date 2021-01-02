@@ -12,20 +12,20 @@ namespace JoyLib.Code.Entities.Abilities
 
         public AbilityHandler()
         {
-            Initialise();
+            this.Initialise();
         }
 
         private void Load()
         {
-            Abilities = new List<IAbility>();
-            Abilities.AddRange(ScriptingEngine.instance.FetchAndInitialiseChildren<IAbility>());
+            this.Abilities = new List<IAbility>();
+            this.Abilities.AddRange(ScriptingEngine.instance.FetchAndInitialiseChildren<IAbility>());
         }
 
         public bool Initialise()
         {
-            if (Abilities is null)
+            if (this.Abilities is null)
             {
-                Load();
+                this.Load();
             }
 
             return true;
@@ -33,13 +33,13 @@ namespace JoyLib.Code.Entities.Abilities
 
         public IAbility GetAbility(string nameRef)
         {
-            Initialise();
+            this.Initialise();
 
-            if (Abilities.Any(x => x.InternalName.Equals(nameRef, StringComparison.OrdinalIgnoreCase)
-                                   || x.Name.Equals(nameRef, StringComparison.OrdinalIgnoreCase)))
+            if (this.Abilities.Any(x => x.InternalName.Equals(nameRef, StringComparison.OrdinalIgnoreCase)
+                                        || x.Name.Equals(nameRef, StringComparison.OrdinalIgnoreCase)))
             {
-                return Abilities.First(x => x.InternalName.Equals(nameRef, StringComparison.OrdinalIgnoreCase)
-                || x.Name.Equals(nameRef, StringComparison.OrdinalIgnoreCase));
+                return this.Abilities.First(x => x.InternalName.Equals(nameRef, StringComparison.OrdinalIgnoreCase)
+                                                 || x.Name.Equals(nameRef, StringComparison.OrdinalIgnoreCase));
             }
 
             throw new InvalidOperationException("Could not find IAbility with name " + nameRef);
@@ -47,21 +47,20 @@ namespace JoyLib.Code.Entities.Abilities
 
         public IEnumerable<IAbility> GetAvailableAbilities(IEntity actor)
         {
-            Initialise();
+            this.Initialise();
 
-            IEnumerable<string> prereqs =
-                Abilities.SelectMany(ability => ability.Prerequisites.Select(pair => pair.Key)).Distinct();
+            IEnumerable<string> prereqs = this.Abilities.SelectMany(ability => ability.Prerequisites.Select(pair => pair.Key)).Distinct();
 
             IEnumerable<Tuple<string, int>> data = actor.GetData(prereqs);
 
-            return Abilities.Where(ability => ability.MeetsPrerequisites(data));
+            return this.Abilities.Where(ability => ability.MeetsPrerequisites(data));
         }
 
         public IEnumerable<IAbility> GetAvailableAbilities(IEntityTemplate template,
             IDictionary<string, IRollableValue<int>> stats,
             IDictionary<string, IEntitySkill> skills)
         {
-            Initialise();
+            this.Initialise();
 
             List<Tuple<string, int>> data =
                 stats.Select(stat => new Tuple<string, int>(stat.Key, stat.Value.Value)).ToList();
@@ -69,7 +68,7 @@ namespace JoyLib.Code.Entities.Abilities
             data.AddRange(skills.Select(skill => new Tuple<string, int>(skill.Key, skill.Value.Value)));
             data.Add(new Tuple<string, int>(template.CreatureType, 1));
 
-            return Abilities.Where(ability => ability.MeetsPrerequisites(data));
+            return this.Abilities.Where(ability => ability.MeetsPrerequisites(data));
         }
     }
 }

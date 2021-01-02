@@ -16,55 +16,55 @@ namespace JoyLib.Code.Unity.GUI
         public void Initialise()
         {
             base.OnEnable();
-            DerivedValuePrefab.gameObject.SetActive(false);
-            if (Items is null)
+            this.DerivedValuePrefab.gameObject.SetActive(false);
+            if (this.Items is null)
             {
-                Items = new List<NamedItem>();
+                this.Items = new List<NamedItem>();
             }
 
-            Value = Maximum;
-            SetRemainingPointsText();
+            this.Value = this.Maximum;
+            this.SetRemainingPointsText();
         }
 
         public void SetDerivedValues(IDictionary<string, IDerivedValue> values)
         {
-            Value = Maximum;
+            this.Value = this.Maximum;
             
             List<IDerivedValue> valueList = new List<IDerivedValue>(values.Values);
             
-            if (Items.Count < valueList.Count)
+            if (this.Items.Count < valueList.Count)
             {
-                for (int i = Items.Count; i < valueList.Count; i++)
+                for (int i = this.Items.Count; i < valueList.Count; i++)
                 {
                     NamedItem newItem =
-                        GameObject.Instantiate(DerivedValuePrefab, this.transform).GetComponent<NamedItem>();
+                        Instantiate(this.DerivedValuePrefab, this.transform).GetComponent<NamedItem>();
                     newItem.gameObject.SetActive(true);
-                    Items.Add(newItem);
+                    this.Items.Add(newItem);
                 }
             }
             
             for(int i = 0; i < valueList.Count; i++)
             {
-                Items[i].Name = valueList[i].Name;
-                Items[i].ValueChanged -= ChangeDerivedValue;
-                Items[i].DirectValueSet(valueList[i].Value);
-                Items[i].Minimum = valueList[i].Value;
-                Items[i].Maximum = valueList[i].Value + 5;
-                Items[i].ValueChanged += ChangeDerivedValue;
-                Items[i].gameObject.GetComponent<RectTransform>()
+                this.Items[i].Name = valueList[i].Name;
+                this.Items[i].ValueChanged -= this.ChangeDerivedValue;
+                this.Items[i].DirectValueSet(valueList[i].Value);
+                this.Items[i].Minimum = valueList[i].Value;
+                this.Items[i].Maximum = valueList[i].Value + 5;
+                this.Items[i].ValueChanged += this.ChangeDerivedValue;
+                this.Items[i].gameObject.GetComponent<RectTransform>()
                     .SetSizeWithCurrentAnchors(
                         RectTransform.Axis.Horizontal, 
                         this.GetComponent<RectTransform>().rect.width);
             }
-            
-            SetRemainingPointsText();
+
+            this.SetRemainingPointsText();
         }
 
         public IDictionary<string, IDerivedValue> GetDerivedValues()
         {
             IDictionary<string, IDerivedValue> values = new Dictionary<string, IDerivedValue>();
 
-            foreach (NamedItem item in Items)
+            foreach (NamedItem item in this.Items)
             {
                 values.Add(
                     item.Name.ToLower(),
@@ -79,13 +79,13 @@ namespace JoyLib.Code.Unity.GUI
 
         protected void ChangeDerivedValue(object sender, ValueChangedEventArgs args)
         {
-            Value -= args.Delta;
-            SetRemainingPointsText();
+            this.Value -= args.Delta;
+            this.SetRemainingPointsText();
         }
 
         protected void SetRemainingPointsText()
         {
-            m_PointsRemainingText.text = "Derived Value Points Remaining: " + Value;
+            this.m_PointsRemainingText.text = "Derived Value Points Remaining: " + this.Value;
         }
     }
 }

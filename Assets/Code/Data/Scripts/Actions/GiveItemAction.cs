@@ -1,7 +1,5 @@
 ﻿using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Quests;
-using UnityEngine;
 
 namespace JoyLib.Code.Scripting.Actions
 {
@@ -12,7 +10,7 @@ namespace JoyLib.Code.Scripting.Actions
         
         public override bool Execute(IJoyObject[] participants, string[] tags = null, params object[] args)
         {
-            ClearLastParameters();
+            this.ClearLastParameters();
             
             if (participants.Length != 2)
             {
@@ -44,8 +42,8 @@ namespace JoyLib.Code.Scripting.Actions
             }
 
             item.SetOwner(right.GUID);
-            
-            SetLastParameters(participants, tags, args);
+
+            this.SetLastParameters(participants, tags, args);
 
             return true;
         }

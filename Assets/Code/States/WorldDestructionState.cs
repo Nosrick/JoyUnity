@@ -10,8 +10,8 @@ namespace JoyLib.Code.States
 
         public WorldDestructionState(IWorldInstance overworld, IWorldInstance nextWorld)
         {
-            m_OverWorld = overworld;
-            m_NextWorld = nextWorld;
+            this.m_OverWorld = overworld;
+            this.m_NextWorld = nextWorld;
         }
 
         public override void LoadContent()
@@ -20,7 +20,7 @@ namespace JoyLib.Code.States
 
         public override void Start()
         {
-            DestroyWorld();
+            this.DestroyWorld();
         }
 
         public override void Stop()
@@ -44,12 +44,12 @@ namespace JoyLib.Code.States
             gameManager.FloorPool.RetireAll();
             gameManager.WallPool.RetireAll();
 
-            Done = true;
+            this.Done = true;
         }
 
         public override GameState GetNextState()
         {
-            return new WorldInitialisationState(m_OverWorld, m_NextWorld);
+            return new WorldInitialisationState(this.m_OverWorld, this.m_NextWorld);
         }
     }
 }

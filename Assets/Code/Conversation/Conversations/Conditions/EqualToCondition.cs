@@ -9,7 +9,7 @@
 
         public override bool FulfillsCondition(int value)
         {
-            return value == Value;
+            return value == this.Value;
         }
     }
 }

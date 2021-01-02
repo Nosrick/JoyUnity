@@ -7,7 +7,6 @@ using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.World;
-using UnityEngine;
 
 namespace JoyLib.Code.Quests
 {
@@ -31,7 +30,7 @@ namespace JoyLib.Code.Quests
             IEnumerable<string> tags,
             RNG roller = null)
         {
-            Roller = roller is null ? new RNG() : roller; 
+            this.Roller = roller is null ? new RNG() : roller; 
             List<string> tempTags = new List<string>();
             tempTags.Add("exploration");
             tempTags.AddRange(tags);
@@ -39,14 +38,14 @@ namespace JoyLib.Code.Quests
             this.Actors = actors;
             this.Areas = areas;
             this.Tags = tempTags.ToArray();
-            Description = AssembleDescription();
+            this.Description = this.AssembleDescription();
         }
         
         public IQuestStep Make(IEntity questor, IEntity provider, IWorldInstance overworld, IEnumerable<string> tags)
         {
             List<IWorldInstance> worlds = overworld.GetWorlds(overworld); 
 
-            int result = Roller.Roll(0, worlds.Count);
+            int result = this.Roller.Roll(0, worlds.Count);
 
             int breakout = 0;
 
@@ -83,7 +82,7 @@ namespace JoyLib.Code.Quests
                 return false;
             }
 
-            if (action.LastArgs.Intersect(Areas).Count() != Areas.Count)
+            if (action.LastArgs.Intersect(this.Areas).Count() != this.Areas.Count)
             {
                 return false;
             }
@@ -102,15 +101,15 @@ namespace JoyLib.Code.Quests
 
             for(int i = 0; i < this.Areas.Count; i++)
             {
-                if (i > 0 && i < Items.Count - 1)
+                if (i > 0 && i < this.Items.Count - 1)
                 {
                     builder.Append(", ");
                 }
-                if (Items.Count > 1 && i == Items.Count - 1)
+                if (this.Items.Count > 1 && i == this.Items.Count - 1)
                 {
                     builder.Append("and ");
                 }
-                builder.Append(Areas[i].Name);
+                builder.Append(this.Areas[i].Name);
             }
             
             return "Go to " + builder.ToString() + ".";

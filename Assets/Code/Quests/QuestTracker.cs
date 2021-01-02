@@ -1,11 +1,7 @@
 ﻿using System;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.World;
 using System.Collections.Generic;
-using System.Linq;
+using JoyLib.Code.Entities;
 using JoyLib.Code.Scripting;
-using UnityEngine;
 
 namespace JoyLib.Code.Quests
 {
@@ -15,22 +11,22 @@ namespace JoyLib.Code.Quests
 
         public QuestTracker()
         {
-            Initialise();
+            this.Initialise();
         }
         
         public void Initialise()
         {
-            if (EntityQuests is null)
+            if (this.EntityQuests is null)
             {
-                EntityQuests = new Dictionary<long, List<IQuest>>();
+                this.EntityQuests = new Dictionary<long, List<IQuest>>();
             }
         }
 
         public List<IQuest> GetQuestsForEntity(long GUID)
         {
-            if (EntityQuests.ContainsKey(GUID))
+            if (this.EntityQuests.ContainsKey(GUID))
             {
-                return EntityQuests[GUID];
+                return this.EntityQuests[GUID];
             }
                 
             return new List<IQuest>();
@@ -38,9 +34,9 @@ namespace JoyLib.Code.Quests
 
         public IQuest GetPrimaryQuestForEntity(long GUID)
         {
-            if (EntityQuests.ContainsKey(GUID) && EntityQuests[GUID].Count > 0)
+            if (this.EntityQuests.ContainsKey(GUID) && this.EntityQuests[GUID].Count > 0)
             {
-                return EntityQuests[GUID][0];
+                return this.EntityQuests[GUID][0];
             }
             
             throw new InvalidOperationException("No quests found for " + GUID + ".");
@@ -48,46 +44,46 @@ namespace JoyLib.Code.Quests
 
         public void AddQuest(long GUID, IQuest quest)
         {
-            if (EntityQuests.ContainsKey(GUID))
+            if (this.EntityQuests.ContainsKey(GUID))
             {
-                EntityQuests[GUID].Add(quest);
+                this.EntityQuests[GUID].Add(quest);
             }
             else
             {
-                EntityQuests.Add(GUID, new List<IQuest> { quest });
+                this.EntityQuests.Add(GUID, new List<IQuest> { quest });
             }
         }
 
         public void CompleteQuest(IEntity questor, IQuest quest)
         {
             quest.CompleteQuest(questor);
-            EntityQuests[questor.GUID].Remove(quest);
+            this.EntityQuests[questor.GUID].Remove(quest);
         }
 
         public void AbandonQuest(IEntity questor, IQuest quest)
         {
-            EntityQuests[questor.GUID].Remove(quest);
+            this.EntityQuests[questor.GUID].Remove(quest);
         }
 
         public void FailQuest(IEntity questor, IQuest quest)
         {
-            EntityQuests[questor.GUID].Remove(quest);
+            this.EntityQuests[questor.GUID].Remove(quest);
         }
 
         public void PerformQuestAction(IEntity questor, IQuest quest, IJoyAction completedAction)
         {
             if (quest.FulfilsRequirements(questor, completedAction) && quest.AdvanceStep())
             {
-                CompleteQuest(questor, quest);
+                this.CompleteQuest(questor, quest);
             }
         }
 
         public void PerformQuestAction(IEntity questor, IJoyAction completedAction)
         {
-            List<IQuest> copy = new List<IQuest>(GetQuestsForEntity(questor.GUID));
+            List<IQuest> copy = new List<IQuest>(this.GetQuestsForEntity(questor.GUID));
             foreach (IQuest quest in copy)
             {
-                PerformQuestAction(questor, quest, completedAction);
+                this.PerformQuestAction(questor, quest, completedAction);
             }
         }
     }

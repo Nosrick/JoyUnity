@@ -15,19 +15,19 @@ namespace JoyLib.Code.World.Lighting
         public LightBoard Do(IEnumerable<IItemInstance> items, IWorldInstance world, Vector2Int dimensions,
             IEnumerable<Vector2Int> walls)
         {
-            m_Board = new LightBoard(dimensions.x, dimensions.y, walls);
+            this.m_Board = new LightBoard(dimensions.x, dimensions.y, walls);
             foreach (IItemInstance item in items)
             {
-                m_Board.ClearVisited();
-                m_Board.AddLight(item.WorldPosition, item.ItemType.LightLevel);
-                foreach (Vector2Int direction in DIAGONALS)
+                this.m_Board.ClearVisited();
+                this.m_Board.AddLight(item.WorldPosition, item.ItemType.LightLevel);
+                foreach (Vector2Int direction in this.DIAGONALS)
                 {
-                    CastLight(item, world, item.WorldPosition, 1, 1, 0, 0, direction.x,direction.y, 0);
-                    CastLight(item, world, item.WorldPosition, 1, 1, 0, direction.x, 0, 0, direction.y);
+                    this.CastLight(item, world, item.WorldPosition, 1, 1, 0, 0, direction.x,direction.y, 0);
+                    this.CastLight(item, world, item.WorldPosition, 1, 1, 0, direction.x, 0, 0, direction.y);
                 }
             }
 
-            return m_Board;
+            return this.m_Board;
         }
 
         private void CastLight(IItemInstance item, IWorldInstance world, Vector2Int origin, int row, float start, float end, int xx, int xy, int yx, int yy)
@@ -52,7 +52,7 @@ namespace JoyLib.Code.World.Lighting
 
                     int lightLevel = item.ItemType.LightLevel - distance;
 
-                    if (!(currentX >= 0 && currentY >= 0 && currentX < m_Board.Width && currentY < m_Board.Height) || start < rightSlope)
+                    if (!(currentX >= 0 && currentY >= 0 && currentX < this.m_Board.Width && currentY < this.m_Board.Height) || start < rightSlope)
                     {
                         continue;
                     }
@@ -65,13 +65,13 @@ namespace JoyLib.Code.World.Lighting
                     Vector2Int currentPosition = new Vector2Int(currentX, currentY);
                     if (Math.Sqrt(deltaX * deltaX + deltaY * deltaY) <= item.ItemType.LightLevel)
                     {
-                        m_Board.AddLight(currentPosition, lightLevel);
+                        this.m_Board.AddLight(currentPosition, lightLevel);
                     }
 
                     if (blocked)
                     {
-                        m_Board.AddLight(currentPosition, lightLevel);
-                        if(m_Board.IsObstacle(currentPosition))
+                        this.m_Board.AddLight(currentPosition, lightLevel);
+                        if(this.m_Board.IsObstacle(currentPosition))
                         {
                             newStart = rightSlope;
                         }
@@ -83,14 +83,14 @@ namespace JoyLib.Code.World.Lighting
                     }
                     else
                     {
-                        m_Board.AddLight(currentPosition, lightLevel);
-                        if (!m_Board.IsObstacle(currentPosition) || distance >= item.ItemType.LightLevel)
+                        this.m_Board.AddLight(currentPosition, lightLevel);
+                        if (!this.m_Board.IsObstacle(currentPosition) || distance >= item.ItemType.LightLevel)
                         {
                             continue;
                         }
                         
                         blocked = true;
-                        CastLight(item, world, origin, distance + 1, start, leftSlope, xx, xy, yx, yy);
+                        this.CastLight(item, world, origin, distance + 1, start, leftSlope, xx, xy, yx, yy);
                         newStart = rightSlope;
                     }
                 }
@@ -99,8 +99,8 @@ namespace JoyLib.Code.World.Lighting
 
         private void DoDiffuse()
         {
-            m_Board.ClearVisited();
-            foreach (KeyValuePair<Vector2Int, int> pair in m_Board.LightLevels)
+            this.m_Board.ClearVisited();
+            foreach (KeyValuePair<Vector2Int, int> pair in this.m_Board.LightLevels)
             {
                 this.DoAdjacent(pair.Key, pair.Value);
             }
@@ -127,6 +127,6 @@ namespace JoyLib.Code.World.Lighting
             }
         }
 
-        public LightBoard Light => m_Board;
+        public LightBoard Light => this.m_Board;
     }
 }

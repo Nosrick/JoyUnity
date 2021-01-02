@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace JoyLib.Code.Entities.Needs
 {
     public class FulfillmentData
@@ -13,8 +11,8 @@ namespace JoyLib.Code.Entities.Needs
 
         public int DecrementCounter()
         {
-            Counter -= 1;
-            return Counter;
+            this.Counter -= 1;
+            return this.Counter;
         }
 
         public string Name

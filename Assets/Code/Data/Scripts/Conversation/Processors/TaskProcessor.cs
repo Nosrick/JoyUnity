@@ -1,6 +1,5 @@
 ﻿using JoyLib.Code.Conversation.Conversations;
 using JoyLib.Code.Quests;
-using UnityEngine;
 
 namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
 {
@@ -23,7 +22,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
                 new string[0], 
                 Speaker.LISTENER)
         {
-            Initialise();
+            this.Initialise();
         }
 
         protected void Initialise()
@@ -39,19 +38,19 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
 
         public override ITopic[] Interact(IEntity instigator, IEntity listener)
         {
-            OfferedQuest = QuestProvider.MakeRandomQuest(
+            this.OfferedQuest = QuestProvider.MakeRandomQuest(
                 instigator,
                 listener,
                 instigator.MyWorld.GetOverworld());
 
-            return FetchNextTopics();
+            return this.FetchNextTopics();
         }
 
         protected override ITopic[] FetchNextTopics()
         {
             return new ITopic[]
             {
-                new TaskPresentationProcessor(OfferedQuest)
+                new TaskPresentationProcessor(this.OfferedQuest)
             };
         }
     }

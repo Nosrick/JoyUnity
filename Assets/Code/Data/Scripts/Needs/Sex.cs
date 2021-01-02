@@ -36,7 +36,7 @@ namespace JoyLib.Code.Entities.Needs
                 1, 
                 new string[0])
         {
-            Initialise();
+            this.Initialise();
         }
 
         public Sex(
@@ -64,7 +64,7 @@ namespace JoyLib.Code.Entities.Needs
                 averageForDayRef,
                 averageForWeekRef)
         {
-            Initialise();
+            this.Initialise();
         }
 
         protected void Initialise()
@@ -119,7 +119,7 @@ namespace JoyLib.Code.Entities.Needs
 
             if (bestMate is null)
             {
-                m_CachedActions["wanderaction"].Execute(
+                this.m_CachedActions["wanderaction"].Execute(
                     new IJoyObject[] { actor },
                     new [] { "need", "wander", "sex" },
                     new object[] {});
@@ -127,7 +127,7 @@ namespace JoyLib.Code.Entities.Needs
             }
             else
             {
-                m_CachedActions["seekaction"].Execute(
+                this.m_CachedActions["seekaction"].Execute(
                     new IJoyObject[] { actor, bestMate },
                     new [] { "need", "seek", "sex" },
                     new object[] { "sex" });
@@ -147,14 +147,14 @@ namespace JoyLib.Code.Entities.Needs
                     new IJoyObject[] { actor, partner },
                     new string[] { "sexual" })))
             {
-                int satisfaction = CalculateSatisfaction(
+                int satisfaction = this.CalculateSatisfaction(
                     new IEntity[] { actor, partner },
                     new string[] {
                         EntityStatistic.ENDURANCE,
                         EntityStatistic.CUNNING,
                         EntityStatistic.PERSONALITY });
 
-                int time = Roller.Roll(5, 30);
+                int time = this.Roller.Roll(5, 30);
 
                 if (actor.FulfillmentData.Name.Equals(this.Name) && 
                     partner.FulfillmentData.Name.Equals(this.Name))
@@ -162,7 +162,7 @@ namespace JoyLib.Code.Entities.Needs
                     HashSet<IJoyObject> userParticipants = new HashSet<IJoyObject>(actor.FulfillmentData.Targets);
                     userParticipants.Add(actor);
                     userParticipants.Add(partner);
-                    m_CachedActions["fulfillneedaction"].Execute(
+                    this.m_CachedActions["fulfillneedaction"].Execute(
                         userParticipants.ToArray(),
                         new string[] { "sex", "need", "fulfill" },
                         new object[] { this.Name, satisfaction, time });
@@ -170,7 +170,7 @@ namespace JoyLib.Code.Entities.Needs
                     HashSet<IJoyObject> partnerParticipants = new HashSet<IJoyObject>(partner.FulfillmentData.Targets);
                     partnerParticipants.Add(partner);
                     partnerParticipants.Add(actor);
-                    m_CachedActions["fulfillneedaction"].Execute(
+                    this.m_CachedActions["fulfillneedaction"].Execute(
                         partnerParticipants.ToArray(),
                         new string[] { "sex", "need", "fulfill" },
                         new object[] { this.Name, satisfaction, time });
@@ -203,15 +203,14 @@ namespace JoyLib.Code.Entities.Needs
 
         public override INeed Randomise()
         {
-            int decay = Roller.Roll(DECAY_MIN, DECAY_MAX);
-            int decayCounter = Roller.Roll(0, DECAY_MAX);
-            int maxValue = Roller.Roll(MAX_VALUE_MIN, MAX_VALUE_MAX);
+            int decay = this.Roller.Roll(DECAY_MIN, DECAY_MAX);
+            int decayCounter = this.Roller.Roll(0, DECAY_MAX);
+            int maxValue = this.Roller.Roll(MAX_VALUE_MIN, MAX_VALUE_MAX);
             return new Sex(
                 decay, 
                 decayCounter, 
                 true, 
-                PRIORITY, 
-                Roller.Roll(HAPPINESS_THRESHOLD_MIN, HAPPINESS_THRESHOLD_MAX), 
+                PRIORITY, this.Roller.Roll(HAPPINESS_THRESHOLD_MIN, HAPPINESS_THRESHOLD_MAX), 
                 HAPPINESS_THRESHOLD_MAX, 
                 maxValue,
                 this.FulfillingSprite);

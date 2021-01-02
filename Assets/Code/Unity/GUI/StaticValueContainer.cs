@@ -42,37 +42,37 @@ namespace JoyLib.Code.Unity.GUI
         
         public int DecreaseValue(int delta = 1)
         {
-            return Value;
+            return this.Value;
         }
 
         public int IncreaseValue(int delta = 1)
         {
-            return Value;
+            return this.Value;
         }
 
         public int DirectValueSet(int newValue)
         {
-            Value = newValue;
-            return Value;
+            this.Value = newValue;
+            return this.Value;
         }
 
         public int Value
         {
-            get => m_Value;
+            get => this.m_Value;
             set
             {
-                m_Value = value;
-                m_ValueText.text = m_Value.ToString();
+                this.m_Value = value;
+                this.m_ValueText.text = this.m_Value.ToString();
             }
         }
 
         public string Name
         {
-            get => m_Name;
+            get => this.m_Name;
             set
             {
-                m_Name = value;
-                m_NameText.text = m_Name;
+                this.m_Name = value;
+                this.m_NameText.text = this.m_Name;
             }
         }
         

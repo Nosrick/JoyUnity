@@ -18,9 +18,9 @@ namespace JoyLib.Code.World.Generators.Interiors
             RNG roller,
             IItemFactory itemFactory)
         {
-            Roller = roller;
-            ItemHandler = itemHandler;
-            ItemFactory = itemFactory;
+            this.Roller = roller;
+            this.ItemHandler = itemHandler;
+            this.ItemFactory = itemFactory;
         }
 
         /// <summary>
@@ -52,9 +52,9 @@ namespace JoyLib.Code.World.Generators.Interiors
 
             for(int i = 0; i < itemsToPlace; i++)
             {
-                Vector2Int point = availablePoints[Roller.Roll(0, availablePoints.Count)];
+                Vector2Int point = availablePoints[this.Roller.Roll(0, availablePoints.Count)];
 
-                IItemInstance item = ItemFactory.CreateCompletelyRandomItem();
+                IItemInstance item = this.ItemFactory.CreateCompletelyRandomItem();
                 worldRef.AddObject(item);
                 item.Move(point);
                 placedItems.Add(item);

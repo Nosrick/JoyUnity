@@ -9,7 +9,7 @@ namespace JoyLib.Code.Conversation.Conversations
         
         public override bool FulfillsCondition(int value)
         {
-            return Value != value;
+            return this.Value != value;
         }
     }
 }

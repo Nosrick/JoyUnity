@@ -59,35 +59,35 @@ namespace JoyLib.Code.Entities.Needs
             int averageForWeekRef = 0,
             RNG roller = null)
         {
-            Roller = roller is null ? new RNG() : roller; 
-            m_CachedActions = new Dictionary<string, IJoyAction>();
+            this.Roller = roller is null ? new RNG() : roller;
+            this.m_CachedActions = new Dictionary<string, IJoyAction>();
 
-            IJoyAction[] standardActions = FetchStandardActions();
+            IJoyAction[] standardActions = this.FetchStandardActions();
 
             foreach (IJoyAction action in standardActions)
             {
-                m_CachedActions.Add(action.Name, action);
+                this.m_CachedActions.Add(action.Name, action);
             }
-            
-            m_Decay = decayRef;
-            m_DecayCounter = decayCounterRef;
-            m_DoesDecay = doesDecayRef;
 
-            m_Priority = priorityRef;
+            this.m_Decay = decayRef;
+            this.m_DecayCounter = decayCounterRef;
+            this.m_DoesDecay = doesDecayRef;
 
-            m_HappinessThreshold = happinessThresholdRef;
+            this.m_Priority = priorityRef;
 
-            m_Value = valueRef;
-            m_MaximumValue = maxValueRef;
+            this.m_HappinessThreshold = happinessThresholdRef;
 
-            m_AverageForDay = averageForDayRef;
-            m_AverageForWeek = averageForWeekRef;
+            this.m_Value = valueRef;
+            this.m_MaximumValue = maxValueRef;
 
-            FulfillingSprite = fulfillingSprite;
+            this.m_AverageForDay = averageForDayRef;
+            this.m_AverageForWeek = averageForWeekRef;
+
+            this.FulfillingSprite = fulfillingSprite;
 
             foreach(string action in actions)
             {
-                m_CachedActions.Add(action, ScriptingEngine.instance.FetchAction(action));
+                this.m_CachedActions.Add(action, ScriptingEngine.instance.FetchAction(action));
             }
 
             if (GlobalConstants.GameManager is null == false)
@@ -105,11 +105,11 @@ namespace JoyLib.Code.Entities.Needs
         //This will be called once per in-game minute
         public virtual bool Tick(Entity actor)
         {
-            m_DecayCounter -= 1;
-            if (m_DecayCounter == 0 && m_DoesDecay)
+            this.m_DecayCounter -= 1;
+            if (this.m_DecayCounter == 0 && this.m_DoesDecay)
             {
-                m_DecayCounter = m_Decay;
-                Decay(1);
+                this.m_DecayCounter = this.m_Decay;
+                this.Decay(1);
                 return true;
             }
             return false;
@@ -117,26 +117,26 @@ namespace JoyLib.Code.Entities.Needs
 
         public virtual int Fulfill(int value)
         {
-            return ModifyValue(value);
+            return this.ModifyValue(value);
         }
 
         public virtual int Decay(int value)
         {
-            return ModifyValue(-value);
+            return this.ModifyValue(-value);
         }
 
         public int ModifyValue(int value)
         {
-            m_Value = Math.Max(0, Math.Min(m_MaximumValue, m_Value + value));
-            return m_Value;
+            this.m_Value = Math.Max(0, Math.Min(this.m_MaximumValue, this.m_Value + value));
+            return this.m_Value;
         }
 
         public abstract bool Interact(IEntity actor, IJoyObject obj);
 
         public int SetValue(int value)
         {
-            m_Value = Math.Max(0, Math.Min(m_MaximumValue, value));
-            return m_Value;
+            this.m_Value = Math.Max(0, Math.Min(this.m_MaximumValue, value));
+            return this.m_Value;
         }
 
         protected IJoyAction[] FetchStandardActions()
@@ -153,11 +153,11 @@ namespace JoyLib.Code.Entities.Needs
         {
             get
             {
-                return m_Priority;
+                return this.m_Priority;
             }
             protected set
             {
-                m_Priority = value;
+                this.m_Priority = value;
             }
         }
 
@@ -165,7 +165,7 @@ namespace JoyLib.Code.Entities.Needs
         {
             get
             {
-                return m_Value >= m_HappinessThreshold;
+                return this.m_Value >= this.m_HappinessThreshold;
             }
         }
 
@@ -173,11 +173,11 @@ namespace JoyLib.Code.Entities.Needs
         {
             get
             {
-                return m_Value;
+                return this.m_Value;
             }
             set
             {
-                m_Value = value;
+                this.m_Value = value;
             }
         }
 
@@ -185,11 +185,11 @@ namespace JoyLib.Code.Entities.Needs
         {
             get
             {
-                return m_AverageForDay;
+                return this.m_AverageForDay;
             }
             protected set
             {
-                m_AverageForDay = value;
+                this.m_AverageForDay = value;
             }
         }
 
@@ -197,11 +197,11 @@ namespace JoyLib.Code.Entities.Needs
         {
             get
             {
-                return m_AverageForWeek;
+                return this.m_AverageForWeek;
             }
             protected set
             {
-                m_AverageForWeek = value;
+                this.m_AverageForWeek = value;
             }
         }
 
@@ -209,14 +209,14 @@ namespace JoyLib.Code.Entities.Needs
         {
             get
             {
-                return m_AverageForMonth;
+                return this.m_AverageForMonth;
             }
             protected set
             {
-                m_AverageForMonth = value;
+                this.m_AverageForMonth = value;
             }
         }
 
-        public int HappinessThreshold => m_HappinessThreshold;
+        public int HappinessThreshold => this.m_HappinessThreshold;
     }
 }

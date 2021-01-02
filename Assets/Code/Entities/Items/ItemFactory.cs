@@ -42,12 +42,12 @@ namespace JoyLib.Code.Entities.Items
             BaseItemType[] matchingTypes = this.ItemHandler.FindItemsOfType(tags, tags.Length);
             if (matchingTypes.Length > 0)
             {
-                int result = Roller.Roll(0, matchingTypes.Length);
+                int result = this.Roller.Roll(0, matchingTypes.Length);
                 BaseItemType itemType = matchingTypes[result];
 
-                IItemInstance itemInstance = CreateFromTemplate(itemType, identified);
+                IItemInstance itemInstance = this.CreateFromTemplate(itemType, identified);
 
-                ItemHandler.AddItem(itemInstance);
+                this.ItemHandler.AddItem(itemInstance);
                 return itemInstance;
             }
 
@@ -56,7 +56,7 @@ namespace JoyLib.Code.Entities.Items
 
         public IItemInstance CreateSpecificType(string name, string[] tags, bool identified = false)
         {
-            BaseItemType[] matchingTypes = ItemHandler.FindItemsOfType(tags);
+            BaseItemType[] matchingTypes = this.ItemHandler.FindItemsOfType(tags);
             List<BaseItemType> secondRound = new List<BaseItemType>();
             foreach (BaseItemType itemType in matchingTypes)
             {
@@ -78,12 +78,12 @@ namespace JoyLib.Code.Entities.Items
 
             if (secondRound.Count > 0)
             {
-                int result = Roller.Roll(0, secondRound.Count);
+                int result = this.Roller.Roll(0, secondRound.Count);
                 BaseItemType itemType = secondRound[result];
 
                 IItemInstance itemInstance = this.CreateFromTemplate(itemType, identified);
 
-                ItemHandler.AddItem(itemInstance);
+                this.ItemHandler.AddItem(itemInstance);
                 return itemInstance;
             }
 
@@ -94,14 +94,14 @@ namespace JoyLib.Code.Entities.Items
             bool identified = false,
             bool withAbility = false)
         {
-            List<BaseItemType> itemDatabase = ItemHandler.ItemDatabase;
+            List<BaseItemType> itemDatabase = this.ItemHandler.ItemDatabase;
 
-            int result = Roller.Roll(0, itemDatabase.Count);
+            int result = this.Roller.Roll(0, itemDatabase.Count);
             BaseItemType itemType = itemDatabase[result];
 
             IItemInstance itemInstance = this.CreateFromTemplate(itemType, identified);
 
-            ItemHandler.AddItem(itemInstance);
+            this.ItemHandler.AddItem(itemInstance);
             return itemInstance;
         }
 
@@ -123,8 +123,7 @@ namespace JoyLib.Code.Entities.Items
                 itemType,
                 this.DerivedValueHandler.GetItemStandardBlock(values),
                 new Vector2Int(-1, -1),
-                identified,
-                ObjectIcons.GetSprites(
+                identified, this.ObjectIcons.GetSprites(
                     itemType.SpriteSheet,
                     itemType.UnidentifiedName),
                 new RNG(),

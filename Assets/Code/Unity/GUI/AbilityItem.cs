@@ -22,11 +22,11 @@ namespace JoyLib.Code.Unity.GUI
         {
             get
             {
-                return Text.text;
+                return this.Text.text;
             }
             set
             {
-                Text.text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(value);
+                this.Text.text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(value);
             }
         }
         protected Image Image { get; set; }
@@ -42,15 +42,15 @@ namespace JoyLib.Code.Unity.GUI
             {
                 GUIManager = GlobalConstants.GameManager.GUIManager;
             }
-            
-            Image = this.GetComponent<Image>();
-            Image.color = IdleColour;
-            Text = this.GetComponentInChildren<TextMeshProUGUI>();
+
+            this.Image = this.GetComponent<Image>();
+            this.Image.color = this.IdleColour;
+            this.Text = this.GetComponentInChildren<TextMeshProUGUI>();
         }
         
         public void OnPointerEnter(PointerEventData data)
         {
-            if (Tooltip is null)
+            if (this.Tooltip is null)
             {
                 return;
             }
@@ -66,25 +66,26 @@ namespace JoyLib.Code.Unity.GUI
 
         public void ToggleMe()
         {
-            if (Parent.Value < Delta && Selected == false)
+            if (this.Parent.Value < this.Delta && this.Selected == false)
             {
                 return;
             }
-            
-            Selected = !Selected;
-            if (Selected)
+
+            this.Selected = !this.Selected;
+            if (this.Selected)
             {
-                Image.color = SelectedColour;
+                this.Image.color = this.SelectedColour;
             }
             else
             {
-                Image.color = IdleColour;
+                this.Image.color = this.IdleColour;
             }
-            OnSelect?.Invoke(this, new ValueChangedEventArgs()
+
+            this.OnSelect?.Invoke(this, new ValueChangedEventArgs()
             {
                 Name = this.Name,
-                NewValue = Selected ? Delta : -Delta,
-                Delta = Selected ? Delta : -Delta 
+                NewValue = this.Selected ? this.Delta : -this.Delta,
+                Delta = this.Selected ? this.Delta : -this.Delta 
             });
         }
     }

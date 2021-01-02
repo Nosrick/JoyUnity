@@ -108,7 +108,7 @@ namespace JoyLib.Code.Entities
             else
             {
                 creatureCultures = new List<ICulture>();
-                List<ICulture> cultureTypes = CultureHandler.GetByCreatureType(template.CreatureType);
+                List<ICulture> cultureTypes = this.CultureHandler.GetByCreatureType(template.CreatureType);
                 creatureCultures.AddRange(cultureTypes);
             }
 
@@ -119,7 +119,7 @@ namespace JoyLib.Code.Entities
                 needs.Add(need, this.NeedHandler.GetRandomised(need));
             }
 
-            int result = Roller.Roll(0, creatureCultures.Count);
+            int result = this.Roller.Roll(0, creatureCultures.Count);
             ICulture dominantCulture = creatureCultures[result];
 
             if (selectedStatistics is null)
@@ -136,7 +136,7 @@ namespace JoyLib.Code.Entities
 
             if (selectedSkills is null)
             {
-                selectedSkills = SkillHandler.GetDefaultSkillBlock(needs.Values);
+                selectedSkills = this.SkillHandler.GetDefaultSkillBlock(needs.Values);
                 foreach (EntitySkill skill in template.Skills.Values)
                 {
                     selectedSkills.Add(skill.Name, skill);
@@ -150,37 +150,37 @@ namespace JoyLib.Code.Entities
 
             if(selectedJob is null)
             {
-                selectedJob = dominantCulture.ChooseJob(JobHandler.Jobs);
+                selectedJob = dominantCulture.ChooseJob(this.JobHandler.Jobs);
             }
 
             if(selectedSex is null)
             {
-                selectedSex = dominantCulture.ChooseSex(BioSexHandler.Sexes);
+                selectedSex = dominantCulture.ChooseSex(this.BioSexHandler.Sexes);
             }
 
             if (selectedGender is null)
             {
-                selectedGender = dominantCulture.ChooseGender(selectedSex, GenderHandler.Genders.ToArray());
+                selectedGender = dominantCulture.ChooseGender(selectedSex, this.GenderHandler.Genders.ToArray());
             }
 
             if (selectedRomance is null)
             {
-                selectedRomance = dominantCulture.ChooseRomance(RomanceHandler.Romances);
+                selectedRomance = dominantCulture.ChooseRomance(this.RomanceHandler.Romances);
             }
 
             if(selectedSexuality is null)
             {
-                selectedSexuality = dominantCulture.ChooseSexuality(SexualityHandler.Sexualities);
+                selectedSexuality = dominantCulture.ChooseSexuality(this.SexualityHandler.Sexualities);
             }
 
             if(selectedSprites is null)
             {
-                selectedSprites = ObjectIcons.GetSprites(dominantCulture.Tileset, template.JoyType);
+                selectedSprites = this.ObjectIcons.GetSprites(dominantCulture.Tileset, template.JoyType);
             }
 
             if(selectedDriver is null)
             {
-                selectedDriver = new StandardDriver(PhysicsManager);
+                selectedDriver = new StandardDriver(this.PhysicsManager);
             }
 
             IEntity entity = new Entity(
@@ -235,14 +235,14 @@ namespace JoyLib.Code.Entities
             }
             else
             {
-                List<ICulture> cultureTypes = CultureHandler.GetByCreatureType(template.CreatureType);
+                List<ICulture> cultureTypes = this.CultureHandler.GetByCreatureType(template.CreatureType);
                 creatureCultures.AddRange(cultureTypes);
             }
 
             IDriver selectedDriver = driver;
             if(selectedDriver is null)
             {
-                selectedDriver = new StandardDriver(PhysicsManager);
+                selectedDriver = new StandardDriver(this.PhysicsManager);
             }
 
             IEntity entity = new Entity(

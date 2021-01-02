@@ -24,15 +24,15 @@ namespace JoyLib.Code.Unity.GUI
         public override void Awake()
         {
             base.Awake();
-            MenuItemRect = MenuItemPrefab.GetComponent<RectTransform>();
-            MenuItems = new List<MenuItem>();
-            FindBits();
+            this.MenuItemRect = this.MenuItemPrefab.GetComponent<RectTransform>();
+            this.MenuItems = new List<MenuItem>();
+            this.FindBits();
         }
 
         public void OnEnable()
         {
-            FindBits();
-            Repaint();
+            this.FindBits();
+            this.Repaint();
         }
 
         protected void FindBits()
@@ -41,52 +41,53 @@ namespace JoyLib.Code.Unity.GUI
             {
                 return;
             }
-            QuestTracker = GlobalConstants.GameManager.QuestTracker ?? QuestTracker;
-            EntityHandler = GlobalConstants.GameManager.EntityHandler ?? EntityHandler;
-            Player = EntityHandler is null == false ? Player is null ? EntityHandler.GetPlayer() : Player : Player;
+
+            this.QuestTracker = GlobalConstants.GameManager.QuestTracker ?? this.QuestTracker;
+            this.EntityHandler = GlobalConstants.GameManager.EntityHandler ?? this.EntityHandler;
+            this.Player = this.EntityHandler is null == false ? this.Player is null ? this.EntityHandler.GetPlayer() : this.Player : this.Player;
         }
 
         public void Repaint()
         {
-            if (Player is null)
+            if (this.Player is null)
             {
                 return;
             }
             
-            List<IQuest> quests = QuestTracker.GetQuestsForEntity(Player.GUID);
-            if (quests.Count > MenuItems.Count)
+            List<IQuest> quests = this.QuestTracker.GetQuestsForEntity(this.Player.GUID);
+            if (quests.Count > this.MenuItems.Count)
             {
-                int difference = quests.Count - MenuItems.Count;
+                int difference = quests.Count - this.MenuItems.Count;
                 for (int i = 0; i < difference; i++)
                 {
-                    MenuItems.Add(
-                        GameObject.Instantiate(MenuItemPrefab, this.MenuContainer.transform)
+                    this.MenuItems.Add(
+                        Instantiate(this.MenuItemPrefab, this.MenuContainer.transform)
                             .GetComponent<MenuItem>());
                 }
             }
             
             for (int i = 0; i < quests.Count; i++)
             {
-                MenuItems[i].GetComponentInChildren<TextMeshProUGUI>().text = quests[i].ToString();
-                MenuItems[i].gameObject.SetActive(true);
+                this.MenuItems[i].GetComponentInChildren<TextMeshProUGUI>().text = quests[i].ToString();
+                this.MenuItems[i].gameObject.SetActive(true);
             }
 
-            for (int i = quests.Count; i < MenuItems.Count; i++)
+            for (int i = quests.Count; i < this.MenuItems.Count; i++)
             {
-                MenuItems[i].gameObject.SetActive(false);
+                this.MenuItems[i].gameObject.SetActive(false);
             }
 
             if (quests.Count == 0)
             {
-                if (MenuItems.Count == 0)
+                if (this.MenuItems.Count == 0)
                 {
-                    MenuItems.Add(
-                        GameObject.Instantiate(MenuItemPrefab, this.MenuContainer.transform)
+                    this.MenuItems.Add(
+                        Instantiate(this.MenuItemPrefab, this.MenuContainer.transform)
                             .GetComponent<MenuItem>());
                 }
 
-                MenuItems[0].GetComponentInChildren<TextMeshProUGUI>().text = "You have no quests.";
-                MenuItems[0].gameObject.SetActive(true);
+                this.MenuItems[0].GetComponentInChildren<TextMeshProUGUI>().text = "You have no quests.";
+                this.MenuItems[0].gameObject.SetActive(true);
             }
         }
     }

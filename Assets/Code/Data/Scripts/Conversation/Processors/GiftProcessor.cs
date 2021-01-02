@@ -1,7 +1,6 @@
 ﻿using JoyLib.Code.Conversation.Conversations;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Unity.GUI;
-using UnityEngine;
 
 namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
 {
@@ -20,16 +19,16 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
                 Speaker.INSTIGATOR,
                 new RNG())
         {
-            if (GUIManager is null)
+            if (this.GUIManager is null)
             {
-                GUIManager = GlobalConstants.GameManager.GUIManager;
+                this.GUIManager = GlobalConstants.GameManager.GUIManager;
             }
         }
 
         public override ITopic[] Interact(IEntity instigator, IEntity listener)
         {
-            GUIManager.OpenGUI("Inventory");
-            GUIManager.BringToFront("Inventory");
+            this.GUIManager.OpenGUI("Inventory");
+            this.GUIManager.BringToFront("Inventory");
             
             return base.Interact(instigator, listener);
         }

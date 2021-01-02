@@ -25,13 +25,13 @@ namespace JoyLib.Code.Unity.GUI
 
         public void Initialise()
         {
-            PlayerInfo.JobChanged += SetSprites;
-            PlayerInfo.CultureChanged += SetRandomName;
-            StatisticWindow.ValueChanged += ChangedStatistics;
+            this.PlayerInfo.JobChanged += this.SetSprites;
+            this.PlayerInfo.CultureChanged += this.SetRandomName;
+            this.StatisticWindow.ValueChanged += this.ChangedStatistics;
             this.StatisticWindow.Initialise();
             this.SkillWindow.Initialise();
             this.DerivedValuesWindow.Initialise();
-            PlayerInfo.Initialise();
+            this.PlayerInfo.Initialise();
             this.AbilityWindow.Initialise();
             //this.GetComponent<FontSizeManager>().ResizeFonts();
         }
@@ -60,13 +60,13 @@ namespace JoyLib.Code.Unity.GUI
 
         protected void ChangedStatistics(object sender, EventArgs args)
         {
-            IDictionary<string, IRollableValue<int>> stats = StatisticWindow.GetStatistics();
+            IDictionary<string, IRollableValue<int>> stats = this.StatisticWindow.GetStatistics();
             if (stats.Count == 0)
             {
                 return;
             }
 
-            DerivedValuesWindow.SetDerivedValues(this.GameManager.DerivedValueHandler.GetEntityStandardBlock(stats.Values));
+            this.DerivedValuesWindow.SetDerivedValues(this.GameManager.DerivedValueHandler.GetEntityStandardBlock(stats.Values));
         }
 
         public void SetRandomName(object sender, EventArgs args)
@@ -76,22 +76,22 @@ namespace JoyLib.Code.Unity.GUI
 
         public void SetRandomName()
         {
-            PlayerName_Part1.text = PlayerInfo.CurrentCulture.GetRandomName(PlayerInfo.Gender);
-            PlayerName_Part2.text = PlayerName_Part1.text;
+            this.PlayerName_Part1.text = this.PlayerInfo.CurrentCulture.GetRandomName(this.PlayerInfo.Gender);
+            this.PlayerName_Part2.text = this.PlayerName_Part1.text;
         }
 
         public void SetSprites(object sender, EventArgs args)
         {
-            PlayerSprite_Part1.sprite = GameManager.ObjectIconHandler.GetSprite(PlayerInfo.CurrentTemplate.CreatureType, PlayerInfo.Job);
-            PlayerSprite_Part2.sprite = PlayerSprite_Part1.sprite;
+            this.PlayerSprite_Part1.sprite = this.GameManager.ObjectIconHandler.GetSprite(this.PlayerInfo.CurrentTemplate.CreatureType, this.PlayerInfo.Job);
+            this.PlayerSprite_Part2.sprite = this.PlayerSprite_Part1.sprite;
         }
 
         public void GoToSkillsAndAbilities()
         {
-            GameManager.GUIManager.CloseGUI(this.name);
-            GameManager.GUIManager.OpenGUI(GUINames.CHARACTER_CREATION_PART_2);
-            SkillWindow.SetSkills(SkillWindow.GetSkillNames());
-            AbilityWindow.GetAvailableAbilities(PlayerInfo.CurrentTemplate, StatisticWindow.GetStatistics(), SkillWindow.GetSkillsBlock());
+            this.GameManager.GUIManager.CloseGUI(this.name);
+            this.GameManager.GUIManager.OpenGUI(GUINames.CHARACTER_CREATION_PART_2);
+            this.SkillWindow.SetSkills(this.SkillWindow.GetSkillNames());
+            this.AbilityWindow.GetAvailableAbilities(this.PlayerInfo.CurrentTemplate, this.StatisticWindow.GetStatistics(), this.SkillWindow.GetSkillsBlock());
         }
 
         public void GoToPlayerInfo()

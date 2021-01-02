@@ -11,28 +11,28 @@ namespace JoyLib.Code.Entities.Sexuality
 
         public EntitySexualityHandler()
         {
-            Initialise();
+            this.Initialise();
         }
 
         protected void Initialise()
         {
-            Load();
+            this.Load();
         }
 
         protected bool Load()
         {
-            if (m_Sexualities != null)
+            if (this.m_Sexualities != null)
             {
                 return true;
             }
 
-            m_Sexualities = new Dictionary<string, ISexuality>();
+            this.m_Sexualities = new Dictionary<string, ISexuality>();
 
             IEnumerable<ISexuality> sexualities = ScriptingEngine.instance.FetchAndInitialiseChildren<ISexuality>();
 
             foreach (ISexuality sexuality in sexualities)
             {
-                m_Sexualities.Add(sexuality.Name, sexuality);
+                this.m_Sexualities.Add(sexuality.Name, sexuality);
             }
 
             return true;
@@ -40,14 +40,14 @@ namespace JoyLib.Code.Entities.Sexuality
 
         public ISexuality Get(string sexuality)
         {
-            if (m_Sexualities is null)
+            if (this.m_Sexualities is null)
             {
                 throw new InvalidOperationException("Sexuality search was null.");
             }
 
-            if (m_Sexualities.ContainsKey(sexuality))
+            if (this.m_Sexualities.ContainsKey(sexuality))
             {
-                return m_Sexualities[sexuality];
+                return this.m_Sexualities[sexuality];
             }
             throw new InvalidOperationException("Sexuality of type " + sexuality + " not found.");
         }
@@ -56,12 +56,12 @@ namespace JoyLib.Code.Entities.Sexuality
         {
             get
             {
-                if (m_Sexualities is null)
+                if (this.m_Sexualities is null)
                 {
-                    Initialise();
+                    this.Initialise();
                 }
 
-                return m_Sexualities.Values.ToArray();
+                return this.m_Sexualities.Values.ToArray();
             }
         }
     }

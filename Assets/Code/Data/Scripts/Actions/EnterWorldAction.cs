@@ -11,7 +11,7 @@ namespace JoyLib.Code.Scripting.Actions
 
         public override bool Execute(IJoyObject[] participants, string[] tags = null, params object[] args)
         {
-            ClearLastParameters();
+            this.ClearLastParameters();
             
             if (participants.Length != 1 || args.Length != 1)
             {
@@ -35,8 +35,8 @@ namespace JoyLib.Code.Scripting.Actions
             {
                 actor.AddData(worldInstance.Name, "explored");
             }
-            
-            SetLastParameters(participants, tags, args);
+
+            this.SetLastParameters(participants, tags, args);
 
             return true;
         }

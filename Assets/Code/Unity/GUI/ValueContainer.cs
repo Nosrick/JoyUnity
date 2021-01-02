@@ -27,19 +27,19 @@ namespace JoyLib.Code.Unity.GUI
 
         public virtual int Maximum
         {
-            get => m_Maximum;
-            set => m_Maximum = value;
+            get => this.m_Maximum;
+            set => this.m_Maximum = value;
         }
 
         public virtual int Minimum
         {
-            get => m_Minimum;
-            set => m_Minimum = value;
+            get => this.m_Minimum;
+            set => this.m_Minimum = value;
         }
 
         public virtual string Tooltip
         {
-            get => m_Tooltip;
+            get => this.m_Tooltip;
             set
             {
                 this.m_Tooltip = value;
@@ -60,7 +60,7 @@ namespace JoyLib.Code.Unity.GUI
 
         public void OnPointerEnter(PointerEventData data)
         {
-            if (Tooltip is null)
+            if (this.Tooltip is null)
             {
                 return;
             }
@@ -77,40 +77,40 @@ namespace JoyLib.Code.Unity.GUI
 
         public virtual int DecreaseValue(int delta = 1)
         {
-            if (Value - delta >= Minimum)
+            if (this.Value - delta >= this.Minimum)
             {
-                Value -= delta;
+                this.Value -= delta;
             }
-            return Value;
+            return this.Value;
         }
 
         public virtual int IncreaseValue(int delta = 1)
         {
-            if (Value + delta <= Maximum)
+            if (this.Value + delta <= this.Maximum)
             {
-                Value += delta;
+                this.Value += delta;
             }
-            return Value;
+            return this.Value;
         }
 
         public virtual int DirectValueSet(int newValue)
         {
-            m_Value = newValue;
-            Value = m_Value;
-            return m_Value;
+            this.m_Value = newValue;
+            this.Value = this.m_Value;
+            return this.m_Value;
         }
 
         public virtual int Value
         {
-            get => m_Value;
+            get => this.m_Value;
             set
             {
-                int previous = m_Value;
-                m_Value = value;
-                ValueChanged?.Invoke(this, new ValueChangedEventArgs()
+                int previous = this.m_Value;
+                this.m_Value = value;
+                this.ValueChanged?.Invoke(this, new ValueChangedEventArgs()
                 {
-                    NewValue = m_Value,
-                    Delta = m_Value - previous
+                    NewValue = this.m_Value,
+                    Delta = this.m_Value - previous
                 });
             }
         }

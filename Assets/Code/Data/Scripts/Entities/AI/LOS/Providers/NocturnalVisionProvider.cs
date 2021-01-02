@@ -27,26 +27,26 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
             {
                 Debug.Log("WORLD IS NULL");
             }
-            
-            Vision = new HashSet<Vector2Int>();
-            
-            Board = (FOVBasicBoard)Algorithm.Do(
+
+            this.Vision = new HashSet<Vector2Int>();
+
+            this.Board = (FOVBasicBoard) this.Algorithm.Do(
                                     viewer,
                                     world,
                                     world.Dimensions,
                                     world.Walls.Keys);
 
-            Vision = Board.GetVision();
+            this.Vision = this.Board.GetVision();
         }
 
         public override bool HasVisibility(IEntity viewer, IWorldInstance world, int x, int y)
         {
-            return HasVisibility(viewer, world, new Vector2Int(x, y));
+            return this.HasVisibility(viewer, world, new Vector2Int(x, y));
         }
 
         public override bool HasVisibility(IEntity viewer, IWorldInstance world, Vector2Int point)
         {
-            return Vision.Contains(point);
+            return this.Vision.Contains(point);
         }
     }
 }

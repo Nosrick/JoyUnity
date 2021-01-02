@@ -42,26 +42,26 @@ namespace JoyLib.Code.States
 
         public WorldState(IWorldInstance overworldRef, IWorldInstance activeWorldRef) : base()
         {
-            m_WorldSerialiser = new WorldSerialiser();
+            this.m_WorldSerialiser = new WorldSerialiser();
 
-            m_ActiveWorld = activeWorldRef;
-            m_Overworld = overworldRef;
+            this.m_ActiveWorld = activeWorldRef;
+            this.m_Overworld = overworldRef;
 
-            m_Camera = GameObject.Find("Main Camera").GetComponent<Camera>();
-            m_FogOfWarHolder = GameObject.Find("WorldFog");
+            this.m_Camera = GameObject.Find("Main Camera").GetComponent<Camera>();
+            this.m_FogOfWarHolder = GameObject.Find("WorldFog");
 
-            GameManager = GlobalConstants.GameManager;
-            PhysicsManager = GameManager.PhysicsManager;
-            RelationshipHandler = GameManager.RelationshipHandler;
-            ConversationEngine = GameManager.ConversationEngine;
-            GUIManager = GameManager.GUIManager;
+            this.GameManager = GlobalConstants.GameManager;
+            this.PhysicsManager = this.GameManager.PhysicsManager;
+            this.RelationshipHandler = this.GameManager.RelationshipHandler;
+            this.ConversationEngine = this.GameManager.ConversationEngine;
+            this.GUIManager = this.GameManager.GUIManager;
 
-            TickTimer = TickEvent();
-            GameManager.MyGameObject.GetComponent<MonoBehaviour>().StartCoroutine(TickTimer);
+            this.TickTimer = this.TickEvent();
+            this.GameManager.MyGameObject.GetComponent<MonoBehaviour>().StartCoroutine(this.TickTimer);
 
             //GlobalConstants.GameManager.Player = m_ActiveWorld.Player;
 
-            m_ActiveWorld.Tick();
+            this.m_ActiveWorld.Tick();
         }
 
         public override void LoadContent()
@@ -69,29 +69,29 @@ namespace JoyLib.Code.States
 
         public override void SetUpUi()
         {
-            GUIManager.CloseAllOtherGUIs();
-            GUIManager.OpenGUI(GUINames.NEEDSRECT);
-            GUIManager.OpenGUI(GUINames.DERIVED_VALUES);
+            this.GUIManager.CloseAllOtherGUIs();
+            this.GUIManager.OpenGUI(GUINames.NEEDSRECT);
+            this.GUIManager.OpenGUI(GUINames.DERIVED_VALUES);
 
-            GUIManager.GetGUI(GUINames.INVENTORY).GetComponent<ItemContainer>().Owner = this.PlayerWorld.Player;
+            this.GUIManager.GetGUI(GUINames.INVENTORY).GetComponent<ItemContainer>().Owner = this.PlayerWorld.Player;
             //GUIManager.GetGUI(GUINames.EQUIPMENT).GetComponent<ItemContainer>().Owner = this.PlayerWorld.Player;
 
-            EquipmentHandler equipmentHandler = GUIManager.GetGUI(GUINames.EQUIPMENT).GetComponent<EquipmentHandler>();
-            equipmentHandler.SetPlayer(m_ActiveWorld.Player);
+            EquipmentHandler equipmentHandler = this.GUIManager.GetGUI(GUINames.EQUIPMENT).GetComponent<EquipmentHandler>();
+            equipmentHandler.SetPlayer(this.m_ActiveWorld.Player);
         }
 
         public override void Start()
         {
-            m_ActiveWorld.Player.Tick();
+            this.m_ActiveWorld.Player.Tick();
 
-            SetEntityWorld(Overworld);
+            this.SetEntityWorld(this.Overworld);
 
-            SetUpUi();
+            this.SetUpUi();
         }
 
         public override void Stop()
         {
-            m_WorldSerialiser.Serialise(m_Overworld);
+            this.m_WorldSerialiser.Serialise(this.m_Overworld);
         }
 
         protected void SetEntityWorld(IWorldInstance world)
@@ -103,15 +103,15 @@ namespace JoyLib.Code.States
 
             foreach (WorldInstance nextWorld in world.Areas.Values)
             {
-                SetEntityWorld(nextWorld);
+                this.SetEntityWorld(nextWorld);
             }
         }
 
         protected void ChangeWorld(IWorldInstance newWorld, Vector2Int spawnPoint)
         {
-            Done = true;
+            this.Done = true;
 
-            IWorldInstance oldWorld = m_ActiveWorld;
+            IWorldInstance oldWorld = this.m_ActiveWorld;
             IEntity player = oldWorld.Player;
 
             player.FetchAction("enterworldaction")
@@ -119,14 +119,14 @@ namespace JoyLib.Code.States
                     new IJoyObject[] {player},
                     new[] {"exploration", "world change"},
                     new object[] {newWorld});
-            m_ActiveWorld = newWorld;
+            this.m_ActiveWorld = newWorld;
 
-            player = m_ActiveWorld.Player;
+            player = this.m_ActiveWorld.Player;
 
             player.Move(spawnPoint);
             player.Tick();
-            
-            Tick();
+
+            this.Tick();
         }
 
         protected IEnumerator TickEvent()
@@ -134,9 +134,9 @@ namespace JoyLib.Code.States
             while (true)
             {
                 yield return new WaitForSeconds(0.2f);
-                if (AutoTurn)
+                if (this.AutoTurn)
                 {
-                    Tick();
+                    this.Tick();
                 }
             }
         }
@@ -217,59 +217,59 @@ namespace JoyLib.Code.States
 
         protected void SetUpContextMenu()
         {
-            GUIManager.CloseGUI(GUINames.CONTEXT_MENU);
-            JoyLib.Code.Unity.GUI.ContextMenu contextMenu = GUIManager.GetGUI(GUINames.CONTEXT_MENU)
+            this.GUIManager.CloseGUI(GUINames.CONTEXT_MENU);
+            JoyLib.Code.Unity.GUI.ContextMenu contextMenu = this.GUIManager.GetGUI(GUINames.CONTEXT_MENU)
                 .GetComponent<JoyLib.Code.Unity.GUI.ContextMenu>();
             
             contextMenu.Clear();
 
-            if (PrimaryTarget.GUID != m_ActiveWorld.Player.GUID)
+            if (this.PrimaryTarget.GUID != this.m_ActiveWorld.Player.GUID)
             {
-                if (AdjacencyHelper.IsAdjacent(m_ActiveWorld.Player.WorldPosition, PrimaryTarget.WorldPosition))
+                if (AdjacencyHelper.IsAdjacent(this.m_ActiveWorld.Player.WorldPosition, this.PrimaryTarget.WorldPosition))
                 {
-                    if (PrimaryTarget is IEntity actor)
+                    if (this.PrimaryTarget is IEntity actor)
                     {
-                        contextMenu.AddMenuItem("Talk", TalkToPlayer);
+                        contextMenu.AddMenuItem("Talk", this.TalkToPlayer);
                     }
                 }
                 else
                 {
-                    if (PrimaryTarget is IEntity actor)
+                    if (this.PrimaryTarget is IEntity actor)
                     {
-                        contextMenu.AddMenuItem("Call Over", CallOver);
+                        contextMenu.AddMenuItem("Call Over", this.CallOver);
                     }
                 }
 
                 if (contextMenu.GetComponentsInChildren<MenuItem>(true).Length > 1)
                 {
-                    GUIManager.OpenGUI(GUINames.CONTEXT_MENU);
+                    this.GUIManager.OpenGUI(GUINames.CONTEXT_MENU);
                 }
             }
         }
 
         protected void TalkToPlayer()
         {
-            if (!(PrimaryTarget is IEntity entity))
+            if (!(this.PrimaryTarget is IEntity entity))
             {
                 return;
             }
 
-            GUIManager.CloseGUI(GUINames.CONTEXT_MENU);
-            GUIManager.OpenGUI(GUINames.CONVERSATION);
-            ConversationEngine.SetActors(m_ActiveWorld.Player, entity);
-            ConversationEngine.Converse();
+            this.GUIManager.CloseGUI(GUINames.CONTEXT_MENU);
+            this.GUIManager.OpenGUI(GUINames.CONVERSATION);
+            this.ConversationEngine.SetActors(this.m_ActiveWorld.Player, entity);
+            this.ConversationEngine.Converse();
         }
 
         protected void CallOver()
         {
-            if (!(PrimaryTarget is IEntity entity))
+            if (!(this.PrimaryTarget is IEntity entity))
             {
                 return;
             }
 
             entity.FetchAction("seekaction")
                 .Execute(
-                    new IJoyObject[] {entity, m_ActiveWorld.Player},
+                    new IJoyObject[] {entity, this.m_ActiveWorld.Player},
                     new[] {"call over"},
                     new object[] {"friendship"});
         }
@@ -280,13 +280,13 @@ namespace JoyLib.Code.States
 
             IEntity player = this.m_ActiveWorld.Player;
 
-            if (player.FulfillmentData.Counter <= 0 && AutoTurn)
+            if (player.FulfillmentData.Counter <= 0 && this.AutoTurn)
             {
-                ManualAutoTurn = false;
-                AutoTurn = true;
+                this.ManualAutoTurn = false;
+                this.AutoTurn = true;
             }
 
-            if (AutoTurn)
+            if (this.AutoTurn)
             {
                 return;
             }
@@ -326,19 +326,19 @@ namespace JoyLib.Code.States
                 }
                 else if (inputAction.name.Equals("toggle equipment", StringComparison.OrdinalIgnoreCase))
                 {
-                    GUIManager.ToggleGUI(GUINames.EQUIPMENT);
+                    this.GUIManager.ToggleGUI(GUINames.EQUIPMENT);
                 }
                 else if (inputAction.name.Equals("toggle journal", StringComparison.OrdinalIgnoreCase))
                 {
-                    GUIManager.ToggleGUI(GUINames.QUEST_JOURNAL);
+                    this.GUIManager.ToggleGUI(GUINames.QUEST_JOURNAL);
                 }
                 else if (inputAction.name.Equals("toggle job management", StringComparison.OrdinalIgnoreCase))
                 {
-                    GUIManager.ToggleGUI(GUINames.JOB_MANAGEMENT);
+                    this.GUIManager.ToggleGUI(GUINames.JOB_MANAGEMENT);
                 }
                 else if (inputAction.name.Equals("toggle character sheet", StringComparison.OrdinalIgnoreCase))
                 {
-                    GUIManager.ToggleGUI(GUINames.CHARACTER_SHEET);
+                    this.GUIManager.ToggleGUI(GUINames.CHARACTER_SHEET);
                 }
 
                 if (inputAction.name.Equals("interact", StringComparison.OrdinalIgnoreCase))
@@ -349,17 +349,16 @@ namespace JoyLib.Code.States
                         itemBehaviourHandler.PickupItems();
                     }
                     //Going up a level
-                    else if (m_ActiveWorld.Parent != null && player.WorldPosition == m_ActiveWorld.SpawnPoint &&
-                        !player.HasMoved)
+                    else if (this.m_ActiveWorld.Parent != null && player.WorldPosition == this.m_ActiveWorld.SpawnPoint &&
+                             !player.HasMoved)
                     {
-                        ChangeWorld(m_ActiveWorld.Parent, m_ActiveWorld.GetTransitionPointForParent());
+                        this.ChangeWorld(this.m_ActiveWorld.Parent, this.m_ActiveWorld.GetTransitionPointForParent());
                         return;
                     }
                     //Going down a level
-                    else if (m_ActiveWorld.Areas.ContainsKey(player.WorldPosition) && !player.HasMoved)
+                    else if (this.m_ActiveWorld.Areas.ContainsKey(player.WorldPosition) && !player.HasMoved)
                     {
-                        ChangeWorld(m_ActiveWorld.Areas[player.WorldPosition],
-                            m_ActiveWorld.Areas[player.WorldPosition].SpawnPoint);
+                        this.ChangeWorld(this.m_ActiveWorld.Areas[player.WorldPosition], this.m_ActiveWorld.Areas[player.WorldPosition].SpawnPoint);
                         return;
                     }
                 }
@@ -424,14 +423,13 @@ namespace JoyLib.Code.States
 
                 if (hasMoved)
                 {
-                    PhysicsResult physicsResult =
-                        PhysicsManager.IsCollision(player.WorldPosition, newPlayerPoint, m_ActiveWorld);
+                    PhysicsResult physicsResult = this.PhysicsManager.IsCollision(player.WorldPosition, newPlayerPoint, this.m_ActiveWorld);
 
                     if (physicsResult == PhysicsResult.EntityCollision)
                     {
-                        IEntity tempEntity = m_ActiveWorld.GetEntity(newPlayerPoint);
-                        PlayerWorld.SwapPosition(player, tempEntity);
-                        Tick();
+                        IEntity tempEntity = this.m_ActiveWorld.GetEntity(newPlayerPoint);
+                        this.PlayerWorld.SwapPosition(player, tempEntity);
+                        this.Tick();
                         
                         /*
                         if (m_GameplayFlags == GameplayFlags.Interacting)
@@ -480,11 +478,11 @@ namespace JoyLib.Code.States
                     }
                     else
                     {
-                        if (newPlayerPoint.x >= 0 && newPlayerPoint.x < m_ActiveWorld.Tiles.GetLength(0) &&
-                            newPlayerPoint.y >= 0 && newPlayerPoint.y < m_ActiveWorld.Tiles.GetLength(1))
+                        if (newPlayerPoint.x >= 0 && newPlayerPoint.x < this.m_ActiveWorld.Tiles.GetLength(0) &&
+                            newPlayerPoint.y >= 0 && newPlayerPoint.y < this.m_ActiveWorld.Tiles.GetLength(1))
                         {
                             player.Move(newPlayerPoint);
-                            Tick();
+                            this.Tick();
                         }
                     }
                 }
@@ -493,27 +491,27 @@ namespace JoyLib.Code.States
                 {
                     Vector3 temp = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
                     Vector2Int position = new Vector2Int((int) Math.Ceiling(temp.x), (int) Math.Ceiling(temp.y));
-    
-                    PrimaryTarget = m_ActiveWorld.GetEntity(position);
-                    if (PrimaryTarget is null)
+
+                    this.PrimaryTarget = this.m_ActiveWorld.GetEntity(position);
+                    if (this.PrimaryTarget is null)
                     {
-                        PrimaryTarget = m_ActiveWorld.GetObject(position);
-                        if (PrimaryTarget is null)
+                        this.PrimaryTarget = this.m_ActiveWorld.GetObject(position);
+                        if (this.PrimaryTarget is null)
                         {
                             return;
                         }
                     }
-    
-                    SetUpContextMenu();
+
+                    this.SetUpContextMenu();
                 }
 
-                if (GUIManager.AreAnyOpen() == false)
+                if (this.GUIManager.AreAnyOpen() == false)
                 {
-                    GUIManager.OpenGUI(GUINames.NEEDSRECT);
-                    GUIManager.OpenGUI(GUINames.DERIVED_VALUES);
+                    this.GUIManager.OpenGUI(GUINames.NEEDSRECT);
+                    this.GUIManager.OpenGUI(GUINames.DERIVED_VALUES);
                 }
 
-                if (GUIManager.RemovesControl())
+                if (this.GUIManager.RemovesControl())
                 {
                     return;
                 }
@@ -547,14 +545,13 @@ namespace JoyLib.Code.States
                 }
                 */
 
-                m_Camera.transform.position = new Vector3(player.WorldPosition.x, player.WorldPosition.y,
-                    m_Camera.transform.position.z);
+                this.m_Camera.transform.position = new Vector3(player.WorldPosition.x, player.WorldPosition.y, this.m_Camera.transform.position.z);
             }
         }
 
         protected void Tick()
         {
-            m_ActiveWorld.Tick();
+            this.m_ActiveWorld.Tick();
 
             /*
             for (int i = 0; i < s_ActiveWorld.entities.Count; i++)
@@ -573,15 +570,15 @@ namespace JoyLib.Code.States
 
         protected void DrawObjects()
         {
-            IEntity player = m_ActiveWorld.Player;
-            for (int i = 0; i < m_FogOfWarHolder.transform.childCount; i++)
+            IEntity player = this.m_ActiveWorld.Player;
+            for (int i = 0; i < this.m_FogOfWarHolder.transform.childCount; i++)
             {
-                GameObject fog = m_FogOfWarHolder.transform.GetChild(i).gameObject;
+                GameObject fog = this.m_FogOfWarHolder.transform.GetChild(i).gameObject;
                 var transformPosition = fog.transform.position;
                 Vector2Int position = new Vector2Int((int) transformPosition.x, (int) transformPosition.y);
 
-                bool visible = player.VisionProvider.HasVisibility(player, m_ActiveWorld, position);
-                int lightLevel = visible ? m_ActiveWorld.LightCalculator.Light.GetLight(position) : 0;
+                bool visible = player.VisionProvider.HasVisibility(player, this.m_ActiveWorld, position);
+                int lightLevel = visible ? this.m_ActiveWorld.LightCalculator.Light.GetLight(position) : 0;
 
                 fog.GetComponent<SpriteRenderer>().color = LightLevelHelper.GetColour(
                     lightLevel,
@@ -592,29 +589,29 @@ namespace JoyLib.Code.States
 
         public override void Update()
         {
-            IEntity player = m_ActiveWorld.Player;
+            IEntity player = this.m_ActiveWorld.Player;
 
-            if (!AutoTurn && player.FulfillmentData.Counter > 0)
+            if (!this.AutoTurn && player.FulfillmentData.Counter > 0)
             {
-                AutoTurn = true;
+                this.AutoTurn = true;
             }
-            else if (AutoTurn && player.FulfillmentData.Counter <= 0 && !ManualAutoTurn)
+            else if (this.AutoTurn && player.FulfillmentData.Counter <= 0 && !this.ManualAutoTurn)
             {
-                AutoTurn = false;
+                this.AutoTurn = false;
             }
 
-            DrawObjects();
+            this.DrawObjects();
         }
 
         public override GameState GetNextState()
         {
-            GameManager.MyGameObject.GetComponent<MonoBehaviour>().StopCoroutine(TickTimer);
-            return new WorldDestructionState(m_Overworld, m_ActiveWorld);
+            this.GameManager.MyGameObject.GetComponent<MonoBehaviour>().StopCoroutine(this.TickTimer);
+            return new WorldDestructionState(this.m_Overworld, this.m_ActiveWorld);
         }
 
-        public IWorldInstance Overworld => m_Overworld;
+        public IWorldInstance Overworld => this.m_Overworld;
 
-        public IWorldInstance PlayerWorld => m_ActiveWorld;
+        public IWorldInstance PlayerWorld => this.m_ActiveWorld;
 
         protected int TickCounter { get; set; }
 

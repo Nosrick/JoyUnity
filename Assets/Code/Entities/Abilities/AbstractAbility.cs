@@ -196,29 +196,29 @@ namespace JoyLib.Code.Entities.Abilities
 
         public bool DecrementCounter(int value)
         {
-            Counter = Math.Max(0, Counter - value);
-            return ReadyForRemoval;
+            this.Counter = Math.Max(0, this.Counter - value);
+            return this.ReadyForRemoval;
         }
 
         public bool DecrementMagnitude(int value)
         {
-            Magnitude = Math.Max(0, Magnitude - value);
-            return ReadyForRemoval;
+            this.Magnitude = Math.Max(0, this.Magnitude - value);
+            return this.ReadyForRemoval;
         }
 
         public void IncrementMagnitude(int value)
         {
-            if(Stacking == true)
+            if(this.Stacking == true)
             {
-                Magnitude += value;
+                this.Magnitude += value;
             }
         }
 
         public void IncrementCounter(int value)
         {
-            if(Stacking == true)
+            if(this.Stacking == true)
             {
-                Counter += value;
+                this.Counter += value;
             }
         }
 
@@ -304,11 +304,11 @@ namespace JoyLib.Code.Entities.Abilities
         {
             get
             {
-                if (Permanent == true)
+                if (this.Permanent == true)
                 {
                     return false;
                 }
-                if (Counter <= 0 || Magnitude <= 0)
+                if (this.Counter <= 0 || this.Magnitude <= 0)
                 {
                     return true;
                 }

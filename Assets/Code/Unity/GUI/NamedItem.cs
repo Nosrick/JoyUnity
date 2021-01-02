@@ -15,38 +15,38 @@ namespace JoyLib.Code.Unity.GUI
 
         public override int IncreaseValue(int delta = 1)
         {
-            if (m_Parent.Value >= delta)
+            if (this.m_Parent.Value >= delta)
             {
                 return base.IncreaseValue(delta);
             }
 
-            return Value;
+            return this.Value;
         }
 
         public override int Value
         {
-            get => m_Value;
+            get => this.m_Value;
             set
             {
-                int previous = m_Value;
-                m_Value = value;
-                m_ValueText.text = m_Value.ToString();
-                ValueChanged?.Invoke(this, new ValueChangedEventArgs()
+                int previous = this.m_Value;
+                this.m_Value = value;
+                this.m_ValueText.text = this.m_Value.ToString();
+                this.ValueChanged?.Invoke(this, new ValueChangedEventArgs()
                 {
                     Name = this.Name,
-                    NewValue = m_Value,
-                    Delta = m_Value - previous
+                    NewValue = this.m_Value,
+                    Delta = this.m_Value - previous
                 });
             }
         }
 
         public override string Name
         {
-            get => m_Name;
+            get => this.m_Name;
             set
             {
-                m_Name = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(value);
-                m_NameText.text = m_Name;
+                this.m_Name = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(value);
+                this.m_NameText.text = this.m_Name;
             }
         }
         

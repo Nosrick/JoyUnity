@@ -30,36 +30,36 @@ namespace JoyLib.Code.Entities.Jobs
 
         public int GetSkillDiscount(string skillName)
         {
-            if(m_SkillDiscounts.ContainsKey(skillName))
+            if(this.m_SkillDiscounts.ContainsKey(skillName))
             {
-                return m_SkillDiscounts[skillName];
+                return this.m_SkillDiscounts[skillName];
             }
             return 0;
         }
 
         public int GetStatisticDiscount(string statisticName)
         {
-            if(m_StatisticDiscounts.ContainsKey(statisticName))
+            if(this.m_StatisticDiscounts.ContainsKey(statisticName))
             {
-                return m_StatisticDiscounts[statisticName];
+                return this.m_StatisticDiscounts[statisticName];
             }
             return 0;
         }
 
         public int AddExperience(int value)
         {
-            Experience += value;
-            return Experience;
+            this.Experience += value;
+            return this.Experience;
         }
 
         public bool SpendExperience(int value)
         {
-            if (Experience < value)
+            if (this.Experience < value)
             {
                 return false;
             }
 
-            Experience -= value;
+            this.Experience -= value;
             return true;
         }
 
@@ -93,7 +93,7 @@ namespace JoyLib.Code.Entities.Jobs
         {
             get
             {
-                return m_StatisticDiscounts;
+                return this.m_StatisticDiscounts;
             }
         }
 
@@ -101,14 +101,14 @@ namespace JoyLib.Code.Entities.Jobs
         {
             get
             {
-                return m_SkillDiscounts.ToDictionary(k => k.Key, v => v.Value);
+                return this.m_SkillDiscounts.ToDictionary(k => k.Key, v => v.Value);
             }
         }
 
         public Dictionary<IAbility, int> Abilities
         {
-            get => m_Abilities;
-            protected set => m_Abilities = value;
+            get => this.m_Abilities;
+            protected set => this.m_Abilities = value;
         }
     }
 }

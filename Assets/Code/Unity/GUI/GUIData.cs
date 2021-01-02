@@ -14,7 +14,7 @@ namespace JoyLib.Code.Unity.GUI
 
         public virtual void OnPointerDown(PointerEventData eventData)
         {
-            GUIManager.BringToFront(this.name);
+            this.GUIManager.BringToFront(this.name);
         }
 
         public virtual void Show()

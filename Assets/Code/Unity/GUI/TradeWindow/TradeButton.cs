@@ -10,12 +10,12 @@ public class TradeButton : MonoBehaviour
     public void Awake()
     {
         Button.ButtonClickedEvent click = new Button.ButtonClickedEvent();
-        click.AddListener(Click);
+        click.AddListener(this.Click);
         this.GetComponent<Button>().onClick = click;
     }
     
     protected void Click()
     {
-        TradeWindow.Trade();
+        this.TradeWindow.Trade();
     }
 }

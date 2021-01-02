@@ -28,60 +28,60 @@ namespace JoyLib.Code.Unity.GUI
         {
             this.MenuItem.SetActive(false);
             
-            if (GameManager.ConversationEngine is null == false && ConversationEngine is null)
+            if (this.GameManager.ConversationEngine is null == false && this.ConversationEngine is null)
             {
-                MenuList = new List<ConversationMenu>();
-                ConversationEngine = GameManager.ConversationEngine;
-                ConversationEngine.OnOpen += new EventHandler(SetActors);
-                ConversationEngine.OnConverse += new EventHandler(SetTitle);
-                ConversationEngine.OnConverse += new EventHandler(CreateMenuItems);
-                ConversationEngine.OnClose += new EventHandler(CloseMe);
+                this.MenuList = new List<ConversationMenu>();
+                this.ConversationEngine = this.GameManager.ConversationEngine;
+                this.ConversationEngine.OnOpen += new EventHandler(this.SetActors);
+                this.ConversationEngine.OnConverse += new EventHandler(this.SetTitle);
+                this.ConversationEngine.OnConverse += new EventHandler(this.CreateMenuItems);
+                this.ConversationEngine.OnClose += new EventHandler(this.CloseMe);
             }
         }
 
         protected void CloseMe(object sender, EventArgs args)
         {
-            GameManager.GUIManager.CloseGUI(GUINames.CONVERSATION);
+            this.GameManager.GUIManager.CloseGUI(GUINames.CONVERSATION);
         }
 
         protected void SetActors(object sender, EventArgs args)
         {
-            LastSpokeIcon.sprite = ConversationEngine.Listener.Sprite;
-            LastSpokeName.text = ConversationEngine.ListenerInfo;
-            LastSaidGUI.text = ConversationEngine.LastSaidWords;
+            this.LastSpokeIcon.sprite = this.ConversationEngine.Listener.Sprite;
+            this.LastSpokeName.text = this.ConversationEngine.ListenerInfo;
+            this.LastSaidGUI.text = this.ConversationEngine.LastSaidWords;
         }
         
         protected void SetTitle(object sender, EventArgs args)
         {
-            double remainingWidth = TitleRect.rect.width - ListenerSection.rect.width;
+            double remainingWidth = this.TitleRect.rect.width - this.ListenerSection.rect.width;
 
             //LastSaidGUI.text = WrapText(LastSaidGUI, text, remainingWidth);
-            LastSaidGUI.text = ConversationEngine.LastSaidWords;
-            LayoutRebuilder.ForceRebuildLayoutImmediate(TitleRect);
+            this.LastSaidGUI.text = this.ConversationEngine.LastSaidWords;
+            LayoutRebuilder.ForceRebuildLayoutImmediate(this.TitleRect);
         }
         
         protected void CreateMenuItems(object sender, EventArgs args)
         {
-            if (ConversationEngine.CurrentTopics.Length > MenuList.Count)
+            if (this.ConversationEngine.CurrentTopics.Length > this.MenuList.Count)
             {
-                for (int i = MenuList.Count; i < ConversationEngine.CurrentTopics.Length; i++)
+                for (int i = this.MenuList.Count; i < this.ConversationEngine.CurrentTopics.Length; i++)
                 {
-                    ConversationMenu child = GameObject.Instantiate(MenuItem, Window.transform).GetComponent<ConversationMenu>();
-                    MenuList.Add(child);
+                    ConversationMenu child = Instantiate(this.MenuItem, this.Window.transform).GetComponent<ConversationMenu>();
+                    this.MenuList.Add(child);
                 }
             }
             
-            for(int i = 0; i < ConversationEngine.CurrentTopics.Length; i++)
+            for(int i = 0; i < this.ConversationEngine.CurrentTopics.Length; i++)
             {
-                MenuList[i].TopicID = ConversationEngine.CurrentTopics[i].ID;
-                MenuList[i].SetText(ConversationEngine.CurrentTopics[i].Words);
-                MenuList[i].gameObject.SetActive(true);
-                MenuList[i].Index = i;
+                this.MenuList[i].TopicID = this.ConversationEngine.CurrentTopics[i].ID;
+                this.MenuList[i].SetText(this.ConversationEngine.CurrentTopics[i].Words);
+                this.MenuList[i].gameObject.SetActive(true);
+                this.MenuList[i].Index = i;
             }
 
-            for (int i = ConversationEngine.CurrentTopics.Length; i < MenuList.Count; i++)
+            for (int i = this.ConversationEngine.CurrentTopics.Length; i < this.MenuList.Count; i++)
             {
-                MenuList[i].gameObject.SetActive(false);
+                this.MenuList[i].gameObject.SetActive(false);
             }
         }
     }

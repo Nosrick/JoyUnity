@@ -11,7 +11,7 @@ namespace JoyLib.Code.Scripting.Actions
 
         public override bool Execute(IJoyObject[] participants, string[] tags = null, params object[] args)
         {
-            ClearLastParameters();
+            this.ClearLastParameters();
             
             if(!(participants[0] is Entity actor))
             {
@@ -50,9 +50,9 @@ namespace JoyLib.Code.Scripting.Actions
                 }
             }
 
-            GlobalConstants.ActionLog.LogAction(actor, ActionString + need);
-            
-            SetLastParameters(participants, tags, args);
+            GlobalConstants.ActionLog.LogAction(actor, this.ActionString + need);
+
+            this.SetLastParameters(participants, tags, args);
 
             return true;
         }

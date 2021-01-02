@@ -23,15 +23,15 @@ namespace JoyLib.Code.Unity.GUI.Character_Sheet
             {
                 return;
             }
-            
-            Player = GlobalConstants.GameManager.Player;
-            Statistics.SetValues(this.Player.Statistics.Values);
-            Skills.SetValues(this.Player.Skills.Values);
-            Abilities.SetValues(Player.Abilities);
-            DerivedValues.SetValues(Player.DerivedValues);
-            PlayerSprite.sprite = Player.Sprite;
-            PlayerName.text = Player.JoyName;
-            PlayerJobAndSpecies.text = Player.CreatureType + " " + Player.CurrentJob.Name;
+
+            this.Player = GlobalConstants.GameManager.Player;
+            this.Statistics.SetValues(this.Player.Statistics.Values);
+            this.Skills.SetValues(this.Player.Skills.Values);
+            this.Abilities.SetValues(this.Player.Abilities);
+            this.DerivedValues.SetValues(this.Player.DerivedValues);
+            this.PlayerSprite.sprite = this.Player.Sprite;
+            this.PlayerName.text = this.Player.JoyName;
+            this.PlayerJobAndSpecies.text = this.Player.CreatureType + " " + this.Player.CurrentJob.Name;
         }
     }
 }

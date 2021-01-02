@@ -26,21 +26,21 @@ namespace JoyLib.Code.Entities.Statistics
         
         public EntityStatistic(string name, int value, int successThreshold)
         {
-            Name = name;
-            Value = value;
-            SuccessThreshold = successThreshold;
+            this.Name = name;
+            this.Value = value;
+            this.SuccessThreshold = successThreshold;
         }
 
         public int ModifyValue(int value)
         {
-            Value = Math.Max(1, Value + value);
-            return Value;
+            this.Value = Math.Max(1, this.Value + value);
+            return this.Value;
         }
 
         public int SetValue(int value)
         {
-            Value = Math.Max(1, value);
-            return Value;
+            this.Value = Math.Max(1, value);
+            return this.Value;
         }
 
         public string Name

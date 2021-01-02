@@ -20,18 +20,18 @@ namespace JoyLib.Code.Entities.Items
         public IdentifiedItem(string nameRef, string[] tagsRef, string descriptionRef, int valueRef, IAbility[] abilitiesRef, int weightingRef,
             string skillRef, string[] materialsRef, float sizeRef, string[] slotsRef, string spriteSheetRef, int lightLevelRef = 0)
         {
-            name = nameRef;
-            tags = tagsRef;
-            description = descriptionRef;
-            value = valueRef;
-            abilities = abilitiesRef;
-            weighting = weightingRef;
-            skill = skillRef;
-            materials = materialsRef;
-            size = sizeRef;
-            slots = slotsRef;
-            spriteSheet = spriteSheetRef;
-            lightLevel = lightLevelRef;
+            this.name = nameRef;
+            this.tags = tagsRef;
+            this.description = descriptionRef;
+            this.value = valueRef;
+            this.abilities = abilitiesRef;
+            this.weighting = weightingRef;
+            this.skill = skillRef;
+            this.materials = materialsRef;
+            this.size = sizeRef;
+            this.slots = slotsRef;
+            this.spriteSheet = spriteSheetRef;
+            this.lightLevel = lightLevelRef;
         }
     }
 
@@ -42,8 +42,8 @@ namespace JoyLib.Code.Entities.Items
 
         public UnidentifiedItem(string nameRef, string descriptionRef)
         {
-            name = nameRef;
-            description = descriptionRef;
+            this.name = nameRef;
+            this.description = descriptionRef;
         }
     }
 }

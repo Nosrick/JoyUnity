@@ -21,19 +21,19 @@ namespace JoyLib.Code.Entities
         {
             get
             {
-                if (m_Templates is null)
+                if (this.m_Templates is null)
                 {
-                    m_Templates = LoadTypes();
+                    this.m_Templates = this.LoadTypes();
                 }
 
-                return m_Templates;
+                return this.m_Templates;
             }
         }
 
         public EntityTemplateHandler(IEntitySkillHandler skillHandler)
         {
             this.SkillHandler = skillHandler;
-            m_Templates = LoadTypes();
+            this.m_Templates = this.LoadTypes();
         }
 
         private List<IEntityTemplate> LoadTypes()
@@ -125,9 +125,9 @@ namespace JoyLib.Code.Entities
 
         public IEntityTemplate Get(string type)
         {
-            if(Templates.Any(x => x.CreatureType == type))
+            if(this.Templates.Any(x => x.CreatureType == type))
             {
-                return Templates.First(x => x.CreatureType == type);
+                return this.Templates.First(x => x.CreatureType == type);
             }
 
             return null;
@@ -135,8 +135,8 @@ namespace JoyLib.Code.Entities
 
         public IEntityTemplate GetRandom()
         {
-            int result = GlobalConstants.GameManager.Roller.Roll(0, m_Templates.Count);
-            return Templates[result];
+            int result = GlobalConstants.GameManager.Roller.Roll(0, this.m_Templates.Count);
+            return this.Templates[result];
         }
     }
 }

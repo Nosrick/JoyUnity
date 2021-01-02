@@ -11,7 +11,7 @@ namespace JoyLib.Code.Entities.Needs
 
         public NeedHandler()
         {
-            m_Needs = Initialise();
+            this.m_Needs = Initialise();
         }
 
         protected static Dictionary<string, INeed> Initialise()
@@ -39,26 +39,26 @@ namespace JoyLib.Code.Entities.Needs
 
         public INeed Get(string name)
         {
-            if(m_Needs is null)
+            if(this.m_Needs is null)
             {
-                m_Needs = Initialise();
+                this.m_Needs = Initialise();
             }
 
-            if(m_Needs.ContainsKey(name))
+            if(this.m_Needs.ContainsKey(name))
             {
-                return m_Needs[name].Copy();
+                return this.m_Needs[name].Copy();
             }
             throw new InvalidOperationException("Need not found, looking for " + name);
         }
 
         public ICollection<INeed> GetMany(IEnumerable<string> names)
         {
-            if (m_Needs is null)
+            if (this.m_Needs is null)
             {
-                m_Needs = Initialise();
+                this.m_Needs = Initialise();
             }
 
-            INeed[] needs = m_Needs
+            INeed[] needs = this.m_Needs
                 .Where(pair => names.Any(
                     name => name.Equals(pair.Key, StringComparison.OrdinalIgnoreCase)))
                 .Select(pair => pair.Value)
@@ -69,7 +69,7 @@ namespace JoyLib.Code.Entities.Needs
 
         public ICollection<INeed> GetManyRandomised(IEnumerable<string> names)
         {
-            INeed[] tempNeeds = GetMany(names).ToArray();
+            INeed[] tempNeeds = this.GetMany(names).ToArray();
 
             List<INeed> needs = new List<INeed>();
 
@@ -83,14 +83,14 @@ namespace JoyLib.Code.Entities.Needs
 
         public INeed GetRandomised(string name)
         {
-            if(m_Needs is null)
+            if(this.m_Needs is null)
             {
-                m_Needs = Initialise();
+                this.m_Needs = Initialise();
             }
 
-            if(m_Needs.ContainsKey(name))
+            if(this.m_Needs.ContainsKey(name))
             {
-                return m_Needs[name].Randomise();
+                return this.m_Needs[name].Randomise();
             }
             throw new InvalidOperationException("Need not found, looking for " + name);
         }
@@ -99,11 +99,11 @@ namespace JoyLib.Code.Entities.Needs
         {
             get
             {
-                if (m_Needs is null)
+                if (this.m_Needs is null)
                 {
-                    m_Needs = Initialise();
+                    this.m_Needs = Initialise();
                 }
-                return new List<INeed>(m_Needs.Values);
+                return new List<INeed>(this.m_Needs.Values);
             }
         }
 
@@ -111,12 +111,12 @@ namespace JoyLib.Code.Entities.Needs
         {
             get
             {
-                if (m_Needs is null)
+                if (this.m_Needs is null)
                 {
-                    m_Needs = Initialise();
+                    this.m_Needs = Initialise();
                 }
 
-                return new List<string>(m_Needs.Keys);
+                return new List<string>(this.m_Needs.Keys);
             }
         }
     }

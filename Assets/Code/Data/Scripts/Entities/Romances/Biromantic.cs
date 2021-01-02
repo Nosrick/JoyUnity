@@ -13,7 +13,7 @@ namespace JoyLib.Code.Entities.Romances
 
         public Biromantic()
         {
-            AddTag("bi");
+            this.AddTag("bi");
         }
 
         public override bool WillRomance(IEntity me, IEntity them, IEnumerable<IRelationship> relationships)
@@ -24,7 +24,7 @@ namespace JoyLib.Code.Entities.Romances
             }
             
             int highestValue = relationships.Max(relationship => relationship.GetRelationshipValue(me.GUID, them.GUID));
-            if(highestValue < RomanceThreshold)
+            if(highestValue < this.RomanceThreshold)
             {
                 return false;
             }

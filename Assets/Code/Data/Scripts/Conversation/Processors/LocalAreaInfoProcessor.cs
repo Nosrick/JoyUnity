@@ -28,7 +28,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
 
         public override ITopic[] Interact(IEntity instigator, IEntity listener)
         {
-            Listener = listener;
+            this.Listener = listener;
             return base.Interact(instigator, listener);
         }
 
@@ -39,8 +39,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
                 new TopicData(
                     new ITopicCondition[0], 
                     "LocalAreaInfo",
-                    new []{ "Thanks" },
-                    GetAreaInfo(Listener),
+                    new []{ "Thanks" }, this.GetAreaInfo(this.Listener),
                     0,
                     new string[0], 
                     Speaker.LISTENER,
@@ -55,7 +54,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
             IWorldInstance listenerWorld = listener.MyWorld;
             if (listenerWorld.HasTag("interior"))
             {
-                int result = Roller.Roll(0, 100);
+                int result = this.Roller.Roll(0, 100);
                 if (result <= 50)
                 {
                     int numberOfLevels = 1;

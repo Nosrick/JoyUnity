@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code.Entities.Relationships;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Rollers;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities.Needs
@@ -37,7 +35,7 @@ namespace JoyLib.Code.Entities.Needs
                 1,
                 new string[0])
         {
-            Initialise();
+            this.Initialise();
         }
         
         public Respect(
@@ -64,7 +62,7 @@ namespace JoyLib.Code.Entities.Needs
                 averageForDayRef, 
                 averageForWeekRef)
         {
-            Initialise();
+            this.Initialise();
         }
 
         protected void Initialise()
@@ -127,12 +125,12 @@ namespace JoyLib.Code.Entities.Needs
 
         public override INeed Randomise()
         {
-            int decay = Roller.Roll(DECAY_MIN, DECAY_MAX);
-            int decayCounter = Roller.Roll(0, DECAY_MAX);
-            int priority = Roller.Roll(PRIORITY_MIN, PRIORITY_MAX);
-            int happinessThreshold = Roller.Roll(HAPPINESS_THRESHOLD_MIN, HAPPINESS_THRESHOLD_MAX);
-            int value = Roller.Roll(0, HAPPINESS_THRESHOLD_MAX);
-            int maxValue = Roller.Roll(MAX_VALUE_MIN, MAX_VALUE_MAX);
+            int decay = this.Roller.Roll(DECAY_MIN, DECAY_MAX);
+            int decayCounter = this.Roller.Roll(0, DECAY_MAX);
+            int priority = this.Roller.Roll(PRIORITY_MIN, PRIORITY_MAX);
+            int happinessThreshold = this.Roller.Roll(HAPPINESS_THRESHOLD_MIN, HAPPINESS_THRESHOLD_MAX);
+            int value = this.Roller.Roll(0, HAPPINESS_THRESHOLD_MAX);
+            int maxValue = this.Roller.Roll(MAX_VALUE_MIN, MAX_VALUE_MAX);
             
             return new Respect(
                 decay,
@@ -147,7 +145,7 @@ namespace JoyLib.Code.Entities.Needs
 
         public override bool Tick(Entity actor)
         {
-            if (this.m_DecayCounter == 0 && m_DoesDecay)
+            if (this.m_DecayCounter == 0 && this.m_DoesDecay)
             {
                 IEnumerable<IRelationship> relationships = RelationshipHandler.GetAllForObject(actor);
 

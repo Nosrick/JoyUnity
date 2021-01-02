@@ -28,7 +28,7 @@ namespace Code.Collections
                 return returnObject;
             }
 
-            GameObject newObject = GameObject.Instantiate(this.Prefab, this.Parent.transform);
+            GameObject newObject = Object.Instantiate(this.Prefab, this.Parent.transform);
             this.Objects.Add(newObject);
             return newObject;
         }

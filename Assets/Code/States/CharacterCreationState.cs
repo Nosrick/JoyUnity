@@ -16,7 +16,7 @@ namespace JoyLib.Code.States
 
         public override void Start()
         {
-            SetUpUi();
+            this.SetUpUi();
         }
 
         public override void Stop()
@@ -30,11 +30,11 @@ namespace JoyLib.Code.States
         public override void SetUpUi()
         {
             base.SetUpUi();
-            CharacterCreationScreen = GUIManager
+            this.CharacterCreationScreen = this.GUIManager
                 .GetGUI(GUINames.CHARACTER_CREATION_PART_1)
                 .GetComponent<CharacterCreationScreen>();
-            CharacterCreationScreen.Initialise();
-            GUIManager.OpenGUI(GUINames.CHARACTER_CREATION_PART_1);
+            this.CharacterCreationScreen.Initialise();
+            this.GUIManager.OpenGUI(GUINames.CHARACTER_CREATION_PART_1);
         }
 
         public override void HandleInput(object data, InputActionChange action)

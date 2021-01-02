@@ -29,9 +29,9 @@ namespace JoyLib.Code.Conversation.Subengines.Rumours
 
         public SkillParameterProcessor()
         {
-            SkillHandler = GlobalConstants.GameManager.SkillHandler;
-            NeedHandler = GlobalConstants.GameManager.NeedHandler;
-            DefaultSkillBlock = SkillHandler.GetDefaultSkillBlock(this.NeedHandler.Needs);
+            this.SkillHandler = GlobalConstants.GameManager.SkillHandler;
+            this.NeedHandler = GlobalConstants.GameManager.NeedHandler;
+            this.DefaultSkillBlock = this.SkillHandler.GetDefaultSkillBlock(this.NeedHandler.Needs);
         }
         
         public bool CanParse(string parameter)
@@ -40,7 +40,7 @@ namespace JoyLib.Code.Conversation.Subengines.Rumours
             {
                 return true;
             }
-            return DefaultSkillBlock.ContainsKey(parameter);
+            return this.DefaultSkillBlock.ContainsKey(parameter);
         }
 
         public string Parse(string parameter, IJoyObject participant)

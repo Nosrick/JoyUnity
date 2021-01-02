@@ -24,7 +24,7 @@ namespace JoyLib.Code.Helpers
 
         public ActionLog()
         {
-            OpenLog();
+            this.OpenLog();
         }
 
         public void Update()
@@ -37,7 +37,7 @@ namespace JoyLib.Code.Helpers
             try
             {
                 File.Delete(FILENAME);
-                WriteToLog("Log Process Started");
+                this.WriteToLog("Log Process Started");
                 return true;
             }
             catch(Exception ex)
@@ -51,17 +51,17 @@ namespace JoyLib.Code.Helpers
 
         private void WriteToLog(string addition)
         {
-            m_Queue.Add(addition + "\n");
+            this.m_Queue.Add(addition + "\n");
         }
 
         public void LogAction(Entity actor, string actionString)
         {
-            AddText(actor.JoyName + " is " + actionString);
+            this.AddText(actor.JoyName + " is " + actionString);
         }
 
         protected void ServiceQueue()
         {
-            foreach(string message in m_Queue.GetConsumingEnumerable())
+            foreach(string message in this.m_Queue.GetConsumingEnumerable())
             {
                 File.AppendAllText(FILENAME, message);
             }
@@ -71,27 +71,27 @@ namespace JoyLib.Code.Helpers
         {
             if (logType == LogType.Information || (logType == LogType.Debug && Debugger.IsAttached))
             {
-                m_Log.Enqueue(stringToAdd);
-                WriteToLog(stringToAdd);
+                this.m_Log.Enqueue(stringToAdd);
+                this.WriteToLog(stringToAdd);
             }
 
-            if (m_Log.Count > LINES_TO_KEEP)
+            if (this.m_Log.Count > LINES_TO_KEEP)
             {
-                m_Log.Dequeue();
+                this.m_Log.Dequeue();
             }
         }
 
         public void LogDamage(int damage, Entity attacker, Entity defender, ItemInstance weapon)
         {
             string damageString = attacker.JoyName + " " + weapon.ItemType.ActionString + " " + defender.JoyName + " for " + damage + ".";
-            AddText(damageString);
+            this.AddText(damageString);
         }
 
         public Queue<string> Log
         {
             get
             {
-                return m_Log;
+                return this.m_Log;
             }
         }
     }

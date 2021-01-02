@@ -24,14 +24,14 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
             new RNG())
         {
             this.SelectedRelationship = relationship;
-            Words = Words.Replace("<1>", SelectedRelationship.Name);
+            this.Words = this.Words.Replace("<1>", this.SelectedRelationship.Name);
         }
 
         protected override ITopic[] FetchNextTopics()
         {
             return new ITopic[]
             {
-                new RomanceYes(SelectedRelationship),
+                new RomanceYes(this.SelectedRelationship),
                 new RomanceNo()
             };
         }

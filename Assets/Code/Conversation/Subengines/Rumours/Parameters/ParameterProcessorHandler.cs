@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code.Scripting;
-using UnityEngine;
 
 namespace JoyLib.Code.Conversation.Subengines.Rumours.Parameters
 {
@@ -11,7 +10,7 @@ namespace JoyLib.Code.Conversation.Subengines.Rumours.Parameters
 
         public ParameterProcessorHandler()
         {
-            Parameters = LoadProcessors();
+            this.Parameters = this.LoadProcessors();
         }
 
         protected List<IParameterProcessor> LoadProcessors()
@@ -21,7 +20,7 @@ namespace JoyLib.Code.Conversation.Subengines.Rumours.Parameters
 
         public IParameterProcessor Get(string parameter)
         {
-            return Parameters.First(p => p.CanParse(parameter));
+            return this.Parameters.First(p => p.CanParse(parameter));
         }
     }
 }

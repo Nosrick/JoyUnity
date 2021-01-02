@@ -1,8 +1,5 @@
-﻿using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Rollers;
-using System.Collections.Generic;
-using JoyLib.Code.Entities.AI;
-using JoyLib.Code.Graphics;
+﻿using System.Collections.Generic;
+using JoyLib.Code.Entities.Items;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities.Needs
@@ -125,7 +122,7 @@ namespace JoyLib.Code.Entities.Needs
                 }
                 else
                 {
-                    m_CachedActions["seekaction"].Execute(
+                    this.m_CachedActions["seekaction"].Execute(
                         new IJoyObject[]{ actor, chosenFood },
                         new string[] { "seek", "need", "hunger" },
                         new object[] { "hunger" });
@@ -133,7 +130,7 @@ namespace JoyLib.Code.Entities.Needs
                 }
             }
 
-            m_CachedActions["wanderaction"].Execute(
+            this.m_CachedActions["wanderaction"].Execute(
                 new IJoyObject[]{ actor },
                 new string[] { "wander", "need", "hunger" });
 
@@ -158,10 +155,8 @@ namespace JoyLib.Code.Entities.Needs
                 DECAY, 
                 DECAY, 
                 true, 
-                PRIORITY, 
-                Roller.Roll(HAPPINESS_THRESHOLD_MIN, HAPPINESS_THRESHOLD_MAX), 
-                HAPPINESS_THRESHOLD_MAX, 
-                Roller.Roll(MAX_VALUE_MIN, MAX_VALUE_MAX),
+                PRIORITY, this.Roller.Roll(HAPPINESS_THRESHOLD_MIN, HAPPINESS_THRESHOLD_MAX), 
+                HAPPINESS_THRESHOLD_MAX, this.Roller.Roll(MAX_VALUE_MIN, MAX_VALUE_MAX),
                 this.FulfillingSprite);
         }
     }

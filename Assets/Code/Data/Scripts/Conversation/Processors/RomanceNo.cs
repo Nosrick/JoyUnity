@@ -23,7 +23,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
 
         public override ITopic[] Interact(IEntity instigator, IEntity listener)
         {
-            IJoyAction influence = CachedActions.First(action =>
+            IJoyAction influence = this.CachedActions.First(action =>
                 action.Name.Equals("modifyrelationshippointsaction", StringComparison.OrdinalIgnoreCase));
 
             influence.Execute(
@@ -35,7 +35,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
                 new[] {"friendship"},
                 new object[] {-instigator.Statistics[EntityStatistic.PERSONALITY].Value});
             
-            return FetchNextTopics();
+            return this.FetchNextTopics();
         }
     }
 }

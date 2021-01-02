@@ -17,20 +17,20 @@ namespace JoyLib.Code.Unity.GUI
         public void Initialise()
         {
             base.OnEnable();
-            namedItem.gameObject.SetActive(false);
-            if (Items is null)
+            this.namedItem.gameObject.SetActive(false);
+            if (this.Items is null)
             {
-                Items = new List<NamedItem>();
+                this.Items = new List<NamedItem>();
             }
-            
-            Value = Maximum;
-            SetRemainingPointsText();
+
+            this.Value = this.Maximum;
+            this.SetRemainingPointsText();
         }
 
         public IDictionary<string, IRollableValue<int>> GetStatistics()
         {
             IDictionary<string, IRollableValue<int>> stats = new Dictionary<string, IRollableValue<int>>();
-            foreach (NamedItem item in Items)
+            foreach (NamedItem item in this.Items)
             {
                 stats.Add(
                     item.Name.ToLower(),
@@ -45,42 +45,42 @@ namespace JoyLib.Code.Unity.GUI
 
         public void SetStatistics(List<Tuple<string, int>> statistics)
         {
-            if (Items.Count < statistics.Count())
+            if (this.Items.Count < statistics.Count())
             {
-                for (int i = Items.Count; i < statistics.Count(); i++)
+                for (int i = this.Items.Count; i < statistics.Count(); i++)
                 {
                     NamedItem newItem =
-                        GameObject.Instantiate(namedItem, this.transform).GetComponent<NamedItem>();
+                        Instantiate(this.namedItem, this.transform).GetComponent<NamedItem>();
                     newItem.gameObject.SetActive(true);
-                    Items.Add(newItem);
+                    this.Items.Add(newItem);
                 }
             }
             
             for(int i = 0; i < statistics.Count; i++)
             {
-                Items[i].Name = statistics[i].Item1;
-                Items[i].ValueChanged -= ChangeStatistic;
-                Items[i].DirectValueSet(statistics[i].Item2);
-                Items[i].ValueChanged += ChangeStatistic;
-                Items[i].gameObject.GetComponent<RectTransform>()
+                this.Items[i].Name = statistics[i].Item1;
+                this.Items[i].ValueChanged -= this.ChangeStatistic;
+                this.Items[i].DirectValueSet(statistics[i].Item2);
+                this.Items[i].ValueChanged += this.ChangeStatistic;
+                this.Items[i].gameObject.GetComponent<RectTransform>()
                     .SetSizeWithCurrentAnchors(
                         RectTransform.Axis.Horizontal, 
                         this.GetComponent<RectTransform>().rect.width);
             }
-            
-            Value = Maximum;
-            SetRemainingPointsText();
+
+            this.Value = this.Maximum;
+            this.SetRemainingPointsText();
         }
 
         protected void ChangeStatistic(object sender, ValueChangedEventArgs args)
         {
-            Value -= args.Delta;
-            SetRemainingPointsText();
+            this.Value -= args.Delta;
+            this.SetRemainingPointsText();
         }
 
         protected void SetRemainingPointsText()
         {
-            m_PointsRemainingText.text = "Statistic Points Remaining: " + Value;
+            this.m_PointsRemainingText.text = "Statistic Points Remaining: " + this.Value;
         }
     }
 }

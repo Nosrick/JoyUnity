@@ -35,16 +35,16 @@ namespace JoyLib.Code.Unity.GUI
             base.Awake();
             this.RectTransform = this.GetComponent<RectTransform>();
 
-            this.LeftOffering.OnAddItem -= Tally;
-            this.LeftOffering.OnRemoveItem -= Tally;
+            this.LeftOffering.OnAddItem -= this.Tally;
+            this.LeftOffering.OnRemoveItem -= this.Tally;
 
             this.RightOffering.OnAddItem -= this.Tally;
             this.RightOffering.OnRemoveItem -= this.Tally;
 
-            this.LeftOffering.OnAddItem += Tally;
-            this.LeftOffering.OnRemoveItem += Tally;
-            this.RightOffering.OnAddItem += Tally;
-            this.RightOffering.OnRemoveItem += Tally;
+            this.LeftOffering.OnAddItem += this.Tally;
+            this.LeftOffering.OnRemoveItem += this.Tally;
+            this.RightOffering.OnAddItem += this.Tally;
+            this.RightOffering.OnRemoveItem += this.Tally;
         }
 
         public override void Close()
@@ -87,17 +87,17 @@ namespace JoyLib.Code.Unity.GUI
             int leftValue = 0;
             int rightValue = 0;
 
-            foreach (IItemInstance item in LeftOffering.Contents)
+            foreach (IItemInstance item in this.LeftOffering.Contents)
             {
                 leftValue += item.Value;
             }
 
-            foreach (IItemInstance item in RightOffering.Contents)
+            foreach (IItemInstance item in this.RightOffering.Contents)
             {
                 rightValue += item.Value;
             }
 
-            int? relationshipValue = RelationshipHandler?.GetHighestRelationshipValue(Right, Left);
+            int? relationshipValue = RelationshipHandler?.GetHighestRelationshipValue(this.Right, this.Left);
 
             if (relationshipValue is null)
             {
@@ -154,7 +154,7 @@ namespace JoyLib.Code.Unity.GUI
             }
 
             this.LeftValue.text = "Your value: " + leftValue;
-            this.RightValue.text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Right.Gender.Possessive) +
+            this.RightValue.text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(this.Right.Gender.Possessive) +
                                    " value: " + rightValue;
         }
 

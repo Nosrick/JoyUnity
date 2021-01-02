@@ -9,7 +9,7 @@ namespace JoyLib.Code.States
     {
         protected GameState()
         {
-            GUIManager = GlobalConstants.GameManager.GUIManager;
+            this.GUIManager = GlobalConstants.GameManager.GUIManager;
         }
 
         public abstract void LoadContent();
@@ -18,10 +18,10 @@ namespace JoyLib.Code.States
         {
             Thread.Sleep(500);
             
-            GUIData[] guiData = GameObject.FindObjectsOfType<GUIData>();
+            GUIData[] guiData = Object.FindObjectsOfType<GUIData>();
             foreach (GUIData data in guiData)
             {
-                GUIManager.AddGUI(data);
+                this.GUIManager.AddGUI(data);
             }
         }
 

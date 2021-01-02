@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System;
+﻿using System;
+using System.Collections.Generic;
 
 namespace JoyLib.Code.Managers
 {
@@ -13,19 +13,20 @@ namespace JoyLib.Code.Managers
 
         public long AssignGUID()
         {
-            if (m_RecycleList.Count > 0)
+            if (this.m_RecycleList.Count > 0)
             {
-                long GUID = m_RecycleList[0];
-                m_RecycleList.RemoveAt(0);
+                long GUID = this.m_RecycleList[0];
+                this.m_RecycleList.RemoveAt(0);
                 return GUID;
             }
-            m_GUIDCounter += 1;
-            return m_GUIDCounter;
+
+            this.m_GUIDCounter += 1;
+            return this.m_GUIDCounter;
         }
 
         public void ReleaseGUID(long GUIDRef)
         {
-            m_RecycleList.Add(GUIDRef);
+            this.m_RecycleList.Add(GUIDRef);
         }
 
         public static GUIDManager Instance

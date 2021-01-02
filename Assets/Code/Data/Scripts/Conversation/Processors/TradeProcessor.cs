@@ -19,7 +19,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
                 new string[0],
                 Speaker.INSTIGATOR)
         {
-            Initialise();
+            this.Initialise();
         }
 
         protected void Initialise()

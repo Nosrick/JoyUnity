@@ -33,7 +33,7 @@ namespace JoyLib.Code.Entities.Sexuality
 
         public Homosexual()
         {
-            AddTag("homo");
+            this.AddTag("homo");
         }
 
         public override bool WillMateWith(IEntity me, IEntity them, IEnumerable<IRelationship> relationships)
@@ -43,7 +43,7 @@ namespace JoyLib.Code.Entities.Sexuality
                 return false;
             }
             int highestValue = relationships.Max(relationship => relationship.GetRelationshipValue(me.GUID, them.GUID));
-            if(highestValue < MatingThreshold
+            if(highestValue < this.MatingThreshold
                || me.Gender.Name.Equals(them.Gender.Name, StringComparison.OrdinalIgnoreCase) == false)
             {
                 return false;

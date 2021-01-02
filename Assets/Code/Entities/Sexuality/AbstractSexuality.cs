@@ -33,7 +33,7 @@ namespace JoyLib.Code.Entities.Sexuality
 
         public bool AddTag(string tag)
         {
-            if (HasTag(tag))
+            if (this.HasTag(tag))
             {
                 return false;
             }
@@ -43,7 +43,7 @@ namespace JoyLib.Code.Entities.Sexuality
 
         public bool RemoveTag(string tag)
         {
-            if (HasTag(tag))
+            if (this.HasTag(tag))
             {
                 this.m_Tags.Remove(tag);
                 return true;

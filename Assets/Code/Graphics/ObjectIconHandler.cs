@@ -19,24 +19,25 @@ namespace JoyLib.Code.Graphics
 
         public ObjectIconHandler(RNG roller)
         {
-            Roller = roller;
-            Initalise(GlobalConstants.SPRITE_SIZE);
+            this.Roller = roller;
+            this.Initalise(GlobalConstants.SPRITE_SIZE);
         }
 
         protected void Initalise(int spriteSize) 
         {
             this.SpriteSize = spriteSize;
 
-            Load();
+            this.Load();
         }
 
         protected bool Load()
         {
-            if(!(Icons is null))
+            if(!(this.Icons is null))
             {
                 return true;
             }
-            Icons = new BucketCollection<IconData, string>();
+
+            this.Icons = new BucketCollection<IconData, string>();
 
             Texture2D loadedSprite = Resources.Load<Texture2D>("Sprites/default");
 
@@ -54,7 +55,7 @@ namespace JoyLib.Code.Graphics
                 filename = "Sprites/default"
             };
 
-            Icons.Add(iconData, "DEFAULT");
+            this.Icons.Add(iconData, "DEFAULT");
 
             string[] files =
                 Directory.GetFiles(
@@ -80,7 +81,7 @@ namespace JoyLib.Code.Graphics
                             position = data.Element("Position").GetAs<int>()
                         }).ToArray();
 
-                    AddIcons(tileSet, iconDatas);
+                    this.AddIcons(tileSet, iconDatas);
                 }
                 catch (Exception e)
                 {
@@ -93,9 +94,9 @@ namespace JoyLib.Code.Graphics
 
         public bool AddIcons(string tileSet, IconData[] data)
         {
-            if(Icons is null)
+            if(this.Icons is null)
             {
-                Load();
+                this.Load();
             }
 
             for (int i = 0; i < data.Length; i++)
@@ -114,13 +115,13 @@ namespace JoyLib.Code.Graphics
                         position = data[i].position
                     };
 
-                    if (Icons.ContainsKey(icon))
+                    if (this.Icons.ContainsKey(icon))
                     {
-                        Icons[icon].Add(tileSet);
+                        this.Icons[icon].Add(tileSet);
                     }
                     else
                     {
-                        Icons.Add(icon, tileSet);
+                        this.Icons.Add(icon, tileSet);
                     }
                 }
             }
@@ -134,7 +135,7 @@ namespace JoyLib.Code.Graphics
 
             Rect sourceRectangle = new Rect(point.x * spriteSize, point.y * spriteSize, spriteSize, spriteSize);
 
-            Color[] imagePiece = GetImageData(imageData, sheet.width, sourceRectangle);
+            Color[] imagePiece = this.GetImageData(imageData, sheet.width, sourceRectangle);
             Texture2D subTexture = new Texture2D(spriteSize, spriteSize, TextureFormat.RGBA32, false, false);
             subTexture.SetPixels(imagePiece);
             subTexture.filterMode = FilterMode.Point;
@@ -154,7 +155,7 @@ namespace JoyLib.Code.Graphics
             {
                 Rect sourceRectangle = new Rect(startPoint.x * spriteSize + (i * spriteSize), startPoint.y * spriteSize, spriteSize, spriteSize);
 
-                Color[] imagePiece = GetImageData(imageData, sheet.width, sourceRectangle);
+                Color[] imagePiece = this.GetImageData(imageData, sheet.width, sourceRectangle);
                 Texture2D subTexture = new Texture2D(spriteSize, spriteSize, TextureFormat.RGBA32, false, false);
                 subTexture.SetPixels(imagePiece);
                 subTexture.filterMode = FilterMode.Point;
@@ -187,14 +188,14 @@ namespace JoyLib.Code.Graphics
         public Texture2D[] GetIcons(string tileSet, string tileName)
         {
             List<Texture2D> icons = new List<Texture2D>();
-            if(Icons.ContainsValue(tileSet))
+            if(this.Icons.ContainsValue(tileSet))
             {
-                List<IconData> textures = Icons[tileSet].FindAll(x => x.name.StartsWith(tileName, StringComparison.OrdinalIgnoreCase) 
-                    || x.data.StartsWith(tileName, StringComparison.OrdinalIgnoreCase));
+                List<IconData> textures = this.Icons[tileSet].FindAll(x => x.name.StartsWith(tileName, StringComparison.OrdinalIgnoreCase) 
+                                                                           || x.data.StartsWith(tileName, StringComparison.OrdinalIgnoreCase));
 
                 if(textures.Count == 0)
                 {
-                    IconData[] defaultIcons = GetDefaultIconSet(tileSet);
+                    IconData[] defaultIcons = this.GetDefaultIconSet(tileSet);
                     List<Texture2D> tempTextures = new List<Texture2D>(defaultIcons.Length);
                     foreach(IconData iconData in defaultIcons)
                     {
@@ -210,49 +211,49 @@ namespace JoyLib.Code.Graphics
         private IconData[] GetDefaultIconSet(string tileSet)
         {
             string lowerTileSet = tileSet;
-            if(tileSet != null && Icons.ContainsValue(lowerTileSet))
+            if(tileSet != null && this.Icons.ContainsValue(lowerTileSet))
             {
-                IconData[] icons = Icons[lowerTileSet].Where(x => x.data.Equals("default", StringComparison.OrdinalIgnoreCase)).ToArray();
+                IconData[] icons = this.Icons[lowerTileSet].Where(x => x.data.Equals("default", StringComparison.OrdinalIgnoreCase)).ToArray();
                 if(icons.Length == 0)
                 {
-                    return ReturnDefaultArray();
+                    return this.ReturnDefaultArray();
                 }
-                int result = Roller.Roll(0, icons.Length);
+                int result = this.Roller.Roll(0, icons.Length);
                 string[] nameToFind = Regex.Split(icons[result].name, @"^[^\d]+");
                 icons = icons.Where(x => x.name.StartsWith(nameToFind[0])).ToArray();
                 if(icons.Length == 0)
                 {
-                    return ReturnDefaultArray();
+                    return this.ReturnDefaultArray();
                 }
                 return icons;
             }
             else
             {
-                return ReturnDefaultArray();
+                return this.ReturnDefaultArray();
             }
         }
 
         public IconData[] ReturnDefaultArray()
         {
-            IconData[] defaultIcon = Icons["DEFAULT"].ToArray();
+            IconData[] defaultIcon = this.Icons["DEFAULT"].ToArray();
             return defaultIcon;
         }
 
         public IconData ReturnDefaultIcon()
         {
-            IconData[] defaultIcon = Icons["DEFAULT"].ToArray();
+            IconData[] defaultIcon = this.Icons["DEFAULT"].ToArray();
             return defaultIcon[0];
         }
 
         public Sprite[] GetDefaultSprites()
         {
-            Sprite[] defaultSprites = Icons["DEFAULT"].Select(x => x.sprite).ToArray();
+            Sprite[] defaultSprites = this.Icons["DEFAULT"].Select(x => x.sprite).ToArray();
             return defaultSprites;
         }
 
         public Sprite GetSprite(string tileSet, string tileName)
         {
-            List<KeyValuePair<IconData, List<string>>> data = Icons.Where(x => x.Value.Contains(tileSet, GlobalConstants.STRING_COMPARER)).ToList();
+            List<KeyValuePair<IconData, List<string>>> data = this.Icons.Where(x => x.Value.Contains(tileSet, GlobalConstants.STRING_COMPARER)).ToList();
             List<IconData> query = new List<IconData>();
 
             foreach(KeyValuePair<IconData, List<string>> pair in data)
@@ -277,7 +278,7 @@ namespace JoyLib.Code.Graphics
                 }
             }
             
-            IconData[] icons = GetDefaultIconSet(tileSet);
+            IconData[] icons = this.GetDefaultIconSet(tileSet);
             return icons[0].sprite;
         }
 
@@ -285,7 +286,7 @@ namespace JoyLib.Code.Graphics
         {
             List<Sprite> sprites = new List<Sprite>();
 
-            List<KeyValuePair<IconData, List<string>>> data = Icons.Where(x => x.Value.Contains(tileSet, GlobalConstants.STRING_COMPARER)).ToList();
+            List<KeyValuePair<IconData, List<string>>> data = this.Icons.Where(x => x.Value.Contains(tileSet, GlobalConstants.STRING_COMPARER)).ToList();
             List<IconData> query = new List<IconData>();
 
             foreach(KeyValuePair<IconData, List<string>> pair in data)
@@ -309,7 +310,7 @@ namespace JoyLib.Code.Graphics
                 }
                 else
                 {
-                    IconData[] icons = GetDefaultIconSet(tileSet);
+                    IconData[] icons = this.GetDefaultIconSet(tileSet);
                     foreach (IconData icon in icons)
                     {
                         sprites.Add(icon.sprite);
@@ -329,11 +330,11 @@ namespace JoyLib.Code.Graphics
         {
             get
             {
-                return m_SpriteSize;
+                return this.m_SpriteSize;
             }
             protected set
             {
-                m_SpriteSize = value;
+                this.m_SpriteSize = value;
             }
         }
     }

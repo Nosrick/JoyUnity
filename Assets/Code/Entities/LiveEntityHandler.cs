@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 namespace JoyLib.Code.Entities
 {
@@ -13,11 +13,11 @@ namespace JoyLib.Code.Entities
         {
             try
             {
-                Entities.Add(created.GUID, created);
+                this.Entities.Add(created.GUID, created);
 
                 if(created.PlayerControlled)
                 {
-                    m_Player = created;
+                    this.m_Player = created;
                 }
 
                 return true;
@@ -32,9 +32,9 @@ namespace JoyLib.Code.Entities
 
         public bool Remove(long GUID)
         {
-            if(Entities.ContainsKey(GUID))
+            if(this.Entities.ContainsKey(GUID))
             {
-                return Entities.Remove(GUID);
+                return this.Entities.Remove(GUID);
             }
 
             return false;
@@ -42,34 +42,34 @@ namespace JoyLib.Code.Entities
 
         public IEntity Get(long GUID)
         {
-            if(Entities.ContainsKey(GUID))
+            if(this.Entities.ContainsKey(GUID))
             {
-                return Entities[GUID];
+                return this.Entities[GUID];
             }
             return null;
         }
 
         public IEntity GetPlayer()
         {
-            return m_Player;
+            return this.m_Player;
         }
 
         public void SetPlayer(IEntity entity)
         {
-            m_Player = entity;
-            GlobalConstants.GameManager.Player = m_Player;
+            this.m_Player = entity;
+            GlobalConstants.GameManager.Player = this.m_Player;
         }
 
         protected Dictionary<long, IEntity> Entities
         {
             get
             {
-                if(m_Entities is null)
+                if(this.m_Entities is null)
                 {
-                    m_Entities = new Dictionary<long, IEntity>();
+                    this.m_Entities = new Dictionary<long, IEntity>();
                 }
 
-                return m_Entities;
+                return this.m_Entities;
             }
         }
     }

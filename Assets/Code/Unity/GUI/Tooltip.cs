@@ -108,7 +108,7 @@ namespace JoyLib.Code.Unity.GUI
                 {
                     for (int i = this.ItemCache.Count; i < data.Count(); i++)
                     {
-                        this.ItemCache.Add(GameObject.Instantiate(this.m_ItemPrefab, this.m_ParentLayout.transform, false));
+                        this.ItemCache.Add(Instantiate(this.m_ItemPrefab, this.m_ParentLayout.transform, false));
                     }
                 }
                 else if (this.ItemCache.Count > data.Count())

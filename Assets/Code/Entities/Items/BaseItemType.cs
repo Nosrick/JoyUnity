@@ -30,7 +30,7 @@ namespace JoyLib.Code.Entities.Items
             int lightLevel = 0,
             IAbility[] abilities = null)
         {
-            m_Tags = tags.ToList();
+            this.m_Tags = tags.ToList();
             
             this.SpawnWeighting = spawnRef;
             this.Value = valueRef;
@@ -52,9 +52,9 @@ namespace JoyLib.Code.Entities.Items
 
         public bool AddTag(string tag)
         {
-            if(m_Tags.Contains(tag) == false)
+            if(this.m_Tags.Contains(tag) == false)
             {
-                m_Tags.Add(tag);
+                this.m_Tags.Add(tag);
                 return true;
             }
             return false;
@@ -62,9 +62,9 @@ namespace JoyLib.Code.Entities.Items
 
         public bool RemoveTag(string tag)
         {
-            if(m_Tags.Contains(tag) == true)
+            if(this.m_Tags.Contains(tag) == true)
             {
-                m_Tags.Remove(tag);
+                this.m_Tags.Remove(tag);
                 return true;
             }
             return false;
@@ -72,17 +72,17 @@ namespace JoyLib.Code.Entities.Items
 
         public bool HasTag(string tag)
         {
-            return m_Tags.Contains(tag);
+            return this.m_Tags.Contains(tag);
         }
 
         public bool HasSlot(string slot)
         {
-            return Slots.Contains(slot);
+            return this.Slots.Contains(slot);
         }
 
         public int GetHitPoints()
         {
-            return (int)(Math.Max(1, Size * Material.Hardness));
+            return (int)(Math.Max(1, this.Size * this.Material.Hardness));
         }
 
         public string Description
@@ -143,7 +143,7 @@ namespace JoyLib.Code.Entities.Items
         {
             get
             {
-                return Material.Bonus;
+                return this.Material.Bonus;
             }
         }
 
@@ -151,7 +151,7 @@ namespace JoyLib.Code.Entities.Items
         {
             get
             {
-                return Material.Bonus;
+                return this.Material.Bonus;
             }
         }
 
@@ -165,7 +165,7 @@ namespace JoyLib.Code.Entities.Items
         {
             get
             {
-                return "It is made of " + Material.Name + ".";
+                return "It is made of " + this.Material.Name + ".";
             }
         }
 
@@ -185,7 +185,7 @@ namespace JoyLib.Code.Entities.Items
         {
             get
             {
-                return "It is worth " + Value + " gold pieces.";
+                return "It is worth " + this.Value + " gold pieces.";
             }
         }
 
@@ -211,7 +211,7 @@ namespace JoyLib.Code.Entities.Items
         {
             get
             {
-                return m_Tags.ToArray();
+                return this.m_Tags.ToArray();
             }
         }
 

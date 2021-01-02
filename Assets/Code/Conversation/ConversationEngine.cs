@@ -58,11 +58,11 @@ namespace JoyLib.Code.Conversation
         public ConversationEngine(
             IEntityRelationshipHandler relationshipHandler)
         {
-            RelationshipHandler = relationshipHandler;
-                
-            m_Topics = LoadTopics();
-            
-            m_CurrentTopics = new List<ITopic>();
+            this.RelationshipHandler = relationshipHandler;
+
+            this.m_Topics = this.LoadTopics();
+
+            this.m_CurrentTopics = new List<ITopic>();
         }
 
         protected List<ITopic> LoadTopics()
@@ -105,7 +105,7 @@ namespace JoyLib.Code.Conversation
                         List<ITopicCondition> conditions = new List<ITopicCondition>();
                         foreach (string condition in conditionStrings)
                         {
-                            conditions.Add(ParseCondition(condition));
+                            conditions.Add(this.ParseCondition(condition));
                         }
 
                         string[] actions = (from actionElement in line.Elements("Action")
@@ -167,7 +167,7 @@ namespace JoyLib.Code.Conversation
                 }
             }
 
-            topics = PerformLinks(topics);
+            topics = this.PerformLinks(topics);
 
             return topics;
         }
@@ -205,12 +205,12 @@ namespace JoyLib.Code.Conversation
 
         public void SetActors(IEntity instigator, IEntity listener)
         {
-            Instigator = instigator;
-            Listener = listener;
+            this.Instigator = instigator;
+            this.Listener = listener;
 
             try
             {
-                IEnumerable<IRelationship> relationships = RelationshipHandler.Get(new IJoyObject[] {Instigator, Listener});
+                IEnumerable<IRelationship> relationships = this.RelationshipHandler.Get(new IJoyObject[] {this.Instigator, this.Listener});
 
                 IRelationship chosenRelationship = null;
                 int best = Int32.MinValue;
@@ -222,81 +222,81 @@ namespace JoyLib.Code.Conversation
                         break;
                     }
                     
-                    int value = relationship.GetRelationshipValue(Instigator.GUID, Listener.GUID);
+                    int value = relationship.GetRelationshipValue(this.Instigator.GUID, this.Listener.GUID);
                     if (value > best)
                     {
                         best = value;
                         chosenRelationship = relationship;
                     }
                 }
-                
-                ListenerInfo = Listener.JoyName + ", " + chosenRelationship.DisplayName;
+
+                this.ListenerInfo = this.Listener.JoyName + ", " + chosenRelationship.DisplayName;
             }
             catch (Exception e)
             {
-                ListenerInfo = Listener.JoyName + ", acquaintance.";
+                this.ListenerInfo = this.Listener.JoyName + ", acquaintance.";
             }
-            
-            OnOpen?.Invoke(this, EventArgs.Empty);
+
+            this.OnOpen?.Invoke(this, EventArgs.Empty);
         }
 
         public ITopic[] Converse(string topic, int index = 0)
         {
-            if (CurrentTopics.Length == 0)
+            if (this.CurrentTopics.Length == 0)
             {
-                CurrentTopics = m_Topics.Where(t => t.ID.Equals(topic, StringComparison.OrdinalIgnoreCase))
+                this.CurrentTopics = this.m_Topics.Where(t => t.ID.Equals(topic, StringComparison.OrdinalIgnoreCase))
                     .ToArray();
 
-                CurrentTopics = SanitiseTopics(CurrentTopics);
+                this.CurrentTopics = this.SanitiseTopics(this.CurrentTopics);
             }
             
-            ITopic currentTopic = CurrentTopics[index];
-            
-            DoInteractions(currentTopic);
+            ITopic currentTopic = this.CurrentTopics[index];
 
-            if (Instigator is null == false && Listener is null == false)
+            this.DoInteractions(currentTopic);
+
+            if (this.Instigator is null == false && this.Listener is null == false)
             {
-                SetActors(Instigator, Listener);
-                OnConverse?.Invoke(this, EventArgs.Empty);
+                this.SetActors(this.Instigator, this.Listener);
+                this.OnConverse?.Invoke(this, EventArgs.Empty);
             }
-            return CurrentTopics;
+            return this.CurrentTopics;
         }
 
         public ITopic[] Converse(int index = 0)
         {
-            return Converse("greeting", index);
+            return this.Converse("greeting", index);
         }
 
         protected void DoInteractions(ITopic currentTopic)
         {
-            ITopic[] next = currentTopic.Interact(Instigator, Listener);
+            ITopic[] next = currentTopic.Interact(this.Instigator, this.Listener);
 
-            next = SanitiseTopics(next);
+            next = this.SanitiseTopics(next);
 
             if (next.Length == 0)
             {
-                OnClose?.Invoke(this, EventArgs.Empty);
-                CurrentTopics = next;
-                Listener = null;
-                Instigator = null;
+                this.OnClose?.Invoke(this, EventArgs.Empty);
+                this.CurrentTopics = next;
+                this.Listener = null;
+                this.Instigator = null;
                 return;
             }
             
             switch (currentTopic.Speaker)
             {
                 case Speaker.LISTENER:
-                    LastSaid = currentTopic;
-                    LastSaidWords = LastSaid.Words;
+                    this.LastSaid = currentTopic;
+                    this.LastSaidWords = this.LastSaid.Words;
                     break;
                 
                 case Speaker.INSTIGATOR:
                     currentTopic = next[0];
                     if (currentTopic.Speaker == Speaker.LISTENER)
                     {
-                        next = currentTopic.Interact(Instigator, Listener);
-                        next = SanitiseTopics(next);
-                        LastSaid = currentTopic;
-                        LastSaidWords = LastSaid.Words;
+                        next = currentTopic.Interact(this.Instigator, this.Listener);
+                        next = this.SanitiseTopics(next);
+                        this.LastSaid = currentTopic;
+                        this.LastSaidWords = this.LastSaid.Words;
                     }
                     break;
                 
@@ -304,23 +304,23 @@ namespace JoyLib.Code.Conversation
                     throw new ArgumentOutOfRangeException();
             }
 
-            CurrentTopics = next;
+            this.CurrentTopics = next;
 
             if (next.Length == 0)
             {
-                OnClose?.Invoke(this, EventArgs.Empty);
-                CurrentTopics = next;
-                Listener = null;
-                Instigator = null;
+                this.OnClose?.Invoke(this, EventArgs.Empty);
+                this.CurrentTopics = next;
+                this.Listener = null;
+                this.Instigator = null;
             }
         }
 
         protected ITopic[] SanitiseTopics(ITopic[] topics)
         {
             ITopic[] next = topics;
-            next = GetValidTopics(next);
-            next = TrimEmpty(next);
-            next = SortByPriority(next);
+            next = this.GetValidTopics(next);
+            next = this.TrimEmpty(next);
+            next = this.SortByPriority(next);
 
             return next;
         }
@@ -335,9 +335,9 @@ namespace JoyLib.Code.Conversation
 
                 foreach (ITopicCondition condition in conditions)
                 {
-                    tuples.AddRange(Listener.GetData(
+                    tuples.AddRange(this.Listener.GetData(
                         new [] {condition.Criteria}, 
-                        new object[] { Listener }));
+                        new object[] {this.Listener }));
                 }
 
                 if(topic.FulfilsConditions(tuples.ToArray()))
@@ -407,14 +407,14 @@ namespace JoyLib.Code.Conversation
         {
             get
             {
-                return m_CurrentTopics.ToArray();
+                return this.m_CurrentTopics.ToArray();
             }
             set
             {
-                m_CurrentTopics = value.ToList();
+                this.m_CurrentTopics = value.ToList();
             }
         }
 
-        public ITopic[] AllTopics => m_Topics.ToArray();
+        public ITopic[] AllTopics => this.m_Topics.ToArray();
     }
 }

@@ -14,7 +14,7 @@ namespace JoyLib.Code.States
         public MainMenuState() :
             base()
         {
-            SetUpUi();
+            this.SetUpUi();
         }
 
         public override void LoadContent()
@@ -44,22 +44,22 @@ namespace JoyLib.Code.States
 
         private void NewGame(object sender, EventArgs eventArgs)
         {
-            Done = true;
-            m_NextState = new CharacterCreationState();
+            this.Done = true;
+            this.m_NextState = new CharacterCreationState();
         }
 
         private void ContinueGame(object sender, EventArgs eventArgs)
         {
-            IWorldInstance overworld = m_WorldSerialiser.Deserialise("Everse");
-            Done = true;
+            IWorldInstance overworld = this.m_WorldSerialiser.Deserialise("Everse");
+            this.Done = true;
 
             IWorldInstance playerWorld = overworld.Player.MyWorld;
-            m_NextState = new WorldState(overworld, playerWorld);
+            this.m_NextState = new WorldState(overworld, playerWorld);
         }
 
         public override GameState GetNextState()
         {
-            return m_NextState;
+            return this.m_NextState;
         }
     }
 }

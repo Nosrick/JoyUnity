@@ -43,12 +43,12 @@ namespace JoyLib.Code.Quests
 
         public bool FulfilsRequirements(IEntity questor, IJoyAction action)
         {
-            return Steps[CurrentStep].Action.ExecutedSuccessfully(action);
+            return this.Steps[this.CurrentStep].Action.ExecutedSuccessfully(action);
         }
 
         public void StartQuest(IEntity questor)
         {
-            foreach (IQuestStep step in Steps)
+            foreach (IQuestStep step in this.Steps)
             {
                 step.StartQuest(questor);
             }
@@ -60,15 +60,15 @@ namespace JoyLib.Code.Quests
             {
                 case ItemInstance itemInstance:
                 {
-                    return Steps[CurrentStep].Items.Contains(itemInstance);
+                    return this.Steps[this.CurrentStep].Items.Contains(itemInstance);
                 }
                 case Entity entity:
                 {
-                    return Steps[CurrentStep].Actors.Contains(entity);
+                    return this.Steps[this.CurrentStep].Actors.Contains(entity);
                 }
                 case WorldInstance worldInstance:
                 {
-                    return Steps[CurrentStep].Areas.Contains(worldInstance);
+                    return this.Steps[this.CurrentStep].Areas.Contains(worldInstance);
                 }
                 default:
                     return false;
@@ -82,7 +82,7 @@ namespace JoyLib.Code.Quests
                 return false;
             }
 
-            foreach (ItemInstance reward in Rewards)
+            foreach (ItemInstance reward in this.Rewards)
             {
                 questor.AddContents(reward);
             }
@@ -120,26 +120,26 @@ namespace JoyLib.Code.Quests
         public override string ToString()
         {
             string fullString = "";
-            string rewardString = Rewards.Count > 0 ? "I'll give you " : "";
-            for (int i = 0; i < Rewards.Count; i++)
+            string rewardString = this.Rewards.Count > 0 ? "I'll give you " : "";
+            for (int i = 0; i < this.Rewards.Count; i++)
             {
-                rewardString += Rewards[i].JoyName;
-                if(Rewards[i].Contents.Any())
+                rewardString += this.Rewards[i].JoyName;
+                if(this.Rewards[i].Contents.Any())
                 {
-                    rewardString += ", " + Rewards[i].ContentString;
+                    rewardString += ", " + this.Rewards[i].ContentString;
                 }
-                if (Rewards.Count > 1)
+                if (this.Rewards.Count > 1)
                 {
-                    if (i == Rewards.Count - 2)
+                    if (i == this.Rewards.Count - 2)
                         rewardString += "and ";
-                    else if (i < Rewards.Count - 2)
+                    else if (i < this.Rewards.Count - 2)
                         rewardString += ", ";
                 }
             }
 
-            for (int j = 0; j < Steps.Count; j++)
+            for (int j = 0; j < this.Steps.Count; j++)
             {
-                fullString += Steps[j].ToString();
+                fullString += this.Steps[j].ToString();
             }
             fullString += " " + rewardString + ".";
             return fullString;

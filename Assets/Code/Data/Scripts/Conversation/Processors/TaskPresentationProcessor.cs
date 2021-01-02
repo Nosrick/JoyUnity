@@ -28,7 +28,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
         {
             return new ITopic[]
             {
-                new TaskYesProcessor(OfferedQuest),
+                new TaskYesProcessor(this.OfferedQuest),
                 new TaskNoProcessor()
             };
         }

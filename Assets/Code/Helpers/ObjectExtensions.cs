@@ -22,7 +22,7 @@ namespace JoyLib.Code.Helpers
         public static Object Copy(this Object originalObject)
         {
             return InternalCopy(originalObject,
-                new Dictionary<Object, Object>(new JoyLib.Code.Helpers.ReferenceEqualityComparer()));
+                new Dictionary<Object, Object>(new ReferenceEqualityComparer()));
         }
 
         private static Object InternalCopy(Object originalObject, IDictionary<Object, Object> visited)
@@ -148,25 +148,25 @@ namespace JoyLib.Code.Helpers
 
         public ArrayTraverse(Array array)
         {
-            maxLengths = new int[array.Rank];
+            this.maxLengths = new int[array.Rank];
             for (int i = 0; i < array.Rank; ++i)
             {
-                maxLengths[i] = array.GetLength(i) - 1;
+                this.maxLengths[i] = array.GetLength(i) - 1;
             }
 
-            Position = new int[array.Rank];
+            this.Position = new int[array.Rank];
         }
 
         public bool Step()
         {
-            for (int i = 0; i < Position.Length; ++i)
+            for (int i = 0; i < this.Position.Length; ++i)
             {
-                if (Position[i] < maxLengths[i])
+                if (this.Position[i] < this.maxLengths[i])
                 {
-                    Position[i]++;
+                    this.Position[i]++;
                     for (int j = 0; j < i; j++)
                     {
-                        Position[j] = 0;
+                        this.Position[j] = 0;
                     }
 
                     return true;

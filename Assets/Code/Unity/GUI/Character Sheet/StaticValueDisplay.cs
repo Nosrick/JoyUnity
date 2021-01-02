@@ -13,9 +13,9 @@ namespace JoyLib.Code.Unity.GUI.Character_Sheet
 
         public void OnEnable()
         {
-            if (Items is null)
+            if (this.Items is null)
             {
-                Items = new List<StaticValueContainer>();
+                this.Items = new List<StaticValueContainer>();
             }
         }
 
@@ -23,27 +23,27 @@ namespace JoyLib.Code.Unity.GUI.Character_Sheet
         {
             List<IRollableValue<int>> listValues = values.ToList();
             
-            foreach (StaticValueContainer item in Items)
+            foreach (StaticValueContainer item in this.Items)
             {
                 item.gameObject.SetActive(false);
             }
             
-            if (Items.Count < listValues.Count)
+            if (this.Items.Count < listValues.Count)
             {
-                for (int i = Items.Count; i < listValues.Count; i++)
+                for (int i = this.Items.Count; i < listValues.Count; i++)
                 {
                     StaticValueContainer newItem =
-                        GameObject.Instantiate(ValueContainerPrefab, this.transform).GetComponent<StaticValueContainer>();
+                        Instantiate(this.ValueContainerPrefab, this.transform).GetComponent<StaticValueContainer>();
                     newItem.gameObject.SetActive(true);
-                    Items.Add(newItem);
+                    this.Items.Add(newItem);
                 }
             }
             
             for(int i = 0; i < listValues.Count; i++)
             {
-                Items[i].Name = listValues[i].Name;
-                Items[i].DirectValueSet(listValues[i].Value);
-                Items[i].gameObject.SetActive(true);
+                this.Items[i].Name = listValues[i].Name;
+                this.Items[i].DirectValueSet(listValues[i].Value);
+                this.Items[i].gameObject.SetActive(true);
             }
         }
     }

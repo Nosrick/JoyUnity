@@ -40,9 +40,9 @@ namespace JoyLib.Code.Conversation.Conversations
             RNG roller = null,
             string link = "")
         {
-            Roller = roller is null ? new RNG( ): roller; 
-            
-            Initialise(
+            this.Roller = roller is null ? new RNG( ): roller;
+
+            this.Initialise(
                 conditions,
                 ID,
                 nextTopics,
@@ -55,14 +55,14 @@ namespace JoyLib.Code.Conversation.Conversations
         
         public string[] GetConditionTags()
         {
-            return Conditions.Select(c => c.Criteria).ToArray();
+            return this.Conditions.Select(c => c.Criteria).ToArray();
         }
 
         public bool FulfilsConditions(IEnumerable<Tuple<string, int>> values)
         {
             bool any = values.Any();
             
-            foreach (ITopicCondition condition in Conditions)
+            foreach (ITopicCondition condition in this.Conditions)
             {
                 try
                 {
@@ -110,7 +110,7 @@ namespace JoyLib.Code.Conversation.Conversations
 
         public bool FulfilsConditions(IEnumerable<JoyObject> participants)
         {
-            string[] criteria = Conditions.Select(c => c.Criteria).ToArray();
+            string[] criteria = this.Conditions.Select(c => c.Criteria).ToArray();
 
             List<Tuple<string, int>> values = new List<Tuple<string, int>>();
             foreach (IJoyObject participant in participants)
@@ -141,7 +141,7 @@ namespace JoyLib.Code.Conversation.Conversations
             this.Words = words;
             this.Priority = priority;
 
-            this.CachedActions = GetCachedActions(cachedActions);
+            this.CachedActions = this.GetCachedActions(cachedActions);
 
             this.Speaker = speaker;
             this.Link = link;
@@ -180,8 +180,8 @@ namespace JoyLib.Code.Conversation.Conversations
 
         public virtual ITopic[] Interact(IEntity instigator, IEntity listener)
         {
-            IJoyAction fulfillNeed = CachedActions.First(action => action.Name.Equals("fulfillneedaction", StringComparison.OrdinalIgnoreCase));
-            IJoyAction influence = CachedActions.First(action =>
+            IJoyAction fulfillNeed = this.CachedActions.First(action => action.Name.Equals("fulfillneedaction", StringComparison.OrdinalIgnoreCase));
+            IJoyAction influence = this.CachedActions.First(action =>
                 action.Name.Equals("modifyrelationshippointsaction", StringComparison.OrdinalIgnoreCase));
 
             fulfillNeed.Execute(
@@ -212,13 +212,13 @@ namespace JoyLib.Code.Conversation.Conversations
                     new object[] {"family", instigator.Statistics[EntityStatistic.PERSONALITY].Value, 0, true});
             }
             
-            return FetchNextTopics();
+            return this.FetchNextTopics();
         }
 
         protected virtual ITopic[] FetchNextTopics()
         {
             List<ITopic> nextTopics = ConversationEngine.AllTopics
-                .Where(topic => NextTopics.Contains(topic.ID))
+                .Where(topic => this.NextTopics.Contains(topic.ID))
                 .ToList();
 
             return nextTopics.ToArray();

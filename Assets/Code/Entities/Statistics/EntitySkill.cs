@@ -18,22 +18,22 @@ namespace JoyLib.Code.Entities.Statistics
             int successThreshold, 
             NonUniqueDictionary<INeed, float> governingNeeds)
         {
-            Name = name;
-            Value = value;
-            SuccessThreshold = successThreshold;
-            GoverningNeeds = governingNeeds;
+            this.Name = name;
+            this.Value = value;
+            this.SuccessThreshold = successThreshold;
+            this.GoverningNeeds = governingNeeds;
         }
 
         public int ModifyValue(int value)
         {
-            Value = Math.Max(0, Value + value);
-            return Value;
+            this.Value = Math.Max(0, this.Value + value);
+            return this.Value;
         }
 
         public int SetValue(int value)
         {
-            Value = Math.Max(0, value);
-            return Value;
+            this.Value = Math.Max(0, value);
+            return this.Value;
         }
 
         public string Name

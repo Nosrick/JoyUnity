@@ -21,18 +21,18 @@ namespace JoyLib.Code.World.Generators.Interiors
             IPhysicsManager physicsManager,
             IEntityFactory entityFactory)
         {
-            EntityFactory = entityFactory;
-            EntityTemplateHandler = templateHandler;
-            PhysicsManager = physicsManager;
-            EntityHandler = entityHandler;
+            this.EntityFactory = entityFactory;
+            this.EntityTemplateHandler = templateHandler;
+            this.PhysicsManager = physicsManager;
+            this.EntityHandler = entityHandler;
         }
 
         public List<IEntity> PlaceEntities(IWorldInstance worldRef, List<string> entityTypes, RNG roller, bool makeNewRollers = true)
         {
-            Roller = roller;
+            this.Roller = roller;
             List<IEntity> entities = new List<IEntity>();
 
-            List<IEntityTemplate> templates = EntityTemplateHandler.Templates;
+            List<IEntityTemplate> templates = this.EntityTemplateHandler.Templates;
             templates = templates.Where(x => entityTypes.Contains(x.CreatureType)).ToList();
 
             int numberToPlace = (worldRef.Tiles.GetLength(0) * worldRef.Tiles.GetLength(1)) / 50;
@@ -45,7 +45,7 @@ namespace JoyLib.Code.World.Generators.Interiors
                 for (int j = 0; j < worldRef.Tiles.GetLength(1); j++)
                 {
                     Vector2Int point = new Vector2Int(i, j);
-                    if (PhysicsManager.IsCollision(point, point, worldRef) == PhysicsResult.None && point != worldRef.SpawnPoint)
+                    if (this.PhysicsManager.IsCollision(point, point, worldRef) == PhysicsResult.None && point != worldRef.SpawnPoint)
                     {
                         availablePoints.Add(point);
                     }
@@ -54,13 +54,13 @@ namespace JoyLib.Code.World.Generators.Interiors
 
             for (int i = 0; i < numberToPlace; i++)
             {
-                int pointIndex = Roller.Roll(0, availablePoints.Count);
+                int pointIndex = this.Roller.Roll(0, availablePoints.Count);
 
-                int entityIndex = Roller.Roll(0, templates.Count);
+                int entityIndex = this.Roller.Roll(0, templates.Count);
 
                 RNG newRoller = makeNewRollers ? new RNG() : roller; 
 
-                IEntity newEntity = EntityFactory.CreateFromTemplate(
+                IEntity newEntity = this.EntityFactory.CreateFromTemplate(
                     templates[entityIndex], 
                     availablePoints[pointIndex],
                     null,
@@ -76,7 +76,7 @@ namespace JoyLib.Code.World.Generators.Interiors
                     null,
                     worldRef);
 
-                EntityHandler.AddEntity(newEntity);
+                this.EntityHandler.AddEntity(newEntity);
                 entities.Add(newEntity);
 
                 availablePoints.RemoveAt(pointIndex);

@@ -11,7 +11,7 @@ namespace JoyLib.Code.Scripting.Actions
 
         public override bool Execute(IJoyObject[] participants, string[] tags = null, params object[] args)
         {
-            ClearLastParameters();
+            this.ClearLastParameters();
             
             if (!(participants[0] is IEntity entity))
             {
@@ -29,7 +29,7 @@ namespace JoyLib.Code.Scripting.Actions
 
             if (result)
             {
-                SetLastParameters(participants, tags, args);
+                this.SetLastParameters(participants, tags, args);
             }
             else
             {

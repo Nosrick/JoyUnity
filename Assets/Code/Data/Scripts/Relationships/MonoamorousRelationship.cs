@@ -6,12 +6,12 @@ namespace JoyLib.Code.Entities.Relationships
     {
         public MonoamorousRelationship()
         {
-            AddTag("romantic");
+            this.AddTag("romantic");
         }
 
         public override bool AddParticipant(IJoyObject newParticipant)
         {
-            return m_Participants.Count < 2 && base.AddParticipant(newParticipant);
+            return this.m_Participants.Count < 2 && base.AddParticipant(newParticipant);
         }
         
         public override IRelationship Create(IEnumerable<IJoyObject> participants)

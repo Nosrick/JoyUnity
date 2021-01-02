@@ -35,7 +35,7 @@ namespace JoyLib.Code.Quests
 
         public override string ToString()
         { 
-            return Description ?? (Description = Action.AssembleDescription());
+            return this.Description ?? (this.Description = this.Action.AssembleDescription());
         }
 
         public IQuestAction Action
@@ -64,7 +64,7 @@ namespace JoyLib.Code.Quests
 
         public void StartQuest(IEntity questor)
         {
-            Action.ExecutePrerequisites(questor);
+            this.Action.ExecutePrerequisites(questor);
         }
         
         public bool AddTag(string tag)

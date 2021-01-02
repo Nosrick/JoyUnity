@@ -17,20 +17,20 @@ namespace JoyLib.Code.Scripting
 
         public void ClearLastParameters()
         {
-            LastParticipants = null;
-            LastTags = null;
-            LastArgs = null;
-            Successful = false;
+            this.LastParticipants = null;
+            this.LastTags = null;
+            this.LastArgs = null;
+            this.Successful = false;
         }
 
         public virtual void SetLastParameters(IJoyObject[] participants, string[] tags = null, params object[] args)
         {
-            LastParticipants = participants;
-            LastTags = tags;
-            LastArgs = args;
-            Successful = true;
+            this.LastParticipants = participants;
+            this.LastTags = tags;
+            this.LastArgs = args;
+            this.Successful = true;
             
-            QuestTracker?.PerformQuestAction(LastParticipants[0] as Entity, this);
+            QuestTracker?.PerformQuestAction(this.LastParticipants[0] as Entity, this);
         }
 
         public virtual string Name => "abstractaction";

@@ -9,27 +9,27 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
 
         public override int IncreaseValue(int delta = 1)
         {
-            if (m_Parent.Value >= IncreaseCost)
+            if (this.m_Parent.Value >= this.IncreaseCost)
             {
                 return base.IncreaseValue(delta);
             }
 
-            return Value;
+            return this.Value;
         }
 
         public override int Value
         {
-            get => m_Value;
+            get => this.m_Value;
             set
             {
-                int previous = m_Value;
-                m_Value = value;
-                m_ValueText.text = m_Value.ToString();
-                ValueChanged?.Invoke(this, new ValueChangedEventArgs()
+                int previous = this.m_Value;
+                this.m_Value = value;
+                this.m_ValueText.text = this.m_Value.ToString();
+                this.ValueChanged?.Invoke(this, new ValueChangedEventArgs()
                 {
                     Name = this.Name,
-                    NewValue = m_Value,
-                    Delta = previous > m_Value ? DecreaseCost : IncreaseCost
+                    NewValue = this.m_Value,
+                    Delta = previous > this.m_Value ? this.DecreaseCost : this.IncreaseCost
                 });
             }
         }

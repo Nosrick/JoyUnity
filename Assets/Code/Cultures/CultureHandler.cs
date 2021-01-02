@@ -14,9 +14,9 @@ namespace JoyLib.Code.Cultures
 
         public CultureHandler()
         {
-            m_Cultures = new Dictionary<string, ICulture>();
+            this.m_Cultures = new Dictionary<string, ICulture>();
 
-            m_Cultures = LoadCultures();
+            this.m_Cultures = this.LoadCultures();
         }
 
         private Dictionary<string, ICulture> LoadCultures()
@@ -149,14 +149,14 @@ namespace JoyLib.Code.Cultures
 
         public ICulture GetByCultureName(string name)
         {
-            if(m_Cultures is null)
+            if(this.m_Cultures is null)
             {
-                LoadCultures();
+                this.LoadCultures();
             }
             
-            if (m_Cultures.ContainsKey(name))
+            if (this.m_Cultures.ContainsKey(name))
             {
-                return m_Cultures[name];
+                return this.m_Cultures[name];
             }
 
             return null;
@@ -164,14 +164,14 @@ namespace JoyLib.Code.Cultures
 
         public List<ICulture> GetByCreatureType(string type)
         {
-            if(m_Cultures is null)
+            if(this.m_Cultures is null)
             {
-                LoadCultures();
+                this.LoadCultures();
             }
 
             try
             {
-                Dictionary<string, ICulture> cultures = m_Cultures.Where(
+                Dictionary<string, ICulture> cultures = this.m_Cultures.Where(
                     culture => culture.Value.Inhabitants.Contains(
                         type, GlobalConstants.STRING_COMPARER))
                     .ToDictionary(pair => pair.Key, pair => pair.Value);
@@ -188,11 +188,11 @@ namespace JoyLib.Code.Cultures
         {
             get
             {
-                if(m_Cultures is null)
+                if(this.m_Cultures is null)
                 {
-                    m_Cultures = LoadCultures();
+                    this.m_Cultures = this.LoadCultures();
                 }
-                return m_Cultures.Values.ToArray();
+                return this.m_Cultures.Values.ToArray();
             }
         }
     }

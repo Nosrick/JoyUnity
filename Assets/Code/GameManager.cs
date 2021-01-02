@@ -53,94 +53,76 @@ public class GameManager : MonoBehaviour, IGameManager
         GameObject prefab = Resources.Load<GameObject>("Prefabs/MonoBehaviourHandler");
         GameObject itemPrefab = Resources.Load<GameObject>("Prefabs/ItemInstance");
         GameObject sprite = Resources.Load<GameObject>("Prefabs/Sprite");
-        FloorPool = new GameObjectPool(sprite, floorHolder);
-        WallPool = new GameObjectPool(prefab, wallHolder);
-        EntityPool = new GameObjectPool(prefab, entityHolder);
-        ItemPool = new GameObjectPool(itemPrefab, objectHolder);
-        FogPool = new GameObjectPool(sprite, fogHolder);
+        this.FloorPool = new GameObjectPool(sprite, floorHolder);
+        this.WallPool = new GameObjectPool(prefab, wallHolder);
+        this.EntityPool = new GameObjectPool(prefab, entityHolder);
+        this.ItemPool = new GameObjectPool(itemPrefab, objectHolder);
+        this.FogPool = new GameObjectPool(sprite, fogHolder);
 
-        MyGameObject = this.gameObject;
-        
-        Roller = new RNG();
+        this.MyGameObject = this.gameObject;
+
+        this.Roller = new RNG();
 
         this.CombatEngine = new CombatEngine();
 
-        PhysicsManager = new PhysicsManager();
+        this.PhysicsManager = new PhysicsManager();
 
-        RelationshipHandler = new EntityRelationshipHandler();
-        
-        GUIManager = new GUIManager();
-        
-        AbilityHandler = new AbilityHandler();
-        
-        MaterialHandler = new MaterialHandler();
-        ObjectIconHandler = new ObjectIconHandler(Roller);
+        this.RelationshipHandler = new EntityRelationshipHandler();
+
+        this.GUIManager = new GUIManager();
+
+        this.AbilityHandler = new AbilityHandler();
+
+        this.MaterialHandler = new MaterialHandler();
+        this.ObjectIconHandler = new ObjectIconHandler(this.Roller);
 
         this.StatisticHandler = new EntityStatisticHandler();
-        NeedHandler = new NeedHandler();
-        CultureHandler = new CultureHandler();
-        BioSexHandler = new EntityBioSexHandler();
-        SexualityHandler = new EntitySexualityHandler();
-        RomanceHandler = new EntityRomanceHandler();
-        JobHandler = new JobHandler(Roller);
-        GenderHandler = new GenderHandler();
-        SkillHandler = new EntitySkillHandler(NeedHandler);
-        EntityTemplateHandler = new EntityTemplateHandler(SkillHandler);
+        this.NeedHandler = new NeedHandler();
+        this.CultureHandler = new CultureHandler();
+        this.BioSexHandler = new EntityBioSexHandler();
+        this.SexualityHandler = new EntitySexualityHandler();
+        this.RomanceHandler = new EntityRomanceHandler();
+        this.JobHandler = new JobHandler(this.Roller);
+        this.GenderHandler = new GenderHandler();
+        this.SkillHandler = new EntitySkillHandler(this.NeedHandler);
+        this.EntityTemplateHandler = new EntityTemplateHandler(this.SkillHandler);
         
         this.DerivedValueHandler = new DerivedValueHandler(this.StatisticHandler, this.SkillHandler);
-        
-        WorldInfoHandler = new WorldInfoHandler(ObjectIconHandler);
-        
-        ParameterProcessorHandler = new ParameterProcessorHandler();
-        
-        EntityHandler = new LiveEntityHandler();
-        ItemHandler = new LiveItemHandler(ObjectIconHandler, MaterialHandler, AbilityHandler, Roller);
-        
-        EntityFactory = new EntityFactory(
-            NeedHandler,
-            ObjectIconHandler,
-            CultureHandler,
-            SexualityHandler,
-            BioSexHandler,
-            GenderHandler,
-            RomanceHandler,
-            JobHandler, 
-            PhysicsManager, 
-            SkillHandler,
+
+        this.WorldInfoHandler = new WorldInfoHandler(this.ObjectIconHandler);
+
+        this.ParameterProcessorHandler = new ParameterProcessorHandler();
+
+        this.EntityHandler = new LiveEntityHandler();
+        this.ItemHandler = new LiveItemHandler(this.ObjectIconHandler, this.MaterialHandler, this.AbilityHandler, this.Roller);
+
+        this.EntityFactory = new EntityFactory(this.NeedHandler, this.ObjectIconHandler, this.CultureHandler, this.SexualityHandler, this.BioSexHandler, this.GenderHandler, this.RomanceHandler, this.JobHandler, this.PhysicsManager, this.SkillHandler,
+            this.DerivedValueHandler, this.Roller);
+
+        this.ItemFactory = new ItemFactory(this.ItemHandler, this.ObjectIconHandler,
             this.DerivedValueHandler,
-            Roller);
-        
-        ItemFactory = new ItemFactory(
-            ItemHandler,
-            ObjectIconHandler,
-            this.DerivedValueHandler,
-            this.ItemPool,
-            Roller);
+            this.ItemPool, this.Roller);
 
-        QuestProvider = new QuestProvider(
-            RelationshipHandler,
-            ItemHandler,
-            ItemFactory,
-            Roller);
-        QuestTracker = new QuestTracker();
-        
-        ConversationEngine = new ConversationEngine(RelationshipHandler);
-        
-        NaturalWeaponHelper = new NaturalWeaponHelper(this.MaterialHandler, this.ItemFactory);
+        this.QuestProvider = new QuestProvider(this.RelationshipHandler, this.ItemHandler, this.ItemFactory, this.Roller);
+        this.QuestTracker = new QuestTracker();
 
-        m_StateManager = new StateManager();
+        this.ConversationEngine = new ConversationEngine(this.RelationshipHandler);
 
-        TradeWindow.RelationshipHandler = RelationshipHandler;
-        
-        TopicData.ConversationEngine = ConversationEngine;
-        TopicData.RelationshipHandler = RelationshipHandler;
+        this.NaturalWeaponHelper = new NaturalWeaponHelper(this.MaterialHandler, this.ItemFactory);
 
-        Entity.QuestTracker = QuestTracker;
-        Entity.RelationshipHandler = RelationshipHandler;
-        Entity.SkillHandler = SkillHandler;
-        Entity.NaturalWeaponHelper = NaturalWeaponHelper;
+        this.m_StateManager = new StateManager();
+
+        TradeWindow.RelationshipHandler = this.RelationshipHandler;
         
-        m_StateManager.ChangeState(new CharacterCreationState());
+        TopicData.ConversationEngine = this.ConversationEngine;
+        TopicData.RelationshipHandler = this.RelationshipHandler;
+
+        Entity.QuestTracker = this.QuestTracker;
+        Entity.RelationshipHandler = this.RelationshipHandler;
+        Entity.SkillHandler = this.SkillHandler;
+        Entity.NaturalWeaponHelper = this.NaturalWeaponHelper;
+
+        this.m_StateManager.ChangeState(new CharacterCreationState());
     }
 	
 	// Update is called once per frame
@@ -151,7 +133,7 @@ public class GameManager : MonoBehaviour, IGameManager
 
     public void NextState()
     {
-        m_StateManager.NextState();
+        this.m_StateManager.NextState();
     }
     
     public ActionLog ActionLog { get; protected set; }

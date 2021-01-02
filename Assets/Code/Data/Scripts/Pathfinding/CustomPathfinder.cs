@@ -1,7 +1,7 @@
-﻿using Algorithms;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Algorithms;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities.AI
@@ -52,7 +52,7 @@ namespace JoyLib.Code.Entities.AI
             Queue<Vector2Int> path = new Queue<Vector2Int>();
 
             sbyte[,] direction;
-            if (Diagonals == true)
+            if (this.Diagonals == true)
             {
                 direction = new sbyte[8, 2] { { 0, -1 }, { 1, 0 }, { 0, 1 }, { -1, 0 }, { 1, -1 }, { 1, 1 }, { -1, 1 }, { -1, -1 } };
             }
@@ -63,7 +63,7 @@ namespace JoyLib.Code.Entities.AI
 
             PathFinderNode parentNode = new PathFinderNode();
             parentNode.G = 0;
-            parentNode.H = HeuristicEstimate;
+            parentNode.H = this.HeuristicEstimate;
             parentNode.F = parentNode.G + parentNode.H;
             parentNode.X = fromPoint.x;
             parentNode.Y = fromPoint.y;
@@ -78,7 +78,7 @@ namespace JoyLib.Code.Entities.AI
             bool found = false;
 
             int loopBreak = 0;
-            while(openList.Count > 0 && loopBreak < SearchLimit)
+            while(openList.Count > 0 && loopBreak < this.SearchLimit)
             {
                 parentNode = openList.Pop();
 
@@ -89,17 +89,17 @@ namespace JoyLib.Code.Entities.AI
                     break;
                 }
 
-                if(closedList.Count > SearchLimit)
+                if(closedList.Count > this.SearchLimit)
                 {
                     return null;
                 }
 
-                if(PunishChangeDirection)
+                if(this.PunishChangeDirection)
                 {
-                    HorizontalPunishment = parentNode.X - parentNode.PX;
+                    this.HorizontalPunishment = parentNode.X - parentNode.PX;
                 }
 
-                for(int i = 0; i < (Diagonals == true ? 8 : 4); i++)
+                for(int i = 0; i < (this.Diagonals == true ? 8 : 4); i++)
                 {
                     PathFinderNode newNode;
                     newNode.X = parentNode.X + direction[i, 0];
@@ -117,23 +117,23 @@ namespace JoyLib.Code.Entities.AI
                     }
 
                     int newG = parentNode.G + grid[newNode.X, newNode.Y];
-                    if(HeavyDiagonals && i > 3)
+                    if(this.HeavyDiagonals && i > 3)
                     {
                         newG += 2;
                     }
 
-                    if(PunishChangeDirection == true)
+                    if(this.PunishChangeDirection == true)
                     {
                         if ((newNode.X - parentNode.X) != 0)
                         {
-                            if (HorizontalPunishment == 0)
+                            if (this.HorizontalPunishment == 0)
                             {
                                 newG += 20;
                             }
                         }
                         if ((newNode.Y - parentNode.Y) != 0)
                         {
-                            if (HorizontalPunishment != 0)
+                            if (this.HorizontalPunishment != 0)
                             {
                                 newG += 20;
                             }
@@ -163,7 +163,7 @@ namespace JoyLib.Code.Entities.AI
                             break;
                         }
                     }
-                    if (foundInCloseIndex != -1 && (ReopenCloseNodes || closedList[foundInCloseIndex].G <= newG))
+                    if (foundInCloseIndex != -1 && (this.ReopenCloseNodes || closedList[foundInCloseIndex].G <= newG))
                     {
                         continue;
                     }
@@ -174,7 +174,7 @@ namespace JoyLib.Code.Entities.AI
 
                     int hDiagonal = Math.Min(Math.Abs(newNode.X - toPoint.x), Math.Abs(newNode.Y - toPoint.y));
                     int hStraight = Math.Abs(newNode.X - toPoint.x) + Math.Abs(newNode.Y - toPoint.y);
-                    newNode.H = (HeuristicEstimate * 2) * hDiagonal + HeuristicEstimate * (hStraight - 2 * hDiagonal);
+                    newNode.H = (this.HeuristicEstimate * 2) * hDiagonal + this.HeuristicEstimate * (hStraight - 2 * hDiagonal);
 
                     newNode.F = newNode.G + newNode.H;
 
@@ -206,7 +206,7 @@ namespace JoyLib.Code.Entities.AI
                 path.Dequeue();
             }
 
-            Stopped = true;
+            this.Stopped = true;
             Queue<Vector2Int> returnPath = new Queue<Vector2Int>(path.Reverse());
             return returnPath;
         }

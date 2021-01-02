@@ -9,10 +9,10 @@
 
         public NameData(string nameRef, int[] chainRef, string[] gendersRef, int[] groupsRef)
         {
-            name = nameRef;
-            chain = chainRef;
-            genders = gendersRef;
-            groups = groupsRef;
+            this.name = nameRef;
+            this.chain = chainRef;
+            this.genders = gendersRef;
+            this.groups = groupsRef;
         }
     }
 }

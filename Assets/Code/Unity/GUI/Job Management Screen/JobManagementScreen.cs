@@ -45,168 +45,167 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
         public override void OnEnable()
         {
             base.OnEnable();
-            if (GameManager.Player is null)
+            if (this.GameManager.Player is null)
             {
                 return;
             }
 
-            if (Statistics is null)
+            if (this.Statistics is null)
             {
-                Statistics = new List<GrowingNamedItem>();
+                this.Statistics = new List<GrowingNamedItem>();
             }
 
-            if (Skills is null)
+            if (this.Skills is null)
             {
-                Skills = new List<GrowingNamedItem>();
+                this.Skills = new List<GrowingNamedItem>();
             }
 
-            if (Abilities is null)
+            if (this.Abilities is null)
             {
-                Abilities = new List<AbilityItem>();
+                this.Abilities = new List<AbilityItem>();
             }
-            
-            Player = GameManager.Player;
-            CurrentJob = Player.CurrentJob;
-            Minimum = 0;
-            Maximum = CurrentJob.Experience;
-            Value = Maximum;
-            PlayerSprite.sprite = Player.Sprite;
-            PlayerName.text = Player.JoyName;
-            JobSelection.Container = Player.Jobs.Select(job => job.Name)
+
+            this.Player = this.GameManager.Player;
+            this.CurrentJob = this.Player.CurrentJob;
+            this.Minimum = 0;
+            this.Maximum = this.CurrentJob.Experience;
+            this.Value = this.Maximum;
+            this.PlayerSprite.sprite = this.Player.Sprite;
+            this.PlayerName.text = this.Player.JoyName;
+            this.JobSelection.Container = this.Player.Jobs.Select(job => job.Name)
                 .ToList();
-            JobSelection.Value =
-                JobSelection.Container.FindIndex(job =>
-                    job.Equals(CurrentJob.Name, StringComparison.OrdinalIgnoreCase));
-            OriginalStatistics = Player.Statistics.Values.ToList();
-            OriginalSkills = Player.Skills.Values.ToList();
-            
-            StatisticsDeltas = new Dictionary<string, int>();
-            SkillsDeltas = new Dictionary<string, int>();
-            JobSelection.ValueChanged -= ChangeJob;
-            JobSelection.ValueChanged += ChangeJob;
+            this.JobSelection.Value = this.JobSelection.Container.FindIndex(job =>
+                    job.Equals(this.CurrentJob.Name, StringComparison.OrdinalIgnoreCase));
+            this.OriginalStatistics = this.Player.Statistics.Values.ToList();
+            this.OriginalSkills = this.Player.Skills.Values.ToList();
 
-            foreach (IRollableValue<int> stat in OriginalStatistics)
+            this.StatisticsDeltas = new Dictionary<string, int>();
+            this.SkillsDeltas = new Dictionary<string, int>();
+            this.JobSelection.ValueChanged -= this.ChangeJob;
+            this.JobSelection.ValueChanged += this.ChangeJob;
+
+            foreach (IRollableValue<int> stat in this.OriginalStatistics)
             {
-                StatisticsDeltas.Add(stat.Name.ToLower(), stat.Value * 10);
+                this.StatisticsDeltas.Add(stat.Name.ToLower(), stat.Value * 10);
             }
 
-            foreach (IRollableValue<int> skill in OriginalSkills)
+            foreach (IRollableValue<int> skill in this.OriginalSkills)
             {
-                SkillsDeltas.Add(skill.Name.ToLower(), skill.Value * 10);
+                this.SkillsDeltas.Add(skill.Name.ToLower(), skill.Value * 10);
             }
-            
-            SetUp();
+
+            this.SetUp();
         }
 
         protected void OnAbilityChange(object sender, ValueChangedEventArgs args)
         {
-            Value -= args.Delta;
-            if(PurchasedAbilities.ContainsKey(args.Name.ToLower()))
+            this.Value -= args.Delta;
+            if(this.PurchasedAbilities.ContainsKey(args.Name.ToLower()))
             {
-                PurchasedAbilities.Remove(args.Name.ToLower());
+                this.PurchasedAbilities.Remove(args.Name.ToLower());
             }
             else
             {
-                KeyValuePair<IAbility, int> ability = CurrentJob.Abilities.First(a =>
+                KeyValuePair<IAbility, int> ability = this.CurrentJob.Abilities.First(a =>
                     a.Key.Name.Equals(args.Name, StringComparison.OrdinalIgnoreCase));
-                PurchasedAbilities.Add(args.Name.ToLower(), ability.Key);
+                this.PurchasedAbilities.Add(args.Name.ToLower(), ability.Key);
             }
         }
 
         protected void OnSkillChange(object sender, ValueChangedEventArgs args)
         {
-            Value -= args.Delta;
-            
-            SetUpSkillDeltas();
+            this.Value -= args.Delta;
+
+            this.SetUpSkillDeltas();
         }
 
         protected void OnStatisticChange(object senver, ValueChangedEventArgs args)
         {
-            Value -= args.Delta;
-            
-            SetUpStatisticDeltas();
+            this.Value -= args.Delta;
+
+            this.SetUpStatisticDeltas();
         }
 
         protected void ChangeJob(object sender, ValueChangedEventArgs args)
         {
-            CurrentJob = Player.Jobs.First(job =>
-                job.Name.Equals(JobSelection.Selected, StringComparison.OrdinalIgnoreCase));
-            Value = CurrentJob.Experience;
-            SetUp();
+            this.CurrentJob = this.Player.Jobs.First(job =>
+                job.Name.Equals(this.JobSelection.Selected, StringComparison.OrdinalIgnoreCase));
+            this.Value = this.CurrentJob.Experience;
+            this.SetUp();
         }
 
         protected void SetExperienceText()
         {
-            ExperienceRemaining.text = "Experience Remaining: " + Value;
+            this.ExperienceRemaining.text = "Experience Remaining: " + this.Value;
         }
 
         protected void SetUp()
         {
-            PurchasedAbilities = new Dictionary<string, IAbility>();
-            
-            SetUpStatistics();
-            SetUpSkills();
-            SetUpAbilities();
+            this.PurchasedAbilities = new Dictionary<string, IAbility>();
+
+            this.SetUpStatistics();
+            this.SetUpSkills();
+            this.SetUpAbilities();
         }
 
         protected void SetUpStatistics()
         {
-            foreach (GrowingNamedItem item in Statistics)
+            foreach (GrowingNamedItem item in this.Statistics)
             {
                 item.gameObject.SetActive(false);
             }
             
-            if (Statistics.Count < OriginalStatistics.Count)
+            if (this.Statistics.Count < this.OriginalStatistics.Count)
             {
-                for (int i = Statistics.Count; i < OriginalStatistics.Count(); i++)
+                for (int i = this.Statistics.Count; i < this.OriginalStatistics.Count(); i++)
                 {
                     GrowingNamedItem newItem =
-                        GameObject.Instantiate(namedItemPrefab, StatisticsPanel.transform).GetComponent<GrowingNamedItem>();
+                        Instantiate(this.namedItemPrefab, this.StatisticsPanel.transform).GetComponent<GrowingNamedItem>();
                     newItem.gameObject.SetActive(true);
-                    Statistics.Add(newItem);
+                    this.Statistics.Add(newItem);
                 }
             }
         
-            for(int i = 0; i < OriginalStatistics.Count; i++)
+            for(int i = 0; i < this.OriginalStatistics.Count; i++)
             {
-                Statistics[i].gameObject.SetActive(true);
-                Statistics[i].Name = OriginalStatistics[i].Name;
-                Statistics[i].ValueChanged -= OnStatisticChange;
-                Statistics[i].DirectValueSet(OriginalStatistics[i].Value);
-                Statistics[i].ValueChanged += OnStatisticChange;
-                Statistics[i].Minimum = OriginalStatistics[i].Value;
-                SetUpStatisticDeltas();
+                this.Statistics[i].gameObject.SetActive(true);
+                this.Statistics[i].Name = this.OriginalStatistics[i].Name;
+                this.Statistics[i].ValueChanged -= this.OnStatisticChange;
+                this.Statistics[i].DirectValueSet(this.OriginalStatistics[i].Value);
+                this.Statistics[i].ValueChanged += this.OnStatisticChange;
+                this.Statistics[i].Minimum = this.OriginalStatistics[i].Value;
+                this.SetUpStatisticDeltas();
             }
         }
 
         protected void SetUpSkills()
         {
-            foreach (GrowingNamedItem item in Skills)
+            foreach (GrowingNamedItem item in this.Skills)
             {
                 item.gameObject.SetActive(false);
             }
             
-            if (Skills.Count < OriginalSkills.Count)
+            if (this.Skills.Count < this.OriginalSkills.Count)
             {
-                for (int i = Skills.Count; i < OriginalSkills.Count(); i++)
+                for (int i = this.Skills.Count; i < this.OriginalSkills.Count(); i++)
                 {
                     GrowingNamedItem newItem =
-                        GameObject.Instantiate(namedItemPrefab, SkillsPanel.transform)
+                        Instantiate(this.namedItemPrefab, this.SkillsPanel.transform)
                             .GetComponent<GrowingNamedItem>();
                     newItem.gameObject.SetActive(true);
-                    Skills.Add(newItem);
+                    this.Skills.Add(newItem);
                 }
             }
 
-            for (int i = 0; i < OriginalSkills.Count; i++)
+            for (int i = 0; i < this.OriginalSkills.Count; i++)
             {
-                Skills[i].gameObject.SetActive(true);
-                Skills[i].Name = OriginalSkills[i].Name;
-                Skills[i].ValueChanged -= OnSkillChange;
-                Skills[i].DirectValueSet(OriginalSkills[i].Value);
-                Skills[i].ValueChanged += OnSkillChange;
-                Skills[i].Minimum = OriginalSkills[i].Value;
-                SetUpSkillDeltas();
+                this.Skills[i].gameObject.SetActive(true);
+                this.Skills[i].Name = this.OriginalSkills[i].Name;
+                this.Skills[i].ValueChanged -= this.OnSkillChange;
+                this.Skills[i].DirectValueSet(this.OriginalSkills[i].Value);
+                this.Skills[i].ValueChanged += this.OnSkillChange;
+                this.Skills[i].Minimum = this.OriginalSkills[i].Value;
+                this.SetUpSkillDeltas();
             }
         }
 
@@ -214,25 +213,24 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
         {
             StringBuilder builder = new StringBuilder();
             
-            List<Tuple<IAbility, int>> abilities =
-                CurrentJob.Abilities.Where(pair => Player.Abilities.Contains(pair.Key) == false)
+            List<Tuple<IAbility, int>> abilities = this.CurrentJob.Abilities.Where(pair => this.Player.Abilities.Contains(pair.Key) == false)
                     .Select(pair => new Tuple<IAbility, int>(pair.Key, pair.Value))
                     .ToList();
 
-            foreach (AbilityItem item in Abilities)
+            foreach (AbilityItem item in this.Abilities)
             {
                 item.gameObject.SetActive(false);
             }
 
-            if (Abilities.Count < abilities.Count)
+            if (this.Abilities.Count < abilities.Count)
             {
-                for (int i = Abilities.Count; i < abilities.Count; i++)
+                for (int i = this.Abilities.Count; i < abilities.Count; i++)
                 {
                     AbilityItem newItem =
-                        GameObject.Instantiate(AbilityItemPrefab, AbilitiesPanel.transform)
+                        Instantiate(this.AbilityItemPrefab, this.AbilitiesPanel.transform)
                             .GetComponent<AbilityItem>();
                     newItem.gameObject.SetActive(true);
-                    Abilities.Add(newItem);
+                    this.Abilities.Add(newItem);
                 }
             }
             
@@ -240,15 +238,15 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
             {
                 builder.AppendLine(abilities[i].Item1.Description);
                 builder.AppendLine("Cost: " + abilities[i].Item2);
-                Abilities[i].gameObject.SetActive(true);
-                Abilities[i].Name = abilities[i].Item1.Name;
-                Abilities[i].Delta = abilities[i].Item2;
-                Abilities[i].OnSelect -= OnAbilityChange;
-                Abilities[i].OnSelect += OnAbilityChange;
-                Abilities[i].Tooltip = builder.ToString();
-                if (Abilities[i].Selected)
+                this.Abilities[i].gameObject.SetActive(true);
+                this.Abilities[i].Name = abilities[i].Item1.Name;
+                this.Abilities[i].Delta = abilities[i].Item2;
+                this.Abilities[i].OnSelect -= this.OnAbilityChange;
+                this.Abilities[i].OnSelect += this.OnAbilityChange;
+                this.Abilities[i].Tooltip = builder.ToString();
+                if (this.Abilities[i].Selected)
                 {
-                    Abilities[i].ToggleMe();
+                    this.Abilities[i].ToggleMe();
                 }
                 builder.Clear();
             }
@@ -256,71 +254,71 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
             
             if (abilities.Count == 0)
             {
-                if (Abilities.Count == 0)
+                if (this.Abilities.Count == 0)
                 {
                     AbilityItem newItem =
-                        GameObject.Instantiate(AbilityItemPrefab, AbilitiesPanel.transform)
+                        Instantiate(this.AbilityItemPrefab, this.AbilitiesPanel.transform)
                             .GetComponent<AbilityItem>();
-                    Abilities.Add(newItem);
+                    this.Abilities.Add(newItem);
                 }
 
-                Abilities[0].gameObject.SetActive(true);
-                Abilities[0].OnSelect -= OnAbilityChange;
-                Abilities[0].Name = "No Abilities Available";
-                Abilities[0].Delta = 0;
-                Abilities[0].Tooltip =
+                this.Abilities[0].gameObject.SetActive(true);
+                this.Abilities[0].OnSelect -= this.OnAbilityChange;
+                this.Abilities[0].Name = "No Abilities Available";
+                this.Abilities[0].Delta = 0;
+                this.Abilities[0].Tooltip =
                     "You either have all of the abilities from this class, or do not qualify for any more.";
             }
         }
 
         protected void SetUpSkillDeltas()
         {
-            for (int i = 0; i < OriginalSkills.Count; i++)
+            for (int i = 0; i < this.OriginalSkills.Count; i++)
             {
-                int delta = SkillsDeltas[OriginalSkills[i].Name.ToLower()] =
-                    (Skills[i].Value * 10) - CurrentJob.GetSkillDiscount(OriginalSkills[i].Name);
-                Skills[i].IncreaseCost = delta + 10;
-                Skills[i].DecreaseCost = -delta;
-                Skills[i].Tooltip = "Cost: " + (delta + 10);
+                int delta = this.SkillsDeltas[this.OriginalSkills[i].Name.ToLower()] =
+                    (this.Skills[i].Value * 10) - this.CurrentJob.GetSkillDiscount(this.OriginalSkills[i].Name);
+                this.Skills[i].IncreaseCost = delta + 10;
+                this.Skills[i].DecreaseCost = -delta;
+                this.Skills[i].Tooltip = "Cost: " + (delta + 10);
             }
         }
 
         protected void SetUpStatisticDeltas()
         {
-            for (int i = 0; i < OriginalStatistics.Count; i++)
+            for (int i = 0; i < this.OriginalStatistics.Count; i++)
             {
-                int delta = StatisticsDeltas[OriginalStatistics[i].Name.ToLower()] =
-                    (Statistics[i].Value * 10) - CurrentJob.GetStatisticDiscount(OriginalStatistics[i].Name);
-                Statistics[i].IncreaseCost = delta + 10;
-                Statistics[i].DecreaseCost = -delta;
-                Statistics[i].Tooltip = "Cost: " + (delta + 10);
+                int delta = this.StatisticsDeltas[this.OriginalStatistics[i].Name.ToLower()] =
+                    (this.Statistics[i].Value * 10) - this.CurrentJob.GetStatisticDiscount(this.OriginalStatistics[i].Name);
+                this.Statistics[i].IncreaseCost = delta + 10;
+                this.Statistics[i].DecreaseCost = -delta;
+                this.Statistics[i].Tooltip = "Cost: " + (delta + 10);
             }
         }
 
         public void MakeChanges()
         {
-            int index = Player.Jobs.FindIndex(job => job.Name.Equals(CurrentJob.Name, StringComparison.OrdinalIgnoreCase));
-            int cost = -(Value - CurrentJob.Experience);
-            Player.Jobs[index].SpendExperience(cost);
-            Player.Abilities.AddRange(PurchasedAbilities.Values);
-            foreach (NamedItem item in Statistics)
+            int index = this.Player.Jobs.FindIndex(job => job.Name.Equals(this.CurrentJob.Name, StringComparison.OrdinalIgnoreCase));
+            int cost = -(this.Value - this.CurrentJob.Experience);
+            this.Player.Jobs[index].SpendExperience(cost);
+            this.Player.Abilities.AddRange(this.PurchasedAbilities.Values);
+            foreach (NamedItem item in this.Statistics)
             {
-                Player.Statistics[item.Name.ToLower()].Value = item.Value;
+                this.Player.Statistics[item.Name.ToLower()].Value = item.Value;
             }
 
-            foreach (NamedItem item in Skills)
+            foreach (NamedItem item in this.Skills)
             {
-                Player.Skills[item.Name.ToLower()].Value = item.Value;
+                this.Player.Skills[item.Name.ToLower()].Value = item.Value;
             }
         }
 
         public override int Value
         {
-            get => m_Value;
+            get => this.m_Value;
             set
             {
                 base.Value = value;
-                SetExperienceText();
+                this.SetExperienceText();
             }
         }
     }

@@ -6,7 +6,7 @@ namespace JoyLib.Code.Entities.Relationships
     {
         public Friendship()
         {
-            AddTag("friendship");
+            this.AddTag("friendship");
         }
         
         public override IRelationship Create(IEnumerable<IJoyObject> participants)

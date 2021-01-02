@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using JoyLib.Code.Helpers;
-using UnityEngine;
 
 namespace JoyLib.Code.Entities.Gender
 {
@@ -14,14 +13,14 @@ namespace JoyLib.Code.Entities.Gender
 
         public GenderHandler()
         {
-            Initialise();
+            this.Initialise();
         }
 
         protected void Initialise()
         {
-            if (Genders is null)
+            if (this.Genders is null)
             {
-                Genders = LoadGenders();
+                this.Genders = this.LoadGenders();
             }
         }
 
@@ -61,12 +60,12 @@ namespace JoyLib.Code.Entities.Gender
 
         public IGender Get(string name)
         {
-            if (Genders is null)
+            if (this.Genders is null)
             {
-                Initialise();
+                this.Initialise();
             }
 
-            return Genders.First(gender => gender.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            return this.Genders.First(gender => gender.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
     }
 }

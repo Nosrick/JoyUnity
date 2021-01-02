@@ -85,7 +85,7 @@ namespace JoyLib.Code.Unity
 
         public override void AttachJoyObject(IJoyObject joyObject)
         {
-            Initialise();
+            this.Initialise();
             base.AttachJoyObject(joyObject);
         }
     }

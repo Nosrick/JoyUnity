@@ -32,7 +32,7 @@ namespace JoyLib.Code.Entities.Sexuality
 
         public Bisexual()
         {
-            AddTag("bi");
+            this.AddTag("bi");
         }
 
         public override bool WillMateWith(IEntity me, IEntity them, IEnumerable<IRelationship> relationships)
@@ -43,7 +43,7 @@ namespace JoyLib.Code.Entities.Sexuality
             }
             
             int highestValue = relationships.Max(relationship => relationship.GetRelationshipValue(me.GUID, them.GUID));
-            if(highestValue < MatingThreshold)
+            if(highestValue < this.MatingThreshold)
             {
                 return false;
             }

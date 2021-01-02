@@ -1,9 +1,8 @@
-using JoyLib.Code.States;
-using JoyLib.Code.World;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using JoyLib.Code.World;
 using Tanis.Collections;
 using UnityEngine;
 
@@ -116,11 +115,11 @@ namespace JoyLib.Code.Entities.AI
         {
             get
             {
-                return m_Parent;
+                return this.m_Parent;
             }
             set
             {
-                m_Parent = value;
+                this.m_Parent = value;
             }
         }
 
@@ -131,11 +130,11 @@ namespace JoyLib.Code.Entities.AI
         {
             set
             {
-                m_Cost = value;
+                this.m_Cost = value;
             }
             get
             {
-                return m_Cost;
+                return this.m_Cost;
             }
         }
         private double m_Cost;
@@ -147,12 +146,12 @@ namespace JoyLib.Code.Entities.AI
         {
             set
             {
-                m_GoalEstimate = value;
+                this.m_GoalEstimate = value;
             }
             get
             {
-                Calculate();
-                return (m_GoalEstimate);
+                this.Calculate();
+                return (this.m_GoalEstimate);
             }
         }
         private double m_GoalEstimate;
@@ -164,7 +163,7 @@ namespace JoyLib.Code.Entities.AI
         {
             get
             {
-                return (cost + goalEstimate);
+                return (this.cost + this.goalEstimate);
             }
         }
 
@@ -175,12 +174,12 @@ namespace JoyLib.Code.Entities.AI
         {
             set
             {
-                m_GoalNode = value;
-                Calculate();
+                this.m_GoalNode = value;
+                this.Calculate();
             }
             get
             {
-                return m_GoalNode;
+                return this.m_GoalNode;
             }
         }
         private AStarNode m_GoalNode;
@@ -197,9 +196,9 @@ namespace JoyLib.Code.Entities.AI
         /// <param name="costRef">The accumulative cost until now</param>
         public AStarNode(AStarNode parentRef, AStarNode goalRef, double costRef)
         {
-            m_Parent = parentRef;
-            m_Cost = costRef;
-            goalNode = goalRef;
+            this.m_Parent = parentRef;
+            this.m_Cost = costRef;
+            this.goalNode = goalRef;
         }
         #endregion
 
@@ -211,7 +210,7 @@ namespace JoyLib.Code.Entities.AI
         /// <returns>Returns true if current node is the goal</returns>
         public bool IsGoal()
         {
-            return IsSameState(m_GoalNode);
+            return this.IsSameState(this.m_GoalNode);
         }
 
         #endregion
@@ -233,7 +232,7 @@ namespace JoyLib.Code.Entities.AI
         /// </summary>
         public virtual void Calculate()
         {
-            m_GoalEstimate = 0.0f;
+            this.m_GoalEstimate = 0.0f;
         }
 
         /// <summary>
@@ -257,7 +256,7 @@ namespace JoyLib.Code.Entities.AI
 
         public override bool Equals(object obj)
         {
-            return IsSameState((AStarNode)obj);
+            return this.IsSameState((AStarNode)obj);
         }
 
         public override int GetHashCode()
@@ -271,7 +270,7 @@ namespace JoyLib.Code.Entities.AI
 
         public int CompareTo(object obj)
         {
-            return (-totalCost.CompareTo(((AStarNode)obj).totalCost));
+            return (-this.totalCost.CompareTo(((AStarNode)obj).totalCost));
         }
 
         #endregion
@@ -303,7 +302,7 @@ namespace JoyLib.Code.Entities.AI
         {
             get
             {
-                return m_Solution;
+                return this.m_Solution;
             }
         }
         private ArrayList m_Solution;
@@ -314,10 +313,10 @@ namespace JoyLib.Code.Entities.AI
 
         public AStar()
         {
-            m_OpenList = new Heap();
-            m_ClosedList = new Heap();
-            m_Successors = new ArrayList();
-            m_Solution = new ArrayList();
+            this.m_OpenList = new Heap();
+            this.m_ClosedList = new Heap();
+            this.m_Successors = new ArrayList();
+            this.m_Solution = new ArrayList();
         }
 
         #endregion
@@ -331,38 +330,38 @@ namespace JoyLib.Code.Entities.AI
         /// <param name="goalNode">Goal node</param>
         public void FindPath(AStarNode startNode, AStarNode goalNode)
         {
-            m_StartNode = startNode;
-            m_GoalNode = goalNode;
+            this.m_StartNode = startNode;
+            this.m_GoalNode = goalNode;
 
             int loopBreak = 0;
 
-            m_OpenList.Add(m_StartNode);
-            while (m_OpenList.Count > 0 && loopBreak < LOOPBREAKER)
+            this.m_OpenList.Add(this.m_StartNode);
+            while (this.m_OpenList.Count > 0 && loopBreak < LOOPBREAKER)
             {
                 // Get the node with the lowest TotalCost
-                AStarNode NodeCurrent = (AStarNode)m_OpenList.Pop();
+                AStarNode NodeCurrent = (AStarNode) this.m_OpenList.Pop();
 
                 // If the node is the goal copy the path to the solution array
                 if (NodeCurrent.IsGoal())
                 {
                     while (NodeCurrent != null)
                     {
-                        m_Solution.Insert(0, NodeCurrent);
+                        this.m_Solution.Insert(0, NodeCurrent);
                         NodeCurrent = NodeCurrent.parent;
                     }
                     break;
                 }
 
                 // Get successors to the current node
-                NodeCurrent.GetSuccessors(m_Successors);
-                foreach (AStarNode NodeSuccessor in m_Successors)
+                NodeCurrent.GetSuccessors(this.m_Successors);
+                foreach (AStarNode NodeSuccessor in this.m_Successors)
                 {
                     // Test if the currect successor node is on the open list, if it is and
                     // the TotalCost is higher, we will throw away the current successor.
                     AStarNode NodeOpen = null;
-                    if (m_OpenList.Contains(NodeSuccessor))
+                    if (this.m_OpenList.Contains(NodeSuccessor))
                     {
-                        NodeOpen = (AStarNode)m_OpenList[m_OpenList.IndexOf(NodeSuccessor)];
+                        NodeOpen = (AStarNode) this.m_OpenList[this.m_OpenList.IndexOf(NodeSuccessor)];
                     }
                     if ((NodeOpen != null) && (NodeSuccessor.totalCost > NodeOpen.totalCost))
                     {
@@ -372,9 +371,9 @@ namespace JoyLib.Code.Entities.AI
                     // Test if the currect successor node is on the closed list, if it is and
                     // the TotalCost is higher, we will throw away the current successor.
                     AStarNode NodeClosed = null;
-                    if (m_ClosedList.Contains(NodeSuccessor))
+                    if (this.m_ClosedList.Contains(NodeSuccessor))
                     {
-                        NodeClosed = (AStarNode)m_ClosedList[m_ClosedList.IndexOf(NodeSuccessor)];
+                        NodeClosed = (AStarNode) this.m_ClosedList[this.m_ClosedList.IndexOf(NodeSuccessor)];
                     }
                     if ((NodeClosed != null) && (NodeSuccessor.totalCost > NodeClosed.totalCost))
                     {
@@ -382,16 +381,16 @@ namespace JoyLib.Code.Entities.AI
                     }
 
                     // Remove the old successor from the open list
-                    m_OpenList.Remove(NodeOpen);
+                    this.m_OpenList.Remove(NodeOpen);
 
                     // Remove the old successor from the closed list
-                    m_ClosedList.Remove(NodeClosed);
+                    this.m_ClosedList.Remove(NodeClosed);
 
                     // Add the current successor to the open list
-                    m_OpenList.Push(NodeSuccessor);
+                    this.m_OpenList.Push(NodeSuccessor);
                 }
                 // Add the current node to the closed list
-                m_ClosedList.Add(NodeCurrent);
+                this.m_ClosedList.Add(NodeCurrent);
                 loopBreak += 1;
             }
         }
@@ -410,7 +409,7 @@ namespace JoyLib.Code.Entities.AI
         {
             get
             {
-                return m_X;
+                return this.m_X;
             }
         }
         private int m_X;
@@ -422,7 +421,7 @@ namespace JoyLib.Code.Entities.AI
         {
             get
             {
-                return m_Y;
+                return this.m_Y;
             }
         }
         private int m_Y;
@@ -442,8 +441,8 @@ namespace JoyLib.Code.Entities.AI
         public AStarNode2D(AStarNode parentRef, AStarNode goalRef, double costRef, int AX, int AY) : 
             base(parentRef, goalRef, costRef)
         {
-            m_X = AX;
-            m_Y = AY;
+            this.m_X = AX;
+            this.m_Y = AY;
         }
 
         #endregion
@@ -476,8 +475,8 @@ namespace JoyLib.Code.Entities.AI
             {
                 return;
             }
-            AStarNode2D NewNode = new AStarNode2D(this, goalNode, cost + CurrentCost, AX, AY);
-            if (NewNode.IsSameState(parent))
+            AStarNode2D NewNode = new AStarNode2D(this, this.goalNode, this.cost + CurrentCost, AX, AY);
+            if (NewNode.IsSameState(this.parent))
             {
                 return;
             }
@@ -499,7 +498,7 @@ namespace JoyLib.Code.Entities.AI
             {
                 return false;
             }
-            return ((((AStarNode2D)node).x == m_X) && (((AStarNode2D)node).y == m_Y));
+            return ((((AStarNode2D)node).x == this.m_X) && (((AStarNode2D)node).y == this.m_Y));
         }
 
         /// <summary>
@@ -507,21 +506,21 @@ namespace JoyLib.Code.Entities.AI
         /// </summary>
         public override void Calculate()
         {
-            if (goalNode != null)
+            if (this.goalNode != null)
             {
-                double xd = m_X - ((AStarNode2D)goalNode).x;
-                double yd = m_Y - ((AStarNode2D)goalNode).y;
+                double xd = this.m_X - ((AStarNode2D) this.goalNode).x;
+                double yd = this.m_Y - ((AStarNode2D) this.goalNode).y;
                 // "Euclidean distance" - Used when search can move at any angle.
                 //GoalEstimate = Math.Sqrt((xd*xd) + (yd*yd));
                 // "Manhattan Distance" - Used when search can only move vertically and 
                 // horizontally.
                 //GoalEstimate = Math.Abs(xd) + Math.Abs(yd); 
                 // "Diagonal Distance" - Used when the search can move in 8 directions.
-                goalEstimate = Math.Max(Math.Abs(xd), Math.Abs(yd));
+                this.goalEstimate = Math.Max(Math.Abs(xd), Math.Abs(yd));
             }
             else
             {
-                goalEstimate = 0;
+                this.goalEstimate = 0;
             }
         }
 
@@ -532,14 +531,14 @@ namespace JoyLib.Code.Entities.AI
         public override void GetSuccessors(ArrayList ASuccessors)
         {
             ASuccessors.Clear();
-            AddSuccessor(ASuccessors, m_X - 1, m_Y);
-            AddSuccessor(ASuccessors, m_X - 1, m_Y - 1);
-            AddSuccessor(ASuccessors, m_X, m_Y - 1);
-            AddSuccessor(ASuccessors, m_X + 1, m_Y - 1);
-            AddSuccessor(ASuccessors, m_X + 1, m_Y);
-            AddSuccessor(ASuccessors, m_X + 1, m_Y + 1);
-            AddSuccessor(ASuccessors, m_X, m_Y + 1);
-            AddSuccessor(ASuccessors, m_X - 1, m_Y + 1);
+            this.AddSuccessor(ASuccessors, this.m_X - 1, this.m_Y);
+            this.AddSuccessor(ASuccessors, this.m_X - 1, this.m_Y - 1);
+            this.AddSuccessor(ASuccessors, this.m_X, this.m_Y - 1);
+            this.AddSuccessor(ASuccessors, this.m_X + 1, this.m_Y - 1);
+            this.AddSuccessor(ASuccessors, this.m_X + 1, this.m_Y);
+            this.AddSuccessor(ASuccessors, this.m_X + 1, this.m_Y + 1);
+            this.AddSuccessor(ASuccessors, this.m_X, this.m_Y + 1);
+            this.AddSuccessor(ASuccessors, this.m_X - 1, this.m_Y + 1);
         }
 
         #endregion

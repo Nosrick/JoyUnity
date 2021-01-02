@@ -17,31 +17,31 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
 
         protected AbstractVisionProvider(IFOVHandler algorithm)
         {
-            Algorithm = algorithm;
+            this.Algorithm = algorithm;
         }
 
         public virtual bool CanSee(IEntity viewer, IWorldInstance world, int x, int y)
         {
-            if (m_Vision is null)
+            if (this.m_Vision is null)
             {
                 Debug.Log("VISION IS NULL");
             }
-            return m_Vision.Contains(new Vector2Int(x, y));
+            return this.m_Vision.Contains(new Vector2Int(x, y));
         }
 
         public virtual bool CanSee(IEntity viewer, IWorldInstance world, Vector2Int point)
         {
-            return CanSee(viewer, world, point.x, point.y);
+            return this.CanSee(viewer, world, point.x, point.y);
         }
 
         public virtual bool HasVisibility(IEntity viewer, IWorldInstance world, int x, int y)
         {
-            return CanSee(viewer, world, x, y);
+            return this.CanSee(viewer, world, x, y);
         }
 
         public virtual bool HasVisibility(IEntity viewer, IWorldInstance world, Vector2Int point)
         {
-            return CanSee(viewer, world, point.x, point.y);
+            return this.CanSee(viewer, world, point.x, point.y);
         }
 
         public virtual RectInt GetFullVisionRect(IEntity viewer)
@@ -71,8 +71,8 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
 
         public HashSet<Vector2Int> Vision 
         { 
-            get => m_Vision;
-            protected set => m_Vision = value;
+            get => this.m_Vision;
+            protected set => this.m_Vision = value;
         }
 
         protected IFOVHandler Algorithm

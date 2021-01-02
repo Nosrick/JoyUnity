@@ -1,9 +1,9 @@
-﻿using JoyLib.Code.Entities;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.World;
-using System;
+﻿using System;
 using System.IO;
 using System.Text;
+using JoyLib.Code.Entities;
+using JoyLib.Code.Graphics;
+using JoyLib.Code.World;
 using UnityEngine;
 
 namespace JoyLib.Code.IO
@@ -48,9 +48,9 @@ namespace JoyLib.Code.IO
             string worldString = reader.ReadToEnd();
             
             IWorldInstance world = JsonUtility.FromJson<WorldInstance>(worldString);
-            LinkWorlds(world);
-            EntityWorldKnowledge(world);
-            AssignIcons(world);
+            this.LinkWorlds(world);
+            this.EntityWorldKnowledge(world);
+            this.AssignIcons(world);
             reader.Close();
             return world;
         }
@@ -60,7 +60,7 @@ namespace JoyLib.Code.IO
             foreach (IWorldInstance world in parent.Areas.Values)
             {
                 world.Parent = parent;
-                LinkWorlds(world);
+                this.LinkWorlds(world);
             }
         }
 
@@ -73,7 +73,7 @@ namespace JoyLib.Code.IO
 
             foreach (IWorldInstance world in parent.Areas.Values)
             {
-                EntityWorldKnowledge(world);
+                this.EntityWorldKnowledge(world);
             }
         }
         
@@ -91,7 +91,7 @@ namespace JoyLib.Code.IO
 
             foreach(IWorldInstance world in parent.Areas.Values)
             {
-                AssignIcons(world);
+                this.AssignIcons(world);
             }
         }
     }

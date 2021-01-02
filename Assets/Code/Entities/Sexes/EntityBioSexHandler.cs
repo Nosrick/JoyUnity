@@ -11,27 +11,27 @@ namespace JoyLib.Code.Entities.Sexes
 
         public EntityBioSexHandler()
         {
-            Initialise();
+            this.Initialise();
         }
 
         protected void Initialise()
         {
-            Load();
+            this.Load();
         }
 
         protected bool Load()
         {
-            if(!(m_Sexes is null))
+            if(!(this.m_Sexes is null))
             {
                 return true;
             }
 
-            m_Sexes = new Dictionary<string, IBioSex>();
+            this.m_Sexes = new Dictionary<string, IBioSex>();
             
             IEnumerable<IBioSex> sexes = ScriptingEngine.instance.FetchAndInitialiseChildren<IBioSex>();
             foreach(IBioSex sex in sexes)
             {
-                m_Sexes.Add(sex.Name, sex);
+                this.m_Sexes.Add(sex.Name, sex);
             }
 
             return true;
@@ -39,9 +39,9 @@ namespace JoyLib.Code.Entities.Sexes
 
         public IBioSex Get(string name)
         {
-            if(m_Sexes.Any(sex => sex.Key.Equals(name, StringComparison.OrdinalIgnoreCase)))
+            if(this.m_Sexes.Any(sex => sex.Key.Equals(name, StringComparison.OrdinalIgnoreCase)))
             {
-                return m_Sexes.First(sex => sex.Key.Equals(name, StringComparison.OrdinalIgnoreCase)).Value;
+                return this.m_Sexes.First(sex => sex.Key.Equals(name, StringComparison.OrdinalIgnoreCase)).Value;
             }
             return null;
         }
@@ -50,7 +50,7 @@ namespace JoyLib.Code.Entities.Sexes
         {
             get
             {
-                return m_Sexes.Values.ToArray();
+                return this.m_Sexes.Values.ToArray();
             }
         }
     }

@@ -6,7 +6,7 @@ namespace JoyLib.Code.Entities.Relationships
     {
         public PolyamourousRelationship()
         {
-            AddTag("romantic");
+            this.AddTag("romantic");
         }
 
         public override IRelationship Create(IEnumerable<IJoyObject> participants)

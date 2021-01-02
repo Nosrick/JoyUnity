@@ -9,7 +9,7 @@ namespace Joy.Code.Managers
 
         public StateManager()
         {
-            m_ActiveState = new MainMenuState();
+            this.m_ActiveState = new MainMenuState();
 
             InputSystem.onActionChange -= this.OnMove;
             InputSystem.onActionChange += this.OnMove;
@@ -17,30 +17,30 @@ namespace Joy.Code.Managers
 
         public void ChangeState(IGameState newState)
         {
-            m_ActiveState.Stop();
-            m_ActiveState = newState;
-            m_ActiveState.Start();
-            m_ActiveState.LoadContent();
+            this.m_ActiveState.Stop();
+            this.m_ActiveState = newState;
+            this.m_ActiveState.Start();
+            this.m_ActiveState.LoadContent();
         }
 
         public void LoadContent()
         {
-            m_ActiveState.LoadContent();
+            this.m_ActiveState.LoadContent();
         }
 
         public void Start()
         {
-            m_ActiveState = new MainMenuState();
-            m_ActiveState.Start();
+            this.m_ActiveState = new MainMenuState();
+            this.m_ActiveState.Start();
         }
 
         public void Update()
         {
-            m_ActiveState.Update();
+            this.m_ActiveState.Update();
 
-            if(m_ActiveState.Done)
+            if(this.m_ActiveState.Done)
             {
-                ChangeState(m_ActiveState.GetNextState());
+                this.ChangeState(this.m_ActiveState.GetNextState());
             }
         }
 
@@ -51,8 +51,8 @@ namespace Joy.Code.Managers
 
         public void NextState()
         {
-            IGameState newState = m_ActiveState.GetNextState();
-            ChangeState(newState);
+            IGameState newState = this.m_ActiveState.GetNextState();
+            this.ChangeState(newState);
         }
     }
 }

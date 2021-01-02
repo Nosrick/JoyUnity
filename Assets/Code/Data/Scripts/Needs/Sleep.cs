@@ -1,8 +1,5 @@
 using System.Collections.Generic;
-using JoyLib.Code.Entities.AI;
 using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Rollers;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities.Needs
@@ -67,7 +64,7 @@ namespace JoyLib.Code.Entities.Needs
             {
                 if (actor.MyWorld.GetEntity(pair.Key) is null)
                 {
-                    m_CachedActions["seekaction"].Execute(
+                    this.m_CachedActions["seekaction"].Execute(
                         new [] {actor, pair.Value},
                         new[] {"need", "sleep", "seek"},
                         new object[] {"sleep"});
@@ -75,7 +72,7 @@ namespace JoyLib.Code.Entities.Needs
                 }
             }
 
-            m_CachedActions["wanderaction"].Execute(
+            this.m_CachedActions["wanderaction"].Execute(
                 new IJoyObject[] {actor},
                 new[] {"need", "sleep", "wander"});
             return false;
@@ -115,10 +112,8 @@ namespace JoyLib.Code.Entities.Needs
                 DECAY,
                 DECAY, 
                 true, 
-                PRIORITY, 
-                Roller.Roll(HAPPINESS_THRESHOLD_MIN, HAPPINESS_THRESHOLD_MAX), 
-                HAPPINESS_THRESHOLD_MAX, 
-                Roller.Roll(MAX_VALUE_MIN, MAX_VALUE_MAX),
+                PRIORITY, this.Roller.Roll(HAPPINESS_THRESHOLD_MIN, HAPPINESS_THRESHOLD_MAX), 
+                HAPPINESS_THRESHOLD_MAX, this.Roller.Roll(MAX_VALUE_MIN, MAX_VALUE_MAX),
                 this.FulfillingSprite);
         }
     }

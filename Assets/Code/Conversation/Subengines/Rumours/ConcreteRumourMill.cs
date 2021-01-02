@@ -23,16 +23,16 @@ namespace JoyLib.Code.Conversation.Conversations
 
         public ConcreteRumourMill(RNG roller = null)
         {
-            Roller = roller is null ? new RNG() : roller; 
-            Initialise();
+            this.Roller = roller is null ? new RNG() : roller;
+            this.Initialise();
         }
 
         protected void Initialise()
         {
-            if (RumourTypes is null)
+            if (this.RumourTypes is null)
             {
-                Rumours = new List<IRumour>();
-                RumourTypes = LoadRumours();
+                this.Rumours = new List<IRumour>();
+                this.RumourTypes = this.LoadRumours();
             }
         }
 
@@ -69,7 +69,7 @@ namespace JoyLib.Code.Conversation.Conversations
                         List<ITopicCondition> conditions = new List<ITopicCondition>();
                         foreach (string conditionString in conditionStrings)
                         {
-                            conditions.Add(ParseCondition(conditionString));
+                            conditions.Add(this.ParseCondition(conditionString));
                         }
 
                         if (processor.Equals("NONE", StringComparison.OrdinalIgnoreCase) == false)
@@ -117,29 +117,29 @@ namespace JoyLib.Code.Conversation.Conversations
 
         public IRumour GetRandom(IWorldInstance overworldRef)
         {
-            if (Rumours.Count == 0)
+            if (this.Rumours.Count == 0)
             {
                 IJoyObject left = overworldRef.GetRandomSentientWorldWide();
                 IJoyObject right = left.MyWorld.GetRandomSentient();
-                Rumours.Add(GenerateRandomRumour(new []{left, right}));
+                this.Rumours.Add(this.GenerateRandomRumour(new []{left, right}));
             }
 
-            return Rumours[Roller.Roll(0, Rumours.Count)];
+            return this.Rumours[this.Roller.Roll(0, this.Rumours.Count)];
         }
 
         public IRumour GenerateRandomRumour(IJoyObject[] participants)
         {
-            if (RumourTypes is null)
+            if (this.RumourTypes is null)
             {
-                Initialise();
+                this.Initialise();
             }
             
             IRumour rumour = null;
-            IRumour[] possibilities = RumourTypes.Where(r => r.FulfilsConditions(participants)).ToArray();
+            IRumour[] possibilities = this.RumourTypes.Where(r => r.FulfilsConditions(participants)).ToArray();
 
             if (possibilities.Length > 0)
             {
-                IRumour selected = possibilities[Roller.Roll(0, possibilities.Length)];
+                IRumour selected = possibilities[this.Roller.Roll(0, possibilities.Length)];
                 rumour = selected.Create(
                     participants,
                     selected.Tags,
@@ -152,7 +152,7 @@ namespace JoyLib.Code.Conversation.Conversations
             }
             else
             {
-                IRumour selected = RumourTypes[Roller.Roll(0, RumourTypes.Count)];
+                IRumour selected = this.RumourTypes[this.Roller.Roll(0, this.RumourTypes.Count)];
                 rumour = selected.Create(
                     participants,
                     selected.Tags,
@@ -170,20 +170,20 @@ namespace JoyLib.Code.Conversation.Conversations
 
         public IRumour GenerateRumourFromTags(IJoyObject[] participants, string[] tags)
         {
-            if (RumourTypes is null)
+            if (this.RumourTypes is null)
             {
-                Initialise();
+                this.Initialise();
             }
             
             IRumour rumour = null;
 
-            IRumour[] possibilities = RumourTypes.Where(r =>
+            IRumour[] possibilities = this.RumourTypes.Where(r =>
                 r.Tags.Intersect(tags, StringComparer.OrdinalIgnoreCase).Any() && r.FulfilsConditions(participants))
                 .ToArray();
             
             if (possibilities.Length > 0)
             {
-                IRumour resultingRumour = possibilities[Roller.Roll(0, possibilities.Length)];
+                IRumour resultingRumour = possibilities[this.Roller.Roll(0, possibilities.Length)];
                 rumour = resultingRumour.Create(
                     participants,
                     resultingRumour.Tags,
@@ -196,8 +196,8 @@ namespace JoyLib.Code.Conversation.Conversations
             }
             else
             {
-                int result = Roller.Roll(0, RumourTypes.Count);
-                IRumour resultingRumour = RumourTypes[result];
+                int result = this.Roller.Roll(0, this.RumourTypes.Count);
+                IRumour resultingRumour = this.RumourTypes[result];
                 rumour = resultingRumour.Create(
                     participants,
                     resultingRumour.Tags,
@@ -216,7 +216,7 @@ namespace JoyLib.Code.Conversation.Conversations
         public IRumour[] GenerateOneRumourOfEachType(IJoyObject[] participants)
         {
             List<IRumour> rumours = new List<IRumour>();
-            foreach (IRumour type in RumourTypes)
+            foreach (IRumour type in this.RumourTypes)
             {
                 rumours.Add(type.Create(
                     participants,

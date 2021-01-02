@@ -10,13 +10,13 @@ namespace JoyLib.Code.Unity.GUI
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (ValueChange == ValueChange.DECREASE && ValueContainer.AllowDecrease)
+            if (this.ValueChange == ValueChange.DECREASE && this.ValueContainer.AllowDecrease)
             {
-                ValueContainer.DecreaseValue(ValueContainer.DecreaseDelta);
+                this.ValueContainer.DecreaseValue(this.ValueContainer.DecreaseDelta);
             }
-            else if (ValueChange == ValueChange.INCREASE && ValueContainer.AllowIncrease)
+            else if (this.ValueChange == ValueChange.INCREASE && this.ValueContainer.AllowIncrease)
             {
-                ValueContainer.IncreaseValue(ValueContainer.IncreaseDelta);
+                this.ValueContainer.IncreaseValue(this.ValueContainer.IncreaseDelta);
             }
         }
     }

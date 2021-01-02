@@ -2,8 +2,6 @@
 using System.Linq;
 using JoyLib.Code.Entities.AI;
 using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Rollers;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities.Needs
@@ -90,13 +88,13 @@ namespace JoyLib.Code.Entities.Needs
 
             if (chosenItem is null)
             {
-                m_CachedActions["wanderaction"].Execute(
+                this.m_CachedActions["wanderaction"].Execute(
                     new IJoyObject[] { actor },
                     new string[] { "need", "property", "wander" });
                 return false;
             }
-            
-            m_CachedActions["seekaction"].Execute(
+
+            this.m_CachedActions["seekaction"].Execute(
                 new IJoyObject[] {actor, chosenItem},
                 new[] {"need", "property", "seek"},
                 new object[] {"property"});
@@ -116,7 +114,7 @@ namespace JoyLib.Code.Entities.Needs
                 tags.Add("theft");
             }
 
-            if (m_CachedActions["additemaction"].Execute(
+            if (this.m_CachedActions["additemaction"].Execute(
                 new[] {actor, obj},
                 tags.ToArray(),
                 new object[] {true}))
@@ -136,7 +134,7 @@ namespace JoyLib.Code.Entities.Needs
                 }
                 else
                 {
-                    FindFulfilmentObject(actor);
+                    this.FindFulfilmentObject(actor);
                 }
             }
 
@@ -160,12 +158,12 @@ namespace JoyLib.Code.Entities.Needs
 
         public override INeed Randomise()
         {
-            int decay = Roller.Roll(DECAY_MIN, DECAY_MAX);
-            int decayCounter = Roller.Roll(0, DECAY_MAX);
-            int priority = Roller.Roll(PRIORITY_MIN, PRIORITY_MAX);
-            int happinessThreshold = Roller.Roll(HAPPINESS_THRESHOLD_MIN, HAPPINESS_THRESHOLD_MAX);
-            int value = Roller.Roll(0, HAPPINESS_THRESHOLD_MAX);
-            int maxValue = Roller.Roll(MAX_VALUE_MIN, MAX_VALUE_MAX);
+            int decay = this.Roller.Roll(DECAY_MIN, DECAY_MAX);
+            int decayCounter = this.Roller.Roll(0, DECAY_MAX);
+            int priority = this.Roller.Roll(PRIORITY_MIN, PRIORITY_MAX);
+            int happinessThreshold = this.Roller.Roll(HAPPINESS_THRESHOLD_MIN, HAPPINESS_THRESHOLD_MAX);
+            int value = this.Roller.Roll(0, HAPPINESS_THRESHOLD_MAX);
+            int maxValue = this.Roller.Roll(MAX_VALUE_MIN, MAX_VALUE_MAX);
             
             return new Property(
                 decay,

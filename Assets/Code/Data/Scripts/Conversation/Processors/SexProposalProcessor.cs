@@ -25,7 +25,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
 
         public override ITopic[] Interact(IEntity instigator, IEntity listener)
         {
-            Happening = false;
+            this.Happening = false;
 
             IJoyObject[] participants = new[] {instigator, listener};
             
@@ -68,14 +68,14 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
                 new[] {"sex", "need"},
                 new object[] {"sex", listenerSatisfaction, 5});
 
-            Happening = true;
+            this.Happening = true;
 
-            return FetchNextTopics();
+            return this.FetchNextTopics();
         }
 
         protected override ITopic[] FetchNextTopics()
         {
-            if (!Happening)
+            if (!this.Happening)
             {
                 return new ITopic[]
                 {

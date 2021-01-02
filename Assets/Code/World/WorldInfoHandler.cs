@@ -21,20 +21,20 @@ namespace JoyLib.Code.World
 
         public WorldInfoHandler(IObjectIconHandler objectIconHandler)
         {
-            ObjectIcons = objectIconHandler;
+            this.ObjectIcons = objectIconHandler;
 
-            Load();
+            this.Load();
         }
 
         protected bool Load()
         {
-            if (WorldInfo is null == false)
+            if (this.WorldInfo is null == false)
             {
                 return true;
             }
 
             string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "World Spaces", "*.xml", SearchOption.AllDirectories);
-            WorldInfo = new List<WorldInfo>();
+            this.WorldInfo = new List<WorldInfo>();
 
             foreach (string file in files)
             {
@@ -71,9 +71,9 @@ namespace JoyLib.Code.World
                         iconData.Add(newIcon);
                     }
 
-                    WorldInfo.Add(info);
+                    this.WorldInfo.Add(info);
 
-                    ObjectIcons.AddIcons(
+                    this.ObjectIcons.AddIcons(
                         info.tileset,
                         iconData.ToArray());
 
@@ -92,7 +92,7 @@ namespace JoyLib.Code.World
         {
             try
             {
-                return WorldInfo.Where(info => info.name.StartsWith(name, StringComparison.OrdinalIgnoreCase)).ToArray();
+                return this.WorldInfo.Where(info => info.name.StartsWith(name, StringComparison.OrdinalIgnoreCase)).ToArray();
             }
             catch (Exception e)
             {

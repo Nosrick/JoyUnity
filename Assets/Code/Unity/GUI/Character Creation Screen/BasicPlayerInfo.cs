@@ -38,103 +38,98 @@ namespace JoyLib.Code.Unity.GUI
         public ICulture CurrentCulture { get; protected set; }
         protected RNG Roller { get; set; }
 
-        public string Gender => GenderContainer.Selected;
-        public string Sex => SexContainer.Selected;
-        public string Sexuality => SexualityContainer.Selected;
-        public string Romance => RomanceContainer.Selected;
-        public string Job => JobContainer.Selected;
+        public string Gender => this.GenderContainer.Selected;
+        public string Sex => this.SexContainer.Selected;
+        public string Sexuality => this.SexualityContainer.Selected;
+        public string Romance => this.RomanceContainer.Selected;
+        public string Job => this.JobContainer.Selected;
 
         public event EventHandler JobChanged;
         public event EventHandler CultureChanged;
 
         public void Initialise()
         {
-            Templates = GameManager.EntityTemplateHandler.Templates;
-            Roller = new RNG();
-            int result = Roller.Roll(0, Templates.Count);
-            ChangeTemplate(Templates[result]);
-            PlayerType.Container = Templates.Select(t => t.CreatureType).ToList();
-            PlayerType.Value = result;
-            PlayerType.ValueChanged += ChangeTemplateHandler;
-            CultureContainer.ValueChanged += ChangeCultureHandler;
-            JobContainer.ValueChanged += ChangeJobHandler;
+            this.Templates = this.GameManager.EntityTemplateHandler.Templates;
+            this.Roller = new RNG();
+            int result = this.Roller.Roll(0, this.Templates.Count);
+            this.ChangeTemplate(this.Templates[result]);
+            this.PlayerType.Container = this.Templates.Select(t => t.CreatureType).ToList();
+            this.PlayerType.Value = result;
+            this.PlayerType.ValueChanged += this.ChangeTemplateHandler;
+            this.CultureContainer.ValueChanged += this.ChangeCultureHandler;
+            this.JobContainer.ValueChanged += this.ChangeJobHandler;
         }
         
         protected void ChangeTemplate(IEntityTemplate template)
         {
-            CurrentTemplate = template;
-            CurrentCultures = GameManager.CultureHandler.GetByCreatureType(CurrentTemplate.CreatureType);
-            CultureContainer.Container = CurrentCultures
+            this.CurrentTemplate = template;
+            this.CurrentCultures = this.GameManager.CultureHandler.GetByCreatureType(this.CurrentTemplate.CreatureType);
+            this.CultureContainer.Container = this.CurrentCultures
                                             .Select(culture => culture.CultureName)
                                             .ToList();
-            CurrentCulture = CurrentCultures[CultureContainer.Value];
-            SetCultureSpecificData(CurrentCulture);
+            this.CurrentCulture = this.CurrentCultures[this.CultureContainer.Value];
+            this.SetCultureSpecificData(this.CurrentCulture);
         }
 
         protected void ChangeTemplateHandler(object sender, ValueChangedEventArgs args)
         {
-            ChangeTemplate(GameManager.EntityTemplateHandler.Get(PlayerType.Selected));
+            this.ChangeTemplate(this.GameManager.EntityTemplateHandler.Get(this.PlayerType.Selected));
         }
 
         protected void ChangeJobHandler(object sender, ValueChangedEventArgs args)
         {
-            JobChanged?.Invoke(this, args);
+            this.JobChanged?.Invoke(this, args);
         }
 
         protected void ChangeCultureHandler(object sender, ValueChangedEventArgs args)
         {
-            SetCultureSpecificData(CurrentCultures.First(
-                culture => culture.CultureName.Equals(CultureContainer.Selected)));
+            this.SetCultureSpecificData(this.CurrentCultures.First(
+                culture => culture.CultureName.Equals(this.CultureContainer.Selected)));
         }
 
         protected void SetCultureSpecificData(ICulture culture)
         {
-            CurrentCulture = culture;
-            SexContainer.Container = CurrentCulture.Sexes.ToList();
-            IBioSex sex = CurrentCulture.ChooseSex(GameManager.BioSexHandler.Sexes);
+            this.CurrentCulture = culture;
+            this.SexContainer.Container = this.CurrentCulture.Sexes.ToList();
+            IBioSex sex = this.CurrentCulture.ChooseSex(this.GameManager.BioSexHandler.Sexes);
             Debug.Log("SEX: " + sex.Name);
-            SexContainer.Value =
-                SexContainer.Container.FindIndex(s => s.Equals(sex.Name, StringComparison.CurrentCulture));
-            
-            GenderContainer.Container = CurrentCulture.Genders.ToList();
-            IGender gender = CurrentCulture.ChooseGender(sex, GameManager.GenderHandler.Genders);
+            this.SexContainer.Value = this.SexContainer.Container.FindIndex(s => s.Equals(sex.Name, StringComparison.CurrentCulture));
+
+            this.GenderContainer.Container = this.CurrentCulture.Genders.ToList();
+            IGender gender = this.CurrentCulture.ChooseGender(sex, this.GameManager.GenderHandler.Genders);
             Debug.Log("GENDER: " + gender.Name);
-            GenderContainer.Value =
-                GenderContainer.Container.FindIndex(s => 
+            this.GenderContainer.Value = this.GenderContainer.Container.FindIndex(s => 
                     s.Equals(gender.Name, StringComparison.Ordinal));
-            
-            
-            SexualityContainer.Container = CurrentCulture.Sexualities.ToList();
-            ISexuality sexuality = CurrentCulture.ChooseSexuality(GameManager.SexualityHandler.Sexualities);
+
+
+            this.SexualityContainer.Container = this.CurrentCulture.Sexualities.ToList();
+            ISexuality sexuality = this.CurrentCulture.ChooseSexuality(this.GameManager.SexualityHandler.Sexualities);
             Debug.Log("SEXUALITY: " + sexuality.Name);
-            SexualityContainer.Value =
-                SexualityContainer.Container.FindIndex(s => 
+            this.SexualityContainer.Value = this.SexualityContainer.Container.FindIndex(s => 
                     s.Equals(sexuality.Name,
                         StringComparison.OrdinalIgnoreCase));
-            
-            JobContainer.Container = CurrentCulture.Jobs.ToList();
-            IJob job = CurrentCulture.ChooseJob(GameManager.JobHandler.Jobs);
+
+            this.JobContainer.Container = this.CurrentCulture.Jobs.ToList();
+            IJob job = this.CurrentCulture.ChooseJob(this.GameManager.JobHandler.Jobs);
             Debug.Log("JOB: "+ job.Name);
-            JobContainer.Value =
-                JobContainer.Container.FindIndex(s =>
+            this.JobContainer.Value = this.JobContainer.Container.FindIndex(s =>
                     s.Equals(job.Name,
                         StringComparison.OrdinalIgnoreCase));
-            
-            RomanceContainer.Container = CurrentCulture.RomanceTypes.ToList();
-            IRomance romance = CurrentCulture.ChooseRomance(GameManager.RomanceHandler.Romances);
+
+            this.RomanceContainer.Container = this.CurrentCulture.RomanceTypes.ToList();
+            IRomance romance = this.CurrentCulture.ChooseRomance(this.GameManager.RomanceHandler.Romances);
             Debug.Log("ROMANCE: " + romance.Name);
-            RomanceContainer.Value =
-                RomanceContainer.Container.FindIndex(s => s.Equals(
+            this.RomanceContainer.Value = this.RomanceContainer.Container.FindIndex(s => s.Equals(
                     romance.Name, StringComparison.OrdinalIgnoreCase));
-            
-            JobChanged?.Invoke(this, EventArgs.Empty);
-            CultureChanged?.Invoke(this, EventArgs.Empty);
-            SetStatistics();
+
+            this.JobChanged?.Invoke(this, EventArgs.Empty);
+            this.CultureChanged?.Invoke(this, EventArgs.Empty);
+            this.SetStatistics();
         }
 
         protected void SetStatistics()
         {
-            StatisticWindow.SetStatistics(CurrentTemplate.Statistics.Select(stat => new Tuple<string, int>(stat.Key, stat.Value.Value)).ToList());
+            this.StatisticWindow.SetStatistics(this.CurrentTemplate.Statistics.Select(stat => new Tuple<string, int>(stat.Key, stat.Value.Value)).ToList());
         }
     }
 }
