@@ -74,15 +74,6 @@ namespace JoyLib.Code.Entities
         IEnumerable<IItemInstance> GetEquipment(string slotRef);
         bool UnequipItem(IItemInstance actor);
 
-        void DecreaseMana(int value);
-        void IncreaseMana(int value);
-
-        void DecreaseComposure(int value);
-        void IncreaseComposure(int value);
-
-        void DecreaseConcentration(int value);
-        void IncreaseConcentration(int value);
-
         void AddExperience(int value);
 
         bool AddJob(IJob job);

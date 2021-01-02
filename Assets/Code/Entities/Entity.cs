@@ -194,7 +194,7 @@ namespace JoyLib.Code.Entities
                 0,
                 new JoyObject[0]);
 
-            this.RegenTicker = Roller.Roll(0, REGEN_TICK_TIME);
+            this.RegenTicker = this.Roller.Roll(0, REGEN_TICK_TIME);
 
             this.MyWorld = world;
             this.JoyName = this.GetNameFromMultipleCultures();
@@ -293,21 +293,21 @@ namespace JoyLib.Code.Entities
             const int groupChance = 10;
             
             List<string> nameList = new List<string>();
-            int maxNames = m_Cultures.SelectMany(x => x.NameData)
+            int maxNames = this.m_Cultures.SelectMany(x => x.NameData)
                 .SelectMany(y => y.chain)
                 .Max(z => z);
 
             int lastGroup = Int32.MinValue;
             for (int i = 0; i <= maxNames; i++)
             {
-                ICulture random = m_Cultures[Roller.Roll(0, m_Cultures.Count)];
+                ICulture random = this.m_Cultures[this.Roller.Roll(0, this.m_Cultures.Count)];
 
                 while (random.NameData.SelectMany(x => x.chain).Max(y => y) < maxNames)
                 {
-                    random = m_Cultures[Roller.Roll(0, m_Cultures.Count)];
+                    random = this.m_Cultures[this.Roller.Roll(0, this.m_Cultures.Count)];
                 }
 
-                if (lastGroup == int.MinValue && Roller.Roll(0, 100) < groupChance)
+                if (lastGroup == int.MinValue && this.Roller.Roll(0, 100) < groupChance)
                 {
                     int[] groups = random.NameData.SelectMany(data => data.groups).Distinct().ToArray();
 
@@ -317,7 +317,7 @@ namespace JoyLib.Code.Entities
                     }
                     else
                     {
-                        lastGroup = groups[Roller.Roll(0, groups.Length)];
+                        lastGroup = groups[this.Roller.Roll(0, groups.Length)];
                         if (random.NameData.Any(data => random.NameData.SelectMany(d => d.chain)
                                                             .Min(d => d) == i 
                                                 && data.groups.Contains(lastGroup)) == false)
@@ -331,53 +331,53 @@ namespace JoyLib.Code.Entities
                 nameList.Add(random.GetNameForChain(i, this.Gender.Name, lastGroup));
             }
 
-            m_Cultures.ForEach(culture => culture.ClearLastGroup());
+            this.m_Cultures.ForEach(culture => culture.ClearLastGroup());
             return String.Join(" ", nameList).Trim();
         }
 
         protected void SetCurrentTarget()
         {
-            m_CurrentTarget.idle = true;
-            m_CurrentTarget.intent = Intent.Interact;
-            m_CurrentTarget.searching = false;
-            m_CurrentTarget.target = null;
-            m_CurrentTarget.targetPoint = GlobalConstants.NO_TARGET;
+            this.m_CurrentTarget.idle = true;
+            this.m_CurrentTarget.intent = Intent.Interact;
+            this.m_CurrentTarget.searching = false;
+            this.m_CurrentTarget.target = null;
+            this.m_CurrentTarget.targetPoint = GlobalConstants.NO_TARGET;
         }
 
         public void Tick()
         {
-            if (m_FulfillmentData.Counter > 0 && m_FulfillmentData.DecrementCounter() == 0)
+            if (this.m_FulfillmentData.Counter > 0 && this.m_FulfillmentData.DecrementCounter() == 0)
             {
-                MonoBehaviourHandler.SetSpeechBubble(false);
+                this.MonoBehaviourHandler.SetSpeechBubble(false);
             }
 
-            if (m_FulfillmentData.Counter == 0)
+            if (this.m_FulfillmentData.Counter == 0)
             {
             }
 
-            RegenTicker += 1;
-            if (RegenTicker == REGEN_TICK_TIME)
+            this.RegenTicker += 1;
+            if (this.RegenTicker == REGEN_TICK_TIME)
             {
                 this.ModifyValue(DerivedValueName.HITPOINTS, 1);
                 this.ModifyValue(DerivedValueName.CONCENTRATION, 1);
                 this.ModifyValue(DerivedValueName.COMPOSURE, 1);
                 this.ModifyValue(DerivedValueName.MANA, 1);
 
-                RegenTicker = 0;
+                this.RegenTicker = 0;
 
-                foreach (INeed need in m_Needs.Values)
+                foreach (INeed need in this.m_Needs.Values)
                 {
                     need.Tick(this);
                 }
             }
 
-            UpdateMe();
+            this.UpdateMe();
         }
 
         public void AddQuest(IQuest quest)
         {
             quest.StartQuest(this);
-            QuestTracker?.AddQuest(GUID, quest);
+            QuestTracker?.AddQuest(this.GUID, quest);
         }
 
         public bool AddJob(IJob job)
@@ -429,52 +429,52 @@ namespace JoyLib.Code.Entities
             //Check statistics
             foreach (string tag in tags)
             {
-                if (m_Statistics.ContainsKey(tag))
+                if (this.m_Statistics.ContainsKey(tag))
                 {
-                    data.Add(new Tuple<string, int>(tag, m_Statistics[tag].Value));
+                    data.Add(new Tuple<string, int>(tag, this.m_Statistics[tag].Value));
                 }
             }
 
             //Fetch all statistics
             if (tags.Any(tag => tag.Equals("statistics", StringComparison.OrdinalIgnoreCase)))
             {
-                data.AddRange(m_Statistics.Select(pair =>
+                data.AddRange(this.m_Statistics.Select(pair =>
                     new Tuple<string, int>(pair.Key, pair.Value.Value)));
             }
 
             //Check skills
             foreach (string tag in tags)
             {
-                if (m_Skills.ContainsKey(tag))
+                if (this.m_Skills.ContainsKey(tag))
                 {
-                    data.Add(new Tuple<string, int>(tag, m_Skills[tag].Value));
+                    data.Add(new Tuple<string, int>(tag, this.m_Skills[tag].Value));
                 }
             }
 
             //Fetch all skills
             if (tags.Any(tag => tag.Equals("skills", StringComparison.OrdinalIgnoreCase)))
             {
-                data.AddRange(from IRollableValue<int> skill in m_Skills.Values
+                data.AddRange(from IRollableValue<int> skill in this.m_Skills.Values
                     select new Tuple<string, int>(skill.Name, skill.Value));
             }
 
             //Check needs
             foreach (string tag in tags)
             {
-                if (m_Needs.ContainsKey(tag))
+                if (this.m_Needs.ContainsKey(tag))
                 {
-                    data.Add(new Tuple<string, int>(tag, m_Needs[tag].Value));
+                    data.Add(new Tuple<string, int>(tag, this.m_Needs[tag].Value));
                 }
             }
 
             //Fetch all needs
             if (tags.Any(tag => tag.Equals("needs", StringComparison.OrdinalIgnoreCase)))
             {
-                data.AddRange(from INeed need in m_Needs select new Tuple<string, int>(need.Name, need.Value));
+                data.AddRange(from INeed need in this.m_Needs select new Tuple<string, int>(need.Name, need.Value));
             }
 
             //Check equipment
-            IEnumerable<IItemInstance> items = m_Equipment.Contents;
+            IEnumerable<IItemInstance> items = this.m_Equipment.Contents;
 
             foreach (string tag in tags)
             {
@@ -495,10 +495,10 @@ namespace JoyLib.Code.Entities
             //Check backpack
             foreach (string tag in tags)
             {
-                int identifiedNames = m_Backpack.Count(item =>
+                int identifiedNames = this.m_Backpack.Count(item =>
                     item.IdentifiedName.Equals(tag, StringComparison.OrdinalIgnoreCase));
 
-                int unidentifiedNames = m_Backpack.Count(item =>
+                int unidentifiedNames = this.m_Backpack.Count(item =>
                     item.ItemType.UnidentifiedName.Equals(tag, StringComparison.OrdinalIgnoreCase));
 
                 if (identifiedNames > 0)
@@ -517,7 +517,7 @@ namespace JoyLib.Code.Entities
             {
                 try
                 {
-                    IJob job = Jobs.First(j => j.Name.Equals(tag, StringComparison.OrdinalIgnoreCase));
+                    IJob job = this.Jobs.First(j => j.Name.Equals(tag, StringComparison.OrdinalIgnoreCase));
                     if (job is null == false)
                     {
                         data.Add(new Tuple<string, int>(job.Name, 1));
@@ -532,7 +532,7 @@ namespace JoyLib.Code.Entities
             //Fetch all job levels
             if (tags.Any(tag => tag.Equals("jobs", StringComparison.OrdinalIgnoreCase)))
             {
-                data.AddRange(from job in Jobs select new Tuple<string, int>(job.Name, 1));
+                data.AddRange(from job in this.Jobs select new Tuple<string, int>(job.Name, 1));
             }
 
             //Fetch gender data
@@ -621,26 +621,26 @@ namespace JoyLib.Code.Entities
 
         public void UpdateMe()
         {
-            HasMoved = false;
+            this.HasMoved = false;
 
-            VisionProvider.Update(this, this.MyWorld);
-            m_Driver.Locomotion(this);
+            this.VisionProvider.Update(this, this.MyWorld);
+            this.m_Driver.Locomotion(this);
         }
 
         public void SetPath(Queue<Vector2Int> pointsRef)
         {
-            m_PathfindingData = pointsRef;
+            this.m_PathfindingData = pointsRef;
         }
 
         public void AddIdentifiedItem(string nameRef)
         {
-            m_IdentifiedItems.Add(nameRef);
+            this.m_IdentifiedItems.Add(nameRef);
         }
 
         public new void Move(Vector2Int position)
         {
             base.Move(position);
-            foreach (IJoyObject joyObject in Backpack)
+            foreach (IJoyObject joyObject in this.Backpack)
             {
                 joyObject.Move(position);
             }
@@ -648,9 +648,9 @@ namespace JoyLib.Code.Entities
 
         public virtual bool RemoveContents(IItemInstance item)
         {
-            if (m_Backpack.Contains(item))
+            if (this.m_Backpack.Contains(item))
             {
-                m_Backpack.Remove(item);
+                this.m_Backpack.Remove(item);
                 this.ItemRemoved?.Invoke(this, new ItemChangedEventArgs(){ Item = item });
                 return true;
             }
@@ -664,7 +664,7 @@ namespace JoyLib.Code.Entities
             bool result = this.Equipment.RemoveContents(item);
 
             //Then the backpack
-            result |=  RemoveContents(item);
+            result |= this.RemoveContents(item);
             return result;
         }
 
@@ -678,7 +678,7 @@ namespace JoyLib.Code.Entities
             try
             {
                 List<IItemInstance> matchingItems = new List<IItemInstance>();
-                foreach (IItemInstance item in m_Backpack)
+                foreach (IItemInstance item in this.m_Backpack)
                 {
                     int matches = 0;
                     foreach (string tag in tags)
@@ -721,48 +721,6 @@ namespace JoyLib.Code.Entities
             return this.Equipment.Contains(actor) && this.Equipment.RemoveContents(actor);
         }
 
-        public void DecreaseMana(int value)
-        {
-            this.ModifyValue(DerivedValueName.MANA, -value);
-        }
-
-        public void IncreaseMana(int value)
-        {
-            this.ModifyValue(DerivedValueName.MANA, value);
-        }
-
-        public void DecreaseComposure(int value)
-        {
-            this.ModifyValue(DerivedValueName.COMPOSURE, -value);
-        }
-
-        public void IncreaseComposure(int value)
-        {
-            this.ModifyValue(DerivedValueName.COMPOSURE, value);
-        }
-
-        public void DecreaseConcentration(int value)
-        {
-            this.ModifyValue(DerivedValueName.CONCENTRATION, -value);
-        }
-
-        public void IncreaseConcentration(int value)
-        {
-            this.ModifyValue(DerivedValueName.CONCENTRATION, value);
-        }
-
-        public override int ModifyValue(string name, int value)
-        {
-            int result = base.ModifyValue(name, value);
-            this.DerivedValueChange?.Invoke(this, new ValueChangedEventArgs()
-            {
-                Delta = value,
-                Name = name,
-                NewValue = result
-            });
-            return result;
-        }
-
         public void AddExperience(int value)
         {
             int result = this.CurrentJob.AddExperience(value);
@@ -778,7 +736,7 @@ namespace JoyLib.Code.Entities
         {
             int damage = value;
 
-            int result = base.DamageValue(DerivedValueName.HITPOINTS, damage);
+            int result = this.DamageValue(DerivedValueName.HITPOINTS, damage);
             this.DerivedValueChange?.Invoke(this, new ValueChangedEventArgs()
             {
                 Delta = damage,
@@ -796,13 +754,13 @@ namespace JoyLib.Code.Entities
         {
             get
             {
-                return m_Backpack;
+                return this.m_Backpack;
             }
         }
 
         public virtual bool AddContents(IItemInstance actor)
         {
-            if (m_IdentifiedItems.Any(i => i.Equals(actor.JoyName, StringComparison.OrdinalIgnoreCase)))
+            if (this.m_IdentifiedItems.Any(i => i.Equals(actor.JoyName, StringComparison.OrdinalIgnoreCase)))
             {
                 actor.IdentifyMe();
             }
@@ -817,7 +775,7 @@ namespace JoyLib.Code.Entities
 
             if (this.m_Backpack.Contains(actor) == false)
             {
-                m_Backpack.Add(actor);
+                this.m_Backpack.Add(actor);
             }
             
             this.ItemAdded?.Invoke(this, new ItemChangedEventArgs(){ Item = actor });
@@ -854,7 +812,7 @@ namespace JoyLib.Code.Entities
         {
             foreach (IItemInstance actor in actors)
             {
-                if (m_IdentifiedItems.Any(i => i.Equals(actor.JoyName, StringComparison.OrdinalIgnoreCase)))
+                if (this.m_IdentifiedItems.Any(i => i.Equals(actor.JoyName, StringComparison.OrdinalIgnoreCase)))
                 {
                     actor.IdentifyMe();
                 }
@@ -871,7 +829,7 @@ namespace JoyLib.Code.Entities
 
         public virtual void Clear()
         {
-            m_Backpack.Clear();
+            this.m_Backpack.Clear();
         }
 
         public string ContentString { get; }
@@ -886,34 +844,34 @@ namespace JoyLib.Code.Entities
 
         public NeedAIData CurrentTarget
         {
-            get { return m_CurrentTarget; }
-            set { m_CurrentTarget = value; }
+            get { return this.m_CurrentTarget; }
+            set { this.m_CurrentTarget = value; }
         }
 
-        public IDriver Driver => m_Driver;
+        public IDriver Driver => this.m_Driver;
 
         public EquipmentStorage Equipment => this.m_Equipment;
 
         public IDictionary<string, IRollableValue<int>> Statistics
         {
-            get { return m_Statistics; }
+            get { return this.m_Statistics; }
         }
 
         public IDictionary<string, IEntitySkill> Skills
         {
-            get { return m_Skills; }
+            get { return this.m_Skills; }
         }
 
         public IDictionary<string, INeed> Needs
         {
-            get { return m_Needs; }
+            get { return this.m_Needs; }
         }
 
-        public List<IAbility> Abilities => m_Abilities;
+        public List<IAbility> Abilities => this.m_Abilities;
 
         public string JobName
         {
-            get { return m_CurrentJob.Name; }
+            get { return this.m_CurrentJob.Name; }
         }
 
         public bool Sentient
@@ -923,50 +881,48 @@ namespace JoyLib.Code.Entities
 
         public int Size
         {
-            get { return m_Size; }
+            get { return this.m_Size; }
         }
 
         public HashSet<Vector2Int> Vision
         {
-            get { return m_VisionProvider.Vision; }
+            get { return this.m_VisionProvider.Vision; }
         }
 
         public bool PlayerControlled { get; set; }
 
-        public List<IItemInstance> Backpack => m_Backpack;
+        public List<IItemInstance> Backpack => this.m_Backpack;
 
-        public IItemInstance NaturalWeapons => m_NaturalWeapons;
+        public IItemInstance NaturalWeapons => this.m_NaturalWeapons;
 
-        public List<string> IdentifiedItems => m_IdentifiedItems;
-        public IJob CurrentJob => m_CurrentJob;
+        public List<string> IdentifiedItems => this.m_IdentifiedItems;
+        public IJob CurrentJob => this.m_CurrentJob;
 
         public bool HasMoved { get; set; }
 
         public FulfillmentData FulfillmentData
         {
-            get => m_FulfillmentData;
+            get => this.m_FulfillmentData;
             set
             {
-                m_FulfillmentData = value;
-                if (m_FulfillmentData.Name.Equals("none", StringComparison.OrdinalIgnoreCase) == false &&
-                    m_FulfillmentData.Name.IsNullOrEmpty() == false)
+                this.m_FulfillmentData = value;
+                if (this.m_FulfillmentData.Name.Equals("none", StringComparison.OrdinalIgnoreCase) == false && this.m_FulfillmentData.Name.IsNullOrEmpty() == false)
                 {
-                    MonoBehaviourHandler.SetSpeechBubble(m_FulfillmentData.Counter > 0,
-                        m_Needs[m_FulfillmentData.Name].FulfillingSprite);
+                    this.MonoBehaviourHandler.SetSpeechBubble(this.m_FulfillmentData.Counter > 0, this.m_Needs[this.m_FulfillmentData.Name].FulfillingSprite);
                 }
             }
         }
 
         public ISexuality Sexuality
         {
-            get => m_Sexuality;
-            set => m_Sexuality = value;
+            get => this.m_Sexuality;
+            set => this.m_Sexuality = value;
         }
 
         public IRomance Romance
         {
-            get => m_Romance;
-            set => m_Romance = value;
+            get => this.m_Romance;
+            set => this.m_Romance = value;
         }
 
         public IAbility TargetingAbility { get; set; }
@@ -1007,35 +963,35 @@ namespace JoyLib.Code.Entities
 
         public Quest QuestOffered { get; set; }
 
-        public List<ICulture> Cultures => m_Cultures;
+        public List<ICulture> Cultures => this.m_Cultures;
 
-        public IVision VisionProvider => m_VisionProvider;
+        public IVision VisionProvider => this.m_VisionProvider;
 
-        public List<string> Slots => m_Slots;
+        public List<string> Slots => this.m_Slots;
 
         public int VisionMod
         {
-            get { return m_Statistics[EntityStatistic.CUNNING].Value + GlobalConstants.MINIMUM_VISION_DISTANCE; }
+            get { return this.m_Statistics[EntityStatistic.CUNNING].Value + GlobalConstants.MINIMUM_VISION_DISTANCE; }
         }
 
         public Queue<Vector2Int> PathfindingData
         {
-            get { return m_PathfindingData; }
-            set { m_PathfindingData = value; }
+            get { return this.m_PathfindingData; }
+            set { this.m_PathfindingData = value; }
         }
 
         public IPathfinder Pathfinder
         {
-            get { return m_Pathfinder; }
+            get { return this.m_Pathfinder; }
         }
 
         public new IWorldInstance MyWorld
         {
-            get => m_MyWorld;
+            get => this.m_MyWorld;
             set
             {
-                m_MyWorld = value;
-                foreach (IItemInstance item in Backpack)
+                this.m_MyWorld = value;
+                foreach (IItemInstance item in this.Backpack)
                 {
                     item.MyWorld = value;
                 }

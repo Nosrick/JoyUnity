@@ -10,69 +10,16 @@ using JoyLib.Code.Managers;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.Unity;
-using JoyLib.Code.World;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace JoyLib.Code.Entities.Items
 {
     [Serializable]
-    public class ItemInstance : IItemInstance
+    public class ItemInstance : JoyObject, IItemInstance
     {
         protected const string DURABILITY = "durability";
 
-        protected List<string> m_Tags;
-        
-        public IDictionary<string, IDerivedValue> DerivedValues { get; protected set; }
-
-        public string TileSet { get; protected set; }
-        
-        public Vector2Int WorldPosition { get; protected set; }
-
-        public bool IsAnimated { get; protected set; }
-
-        public int ChosenSprite { get; protected set; }
-        
-        public int LastIndex { get; protected set; }
-
-        public int FramesSinceLastChange { get; protected set; }
-
-        public IEnumerable<string> Tags
-        {
-            get => this.m_Tags;
-            protected set => this.m_Tags = new List<string>(value);
-        }
-
-        public bool IsWall { get; protected set; }
-
-        public bool IsDestructible { get; protected set; }
-
-        public RNG Roller { get; protected set; }
-        public IWorldInstance MyWorld { get; set; }
-        
-        public Sprite Sprite => Sprites[ChosenSprite];
-
-        public Sprite[] Sprites { get; set; }
-
-        public long GUID { get; protected set; }
-
-        public string JoyName { get; protected set; }
-
-        public int HitPointsRemaining => GetValue(DURABILITY);
-
-        public int HitPoints => GetMaximum(DURABILITY);
-
-        public bool Conscious => HitPointsRemaining > 0;
-
-        public bool Alive => HitPointsRemaining > (HitPoints * (-1));
-        
-        protected NonUniqueDictionary<object, object> Data { get; set; }
-
-        public List<IJoyAction> CachedActions { get; protected set; }
-        
-        public MonoBehaviourHandler MonoBehaviourHandler { get; protected set; }
-
-        public IEnumerable<Tuple<string, string>> Tooltip { get; protected set; }
-        
         protected IEntity User { get; set; }
         
         protected bool m_Identified;
@@ -89,18 +36,18 @@ namespace JoyLib.Code.Entities.Items
         {
             get
             {
-                return m_OwnerGUID;
+                return this.m_OwnerGUID;
             }
             protected set
             {
-                m_OwnerGUID = value;
-                m_OwnerString = EntityHandler?.Get(m_OwnerGUID).JoyName;
+                this.m_OwnerGUID = value;
+                this.m_OwnerString = EntityHandler?.Get(this.m_OwnerGUID).JoyName;
             }
         }
 
         public string OwnerString
         {
-            get => m_OwnerString;
+            get => this.m_OwnerString;
         }
 
         public IEnumerable<IAbility> UniqueAbilities { get; protected set; }
@@ -167,7 +114,7 @@ namespace JoyLib.Code.Entities.Items
             //If it's not animated, select a random icon to represent it
             if (!this.IsAnimated && sprites != null)
             {
-                this.ChosenSprite = Roller.Roll(0, sprites.Length);
+                this.ChosenSprite = this.Roller.Roll(0, sprites.Length);
             }
             else
             {
@@ -179,17 +126,17 @@ namespace JoyLib.Code.Entities.Items
 
             this.CachedActions = actions is null ? new List<IJoyAction>() : new List<IJoyAction>(actions);
 
-            Initialise();
+            this.Initialise();
                 
             this.m_Type = type;
             
             this.Identified = identified;
             //chosenIcon = RNG.instance.Roll(0, m_Icons.Length - 1);
 
-            UniqueAbilities = uniqueAbilities is null == false ? new List<IAbility>(uniqueAbilities) : new List<IAbility>();
-            
-            CalculateValue();
-            ConstructDescription();
+            this.UniqueAbilities = uniqueAbilities is null == false ? new List<IAbility>(uniqueAbilities) : new List<IAbility>();
+
+            this.CalculateValue();
+            this.ConstructDescription();
 
             if (this.Prefab is null == false)
             {
@@ -201,7 +148,7 @@ namespace JoyLib.Code.Entities.Items
         {
             if (gameObject is null)
             {
-                GameObject newOne = GameObject.Instantiate(Prefab);
+                GameObject newOne = Object.Instantiate(this.Prefab);
                 newOne.GetComponent<MonoBehaviourHandler>().AttachJoyObject(this);
                 newOne.SetActive(active);
             }
@@ -215,7 +162,7 @@ namespace JoyLib.Code.Entities.Items
 
         public IItemInstance Copy(IItemInstance copy)
         {
-            Initialise();
+            this.Initialise();
 
             ItemInstance newItem = new ItemInstance(
                 copy.ItemType,
@@ -267,7 +214,7 @@ namespace JoyLib.Code.Entities.Items
             {
                 data.Add(new Tuple<string, string>(
                     "",
-                    "Unowned"));
+                    "This is not owned"));
             }
 
             data.Add(new Tuple<string, string>(
@@ -284,158 +231,23 @@ namespace JoyLib.Code.Entities.Items
 
         public void Use()
         {
-            if ((this.AllAbilities.Count() == 0) || User is null)
+            if (this.AllAbilities.Any() || this.User is null)
             {
                 return;
             }
 
             foreach (IAbility ability in this.AllAbilities)
             {
-                ability.OnUse(User, this);
+                ability.OnUse(this.User, this);
             }
 
-            foreach (IAbility ability in User.Abilities)
+            foreach (IAbility ability in this.User.Abilities)
             {
-                ability.OnUse(User, this);
+                ability.OnUse(this.User, this);
             }
             
-            CalculateValue();
-            ConstructDescription();
-        }
-
-        public IJoyAction FetchAction(string name)
-        {
-            return CachedActions.First(action => action.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
-        }
-
-        public bool AddTag(string tag)
-        {
-            if (HasTag(tag) == false)
-            {
-                return false;
-            }
-            
-            this.m_Tags.Add(tag);
-            return true;
-        }
-
-        public bool RemoveTag(string tag)
-        {
-            if (!HasTag(tag))
-            {
-                return false;
-            }
-            
-            this.m_Tags.Remove(tag);
-            return true;
-        }
-
-        public bool HasTag(string tag)
-        {
-            return this.m_Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase));
-        }
-
-        public void Move(Vector2Int newPosition)
-        {
-            this.WorldPosition = newPosition;
-            foreach (IJoyObject joyObject in this.Contents)
-            {
-                joyObject.Move(newPosition);
-            }
-        }
-
-        public int DamageValue(string name, int value)
-        {
-            return this.ModifyValue(name, -value);
-        }
-
-        public int RestoreValue(string name, int value)
-        {
-            return this.ModifyValue(name, value);
-        }
-
-        public int GetValue(string name)
-        {
-            if (this.DerivedValues.ContainsKey(name))
-            {
-                return this.DerivedValues[name].Value;
-            }
-            
-            throw new InvalidOperationException("Derived value of " + name + " not found on JoyObject " + this.ToString());
-        }
-
-        public int GetMaximum(string name)
-        {
-            if (this.DerivedValues.ContainsKey(name))
-            {
-                return this.DerivedValues[name].Maximum;
-            }
-            
-            throw new InvalidOperationException("Derived value of " + name + " not found on JoyObject " + this.ToString());
-        }
-
-        public virtual int ModifyMaximum(string name, int value)
-        {
-            if (this.DerivedValues.ContainsKey(name))
-            {
-                this.DerivedValues[name].Maximum += value;
-                return this.DerivedValues[name].Maximum;
-            }
-            
-            throw new InvalidOperationException("Derived value of " + name + " not found on JoyObject " + this.ToString());
-        }
-
-        public virtual int ModifyValue(string name, int value)
-        {
-            if (this.DerivedValues.ContainsKey(name))
-            {
-                this.DerivedValues[name].Value += value;
-                return this.DerivedValues[name].Value;
-            }
-
-            throw new InvalidOperationException("Derived value of " + name + " not found on JoyObject " + this.ToString());
-        }
-
-        //Used for deserialisation
-        public void SetIcons(Sprite[] sprites)
-        {
-            Sprites = sprites;
-        }
-
-        // Update is called once per frame
-        public virtual void Update ()
-        {
-            FramesSinceLastChange += 1;
-
-            if(IsAnimated == false)
-            {
-                return;
-            }
-
-            if (FramesSinceLastChange != GlobalConstants.FRAMES_PER_SECOND)
-            {
-                return;
-            }
-            
-            ChosenSprite += 1;
-            ChosenSprite %= Sprites.Length;
-
-            FramesSinceLastChange = 0;
-        }
-
-        public int CompareTo(object obj)
-        {
-            switch (obj)
-            {
-                case null:
-                    return 1;
-                
-                case JoyObject joyObject:
-                    return this.GUID.CompareTo(joyObject.GUID);
-                
-                default:
-                    throw new ArgumentException("Object is not a JoyObject");
-            }
+            this.CalculateValue();
+            this.ConstructDescription();
         }
 
         public override string ToString()
@@ -443,85 +255,46 @@ namespace JoyLib.Code.Entities.Items
             return "{ " + this.JoyName + " : " + this.GUID + "}";
         }
 
-        public bool AddData(object key, object value)
-        {
-            Data.Add(key, value);
-            return true;
-        }
-
-        public bool RemoveData(object key)
-        {
-            return Data.RemoveByKey(key) > 0;
-        }
-
-        public bool HasDataKey(object search)
-        {
-            return Data.ContainsKey(search);
-        }
-
-        public bool HasDataValue(object search)
-        {
-            return Data.ContainsValue(search);
-        }
-
-        public object[] GetDataValues(object key)
-        {
-            return Data.Where(tuple => tuple.Item1.Equals(key))
-                .Select(tuple => tuple.Item2)
-                .ToArray();
-        }
-
-        public object[] GetDataKeysForValue(object value)
-        {
-            return Data.Where(tuple => tuple.Item2.Equals(value))
-                .Select(tuple => tuple.Item1)
-                .ToArray();
-        }
-
-        public void AttachMonoBehaviourHandler(MonoBehaviourHandler mbh)
-        {
-            MonoBehaviourHandler = mbh;
-        }
-
         protected void Initialise()
         {
-            if(GlobalConstants.GameManager is null == false)
+            if (GlobalConstants.GameManager is null)
             {
-                ItemHandler = GlobalConstants.GameManager.ItemHandler;
-                EntityHandler = GlobalConstants.GameManager.EntityHandler;
+                return;
             }
+            ItemHandler = GlobalConstants.GameManager.ItemHandler;
+            EntityHandler = GlobalConstants.GameManager.EntityHandler;
         }
         
         public void SetOwner(long newOwner, bool recursive = false)
         {
-            OwnerGUID = newOwner;
+            this.OwnerGUID = newOwner;
 
             if (recursive)
             {
-                foreach (ItemInstance item in this.Contents)
+                foreach (IItemInstance item in this.Contents)
                 {
-                    item.SetOwner(newOwner, recursive);
+                    item.SetOwner(newOwner, true);
                 }
             }
-            
-            ConstructDescription();
+
+            this.ConstructDescription();
         }
 
         public void Interact(IEntity user)
         {
-            SetUser(user);
+            this.SetUser(user);
 
-            Use();
+            this.Use();
 
-            if(!Identified)
+            if(!this.Identified)
             {
-                IdentifyMe();
-                user.AddIdentifiedItem(DisplayName);
+                this.IdentifyMe();
+                user.AddIdentifiedItem(this.DisplayName);
             }
             //Identify any identical items the user is carrying
-            foreach (ItemInstance item in user.Backpack)
+            foreach (IItemInstance item in user.Backpack)
             {
-                if(item.DisplayName.Equals(DisplayName) && !item.Identified)
+                if(item.DisplayName.Equals(this.DisplayName) && !item.Identified)
                 {
                     item.IdentifyMe();
                 }
@@ -538,10 +311,10 @@ namespace JoyLib.Code.Entities.Items
 
         public IItemInstance TakeMyItem(int index)
         {
-            if(index > 0 && index < m_Contents.Count)
+            if(index > 0 && index < this.m_Contents.Count)
             {
-                IItemInstance item = ItemHandler?.GetItem(m_Contents[index]);
-                m_Contents.RemoveAt(index);
+                IItemInstance item = ItemHandler?.GetItem(this.m_Contents[index]);
+                this.m_Contents.RemoveAt(index);
                 return item;
             }
 
@@ -562,11 +335,11 @@ namespace JoyLib.Code.Entities.Items
                 result |= c.Contains(actor);
                 if (result)
                 {
-                    return result;
+                    return true;
                 }
             }
 
-            return result;
+            return false;
         }
 
         public bool CanAddContents(IItemInstance actor)
@@ -585,10 +358,10 @@ namespace JoyLib.Code.Entities.Items
         {
             if(this.CanAddContents(actor))
             {
-                m_Contents.Add(actor.GUID);
+                this.m_Contents.Add(actor.GUID);
 
-                CalculateValue();
-                ConstructDescription();
+                this.CalculateValue();
+                this.ConstructDescription();
                 
                 this.ItemAdded?.Invoke(this, new ItemChangedEventArgs() { Item = actor });
                 return true;
@@ -599,14 +372,16 @@ namespace JoyLib.Code.Entities.Items
 
         public bool AddContents(IEnumerable<IItemInstance> actors)
         {
-            m_Contents.AddRange(actors.Where(actor => this.m_Contents.Any(GUID => GUID == actor.GUID) == false)
+            IEnumerable<IItemInstance> itemInstances = actors as IItemInstance[] ?? actors.ToArray();
+            this.m_Contents.AddRange(itemInstances.Where(actor => 
+                    this.m_Contents.Any(itemGUID => itemGUID == actor.GUID) == false)
                 .Select(actor => actor.GUID));
-            
-            CalculateValue();
-            ConstructDescription();
-            foreach (IItemInstance actor in actors)
+
+            this.CalculateValue();
+            this.ConstructDescription();
+            foreach (IItemInstance actor in itemInstances)
             {
-                this.ItemAdded?.Invoke(this, new ItemChangedEventArgs() { Item = actor });
+                this.ItemAdded?.Invoke(this, new ItemChangedEventArgs { Item = actor });
             }
 
             return true;
@@ -614,16 +389,16 @@ namespace JoyLib.Code.Entities.Items
 
         public bool RemoveContents(IItemInstance actor)
         {
-            bool result = m_Contents.Remove(actor.GUID);
-            if (!result)
+            if (!this.m_Contents.Remove(actor.GUID))
             {
-                return result;
+                return false;
             }
-            CalculateValue();
-            ConstructDescription();
-            this.ItemRemoved?.Invoke(this, new ItemChangedEventArgs() { Item = actor });
 
-            return result;
+            this.CalculateValue();
+            this.ConstructDescription();
+            this.ItemRemoved?.Invoke(this, new ItemChangedEventArgs { Item = actor });
+
+            return true;
         }
 
         public void Clear()
@@ -633,81 +408,51 @@ namespace JoyLib.Code.Entities.Items
             {
                 this.RemoveContents(item);
             }
-            CalculateValue();
-            ConstructDescription();
+
+            this.CalculateValue();
+            this.ConstructDescription();
         }
 
         protected void CalculateValue()
         {
-            m_Value = (int)(m_Type.Value * m_Type.Material.ValueMod);
-            foreach (ItemInstance item in this.Contents)
+            this.m_Value = (int)(this.m_Type.Value * this.m_Type.Material.ValueMod);
+            foreach (IItemInstance item in this.Contents)
             {
-                m_Value += item.Value;
+                this.m_Value += item.Value;
             }
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (!(obj is IItemInstance other))
-            {
-                return false;
-            }
-
-            return other.GUID == this.GUID;
         }
 
         public bool Identified
         {
-            get
-            {
-                return m_Identified;
-            }
-            protected set
-            {
-                m_Identified = value;
-            }
+            get => this.m_Identified;
+            protected set => this.m_Identified = value;
         }
 
-        public bool Broken
-        {
-            get
-            {
-                return this.HitPointsRemaining <= 0;
-            }
-        }
+        public bool Broken => this.HitPointsRemaining <= 0;
 
-        public int Efficiency
-        {
-            get
-            {
-                return (int)(m_Type.Material.Bonus * (float)(HitPointsRemaining / HitPoints));
-            }
-        }
+        public int Efficiency => (int)(this.m_Type.Material.Bonus * (this.HitPointsRemaining / (float)this.HitPoints));
 
         public string ConditionString
         {
             get
             {
-                if (HitPointsRemaining / HitPoints == 1)
+                if (this.HitPointsRemaining / this.HitPoints == 1)
                 {
                     return "It is in great condition.";
                 }
-                else if (HitPointsRemaining / HitPoints > 0.75)
+                if (this.HitPointsRemaining / (float)this.HitPoints > 0.75)
                 {
                     return "It is in good condition.";
                 }
-                else if (HitPointsRemaining / HitPoints > 0.5)
+                if (this.HitPointsRemaining / (float)this.HitPoints > 0.5)
                 {
                     return "It is in fair condition.";
                 }
-                else if (HitPointsRemaining / HitPoints > 0.25)
+                if (this.HitPointsRemaining / (float)this.HitPoints > 0.25)
                 {
                     return "It is in poor condition.";
                 }
-                else
-                {
-                    return "It is close to breaking.";
-                }
+                return "It is close to breaking.";
             }
         }
 
@@ -719,84 +464,31 @@ namespace JoyLib.Code.Entities.Items
                 {
                     return "This item can be thrown.";
                 }
-                else
-                {
-                    ;
-                    return "This is equipped to " + string.Join(", ", this.ItemType.Slots);
-                }
+                return "This is equipped to " + string.Join(", ", this.ItemType.Slots);
             }
         }
 
-        public string DisplayName
-        {
-            get
-            {
-                if (Identified)
-                {
-                    return this.JoyName;
-                }
-                else
-                {
-                    return m_Type.UnidentifiedName;
-                }
-            }
-        }
+        public string DisplayName => this.Identified ? this.JoyName : this.m_Type.UnidentifiedName;
 
-        public string IdentifiedName
-        {
-            get
-            {
-                return this.JoyName;
-            }
-        }
+        public string IdentifiedName => this.JoyName;
 
-        public string DisplayDescription
-        {
-            get
-            {
-                if (Identified)
-                {
-                    return m_Type.Description;
-                }
-                else
-                {
-                    return m_Type.UnidentifiedDescription;
-                }
-            }
-        }
+        public string DisplayDescription => this.Identified ? this.m_Type.Description : this.m_Type.UnidentifiedDescription;
 
         public float Weight
         {
             get
             {
-                float weight = m_Type.Weight;
-                foreach(IItemInstance item in this.Contents)
-                {
-                    weight += item.Weight;
-                }
-
-                return weight;
+                return this.m_Type.Weight + this.Contents.Sum(item => item.Weight);
             }
         }
 
-        public string WeightString
-        {
-            get
-            {
-                return "It weighs " + Weight + " grams.";
-            }
-        }
+        public string WeightString => "It weighs " + this.Weight + " grams.";
 
         public IEnumerable<IItemInstance> Contents
         {
             get
             {
-                List<IItemInstance> contents = new List<IItemInstance>();
-                foreach(long GUID in m_Contents)
-                {
-                    contents.Add(ItemHandler?.GetItem(GUID));
-                }
-                return contents;
+                return this.m_Contents.Select(itemGUID => ItemHandler?.GetItem(itemGUID)).ToList();
             }
         }
 
@@ -846,14 +538,14 @@ namespace JoyLib.Code.Entities.Items
             get
             {
                 List<IAbility> abilities = new List<IAbility>();
-                abilities.AddRange(UniqueAbilities);
-                abilities.AddRange(ItemType.Abilities);
+                abilities.AddRange(this.UniqueAbilities);
+                abilities.AddRange(this.ItemType.Abilities);
                 return abilities;
             }
         }
 
-        public BaseItemType ItemType => m_Type;
+        public BaseItemType ItemType => this.m_Type;
 
-        public int Value => m_Value;
+        public int Value => this.m_Value;
     }
 }

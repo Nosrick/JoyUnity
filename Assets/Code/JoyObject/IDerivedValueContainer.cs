@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Events;
 
 namespace JoyLib.Code
 {
@@ -12,5 +13,8 @@ namespace JoyLib.Code
         int GetValue(string name);
         int GetMaximum(string name);
         int ModifyMaximum(string name, int value);
+
+        event ValueChangedEventHandler OnValueChange;
+        event ValueChangedEventHandler OnMaximumChange;
     }
 }

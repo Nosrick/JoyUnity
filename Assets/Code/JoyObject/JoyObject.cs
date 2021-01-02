@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code.Collections;
 using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Events;
 using JoyLib.Code.Managers;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
@@ -15,6 +16,9 @@ namespace JoyLib.Code
     [Serializable]
     public class JoyObject : IComparable, IJoyObject
     {
+        public event ValueChangedEventHandler OnValueChange;
+        public event ValueChangedEventHandler OnMaximumChange;
+        
         protected List<string> m_Tags;
         
         public IDictionary<string, IDerivedValue> DerivedValues { get; protected set; }
@@ -43,7 +47,7 @@ namespace JoyLib.Code
         
         public IWorldInstance MyWorld { get; set; }
         
-        public Sprite Sprite => Sprites[ChosenSprite];
+        public Sprite Sprite => this.Sprites[this.ChosenSprite];
 
         public Sprite[] Sprites { get; set; }
 
@@ -51,13 +55,13 @@ namespace JoyLib.Code
 
         public string JoyName { get; protected set; }
 
-        public int HitPointsRemaining => GetValue("hitpoints");
+        public int HitPointsRemaining => this.GetValue("hitpoints");
 
-        public int HitPoints => GetMaximum("hitpoints");
+        public int HitPoints => this.GetMaximum("hitpoints");
 
-        public bool Conscious => HitPointsRemaining > 0;
+        public bool Conscious => this.HitPointsRemaining > 0;
 
-        public bool Alive => HitPointsRemaining > (HitPoints * (-1));
+        public bool Alive => this.HitPointsRemaining > (this.HitPoints * (-1));
         
         protected NonUniqueDictionary<object, object> Data { get; set; }
 
@@ -94,14 +98,14 @@ namespace JoyLib.Code
             RNG roller = null,
             params string[] tags)
         {
-            Roller = roller is null ? new RNG() : roller; 
+            this.Roller = roller is null ? new RNG() : roller; 
             List<IJoyAction> tempActions = new List<IJoyAction>(); 
             foreach(string action in actions)
             {
                 tempActions.Add(ScriptingEngine.instance.FetchAction(action));
             }
-            
-            Initialise(
+
+            this.Initialise(
                 name,
                 derivedValues,
                 position,
@@ -120,7 +124,7 @@ namespace JoyLib.Code
             Sprite[] sprites, 
             params string[] tags)
         {
-            Initialise(
+            this.Initialise(
                 name,
                 derivedValues,
                 position,
@@ -172,7 +176,7 @@ namespace JoyLib.Code
             //If it's not animated, select a random icon to represent it
             if (!this.IsAnimated && sprites != null)
             {
-                this.ChosenSprite = Roller.Roll(0, sprites.Length);
+                this.ChosenSprite = this.Roller.Roll(0, sprites.Length);
             }
             else
             {
@@ -194,12 +198,12 @@ namespace JoyLib.Code
 
         public IJoyAction FetchAction(string name)
         {
-            return CachedActions.First(action => action.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            return this.CachedActions.First(action => action.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
 
         public bool AddTag(string tag)
         {
-            if (HasTag(tag))
+            if (this.HasTag(tag))
             {
                 return false;
             }
@@ -210,7 +214,7 @@ namespace JoyLib.Code
 
         public bool RemoveTag(string tag)
         {
-            if (!HasTag(tag))
+            if (!this.HasTag(tag))
             {
                 return false;
             }
@@ -261,51 +265,63 @@ namespace JoyLib.Code
 
         public virtual int ModifyMaximum(string name, int value)
         {
-            if (this.DerivedValues.ContainsKey(name))
+            if (!this.DerivedValues.ContainsKey(name))
             {
-                this.DerivedValues[name].Maximum += value;
-                return this.DerivedValues[name].Maximum;
+                throw new InvalidOperationException("Derived value of " + name + " not found on JoyObject " + this);
             }
-            
-            throw new InvalidOperationException("Derived value of " + name + " not found on JoyObject " + this.ToString());
+            this.DerivedValues[name].Maximum += value;
+            this.OnMaximumChange?.Invoke(this, new ValueChangedEventArgs
+            {
+                Delta = value,
+                Name = name,
+                NewValue = this.DerivedValues[name].Maximum
+            });
+            return this.DerivedValues[name].Maximum;
+
         }
 
         public virtual int ModifyValue(string name, int value)
         {
-            if (this.DerivedValues.ContainsKey(name))
+            if (!this.DerivedValues.ContainsKey(name))
             {
-                this.DerivedValues[name].Value = Math.Min(this.DerivedValues[name].Maximum, this.DerivedValues[name].Value + value);
-                return this.DerivedValues[name].Value;
+                throw new InvalidOperationException("Derived value of " + name + " not found on JoyObject " + this);
             }
+            this.DerivedValues[name].Value = Math.Min(this.DerivedValues[name].Maximum, this.DerivedValues[name].Value + value);
+            this.OnValueChange?.Invoke(this, new ValueChangedEventArgs
+            {
+                Delta = value,
+                Name = name,
+                NewValue = this.DerivedValues[name].Value
+            });
+            return this.DerivedValues[name].Value;
 
-            throw new InvalidOperationException("Derived value of " + name + " not found on JoyObject " + this.ToString());
         }
 
         //Used for deserialisation
         public void SetIcons(Sprite[] sprites)
         {
-            Sprites = sprites;
+            this.Sprites = sprites;
         }
 
         // Update is called once per frame
         public virtual void Update ()
         {
-            FramesSinceLastChange += 1;
+            this.FramesSinceLastChange += 1;
 
-            if(IsAnimated == false)
+            if(this.IsAnimated == false)
             {
                 return;
             }
 
-            if (FramesSinceLastChange != GlobalConstants.FRAMES_PER_SECOND)
+            if (this.FramesSinceLastChange != GlobalConstants.FRAMES_PER_SECOND)
             {
                 return;
             }
-            
-            ChosenSprite += 1;
-            ChosenSprite %= Sprites.Length;
 
-            FramesSinceLastChange = 0;
+            this.ChosenSprite += 1;
+            this.ChosenSprite %= this.Sprites.Length;
+
+            this.FramesSinceLastChange = 0;
         }
 
         public int CompareTo(object obj)
@@ -330,42 +346,42 @@ namespace JoyLib.Code
 
         public bool AddData(object key, object value)
         {
-            Data.Add(key, value);
+            this.Data.Add(key, value);
             return true;
         }
 
         public bool RemoveData(object key)
         {
-            return Data.RemoveByKey(key) > 0;
+            return this.Data.RemoveByKey(key) > 0;
         }
 
         public bool HasDataKey(object search)
         {
-            return Data.ContainsKey(search);
+            return this.Data.ContainsKey(search);
         }
 
         public bool HasDataValue(object search)
         {
-            return Data.ContainsValue(search);
+            return this.Data.ContainsValue(search);
         }
 
         public object[] GetDataValues(object key)
         {
-            return Data.Where(tuple => tuple.Item1.Equals(key))
+            return this.Data.Where(tuple => tuple.Item1.Equals(key))
                 .Select(tuple => tuple.Item2)
                 .ToArray();
         }
 
         public object[] GetDataKeysForValue(object value)
         {
-            return Data.Where(tuple => tuple.Item2.Equals(value))
+            return this.Data.Where(tuple => tuple.Item2.Equals(value))
                 .Select(tuple => tuple.Item1)
                 .ToArray();
         }
 
         public void AttachMonoBehaviourHandler(MonoBehaviourHandler mbh)
         {
-            MonoBehaviourHandler = mbh;
+            this.MonoBehaviourHandler = mbh;
         }
     }    
 }
