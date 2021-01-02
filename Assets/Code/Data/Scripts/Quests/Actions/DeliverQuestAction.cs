@@ -64,6 +64,7 @@ namespace JoyLib.Code.Quests
             {
                 deliveryItem = this.ItemFactory.CreateCompletelyRandomItem();
             }
+            deliveryItem.SetOwner(endPoint.GUID);
 
             this.Items = new List<IItemInstance> {deliveryItem};
             this.Actors = new List<IJoyObject> {endPoint};
