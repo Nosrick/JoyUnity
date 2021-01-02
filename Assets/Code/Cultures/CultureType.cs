@@ -143,7 +143,7 @@ namespace JoyLib.Code.Cultures
                 returnName = string.Join(" ", returnName, this.GetNameForChain(i, genderRef, chosenGroup));
             }
 
-            returnName = returnName.TrimEnd();
+            returnName = returnName.Trim();
 
             this.ClearLastGroup();
 
