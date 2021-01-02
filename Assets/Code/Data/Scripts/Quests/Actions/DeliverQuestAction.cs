@@ -7,7 +7,6 @@ using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.World;
-using UnityEngine;
 
 namespace JoyLib.Code.Quests
 {
@@ -91,7 +90,6 @@ namespace JoyLib.Code.Quests
         {
             if (action.LastTags.Any(tag => tag.Equals("item", StringComparison.OrdinalIgnoreCase)) == false)
             {
-                Debug.Log("NO ITEM TAG");
                 return false;
             }
 
@@ -99,27 +97,10 @@ namespace JoyLib.Code.Quests
                 tag.Equals("trade", StringComparison.OrdinalIgnoreCase)
                 || tag.Equals("give", StringComparison.OrdinalIgnoreCase)) == false)
             {
-                Debug.Log("NO TRADE/GIVE TAG");
                 return false;
             }
 
             if (action.LastParticipants.Intersect(this.Actors).Count() != this.Actors.Count)
-            {
-                Debug.Log("ACTORS DO NOT MATCH");
-                Debug.Log("ACTORS IN QUEST");
-                foreach (IJoyObject actor in this.Actors)
-                {
-                    Debug.Log(actor.ToString());
-                }
-                Debug.Log("ACTORS FOUND");
-                foreach (IJoyObject actor in action.LastParticipants)
-                {
-                    Debug.Log(actor.ToString());
-                }
-                return false;
-            }
-
-            if (action.LastArgs.Length == 0)
             {
                 return false;
             }
