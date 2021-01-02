@@ -47,7 +47,7 @@ namespace JoyLib.Code.Unity.GUI
             this.BarImage.color = this.BackgroundColour;
             this.NameText.color = this.TextColour;
             this.ValueText.color = this.TextColour;
-            this.BarImage.fillAmount = (float)this.Value / (float)this.Maximum;
+            this.BarImage.fillAmount = this.Value / (float)this.Maximum;
         }
 
         public override int Value
