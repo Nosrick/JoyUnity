@@ -4,6 +4,7 @@ using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Events;
+using JoyLib.Code.Scripting;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -118,18 +119,13 @@ namespace JoyLib.Code.Unity.GUI
                 relationship.ModifyValueOfParticipant(this.Left.GUID, this.Right.GUID, difference);
             }
 
-            foreach (IItemInstance item in this.LeftOffering.Contents)
-            {
-                this.Right.AddContents(item);
-            }
+            ScriptingEngine.instance.FetchAction("tradeaction").Execute(
+                new IJoyObject[] {this.Left, this.Right},
+                new[] {"trade", "give", "item"},
+                this.LeftOffering.Contents,
+                    this.RightOffering.Contents);
 
             this.LeftOffering.RemoveAllItems();
-
-            foreach (IItemInstance item in this.RightOffering.Contents)
-            {
-                this.Left.AddContents(item);
-            }
-
             this.RightOffering.RemoveAllItems();
 
             this.SetActors(this.Left, this.Right);
