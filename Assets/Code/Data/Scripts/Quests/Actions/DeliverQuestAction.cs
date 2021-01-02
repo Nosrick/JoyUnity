@@ -7,6 +7,7 @@ using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.World;
+using UnityEngine;
 
 namespace JoyLib.Code.Quests
 {
@@ -88,22 +89,55 @@ namespace JoyLib.Code.Quests
 
         public bool ExecutedSuccessfully(IJoyAction action)
         {
-            if (action.Name.Equals("giveitemaction", StringComparison.OrdinalIgnoreCase) == false)
+            if (action.LastTags.Any(tag => tag.Equals("item", StringComparison.OrdinalIgnoreCase)) == false)
             {
+                Debug.Log("NO ITEM TAG");
+                return false;
+            }
+
+            if (action.LastTags.Any(tag =>
+                tag.Equals("trade", StringComparison.OrdinalIgnoreCase)
+                || tag.Equals("give", StringComparison.OrdinalIgnoreCase)) == false)
+            {
+                Debug.Log("NO TRADE/GIVE TAG");
                 return false;
             }
 
             if (action.LastParticipants.Intersect(this.Actors).Count() != this.Actors.Count)
             {
+                Debug.Log("ACTORS DO NOT MATCH");
+                Debug.Log("ACTORS IN QUEST");
+                foreach (IJoyObject actor in this.Actors)
+                {
+                    Debug.Log(actor.ToString());
+                }
+                Debug.Log("ACTORS FOUND");
+                foreach (IJoyObject actor in action.LastParticipants)
+                {
+                    Debug.Log(actor.ToString());
+                }
                 return false;
             }
 
-            if (action.LastArgs.Intersect(this.Items).Count() != this.Items.Count)
+            if (action.LastArgs.Length == 0)
             {
                 return false;
             }
 
-            return action.Successful;
+            List<IItemInstance> items = new List<IItemInstance>();
+            foreach (object obj in action.LastArgs)
+            {
+                if (obj is IEnumerable<IItemInstance> toAdd)
+                {
+                    items.AddRange(toAdd);
+                }
+                else if (obj is IItemInstance item)
+                {
+                    items.Add(item);
+                }
+            }
+
+            return items.Intersect(this.Items).Count() == this.Items.Count && action.Successful;
         }
 
         public string AssembleDescription()

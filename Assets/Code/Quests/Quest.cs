@@ -58,15 +58,15 @@ namespace JoyLib.Code.Quests
         {
             switch (searchTerm)
             {
-                case ItemInstance itemInstance:
+                case IItemInstance itemInstance:
                 {
                     return this.Steps[this.CurrentStep].Items.Contains(itemInstance);
                 }
-                case Entity entity:
+                case IEntity entity:
                 {
                     return this.Steps[this.CurrentStep].Actors.Contains(entity);
                 }
-                case WorldInstance worldInstance:
+                case IWorldInstance worldInstance:
                 {
                     return this.Steps[this.CurrentStep].Areas.Contains(worldInstance);
                 }
@@ -82,7 +82,7 @@ namespace JoyLib.Code.Quests
                 return false;
             }
 
-            foreach (ItemInstance reward in this.Rewards)
+            foreach (IItemInstance reward in this.Rewards)
             {
                 questor.AddContents(reward);
             }
