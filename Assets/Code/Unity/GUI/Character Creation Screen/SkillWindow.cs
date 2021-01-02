@@ -44,7 +44,7 @@ namespace JoyLib.Code.Unity.GUI
         {
             for (int i = 0; i < this.Items.Count; i++)
             {
-                this.Skills[this.Items[i].Name.ToLower()].Value = this.Items[i].Value;
+                this.Skills[this.Items[i].Name.ToLower()].SetValue(this.Items[i].Value);
             }
 
             return this.Skills;

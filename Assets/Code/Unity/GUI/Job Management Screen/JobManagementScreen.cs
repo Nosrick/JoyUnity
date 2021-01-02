@@ -301,14 +301,26 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
             int cost = -(this.Value - this.CurrentJob.Experience);
             this.Player.Jobs[index].SpendExperience(cost);
             this.Player.Abilities.AddRange(this.PurchasedAbilities.Values);
-            foreach (NamedItem item in this.Statistics)
+            foreach (GrowingNamedItem item in this.Statistics)
             {
-                this.Player.Statistics[item.Name.ToLower()].Value = item.Value;
+                int delta = item.Value - this.OriginalStatistics
+                    .First(stat => stat.Name.Equals(item.Name, StringComparison.OrdinalIgnoreCase)).Value;
+
+                if (delta != 0)
+                {
+                    this.Player.ModifyValue(item.Name.ToLower(), delta);
+                }
             }
 
-            foreach (NamedItem item in this.Skills)
+            foreach (GrowingNamedItem item in this.Skills)
             {
-                this.Player.Skills[item.Name.ToLower()].Value = item.Value;
+                int delta = item.Value - this.OriginalSkills
+                    .First(stat => stat.Name.Equals(item.Name, StringComparison.OrdinalIgnoreCase)).Value;
+
+                if (delta != 0)
+                {
+                    this.Player.ModifyValue(item.Name.ToLower(), delta);
+                }
             }
         }
 

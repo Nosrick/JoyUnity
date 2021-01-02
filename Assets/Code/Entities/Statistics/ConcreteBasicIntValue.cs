@@ -5,15 +5,15 @@
         public string Name
         {
             get;
-            set;
+            protected set;
         }
 
         public int Value
         {
             get;
-            set;
+            protected set;
         }
-        
+
         public ConcreteBasicIntValue()
         {}
         
@@ -21,6 +21,18 @@
         {
             this.Name = name;
             this.Value = value;
+        }
+
+        public int ModifyValue(int value)
+        {
+            this.Value += value;
+            return this.Value;
+        }
+
+        public int SetValue(int value)
+        {
+            this.Value = value;
+            return this.Value;
         }
     }
 }

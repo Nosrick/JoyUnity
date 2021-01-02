@@ -81,9 +81,6 @@ namespace JoyLib.Code.Entities
         bool ChangeJob(IJob job);
         
         void DamageMe(int value, Entity source);
-
-        event ValueChangedEventHandler DerivedValueChange;
-        event ValueChangedEventHandler DerivedValueMaximumChange;
         event ValueChangedEventHandler StatisticChange;
         event ValueChangedEventHandler SkillChange;
         event ValueChangedEventHandler ExperienceChange;

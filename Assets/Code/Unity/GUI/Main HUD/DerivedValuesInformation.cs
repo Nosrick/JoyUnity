@@ -37,10 +37,10 @@ namespace JoyLib.Code.Unity.GUI
             this.RectTransform = this.GetComponent<RectTransform>();
             
             this.Player = this.GameManager.Player;
-            this.Player.DerivedValueChange -= this.DerivedValueChange;
-            this.Player.DerivedValueChange += this.DerivedValueChange;
-            this.Player.DerivedValueMaximumChange -= this.DerivedValueMaximumChange;
-            this.Player.DerivedValueMaximumChange += this.DerivedValueMaximumChange;
+            this.Player.OnDerivedValueChange -= this.DerivedValueChange;
+            this.Player.OnDerivedValueChange += this.DerivedValueChange;
+            this.Player.OnMaximumChange -= this.DerivedValueMaximumChange;
+            this.Player.OnMaximumChange += this.DerivedValueMaximumChange;
             this.SetUpDerivedValues(this.Player.DerivedValues);
         }
 

@@ -121,6 +121,7 @@ public class GameManager : MonoBehaviour, IGameManager
         Entity.RelationshipHandler = this.RelationshipHandler;
         Entity.SkillHandler = this.SkillHandler;
         Entity.NaturalWeaponHelper = this.NaturalWeaponHelper;
+        Entity.DerivedValueHandler = this.DerivedValueHandler;
 
         this.m_StateManager.ChangeState(new CharacterCreationState());
     }

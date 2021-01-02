@@ -2,8 +2,8 @@
 {
     public class ConcreteBasicFloatValue : IBasicValue<float>
     {
-        public string Name { get; set; }
-        public float Value { get; set; }
+        public string Name { get; protected set; }
+        public float Value { get; protected set; }
 
         public ConcreteBasicFloatValue()
         {
@@ -13,6 +13,17 @@
         {
             this.Name = name;
             this.Value = value;
+        }
+        public float ModifyValue(float value)
+        {
+            this.Value += value;
+            return this.Value;
+        }
+
+        public float SetValue(float value)
+        {
+            this.Value = value;
+            return this.Value;
         }
     }
 }

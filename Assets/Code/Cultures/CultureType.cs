@@ -286,7 +286,7 @@ namespace JoyLib.Code.Cultures
             Dictionary<string, IRollableValue<int>> stats = new Dictionary<string, IRollableValue<int>>(baseStats);
             foreach (string stat in baseStats.Keys)
             {
-                stats[stat].Value += this.GetStatVariance(stat);
+                stats[stat].ModifyValue(this.GetStatVariance(stat));
             }
 
             return stats;

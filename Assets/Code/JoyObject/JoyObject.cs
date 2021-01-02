@@ -16,7 +16,7 @@ namespace JoyLib.Code
     [Serializable]
     public class JoyObject : IComparable, IJoyObject
     {
-        public event ValueChangedEventHandler OnValueChange;
+        public event ValueChangedEventHandler OnDerivedValueChange;
         public event ValueChangedEventHandler OnMaximumChange;
         
         protected List<string> m_Tags;
@@ -201,6 +201,16 @@ namespace JoyLib.Code
             return this.CachedActions.First(action => action.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
 
+        protected virtual void OnMaximumChanged(object sender, ValueChangedEventArgs args)
+        {
+            this.OnMaximumChange?.Invoke(sender, args);
+        }
+
+        protected virtual void OnDerivedValueChanged(object sender, ValueChangedEventArgs args)
+        {
+            this.OnDerivedValueChange?.Invoke(sender, args);
+        }
+
         public bool AddTag(string tag)
         {
             if (this.HasTag(tag))
@@ -243,7 +253,7 @@ namespace JoyLib.Code
             return this.ModifyValue(name, value);
         }
 
-        public int GetValue(string name)
+        public virtual int GetValue(string name)
         {
             if (this.DerivedValues.Keys.Any(key => key.Equals(name, StringComparison.OrdinalIgnoreCase)))
             {
@@ -253,7 +263,7 @@ namespace JoyLib.Code
             throw new InvalidOperationException("Derived value of " + name + " not found on JoyObject " + this.ToString());
         }
 
-        public int GetMaximum(string name)
+        public virtual int GetMaximum(string name)
         {
             if (this.DerivedValues.Keys.Any(key => key.Equals(name, StringComparison.OrdinalIgnoreCase)))
             {
@@ -263,21 +273,40 @@ namespace JoyLib.Code
             throw new InvalidOperationException("Derived value of " + name + " not found on JoyObject " + this.ToString());
         }
 
-        public virtual int ModifyMaximum(string name, int value)
+        public int SetBase(string name, int value)
         {
             if (!this.DerivedValues.ContainsKey(name))
             {
                 throw new InvalidOperationException("Derived value of " + name + " not found on JoyObject " + this);
             }
-            this.DerivedValues[name].Maximum += value;
+
+            int old = this.DerivedValues[name].Base;
+            this.DerivedValues[name].SetBase(value);
             this.OnMaximumChange?.Invoke(this, new ValueChangedEventArgs
             {
-                Delta = value,
+                Delta = value - old,
                 Name = name,
-                NewValue = this.DerivedValues[name].Maximum
+                NewValue = this.DerivedValues[name].Base
             });
-            return this.DerivedValues[name].Maximum;
+            return this.DerivedValues[name].Base;
+        }
+        
+        public int SetEnhancement(string name, int value)
+        {
+            if (!this.DerivedValues.ContainsKey(name))
+            {
+                throw new InvalidOperationException("Derived value of " + name + " not found on JoyObject " + this);
+            }
 
+            int old = this.DerivedValues[name].Enhancement;
+            this.DerivedValues[name].SetEnhancement(value);
+            this.OnMaximumChange?.Invoke(this, new ValueChangedEventArgs
+            {
+                Delta = value - old,
+                Name = name,
+                NewValue = this.DerivedValues[name].Enhancement
+            });
+            return this.DerivedValues[name].Enhancement;
         }
 
         public virtual int ModifyValue(string name, int value)
@@ -286,15 +315,32 @@ namespace JoyLib.Code
             {
                 throw new InvalidOperationException("Derived value of " + name + " not found on JoyObject " + this);
             }
-            this.DerivedValues[name].Value = Math.Min(this.DerivedValues[name].Maximum, this.DerivedValues[name].Value + value);
-            this.OnValueChange?.Invoke(this, new ValueChangedEventArgs
+            this.DerivedValues[name].ModifyValue(value);
+            this.OnDerivedValueChange?.Invoke(this, new ValueChangedEventArgs
             {
                 Delta = value,
                 Name = name,
                 NewValue = this.DerivedValues[name].Value
             });
             return this.DerivedValues[name].Value;
+        }
 
+        public virtual int SetValue(string name, int value)
+        {
+            if (!this.DerivedValues.ContainsKey(name))
+            {
+                throw new InvalidOperationException("Derived value of " + name + " not found on JoyObject " + this);
+            }
+
+            int old = this.DerivedValues[name].Value;
+            this.DerivedValues[name].SetValue(value);
+            this.OnDerivedValueChange?.Invoke(this, new ValueChangedEventArgs
+            {
+                Delta = value - old,
+                Name = name,
+                NewValue = this.DerivedValues[name].Value
+            });
+            return this.DerivedValues[name].Value;
         }
 
         //Used for deserialisation

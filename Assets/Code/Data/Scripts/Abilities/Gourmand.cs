@@ -4,12 +4,12 @@ using JoyLib.Code.Entities.Items;
 
 namespace JoyLib.Code.Entities.Abilities
 {
-    public class Gourmet : AbstractAbility
+    public class Gourmand : AbstractAbility
     {
-        public Gourmet()
+        public Gourmand()
         : base(
-            "Gourmet",
-            "gourmet",
+            "Gourmand",
+            "Gourmand",
             "Doubles the efficacy of food items.",
             false,
             0,
@@ -28,7 +28,7 @@ namespace JoyLib.Code.Entities.Abilities
             if (target is IItemInstance item 
                 && item.HasTag("food"))
             {
-                user.Needs["hunger"].Value += item.Value;
+                user.Needs["hunger"].ModifyValue(item.Value);
                 return true;
             }
 

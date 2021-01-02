@@ -46,8 +46,7 @@ namespace JoyLib.Code.Unity.GUI
                 if (GUIManager.IsActive(GUINames.TOOLTIP))
                 {
                     GUIManager.CloseGUI(GUINames.TOOLTIP);
-                    GUIManager.OpenGUI(GUINames.TOOLTIP);
-                    GUIManager.GetGUI(GUINames.TOOLTIP).GetComponent<Tooltip>().Show(null, this.Tooltip);
+                    GUIManager.OpenGUI(GUINames.TOOLTIP).GetComponent<Tooltip>().Show(null, this.Tooltip);
                 }
             }
         }

@@ -39,19 +39,19 @@ namespace JoyLib.Code.Entities.Statistics
         public string Name
         {
             get;
-            set;
+            protected set;
         }
 
         public int Value
         {
             get;
-            set;
+            protected set;
         }
 
         public int SuccessThreshold
         {
             get;
-            set;
+            protected set;
         }
 
         public NonUniqueDictionary<INeed, float> GoverningNeeds

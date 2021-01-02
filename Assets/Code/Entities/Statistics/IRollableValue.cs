@@ -5,7 +5,6 @@
         int SuccessThreshold
         {
             get;
-            set;
         }
     }
 }

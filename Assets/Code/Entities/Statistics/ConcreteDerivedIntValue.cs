@@ -1,9 +1,10 @@
-﻿namespace JoyLib.Code.Entities.Statistics
+﻿using System;
+using UnityEngine;
+
+namespace JoyLib.Code.Entities.Statistics
 {
     public class ConcreteDerivedIntValue : IDerivedValue
     {
-        public const string ITEM_HITPOINTS = "item hitpoints";
-
         public string Name
         {
             get;
@@ -13,35 +14,67 @@
         public int Maximum
         {
             get;
-            set;
+            protected set;
         }
 
         public int Value
         {
             get;
-            set;
+            protected set;
         }
-        
+
+        public int Base { get; protected set; }
+
+        public int Enhancement { get; protected set; }
+
         public ConcreteDerivedIntValue()
         {}
 
         public ConcreteDerivedIntValue(string name, int value, int maximum)
         {
             this.Name = name;
+            this.Base = value;
             this.Value = value;
             this.Maximum = maximum;
         }
 
-        public int SetValue(string data)
+        public ConcreteDerivedIntValue(
+            string name,
+            int baseValue,
+            int enhancement,
+            int value)
         {
-            this.Value = int.Parse(data);
+            this.Name = name;
+            this.Base = baseValue;
+            this.Enhancement = enhancement;
+            this.Maximum = this.Base + this.Enhancement;
+            this.Value = Mathf.Clamp(value, 0, this.Maximum);
+        }
+
+        public int SetValue(int data)
+        {
+            this.Value = Mathf.Clamp(data, -this.Maximum, this.Maximum);
             return this.Value;
         }
 
-        public int SetMaximum(string data)
+        public int ModifyValue(int value)
         {
-            this.Maximum = int.Parse(data);
-            return this.Maximum;
+            this.Value = Mathf.Clamp(this.Value + value, -this.Maximum, this.Maximum);
+            return this.Value;
+        }
+
+        public int SetBase(int data)
+        {
+            this.Base = Math.Max(1, data);
+            this.Maximum = this.Base + this.Enhancement;
+            return this.Base;
+        }
+
+        public int SetEnhancement(int data)
+        {
+            this.Enhancement = Math.Max(0, data);
+            this.Maximum = this.Base + this.Enhancement;
+            return this.Enhancement;
         }
     }
 
@@ -51,5 +84,6 @@
         public const string CONCENTRATION = "concentration";
         public const string COMPOSURE = "composure";
         public const string MANA = "mana";
+        public const string DURABILITY = "durability";
     }
 }

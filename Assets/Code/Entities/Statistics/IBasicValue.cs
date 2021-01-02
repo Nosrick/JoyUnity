@@ -5,13 +5,14 @@
         string Name
         {
             get;
-            set;
         }
 
         T Value
         {
             get;
-            set;
         }
+
+        T ModifyValue(T value);
+        T SetValue(T value);
     }
 }

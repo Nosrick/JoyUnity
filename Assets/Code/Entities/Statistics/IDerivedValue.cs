@@ -5,10 +5,18 @@
         int Maximum
         {
             get;
-            set;
         }
 
-        int SetValue(string data);
-        int SetMaximum(string data);
+        int Base
+        {
+            get;
+        }
+
+        int Enhancement
+        {
+            get;
+        }
+        int SetBase(int data);
+        int SetEnhancement(int data);
     }
 }

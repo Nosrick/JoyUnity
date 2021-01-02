@@ -29,8 +29,8 @@ namespace JoyLib.Code.Entities
 {
     public class Entity : JoyObject, IEntity
     {
-        public event ValueChangedEventHandler DerivedValueChange;
-        public event ValueChangedEventHandler DerivedValueMaximumChange;
+        //public event ValueChangedEventHandler OnDerivedValueChange;
+        //public event ValueChangedEventHandler OnMaximumChange;
         public event ValueChangedEventHandler StatisticChange;
         public event ValueChangedEventHandler SkillChange;
         public event ValueChangedEventHandler ExperienceChange;
@@ -79,6 +79,8 @@ namespace JoyLib.Code.Entities
         public static IEntitySkillHandler SkillHandler { get; set; }
         public static IQuestTracker QuestTracker { get; set; }
         public static NaturalWeaponHelper NaturalWeaponHelper { get; set; }
+        
+        public static IDerivedValueHandler DerivedValueHandler { get; set; }
 
         protected readonly static string[] STANDARD_ACTIONS = new string[]
         {
@@ -204,6 +206,8 @@ namespace JoyLib.Code.Entities
 
             this.SetCurrentTarget();
             this.ConstructDescription();
+
+            this.StatisticChange += this.RecalculateDVs;
         }
 
         /// <summary>
@@ -286,6 +290,35 @@ namespace JoyLib.Code.Entities
             };
 
             return data;
+        }
+
+        protected void RecalculateDVs(object sender, ValueChangedEventArgs args)
+        {
+            if (sender != this)
+            {
+                return;
+            }
+
+            if (args.Delta == 0)
+            {
+                return;
+            }
+
+            foreach (string name in this.DerivedValues.Keys)
+            {
+                IDerivedValue dv = DerivedValueHandler.Calculate(name, this.Statistics.Values);
+                if (this.DerivedValues[name].Base == dv.Base)
+                {
+                    continue;
+                }
+                this.OnMaximumChanged(this, new ValueChangedEventArgs
+                {
+                    Delta = dv.Maximum - this.DerivedValues[name].Maximum,
+                    Name = name,
+                    NewValue = dv.Maximum
+                });
+                this.DerivedValues[name].SetBase(dv.Base);
+            }
         }
 
         protected string GetNameFromMultipleCultures()
@@ -424,26 +457,21 @@ namespace JoyLib.Code.Entities
 
         public IEnumerable<Tuple<string, int>> GetData(IEnumerable<string> tags, params object[] args)
         {
-            List<Tuple<string, int>> data = new List<Tuple<string, int>>();
-
             //Check statistics
-            foreach (string tag in tags)
-            {
-                if (this.m_Statistics.ContainsKey(tag))
-                {
-                    data.Add(new Tuple<string, int>(tag, this.m_Statistics[tag].Value));
-                }
-            }
+            IEnumerable<string> tagArray = tags as string[] ?? tags.ToArray();
+            List<Tuple<string, int>> data = (from tag in tagArray
+                where this.m_Statistics.ContainsKey(tag)
+                select new Tuple<string, int>(tag, this.m_Statistics[tag].Value)).ToList();
 
             //Fetch all statistics
-            if (tags.Any(tag => tag.Equals("statistics", StringComparison.OrdinalIgnoreCase)))
+            if (tagArray.Any(tag => tag.Equals("statistics", StringComparison.OrdinalIgnoreCase)))
             {
                 data.AddRange(this.m_Statistics.Select(pair =>
                     new Tuple<string, int>(pair.Key, pair.Value.Value)));
             }
 
             //Check skills
-            foreach (string tag in tags)
+            foreach (string tag in tagArray)
             {
                 if (this.m_Skills.ContainsKey(tag))
                 {
@@ -452,14 +480,14 @@ namespace JoyLib.Code.Entities
             }
 
             //Fetch all skills
-            if (tags.Any(tag => tag.Equals("skills", StringComparison.OrdinalIgnoreCase)))
+            if (tagArray.Any(tag => tag.Equals("skills", StringComparison.OrdinalIgnoreCase)))
             {
                 data.AddRange(from IRollableValue<int> skill in this.m_Skills.Values
                     select new Tuple<string, int>(skill.Name, skill.Value));
             }
 
             //Check needs
-            foreach (string tag in tags)
+            foreach (string tag in tagArray)
             {
                 if (this.m_Needs.ContainsKey(tag))
                 {
@@ -468,7 +496,7 @@ namespace JoyLib.Code.Entities
             }
 
             //Fetch all needs
-            if (tags.Any(tag => tag.Equals("needs", StringComparison.OrdinalIgnoreCase)))
+            if (tagArray.Any(tag => tag.Equals("needs", StringComparison.OrdinalIgnoreCase)))
             {
                 data.AddRange(from INeed need in this.m_Needs select new Tuple<string, int>(need.Name, need.Value));
             }
@@ -476,7 +504,7 @@ namespace JoyLib.Code.Entities
             //Check equipment
             IEnumerable<IItemInstance> items = this.m_Equipment.Contents;
 
-            foreach (string tag in tags)
+            foreach (string tag in tagArray)
             {
                 int result = this.m_Equipment.Contents.Count(item => item.HasTag(tag));
                 if (result > 0)
@@ -493,7 +521,7 @@ namespace JoyLib.Code.Entities
             }
 
             //Check backpack
-            foreach (string tag in tags)
+            foreach (string tag in tagArray)
             {
                 int identifiedNames = this.m_Backpack.Count(item =>
                     item.IdentifiedName.Equals(tag, StringComparison.OrdinalIgnoreCase));
@@ -513,11 +541,11 @@ namespace JoyLib.Code.Entities
             }
 
             //Check jobs
-            foreach (string tag in tags)
+            foreach (string tag in tagArray)
             {
                 try
                 {
-                    IJob job = this.Jobs.First(j => j.Name.Equals(tag, StringComparison.OrdinalIgnoreCase));
+                    IJob job = this.Jobs.FirstOrDefault(j => j.Name.Equals(tag, StringComparison.OrdinalIgnoreCase));
                     if (job is null == false)
                     {
                         data.Add(new Tuple<string, int>(job.Name, 1));
@@ -530,40 +558,40 @@ namespace JoyLib.Code.Entities
             }
 
             //Fetch all job levels
-            if (tags.Any(tag => tag.Equals("jobs", StringComparison.OrdinalIgnoreCase)))
+            if (tagArray.Any(tag => tag.Equals("jobs", StringComparison.OrdinalIgnoreCase)))
             {
                 data.AddRange(from job in this.Jobs select new Tuple<string, int>(job.Name, 1));
             }
 
             //Fetch gender data
-            if (tags.Any(tag => tag.Equals(this.Gender.Name, StringComparison.OrdinalIgnoreCase))
-                || tags.Any(tag => tag.Equals("gender", StringComparison.OrdinalIgnoreCase)))
+            if (tagArray.Any(tag => tag.Equals(this.Gender.Name, StringComparison.OrdinalIgnoreCase))
+                || tagArray.Any(tag => tag.Equals("gender", StringComparison.OrdinalIgnoreCase)))
             {
                 data.Add(new Tuple<string, int>(this.Gender.Name, 1));
             }
 
             //Fetch sex data
-            if (tags.Any(tag => tag.Equals(this.Sex.Name, StringComparison.OrdinalIgnoreCase))
-                || tags.Any(tag => tag.Equals("sex")))
+            if (tagArray.Any(tag => tag.Equals(this.Sex.Name, StringComparison.OrdinalIgnoreCase))
+                || tagArray.Any(tag => tag.Equals("sex")))
             {
                 data.Add(new Tuple<string, int>(this.Sex.Name, 1));
             }
 
-            if (tags.Any(tag => tag.Equals("can birth", StringComparison.OrdinalIgnoreCase)))
+            if (tagArray.Any(tag => tag.Equals("can birth", StringComparison.OrdinalIgnoreCase)))
             {
                 data.Add(new Tuple<string, int>("can birth", this.Sex.CanBirth == true ? 1 : 0));
             }
 
             //Fetch sexuality data
-            if (tags.Any(tag => tag.Equals(this.Sexuality.Name, StringComparison.OrdinalIgnoreCase))
-                || tags.Any(tag => tag.Equals("sexuality", StringComparison.OrdinalIgnoreCase)))
+            if (tagArray.Any(tag => tag.Equals(this.Sexuality.Name, StringComparison.OrdinalIgnoreCase))
+                || tagArray.Any(tag => tag.Equals("sexuality", StringComparison.OrdinalIgnoreCase)))
             {
                 data.Add(new Tuple<string, int>(this.Sexuality.Name, 1));
             }
 
             //Fetch romance data
-            if (tags.Any(tag => tag.Equals(this.Romance.Name, StringComparison.OrdinalIgnoreCase))
-                || tags.Any(tag => tag.Equals("romance", StringComparison.OrdinalIgnoreCase)))
+            if (tagArray.Any(tag => tag.Equals(this.Romance.Name, StringComparison.OrdinalIgnoreCase))
+                || tagArray.Any(tag => tag.Equals("romance", StringComparison.OrdinalIgnoreCase)))
             {
                 data.Add(new Tuple<string, int>(this.Romance.Name, 1));
             }
@@ -580,31 +608,31 @@ namespace JoyLib.Code.Entities
                     continue;
                 }
 
-                IEnumerable<IRelationship> relationships = RelationshipHandler?.GetAllForObject(this);
+                List<IRelationship> relationships = RelationshipHandler?.GetAllForObject(this).ToList();
 
                 if (relationships.IsNullOrEmpty())
                 {
                     return data.ToArray();
                 }
 
-                if (tags.Any(tag => tag.Equals("will mate", StringComparison.OrdinalIgnoreCase)))
+                if (tagArray.Any(tag => tag.Equals("will mate", StringComparison.OrdinalIgnoreCase)))
                 {
                     data.Add(new Tuple<string, int>(
                         other.JoyName,
-                        this.Sexuality.WillMateWith(this, other, relationships) == true ? 1 : 0));
+                        this.Sexuality.WillMateWith(this, other, relationships) ? 1 : 0));
                 }
 
-                if (tags.Any(tag => tag.Equals("will romance", StringComparison.OrdinalIgnoreCase)))
+                if (tagArray.Any(tag => tag.Equals("will romance", StringComparison.OrdinalIgnoreCase)))
                 {
                     data.Add(new Tuple<string, int>(
                         other.JoyName,
-                        this.Romance.WillRomance(this, other, relationships) == true ? 1 : 0));
+                        this.Romance.WillRomance(this, other, relationships) ? 1 : 0));
                 }
 
                 //Check relationships
                 foreach (IRelationship relationship in relationships)
                 {
-                    foreach (string tag in tags)
+                    foreach (string tag in tagArray)
                     {
                         if (relationship.Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase)))
                         {
@@ -823,6 +851,81 @@ namespace JoyLib.Code.Entities
         public virtual void Clear()
         {
             this.m_Backpack.Clear();
+        }
+
+        public override int GetValue(string name)
+        {
+            if (this.Statistics.ContainsKey(name))
+            {
+                return this.Statistics[name].Value;
+            }
+
+            return this.Skills.ContainsKey(name) ? this.Skills[name].Value : base.GetValue(name);
+        }
+
+        public override int ModifyValue(string name, int value)
+        {
+            if (this.Statistics.ContainsKey(name))
+            {
+                this.Statistics[name].ModifyValue(value);
+                this.StatisticChange?.Invoke(this, new ValueChangedEventArgs
+                {
+                    Delta = value,
+                    Name = name,
+                    NewValue = this.Statistics[name].Value
+                });
+                return this.Statistics[name].Value;
+            }
+
+            if (this.Skills.ContainsKey(name))
+            {
+                this.Skills[name].ModifyValue(value);
+                this.SkillChange?.Invoke(this, new ValueChangedEventArgs
+                {
+                    Delta = value,
+                    Name = name,
+                    NewValue = this.Skills[name].Value
+                });
+                return this.Skills[name].Value;
+            }
+
+            return base.ModifyValue(name, value);
+        }
+
+        public override int SetValue(string name, int value)
+        {
+            if (!this.Statistics.ContainsKey(name) && !this.Skills.ContainsKey(name))
+            {
+                return base.SetValue(name, value);
+            }
+
+            if (this.Statistics.ContainsKey(name))
+            {
+                int old = this.Statistics[name].Value;
+                this.Statistics[name].SetValue(value);
+                this.StatisticChange?.Invoke(this, new ValueChangedEventArgs
+                {
+                    Delta = value - old,
+                    Name = name,
+                    NewValue = this.Statistics[name].Value
+                });
+                return this.Statistics[name].Value;
+            }
+
+            if (this.Skills.ContainsKey(name))
+            {
+                int old = this.Skills[name].Value;
+                this.Skills[name].SetValue(value);
+                this.SkillChange?.Invoke(this, new ValueChangedEventArgs
+                {
+                    Delta = value - old,
+                    Name = name,
+                    NewValue = this.Skills[name].Value
+                });
+                return this.Skills[name].Value;
+            }
+
+            throw new InvalidOperationException("No value of " + name + " found on " + this.JoyName);
         }
 
         public string ContentString { get; }
