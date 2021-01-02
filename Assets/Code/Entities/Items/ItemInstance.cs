@@ -233,21 +233,23 @@ namespace JoyLib.Code.Entities.Items
 
         protected void ConstructDescription()
         {
-            List<Tuple<string, string>> data = new List<Tuple<string, string>>();
-            data.Add(new Tuple<string, string>(
+            List<Tuple<string, string>> data = new List<Tuple<string, string>>
+            {
+                new Tuple<string, string>(
+                    "",
+                    this.ConditionString),
+                new Tuple<string, string>(
+                    "",
+                    this.WeightString),
+                new Tuple<string, string>(
+                    "",
+                    this.ItemType.MaterialDescription)
+            };
+            /*data.Add(new Tuple<string, string>(
                 "",
                 this.Identified
                 ? this.ItemType.Description
-                : this.ItemType.UnidentifiedDescription));
-            data.Add(new Tuple<string, string>(
-                "",
-                this.ConditionString));
-            data.Add(new Tuple<string, string>(
-                "",
-                this.WeightString));
-            data.Add(new Tuple<string, string>(
-                "",
-                this.ItemType.MaterialDescription));
+                : this.ItemType.UnidentifiedDescription));*/
             if (this.ContentString.IsNullOrEmpty() == false)
             {
                 data.Add(new Tuple<string, string>(
