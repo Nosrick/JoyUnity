@@ -64,6 +64,7 @@ namespace JoyLib.Code.World.Generators.Interiors
                     templates[entityIndex], 
                     availablePoints[pointIndex],
                     null,
+                    null,
                     null, 
                     null,
                     null,

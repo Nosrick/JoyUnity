@@ -190,7 +190,10 @@ namespace JoyLib.Code.Entities.Items
                     this.WeightString),
                 new Tuple<string, string>(
                     "",
-                    this.ItemType.MaterialDescription)
+                    this.ItemType.MaterialDescription),
+                new Tuple<string, string>(
+                    "",
+                    this.SlotString)
             };
             /*data.Add(new Tuple<string, string>(
                 "",
@@ -207,8 +210,8 @@ namespace JoyLib.Code.Entities.Items
             if (this.OwnerString.IsNullOrEmpty() == false)
             {
                 data.Add(new Tuple<string, string>(
-                    "Owner:",
-                    this.OwnerString));
+                    "",
+                    "Owned by " + this.OwnerString));
             }
             else
             {
@@ -216,10 +219,10 @@ namespace JoyLib.Code.Entities.Items
                     "",
                     "This is not owned"));
             }
-
+            
             data.Add(new Tuple<string, string>(
-                "Value:",
-                this.Value.ToString()));
+                    "",
+                    "Worth " + this.Value));
 
             this.Tooltip = data;
         }
@@ -445,23 +448,23 @@ namespace JoyLib.Code.Entities.Items
                 float maximum = this.GetMaximum(DURABILITY);
                 if (durability == 0)
                 {
-                    return "This is broken.";
+                    return "Broken";
                 }
                 if (durability / maximum < 0.25)
                 {
-                    return "It is in poor condition.";
+                    return "In poor condition";
                 }
 
                 if (durability / maximum < 0.5)
                 {
-                    return "It is in fair condition.";
+                    return "In fair condition";
                 }
                 if (durability / maximum < 0.75)
                 {
-                    return "It is in good condition.";
+                    return "In good condition";
                 }
 
-                return "It is in great condition";
+                return "In great condition";
             }
         }
 
@@ -469,9 +472,9 @@ namespace JoyLib.Code.Entities.Items
         {
             get
             {
-                if (this.ItemType.Slots.Contains("None"))
+                if (this.ItemType.Slots.Contains("None") || this.ItemType.Slots.IsNullOrEmpty())
                 {
-                    return "This item can be thrown.";
+                    return "This item can be thrown";
                 }
                 return "This is equipped to " + string.Join(", ", this.ItemType.Slots);
             }
@@ -491,7 +494,18 @@ namespace JoyLib.Code.Entities.Items
             }
         }
 
-        public string WeightString => "It weighs " + this.Weight + " grams.";
+        public string WeightString 
+        {
+            get
+            {
+                const string weight = "Weighs ";
+                if (this.Weight < 1000)
+                {
+                    return weight + this.Weight + " grams";
+                }
+                return weight + (this.Weight / 1000f) + " kilograms";
+            }
+        }
 
         public IEnumerable<IItemInstance> Contents
         {

@@ -146,8 +146,9 @@ namespace JoyLib.Code.Entities
             IEnumerable<IJob> jobs,
             IWorldInstance world,
             IDriver driver,
-            RNG roller = null) :
-            base("",
+            RNG roller = null,
+            string name = null) :
+            base(name,
                 derivedValues,
                 position,
                 cultures[GlobalConstants.GameManager.Roller.Roll(0, cultures.Count)].Tileset,
@@ -199,7 +200,7 @@ namespace JoyLib.Code.Entities
             this.RegenTicker = this.Roller.Roll(0, REGEN_TICK_TIME);
 
             this.MyWorld = world;
-            this.JoyName = this.GetNameFromMultipleCultures();
+            this.JoyName = name.IsNullOrEmpty() ? this.GetNameFromMultipleCultures() : name;
 
             this.m_Driver = driver;
             this.PlayerControlled = driver.PlayerControlled;
@@ -214,24 +215,24 @@ namespace JoyLib.Code.Entities
         /// Create a new entity, naked and squirming
         /// Created with no equipment, knowledge, family, etc
         /// </summary>
-        /// <param name="template"></param>
-        /// <param name="needs"></param>
-        /// <param name="statistics"></param>
-        /// <param name="derivedValues"></param>
-        /// <param name="skills"></param>
-        /// <param name="abilities"></param>
-        /// <param name="cultures"></param>
-        /// <param name="job"></param>
-        /// <param name="gender"></param>
-        /// <param name="sex"></param>
-        /// <param name="sexuality"></param>
-        /// <param name="romance"></param>
-        /// <param name="position"></param>
-        /// <param name="sprites"></param>
-        /// <param name="world"></param>
-        /// <param name="driver"></param>
-        /// <param name="roller"></param>
-        /// <param name="icons"></param>
+        /// <param name="template">The template the entity is based upon</param>
+        /// <param name="needs">The entity's needs</param>
+        /// <param name="statistics">The entity's statistic block</param>
+        /// <param name="derivedValues">The derived values of the entity</param>
+        /// <param name="skills">The entity's skill block</param>
+        /// <param name="abilities">Any abilities the entity may have</param>
+        /// <param name="cultures">The cultures the entity belongs to</param>
+        /// <param name="job">The entity's current job</param>
+        /// <param name="gender">The entity's chosen gender</param>
+        /// <param name="sex">The biological sex of the entity</param>
+        /// <param name="sexuality">The sexuality of the entity</param>
+        /// <param name="romance">The romance type for the entity</param>
+        /// <param name="position">The entity's position in its current world</param>
+        /// <param name="sprites">The sprites used for the entity</param>
+        /// <param name="world">The world the entity is located in</param>
+        /// <param name="driver">The driver used for this entity</param>
+        /// <param name="roller">The RNG used for this entity</param>
+        /// <param name="name">The name of the entity</param>
         public Entity(
             IEntityTemplate template,
             IDictionary<string, IRollableValue<int>> statistics,
@@ -249,10 +250,11 @@ namespace JoyLib.Code.Entities
             Sprite[] sprites,
             IWorldInstance world,
             IDriver driver,
-            RNG roller = null) :
+            RNG roller = null,
+            string name = null) :
             this(template, statistics, derivedValues, needs, skills, abilities, cultures, job, gender, sex, sexuality, romance, position, sprites,
                 NaturalWeaponHelper?.MakeNaturalWeapon(template.Size), new EquipmentStorage(template.Slots),
-                new List<IItemInstance>(), new List<string>(), new List<IJob> { job }, world, driver, roller)
+                new List<IItemInstance>(), new List<string>(), new List<IJob> { job }, world, driver, roller, name)
         {
         }
 
@@ -277,15 +279,15 @@ namespace JoyLib.Code.Entities
                 {
                 }
                 relationship = new Tuple<string, string>(
-                    "Relationship:",
+                    "",
                     relationshipName);
             }
 
             List<Tuple<string, string>> data = new List<Tuple<string, string>>
             {
-                new Tuple<string, string>("Species:", textInfo.ToTitleCase(this.CreatureType)),
-                new Tuple<string, string>("Job:", textInfo.ToTitleCase(this.CurrentJob.Name)),
-                new Tuple<string, string>("Gender:", textInfo.ToTitleCase(this.Gender.Name)),
+                new Tuple<string, string>("", textInfo.ToTitleCase(this.CreatureType)),
+                new Tuple<string, string>("", textInfo.ToTitleCase(this.CurrentJob.Name)),
+                new Tuple<string, string>("", textInfo.ToTitleCase(this.Gender.Name)),
                 relationship
             };
 

@@ -41,6 +41,7 @@ namespace JoyLib.Code.Unity.GUI
             return this.GameManager.EntityFactory.CreateFromTemplate(
                 this.PlayerInfo.CurrentTemplate,
                 GlobalConstants.NO_TARGET,
+                this.PlayerName_Part1.text,
                 this.StatisticWindow.GetStatistics(),
                 this.DerivedValuesWindow.GetDerivedValues(),
                 this.SkillWindow.GetSkillsBlock(), 

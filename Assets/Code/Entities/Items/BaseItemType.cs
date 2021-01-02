@@ -165,7 +165,7 @@ namespace JoyLib.Code.Entities.Items
         {
             get
             {
-                return "It is made of " + this.Material.Name + ".";
+                return "It is made of " + this.Material.Name;
             }
         }
 

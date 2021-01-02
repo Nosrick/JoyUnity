@@ -19,6 +19,7 @@ namespace JoyLib.Code.Entities
     {
         IEntity CreateFromTemplate(IEntityTemplate template,
             Vector2Int position,
+            string name = null,
             IDictionary<string, IRollableValue<int>> statistics = null,
             IDictionary<string, IDerivedValue> derivedValues = null,
             IDictionary<string, IEntitySkill> skills = null,

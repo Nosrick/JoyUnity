@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Castle.Core.Internal;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.AI.Drivers;
@@ -75,6 +76,7 @@ namespace JoyLib.Code.Entities
 
         public IEntity CreateFromTemplate(IEntityTemplate template,
             Vector2Int position,
+            string name = null,
             IDictionary<string, IRollableValue<int>> statistics = null,
             IDictionary<string, IDerivedValue> derivedValues = null,
             IDictionary<string, IEntitySkill> skills = null,
@@ -89,6 +91,7 @@ namespace JoyLib.Code.Entities
             IWorldInstance world = null,
             IDriver driver = null)
         {
+            string selectedName = name;
             IJob selectedJob = job;
             IGender selectedGender = gender;
             IBioSex selectedSex = sex;
@@ -163,6 +166,11 @@ namespace JoyLib.Code.Entities
                 selectedGender = dominantCulture.ChooseGender(selectedSex, this.GenderHandler.Genders.ToArray());
             }
 
+            if (selectedName.IsNullOrEmpty())
+            {
+                selectedName = dominantCulture.GetRandomName(selectedGender.Name);
+            }
+
             if (selectedRomance is null)
             {
                 selectedRomance = dominantCulture.ChooseRomance(this.RomanceHandler.Romances);
@@ -200,7 +208,8 @@ namespace JoyLib.Code.Entities
                 selectedSprites, 
                 world,
                 selectedDriver,
-                new RNG());
+                new RNG(),
+                selectedName);
 
             return entity;
         }
