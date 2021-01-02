@@ -213,7 +213,7 @@ namespace JoyLib.Code.Unity.GUI
             {
                 if (this.Item.MonoBehaviourHandler is ItemBehaviourHandler itemBehaviourHandler)
                 {
-                    itemBehaviourHandler.DropItem(this.Item);
+                    itemBehaviourHandler.DropItem();
                 }
 
                 this.Container.RemoveItem(this.Item);

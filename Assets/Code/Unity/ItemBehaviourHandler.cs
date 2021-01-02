@@ -1,7 +1,9 @@
-﻿using JoyLib.Code.Entities;
+﻿using System;
+using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Scripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace JoyLib.Code.Unity
 {
@@ -25,9 +27,32 @@ namespace JoyLib.Code.Unity
             }
         }
 
+        protected override void HandleInput(object data, InputActionChange change)
+        {
+            if (this.EntityInRange is null)
+            {
+                return;
+            }
+        
+            if (change != InputActionChange.ActionPerformed)
+            {
+                return;
+            }
+
+            if (!(data is InputAction action))
+            {
+                return;
+            }
+
+            if (action.name.Equals("interact", StringComparison.OrdinalIgnoreCase))
+            {
+                this.PickupItems();
+            }
+        }
+
         public void OnTriggerEnter2D(Collider2D other)
         {
-            IJoyObject otherObj = other.gameObject.GetComponent<MonoBehaviourHandler>().MyJoyObject;
+            IJoyObject otherObj = other.gameObject.GetComponent<MonoBehaviourHandler>().JoyObject;
 
             if (otherObj is IEntity entity)
             {
@@ -42,7 +67,7 @@ namespace JoyLib.Code.Unity
                 return;
             }
             
-            IJoyObject otherObj = other.gameObject.GetComponent<MonoBehaviourHandler>().MyJoyObject;
+            IJoyObject otherObj = other.gameObject.GetComponent<MonoBehaviourHandler>().JoyObject;
 
             if (otherObj is IEntity entity && entity.GUID.Equals(this.EntityInRange.GUID))
             {
@@ -54,7 +79,7 @@ namespace JoyLib.Code.Unity
         {
             this.Initialise();
             bool result = false;
-            if (this.MyJoyObject is IItemInstance item)
+            if (this.JoyObject is IItemInstance item)
             {
                 IJoyAction addItemAction = this.EntityInRange.FetchAction("additemaction");
                 result = addItemAction.Execute(
@@ -67,14 +92,14 @@ namespace JoyLib.Code.Unity
             return result;
         }
 
-        public void DropItem(IItemInstance item)
+        public void DropItem()
         {
             this.Initialise();
             
-            if (this.MyJoyObject is IItemInstance itemInstance)
+            if (this.JoyObject is IItemInstance itemInstance)
             {
-                IEntity dropper = this.MyJoyObject.MyWorld.GetEntity(this.MyJoyObject.WorldPosition);
-                this.gameObject.transform.position = new Vector3(this.MyJoyObject.WorldPosition.x, this.MyJoyObject.WorldPosition.y);
+                IEntity dropper = this.JoyObject.MyWorld.GetEntity(this.JoyObject.WorldPosition);
+                this.gameObject.transform.position = new Vector3(this.JoyObject.WorldPosition.x, this.JoyObject.WorldPosition.y);
                 IJoyAction placeInWorldAction = dropper.FetchAction("placeiteminworldaction");
                 placeInWorldAction.Execute(
                     new IJoyObject[] {dropper, itemInstance},

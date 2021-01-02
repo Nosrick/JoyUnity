@@ -148,6 +148,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "Open Context Menu",
+                    "type": "Button",
+                    "id": "d3048b49-8240-4965-bb7a-370a3cf87dd2",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -357,6 +365,17 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "Unstack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "289322f5-f1ea-4e4e-b878-c26761ed2c6c",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Open Context Menu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

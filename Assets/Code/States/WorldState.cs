@@ -101,7 +101,7 @@ namespace JoyLib.Code.States
                 world.Entities[i].MyWorld = world;
             }
 
-            foreach (WorldInstance nextWorld in world.Areas.Values)
+            foreach (IWorldInstance nextWorld in world.Areas.Values)
             {
                 this.SetEntityWorld(nextWorld);
             }
@@ -215,65 +215,6 @@ namespace JoyLib.Code.States
         }
         */
 
-        protected void SetUpContextMenu()
-        {
-            this.GUIManager.CloseGUI(GUINames.CONTEXT_MENU);
-            JoyLib.Code.Unity.GUI.ContextMenu contextMenu = this.GUIManager.GetGUI(GUINames.CONTEXT_MENU)
-                .GetComponent<JoyLib.Code.Unity.GUI.ContextMenu>();
-            
-            contextMenu.Clear();
-
-            if (this.PrimaryTarget.GUID != this.m_ActiveWorld.Player.GUID)
-            {
-                if (AdjacencyHelper.IsAdjacent(this.m_ActiveWorld.Player.WorldPosition, this.PrimaryTarget.WorldPosition))
-                {
-                    if (this.PrimaryTarget is IEntity actor)
-                    {
-                        contextMenu.AddMenuItem("Talk", this.TalkToPlayer);
-                    }
-                }
-                else
-                {
-                    if (this.PrimaryTarget is IEntity actor)
-                    {
-                        contextMenu.AddMenuItem("Call Over", this.CallOver);
-                    }
-                }
-
-                if (contextMenu.GetComponentsInChildren<MenuItem>(true).Length > 1)
-                {
-                    this.GUIManager.OpenGUI(GUINames.CONTEXT_MENU);
-                }
-            }
-        }
-
-        protected void TalkToPlayer()
-        {
-            if (!(this.PrimaryTarget is IEntity entity))
-            {
-                return;
-            }
-
-            this.GUIManager.CloseGUI(GUINames.CONTEXT_MENU);
-            this.GUIManager.OpenGUI(GUINames.CONVERSATION);
-            this.ConversationEngine.SetActors(this.m_ActiveWorld.Player, entity);
-            this.ConversationEngine.Converse();
-        }
-
-        protected void CallOver()
-        {
-            if (!(this.PrimaryTarget is IEntity entity))
-            {
-                return;
-            }
-
-            entity.FetchAction("seekaction")
-                .Execute(
-                    new IJoyObject[] {entity, this.m_ActiveWorld.Player},
-                    new[] {"call over"},
-                    new object[] {"friendship"});
-        }
-
         public override void HandleInput(object data, InputActionChange change)
         {
             bool hasMoved = false;
@@ -304,134 +245,131 @@ namespace JoyLib.Code.States
                 autoTurn = true;
             }
             */
-
-            if (data is InputAction inputAction)
+            
+            if (change != InputActionChange.ActionPerformed)
             {
-                if (change != InputActionChange.ActionStarted)
+                return;
+            }
+
+            if (!(data is InputAction inputAction))
+            {
+                return;
+            }
+
+            Vector2Int newPlayerPoint = this.m_ActiveWorld.Player.WorldPosition;
+
+            if (inputAction.name.Equals("close all windows", StringComparison.OrdinalIgnoreCase))
+            {
+                this.GUIManager.CloseAllOtherGUIs(GUINames.NEEDSRECT);
+            }
+
+            if (inputAction.name.Equals("toggle inventory", StringComparison.OrdinalIgnoreCase))
+            {
+                this.GUIManager.ToggleGUI(GUINames.INVENTORY);
+            }
+            else if (inputAction.name.Equals("toggle equipment", StringComparison.OrdinalIgnoreCase))
+            {
+                this.GUIManager.ToggleGUI(GUINames.EQUIPMENT);
+            }
+            else if (inputAction.name.Equals("toggle journal", StringComparison.OrdinalIgnoreCase))
+            {
+                this.GUIManager.ToggleGUI(GUINames.QUEST_JOURNAL);
+            }
+            else if (inputAction.name.Equals("toggle job management", StringComparison.OrdinalIgnoreCase))
+            {
+                this.GUIManager.ToggleGUI(GUINames.JOB_MANAGEMENT);
+            }
+            else if (inputAction.name.Equals("toggle character sheet", StringComparison.OrdinalIgnoreCase))
+            {
+                this.GUIManager.ToggleGUI(GUINames.CHARACTER_SHEET);
+            }
+
+            if (inputAction.name.Equals("interact", StringComparison.OrdinalIgnoreCase))
+            {
+                //Going up a level
+                if (this.m_ActiveWorld.Parent != null && player.WorldPosition == this.m_ActiveWorld.SpawnPoint &&
+                         !player.HasMoved)
                 {
+                    this.ChangeWorld(this.m_ActiveWorld.Parent, this.m_ActiveWorld.GetTransitionPointForParent());
                     return;
                 }
+                //Going down a level
+                if (this.m_ActiveWorld.Areas.ContainsKey(player.WorldPosition) && !player.HasMoved)
+                {
+                    this.ChangeWorld(this.m_ActiveWorld.Areas[player.WorldPosition], this.m_ActiveWorld.Areas[player.WorldPosition].SpawnPoint);
+                    return;
+                }
+            }
 
-                Vector2Int newPlayerPoint = this.m_ActiveWorld.Player.WorldPosition;
+            if (inputAction.name.Equals("skip turn", StringComparison.OrdinalIgnoreCase))
+            {
+                Debug.Log("TICK");
+                this.Tick();
+            }
+            //North
+            else if (inputAction.name.Equals("N", StringComparison.OrdinalIgnoreCase))
+            {
+                newPlayerPoint.y += 1;
+                hasMoved = true;
+            }
+            //North east
+            else if (inputAction.name.Equals("NE", StringComparison.OrdinalIgnoreCase))
+            {
+                newPlayerPoint.x += 1;
+                newPlayerPoint.y += 1;
+                hasMoved = true;
+            }
+            //East
+            else if (inputAction.name.Equals("E", StringComparison.OrdinalIgnoreCase))
+            {
+                newPlayerPoint.x += 1;
+                hasMoved = true;
+            }
+            //South east
+            else if (inputAction.name.Equals("SE", StringComparison.OrdinalIgnoreCase))
+            {
+                newPlayerPoint.x += 1;
+                newPlayerPoint.y -= 1;
+                hasMoved = true;
+            }
+            //South
+            else if (inputAction.name.Equals("S", StringComparison.OrdinalIgnoreCase))
+            {
+                newPlayerPoint.y -= 1;
+                hasMoved = true;
+            }
+            //South west
+            else if (inputAction.name.Equals("SW", StringComparison.OrdinalIgnoreCase))
+            {
+                newPlayerPoint.x -= 1;
+                newPlayerPoint.y -= 1;
+                hasMoved = true;
+            }
+            //West
+            else if (inputAction.name.Equals("W", StringComparison.OrdinalIgnoreCase))
+            {
+                newPlayerPoint.x -= 1;
+                hasMoved = true;
+            }
+            //North west
+            else if (inputAction.name.Equals("NW", StringComparison.OrdinalIgnoreCase))
+            {
+                newPlayerPoint.x -= 1;
+                newPlayerPoint.y += 1;
+                hasMoved = true;
+            }
 
-                if (inputAction.name.Equals("close all windows", StringComparison.OrdinalIgnoreCase))
-                {
-                    this.GUIManager.CloseAllOtherGUIs(GUINames.NEEDSRECT);
-                    this.GUIManager.OpenGUI(GUINames.DERIVED_VALUES);
-                }
+            if (hasMoved)
+            {
+                PhysicsResult physicsResult = this.PhysicsManager.IsCollision(player.WorldPosition, newPlayerPoint, this.m_ActiveWorld);
 
-                if (inputAction.name.Equals("toggle inventory", StringComparison.OrdinalIgnoreCase))
+                if (physicsResult == PhysicsResult.EntityCollision)
                 {
-                    this.GUIManager.ToggleGUI(GUINames.INVENTORY);
-                }
-                else if (inputAction.name.Equals("toggle equipment", StringComparison.OrdinalIgnoreCase))
-                {
-                    this.GUIManager.ToggleGUI(GUINames.EQUIPMENT);
-                }
-                else if (inputAction.name.Equals("toggle journal", StringComparison.OrdinalIgnoreCase))
-                {
-                    this.GUIManager.ToggleGUI(GUINames.QUEST_JOURNAL);
-                }
-                else if (inputAction.name.Equals("toggle job management", StringComparison.OrdinalIgnoreCase))
-                {
-                    this.GUIManager.ToggleGUI(GUINames.JOB_MANAGEMENT);
-                }
-                else if (inputAction.name.Equals("toggle character sheet", StringComparison.OrdinalIgnoreCase))
-                {
-                    this.GUIManager.ToggleGUI(GUINames.CHARACTER_SHEET);
-                }
-
-                if (inputAction.name.Equals("interact", StringComparison.OrdinalIgnoreCase))
-                {
-                    IJoyObject joyObject = this.m_ActiveWorld.GetObject(this.m_ActiveWorld.Player.WorldPosition);
-                    if (joyObject is null == false && joyObject.MonoBehaviourHandler is ItemBehaviourHandler itemBehaviourHandler)
-                    {
-                        itemBehaviourHandler.PickupItems();
-                    }
-                    //Going up a level
-                    else if (this.m_ActiveWorld.Parent != null && player.WorldPosition == this.m_ActiveWorld.SpawnPoint &&
-                             !player.HasMoved)
-                    {
-                        this.ChangeWorld(this.m_ActiveWorld.Parent, this.m_ActiveWorld.GetTransitionPointForParent());
-                        return;
-                    }
-                    //Going down a level
-                    else if (this.m_ActiveWorld.Areas.ContainsKey(player.WorldPosition) && !player.HasMoved)
-                    {
-                        this.ChangeWorld(this.m_ActiveWorld.Areas[player.WorldPosition], this.m_ActiveWorld.Areas[player.WorldPosition].SpawnPoint);
-                        return;
-                    }
-                }
-
-                if (inputAction.name.Equals("skip turn", StringComparison.OrdinalIgnoreCase))
-                {
-                    Debug.Log("TICK");
+                    IEntity tempEntity = this.m_ActiveWorld.GetEntity(newPlayerPoint);
+                    this.PlayerWorld.SwapPosition(player, tempEntity);
                     this.Tick();
-                }
-                //North
-                else if (inputAction.name.Equals("N", StringComparison.OrdinalIgnoreCase))
-                {
-                    newPlayerPoint.y += 1;
-                        hasMoved = true;
-                }
-                //North east
-                else if (inputAction.name.Equals("NE", StringComparison.OrdinalIgnoreCase))
-                {
-                    newPlayerPoint.x += 1;
-                        newPlayerPoint.y += 1;
-                        hasMoved = true;
-                }
-                //East
-                else if (inputAction.name.Equals("E", StringComparison.OrdinalIgnoreCase))
-                {
-                    newPlayerPoint.x += 1;
-                        hasMoved = true;
-                }
-                //South east
-                else if (inputAction.name.Equals("SE", StringComparison.OrdinalIgnoreCase))
-                {
-                        newPlayerPoint.x += 1;
-                        newPlayerPoint.y -= 1;
-                        hasMoved = true;
-                }
-                //South
-                else if (inputAction.name.Equals("S", StringComparison.OrdinalIgnoreCase))
-                {
-                        newPlayerPoint.y -= 1;
-                        hasMoved = true;
-                }
-                //South west
-                else if (inputAction.name.Equals("SW", StringComparison.OrdinalIgnoreCase))
-                {
-                        newPlayerPoint.x -= 1;
-                        newPlayerPoint.y -= 1;
-                        hasMoved = true;
-                }
-                //West
-                else if (inputAction.name.Equals("W", StringComparison.OrdinalIgnoreCase))
-                {
-                        newPlayerPoint.x -= 1;
-                        hasMoved = true;
-                }
-                //North west
-                else if (inputAction.name.Equals("NW", StringComparison.OrdinalIgnoreCase))
-                {
-                    newPlayerPoint.x -= 1;
-                    newPlayerPoint.y += 1;
-                    hasMoved = true;
-                }
-
-                if (hasMoved)
-                {
-                    PhysicsResult physicsResult = this.PhysicsManager.IsCollision(player.WorldPosition, newPlayerPoint, this.m_ActiveWorld);
-
-                    if (physicsResult == PhysicsResult.EntityCollision)
-                    {
-                        IEntity tempEntity = this.m_ActiveWorld.GetEntity(newPlayerPoint);
-                        this.PlayerWorld.SwapPosition(player, tempEntity);
-                        this.Tick();
                         
-                        /*
+                    /*
                         if (m_GameplayFlags == GameplayFlags.Interacting)
                         { }
                         else if (m_GameplayFlags == GameplayFlags.Giving)
@@ -471,52 +409,34 @@ namespace JoyLib.Code.States
                             }
                         }
                         */
-                    }
-                    else if (physicsResult == PhysicsResult.WallCollision)
-                    {
-                        //Do nothing!
-                    }
-                    else
-                    {
-                        if (newPlayerPoint.x >= 0 && newPlayerPoint.x < this.m_ActiveWorld.Tiles.GetLength(0) &&
-                            newPlayerPoint.y >= 0 && newPlayerPoint.y < this.m_ActiveWorld.Tiles.GetLength(1))
-                        {
-                            player.Move(newPlayerPoint);
-                            this.Tick();
-                        }
-                    }
                 }
-                
-                if (inputAction.name.Equals("right mouse", StringComparison.OrdinalIgnoreCase))
+                else if (physicsResult == PhysicsResult.WallCollision)
                 {
-                    Vector3 temp = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-                    Vector2Int position = new Vector2Int((int) Math.Ceiling(temp.x), (int) Math.Ceiling(temp.y));
-
-                    this.PrimaryTarget = this.m_ActiveWorld.GetEntity(position);
-                    if (this.PrimaryTarget is null)
+                    //Do nothing!
+                }
+                else
+                {
+                    if (newPlayerPoint.x >= 0 && newPlayerPoint.x < this.m_ActiveWorld.Tiles.GetLength(0) &&
+                        newPlayerPoint.y >= 0 && newPlayerPoint.y < this.m_ActiveWorld.Tiles.GetLength(1))
                     {
-                        this.PrimaryTarget = this.m_ActiveWorld.GetObject(position);
-                        if (this.PrimaryTarget is null)
-                        {
-                            return;
-                        }
+                        player.Move(newPlayerPoint);
+                        this.Tick();
                     }
-
-                    this.SetUpContextMenu();
                 }
+            }
 
-                if (this.GUIManager.AreAnyOpen() == false)
-                {
-                    this.GUIManager.OpenGUI(GUINames.NEEDSRECT);
-                    this.GUIManager.OpenGUI(GUINames.DERIVED_VALUES);
-                }
+            if (this.GUIManager.AreAnyOpen() == false)
+            {
+                this.GUIManager.OpenGUI(GUINames.NEEDSRECT);
+                this.GUIManager.OpenGUI(GUINames.DERIVED_VALUES);
+            }
 
-                if (this.GUIManager.RemovesControl())
-                {
-                    return;
-                }
+            if (this.GUIManager.RemovesControl())
+            {
+                return;
+            }
 
-                /*
+            /*
                 else if (m_GameplayFlags == GameplayFlags.Targeting)
                 {
                     if (player.TargetingAbility.TargetType == AbilityTarget.Adjacent)
@@ -545,8 +465,7 @@ namespace JoyLib.Code.States
                 }
                 */
 
-                this.m_Camera.transform.position = new Vector3(player.WorldPosition.x, player.WorldPosition.y, this.m_Camera.transform.position.z);
-            }
+            this.m_Camera.transform.position = new Vector3(player.WorldPosition.x, player.WorldPosition.y, this.m_Camera.transform.position.z);
         }
 
         protected void Tick()

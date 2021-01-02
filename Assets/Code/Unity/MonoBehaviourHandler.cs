@@ -1,34 +1,40 @@
-﻿using JoyLib.Code.Entities.Items;
+﻿using System;
+using JoyLib.Code.Entities;
+using JoyLib.Code.Entities.Items;
+using JoyLib.Code.Helpers;
 using JoyLib.Code.Unity.GUI;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+using ContextMenu = JoyLib.Code.Unity.GUI.ContextMenu;
 
 namespace JoyLib.Code.Unity
 {
     public class MonoBehaviourHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
-        protected IJoyObject m_JoyObject;
-        protected SpriteRenderer m_SpriteRenderer;
+        public IJoyObject JoyObject { get; protected set; }
+        protected SpriteRenderer SpriteRenderer { get; set; }
         protected SpriteRenderer SpeechBubble { get; set; }
-
-        public IJoyObject MyJoyObject => this.m_JoyObject;
+        protected bool PointerOver { get; set; }
         
         protected static IGUIManager GUIManager { get; set; }
 
         public void Update()
         {
-            if (this.m_JoyObject == null)
+            if (this.JoyObject == null)
             {
                 return;
             }
             
-            this.m_JoyObject.Update();
-            this.m_SpriteRenderer.sprite = this.m_JoyObject.Sprite;
-            this.transform.position = new Vector3(this.m_JoyObject.WorldPosition.x, this.m_JoyObject.WorldPosition.y);
+            this.JoyObject.Update();
+            this.SpriteRenderer.sprite = this.JoyObject.Sprite;
+            this.transform.position = new Vector3(this.JoyObject.WorldPosition.x, this.JoyObject.WorldPosition.y);
         }
 
         public void Start()
         {
+            InputSystem.onActionChange -= this.HandleInput;
+            InputSystem.onActionChange += this.HandleInput;
         }
 
         public virtual void AttachJoyObject(IJoyObject joyObject)
@@ -38,9 +44,9 @@ namespace JoyLib.Code.Unity
                 GUIManager = GlobalConstants.GameManager.GUIManager;
             }
             
-            this.m_JoyObject = joyObject;
-            this.m_JoyObject.AttachMonoBehaviourHandler(this);
-            this.m_SpriteRenderer = this.GetComponent<SpriteRenderer>();
+            this.JoyObject = joyObject;
+            this.JoyObject.AttachMonoBehaviourHandler(this);
+            this.SpriteRenderer = this.GetComponent<SpriteRenderer>();
             Transform transform = this.transform.Find("Speech Bubble");
             if (transform is null == false)
             {
@@ -48,35 +54,35 @@ namespace JoyLib.Code.Unity
                 this.SpeechBubble.gameObject.SetActive(false);
             }
 
-            if(this.m_JoyObject.JoyName.StartsWith("Downstairs") || this.m_JoyObject.JoyName.StartsWith("Upstairs"))
+            if(this.JoyObject.JoyName.StartsWith("Downstairs") || this.JoyObject.JoyName.StartsWith("Upstairs"))
             {
-                this.m_SpriteRenderer.sortingLayerName = "Walls";
+                this.SpriteRenderer.sortingLayerName = "Walls";
             }
-            else if (this.m_JoyObject.GetType() == typeof(JoyObject))
+            else if (this.JoyObject.GetType() == typeof(JoyObject))
             {
-                if(this.m_JoyObject.IsWall)
+                if(this.JoyObject.IsWall)
                 {
-                    this.m_SpriteRenderer.sortingLayerName = "Walls";
+                    this.SpriteRenderer.sortingLayerName = "Walls";
                 }
                 else
                 {
-                    this.m_SpriteRenderer.sortingLayerName = "Terrain";
+                    this.SpriteRenderer.sortingLayerName = "Terrain";
                 }
             }
             else
             {
-                if(this.m_JoyObject is ItemInstance)
+                if(this.JoyObject is ItemInstance)
                 {
-                    this.m_SpriteRenderer.sortingLayerName = "Objects";
+                    this.SpriteRenderer.sortingLayerName = "Objects";
                 }
                 else
                 {
-                    this.m_SpriteRenderer.sortingLayerName = "Entities";
+                    this.SpriteRenderer.sortingLayerName = "Entities";
                 }
             }
-            this.name = this.m_JoyObject.JoyName + ":" + this.m_JoyObject.GUID;
-            this.transform.position = new Vector3(this.m_JoyObject.WorldPosition.x, this.m_JoyObject.WorldPosition.y, 0.0f);
-            this.m_SpriteRenderer.sprite = joyObject.Sprite;
+            this.name = this.JoyObject.JoyName + ":" + this.JoyObject.GUID;
+            this.transform.position = new Vector3(this.JoyObject.WorldPosition.x, this.JoyObject.WorldPosition.y, 0.0f);
+            this.SpriteRenderer.sprite = joyObject.Sprite;
         }
 
         public void SetSpeechBubble(bool on, Sprite need = null)
@@ -90,19 +96,100 @@ namespace JoyLib.Code.Unity
 
         public void OnPointerEnter(PointerEventData eventData)
         {
+            this.PointerOver = true;
             if (GUIManager.IsActive(GUINames.CONTEXT_MENU) == false)
             {
                 GUIManager.OpenGUI(GUINames.TOOLTIP).GetComponent<Tooltip>().Show(
-                    this.m_JoyObject.JoyName,
+                    this.JoyObject.JoyName,
                     null,
-                    this.m_JoyObject.Sprite,
-                    this.m_JoyObject.Tooltip);
+                    this.JoyObject.Sprite,
+                    this.JoyObject.Tooltip);
             }
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
+            this.PointerOver = false;
             GUIManager.CloseGUI(GUINames.TOOLTIP);
+        }
+
+        protected virtual void OpenContextMenu()
+        {
+            ContextMenu contextMenu = GUIManager.GetGUI(GUINames.CONTEXT_MENU).GetComponent<ContextMenu>();
+            contextMenu.Clear();
+
+            if (this.JoyObject.Equals(GlobalConstants.GameManager.Player) == false
+                && this.JoyObject is IEntity)
+            {
+                if (AdjacencyHelper.IsAdjacent(
+                    this.JoyObject.WorldPosition, 
+                    GlobalConstants.GameManager.Player.WorldPosition))
+                {
+                    contextMenu.AddMenuItem("Talk", this.TalkToPlayer);
+                }
+                else
+                {
+                    contextMenu.AddMenuItem("Call Over", this.CallOver);
+                }
+            }
+            else
+            {
+                contextMenu.AddMenuItem("Open Inventory", this.OpenInventory);
+            }
+
+            if (contextMenu.GetComponentsInChildren<MenuItem>().Length > 0)
+            {
+                GUIManager.OpenGUI(GUINames.CONTEXT_MENU);
+            }
+        }
+
+        protected virtual void HandleInput(object data, InputActionChange change)
+        {
+            if (this.PointerOver == false)
+            {
+                return;
+            }
+        
+            if (change != InputActionChange.ActionPerformed)
+            {
+                return;
+            }
+
+            if (!(data is InputAction action))
+            {
+                return;
+            }
+            
+            if (action.name.Equals("open context menu", StringComparison.OrdinalIgnoreCase))
+            {
+                this.OpenContextMenu();
+            }
+        }
+
+        protected void OpenInventory()
+        {
+            GUIManager.OpenGUI(GUINames.INVENTORY);
+        }
+
+        protected void TalkToPlayer()
+        {
+            GUIManager.CloseGUI(GUINames.CONTEXT_MENU);
+            GUIManager.OpenGUI(GUINames.CONVERSATION);
+            GlobalConstants.GameManager.ConversationEngine.SetActors(
+                GlobalConstants.GameManager.Player, 
+                this.JoyObject as IEntity);
+            
+            GlobalConstants.GameManager.ConversationEngine.Converse();
+        }
+
+        protected void CallOver()
+        {
+            GUIManager.CloseGUI(GUINames.CONTEXT_MENU);
+            this.JoyObject.FetchAction("seekaction")
+                .Execute(
+                    new IJoyObject[] {this.JoyObject, GlobalConstants.GameManager.Player},
+                    new[] {"call over"},
+                    new object[] {"friendship"});
         }
     }
 }
