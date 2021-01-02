@@ -79,7 +79,7 @@ namespace JoyLib.Code.World.Generators.Interiors
                     {
                         walls.Add(
                             new JoyObject(
-                                "Surround", 
+                                "Wall", 
                                 this.DerivedValueHandler.GetItemStandardBlock(values), 
                                 new Vector2Int(i, j), this.TileSet, 
                                 new string[] {}, 
