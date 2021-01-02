@@ -132,7 +132,7 @@
 		<Names>
 			<NameData>
 				<Name>The</Name>
-				<Sex>all</Sex>
+				<Gender>all</Gender>
 				<Chain>1</Chain>
 				<Group>0</Group>
 				<Group>1</Group>
@@ -140,662 +140,662 @@
 
 			<NameData>
 				<Name>Fantastic</Name>
-				<Sex>all</Sex>
+				<Gender>all</Gender>
 				<Chain>2</Chain>
 				<Group>0</Group>
 			</NameData>
 
 			<NameData>
 				<Name>Despicable</Name>
-				<Sex>all</Sex>
+				<Gender>all</Gender>
 				<Chain>2</Chain>
 				<Group>1</Group>
 			</NameData>
 			
 			<NameData>
-				<Name>Of</Name>
-				<Sex>all</Sex>
+				<Name>of</Name>
+				<Gender>all</Gender>
 				<Chain>1</Chain>
 				<Group>2</Group>
 			</NameData>
 			
 			<NameData>
 				<Name>the Isles</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>2</Chain>
 				<Group>2</Group>
 			</NameData>
 			
 			<NameData>
 				<Name>the Mountains</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>2</Chain>
 				<Group>2</Group>
 			</NameData>
 			
 			<NameData>
 				<Name>the Moon</Name>
-				<Sex>all</Sex>
+				<Gender>all</Gender>
 				<Chain>2</Chain>
 				<Group>2</Group>
 			</NameData>
 			
 			<NameData>
 				<Name>Aditi</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Aditya</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Agni</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Ananta</Name>
-				<Sex>all</Sex>
+				<Gender>all</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Anil</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Aniruddha</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Arjuna</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Aruna</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Arundhati</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Bala</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Baladeva</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Bharata</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Bhaskara</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Bhima</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Bhumi</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Brahma</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Brijesha</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Chandra</Name>
-				<Sex>all</Sex>
+				<Gender>all</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Damayanti</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Damodara</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Devaraja</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Devi</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Dilipa</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Draupadi</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Durga</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Gauri</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Girisha</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Hari</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Indira</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Jaya</Name>
-				<Sex>male</Sex>
-				<Sex>female</Sex>
+				<Gender>male</Gender>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Jayanta</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Jayanti</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Kali</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Kalyani</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Kama</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Kamala</Name>
-				<Sex>all</Sex>
+				<Gender>all</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Kanti</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Kapila</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Karna</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Kumara</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Kumari</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Lakshmi</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Lalita</Name>
-				<Sex>all</Sex>
+				<Gender>all</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Madhava</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Madhavi</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Mahesha</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Mani</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Manu</Name>
-				<Sex>all</Sex>
+				<Gender>all</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Maya</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Mina</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Mitra</Name>
-				<Sex>all</Sex>
+				<Gender>all</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Mohana</Name>
-				<Sex>all</Sex>
+				<Gender>all</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Mohini</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Murali</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Nala</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Nanda</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Padma</Name>
-				<Sex>all</Sex>
+				<Gender>all</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Padmavati</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Partha</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Parvati</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Pramoda</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Pritha</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Priya</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Radha</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Raghu</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Rajani</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Rama</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Rama</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Rati</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Ravi</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Reva</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Rukmini</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Sachin</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Sandhya</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Sanjaya</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Saraswati</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Sati</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Savitr</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Savitri</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Shailaja</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Shakti</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Shanta</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Shantanu</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Shri</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Shyama</Name>
-				<Sex>all</Sex>
+				<Gender>all</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Sita</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Skanda</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Sumati</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Sundara</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Sunita</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Surya</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Sushila</Name>
-				<Sex>all</Sex>
+				<Gender>all</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Tara</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Uma</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Usha</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Vasanta</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Vasu</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Vayu</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Vijaya</Name>
-				<Sex>all</Sex>
+				<Gender>all</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Vikrama</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Yama</Name>
-				<Sex>male</Sex>
+				<Gender>male</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>Yami</Name>
-				<Sex>female</Sex>
+				<Gender>female</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>McNaga</Name>
-				<Sex>all</Sex>
+				<Gender>all</Gender>
 				<Chain>1</Chain>
 			</NameData>
 		</Names>

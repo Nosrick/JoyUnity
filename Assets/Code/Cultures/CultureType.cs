@@ -34,11 +34,7 @@ namespace JoyLib.Code.Cultures
 
         public string[] Inhabitants => this.m_Inhabitants.ToArray();
 
-        public string CultureName
-        {
-            get;
-            protected set;
-        }
+        public string CultureName { get; protected set; }
 
         public string[] RulerTypes => this.m_RulerTypes.ToArray();
 
@@ -55,26 +51,29 @@ namespace JoyLib.Code.Cultures
         public string[] Genders => this.m_GenderPrevelence.Keys.ToArray();
 
         public string[] Jobs => this.m_JobPrevelence.Keys.ToArray();
-        
+
         public int NonConformingGenderChance { get; protected set; }
 
         public NameData[] NameData => this.m_NameData.ToArray();
 
         public RNG Roller { get; protected set; }
 
+        protected const int NO_GROUP = int.MinValue;
+        public const int GROUP_CHANCE = 25;
+
         public CultureType()
-        {}
+        { }
 
         public CultureType(
-            string nameRef, 
+            string nameRef,
             string tileset,
-            List<string> rulersRef, 
-            List<string> crimesRef, 
+            List<string> rulersRef,
+            List<string> crimesRef,
             List<NameData> namesRef,
-            Dictionary<string, int> jobRef, 
+            Dictionary<string, int> jobRef,
             List<string> inhabitantsNameRef,
             Dictionary<string, int> sexualityPrevelenceRef,
-            Dictionary<string, int> sexPrevelence, 
+            Dictionary<string, int> sexPrevelence,
             Dictionary<string, Tuple<int, int>> statVariance,
             List<string> relationshipTypes,
             Dictionary<string, int> romancePrevelence,
@@ -111,17 +110,39 @@ namespace JoyLib.Code.Cultures
         {
             string returnName = "";
 
-            int maxChain = this.m_NameData.Where(data => data.genders.Contains(genderRef, GlobalConstants.STRING_COMPARER)
-                                                         || data.genders.Contains("all", GlobalConstants.STRING_COMPARER))
+            int maxChain = this.m_NameData.Where(data =>
+                    data.genders.Contains(genderRef, GlobalConstants.STRING_COMPARER)
+                    || data.genders.Contains("all", GlobalConstants.STRING_COMPARER))
                 .SelectMany(data => data.chain)
                 .Distinct()
                 .Max(data => data);
+            int groupCount = this.m_NameData.SelectMany(data => data.groups)
+                .Count();
+
+            int groupChance = (100 / (groupCount + 1)) * groupCount;
+            
+            int chosenGroup = NO_GROUP;
+            
+            if (this.Roller.Roll(0, 100) < groupChance)
+            {
+                int[] availableGroups = this.m_NameData.Where(data =>
+                        data.genders.Contains(genderRef, GlobalConstants.STRING_COMPARER)
+                        || data.genders.Contains("all", GlobalConstants.STRING_COMPARER))
+                    .SelectMany(data => data.groups)
+                    .Distinct()
+                    .ToArray();
+
+                if (availableGroups.Length > 0)
+                {
+                    chosenGroup = availableGroups[this.Roller.Roll(0, availableGroups.Length)];
+                }
+            }
 
             for (int i = 0; i <= maxChain; i++)
             {
-                returnName = String.Join(" ", returnName, this.GetNameForChain(i, genderRef, 25));
+                returnName = string.Join(" ", returnName, this.GetNameForChain(i, genderRef, chosenGroup));
             }
-            
+
             returnName = returnName.TrimEnd();
 
             this.ClearLastGroup();
@@ -129,41 +150,39 @@ namespace JoyLib.Code.Cultures
             return returnName;
         }
 
-        public string GetNameForChain(int chain, string gender, int group = Int32.MinValue)
+        public string GetNameForChain(int chain, string gender, int group = NO_GROUP)
         {
             NameData[] names;
 
-            int chosenGroup = group == Int32.MinValue ? this.LastGroup : group;
-
-            this.LastGroup = chosenGroup;
-            
-            if (chosenGroup == Int32.MinValue)
+            if (group == NO_GROUP)
             {
-                names = this.m_NameData.Where(x => x.chain.Contains(chain) 
-                                                   && (x.genders.Contains(gender, GlobalConstants.STRING_COMPARER) 
-                                                       || x.genders.Any(s => s.Equals("all", StringComparison.OrdinalIgnoreCase)))
+                names = this.m_NameData.Where(x => x.chain.Contains(chain)
+                                                   && (x.genders.Contains(gender, GlobalConstants.STRING_COMPARER)
+                                                       || x.genders.Any(s =>
+                                                           s.Equals("all", StringComparison.OrdinalIgnoreCase)))
                                                    && x.groups.IsNullOrEmpty()).ToArray();
             }
             else
             {
                 names = this.m_NameData.Where(x => x.chain.Contains(chain)
                                                    && (x.genders.Contains(gender, GlobalConstants.STRING_COMPARER)
-                                                       || x.genders.Any(s => s.Equals("all", StringComparison.OrdinalIgnoreCase))
-                                                       && x.groups.Contains(chosenGroup))).ToArray();
+                                                       || x.genders.Any(s =>
+                                                           s.Equals("all", StringComparison.OrdinalIgnoreCase)))
+                                                       && x.groups.Contains(group)).ToArray();
             }
 
             if (names.IsNullOrEmpty())
             {
-                if (this.LastGroup != int.MinValue)
-                {
-                    this.ClearLastGroup();
-                    return this.GetNameForChain(chain, gender, this.LastGroup);
-                }
-                else
+                if (group == NO_GROUP)
                 {
                     return "";
                 }
+
+                this.ClearLastGroup();
+                return this.GetNameForChain(chain, gender, this.LastGroup);
             }
+
+            this.LastGroup = group;
             int result = this.Roller.Roll(0, names.Length);
             return names[result].name;
         }
@@ -171,14 +190,14 @@ namespace JoyLib.Code.Cultures
         public IBioSex ChooseSex(IEnumerable<IBioSex> sexes)
         {
             int totalSex = 0;
-            foreach(int value in this.m_SexPrevelence.Values)
+            foreach (int value in this.m_SexPrevelence.Values)
             {
                 totalSex += value;
             }
 
             int result = this.Roller.Roll(0, totalSex);
             int soFar = 0;
-            foreach(KeyValuePair<string, int> pair in this.m_SexPrevelence)
+            foreach (KeyValuePair<string, int> pair in this.m_SexPrevelence)
             {
                 soFar += pair.Value;
                 if (result < soFar)
@@ -186,6 +205,7 @@ namespace JoyLib.Code.Cultures
                     return sexes.First(sex => sex.Name.Equals(pair.Key));
                 }
             }
+
             throw new InvalidOperationException("Could not assign sex from culture " + this.CultureName + ".");
         }
 
@@ -193,20 +213,23 @@ namespace JoyLib.Code.Cultures
         {
             int soFar = 0;
             int totalSexuality = 0;
-            foreach(int value in this.m_SexualityPrevelence.Values)
+            foreach (int value in this.m_SexualityPrevelence.Values)
             {
                 totalSexuality += value;
             }
+
             int result = this.Roller.Roll(0, totalSexuality);
 
             foreach (KeyValuePair<string, int> pair in this.m_SexualityPrevelence)
             {
                 soFar += pair.Value;
-                if(result < soFar)
+                if (result < soFar)
                 {
-                    return sexualities.First(sexuality => sexuality.Name.Equals(pair.Key, StringComparison.OrdinalIgnoreCase));
+                    return sexualities.First(sexuality =>
+                        sexuality.Name.Equals(pair.Key, StringComparison.OrdinalIgnoreCase));
                 }
             }
+
             throw new InvalidOperationException("Could not assign sexuality from culture " + this.CultureName + ".");
         }
 
@@ -214,20 +237,22 @@ namespace JoyLib.Code.Cultures
         {
             int soFar = 0;
             int totalRomance = 0;
-            foreach(int value in this.m_RomancePrevelence.Values)
+            foreach (int value in this.m_RomancePrevelence.Values)
             {
                 totalRomance += value;
             }
+
             int result = this.Roller.Roll(0, totalRomance);
 
             foreach (KeyValuePair<string, int> pair in this.m_RomancePrevelence)
             {
                 soFar += pair.Value;
-                if(result < soFar)
+                if (result < soFar)
                 {
                     return romances.First(romance => romance.Name.Equals(pair.Key, StringComparison.OrdinalIgnoreCase));
                 }
             }
+
             throw new InvalidOperationException("Could not assign romance from culture " + this.CultureName + ".");
         }
 
@@ -238,18 +263,20 @@ namespace JoyLib.Code.Cultures
             {
                 int soFar = 0;
                 int totalGender = 0;
-                foreach(int value in this.m_GenderPrevelence.Values)
+                foreach (int value in this.m_GenderPrevelence.Values)
                 {
                     totalGender += value;
                 }
+
                 int result = this.Roller.Roll(0, totalGender);
 
                 foreach (KeyValuePair<string, int> pair in this.m_GenderPrevelence)
                 {
                     soFar += pair.Value;
-                    if(result < soFar)
+                    if (result < soFar)
                     {
-                        return genders.First(gender => gender.Name.Equals(pair.Key, StringComparison.OrdinalIgnoreCase));
+                        return genders.First(gender =>
+                            gender.Name.Equals(pair.Key, StringComparison.OrdinalIgnoreCase));
                     }
                 }
             }
@@ -257,6 +284,7 @@ namespace JoyLib.Code.Cultures
             {
                 return genders.First(gender => gender.Name.Equals(sex.Name, StringComparison.OrdinalIgnoreCase));
             }
+
             throw new InvalidOperationException("Could not assign gender from culture " + this.CultureName + ".");
         }
 
@@ -264,20 +292,22 @@ namespace JoyLib.Code.Cultures
         {
             int soFar = 0;
             int totalJob = 0;
-            foreach(int value in this.m_JobPrevelence.Values)
+            foreach (int value in this.m_JobPrevelence.Values)
             {
                 totalJob += value;
             }
+
             int result = this.Roller.Roll(0, totalJob);
 
-            foreach(KeyValuePair<string, int> pair in this.m_JobPrevelence)
+            foreach (KeyValuePair<string, int> pair in this.m_JobPrevelence)
             {
                 soFar += pair.Value;
-                if(result < soFar)
+                if (result < soFar)
                 {
                     return jobs.First(job => job.Name.Equals(pair.Key, StringComparison.OrdinalIgnoreCase));
                 }
             }
+
             throw new InvalidOperationException("Could not assign job from culture " + this.CultureName + ".");
         }
 
@@ -294,13 +324,15 @@ namespace JoyLib.Code.Cultures
 
         public int GetStatVariance(string statistic)
         {
-            if(this.m_StatVariance.ContainsKey(statistic))
+            if (this.m_StatVariance.ContainsKey(statistic))
             {
-                if(this.Roller.Roll(0, 100) < this.m_StatVariance[statistic].Item1)
+                if (this.Roller.Roll(0, 100) < this.m_StatVariance[statistic].Item1)
                 {
-                    return this.Roller.Roll(-this.m_StatVariance[statistic].Item2, this.m_StatVariance[statistic].Item2 + 1);
+                    return this.Roller.Roll(-this.m_StatVariance[statistic].Item2,
+                        this.m_StatVariance[statistic].Item2 + 1);
                 }
             }
+
             return 0;
         }
     }

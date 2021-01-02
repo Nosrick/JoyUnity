@@ -140,26 +140,26 @@
         <Names>
             <NameData>
                 <Name>Robin</Name>
-                <Sex>all</Sex>
+                <Gender>all</Gender>
                 <Chain>0</Chain>
             </NameData>
             
             <NameData>
                 <Name>McDemon</Name>
-                <Sex>all</Sex>
+                <Gender>all</Gender>
                 <Chain>1</Chain>
             </NameData>
             
             <NameData>
                 <Name>The</Name>
-                <Sex>all</Sex>
+                <Gender>all</Gender>
                 <Chain>1</Chain>
                 <Group>0</Group>
             </NameData>
             
             <NameData>
                 <Name>Republican</Name>
-                <Sex>all</Sex>
+                <Gender>all</Gender>
                 <Chain>2</Chain>
                 <Group>0</Group>
             </NameData>

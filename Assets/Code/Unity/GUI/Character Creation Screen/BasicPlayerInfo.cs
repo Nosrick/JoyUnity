@@ -92,33 +92,28 @@ namespace JoyLib.Code.Unity.GUI
             this.CurrentCulture = culture;
             this.SexContainer.Container = this.CurrentCulture.Sexes.ToList();
             IBioSex sex = this.CurrentCulture.ChooseSex(this.GameManager.BioSexHandler.Sexes);
-            Debug.Log("SEX: " + sex.Name);
             this.SexContainer.Value = this.SexContainer.Container.FindIndex(s => s.Equals(sex.Name, StringComparison.CurrentCulture));
 
             this.GenderContainer.Container = this.CurrentCulture.Genders.ToList();
             IGender gender = this.CurrentCulture.ChooseGender(sex, this.GameManager.GenderHandler.Genders);
-            Debug.Log("GENDER: " + gender.Name);
             this.GenderContainer.Value = this.GenderContainer.Container.FindIndex(s => 
                     s.Equals(gender.Name, StringComparison.Ordinal));
 
 
             this.SexualityContainer.Container = this.CurrentCulture.Sexualities.ToList();
             ISexuality sexuality = this.CurrentCulture.ChooseSexuality(this.GameManager.SexualityHandler.Sexualities);
-            Debug.Log("SEXUALITY: " + sexuality.Name);
             this.SexualityContainer.Value = this.SexualityContainer.Container.FindIndex(s => 
                     s.Equals(sexuality.Name,
                         StringComparison.OrdinalIgnoreCase));
 
             this.JobContainer.Container = this.CurrentCulture.Jobs.ToList();
             IJob job = this.CurrentCulture.ChooseJob(this.GameManager.JobHandler.Jobs);
-            Debug.Log("JOB: "+ job.Name);
             this.JobContainer.Value = this.JobContainer.Container.FindIndex(s =>
                     s.Equals(job.Name,
                         StringComparison.OrdinalIgnoreCase));
 
             this.RomanceContainer.Container = this.CurrentCulture.RomanceTypes.ToList();
             IRomance romance = this.CurrentCulture.ChooseRomance(this.GameManager.RomanceHandler.Romances);
-            Debug.Log("ROMANCE: " + romance.Name);
             this.RomanceContainer.Value = this.RomanceContainer.Container.FindIndex(s => s.Equals(
                     romance.Name, StringComparison.OrdinalIgnoreCase));
 

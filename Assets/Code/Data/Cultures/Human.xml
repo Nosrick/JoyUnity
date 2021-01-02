@@ -119,19 +119,19 @@
 		<Names>
 			<NameData>
 				<Name>Alex</Name>
-				<Sex>all</Sex>
+				<Gender>all</Gender>
 				<Chain>0</Chain>
 			</NameData>
 
 			<NameData>
 				<Name>McHuman</Name>
-				<Sex>all</Sex>
+				<Gender>all</Gender>
 				<Chain>1</Chain>
 			</NameData>
 			
 			<NameData>
-				<Name>The</Name>
-				<Sex>all</Sex>
+				<Name>the</Name>
+				<Gender>all</Gender>
 				<Chain>1</Chain>
 				<Group>0</Group>
 				<Group>1</Group>
@@ -139,14 +139,14 @@
 			
 			<NameData>
 				<Name>Fantastic</Name>
-				<sex>all</sex>
+				<Gender>all</Gender>
 				<Chain>2</Chain>
 				<Group>0</Group>
 			</NameData>
 			
 			<NameData>
 				<Name>Despicable</Name>
-				<sex>all</sex>
+				<Gender>all</Gender>
 				<Chain>2</Chain>
 				<Group>1</Group>
 			</NameData>

@@ -55,7 +55,7 @@ namespace JoyLib.Code.Cultures
                                                    select new NameData(
                                                       nameData.Element("Name").GetAs<string>(),
                                                       nameData.Elements("Chain").Select(x => x.GetAs<int>()).ToArray(),
-                                                      nameData.Elements("Sex").Select(x => x.GetAs<string>()).ToArray(),
+                                                      nameData.Elements("Gender").Select(x => x.GetAs<string>()).ToArray(),
                                                       nameData.Elements("Group").Select(x => x.GetAs<int>()).ToArray()
                                                       )).ToList();
 
