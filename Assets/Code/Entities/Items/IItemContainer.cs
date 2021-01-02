@@ -16,6 +16,7 @@ namespace JoyLib.Code.Entities.Items
         bool AddContents(IEnumerable<IItemInstance> actors);
 
         bool RemoveContents(IItemInstance actor);
+        bool RemoveContents(IEnumerable<IItemInstance> actors);
 
         void Clear();
         

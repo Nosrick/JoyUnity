@@ -401,6 +401,11 @@ namespace JoyLib.Code.Entities.Items
             return true;
         }
 
+        public virtual bool RemoveContents(IEnumerable<IItemInstance> actors)
+        {
+            return actors.Aggregate(true, (current, actor) => current & this.RemoveContents(actor));
+        }
+
         public void Clear()
         {
             List<IItemInstance> copy = new List<IItemInstance>(this.Contents);

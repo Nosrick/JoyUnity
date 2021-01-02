@@ -724,7 +724,7 @@ namespace JoyLib.Code.Entities
         public void AddExperience(int value)
         {
             int result = this.CurrentJob.AddExperience(value);
-            this.ExperienceChange?.Invoke(this, new ValueChangedEventArgs()
+            this.ExperienceChange?.Invoke(this, new ValueChangedEventArgs
             {
                 Delta = value,
                 Name = "experience",
@@ -736,13 +736,7 @@ namespace JoyLib.Code.Entities
         {
             int damage = value;
 
-            int result = this.DamageValue(DerivedValueName.HITPOINTS, damage);
-            this.DerivedValueChange?.Invoke(this, new ValueChangedEventArgs()
-            {
-                Delta = damage,
-                Name = DerivedValueName.HITPOINTS,
-                NewValue = result
-            });
+            this.DamageValue(DerivedValueName.HITPOINTS, damage);
         }
 
         public IEnumerable<IItemInstance> GetEquipment(string slotRef)
@@ -750,13 +744,7 @@ namespace JoyLib.Code.Entities
             return this.Equipment.GetSlotContents(slotRef);
         }
 
-        public IEnumerable<IItemInstance> Contents
-        {
-            get
-            {
-                return this.m_Backpack;
-            }
-        }
+        public IEnumerable<IItemInstance> Contents => this.m_Backpack;
 
         public virtual bool AddContents(IItemInstance actor)
         {
@@ -778,7 +766,7 @@ namespace JoyLib.Code.Entities
                 this.m_Backpack.Add(actor);
             }
             
-            this.ItemAdded?.Invoke(this, new ItemChangedEventArgs(){ Item = actor });
+            this.ItemAdded?.Invoke(this, new ItemChangedEventArgs { Item = actor });
             return true;
         }
 
@@ -793,7 +781,7 @@ namespace JoyLib.Code.Entities
             result |= this.Backpack.Contains(actor);
             if (result)
             {
-                return result;
+                return true;
             }
 
             foreach (IItemInstance item in this.Backpack)
@@ -801,11 +789,11 @@ namespace JoyLib.Code.Entities
                 result |= item.Contains(actor);
                 if (result)
                 {
-                    return result;
+                    return true;
                 }
             }
 
-            return result;
+            return false;
         }
 
         public virtual bool AddContents(IEnumerable<IItemInstance> actors)
@@ -825,6 +813,11 @@ namespace JoyLib.Code.Entities
                 this.ItemAdded?.Invoke(this, new ItemChangedEventArgs() { Item = actor });
             }
             return true;
+        }
+
+        public virtual bool RemoveContents(IEnumerable<IItemInstance> actors)
+        {
+            return actors.Aggregate(true, (current, actor) => current & this.RemoveContents(actor));
         }
 
         public virtual void Clear()
