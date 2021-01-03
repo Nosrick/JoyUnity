@@ -46,7 +46,7 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
 
         public override bool HasVisibility(IEntity viewer, IWorldInstance world, Vector2Int point)
         {
-            return this.Vision.Contains(point);
+            return this.Vision.Contains(point) && world.LightCalculator.Light.GetLight(point) < this.MaximumLightLevel;
         }
     }
 }

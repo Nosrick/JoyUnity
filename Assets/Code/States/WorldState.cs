@@ -496,13 +496,19 @@ namespace JoyLib.Code.States
                 var transformPosition = fog.transform.position;
                 Vector2Int position = new Vector2Int((int) transformPosition.x, (int) transformPosition.y);
 
-                bool visible = player.VisionProvider.HasVisibility(player, this.m_ActiveWorld, position);
-                int lightLevel = visible ? this.m_ActiveWorld.LightCalculator.Light.GetLight(position) : 0;
-
-                fog.GetComponent<SpriteRenderer>().color = LightLevelHelper.GetColour(
-                    lightLevel,
-                    player.VisionProvider.MinimumLightLevel,
-                    player.VisionProvider.MaximumLightLevel);
+                bool canSee = player.VisionProvider.CanSee(player, this.m_ActiveWorld, position);
+                if (canSee)
+                {
+                    int lightLevel = this.m_ActiveWorld.LightCalculator.Light.GetLight(position);
+                    fog.GetComponent<SpriteRenderer>().color = LightLevelHelper.GetColour(
+                        lightLevel,
+                        player.VisionProvider.MinimumLightLevel,
+                        player.VisionProvider.MaximumLightLevel);
+                }
+                else
+                {
+                    fog.GetComponent<SpriteRenderer>().color = Color.black;
+                }
             }
         }
 

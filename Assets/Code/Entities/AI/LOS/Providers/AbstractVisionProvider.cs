@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code.World;
@@ -18,14 +17,11 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
         protected AbstractVisionProvider(IFOVHandler algorithm)
         {
             this.Algorithm = algorithm;
+            this.m_Vision = new HashSet<Vector2Int>();
         }
 
         public virtual bool CanSee(IEntity viewer, IWorldInstance world, int x, int y)
         {
-            if (this.m_Vision is null)
-            {
-                Debug.Log("VISION IS NULL");
-            }
             return this.m_Vision.Contains(new Vector2Int(x, y));
         }
 
@@ -64,10 +60,7 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
             return visionRect;
         }
 
-        public virtual void Update(IEntity viewer, IWorldInstance world)
-        {
-            throw new NotImplementedException("Someone forgot to implement Update()");
-        }
+        public abstract void Update(IEntity viewer, IWorldInstance world);
 
         public HashSet<Vector2Int> Vision 
         { 
