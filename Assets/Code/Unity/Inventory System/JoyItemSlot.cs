@@ -256,8 +256,7 @@ namespace JoyLib.Code.Unity.GUI
         public virtual void OnEndDrag(PointerEventData eventData)
         {
             List<RaycastResult> results = new List<RaycastResult>();
-            EventSystem eventSystem = EventSystem.current;
-            eventSystem.RaycastAll(eventData, results);
+            Raycaster.Raycast(eventData, results);
 
             if (results.Count == 0)
             {
@@ -271,7 +270,7 @@ namespace JoyLib.Code.Unity.GUI
             }
 
             MoveContainerPriority chosen = null;
-            int highestPriority = Int32.MinValue;
+            int highestPriority = int.MinValue;
             foreach (MoveContainerPriority priority in results.Select(result => this.Container.ContainerPriorities.FirstOrDefault(p =>
                 p.m_ContainerName.Equals(result.gameObject.name, StringComparison.OrdinalIgnoreCase)))
                 .Where(p => p is null == false))
