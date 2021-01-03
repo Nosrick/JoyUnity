@@ -97,7 +97,11 @@ namespace JoyLib.Code.Unity
         public void OnPointerEnter(PointerEventData eventData)
         {
             this.PointerOver = true;
-            if (GUIManager.IsActive(GUINames.CONTEXT_MENU) == false)
+            if (GUIManager.IsActive(GUINames.CONTEXT_MENU) == false
+                && GlobalConstants.GameManager.Player.VisionProvider.CanSee(
+                    GlobalConstants.GameManager.Player,
+                    this.JoyObject.MyWorld,
+                    this.JoyObject.WorldPosition))
             {
                 GUIManager.OpenGUI(GUINames.TOOLTIP).GetComponent<Tooltip>().Show(
                     this.JoyObject.JoyName,
@@ -119,6 +123,10 @@ namespace JoyLib.Code.Unity
             contextMenu.Clear();
 
             if (this.JoyObject.Equals(GlobalConstants.GameManager.Player) == false
+                && GlobalConstants.GameManager.Player.VisionProvider.CanSee(
+                    GlobalConstants.GameManager.Player,
+                    this.JoyObject.MyWorld,
+                    this.JoyObject.WorldPosition)
                 && this.JoyObject is IEntity)
             {
                 if (AdjacencyHelper.IsAdjacent(
