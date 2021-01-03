@@ -489,6 +489,13 @@ namespace JoyLib.Code.Unity
             return this.RemoveItem(item) && destination.StackOrAdd(item);
         }
 
+        public override void Close()
+        {
+            this.GUIManager.CloseGUI(GUINames.TOOLTIP);
+            this.GUIManager.CloseGUI(GUINames.CONTEXT_MENU);
+            base.Close();
+        }
+
         public virtual event ItemAddedEventHandler OnAddItem;
         public virtual event ItemRemovedEventHandler OnRemoveItem;
     }

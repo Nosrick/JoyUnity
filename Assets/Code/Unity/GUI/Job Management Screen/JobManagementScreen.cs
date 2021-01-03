@@ -31,8 +31,8 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
         protected List<GrowingNamedItem> Skills { get; set; }
         protected List<AbilityItem> Abilities { get; set; }
 
-        protected IEntity Player;
-        protected IJob CurrentJob; 
+        protected IEntity Player { get; set; }
+        protected IJob CurrentJob { get; set; } 
         
         protected Dictionary<string, IAbility> PurchasedAbilities { get; set; }
         
@@ -42,9 +42,8 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
         protected Dictionary<string, int> StatisticsDeltas { get; set; }
         protected Dictionary<string, int> SkillsDeltas { get; set; }
 
-        public override void OnEnable()
+        public void OnEnable()
         {
-            base.OnEnable();
             if (this.GameManager.Player is null)
             {
                 return;
@@ -322,14 +321,24 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
                     this.Player.ModifyValue(item.Name.ToLower(), delta);
                 }
             }
+
+            this.OriginalSkills = this.Player.Skills.Values.ToList();
+            this.OriginalStatistics = this.Player.Statistics.Values.ToList();
+            this.SetUp();
         }
 
-        public override int Value
+        public virtual int Value
         {
             get => this.m_Value;
             set
             {
-                base.Value = value;
+                int previous = this.m_Value;
+                this.m_Value = value;
+                this.OnChangeValue(this, new ValueChangedEventArgs()
+                {
+                    NewValue = this.m_Value,
+                    Delta = this.m_Value - previous
+                });
                 this.SetExperienceText();
             }
         }
