@@ -5,10 +5,10 @@ namespace JoyLib.Code.Entities.AI.LOS
 {
     public class LightBoard
     {
-        public Dictionary<Vector2Int, int> LightLevels { get; protected set; }
+        public int[,] LightLevels { get; protected set; }
         
-        protected HashSet<Vector2Int> Walls { get; set; }
-        protected HashSet<Vector2Int> Visited { get; set; }
+        protected bool[,] Walls { get; set; }
+        protected bool[,] Visited { get; set; }
         
         public int Width { get; protected set; }
         public int Height { get; protected set; }
@@ -17,60 +17,77 @@ namespace JoyLib.Code.Entities.AI.LOS
         {
             this.Width = width;
             this.Height = height;
-            this.Walls = new HashSet<Vector2Int>(walls);
-            this.Visited = new HashSet<Vector2Int>();
-            this.LightLevels = new Dictionary<Vector2Int, int>();
+            this.Walls = new bool[width, height];
+            this.Visited = new bool[width, height];
+            this.LightLevels = new int[width, height];
+
+            foreach (Vector2Int wall in walls)
+            {
+                this.Walls[wall.x, wall.y] = true;
+            }
+        }
+
+        public bool Visit(Vector2Int position)
+        {
+            this.Visited[position.x, position.y] = true;
+            return true;
         }
 
         public bool HasVisited(Vector2Int position)
         {
-            return this.Visited.Contains(position);
+            return this.Visited[position.x, position.y];
         }
 
         public int AddLight(Vector2Int position, int lightLevel)
         {
             if (this.HasVisited(position))
             {
-                return this.LightLevels[position];
+                return this.LightLevels[position.x, position.y];
             }
 
-            if (this.LightLevels.ContainsKey(position))
-            {
-                this.LightLevels[position] = Mathf.Min(this.LightLevels[position] + lightLevel, GlobalConstants.MAX_LIGHT);
-            }
-            else
-            {
-                this.LightLevels.Add(position, lightLevel);
-            }
+            this.LightLevels[position.x, position.y] = Mathf.Min(this.LightLevels[position.x, position.y] + lightLevel, GlobalConstants.MAX_LIGHT);
 
-            this.Visited.Add(position);
-            return this.LightLevels[position];
+            this.Visited[position.x, position.y] = true;
+            return this.LightLevels[position.x, position.y];
+        }
+
+        public int DiffuseLight(Vector2Int position, int lightLevel)
+        {
+            /*
+            if (this.HasVisited(position))
+            {
+                return this.LightLevels[position.x, position.y];
+            }
+            */
+
+            this.LightLevels[position.x, position.y] = Mathf.Clamp(
+                lightLevel, 
+                this.LightLevels[position.x, position.y], 
+                GlobalConstants.MAX_LIGHT);
+
+            this.Visited[position.x, position.y] = true;
+            return this.LightLevels[position.x, position.y];
         }
 
         public int GetLight(Vector2Int position)
         {
-            if (this.LightLevels.ContainsKey(position))
-            {
-                return this.LightLevels[position];
-            }
-
-            return 0;
+            return this.LightLevels[position.x, position.y];
         }
 
         public bool IsObstacle(Vector2Int position)
         {
-            return this.Walls.Contains(position);
+            return this.Walls[position.x, position.y];
         }
 
         public void ClearVisited()
         {
-            this.Visited.Clear();
+            this.Visited = new bool[this.Width, this.Height];
         }
 
         public void ClearBoard()
         {
-            this.LightLevels.Clear();
-            this.Visited.Clear();
+            this.LightLevels = new int[this.Width, this.Height];
+            this.Visited = new bool[this.Width, this.Height];
         }
     }
 }

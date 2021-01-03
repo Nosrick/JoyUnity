@@ -19,18 +19,22 @@ namespace JoyLib.Code.World.Lighting
             foreach (IItemInstance item in items)
             {
                 this.m_Board.ClearVisited();
-                this.m_Board.AddLight(item.WorldPosition, item.ItemType.LightLevel);
+                //this.m_Board.AddLight(item.WorldPosition, item.ItemType.LightLevel);
                 foreach (Vector2Int direction in this.DIAGONALS)
                 {
-                    this.CastLight(item, world, item.WorldPosition, 1, 1, 0, 0, direction.x,direction.y, 0);
-                    this.CastLight(item, world, item.WorldPosition, 1, 1, 0, direction.x, 0, 0, direction.y);
+                    this.Light.DiffuseLight(item.WorldPosition, item.ItemType.LightLevel);
+                    this.DoAdjacent(item.WorldPosition);
+                    //this.CastLight(item, world, item.WorldPosition, 1, 1, 0, 0, direction.x,direction.y, 0);
+                    //this.CastLight(item, world, item.WorldPosition, 1, 1, 0, direction.x, 0, 0, direction.y);
                 }
+            
+                //this.DoDiffuse(item.WorldPosition);
             }
 
             return this.m_Board;
         }
 
-        private void CastLight(IItemInstance item, IWorldInstance world, Vector2Int origin, int row, float start, float end, int xx, int xy, int yx, int yy)
+        protected void CastLight(IItemInstance item, IWorldInstance world, Vector2Int origin, int row, float start, float end, int xx, int xy, int yx, int yy)
         {
             float newStart = 0.0f;
             if(start < end)
@@ -52,7 +56,7 @@ namespace JoyLib.Code.World.Lighting
 
                     int lightLevel = item.ItemType.LightLevel - distance;
 
-                    if (!(currentX >= 0 && currentY >= 0 && currentX < this.m_Board.Width && currentY < this.m_Board.Height) || start < rightSlope)
+                    if (!this.Contains(new Vector2Int(currentX, currentY)) || start < rightSlope)
                     {
                         continue;
                     }
@@ -70,7 +74,7 @@ namespace JoyLib.Code.World.Lighting
 
                     if (blocked)
                     {
-                        this.m_Board.AddLight(currentPosition, lightLevel);
+                        this.m_Board.DiffuseLight(currentPosition, lightLevel);
                         if(this.m_Board.IsObstacle(currentPosition))
                         {
                             newStart = rightSlope;
@@ -83,7 +87,7 @@ namespace JoyLib.Code.World.Lighting
                     }
                     else
                     {
-                        this.m_Board.AddLight(currentPosition, lightLevel);
+                        this.m_Board.DiffuseLight(currentPosition, lightLevel);
                         if (!this.m_Board.IsObstacle(currentPosition) || distance >= item.ItemType.LightLevel)
                         {
                             continue;
@@ -97,17 +101,20 @@ namespace JoyLib.Code.World.Lighting
             }
         }
 
-        private void DoDiffuse()
+        protected void DoDiffuse(Vector2Int point)
         {
             this.m_Board.ClearVisited();
-            foreach (KeyValuePair<Vector2Int, int> pair in this.m_Board.LightLevels)
-            {
-                this.DoAdjacent(pair.Key, pair.Value);
-            }
+            this.DoAdjacent(point);
         }
 
-        private void DoAdjacent(Vector2Int position, int lightlevel)
+        protected void DoAdjacent(Vector2Int position)
         {
+            int lightLevel = this.m_Board.GetLight(position);
+            if (lightLevel <= 1)
+            {
+                return;
+            }
+
             List<Vector2Int> adjacent = new List<Vector2Int>
             {
                 new Vector2Int(position.x - 1, position.y),
@@ -116,15 +123,26 @@ namespace JoyLib.Code.World.Lighting
                 new Vector2Int(position.x, position.y - 1)
             };
             foreach (Vector2Int point in adjacent)
-            {
-                if (point.x > 0 && point.x < this.m_Board.Width
-                                && point.y > 0 && point.y < this.m_Board.Height
-                                && lightlevel > 0)
+            { 
+                if (!this.Contains(point))
                 {
-                    this.m_Board.AddLight(point, lightlevel - 1);
-                    this.DoAdjacent(point, lightlevel - 1);
+                    continue;
+                }
+                int neighbourLight = this.m_Board.GetLight(point);
+                if (neighbourLight < lightLevel - 1)
+                {
+                    this.m_Board.DiffuseLight(point, lightLevel - 1);
+                    this.DoAdjacent(point);
                 }
             }
+        }
+
+        protected bool Contains(Vector2Int point)
+        {
+            return point.x >= 0
+                   && point.x < this.m_Board.Width
+                   && point.y >= 0
+                   && point.y < this.m_Board.Height;
         }
 
         public LightBoard Light => this.m_Board;
