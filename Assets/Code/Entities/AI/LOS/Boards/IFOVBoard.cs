@@ -5,7 +5,7 @@ namespace JoyLib.Code.Entities.AI.LOS
 {
     public interface IFOVBoard
     {
-        HashSet<Vector2Int> GetVision();
+        IEnumerable<Vector2Int> GetVision();
 
         bool Contains(int x, int y);
 

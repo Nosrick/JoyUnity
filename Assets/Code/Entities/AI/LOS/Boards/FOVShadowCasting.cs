@@ -7,7 +7,7 @@ namespace JoyLib.Code.Entities.AI.LOS
 {
     public class FOVShadowCasting : IFOVHandler
     {
-        protected FOVBasicBoard m_Board;
+        protected FOVArrayBoard m_Board;
 
         protected readonly Vector2Int[] DIAGONALS = { new Vector2Int(1, -1), new Vector2Int(1, 1), new Vector2Int(-1, 1), new Vector2Int(-1, -1) };
 
@@ -16,7 +16,7 @@ namespace JoyLib.Code.Entities.AI.LOS
         {
             Vector2Int viewerPos = viewer.WorldPosition;
 
-            this.m_Board = new FOVBasicBoard(dimensions.x, dimensions.y, walls);
+            this.m_Board = new FOVArrayBoard(dimensions.x, dimensions.y, walls);
             this.m_Board.Visible(viewerPos.x, viewerPos.y);
             foreach(Vector2Int direction in this.DIAGONALS)
             {

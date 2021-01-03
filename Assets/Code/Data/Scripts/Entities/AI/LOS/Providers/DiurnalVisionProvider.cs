@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using JoyLib.Code.World;
 using UnityEngine;
 
@@ -18,19 +19,9 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
 
         public override void Update(IEntity viewer, IWorldInstance world)
         {
-            if (viewer is null)
-            {
-                Debug.Log("VIEWER IS NULL");
-            }
-
-            if (world is null)
-            {
-                Debug.Log("WORLD IS NULL");
-            }
-
             this.Vision = new HashSet<Vector2Int>();
 
-            this.Board = (FOVBasicBoard) this.Algorithm.Do(
+            this.Board = this.Algorithm.Do(
                                     viewer,
                                     world,
                                     world.Dimensions,
@@ -46,7 +37,7 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
 
         public override bool HasVisibility(IEntity viewer, IWorldInstance world, Vector2Int point)
         {
-            return this.Vision.Contains(point) && world.LightCalculator.Light.GetLight(point) > this.MinimumLightLevel;
+            return this.Vision.Any(v => v.Equals(point)) && world.LightCalculator.Light.GetLight(point) > this.MinimumLightLevel;
         }
     }
 }

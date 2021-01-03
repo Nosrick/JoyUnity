@@ -288,7 +288,8 @@ namespace JoyLib.Code.Entities
                 new Tuple<string, string>("", textInfo.ToTitleCase(this.CreatureType)),
                 new Tuple<string, string>("", textInfo.ToTitleCase(this.CurrentJob.Name)),
                 new Tuple<string, string>("", textInfo.ToTitleCase(this.Gender.Name)),
-                relationship
+                relationship,
+                new Tuple<string, string>("", this.WorldPosition.ToString())
             };
 
             return data;
@@ -982,7 +983,7 @@ namespace JoyLib.Code.Entities
             get { return this.m_Size; }
         }
 
-        public HashSet<Vector2Int> Vision
+        public IEnumerable<Vector2Int> Vision
         {
             get { return this.m_VisionProvider.Vision; }
         }

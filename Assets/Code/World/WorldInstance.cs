@@ -253,7 +253,7 @@ namespace JoyLib.Code.World
         {
             List<IJoyObject> data = new List<IJoyObject>();
 
-            if (entityRef.VisionProvider.Vision.Count == 0)
+            if (entityRef.VisionProvider.Vision.Any() == false)
             {
                 return data;
             }
