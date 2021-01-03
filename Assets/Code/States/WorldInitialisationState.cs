@@ -3,7 +3,6 @@ using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
-using JoyLib.Code.Scripting;
 using JoyLib.Code.Unity;
 using JoyLib.Code.World;
 using UnityEngine;
@@ -76,8 +75,9 @@ namespace JoyLib.Code.States
                 child.transform.position = new Vector3(this.m_ActiveWorld.SpawnPoint.x, this.m_ActiveWorld.SpawnPoint.y, 0.0f);
                 SpriteRenderer spriteRenderer = child.GetComponent<SpriteRenderer>();
                 spriteRenderer.sortingLayerName = "Walls";
-                //child.transform.name = this.m_ActiveWorld.Parent.Name + " stairs";
+                child.transform.name = this.m_ActiveWorld.Parent.Name + " stairs";
                 child.SetActive(true);
+                /*
                 IJoyObject upstairs = new JoyObject(
                     this.m_ActiveWorld.Parent.Name + " stairs",
                     gameManager.DerivedValueHandler.GetItemStandardBlock(values),
@@ -87,6 +87,7 @@ namespace JoyLib.Code.States
                     this.m_ObjectIcons.GetSprites("Stairs", "UpStairs"));
                 upstairs.MyWorld = this.m_ActiveWorld;
                 child.GetComponent<MonoBehaviourHandler>().AttachJoyObject(upstairs);
+                */
             }
 
             //Make each downstairs
@@ -95,24 +96,25 @@ namespace JoyLib.Code.States
                 GameObject child = gameManager.FloorPool.Get();
                 
                 Vector2Int position = pair.Key;
-                child.transform.position = new Vector3(position.x, position.y, 0.0f);
                 SpriteRenderer spriteRenderer = child.GetComponent<SpriteRenderer>();
                 spriteRenderer.sortingLayerName = "Walls";
                 spriteRenderer.sprite = this.m_ObjectIcons.GetSprite("Stairs", "Downstairs");
-                //child.transform.name = pair.Value.Name + " stairs";
+                child.transform.name = pair.Value.Name + " stairs";
+                child.transform.position = new Vector3(pair.Key.x, pair.Key.y);
                 child.SetActive(true);
+                /*
                 IJoyObject downstairs = new JoyObject(
                     pair.Value.Name + " stairs",
                     gameManager.DerivedValueHandler.GetItemStandardBlock(values),
-                    this.m_ActiveWorld.SpawnPoint,
+                    position,
                     "Stairs",
                     new IJoyAction[0],
                     this.m_ObjectIcons.GetSprites("Stairs", "Downstairs"));
                 downstairs.MyWorld = this.m_ActiveWorld;
                 child.GetComponent<MonoBehaviourHandler>().AttachJoyObject(downstairs);
+                */
             }
 
-            int index = 0;
             Vector3 pos = Vector3.zero;
             for(int i = 0; i < this.m_ActiveWorld.Tiles.GetLength(0); i++)
             {
@@ -129,22 +131,32 @@ namespace JoyLib.Code.States
                     goSpriteRenderer.sprite = this.m_ObjectIcons.GetSprite("Obscure", "Obscure");
                     fog.name = "Fog of War";
                     fog.SetActive(true);
+                    /*
                     IJoyObject fogObj = new JoyObject(
                         "Fog of War",
                         gameManager.DerivedValueHandler.GetItemStandardBlock(values),
                         new Vector2Int(i, j),
                         this.m_ActiveWorld.Tiles[i, j].TileSet,
                         new IJoyAction[0],
-                        this.m_ObjectIcons.GetSprites(this.m_ActiveWorld.Tiles[i, j].TileSet, "surroundfloor"));
+                        this.m_ObjectIcons.GetSprites("Obscure", "Obscure"));
                     fogObj.MyWorld = this.m_ActiveWorld;
                     fog.GetComponent<MonoBehaviourHandler>().AttachJoyObject(fogObj);
+                    */
+                    
                     
                     //Make the floor
                     GameObject floor = gameManager.FloorPool.Get();
                     floor.transform.position = pos;
                     SpriteRenderer fogSpriteRenderer = floor.GetComponent<SpriteRenderer>();
                     fogSpriteRenderer.sortingLayerName = "Terrain";
+                    fogSpriteRenderer.sprite = this.m_ObjectIcons.GetSprite(this.m_ActiveWorld.Tiles[i, j].TileSet, 
+                            //TODO: This will eventually be a tile direction selection algorithm
+                            "surroundfloor");
+                    floor.name = this.m_ActiveWorld.Name + " floor";
                     floor.SetActive(true);
+                    
+                    
+                    /*
                     IJoyObject floorObj = new JoyObject(
                         this.m_ActiveWorld.Name + " floor",
                         gameManager.DerivedValueHandler.GetItemStandardBlock(values),
@@ -154,8 +166,7 @@ namespace JoyLib.Code.States
                         this.m_ObjectIcons.GetSprites(this.m_ActiveWorld.Tiles[i, j].TileSet, "surroundfloor"));
                     floorObj.MyWorld = this.m_ActiveWorld;
                     floor.GetComponent<MonoBehaviourHandler>().AttachJoyObject(floorObj);
-
-                    index += 1;
+                    */
                 }
             }
 
@@ -168,7 +179,6 @@ namespace JoyLib.Code.States
                 gameObject.GetComponent<MonoBehaviourHandler>()
                     .AttachJoyObject(wall);
                 gameObject.SetActive(true);
-                index += 1;
             }
             
             this.CreateItems(this.m_ActiveWorld.Objects);

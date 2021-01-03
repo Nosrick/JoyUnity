@@ -4,9 +4,9 @@ namespace JoyLib.Code.Helpers
 {
     public static class LightLevelHelper
     {
-        private static float Normalise(int light)
+        private static float Normalise(int light, int minValue = 0, int maxValue = GlobalConstants.MAX_LIGHT)
         {
-            return light == 0 ? 1 : light / (float)GlobalConstants.MAX_LIGHT;
+            return (light - minValue) / (float)(maxValue - minValue);
         }
 
         public static Color GetColour(int light, int minValue, int maxValue)
@@ -14,19 +14,17 @@ namespace JoyLib.Code.Helpers
             Color colour;
             if (light >= minValue && light <= maxValue)
             {
-                colour = Color.clear;
+                float hue = Normalise(light, minValue, maxValue);
+                float alpha = 1.0f - hue;
+                colour = new Color(hue, hue, hue, alpha);
             }
             else if (light > maxValue)
             {
-                float alpha = Normalise(light);
-                float hue = Normalise(light);
-                colour = new Color(hue, hue, hue, alpha);
+                colour = new Color(1.0f, 1.0f, 1.0f, 1.0f);
             }
             else
             {
-                float alpha = Normalise(GlobalConstants.MAX_LIGHT - light);
-                float hue = 1.0f - alpha;
-                colour = new Color(hue, hue, hue, alpha);
+                colour = new Color(0.0f, 0.0f, 0.0f, 1.0f);
             }
             
             return colour;

@@ -100,10 +100,10 @@ namespace JoyLib.Code.Unity
         {
             this.PointerOver = true;
             if (GUIManager.IsActive(GUINames.CONTEXT_MENU) == false
-                /*&& GlobalConstants.GameManager.Player.VisionProvider.CanSee(
+                && GlobalConstants.GameManager.Player.VisionProvider.CanSee(
                     GlobalConstants.GameManager.Player,
                     this.JoyObject.MyWorld,
-                    this.JoyObject.WorldPosition)*/)
+                    this.JoyObject.WorldPosition))
             {
                 GUIManager.OpenGUI(GUINames.TOOLTIP).GetComponent<Tooltip>().Show(
                     this.JoyObject.JoyName,

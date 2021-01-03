@@ -75,21 +75,14 @@ namespace JoyLib.Code
         {
             get
             {
-                return new List<Tuple<string, string>>
-                {
-                    new Tuple<string, string>(
-                        "Light Level",
-                        this.MyWorld.LightCalculator.Light.GetLight(this.WorldPosition).ToString()),
-                    new Tuple<string, string>("", this.WorldPosition.ToString())
-                };
+                return this.m_Tooltip;
             }
             set
             {
                 this.m_Tooltip = value;
             }
         }
-            
-
+        
         protected IEnumerable<Tuple<string, string>> m_Tooltip;
 
         public JoyObject()

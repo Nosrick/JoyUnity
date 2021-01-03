@@ -8,7 +8,7 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
     {
         public new string Name => "nocturnalvision";
 
-        public override int MaximumLightLevel => 24;
+        public override int MaximumLightLevel => 12;
 
         public NocturnalVisionProvider() :
             base(new FOVShadowCasting())
