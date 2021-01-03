@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public class ValueContainer : MonoBehaviour, IValueContainer, IPointerEnterHandler, IPointerExitHandler
+    public class ValueContainer : MonoBehaviour, IValueContainer
     {
         [SerializeField] protected int m_Minimum = 1;
         [SerializeField] protected int m_Maximum = 10;
@@ -12,10 +12,12 @@ namespace JoyLib.Code.Unity.GUI
         [SerializeField] public int IncreaseDelta = 1;
         [SerializeField] public bool AllowIncrease = true;
         [SerializeField] public bool AllowDecrease = true;
-        
-        protected static IGUIManager GUIManager { get; set; }
+
+        protected int m_Value;
 
         protected string m_Tooltip;
+        
+        protected static IGUIManager GUIManager { get; set; }
 
         public virtual void OnEnable()
         {
@@ -55,6 +57,11 @@ namespace JoyLib.Code.Unity.GUI
         {
             get;
             set;
+        }
+
+        protected virtual void OnChangeValue(object sender, ValueChangedEventArgs args)
+        {
+            this.ValueChanged?.Invoke(sender, args);
         }
 
         public void OnPointerEnter(PointerEventData data)
@@ -113,8 +120,6 @@ namespace JoyLib.Code.Unity.GUI
                 });
             }
         }
-
-        protected int m_Value;
         
         public virtual event ValueChangedEventHandler ValueChanged;
     }

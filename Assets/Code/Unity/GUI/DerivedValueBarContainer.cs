@@ -10,41 +10,12 @@ namespace JoyLib.Code.Unity.GUI
         [SerializeField] protected TextMeshProUGUI NameText;
         [SerializeField] protected TextMeshProUGUI ValueText;
 
-        [SerializeField] public Color BackgroundColour;
+        [SerializeField] public Color BarColour;
         [SerializeField] public Color TextColour;
-
-        public override int DecreaseValue(int delta = 1)
-        {
-            if (this.m_Parent is null)
-            {
-                if (this.Value - delta >= this.Minimum)
-                {
-                    this.Value -= delta;
-                }
-                return this.Value;
-            }
-
-            return base.DecreaseValue(delta);
-        }
-
-        public override int IncreaseValue(int delta = 1)
-        {
-            if (this.m_Parent is null)
-            {
-                if (this.Value + delta <= this.Maximum)
-                {
-                    this.Value += delta;
-                }
-
-                return this.Value;
-            }
-            
-            return base.IncreaseValue(delta);
-        }
 
         protected void SetFillAmount()
         {
-            this.BarImage.color = this.BackgroundColour;
+            this.BarImage.color = this.BarColour;
             this.NameText.color = this.TextColour;
             this.ValueText.color = this.TextColour;
             this.BarImage.fillAmount = this.Value / (float)this.Maximum;

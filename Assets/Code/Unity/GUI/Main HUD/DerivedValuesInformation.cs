@@ -71,7 +71,7 @@ namespace JoyLib.Code.Unity.GUI
             
             for(int i = 0; i < valueList.Count; i++)
             {
-                this.Items[valueList[i].Name].BackgroundColour =
+                this.Items[valueList[i].Name].BarColour =
                     this.GameManager.DerivedValueHandler.GetBackgroundColour(valueList[i].Name);
                 
                 this.Items[valueList[i].Name].TextColour =

@@ -10,12 +10,12 @@ namespace JoyLib.Code.Unity.GUI
     [RequireComponent(typeof(Image))]
     public class AbilityItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
-        [SerializeField] protected ValueContainer Parent;
+        [SerializeField] protected ValueContainer m_Parent;
         [SerializeField] protected Color32 SelectedColour;
         [SerializeField] protected Color32 IdleColour;
         [SerializeField] public int Delta = 1;
         public bool Selected { get; protected set; }
-        
+
         public string Tooltip { get; set; }
 
         public string Name
@@ -66,7 +66,7 @@ namespace JoyLib.Code.Unity.GUI
 
         public void ToggleMe()
         {
-            if (this.Parent.Value < this.Delta && this.Selected == false)
+            if (this.m_Parent.Value < this.Delta && this.Selected == false)
             {
                 return;
             }
@@ -81,7 +81,7 @@ namespace JoyLib.Code.Unity.GUI
                 this.Image.color = this.IdleColour;
             }
 
-            this.OnSelect?.Invoke(this, new ValueChangedEventArgs()
+            this.OnSelect?.Invoke(this, new ValueChangedEventArgs
             {
                 Name = this.Name,
                 NewValue = this.Selected ? this.Delta : -this.Delta,
