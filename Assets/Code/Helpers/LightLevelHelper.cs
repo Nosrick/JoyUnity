@@ -6,7 +6,8 @@ namespace JoyLib.Code.Helpers
     {
         private static float Normalise(int light, int minValue = 0, int maxValue = GlobalConstants.MAX_LIGHT)
         {
-            return (light - minValue) / (float)(maxValue - minValue);
+            int adjusted = light == 0 ? 1 : light;
+            return (adjusted - minValue) / (float)(maxValue - minValue);
         }
 
         public static Color GetColour(int light, int minValue, int maxValue)

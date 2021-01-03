@@ -59,10 +59,7 @@ namespace JoyLib.Code.Entities.AI.LOS
 
                     if (Math.Sqrt(deltaX * deltaX + deltaY * deltaY) <= sightMod)
                     {
-                        if(viewer.VisionProvider.HasVisibility(viewer, world, currentX, currentY))
-                        {
-                            this.m_Board.Visible(currentX, currentY);
-                        }
+                        this.m_Board.Visible(currentX, currentY);
                     }
 
                     if (blocked)
