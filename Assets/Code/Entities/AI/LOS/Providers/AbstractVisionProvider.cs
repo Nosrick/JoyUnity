@@ -62,10 +62,10 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
 
         public abstract void Update(IEntity viewer, IWorldInstance world);
 
-        public HashSet<Vector2Int> Vision 
+        public IEnumerable<Vector2Int> Vision 
         { 
             get => this.m_Vision;
-            protected set => this.m_Vision = value;
+            protected set => this.m_Vision = new HashSet<Vector2Int>(value);
         }
 
         protected IFOVHandler Algorithm

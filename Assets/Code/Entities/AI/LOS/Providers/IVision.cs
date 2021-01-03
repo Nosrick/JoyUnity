@@ -14,7 +14,7 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
             get;
         }
 
-        HashSet<Vector2Int> Vision
+        IEnumerable<Vector2Int> Vision
         {
             get;
         }
