@@ -283,7 +283,18 @@ namespace JoyLib.Code.States
             {
                 this.GUIManager.ToggleGUI(GUINames.CHARACTER_SHEET);
             }
+            
+            if (this.GUIManager.AreAnyOpen() == false)
+            {
+                this.GUIManager.OpenGUI(GUINames.NEEDSRECT);
+                this.GUIManager.OpenGUI(GUINames.DERIVED_VALUES);
+            }
 
+            if (this.GUIManager.RemovesControl())
+            {
+                return;
+            }
+            
             if (inputAction.name.Equals("interact", StringComparison.OrdinalIgnoreCase))
             {
                 //Going up a level
@@ -425,17 +436,6 @@ namespace JoyLib.Code.States
                 }
             }
 
-            if (this.GUIManager.AreAnyOpen() == false)
-            {
-                this.GUIManager.OpenGUI(GUINames.NEEDSRECT);
-                this.GUIManager.OpenGUI(GUINames.DERIVED_VALUES);
-            }
-
-            if (this.GUIManager.RemovesControl())
-            {
-                return;
-            }
-
             /*
                 else if (m_GameplayFlags == GameplayFlags.Targeting)
                 {
@@ -471,20 +471,6 @@ namespace JoyLib.Code.States
         protected void Tick()
         {
             this.m_ActiveWorld.Tick();
-
-            /*
-            for (int i = 0; i < s_ActiveWorld.entities.Count; i++)
-            {
-                if (s_ActiveWorld.entities[i].GUID % 10 == tickCounter)
-                {
-                    Thread childThread = new Thread(new ThreadStart(s_ActiveWorld.entities[i].Tick));
-                    childThread.Start();
-                }
-            }
-
-            tickCounter += 1;
-            tickCounter %= 10;
-            */
         }
 
         protected void DrawObjects()

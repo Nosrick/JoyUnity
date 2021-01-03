@@ -1,6 +1,5 @@
 ﻿using System;
 using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Unity.GUI;
 using UnityEngine;
@@ -54,6 +53,7 @@ namespace JoyLib.Code.Unity
                 this.SpeechBubble.gameObject.SetActive(false);
             }
 
+            /*
             if(this.JoyObject.JoyName.StartsWith("Downstairs") || this.JoyObject.JoyName.StartsWith("Upstairs"))
             {
                 this.SpriteRenderer.sortingLayerName = "Walls";
@@ -80,9 +80,11 @@ namespace JoyLib.Code.Unity
                     this.SpriteRenderer.sortingLayerName = "Entities";
                 }
             }
+            */
             this.name = this.JoyObject.JoyName + ":" + this.JoyObject.GUID;
             this.transform.position = new Vector3(this.JoyObject.WorldPosition.x, this.JoyObject.WorldPosition.y, 0.0f);
             this.SpriteRenderer.sprite = joyObject.Sprite;
+            this.SetSpeechBubble(false);
         }
 
         public void SetSpeechBubble(bool on, Sprite need = null)
@@ -98,10 +100,10 @@ namespace JoyLib.Code.Unity
         {
             this.PointerOver = true;
             if (GUIManager.IsActive(GUINames.CONTEXT_MENU) == false
-                && GlobalConstants.GameManager.Player.VisionProvider.CanSee(
+                /*&& GlobalConstants.GameManager.Player.VisionProvider.CanSee(
                     GlobalConstants.GameManager.Player,
                     this.JoyObject.MyWorld,
-                    this.JoyObject.WorldPosition))
+                    this.JoyObject.WorldPosition)*/)
             {
                 GUIManager.OpenGUI(GUINames.TOOLTIP).GetComponent<Tooltip>().Show(
                     this.JoyObject.JoyName,

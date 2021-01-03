@@ -42,7 +42,7 @@ namespace JoyLib.Code.World.Generators.Interiors
             return tiles;
         }
 
-        private WorldTile[,] TreatTiles()
+        protected WorldTile[,] TreatTiles()
         {
             WorldTile[,] tiles = new WorldTile[this.m_UntreatedTiles.GetLength(0), this.m_UntreatedTiles.GetLength(1)];
 
@@ -81,7 +81,8 @@ namespace JoyLib.Code.World.Generators.Interiors
                             new JoyObject(
                                 "Wall", 
                                 this.DerivedValueHandler.GetItemStandardBlock(values), 
-                                new Vector2Int(i, j), this.TileSet, 
+                                new Vector2Int(i, j), 
+                                this.TileSet, 
                                 new string[] {}, 
                                 sprites,
                                 null,

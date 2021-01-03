@@ -69,9 +69,28 @@ namespace JoyLib.Code
         
         public MonoBehaviourHandler MonoBehaviourHandler { get; protected set; }
 
-        public RNG Roller { get; protected set; }
+        public IRollable Roller { get; protected set; }
 
-        public virtual IEnumerable<Tuple<string, string>> Tooltip { get; protected set; }
+        public virtual IEnumerable<Tuple<string, string>> Tooltip
+        {
+            get
+            {
+                return new List<Tuple<string, string>>
+                {
+                    new Tuple<string, string>(
+                        "Light Level",
+                        this.MyWorld.LightCalculator.Light.GetLight(this.WorldPosition).ToString()),
+                    new Tuple<string, string>("", this.WorldPosition.ToString())
+                };
+            }
+            set
+            {
+                this.m_Tooltip = value;
+            }
+        }
+            
+
+        protected IEnumerable<Tuple<string, string>> m_Tooltip;
 
         public JoyObject()
         {
@@ -121,9 +140,11 @@ namespace JoyLib.Code
             Vector2Int position, 
             string tileSet, 
             IJoyAction[] actions,
-            Sprite[] sprites, 
+            Sprite[] sprites,
+            IRollable roller = null,
             params string[] tags)
         {
+            this.Roller = roller is null ? new RNG() : roller; 
             this.Initialise(
                 name,
                 derivedValues,
@@ -188,7 +209,7 @@ namespace JoyLib.Code
 
             this.CachedActions = new List<IJoyAction>(actions);
 
-            this.Tooltip = new List<Tuple<string, string>>();
+            //this.Tooltip = new List<Tuple<string, string>>();
         }
 
         ~JoyObject()

@@ -15,7 +15,7 @@ namespace JoyLib.Code
         string JoyName { get; }
         long GUID { get; }
         
-        RNG Roller { get; }
+        IRollable Roller { get; }
         
         IWorldInstance MyWorld { get; set; }
         

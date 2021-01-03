@@ -63,7 +63,7 @@ namespace JoyLib.Code.Entities.Items
             Vector2Int position, 
             bool identified, 
             Sprite[] sprites,
-            RNG roller = null,
+            IRollable roller = null,
             IEnumerable<IAbility> uniqueAbilities = null,
             IEnumerable<IJoyAction> actions = null,
             GameObject gameObject = null,
