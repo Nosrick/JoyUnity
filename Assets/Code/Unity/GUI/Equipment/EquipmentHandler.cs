@@ -17,6 +17,13 @@ namespace JoyLib.Code.Unity.GUI
             this.CalculateSlots(clearSlots);
         }
 
+        public override void Close()
+        {
+            this.GUIManager.CloseGUI(GUINames.TOOLTIP);
+            this.GUIManager.CloseGUI(GUINames.CONTEXT_MENU);
+            base.Close();
+        }
+
         protected virtual void CalculateSlots(bool clearSlots = false)
         {
             if (clearSlots)
