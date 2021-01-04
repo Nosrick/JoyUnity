@@ -62,7 +62,7 @@ namespace JoyLib.Code.States
 
             //GlobalConstants.GameManager.Player = m_ActiveWorld.Player;
 
-            this.m_ActiveWorld.Tick();
+            this.Tick();
         }
 
         public static IEnumerable<Tuple<string, string>> GetTooltipData(IPosition positionable)
@@ -106,6 +106,10 @@ namespace JoyLib.Code.States
         public override void Stop()
         {
             this.m_WorldSerialiser.Serialise(this.m_Overworld);
+        }
+
+        public override void Update()
+        {
         }
 
         protected void SetEntityWorld(IWorldInstance world)
@@ -154,80 +158,6 @@ namespace JoyLib.Code.States
                 }
             }
         }
-        
-        /*
-        protected void OnMouseOverJoyObject(object sender, JoyObjectMouseOverEventArgs args)
-        {
-            if (GUIManager.IsActive(GUINames.CONTEXT_MENU) == false)
-            {
-                PrimaryTarget = args.Actor;
-                SetUpTooltip();
-            }
-        }
-
-        protected void OnMouseExitJoyObject(object sender, EventArgs args)
-        {
-            if (GUIManager.IsActive(GUINames.CONTEXT_MENU) == false)
-            {
-                PrimaryTarget = null;
-            }
-
-            GUIManager.CloseGUI(GUINames.TOOLTIP);
-        }
-
-        protected void SetUpTooltip()
-        {
-            if (m_ActiveWorld.Player.VisionProvider.CanSee(m_ActiveWorld.Player, m_ActiveWorld,
-                PrimaryTarget.WorldPosition) == false)
-            {
-                return;
-            }
-
-            if (PrimaryTarget is IEntity entity)
-            {
-                string relationshipName = "You";
-                if (PrimaryTarget.GUID != m_ActiveWorld.Player.GUID)
-                {
-                    try
-                    {
-                        relationshipName = RelationshipHandler.GetBestRelationship(
-                            GlobalConstants.GameManager.Player,
-                            PrimaryTarget).DisplayName;
-                    }
-                    catch (Exception e)
-                    {
-                        relationshipName = "Stranger";
-                    }
-                }
-
-                List<Tuple<string, string>> data = new List<Tuple<string, string>>
-                {
-                    new Tuple<string, string>("Relationship: ", CultureInfo.CurrentCulture.TextInfo.ToTitleCase(relationshipName)),
-                    new Tuple<string, string>("Gender: ", entity.Gender.Name),
-                    new Tuple<string, string>("Job: ", CultureInfo.CurrentCulture.TextInfo.ToTitleCase(entity.CurrentJob.Name)),
-                    new Tuple<string, string>("Species: ", CultureInfo.CurrentCulture.TextInfo.ToTitleCase(entity.CreatureType))
-                };
-
-                this.GUIManager.OpenGUI(GUINames.TOOLTIP)
-                    .GetComponent<Tooltip>()
-                    .Show(
-                        entity.JoyName,
-                        null,
-                        entity.Sprite,
-                        data);
-            }
-            else if (PrimaryTarget is IItemInstance item)
-            {
-                this.GUIManager.OpenGUI(GUINames.TOOLTIP)
-                    .GetComponent<Tooltip>()
-                    .Show(
-                        item.JoyName,
-                        null,
-                        item.Sprite,
-                        item.Tooltip);
-            }
-        }
-        */
 
         public override void HandleInput(object data, InputActionChange change)
         {
@@ -485,6 +415,7 @@ namespace JoyLib.Code.States
         protected void Tick()
         {
             this.m_ActiveWorld.Tick();
+            this.DrawObjects();
         }
 
         protected void DrawObjects()
@@ -510,22 +441,6 @@ namespace JoyLib.Code.States
                     fog.GetComponent<SpriteRenderer>().color = Color.black;
                 }
             }
-        }
-
-        public override void Update()
-        {
-            IEntity player = this.m_ActiveWorld.Player;
-
-            if (!this.AutoTurn && player.FulfillmentData.Counter > 0)
-            {
-                this.AutoTurn = true;
-            }
-            else if (this.AutoTurn && player.FulfillmentData.Counter <= 0 && !this.ManualAutoTurn)
-            {
-                this.AutoTurn = false;
-            }
-
-            this.DrawObjects();
         }
 
         public override GameState GetNextState()
