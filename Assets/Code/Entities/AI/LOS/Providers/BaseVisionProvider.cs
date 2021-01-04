@@ -11,7 +11,9 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
         public string Name { get; protected set; }
         public int MinimumLightLevel { get; protected set; }
         public int MaximumLightLevel { get; protected set; }
-        
+        public int MinimumComfortLevel { get; protected set; }
+        public int MaximumComfortLevel { get; protected set; }
+
         public Color DarkColour { get; protected set; }
         public Color LightColour { get; protected set; }
 
@@ -22,7 +24,9 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
             Color lightColour,
             IFOVHandler algorithm,
             int minimumLightLevel = 0,
+            int minimumComfortLevel = 0,
             int maximumLightLevel = GlobalConstants.MAX_LIGHT,
+            int maximumComfortLevel = GlobalConstants.MAX_LIGHT,
             string name = null)
         {
             if (name.IsNullOrEmpty() == false)
@@ -36,6 +40,8 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
             this.m_Vision = new HashSet<Vector2Int>();
             this.MinimumLightLevel = minimumLightLevel;
             this.MaximumLightLevel = maximumLightLevel;
+            this.MinimumComfortLevel = minimumComfortLevel;
+            this.MaximumComfortLevel = maximumComfortLevel;
             this.m_Vision = new HashSet<Vector2Int>();
         }
 

@@ -55,12 +55,18 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
                             int minimumLightLevel = visionType.Element("MinimumLight").DefaultIfEmpty(0);
                             int maximumLightLevel = visionType.Element("MaximumLight")
                                 .DefaultIfEmpty(GlobalConstants.MAX_LIGHT);
+                            int minimumComfortLevel =
+                                visionType.Element("MinimumComfort").DefaultIfEmpty(minimumLightLevel);
+                            int maximumComfortLevel =
+                                visionType.Element("MaximumComfort").DefaultIfEmpty(maximumLightLevel);
                             this.AddVision(new BaseVisionProvider(
                                 darkColour,
                                 lightColour,
                                 handler,
                                 minimumLightLevel,
+                                minimumComfortLevel,
                                 maximumLightLevel,
+                                maximumComfortLevel,
                                 name));
                         }
                         catch (Exception e)
@@ -88,7 +94,9 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
             Color lightColour, 
             IFOVHandler algorithm, 
             int minimumLightLevel = 0,
-            int maximumLightLevel = GlobalConstants.MAX_LIGHT)
+            int minimumComfortLevel = 0,
+            int maximumLightLevel = GlobalConstants.MAX_LIGHT,
+            int maximumComfortLevel = GlobalConstants.MAX_LIGHT)
         {
             if (this.VisionTypes.ContainsKey(name))
             {
@@ -102,7 +110,9 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
                     lightColour,
                     algorithm,
                     minimumLightLevel,
+                    minimumComfortLevel,
                     maximumLightLevel,
+                    maximumComfortLevel,
                     name));
 
             return true;

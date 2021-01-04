@@ -7,7 +7,7 @@
 		<Material>Copper</Material>
 		<Material>Iron</Material>
 		<Size>150</Size>
-		<LightLevel>18</LightLevel>
+		<LightLevel>24</LightLevel>
 		<SpawnWeight>2</SpawnWeight>
 		<Tag>light source</Tag>
 		<Tileset>Light Source</Tileset>
@@ -19,7 +19,7 @@
 		<Value>5</Value>
 		<Material>White Pine</Material>
 		<Size>150</Size>
-		<LightLevel>12</LightLevel>
+		<LightLevel>16</LightLevel>
 		<SpawnWeight>5</SpawnWeight>
 		<Tag>light source</Tag>
 		<Tileset>Light Source</Tileset>

@@ -436,7 +436,7 @@ namespace JoyLib.Code.States
                 }
                 else
                 {
-                    fog.GetComponent<SpriteRenderer>().color = Color.black;
+                    fog.GetComponent<SpriteRenderer>().color = player.VisionProvider.DarkColour;
                 }
             }
         }

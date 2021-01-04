@@ -71,7 +71,7 @@ namespace JoyLib.Code.States
                 child.name = this.m_ActiveWorld.Parent.Name + " stairs";
                 TooltipComponent tooltip = child.GetComponent<TooltipComponent>();
                 tooltip.WorldPosition = this.m_ActiveWorld.SpawnPoint;
-                tooltip.RefreshTooltip = WorldState.GetTooltipData;
+                //tooltip.RefreshTooltip = WorldState.GetTooltipData;
                 child.SetActive(true);
             }
 
@@ -87,7 +87,7 @@ namespace JoyLib.Code.States
                 child.transform.position = new Vector3(pair.Key.x, pair.Key.y);
                 TooltipComponent tooltip = child.GetComponent<TooltipComponent>();
                 tooltip.WorldPosition = pair.Key;
-                tooltip.RefreshTooltip = WorldState.GetTooltipData;
+                //tooltip.RefreshTooltip = WorldState.GetTooltipData;
                 child.SetActive(true);
             }
 
@@ -120,7 +120,7 @@ namespace JoyLib.Code.States
                     floor.name = this.m_ActiveWorld.Name + " floor";
                     TooltipComponent tooltip = floor.GetComponent<TooltipComponent>();
                     tooltip.Move(intPos);
-                    tooltip.RefreshTooltip = WorldState.GetTooltipData;
+                    //tooltip.RefreshTooltip = WorldState.GetTooltipData;
                     floor.SetActive(true);
                 }
             }

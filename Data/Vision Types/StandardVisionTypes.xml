@@ -2,15 +2,17 @@
 <VisionTypes>
     <VisionType>
         <Name>diurnal vision</Name>
-        <DarkColour>#000000FF</DarkColour>
-        <LightColour>#FFFFFFFF</LightColour>
+        <DarkColour>#0d000dff</DarkColour>
+        <LightColour>#dbd5adff</LightColour>
         <MinimumLight>8</MinimumLight>
+        <MinimumComfort>14</MinimumComfort>
     </VisionType>
     
     <VisionType>
         <Name>nocturnal vision</Name>
         <DarkColour>#0E3613FF</DarkColour>
         <LightColour>#addbb3FF</LightColour>
-        <MaximumLight>14</MaximumLight>
+        <MaximumLight>24</MaximumLight>
+        <MaximumComfort>16</MaximumComfort>
     </VisionType>
 </VisionTypes>

@@ -13,25 +13,29 @@ namespace JoyLib.Code.Helpers
 
         public static Color GetColour(int light, IVision vision)
         {
-            Color colour;
-            if (light >= vision.MinimumLightLevel && light <= vision.MaximumLightLevel)
+            float lerp = Normalise(light);
+            Color displayColour = Color.Lerp(vision.DarkColour, vision.LightColour, lerp);
+            if(light > vision.MaximumLightLevel)
             {
-                float hue = Normalise(light, vision.MinimumLightLevel, vision.MaximumLightLevel);
-                float alpha = 1.0f - hue;
-                Color displayColour = Color.Lerp(vision.DarkColour, vision.LightColour, hue);
-                displayColour.a = alpha;
-                colour = displayColour;
+                displayColour.a = 1f;
             }
-            else if (light > vision.MaximumLightLevel)
+            else if (light > vision.MaximumComfortLevel)
             {
-                colour = vision.LightColour;
+                displayColour.a = lerp;
+            }
+            else if (light < vision.MinimumLightLevel)
+            {
+                displayColour.a = 1f;
+            }
+            else if(light < vision.MinimumComfortLevel)
+            {
+                displayColour.a = 1f - lerp;
             }
             else
             {
-                colour = vision.DarkColour;
+                displayColour.a = 0f;
             }
-            
-            return colour;
+            return displayColour;
         }
     }
 }

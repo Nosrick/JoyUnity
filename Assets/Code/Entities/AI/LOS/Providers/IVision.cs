@@ -9,6 +9,9 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
         int MinimumLightLevel { get; }
         int MaximumLightLevel { get; }
         
+        int MinimumComfortLevel { get; }
+        int MaximumComfortLevel { get; }
+        
         Color DarkColour { get; }
         Color LightColour { get; }
         
