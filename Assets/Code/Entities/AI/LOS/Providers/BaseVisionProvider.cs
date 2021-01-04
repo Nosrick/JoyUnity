@@ -1,43 +1,63 @@
 using System.Collections.Generic;
 using System.Linq;
+using Castle.Core.Internal;
 using JoyLib.Code.World;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities.AI.LOS.Providers
 {
-    public abstract class AbstractVisionProvider : IVision
+    public class BaseVisionProvider : IVision
     {
-        public string Name => "abstractvisionprovider";
-
-        public virtual int MinimumLightLevel => 0;
-        public virtual int MaximumLightLevel => GlobalConstants.MAX_LIGHT;
+        public string Name { get; protected set; }
+        public int MinimumLightLevel { get; protected set; }
+        public int MaximumLightLevel { get; protected set; }
+        
+        public Color DarkColour { get; protected set; }
+        public Color LightColour { get; protected set; }
 
         protected HashSet<Vector2Int> m_Vision;
 
-        protected AbstractVisionProvider(IFOVHandler algorithm)
+        public BaseVisionProvider(
+            Color darkColour,
+            Color lightColour,
+            IFOVHandler algorithm,
+            int minimumLightLevel = 0,
+            int maximumLightLevel = GlobalConstants.MAX_LIGHT,
+            string name = null)
         {
+            if (name.IsNullOrEmpty() == false)
+            {
+                this.Name = name;
+            }
+
+            this.DarkColour = darkColour;
+            this.LightColour = lightColour;
             this.Algorithm = algorithm;
+            this.m_Vision = new HashSet<Vector2Int>();
+            this.MinimumLightLevel = minimumLightLevel;
+            this.MaximumLightLevel = maximumLightLevel;
             this.m_Vision = new HashSet<Vector2Int>();
         }
 
         public virtual bool CanSee(IEntity viewer, IWorldInstance world, int x, int y)
         {
-            return this.m_Vision.Contains(new Vector2Int(x, y));
+            return this.CanSee(viewer, world, new Vector2Int(x, y));
         }
 
         public virtual bool CanSee(IEntity viewer, IWorldInstance world, Vector2Int point)
         {
-            return this.CanSee(viewer, world, point.x, point.y);
+            return this.m_Vision.Any(p => p.Equals(point));
         }
 
         public virtual bool HasVisibility(IEntity viewer, IWorldInstance world, int x, int y)
         {
-            return this.CanSee(viewer, world, x, y);
+            return this.HasVisibility(viewer, world, new Vector2Int(x, y));
         }
 
         public virtual bool HasVisibility(IEntity viewer, IWorldInstance world, Vector2Int point)
         {
-            return this.CanSee(viewer, world, point.x, point.y);
+            int lightLevel = world.LightCalculator.Light.GetLight(point);
+            return this.CanSee(viewer, world, point) && lightLevel >= this.MinimumLightLevel && lightLevel <= this.MaximumLightLevel;
         }
 
         public virtual RectInt GetFullVisionRect(IEntity viewer)
@@ -60,7 +80,18 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
             return visionRect;
         }
 
-        public abstract void Update(IEntity viewer, IWorldInstance world);
+        public virtual void Update(IEntity viewer, IWorldInstance world)
+        {
+            this.Vision = new HashSet<Vector2Int>();
+
+            this.Board = this.Algorithm.Do(
+                viewer,
+                world,
+                world.Dimensions,
+                world.Walls.Keys);
+
+            this.Vision = this.Board.GetVision();
+        }
 
         public IEnumerable<Vector2Int> Vision 
         { 
