@@ -27,6 +27,11 @@ namespace JoyLib.Code.Entities.AI.Drivers
             }
         }
 
+        public override void Interact()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public override void Locomotion(Entity vehicle)
         {
             //If you're idle
