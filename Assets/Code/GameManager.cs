@@ -53,11 +53,12 @@ public class GameManager : MonoBehaviour, IGameManager
         GameObject prefab = Resources.Load<GameObject>("Prefabs/MonoBehaviourHandler");
         GameObject itemPrefab = Resources.Load<GameObject>("Prefabs/ItemInstance");
         GameObject sprite = Resources.Load<GameObject>("Prefabs/Sprite");
+        GameObject fog = Resources.Load<GameObject>("Prefabs/Fog of War");
         this.FloorPool = new GameObjectPool(sprite, floorHolder);
         this.WallPool = new GameObjectPool(prefab, wallHolder);
         this.EntityPool = new GameObjectPool(prefab, entityHolder);
         this.ItemPool = new GameObjectPool(itemPrefab, objectHolder);
-        this.FogPool = new GameObjectPool(sprite, fogHolder);
+        this.FogPool = new GameObjectPool(fog, fogHolder);
 
         this.MyGameObject = this.gameObject;
 

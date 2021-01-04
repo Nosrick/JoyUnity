@@ -52,7 +52,7 @@ namespace JoyLib.Code.Unity
 
         public void OnTriggerEnter2D(Collider2D other)
         {
-            IJoyObject otherObj = other.gameObject.GetComponent<MonoBehaviourHandler>().JoyObject;
+            IJoyObject otherObj = other.gameObject.GetComponent<MonoBehaviourHandler>()?.JoyObject;
 
             if (otherObj is IEntity entity)
             {
@@ -67,7 +67,7 @@ namespace JoyLib.Code.Unity
                 return;
             }
             
-            IJoyObject otherObj = other.gameObject.GetComponent<MonoBehaviourHandler>().JoyObject;
+            IJoyObject otherObj = other.gameObject.GetComponent<MonoBehaviourHandler>()?.JoyObject;
 
             if (otherObj is IEntity entity && entity.GUID.Equals(this.EntityInRange.GUID))
             {
@@ -79,15 +79,16 @@ namespace JoyLib.Code.Unity
         {
             this.Initialise();
             bool result = false;
-            if (this.JoyObject is IItemInstance item)
+            if (!(this.JoyObject is IItemInstance item))
             {
-                IJoyAction addItemAction = this.EntityInRange.FetchAction("additemaction");
-                result = addItemAction.Execute(
-                    new IJoyObject[] {this.EntityInRange, item},
-                    new string[] {"pickup"},
-                    new object[] {true});
-                result &= LiveItemHandler.RemoveItemFromWorld(item.GUID);
+                return false;
             }
+            IJoyAction addItemAction = this.EntityInRange.FetchAction("additemaction");
+            result = addItemAction.Execute(
+                new IJoyObject[] {this.EntityInRange, item},
+                new string[] {"pickup"},
+                new object[] {true});
+            result &= LiveItemHandler.RemoveItemFromWorld(item.GUID);
 
             return result;
         }
@@ -95,17 +96,18 @@ namespace JoyLib.Code.Unity
         public void DropItem()
         {
             this.Initialise();
-            
-            if (this.JoyObject is IItemInstance itemInstance)
+
+            if (!(this.JoyObject is IItemInstance itemInstance))
             {
-                IEntity dropper = this.JoyObject.MyWorld.GetEntity(this.JoyObject.WorldPosition);
-                this.gameObject.transform.position = new Vector3(this.JoyObject.WorldPosition.x, this.JoyObject.WorldPosition.y);
-                IJoyAction placeInWorldAction = dropper.FetchAction("placeiteminworldaction");
-                placeInWorldAction.Execute(
-                    new IJoyObject[] {dropper, itemInstance},
-                    new string[] { "drop" });
-                this.gameObject.SetActive(true);
+                return;
             }
+            IEntity dropper = this.JoyObject.MyWorld.GetEntity(this.JoyObject.WorldPosition);
+            this.gameObject.transform.position = new Vector3(this.JoyObject.WorldPosition.x, this.JoyObject.WorldPosition.y);
+            IJoyAction placeInWorldAction = dropper.FetchAction("placeiteminworldaction");
+            placeInWorldAction.Execute(
+                new IJoyObject[] {dropper, itemInstance},
+                new string[] { "drop" });
+            this.gameObject.SetActive(true);
         }
 
         public override void AttachJoyObject(IJoyObject joyObject)

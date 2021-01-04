@@ -50,37 +50,8 @@ namespace JoyLib.Code.Unity
             if (transform is null == false)
             {
                 this.SpeechBubble = transform.GetComponent<SpriteRenderer>();
-                this.SpeechBubble.gameObject.SetActive(false);
             }
-
-            /*
-            if(this.JoyObject.JoyName.StartsWith("Downstairs") || this.JoyObject.JoyName.StartsWith("Upstairs"))
-            {
-                this.SpriteRenderer.sortingLayerName = "Walls";
-            }
-            else if (this.JoyObject.GetType() == typeof(JoyObject))
-            {
-                if(this.JoyObject.IsWall)
-                {
-                    this.SpriteRenderer.sortingLayerName = "Walls";
-                }
-                else
-                {
-                    this.SpriteRenderer.sortingLayerName = "Terrain";
-                }
-            }
-            else
-            {
-                if(this.JoyObject is ItemInstance)
-                {
-                    this.SpriteRenderer.sortingLayerName = "Objects";
-                }
-                else
-                {
-                    this.SpriteRenderer.sortingLayerName = "Entities";
-                }
-            }
-            */
+            
             this.name = this.JoyObject.JoyName + ":" + this.JoyObject.GUID;
             this.transform.position = new Vector3(this.JoyObject.WorldPosition.x, this.JoyObject.WorldPosition.y, 0.0f);
             this.SpriteRenderer.sprite = joyObject.Sprite;
@@ -89,6 +60,11 @@ namespace JoyLib.Code.Unity
 
         public void SetSpeechBubble(bool on, Sprite need = null)
         {
+            if (this.SpeechBubble is null)
+            {
+                return;
+            }
+            
             this.SpeechBubble.gameObject.SetActive(on);
             if (on)
             {

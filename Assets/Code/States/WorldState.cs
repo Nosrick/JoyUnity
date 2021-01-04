@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using JoyLib.Code.Conversation;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Relationships;
@@ -62,6 +63,19 @@ namespace JoyLib.Code.States
             //GlobalConstants.GameManager.Player = m_ActiveWorld.Player;
 
             this.m_ActiveWorld.Tick();
+        }
+
+        public static IEnumerable<Tuple<string, string>> GetTooltipData(IPosition positionable)
+        {
+            return new List<Tuple<string, string>>
+            {
+                new Tuple<string, string>(
+                    "Light Level", GlobalConstants.GameManager.Player.MyWorld.LightCalculator.Light
+                        .GetLight(positionable.WorldPosition)
+                        .ToString()),
+                new Tuple<string, string>(
+                    "", positionable.WorldPosition.ToString())
+            };
         }
 
         public override void LoadContent()
