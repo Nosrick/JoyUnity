@@ -424,8 +424,7 @@ namespace JoyLib.Code.States
             for (int i = 0; i < this.m_FogOfWarHolder.transform.childCount; i++)
             {
                 GameObject fog = this.m_FogOfWarHolder.transform.GetChild(i).gameObject;
-                var transformPosition = fog.transform.position;
-                Vector2Int position = new Vector2Int((int) transformPosition.x, (int) transformPosition.y);
+                Vector2Int position = fog.GetComponent<GridPosition>().WorldPosition;
 
                 bool canSee = player.VisionProvider.CanSee(player, this.m_ActiveWorld, position);
                 if (canSee)

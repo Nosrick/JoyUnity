@@ -92,20 +92,16 @@ namespace JoyLib.Code.States
             }
 
             int fogLayer = LayerMask.NameToLayer("Fog of War");
-            Vector3 pos = Vector3.zero;
             for(int i = 0; i < this.m_ActiveWorld.Tiles.GetLength(0); i++)
             {
                 for(int j = 0; j < this.m_ActiveWorld.Tiles.GetLength(1); j++)
                 {
-                    pos.x = i;
-                    pos.y = j;
-
                     Vector2Int intPos = new Vector2Int(i, j);
                     
                     //Make the fog of war
                     GameObject fog = gameManager.FogPool.Get();
                     fog.layer = fogLayer;
-                    fog.transform.position = pos;
+                    fog.GetComponent<GridPosition>().Move(intPos);
                     SpriteRenderer goSpriteRenderer = fog.GetComponent<SpriteRenderer>();
                     goSpriteRenderer.sortingLayerName = "Fog of War";
                     goSpriteRenderer.sprite = this.m_ObjectIcons.GetSprite("Obscure", "Obscure");

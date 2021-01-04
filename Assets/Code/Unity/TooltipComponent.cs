@@ -8,10 +8,9 @@ using UnityEngine.EventSystems;
 
 namespace JoyLib.Code.Unity
 {
-    public class TooltipComponent : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPosition
+    public class TooltipComponent : GridPosition, IPointerEnterHandler, IPointerExitHandler, IPosition
     {
         public delegate IEnumerable<Tuple<string, string>> SetTooltip(IPosition positionable);
-        
         protected SpriteRenderer SpriteRenderer { get; set; }
         protected Sprite Sprite { get; set; }
         public static IGUIManager GUIManager { get; set; }
@@ -19,8 +18,6 @@ namespace JoyLib.Code.Unity
         public IEnumerable<Tuple<string, string>> Tooltip { get; set; }
 
         public SetTooltip RefreshTooltip { get; set; }
-
-        public Vector2Int WorldPosition { get; set; }
 
         public void Awake()
         {
@@ -61,11 +58,6 @@ namespace JoyLib.Code.Unity
         public void OnPointerExit(PointerEventData eventData)
         {            
             GUIManager.CloseGUI(GUINames.TOOLTIP);
-        }
-        public void Move(Vector2Int position)
-        {
-            this.WorldPosition = position;
-            this.gameObject.transform.position = new Vector3(position.x, position.y);
         }
     }
 }
