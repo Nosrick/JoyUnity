@@ -5,6 +5,7 @@ using JoyLib.Code.Conversation.Subengines.Rumours;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Abilities;
+using JoyLib.Code.Entities.AI.LOS.Providers;
 using JoyLib.Code.Entities.Gender;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Jobs;
@@ -53,6 +54,7 @@ namespace JoyLib.Code
         IConversationEngine ConversationEngine { get; }
         IAbilityHandler AbilityHandler { get; }
         IDerivedValueHandler DerivedValueHandler { get; }
+        IVisionProviderHandler VisionProviderHandler { get; }
         
         NaturalWeaponHelper NaturalWeaponHelper { get; }
         

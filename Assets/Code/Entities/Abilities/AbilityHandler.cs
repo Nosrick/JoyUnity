@@ -18,7 +18,7 @@ namespace JoyLib.Code.Entities.Abilities
         private void Load()
         {
             this.Abilities = new List<IAbility>();
-            this.Abilities.AddRange(ScriptingEngine.instance.FetchAndInitialiseChildren<IAbility>());
+            this.Abilities.AddRange(ScriptingEngine.Instance.FetchAndInitialiseChildren<IAbility>());
         }
 
         public bool Initialise()

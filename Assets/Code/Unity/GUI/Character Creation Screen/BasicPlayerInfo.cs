@@ -49,7 +49,7 @@ namespace JoyLib.Code.Unity.GUI
 
         public void Initialise()
         {
-            this.Templates = this.GameManager.EntityTemplateHandler.Templates;
+            this.Templates = this.GameManager.EntityTemplateHandler.Templates.ToList();
             this.Roller = new RNG();
             int result = this.Roller.Roll(0, this.Templates.Count);
             this.ChangeTemplate(this.Templates[result]);

@@ -23,7 +23,7 @@ namespace JoyLib.Code.Entities.Relationships
             this.m_RelationshipTypes = new Dictionary<string, IRelationship>();
             this.m_Relationships = new NonUniqueDictionary<long, IRelationship>();
 
-            IEnumerable<IRelationship> types = ScriptingEngine.instance.FetchAndInitialiseChildren<IRelationship>();
+            IEnumerable<IRelationship> types = ScriptingEngine.Instance.FetchAndInitialiseChildren<IRelationship>();
             foreach(IRelationship type in types)
             {
                 this.m_RelationshipTypes.Add(type.Name, type);

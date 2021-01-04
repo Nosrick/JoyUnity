@@ -7,7 +7,6 @@ using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.AI.LOS.Providers;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Helpers;
-using JoyLib.Code.Scripting;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities
@@ -16,8 +15,10 @@ namespace JoyLib.Code.Entities
     {
         protected List<IEntityTemplate> m_Templates;
         protected IEntitySkillHandler SkillHandler { get; set; }
+        protected IVisionProviderHandler VisionProviderHandler { get; set; }
+        protected IAbilityHandler AbilityHandler { get; set; }
 
-        public List<IEntityTemplate> Templates
+        public IEnumerable<IEntityTemplate> Templates
         {
             get
             {
@@ -30,8 +31,13 @@ namespace JoyLib.Code.Entities
             }
         }
 
-        public EntityTemplateHandler(IEntitySkillHandler skillHandler)
+        public EntityTemplateHandler(
+            IEntitySkillHandler skillHandler,
+            IVisionProviderHandler visionProviderHandler,
+            IAbilityHandler abilityHandler)
         {
+            this.AbilityHandler = abilityHandler;
+            this.VisionProviderHandler = visionProviderHandler;
             this.SkillHandler = skillHandler;
             this.m_Templates = this.LoadTypes();
         }
@@ -73,8 +79,8 @@ namespace JoyLib.Code.Entities
 
                         string creatureType = entity.Element("CreatureType").DefaultIfEmpty("DEFAULT");
                         string type = entity.Element("Type").DefaultIfEmpty("DEFAULT");
-                        string visionType = entity.Element("VisionType").DefaultIfEmpty("DiurnalVisionProvider");
-                        IVision vision = (IVision)ScriptingEngine.instance.FetchAndInitialise(visionType);
+                        string visionType = entity.Element("VisionType").DefaultIfEmpty("diurnal vision");
+                        IVision vision = this.VisionProviderHandler.GetVision(visionType);
 
                         int size = entity.Element("Size").DefaultIfEmpty<int>(0);
 
@@ -88,7 +94,7 @@ namespace JoyLib.Code.Entities
                         try
                         {
                             abilities = (from ability in entity.Elements("Ability")
-                                                    select GlobalConstants.GameManager.AbilityHandler.GetAbility(ability.DefaultIfEmpty("DEFAULT"))).ToList();
+                                                    select this.AbilityHandler.GetAbility(ability.GetAs<string>())).ToList();
                         }
                         catch(Exception e)
                         {
@@ -97,7 +103,6 @@ namespace JoyLib.Code.Entities
                             GlobalConstants.ActionLog.AddText(e.StackTrace);
                         }
                         
-
                         entities.Add(new EntityTemplate(
                                             statistics, 
                                             skills,
@@ -130,13 +135,13 @@ namespace JoyLib.Code.Entities
                 return this.Templates.First(x => x.CreatureType == type);
             }
 
-            return null;
+            throw new InvalidOperationException("Could not find entity template of type " + type);
         }
 
         public IEntityTemplate GetRandom()
         {
             int result = GlobalConstants.GameManager.Roller.Roll(0, this.m_Templates.Count);
-            return this.Templates[result];
+            return this.m_Templates[result];
         }
     }
 }

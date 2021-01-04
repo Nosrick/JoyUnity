@@ -39,8 +39,7 @@ namespace Tests
 
             ILiveEntityHandler entityHandler = Mock.Of<ILiveEntityHandler>();
 
-            JoyLib.Code.Entities.Relationships.Friendship friendship =
-                new JoyLib.Code.Entities.Relationships.Friendship();
+            IRelationship friendship = Mock.Of<IRelationship>();
             
             IEntityRelationshipHandler relationshipHandler = Mock.Of<IEntityRelationshipHandler>(
                 handler => handler.Get(It.IsAny<IJoyObject[]>(), It.IsAny<string[]>(), It.IsAny<bool>())

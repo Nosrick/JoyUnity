@@ -114,7 +114,7 @@ namespace JoyLib.Code
             List<IJoyAction> tempActions = new List<IJoyAction>(); 
             foreach(string action in actions)
             {
-                tempActions.Add(ScriptingEngine.instance.FetchAction(action));
+                tempActions.Add(ScriptingEngine.Instance.FetchAction(action));
             }
 
             this.Initialise(

@@ -115,7 +115,7 @@ namespace JoyLib.Code.Conversation
                         {
                             try
                             {
-                                ITopic processorObject = (ITopic)ScriptingEngine.instance.FetchAndInitialise(processor);
+                                ITopic processorObject = (ITopic)ScriptingEngine.Instance.FetchAndInitialise(processor);
                                 processorObject.Initialise(
                                     conditions.ToArray(),
                                     topicName,

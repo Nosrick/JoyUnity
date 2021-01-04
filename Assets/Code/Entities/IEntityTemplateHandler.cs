@@ -4,7 +4,7 @@ namespace JoyLib.Code.Entities
 {
     public interface IEntityTemplateHandler
     {
-        List<IEntityTemplate> Templates { get; }
+        IEnumerable<IEntityTemplate> Templates { get; }
 
         IEntityTemplate Get(string type);
         IEntityTemplate GetRandom();

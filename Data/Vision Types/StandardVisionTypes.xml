@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VisionTypes>
+    <VisionType>
+        <Name>diurnal vision</Name>
+        <DarkColour>#000000FF</DarkColour>
+        <LightColour>#FFFFFFFF</LightColour>
+        <MinimumLight>8</MinimumLight>
+    </VisionType>
+    
+    <VisionType>
+        <Name>nocturnal vision</Name>
+        <DarkColour>#0E3613FF</DarkColour>
+        <LightColour>#addbb3FF</LightColour>
+        <MaximumLight>14</MaximumLight>
+    </VisionType>
+</VisionTypes>

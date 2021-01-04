@@ -13,18 +13,15 @@ namespace JoyLib.Code.Scripting
 {
     public class ScriptingEngine
     {
-        private static readonly Lazy<ScriptingEngine> lazy = new Lazy<ScriptingEngine>(() => new ScriptingEngine());
+        private static readonly Lazy<ScriptingEngine> LAZY = new Lazy<ScriptingEngine>(() => new ScriptingEngine());
 
-        public static ScriptingEngine instance => lazy.Value;
+        public static ScriptingEngine Instance => LAZY.Value;
 
-        private Assembly m_ScriptDLL;
+        protected Assembly m_ScriptDLL;
 
-        private Type[] m_Types;
+        protected List<Type> m_Types;
 
-        private ExpressionEvaluator Eval;
-
-        private const string ABILITY_NAMESPACE = "JoyLib.Code.Entities.Abilities.";
-        private const string NEED_NAMESPACE = "JoyLib.Code.Entities.Needs.";
+        protected ExpressionEvaluator Eval;
 
         public ScriptingEngine()
         {
@@ -48,11 +45,11 @@ namespace JoyLib.Code.Scripting
                     List<MetadataReference> libs = new List<MetadataReference>
                     {
                         MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
-                        MetadataReference.CreateFromFile(typeof(Entities.Entity).Assembly.Location),
+                        MetadataReference.CreateFromFile(typeof(GlobalConstants).Assembly.Location),
+                        MetadataReference.CreateFromFile(typeof(Debug).Assembly.Location),
                         MetadataReference.CreateFromFile(typeof(Vector2Int).Assembly.Location),
                         MetadataReference.CreateFromFile(typeof(Queue<bool>).Assembly.Location),
                         MetadataReference.CreateFromFile(typeof(IQueryable).Assembly.Location),
-                        MetadataReference.CreateFromFile(typeof(GlobalConstants).Assembly.Location),
                         MetadataReference.CreateFromFile(typeof(Castle.Core.Internal.CollectionExtensions).Assembly.Location)
                     };
                     CSharpCompilation compilation = CSharpCompilation.Create("JoyScripts", builtFiles, libs,
@@ -65,42 +62,31 @@ namespace JoyLib.Code.Scripting
                     {
                         foreach (var diagnostic in result.Diagnostics)
                         {
-                            if (diagnostic.Severity == DiagnosticSeverity.Error)
+                            if (diagnostic.Severity != DiagnosticSeverity.Error)
                             {
-                                Debug.Log(diagnostic.Severity.ToString());
-                                Debug.Log(diagnostic.GetMessage());
+                                continue;
                             }
+                            Debug.Log(diagnostic.Severity.ToString());
+                            Debug.Log(diagnostic.GetMessage());
                         }
                     }
 
                     memory.Seek(0, SeekOrigin.Begin);
                     this.m_ScriptDLL = Assembly.Load(memory.ToArray());
 
-                    this.m_Types = this.m_ScriptDLL.GetTypes();
-                    
-                    this.Eval = new ExpressionEvaluator();
-                    this.Eval.OptionForceIntegerNumbersEvaluationsAsDoubleByDefault = true;
+                    this.m_Types = new List<Type>(this.m_ScriptDLL.GetTypes());
+                    this.m_Types.AddRange(typeof(IJoyObject).Assembly.GetExportedTypes());
+
+                    this.Eval = new ExpressionEvaluator
+                    {
+                        OptionForceIntegerNumbersEvaluationsAsDoubleByDefault = true
+                    };
                 }
                 catch (Exception ex)
                 {
                     Debug.LogError(ex.Message);
                     Debug.LogError(ex.StackTrace);
                 }
-            }
-        }
-
-        public Type FetchType(string typeName)
-        {
-            try
-            {
-                Type directType = this.m_Types.Single(type => type.Name.Equals(typeName, StringComparison.OrdinalIgnoreCase));
-                return directType;
-            }
-            catch (Exception ex)
-            {
-                Debug.LogWarning(ex.Message);
-                Debug.LogWarning(ex.StackTrace);
-                throw new InvalidOperationException("Error when searching for type, " + typeName);
             }
         }
 
@@ -116,8 +102,21 @@ namespace JoyLib.Code.Scripting
             {
                 Debug.LogWarning(ex.Message);
                 Debug.LogWarning(ex.StackTrace);
-                throw new InvalidOperationException("Error when searching for Type in ScriptingEngine, type name " +
-                                                    type.ToString());
+                throw new InvalidOperationException("Error when searching for Type in ScriptingEngine, type name " + type);
+            }
+        }
+
+        public T Initialise<T>()
+        {
+            try
+            {
+                return Activator.CreateInstance<T>();
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning(e.Message);
+                Debug.LogWarning(e.StackTrace);
+                throw new InvalidOperationException("Error when searching for Type " + typeof(T).Name);
             }
         }
 
@@ -219,11 +218,6 @@ namespace JoyLib.Code.Scripting
         public T Evaluate<T>(string code)
         {
             return (T)Convert.ChangeType(this.Eval.Evaluate(code), typeof(T));
-        }
-
-        public int Evaluate(string code)
-        {
-            return int.Parse(Math.Floor(this.Eval.Evaluate<double>(code)).ToString());
         }
     }
 }

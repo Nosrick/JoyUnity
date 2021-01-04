@@ -12,7 +12,7 @@ namespace JoyLib.Code.Entities.AI.Drivers
 {
     public class StandardDriver : AbstractDriver
     {
-        protected static IJoyAction s_WanderAction = ScriptingEngine.instance.FetchAction("wanderaction");
+        protected static IJoyAction s_WanderAction = ScriptingEngine.Instance.FetchAction("wanderaction");
 
         protected static IPhysicsManager s_PhysicsManager;
         

@@ -49,7 +49,7 @@ namespace JoyLib.Code.Entities.Abilities
 
             foreach(string action in actions)
             {
-                this.m_CachedActions.Add(action, ScriptingEngine.instance.FetchAction(action));
+                this.m_CachedActions.Add(action, ScriptingEngine.Instance.FetchAction(action));
             }
         }
 

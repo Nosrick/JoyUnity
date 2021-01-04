@@ -185,17 +185,17 @@ namespace JoyLib.Code.Entities
             this.m_Equipment = equipment;
             this.m_Backpack = backpack;
             this.Sex = sex;
-            this.m_VisionProvider = template.VisionType;
+            this.m_VisionProvider = template.VisionType.Copy();
 
             this.m_Cultures = cultures;
 
-            this.m_Pathfinder = (IPathfinder) ScriptingEngine.instance.FetchAndInitialise("custompathfinder");
+            this.m_Pathfinder = (IPathfinder) ScriptingEngine.Instance.FetchAndInitialise("custompathfinder");
             this.m_PathfindingData = new Queue<Vector2Int>();
 
             this.m_FulfillmentData = new FulfillmentData(
                 "none",
                 0,
-                new JoyObject[0]);
+                new IJoyObject[0]);
 
             this.RegenTicker = this.Roller.Roll(0, REGEN_TICK_TIME);
 

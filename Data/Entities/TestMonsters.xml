@@ -3,7 +3,7 @@
     <Entity>
         <CreatureType>Naga</CreatureType>
         <Type>Naga</Type>
-        <VisionType>NocturnalVisionProvider</VisionType>
+        <VisionType>nocturnal vision</VisionType>
 
         <Statistic>
             <Name>strength</Name>
@@ -82,7 +82,7 @@
     <Entity>
         <CreatureType>Slime</CreatureType>
         <Type>Slime</Type>
-        <VisionType>NocturnalVisionProvider</VisionType>
+        <VisionType>nocturnal vision</VisionType>
         
         <Tileset>slime</Tileset>
 

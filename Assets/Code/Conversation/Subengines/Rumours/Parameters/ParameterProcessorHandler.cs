@@ -15,7 +15,7 @@ namespace JoyLib.Code.Conversation.Subengines.Rumours.Parameters
 
         protected List<IParameterProcessor> LoadProcessors()
         {
-            return new List<IParameterProcessor>(ScriptingEngine.instance.FetchAndInitialiseChildren<IParameterProcessor>());
+            return new List<IParameterProcessor>(ScriptingEngine.Instance.FetchAndInitialiseChildren<IParameterProcessor>());
         }
 
         public IParameterProcessor Get(string parameter)

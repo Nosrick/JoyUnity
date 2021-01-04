@@ -35,15 +35,18 @@ namespace Tests
         {
             scriptingEngine = new ScriptingEngine();
 
+            IItemInstance item = Mock.Of<IItemInstance>();
+
             world = Mock.Of<IWorldInstance>(
-                w => w.GetRandomSentientWorldWide() == right
+                w => w.GetRandomSentientWorldWide() == Mock.Of<IEntity>(
+                         entity => entity.GUID == 3
+                         && entity.MyWorld == world
+                         && entity.Backpack == new List<IItemInstance> { item })
                 && w.GetWorlds(It.IsAny<IWorldInstance>()) == new List<IWorldInstance>
                 {
                     Mock.Of<IWorldInstance>(mock => mock.Name == "TEST2")
                 }
                 && w.Name == "TEST");
-
-            IItemInstance item = Mock.Of<IItemInstance>();
             
             left = Mock.Of<IEntity>(
                 entity => entity.GUID == 1
@@ -56,9 +59,8 @@ namespace Tests
                 && entity.MyWorld == world
                 && entity.Backpack == new List<IItemInstance> { item });
 
-            Friendship friendship = new Friendship();
-            friendship.AddParticipant(left);
-            friendship.AddParticipant(right);
+            IRelationship friendship = Mock.Of<IRelationship>(
+                relationship => relationship.GetRelationshipValue(It.IsAny<long>(), It.IsAny<long>()) == 0);
             
             IEntityRelationshipHandler relationshipHandler = Mock.Of<IEntityRelationshipHandler>(
                 handler => handler.Get(It.IsAny<IJoyObject[]>(), It.IsAny<string[]>(), It.IsAny<bool>())

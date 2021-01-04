@@ -30,7 +30,7 @@ namespace JoyLib.Code.Entities.Romance
 
             this.RomanceTypes = new Dictionary<string, IRomance>();
             
-            IEnumerable<IRomance> romanceTypes = ScriptingEngine.instance.FetchAndInitialiseChildren<IRomance>();
+            IEnumerable<IRomance> romanceTypes = ScriptingEngine.Instance.FetchAndInitialiseChildren<IRomance>();
             foreach (IRomance romance in romanceTypes)
             {
                 this.RomanceTypes.Add(romance.Name, romance);

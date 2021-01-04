@@ -87,7 +87,7 @@ namespace JoyLib.Code.Entities.Needs
 
             foreach(string action in actions)
             {
-                this.m_CachedActions.Add(action, ScriptingEngine.instance.FetchAction(action));
+                this.m_CachedActions.Add(action, ScriptingEngine.Instance.FetchAction(action));
             }
 
             if (GlobalConstants.GameManager is null == false)
@@ -142,9 +142,9 @@ namespace JoyLib.Code.Entities.Needs
         protected IJoyAction[] FetchStandardActions()
         {
             List<IJoyAction> actions = new List<IJoyAction>();
-            actions.Add(ScriptingEngine.instance.FetchAction("seekaction"));
-            actions.Add(ScriptingEngine.instance.FetchAction("wanderaction"));
-            actions.Add(ScriptingEngine.instance.FetchAction("fulfillneedaction"));
+            actions.Add(ScriptingEngine.Instance.FetchAction("seekaction"));
+            actions.Add(ScriptingEngine.Instance.FetchAction("wanderaction"));
+            actions.Add(ScriptingEngine.Instance.FetchAction("fulfillneedaction"));
 
             return actions.ToArray();
         }

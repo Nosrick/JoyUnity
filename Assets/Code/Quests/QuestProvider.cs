@@ -30,14 +30,14 @@ namespace JoyLib.Code.Quests
             this.Roller = roller;
             this.EntityRelationshipHandler = entityRelationshipHandler;
 
-            this.Actions = ScriptingEngine.instance.FetchAndInitialiseChildren<IQuestAction>().ToList();
+            this.Actions = ScriptingEngine.Instance.FetchAndInitialiseChildren<IQuestAction>().ToList();
         }
 
         protected void Initialise()
         {
             this.EntityRelationshipHandler = GlobalConstants.GameManager.RelationshipHandler;
 
-            this.Actions = ScriptingEngine.instance.FetchAndInitialiseChildren<IQuestAction>().ToList();
+            this.Actions = ScriptingEngine.Instance.FetchAndInitialiseChildren<IQuestAction>().ToList();
         }
 
         public IQuest MakeRandomQuest(IEntity questor, IEntity provider, IWorldInstance overworldRef)
@@ -73,7 +73,7 @@ namespace JoyLib.Code.Quests
                     new List<IItemInstance>(),
                     new List<IJoyObject>(),
                     new List<IWorldInstance>());
-                List<IQuestStep> steps = new List<IQuestStep>{newAction.Make(questor, provider, overworldRef, new string[0])};
+                List<IQuestStep> steps = new List<IQuestStep>{newAction.Make(questor, provider, overworldRef, newAction.Tags)};
                 quests.Add(new Quest(steps, QuestMorality.Neutral, this.GetRewards(questor, provider, steps), provider, new string[0]));
             }
 

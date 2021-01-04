@@ -32,7 +32,7 @@ namespace JoyLib.Code.World.Generators.Interiors
             this.Roller = roller;
             List<IEntity> entities = new List<IEntity>();
 
-            List<IEntityTemplate> templates = this.EntityTemplateHandler.Templates;
+            List<IEntityTemplate> templates = this.EntityTemplateHandler.Templates.ToList();
             templates = templates.Where(x => entityTypes.Contains(x.CreatureType)).ToList();
 
             int numberToPlace = (worldRef.Tiles.GetLength(0) * worldRef.Tiles.GetLength(1)) / 50;

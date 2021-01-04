@@ -9,6 +9,7 @@ using JoyLib.Code.Conversation.Subengines.Rumours.Parameters;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Abilities;
+using JoyLib.Code.Entities.AI.LOS.Providers;
 using JoyLib.Code.Entities.Gender;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Jobs;
@@ -77,6 +78,8 @@ public class GameManager : MonoBehaviour, IGameManager
         this.MaterialHandler = new MaterialHandler();
         this.ObjectIconHandler = new ObjectIconHandler(this.Roller);
 
+        this.VisionProviderHandler = new VisionProviderHandler();
+
         this.StatisticHandler = new EntityStatisticHandler();
         this.NeedHandler = new NeedHandler();
         this.CultureHandler = new CultureHandler();
@@ -86,7 +89,10 @@ public class GameManager : MonoBehaviour, IGameManager
         this.JobHandler = new JobHandler(this.Roller);
         this.GenderHandler = new GenderHandler();
         this.SkillHandler = new EntitySkillHandler(this.NeedHandler);
-        this.EntityTemplateHandler = new EntityTemplateHandler(this.SkillHandler);
+        this.EntityTemplateHandler = new EntityTemplateHandler(
+            this.SkillHandler, 
+            this.VisionProviderHandler,
+            this.AbilityHandler);
         
         this.DerivedValueHandler = new DerivedValueHandler(this.StatisticHandler, this.SkillHandler);
 
@@ -164,6 +170,8 @@ public class GameManager : MonoBehaviour, IGameManager
     public IConversationEngine ConversationEngine { get; protected set; }
     public IAbilityHandler AbilityHandler { get; protected set; }
     public IDerivedValueHandler DerivedValueHandler { get; protected set; }
+    public IVisionProviderHandler VisionProviderHandler { get; protected set; }
+
     public NaturalWeaponHelper NaturalWeaponHelper { get; protected set; }
     public RNG Roller { get; protected set; }
 

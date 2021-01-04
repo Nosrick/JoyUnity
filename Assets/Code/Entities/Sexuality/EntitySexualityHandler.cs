@@ -28,7 +28,7 @@ namespace JoyLib.Code.Entities.Sexuality
 
             this.m_Sexualities = new Dictionary<string, ISexuality>();
 
-            IEnumerable<ISexuality> sexualities = ScriptingEngine.instance.FetchAndInitialiseChildren<ISexuality>();
+            IEnumerable<ISexuality> sexualities = ScriptingEngine.Instance.FetchAndInitialiseChildren<ISexuality>();
 
             foreach (ISexuality sexuality in sexualities)
             {

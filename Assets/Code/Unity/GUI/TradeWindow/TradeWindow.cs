@@ -119,7 +119,7 @@ namespace JoyLib.Code.Unity.GUI
                 relationship.ModifyValueOfParticipant(this.Left.GUID, this.Right.GUID, difference);
             }
 
-            ScriptingEngine.instance.FetchAction("tradeaction").Execute(
+            ScriptingEngine.Instance.FetchAction("tradeaction").Execute(
                 new IJoyObject[] {this.Left, this.Right},
                 new[] {"trade", "give", "item"},
                 this.LeftOffering.Contents,

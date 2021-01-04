@@ -171,9 +171,9 @@ namespace JoyLib.Code.Conversation.Conversations
 
         protected IJoyAction[] GetCachedActions(string[] actionNames)
         {
-            List<IJoyAction> actions = new List<IJoyAction>(ScriptingEngine.instance.FetchActions(actionNames));
+            List<IJoyAction> actions = new List<IJoyAction>(ScriptingEngine.Instance.FetchActions(actionNames));
             string[] standardActions = new[] {"fulfillneedaction", "modifyrelationshippointsaction"};
-            actions.AddRange(ScriptingEngine.instance.FetchActions(standardActions));
+            actions.AddRange(ScriptingEngine.Instance.FetchActions(standardActions));
 
             return actions.ToArray();
         }

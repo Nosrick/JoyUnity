@@ -1,12 +1,14 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <Entities>
     <Entity>
-        <CreatureType>demon</CreatureType>
-        <Type>demon</Type>
+        <CreatureType>human</CreatureType>
+        <Type>humanoid</Type>
+        
+        <VisionType>diurnal vision</VisionType>
 
         <Statistic>
             <Name>strength</Name>
-            <Value>6</Value>
+            <Value>4</Value>
         </Statistic>
         <Statistic>
             <Name>agility</Name>
@@ -14,7 +16,7 @@
         </Statistic>
         <Statistic>
             <Name>endurance</Name>
-            <Value>6</Value>
+            <Value>5</Value>
         </Statistic>
 
         <Statistic>
@@ -32,11 +34,11 @@
 
         <Statistic>
             <Name>personality</Name>
-            <Value>5</Value>
+            <Value>4</Value>
         </Statistic>
         <Statistic>
             <Name>suavity</Name>
-            <Value>5</Value>
+            <Value>4</Value>
         </Statistic>
         <Statistic>
             <Name>wit</Name>
@@ -46,7 +48,7 @@
         <Tag>Living</Tag>
         <Tag>Sentient</Tag>
         <Tag>Animated</Tag>
-        <Tag>Nocturnal</Tag>
+        <Tag>Diurnal</Tag>
 
         <Need>hunger</Need>
         <Need>thirst</Need>
@@ -70,10 +72,6 @@
         <Slot>Feet</Slot>
         <Slot>Hand</Slot>
         <Slot>Hand</Slot>
-        <Slot>Hand</Slot>
-        <Slot>Hand</Slot>
-        <Slot>Ring</Slot>
-        <Slot>Ring</Slot>
         <Slot>Ring</Slot>
         <Slot>Ring</Slot>
         <Slot>Ranged</Slot>

@@ -26,6 +26,7 @@ namespace Tests
         private IEntityStatisticHandler statisticHandler;
         private IEntitySkillHandler skillHandler;
         private IDerivedValueHandler derivedValueHandler;
+        private IAbilityHandler abilityHandler;
 
         private ActionLog logger;
 
@@ -69,6 +70,7 @@ namespace Tests
             this.statisticHandler = new EntityStatisticHandler();
             this.skillHandler = new EntitySkillHandler(this.needHandler);
             this.derivedValueHandler = new DerivedValueHandler(this.statisticHandler, this.skillHandler);
+            this.abilityHandler = new AbilityHandler();
         }
 
         [SetUp]
@@ -319,7 +321,7 @@ namespace Tests
                 0,
                 0);
 
-            IAbility backdraft = new Backdraft();
+            IAbility backdraft = this.abilityHandler.GetAbility("backdraft");
 
             this.attackerAbilities.Add(backdraft);
             this.attackerTags.Add("backdraft");
@@ -362,8 +364,8 @@ namespace Tests
                 6,
                 2);
 
-            IAbility keenReflexes = new KeenReflexes();
-            IAbility uncannyDodge = new UncannyDodge();
+            IAbility keenReflexes = this.abilityHandler.GetAbility("keenreflexes");
+            IAbility uncannyDodge = this.abilityHandler.GetAbility("uncannydodge");
 
             this.defenderAbilities.Add(keenReflexes);
             this.defenderAbilities.Add(uncannyDodge);
@@ -441,9 +443,9 @@ namespace Tests
                 0,
                 0,
                 0);
-            this.attackerAbilities.Add(new Distraction());
+            this.attackerAbilities.Add(this.abilityHandler.GetAbility("distraction"));
             this.attackerTags.Add("distraction");
-            this.defenderAbilities.Add(new IronWill());
+            this.defenderAbilities.Add(this.abilityHandler.GetAbility("ironwill"));
             this.MakeEntities();
 
             List<int> results = new List<int>();
@@ -596,7 +598,7 @@ namespace Tests
                 0,
                 0);
             
-            this.attackerAbilities.Add(new Distraction());
+            this.attackerAbilities.Add(this.abilityHandler.GetAbility("distraction"));
             this.attackerTags.Add("distraction");
             
             this.MakeEntities();
@@ -638,7 +640,7 @@ namespace Tests
                 6,
                 2);
             
-            this.defenderAbilities.Add(new IronWill());
+            this.defenderAbilities.Add(this.abilityHandler.GetAbility("ironwill"));
             
             this.MakeEntities();
             
@@ -774,7 +776,7 @@ namespace Tests
             this.SetUpEquipment("social", 6, 1, 0, 0);
             this.SetSocialTags();
             
-            this.attackerAbilities.Add(new PiercingGaze());
+            this.attackerAbilities.Add(this.abilityHandler.GetAbility("piercinggaze"));
 
             this.MakeEntities();
             
@@ -810,7 +812,7 @@ namespace Tests
             this.SetUpEquipment("social", 2, 1, 6, 2);
             this.SetSocialTags();
             
-            this.defenderAbilities.Add(new Indomitable());
+            this.defenderAbilities.Add(this.abilityHandler.GetAbility("indomitable"));
 
             this.MakeEntities();
             

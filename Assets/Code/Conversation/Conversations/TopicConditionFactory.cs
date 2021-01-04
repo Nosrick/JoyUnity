@@ -13,7 +13,7 @@ namespace JoyLib.Code.Conversation.Conversations
         {
             if (s_ConditionTypes is null)
             {
-                s_ConditionTypes = ScriptingEngine.instance.FetchTypeAndChildren(typeof(ITopicCondition)).ToList();
+                s_ConditionTypes = ScriptingEngine.Instance.FetchTypeAndChildren(typeof(ITopicCondition)).ToList();
             }
         }
         

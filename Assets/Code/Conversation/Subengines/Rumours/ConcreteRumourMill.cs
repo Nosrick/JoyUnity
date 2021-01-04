@@ -74,7 +74,7 @@ namespace JoyLib.Code.Conversation.Conversations
 
                         if (processor.Equals("NONE", StringComparison.OrdinalIgnoreCase) == false)
                         {
-                            IRumour processorObject = (IRumour) ScriptingEngine.instance.FetchAndInitialise(processor);
+                            IRumour processorObject = (IRumour) ScriptingEngine.Instance.FetchAndInitialise(processor);
                             rumours.Add(
                                 processorObject.Create(
                                     null,

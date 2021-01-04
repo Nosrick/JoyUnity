@@ -28,7 +28,7 @@ namespace JoyLib.Code.Entities.Sexes
 
             this.m_Sexes = new Dictionary<string, IBioSex>();
             
-            IEnumerable<IBioSex> sexes = ScriptingEngine.instance.FetchAndInitialiseChildren<IBioSex>();
+            IEnumerable<IBioSex> sexes = ScriptingEngine.Instance.FetchAndInitialiseChildren<IBioSex>();
             foreach(IBioSex sex in sexes)
             {
                 this.m_Sexes.Add(sex.Name, sex);
