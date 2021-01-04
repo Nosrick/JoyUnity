@@ -432,8 +432,7 @@ namespace JoyLib.Code.States
                     int lightLevel = this.m_ActiveWorld.LightCalculator.Light.GetLight(position);
                     fog.GetComponent<SpriteRenderer>().color = LightLevelHelper.GetColour(
                         lightLevel,
-                        player.VisionProvider.MinimumLightLevel,
-                        player.VisionProvider.MaximumLightLevel);
+                        player.VisionProvider);
                 }
                 else
                 {

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using JoyLib.Code.Entities.AI.LOS.Providers;
+using UnityEngine;
 
 namespace JoyLib.Code.Helpers
 {
@@ -10,22 +11,24 @@ namespace JoyLib.Code.Helpers
             return (adjusted - minValue) / (float)(maxValue - minValue);
         }
 
-        public static Color GetColour(int light, int minValue, int maxValue)
+        public static Color GetColour(int light, IVision vision)
         {
             Color colour;
-            if (light >= minValue && light <= maxValue)
+            if (light >= vision.MinimumLightLevel && light <= vision.MaximumLightLevel)
             {
-                float hue = Normalise(light, minValue, maxValue);
+                float hue = Normalise(light, vision.MinimumLightLevel, vision.MaximumLightLevel);
                 float alpha = 1.0f - hue;
-                colour = new Color(hue, hue, hue, alpha);
+                Color displayColour = Color.Lerp(vision.DarkColour, vision.LightColour, hue);
+                displayColour.a = alpha;
+                colour = displayColour;
             }
-            else if (light > maxValue)
+            else if (light > vision.MaximumLightLevel)
             {
-                colour = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+                colour = vision.LightColour;
             }
             else
             {
-                colour = new Color(0.0f, 0.0f, 0.0f, 1.0f);
+                colour = vision.DarkColour;
             }
             
             return colour;
