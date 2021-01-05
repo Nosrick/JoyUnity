@@ -56,6 +56,21 @@ namespace JoyLib.Code.Unity.GUI
             this.CanvasGroup.alpha = 0f;
         }
 
+        public void SetCursorSize(int width, int height)
+        {
+            this.MyRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
+            this.MyRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
+            foreach (Image cursorPart in this.CursorObjects)
+            {
+                RectTransform cursorRect = cursorPart.GetComponent<RectTransform>();
+                cursorRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
+                cursorRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
+            }
+            RectTransform dragRect = this.DragObject.GetComponent<RectTransform>();
+            dragRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width * 2);
+            dragRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height * 2);
+        }
+
         public void SetCursorSprites(IEnumerable<Sprite> sprites, IEnumerable<Color> spriteColours)
         {
             this.CursorSprites = new List<Sprite>(sprites);

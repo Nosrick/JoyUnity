@@ -29,6 +29,7 @@ using JoyLib.Code.States;
 using JoyLib.Code.Unity.GUI;
 using JoyLib.Code.World;
 using UnityEngine;
+using Cursor = JoyLib.Code.Unity.GUI.Cursor;
 
 public class GameManager : MonoBehaviour, IGameManager
 {
@@ -131,9 +132,9 @@ public class GameManager : MonoBehaviour, IGameManager
         Entity.NaturalWeaponHelper = this.NaturalWeaponHelper;
         Entity.DerivedValueHandler = this.DerivedValueHandler;
 
-        this.GUIManager.OpenGUI(GUINames.CURSOR)
-            .GetComponent<JoyLib.Code.Unity.GUI.Cursor>()
-            .SetCursorSprites(
+        Cursor cursor = this.GUIManager.OpenGUI(GUINames.CURSOR)
+            .GetComponent<Cursor>();
+        cursor.SetCursorSprites(
                 this.ObjectIconHandler.GetTileSet("DefaultCursor"),
                 new List<Color>
                 {
@@ -141,6 +142,7 @@ public class GameManager : MonoBehaviour, IGameManager
                     Color.gray,
                     Color.black
                 });
+        cursor.SetCursorSize(64, 64);
 
         this.m_StateManager.ChangeState(new CharacterCreationState());
     }
