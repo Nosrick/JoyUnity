@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Castle.Core.Internal;
 using JoyLib.Code.Collections;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Events;
@@ -52,7 +53,7 @@ namespace JoyLib.Code
         
         protected NonUniqueDictionary<object, object> Data { get; set; }
 
-        protected IEnumerable<ISpriteState> m_States;
+        public List<ISpriteState> States { get; protected set; }
 
         public List<IJoyAction> CachedActions { get; protected set; }
         
@@ -149,6 +150,8 @@ namespace JoyLib.Code
             this.DerivedValues = derivedValues;
 
             this.Tags = tags.ToList();
+
+            this.States = sprites.ToList();
 
             this.WorldPosition = position;
             this.Move(this.WorldPosition);
@@ -385,10 +388,15 @@ namespace JoyLib.Code
             this.MonoBehaviourHandler = mbh;
             this.MonoBehaviourHandler.IsAnimated =
                 this.Tags.Any(tag => tag.Equals("animated", StringComparison.OrdinalIgnoreCase));
-            foreach (ISpriteState state in this.m_States)
+            if (this.States.IsNullOrEmpty())
+            {
+                return;
+            }
+            foreach (ISpriteState state in this.States)
             {
                 this.MonoBehaviourHandler.AddSpriteState(state);
             }
+            this.MonoBehaviourHandler.ChangeState(this.States[0].Name);
         }
     }    
 }

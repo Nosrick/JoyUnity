@@ -14,8 +14,9 @@ namespace JoyLib.Code.Unity
         public static ILiveItemHandler LiveItemHandler { get; set; }
         public static ILiveEntityHandler LiveEntityHandler { get; set; }
 
-        public void Awake()
+        public override void Awake()
         {
+            base.Awake();
             this.Initialise();
         }
 

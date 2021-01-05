@@ -1035,7 +1035,9 @@ MonoBehaviour:
   m_Index: 0
   m_Title: {fileID: 7265820668663487646}
   m_Text: {fileID: 7265820668081123753}
-  m_Icon: {fileID: 7265820668276746113}
+  m_IconRect: {fileID: 7265820668276746114}
+  m_IconPrefab: {fileID: 8508073013203689566, guid: e14ff5d3792717e45b8b7ca9a4ae5737,
+    type: 3}
   m_Background: {fileID: 7265820666756524092}
   m_ItemPrefab: {fileID: 7265820666729403734}
   m_ParentLayout: {fileID: 7265820667142493886}

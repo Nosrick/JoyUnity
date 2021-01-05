@@ -570,12 +570,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0641692108564ac39651851503d52a32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UseKey: 0
   m_CooldownOverlay: {fileID: 8604156884983650608}
   m_Cooldown: {fileID: 0}
   m_ItemName: {fileID: 0}
   m_UseRarityColor: 0
-  m_Icon: {fileID: 8604156885990248955}
+  m_Icon: {fileID: -9111090149253444989, guid: 9e6c285750604c64aae808ae52b15c7b, type: 3}
   m_Stack: {fileID: 8604156884670249676}
   m_Slot: 
 --- !u!114 &6845158268629664666

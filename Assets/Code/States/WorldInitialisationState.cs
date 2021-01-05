@@ -65,13 +65,23 @@ namespace JoyLib.Code.States
                 GameObject child = gameManager.FloorPool.Get();
                 child.layer = terrainLayer;
                 child.transform.position = new Vector3(this.m_ActiveWorld.SpawnPoint.x, this.m_ActiveWorld.SpawnPoint.y, 0.0f);
-                SpriteRenderer spriteRenderer = child.GetComponent<SpriteRenderer>();
-                spriteRenderer.sprite = this.m_ObjectIcons.GetSprite("Stairs", "Upstairs");
-                spriteRenderer.sortingLayerName = "Walls";
                 child.name = this.m_ActiveWorld.Parent.Name + " stairs";
                 TooltipComponent tooltip = child.GetComponent<TooltipComponent>();
                 tooltip.WorldPosition = this.m_ActiveWorld.SpawnPoint;
                 //tooltip.RefreshTooltip = WorldState.GetTooltipData;
+
+                ManagedSprite sprite = child.GetComponent<ManagedSprite>();
+                sprite.AddSpriteState(
+                    new SpriteState(
+                        child.name,
+                        new List<Sprite>
+                        {
+                            this.m_ObjectIcons.GetSprite("Stairs", "Upstairs")
+                        },
+                        new List<Color>
+                        {
+                            Color.white
+                        }));
                 child.SetActive(true);
             }
 
@@ -79,15 +89,25 @@ namespace JoyLib.Code.States
             foreach(KeyValuePair<Vector2Int, IWorldInstance> pair in this.m_ActiveWorld.Areas)
             {
                 GameObject child = gameManager.FloorPool.Get();
-                SpriteRenderer spriteRenderer = child.GetComponent<SpriteRenderer>();
                 child.layer = terrainLayer;
-                spriteRenderer.sortingLayerName = "Walls";
-                spriteRenderer.sprite = this.m_ObjectIcons.GetSprite("Stairs", "Downstairs");
                 child.name = pair.Value.Name + " stairs";
                 child.transform.position = new Vector3(pair.Key.x, pair.Key.y);
                 TooltipComponent tooltip = child.GetComponent<TooltipComponent>();
                 tooltip.WorldPosition = pair.Key;
                 //tooltip.RefreshTooltip = WorldState.GetTooltipData;
+
+                ManagedSprite sprite = child.GetComponent<ManagedSprite>();
+                sprite.AddSpriteState(
+                    new SpriteState(
+                        child.name,
+                        new List<Sprite>
+                        {
+                            this.m_ObjectIcons.GetSprite("Stairs", "Downstairs")
+                        },
+                        new List<Color>
+                        {
+                            Color.white
+                        }));
                 child.SetActive(true);
             }
 
@@ -112,15 +132,25 @@ namespace JoyLib.Code.States
                     //Make the floor
                     GameObject floor = gameManager.FloorPool.Get();
                     floor.layer = terrainLayer;
-                    goSpriteRenderer = floor.GetComponent<SpriteRenderer>();
-                    goSpriteRenderer.sortingLayerName = "Terrain";
-                    goSpriteRenderer.sprite = this.m_ObjectIcons.GetSprite(this.m_ActiveWorld.Tiles[i, j].TileSet, 
-                            //TODO: This will eventually be a tile direction selection algorithm
-                            "surroundfloor");
                     floor.name = this.m_ActiveWorld.Name + " floor";
                     TooltipComponent tooltip = floor.GetComponent<TooltipComponent>();
                     tooltip.Move(intPos);
                     //tooltip.RefreshTooltip = WorldState.GetTooltipData;
+
+                    ManagedSprite sprite = floor.GetComponent<ManagedSprite>();
+                    sprite.AddSpriteState(
+                        new SpriteState(
+                            floor.name,
+                            new List<Sprite>
+                            {
+                                this.m_ObjectIcons.GetSprite(
+                                    this.m_ActiveWorld.Tiles[i, j].TileSet, 
+                                    "surroundfloor")
+                            },
+                            new List<Color>
+                            {
+                                Color.white
+                            }));
                     floor.SetActive(true);
                 }
             }
@@ -132,7 +162,6 @@ namespace JoyLib.Code.States
                 wall.MyWorld = this.m_ActiveWorld;
                 GameObject gameObject = gameManager.WallPool.Get();
                 gameObject.layer = wallLayer;
-                gameObject.GetComponent<SpriteRenderer>().sortingLayerName = "Walls";
                 gameObject.GetComponent<MonoBehaviourHandler>()
                     .AttachJoyObject(wall);
                 gameObject.SetActive(true);
@@ -145,7 +174,6 @@ namespace JoyLib.Code.States
             foreach(IEntity entity in this.m_ActiveWorld.Entities)
             {
                 GameObject gameObject = gameManager.EntityPool.Get();
-                gameObject.GetComponent<SpriteRenderer>().sortingLayerName = "Entities";
                 gameObject.SetActive(true);
                 gameObject.layer = entityLayer;
                 MonoBehaviourHandler newEntity = gameObject.GetComponent<MonoBehaviourHandler>();
@@ -181,7 +209,6 @@ namespace JoyLib.Code.States
                 {
                     itemInstance.Instantiate(gameManager.ItemPool.Get());
                     itemInstance.MonoBehaviourHandler.gameObject.layer = itemLayer;
-                    itemInstance.MonoBehaviourHandler.gameObject.GetComponent<SpriteRenderer>().sortingLayerName = "Objects";
                     itemInstance.MonoBehaviourHandler.gameObject.SetActive(active);
                     if (itemInstance.Contents.IsNullOrEmpty() == false)
                     {

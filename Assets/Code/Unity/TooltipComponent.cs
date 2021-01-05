@@ -9,10 +9,12 @@ using UnityEngine.EventSystems;
 
 namespace JoyLib.Code.Unity
 {
+    [RequireComponent(typeof(ManagedSprite))]
     public class TooltipComponent : GridPosition, IPointerEnterHandler, IPointerExitHandler, IPosition
     {
         public delegate IEnumerable<Tuple<string, string>> SetTooltip(IPosition positionable);
-        protected SpriteRenderer SpriteRenderer { get; set; }
+        
+        protected ManagedSprite ManagedSprite { get; set; }
         protected ISpriteState Sprite { get; set; }
         public static IGUIManager GUIManager { get; set; }
 
@@ -26,12 +28,12 @@ namespace JoyLib.Code.Unity
             {
                 GUIManager = GlobalConstants.GameManager.GUIManager;
             }
-            if (!(this.SpriteRenderer is null))
+            if (!(this.ManagedSprite is null))
             {
                 return;
             }
-            this.SpriteRenderer = this.gameObject.GetComponent<SpriteRenderer>();
-            if (this.SpriteRenderer is null == false)
+            this.ManagedSprite = this.gameObject.GetComponent<ManagedSprite>();
+            if (this.ManagedSprite is null == false)
             {
                 this.Sprite = this.GetComponent<ManagedSprite>().CurrentSpriteState;
             }

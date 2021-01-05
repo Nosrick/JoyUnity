@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using JoyLib.Code.Entities.Abilities;
-using JoyLib.Code.Graphics;
 
 namespace JoyLib.Code.Entities.Items
 {
     public interface IItemInstance : IJoyObject, IItemContainer, IOwnable
     {
-        IEnumerable<ISpriteState> Sprites { get; }
-        
         IEnumerable<IAbility> UniqueAbilities { get; }
         
         IEnumerable<IAbility> AllAbilities { get; }

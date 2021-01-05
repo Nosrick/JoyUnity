@@ -1946,6 +1946,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: UICursor
       objectReference: {fileID: 0}
+    - target: {fileID: 3087105847453020188, guid: ca198771cedc79f449e66f1067c0033a,
+        type: 3}
+      propertyPath: m_PartPrefab
+      value: 
+      objectReference: {fileID: -9111090149253444989, guid: 9e6c285750604c64aae808ae52b15c7b,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ca198771cedc79f449e66f1067c0033a, type: 3}
 --- !u!224 &1525572196 stripped
@@ -9935,7 +9941,7 @@ PrefabInstance:
     - target: {fileID: 7265820667142493887, guid: 939b96c95bb1bec4ab13accee84db480,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 7265820667142493887, guid: 939b96c95bb1bec4ab13accee84db480,
         type: 3}
@@ -9945,7 +9951,7 @@ PrefabInstance:
     - target: {fileID: 7265820667142493887, guid: 939b96c95bb1bec4ab13accee84db480,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 246
       objectReference: {fileID: 0}
     - target: {fileID: 7265820667142493887, guid: 939b96c95bb1bec4ab13accee84db480,
         type: 3}
@@ -10005,7 +10011,7 @@ PrefabInstance:
     - target: {fileID: 7265820668081123754, guid: 939b96c95bb1bec4ab13accee84db480,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 7265820668081123754, guid: 939b96c95bb1bec4ab13accee84db480,
         type: 3}
@@ -10150,7 +10156,7 @@ PrefabInstance:
     - target: {fileID: 7265820668663487647, guid: 939b96c95bb1bec4ab13accee84db480,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 7265820668663487647, guid: 939b96c95bb1bec4ab13accee84db480,
         type: 3}

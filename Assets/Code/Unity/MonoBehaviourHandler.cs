@@ -12,7 +12,6 @@ namespace JoyLib.Code.Unity
     public class MonoBehaviourHandler : ManagedSprite, IPointerEnterHandler, IPointerExitHandler
     {
         public IJoyObject JoyObject { get; protected set; }
-        protected SpriteRenderer SpriteRenderer { get; set; }
         protected SpriteRenderer SpeechBubble { get; set; }
         protected bool PointerOver { get; set; }
         
@@ -45,16 +44,13 @@ namespace JoyLib.Code.Unity
             
             this.JoyObject = joyObject;
             this.JoyObject.AttachMonoBehaviourHandler(this);
-            this.SpriteRenderer = this.GetComponent<SpriteRenderer>();
             Transform transform = this.transform.Find("Speech Bubble");
             if (transform is null == false)
             {
                 this.SpeechBubble = transform.GetComponent<SpriteRenderer>();
             }
-            
             this.name = this.JoyObject.JoyName + ":" + this.JoyObject.GUID;
             this.transform.position = new Vector3(this.JoyObject.WorldPosition.x, this.JoyObject.WorldPosition.y, 0.0f);
-            //this.SpriteRenderer.sprite = 
             this.SetSpeechBubble(false);
         }
 

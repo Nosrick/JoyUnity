@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
-using JoyLib.Code.Collections;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Events;
 using JoyLib.Code.Graphics;
-using JoyLib.Code.Managers;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.Unity;
@@ -27,8 +25,6 @@ namespace JoyLib.Code.Entities.Items
 
         protected List<long> m_Contents;
         protected BaseItemType m_Type;
-        
-        public IEnumerable<ISpriteState> Sprites { get; protected set; }
 
         protected long m_OwnerGUID;
         protected string m_OwnerString;
@@ -57,6 +53,8 @@ namespace JoyLib.Code.Entities.Items
         
         protected GameObject Prefab { get; set; }
 
+        public IEnumerable<ISpriteState> Sprites => this.States;
+
         public static ILiveItemHandler ItemHandler { get; set; }
         public static ILiveEntityHandler EntityHandler { get; set; }
 
@@ -71,6 +69,13 @@ namespace JoyLib.Code.Entities.Items
             IEnumerable<IJoyAction> actions = null,
             GameObject gameObject = null,
             bool active = false)
+            : base(
+                type.UnidentifiedName,
+                derivedValues,
+                position,
+                actions,
+                sprites,
+                roller)
         {
             if (this.Prefab is null)
             {
@@ -80,42 +85,14 @@ namespace JoyLib.Code.Entities.Items
                 }
                 this.Prefab = Resources.Load<GameObject>("Prefabs/ItemInstance");
             }
-            
-            this.Roller = roller is null ? new RNG() : roller;
-            this.Data = new NonUniqueDictionary<object, object>();
-
-            this.JoyName = identified ? type.IdentifiedName : type.UnidentifiedName;
-            this.GUID = GUIDManager.Instance.AssignGUID();
-
-            this.DerivedValues = derivedValues;
-
-            this.Tags = type.Tags.ToList();
-
-            this.m_Contents = new List<long>();
-
-            this.Sprites = sprites;
-
-            this.WorldPosition = position;
-            this.Move(this.WorldPosition);
-
-            if (this.Tags.Any(tag => tag.Equals("invulnerable", StringComparison.OrdinalIgnoreCase)))
-            {
-                this.IsDestructible = false;
-            }
-
-            if (this.Tags.Any(tag => tag.Equals("wall", StringComparison.OrdinalIgnoreCase)))
-            {
-                this.IsWall = true;
-            }
-
-            this.CachedActions = actions is null ? new List<IJoyAction>() : new List<IJoyAction>(actions);
 
             this.Initialise();
                 
             this.m_Type = type;
             
             this.Identified = identified;
-            //chosenIcon = RNG.instance.Roll(0, m_Icons.Length - 1);
+
+            this.m_Contents = new List<long>();
 
             this.UniqueAbilities = uniqueAbilities is null == false ? new List<IAbility>(uniqueAbilities) : new List<IAbility>();
 
@@ -136,7 +113,7 @@ namespace JoyLib.Code.Entities.Items
                 newOne.GetComponent<MonoBehaviourHandler>().AttachJoyObject(this);
                 this.MonoBehaviourHandler.IsAnimated =
                     this.Tags.Any(tag => tag.Equals("animated", StringComparison.OrdinalIgnoreCase));
-                foreach (ISpriteState state in this.m_States)
+                foreach (ISpriteState state in this.States)
                 {
                     this.MonoBehaviourHandler.AddSpriteState(state);
                 }
@@ -146,6 +123,13 @@ namespace JoyLib.Code.Entities.Items
             {
                 MonoBehaviourHandler monoBehaviourHandler = gameObject.GetComponent<MonoBehaviourHandler>();
                 monoBehaviourHandler.AttachJoyObject(this);
+                monoBehaviourHandler.IsAnimated = this.Tags.Any(tag => 
+                    tag.Equals("animated", StringComparison.OrdinalIgnoreCase));
+                foreach (ISpriteState state in this.States)
+                {
+                    monoBehaviourHandler.AddSpriteState(state);
+                }
+                monoBehaviourHandler.ChangeState(this.States[0].Name);
                 monoBehaviourHandler.gameObject.SetActive(active);
             }
         }
@@ -159,7 +143,7 @@ namespace JoyLib.Code.Entities.Items
                 copy.DerivedValues,
                 copy.WorldPosition,
                 copy.Identified,
-                copy.Sprites,
+                copy.States,
                 copy.Roller,
                 copy.UniqueAbilities,
                 copy.CachedActions.ToArray());

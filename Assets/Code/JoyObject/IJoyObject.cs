@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using JoyLib.Code.Graphics;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.Unity;
@@ -9,6 +10,7 @@ namespace JoyLib.Code
 {
     public interface IJoyObject : ITagged, IPosition, IDerivedValueContainer, IDataContainer
     {
+        List<ISpriteState> States { get; }
         bool IsDestructible { get; }
         bool IsWall { get; }
         string JoyName { get; }

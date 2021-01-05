@@ -15,7 +15,6 @@ namespace JoyLib.Code.Unity.GUI
         protected ManagedSprite CursorObject { get; set; }
         protected CanvasGroup CanvasGroup { get; set; }
         protected RectTransform MyRect { get; set; }
-        public ISpriteState CurrentSpriteState { get; protected set; }
         
         public int FrameIndex { get; protected set; }
         public string ChosenSpriteState { get; protected set; }
@@ -46,7 +45,10 @@ namespace JoyLib.Code.Unity.GUI
             
             UnityEngine.Cursor.visible = false;
 
-            this.CursorObject = Instantiate(this.m_PartPrefab, this.transform);
+            if (this.CursorObject is null)
+            {
+                this.CursorObject = Instantiate(this.m_PartPrefab, this.transform);
+            }
         }
 
         public void Update()
@@ -81,7 +83,6 @@ namespace JoyLib.Code.Unity.GUI
         public void SetCursorSprites(ISpriteState state)
         {
             this.CursorObject.Clear();
-            this.CurrentSpriteState = state;
             this.CursorObject.AddSpriteState(state);
             this.CursorObject.ChangeState(state.Name);
         }

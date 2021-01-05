@@ -8,11 +8,28 @@ using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity
 {
+    [RequireComponent(typeof(RectTransform))]
     public class ManagedSprite : MonoBehaviour, IAnimated
     {
         [SerializeField] protected Image m_SpritePrefab;
         
-        public ISpriteState CurrentSpriteState => this.m_States[this.ChosenSpriteState][this.FrameIndex];
+        protected RectTransform MyRect { get; set; }
+
+        public ISpriteState CurrentSpriteState
+        {
+            get
+            {
+                if (this.m_States.ContainsKey(this.ChosenSpriteState))
+                {
+                    if (this.m_States[this.ChosenSpriteState].Count > this.FrameIndex)
+                    {
+                        return this.m_States[this.ChosenSpriteState][this.FrameIndex];
+                    }
+                }
+
+                return null;
+            }
+        }
         public int FrameIndex { get; protected set; }
         public string ChosenSpriteState { get; protected set; }
         public string TileSet { get; protected set; }
@@ -30,6 +47,8 @@ namespace JoyLib.Code.Unity
         public virtual void Awake()
         {
             this.SpriteParts = new List<Image>();
+            this.m_States = new NonUniqueDictionary<string, ISpriteState>();
+            this.MyRect = this.GetComponent<RectTransform>();
         }
 
         public virtual void AddSpriteState(ISpriteState state)
@@ -100,9 +119,9 @@ namespace JoyLib.Code.Unity
             {
                 spritePart.gameObject.SetActive(false);
             }
-            if (this.SpriteParts.Count < this.CurrentSpriteState.SpriteParts.Count())
+            if (this.SpriteParts.Count < this.CurrentSpriteState.SpriteParts.Count)
             {
-                for (int i = this.SpriteParts.Count; i < this.CurrentSpriteState.SpriteParts.Count(); i++)
+                for (int i = this.SpriteParts.Count; i < this.CurrentSpriteState.SpriteParts.Count; i++)
                 {
                     this.SpriteParts.Add(Instantiate(this.m_SpritePrefab, this.transform));
                 }
@@ -112,6 +131,9 @@ namespace JoyLib.Code.Unity
             List<Color> spriteColours = this.CurrentSpriteState.SpriteColours.ToList();
             for (int i = 0; i < sprites.Count; i++)
             {
+                RectTransform partRect = this.SpriteParts[i].GetComponent<RectTransform>();
+                partRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, this.MyRect.rect.width);
+                partRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, this.MyRect.rect.height);
                 this.SpriteParts[i].gameObject.SetActive(true);
                 this.SpriteParts[i].sprite = sprites[i];
                 this.SpriteParts[i].color = spriteColours[i];
