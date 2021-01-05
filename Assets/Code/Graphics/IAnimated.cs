@@ -1,15 +1,12 @@
-﻿using UnityEngine;
-
-namespace JoyLib.Code.Graphics
+﻿namespace JoyLib.Code.Graphics
 {
-    public interface IAnimated
+    public interface IAnimated : ISpriteStateContainer
     {
-        Sprite[] Sprites { get; set; }
-        Sprite Sprite { get; }
-        int LastIndex { get; }
-        int ChosenSprite { get; }
+        ISpriteState CurrentSpriteState { get; }
+        int FrameIndex { get; }
+        string ChosenSpriteState { get; }
         string TileSet { get; }
-        int FramesSinceLastChange { get; }
+        float TimeSinceLastChange { get; }
         bool IsAnimated { get; }
     }
 }

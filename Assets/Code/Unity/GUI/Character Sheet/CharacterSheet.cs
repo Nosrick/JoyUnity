@@ -1,13 +1,12 @@
 ﻿using JoyLib.Code.Entities;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity.GUI.Character_Sheet
 {
     public class CharacterSheet : GUIData
     {
-        [SerializeField] protected Image PlayerSprite;
+        [SerializeField] protected ManagedSprite PlayerSprite;
         [SerializeField] protected TextMeshProUGUI PlayerName;
         [SerializeField] protected TextMeshProUGUI PlayerJobAndSpecies;
         [SerializeField] protected StaticDerivedValueDisplay DerivedValues;
@@ -29,7 +28,8 @@ namespace JoyLib.Code.Unity.GUI.Character_Sheet
             this.Skills.SetValues(this.Player.Skills.Values);
             this.Abilities.SetValues(this.Player.Abilities);
             this.DerivedValues.SetValues(this.Player.DerivedValues);
-            this.PlayerSprite.sprite = this.Player.Sprite;
+            this.PlayerSprite.Clear();
+            this.PlayerSprite.AddSpriteState(this.Player.MonoBehaviourHandler.CurrentSpriteState);
             this.PlayerName.text = this.Player.JoyName;
             this.PlayerJobAndSpecies.text = this.Player.CreatureType + " " + this.Player.CurrentJob.Name;
         }

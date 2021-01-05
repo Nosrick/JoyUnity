@@ -10,6 +10,7 @@ using JoyLib.Code.Entities.Romance;
 using JoyLib.Code.Entities.Sexes;
 using JoyLib.Code.Entities.Sexuality;
 using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Graphics;
 using JoyLib.Code.World;
 using UnityEngine;
 
@@ -30,7 +31,7 @@ namespace JoyLib.Code.Entities
             ISexuality sexuality = null,
             IRomance romance = null,
             IJob job = null,
-            IEnumerable<Sprite> sprites = null,
+            IEnumerable<ISpriteState> sprites = null,
             IWorldInstance world = null,
             IDriver driver = null);
 
@@ -40,14 +41,13 @@ namespace JoyLib.Code.Entities
             IDictionary<string, IDerivedValue> derivedValues,
             IDictionary<string, IEntitySkill> skills,
             IEnumerable<IAbility> abilities,
-            float experience,
             IJob job,
             IGender gender,
             IBioSex sex,
             ISexuality sexuality,
             IRomance romance,
             Vector2Int position,
-            IEnumerable<Sprite> sprites,
+            IEnumerable<ISpriteState> sprites,
             IItemInstance naturalWeapons,
             EquipmentStorage equipment,
             IEnumerable<IItemInstance> backpack,

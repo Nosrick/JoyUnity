@@ -18,6 +18,7 @@ using JoyLib.Code.Entities.Sexes;
 using JoyLib.Code.Entities.Sexuality;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Events;
+using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Quests;
 using JoyLib.Code.Rollers;
@@ -138,7 +139,7 @@ namespace JoyLib.Code.Entities
             ISexuality sexuality,
             IRomance romance,
             Vector2Int position,
-            IEnumerable<Sprite> sprites,
+            IEnumerable<ISpriteState> sprites,
             IItemInstance naturalWeapons,
             EquipmentStorage equipment,
             IEnumerable<IItemInstance> backpack,
@@ -151,7 +152,6 @@ namespace JoyLib.Code.Entities
             base(name,
                 derivedValues,
                 position,
-                cultures.ElementAt(GlobalConstants.GameManager.Roller.Roll(0, cultures.Count())).Tileset,
                 STANDARD_ACTIONS,
                 sprites,
                 roller,
@@ -247,7 +247,7 @@ namespace JoyLib.Code.Entities
             ISexuality sexuality,
             IRomance romance,
             Vector2Int position,
-            IEnumerable<Sprite> sprites,
+            IEnumerable<ISpriteState> sprites,
             IWorldInstance world,
             IDriver driver,
             RNG roller = null,

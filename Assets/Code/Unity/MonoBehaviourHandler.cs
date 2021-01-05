@@ -9,7 +9,7 @@ using ContextMenu = JoyLib.Code.Unity.GUI.ContextMenu;
 
 namespace JoyLib.Code.Unity
 {
-    public class MonoBehaviourHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+    public class MonoBehaviourHandler : ManagedSprite, IPointerEnterHandler, IPointerExitHandler
     {
         public IJoyObject JoyObject { get; protected set; }
         protected SpriteRenderer SpriteRenderer { get; set; }
@@ -18,15 +18,15 @@ namespace JoyLib.Code.Unity
         
         protected static IGUIManager GUIManager { get; set; }
 
-        public void Update()
+        public override void Update()
         {
+            base.Update();
             if (this.JoyObject == null)
             {
                 return;
             }
             
             this.JoyObject.Update();
-            this.SpriteRenderer.sprite = this.JoyObject.Sprite;
             this.transform.position = new Vector3(this.JoyObject.WorldPosition.x, this.JoyObject.WorldPosition.y);
         }
 
@@ -54,7 +54,7 @@ namespace JoyLib.Code.Unity
             
             this.name = this.JoyObject.JoyName + ":" + this.JoyObject.GUID;
             this.transform.position = new Vector3(this.JoyObject.WorldPosition.x, this.JoyObject.WorldPosition.y, 0.0f);
-            this.SpriteRenderer.sprite = joyObject.Sprite;
+            //this.SpriteRenderer.sprite = 
             this.SetSpeechBubble(false);
         }
 
@@ -84,7 +84,7 @@ namespace JoyLib.Code.Unity
                 GUIManager.OpenGUI(GUINames.TOOLTIP).GetComponent<Tooltip>().Show(
                     this.JoyObject.JoyName,
                     null,
-                    this.JoyObject.Sprite,
+                    this.CurrentSpriteState,
                     this.JoyObject.Tooltip);
             }
         }

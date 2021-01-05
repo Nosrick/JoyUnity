@@ -87,7 +87,7 @@ namespace JoyLib.Code.Entities
             ISexuality sexuality = null,
             IRomance romance = null,
             IJob job = null,
-            IEnumerable<Sprite> sprites = null,
+            IEnumerable<ISpriteState> sprites = null,
             IWorldInstance world = null,
             IDriver driver = null)
         {
@@ -97,7 +97,7 @@ namespace JoyLib.Code.Entities
             IBioSex selectedSex = sex;
             ISexuality selectedSexuality = sexuality;
             IRomance selectedRomance = romance;
-            IEnumerable<Sprite> selectedSprites = sprites;
+            IEnumerable<ISpriteState> selectedSprites = sprites;
             List<ICulture> creatureCultures = new List<ICulture>();
             IDriver selectedDriver = driver;
             IDictionary<string, IRollableValue<int>> selectedStatistics = statistics;
@@ -183,7 +183,16 @@ namespace JoyLib.Code.Entities
 
             if(selectedSprites is null)
             {
-                selectedSprites = this.ObjectIcons.GetSprites(dominantCulture.Tileset, template.JoyType);
+                selectedSprites = new List<ISpriteState>
+                {
+                    new SpriteState(
+                        template.CreatureType,
+                        this.ObjectIcons.GetSprites(dominantCulture.Tileset, template.JoyType),
+                        new List<Color>
+                        {
+                            Color.white
+                        })
+                };
             }
 
             if(selectedDriver is null)
@@ -220,14 +229,13 @@ namespace JoyLib.Code.Entities
             IDictionary<string, IDerivedValue> derivedValues,
             IDictionary<string, IEntitySkill> skills,
             IEnumerable<IAbility> abilities,
-            float experience,
             IJob job,
             IGender gender,
             IBioSex sex,
             ISexuality sexuality,
             IRomance romance,
             Vector2Int position,
-            IEnumerable<Sprite> sprites,
+            IEnumerable<ISpriteState> sprites,
             IItemInstance naturalWeapons,
             EquipmentStorage equipment,
             IEnumerable<IItemInstance> backpack,

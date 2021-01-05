@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
+using JoyLib.Code.Graphics;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -13,7 +14,8 @@ namespace JoyLib.Code.Unity.GUI
     {
         [SerializeField] protected TextMeshProUGUI m_Title;
         [SerializeField] protected TextMeshProUGUI m_Text;
-        [SerializeField] protected Image m_Icon;
+        [SerializeField] protected RectTransform m_IconRect;
+        [SerializeField] protected Image m_IconPrefab;
         [SerializeField] protected Image m_Background;
         [SerializeField] protected StringPairContainer m_ItemPrefab;
         [SerializeField] protected LayoutGroup m_ParentLayout;
@@ -23,6 +25,8 @@ namespace JoyLib.Code.Unity.GUI
         protected RectTransform RectTransform { get; set; }
         
         protected List<StringPairContainer> ItemCache { get; set; }
+        
+        protected List<Image> IconComponents { get; set; }
 
         public override void Awake()
         {
@@ -32,6 +36,7 @@ namespace JoyLib.Code.Unity.GUI
                 this.ItemCache = new List<StringPairContainer>();
                 this.Canvas = this.GetComponentInParent<Canvas>();
                 this.RectTransform = this.GetComponent<RectTransform>();
+                this.IconComponents = new List<Image>();
             }
         }
 
@@ -75,7 +80,7 @@ namespace JoyLib.Code.Unity.GUI
         public virtual void Show(
             string title = null, 
             string content = null, 
-            Sprite sprite = null, 
+            ISpriteState sprite = null, 
             IEnumerable<Tuple<string, string>> data = null, 
             bool showBackground = true)
         {
@@ -94,35 +99,34 @@ namespace JoyLib.Code.Unity.GUI
 
             if (sprite is null == false)
             {
-                this.m_Icon.overrideSprite = sprite;
-                this.m_Icon.transform.parent.gameObject.SetActive(true);
+                this.SetIcon(sprite);
             }
             else
             {
-                this.m_Icon.transform.parent.gameObject.SetActive(false);
+                this.m_IconRect.gameObject.SetActive(false);
             }
 
-            if (data.IsNullOrEmpty() == false && data.Count() > 0)
+            Tuple<string,string>[] dataArray = data as Tuple<string, string>[];
+            if (dataArray.IsNullOrEmpty() == false && dataArray.Length > 0)
             {
-                if (this.ItemCache.Count < data.Count())
+                if (this.ItemCache.Count < dataArray.Length)
                 {
-                    for (int i = this.ItemCache.Count; i < data.Count(); i++)
+                    for (int i = this.ItemCache.Count; i < dataArray.Length; i++)
                     {
                         this.ItemCache.Add(Instantiate(this.m_ItemPrefab, this.m_ParentLayout.transform, false));
                     }
                 }
-                else if (this.ItemCache.Count > data.Count())
+                else if (this.ItemCache.Count > dataArray.Length)
                 {
-                    for (int i = data.Count(); i < this.ItemCache.Count; i++)
+                    for (int i = dataArray.Count(); i < this.ItemCache.Count; i++)
                     {
                         this.ItemCache[i].gameObject.SetActive(false);
                     }
                 }
                     
-                List<Tuple<string, string>> dataList = data.ToList();
-                for (int i = 0; i < dataList.Count; i++)
+                for (int i = 0; i < dataArray.Length; i++)
                 {
-                    this.ItemCache[i].Target = dataList[i];
+                    this.ItemCache[i].Target = dataArray[i];
                     this.ItemCache[i].gameObject.SetActive(true);
                 }
             }
@@ -139,6 +143,30 @@ namespace JoyLib.Code.Unity.GUI
             LayoutRebuilder.ForceRebuildLayoutImmediate(this.RectTransform);
 
             base.Show();
+        }
+
+        protected void SetIcon(ISpriteState state)
+        {
+            List<Sprite> sprites = state.SpriteParts.ToList();
+            List<Color> colours = state.SpriteColours.ToList();
+            foreach (Image icon in this.IconComponents)
+            {
+                icon.gameObject.SetActive(false);
+            }
+            if (sprites.Count > this.IconComponents.Count)
+            {
+                for (int i = this.IconComponents.Count; i < sprites.Count; i++)
+                {
+                    this.IconComponents.Add(Instantiate(this.m_IconPrefab, this.m_IconRect.transform));
+                }
+            }
+
+            for (int i = 0; i < sprites.Count; i++)
+            {
+                this.IconComponents[i].sprite = sprites[i];
+                this.IconComponents[i].color = colours[i];
+                this.IconComponents[i].gameObject.SetActive(true);
+            }
         }
     }
 }

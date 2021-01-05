@@ -9,7 +9,6 @@ using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Events;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
 {
@@ -19,7 +18,7 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
         [SerializeField] protected TextMeshProUGUI ExperienceRemaining;
         [SerializeField] protected GrowingNamedItem namedItemPrefab;
         [SerializeField] protected AbilityItem AbilityItemPrefab;
-        [SerializeField] protected Image PlayerSprite;
+        [SerializeField] protected ManagedSprite PlayerSprite;
         [SerializeField] protected TextMeshProUGUI PlayerName;
         [SerializeField] protected ConstrainedValueContainer JobSelection;
 
@@ -69,7 +68,8 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
             this.Minimum = 0;
             this.Maximum = this.CurrentJob.Experience;
             this.Value = this.Maximum;
-            this.PlayerSprite.sprite = this.Player.Sprite;
+            this.PlayerSprite.Clear();
+            this.PlayerSprite.AddSpriteState(this.Player.MonoBehaviourHandler.CurrentSpriteState);
             this.PlayerName.text = this.Player.JoyName;
             this.JobSelection.Container = this.Player.Jobs.Select(job => job.Name)
                 .ToList();

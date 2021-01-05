@@ -4,6 +4,7 @@ using System.Linq;
 using JoyLib.Code.Collections;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Events;
+using JoyLib.Code.Graphics;
 using JoyLib.Code.Managers;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
@@ -22,18 +23,8 @@ namespace JoyLib.Code
         protected List<string> m_Tags;
         
         public IDictionary<string, IDerivedValue> DerivedValues { get; protected set; }
-
-        public string TileSet { get; protected set; }
         
         public Vector2Int WorldPosition { get; protected set; }
-
-        public bool IsAnimated { get; protected set; }
-
-        public int ChosenSprite { get; protected set; }
-        
-        public int LastIndex { get; protected set; }
-
-        public int FramesSinceLastChange { get; protected set; }
 
         public IEnumerable<string> Tags
         {
@@ -46,10 +37,6 @@ namespace JoyLib.Code
         public bool IsDestructible { get; protected set; }
         
         public IWorldInstance MyWorld { get; set; }
-        
-        public Sprite Sprite => this.Sprites[this.ChosenSprite];
-
-        public Sprite[] Sprites { get; set; }
 
         public long GUID { get; protected set; }
 
@@ -64,6 +51,8 @@ namespace JoyLib.Code
         public bool Alive => this.HitPointsRemaining > (this.HitPoints * (-1));
         
         protected NonUniqueDictionary<object, object> Data { get; set; }
+
+        protected IEnumerable<ISpriteState> m_States;
 
         public List<IJoyAction> CachedActions { get; protected set; }
         
@@ -91,7 +80,7 @@ namespace JoyLib.Code
         }
 
         /// <summary>
-        /// Creation of a JoyObject (MonoBehaviour) using a List of Sprites
+        /// Creation of a JoyObject
         /// </summary>
         /// <param name="name"></param>
         /// <param name="hitPoints"></param>
@@ -104,9 +93,8 @@ namespace JoyLib.Code
             string name, 
             IDictionary<string, IDerivedValue> derivedValues, 
             Vector2Int position, 
-            string tileSet, 
             IEnumerable<string> actions,
-            IEnumerable<Sprite> sprites, 
+            IEnumerable<ISpriteState> sprites, 
             RNG roller = null,
             params string[] tags)
         {
@@ -121,7 +109,6 @@ namespace JoyLib.Code
                 name,
                 derivedValues,
                 position,
-                tileSet,
                 tempActions.ToArray(),
                 sprites,
                 tags);
@@ -130,10 +117,9 @@ namespace JoyLib.Code
         public JoyObject(
             string name, 
             IDictionary<string, IDerivedValue> derivedValues, 
-            Vector2Int position, 
-            string tileSet, 
+            Vector2Int position,
             IEnumerable<IJoyAction> actions,
-            IEnumerable<Sprite> sprites,
+            IEnumerable<ISpriteState> sprites,
             IRollable roller = null,
             params string[] tags)
         {
@@ -142,7 +128,6 @@ namespace JoyLib.Code
                 name,
                 derivedValues,
                 position,
-                tileSet,
                 actions,
                 sprites,
                 tags);
@@ -152,9 +137,8 @@ namespace JoyLib.Code
             string name, 
             IDictionary<string, IDerivedValue> derivedValues, 
             Vector2Int position, 
-            string tileSet, 
             IEnumerable<IJoyAction> actions,
-            IEnumerable<Sprite> sprites, 
+            IEnumerable<ISpriteState> sprites, 
             params string[] tags)
         {
             this.Data = new NonUniqueDictionary<object, object>();
@@ -164,18 +148,10 @@ namespace JoyLib.Code
 
             this.DerivedValues = derivedValues;
 
-            this.TileSet = tileSet;
             this.Tags = tags.ToList();
 
             this.WorldPosition = position;
             this.Move(this.WorldPosition);
-
-            this.Sprites = sprites.ToArray();
-
-            if (tags.Any(tag => tag.Equals("animated", StringComparison.OrdinalIgnoreCase)))
-            {
-                this.IsAnimated = true;
-            }
 
             if (tags.Any(tag => tag.Equals("invulnerable", StringComparison.OrdinalIgnoreCase)))
             {
@@ -186,14 +162,6 @@ namespace JoyLib.Code
             {
                 this.IsWall = true;
             }
-
-            //If it's not animated, select a random icon to represent it
-            this.ChosenSprite = !this.IsAnimated 
-                ? this.Roller.Roll(0, this.Sprites.Length) 
-                : 0;
-
-            this.LastIndex = 0;
-            this.FramesSinceLastChange = 0;
 
             this.CachedActions = new List<IJoyAction>(actions);
 
@@ -352,31 +320,9 @@ namespace JoyLib.Code
             return this.DerivedValues[name].Value;
         }
 
-        //Used for deserialisation
-        public void SetIcons(Sprite[] sprites)
-        {
-            this.Sprites = sprites;
-        }
-
         // Update is called once per frame
         public virtual void Update ()
         {
-            this.FramesSinceLastChange += 1;
-
-            if(this.IsAnimated == false)
-            {
-                return;
-            }
-
-            if (this.FramesSinceLastChange != GlobalConstants.FRAMES_PER_SECOND)
-            {
-                return;
-            }
-
-            this.ChosenSprite += 1;
-            this.ChosenSprite %= this.Sprites.Length;
-
-            this.FramesSinceLastChange = 0;
         }
 
         public int CompareTo(object obj)
@@ -437,6 +383,12 @@ namespace JoyLib.Code
         public void AttachMonoBehaviourHandler(MonoBehaviourHandler mbh)
         {
             this.MonoBehaviourHandler = mbh;
+            this.MonoBehaviourHandler.IsAnimated =
+                this.Tags.Any(tag => tag.Equals("animated", StringComparison.OrdinalIgnoreCase));
+            foreach (ISpriteState state in this.m_States)
+            {
+                this.MonoBehaviourHandler.AddSpriteState(state);
+            }
         }
     }    
 }

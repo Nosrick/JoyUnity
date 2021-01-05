@@ -27,7 +27,7 @@ namespace JoyLib.Code.Unity.GUI
         protected bool m_UseRarityColor = false;
         
         [SerializeField]
-        protected Image m_Icon;
+        protected ManagedSprite m_Icon;
         
         [SerializeField]
         protected Text m_Stack;
@@ -101,12 +101,12 @@ namespace JoyLib.Code.Unity.GUI
             {
                 if (!this.IsEmpty)
                 {
-                    this.m_Icon.overrideSprite = this.Item.Sprite;
-                    this.m_Icon.enabled = true;
+                    this.m_Icon.Clear();
+                    this.m_Icon.AddSpriteState(this.Item.MonoBehaviourHandler.CurrentSpriteState);
                 }
                 else 
                 {
-                    this.m_Icon.enabled = false;
+                    this.m_Icon.Clear();
                 }
             }
 
@@ -179,7 +179,7 @@ namespace JoyLib.Code.Unity.GUI
                     .Show(
                         this.Item.JoyName,
                         null,
-                        this.Item.Sprite,
+                        this.Item.MonoBehaviourHandler.CurrentSpriteState,
                         this.Item.Tooltip);
             }
         }
@@ -239,7 +239,7 @@ namespace JoyLib.Code.Unity.GUI
                 {
                     GUIManager.OpenGUI(GUINames.CURSOR)
                         .GetComponent<Cursor>()
-                        .Show(this.Item.Sprite);
+                        .Show(this.Item.MonoBehaviourHandler.CurrentSpriteState);
                     DragObject = new DragObject
                     {
                         Item = this.Item,

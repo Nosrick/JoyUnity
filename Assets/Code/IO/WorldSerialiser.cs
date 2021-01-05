@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.World;
@@ -80,6 +79,7 @@ namespace JoyLib.Code.IO
         
         private void AssignIcons(IWorldInstance parent)
         {
+            /*
             foreach(IJoyObject obj in parent.Objects)
             {
                 obj.Sprites = s_ObjectIcons.GetSprites(obj.TileSet, obj.JoyName).ToArray();
@@ -94,6 +94,7 @@ namespace JoyLib.Code.IO
             {
                 this.AssignIcons(world);
             }
+            */
         }
     }
 }

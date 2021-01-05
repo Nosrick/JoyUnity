@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.AI.Drivers;
 using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Graphics;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,12 +23,16 @@ namespace JoyLib.Code.Unity.GUI
         [SerializeField] protected Image PlayerSprite_Part2;
         [SerializeField] protected TMP_InputField PlayerName_Part1;
         [SerializeField] protected TMP_InputField PlayerName_Part2;
+        
+        protected string PlayerName { get; set; }
 
         public void Initialise()
         {
             this.PlayerInfo.JobChanged += this.SetSprites;
             this.PlayerInfo.CultureChanged += this.SetRandomName;
             this.StatisticWindow.ValueChanged += this.ChangedStatistics;
+            this.PlayerName_Part1.GetComponent<TextWatcher>().OnTextChange += this.UpdatePlayerName;
+            this.PlayerName_Part2.GetComponent<TextWatcher>().OnTextChange += this.UpdatePlayerName;
             this.StatisticWindow.Initialise();
             this.SkillWindow.Initialise();
             this.DerivedValuesWindow.Initialise();
@@ -41,7 +46,7 @@ namespace JoyLib.Code.Unity.GUI
             return this.GameManager.EntityFactory.CreateFromTemplate(
                 this.PlayerInfo.CurrentTemplate,
                 GlobalConstants.NO_TARGET,
-                this.PlayerName_Part1.text,
+                this.PlayerName,
                 this.StatisticWindow.GetStatistics(),
                 this.DerivedValuesWindow.GetDerivedValues(),
                 this.SkillWindow.GetSkillsBlock(), 
@@ -52,9 +57,18 @@ namespace JoyLib.Code.Unity.GUI
                 this.GameManager.SexualityHandler.Get(this.PlayerInfo.Sexuality),
                 this.GameManager.RomanceHandler.Get(this.PlayerInfo.Romance),
                 this.GameManager.JobHandler.Get(this.PlayerInfo.Job), 
-                this.GameManager.ObjectIconHandler.GetSprites(
-                    this.PlayerInfo.CurrentTemplate.CreatureType, 
-                    this.PlayerInfo.Job),
+                new List<ISpriteState>
+                {
+                    new Graphics.SpriteState(
+                        this.PlayerName_Part1.text,
+                        this.GameManager.ObjectIconHandler.GetSprites(
+                            this.PlayerInfo.CurrentTemplate.CreatureType, 
+                            this.PlayerInfo.Job),
+                        new List<Color>
+                        {
+                            Color.white
+                        })
+                },
                 null,
                 new PlayerDriver());
         }
@@ -77,8 +91,9 @@ namespace JoyLib.Code.Unity.GUI
 
         public void SetRandomName()
         {
-            this.PlayerName_Part1.text = this.PlayerInfo.CurrentCulture.GetRandomName(this.PlayerInfo.Gender);
-            this.PlayerName_Part2.text = this.PlayerName_Part1.text;
+            this.PlayerName = this.PlayerInfo.CurrentCulture.GetRandomName(this.PlayerInfo.Gender);
+            this.PlayerName_Part1.text = this.PlayerName;
+            this.PlayerName_Part2.text = this.PlayerName;
         }
 
         public void SetSprites(object sender, EventArgs args)
@@ -99,6 +114,19 @@ namespace JoyLib.Code.Unity.GUI
         {
             this.GameManager.GUIManager.CloseGUI(GUINames.CHARACTER_CREATION_PART_2);
             this.GameManager.GUIManager.OpenGUI(this.name);
+        }
+
+        protected void UpdatePlayerName(object sender, TextChangedEventArgs args)
+        {
+            this.PlayerName = args.NewValue;
+            if (sender.Equals(this.PlayerName_Part2))
+            {
+                this.PlayerName_Part1.text = this.PlayerName;
+            }
+            else if (sender.Equals(this.PlayerName_Part1))
+            {
+                this.PlayerName_Part2.text = this.PlayerName;
+            }
         }
     }
 }

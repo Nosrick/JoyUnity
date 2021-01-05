@@ -11,7 +11,7 @@ namespace JoyLib.Code.Unity.GUI
     {
         [SerializeField] protected GameManager GameManager;
         [SerializeField] protected TextMeshProUGUI LastSaidGUI;
-        [SerializeField] protected Image LastSpokeIcon;
+        [SerializeField] protected ManagedSprite LastSpokeIcon;
         [SerializeField] protected TextMeshProUGUI LastSpokeName;
         [SerializeField] protected RectTransform ListenerSection;
         [SerializeField] protected GameObject Window;
@@ -46,7 +46,8 @@ namespace JoyLib.Code.Unity.GUI
 
         protected void SetActors(object sender, EventArgs args)
         {
-            this.LastSpokeIcon.sprite = this.ConversationEngine.Listener.Sprite;
+            this.LastSpokeIcon.Clear();
+            this.LastSpokeIcon.AddSpriteState(this.ConversationEngine.Listener.MonoBehaviourHandler.CurrentSpriteState);
             this.LastSpokeName.text = this.ConversationEngine.ListenerInfo;
             this.LastSaidGUI.text = this.ConversationEngine.LastSaidWords;
         }

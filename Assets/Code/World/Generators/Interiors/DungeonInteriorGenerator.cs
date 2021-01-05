@@ -63,7 +63,16 @@ namespace JoyLib.Code.World.Generators.Interiors
         public List<JoyObject> GenerateWalls(WorldTile[,] worldTiles)
         {
             List<JoyObject> walls = new List<JoyObject>();
-            IEnumerable<Sprite> sprites = this.ObjectIcons.GetSprites(this.TileSet, "surroundwall");
+            List<ISpriteState> spriteList = new List<ISpriteState>
+            {
+                new SpriteState(
+                    "Wall",
+                    this.ObjectIcons.GetSprites(this.TileSet, "surroundwall"),
+                    new List<Color>
+                    {
+                        Color.white
+                    })
+            };
             List<IBasicValue<float>> values = new List<IBasicValue<float>>();
             values.Add(new ConcreteBasicFloatValue("weight", 1));
             values.Add(new ConcreteBasicFloatValue("bonus", 1));
@@ -82,9 +91,8 @@ namespace JoyLib.Code.World.Generators.Interiors
                                 "Wall", 
                                 this.DerivedValueHandler.GetItemStandardBlock(values), 
                                 new Vector2Int(i, j), 
-                                this.TileSet, 
                                 new string[] {}, 
-                                sprites,
+                                spriteList,
                                 null,
                                 new string[] { "wall", "interior" }));
                     }

@@ -25,6 +25,12 @@ namespace JoyLib.Code.Collections
             this.m_KeyValues = new List<Tuple<K, T>>(collection.m_KeyValues);
         }
 
+        public NonUniqueDictionary(IEnumerable<Tuple<K, T>> collection)
+        {
+            this.m_KeyValues = new List<Tuple<K, T>>();
+            this.AddRange(collection);
+        }
+
         public void Add(K key, T value)
         {
             this.m_KeyValues.Add(new Tuple<K, T>(key, value));

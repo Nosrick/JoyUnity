@@ -134,14 +134,13 @@ public class GameManager : MonoBehaviour, IGameManager
 
         Cursor cursor = this.GUIManager.OpenGUI(GUINames.CURSOR)
             .GetComponent<Cursor>();
-        cursor.SetCursorSprites(
-                this.ObjectIconHandler.GetTileSet("DefaultCursor"),
-                new List<Color>
-                {
-                    Color.white,
-                    Color.gray,
-                    Color.black
-                });
+        cursor.SetCursorSprites(new SpriteState(
+            "Cursor",
+            this.ObjectIconHandler.GetTileSet("DefaultCursor"),
+            new List<Color>
+            {
+                Color.magenta
+            }));
         cursor.SetCursorSize(64, 64);
 
         this.m_StateManager.ChangeState(new CharacterCreationState());

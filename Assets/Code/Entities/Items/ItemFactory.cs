@@ -123,9 +123,19 @@ namespace JoyLib.Code.Entities.Items
                 itemType,
                 this.DerivedValueHandler.GetItemStandardBlock(values),
                 new Vector2Int(-1, -1),
-                identified, this.ObjectIcons.GetSprites(
-                    itemType.SpriteSheet,
-                    itemType.UnidentifiedName),
+                identified, 
+                new List<ISpriteState>
+                {
+                    new SpriteState(
+                        itemType.UnidentifiedName,
+                        this.ObjectIcons.GetSprites(
+                            itemType.SpriteSheet,
+                            itemType.UnidentifiedName),
+                        new List<Color>
+                        {
+                            Color.white
+                        })
+                },
                 new RNG(),
                 new List<IAbility>(),
                 new List<IJoyAction>(),

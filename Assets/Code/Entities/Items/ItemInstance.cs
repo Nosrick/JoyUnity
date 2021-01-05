@@ -6,6 +6,7 @@ using JoyLib.Code.Collections;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Events;
+using JoyLib.Code.Graphics;
 using JoyLib.Code.Managers;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
@@ -26,6 +27,8 @@ namespace JoyLib.Code.Entities.Items
 
         protected List<long> m_Contents;
         protected BaseItemType m_Type;
+        
+        public IEnumerable<ISpriteState> Sprites { get; protected set; }
 
         protected long m_OwnerGUID;
         protected string m_OwnerString;
@@ -62,7 +65,7 @@ namespace JoyLib.Code.Entities.Items
             IDictionary<string, IDerivedValue> derivedValues,
             Vector2Int position, 
             bool identified, 
-            IEnumerable<Sprite> sprites,
+            IEnumerable<ISpriteState> sprites,
             IRollable roller = null,
             IEnumerable<IAbility> uniqueAbilities = null,
             IEnumerable<IJoyAction> actions = null,
@@ -86,20 +89,14 @@ namespace JoyLib.Code.Entities.Items
 
             this.DerivedValues = derivedValues;
 
-            this.TileSet = type.SpriteSheet;
             this.Tags = type.Tags.ToList();
 
             this.m_Contents = new List<long>();
 
+            this.Sprites = sprites;
+
             this.WorldPosition = position;
             this.Move(this.WorldPosition);
-
-            this.Sprites = sprites.ToArray();
-
-            if (this.Tags.Any(tag => tag.Equals("animated", StringComparison.OrdinalIgnoreCase)))
-            {
-                this.IsAnimated = true;
-            }
 
             if (this.Tags.Any(tag => tag.Equals("invulnerable", StringComparison.OrdinalIgnoreCase)))
             {
@@ -110,19 +107,6 @@ namespace JoyLib.Code.Entities.Items
             {
                 this.IsWall = true;
             }
-
-            //If it's not animated, select a random icon to represent it
-            if (!this.IsAnimated)
-            {
-                this.ChosenSprite = this.Roller.Roll(0, this.Sprites.Length);
-            }
-            else
-            {
-                this.ChosenSprite = 0;
-            }
-
-            this.LastIndex = 0;
-            this.FramesSinceLastChange = 0;
 
             this.CachedActions = actions is null ? new List<IJoyAction>() : new List<IJoyAction>(actions);
 
@@ -150,6 +134,12 @@ namespace JoyLib.Code.Entities.Items
             {
                 GameObject newOne = Object.Instantiate(this.Prefab);
                 newOne.GetComponent<MonoBehaviourHandler>().AttachJoyObject(this);
+                this.MonoBehaviourHandler.IsAnimated =
+                    this.Tags.Any(tag => tag.Equals("animated", StringComparison.OrdinalIgnoreCase));
+                foreach (ISpriteState state in this.m_States)
+                {
+                    this.MonoBehaviourHandler.AddSpriteState(state);
+                }
                 newOne.SetActive(active);
             }
             else

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
+using JoyLib.Code.Graphics;
 using JoyLib.Code.Unity.GUI;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -12,7 +13,7 @@ namespace JoyLib.Code.Unity
     {
         public delegate IEnumerable<Tuple<string, string>> SetTooltip(IPosition positionable);
         protected SpriteRenderer SpriteRenderer { get; set; }
-        protected Sprite Sprite { get; set; }
+        protected ISpriteState Sprite { get; set; }
         public static IGUIManager GUIManager { get; set; }
 
         public IEnumerable<Tuple<string, string>> Tooltip { get; set; }
@@ -32,7 +33,7 @@ namespace JoyLib.Code.Unity
             this.SpriteRenderer = this.gameObject.GetComponent<SpriteRenderer>();
             if (this.SpriteRenderer is null == false)
             {
-                this.Sprite = this.SpriteRenderer.sprite;
+                this.Sprite = this.GetComponent<ManagedSprite>().CurrentSpriteState;
             }
         }
         
