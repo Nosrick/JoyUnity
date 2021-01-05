@@ -116,5 +116,12 @@
 				<Chain>2</Chain>
 			</NameData>
 		</Names>
+
+		<CursorColours>
+			<Colour>#73dcffff</Colour>
+			<Colour>#4196dcff</Colour>
+			<Colour>#73dcffff</Colour>
+			<Colour>#4196dcff</Colour>
+		</CursorColours>
 	</Culture>
 </Cultures>

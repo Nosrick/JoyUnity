@@ -63,7 +63,7 @@ namespace JoyLib.Code.World.Generators.Interiors
         public List<JoyObject> GenerateWalls(WorldTile[,] worldTiles)
         {
             List<JoyObject> walls = new List<JoyObject>();
-            Sprite[] sprites = this.ObjectIcons.GetSprites(this.TileSet, "surroundwall");
+            IEnumerable<Sprite> sprites = this.ObjectIcons.GetSprites(this.TileSet, "surroundwall");
             List<IBasicValue<float>> values = new List<IBasicValue<float>>();
             values.Add(new ConcreteBasicFloatValue("weight", 1));
             values.Add(new ConcreteBasicFloatValue("bonus", 1));

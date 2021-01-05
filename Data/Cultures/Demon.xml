@@ -176,5 +176,12 @@
                 <Position>0</Position>
             </Icon>
         </TileSet>
+        
+        <CursorColours>
+            <Colour>#f04b36ff</Colour>
+            <Colour>#b43232ff</Colour>
+            <Colour>#3c9b6eff</Colour>
+            <Colour>#2dcd41ff</Colour>
+        </CursorColours>
     </Culture>
 </Cultures>

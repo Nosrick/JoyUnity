@@ -9,6 +9,7 @@ using JoyLib.Code.Entities.Sexes;
 using JoyLib.Code.Entities.Sexuality;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Rollers;
+using UnityEngine;
 
 namespace JoyLib.Code.Cultures
 {
@@ -58,8 +59,9 @@ namespace JoyLib.Code.Cultures
 
         public RNG Roller { get; protected set; }
 
+        public IEnumerable<Color> CursorColours { get; protected set; }
+
         protected const int NO_GROUP = int.MinValue;
-        public const int GROUP_CHANCE = 25;
 
         public CultureType()
         { }
@@ -79,6 +81,7 @@ namespace JoyLib.Code.Cultures
             Dictionary<string, int> romancePrevelence,
             Dictionary<string, int> genderPrevelence,
             int nonConformingGenderChance,
+            IEnumerable<Color> cursorColours,
             RNG roller = null)
         {
             this.Roller = roller is null ? new RNG() : roller;
@@ -97,6 +100,7 @@ namespace JoyLib.Code.Cultures
             this.m_RomancePrevelence = romancePrevelence;
             this.m_GenderPrevelence = genderPrevelence;
             this.NonConformingGenderChance = nonConformingGenderChance;
+            this.CursorColours = cursorColours;
 
             this.ClearLastGroup();
         }

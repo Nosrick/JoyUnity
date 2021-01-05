@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace JoyLib.Code.Graphics
 {
@@ -10,7 +11,8 @@ namespace JoyLib.Code.Graphics
         IconData ReturnDefaultIcon();
         Sprite[] GetDefaultSprites();
         Sprite GetSprite(string tileSet, string tileName);
-        Sprite[] GetSprites(string tileSet, string tileName);
+        IEnumerable<Sprite> GetSprites(string tileSet, string tileName);
+        IEnumerable<Sprite> GetTileSet(string tileSet);
         int SpriteSize { get; }
     }
 }

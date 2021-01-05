@@ -238,7 +238,8 @@ namespace JoyLib.Code.Unity.GUI
                 else
                 {
                     GUIManager.OpenGUI(GUINames.CURSOR)
-                        .GetComponent<Image>().sprite = this.Item.Sprite;
+                        .GetComponent<Cursor>()
+                        .Show(this.Item.Sprite);
                     DragObject = new DragObject
                     {
                         Item = this.Item,
@@ -312,7 +313,7 @@ namespace JoyLib.Code.Unity.GUI
         protected virtual void EndDrag()
         {
             this.Repaint();
-            GUIManager.CloseGUI(GUINames.CURSOR);
+            GUIManager.GetGUI(GUINames.CURSOR).GetComponent<Cursor>().Reset();
         }
 
         public virtual void OnPointerDown(PointerEventData eventData)

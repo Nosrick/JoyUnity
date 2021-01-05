@@ -6,6 +6,7 @@ using JoyLib.Code.Entities.Sexes;
 using JoyLib.Code.Entities.Sexuality;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Rollers;
+using UnityEngine;
 
 namespace JoyLib.Code.Cultures
 {
@@ -60,5 +61,7 @@ namespace JoyLib.Code.Cultures
         NameData[] NameData { get; }
         
         RNG Roller { get; }
+        
+        IEnumerable<Color> CursorColours { get; }
     }
 }

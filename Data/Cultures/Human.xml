@@ -187,5 +187,12 @@
 				<Position>12</Position>
 			</Icon>
 		</TileSet>
+		
+		<CursorColours>
+			<Colour>#f2a085ff</Colour>
+			<Colour>#d77e4bff</Colour>
+			<Colour>#b45a50ff</Colour>
+			<Colour>#823219ff</Colour>
+		</CursorColours>
 	</Culture>
 </Cultures>

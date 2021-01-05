@@ -105,8 +105,8 @@ namespace JoyLib.Code
             IDictionary<string, IDerivedValue> derivedValues, 
             Vector2Int position, 
             string tileSet, 
-            string[] actions,
-            Sprite[] sprites, 
+            IEnumerable<string> actions,
+            IEnumerable<Sprite> sprites, 
             RNG roller = null,
             params string[] tags)
         {
@@ -132,8 +132,8 @@ namespace JoyLib.Code
             IDictionary<string, IDerivedValue> derivedValues, 
             Vector2Int position, 
             string tileSet, 
-            IJoyAction[] actions,
-            Sprite[] sprites,
+            IEnumerable<IJoyAction> actions,
+            IEnumerable<Sprite> sprites,
             IRollable roller = null,
             params string[] tags)
         {
@@ -153,8 +153,8 @@ namespace JoyLib.Code
             IDictionary<string, IDerivedValue> derivedValues, 
             Vector2Int position, 
             string tileSet, 
-            IJoyAction[] actions,
-            Sprite[] sprites, 
+            IEnumerable<IJoyAction> actions,
+            IEnumerable<Sprite> sprites, 
             params string[] tags)
         {
             this.Data = new NonUniqueDictionary<object, object>();
@@ -170,7 +170,7 @@ namespace JoyLib.Code
             this.WorldPosition = position;
             this.Move(this.WorldPosition);
 
-            this.Sprites = sprites;
+            this.Sprites = sprites.ToArray();
 
             if (tags.Any(tag => tag.Equals("animated", StringComparison.OrdinalIgnoreCase)))
             {
@@ -188,14 +188,9 @@ namespace JoyLib.Code
             }
 
             //If it's not animated, select a random icon to represent it
-            if (!this.IsAnimated && sprites != null)
-            {
-                this.ChosenSprite = this.Roller.Roll(0, sprites.Length);
-            }
-            else
-            {
-                this.ChosenSprite = 0;
-            }
+            this.ChosenSprite = !this.IsAnimated 
+                ? this.Roller.Roll(0, this.Sprites.Length) 
+                : 0;
 
             this.LastIndex = 0;
             this.FramesSinceLastChange = 0;

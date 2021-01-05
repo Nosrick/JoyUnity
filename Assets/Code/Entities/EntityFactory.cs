@@ -81,13 +81,13 @@ namespace JoyLib.Code.Entities
             IDictionary<string, IDerivedValue> derivedValues = null,
             IDictionary<string, IEntitySkill> skills = null,
             IEnumerable<IAbility> abilities = null,
-            List<ICulture> cultures = null,
+            IEnumerable<ICulture> cultures = null,
             IGender gender = null,
             IBioSex sex = null,
             ISexuality sexuality = null,
             IRomance romance = null,
             IJob job = null,
-            Sprite[] sprites = null,
+            IEnumerable<Sprite> sprites = null,
             IWorldInstance world = null,
             IDriver driver = null)
         {
@@ -97,7 +97,7 @@ namespace JoyLib.Code.Entities
             IBioSex selectedSex = sex;
             ISexuality selectedSexuality = sexuality;
             IRomance selectedRomance = romance;
-            Sprite[] selectedSprites = sprites;
+            IEnumerable<Sprite> selectedSprites = sprites;
             List<ICulture> creatureCultures = new List<ICulture>();
             IDriver selectedDriver = driver;
             IDictionary<string, IRollableValue<int>> selectedStatistics = statistics;
@@ -227,14 +227,14 @@ namespace JoyLib.Code.Entities
             ISexuality sexuality,
             IRomance romance,
             Vector2Int position,
-            Sprite[] sprites,
+            IEnumerable<Sprite> sprites,
             IItemInstance naturalWeapons,
             EquipmentStorage equipment,
-            List<IItemInstance> backpack,
-            List<string> identifiedItems,
+            IEnumerable<IItemInstance> backpack,
+            IEnumerable<string> identifiedItems,
             IEnumerable<IJob> jobs,
             IWorldInstance world,
-            List<ICulture> cultures = null,
+            IEnumerable<ICulture> cultures = null,
             IDriver driver = null)
         {
             List<ICulture> creatureCultures = new List<ICulture>();

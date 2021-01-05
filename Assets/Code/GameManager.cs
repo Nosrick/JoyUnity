@@ -1,4 +1,5 @@
-﻿using Code.Collections;
+﻿using System.Collections.Generic;
+using Code.Collections;
 using Joy.Code.Managers;
 using JoyLib.Code;
 using JoyLib.Code.Combat;
@@ -53,9 +54,9 @@ public class GameManager : MonoBehaviour, IGameManager
             
         GameObject prefab = Resources.Load<GameObject>("Prefabs/MonoBehaviourHandler");
         GameObject itemPrefab = Resources.Load<GameObject>("Prefabs/ItemInstance");
-        GameObject sprite = Resources.Load<GameObject>("Prefabs/Sprite");
+        GameObject positionableSprite = Resources.Load<GameObject>("Prefabs/PositionableSprite");
         GameObject fog = Resources.Load<GameObject>("Prefabs/Fog of War");
-        this.FloorPool = new GameObjectPool(sprite, floorHolder);
+        this.FloorPool = new GameObjectPool(positionableSprite, floorHolder);
         this.WallPool = new GameObjectPool(prefab, wallHolder);
         this.EntityPool = new GameObjectPool(prefab, entityHolder);
         this.ItemPool = new GameObjectPool(itemPrefab, objectHolder);
@@ -129,6 +130,17 @@ public class GameManager : MonoBehaviour, IGameManager
         Entity.SkillHandler = this.SkillHandler;
         Entity.NaturalWeaponHelper = this.NaturalWeaponHelper;
         Entity.DerivedValueHandler = this.DerivedValueHandler;
+
+        this.GUIManager.OpenGUI(GUINames.CURSOR)
+            .GetComponent<JoyLib.Code.Unity.GUI.Cursor>()
+            .SetCursorSprites(
+                this.ObjectIconHandler.GetTileSet("DefaultCursor"),
+                new List<Color>
+                {
+                    Color.white,
+                    Color.gray,
+                    Color.black
+                });
 
         this.m_StateManager.ChangeState(new CharacterCreationState());
     }

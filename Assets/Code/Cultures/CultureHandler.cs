@@ -5,6 +5,7 @@ using System.Linq;
 using System.Xml.Linq;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
+using UnityEngine;
 
 namespace JoyLib.Code.Cultures
 {
@@ -108,6 +109,47 @@ namespace JoyLib.Code.Cultures
                     int nonConformingGenderChance = culture.Element("NonConformingGenderChance").DefaultIfEmpty(10);
 
                     string tileSet = culture.Element("TileSet").Element("Name").DefaultIfEmpty("");
+
+                    List<Color> cursorColours = new List<Color>();
+                    try
+                    {
+                        IEnumerable<string> colourStrings = (from colours in culture.Element("CursorColours")
+                                .Elements("Colour")
+                            select colours.GetAs<string>());
+
+                        foreach (string colourString in colourStrings)
+                        {
+                            ColorUtility.TryParseHtmlString(colourString, out Color colour);
+                            cursorColours.Add(colour);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogWarning(e.Message);
+                        Debug.LogWarning(e.StackTrace);
+                        Debug.LogWarning("Could not find cursor colours in file " + file);
+                        GlobalConstants.ActionLog.AddText("Could not find cursor colours in file " + file);
+                    }
+
+                    if (cursorColours.Any() == false)
+                    {
+                        cursorColours.Add(Color.magenta);
+                    }
+                    
+                    /*
+                    ColorUtility.TryParseHtmlString(
+                        culture.Element("CursorColours").Element("First").DefaultIfEmpty("#d9d9d9ff"), out Color colour);
+                    cursorColours.Add(colour);
+
+                    ColorUtility.TryParseHtmlString(
+                        culture.Element("CursorColours").Element("Second").DefaultIfEmpty("#beb4aaff"),
+                        out colour);
+                    cursorColours.Add(colour);
+
+                    ColorUtility.TryParseHtmlString(
+                        culture.Element("CursorColours").Element("Third").DefaultIfEmpty("#737d73ff"), out colour);
+                    cursorColours.Add(colour);
+                    */
                     //string filename = culture.Element("TileSet").Element("Filename").DefaultIfEmpty("");
 
                     if (tileSet.Length > 0)
@@ -140,7 +182,8 @@ namespace JoyLib.Code.Cultures
                             relationships,
                             romanceDictionary,
                             genderDictionary,
-                            nonConformingGenderChance));
+                            nonConformingGenderChance,
+                            cursorColours));
                 }
             }
 

@@ -120,6 +120,10 @@ namespace JoyLib.Code.Unity.GUI
             this.JobChanged?.Invoke(this, EventArgs.Empty);
             this.CultureChanged?.Invoke(this, EventArgs.Empty);
             this.SetStatistics();
+
+            this.GameManager.GUIManager.GetGUI(GUINames.CURSOR)
+                .GetComponent<Cursor>()
+                .SetCursorColours(this.CurrentCulture.CursorColours);
         }
 
         protected void SetStatistics()

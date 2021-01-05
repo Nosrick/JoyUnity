@@ -799,5 +799,12 @@
 				<Chain>1</Chain>
 			</NameData>
 		</Names>
+
+		<CursorColours>
+			<Colour>#ffb35bff</Colour>
+			<Colour>#ff851bff</Colour>
+			<Colour>#f04b36ff</Colour>
+			<Colour>#ff851bff</Colour>
+		</CursorColours>
 	</Culture>
 </Cultures>

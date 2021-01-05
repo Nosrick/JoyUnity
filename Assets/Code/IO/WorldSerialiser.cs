@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using System.Text;
+using System.Linq;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.World;
@@ -17,7 +17,9 @@ namespace JoyLib.Code.IO
             try
             {
                 if (!Directory.Exists(Directory.GetCurrentDirectory() + "/save/" + world.Name))
+                {
                     Directory.CreateDirectory(Directory.GetCurrentDirectory() + "/save/" + world.Name);
+                }
             }
             catch (Exception e)
             {
@@ -29,7 +31,6 @@ namespace JoyLib.Code.IO
             {
                 string worldString = JsonUtility.ToJson(world);
 
-                byte[] worldBytes = Encoding.ASCII.GetBytes(worldString);
                 StreamWriter writer = new StreamWriter(Directory.GetCurrentDirectory() + "/save/" + world.Name + "/sav.dat", false);
                 writer.WriteLine(worldString);
                 writer.Close();
@@ -81,12 +82,12 @@ namespace JoyLib.Code.IO
         {
             foreach(IJoyObject obj in parent.Objects)
             {
-                obj.Sprites = s_ObjectIcons.GetSprites(obj.TileSet, obj.JoyName);
+                obj.Sprites = s_ObjectIcons.GetSprites(obj.TileSet, obj.JoyName).ToArray();
             }
 
             foreach(IEntity entity in parent.Entities)
             {
-                entity.Sprites = s_ObjectIcons.GetSprites(entity.TileSet, entity.CreatureType);
+                entity.Sprites = s_ObjectIcons.GetSprites(entity.TileSet, entity.CreatureType).ToArray();
             }
 
             foreach(IWorldInstance world in parent.Areas.Values)

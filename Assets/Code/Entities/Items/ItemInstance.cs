@@ -62,7 +62,7 @@ namespace JoyLib.Code.Entities.Items
             IDictionary<string, IDerivedValue> derivedValues,
             Vector2Int position, 
             bool identified, 
-            Sprite[] sprites,
+            IEnumerable<Sprite> sprites,
             IRollable roller = null,
             IEnumerable<IAbility> uniqueAbilities = null,
             IEnumerable<IJoyAction> actions = null,
@@ -94,7 +94,7 @@ namespace JoyLib.Code.Entities.Items
             this.WorldPosition = position;
             this.Move(this.WorldPosition);
 
-            this.Sprites = sprites;
+            this.Sprites = sprites.ToArray();
 
             if (this.Tags.Any(tag => tag.Equals("animated", StringComparison.OrdinalIgnoreCase)))
             {
@@ -112,9 +112,9 @@ namespace JoyLib.Code.Entities.Items
             }
 
             //If it's not animated, select a random icon to represent it
-            if (!this.IsAnimated && sprites != null)
+            if (!this.IsAnimated)
             {
-                this.ChosenSprite = this.Roller.Roll(0, sprites.Length);
+                this.ChosenSprite = this.Roller.Roll(0, this.Sprites.Length);
             }
             else
             {

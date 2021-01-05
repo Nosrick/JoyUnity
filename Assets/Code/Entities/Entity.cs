@@ -131,18 +131,18 @@ namespace JoyLib.Code.Entities
             IDictionary<string, INeed> needs,
             IDictionary<string, IEntitySkill> skills,
             IEnumerable<IAbility> abilities,
-            List<ICulture> cultures,
+            IEnumerable<ICulture> cultures,
             IJob job,
             IGender gender,
             IBioSex sex,
             ISexuality sexuality,
             IRomance romance,
             Vector2Int position,
-            Sprite[] sprites,
+            IEnumerable<Sprite> sprites,
             IItemInstance naturalWeapons,
             EquipmentStorage equipment,
-            List<IItemInstance> backpack,
-            List<string> identifiedItems,
+            IEnumerable<IItemInstance> backpack,
+            IEnumerable<string> identifiedItems,
             IEnumerable<IJob> jobs,
             IWorldInstance world,
             IDriver driver,
@@ -151,7 +151,7 @@ namespace JoyLib.Code.Entities
             base(name,
                 derivedValues,
                 position,
-                cultures[GlobalConstants.GameManager.Roller.Roll(0, cultures.Count)].Tileset,
+                cultures.ElementAt(GlobalConstants.GameManager.Roller.Roll(0, cultures.Count())).Tileset,
                 STANDARD_ACTIONS,
                 sprites,
                 roller,
@@ -167,7 +167,7 @@ namespace JoyLib.Code.Entities
             this.Jobs = new List<IJob>(jobs);
             this.Sexuality = sexuality;
             this.Romance = romance;
-            this.m_IdentifiedItems = identifiedItems;
+            this.m_IdentifiedItems = identifiedItems.ToList();
             this.m_Statistics = statistics;
             
             this.m_Needs = needs;
@@ -183,11 +183,11 @@ namespace JoyLib.Code.Entities
 
             this.m_NaturalWeapons = naturalWeapons;
             this.m_Equipment = equipment;
-            this.m_Backpack = backpack;
+            this.m_Backpack = backpack.ToList();
             this.Sex = sex;
             this.m_VisionProvider = template.VisionType.Copy();
 
-            this.m_Cultures = cultures;
+            this.m_Cultures = cultures.ToList();
 
             this.m_Pathfinder = (IPathfinder) ScriptingEngine.Instance.FetchAndInitialise("custompathfinder");
             this.m_PathfindingData = new Queue<Vector2Int>();
@@ -240,14 +240,14 @@ namespace JoyLib.Code.Entities
             IDictionary<string, INeed> needs,
             IDictionary<string, IEntitySkill> skills,
             IEnumerable<IAbility> abilities,
-            List<ICulture> cultures,
+            IEnumerable<ICulture> cultures,
             IJob job,
             IGender gender,
             IBioSex sex,
             ISexuality sexuality,
             IRomance romance,
             Vector2Int position,
-            Sprite[] sprites,
+            IEnumerable<Sprite> sprites,
             IWorldInstance world,
             IDriver driver,
             RNG roller = null,

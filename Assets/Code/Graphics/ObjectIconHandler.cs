@@ -282,20 +282,16 @@ namespace JoyLib.Code.Graphics
             return icons[0].sprite;
         }
 
-        public Sprite[] GetSprites(string tileSet, string tileName)
+        public IEnumerable<Sprite> GetSprites(string tileSet, string tileName)
         {
             List<Sprite> sprites = new List<Sprite>();
 
-            List<KeyValuePair<IconData, List<string>>> data = this.Icons.Where(x => x.Value.Contains(tileSet, GlobalConstants.STRING_COMPARER)).ToList();
-            List<IconData> query = new List<IconData>();
+            List<IconData> data = this.Icons.Where(x => x.Value.Contains(tileSet, GlobalConstants.STRING_COMPARER))
+                .Select(pair => pair.Key)
+                .ToList();
 
-            foreach(KeyValuePair<IconData, List<string>> pair in data)
-            {
-                query.Add(pair.Key);
-            }
-
-            List<IconData> find = query.FindAll(x => x.name.Equals(tileName, StringComparison.OrdinalIgnoreCase) 
-                                                                    || x.data.Equals(tileName, StringComparison.OrdinalIgnoreCase));
+            List<IconData> find = data.FindAll(x => x.name.Equals(tileName, StringComparison.OrdinalIgnoreCase) 
+                                                    || x.data.Equals(tileName, StringComparison.OrdinalIgnoreCase));
             foreach(IconData found in find)
             {
                 sprites.Add(found.sprite);
@@ -303,9 +299,9 @@ namespace JoyLib.Code.Graphics
 
             if(sprites.Count == 0)
             {
-                if (query.Any(x => x.data.Equals("default", StringComparison.OrdinalIgnoreCase)))
+                if (data.Any(x => x.data.Equals("default", StringComparison.OrdinalIgnoreCase)))
                 {
-                    IconData[] defaultIcons = query.Where(x => x.data.Equals("default", StringComparison.OrdinalIgnoreCase)).ToArray();
+                    IconData[] defaultIcons = data.Where(x => x.data.Equals("default", StringComparison.OrdinalIgnoreCase)).ToArray();
                     sprites.AddRange(defaultIcons.Select(icon => icon.sprite));
                 }
                 else
@@ -320,6 +316,13 @@ namespace JoyLib.Code.Graphics
 
             return sprites.ToArray();
         }
+
+        public IEnumerable<Sprite> GetTileSet(string tileSet)
+        {
+            return this.Icons.Where(pair => pair.Value.Contains(tileSet))
+                .Select(pair => pair.Key.sprite);
+        }
+
         private BucketCollection<IconData, string> Icons
         {
             get;
