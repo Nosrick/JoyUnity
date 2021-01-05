@@ -14,5 +14,6 @@
         <LightColour>#addbb3FF</LightColour>
         <MaximumLight>24</MaximumLight>
         <MaximumComfort>16</MaximumComfort>
+        <MinimumComfort>3</MinimumComfort>
     </VisionType>
 </VisionTypes>

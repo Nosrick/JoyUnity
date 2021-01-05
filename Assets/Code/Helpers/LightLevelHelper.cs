@@ -21,7 +21,8 @@ namespace JoyLib.Code.Helpers
             }
             else if (light > vision.MaximumComfortLevel)
             {
-                displayColour.a = lerp;
+                float alpha = Normalise(light, vision.MaximumComfortLevel, GlobalConstants.MAX_LIGHT);
+                displayColour.a = alpha;
             }
             else if (light < vision.MinimumLightLevel)
             {
@@ -29,7 +30,8 @@ namespace JoyLib.Code.Helpers
             }
             else if(light < vision.MinimumComfortLevel)
             {
-                displayColour.a = 1f - lerp;
+                float alpha = Normalise(light, 0, vision.MinimumComfortLevel);
+                displayColour.a = 1f - alpha;
             }
             else
             {
