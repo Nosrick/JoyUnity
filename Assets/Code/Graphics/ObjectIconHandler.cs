@@ -166,7 +166,8 @@ namespace JoyLib.Code.Graphics
                             m_PossibleColours = part.Elements("Colour").Any() 
                                 ? (from colour in part.Elements("Colour")
                                 select ColourHelper.ParseHTMLString(colour.GetAs<string>())).ToList()
-                                : new List<Color> { Color.white }
+                                : new List<Color> { Color.white },
+                            m_SortingOrder = part.Element("SortOrder").DefaultIfEmpty(0)
                         }).ToList()
                 };
 
@@ -241,5 +242,6 @@ namespace JoyLib.Code.Graphics
         public int m_Position;
         public List<Color> m_PossibleColours;
         public int m_SelectedColour;
+        public int m_SortingOrder;
     }
 }

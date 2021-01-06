@@ -165,6 +165,7 @@ namespace JoyLib.Code.Unity
                 this.SpriteParts[i].gameObject.SetActive(true);
                 this.SpriteParts[i].sprite = data[i].Item2;
                 this.SpriteParts[i].color = data[i].Item1;
+                this.SpriteParts[i].sortingOrder = this.CurrentSpriteState.SpriteData.m_Parts[i].m_SortingOrder;
             }
         }
     }

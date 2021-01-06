@@ -184,7 +184,8 @@ namespace JoyLib.Code.Entities
             if(selectedSprites is null)
             {
                 List<ISpriteState> states = new List<ISpriteState>();
-                List<SpriteData> spriteData = this.ObjectIcons.GetSprites(dominantCulture.Tileset, "default").ToList();
+                List<SpriteData> spriteData = this.ObjectIcons
+                    .GetSprites(dominantCulture.CultureName, template.CreatureType).ToList();
                 for (int i = 0; i < spriteData.Count; i++)
                 {
                     SpriteData data = spriteData[i];

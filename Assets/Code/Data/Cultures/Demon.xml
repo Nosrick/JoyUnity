@@ -187,6 +187,7 @@
                     <Filename>cultures/human-body</Filename>
                     <Data>default</Data>
                     <Position>0</Position>
+                    <SortOrder>0</SortOrder>
                     <Colour>#f04b36ff</Colour>
                     <Colour>#c8ff64ff</Colour>
                 </Part>
@@ -196,6 +197,7 @@
                     <Filename>cultures/human-eyes</Filename>
                     <Data>default</Data>
                     <Position>0</Position>
+                    <SortOrder>1</SortOrder>
                     <Colour>#4196dcff</Colour>
                     <Colour>#3c9b6eff</Colour>
                     <Colour>#b45a50ff</Colour>
@@ -206,6 +208,7 @@
                     <Filename>cultures/human-horns</Filename>
                     <Data>default</Data>
                     <Position>0</Position>
+                    <SortOrder>2</SortOrder>
                     <Colour>#141414ff</Colour>
                     <Colour>#64284bff</Colour>
                 </Part>

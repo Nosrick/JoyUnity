@@ -44,8 +44,8 @@ namespace JoyLib.Code.Unity.GUI
         public IEntity CreatePlayer()
         {
             var data = this.GameManager.ObjectIconHandler.GetSprites(
-                this.PlayerInfo.CurrentTemplate.CreatureType,
-                "default");
+                this.PlayerInfo.CurrentCulture.CultureName,
+                this.PlayerInfo.CurrentTemplate.CreatureType);
             List<SpriteState> spriteStates = data.Select(d => new SpriteState(d.m_Name, d)).ToList();
 
             return this.GameManager.EntityFactory.CreateFromTemplate(
