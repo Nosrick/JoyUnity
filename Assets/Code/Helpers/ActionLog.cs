@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
@@ -13,7 +12,7 @@ namespace JoyLib.Code.Helpers
     {
         private Queue<string> m_Log = new Queue<string>(10);
 
-        private BlockingCollection<string> m_Queue = new BlockingCollection<string>();
+        private Queue<string> m_Queue = new Queue<string>();
         private Thread m_LogProcess;
 
         private const int LINES_TO_KEEP = 10;
@@ -54,7 +53,7 @@ namespace JoyLib.Code.Helpers
 
         private void WriteToLog(string addition)
         {
-            this.m_Queue.Add(addition + "\n");
+            this.m_Queue.Enqueue(addition + "\n");
         }
 
         public void LogAction(Entity actor, string actionString)
@@ -64,10 +63,7 @@ namespace JoyLib.Code.Helpers
 
         protected void ServiceQueue()
         {
-            foreach(string message in this.m_Queue.GetConsumingEnumerable())
-            {
-                File.AppendAllText(FILENAME, message);
-            }
+            File.AppendAllText(FILENAME, this.m_Queue.Dequeue());
         }
 
         public void AddText(string stringToAdd, LogType logType = LogType.Information)

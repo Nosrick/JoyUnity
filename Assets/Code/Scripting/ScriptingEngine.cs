@@ -74,7 +74,8 @@ namespace JoyLib.Code.Scripting
                     memory.Seek(0, SeekOrigin.Begin);
                     this.m_ScriptDLL = Assembly.Load(memory.ToArray());
 
-                    this.m_Types = new List<Type>(this.m_ScriptDLL.GetTypes());
+                    //this.m_Types = new List<Type>(this.m_ScriptDLL.GetTypes());
+                    this.m_Types = new List<Type>(typeof(IJoyObject).Assembly.GetExportedTypes());
                     //this.m_Types.AddRange(typeof(IJoyObject).Assembly.GetExportedTypes());
 
                     this.Eval = new ExpressionEvaluator
