@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <World>
 	<WorldInfo>
-		<Filename>environments/naga pits</Filename>
-
-		<Tileset>Naga Pits</Tileset>
 		<Name>Naga Pits</Name>
 		
 		<Inhabitant>Naga</Inhabitant>
@@ -11,6 +8,45 @@
 
 		<Tag>Interior</Tag>
 
+		<TileSet>
+			<Name>Naga Pits</Name>
+
+			<SpriteData>
+				<Name>SoloFloor</Name>
+				<Part>
+					<Name>SoloFloor</Name>
+					<Frames>1</Frames>
+					<Filename>environments/naga pits</Filename>
+					<Position>4</Position>
+					<Data>Floor</Data>
+				</Part>
+			</SpriteData>
+
+			<SpriteData>
+				<Name>SurroundFloor</Name>
+				<Part>
+					<Name>SurroundFloor</Name>
+					<Position>6</Position>
+					<Data>Floor</Data>
+					<Data>Default</Data>
+					<Filename>environments/naga pits</Filename>
+					<Frames>1</Frames>
+				</Part>
+			</SpriteData>
+
+			<SpriteData>
+				<Name>SurroundWall</Name>
+				<Part>
+					<Name>SurroundWall</Name>
+					<Position>19</Position>
+					<Data>Floor</Data>
+					<Data>Default</Data>
+					<Filename>environments/naga pits</Filename>
+					<Frames>1</Frames>
+				</Part>
+			</SpriteData>
+		</TileSet>
+		<!--
 		<Icon>
 			<Name>TopLeftWall</Name>
 			<Position>16</Position>
@@ -163,8 +199,7 @@
 
 		<Icon>
 			<Name>SoloFloor</Name>
-			<Position>4</Position>
-			<Data>Floor</Data>
 		</Icon>
+		-->
 	</WorldInfo>
 </World>

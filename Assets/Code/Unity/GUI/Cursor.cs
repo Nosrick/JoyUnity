@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using JoyLib.Code.Collections;
 using JoyLib.Code.Graphics;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -10,9 +9,9 @@ namespace JoyLib.Code.Unity.GUI
     [RequireComponent(typeof(Sprite))]
     public class Cursor : GUIData
     {
-        [SerializeField] protected ManagedSprite m_PartPrefab;
+        [SerializeField] protected ManagedUISprite m_PartPrefab;
         
-        protected ManagedSprite CursorObject { get; set; }
+        protected ManagedUISprite CursorObject { get; set; }
         protected CanvasGroup CanvasGroup { get; set; }
         protected RectTransform MyRect { get; set; }
         
@@ -22,11 +21,7 @@ namespace JoyLib.Code.Unity.GUI
         public float TimeSinceLastChange { get; protected set; }
         public bool IsAnimated { get; set; }
         
-        public List<ISpriteState> States => this.m_States.Values;
-
-        protected NonUniqueDictionary<string, ISpriteState> m_States;
-        
-        protected ManagedSprite DragObject { get; set; }
+        protected ManagedUISprite DragObject { get; set; }
 
         public override void Awake()
         {
@@ -94,11 +89,15 @@ namespace JoyLib.Code.Unity.GUI
                 for (int j = 0; j < state.SpriteData.m_Parts.Count; j++)
                 {
                     SpritePart part = state.SpriteData.m_Parts[j];
-                    if (colours.ContainsKey(part.m_Name))
+                    if (!colours.ContainsKey(part.m_Name))
                     {
-                        part.m_Colour = colours[part.m_Name];
+                        continue;
                     }
+                    part.m_Colour = colours[part.m_Name];
+                    state.SpriteData.m_Parts[j] = part;
+                    this.CursorObject.Clear();
                 }
+                this.CursorObject.AddSpriteState(state, true);
             }
         }
 

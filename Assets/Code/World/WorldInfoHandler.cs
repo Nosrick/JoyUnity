@@ -48,23 +48,22 @@ namespace JoyLib.Code.World
                         inhabitants = worldInfo.Elements("Inhabitant")
                             .Select(x => x.GetAs<string>())
                             .ToArray(),
-                        tileset = worldInfo.Element("Tileset").GetAs<string>(),
                         tags = worldInfo.Elements("Tag")
                             .Select(x => x.GetAs<string>())
                             .ToArray()
                     };
 
-                    //This is optional
-                    string filename = worldInfo.Element("Filename").DefaultIfEmpty("NULL");
-
-                    this.ObjectIcons.AddSpriteDataFromXML(info.tileset, doc);
+                    foreach (XElement tileset in worldInfo.Elements("TileSet"))
+                    {
+                        this.ObjectIcons.AddSpriteDataFromXML(info.name, tileset);
+                    }
 
                     this.WorldInfo.Add(info);
 
                     StandardWorldTiles.instance.AddType(
                         new WorldTile(
                             info.name,
-                            info.tileset,
+                            info.name,
                             info.tags));
                 }
             }
@@ -92,7 +91,6 @@ namespace JoyLib.Code.World
     {
         public string name;
         public string[] inhabitants;
-        public string tileset;
 
         public string[] tags;
     }

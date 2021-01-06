@@ -163,7 +163,7 @@
 				<Part>
 					<Name>body</Name>
 					<Frames>2</Frames>
-					<Filename>cultures/human</Filename>
+					<Filename>cultures/human-body</Filename>
 					<Data>default</Data>
 					<Position>0</Position>
 				</Part>

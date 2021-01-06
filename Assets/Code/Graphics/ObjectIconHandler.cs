@@ -37,8 +37,8 @@ namespace JoyLib.Code.Graphics
 
             this.Icons = new Dictionary<string, IDictionary<string, SpriteData>>();
 
-            Texture2D loadedSprite = Resources.Load<Texture2D>("Sprites/default");
-
+            Sprite defaultSprite = Resources.Load<Sprite>("Sprites/default");
+            //defaultSprite.pivot = new Vector2(0.5f, 0.5f);
             SpriteData iconData = new SpriteData
             {
                 m_Name = "DEFAULT",
@@ -53,16 +53,9 @@ namespace JoyLib.Code.Graphics
                         m_Position = 0,
                         m_FrameSprites = new List<Sprite>
                         {
-                            Sprite.Create(
-                                loadedSprite, 
-                                new Rect(
-                                    0,
-                                    0,
-                                    this.SpriteSize,
-                                    this.SpriteSize), 
-                                Vector2.zero, 
-                                this.SpriteSize)
-                        }
+                            defaultSprite
+                        },
+                        m_Colour = Color.white
                     }
                 }
             };
@@ -83,9 +76,12 @@ namespace JoyLib.Code.Graphics
                 {
                     XElement doc = XElement.Load(file);
 
-                    string tileSet = doc.Element("TilesetName").GetAs<string>();
+                    foreach (XElement tileSetElement in doc.Elements("TileSet"))
+                    {
+                        string tileSet = tileSetElement.Element("Name").GetAs<string>();
 
-                    this.AddSpriteDataFromXML(tileSet, doc);
+                        this.AddSpriteDataFromXML(tileSet, tileSetElement);
+                    }
                 }
                 catch (Exception e)
                 {
@@ -166,7 +162,8 @@ namespace JoyLib.Code.Graphics
                                     (sprite, i) => 
                                         i >= part.Element("Position").DefaultIfEmpty(0) 
                                         && i < part.Element("Position").DefaultIfEmpty(0) + part.Element("Frames").DefaultIfEmpty(1))
-                                .ToList()
+                                .ToList(),
+                            m_Colour = Color.white
                         }).ToList()
                 };
 

@@ -27,7 +27,7 @@ namespace JoyLib.Code.Unity.GUI
         protected bool m_UseRarityColor = false;
         
         [SerializeField]
-        protected ManagedSprite m_Icon;
+        protected ManagedUISprite m_Icon;
         
         [SerializeField]
         protected Text m_Stack;

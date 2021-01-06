@@ -129,7 +129,6 @@ namespace JoyLib.Code.Entities.Items
                 {
                     monoBehaviourHandler.AddSpriteState(state);
                 }
-                monoBehaviourHandler.ChangeState(this.States[0].Name);
                 monoBehaviourHandler.gameObject.SetActive(active);
             }
         }

@@ -15,7 +15,7 @@ namespace JoyLib.Code.Unity.GUI
         [SerializeField] protected TextMeshProUGUI m_Title;
         [SerializeField] protected TextMeshProUGUI m_Text;
         [SerializeField] protected RectTransform m_IconRect;
-        [SerializeField] protected ManagedSprite m_IconPrefab;
+        [SerializeField] protected ManagedUISprite m_IconPrefab;
         [SerializeField] protected Image m_Background;
         [SerializeField] protected StringPairContainer m_ItemPrefab;
         [SerializeField] protected LayoutGroup m_ParentLayout;

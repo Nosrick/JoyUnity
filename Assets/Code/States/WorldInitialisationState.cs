@@ -72,8 +72,10 @@ namespace JoyLib.Code.States
                 //tooltip.RefreshTooltip = WorldState.GetTooltipData;
 
                 ManagedSprite sprite = child.GetComponent<ManagedSprite>();
-                sprite.AddSpriteState(SpriteState.MakeWithDefaultColour(child.name,
-                    this.m_ObjectIcons.GetSprites("Stairs", "Upstairs").First()));
+                sprite.AddSpriteState(SpriteState.MakeWithDefaultColour(
+                        child.name,
+                    this.m_ObjectIcons.GetSprites("Stairs", "Upstairs").First()), 
+                    true);
                 child.SetActive(true);
             }
 
@@ -90,8 +92,10 @@ namespace JoyLib.Code.States
 
 
                 ManagedSprite sprite = child.GetComponent<ManagedSprite>();
-                sprite.AddSpriteState(SpriteState.MakeWithDefaultColour(child.name,
-                    this.m_ObjectIcons.GetSprites("Stairs", "Downstairs").First()));
+                sprite.AddSpriteState(SpriteState.MakeWithDefaultColour(
+                        child.name,
+                    this.m_ObjectIcons.GetSprites("Stairs", "Downstairs").First()), 
+                    true);
                 child.SetActive(true);
             }
 
@@ -131,7 +135,7 @@ namespace JoyLib.Code.States
                             "Floor",
                             this.m_ObjectIcons.GetSprites(this.m_ActiveWorld.Tiles[i, j].TileSet, "surroundfloor").First());
                     }
-                    sprite.AddSpriteState(state);
+                    sprite.AddSpriteState(state, true);
                     floor.SetActive(true);
                 }
             }
@@ -143,8 +147,10 @@ namespace JoyLib.Code.States
                 wall.MyWorld = this.m_ActiveWorld;
                 GameObject gameObject = gameManager.WallPool.Get();
                 gameObject.layer = wallLayer;
-                gameObject.GetComponent<MonoBehaviourHandler>()
-                    .AttachJoyObject(wall);
+                MonoBehaviourHandler mbh = gameObject.GetComponent<MonoBehaviourHandler>();
+                mbh.AttachJoyObject(wall);
+                mbh.AddSpriteState(wall.States.First(), true);
+                
                 gameObject.SetActive(true);
             }
             
@@ -157,13 +163,14 @@ namespace JoyLib.Code.States
                 GameObject gameObject = gameManager.EntityPool.Get();
                 gameObject.SetActive(true);
                 gameObject.layer = entityLayer;
-                MonoBehaviourHandler newEntity = gameObject.GetComponent<MonoBehaviourHandler>();
-                newEntity.AttachJoyObject(entity);
+                MonoBehaviourHandler mbh = gameObject.GetComponent<MonoBehaviourHandler>();
+                mbh.AttachJoyObject(entity);
 
                 if (entity.PlayerControlled)
                 {
-                    newEntity.tag = "Player";
+                    mbh.tag = "Player";
                 }
+                mbh.AddSpriteState(entity.States.First(), true);
                 this.CreateItems(entity.Backpack, false);
             }
 
@@ -195,6 +202,7 @@ namespace JoyLib.Code.States
                     {
                         this.CreateItems(itemInstance.Contents, false);
                     }
+                    itemInstance.MonoBehaviourHandler.AddSpriteState(itemInstance.States.First(), true);
                 }
             }
         }

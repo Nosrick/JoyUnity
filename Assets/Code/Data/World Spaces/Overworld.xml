@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <World>
 	<WorldInfo>
-		<Filename>Floor</Filename>
-		
-		<Tileset>Plains</Tileset>
 		<Name>Plains</Name>
 
 		<Tag>Exterior</Tag>
 
-		<Icon>
-			<Name>SurroundFloor</Name>
-			<Position>103</Position>
-			<Data>Default</Data>
-		</Icon>
+		<TileSet>
+			<Name>Overworld</Name>
+			
+			<SpriteData>
+				<Name>SurroundFloor</Name>
+				<Part>
+					<Name>SurroundFloor</Name>
+					<Position>103</Position>
+					<Data>default</Data>
+					<Frames>1</Frames>
+					<Filename>Floor</Filename>
+				</Part>
+			</SpriteData>
+		</TileSet>
 	</WorldInfo>
 </World>

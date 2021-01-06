@@ -109,7 +109,8 @@ namespace JoyLib.Code.Cultures
 
                     int nonConformingGenderChance = culture.Element("NonConformingGenderChance").DefaultIfEmpty(10);
 
-                    string tileSet = culture.Element("TileSet").Element("Name").DefaultIfEmpty("");
+                    XElement tileSetElement = culture.Element("TileSet");
+                    string tileSet = tileSetElement.Element("Name").DefaultIfEmpty("");
 
                     IDictionary<string, Color> cursorColours = new Dictionary<string, Color>();
                     try
@@ -145,7 +146,7 @@ namespace JoyLib.Code.Cultures
                     */
                     //string filename = culture.Element("TileSet").Element("Filename").DefaultIfEmpty("");
 
-                    objectIcons.AddSpriteDataFromXML(tileSet, culture);
+                    objectIcons.AddSpriteDataFromXML(tileSet, tileSetElement);
 
                     cultures.Add(cultureName,
                         new CultureType(

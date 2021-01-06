@@ -19,8 +19,8 @@ namespace JoyLib.Code.Unity.GUI
         [SerializeField] protected BasicPlayerInfo PlayerInfo;
         [SerializeField] protected AbilityWindow AbilityWindow;
 
-        [SerializeField] protected ManagedSprite PlayerSprite_Part1;
-        [SerializeField] protected ManagedSprite PlayerSprite_Part2;
+        [SerializeField] protected ManagedUISprite PlayerSprite_Part1;
+        [SerializeField] protected ManagedUISprite PlayerSprite_Part2;
         [SerializeField] protected TMP_InputField PlayerName_Part1;
         [SerializeField] protected TMP_InputField PlayerName_Part2;
         
@@ -45,7 +45,7 @@ namespace JoyLib.Code.Unity.GUI
         {
             var data = this.GameManager.ObjectIconHandler.GetSprites(
                 this.PlayerInfo.CurrentTemplate.CreatureType,
-                this.PlayerInfo.Job);
+                "default");
             List<ISpriteState> spriteStates = data.Select(d => SpriteState.MakeWithDefaultColour(d.m_Name, d)).ToList();
 
             return this.GameManager.EntityFactory.CreateFromTemplate(

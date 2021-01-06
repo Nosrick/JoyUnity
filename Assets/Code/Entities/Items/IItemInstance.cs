@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using JoyLib.Code.Entities.Abilities;
 
 namespace JoyLib.Code.Entities.Items
@@ -37,8 +36,6 @@ namespace JoyLib.Code.Entities.Items
         string WeightString { get; }
         
         string DisplayName { get; }
-        
-        IEnumerable<Tuple<string, string>> Tooltip { get; }
         
         BaseItemType ItemType { get; }
         

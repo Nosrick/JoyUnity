@@ -1,13 +1,34 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <World>
 	<WorldInfo>
-		<Filename>environments/stairs</Filename>
 		
-		<Tileset>stairs</Tileset>
 		<Name>stairs</Name>
 
 		<Tag>stairs</Tag>
+		
+		<TileSet>
+			<Name>Stairs</Name>
+			<SpriteData>
+				<Name>Upstairs</Name>
+				<Part>
+					<Name>Upstairs</Name>
+					<Data>default</Data>
+					<Position>0</Position>
+					<Filename>environments/stairs</Filename>
+				</Part>
+			</SpriteData>
+			<SpriteData>
+				<Name>Downstairs</Name>
+				<Part>
+					<Name>Downstairs</Name>
+					<Data>default</Data>
+					<Position>1</Position>
+					<Filename>environments/stairs</Filename>
+				</Part>
+			</SpriteData>
+		</TileSet>
 
+		<!--
 		<Icon>
 			<Name>upstairs</Name>
 			<Position>0</Position>
@@ -17,5 +38,6 @@
             <Name>downstairs</Name>
             <Position>1</Position>
         </Icon>
+        -->
 	</WorldInfo>
 </World>

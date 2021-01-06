@@ -37,7 +37,7 @@ namespace JoyLib.Code.World.Generators.Interiors
             WorldInstance current = null;
             for (int i = 1; i <= levels; i++)
             {
-                WorldTile[,] tiles = interiorGenerator.GenerateWorldSpace(size, worldInfo.tileset);
+                WorldTile[,] tiles = interiorGenerator.GenerateWorldSpace(size, worldInfo.name);
                 WorldInstance worldInstance = new WorldInstance(
                     tiles, 
                     worldInfo.tags, 

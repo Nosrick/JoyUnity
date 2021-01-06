@@ -439,6 +439,6 @@ MonoBehaviour:
   m_Cooldown: {fileID: 0}
   m_ItemName: {fileID: 0}
   m_UseRarityColor: 0
-  m_Icon: {fileID: -9111090149253444989, guid: 9e6c285750604c64aae808ae52b15c7b, type: 3}
+  m_Icon: {fileID: 8300874287365320679, guid: a2de3cfe6abfcb648ac806bc92ce0d02, type: 3}
   m_Stack: {fileID: 8604156884670249676}
   m_Slot: 

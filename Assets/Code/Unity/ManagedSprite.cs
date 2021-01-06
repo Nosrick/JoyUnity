@@ -10,7 +10,7 @@ namespace JoyLib.Code.Unity
     [RequireComponent(typeof(RectTransform))]
     public class ManagedSprite : MonoBehaviour, IAnimated
     {
-        [SerializeField] protected SpriteRenderer m_SpritePrefab;
+        [SerializeField] protected GameObject m_Prefab;
         
         protected RectTransform MyRect { get; set; }
 
@@ -93,7 +93,7 @@ namespace JoyLib.Code.Unity
             }
         }
 
-        public void Clear()
+        public virtual void Clear()
         {
             this.m_States = new NonUniqueDictionary<string, ISpriteState>();
             foreach (SpriteRenderer part in this.SpriteParts)
@@ -135,16 +135,17 @@ namespace JoyLib.Code.Unity
             {
                 for (int i = this.SpriteParts.Count; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
                 {
-                    this.SpriteParts.Add(Instantiate(this.m_SpritePrefab, this.transform));
+                    this.SpriteParts.Add(GameObject.Instantiate(this.m_Prefab, this.transform).GetComponent<SpriteRenderer>());
                 }
             }
 
             var data = this.CurrentSpriteState.GetSpriteForFrame(this.FrameIndex);
             for (int i = 0; i < data.Count; i++)
             {
-                RectTransform partRect = this.SpriteParts[i].GetComponent<RectTransform>();
-                partRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, this.MyRect.rect.width);
-                partRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, this.MyRect.rect.height);
+                //RectTransform partRect = this.SpriteParts[i].GetComponent<RectTransform>();
+                //partRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, this.MyRect.sizeDelta.x);
+                //partRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, this.MyRect.sizeDelta.y);
+                this.SpriteParts[i].name = this.CurrentSpriteState.SpriteData.m_Parts[i].m_Name;
                 this.SpriteParts[i].gameObject.SetActive(true);
                 this.SpriteParts[i].sprite = data[i].Item2;
                 this.SpriteParts[i].color = data[i].Item1;

@@ -41,7 +41,7 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
         protected Dictionary<string, int> StatisticsDeltas { get; set; }
         protected Dictionary<string, int> SkillsDeltas { get; set; }
 
-        public void OnEnable()
+        public override void OnEnable()
         {
             if (this.GameManager.Player is null)
             {
@@ -327,14 +327,14 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
             this.SetUp();
         }
 
-        public virtual int Value
+        public override int Value
         {
             get => this.m_Value;
             set
             {
                 int previous = this.m_Value;
                 this.m_Value = value;
-                this.OnChangeValue(this, new ValueChangedEventArgs()
+                this.OnChangeValue(this, new ValueChangedEventArgs
                 {
                     NewValue = this.m_Value,
                     Delta = this.m_Value - previous

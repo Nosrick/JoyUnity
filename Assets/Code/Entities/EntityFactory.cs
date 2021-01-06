@@ -184,7 +184,7 @@ namespace JoyLib.Code.Entities
             if(selectedSprites is null)
             {
                 List<ISpriteState> states = new List<ISpriteState>();
-                List<SpriteData> spriteData = this.ObjectIcons.GetSprites(dominantCulture.Tileset, template.JoyType).ToList();
+                List<SpriteData> spriteData = this.ObjectIcons.GetSprites(dominantCulture.Tileset, "default").ToList();
                 for (int i = 0; i < spriteData.Count; i++)
                 {
                     SpriteData data = spriteData[i];
@@ -198,6 +198,8 @@ namespace JoyLib.Code.Entities
                         data,
                         spriteColours));
                 }
+
+                selectedSprites = states;
             }
 
             if(selectedDriver is null)
