@@ -18,7 +18,7 @@ namespace JoyLib.Code
 
         public const int MINIMUM_VISION_DISTANCE = 3;
         
-        public const int FRAMES_PER_SECOND = 30;
+        public const int FRAMES_PER_SECOND = 2;
 
         public static readonly Vector2Int NO_TARGET = new Vector2Int(-1, -1);
 

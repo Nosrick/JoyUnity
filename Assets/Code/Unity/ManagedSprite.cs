@@ -121,7 +121,6 @@ namespace JoyLib.Code.Unity
                 return;
             }
             
-            Debug.Log(Time.unscaledDeltaTime);
             this.TimeSinceLastChange += Time.unscaledDeltaTime;
             if (!(this.TimeSinceLastChange >= TIME_BETWEEN_FRAMES))
             {
