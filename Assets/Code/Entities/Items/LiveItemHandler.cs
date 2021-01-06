@@ -91,27 +91,9 @@ namespace JoyLib.Code.Entities.Items
 
                 string tileSet = doc.Element("TileSet").Element("Name").GetAs<string>();
 
-                string fileName = doc.Element("TileSet").Element("Filename").DefaultIfEmpty("");
-
-                if (fileName.Length > 0)
-                {
-                    List<IconData> iconData = (from item in doc.Element("TileSet").Elements("Icon")
-                                               select new IconData()
-                                               {
-                                                   name = item.Element("Name").GetAs<string>(),
-                                                   data = item.Element("Data").DefaultIfEmpty(""),
-                                                   frames = item.Element("Frames").DefaultIfEmpty(1),
-                                                   filename = fileName,
-                                                   position = item.Element("Position").GetAs<int>()
-                                               }).ToList();
-
-                    this.m_ObjectIcons.AddIcons(tileSet, iconData.ToArray());
-                }
-
+                this.m_ObjectIcons.AddSpriteDataFromXML(tileSet, doc);
 
                 string actionWord = doc.Element("ActionWord").DefaultIfEmpty("strikes");
-
-                string effect = doc.Element("Effect").DefaultIfEmpty("");
 
                 for (int j = 0; j < identifiedItems.Count; j++)
                 {

@@ -4,14 +4,13 @@ using System.Linq;
 using JoyLib.Code.Collections;
 using JoyLib.Code.Graphics;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity
 {
     [RequireComponent(typeof(RectTransform))]
     public class ManagedSprite : MonoBehaviour, IAnimated
     {
-        [SerializeField] protected Image m_SpritePrefab;
+        [SerializeField] protected SpriteRenderer m_SpritePrefab;
         
         protected RectTransform MyRect { get; set; }
 
@@ -40,20 +39,24 @@ namespace JoyLib.Code.Unity
 
         protected NonUniqueDictionary<string, ISpriteState> m_States;
         
-        protected List<Image> SpriteParts { get; set; }
+        protected List<SpriteRenderer> SpriteParts { get; set; }
 
-        protected static float TimeBetweenFrames = 1f / GlobalConstants.FRAMES_PER_SECOND;
+        protected const float TIME_BETWEEN_FRAMES = 1f / GlobalConstants.FRAMES_PER_SECOND;
 
         public virtual void Awake()
         {
-            this.SpriteParts = new List<Image>();
+            this.SpriteParts = new List<SpriteRenderer>();
             this.m_States = new NonUniqueDictionary<string, ISpriteState>();
             this.MyRect = this.GetComponent<RectTransform>();
         }
 
-        public virtual void AddSpriteState(ISpriteState state)
+        public virtual void AddSpriteState(ISpriteState state, bool changeToNew = false)
         {
             this.m_States.Add(state.Name, state);
+            if (changeToNew)
+            {
+                this.ChangeState(state);
+            }
         }
 
         public virtual bool RemoveStatesByName(string name)
@@ -81,10 +84,19 @@ namespace JoyLib.Code.Unity
             }
         }
 
+        public virtual void ChangeState(ISpriteState state)
+        {
+            if (this.m_States.ContainsKey(state.Name))
+            {
+                this.ChosenSpriteState = state.Name;
+                this.UpdateSprites();
+            }
+        }
+
         public void Clear()
         {
             this.m_States = new NonUniqueDictionary<string, ISpriteState>();
-            foreach (Image part in this.SpriteParts)
+            foreach (SpriteRenderer part in this.SpriteParts)
             {
                 part.gameObject.SetActive(false);
             }
@@ -98,7 +110,7 @@ namespace JoyLib.Code.Unity
             }
             
             this.TimeSinceLastChange += Time.unscaledDeltaTime;
-            if (!(this.TimeSinceLastChange >= TimeBetweenFrames))
+            if (!(this.TimeSinceLastChange >= TIME_BETWEEN_FRAMES))
             {
                 return;
             }
@@ -115,28 +127,27 @@ namespace JoyLib.Code.Unity
 
         protected virtual void UpdateSprites()
         {
-            foreach (Image spritePart in this.SpriteParts)
+            foreach (SpriteRenderer spritePart in this.SpriteParts)
             {
                 spritePart.gameObject.SetActive(false);
             }
-            if (this.SpriteParts.Count < this.CurrentSpriteState.SpriteParts.Count)
+            if (this.SpriteParts.Count < this.CurrentSpriteState.SpriteData.m_Parts.Count)
             {
-                for (int i = this.SpriteParts.Count; i < this.CurrentSpriteState.SpriteParts.Count; i++)
+                for (int i = this.SpriteParts.Count; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
                 {
                     this.SpriteParts.Add(Instantiate(this.m_SpritePrefab, this.transform));
                 }
             }
 
-            List<Sprite> sprites = this.CurrentSpriteState.SpriteParts.ToList();
-            List<Color> spriteColours = this.CurrentSpriteState.SpriteColours.ToList();
-            for (int i = 0; i < sprites.Count; i++)
+            var data = this.CurrentSpriteState.GetSpriteForFrame(this.FrameIndex);
+            for (int i = 0; i < data.Count; i++)
             {
                 RectTransform partRect = this.SpriteParts[i].GetComponent<RectTransform>();
                 partRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, this.MyRect.rect.width);
                 partRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, this.MyRect.rect.height);
                 this.SpriteParts[i].gameObject.SetActive(true);
-                this.SpriteParts[i].sprite = sprites[i];
-                this.SpriteParts[i].color = spriteColours[i];
+                this.SpriteParts[i].sprite = data[i].Item2;
+                this.SpriteParts[i].color = data[i].Item1;
             }
         }
     }

@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Xml.Linq;
-using JoyLib.Code.Collections;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Rollers;
 using UnityEngine;
@@ -37,25 +35,42 @@ namespace JoyLib.Code.Graphics
                 return true;
             }
 
-            this.Icons = new BucketCollection<IconData, string>();
+            this.Icons = new Dictionary<string, IDictionary<string, SpriteData>>();
 
             Texture2D loadedSprite = Resources.Load<Texture2D>("Sprites/default");
 
-            IconData iconData = new IconData()
+            SpriteData iconData = new SpriteData
             {
-                data = "DEFAULT",
-                name = "DEFAULT",
-                texture = loadedSprite,
-                sprite = Sprite.Create(loadedSprite, new Rect(0,
-                                                               0,
-                                                               this.SpriteSize,
-                                                               this.SpriteSize), 
-                                                               Vector2.zero, 
-                                                               this.SpriteSize),
-                filename = "Sprites/default"
+                m_Name = "DEFAULT",
+                m_Parts = new List<SpritePart>
+                {
+                    new SpritePart
+                    {
+                        m_Data = new[] { "DEFAULT" },
+                        m_Filename = "Sprites/default",
+                        m_Frames = 1,
+                        m_Name = "DEFAULT",
+                        m_Position = 0,
+                        m_FrameSprites = new List<Sprite>
+                        {
+                            Sprite.Create(
+                                loadedSprite, 
+                                new Rect(
+                                    0,
+                                    0,
+                                    this.SpriteSize,
+                                    this.SpriteSize), 
+                                Vector2.zero, 
+                                this.SpriteSize)
+                        }
+                    }
+                }
             };
 
-            this.Icons.Add(iconData, "DEFAULT");
+            this.Icons.Add("DEFAULT", new Dictionary<string, SpriteData>
+            {
+                { iconData.m_Name, iconData }
+            });
 
             string[] files =
                 Directory.GetFiles(
@@ -69,19 +84,8 @@ namespace JoyLib.Code.Graphics
                     XElement doc = XElement.Load(file);
 
                     string tileSet = doc.Element("TilesetName").GetAs<string>();
-                    string sheet = doc.Element("Sheet").GetAs<string>();
 
-                    IconData[] iconDatas = (from data in doc.Elements("Icon")
-                        select new IconData()
-                        {
-                            data = data.Element("Data").DefaultIfEmpty("DEFAULT"),
-                            filename = sheet,
-                            frames = data.Element("Frames").DefaultIfEmpty(1),
-                            name = data.Element("Name").GetAs<string>(),
-                            position = data.Element("Position").GetAs<int>()
-                        }).ToArray();
-
-                    this.AddIcons(tileSet, iconDatas);
+                    this.AddSpriteDataFromXML(tileSet, doc);
                 }
                 catch (Exception e)
                 {
@@ -92,238 +96,117 @@ namespace JoyLib.Code.Graphics
             return true;
         }
 
-        public bool AddIcons(string tileSet, IconData[] data)
+        public bool AddSpriteData(string tileSet, SpriteData dataToAdd)
         {
-            if(this.Icons is null)
+            if (this.Icons.ContainsKey(tileSet))
             {
-                this.Load();
+                if (this.Icons[tileSet].ContainsKey(dataToAdd.m_Name))
+                {
+                    GlobalConstants.ActionLog.AddText("Trying to add/overwrite sprites, at tile set " + tileSet +
+                                                      " with name " + dataToAdd.m_Name);
+                    return false;
+                }
             }
 
-            for (int i = 0; i < data.Length; i++)
+            List<SpritePart> parts = new List<SpritePart>();
+            foreach (SpritePart part in dataToAdd.m_Parts)
             {
-                int jIndex = data[i].frames > 0 ? data[i].frames : 1;
-                Sprite[] sheets = Resources.LoadAll<Sprite>("Sprites/" + data[i].filename);
-                for (int j = 0; j < jIndex; j++)
-                {
-                    IconData icon = new IconData()
-                    {
-                        name = data[i].name,
-                        data = data[i].data,
-                        texture = sheets[data[i].position + j].texture,
-                        sprite = sheets[data[i].position + j],
-                        filename = data[i].filename,
-                        position = data[i].position
-                    };
+                SpritePart copy = part;
+                copy.m_FrameSprites = Resources.LoadAll<Sprite>("Sprites/" + part.m_Filename)
+                    .Where(
+                        (sprite, i) =>
+                            i >= part.m_Position
+                            && i < part.m_Position +
+                            part.m_Frames)
+                    .ToList();
+                parts.Add(copy);
+            }
 
-                    if (this.Icons.ContainsKey(icon))
+            dataToAdd.m_Parts = parts;
+
+            if (this.Icons.ContainsKey(tileSet))
+            {
+                this.Icons[tileSet].Add(dataToAdd.m_Name, dataToAdd);
+            }
+            else
+            {
+                this.Icons.Add(new KeyValuePair<string, IDictionary<string, SpriteData>>(
+                    tileSet,
+                    new Dictionary<string, SpriteData>
                     {
-                        this.Icons[icon].Add(tileSet);
-                    }
-                    else
-                    {
-                        this.Icons.Add(icon, tileSet);
-                    }
-                }
+                        { dataToAdd.m_Name, dataToAdd }
+                    }));
             }
 
             return true;
         }
 
-        private Tuple<Texture2D, Sprite> MakeSprite(Texture2D sheet, Vector2Int point, int spriteSize)
+        public bool AddSpriteDataRange(string tileSet, IEnumerable<SpriteData> dataToAdd)
         {
-            Color[] imageData = sheet.GetPixels();
-
-            Rect sourceRectangle = new Rect(point.x * spriteSize, point.y * spriteSize, spriteSize, spriteSize);
-
-            Color[] imagePiece = this.GetImageData(imageData, sheet.width, sourceRectangle);
-            Texture2D subTexture = new Texture2D(spriteSize, spriteSize, TextureFormat.RGBA32, false, false);
-            subTexture.SetPixels(imagePiece);
-            subTexture.filterMode = FilterMode.Point;
-
-            Sprite sprite = Sprite.Create(subTexture, new Rect(0, 0, spriteSize, spriteSize), Vector2.zero, spriteSize);
-            return new Tuple<Texture2D, Sprite>(subTexture, sprite);
+            return dataToAdd.Aggregate(true, (current, data) => current & this.AddSpriteData(tileSet, data));
         }
 
-        //This assumes using a single sheet laid out in a horizontal row
-        private List<Tuple<Texture2D, Sprite>> MakeSpritesFromOneSheet(Texture2D sheet, int frames, Vector2Int startPoint, int spriteSize)
+        public bool AddSpriteDataFromXML(string tileSet, XElement spriteDataElement)
         {
-            Color[] imageData = sheet.GetPixels();
-
-            List<Tuple<Texture2D, Sprite>> tuples = new List<Tuple<Texture2D, Sprite>>();
-
-            for(int i = 0; i < frames; i++)
-            {
-                Rect sourceRectangle = new Rect(startPoint.x * spriteSize + (i * spriteSize), startPoint.y * spriteSize, spriteSize, spriteSize);
-
-                Color[] imagePiece = this.GetImageData(imageData, sheet.width, sourceRectangle);
-                Texture2D subTexture = new Texture2D(spriteSize, spriteSize, TextureFormat.RGBA32, false, false);
-                subTexture.SetPixels(imagePiece);
-                subTexture.filterMode = FilterMode.Point;
-
-                Sprite sprite = Sprite.Create(subTexture, new Rect(0, 0, spriteSize, spriteSize), Vector2.zero, spriteSize);
-                tuples.Add(new Tuple<Texture2D, Sprite>(subTexture, sprite));
-            }
-
-            return tuples;
-        }
-
-        private Color[] GetImageData(Color[] colourData, int textureWidth, Rect rectangle)
-        {
-            int width, height;
-            width = (int)rectangle.width;
-            height = (int)rectangle.height;
-            Color[] color = new Color[width * height];
-            for (int x = 0; x < width; x++)
-            {
-                for (int y = 0; y < height; y++)
+            IEnumerable<SpriteData> spriteData = from data in spriteDataElement.Elements("SpriteData")
+                select new SpriteData
                 {
-                    int index = (int)((rectangle.y * textureWidth) + (y * textureWidth) + x + rectangle.x);
-                    color[x + y * width] = colourData[index];
-                }
-            }
+                    m_Name = data.Element("Name").GetAs<string>(),
+                    m_Parts = (from part in data.Elements("Part")
+                        select new SpritePart
+                        {
+                            m_Data = from d in part.Elements("Data")
+                                select d.GetAs<string>(),
+                            m_Filename = part.Element("Filename").GetAs<string>(),
+                            m_Frames = part.Element("Frames").DefaultIfEmpty(1),
+                            m_Name = part.Element("Name").GetAs<string>(),
+                            m_Position = part.Element("Position").DefaultIfEmpty(0),
+                            m_FrameSprites = Resources.LoadAll<Sprite>("Sprites/" + part.Element("Filename").GetAs<string>())
+                                .Where(
+                                    (sprite, i) => 
+                                        i >= part.Element("Position").DefaultIfEmpty(0) 
+                                        && i < part.Element("Position").DefaultIfEmpty(0) + part.Element("Frames").DefaultIfEmpty(1))
+                                .ToList()
+                        }).ToList()
+                };
 
-            return color;
+            return this.AddSpriteDataRange(tileSet, spriteData);
         }
 
-        public Texture2D[] GetIcons(string tileSet, string tileName)
+        public IEnumerable<SpriteData> ReturnDefaultData()
         {
-            List<Texture2D> icons = new List<Texture2D>();
-            if(this.Icons.ContainsValue(tileSet))
-            {
-                List<IconData> textures = this.Icons[tileSet].FindAll(x => x.name.StartsWith(tileName, StringComparison.OrdinalIgnoreCase) 
-                                                                           || x.data.StartsWith(tileName, StringComparison.OrdinalIgnoreCase));
-
-                if(textures.Count == 0)
-                {
-                    IconData[] defaultIcons = this.GetDefaultIconSet(tileSet);
-                    List<Texture2D> tempTextures = new List<Texture2D>(defaultIcons.Length);
-                    foreach(IconData iconData in defaultIcons)
-                    {
-                        tempTextures.Add(iconData.texture);
-                    }
-                    icons.AddRange(tempTextures);
-                }
-            }
-
-            return icons.ToArray();
+            return this.Icons["DEFAULT"].Values;
         }
 
-        private IconData[] GetDefaultIconSet(string tileSet)
+        public SpriteData ReturnDefaultIcon()
         {
-            string lowerTileSet = tileSet;
-            if(tileSet != null && this.Icons.ContainsValue(lowerTileSet))
-            {
-                IconData[] icons = this.Icons[lowerTileSet].Where(x => x.data.Equals("default", StringComparison.OrdinalIgnoreCase)).ToArray();
-                if(icons.Length == 0)
-                {
-                    return this.ReturnDefaultArray();
-                }
-                int result = this.Roller.Roll(0, icons.Length);
-                string[] nameToFind = Regex.Split(icons[result].name, @"^[^\d]+");
-                icons = icons.Where(x => x.name.StartsWith(nameToFind[0])).ToArray();
-                if(icons.Length == 0)
-                {
-                    return this.ReturnDefaultArray();
-                }
-                return icons;
-            }
-            else
-            {
-                return this.ReturnDefaultArray();
-            }
+            return this.Icons["DEFAULT"].Values.First();
         }
 
-        public IconData[] ReturnDefaultArray()
+        public SpriteData GetFrame(string tileSet, string tileName, int frame)
         {
-            IconData[] defaultIcon = this.Icons["DEFAULT"].ToArray();
-            return defaultIcon;
+            SpriteData[] frames = this.GetSprites(tileSet, tileName).ToArray();
+            return frames.Length >= frame ? frames[frame] : this.ReturnDefaultIcon();
         }
 
-        public IconData ReturnDefaultIcon()
+        public IEnumerable<SpriteData> GetSprites(string tileSet, string tileName)
         {
-            IconData[] defaultIcon = this.Icons["DEFAULT"].ToArray();
-            return defaultIcon[0];
-        }
-
-        public Sprite[] GetDefaultSprites()
-        {
-            Sprite[] defaultSprites = this.Icons["DEFAULT"].Select(x => x.sprite).ToArray();
-            return defaultSprites;
-        }
-
-        public Sprite GetSprite(string tileSet, string tileName)
-        {
-            List<KeyValuePair<IconData, List<string>>> data = this.Icons.Where(x => x.Value.Contains(tileSet, GlobalConstants.STRING_COMPARER)).ToList();
-            List<IconData> query = new List<IconData>();
-
-            foreach(KeyValuePair<IconData, List<string>> pair in data)
-            {
-                query.Add(pair.Key);
-            }
-
-            if(query.Count > 0)
-            {
-                if(query.Any(x => x.name.Equals(tileName, StringComparison.OrdinalIgnoreCase)))
-                {
-                    return query.First(x => x.name.Equals(tileName, StringComparison.OrdinalIgnoreCase) 
-                                            || x.data.Equals(tileName, StringComparison.OrdinalIgnoreCase)).sprite;
-                    
-                }
-                else
-                {
-                    if (query.Any(x => x.data.Equals("default", StringComparison.OrdinalIgnoreCase)))
-                    {
-                        return query.First(x => x.data.Equals("default", StringComparison.OrdinalIgnoreCase)).sprite;
-                    }
-                }
-            }
-            
-            IconData[] icons = this.GetDefaultIconSet(tileSet);
-            return icons[0].sprite;
-        }
-
-        public IEnumerable<Sprite> GetSprites(string tileSet, string tileName)
-        {
-            List<Sprite> sprites = new List<Sprite>();
-
-            List<IconData> data = this.Icons.Where(x => x.Value.Contains(tileSet, GlobalConstants.STRING_COMPARER))
-                .Select(pair => pair.Key)
+            List<SpriteData> data = this.Icons.Where(x => x.Key.Equals(tileSet, StringComparison.OrdinalIgnoreCase))
+                .SelectMany(x => x.Value.Where(pair => pair.Key.Equals(tileName, StringComparison.OrdinalIgnoreCase)))
+                .Select(x => x.Value)
                 .ToList();
 
-            List<IconData> find = data.FindAll(x => x.name.Equals(tileName, StringComparison.OrdinalIgnoreCase) 
-                                                    || x.data.Equals(tileName, StringComparison.OrdinalIgnoreCase));
-            foreach(IconData found in find)
-            {
-                sprites.Add(found.sprite);
-            }
-
-            if(sprites.Count == 0)
-            {
-                if (data.Any(x => x.data.Equals("default", StringComparison.OrdinalIgnoreCase)))
-                {
-                    IconData[] defaultIcons = data.Where(x => x.data.Equals("default", StringComparison.OrdinalIgnoreCase)).ToArray();
-                    sprites.AddRange(defaultIcons.Select(icon => icon.sprite));
-                }
-                else
-                {
-                    IconData[] icons = this.GetDefaultIconSet(tileSet);
-                    foreach (IconData icon in icons)
-                    {
-                        sprites.Add(icon.sprite);
-                    }
-                }
-            }
-
-            return sprites.ToArray();
+            return data.Any() == false ? this.ReturnDefaultData() : data;
         }
 
-        public IEnumerable<Sprite> GetTileSet(string tileSet)
+        public IEnumerable<SpriteData> GetTileSet(string tileSet)
         {
-            return this.Icons.Where(pair => pair.Value.Contains(tileSet))
-                .Select(pair => pair.Key.sprite);
+            return this.Icons.Where(pair => pair.Key.Equals(tileSet, StringComparison.OrdinalIgnoreCase))
+                .SelectMany(pair => pair.Value)
+                .Select(pair => pair.Value);
         }
 
-        private BucketCollection<IconData, string> Icons
+        protected IDictionary<string, IDictionary<string, SpriteData>> Icons
         {
             get;
             set;
@@ -342,14 +225,20 @@ namespace JoyLib.Code.Graphics
         }
     }
 
-    public struct IconData
+    public struct SpriteData
     {
-        public string name;
-        public string data;
-        public int frames;
-        public Texture2D texture;
-        public Sprite sprite;
-        public string filename;
-        public int position;
+        public string m_Name;
+        public List<SpritePart> m_Parts;
+    }
+
+    public struct SpritePart
+    {
+        public string m_Name;
+        public int m_Frames;
+        public IEnumerable<string> m_Data;
+        public List<Sprite> m_FrameSprites;
+        public string m_Filename;
+        public int m_Position;
+        public Color m_Colour;
     }
 }

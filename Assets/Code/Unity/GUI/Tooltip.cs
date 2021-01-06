@@ -15,7 +15,7 @@ namespace JoyLib.Code.Unity.GUI
         [SerializeField] protected TextMeshProUGUI m_Title;
         [SerializeField] protected TextMeshProUGUI m_Text;
         [SerializeField] protected RectTransform m_IconRect;
-        [SerializeField] protected Image m_IconPrefab;
+        [SerializeField] protected ManagedSprite m_IconPrefab;
         [SerializeField] protected Image m_Background;
         [SerializeField] protected StringPairContainer m_ItemPrefab;
         [SerializeField] protected LayoutGroup m_ParentLayout;
@@ -26,7 +26,7 @@ namespace JoyLib.Code.Unity.GUI
         
         protected List<StringPairContainer> ItemCache { get; set; }
         
-        protected List<Image> IconComponents { get; set; }
+        protected ManagedSprite Icon { get; set; }
 
         public override void Awake()
         {
@@ -36,7 +36,7 @@ namespace JoyLib.Code.Unity.GUI
                 this.ItemCache = new List<StringPairContainer>();
                 this.Canvas = this.GetComponentInParent<Canvas>();
                 this.RectTransform = this.GetComponent<RectTransform>();
-                this.IconComponents = new List<Image>();
+                this.Icon = Instantiate(this.m_IconPrefab);
             }
         }
 
@@ -147,26 +147,8 @@ namespace JoyLib.Code.Unity.GUI
 
         protected void SetIcon(ISpriteState state)
         {
-            List<Sprite> sprites = state.SpriteParts.ToList();
-            List<Color> colours = state.SpriteColours.ToList();
-            foreach (Image icon in this.IconComponents)
-            {
-                icon.gameObject.SetActive(false);
-            }
-            if (sprites.Count > this.IconComponents.Count)
-            {
-                for (int i = this.IconComponents.Count; i < sprites.Count; i++)
-                {
-                    this.IconComponents.Add(Instantiate(this.m_IconPrefab, this.m_IconRect.transform));
-                }
-            }
-
-            for (int i = 0; i < sprites.Count; i++)
-            {
-                this.IconComponents[i].sprite = sprites[i];
-                this.IconComponents[i].color = colours[i];
-                this.IconComponents[i].gameObject.SetActive(true);
-            }
+            this.Icon.Clear();
+            this.Icon.AddSpriteState(state, true);
         }
     }
 }

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Objects>
+	<TileSet>
+		<Name>obscure</Name>
+		
+		<SpriteData>
+			<Name>obscure</Name>
+			<Part>
+				<Name>obscure</Name>
+				<Frames>1</Frames>
+				<Filename>Obscure</Filename>
+				<Data>default</Data>
+				<Position>0</Position>
+			</Part>
+		</SpriteData>
+	</TileSet>
+</Objects>

@@ -1,0 +1,199 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Cultures>
+	<Culture>
+		<CultureName>human kingdom</CultureName>
+
+		<Inhabitants>
+			<Inhabitant>human</Inhabitant>
+		</Inhabitants>
+
+		<Rulers>
+			<Ruler>king</Ruler>
+			<Ruler>queen</Ruler>
+		</Rulers>
+
+		<Crimes>
+			<Crime>theft</Crime>
+			<Crime>murder</Crime>
+			<Crime>trespass</Crime>
+			<Crime>rape</Crime>
+		</Crimes>
+
+		<Jobs>
+			<Job>
+				<Name>warrior</Name>
+				<Chance>50</Chance>
+			</Job>
+
+			<Job>
+				<Name>thief</Name>
+				<Chance>20</Chance>
+			</Job>
+
+			<Job>
+				<Name>hedge wizard</Name>
+				<Chance>10</Chance>
+			</Job>
+		</Jobs>
+
+		<Sexualities>
+			<Sexuality>
+				<Name>heterosexual</Name>
+				<Chance>70</Chance>
+			</Sexuality>
+
+			<Sexuality>
+				<Name>bisexual</Name>
+				<Chance>10</Chance>
+			</Sexuality>
+
+			<Sexuality>
+				<Name>homosexual</Name>
+				<Chance>10</Chance>
+			</Sexuality>
+
+			<Sexuality>
+				<Name>asexual</Name>
+				<Chance>3</Chance>
+			</Sexuality>
+		</Sexualities>
+		
+		<Genders>
+			<Gender>
+				<Name>male</Name>
+				<Chance>40</Chance>
+			</Gender>
+			<Gender>
+				<Name>female</Name>
+				<Chance>40</Chance>
+			</Gender>
+			<Gender>
+				<Name>neutral</Name>
+				<Chance>10</Chance>
+			</Gender>
+			<Gender>
+				<Name>agender</Name>
+				<Chance>5</Chance>
+			</Gender>
+		</Genders>
+		
+		<Romances>
+			<Romance>
+				<Name>heteroromantic</Name>
+				<Chance>70</Chance>
+			</Romance>
+			
+			<Romance>
+				<Name>homoromantic</Name>
+				<Chance>10</Chance>
+			</Romance>
+			
+			<Romance>
+				<Name>biromantic</Name>
+				<Chance>10</Chance>
+			</Romance>
+			
+			<Romance>
+				<Name>aromantic</Name>
+				<Chance>3</Chance>
+			</Romance>
+		</Romances>
+
+		<Sexes>
+			<Sex>
+				<Name>male</Name>
+				<Chance>50</Chance>
+			</Sex>
+
+			<Sex>
+				<Name>female</Name>
+				<Chance>50</Chance>
+			</Sex>
+		</Sexes>
+
+		<Relationships>
+			<RelationshipType>monoamorous</RelationshipType>
+			<RelationshipType>polyamorous</RelationshipType>
+		</Relationships>
+
+		<Names>
+			<NameData>
+				<Name>Alex</Name>
+				<Gender>all</Gender>
+				<Chain>0</Chain>
+			</NameData>
+
+			<NameData>
+				<Name>McHuman</Name>
+				<Gender>all</Gender>
+				<Chain>1</Chain>
+			</NameData>
+			
+			<NameData>
+				<Name>the</Name>
+				<Gender>all</Gender>
+				<Chain>1</Chain>
+				<Group>0</Group>
+				<Group>1</Group>
+			</NameData>
+			
+			<NameData>
+				<Name>Fantastic</Name>
+				<Gender>all</Gender>
+				<Chain>2</Chain>
+				<Group>0</Group>
+			</NameData>
+			
+			<NameData>
+				<Name>Despicable</Name>
+				<Gender>all</Gender>
+				<Chain>2</Chain>
+				<Group>1</Group>
+			</NameData>
+		</Names>
+
+		<Statistics>
+		</Statistics>
+
+		<TileSet>
+			<Name>human</Name>
+			
+			<SpriteData>
+				<Name>default</Name>
+				<Part>
+					<Name>body</Name>
+					<Frames>2</Frames>
+					<Filename>cultures/human</Filename>
+					<Data>default</Data>
+					<Position>0</Position>
+				</Part>
+				<Part>
+					<Name>eyes</Name>
+					<Frames>2</Frames>
+					<Filename>cultures/human-eyes</Filename>
+					<Data>default</Data>
+					<Position>0</Position>
+				</Part>
+			</SpriteData>
+		</TileSet>
+		
+		<CursorColours>
+			<Colour>
+				<Name>CursorHighlight</Name>
+				<Value>#f2a085ff</Value>
+			</Colour>
+			<Colour>
+				<Name>CursorBright</Name>
+				<Value>#d77e4bff</Value>
+			</Colour>
+			<Colour>
+				<Name>CursorMid</Name>
+				<Value>#b45a50ff</Value>
+			</Colour>
+			<Colour>
+				<Name>CursorDark</Name>
+				<Value>#823219ff</Value>
+			</Colour>
+		</CursorColours>
+	</Culture>
+</Cultures>

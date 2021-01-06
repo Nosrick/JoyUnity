@@ -1,5 +1,6 @@
 ﻿using System;
 using JoyLib.Code.Entities;
+using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Unity.GUI;
 using UnityEngine;
@@ -12,7 +13,7 @@ namespace JoyLib.Code.Unity
     public class MonoBehaviourHandler : ManagedSprite, IPointerEnterHandler, IPointerExitHandler
     {
         public IJoyObject JoyObject { get; protected set; }
-        protected SpriteRenderer SpeechBubble { get; set; }
+        protected ManagedSprite SpeechBubble { get; set; }
         protected bool PointerOver { get; set; }
         
         protected static IGUIManager GUIManager { get; set; }
@@ -47,14 +48,14 @@ namespace JoyLib.Code.Unity
             Transform transform = this.transform.Find("Speech Bubble");
             if (transform is null == false)
             {
-                this.SpeechBubble = transform.GetComponent<SpriteRenderer>();
+                this.SpeechBubble = transform.GetComponent<ManagedSprite>();
             }
             this.name = this.JoyObject.JoyName + ":" + this.JoyObject.GUID;
             this.transform.position = new Vector3(this.JoyObject.WorldPosition.x, this.JoyObject.WorldPosition.y, 0.0f);
             this.SetSpeechBubble(false);
         }
 
-        public void SetSpeechBubble(bool on, Sprite need = null)
+        public void SetSpeechBubble(bool on, ISpriteState need = null)
         {
             if (this.SpeechBubble is null)
             {
@@ -64,7 +65,8 @@ namespace JoyLib.Code.Unity
             this.SpeechBubble.gameObject.SetActive(on);
             if (on)
             {
-                this.SpeechBubble.sprite = need;
+                this.SpeechBubble.Clear();
+                this.SpeechBubble.AddSpriteState(need, true);
             }
         }
 

@@ -1,6 +1,6 @@
 ﻿using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Graphics;
 using JoyLib.Code.Rollers;
-using UnityEngine;
 
 namespace JoyLib.Code.Entities.Needs
 {
@@ -48,7 +48,7 @@ namespace JoyLib.Code.Entities.Needs
             get;
         }
 
-        Sprite FulfillingSprite
+        ISpriteState FulfillingSprite
         {
             get;
         }

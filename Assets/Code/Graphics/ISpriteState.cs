@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace JoyLib.Code.Graphics
@@ -6,7 +7,9 @@ namespace JoyLib.Code.Graphics
     public interface ISpriteState
     {
         string Name { get; }
-        List<Sprite> SpriteParts { get; }
-        List<Color> SpriteColours { get; }
+
+        List<Tuple<Color, Sprite>> GetSpriteForFrame(int frame);
+        
+        SpriteData SpriteData { get; }
     }
 }

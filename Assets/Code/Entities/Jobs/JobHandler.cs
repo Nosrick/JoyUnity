@@ -15,9 +15,14 @@ namespace JoyLib.Code.Entities.Jobs
         protected List<IJob> m_Jobs;
         
         protected RNG Roller { get; set; }
+        
+        protected IAbilityHandler AbilityHandler { get; set; }
 
-        public JobHandler(RNG roller)
+        public JobHandler(
+            IAbilityHandler abilityHandler,
+            RNG roller)
         {
+            this.AbilityHandler = abilityHandler;
             this.Roller = roller;
             this.m_Jobs = this.LoadTypes();
         }
@@ -74,8 +79,7 @@ namespace JoyLib.Code.Entities.Jobs
                         {
                             abilities = (from ability in jobElement.Elements("Ability")
                                 select new KeyValuePair<IAbility, int>(
-                                    GlobalConstants.GameManager.AbilityHandler.GetAbility(
-                                        ability.Element("Name").GetAs<string>()),
+                                    this.AbilityHandler.GetAbility(ability.Element("Name").GetAs<string>()),
                                     ability.Element("Cost").GetAs<int>()))
                                 .ToDictionary(x => x.Key, x => x.Value);
                         }

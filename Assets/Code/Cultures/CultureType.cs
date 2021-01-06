@@ -59,7 +59,7 @@ namespace JoyLib.Code.Cultures
 
         public RNG Roller { get; protected set; }
 
-        public IEnumerable<Color> CursorColours { get; protected set; }
+        public IDictionary<string, Color> CursorColours { get; protected set; }
 
         protected const int NO_GROUP = int.MinValue;
 
@@ -81,7 +81,7 @@ namespace JoyLib.Code.Cultures
             Dictionary<string, int> romancePrevelence,
             Dictionary<string, int> genderPrevelence,
             int nonConformingGenderChance,
-            IEnumerable<Color> cursorColours,
+            IDictionary<string, Color> cursorColours,
             RNG roller = null)
         {
             this.Roller = roller is null ? new RNG() : roller;

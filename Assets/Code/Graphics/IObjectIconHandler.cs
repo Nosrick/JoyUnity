@@ -1,18 +1,18 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
+using System.Xml.Linq;
 
 namespace JoyLib.Code.Graphics
 {
     public interface IObjectIconHandler
     {
-        bool AddIcons(string tileSet, IconData[] data);
-        Texture2D[] GetIcons(string tileSet, string tileName);
-        IconData[] ReturnDefaultArray();
-        IconData ReturnDefaultIcon();
-        Sprite[] GetDefaultSprites();
-        Sprite GetSprite(string tileSet, string tileName);
-        IEnumerable<Sprite> GetSprites(string tileSet, string tileName);
-        IEnumerable<Sprite> GetTileSet(string tileSet);
+        bool AddSpriteData(string tileSet, SpriteData dataToAdd);
+        bool AddSpriteDataRange(string tileSet, IEnumerable<SpriteData> dataToAdd);
+        bool AddSpriteDataFromXML(string tileSet, XElement spriteDataElement);
+        IEnumerable<SpriteData> ReturnDefaultData();
+        SpriteData ReturnDefaultIcon();
+        IEnumerable<SpriteData> GetTileSet(string tileSet);
+        IEnumerable<SpriteData> GetSprites(string tileSet, string tileName);
+        SpriteData GetFrame(string tileSet, string tileName, int frame);
         int SpriteSize { get; }
     }
 }

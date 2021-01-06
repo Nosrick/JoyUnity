@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using JoyLib.Code.Graphics;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
-using UnityEngine;
 
 namespace JoyLib.Code.Entities.Needs
 {
@@ -11,10 +11,9 @@ namespace JoyLib.Code.Entities.Needs
         public virtual string Name
         {
             get => "abstractneed";
-            set {}
         }
 
-        public Sprite FulfillingSprite { get; protected set; }
+        public ISpriteState FulfillingSprite { get; protected set; }
 
         public RNG Roller { get; protected set; }
 
@@ -53,8 +52,8 @@ namespace JoyLib.Code.Entities.Needs
             int happinessThresholdRef,
             int valueRef, 
             int maxValueRef, 
-            string[] actions,
-            Sprite fulfillingSprite = null,
+            IEnumerable<string> actions,
+            ISpriteState fulfillingSprite = null,
             int averageForDayRef = 0, 
             int averageForWeekRef = 0,
             RNG roller = null)
@@ -92,7 +91,12 @@ namespace JoyLib.Code.Entities.Needs
 
             if (GlobalConstants.GameManager is null == false)
             {
-                this.FulfillingSprite = GlobalConstants.GameManager.ObjectIconHandler.GetSprite("needs", this.Name);
+                this.FulfillingSprite = SpriteState.MakeWithDefaultColour(
+                    this.Name, 
+                    GlobalConstants.GameManager.ObjectIconHandler.GetFrame(
+                        "needs", 
+                        this.Name, 
+                        0));
             }
         }
 

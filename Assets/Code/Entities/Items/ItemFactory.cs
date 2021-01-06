@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Code.Collections;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.Statistics;
@@ -107,35 +108,29 @@ namespace JoyLib.Code.Entities.Items
 
         public IItemInstance CreateFromTemplate(BaseItemType itemType, bool identified = false)
         {
-            List<IBasicValue<float>> values = new List<IBasicValue<float>>();
-            values.Add(new ConcreteBasicFloatValue(
-                "weight", itemType.Weight));
-            values.Add(new ConcreteBasicFloatValue(
-                "bonus", itemType.Material.Bonus));
-            values.Add(new ConcreteBasicFloatValue(
-                "size", itemType.Size));
-            values.Add(new ConcreteBasicFloatValue(
-                "hardness", itemType.Material.Hardness));
-            values.Add(new ConcreteBasicFloatValue(
-                "density", itemType.Material.Density));
-            
+            List<IBasicValue<float>> values = new List<IBasicValue<float>>
+            {
+                new ConcreteBasicFloatValue(
+                    "weight", itemType.Weight),
+                new ConcreteBasicFloatValue(
+                    "bonus", itemType.Material.Bonus),
+                new ConcreteBasicFloatValue(
+                    "size", itemType.Size),
+                new ConcreteBasicFloatValue(
+                    "hardness", itemType.Material.Hardness),
+                new ConcreteBasicFloatValue(
+                    "density", itemType.Material.Density)
+            };
+
             ItemInstance itemInstance = new ItemInstance(
                 itemType,
                 this.DerivedValueHandler.GetItemStandardBlock(values),
                 new Vector2Int(-1, -1),
                 identified, 
-                new List<ISpriteState>
-                {
-                    new SpriteState(
-                        itemType.UnidentifiedName,
-                        this.ObjectIcons.GetSprites(
-                            itemType.SpriteSheet,
-                            itemType.UnidentifiedName),
-                        new List<Color>
-                        {
-                            Color.white
-                        })
-                },
+                from sprite in this.ObjectIcons.GetSprites(
+                        itemType.SpriteSheet,
+                        itemType.UnidentifiedName)
+                    select SpriteState.MakeWithDefaultColour(sprite.m_Name, sprite),
                 new RNG(),
                 new List<IAbility>(),
                 new List<IJoyAction>(),

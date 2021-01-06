@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.AI.Drivers;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity.GUI
 {
@@ -19,8 +19,8 @@ namespace JoyLib.Code.Unity.GUI
         [SerializeField] protected BasicPlayerInfo PlayerInfo;
         [SerializeField] protected AbilityWindow AbilityWindow;
 
-        [SerializeField] protected Image PlayerSprite_Part1;
-        [SerializeField] protected Image PlayerSprite_Part2;
+        [SerializeField] protected ManagedSprite PlayerSprite_Part1;
+        [SerializeField] protected ManagedSprite PlayerSprite_Part2;
         [SerializeField] protected TMP_InputField PlayerName_Part1;
         [SerializeField] protected TMP_InputField PlayerName_Part2;
         
@@ -43,6 +43,11 @@ namespace JoyLib.Code.Unity.GUI
 
         public IEntity CreatePlayer()
         {
+            var data = this.GameManager.ObjectIconHandler.GetSprites(
+                this.PlayerInfo.CurrentTemplate.CreatureType,
+                this.PlayerInfo.Job);
+            List<ISpriteState> spriteStates = data.Select(d => SpriteState.MakeWithDefaultColour(d.m_Name, d)).ToList();
+
             return this.GameManager.EntityFactory.CreateFromTemplate(
                 this.PlayerInfo.CurrentTemplate,
                 GlobalConstants.NO_TARGET,
@@ -57,18 +62,7 @@ namespace JoyLib.Code.Unity.GUI
                 this.GameManager.SexualityHandler.Get(this.PlayerInfo.Sexuality),
                 this.GameManager.RomanceHandler.Get(this.PlayerInfo.Romance),
                 this.GameManager.JobHandler.Get(this.PlayerInfo.Job), 
-                new List<ISpriteState>
-                {
-                    new Graphics.SpriteState(
-                        this.PlayerName_Part1.text,
-                        this.GameManager.ObjectIconHandler.GetSprites(
-                            this.PlayerInfo.CurrentTemplate.CreatureType, 
-                            this.PlayerInfo.Job),
-                        new List<Color>
-                        {
-                            Color.white
-                        })
-                },
+                spriteStates,
                 null,
                 new PlayerDriver());
         }
@@ -98,8 +92,14 @@ namespace JoyLib.Code.Unity.GUI
 
         public void SetSprites(object sender, EventArgs args)
         {
-            this.PlayerSprite_Part1.sprite = this.GameManager.ObjectIconHandler.GetSprite(this.PlayerInfo.CurrentTemplate.CreatureType, this.PlayerInfo.Job);
-            this.PlayerSprite_Part2.sprite = this.PlayerSprite_Part1.sprite;
+            SpriteData data = this.GameManager.ObjectIconHandler.GetSprites(
+                this.PlayerInfo.CurrentTemplate.CreatureType,
+                "default").First();
+            ISpriteState state = SpriteState.MakeWithDefaultColour(data.m_Name, data);
+            this.PlayerSprite_Part1.Clear();
+            this.PlayerSprite_Part1.AddSpriteState(state, true);
+            this.PlayerSprite_Part2.Clear();
+            this.PlayerSprite_Part2.AddSpriteState(state, true);
         }
 
         public void GoToSkillsAndAbilities()

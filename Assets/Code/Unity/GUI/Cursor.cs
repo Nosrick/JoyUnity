@@ -87,6 +87,21 @@ namespace JoyLib.Code.Unity.GUI
             this.CursorObject.ChangeState(state.Name);
         }
 
+        public void SetCursorColours(IDictionary<string, Color> colours)
+        {
+            foreach (ISpriteState state in this.CursorObject.States)
+            {
+                for (int j = 0; j < state.SpriteData.m_Parts.Count; j++)
+                {
+                    SpritePart part = state.SpriteData.m_Parts[j];
+                    if (colours.ContainsKey(part.m_Name))
+                    {
+                        part.m_Colour = colours[part.m_Name];
+                    }
+                }
+            }
+        }
+
         public override void Show()
         {
             base.Show();

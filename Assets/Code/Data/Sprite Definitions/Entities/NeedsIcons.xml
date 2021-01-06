@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Objects>
+	<TilesetName>Needs</TilesetName>
+
+	<SpriteData>
+		<Name>Hunger</Name>
+		<Part>
+			<Name>Hunger</Name>
+			<Frames>1</Frames>
+			<Filename>Needs</Filename>
+			<Data>default</Data>
+			<Position>0</Position>
+		</Part>
+	</SpriteData>
+
+	<SpriteData>
+		<Name>Thirst</Name>
+		<Part>
+			<Name>Thirst</Name>
+			<Frames>1</Frames>
+			<Filename>Needs</Filename>
+			<Data>default</Data>
+			<Position>1</Position>
+		</Part>
+	</SpriteData>
+
+	<SpriteData>
+		<Name>Sex</Name>
+		<Part>
+			<Name>Sex</Name>
+			<Frames>1</Frames>
+			<Filename>Needs</Filename>
+			<Data>default</Data>
+			<Position>2</Position>
+		</Part>
+	</SpriteData>
+
+	<SpriteData>
+		<Name>Sleep</Name>
+		<Part>
+			<Name>Sleep</Name>
+			<Frames>1</Frames>
+			<Filename>Needs</Filename>
+			<Data>default</Data>
+			<Position>3</Position>
+		</Part>
+	</SpriteData>
+
+	<SpriteData>
+		<Name>Health</Name>
+		<Part>
+			<Name>Health</Name>
+			<Frames>1</Frames>
+			<Filename>Needs</Filename>
+			<Data>default</Data>
+			<Position>4</Position>
+		</Part>
+	</SpriteData>
+
+	<SpriteData>
+		<Name>Purpose</Name>
+		<Part>
+			<Name>Purpose</Name>
+			<Frames>1</Frames>
+			<Filename>Needs</Filename>
+			<Data>default</Data>
+			<Position>5</Position>
+		</Part>
+	</SpriteData>
+
+	<SpriteData>
+		<Name>Property</Name>
+		<Part>
+			<Name>Property</Name>
+			<Frames>1</Frames>
+			<Filename>Needs</Filename>
+			<Data>default</Data>
+			<Position>6</Position>
+		</Part>
+	</SpriteData>
+
+	<SpriteData>
+		<Name>Friendship</Name>
+		<Part>
+			<Name>Friendship</Name>
+			<Frames>1</Frames>
+			<Filename>Needs</Filename>
+			<Data>default</Data>
+			<Position>7</Position>
+		</Part>
+	</SpriteData>
+
+	<SpriteData>
+		<Name>Family</Name>
+		<Part>
+			<Name>Family</Name>
+			<Frames>1</Frames>
+			<Filename>Needs</Filename>
+			<Data>default</Data>
+			<Position>8</Position>
+		</Part>
+	</SpriteData>
+
+	<SpriteData>
+		<Name>Morality</Name>
+		<Part>
+			<Name>Morality</Name>
+			<Frames>1</Frames>
+			<Filename>Needs</Filename>
+			<Data>default</Data>
+			<Position>9</Position>
+		</Part>
+	</SpriteData>
+
+	<SpriteData>
+		<Name>Confidence</Name>
+		<Part>
+			<Name>Confidence</Name>
+			<Frames>1</Frames>
+			<Filename>Needs</Filename>
+			<Data>default</Data>
+			<Position>10</Position>
+		</Part>
+	</SpriteData>
+
+	<SpriteData>
+		<Name>Respect</Name>
+		<Part>
+			<Name>Respect</Name>
+			<Frames>1</Frames>
+			<Filename>Needs</Filename>
+			<Data>default</Data>
+			<Position>11</Position>
+		</Part>
+	</SpriteData>
+</Objects>

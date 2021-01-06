@@ -62,6 +62,6 @@ namespace JoyLib.Code.Cultures
         
         RNG Roller { get; }
         
-        IEnumerable<Color> CursorColours { get; }
+        IDictionary<string, Color> CursorColours { get; }
     }
 }

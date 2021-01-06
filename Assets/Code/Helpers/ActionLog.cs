@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Items;
+using UnityEngine;
 
 namespace JoyLib.Code.Helpers
 {
@@ -22,14 +22,17 @@ namespace JoyLib.Code.Helpers
 
         private StreamWriter s_LogFile;
 
+        private bool IsEditor = Application.isEditor;
+
         public ActionLog()
         {
             this.OpenLog();
         }
 
-        public void Update()
+        public IEnumerator Update()
         {
             this.ServiceQueue();
+            yield return new WaitForSeconds(0.1f);
         }
 
         public bool OpenLog()
@@ -69,11 +72,12 @@ namespace JoyLib.Code.Helpers
 
         public void AddText(string stringToAdd, LogType logType = LogType.Information)
         {
-            if (logType == LogType.Information || (logType == LogType.Debug && Debugger.IsAttached))
+            if (this.IsEditor)
             {
-                this.m_Log.Enqueue(stringToAdd);
-                this.WriteToLog(stringToAdd);
+                UnityEngine.Debug.Log(stringToAdd);
             }
+            this.m_Log.Enqueue(stringToAdd);
+            this.WriteToLog(stringToAdd);
 
             if (this.m_Log.Count > LINES_TO_KEEP)
             {
@@ -81,24 +85,13 @@ namespace JoyLib.Code.Helpers
             }
         }
 
-        public void LogDamage(int damage, Entity attacker, Entity defender, ItemInstance weapon)
-        {
-            string damageString = attacker.JoyName + " " + weapon.ItemType.ActionString + " " + defender.JoyName + " for " + damage + ".";
-            this.AddText(damageString);
-        }
-
-        public Queue<string> Log
-        {
-            get
-            {
-                return this.m_Log;
-            }
-        }
+        public IReadOnlyCollection<string> Log => this.m_Log;
     }
 
     public enum LogType
     {
         Debug,
-        Information
+        Information,
+        Error
     }
 }

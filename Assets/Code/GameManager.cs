@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Code.Collections;
+﻿using Code.Collections;
 using Joy.Code.Managers;
 using JoyLib.Code;
 using JoyLib.Code.Combat;
@@ -46,6 +45,8 @@ public class GameManager : MonoBehaviour, IGameManager
         this.ActionLog = new ActionLog();
 
         GlobalConstants.ActionLog = this.ActionLog;
+
+        this.StartCoroutine(this.ActionLog.Update());
         
         GameObject objectHolder = GameObject.Find("WorldObjects");
         GameObject entityHolder = GameObject.Find("WorldEntities");
@@ -88,7 +89,7 @@ public class GameManager : MonoBehaviour, IGameManager
         this.BioSexHandler = new EntityBioSexHandler();
         this.SexualityHandler = new EntitySexualityHandler();
         this.RomanceHandler = new EntityRomanceHandler();
-        this.JobHandler = new JobHandler(this.Roller);
+        this.JobHandler = new JobHandler(this.AbilityHandler, this.Roller);
         this.GenderHandler = new GenderHandler();
         this.SkillHandler = new EntitySkillHandler(this.NeedHandler);
         this.EntityTemplateHandler = new EntityTemplateHandler(
@@ -134,13 +135,9 @@ public class GameManager : MonoBehaviour, IGameManager
 
         Cursor cursor = this.GUIManager.OpenGUI(GUINames.CURSOR)
             .GetComponent<Cursor>();
-        cursor.SetCursorSprites(new SpriteState(
+        cursor.SetCursorSprites(SpriteState.MakeWithDefaultColour(
             "Cursor",
-            this.ObjectIconHandler.GetTileSet("DefaultCursor"),
-            new List<Color>
-            {
-                Color.magenta
-            }));
+            this.ObjectIconHandler.GetFrame("DefaultCursor", "DefaultCursor", 0)));
         cursor.SetCursorSize(64, 64);
 
         this.m_StateManager.ChangeState(new CharacterCreationState());

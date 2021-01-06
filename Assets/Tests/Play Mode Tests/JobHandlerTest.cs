@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Linq;
 using JoyLib.Code;
+using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.Jobs;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Rollers;
@@ -12,15 +13,17 @@ namespace Tests
     public class JobHandlerTest
     {
         private IJobHandler target;
+        private IAbilityHandler abilityHandler;
 
         private ActionLog log;
 
         [SetUp]
         public void SetUp()
         {
-            log = new ActionLog();
+            this.abilityHandler = new AbilityHandler();
+            this.log = new ActionLog();
             GlobalConstants.ActionLog = this.log;
-            target = new JobHandler(new RNG());
+            this.target = new JobHandler(this.abilityHandler, new RNG());
         }
 
         [UnityTest]

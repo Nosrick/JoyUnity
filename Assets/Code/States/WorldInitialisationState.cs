@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
 using JoyLib.Code.Entities;
@@ -71,17 +72,8 @@ namespace JoyLib.Code.States
                 //tooltip.RefreshTooltip = WorldState.GetTooltipData;
 
                 ManagedSprite sprite = child.GetComponent<ManagedSprite>();
-                sprite.AddSpriteState(
-                    new SpriteState(
-                        child.name,
-                        new List<Sprite>
-                        {
-                            this.m_ObjectIcons.GetSprite("Stairs", "Upstairs")
-                        },
-                        new List<Color>
-                        {
-                            Color.white
-                        }));
+                sprite.AddSpriteState(SpriteState.MakeWithDefaultColour(child.name,
+                    this.m_ObjectIcons.GetSprites("Stairs", "Upstairs").First()));
                 child.SetActive(true);
             }
 
@@ -96,22 +88,15 @@ namespace JoyLib.Code.States
                 tooltip.WorldPosition = pair.Key;
                 //tooltip.RefreshTooltip = WorldState.GetTooltipData;
 
+
                 ManagedSprite sprite = child.GetComponent<ManagedSprite>();
-                sprite.AddSpriteState(
-                    new SpriteState(
-                        child.name,
-                        new List<Sprite>
-                        {
-                            this.m_ObjectIcons.GetSprite("Stairs", "Downstairs")
-                        },
-                        new List<Color>
-                        {
-                            Color.white
-                        }));
+                sprite.AddSpriteState(SpriteState.MakeWithDefaultColour(child.name,
+                    this.m_ObjectIcons.GetSprites("Stairs", "Downstairs").First()));
                 child.SetActive(true);
             }
 
             int fogLayer = LayerMask.NameToLayer("Fog of War");
+            ISpriteState state = null;
             for(int i = 0; i < this.m_ActiveWorld.Tiles.GetLength(0); i++)
             {
                 for(int j = 0; j < this.m_ActiveWorld.Tiles.GetLength(1); j++)
@@ -124,7 +109,7 @@ namespace JoyLib.Code.States
                     fog.GetComponent<GridPosition>().Move(intPos);
                     SpriteRenderer goSpriteRenderer = fog.GetComponent<SpriteRenderer>();
                     goSpriteRenderer.sortingLayerName = "Fog of War";
-                    goSpriteRenderer.sprite = this.m_ObjectIcons.GetSprite("Obscure", "Obscure");
+                    goSpriteRenderer.sprite = this.m_ObjectIcons.GetSprites("Obscure", "Obscure").First().m_Parts.First().m_FrameSprites.First();
                     fog.name = "Fog of War";
                     fog.SetActive(true);
                     
@@ -138,19 +123,15 @@ namespace JoyLib.Code.States
                     //tooltip.RefreshTooltip = WorldState.GetTooltipData;
 
                     ManagedSprite sprite = floor.GetComponent<ManagedSprite>();
-                    sprite.AddSpriteState(
-                        new SpriteState(
-                            floor.name,
-                            new List<Sprite>
-                            {
-                                this.m_ObjectIcons.GetSprite(
-                                    this.m_ActiveWorld.Tiles[i, j].TileSet, 
-                                    "surroundfloor")
-                            },
-                            new List<Color>
-                            {
-                                Color.white
-                            }));
+                    if (state is null
+                        || state.SpriteData.m_Name.Equals(this.m_ActiveWorld.Tiles[i, j].TileSet,
+                            StringComparison.OrdinalIgnoreCase) == false)
+                    {
+                        state = SpriteState.MakeWithDefaultColour(
+                            "Floor",
+                            this.m_ObjectIcons.GetSprites(this.m_ActiveWorld.Tiles[i, j].TileSet, "surroundfloor").First());
+                    }
+                    sprite.AddSpriteState(state);
                     floor.SetActive(true);
                 }
             }

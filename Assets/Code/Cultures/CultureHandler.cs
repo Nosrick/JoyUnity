@@ -6,6 +6,7 @@ using System.Xml.Linq;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
 using UnityEngine;
+using LogType = JoyLib.Code.Helpers.LogType;
 
 namespace JoyLib.Code.Cultures
 {
@@ -110,30 +111,22 @@ namespace JoyLib.Code.Cultures
 
                     string tileSet = culture.Element("TileSet").Element("Name").DefaultIfEmpty("");
 
-                    List<Color> cursorColours = new List<Color>();
+                    IDictionary<string, Color> cursorColours = new Dictionary<string, Color>();
                     try
                     {
-                        IEnumerable<string> colourStrings = (from colours in culture.Element("CursorColours")
+                        cursorColours = (from colours in culture.Element("CursorColours")
                                 .Elements("Colour")
-                            select colours.GetAs<string>());
-
-                        foreach (string colourString in colourStrings)
-                        {
-                            ColorUtility.TryParseHtmlString(colourString, out Color colour);
-                            cursorColours.Add(colour);
-                        }
+                                select new KeyValuePair<string, Color>(
+                                    colours.Element("Name").GetAs<string>(),
+                                    ColourHelper.ParseHTMLString(colours.Element("Value").GetAs<string>())))
+                            .ToDictionary(x => x.Key, x => x.Value);
                     }
                     catch (Exception e)
                     {
-                        Debug.LogWarning(e.Message);
-                        Debug.LogWarning(e.StackTrace);
-                        Debug.LogWarning("Could not find cursor colours in file " + file);
-                        GlobalConstants.ActionLog.AddText("Could not find cursor colours in file " + file);
-                    }
-
-                    if (cursorColours.Any() == false)
-                    {
-                        cursorColours.Add(Color.magenta);
+                        GlobalConstants.ActionLog.AddText(e.Message, LogType.Error);
+                        GlobalConstants.ActionLog.AddText(e.StackTrace, LogType.Error);
+                        GlobalConstants.ActionLog.AddText("Could not find cursor colours in file " + file, LogType.Error);
+                        cursorColours.Add("default", Color.magenta);
                     }
                     
                     /*
@@ -152,20 +145,7 @@ namespace JoyLib.Code.Cultures
                     */
                     //string filename = culture.Element("TileSet").Element("Filename").DefaultIfEmpty("");
 
-                    if (tileSet.Length > 0)
-                    {
-                        IconData[] icons = (from cultureIcons in culture.Element("TileSet").Elements("Icon")
-                                            select new IconData()
-                                            {
-                                                name = cultureIcons.Element("Name").GetAs<string>(),
-                                                data = cultureIcons.Element("Data").DefaultIfEmpty(""),
-                                                frames = cultureIcons.Element("Frames").GetAs<int>(),
-                                                filename = cultureIcons.Element("Filename").GetAs<string>(),
-                                                position = cultureIcons.Element("Position").DefaultIfEmpty(0)
-                                            }).ToArray();
-
-                        objectIcons.AddIcons(tileSet, icons);
-                    }
+                    objectIcons.AddSpriteDataFromXML(tileSet, culture);
 
                     cultures.Add(cultureName,
                         new CultureType(

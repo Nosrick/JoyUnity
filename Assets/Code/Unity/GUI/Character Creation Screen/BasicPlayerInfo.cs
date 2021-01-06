@@ -9,7 +9,6 @@ using JoyLib.Code.Entities.Romance;
 using JoyLib.Code.Entities.Sexes;
 using JoyLib.Code.Entities.Sexuality;
 using JoyLib.Code.Events;
-using JoyLib.Code.Graphics;
 using JoyLib.Code.Rollers;
 using UnityEngine;
 
@@ -124,10 +123,7 @@ namespace JoyLib.Code.Unity.GUI
 
             this.GameManager.GUIManager.GetGUI(GUINames.CURSOR)
                 .GetComponent<Cursor>()
-                .SetCursorSprites(new SpriteState(
-                    "Cursor",
-                    GlobalConstants.GameManager.ObjectIconHandler.GetTileSet("DefaultCursor"),
-                    this.CurrentCulture.CursorColours));
+                .SetCursorColours(this.CurrentCulture.CursorColours);
         }
 
         protected void SetStatistics()

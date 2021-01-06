@@ -183,16 +183,21 @@ namespace JoyLib.Code.Entities
 
             if(selectedSprites is null)
             {
-                selectedSprites = new List<ISpriteState>
+                List<ISpriteState> states = new List<ISpriteState>();
+                List<SpriteData> spriteData = this.ObjectIcons.GetSprites(dominantCulture.Tileset, template.JoyType).ToList();
+                for (int i = 0; i < spriteData.Count; i++)
                 {
-                    new SpriteState(
-                        template.CreatureType,
-                        this.ObjectIcons.GetSprites(dominantCulture.Tileset, template.JoyType),
-                        new List<Color>
-                        {
-                            Color.white
-                        })
-                };
+                    SpriteData data = spriteData[i];
+                    var spriteColours = (from d in data.m_Parts
+                        select new KeyValuePair<string, Color>(
+                            d.m_Name,
+                            Color.white))
+                        .ToDictionary(x => x.Key, x => x.Value);
+                    states.Add(new SpriteState(
+                        data.m_Name,
+                        data,
+                        spriteColours));
+                }
             }
 
             if(selectedDriver is null)

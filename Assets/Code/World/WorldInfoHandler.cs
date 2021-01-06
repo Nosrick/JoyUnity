@@ -57,25 +57,9 @@ namespace JoyLib.Code.World
                     //This is optional
                     string filename = worldInfo.Element("Filename").DefaultIfEmpty("NULL");
 
-                    List<IconData> iconData = new List<IconData>();
-                    foreach (XElement icon in worldInfo.Elements("Icon"))
-                    {
-                        IconData newIcon = new IconData()
-                        {
-                            name = icon.Element("Name").GetAs<string>(),
-                            data = icon.Element("Data").DefaultIfEmpty(""),
-                            filename = filename,
-                            position = icon.Element("Position").GetAs<int>()
-                        };
-
-                        iconData.Add(newIcon);
-                    }
+                    this.ObjectIcons.AddSpriteDataFromXML(info.tileset, doc);
 
                     this.WorldInfo.Add(info);
-
-                    this.ObjectIcons.AddIcons(
-                        info.tileset,
-                        iconData.ToArray());
 
                     StandardWorldTiles.instance.AddType(
                         new WorldTile(

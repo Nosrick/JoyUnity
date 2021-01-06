@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Cultures>
+	<Culture>
+		<CultureName>slime conglomerate</CultureName>
+
+		<Inhabitants>
+			<Inhabitant>slime</Inhabitant>
+		</Inhabitants>
+
+		<Rulers>
+			<Ruler>great slime</Ruler>
+		</Rulers>
+
+		<Crimes>
+		</Crimes>
+
+		<TileSet>
+			<Name>slime</Name>
+			
+			<SpriteData>
+				<Name>default</Name>
+				<Part>
+					<Name>body</Name>
+					<Frames>2</Frames>
+					<Filename>cultures/slime</Filename>
+					<Data>default</Data>
+					<Position>12</Position>
+				</Part>
+			</SpriteData>
+		</TileSet>
+
+		<Sexualities>
+			<Sexuality>
+				<Name>bisexual</Name>
+				<Chance>95</Chance>
+			</Sexuality>
+
+			<Sexuality>
+				<Name>asexual</Name>
+				<Chance>5</Chance>
+			</Sexuality>
+		</Sexualities>
+		
+		<Romances>
+			<Romance>
+				<Name>aromantic</Name>
+				<Chance>100</Chance>
+			</Romance>
+		</Romances>
+
+		<Sexes>
+			<Sex>
+				<Name>neutral</Name>
+				<Chance>100</Chance>
+			</Sex>
+		</Sexes>
+
+		<Genders>
+			<Gender>
+				<Name>neutral</Name>
+				<Chance>100</Chance>
+			</Gender>
+		</Genders>
+
+		<Jobs>
+			<Job>
+				<Name>warrior</Name>
+				<Chance>10</Chance>
+			</Job>
+		</Jobs>
+
+		<Relationships>
+			<RelationshipType>polyamorous</RelationshipType>
+		</Relationships>
+
+		<Statistics>
+		</Statistics>
+
+		<Names>
+			<NameData>
+				<Name>Glorp</Name>
+				<Gender>all</Gender>
+				<Chain>0</Chain>
+			</NameData>
+
+			<NameData>
+				<Name>Blip</Name>
+				<Gender>all</Gender>
+				<Chain>0</Chain>
+			</NameData>
+
+			<NameData>
+				<Name>Slorp</Name>
+				<Gender>all</Gender>
+				<Chain>0</Chain>
+			</NameData>
+
+			<NameData>
+				<Name>Glurg</Name>
+				<Gender>all</Gender>
+				<Chain>0</Chain>
+			</NameData>
+
+			<NameData>
+				<Name>The</Name>
+				<Gender>all</Gender>
+				<Chain>1</Chain>
+			</NameData>
+			
+			<NameData>
+				<Name>Von</Name>
+				<Gender>all</Gender>
+				<Chain>1</Chain>
+			</NameData>
+
+			<NameData>
+				<Name>Slimy</Name>
+				<Gender>all</Gender>
+				<Chain>2</Chain>
+			</NameData>
+		</Names>
+
+		<CursorColours>
+			<Colour>
+				<Name>CursorHighlight</Name>
+				<Value>#73dcffff</Value>
+			</Colour>
+			<Colour>
+				<Name>CursorBright</Name>
+				<Value>#4196dcff</Value>
+			</Colour>
+			<Colour>
+				<Name>CursorMid</Name>
+				<Value>#73dcffff</Value>
+			</Colour>
+			<Colour>
+				<Name>CursorDark</Name>
+				<Value>#4196dcff</Value>
+			</Colour>
+		</CursorColours>
+	</Culture>
+</Cultures>

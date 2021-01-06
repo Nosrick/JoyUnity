@@ -63,22 +63,17 @@ namespace JoyLib.Code.World.Generators.Interiors
         public List<JoyObject> GenerateWalls(WorldTile[,] worldTiles)
         {
             List<JoyObject> walls = new List<JoyObject>();
-            List<ISpriteState> spriteList = new List<ISpriteState>
+            List<SpriteData> spriteData = this.ObjectIcons.GetSprites(this.TileSet, "surroundwall").ToList();
+            List<ISpriteState> spriteList = spriteData.Select(data => SpriteState.MakeWithDefaultColour("wall", data)).ToList();
+
+            List<IBasicValue<float>> values = new List<IBasicValue<float>>
             {
-                new SpriteState(
-                    "Wall",
-                    this.ObjectIcons.GetSprites(this.TileSet, "surroundwall"),
-                    new List<Color>
-                    {
-                        Color.white
-                    })
+                new ConcreteBasicFloatValue("weight", 1),
+                new ConcreteBasicFloatValue("bonus", 1),
+                new ConcreteBasicFloatValue("size", 1),
+                new ConcreteBasicFloatValue("hardness", 1),
+                new ConcreteBasicFloatValue("density", 1)
             };
-            List<IBasicValue<float>> values = new List<IBasicValue<float>>();
-            values.Add(new ConcreteBasicFloatValue("weight", 1));
-            values.Add(new ConcreteBasicFloatValue("bonus", 1));
-            values.Add(new ConcreteBasicFloatValue("size", 1));
-            values.Add(new ConcreteBasicFloatValue("hardness", 1));
-            values.Add(new ConcreteBasicFloatValue("density", 1));
 
             for (int i = 0; i < this.m_UntreatedTiles.GetLength(0); i++)
             {
