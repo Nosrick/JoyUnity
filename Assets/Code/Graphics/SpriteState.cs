@@ -32,9 +32,10 @@ namespace JoyLib.Code.Graphics
                 {
                     continue;
                 }
-                part.m_Colour = randomAdditionsIfNotEnoughColours 
-                    ? colours[GlobalConstants.GameManager.Roller.Roll(0, colours.Count)] 
-                    : Color.magenta;
+
+                part.m_PossibleColours = randomAdditionsIfNotEnoughColours
+                    ? new List<Color> {colours[GlobalConstants.GameManager.Roller.Roll(0, colours.Count)]}
+                    : new List<Color> {Color.magenta};
                 this.SpriteData.m_Parts[i] = part;
             }
         }
@@ -50,7 +51,7 @@ namespace JoyLib.Code.Graphics
             {
                 return this.SpriteData.m_Parts.Select(part =>
                     new Tuple<Color, Sprite>(
-                        part.m_Colour,
+                        part.m_PossibleColours[part.m_SelectedColour],
                         part.m_FrameSprites[frame])).ToList();
             }
 

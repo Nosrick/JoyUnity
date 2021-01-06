@@ -93,7 +93,8 @@ namespace JoyLib.Code.Unity.GUI
                     {
                         continue;
                     }
-                    part.m_Colour = colours[part.m_Name];
+
+                    part.m_PossibleColours = new List<Color> {colours[part.m_Name]};
                     state.SpriteData.m_Parts[j] = part;
                     this.CursorObject.Clear();
                 }

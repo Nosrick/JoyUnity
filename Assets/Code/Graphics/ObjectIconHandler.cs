@@ -55,7 +55,7 @@ namespace JoyLib.Code.Graphics
                         {
                             defaultSprite
                         },
-                        m_Colour = Color.white
+                        m_PossibleColours = new List<Color>{ Color.white }
                     }
                 }
             };
@@ -163,7 +163,10 @@ namespace JoyLib.Code.Graphics
                                         i >= part.Element("Position").DefaultIfEmpty(0) 
                                         && i < part.Element("Position").DefaultIfEmpty(0) + part.Element("Frames").DefaultIfEmpty(1))
                                 .ToList(),
-                            m_Colour = Color.white
+                            m_PossibleColours = part.Elements("Colour").Any() 
+                                ? (from colour in part.Elements("Colour")
+                                select ColourHelper.ParseHTMLString(colour.GetAs<string>())).ToList()
+                                : new List<Color> { Color.white }
                         }).ToList()
                 };
 
@@ -236,6 +239,7 @@ namespace JoyLib.Code.Graphics
         public List<Sprite> m_FrameSprites;
         public string m_Filename;
         public int m_Position;
-        public Color m_Colour;
+        public List<Color> m_PossibleColours;
+        public int m_SelectedColour;
     }
 }

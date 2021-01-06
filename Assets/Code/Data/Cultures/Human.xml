@@ -166,6 +166,8 @@
 					<Filename>cultures/human-body</Filename>
 					<Data>default</Data>
 					<Position>0</Position>
+					<Colour>#ffb35bff</Colour>
+					<Colour>#3c9b6eff</Colour>
 				</Part>
 				<Part>
 					<Name>eyes</Name>
@@ -173,6 +175,9 @@
 					<Filename>cultures/human-eyes</Filename>
 					<Data>default</Data>
 					<Position>0</Position>
+					<Colour>#4196dcff</Colour>
+					<Colour>#3c9b6eff</Colour>
+					<Colour>#b45a50ff</Colour>
 				</Part>
 			</SpriteData>
 		</TileSet>
