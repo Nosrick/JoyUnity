@@ -72,7 +72,7 @@ namespace JoyLib.Code.States
                 //tooltip.RefreshTooltip = WorldState.GetTooltipData;
 
                 ManagedSprite sprite = child.GetComponent<ManagedSprite>();
-                sprite.AddSpriteState(SpriteState.MakeWithDefaultColour(
+                sprite.AddSpriteState(new SpriteState(
                         child.name,
                     this.m_ObjectIcons.GetSprites("Stairs", "Upstairs").First()), 
                     true);
@@ -90,7 +90,7 @@ namespace JoyLib.Code.States
                 TooltipComponent tooltip = child.GetComponent<TooltipComponent>();
                 tooltip.WorldPosition = pair.Key;
                 ManagedSprite sprite = child.GetComponent<ManagedSprite>();
-                sprite.AddSpriteState(SpriteState.MakeWithDefaultColour(
+                sprite.AddSpriteState(new SpriteState(
                         child.name,
                     this.m_ObjectIcons.GetSprites("Stairs", "Downstairs").First()), 
                     true);
@@ -130,7 +130,7 @@ namespace JoyLib.Code.States
                         || state.SpriteData.m_Name.Equals(this.m_ActiveWorld.Tiles[i, j].TileSet,
                             StringComparison.OrdinalIgnoreCase) == false)
                     {
-                        state = SpriteState.MakeWithDefaultColour(
+                        state = new SpriteState(
                             "Floor",
                             this.m_ObjectIcons.GetSprites(this.m_ActiveWorld.Tiles[i, j].TileSet, "surroundfloor").First());
                     }

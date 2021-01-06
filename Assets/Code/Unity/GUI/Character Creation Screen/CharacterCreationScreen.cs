@@ -46,7 +46,7 @@ namespace JoyLib.Code.Unity.GUI
             var data = this.GameManager.ObjectIconHandler.GetSprites(
                 this.PlayerInfo.CurrentTemplate.CreatureType,
                 "default");
-            List<ISpriteState> spriteStates = data.Select(d => SpriteState.MakeWithDefaultColour(d.m_Name, d)).ToList();
+            List<SpriteState> spriteStates = data.Select(d => new SpriteState(d.m_Name, d)).ToList();
 
             return this.GameManager.EntityFactory.CreateFromTemplate(
                 this.PlayerInfo.CurrentTemplate,
@@ -93,9 +93,10 @@ namespace JoyLib.Code.Unity.GUI
         public void SetSprites(object sender, EventArgs args)
         {
             SpriteData data = this.GameManager.ObjectIconHandler.GetSprites(
-                this.PlayerInfo.CurrentTemplate.CreatureType,
-                "default").First();
-            ISpriteState state = SpriteState.MakeWithDefaultColour(data.m_Name, data);
+                this.PlayerInfo.CurrentCulture.CultureName,
+                this.PlayerInfo.CurrentTemplate.CreatureType).First();
+            ISpriteState state = new SpriteState(data.m_Name, data);
+            state.RandomiseColours();
             this.PlayerSprite_Part1.Clear();
             this.PlayerSprite_Part1.AddSpriteState(state, true);
             this.PlayerSprite_Part2.Clear();

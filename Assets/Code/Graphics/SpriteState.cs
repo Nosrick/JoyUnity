@@ -8,35 +8,21 @@ namespace JoyLib.Code.Graphics
     public class SpriteState : ISpriteState
     {
         public SpriteData SpriteData { get; protected set; }
+
         public string Name { get; protected set; }
 
         public SpriteState(
             string name,
             SpriteData spriteData,
-            IDictionary<string, Color> spriteColours,
-            bool randomAdditionsIfNotEnoughColours = true)
+            bool randomiseColours = false)
         {
             this.SpriteData = spriteData;
             
             this.Name = name;
 
-            if (this.SpriteData.m_Parts.All(part => spriteColours.ContainsKey(part.m_Name)))
+            if (randomiseColours)
             {
-                return;
-            }
-            List<Color> colours = spriteColours.Values.ToList();
-            for(int i = 0; i < this.SpriteData.m_Parts.Count; i++)
-            {
-                SpritePart part = this.SpriteData.m_Parts[i];
-                if (spriteColours.ContainsKey(part.m_Name))
-                {
-                    continue;
-                }
-
-                part.m_PossibleColours = randomAdditionsIfNotEnoughColours
-                    ? new List<Color> {colours[GlobalConstants.GameManager.Roller.Roll(0, colours.Count)]}
-                    : new List<Color> {Color.magenta};
-                this.SpriteData.m_Parts[i] = part;
+                this.RandomiseColours();
             }
         }
         public List<Tuple<Color, Sprite>> GetSpriteForFrame(int frame)
@@ -58,18 +44,32 @@ namespace JoyLib.Code.Graphics
             return this.GetSpriteForFrame(0);
         }
 
-        public static ISpriteState MakeWithDefaultColour(string name, SpriteData data)
+        public List<int> GetIndices()
         {
-            IDictionary<string, Color> colours = (from d in data.m_Parts
-                    select new KeyValuePair<string, Color>(
-                        d.m_Name,
-                        Color.white))
-                .ToDictionary(x => x.Key, x => x.Value);
+            return this.SpriteData.m_Parts.Select(part => part.m_SelectedColour).ToList();
+        }
+        
+        public void RandomiseColours()
+        {
+            for(int i = 0; i < this.SpriteData.m_Parts.Count; i++)
+            {
+                SpritePart part = this.SpriteData.m_Parts[i];
+                part.m_SelectedColour = GlobalConstants.GameManager.Roller.Roll(0, part.m_PossibleColours.Count);
+                this.SpriteData.m_Parts[i] = part;
+            }
+        }
 
-            return new SpriteState(
-                name,
-                data,
-                colours);
+        public void SetColourIndices(List<int> indices)
+        {
+            for (int i = 0; i < indices.Count; i++)
+            {
+                for (int j = 0; j < this.SpriteData.m_Parts.Count; j++)
+                {
+                    SpritePart part = this.SpriteData.m_Parts[j];
+                    part.m_SelectedColour = indices[i];
+                    this.SpriteData.m_Parts[j] = part;
+                }
+            }
         }
     }
 }

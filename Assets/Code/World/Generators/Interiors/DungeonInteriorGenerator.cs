@@ -64,7 +64,7 @@ namespace JoyLib.Code.World.Generators.Interiors
         {
             List<JoyObject> walls = new List<JoyObject>();
             List<SpriteData> spriteData = this.ObjectIcons.GetSprites(this.TileSet, "surroundwall").ToList();
-            List<ISpriteState> spriteList = spriteData.Select(data => SpriteState.MakeWithDefaultColour("wall", data)).ToList();
+            List<SpriteState> spriteList = spriteData.Select(data => new SpriteState("wall", data)).ToList();
 
             List<IBasicValue<float>> values = new List<IBasicValue<float>>
             {

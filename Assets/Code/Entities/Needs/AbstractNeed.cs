@@ -91,7 +91,7 @@ namespace JoyLib.Code.Entities.Needs
 
             if (GlobalConstants.GameManager is null == false)
             {
-                this.FulfillingSprite = SpriteState.MakeWithDefaultColour(
+                this.FulfillingSprite = new SpriteState(
                     this.Name, 
                     GlobalConstants.GameManager.ObjectIconHandler.GetFrame(
                         "needs", 

@@ -11,5 +11,10 @@ namespace JoyLib.Code.Graphics
         List<Tuple<Color, Sprite>> GetSpriteForFrame(int frame);
         
         SpriteData SpriteData { get; }
+
+        void RandomiseColours();
+        void SetColourIndices(List<int> indices);
+
+        List<int> GetIndices();
     }
 }

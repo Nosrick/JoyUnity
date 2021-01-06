@@ -188,15 +188,15 @@ namespace JoyLib.Code.Entities
                 for (int i = 0; i < spriteData.Count; i++)
                 {
                     SpriteData data = spriteData[i];
-                    var spriteColours = (from d in data.m_Parts
-                        select new KeyValuePair<string, Color>(
-                            d.m_Name,
-                            Color.white))
-                        .ToDictionary(x => x.Key, x => x.Value);
                     states.Add(new SpriteState(
                         data.m_Name,
-                        data,
-                        spriteColours));
+                        data));
+                }
+                
+                states[0].RandomiseColours();
+                for(int i = 1; i < states.Count; i++)
+                {
+                    states[i].SetColourIndices(states[0].GetIndices());
                 }
 
                 selectedSprites = states;

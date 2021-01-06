@@ -156,10 +156,10 @@
 		</Statistics>
 
 		<TileSet>
-			<Name>human</Name>
+			<Name>human kingdom</Name>
 			
 			<SpriteData>
-				<Name>default</Name>
+				<Name>human</Name>
 				<Part>
 					<Name>body</Name>
 					<Frames>2</Frames>
@@ -167,7 +167,7 @@
 					<Data>default</Data>
 					<Position>0</Position>
 					<Colour>#ffb35bff</Colour>
-					<Colour>#3c9b6eff</Colour>
+					<Colour>#864d30ff</Colour>
 				</Part>
 				<Part>
 					<Name>eyes</Name>

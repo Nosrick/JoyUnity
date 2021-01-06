@@ -57,7 +57,7 @@ namespace JoyLib.Code.Unity.GUI
             this.PlayerType.Value = result;
             this.PlayerType.ValueChanged += this.ChangeTemplateHandler;
             this.CultureContainer.ValueChanged += this.ChangeCultureHandler;
-            this.JobContainer.ValueChanged += this.ChangeJobHandler;
+            //this.JobContainer.ValueChanged += this.ChangeJobHandler;
         }
         
         protected void ChangeTemplate(IEntityTemplate template)
@@ -78,7 +78,7 @@ namespace JoyLib.Code.Unity.GUI
 
         protected void ChangeJobHandler(object sender, ValueChangedEventArgs args)
         {
-            this.JobChanged?.Invoke(this, args);
+            this.JobChanged?.Invoke(sender, args);
         }
 
         protected void ChangeCultureHandler(object sender, ValueChangedEventArgs args)

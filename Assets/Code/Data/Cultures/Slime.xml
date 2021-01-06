@@ -15,10 +15,10 @@
 		</Crimes>
 
 		<TileSet>
-			<Name>slime</Name>
+			<Name>slime conglomerate</Name>
 			
 			<SpriteData>
-				<Name>default</Name>
+				<Name>slime</Name>
 				<Part>
 					<Name>body</Name>
 					<Frames>2</Frames>

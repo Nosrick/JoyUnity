@@ -27,10 +27,10 @@
 		</Statistics>
 
 		<TileSet>
-			<Name>naga</Name>
+			<Name>naga imperium</Name>
 			
 			<SpriteData>
-				<Name>default</Name>
+				<Name>naga</Name>
 				<Part>
 					<Name>body</Name>
 					<Frames>2</Frames>

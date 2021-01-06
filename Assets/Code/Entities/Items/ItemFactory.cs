@@ -122,15 +122,24 @@ namespace JoyLib.Code.Entities.Items
                     "density", itemType.Material.Density)
             };
 
+            List<SpriteState> states = (from sprite in this.ObjectIcons.GetSprites(
+                        itemType.SpriteSheet,
+                        itemType.UnidentifiedName)
+                    select new SpriteState(sprite.m_Name, sprite))
+                .ToList();
+            
+            states[0].RandomiseColours();
+            for (int i = 1; i < states.Count; i++)
+            {
+                states[i].SetColourIndices(states[0].GetIndices());
+            }
+
             ItemInstance itemInstance = new ItemInstance(
                 itemType,
                 this.DerivedValueHandler.GetItemStandardBlock(values),
                 new Vector2Int(-1, -1),
                 identified, 
-                from sprite in this.ObjectIcons.GetSprites(
-                        itemType.SpriteSheet,
-                        itemType.UnidentifiedName)
-                    select SpriteState.MakeWithDefaultColour(sprite.m_Name, sprite),
+                states,
                 new RNG(),
                 new List<IAbility>(),
                 new List<IJoyAction>(),

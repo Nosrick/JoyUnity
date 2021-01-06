@@ -166,16 +166,48 @@
         </Names>
 
         <TileSet>
-            <Name>demon</Name>
+            <Name>demon republic</Name>
 
             <SpriteData>
-                <Name>default</Name>
+                <Name>demon</Name>
                 <Part>
                     <Name>body</Name>
                     <Frames>2</Frames>
                     <Filename>cultures/demon</Filename>
                     <Data>default</Data>
                     <Position>0</Position>
+                </Part>
+            </SpriteData>
+
+            <SpriteData>
+                <Name>human</Name>
+                <Part>
+                    <Name>body</Name>
+                    <Frames>2</Frames>
+                    <Filename>cultures/human-body</Filename>
+                    <Data>default</Data>
+                    <Position>0</Position>
+                    <Colour>#f04b36ff</Colour>
+                    <Colour>#c8ff64ff</Colour>
+                </Part>
+                <Part>
+                    <Name>eyes</Name>
+                    <Frames>2</Frames>
+                    <Filename>cultures/human-eyes</Filename>
+                    <Data>default</Data>
+                    <Position>0</Position>
+                    <Colour>#4196dcff</Colour>
+                    <Colour>#3c9b6eff</Colour>
+                    <Colour>#b45a50ff</Colour>
+                </Part>
+                <Part>
+                    <Name>horns</Name>
+                    <Frames>2</Frames>
+                    <Filename>cultures/human-horns</Filename>
+                    <Data>default</Data>
+                    <Position>0</Position>
+                    <Colour>#141414ff</Colour>
+                    <Colour>#64284bff</Colour>
                 </Part>
             </SpriteData>
         </TileSet>
