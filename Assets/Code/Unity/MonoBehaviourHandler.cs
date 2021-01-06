@@ -18,9 +18,9 @@ namespace JoyLib.Code.Unity
         
         protected static IGUIManager GUIManager { get; set; }
 
-        public override void Update()
+        public override void FixedUpdate()
         {
-            base.Update();
+            base.FixedUpdate();
             if (this.JoyObject == null)
             {
                 return;

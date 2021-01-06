@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Castle.Core.Internal;
 using JoyLib.Code.Collections;
 using JoyLib.Code.Graphics;
 using UnityEngine;
@@ -11,6 +12,8 @@ namespace JoyLib.Code.Unity
     public class ManagedSprite : MonoBehaviour, IAnimated
     {
         [SerializeField] protected GameObject m_Prefab;
+        
+        protected string SortingLayer { get; set; }
         
         protected RectTransform MyRect { get; set; }
 
@@ -59,6 +62,15 @@ namespace JoyLib.Code.Unity
             }
         }
 
+        public virtual void SetSpriteLayer(string layerName)
+        {
+            foreach (SpriteRenderer spriteRenderer in this.SpriteParts)
+            {
+                this.SortingLayer = layerName;
+                spriteRenderer.sortingLayerName = layerName;
+            }
+        }
+
         public virtual bool RemoveStatesByName(string name)
         {
             return this.m_States.RemoveByKey(name) > 0;
@@ -102,13 +114,14 @@ namespace JoyLib.Code.Unity
             }
         }
 
-        public virtual void Update()
+        public virtual void FixedUpdate()
         {
             if (!this.IsAnimated)
             {
                 return;
             }
             
+            Debug.Log(Time.unscaledDeltaTime);
             this.TimeSinceLastChange += Time.unscaledDeltaTime;
             if (!(this.TimeSinceLastChange >= TIME_BETWEEN_FRAMES))
             {
@@ -145,6 +158,10 @@ namespace JoyLib.Code.Unity
                 //RectTransform partRect = this.SpriteParts[i].GetComponent<RectTransform>();
                 //partRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, this.MyRect.sizeDelta.x);
                 //partRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, this.MyRect.sizeDelta.y);
+                if (this.SortingLayer.IsNullOrEmpty() == false)
+                {
+                    this.SpriteParts[i].sortingLayerName = this.SortingLayer;
+                }
                 this.SpriteParts[i].name = this.CurrentSpriteState.SpriteData.m_Parts[i].m_Name;
                 this.SpriteParts[i].gameObject.SetActive(true);
                 this.SpriteParts[i].sprite = data[i].Item2;
