@@ -14,8 +14,7 @@ namespace JoyLib.Code.Unity.GUI
     {
         [SerializeField] protected TextMeshProUGUI m_Title;
         [SerializeField] protected TextMeshProUGUI m_Text;
-        [SerializeField] protected RectTransform m_IconRect;
-        [SerializeField] protected ManagedUISprite m_IconPrefab;
+        [SerializeField] protected ManagedUISprite m_Icon;
         [SerializeField] protected Image m_Background;
         [SerializeField] protected StringPairContainer m_ItemPrefab;
         [SerializeField] protected LayoutGroup m_ParentLayout;
@@ -25,8 +24,6 @@ namespace JoyLib.Code.Unity.GUI
         protected RectTransform RectTransform { get; set; }
         
         protected List<StringPairContainer> ItemCache { get; set; }
-        
-        protected ManagedSprite Icon { get; set; }
 
         public override void Awake()
         {
@@ -36,7 +33,6 @@ namespace JoyLib.Code.Unity.GUI
                 this.ItemCache = new List<StringPairContainer>();
                 this.Canvas = this.GetComponentInParent<Canvas>();
                 this.RectTransform = this.GetComponent<RectTransform>();
-                this.Icon = Instantiate(this.m_IconPrefab);
             }
         }
 
@@ -103,12 +99,12 @@ namespace JoyLib.Code.Unity.GUI
             }
             else
             {
-                this.m_IconRect.gameObject.SetActive(false);
+                this.m_Icon.gameObject.SetActive(false);
             }
 
-            Tuple<string,string>[] dataArray = data as Tuple<string, string>[];
-            if (dataArray.IsNullOrEmpty() == false && dataArray.Length > 0)
+            if (data.IsNullOrEmpty() == false)
             {
+                Tuple<string,string>[] dataArray = data.ToArray();
                 if (this.ItemCache.Count < dataArray.Length)
                 {
                     for (int i = this.ItemCache.Count; i < dataArray.Length; i++)
@@ -147,8 +143,8 @@ namespace JoyLib.Code.Unity.GUI
 
         protected void SetIcon(ISpriteState state)
         {
-            this.Icon.Clear();
-            this.Icon.AddSpriteState(state, true);
+            this.m_Icon.Clear();
+            this.m_Icon.AddSpriteState(state, true);
         }
     }
 }

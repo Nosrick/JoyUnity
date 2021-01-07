@@ -72,6 +72,7 @@ namespace JoyLib.Code.Unity
 
         public void OnPointerEnter(PointerEventData eventData)
         {
+            Debug.Log("ONPOINTERENTER: " + this.JoyObject);
             this.PointerOver = true;
             if (GUIManager.IsActive(GUINames.CONTEXT_MENU) == false
                 && GlobalConstants.GameManager.Player.VisionProvider.CanSee(
