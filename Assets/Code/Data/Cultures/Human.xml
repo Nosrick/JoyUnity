@@ -163,18 +163,20 @@
 				<Part>
 					<Name>body</Name>
 					<Frames>2</Frames>
-					<Filename>cultures/human-body</Filename>
+					<Filename>cultures/human-body32</Filename>
 					<Data>default</Data>
 					<Position>0</Position>
+					<SortOrder>0</SortOrder>
 					<Colour>#ffb35bff</Colour>
 					<Colour>#864d30ff</Colour>
 				</Part>
 				<Part>
 					<Name>eyes</Name>
 					<Frames>2</Frames>
-					<Filename>cultures/human-eyes</Filename>
+					<Filename>cultures/human-eyes32</Filename>
 					<Data>default</Data>
 					<Position>0</Position>
+					<SortOrder>1</SortOrder>
 					<Colour>#4196dcff</Colour>
 					<Colour>#3c9b6eff</Colour>
 					<Colour>#b45a50ff</Colour>
