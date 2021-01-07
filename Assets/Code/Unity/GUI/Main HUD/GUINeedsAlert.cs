@@ -1,19 +1,28 @@
-﻿using System.Globalization;
-using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Needs;
-using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity.GUI
 {
     public class GUINeedsAlert : GUIData
     {
-        [SerializeField] protected TextMeshProUGUI m_Text;
+        [SerializeField] protected GameObject m_Container;
+        [SerializeField] protected StringPairContainer m_PairPrefab;
 
         protected IEntity Player { get; set; }
         
         protected ILiveEntityHandler EntityHandler { get; set; }
+        
+        protected List<StringPairContainer> ChildList { get; set; }
+        
+        protected List<INeed> PlayerNeeds { get; set; }
+        
+        protected RectTransform ContainerRect { get; set; }
 
         protected int Counter { get; set; }
         protected const int MAXIMUM_FRAMES = 90;
@@ -21,15 +30,34 @@ namespace JoyLib.Code.Unity.GUI
         public override void Awake()
         {
             base.Awake();
+            if (this.ChildList is null)
+            {
+                this.ChildList = new List<StringPairContainer>();
+            }
             this.GetBits();
         }
 
         protected void GetBits()
         {
-            if (GlobalConstants.GameManager is null == false)
+            if (GlobalConstants.GameManager is null || !(this.Player is null))
             {
-                this.EntityHandler = this.EntityHandler ?? GlobalConstants.GameManager.EntityHandler;
-                this.Player = this.EntityHandler is null == false ? this.EntityHandler.GetPlayer() : this.Player;
+                return;
+            }
+
+            this.ContainerRect = this.m_Container.GetComponent<RectTransform>();
+            this.EntityHandler = this.EntityHandler ?? GlobalConstants.GameManager.EntityHandler;
+            this.Player = this.EntityHandler is null == false ? this.EntityHandler.GetPlayer() : this.Player;
+            if (this.Player is null)
+            {
+                return;
+            }
+                
+            this.PlayerNeeds = this.Player.Needs.Values.ToList();
+            this.ChildList = new List<StringPairContainer>();
+            foreach (StringPairContainer child in this.PlayerNeeds.Select(need => Instantiate(this.m_PairPrefab, this.m_Container.transform)))
+            {
+                child.gameObject.SetActive(false);
+                this.ChildList.Add(child);
             }
         }
 
@@ -46,30 +74,32 @@ namespace JoyLib.Code.Unity.GUI
 
         protected void DoText()
         {
-            this.m_Text.text = "";
             this.GetBits();
             if (this.Player is null)
             {
                 return;
             }
 
-            StringBuilder builder = new StringBuilder();
-            foreach(INeed need in this.Player.Needs.Values)
+            for(int i = 0; i < this.PlayerNeeds.Count; i++)
             {
-                if(!need.ContributingHappiness)
+                INeed need = this.PlayerNeeds[i];
+                if (need.ContributingHappiness == false)
                 {
+                    this.ChildList[i].gameObject.SetActive(true);
                     if (need.Value < need.HappinessThreshold / 2)
                     {
-                        builder.AppendLine("<color=red>" + CultureInfo.CurrentCulture.TextInfo.ToTitleCase(need.Name) + "</color>");
+                        this.ChildList[i].Target = new Tuple<string, string>("",
+                            "<color=red>" + CultureInfo.CurrentCulture.TextInfo.ToTitleCase(need.Name) + "</color>");
                     }
                     else
                     {
-                        builder.AppendLine("<color=yellow>" + CultureInfo.CurrentCulture.TextInfo.ToTitleCase(need.Name) + "</color>");
+                        this.ChildList[i].Target = new Tuple<string, string>("",
+                            "<color=yellow>" + CultureInfo.CurrentCulture.TextInfo.ToTitleCase(need.Name) + "</color>");
                     }
+                    
                 }
             }
-
-            this.m_Text.text = builder.ToString();
+            LayoutRebuilder.ForceRebuildLayoutImmediate(this.ContainerRect);
         }
     }
 }
