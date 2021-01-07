@@ -42,10 +42,9 @@ namespace JoyLib.Code.Unity
             var data = this.CurrentSpriteState.GetSpriteForFrame(this.FrameIndex);
             for (int i = 0; i < data.Count; i++)
             {
-                //RectTransform partRect = this.ImageParts[i].GetComponent<RectTransform>();
-                //partRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, this.MyRect.sizeDelta.x);
-                //partRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, this.MyRect.sizeDelta.y);
                 this.ImageParts[i].name = this.CurrentSpriteState.SpriteData.m_Parts[i].m_Name;
+                this.ImageParts[i].GetComponent<Canvas>().sortingOrder =
+                    this.CurrentSpriteState.SpriteData.m_Parts[i].m_SortingOrder;
                 this.ImageParts[i].gameObject.SetActive(true);
                 this.ImageParts[i].sprite = data[i].Item2;
                 this.ImageParts[i].color = data[i].Item1;

@@ -226,11 +226,15 @@
             </Colour>
             <Colour>
                 <Name>CursorMid</Name>
-                <Value>#3c9b6eff</Value>
+                <Value>#b43232ff</Value>
             </Colour>
             <Colour>
                 <Name>CursorDark</Name>
-                <Value>#2dcd41ff</Value>
+                <Value>#ff851bff</Value>
+            </Colour>
+            <Colour>
+                <Name>CursorOutline</Name>
+                <Value>#141414ff</Value>
             </Colour>
         </CursorColours>
     </Culture>

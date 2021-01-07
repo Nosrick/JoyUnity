@@ -807,19 +807,23 @@
 		<CursorColours>
 			<Colour>
 				<Name>CursorHighlight</Name>
-				<Value>#ffb35bff</Value>
-			</Colour>
-			<Colour>
-				<Name>CursorBright</Name>
 				<Value>#ff851bff</Value>
 			</Colour>
 			<Colour>
+				<Name>CursorBright</Name>
+				<Value>#b43232ff</Value>
+			</Colour>
+			<Colour>
 				<Name>CursorMid</Name>
-				<Value>#f04b36ff</Value>
+				<Value>#b43232ff</Value>
 			</Colour>
 			<Colour>
 				<Name>CursorDark</Name>
-				<Value>#ffb35bff</Value>
+				<Value>#ffc80aff</Value>
+			</Colour>
+			<Colour>
+				<Name>CursorOutline</Name>
+				<Value>#f04b36ff</Value>
 			</Colour>
 		</CursorColours>
 	</Culture>

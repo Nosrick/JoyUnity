@@ -123,7 +123,7 @@
 		<CursorColours>
 			<Colour>
 				<Name>CursorHighlight</Name>
-				<Value>#73dcffff</Value>
+				<Value>#4196dcff</Value>
 			</Colour>
 			<Colour>
 				<Name>CursorBright</Name>
@@ -131,11 +131,15 @@
 			</Colour>
 			<Colour>
 				<Name>CursorMid</Name>
-				<Value>#73dcffff</Value>
+				<Value>#4196dcff</Value>
 			</Colour>
 			<Colour>
 				<Name>CursorDark</Name>
 				<Value>#4196dcff</Value>
+			</Colour>
+			<Colour>
+				<Name>CursorOutline</Name>
+				<Value>#73dcffff</Value>
 			</Colour>
 		</CursorColours>
 	</Culture>

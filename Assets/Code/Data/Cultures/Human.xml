@@ -187,19 +187,23 @@
 		<CursorColours>
 			<Colour>
 				<Name>CursorHighlight</Name>
-				<Value>#f2a085ff</Value>
-			</Colour>
-			<Colour>
-				<Name>CursorBright</Name>
-				<Value>#d77e4bff</Value>
-			</Colour>
-			<Colour>
-				<Name>CursorMid</Name>
 				<Value>#b45a50ff</Value>
 			</Colour>
 			<Colour>
-				<Name>CursorDark</Name>
+				<Name>CursorBright</Name>
 				<Value>#823219ff</Value>
+			</Colour>
+			<Colour>
+				<Name>CursorMid</Name>
+				<Value>#823219ff</Value>
+			</Colour>
+			<Colour>
+				<Name>CursorDark</Name>
+				<Value>#d77e4bff</Value>
+			</Colour>
+			<Colour>
+				<Name>CursorOutline</Name>
+				<Value>#490606ff</Value>
 			</Colour>
 		</CursorColours>
 	</Culture>
