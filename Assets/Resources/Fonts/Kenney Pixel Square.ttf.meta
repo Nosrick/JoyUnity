@@ -1,7 +1,5 @@
 fileFormatVersion: 2
-guid: 9f3db2e851f950f479ba5b41e0d481b4
-timeCreated: 1530288684
-licenseType: Free
+guid: 154884c156340244d81c74729c2c2e4d
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -10,14 +8,15 @@ TrueTypeFontImporter:
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
-  fontName: SDS_6x6
+  fontName: Kenney Pixel Square
   fontNames:
-  - SDS_6x6
+  - Kenney Pixel Square
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0
   ascentCalculationMode: 1
   useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
   userData: 
   assetBundleName: 
   assetBundleVariant: 

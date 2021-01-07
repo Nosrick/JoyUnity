@@ -53,9 +53,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7df474a8f97f6414fb888ed3a540e50d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  horizontal: 0
-  horizontalPixelMin: -100
-  horizontalPixelMax: 100
+  horizontal: 1
+  horizontalPixelMin: 0
+  horizontalPixelMax: 0
   horizontalRectMin: 0
   horizontalRectMax: 0
   horizontalParentMin: 0
@@ -169,7 +169,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.122641504, g: 0.122641504, b: 0.122641504, a: 0.392}
+  m_Color: {r: 0.0754717, g: 0.07155571, b: 0.07155571, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -318,8 +318,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: Needs Panel
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 50742e3046ccf1d428b419796c7eeddf, type: 2}
+  m_sharedMaterial: {fileID: -1121508618558734787, guid: 50742e3046ccf1d428b419796c7eeddf,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -444,7 +445,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 0.20784314, g: 0.14901961, b: 0.14901961, a: 1}
   m_RaycastTarget: 0
   m_Maskable: 1
   m_OnCullStateChanged:
