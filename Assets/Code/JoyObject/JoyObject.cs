@@ -345,7 +345,7 @@ namespace JoyLib.Code
 
         public override string ToString()
         {
-            return "{ " + this.JoyName + " : " + this.GUID + "}";
+            return "{ " + this.JoyName + " : " + this.GUID + " }";
         }
 
         public bool AddData(object key, object value)
