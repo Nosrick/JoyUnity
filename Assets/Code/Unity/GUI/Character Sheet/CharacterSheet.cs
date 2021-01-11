@@ -6,7 +6,7 @@ namespace JoyLib.Code.Unity.GUI.Character_Sheet
 {
     public class CharacterSheet : MonoBehaviour
     {
-        [SerializeField] protected ManagedSprite PlayerSprite;
+        [SerializeField] protected ManagedUISprite PlayerSprite;
         [SerializeField] protected TextMeshProUGUI PlayerName;
         [SerializeField] protected TextMeshProUGUI PlayerJobAndSpecies;
         [SerializeField] protected StaticDerivedValueDisplay DerivedValues;
@@ -29,7 +29,7 @@ namespace JoyLib.Code.Unity.GUI.Character_Sheet
             this.Abilities.SetValues(this.Player.Abilities);
             this.DerivedValues.SetValues(this.Player.DerivedValues);
             this.PlayerSprite.Clear();
-            this.PlayerSprite.AddSpriteState(this.Player.MonoBehaviourHandler.CurrentSpriteState);
+            this.PlayerSprite.AddSpriteState(this.Player.MonoBehaviourHandler.CurrentSpriteState, true);
             this.PlayerName.text = this.Player.JoyName;
             this.PlayerJobAndSpecies.text = this.Player.CreatureType + " " + this.Player.CurrentJob.Name;
         }

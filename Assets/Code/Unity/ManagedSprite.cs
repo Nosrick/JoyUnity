@@ -58,7 +58,7 @@ namespace JoyLib.Code.Unity
             this.MyRect = this.GetComponent<RectTransform>();
         }
 
-        public virtual void AddSpriteState(ISpriteState state, bool changeToNew = false)
+        public virtual void AddSpriteState(ISpriteState state, bool changeToNew = true)
         {
             this.m_States.Add(state.Name, state);
             if (changeToNew)
