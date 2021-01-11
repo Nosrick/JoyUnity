@@ -133,6 +133,7 @@ namespace JoyLib.Code.Unity
             if (contextMenu.GetComponentsInChildren<MenuItem>().Length > 0)
             {
                 GUIManager.OpenGUI(GUINames.CONTEXT_MENU);
+                contextMenu.Show();
             }
         }
 

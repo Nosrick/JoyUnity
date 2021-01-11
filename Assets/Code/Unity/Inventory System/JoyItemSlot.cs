@@ -158,6 +158,8 @@ namespace JoyLib.Code.Unity.GUI
                 {
                     menu.AddMenuItem("Use", this.OnUse);
                 }
+
+                GUIManager.OpenGUI(GUINames.CONTEXT_MENU);
                 menu.Show();
             }
         }
