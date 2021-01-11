@@ -48,8 +48,6 @@ namespace JoyLib.Code.Unity
             for (int i = 0; i < data.Count; i++)
             {
                 this.ImageParts[i].name = this.CurrentSpriteState.SpriteData.m_Parts[i].m_Name;
-                this.ImageParts[i].GetComponent<Canvas>().sortingOrder =
-                    this.CurrentSpriteState.SpriteData.m_Parts[i].m_SortingOrder;
                 this.ImageParts[i].gameObject.SetActive(true);
                 this.ImageParts[i].sprite = data[i].Item2;
                 this.ImageParts[i].color = data[i].Item1;
