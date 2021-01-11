@@ -11,7 +11,7 @@ namespace JoyLib.Code.Unity.GUI
     {
         [SerializeField] protected GameManager GameManager;
         [SerializeField] protected TextMeshProUGUI LastSaidGUI;
-        [SerializeField] protected ManagedSprite LastSpokeIcon;
+        [SerializeField] protected ManagedUISprite LastSpokeIcon;
         [SerializeField] protected TextMeshProUGUI LastSpokeName;
         [SerializeField] protected RectTransform ListenerSection;
         [SerializeField] protected GameObject Window;
