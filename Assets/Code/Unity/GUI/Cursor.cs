@@ -32,6 +32,7 @@ namespace JoyLib.Code.Unity.GUI
             if (this.DragObject is null)
             {
                 this.DragObject = Instantiate(this.m_PartPrefab, this.transform);
+                this.DragObject.Awake();
                 this.DragObject.gameObject.SetActive(false);
                 RectTransform dragRect = this.DragObject.GetComponent<RectTransform>();
                 dragRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, this.MyRect.rect.width * 2);
@@ -43,6 +44,7 @@ namespace JoyLib.Code.Unity.GUI
             if (this.CursorObject is null)
             {
                 this.CursorObject = Instantiate(this.m_PartPrefab, this.transform);
+                this.CursorObject.Awake();
             }
         }
 

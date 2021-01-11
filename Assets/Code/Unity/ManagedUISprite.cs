@@ -12,6 +12,11 @@ namespace JoyLib.Code.Unity
 
         public override void Awake()
         {
+            if (this.ImageParts is null == false)
+            {
+                return;
+            }
+            
             base.Awake();
             this.ImageParts = new List<Image>();
         }

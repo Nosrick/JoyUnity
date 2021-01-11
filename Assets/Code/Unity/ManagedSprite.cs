@@ -48,6 +48,11 @@ namespace JoyLib.Code.Unity
 
         public virtual void Awake()
         {
+            if (this.m_States is null == false)
+            {
+                return;
+            }
+            
             this.SpriteParts = new List<SpriteRenderer>();
             this.m_States = new NonUniqueDictionary<string, ISpriteState>();
             this.MyRect = this.GetComponent<RectTransform>();

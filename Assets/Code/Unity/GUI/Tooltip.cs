@@ -33,6 +33,7 @@ namespace JoyLib.Code.Unity.GUI
                 this.ItemCache = new List<StringPairContainer>();
                 this.Canvas = this.GetComponentInParent<Canvas>();
                 this.RectTransform = this.GetComponent<RectTransform>();
+                this.m_Icon.Awake();
             }
         }
 
