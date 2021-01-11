@@ -79,9 +79,9 @@ namespace JoyLib.Code.Unity.GUI
 
         public void SetCursorSprites(ISpriteState state)
         {
+            this.CursorObject.gameObject.SetActive(true);
             this.CursorObject.Clear();
-            this.CursorObject.AddSpriteState(state);
-            this.CursorObject.ChangeState(state.Name);
+            this.CursorObject.AddSpriteState(state, true);
         }
 
         public void SetCursorColours(IDictionary<string, Color> colours)
@@ -114,12 +114,13 @@ namespace JoyLib.Code.Unity.GUI
         {
             this.Show();
             this.DragObject.Clear();
+            this.DragObject.gameObject.SetActive(false);
             if (replacement is null)
             {
                 return;
             }
-            this.DragObject.AddSpriteState(replacement);
-            this.DragObject.ChangeState(replacement.Name);
+            this.DragObject.gameObject.SetActive(true);
+            this.DragObject.AddSpriteState(replacement, true);
         }
 
         public void Reset()
