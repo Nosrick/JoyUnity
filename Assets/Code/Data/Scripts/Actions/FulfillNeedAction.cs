@@ -50,7 +50,7 @@ namespace JoyLib.Code.Scripting.Actions
                 }
             }
 
-            GlobalConstants.ActionLog.LogAction(actor, this.ActionString + need);
+            GlobalConstants.ActionLog.LogAction(actor, this.ActionString + " " + need);
 
             this.SetLastParameters(participants, tags, args);
 
