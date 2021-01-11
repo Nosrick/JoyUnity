@@ -537,6 +537,7 @@ GameObject:
   - component: {fileID: 7265820668172797016}
   - component: {fileID: 7265820668172797017}
   - component: {fileID: 7265820668172797023}
+  - component: {fileID: 2029339562}
   m_Layer: 5
   m_Name: Tooltip
   m_TagString: Untagged
@@ -585,6 +586,7 @@ MonoBehaviour:
   m_Title: {fileID: 7265820668663487646}
   m_Text: {fileID: 7265820668081123753}
   m_Icon: {fileID: 8439859475433882032}
+  m_IconSlot: {fileID: 7265820667781865521}
   m_Background: {fileID: 7265820666756524092}
   m_ItemPrefab: {fileID: 7265820666729403734}
   m_ParentLayout: {fileID: 7265820667142493886}
@@ -640,6 +642,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 2
   m_VerticalFit: 2
+--- !u!223 &2029339562
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7265820668172797012}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 1
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 1
+  m_OverridePixelPerfect: 1
+  m_SortingBucketNormalizedSize: 0
+  m_AdditionalShaderChannelsFlag: 25
+  m_SortingLayerID: 0
+  m_SortingOrder: 50
+  m_TargetDisplay: 0
 --- !u!1 &7265820668663487640
 GameObject:
   m_ObjectHideFlags: 0
@@ -1002,6 +1025,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a2de3cfe6abfcb648ac806bc92ce0d02, type: 3}
+--- !u!224 &1266354761363756881 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 1693415750243514630, guid: a2de3cfe6abfcb648ac806bc92ce0d02,
+    type: 3}
+  m_PrefabInstance: {fileID: 437630183070428759}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &8439859475433882032 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8300874287365320679, guid: a2de3cfe6abfcb648ac806bc92ce0d02,
@@ -1014,12 +1043,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00c8905d6a4e4134bfea8d818778bf32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!224 &1266354761363756881 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 1693415750243514630, guid: a2de3cfe6abfcb648ac806bc92ce0d02,
-    type: 3}
-  m_PrefabInstance: {fileID: 437630183070428759}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &797267029400053260
 PrefabInstance:
   m_ObjectHideFlags: 0

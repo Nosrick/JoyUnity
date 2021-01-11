@@ -15,6 +15,7 @@ namespace JoyLib.Code.Unity.GUI
         [SerializeField] protected TextMeshProUGUI m_Title;
         [SerializeField] protected TextMeshProUGUI m_Text;
         [SerializeField] protected ManagedUISprite m_Icon;
+        [SerializeField] protected RectTransform m_IconSlot;
         [SerializeField] protected Image m_Background;
         [SerializeField] protected StringPairContainer m_ItemPrefab;
         [SerializeField] protected LayoutGroup m_ParentLayout;
@@ -96,11 +97,12 @@ namespace JoyLib.Code.Unity.GUI
 
             if (sprite is null == false)
             {
+                this.m_IconSlot.gameObject.SetActive(true);
                 this.SetIcon(sprite);
             }
             else
             {
-                this.m_Icon.gameObject.SetActive(false);
+                this.m_IconSlot.gameObject.SetActive(false);
             }
 
             if (data.IsNullOrEmpty() == false)
