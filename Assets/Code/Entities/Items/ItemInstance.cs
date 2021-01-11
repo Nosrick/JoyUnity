@@ -75,7 +75,8 @@ namespace JoyLib.Code.Entities.Items
                 position,
                 actions,
                 sprites,
-                roller)
+                roller,
+                type.Tags)
         {
             if (this.Prefab is null)
             {
