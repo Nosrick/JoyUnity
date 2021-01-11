@@ -43,6 +43,7 @@ namespace JoyLib.Code.Unity.GUI
                 JoyItemSlot slotInstance = Instantiate(
                     this.m_SlotPrefab,
                     this.m_SlotParent.transform);
+                slotInstance.OnEnable();
                 this.Slots.Add(slotInstance);
             }
             

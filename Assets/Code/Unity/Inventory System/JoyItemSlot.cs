@@ -76,6 +76,7 @@ namespace JoyLib.Code.Unity.GUI
             {
                 Raycaster = this.GetComponentInParent<GraphicRaycaster>();
             }
+            this.m_Icon.Awake();
         }
 
         protected void GetBits()

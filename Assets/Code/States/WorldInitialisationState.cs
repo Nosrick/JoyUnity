@@ -76,7 +76,7 @@ namespace JoyLib.Code.States
                         child.name,
                     this.m_ObjectIcons.GetSprites("Stairs", "Upstairs").First()), 
                     true);
-                sprite.SetSpriteLayer("Terrain");
+                sprite.SetSpriteLayer("Walls");
                 child.SetActive(true);
             }
 
@@ -94,7 +94,7 @@ namespace JoyLib.Code.States
                         child.name,
                     this.m_ObjectIcons.GetSprites("Stairs", "Downstairs").First()), 
                     true);
-                sprite.SetSpriteLayer("Terrain");
+                sprite.SetSpriteLayer("Walls");
                 child.SetActive(true);
             }
 
