@@ -102,9 +102,9 @@ namespace JoyLib.Code.Unity
 
         public virtual void SetSpriteLayer(string layerName)
         {
+            this.SortingLayer = layerName;
             foreach (SpriteRenderer spriteRenderer in this.SpriteParts)
             {
-                this.SortingLayer = layerName;
                 spriteRenderer.sortingLayerName = layerName;
             }
         }
@@ -205,6 +205,7 @@ namespace JoyLib.Code.Unity
                 this.SpriteParts[i].sprite = data[i].Item2;
                 this.SpriteParts[i].color = data[i].Item1;
                 this.SpriteParts[i].sortingOrder = this.CurrentSpriteState.SpriteData.m_Parts[i].m_SortingOrder;
+                this.SpriteParts[i].sortingLayerName = this.SortingLayer;
             }
         }
     }

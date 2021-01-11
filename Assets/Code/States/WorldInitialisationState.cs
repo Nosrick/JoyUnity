@@ -72,11 +72,11 @@ namespace JoyLib.Code.States
                 //tooltip.RefreshTooltip = WorldState.GetTooltipData;
 
                 ManagedSprite sprite = child.GetComponent<ManagedSprite>();
+                sprite.Clear();
                 sprite.AddSpriteState(new SpriteState(
                         child.name,
                     this.m_ObjectIcons.GetSprites("Stairs", "Upstairs").First()), 
                     true);
-                sprite.Clear();
                 sprite.SetSpriteLayer("Walls");
                 child.SetActive(true);
             }
