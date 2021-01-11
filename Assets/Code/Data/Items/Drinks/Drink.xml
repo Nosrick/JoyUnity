@@ -37,20 +37,39 @@
 	</IdentifiedItem>
 	
 	<TileSet>
-	<Filename>Drinks</Filename>
-	<Name>Drinks</Name>
+		<Name>Drinks</Name>
 
-	<Icon>
-		<Name>Cider</Name>
-		<Position>0</Position>
-	</Icon>
-	<Icon>
-		<Name>Water</Name>
-		<Position>1</Position>
-	</Icon>
-	<Icon>
-		<Name>Wine</Name>
-		<Position>2</Position>
-	</Icon>
+		<SpriteData>
+			<Name>cider</Name>
+			<Part>
+				<Name>cider</Name>
+				<Frames>1</Frames>
+				<Filename>Drinks</Filename>
+				<Data>default</Data>
+				<Position>0</Position>
+			</Part>
+		</SpriteData>
+
+		<SpriteData>
+			<Name>water</Name>
+			<Part>
+				<Name>water</Name>
+				<Frames>1</Frames>
+				<Filename>Drinks</Filename>
+				<Data>default</Data>
+				<Position>1</Position>
+			</Part>
+		</SpriteData>
+
+		<SpriteData>
+			<Name>wine</Name>
+			<Part>
+				<Name>wine</Name>
+				<Frames>1</Frames>
+				<Filename>Drinks</Filename>
+				<Data>default</Data>
+				<Position>2</Position>
+			</Part>
+		</SpriteData>
 	</TileSet>
 </Items>

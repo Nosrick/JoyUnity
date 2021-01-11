@@ -16,13 +16,17 @@
 	</IdentifiedItem>
 
 	<TileSet>
-		<Filename>Food</Filename>
 		<Name>Food</Name>
 
-		<Icon>
-			<Name>Apple</Name>
-			<Position>16</Position>
-			<Data>Apple</Data>
-		</Icon>
+		<SpriteData>
+			<Name>apple</Name>
+			<Part>
+				<Name>apple</Name>
+				<Frames>1</Frames>
+				<Filename>Food</Filename>
+				<Data>apple</Data>
+				<Position>16</Position>
+			</Part>
+		</SpriteData>
 	</TileSet>
 </Items>
