@@ -54,7 +54,7 @@ namespace JoyLib.Code.Unity.GUI
 
             
             Vector2 offset = Vector2.zero;
-            if (mousePosition.x < this.RectTransform.sizeDelta.x)
+            if (mousePosition.x < Screen.width - this.RectTransform.sizeDelta.x)
             {
                 offset += new Vector2(this.RectTransform.sizeDelta.x * 0.5f, 0) + this.m_PositionOffset;
             }
