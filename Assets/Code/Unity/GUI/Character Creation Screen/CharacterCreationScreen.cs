@@ -33,6 +33,8 @@ namespace JoyLib.Code.Unity.GUI
             this.StatisticWindow.ValueChanged += this.ChangedStatistics;
             this.PlayerName_Part1.GetComponent<TextWatcher>().OnTextChange += this.UpdatePlayerName;
             this.PlayerName_Part2.GetComponent<TextWatcher>().OnTextChange += this.UpdatePlayerName;
+            this.PlayerSprite_Part1.Awake();
+            this.PlayerSprite_Part2.Awake();
             this.StatisticWindow.Initialise();
             this.SkillWindow.Initialise();
             this.DerivedValuesWindow.Initialise();
@@ -85,9 +87,7 @@ namespace JoyLib.Code.Unity.GUI
 
         public void SetRandomName()
         {
-            this.PlayerName = this.PlayerInfo.CurrentCulture.GetRandomName(this.PlayerInfo.Gender);
-            this.PlayerName_Part1.text = this.PlayerName;
-            this.PlayerName_Part2.text = this.PlayerName;
+            this.UpdatePlayerName(this.PlayerInfo.CurrentCulture.GetRandomName(this.PlayerInfo.Gender));
         }
 
         public void SetSprites(object sender, EventArgs args)
@@ -117,17 +117,16 @@ namespace JoyLib.Code.Unity.GUI
             this.GameManager.GUIManager.OpenGUI(this.name);
         }
 
-        protected void UpdatePlayerName(object sender, TextChangedEventArgs args)
+        protected void UpdatePlayerName(GameObject sender, TextChangedEventArgs args)
         {
-            this.PlayerName = args.NewValue;
-            if (sender.Equals(this.PlayerName_Part2))
-            {
-                this.PlayerName_Part1.text = this.PlayerName;
-            }
-            else if (sender.Equals(this.PlayerName_Part1))
-            {
-                this.PlayerName_Part2.text = this.PlayerName;
-            }
+            this.UpdatePlayerName(args.NewValue);
+        }
+
+        protected void UpdatePlayerName(string name)
+        {
+            this.PlayerName = name;
+            this.PlayerName_Part1.text = this.PlayerName;
+            this.PlayerName_Part2.text = this.PlayerName;
         }
     }
 }

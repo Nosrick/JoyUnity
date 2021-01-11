@@ -3,9 +3,10 @@ using UnityEngine;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public delegate void TextChanged(object sender, TextChangedEventArgs args);
+    public delegate void TextChanged(GameObject sender, TextChangedEventArgs args);
     
     [RequireComponent(typeof(TMP_InputField))]
+    [DisallowMultipleComponent]
     public class TextWatcher : MonoBehaviour
     {
         public event TextChanged OnTextChange;
@@ -25,7 +26,7 @@ namespace JoyLib.Code.Unity.GUI
             {
                 return;
             }
-            this.OnTextChange?.Invoke(this, new TextChangedEventArgs
+            this.OnTextChange?.Invoke(this.gameObject, new TextChangedEventArgs
             {
                 LastValue = this.LastText,
                 NewValue = this.Text.text
