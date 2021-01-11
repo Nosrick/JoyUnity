@@ -4,7 +4,7 @@
     {
         ISpriteState CurrentSpriteState { get; }
         int FrameIndex { get; }
-        string ChosenSpriteState { get; }
+        string ChosenSprite { get; }
         string TileSet { get; }
         float TimeSinceLastChange { get; }
         bool IsAnimated { get; }

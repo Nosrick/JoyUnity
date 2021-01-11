@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using JoyLib.Code.Collections;
 using JoyLib.Code.Graphics;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,7 +22,7 @@ namespace JoyLib.Code.Unity
 
         public override void Clear()
         {
-            this.m_States = new NonUniqueDictionary<string, ISpriteState>();
+            this.m_States = new Dictionary<string, ISpriteState>();
             foreach (Image part in this.ImageParts)
             {
                 part.gameObject.SetActive(false);

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
-using JoyLib.Code.Collections;
 using JoyLib.Code.Graphics;
 using UnityEngine;
 
@@ -21,26 +20,59 @@ namespace JoyLib.Code.Unity
         {
             get
             {
-                if (this.m_States.ContainsKey(this.ChosenSpriteState))
+                if (this.IsDirty)
                 {
-                    if (this.m_States[this.ChosenSpriteState].Count > this.FrameIndex)
+                    if (this.m_States.ContainsKey(this.ChosenSprite)
+                        && this.m_States[this.ChosenSprite].SpriteData.m_State.Equals(this.ChosenState, StringComparison.OrdinalIgnoreCase))
                     {
-                        return this.m_States[this.ChosenSpriteState][this.FrameIndex];
+                        this.CachedState = this.m_States[this.ChosenSprite];
+                        this.LastSprite = this.ChosenSprite;
+                        this.LastState = this.ChosenState;
+                        this.IsDirty = false;
                     }
                 }
 
-                return null;
+                return this.CachedState;
             }
         }
+        
+        protected bool IsDirty { get; set; }
+        
+        protected ISpriteState CachedState { get; set; } 
         public int FrameIndex { get; protected set; }
-        public string ChosenSpriteState { get; protected set; }
+
+        public string ChosenSprite
+        {
+            get => this.m_ChosenSprite;
+            protected set
+            {
+                this.m_ChosenSprite = value;
+                this.IsDirty = true;
+            }
+        }
+        protected string m_ChosenSprite;
+
+        public string ChosenState
+        {
+            get => this.m_ChosenState;
+            protected set
+            {
+                this.m_ChosenState = value;
+                this.IsDirty = true;
+            }
+        }
+        protected string m_ChosenState;
+        
+        protected string LastState { get; set; }
+        protected string LastSprite { get; set; }
+        
         public string TileSet { get; protected set; }
         public float TimeSinceLastChange { get; protected set; }
         public bool IsAnimated { get; set; }
         
-        public List<ISpriteState> States => this.m_States.Values;
+        public IEnumerable<ISpriteState> States => this.m_States.Values;
 
-        protected NonUniqueDictionary<string, ISpriteState> m_States;
+        protected IDictionary<string, ISpriteState> m_States;
         
         protected List<SpriteRenderer> SpriteParts { get; set; }
 
@@ -54,13 +86,14 @@ namespace JoyLib.Code.Unity
             }
             
             this.SpriteParts = new List<SpriteRenderer>();
-            this.m_States = new NonUniqueDictionary<string, ISpriteState>();
+            this.m_States = new Dictionary<string, ISpriteState>();
             this.MyRect = this.GetComponent<RectTransform>();
         }
 
         public virtual void AddSpriteState(ISpriteState state, bool changeToNew = true)
         {
             this.m_States.Add(state.Name, state);
+            this.IsDirty = true;
             if (changeToNew)
             {
                 this.ChangeState(state);
@@ -78,25 +111,25 @@ namespace JoyLib.Code.Unity
 
         public virtual bool RemoveStatesByName(string name)
         {
-            return this.m_States.RemoveByKey(name) > 0;
+            return this.m_States.Remove(name);
         }
 
         public virtual ISpriteState GetState(string name)
         {
-            return this.m_States.First(pair => pair.Item1.Equals(name, StringComparison.OrdinalIgnoreCase)).Item2;
+            return this.m_States.First(pair => pair.Key.Equals(name, StringComparison.OrdinalIgnoreCase)).Value;
         }
 
         public virtual IEnumerable<ISpriteState> GetStatesByName(string name)
         {
-            return this.m_States.Where(pair => pair.Item1.Equals(name, StringComparison.OrdinalIgnoreCase))
-                .Select(pair => pair.Item2);
+            return this.m_States.Where(pair => pair.Key.Equals(name, StringComparison.OrdinalIgnoreCase))
+                .Select(pair => pair.Value);
         }
 
         public virtual void ChangeState(string name)
         {
             if (this.m_States.ContainsKey(name))
             {
-                this.ChosenSpriteState = name;
+                this.ChosenSprite = name;
                 this.UpdateSprites();
             }
         }
@@ -105,14 +138,15 @@ namespace JoyLib.Code.Unity
         {
             if (this.m_States.ContainsKey(state.Name))
             {
-                this.ChosenSpriteState = state.Name;
+                this.ChosenSprite = state.Name;
+                this.ChosenState = state.SpriteData.m_State;
                 this.UpdateSprites();
             }
         }
 
         public virtual void Clear()
         {
-            this.m_States = new NonUniqueDictionary<string, ISpriteState>();
+            this.m_States = new Dictionary<string, ISpriteState>();
             foreach (SpriteRenderer part in this.SpriteParts)
             {
                 part.gameObject.SetActive(false);
@@ -135,7 +169,7 @@ namespace JoyLib.Code.Unity
             int lastIndex = this.FrameIndex;
             this.TimeSinceLastChange = 0f;
             this.FrameIndex += 1;
-            this.FrameIndex %= this.m_States[this.ChosenSpriteState].Count;
+            this.FrameIndex %= this.CurrentSpriteState.SpriteData.m_Parts.Max(part => part.m_Frames);
             if (lastIndex != this.FrameIndex)
             {
                 this.UpdateSprites();

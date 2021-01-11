@@ -4,7 +4,7 @@ namespace JoyLib.Code.Graphics
 {
     public interface ISpriteStateContainer
     {
-        List<ISpriteState> States { get; }
+        IEnumerable<ISpriteState> States { get; }
         ISpriteState GetState(string name);
         IEnumerable<ISpriteState> GetStatesByName(string name);
         void AddSpriteState(ISpriteState state, bool changeToNew);

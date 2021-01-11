@@ -170,6 +170,7 @@
 
             <SpriteData>
                 <Name>demon</Name>
+                <State>idle</State>
                 <Part>
                     <Name>body</Name>
                     <Frames>2</Frames>
@@ -180,7 +181,8 @@
             </SpriteData>
 
             <SpriteData>
-                <Name>human</Name>
+                <Name>human</Name>                
+                <State>idle</State>
                 <Part>
                     <Name>body</Name>
                     <Frames>2</Frames>

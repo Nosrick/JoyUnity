@@ -42,6 +42,7 @@ namespace JoyLib.Code.Graphics
             SpriteData iconData = new SpriteData
             {
                 m_Name = "DEFAULT",
+                m_State = "DEFAULT",
                 m_Parts = new List<SpritePart>
                 {
                     new SpritePart
@@ -148,6 +149,7 @@ namespace JoyLib.Code.Graphics
                 select new SpriteData
                 {
                     m_Name = data.Element("Name").GetAs<string>(),
+                    m_State = data.Element("State").DefaultIfEmpty("DEFAULT"),
                     m_Parts = (from part in data.Elements("Part")
                         select new SpritePart
                         {
@@ -184,16 +186,17 @@ namespace JoyLib.Code.Graphics
             return this.Icons["DEFAULT"].Values.First();
         }
 
-        public SpriteData GetFrame(string tileSet, string tileName, int frame)
+        public SpriteData GetFrame(string tileSet, string tileName, string state = "DEFAULT", int frame = 0)
         {
-            SpriteData[] frames = this.GetSprites(tileSet, tileName).ToArray();
+            SpriteData[] frames = this.GetSprites(tileSet, tileName, state).ToArray();
             return frames.Length >= frame ? frames[frame] : this.ReturnDefaultIcon();
         }
 
-        public IEnumerable<SpriteData> GetSprites(string tileSet, string tileName)
+        public IEnumerable<SpriteData> GetSprites(string tileSet, string tileName, string state = "DEFAULT")
         {
             List<SpriteData> data = this.Icons.Where(x => x.Key.Equals(tileSet, StringComparison.OrdinalIgnoreCase))
                 .SelectMany(x => x.Value.Where(pair => pair.Key.Equals(tileName, StringComparison.OrdinalIgnoreCase)))
+                .Where(pair => pair.Value.m_State.Equals(state, StringComparison.OrdinalIgnoreCase))
                 .Select(x => x.Value)
                 .ToList();
 
@@ -229,6 +232,7 @@ namespace JoyLib.Code.Graphics
     public struct SpriteData
     {
         public string m_Name;
+        public string m_State;
         public List<SpritePart> m_Parts;
     }
 

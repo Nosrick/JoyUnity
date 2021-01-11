@@ -137,7 +137,7 @@ public class GameManager : MonoBehaviour, IGameManager
             .GetComponent<Cursor>();
         cursor.SetCursorSprites(new SpriteState(
             "Cursor",
-            this.ObjectIconHandler.GetFrame("DefaultCursor", "DefaultCursor", 0)));
+            this.ObjectIconHandler.GetFrame("DefaultCursor", "DefaultCursor")));
         cursor.SetCursorSize(64, 64);
 
         this.m_StateManager.ChangeState(new CharacterCreationState());

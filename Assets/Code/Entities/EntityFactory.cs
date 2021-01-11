@@ -185,7 +185,7 @@ namespace JoyLib.Code.Entities
             {
                 List<ISpriteState> states = new List<ISpriteState>();
                 List<SpriteData> spriteData = this.ObjectIcons
-                    .GetSprites(dominantCulture.CultureName, template.CreatureType).ToList();
+                    .GetSprites(dominantCulture.CultureName, template.CreatureType, "idle").ToList();
                 for (int i = 0; i < spriteData.Count; i++)
                 {
                     SpriteData data = spriteData[i];

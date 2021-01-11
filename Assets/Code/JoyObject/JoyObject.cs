@@ -392,11 +392,6 @@ namespace JoyLib.Code
             {
                 return;
             }
-            foreach (ISpriteState state in this.States)
-            {
-                this.MonoBehaviourHandler.AddSpriteState(state);
-            }
-            this.MonoBehaviourHandler.ChangeState(this.States[0].Name);
         }
     }    
 }

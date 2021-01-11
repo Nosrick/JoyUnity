@@ -47,7 +47,7 @@ namespace JoyLib.Code.Unity.GUI
         {
             var data = this.GameManager.ObjectIconHandler.GetSprites(
                 this.PlayerInfo.CurrentCulture.CultureName,
-                this.PlayerInfo.CurrentTemplate.CreatureType);
+                this.PlayerInfo.CurrentTemplate.CreatureType, "idle");
             List<SpriteState> spriteStates = data.Select(d => new SpriteState(d.m_Name, d)).ToList();
 
             return this.GameManager.EntityFactory.CreateFromTemplate(
@@ -94,7 +94,7 @@ namespace JoyLib.Code.Unity.GUI
         {
             SpriteData data = this.GameManager.ObjectIconHandler.GetSprites(
                 this.PlayerInfo.CurrentCulture.CultureName,
-                this.PlayerInfo.CurrentTemplate.CreatureType).First();
+                this.PlayerInfo.CurrentTemplate.CreatureType, "idle").First();
             ISpriteState state = new SpriteState(data.m_Name, data);
             state.RandomiseColours();
             this.PlayerSprite_Part1.Clear();

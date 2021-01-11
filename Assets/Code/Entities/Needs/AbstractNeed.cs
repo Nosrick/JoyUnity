@@ -95,8 +95,7 @@ namespace JoyLib.Code.Entities.Needs
                     this.Name, 
                     GlobalConstants.GameManager.ObjectIconHandler.GetFrame(
                         "needs", 
-                        this.Name, 
-                        0));
+                        this.Name));
             }
         }
 

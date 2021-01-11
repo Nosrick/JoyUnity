@@ -36,6 +36,15 @@ namespace JoyLib.Code.Unity
             InputSystem.onActionChange += this.HandleInput;
         }
 
+        public override void SetSpriteLayer(string layerName)
+        {
+            base.SetSpriteLayer(layerName);
+            if (this.SpeechBubble is null == false)
+            {
+                this.SpeechBubble.SetSpriteLayer(layerName);
+            }
+        }
+
         public virtual void AttachJoyObject(IJoyObject joyObject)
         {
             if (GUIManager is null)

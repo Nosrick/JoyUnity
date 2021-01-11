@@ -111,26 +111,21 @@ namespace JoyLib.Code.Entities.Items
             {
                 GameObject newOne = Object.Instantiate(this.Prefab);
                 newOne.GetComponent<MonoBehaviourHandler>().AttachJoyObject(this);
-                this.MonoBehaviourHandler.IsAnimated =
-                    this.Tags.Any(tag => tag.Equals("animated", StringComparison.OrdinalIgnoreCase));
-                foreach (ISpriteState state in this.States)
-                {
-                    this.MonoBehaviourHandler.AddSpriteState(state);
-                }
-                newOne.SetActive(active);
             }
             else
             {
                 MonoBehaviourHandler monoBehaviourHandler = gameObject.GetComponent<MonoBehaviourHandler>();
                 monoBehaviourHandler.AttachJoyObject(this);
-                monoBehaviourHandler.IsAnimated = this.Tags.Any(tag => 
-                    tag.Equals("animated", StringComparison.OrdinalIgnoreCase));
-                foreach (ISpriteState state in this.States)
-                {
-                    monoBehaviourHandler.AddSpriteState(state);
-                }
-                monoBehaviourHandler.gameObject.SetActive(active);
             }
+            this.MonoBehaviourHandler.IsAnimated =
+                this.Tags.Any(tag => tag.Equals("animated", StringComparison.OrdinalIgnoreCase));
+            this.MonoBehaviourHandler.Clear();
+            foreach (ISpriteState state in this.States)
+            {
+                this.MonoBehaviourHandler.AddSpriteState(state);
+            }
+            this.MonoBehaviourHandler.gameObject.SetActive(active);
+            this.MonoBehaviourHandler.ChangeState(this.States[0]);
         }
 
         public IItemInstance Copy(IItemInstance copy)

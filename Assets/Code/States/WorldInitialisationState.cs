@@ -76,6 +76,7 @@ namespace JoyLib.Code.States
                         child.name,
                     this.m_ObjectIcons.GetSprites("Stairs", "Upstairs").First()), 
                     true);
+                sprite.Clear();
                 sprite.SetSpriteLayer("Walls");
                 child.SetActive(true);
             }
@@ -90,6 +91,7 @@ namespace JoyLib.Code.States
                 TooltipComponent tooltip = child.GetComponent<TooltipComponent>();
                 tooltip.WorldPosition = pair.Key;
                 ManagedSprite sprite = child.GetComponent<ManagedSprite>();
+                sprite.Clear();
                 sprite.AddSpriteState(new SpriteState(
                         child.name,
                     this.m_ObjectIcons.GetSprites("Stairs", "Downstairs").First()), 
@@ -133,6 +135,7 @@ namespace JoyLib.Code.States
                             "Floor",
                             this.m_ObjectIcons.GetSprites(this.m_ActiveWorld.Tiles[i, j].TileSet, "surroundfloor").First());
                     }
+                    sprite.Clear();
                     sprite.AddSpriteState(state, true);
                     sprite.SetSpriteLayer("Terrain");
                     floor.SetActive(true);
@@ -148,6 +151,7 @@ namespace JoyLib.Code.States
                 gameObject.layer = wallLayer;
                 MonoBehaviourHandler mbh = gameObject.GetComponent<MonoBehaviourHandler>();
                 mbh.AttachJoyObject(wall);
+                mbh.Clear();
                 mbh.AddSpriteState(wall.States.First(), true);
                 mbh.SetSpriteLayer("Walls");
                 gameObject.SetActive(true);
@@ -169,6 +173,7 @@ namespace JoyLib.Code.States
                 {
                     mbh.tag = "Player";
                 }
+                mbh.Clear();
                 mbh.AddSpriteState(entity.States.First(), true);
                 mbh.SetSpriteLayer("Entities");
                 this.CreateItems(entity.Backpack, false);
@@ -202,6 +207,7 @@ namespace JoyLib.Code.States
                     {
                         this.CreateItems(itemInstance.Contents, false);
                     }
+                    itemInstance.MonoBehaviourHandler.Clear();
                     itemInstance.MonoBehaviourHandler.AddSpriteState(itemInstance.States.First(), true);
                     itemInstance.MonoBehaviourHandler.SetSpriteLayer("Objects");
                 }

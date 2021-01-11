@@ -19,6 +19,7 @@
 			
 			<SpriteData>
 				<Name>slime</Name>
+				<State>idle</State>
 				<Part>
 					<Name>body</Name>
 					<Frames>2</Frames>

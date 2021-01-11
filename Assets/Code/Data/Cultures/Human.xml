@@ -160,6 +160,7 @@
 			
 			<SpriteData>
 				<Name>human</Name>
+				<State>idle</State>
 				<Part>
 					<Name>body</Name>
 					<Frames>2</Frames>

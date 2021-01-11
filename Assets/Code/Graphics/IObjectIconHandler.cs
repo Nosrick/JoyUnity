@@ -11,8 +11,8 @@ namespace JoyLib.Code.Graphics
         IEnumerable<SpriteData> ReturnDefaultData();
         SpriteData ReturnDefaultIcon();
         IEnumerable<SpriteData> GetTileSet(string tileSet);
-        IEnumerable<SpriteData> GetSprites(string tileSet, string tileName);
-        SpriteData GetFrame(string tileSet, string tileName, int frame);
+        IEnumerable<SpriteData> GetSprites(string tileSet, string tileName, string state = "DEFAULT");
+        SpriteData GetFrame(string tileSet, string tileName, string state = "DEFAULT", int frame = 0);
         int SpriteSize { get; }
     }
 }
