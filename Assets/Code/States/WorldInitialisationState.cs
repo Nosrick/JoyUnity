@@ -112,7 +112,6 @@ namespace JoyLib.Code.States
                     fog.GetComponent<GridPosition>().Move(intPos);
                     SpriteRenderer goSpriteRenderer = fog.GetComponent<SpriteRenderer>();
                     goSpriteRenderer.sortingLayerName = "Fog of War";
-                    goSpriteRenderer.sprite = this.m_ObjectIcons.GetSprites("Obscure", "Obscure").First().m_Parts.First().m_FrameSprites.First();
                     fog.name = "Fog of War";
                     fog.SetActive(true);
                     

@@ -89,9 +89,10 @@ namespace JoyLib.Code.Entities.Items
                                                                 description = item.Element("Description").GetAs<string>()
                                                             }).ToList();
 
-                string tileSet = doc.Element("TileSet").Element("Name").GetAs<string>();
+                XElement tileSetElement = doc.Element("TileSet");
+                string tileSet = tileSetElement.Element("Name").GetAs<string>();
 
-                this.m_ObjectIcons.AddSpriteDataFromXML(tileSet, doc);
+                this.m_ObjectIcons.AddSpriteDataFromXML(tileSet, tileSetElement);
 
                 string actionWord = doc.Element("ActionWord").DefaultIfEmpty("strikes");
 

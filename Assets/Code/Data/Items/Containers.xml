@@ -27,14 +27,26 @@
     <Filename>Chest0</Filename>
     <Name>Containers</Name>
 
-    <Icon>
+    <SpriteData>
       <Name>canvas bag</Name>
-      <Position>12</Position>
-    </Icon>
-    
-    <Icon>
+      <Part>
+        <Name>bag</Name>
+        <Frames>1</Frames>
+        <Filename>Chest0</Filename>
+        <Data>default</Data>
+        <Position>12</Position>
+      </Part>
+    </SpriteData>
+
+    <SpriteData>
       <Name>leather bag</Name>
-      <Position>12</Position>
-    </Icon>
+      <Part>
+        <Name>bag</Name>
+        <Frames>1</Frames>
+        <Filename>Chest0</Filename>
+        <Data>default</Data>
+        <Position>12</Position>
+      </Part>
+    </SpriteData>
   </TileSet>
 </Items>

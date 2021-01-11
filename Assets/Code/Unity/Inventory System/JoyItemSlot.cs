@@ -102,11 +102,13 @@ namespace JoyLib.Code.Unity.GUI
                 if (!this.IsEmpty)
                 {
                     this.m_Icon.Clear();
-                    this.m_Icon.AddSpriteState(this.Item.MonoBehaviourHandler.CurrentSpriteState);
+                    this.m_Icon.AddSpriteState(this.Item.MonoBehaviourHandler.CurrentSpriteState, true);
+                    this.m_Icon.gameObject.SetActive(true);
                 }
                 else 
                 {
                     this.m_Icon.Clear();
+                    this.m_Icon.gameObject.SetActive(false);
                 }
             }
 
