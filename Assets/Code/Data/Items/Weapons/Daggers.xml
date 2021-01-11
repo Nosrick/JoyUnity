@@ -29,47 +29,116 @@
 	</UnidentifiedItem>
 
 	<TileSet>
-		<Filename>ShortWep</Filename>
 		<Name>Weapons</Name>
-		<Icon>
-			<Name>Dagger</Name>
-			<Position>0</Position>
-		</Icon>
-		<Icon>
-			<Name>Dagger</Name>
-			<Position>1</Position>
-		</Icon>
-		<Icon>
-			<Name>Dagger</Name>
-			<Position>2</Position>
-		</Icon>
-		<Icon>
-			<Name>Dagger</Name>
-			<Position>3</Position>
-		</Icon>
-		<Icon>
-			<Name>Dagger</Name>
-			<Position>4</Position>
-		</Icon>
-		<Icon>
-			<Name>Dagger</Name>
-			<Position>5</Position>
-		</Icon>
-		<Icon>
-			<Name>Dagger</Name>
-			<Position>6</Position>
-		</Icon>
-		<Icon>
-			<Name>Dagger</Name>
-			<Position>7</Position>
-		</Icon>
-		<Icon>
-			<Name>Dagger</Name>
-			<Position>8</Position>
-		</Icon>
-		<Icon>
-			<Name>Dagger</Name>
-			<Position>9</Position>
-		</Icon>
+
+		<SpriteData>
+			<Name>dagger</Name>
+			<Part>
+				<Name>dagger</Name>
+				<Frames>1</Frames>
+				<Filename>ShortWep</Filename>
+				<Data>default</Data>
+				<Position>0</Position>
+			</Part>
+		</SpriteData>
+
+		<SpriteData>
+			<Name>dagger</Name>
+			<Part>
+				<Name>dagger</Name>
+				<Frames>1</Frames>
+				<Filename>ShortWep</Filename>
+				<Data>default</Data>
+				<Position>1</Position>
+			</Part>
+		</SpriteData>
+
+		<SpriteData>
+			<Name>dagger</Name>
+			<Part>
+				<Name>dagger</Name>
+				<Frames>1</Frames>
+				<Filename>ShortWep</Filename>
+				<Data>default</Data>
+				<Position>2</Position>
+			</Part>
+		</SpriteData>
+
+		<SpriteData>
+			<Name>dagger</Name>
+			<Part>
+				<Name>dagger</Name>
+				<Frames>1</Frames>
+				<Filename>ShortWep</Filename>
+				<Data>default</Data>
+				<Position>3</Position>
+			</Part>
+		</SpriteData>
+
+		<SpriteData>
+			<Name>dagger</Name>
+			<Part>
+				<Name>dagger</Name>
+				<Frames>1</Frames>
+				<Filename>ShortWep</Filename>
+				<Data>default</Data>
+				<Position>4</Position>
+			</Part>
+		</SpriteData>
+
+		<SpriteData>
+			<Name>dagger</Name>
+			<Part>
+				<Name>dagger</Name>
+				<Frames>1</Frames>
+				<Filename>ShortWep</Filename>
+				<Data>default</Data>
+				<Position>5</Position>
+			</Part>
+		</SpriteData>
+
+		<SpriteData>
+			<Name>dagger</Name>
+			<Part>
+				<Name>dagger</Name>
+				<Frames>1</Frames>
+				<Filename>ShortWep</Filename>
+				<Data>default</Data>
+				<Position>6</Position>
+			</Part>
+		</SpriteData>
+
+		<SpriteData>
+			<Name>dagger</Name>
+			<Part>
+				<Name>dagger</Name>
+				<Frames>1</Frames>
+				<Filename>ShortWep</Filename>
+				<Data>default</Data>
+				<Position>7</Position>
+			</Part>
+		</SpriteData>
+
+		<SpriteData>
+			<Name>dagger</Name>
+			<Part>
+				<Name>dagger</Name>
+				<Frames>1</Frames>
+				<Filename>ShortWep</Filename>
+				<Data>default</Data>
+				<Position>8</Position>
+			</Part>
+		</SpriteData>
+
+		<SpriteData>
+			<Name>dagger</Name>
+			<Part>
+				<Name>dagger</Name>
+				<Frames>1</Frames>
+				<Filename>ShortWep</Filename>
+				<Data>default</Data>
+				<Position>9</Position>
+			</Part>
+		</SpriteData>
 	</TileSet>
 </Items>

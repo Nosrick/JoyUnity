@@ -30,31 +30,72 @@
     </UnidentifiedItem>
 
     <TileSet>
-        <Filename>LongWep</Filename>
         <Name>Weapons</Name>
-        <Icon>
-            <Name>Greatsword</Name>
-            <Position>7</Position>
-        </Icon>
-        <Icon>
-            <Name>Greatsword</Name>
-            <Position>8</Position>
-        </Icon>
-        <Icon>
-            <Name>Greatsword</Name>
-            <Position>9</Position>
-        </Icon>
-        <Icon>
-            <Name>Greatsword</Name>
-            <Position>10</Position>
-        </Icon>
-        <Icon>
-            <Name>Greatsword</Name>
-            <Position>11</Position>
-        </Icon>
-        <Icon>
-            <Name>Greatsword</Name>
-            <Position>12</Position>
-        </Icon>
+
+        <SpriteData>
+            <Name>greatsword</Name>
+            <Part>
+                <Name>greatsword</Name>
+                <Frames>1</Frames>
+                <Filename>LongWep</Filename>
+                <Data>default</Data>
+                <Position>7</Position>
+            </Part>
+        </SpriteData>
+
+        <SpriteData>
+            <Name>greatsword</Name>
+            <Part>
+                <Name>greatsword</Name>
+                <Frames>1</Frames>
+                <Filename>LongWep</Filename>
+                <Data>default</Data>
+                <Position>8</Position>
+            </Part>
+        </SpriteData>
+
+        <SpriteData>
+            <Name>greatsword</Name>
+            <Part>
+                <Name>greatsword</Name>
+                <Frames>1</Frames>
+                <Filename>LongWep</Filename>
+                <Data>default</Data>
+                <Position>9</Position>
+            </Part>
+        </SpriteData>
+
+        <SpriteData>
+            <Name>greatsword</Name>
+            <Part>
+                <Name>greatsword</Name>
+                <Frames>1</Frames>
+                <Filename>LongWep</Filename>
+                <Data>default</Data>
+                <Position>10</Position>
+            </Part>
+        </SpriteData>
+
+        <SpriteData>
+            <Name>greatsword</Name>
+            <Part>
+                <Name>greatsword</Name>
+                <Frames>1</Frames>
+                <Filename>LongWep</Filename>
+                <Data>default</Data>
+                <Position>11</Position>
+            </Part>
+        </SpriteData>
+
+        <SpriteData>
+            <Name>greatsword</Name>
+            <Part>
+                <Name>greatsword</Name>
+                <Frames>1</Frames>
+                <Filename>LongWep</Filename>
+                <Data>default</Data>
+                <Position>12</Position>
+            </Part>
+        </SpriteData>
     </TileSet>
 </Items>
