@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public class CharacterCreationScreen : GUIData
+    public class CharacterCreationScreen : MonoBehaviour
     {
         [SerializeField] protected GameManager GameManager;
         [SerializeField] protected StatisticWindow StatisticWindow;

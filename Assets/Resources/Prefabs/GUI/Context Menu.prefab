@@ -245,6 +245,7 @@ GameObject:
   - component: {fileID: 2145340021974888288}
   - component: {fileID: 150677011}
   - component: {fileID: 150677012}
+  - component: {fileID: 2663578033129893344}
   m_Layer: 5
   m_Name: Context Menu
   m_TagString: Untagged
@@ -305,10 +306,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cfc9ce900d74e4aaf7b27edf8a17724, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_RemovesControl: 0
-  m_ClosesOthers: 0
-  m_AlwaysOpen: 0
-  m_Index: 0
   m_MenuItemPrefab: {fileID: 9212209383858053046}
 --- !u!114 &9212209383375231418
 MonoBehaviour:
@@ -416,6 +413,22 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 32
+--- !u!114 &2663578033129893344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9212209383375231398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79b34202c8a849cb81a9f40db85841f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RemovesControl: 0
+  m_ClosesOthers: 0
+  m_AlwaysOpen: 0
+  m_Index: 0
 --- !u!1 &9212209383858053044
 GameObject:
   m_ObjectHideFlags: 0

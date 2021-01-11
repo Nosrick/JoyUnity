@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 4484802662267518628}
   - component: {fileID: 4484802662267518629}
   - component: {fileID: 4484802662267518630}
-  - component: {fileID: 4484802662267518624}
   - component: {fileID: 1153502907}
   - component: {fileID: 1153502911}
+  - component: {fileID: 4484802664301879307}
   m_Layer: 5
   m_Name: Equipment
   m_TagString: Untagged
@@ -162,35 +162,6 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!114 &4484802662267518624
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4484802662267518616}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae7426b9a54d79844b6b701d5ba47f9b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_RemovesControl: 1
-  m_ClosesOthers: 0
-  m_AlwaysOpen: 0
-  m_Index: 0
-  m_UseAction: right mouse
-  m_SlotParent: {fileID: 161253348}
-  m_SlotPrefab: {fileID: 3635135160908564448}
-  m_CanDrag: 1
-  m_CanDropItems: 0
-  m_CanUseItems: 0
-  m_UseContextMenu: 0
-  m_ShowTooltips: 1
-  m_MoveUsedItem: 1
-  m_ContainerNames:
-  - m_ContainerName: Inventory
-    m_Priority: 1
-    m_RequiresVisibility: 1
 --- !u!223 &1153502907
 Canvas:
   m_ObjectHideFlags: 0
@@ -229,6 +200,22 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 32
+--- !u!114 &4484802664301879307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4484802662267518616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79b34202c8a849cb81a9f40db85841f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RemovesControl: 1
+  m_ClosesOthers: 0
+  m_AlwaysOpen: 0
+  m_Index: 0
 --- !u!1 &4484802662463132232
 GameObject:
   m_ObjectHideFlags: 0
@@ -461,8 +448,9 @@ GameObject:
   - component: {fileID: 4484802663421619782}
   - component: {fileID: 6847302797944684887}
   - component: {fileID: 4484802664301879305}
+  - component: {fileID: 4484802664301879306}
   m_Layer: 5
-  m_Name: SlotsMask
+  m_Name: Equipment Container
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -568,6 +556,31 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &4484802664301879306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4484802663421619781}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae7426b9a54d79844b6b701d5ba47f9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_UseAction: right mouse
+  m_SlotParent: {fileID: 161253348}
+  m_SlotPrefab: {fileID: 3635135160908564448}
+  m_CanDrag: 1
+  m_CanDropItems: 0
+  m_CanUseItems: 0
+  m_UseContextMenu: 0
+  m_ShowTooltips: 1
+  m_MoveUsedItem: 1
+  m_ContainerNames:
+  - m_ContainerName: Inventory
+    m_Priority: 5
+    m_RequiresVisibility: 1
 --- !u!1 &5495078052126651665
 GameObject:
   m_ObjectHideFlags: 0
@@ -837,7 +850,8 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 4484802662267518624}
+      objectReference: {fileID: 4484802662267518624, guid: 3e23de846bff60441822ee1d05e4ba68,
+        type: 3}
     - target: {fileID: 5672350621991433020, guid: 170a10e9e51de134b9b56ec34ceaebf2,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState

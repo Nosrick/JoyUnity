@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public class DerivedValuesInformation : GUIData
+    public class DerivedValuesInformation : MonoBehaviour
     {
         [SerializeField] protected DerivedValueBarContainer DerivedValuePrefab;
         [SerializeField] protected GameManager GameManager;

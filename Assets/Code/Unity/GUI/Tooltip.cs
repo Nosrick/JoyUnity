@@ -10,7 +10,8 @@ using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public class Tooltip : GUIData
+    [RequireComponent(typeof(GUIData))]
+    public class Tooltip : MonoBehaviour
     {
         [SerializeField] protected TextMeshProUGUI m_Title;
         [SerializeField] protected TextMeshProUGUI m_Text;
@@ -26,9 +27,8 @@ namespace JoyLib.Code.Unity.GUI
         
         protected List<StringPairContainer> ItemCache { get; set; }
 
-        public override void Awake()
+        public void Awake()
         {
-            base.Awake();
             if (this.Canvas is null)
             {
                 this.ItemCache = new List<StringPairContainer>();
@@ -140,8 +140,6 @@ namespace JoyLib.Code.Unity.GUI
             this.m_Background.gameObject.SetActive(showBackground);
             
             LayoutRebuilder.ForceRebuildLayoutImmediate(this.RectTransform);
-
-            base.Show();
         }
 
         protected void SetIcon(ISpriteState state)

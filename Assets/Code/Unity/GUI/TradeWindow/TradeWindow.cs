@@ -11,7 +11,7 @@ using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public class TradeWindow : GUIData
+    public class TradeWindow : MonoBehaviour
     {
         public IEntity Left { get; protected set; }
         public IEntity Right { get; protected set; }
@@ -31,9 +31,8 @@ namespace JoyLib.Code.Unity.GUI
 
         protected RectTransform RectTransform { get; set; }
 
-        public override void Awake()
+        public void Awake()
         {
-            base.Awake();
             this.RectTransform = this.GetComponent<RectTransform>();
 
             this.LeftOffering.OnAddItem -= this.Tally;
@@ -48,9 +47,8 @@ namespace JoyLib.Code.Unity.GUI
             this.RightOffering.OnRemoveItem += this.Tally;
         }
 
-        public override void Close()
+        public void OnDisable()
         {
-            base.Close();
             foreach (IItemInstance item in this.LeftOffering.Contents)
             {
                 this.LeftInventory.StackOrAdd(item);

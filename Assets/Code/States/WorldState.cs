@@ -90,7 +90,7 @@ namespace JoyLib.Code.States
             this.GUIManager.GetGUI(GUINames.INVENTORY).GetComponent<ItemContainer>().Owner = this.PlayerWorld.Player;
             //GUIManager.GetGUI(GUINames.EQUIPMENT).GetComponent<ItemContainer>().Owner = this.PlayerWorld.Player;
 
-            EquipmentHandler equipmentHandler = this.GUIManager.GetGUI(GUINames.EQUIPMENT).GetComponent<EquipmentHandler>();
+            EquipmentHandler equipmentHandler = this.GUIManager.GetGUI(GUINames.EQUIPMENT).GetComponentInChildren<EquipmentHandler>();
             equipmentHandler.SetPlayer(this.m_ActiveWorld.Player);
         }
 

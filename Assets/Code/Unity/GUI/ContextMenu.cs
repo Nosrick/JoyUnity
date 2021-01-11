@@ -7,12 +7,15 @@ using UnityEngine.InputSystem;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public class ContextMenu : GUIData
+    [RequireComponent(typeof(GUIData))]
+    public class ContextMenu : MonoBehaviour
     {
         [SerializeField]
         protected MenuItem m_MenuItemPrefab = null;
         protected List<MenuItem> ItemCache { get; set; }
         protected RectTransform RectTransform { get; set; }
+        
+        protected GUIData GUIData { get; set; }
 
         public void OnEnable()
         {
@@ -20,15 +23,15 @@ namespace JoyLib.Code.Unity.GUI
             {
                 this.RectTransform = this.GetComponent<RectTransform>();
                 this.ItemCache = new List<MenuItem>();
+                this.GUIData = this.GetComponent<GUIData>();
             }
         }
 
-        public override void Show()
+        public void Show()
         {
             if (this.ItemCache.Any(item => item.gameObject.activeSelf))
             {
                 this.RectTransform.position = Mouse.current.position.ReadValue();
-                base.Show();
             }
         }
 
@@ -50,8 +53,8 @@ namespace JoyLib.Code.Unity.GUI
                         return;
                     }
                 }
-
-                GUIManager.CloseGUI(this.name);
+                
+                this.GUIData.GUIManager.CloseGUI(GUINames.CONTEXT_MENU);
             }
         }
 
@@ -81,9 +84,9 @@ namespace JoyLib.Code.Unity.GUI
             item.gameObject.SetActive(true);
             item.transform.SetParent(this.RectTransform, false);
             item.Trigger.AddListener(
-                delegate() 
+                delegate
                 {
-                    this.Close();
+                    this.GUIData.GUIManager.CloseGUI(GUINames.CONTEXT_MENU);
                     if (used is null == false) 
                     {
                         used.Invoke();

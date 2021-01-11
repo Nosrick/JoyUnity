@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public class ConversationWindow : GUIData
+    public class ConversationWindow : MonoBehaviour
     {
         [SerializeField] protected GameManager GameManager;
         [SerializeField] protected TextMeshProUGUI LastSaidGUI;

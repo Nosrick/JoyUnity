@@ -6,7 +6,20 @@ namespace JoyLib.Code.Unity.GUI
     [DisallowMultipleComponent]
     public class GUIData : MonoBehaviour, IPointerDownHandler
     {
-        public IGUIManager GUIManager { get; set; }
+        protected IGUIManager m_GUIManager;
+
+        public IGUIManager GUIManager
+        {
+            get => this.m_GUIManager;
+            set
+            {
+                this.m_GUIManager = value;
+                foreach (GUIData data in this.GetComponentsInChildren<GUIData>())
+                {
+                    data.m_GUIManager = value;
+                }
+            }
+        }
 
         public virtual void Awake()
         {

@@ -575,6 +575,7 @@ GameObject:
   - component: {fileID: 127590850}
   - component: {fileID: 1025104008}
   - component: {fileID: 1025104009}
+  - component: {fileID: 5573507356910968770}
   m_Layer: 5
   m_Name: Character Creation Part 1
   m_TagString: Untagged
@@ -654,10 +655,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c976475fb4bf4ea9b061cd78dcc79483, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_RemovesControl: 0
-  m_ClosesOthers: 0
-  m_AlwaysOpen: 0
-  m_Index: 0
   GameManager: {fileID: 0}
   StatisticWindow: {fileID: 5573507356136866956}
   DerivedValuesWindow: {fileID: 5008702698678543501}
@@ -718,6 +715,22 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 32
+--- !u!114 &5573507356910968770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5573507356558727690}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79b34202c8a849cb81a9f40db85841f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RemovesControl: 0
+  m_ClosesOthers: 0
+  m_AlwaysOpen: 0
+  m_Index: 0
 --- !u!1 &5573507357685518258
 GameObject:
   m_ObjectHideFlags: 0

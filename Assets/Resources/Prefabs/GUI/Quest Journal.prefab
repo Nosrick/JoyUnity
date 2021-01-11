@@ -158,6 +158,7 @@ GameObject:
   - component: {fileID: 718918997}
   - component: {fileID: 1187608022}
   - component: {fileID: 1187608023}
+  - component: {fileID: 8862829973588827229}
   m_Layer: 5
   m_Name: Quest Journal
   m_TagString: Untagged
@@ -237,10 +238,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0000b79bc064fddb145affd9940e0c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_RemovesControl: 0
-  m_ClosesOthers: 0
-  m_AlwaysOpen: 0
-  m_Index: 0
   MenuItemPrefab: {fileID: 2363985745292612440}
   MenuContainer: {fileID: 8862829973209153596}
 --- !u!225 &718918997
@@ -293,6 +290,22 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 32
+--- !u!114 &8862829973588827229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8862829972381363171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79b34202c8a849cb81a9f40db85841f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RemovesControl: 0
+  m_ClosesOthers: 0
+  m_AlwaysOpen: 0
+  m_Index: 0
 --- !u!1 &8862829972594165433
 GameObject:
   m_ObjectHideFlags: 0

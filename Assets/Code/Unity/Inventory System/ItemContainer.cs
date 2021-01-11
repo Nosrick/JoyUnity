@@ -10,7 +10,7 @@ using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity
 {
-    public class ItemContainer : GUIData
+    public class ItemContainer : MonoBehaviour
     {
         [SerializeField] protected string m_UseAction;
         [SerializeField] protected LayoutGroup m_SlotParent;
@@ -34,7 +34,7 @@ namespace JoyLib.Code.Unity
         [SerializeField] protected bool m_MoveUsedItem = false;
 
         [SerializeField] protected List<MoveContainerPriority> m_ContainerNames;
-        protected List<ItemContainer> MoveToContainers { get; set; }
+        protected List<string> MoveToContainers { get; set; }
         public bool MoveUsedItem => this.m_MoveUsedItem;
 
         protected List<JoyItemSlot> Slots { get; set; }
@@ -42,6 +42,8 @@ namespace JoyLib.Code.Unity
         protected IJoyObject m_Owner;
 
         public List<MoveContainerPriority> ContainerPriorities => this.m_ContainerNames;
+        
+        public IGUIManager GUIManager { get; set; }
 
         public IJoyObject Owner
         {
@@ -90,12 +92,13 @@ namespace JoyLib.Code.Unity
                 return;
             }
 
+            this.GUIManager = GlobalConstants.GameManager.GUIManager;
             if (this.Slots is null)
             {
                 this.Slots = this.GetComponentsInChildren<JoyItemSlot>().ToList();
             }
 
-            this.MoveToContainers = new List<ItemContainer>();
+            this.MoveToContainers = new List<string>();
             if (this.m_ContainerNames is null)
             {
                 this.m_ContainerNames = new List<MoveContainerPriority>();
@@ -104,8 +107,7 @@ namespace JoyLib.Code.Unity
             {
                 foreach (MoveContainerPriority priority in this.m_ContainerNames)
                 {
-                    this.MoveToContainers.Add(this.GUIManager.GetGUI(priority.m_ContainerName)
-                        .GetComponent<ItemContainer>());
+                    this.MoveToContainers.Add(priority.m_ContainerName);
                 }
             }
 
@@ -164,9 +166,9 @@ namespace JoyLib.Code.Unity
                 return false;
             }
             
-            ItemContainer target = this.MoveToContainers.FirstOrDefault(container => sorted.Any(sort =>
-                sort.m_ContainerName.Equals(container.name, StringComparison.OrdinalIgnoreCase)
-                && (sort.m_RequiresVisibility && container.isActiveAndEnabled)
+            string target = this.MoveToContainers.FirstOrDefault(container => sorted.Any(sort =>
+                sort.m_ContainerName.Equals(container, StringComparison.OrdinalIgnoreCase)
+                && (sort.m_RequiresVisibility && GameObject.Find(container) is null == false)
                 || sort.m_RequiresVisibility == false));
                 
             if (target is null || item is null)
@@ -174,7 +176,8 @@ namespace JoyLib.Code.Unity
                 return false;
             }
 
-            return this.StackOrSwap(target, item);
+            ItemContainer targetContainer = GameObject.Find(target).GetComponent<ItemContainer>();
+            return !(targetContainer is null) && this.StackOrSwap(targetContainer, item);
         }
 
         public virtual List<JoyItemSlot> GetRequiredSlots(IItemInstance item, bool takeFilledSlots = false)
@@ -487,13 +490,6 @@ namespace JoyLib.Code.Unity
             }
 
             return this.RemoveItem(item) && destination.StackOrAdd(item);
-        }
-
-        public override void Close()
-        {
-            this.GUIManager.CloseGUI(GUINames.TOOLTIP);
-            this.GUIManager.CloseGUI(GUINames.CONTEXT_MENU);
-            base.Close();
         }
 
         public virtual event ItemAddedEventHandler OnAddItem;

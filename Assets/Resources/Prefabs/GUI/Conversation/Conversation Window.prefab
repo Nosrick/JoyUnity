@@ -834,6 +834,7 @@ GameObject:
   - component: {fileID: 1575259960}
   - component: {fileID: 436667623}
   - component: {fileID: 436667624}
+  - component: {fileID: 1285147745}
   m_Layer: 5
   m_Name: Conversation Window
   m_TagString: Untagged
@@ -911,10 +912,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e6040ea07964acba372d04f29f88f05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_RemovesControl: 1
-  m_ClosesOthers: 1
-  m_AlwaysOpen: 0
-  m_Index: 0
   GameManager: {fileID: 0}
   LastSaidGUI: {fileID: 9014987977286830260}
   LastSpokeIcon: {fileID: 0}
@@ -973,6 +970,22 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 32
+--- !u!114 &1285147745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8424994987622645055}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79b34202c8a849cb81a9f40db85841f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RemovesControl: 1
+  m_ClosesOthers: 1
+  m_AlwaysOpen: 0
+  m_Index: 0
 --- !u!1 &8424994988068797229
 GameObject:
   m_ObjectHideFlags: 0

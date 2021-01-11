@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code.Conversation;
 using JoyLib.Code.Entities;
@@ -74,7 +73,7 @@ namespace JoyLib.Code.Unity.GUI
 
             if (Raycaster is null)
             {
-                Raycaster = this.GetComponentInParent<GraphicRaycaster>();
+                Raycaster = GameObject.Find("Main UI").GetComponent<GraphicRaycaster>();
             }
             this.m_Icon.Awake();
         }
@@ -259,10 +258,30 @@ namespace JoyLib.Code.Unity.GUI
 
         public virtual void OnEndDrag(PointerEventData eventData)
         {
-            List<RaycastResult> results = new List<RaycastResult>();
-            Raycaster.Raycast(eventData, results);
+            Debug.Log(eventData.pointerCurrentRaycast.gameObject.name);
 
-            if (results.Count == 0)
+            GameObject goResult = eventData.pointerCurrentRaycast.gameObject;
+            if (goResult.TryGetComponent(out JoyItemSlot resultSlot))
+            {
+                if (resultSlot.Container is null == false
+                    && resultSlot.Container != this.Container
+                    && this.Container.CanDrag
+                    && resultSlot.Container.CanDrag)
+                {
+                    this.Container.StackOrSwap(resultSlot.Container, this.Item);
+                }
+            }
+            else if (goResult.TryGetComponent(out ItemContainer container))
+            {
+                if (container is null == false
+                    && container != this.Container
+                    && this.Container.CanDrag
+                    && container.CanDrag)
+                {
+                    this.Container.StackOrSwap(container, this.Item);
+                }
+            }
+            else
             {
                 if (this.Container.CanDropItems)
                 {
@@ -272,40 +291,7 @@ namespace JoyLib.Code.Unity.GUI
                 this.EndDrag();
                 return;
             }
-
-            MoveContainerPriority chosen = null;
-            int highestPriority = int.MinValue;
-            foreach (MoveContainerPriority priority in results.Select(result => this.Container.ContainerPriorities.FirstOrDefault(p =>
-                p.m_ContainerName.Equals(result.gameObject.name, StringComparison.OrdinalIgnoreCase)))
-                .Where(p => p is null == false))
-            {
-                if (priority.m_Priority <= highestPriority)
-                {
-                    continue;
-                }
-                chosen = priority;
-                highestPriority = priority.m_Priority;
-            }
-
-            if (chosen is null)
-            {
-                this.EndDrag();
-                return;
-            }
-
-            ItemContainer container = results.First(result =>
-                    result.gameObject.name.Equals(chosen.m_ContainerName, StringComparison.OrdinalIgnoreCase))
-                .gameObject
-                .GetComponent<ItemContainer>();
-
-            if (container is null == false
-                && container != this.Container
-                && this.Container.CanDrag
-                && container.CanDrag)
-            {
-                this.Container.StackOrSwap(container, this.Item);
-            }
-                
+            
             this.EndDrag();
         }
 

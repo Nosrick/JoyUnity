@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public class QuestJournal : GUIData
+    public class QuestJournal : MonoBehaviour
     {
         public IEntity Player { get; set; }
         
@@ -21,9 +21,8 @@ namespace JoyLib.Code.Unity.GUI
         
         protected List<MenuItem> MenuItems { get; set; }
 
-        public override void Awake()
+        public void Awake()
         {
-            base.Awake();
             this.MenuItemRect = this.MenuItemPrefab.GetComponent<RectTransform>();
             this.MenuItems = new List<MenuItem>();
             this.FindBits();

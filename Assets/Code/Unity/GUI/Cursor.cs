@@ -6,8 +6,8 @@ using UnityEngine.InputSystem;
 namespace JoyLib.Code.Unity.GUI
 {
     [RequireComponent(typeof(CanvasGroup))]
-    [RequireComponent(typeof(Sprite))]
-    public class Cursor : GUIData
+    [RequireComponent(typeof(GUIData))]
+    public class Cursor : MonoBehaviour
     {
         [SerializeField] protected ManagedUISprite m_PartPrefab;
         
@@ -23,9 +23,8 @@ namespace JoyLib.Code.Unity.GUI
         
         protected ManagedUISprite DragObject { get; set; }
 
-        public override void Awake()
+        public void Awake()
         {
-            base.Awake();
             this.CanvasGroup = this.GetComponent<CanvasGroup>();
             this.MyRect = this.GetComponent<RectTransform>();
 
@@ -57,12 +56,6 @@ namespace JoyLib.Code.Unity.GUI
 
             Rect rect = this.MyRect.rect;
             this.transform.position = Mouse.current.position.ReadValue() + new Vector2(rect.width / 4, -(rect.height / 4));
-        }
-
-        public override void Close()
-        {
-            base.Close();
-            this.CanvasGroup.alpha = 0f;
         }
 
         public void SetCursorSize(int width, int height)
@@ -104,15 +97,8 @@ namespace JoyLib.Code.Unity.GUI
             }
         }
 
-        public override void Show()
-        {
-            base.Show();
-            this.CanvasGroup.alpha = 1f;
-        }
-
         public void Show(ISpriteState replacement)
         {
-            this.Show();
             this.DragObject.Clear();
             this.DragObject.gameObject.SetActive(false);
             if (replacement is null)

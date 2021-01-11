@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace JoyLib.Code.Unity.GUI.Character_Sheet
 {
-    public class CharacterSheet : GUIData
+    public class CharacterSheet : MonoBehaviour
     {
         [SerializeField] protected ManagedSprite PlayerSprite;
         [SerializeField] protected TextMeshProUGUI PlayerName;
@@ -32,13 +32,6 @@ namespace JoyLib.Code.Unity.GUI.Character_Sheet
             this.PlayerSprite.AddSpriteState(this.Player.MonoBehaviourHandler.CurrentSpriteState);
             this.PlayerName.text = this.Player.JoyName;
             this.PlayerJobAndSpecies.text = this.Player.CreatureType + " " + this.Player.CurrentJob.Name;
-        }
-
-        public override void Close()
-        {
-            this.GUIManager.CloseGUI(GUINames.TOOLTIP);
-            this.GUIManager.CloseGUI(GUINames.CONTEXT_MENU);
-            base.Close();
         }
     }
 }

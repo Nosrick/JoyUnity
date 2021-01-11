@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public class GUINeedsAlert : GUIData
+    public class GUINeedsAlert : MonoBehaviour
     {
         [SerializeField] protected GameObject m_Container;
         [SerializeField] protected StringPairContainer m_PairPrefab;
@@ -27,9 +27,8 @@ namespace JoyLib.Code.Unity.GUI
         protected int Counter { get; set; }
         protected const int MAXIMUM_FRAMES = 90;
 
-        public override void Awake()
+        public void Awake()
         {
-            base.Awake();
             if (this.ChildList is null)
             {
                 this.ChildList = new List<StringPairContainer>();
