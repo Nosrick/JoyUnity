@@ -36,25 +36,35 @@
 	<TileSet>
 		<Filename>Money</Filename>
 		<Name>Currency</Name>
-		<Icon>
-			<Name>Copper Coin</Name>
-			<X>3</X>
-			<Y>5</Y>
-			<Data>default</Data>
-		</Icon>
-
-		<Icon>
-			<Name>Silver Coin</Name>
-			<X>4</X>
-			<Y>5</Y>
-			<Data>default</Data>
-		</Icon>
-
-		<Icon>
-			<Name>Gold Coin</Name>
-			<X>2</X>
-			<Y>4</Y>
-			<Data>default</Data>
-		</Icon>
+		<SpriteData>
+			<Name>copper coin</Name>
+			<Part>
+				<Name>copper coin</Name>
+				<Filename>Money32</Filename>
+				<Data>default</Data>
+				<Position>0</Position>
+				<Colour>#ff851bff</Colour>
+			</Part>
+		</SpriteData>
+		<SpriteData>
+			<Name>silver coin</Name>
+			<Part>
+				<Name>silver coin</Name>
+				<Filename>Money32</Filename>
+				<Data>default</Data>
+				<Position>0</Position>
+				<Colour>#d9d9d9ff</Colour>
+			</Part>
+		</SpriteData>
+		<SpriteData>
+			<Name>gold coin</Name>
+			<Part>
+				<Name>gold coin</Name>
+				<Filename>Money32</Filename>
+				<Data>default</Data>
+				<Position>0</Position>
+				<Colour>#ffc80aff</Colour>
+			</Part>
+		</SpriteData>
 	</TileSet>
 </Items>
