@@ -36,12 +36,17 @@
     </IdentifiedItem>
     
     <TileSet>
-        <Filename>Shield</Filename>
         <Name>armour</Name>
-        
-        <Icon>
-            <Name>Round Shield</Name>
-            <Position>5</Position>
-        </Icon>
+
+        <SpriteData>
+            <Name>round shield</Name>
+            <Part>
+                <Name>round shield</Name>
+                <Frames>1</Frames>
+                <Filename>Shield</Filename>
+                <Data>default</Data>
+                <Position>5</Position>
+            </Part>
+        </SpriteData>
     </TileSet>
 </Items>

@@ -30,20 +30,32 @@
         <Tag>armour</Tag>
         <Tag>torso</Tag>
         <Tag>leather</Tag>
+        <Tag>physical</Tag>
     </IdentifiedItem>
     
     <TileSet>
-        <Filename>Armor</Filename>
         <Name>Armour</Name>
-        
-        <Icon>
-            <Name>Breastplate</Name>
-            <Position>5</Position>
-        </Icon>
-        
-        <Icon>
-            <Name>Leather Armour</Name>
-            <Position>1</Position>
-        </Icon>
+
+        <SpriteData>
+            <Name>breastplate</Name>
+            <Part>
+                <Name>breastplate</Name>
+                <Frames>1</Frames>
+                <Filename>Armor</Filename>
+                <Data>default</Data>
+                <Position>5</Position>
+            </Part>
+        </SpriteData>
+
+        <SpriteData>
+            <Name>leather armour</Name>
+            <Part>
+                <Name>leather armour</Name>
+                <Frames>1</Frames>
+                <Filename>Armor</Filename>
+                <Data>default</Data>
+                <Position>1</Position>
+            </Part>
+        </SpriteData>
     </TileSet>
 </Items>
