@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Castle.Core.Internal;
 using JoyLib.Code.Collections;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Events;
@@ -386,12 +385,6 @@ namespace JoyLib.Code
         public void AttachMonoBehaviourHandler(MonoBehaviourHandler mbh)
         {
             this.MonoBehaviourHandler = mbh;
-            this.MonoBehaviourHandler.IsAnimated =
-                this.Tags.Any(tag => tag.Equals("animated", StringComparison.OrdinalIgnoreCase));
-            if (this.States.IsNullOrEmpty())
-            {
-                return;
-            }
         }
     }    
 }

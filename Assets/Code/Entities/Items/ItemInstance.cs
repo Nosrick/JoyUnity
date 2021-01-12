@@ -129,8 +129,6 @@ namespace JoyLib.Code.Entities.Items
                 MonoBehaviourHandler monoBehaviourHandler = gameObject.GetComponent<MonoBehaviourHandler>();
                 monoBehaviourHandler.AttachJoyObject(this);
             }
-            this.MonoBehaviourHandler.IsAnimated =
-                this.Tags.Any(tag => tag.Equals("animated", StringComparison.OrdinalIgnoreCase));
             this.MonoBehaviourHandler.Clear();
             this.MonoBehaviourHandler.AddSpriteState(this.States[this.StateIndex]);
             this.MonoBehaviourHandler.gameObject.SetActive(active);

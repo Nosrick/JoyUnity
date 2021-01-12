@@ -68,7 +68,7 @@ namespace JoyLib.Code.Unity
         
         public string TileSet { get; protected set; }
         public float TimeSinceLastChange { get; protected set; }
-        public bool IsAnimated { get; set; }
+        public bool IsAnimated { get; protected set; }
         
         public IEnumerable<ISpriteState> States => this.m_States.Values;
 
@@ -130,18 +130,22 @@ namespace JoyLib.Code.Unity
             if (this.m_States.ContainsKey(name))
             {
                 this.ChosenSprite = name;
+                this.ChosenState = this.m_States[this.ChosenSprite].SpriteData.m_State;
+                if (this.CurrentSpriteState.SpriteData.m_Parts.Max(part => part.m_Frames) > 1)
+                {
+                    this.IsAnimated = true;
+                }
+                else
+                {
+                    this.IsAnimated = false;
+                }
                 this.UpdateSprites();
             }
         }
 
         public virtual void ChangeState(ISpriteState state)
         {
-            if (this.m_States.ContainsKey(state.Name))
-            {
-                this.ChosenSprite = state.Name;
-                this.ChosenState = state.SpriteData.m_State;
-                this.UpdateSprites();
-            }
+            this.ChangeState(state.Name);
         }
 
         public virtual void Clear()
