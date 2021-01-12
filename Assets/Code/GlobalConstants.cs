@@ -6,8 +6,8 @@ namespace JoyLib.Code
 {
     public static class GlobalConstants
     {
-        public const string DATA_FOLDER = "/Assets/Code/Data/";
-        public const string SCRIPTS_FOLDER = DATA_FOLDER + "Scripts/";
+        public static readonly string DATA_FOLDER = Application.isEditor ? "/Assets/Code/Data/" : "/Data/";
+        public static readonly string SCRIPTS_FOLDER = DATA_FOLDER + "Scripts/";
         
         public const int MAX_LIGHT = 32;
 

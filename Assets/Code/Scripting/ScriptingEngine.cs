@@ -29,54 +29,64 @@ namespace JoyLib.Code.Scripting
             {
                 try
                 {
-                    string dir = Directory.GetCurrentDirectory() + "/" + GlobalConstants.SCRIPTS_FOLDER;
-                    string[] scriptFiles = Directory.GetFiles(dir, "*.cs", SearchOption.AllDirectories);
-
-                    List<SyntaxTree> builtFiles = new List<SyntaxTree>();
-
-                    foreach (string scriptFile in scriptFiles)
+                    if (Application.isEditor)
                     {
-                        string contents = File.ReadAllText(scriptFile);
-                        SyntaxTree builtFile = CSharpSyntaxTree.ParseText(contents);
-                        builtFiles.Add(builtFile);
-                    }
+                        string dir = Directory.GetCurrentDirectory() + "/" + GlobalConstants.SCRIPTS_FOLDER;
+                        string[] scriptFiles = Directory.GetFiles(dir, "*.cs", SearchOption.AllDirectories);
 
-                    Debug.Log("Loaded " + scriptFiles.Length + " script files.");
-                    List<MetadataReference> libs = new List<MetadataReference>
-                    {
-                        MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
-                        MetadataReference.CreateFromFile(typeof(GlobalConstants).Assembly.Location),
-                        MetadataReference.CreateFromFile(typeof(Debug).Assembly.Location),
-                        MetadataReference.CreateFromFile(typeof(Vector2Int).Assembly.Location),
-                        MetadataReference.CreateFromFile(typeof(Queue<bool>).Assembly.Location),
-                        MetadataReference.CreateFromFile(typeof(IQueryable).Assembly.Location),
-                        MetadataReference.CreateFromFile(typeof(Castle.Core.Internal.CollectionExtensions).Assembly.Location)
-                    };
-                    CSharpCompilation compilation = CSharpCompilation.Create("JoyScripts", builtFiles, libs,
-                        new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
+                        List<SyntaxTree> builtFiles = new List<SyntaxTree>();
 
-                    MemoryStream memory = new MemoryStream();
-                    EmitResult result = compilation.Emit(memory);
-
-                    if (result.Success == false)
-                    {
-                        foreach (var diagnostic in result.Diagnostics)
+                        foreach (string scriptFile in scriptFiles)
                         {
-                            if (diagnostic.Severity != DiagnosticSeverity.Error)
-                            {
-                                continue;
-                            }
-                            Debug.Log(diagnostic.Severity.ToString());
-                            Debug.Log(diagnostic.GetMessage());
+                            string contents = File.ReadAllText(scriptFile);
+                            SyntaxTree builtFile = CSharpSyntaxTree.ParseText(contents);
+                            builtFiles.Add(builtFile);
                         }
+
+                        Debug.Log("Loaded " + scriptFiles.Length + " script files.");
+                        List<MetadataReference> libs = new List<MetadataReference>
+                        {
+                            MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
+                            MetadataReference.CreateFromFile(typeof(GlobalConstants).Assembly.Location),
+                            MetadataReference.CreateFromFile(typeof(Debug).Assembly.Location),
+                            MetadataReference.CreateFromFile(typeof(Vector2Int).Assembly.Location),
+                            MetadataReference.CreateFromFile(typeof(Queue<bool>).Assembly.Location),
+                            MetadataReference.CreateFromFile(typeof(IQueryable).Assembly.Location),
+                            MetadataReference.CreateFromFile(typeof(Castle.Core.Internal.CollectionExtensions).Assembly
+                                .Location)
+                        };
+                        CSharpCompilation compilation = CSharpCompilation.Create("JoyScripts", builtFiles, libs,
+                            new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
+
+                        MemoryStream memory = new MemoryStream();
+                        EmitResult result = compilation.Emit(memory);
+
+                        if (result.Success == false)
+                        {
+                            foreach (var diagnostic in result.Diagnostics)
+                            {
+                                if (diagnostic.Severity != DiagnosticSeverity.Error)
+                                {
+                                    continue;
+                                }
+
+                                Debug.Log(diagnostic.Severity.ToString());
+                                Debug.Log(diagnostic.GetMessage());
+                            }
+                        }
+
+                        memory.Seek(0, SeekOrigin.Begin);
+                        this.m_ScriptDLL = Assembly.Load(memory.ToArray());
+
+                        //this.m_Types = new List<Type>(this.m_ScriptDLL.GetTypes());
+                        this.m_Types = new List<Type>(typeof(IJoyObject).Assembly.GetExportedTypes());
+                        //this.m_Types.AddRange(typeof(IJoyObject).Assembly.GetExportedTypes());
                     }
-
-                    memory.Seek(0, SeekOrigin.Begin);
-                    this.m_ScriptDLL = Assembly.Load(memory.ToArray());
-
-                    //this.m_Types = new List<Type>(this.m_ScriptDLL.GetTypes());
-                    this.m_Types = new List<Type>(typeof(IJoyObject).Assembly.GetExportedTypes());
-                    //this.m_Types.AddRange(typeof(IJoyObject).Assembly.GetExportedTypes());
+                    else
+                    {
+                        this.m_ScriptDLL = typeof(IJoyObject).Assembly;
+                        this.m_Types = new List<Type>(this.m_ScriptDLL.GetExportedTypes());
+                    }
 
                     this.Eval = new ExpressionEvaluator
                     {
