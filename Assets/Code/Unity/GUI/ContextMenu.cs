@@ -11,7 +11,7 @@ namespace JoyLib.Code.Unity.GUI
     public class ContextMenu : MonoBehaviour
     {
         [SerializeField]
-        protected MenuItem m_MenuItemPrefab = null;
+        protected MenuItem m_MenuItemPrefab;
         protected List<MenuItem> ItemCache { get; set; }
         protected RectTransform RectTransform { get; set; }
         
@@ -19,16 +19,25 @@ namespace JoyLib.Code.Unity.GUI
 
         public void OnEnable()
         {
+            this.Initialise();
+        }
+
+        protected void Initialise()
+        {
+            Debug.Log("CONTEXT MENU INITIALISING");
+
             if (this.RectTransform is null)
             {
                 this.RectTransform = this.GetComponent<RectTransform>();
                 this.ItemCache = new List<MenuItem>();
+                Debug.Log("CONTEXT MENU CACHE INITIALISED");
                 this.GUIData = this.GetComponent<GUIData>();
             }
         }
 
         public void Show()
         {
+            this.Initialise();
             if (this.ItemCache.Any(item => item.gameObject.activeSelf))
             {
                 this.RectTransform.position = Mouse.current.position.ReadValue();
@@ -60,6 +69,11 @@ namespace JoyLib.Code.Unity.GUI
 
         public virtual void Clear ()
         {
+            this.Initialise();
+            if (this.ItemCache is null)
+            {
+                GlobalConstants.ActionLog.AddText("CONTEXT MENU ITEMS ARE NULL");
+            }
             for (int i = 0; i < this.ItemCache.Count; i++) 
             {
                 this.ItemCache [i].gameObject.SetActive(false);
@@ -68,6 +82,7 @@ namespace JoyLib.Code.Unity.GUI
 
         public virtual MenuItem AddMenuItem (string text, UnityAction used)
         {
+            this.Initialise();
             MenuItem item = null;
             if (this.ItemCache.All(x => x.gameObject.activeSelf))
             {
