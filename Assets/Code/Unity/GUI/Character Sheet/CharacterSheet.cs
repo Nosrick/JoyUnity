@@ -33,5 +33,10 @@ namespace JoyLib.Code.Unity.GUI.Character_Sheet
             this.PlayerName.text = this.Player.JoyName;
             this.PlayerJobAndSpecies.text = this.Player.CreatureType + " " + this.Player.CurrentJob.Name;
         }
+
+        public void OnDisable()
+        {
+            GlobalConstants.GameManager.GUIManager.CloseGUI(GUINames.TOOLTIP);
+        }
     }
 }

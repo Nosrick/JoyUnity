@@ -62,6 +62,8 @@ namespace JoyLib.Code.Unity.GUI
             }
 
             this.RightOffering.RemoveAllItems();
+            
+            GlobalConstants.GameManager.GUIManager.CloseGUI(GUINames.TOOLTIP);
         }
 
         public void SetActors(IEntity left, IEntity right)

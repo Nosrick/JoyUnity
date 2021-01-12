@@ -96,6 +96,11 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
             this.SetUp();
         }
 
+        public void OnDisable()
+        {
+            GUIManager.CloseGUI(GUINames.TOOLTIP);
+        }
+
         protected void OnAbilityChange(object sender, ValueChangedEventArgs args)
         {
             this.Value -= args.Delta;

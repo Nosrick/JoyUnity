@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using JoyLib.Code.Events;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace JoyLib.Code.Unity.GUI
@@ -41,6 +42,8 @@ namespace JoyLib.Code.Unity.GUI
                     child.Show();
                 }
             }
+
+            this.OnGUIOpen?.Invoke(this);
         }
 
         public virtual void Close()
@@ -54,6 +57,8 @@ namespace JoyLib.Code.Unity.GUI
                     child.Close();
                 }
             }
+
+            this.OnGUIClose?.Invoke(this);
         }
 
         public virtual void ButtonClose()
@@ -68,5 +73,8 @@ namespace JoyLib.Code.Unity.GUI
         public bool m_AlwaysOpen;
 
         public int m_Index;
+
+        public virtual event GUIClosedEventHandler OnGUIClose;
+        public virtual event GUIOpenedEventHandler OnGUIOpen;
     }
 }
