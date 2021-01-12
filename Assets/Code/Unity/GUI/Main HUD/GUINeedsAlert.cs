@@ -79,6 +79,7 @@ namespace JoyLib.Code.Unity.GUI
                 return;
             }
 
+            bool empty = true;
             for(int i = 0; i < this.PlayerNeeds.Count; i++)
             {
                 INeed need = this.PlayerNeeds[i];
@@ -95,9 +96,22 @@ namespace JoyLib.Code.Unity.GUI
                         this.ChildList[i].Target = new Tuple<string, string>("",
                             "<color=yellow>" + CultureInfo.CurrentCulture.TextInfo.ToTitleCase(need.Name) + "</color>");
                     }
-                    
+
+                    empty = false;
+                }
+                else
+                {
+                    this.ChildList[i].gameObject.SetActive(false);
                 }
             }
+
+            if (empty)
+            {
+                this.ChildList[0].gameObject.SetActive(true);
+                this.ChildList[0].Target =
+                    new Tuple<string, string>("", "<color=green>I feel fulfilled!</color>");
+            }
+            
             LayoutRebuilder.ForceRebuildLayoutImmediate(this.ContainerRect);
         }
     }
