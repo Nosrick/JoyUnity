@@ -1339,6 +1339,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6377130293206090874, guid: f354a9795ff61894481e786a4ca0b891,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f354a9795ff61894481e786a4ca0b891, type: 3}
 --- !u!224 &990688722 stripped
@@ -1494,6 +1499,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1293420870}
     m_Modifications:
+    - target: {fileID: 1202375698275872110, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.32006836
+      objectReference: {fileID: 0}
     - target: {fileID: 3198197588467432652, guid: 2d53dc4a1c9b3c54d82d77dde2040807,
         type: 3}
       propertyPath: GameManager
@@ -1961,6 +1971,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1629111814}
   - component: {fileID: 1629111815}
+  - component: {fileID: 1629111816}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1994,6 +2005,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76cab89cbe3b23b48ba70bc8cf4b081a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1629111816
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1629111813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2183be163d5e4499bf1166351407e762, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ActionsRequired: 3
 --- !u!1 &1631259443
 GameObject:
   m_ObjectHideFlags: 0
@@ -6721,6 +6745,11 @@ PrefabInstance:
       propertyPath: ChildPrefab
       value: 
       objectReference: {fileID: 533345815}
+    - target: {fileID: 6156505942358185206, guid: 16e84603d23571845a276f6a352b2530,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -14.999023
+      objectReference: {fileID: 0}
     - target: {fileID: 6156505943501508128, guid: 16e84603d23571845a276f6a352b2530,
         type: 3}
       propertyPath: m_Pivot.x
