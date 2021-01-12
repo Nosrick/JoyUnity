@@ -30,18 +30,13 @@ namespace JoyLib.Code.Unity.GUI
                 return;
             }
 
-            var log = GlobalConstants.ActionLog.Log;
-            var enumerator = log.GetEnumerator();
-
-            int i = 0;
-            while (enumerator.MoveNext())
-            {
-                this.LogText[i].text = enumerator.Current;
-                this.LogText[i].gameObject.SetActive(true);
-                i++;
-            }
+            var log = GlobalConstants.ActionLog.History;
             
-            enumerator.Dispose();
+            for (int i = 0; i < log.Count; i++)
+            {
+                this.LogText[i].text = log[i];
+                this.LogText[i].gameObject.SetActive(true);
+            }
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using JoyLib.Code.Entities;
 using UnityEngine;
 
@@ -9,6 +8,8 @@ namespace JoyLib.Code.Helpers
 {
     public class ActionLog
     {
+        public List<string> History { get; protected set; } 
+        
         private Queue<LogEntry> m_Queue = new Queue<LogEntry>();
 
         public const int LINES_TO_KEEP = 10;
@@ -35,6 +36,8 @@ namespace JoyLib.Code.Helpers
             {
                 File.Delete(FILENAME);
                 this.Writer = new StreamWriter(FILENAME);
+                this.m_Queue = new Queue<LogEntry>();
+                this.History = new List<string>();
                 return true;
             }
             catch(Exception ex)
@@ -64,6 +67,11 @@ namespace JoyLib.Code.Helpers
             {
                 this.Writer.Flush();
             }
+
+            while (this.History.Count > LINES_TO_KEEP)
+            {
+                this.History.RemoveAt(0);
+            }
         }
 
         public void AddText(string stringToAdd, LogLevel logLevel = LogLevel.Information)
@@ -72,16 +80,18 @@ namespace JoyLib.Code.Helpers
             {
                 Debug.Log(stringToAdd);
             }
-            this.m_Queue.Enqueue(new LogEntry
+
+            LogEntry entry = new LogEntry
             {
                 m_Data = stringToAdd,
                 m_LogLevel = logLevel
-            });
+            };
+            this.m_Queue.Enqueue(entry);
+            if (logLevel == LogLevel.Gameplay)
+            {
+                this.History.Add(stringToAdd);
+            }
         }
-
-        public IEnumerable<string> Log => this.m_Queue
-            .Where(data => data.m_LogLevel == LogLevel.Gameplay)
-            .Select(data => data.m_Data);
     }
 
     public enum LogLevel
