@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace JoyLib.Code.Entities.Relationships
 {
@@ -119,13 +118,6 @@ namespace JoyLib.Code.Entities.Relationships
 
         public int GetHighestRelationshipValue(long GUID)
         {
-            Debug.Log("GUID IS " + GUID);
-            Debug.Log("PARTICIPANT GUIDS:");
-            foreach (long value in this.m_Participants.Keys)
-            {
-                Debug.Log(value);
-            }
-            
             return this.m_Values.Where(pair => pair.Key.Equals(GUID))
                 .Max(pair => pair.Value.Max(valuePair => valuePair.Value));
         }

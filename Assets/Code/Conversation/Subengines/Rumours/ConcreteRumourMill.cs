@@ -9,7 +9,6 @@ using JoyLib.Code.Helpers;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.World;
-using UnityEngine;
 
 namespace JoyLib.Code.Conversation.Conversations
 {
@@ -106,9 +105,9 @@ namespace JoyLib.Code.Conversation.Conversations
                 catch (Exception e)
                 {
                     GlobalConstants.ActionLog.AddText("Could not load rumours from file " + file);
-                    Debug.LogWarning("Could not load rumours from file " + file);
-                    Debug.LogWarning(e.Message);
-                    Debug.LogWarning(e.StackTrace);
+                    GlobalConstants.ActionLog.AddText("Could not load rumours from file " + file);
+                    GlobalConstants.ActionLog.AddText(e.Message);
+                    GlobalConstants.ActionLog.AddText(e.StackTrace);
                 }
             }
 

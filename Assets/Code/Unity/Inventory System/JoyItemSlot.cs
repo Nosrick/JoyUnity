@@ -260,7 +260,7 @@ namespace JoyLib.Code.Unity.GUI
 
         public virtual void OnEndDrag(PointerEventData eventData)
         {
-            Debug.Log(eventData.pointerCurrentRaycast.gameObject.name);
+            GlobalConstants.ActionLog.AddText(eventData.pointerCurrentRaycast.gameObject.name);
 
             GameObject goResult = eventData.pointerCurrentRaycast.gameObject;
             if (goResult.TryGetComponent(out JoyItemSlot resultSlot))

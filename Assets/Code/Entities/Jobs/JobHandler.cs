@@ -6,7 +6,6 @@ using System.Xml.Linq;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Rollers;
-using UnityEngine;
 
 namespace JoyLib.Code.Entities.Jobs
 {
@@ -88,9 +87,9 @@ namespace JoyLib.Code.Entities.Jobs
                             GlobalConstants.ActionLog.AddText("ERROR LOADING ABILITIES FOR JOB, FILE " + file);
                             GlobalConstants.ActionLog.AddText(e.Message);
                             GlobalConstants.ActionLog.AddText(e.StackTrace);
-                            Debug.LogWarning("ERROR LOADING ABILITIES FOR JOB, FILE " + file);
-                            Debug.LogWarning(e.Message);
-                            Debug.LogWarning(e.StackTrace);
+                            GlobalConstants.ActionLog.AddText("ERROR LOADING ABILITIES FOR JOB, FILE " + file);
+                            GlobalConstants.ActionLog.AddText(e.Message);
+                            GlobalConstants.ActionLog.AddText(e.StackTrace);
                         }
                                                                         
 
@@ -105,9 +104,9 @@ namespace JoyLib.Code.Entities.Jobs
                     GlobalConstants.ActionLog.AddText("ERROR LOADING JOBS, FILE " + file);
                     GlobalConstants.ActionLog.AddText(e.Message);
                     GlobalConstants.ActionLog.AddText(e.StackTrace);
-                    Debug.LogWarning("ERROR LOADING JOB FROM FILE " + file);
-                    Debug.LogWarning(e.Message);
-                    Debug.LogWarning(e.StackTrace);
+                    GlobalConstants.ActionLog.AddText("ERROR LOADING JOB FROM FILE " + file);
+                    GlobalConstants.ActionLog.AddText(e.Message);
+                    GlobalConstants.ActionLog.AddText(e.StackTrace);
                 }
             }
 

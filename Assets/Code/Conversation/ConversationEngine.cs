@@ -130,7 +130,7 @@ namespace JoyLib.Code.Conversation
                             }
                             catch (Exception e)
                             {
-                                Debug.LogWarning("Could not find topic processor " + processor);
+                                GlobalConstants.ActionLog.AddText("Could not find topic processor " + processor);
                                 topics.Add(new TopicData(
                                     conditions.ToArray(),
                                     topicName,
@@ -161,9 +161,9 @@ namespace JoyLib.Code.Conversation
                 catch (Exception e)
                 {
                     GlobalConstants.ActionLog.AddText("Could not load conversations from file " + file);
-                    Debug.LogWarning("Could not load conversations from file " + file);
-                    Debug.LogWarning(e.Message);
-                    Debug.LogWarning(e.StackTrace);
+                    GlobalConstants.ActionLog.AddText("Could not load conversations from file " + file);
+                    GlobalConstants.ActionLog.AddText(e.Message);
+                    GlobalConstants.ActionLog.AddText(e.StackTrace);
                 }
             }
 

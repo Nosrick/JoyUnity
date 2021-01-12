@@ -7,7 +7,6 @@ using JoyLib.Code.Collections;
 using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Helpers;
-using UnityEngine;
 
 namespace JoyLib.Code.Entities
 {
@@ -97,11 +96,11 @@ namespace JoyLib.Code.Entities
                                 GlobalConstants.ActionLog.AddText(
                                     "Suppressing Exception when trying to add Skill Coefficient. Skill is "
                                     + skillName + ", with need name " + tuple.Item1);
-                                Debug.LogWarning(
+                                GlobalConstants.ActionLog.AddText(
                                     "Suppressing Exception when trying to add Skill Coefficient. Skill is "
                                                  + skillName + ", with need name " + tuple.Item1);
-                                Debug.LogWarning(e.Message);
-                                Debug.LogWarning(e.StackTrace);
+                                GlobalConstants.ActionLog.AddText(e.Message);
+                                GlobalConstants.ActionLog.AddText(e.StackTrace);
                             }
                         }
                     }

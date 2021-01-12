@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace JoyLib.Code.Entities
 {
@@ -24,8 +23,8 @@ namespace JoyLib.Code.Entities
             }
             catch(Exception e)
             {
-                Debug.Log(e.Message);
-                Debug.Log(e.StackTrace);
+                GlobalConstants.ActionLog.AddText(e.Message);
+                GlobalConstants.ActionLog.AddText(e.StackTrace);
                 return false;
             }
         }

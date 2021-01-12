@@ -1,6 +1,5 @@
 ﻿using JoyLib.Code.Conversation.Conversations;
 using JoyLib.Code.Quests;
-using UnityEngine;
 
 namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
 {
@@ -46,7 +45,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
 
             foreach (string next in this.NextTopics)
             {
-                Debug.Log(next);
+                GlobalConstants.ActionLog.AddText(next);
             }
 
             this.OfferedQuest.StartQuest(instigator);

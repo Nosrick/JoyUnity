@@ -45,8 +45,6 @@ public class GameManager : MonoBehaviour, IGameManager
         this.ActionLog = new ActionLog();
 
         GlobalConstants.ActionLog = this.ActionLog;
-
-        this.StartCoroutine(this.ActionLog.Update());
         
         GameObject objectHolder = GameObject.Find("WorldObjects");
         GameObject entityHolder = GameObject.Find("WorldEntities");
@@ -144,9 +142,10 @@ public class GameManager : MonoBehaviour, IGameManager
     }
 	
 	// Update is called once per frame
-	protected void Update ()
+	protected void Update()
     {
         this.m_StateManager?.Update();
+        this.ActionLog.Update();
     }
 
     public void NextState()

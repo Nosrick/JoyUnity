@@ -43,7 +43,7 @@ namespace JoyLib.Code.Scripting
                             builtFiles.Add(builtFile);
                         }
 
-                        Debug.Log("Loaded " + scriptFiles.Length + " script files.");
+                        GlobalConstants.ActionLog.AddText("Loaded " + scriptFiles.Length + " script files.");
                         List<MetadataReference> libs = new List<MetadataReference>
                         {
                             MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
@@ -70,8 +70,8 @@ namespace JoyLib.Code.Scripting
                                     continue;
                                 }
 
-                                Debug.Log(diagnostic.Severity.ToString());
-                                Debug.Log(diagnostic.GetMessage());
+                                GlobalConstants.ActionLog.AddText(diagnostic.Severity.ToString());
+                                GlobalConstants.ActionLog.AddText(diagnostic.GetMessage());
                             }
                         }
 
@@ -95,8 +95,8 @@ namespace JoyLib.Code.Scripting
                 }
                 catch (Exception ex)
                 {
-                    Debug.LogError(ex.Message);
-                    Debug.LogError(ex.StackTrace);
+                    GlobalConstants.ActionLog.AddText(ex.Message);
+                    GlobalConstants.ActionLog.AddText(ex.StackTrace);
                 }
             }
         }
@@ -111,8 +111,8 @@ namespace JoyLib.Code.Scripting
             }
             catch (Exception ex)
             {
-                Debug.LogWarning(ex.Message);
-                Debug.LogWarning(ex.StackTrace);
+                GlobalConstants.ActionLog.AddText(ex.Message);
+                GlobalConstants.ActionLog.AddText(ex.StackTrace);
                 throw new InvalidOperationException("Error when searching for Type in ScriptingEngine, type name " + type);
             }
         }
@@ -125,8 +125,8 @@ namespace JoyLib.Code.Scripting
             }
             catch (Exception e)
             {
-                Debug.LogWarning(e.Message);
-                Debug.LogWarning(e.StackTrace);
+                GlobalConstants.ActionLog.AddText(e.Message);
+                GlobalConstants.ActionLog.AddText(e.StackTrace);
                 throw new InvalidOperationException("Error when searching for Type " + typeof(T).Name);
             }
         }
@@ -146,8 +146,8 @@ namespace JoyLib.Code.Scripting
             }
             catch (Exception e)
             {
-                Debug.LogWarning(e.Message);
-                Debug.LogWarning(e.StackTrace);
+                GlobalConstants.ActionLog.AddText(e.Message);
+                GlobalConstants.ActionLog.AddText(e.StackTrace);
                 throw new InvalidOperationException("Error when searching for Type in ScriptingEngine, " +
                                                     typeof(T).Name);
             }
@@ -175,8 +175,8 @@ namespace JoyLib.Code.Scripting
             }
             catch (Exception ex)
             {
-                Debug.LogWarning(ex.Message);
-                Debug.LogWarning(ex.StackTrace);
+                GlobalConstants.ActionLog.AddText(ex.Message);
+                GlobalConstants.ActionLog.AddText(ex.StackTrace);
                 throw new InvalidOperationException("Error when searching for Type in ScriptingEngine, " + typeName);
             }
         }
@@ -191,8 +191,8 @@ namespace JoyLib.Code.Scripting
             }
             catch (Exception e)
             {
-                Debug.LogWarning(e.Message);
-                Debug.LogWarning(e.StackTrace);
+                GlobalConstants.ActionLog.AddText(e.Message);
+                GlobalConstants.ActionLog.AddText(e.StackTrace);
                 throw new InvalidOperationException(
                     "Error when searching for Type in ScriptingEngine, " + type.FullName);
             }
@@ -209,8 +209,8 @@ namespace JoyLib.Code.Scripting
             }
             catch (Exception e)
             {
-                Debug.LogWarning(e.Message);
-                Debug.LogWarning(e.StackTrace);
+                GlobalConstants.ActionLog.AddText(e.Message);
+                GlobalConstants.ActionLog.AddText(e.StackTrace);
                 throw new InvalidOperationException("Error when finding action, no such action " + actionName);
             }
         }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace JoyLib.Code.Entities.Needs
 {
@@ -30,9 +29,9 @@ namespace JoyLib.Code.Entities.Needs
             }
             catch(Exception ex)
             {
-                Debug.LogError(ex.Message);
-                Debug.LogError(ex.StackTrace);
-                Debug.LogError(ex.InnerException.StackTrace);
+                GlobalConstants.ActionLog.AddText(ex.Message);
+                GlobalConstants.ActionLog.AddText(ex.StackTrace);
+                GlobalConstants.ActionLog.AddText(ex.InnerException.StackTrace);
                 return new Dictionary<string, INeed>();
             }
         }

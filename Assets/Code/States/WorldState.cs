@@ -262,7 +262,7 @@ namespace JoyLib.Code.States
 
             if (inputAction.name.Equals("skip turn", StringComparison.OrdinalIgnoreCase))
             {
-                Debug.Log("TICK");
+                GlobalConstants.ActionLog.AddText("TICK");
                 this.Tick();
             }
             //North

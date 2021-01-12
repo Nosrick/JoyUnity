@@ -1,6 +1,5 @@
 ﻿using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
-using UnityEngine;
 
 namespace JoyLib.Code.Scripting.Actions
 {
@@ -33,7 +32,7 @@ namespace JoyLib.Code.Scripting.Actions
             }
             else
             {
-                Debug.Log("FAILED TO REMOVE ITEM");
+                GlobalConstants.ActionLog.AddText("FAILED TO REMOVE ITEM");
             }
 
             return result;

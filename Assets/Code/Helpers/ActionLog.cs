@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
@@ -22,16 +21,17 @@ namespace JoyLib.Code.Helpers
         private StreamWriter s_LogFile;
 
         private bool IsEditor = Application.isEditor;
+        
+        private StreamWriter Writer { get; set; }
 
         public ActionLog()
         {
             this.OpenLog();
         }
 
-        public IEnumerator Update()
+        public void Update()
         {
             this.ServiceQueue();
-            yield return new WaitForSeconds(0.1f);
         }
 
         public bool OpenLog()
@@ -39,14 +39,14 @@ namespace JoyLib.Code.Helpers
             try
             {
                 File.Delete(FILENAME);
-                this.WriteToLog("Log Process Started");
+                this.Writer = new StreamWriter(FILENAME);
                 return true;
             }
             catch(Exception ex)
             {
-                UnityEngine.Debug.LogError("COULD NOT START LOG PROCESS");
-                UnityEngine.Debug.LogError(ex.Message);
-                UnityEngine.Debug.LogError(ex.StackTrace);
+                Debug.LogError("COULD NOT START LOG PROCESS");
+                Debug.LogError(ex.Message);
+                Debug.LogError(ex.StackTrace);
                 return false;
             }
         }
@@ -63,14 +63,24 @@ namespace JoyLib.Code.Helpers
 
         protected void ServiceQueue()
         {
-            File.AppendAllText(FILENAME, this.m_Queue.Dequeue());
+            bool written = false;
+            while (this.m_Queue.Count > 0)
+            {
+                this.Writer.WriteLine(this.m_Queue.Dequeue());
+                written = true;
+            }
+
+            if (written)
+            {
+                this.Writer.Flush();
+            }
         }
 
         public void AddText(string stringToAdd, LogType logType = LogType.Information)
         {
             if (this.IsEditor)
             {
-                UnityEngine.Debug.Log(stringToAdd);
+                Debug.Log(stringToAdd);
             }
             this.m_Log.Enqueue(stringToAdd);
             this.WriteToLog(stringToAdd);

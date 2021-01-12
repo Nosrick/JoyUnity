@@ -7,7 +7,6 @@ using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.AI.LOS.Providers;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Helpers;
-using UnityEngine;
 
 namespace JoyLib.Code.Entities
 {
@@ -119,9 +118,9 @@ namespace JoyLib.Code.Entities
                 catch (Exception e)
                 {
                     GlobalConstants.ActionLog.AddText("ERROR LOADING ENTITY TEMPLATES, FILE " + file);
-                    Debug.LogWarning("ERROR LOADING ENTITY TEMPLATES, FILE " + file);
-                    Debug.LogWarning(e.Message);
-                    Debug.LogWarning(e.StackTrace);
+                    GlobalConstants.ActionLog.AddText("ERROR LOADING ENTITY TEMPLATES, FILE " + file);
+                    GlobalConstants.ActionLog.AddText(e.Message);
+                    GlobalConstants.ActionLog.AddText(e.StackTrace);
                 }
             }
 

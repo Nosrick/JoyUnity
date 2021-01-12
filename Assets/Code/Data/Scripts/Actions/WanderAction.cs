@@ -1,6 +1,5 @@
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.AI;
-using UnityEngine;
 
 namespace JoyLib.Code.Scripting.Actions
 {
@@ -26,10 +25,10 @@ namespace JoyLib.Code.Scripting.Actions
                 searching = true,
                 targetPoint = GlobalConstants.NO_TARGET
             };
-            Debug.Log(actor.JoyName + " is wandering.");
+            GlobalConstants.ActionLog.AddText(actor.JoyName + " is wandering.");
             foreach (string tag in tags)
             {
-                Debug.Log(tag);
+                GlobalConstants.ActionLog.AddText(tag);
             }
 
             actor.CurrentTarget = needAIData;

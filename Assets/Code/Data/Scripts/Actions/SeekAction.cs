@@ -1,6 +1,5 @@
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.AI;
-using UnityEngine;
 
 namespace JoyLib.Code.Scripting.Actions
 {
@@ -35,7 +34,7 @@ namespace JoyLib.Code.Scripting.Actions
             };
 
             actor.CurrentTarget = needAIData;
-            Debug.Log(actor.JoyName + " is seeking " + participants[1].JoyName + " for " + needName);
+            GlobalConstants.ActionLog.AddText(actor.JoyName + " is seeking " + participants[1].JoyName + " for " + needName);
 
             this.SetLastParameters(participants, tags, args);
 

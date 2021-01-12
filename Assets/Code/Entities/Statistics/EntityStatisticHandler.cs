@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using JoyLib.Code.Helpers;
-using UnityEngine;
 
 namespace JoyLib.Code.Entities.Statistics
 {
@@ -32,7 +31,8 @@ namespace JoyLib.Code.Entities.Statistics
             }
             catch (Exception e)
             {
-                Debug.LogError(e);
+                GlobalConstants.ActionLog.AddText(e.Message);
+                GlobalConstants.ActionLog.AddText(e.StackTrace);
             }
             
             return names;
