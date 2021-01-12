@@ -69,7 +69,7 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
             this.Maximum = this.CurrentJob.Experience;
             this.Value = this.Maximum;
             this.PlayerSprite.Clear();
-            this.PlayerSprite.AddSpriteState(this.Player.MonoBehaviourHandler.CurrentSpriteState, true);
+            this.PlayerSprite.AddSpriteState(this.Player.MonoBehaviourHandler.CurrentSpriteState);
             this.PlayerName.text = this.Player.JoyName;
             this.JobSelection.Container = this.Player.Jobs.Select(job => job.Name)
                 .ToList();
@@ -154,11 +154,6 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
 
         protected void SetUpStatistics()
         {
-            foreach (GrowingNamedItem item in this.Statistics)
-            {
-                item.gameObject.SetActive(false);
-            }
-            
             if (this.Statistics.Count < this.OriginalStatistics.Count)
             {
                 for (int i = this.Statistics.Count; i < this.OriginalStatistics.Count(); i++)
@@ -167,6 +162,13 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
                         Instantiate(this.namedItemPrefab, this.StatisticsPanel.transform).GetComponent<GrowingNamedItem>();
                     newItem.gameObject.SetActive(true);
                     this.Statistics.Add(newItem);
+                }
+            }
+            else if (this.Statistics.Count >= this.OriginalStatistics.Count)
+            {
+                for (int i = this.OriginalStatistics.Count; i < this.Statistics.Count; i++)
+                {
+                    this.Statistics[i].gameObject.SetActive(false);
                 }
             }
         
@@ -200,6 +202,13 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
                     this.Skills.Add(newItem);
                 }
             }
+            else if (this.Skills.Count >= this.OriginalSkills.Count)
+            {
+                for (int i = this.OriginalSkills.Count; i < this.Skills.Count; i++)
+                {
+                    this.Skills[i].gameObject.SetActive(false);
+                }
+            }
 
             for (int i = 0; i < this.OriginalSkills.Count; i++)
             {
@@ -221,11 +230,6 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
                     .Select(pair => new Tuple<IAbility, int>(pair.Key, pair.Value))
                     .ToList();
 
-            foreach (AbilityItem item in this.Abilities)
-            {
-                item.gameObject.SetActive(false);
-            }
-
             if (this.Abilities.Count < abilities.Count)
             {
                 for (int i = this.Abilities.Count; i < abilities.Count; i++)
@@ -235,6 +239,13 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
                             .GetComponent<AbilityItem>();
                     newItem.gameObject.SetActive(true);
                     this.Abilities.Add(newItem);
+                }
+            }
+            else if (this.Abilities.Count > abilities.Count)
+            {
+                for (int i = abilities.Count; i < this.Abilities.Count; i++)
+                {
+                    this.Abilities[i].gameObject.SetActive(false);
                 }
             }
             
@@ -255,7 +266,6 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
                 builder.Clear();
             }
 
-            
             if (abilities.Count == 0)
             {
                 if (this.Abilities.Count == 0)

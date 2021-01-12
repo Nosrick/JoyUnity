@@ -31,6 +31,10 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
                     NewValue = this.m_Value,
                     Delta = previous > this.m_Value ? this.DecreaseCost : this.IncreaseCost
                 });
+                GUIManager.CloseGUI(GUINames.TOOLTIP);
+                GUIManager.OpenGUI(GUINames.TOOLTIP).GetComponent<Tooltip>().Show(
+                    null,
+                    this.Tooltip);
             }
         }
         
