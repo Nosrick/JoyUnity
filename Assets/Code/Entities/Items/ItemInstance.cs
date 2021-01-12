@@ -412,7 +412,7 @@ namespace JoyLib.Code.Entities.Items
 
         public bool Broken => this.HitPointsRemaining <= 0;
 
-        public int Efficiency => (int)(this.m_Type.Material.Bonus * (this.HitPointsRemaining / (float)this.HitPoints));
+        public int Efficiency => (int)(this.m_Type.Material.Bonus * (this.GetValue(DURABILITY) / (float)this.GetMaximum(DURABILITY)));
 
         public string ConditionString
         {

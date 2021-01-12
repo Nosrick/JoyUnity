@@ -142,6 +142,7 @@ namespace JoyLib.Code.Combat
                 result = Math.Max(0, result);
             }
 
+            GlobalConstants.ActionLog.AddText(attacker.JoyName + " attacks " + defender.JoyName + " for " + result + " damage.");
             return result;
         }
     }

@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using JoyLib.Code.Entities;
+using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Unity.GUI;
@@ -111,18 +114,22 @@ namespace JoyLib.Code.Unity
                 && GlobalConstants.GameManager.Player.VisionProvider.CanSee(
                     GlobalConstants.GameManager.Player,
                     this.JoyObject.MyWorld,
-                    this.JoyObject.WorldPosition)
-                && this.JoyObject is IEntity)
+                    this.JoyObject.WorldPosition))
             {
-                if (AdjacencyHelper.IsAdjacent(
-                    this.JoyObject.WorldPosition, 
-                    GlobalConstants.GameManager.Player.WorldPosition))
+                bool adjacent = AdjacencyHelper.IsAdjacent(
+                    this.JoyObject.WorldPosition,
+                    GlobalConstants.GameManager.Player.WorldPosition);
+                if (this.JoyObject is IEntity)
                 {
-                    contextMenu.AddMenuItem("Talk", this.TalkToPlayer);
-                }
-                else
-                {
-                    contextMenu.AddMenuItem("Call Over", this.CallOver);
+                    if (adjacent)
+                    {
+                        contextMenu.AddMenuItem("Talk", this.TalkToPlayer);
+                        contextMenu.AddMenuItem("Attack", this.Attack);
+                    }
+                    else
+                    {
+                        contextMenu.AddMenuItem("Call Over", this.CallOver);
+                    }
                 }
             }
             else
@@ -184,6 +191,52 @@ namespace JoyLib.Code.Unity
                     new IJoyObject[] {this.JoyObject, GlobalConstants.GameManager.Player},
                     new[] {"call over"},
                     new object[] {"friendship"});
+        }
+
+        protected void Attack()
+        {
+            IEntity player = this.JoyObject.MyWorld.Player;
+            List<string> attackerTags = player.Equipment.Contents
+                .Where(equipment => equipment.HasTag("weapon") && equipment.HasTag("physical"))
+                .SelectMany(equipment => equipment.Tags)
+                .Distinct()
+                .ToList();
+            
+            IEntity defender = this.JoyObject as IEntity;
+            List<string> defenderTags = new List<string>
+            {
+                "evasion",
+                "agility"
+            };
+            defenderTags.AddRange(defender.Equipment.Contents
+                .Where(equipment => equipment.HasTag("armour") && equipment.HasTag("physical"))
+                .SelectMany(equipment => equipment.Tags)
+                .Distinct());
+            defenderTags = defenderTags.Distinct().ToList();
+            int result = GlobalConstants.GameManager.CombatEngine.MakeAttack(
+                player,
+                defender,
+                attackerTags,
+                defenderTags);
+
+            if (result <= 0)
+            {
+                return;
+            }
+            
+            defender.ModifyValue(DerivedValueName.HITPOINTS, -result);
+            if (defender.GetValue(DerivedValueName.HITPOINTS) <= 0)
+            {
+                GlobalConstants.ActionLog.AddText(player.JoyName + " has knocked " + defender.JoyName + " unconscious!");
+            }
+
+            if (defender.Alive)
+            {
+                return;
+            }
+            
+            player.MyWorld.RemoveEntity(defender.WorldPosition);
+            GlobalConstants.ActionLog.AddText(player.JoyName + " has killed " + defender.JoyName + "!");
         }
     }
 }

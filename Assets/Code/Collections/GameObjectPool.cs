@@ -39,6 +39,7 @@ namespace Code.Collections
             if (result)
             {
                 this.InactiveObjects.Add(gameObject);
+                gameObject.SetActive(false);
             }
 
             return result;

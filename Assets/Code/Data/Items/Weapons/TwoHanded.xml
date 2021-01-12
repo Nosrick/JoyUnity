@@ -21,6 +21,8 @@
         <Tag>two-handed</Tag>
         <Tag>sword</Tag>
         <Tag>physical</Tag>
+        <Tag>heavy blades</Tag>
+        <Tag>strength</Tag>
         <Tileset>Weapons</Tileset>
     </IdentifiedItem>
 
