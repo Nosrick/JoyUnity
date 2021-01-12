@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code.Entities;
+using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
@@ -18,7 +19,7 @@ namespace JoyLib.Code.Unity
         public IJoyObject JoyObject { get; protected set; }
         protected ManagedSprite SpeechBubble { get; set; }
         protected bool PointerOver { get; set; }
-        
+
         protected static IGUIManager GUIManager { get; set; }
 
         public override void FixedUpdate()
@@ -28,7 +29,7 @@ namespace JoyLib.Code.Unity
             {
                 return;
             }
-            
+
             this.JoyObject.Update();
             this.transform.position = new Vector3(this.JoyObject.WorldPosition.x, this.JoyObject.WorldPosition.y);
         }
@@ -54,7 +55,7 @@ namespace JoyLib.Code.Unity
             {
                 GUIManager = GlobalConstants.GameManager.GUIManager;
             }
-            
+
             this.JoyObject = joyObject;
             this.JoyObject.AttachMonoBehaviourHandler(this);
             Transform transform = this.transform.Find("Speech Bubble");
@@ -62,6 +63,7 @@ namespace JoyLib.Code.Unity
             {
                 this.SpeechBubble = transform.GetComponent<ManagedSprite>();
             }
+
             this.name = this.JoyObject.JoyName + ":" + this.JoyObject.GUID;
             this.transform.position = new Vector3(this.JoyObject.WorldPosition.x, this.JoyObject.WorldPosition.y, 0.0f);
             this.SetSpeechBubble(false);
@@ -73,7 +75,7 @@ namespace JoyLib.Code.Unity
             {
                 return;
             }
-            
+
             this.SpeechBubble.gameObject.SetActive(on);
             if (on)
             {
@@ -150,7 +152,7 @@ namespace JoyLib.Code.Unity
             {
                 return;
             }
-        
+
             if (change != InputActionChange.ActionPerformed)
             {
                 return;
@@ -160,7 +162,7 @@ namespace JoyLib.Code.Unity
             {
                 return;
             }
-            
+
             if (action.name.Equals("open context menu", StringComparison.OrdinalIgnoreCase))
             {
                 this.OpenContextMenu();
@@ -177,9 +179,9 @@ namespace JoyLib.Code.Unity
             GUIManager.CloseGUI(GUINames.CONTEXT_MENU);
             GUIManager.OpenGUI(GUINames.CONVERSATION);
             GlobalConstants.GameManager.ConversationEngine.SetActors(
-                GlobalConstants.GameManager.Player, 
+                GlobalConstants.GameManager.Player,
                 this.JoyObject as IEntity);
-            
+
             GlobalConstants.GameManager.ConversationEngine.Converse();
         }
 
@@ -196,47 +198,133 @@ namespace JoyLib.Code.Unity
         protected void Attack()
         {
             IEntity player = this.JoyObject.MyWorld.Player;
-            List<string> attackerTags = player.Equipment.Contents
+            IEntity defender = this.JoyObject as IEntity;
+            int playerAttack = this.PlayerAttack(player);
+
+            IEnumerable<IRelationship> relationships =
+                GlobalConstants.GameManager.RelationshipHandler.Get(new[] {player, defender});
+            int bestRelationship = int.MinValue;
+            foreach (IRelationship relationship in relationships)
+            {
+                relationship.ModifyValueOfOtherParticipants(player.GUID, -50);
+                int value = relationship.GetRelationshipValue(defender.GUID, player.GUID);
+                if (value > bestRelationship)
+                {
+                    bestRelationship = value;
+                }
+            }
+
+            defender.ModifyValue(DerivedValueName.HITPOINTS, -playerAttack);
+            if (defender.Alive == false)
+            {
+                player.MyWorld.RemoveEntity(defender.WorldPosition);
+                GlobalConstants.ActionLog.AddText(player.JoyName + " has killed " + defender.JoyName + "!");
+            }
+            else if (defender.Conscious == false)
+            {
+                GlobalConstants.ActionLog.AddText(player.JoyName + " has knocked " + defender.JoyName +
+                                                  " unconscious!");
+            }
+            else if (defender.Conscious)
+            {
+                if (bestRelationship < -50)
+                {
+                    int defenderAttack = this.MyAttack(player);
+                    if (defenderAttack > 0)
+                    {
+                        player.ModifyValue(DerivedValueName.HITPOINTS, -defenderAttack);
+                    }
+                }
+            }
+
+            this.JoyObject.MyWorld.Tick();
+        }
+
+        protected int PlayerAttack(IEntity player)
+        {
+            IEntity defender = this.JoyObject as IEntity;
+
+            List<string> attackerTags = new List<string>
+            {
+                "physical",
+                "attack"
+            };
+            attackerTags.AddRange(player.Equipment.Contents
                 .Where(equipment => equipment.HasTag("weapon") && equipment.HasTag("physical"))
                 .SelectMany(equipment => equipment.Tags)
-                .Distinct()
-                .ToList();
-            
-            IEntity defender = this.JoyObject as IEntity;
+                .Distinct());
+            if (attackerTags.Count == 2)
+            {
+                attackerTags.AddRange(new[]
+                {
+                    "martial arts",
+                    "agility",
+                    "strength"
+                });
+            }
+
+            attackerTags = attackerTags.Distinct().ToList();
+
             List<string> defenderTags = new List<string>
             {
                 "evasion",
-                "agility"
+                "agility",
+                "defend",
+                "physical"
             };
             defenderTags.AddRange(defender.Equipment.Contents
                 .Where(equipment => equipment.HasTag("armour") && equipment.HasTag("physical"))
                 .SelectMany(equipment => equipment.Tags)
                 .Distinct());
             defenderTags = defenderTags.Distinct().ToList();
-            int result = GlobalConstants.GameManager.CombatEngine.MakeAttack(
+            return GlobalConstants.GameManager.CombatEngine.MakeAttack(
                 player,
                 defender,
                 attackerTags,
                 defenderTags);
+        }
 
-            if (result <= 0)
+        protected int MyAttack(IEntity player)
+        {
+            IEntity myself = this.JoyObject as IEntity;
+
+            List<string> attackerTags = new List<string>
             {
-                return;
-            }
-            
-            defender.ModifyValue(DerivedValueName.HITPOINTS, -result);
-            if (defender.GetValue(DerivedValueName.HITPOINTS) <= 0)
+                "physical",
+                "attack"
+            };
+            attackerTags.AddRange(myself.Equipment.Contents
+                .Where(equipment => equipment.HasTag("weapon") && equipment.HasTag("physical"))
+                .SelectMany(equipment => equipment.Tags)
+                .Distinct());
+
+            if (attackerTags.Count == 2)
             {
-                GlobalConstants.ActionLog.AddText(player.JoyName + " has knocked " + defender.JoyName + " unconscious!");
+                attackerTags.AddRange(new[]
+                {
+                    "agility",
+                    "strength",
+                    "martial arts"
+                });
             }
 
-            if (defender.Alive)
+            List<string> defenderTags = new List<string>
             {
-                return;
-            }
-            
-            player.MyWorld.RemoveEntity(defender.WorldPosition);
-            GlobalConstants.ActionLog.AddText(player.JoyName + " has killed " + defender.JoyName + "!");
+                "evasion",
+                "agility",
+                "physical",
+                "defend"
+            };
+            defenderTags.AddRange(player.Equipment.Contents
+                .Where(equipment => equipment.HasTag("armour") && equipment.HasTag("physical"))
+                .SelectMany(equipment => equipment.Tags)
+                .Distinct());
+            defenderTags = defenderTags.Distinct().ToList();
+            return GlobalConstants.GameManager.CombatEngine.MakeAttack(
+                myself,
+                player,
+                attackerTags,
+                defenderTags);
         }
     }
 }

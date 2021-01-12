@@ -46,8 +46,6 @@ namespace JoyLib.Code
 
         public int HitPoints => this.GetMaximum("hitpoints");
 
-        public bool Conscious => this.HitPointsRemaining > 0;
-
         public bool Alive => this.HitPointsRemaining > (this.HitPoints * (-1));
         
         protected NonUniqueDictionary<object, object> Data { get; set; }

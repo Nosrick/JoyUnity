@@ -16,6 +16,7 @@
         <Tag>torso</Tag>
         <Tag>metal</Tag>
         <Tag>physical</Tag>
+        <Tag>heavy armour</Tag>
     </IdentifiedItem>
     
     <IdentifiedItem>
@@ -31,6 +32,7 @@
         <Tag>torso</Tag>
         <Tag>leather</Tag>
         <Tag>physical</Tag>
+        <Tag>light armour</Tag>
     </IdentifiedItem>
     
     <TileSet>

@@ -17,6 +17,7 @@
         <Tag>armour</Tag>
         <Tag>metal</Tag>
         <Tag>physical</Tag>
+        <Tag>light armour</Tag>
     </IdentifiedItem>
     
     <IdentifiedItem>
@@ -33,6 +34,8 @@
         <Tag>armour</Tag>
         <Tag>leather</Tag>
         <Tag>weapon</Tag>
+        <Tag>physical</Tag>
+        <Tag>light armour</Tag>
     </IdentifiedItem>
     
     <TileSet>

@@ -60,6 +60,8 @@ namespace JoyLib.Code.Entities
         string CreatureType { get; }
         
         bool HasMoved { get; }
+
+        bool Conscious { get; }
         
         bool Alive { get; }
         

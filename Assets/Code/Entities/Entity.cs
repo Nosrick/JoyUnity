@@ -654,6 +654,11 @@ namespace JoyLib.Code.Entities
         {
             this.HasMoved = false;
 
+            if (this.Conscious == false)
+            {
+                return;
+            }
+
             this.VisionProvider.Update(this, this.MyWorld);
             this.m_Driver.Locomotion(this);
         }
@@ -1096,6 +1101,8 @@ namespace JoyLib.Code.Entities
                 }
             }
         }
+
+        public bool Conscious => this.HitPointsRemaining > 0;
 
         public List<IJob> Jobs { get; protected set; }
 
