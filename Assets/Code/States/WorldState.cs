@@ -210,6 +210,10 @@ namespace JoyLib.Code.States
             if (inputAction.name.Equals("toggle inventory", StringComparison.OrdinalIgnoreCase))
             {
                 this.GUIManager.ToggleGUI(GUINames.INVENTORY);
+                if (this.GUIManager.IsActive(GUINames.INVENTORY) == false)
+                {
+                    this.GUIManager.CloseGUI(GUINames.INVENTORY_CONTAINER);
+                }
             }
             else if (inputAction.name.Equals("toggle equipment", StringComparison.OrdinalIgnoreCase))
             {
