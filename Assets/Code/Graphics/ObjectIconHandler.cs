@@ -35,7 +35,7 @@ namespace JoyLib.Code.Graphics
                 return true;
             }
 
-            this.Icons = new Dictionary<string, IDictionary<string, SpriteData>>();
+            this.Icons = new Dictionary<string, List<Tuple<string, SpriteData>>>();
 
             Sprite defaultSprite = Resources.Load<Sprite>("Sprites/default");
             //defaultSprite.pivot = new Vector2(0.5f, 0.5f);
@@ -61,9 +61,9 @@ namespace JoyLib.Code.Graphics
                 }
             };
 
-            this.Icons.Add("DEFAULT", new Dictionary<string, SpriteData>
+            this.Icons.Add("DEFAULT", new List<Tuple<string, SpriteData>>
             {
-                { iconData.m_Name, iconData }
+                new Tuple<string, SpriteData>(iconData.m_Name, iconData)
             });
 
             string[] files =
@@ -95,16 +95,6 @@ namespace JoyLib.Code.Graphics
 
         public bool AddSpriteData(string tileSet, SpriteData dataToAdd)
         {
-            if (this.Icons.ContainsKey(tileSet))
-            {
-                if (this.Icons[tileSet].ContainsKey(dataToAdd.m_Name))
-                {
-                    GlobalConstants.ActionLog.AddText("Trying to add/overwrite sprites, at tile set " + tileSet +
-                                                      " with name " + dataToAdd.m_Name);
-                    return false;
-                }
-            }
-
             List<SpritePart> parts = new List<SpritePart>();
             foreach (SpritePart part in dataToAdd.m_Parts)
             {
@@ -123,15 +113,15 @@ namespace JoyLib.Code.Graphics
 
             if (this.Icons.ContainsKey(tileSet))
             {
-                this.Icons[tileSet].Add(dataToAdd.m_Name, dataToAdd);
+                this.Icons[tileSet].Add(new Tuple<string, SpriteData>(dataToAdd.m_Name, dataToAdd));
             }
             else
             {
-                this.Icons.Add(new KeyValuePair<string, IDictionary<string, SpriteData>>(
+                this.Icons.Add(new KeyValuePair<string, List<Tuple<string, SpriteData>>>(
                     tileSet,
-                    new Dictionary<string, SpriteData>
+                    new List<Tuple<string, SpriteData>>
                     {
-                        { dataToAdd.m_Name, dataToAdd }
+                        new Tuple<string, SpriteData>(dataToAdd.m_Name, dataToAdd)
                     }));
             }
 
@@ -178,12 +168,13 @@ namespace JoyLib.Code.Graphics
 
         public IEnumerable<SpriteData> ReturnDefaultData()
         {
-            return this.Icons["DEFAULT"].Values;
+            return this.Icons["DEFAULT"]
+                .Select(tuple => tuple.Item2);
         }
 
         public SpriteData ReturnDefaultIcon()
         {
-            return this.Icons["DEFAULT"].Values.First();
+            return this.Icons["DEFAULT"].First().Item2;
         }
 
         public SpriteData GetFrame(string tileSet, string tileName, string state = "DEFAULT", int frame = 0)
@@ -195,9 +186,9 @@ namespace JoyLib.Code.Graphics
         public IEnumerable<SpriteData> GetSprites(string tileSet, string tileName, string state = "DEFAULT")
         {
             List<SpriteData> data = this.Icons.Where(x => x.Key.Equals(tileSet, StringComparison.OrdinalIgnoreCase))
-                .SelectMany(x => x.Value.Where(pair => pair.Key.Equals(tileName, StringComparison.OrdinalIgnoreCase)))
-                .Where(pair => pair.Value.m_State.Equals(state, StringComparison.OrdinalIgnoreCase))
-                .Select(x => x.Value)
+                .SelectMany(x => x.Value.Where(pair => pair.Item1.Equals(tileName, StringComparison.OrdinalIgnoreCase)))
+                .Where(pair => pair.Item2.m_State.Equals(state, StringComparison.OrdinalIgnoreCase))
+                .Select(x => x.Item2)
                 .ToList();
 
             return data.Any() == false ? this.ReturnDefaultData() : data;
@@ -207,10 +198,10 @@ namespace JoyLib.Code.Graphics
         {
             return this.Icons.Where(pair => pair.Key.Equals(tileSet, StringComparison.OrdinalIgnoreCase))
                 .SelectMany(pair => pair.Value)
-                .Select(pair => pair.Value);
+                .Select(pair => pair.Item2);
         }
 
-        protected IDictionary<string, IDictionary<string, SpriteData>> Icons
+        protected IDictionary<string, List<Tuple<string, SpriteData>>> Icons
         {
             get;
             set;

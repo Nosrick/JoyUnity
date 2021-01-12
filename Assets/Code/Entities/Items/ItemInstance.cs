@@ -28,6 +28,8 @@ namespace JoyLib.Code.Entities.Items
 
         protected long m_OwnerGUID;
         protected string m_OwnerString;
+        
+        protected int StateIndex { get; set; }
 
         protected int m_Value;
 
@@ -100,6 +102,15 @@ namespace JoyLib.Code.Entities.Items
             this.CalculateValue();
             this.ConstructDescription();
 
+            if (this.States.Count > 1)
+            {
+                this.StateIndex = this.Roller.Roll(0, this.States.Count);
+            }
+            else
+            {
+                this.StateIndex = 0;
+            }
+
             if (this.Prefab is null == false)
             {
                 this.Instantiate(gameObject, active);
@@ -121,12 +132,8 @@ namespace JoyLib.Code.Entities.Items
             this.MonoBehaviourHandler.IsAnimated =
                 this.Tags.Any(tag => tag.Equals("animated", StringComparison.OrdinalIgnoreCase));
             this.MonoBehaviourHandler.Clear();
-            foreach (ISpriteState state in this.States)
-            {
-                this.MonoBehaviourHandler.AddSpriteState(state);
-            }
+            this.MonoBehaviourHandler.AddSpriteState(this.States[this.StateIndex]);
             this.MonoBehaviourHandler.gameObject.SetActive(active);
-            this.MonoBehaviourHandler.ChangeState(this.States[0]);
         }
 
         public IItemInstance Copy(IItemInstance copy)
