@@ -98,7 +98,7 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
 
         public void OnDisable()
         {
-            GUIManager.CloseGUI(GUINames.TOOLTIP);
+            GUIManager?.CloseGUI(GUINames.TOOLTIP);
         }
 
         protected void OnAbilityChange(object sender, ValueChangedEventArgs args)

@@ -120,6 +120,7 @@ namespace JoyLib.Code.Unity
             {
                 foreach (JoyItemSlot slot in this.Slots)
                 {
+                    slot.OnEnable();
                     slot.Container = this;
                     slot.Item = null;
                 }
@@ -143,8 +144,8 @@ namespace JoyLib.Code.Unity
 
         public void OnDisable()
         {
-            this.GUIManager.CloseGUI(GUINames.TOOLTIP);
-            this.GUIManager.CloseGUI(GUINames.CONTEXT_MENU);
+            this.GUIManager?.CloseGUI(GUINames.TOOLTIP);
+            this.GUIManager?.CloseGUI(GUINames.CONTEXT_MENU);
         }
 
         public virtual void RemoveAllItems()
