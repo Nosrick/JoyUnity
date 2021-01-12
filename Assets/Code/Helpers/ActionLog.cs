@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading;
 using JoyLib.Code.Entities;
 using UnityEngine;
 
@@ -12,15 +11,12 @@ namespace JoyLib.Code.Helpers
         private Queue<string> m_Log = new Queue<string>(10);
 
         private Queue<string> m_Queue = new Queue<string>();
-        private Thread m_LogProcess;
 
         private const int LINES_TO_KEEP = 10;
 
-        private const string FILENAME = "log";
+        private const string FILENAME = "player.log";
 
-        private StreamWriter s_LogFile;
-
-        private bool IsEditor = Application.isEditor;
+        private readonly bool IsEditor = Application.isEditor;
         
         private StreamWriter Writer { get; set; }
 
