@@ -6,7 +6,6 @@ using System.Xml.Linq;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
 using UnityEngine;
-using LogType = JoyLib.Code.Helpers.LogType;
 
 namespace JoyLib.Code.Cultures
 {
@@ -124,9 +123,9 @@ namespace JoyLib.Code.Cultures
                     }
                     catch (Exception e)
                     {
-                        GlobalConstants.ActionLog.AddText(e.Message, LogType.Error);
-                        GlobalConstants.ActionLog.AddText(e.StackTrace, LogType.Error);
-                        GlobalConstants.ActionLog.AddText("Could not find cursor colours in file " + file, LogType.Error);
+                        GlobalConstants.ActionLog.AddText(e.Message, LogLevel.Error);
+                        GlobalConstants.ActionLog.AddText(e.StackTrace, LogLevel.Error);
+                        GlobalConstants.ActionLog.AddText("Could not find cursor colours in file " + file, LogLevel.Error);
                         cursorColours.Add("default", Color.magenta);
                     }
                     

@@ -79,9 +79,9 @@ namespace JoyLib.Code.World
             }
             catch (Exception e)
             {
-                GlobalConstants.ActionLog.AddText("ERROR GETTING WORLD INFO");
-                GlobalConstants.ActionLog.AddText(e.Message);
-                GlobalConstants.ActionLog.AddText(e.StackTrace);
+                GlobalConstants.ActionLog.AddText("ERROR GETTING WORLD INFO", LogLevel.Error);
+                GlobalConstants.ActionLog.AddText(e.Message, LogLevel.Error);
+                GlobalConstants.ActionLog.AddText(e.StackTrace, LogLevel.Error);
                 throw new InvalidOperationException("Error getting world info for " + name);
             }
         }

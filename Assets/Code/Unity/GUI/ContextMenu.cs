@@ -24,13 +24,10 @@ namespace JoyLib.Code.Unity.GUI
 
         protected void Initialise()
         {
-            Debug.Log("CONTEXT MENU INITIALISING");
-
             if (this.RectTransform is null)
             {
                 this.RectTransform = this.GetComponent<RectTransform>();
                 this.ItemCache = new List<MenuItem>();
-                Debug.Log("CONTEXT MENU CACHE INITIALISED");
                 this.GUIData = this.GetComponent<GUIData>();
             }
         }
@@ -70,10 +67,6 @@ namespace JoyLib.Code.Unity.GUI
         public virtual void Clear ()
         {
             this.Initialise();
-            if (this.ItemCache is null)
-            {
-                GlobalConstants.ActionLog.AddText("CONTEXT MENU ITEMS ARE NULL");
-            }
             for (int i = 0; i < this.ItemCache.Count; i++) 
             {
                 this.ItemCache [i].gameObject.SetActive(false);

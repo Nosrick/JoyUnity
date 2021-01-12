@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using JoyLib.Code.Entities;
 using UnityEngine;
 
@@ -8,11 +9,9 @@ namespace JoyLib.Code.Helpers
 {
     public class ActionLog
     {
-        private Queue<string> m_Log = new Queue<string>(10);
+        private Queue<LogEntry> m_Queue = new Queue<LogEntry>();
 
-        private Queue<string> m_Queue = new Queue<string>();
-
-        private const int LINES_TO_KEEP = 10;
+        public const int LINES_TO_KEEP = 10;
 
         private const string FILENAME = "player.log";
 
@@ -47,14 +46,9 @@ namespace JoyLib.Code.Helpers
             }
         }
 
-        private void WriteToLog(string addition)
-        {
-            this.m_Queue.Enqueue(addition + "\n");
-        }
-
         public void LogAction(Entity actor, string actionString)
         {
-            this.AddText(actor.JoyName + " is " + actionString);
+            this.AddText(actor.JoyName + " is " + actionString, LogLevel.Gameplay);
         }
 
         protected void ServiceQueue()
@@ -72,28 +66,35 @@ namespace JoyLib.Code.Helpers
             }
         }
 
-        public void AddText(string stringToAdd, LogType logType = LogType.Information)
+        public void AddText(string stringToAdd, LogLevel logLevel = LogLevel.Information)
         {
             if (this.IsEditor)
             {
                 Debug.Log(stringToAdd);
             }
-            this.m_Log.Enqueue(stringToAdd);
-            this.WriteToLog(stringToAdd);
-
-            if (this.m_Log.Count > LINES_TO_KEEP)
+            this.m_Queue.Enqueue(new LogEntry
             {
-                this.m_Log.Dequeue();
-            }
+                m_Data = stringToAdd,
+                m_LogLevel = logLevel
+            });
         }
 
-        public IReadOnlyCollection<string> Log => this.m_Log;
+        public IEnumerable<string> Log => this.m_Queue
+            .Where(data => data.m_LogLevel == LogLevel.Gameplay)
+            .Select(data => data.m_Data);
     }
 
-    public enum LogType
+    public enum LogLevel
     {
         Debug,
         Information,
+        Gameplay,
         Error
+    }
+
+    public struct LogEntry
+    {
+        public string m_Data;
+        public LogLevel m_LogLevel;
     }
 }

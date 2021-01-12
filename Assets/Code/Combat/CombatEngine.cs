@@ -5,6 +5,7 @@ using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Helpers;
 using JoyLib.Code.Rollers;
 
 namespace JoyLib.Code.Combat
@@ -142,7 +143,9 @@ namespace JoyLib.Code.Combat
                 result = Math.Max(0, result);
             }
 
-            GlobalConstants.ActionLog.AddText(attacker.JoyName + " attacks " + defender.JoyName + " for " + result + " damage.");
+            GlobalConstants.ActionLog.AddText(
+                attacker.JoyName + " attacks " + defender.JoyName + " for " + result + " damage.",
+                LogLevel.Gameplay);
             return result;
         }
     }
