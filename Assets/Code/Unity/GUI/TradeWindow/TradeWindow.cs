@@ -7,7 +7,6 @@ using JoyLib.Code.Events;
 using JoyLib.Code.Scripting;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity.GUI
 {
@@ -19,7 +18,8 @@ namespace JoyLib.Code.Unity.GUI
         [SerializeField] protected TextMeshProUGUI LeftValue;
         [SerializeField] protected TextMeshProUGUI RightValue;
 
-        [SerializeField] protected TextMeshProUGUI RightName;
+        [SerializeField] protected TextMeshProUGUI m_RightGenderedText;
+        [SerializeField] protected TextMeshProUGUI m_RightName;
 
         [SerializeField] protected ItemContainer LeftInventory;
         [SerializeField] protected ItemContainer LeftOffering;
@@ -77,10 +77,13 @@ namespace JoyLib.Code.Unity.GUI
             this.RightInventory.Owner = this.Right;
             this.RightOffering.Owner = new VirtualStorage();
 
-            this.RightName.text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(this.Right.Gender.PersonalSubject) +
+            this.m_RightGenderedText.text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(this.Right.Gender.PersonalSubject) +
                                   " " + this.Right.Gender.IsOrAre + " offering";
-            
-            LayoutRebuilder.ForceRebuildLayoutImmediate(this.RectTransform);
+            this.m_RightName.text = this.Right.JoyName;
+
+            this.Tally();
+
+            //LayoutRebuilder.ForceRebuildLayoutImmediate(this.RectTransform);
         }
 
         public bool Trade()
@@ -129,7 +132,6 @@ namespace JoyLib.Code.Unity.GUI
             this.RightOffering.RemoveAllItems();
 
             this.SetActors(this.Left, this.Right);
-            this.Tally();
 
             return true;
         }

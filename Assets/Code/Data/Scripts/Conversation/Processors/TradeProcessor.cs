@@ -1,6 +1,6 @@
 ﻿using JoyLib.Code.Conversation.Conversations;
+using JoyLib.Code.Helpers;
 using JoyLib.Code.Unity.GUI;
-using UnityEngine;
 
 namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
 {
@@ -24,15 +24,23 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
 
         protected void Initialise()
         {
-            if (TradeWindow is null)
+            if (TradeWindow is null || GUIManager is null)
             {
-                TradeWindow = GameObject.Find("Trade").GetComponent<TradeWindow>();
-                GUIManager = GlobalConstants.GameManager.GUIManager;
+                try
+                {
+                    GUIManager = GlobalConstants.GameManager.GUIManager;
+                    TradeWindow = GUIManager.GetGUI(GUINames.TRADE).GetComponent<TradeWindow>();
+                }
+                catch
+                {
+                    GlobalConstants.ActionLog.AddText("Could not load TradeProcessor bits. Trying again later.", LogLevel.Warning);
+                }
             }
         }
 
         public override ITopic[] Interact(IEntity instigator, IEntity listener)
         {
+            this.Initialise();
             TradeWindow.SetActors(instigator, listener);
             
             GUIManager.OpenGUI("Trade");

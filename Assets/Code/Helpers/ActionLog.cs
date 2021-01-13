@@ -99,12 +99,18 @@ namespace JoyLib.Code.Helpers
         Debug,
         Information,
         Gameplay,
+        Warning,
         Error
     }
 
-    public struct LogEntry
+    public class LogEntry
     {
         public string m_Data;
         public LogLevel m_LogLevel;
+
+        public override string ToString()
+        {
+            return "[" + this.m_LogLevel + "]: " + this.m_Data;
+        }
     }
 }

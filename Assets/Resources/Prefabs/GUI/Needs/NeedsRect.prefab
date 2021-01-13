@@ -131,7 +131,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 10
   m_TargetDisplay: 0
 --- !u!114 &471553032
 MonoBehaviour:
@@ -165,7 +165,7 @@ MonoBehaviour:
   m_RemovesControl: 0
   m_ClosesOthers: 0
   m_AlwaysOpen: 1
-  m_Index: 0
+  m_AlwaysOnTop: 0
 --- !u!222 &8185498328792096719
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -598,7 +598,7 @@ PrefabInstance:
     - target: {fileID: 8053869093753893887, guid: 3f671d9551e4c2943a01cf8e502f13af,
         type: 3}
       propertyPath: m_fontSizeMax
-      value: 20
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 8053869093753893887, guid: 3f671d9551e4c2943a01cf8e502f13af,
         type: 3}
@@ -629,7 +629,7 @@ PrefabInstance:
     - target: {fileID: 8053869094222197593, guid: 3f671d9551e4c2943a01cf8e502f13af,
         type: 3}
       propertyPath: m_MinHeight
-      value: 20
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 8053869094222197593, guid: 3f671d9551e4c2943a01cf8e502f13af,
         type: 3}
@@ -770,7 +770,7 @@ PrefabInstance:
     - target: {fileID: 8053869094365893790, guid: 3f671d9551e4c2943a01cf8e502f13af,
         type: 3}
       propertyPath: m_fontSizeMax
-      value: 20
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 8053869094365893790, guid: 3f671d9551e4c2943a01cf8e502f13af,
         type: 3}

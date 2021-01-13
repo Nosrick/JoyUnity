@@ -1239,7 +1239,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LeftValue: {fileID: 2333912725600333599}
   RightValue: {fileID: 2333912726121193145}
-  RightName: {fileID: 2333912725601075038}
+  m_RightGenderedText: {fileID: 2333912725601075038}
+  m_RightName: {fileID: 2333912725685141463}
   LeftInventory: {fileID: 2333912726033209119}
   LeftOffering: {fileID: 2333912726576562482}
   RightInventory: {fileID: 2333912727104761473}
@@ -1309,7 +1310,7 @@ MonoBehaviour:
   m_RemovesControl: 1
   m_ClosesOthers: 1
   m_AlwaysOpen: 0
-  m_Index: 0
+  m_AlwaysOnTop: 0
 --- !u!1 &2333912726180944504
 GameObject:
   m_ObjectHideFlags: 0
