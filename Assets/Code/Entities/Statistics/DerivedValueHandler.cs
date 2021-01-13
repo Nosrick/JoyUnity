@@ -16,6 +16,7 @@ namespace JoyLib.Code.Entities.Statistics
         protected Dictionary<string, string> ItemStandardFormulas { get; set; }
         protected Dictionary<string, Color> DerivedValueBackgroundColours { get; set; }
         protected Dictionary<string, Color> DerivedValueTextColours { get; set; }
+        protected Dictionary<string, Color> DerivedValueOutlineColours { get; set; }
         
         protected static IEntityStatisticHandler StatisticHandler { get; set; }
         protected static IEntitySkillHandler SkillHandler { get; set; }
@@ -40,7 +41,8 @@ namespace JoyLib.Code.Entities.Statistics
                                "EntityDerivedValues.xml";
 
             this.ITEM_FILE = Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "ItemDerivedValues.xml";
-            
+
+            this.DerivedValueOutlineColours = new Dictionary<string, Color>();
             this.DerivedValueBackgroundColours = new Dictionary<string, Color>();
             this.DerivedValueTextColours = new Dictionary<string, Color>();
             this.EntityStandardFormulas = this.LoadFormulasFromFile(this.ENTITY_FILE);
@@ -68,20 +70,20 @@ namespace JoyLib.Code.Entities.Statistics
                     formulas.Add(
                         name,
                         dv.Element("Formula").GetAs<string>().ToLower()); 
-                    this.DerivedValueBackgroundColours.Add(
-                        name,
-                        colour);
+                    this.DerivedValueBackgroundColours.Add(name, colour);
 
                     colourCode = dv.Element("TextColour").DefaultIfEmpty("#FFFFFFFF");
                     ColorUtility.TryParseHtmlString(colourCode, out colour);
-                    this.DerivedValueTextColours.Add(
-                        name,
-                        colour);
+                    this.DerivedValueTextColours.Add(name, colour);
+
+                    colourCode = dv.Element("OutlineColour").DefaultIfEmpty("#000000FF");
+                    ColorUtility.TryParseHtmlString(colourCode, out colour);
+                    this.DerivedValueOutlineColours.Add(name, colour);
                 }
                 catch (Exception e)
                 {
-                    GlobalConstants.ActionLog.AddText(e.Message);
-                    GlobalConstants.ActionLog.AddText(e.StackTrace);
+                    GlobalConstants.ActionLog.AddText(e.Message, LogLevel.Error);
+                    GlobalConstants.ActionLog.AddText(e.StackTrace, LogLevel.Error);
                     throw;
                 }
             }
