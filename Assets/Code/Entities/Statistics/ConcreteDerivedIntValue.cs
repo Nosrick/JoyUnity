@@ -11,11 +11,7 @@ namespace JoyLib.Code.Entities.Statistics
             set;
         }
 
-        public int Maximum
-        {
-            get;
-            protected set;
-        }
+        public int Maximum => this.Base + this.Enhancement;
 
         public int Value
         {
@@ -35,7 +31,6 @@ namespace JoyLib.Code.Entities.Statistics
             this.Name = name;
             this.Base = value;
             this.Value = value;
-            this.Maximum = maximum;
         }
 
         public ConcreteDerivedIntValue(
@@ -47,8 +42,7 @@ namespace JoyLib.Code.Entities.Statistics
             this.Name = name;
             this.Base = baseValue;
             this.Enhancement = enhancement;
-            this.Maximum = this.Base + this.Enhancement;
-            this.Value = Mathf.Clamp(value, 0, this.Maximum);
+            this.Value = Mathf.Clamp(value, -this.Maximum, this.Maximum); 
         }
 
         public int SetValue(int data)
@@ -66,14 +60,12 @@ namespace JoyLib.Code.Entities.Statistics
         public int SetBase(int data)
         {
             this.Base = Math.Max(1, data);
-            this.Maximum = this.Base + this.Enhancement;
             return this.Base;
         }
 
         public int SetEnhancement(int data)
         {
             this.Enhancement = Math.Max(0, data);
-            this.Maximum = this.Base + this.Enhancement;
             return this.Enhancement;
         }
     }
