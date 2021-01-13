@@ -29,6 +29,9 @@ namespace JoyLib.Code.Unity.GUI
 
             this.ValueMid = (this.ValueRect.anchorMin.x + this.ValueRect.anchorMax.x) / 2;
             this.NameMid = (this.NameRect.anchorMin.x + this.NameRect.anchorMax.x) / 2;
+
+            this.NameText.outlineWidth = 0.05f;
+            this.ValueText.outlineWidth = 0.05f;
         }
 
         protected void SetFillAmount()
