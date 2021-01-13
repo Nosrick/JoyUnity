@@ -827,5 +827,16 @@
 				<Value>#f04b36ff</Value>
 			</Colour>
 		</CursorColours>
+
+		<UIColours>
+			<Colour>
+				<Name>background</Name>
+				<Value>#b43232ff</Value>
+			</Colour>
+			<Colour>
+				<Name>border</Name>
+				<Value>#f04b36ff</Value>
+			</Colour>
+		</UIColours>
 	</Culture>
 </Cultures>

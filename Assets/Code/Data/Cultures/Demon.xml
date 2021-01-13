@@ -236,8 +236,19 @@
             </Colour>
             <Colour>
                 <Name>CursorOutline</Name>
-                <Value>#f01f5aff</Value>
+                <Value>#c41d39ff</Value>
             </Colour>
         </CursorColours>
+
+        <UIColours>
+            <Colour>
+                <Name>background</Name>
+                <Value>#3c9b6eff</Value>
+            </Colour>
+            <Colour>
+                <Name>border</Name>
+                <Value>#c41d39ff</Value>
+            </Colour>
+        </UIColours>
     </Culture>
 </Cultures>

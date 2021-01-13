@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Objects>
+    <TileSet>
+        <Name>WindowBackground</Name>
+        <SpriteData>
+            <Name>WindowBackground</Name>
+
+            <Part>
+                <Name>background</Name>
+                <Filename>UI/background-tile</Filename>
+                <Data>default</Data>
+                <Frames>1</Frames>
+                <Position>0</Position>
+                <SortOrder>1</SortOrder>
+            </Part>
+            <Part>
+                <Name>border</Name>
+                <Filename>UI/background-border</Filename>
+                <Data>default</Data>
+                <Frames>1</Frames>
+                <Position>0</Position>
+                <SortOrder>2</SortOrder>
+            </Part>
+        </SpriteData>
+    </TileSet>
+</Objects>

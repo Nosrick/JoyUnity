@@ -10,6 +10,7 @@ using UnityEngine;
 
 namespace JoyLib.Code.Unity.GUI
 {
+    [RequireComponent(typeof(SkinnableGUI))]
     public class CharacterCreationScreen : MonoBehaviour
     {
         [SerializeField] protected GameManager GameManager;
@@ -23,13 +24,16 @@ namespace JoyLib.Code.Unity.GUI
         [SerializeField] protected ManagedUISprite PlayerSprite_Part2;
         [SerializeField] protected TMP_InputField PlayerName_Part1;
         [SerializeField] protected TMP_InputField PlayerName_Part2;
+        [SerializeField] protected SkinnableGUI m_CharacterCreation_Part2;
+        
+        protected SkinnableGUI GUIData { get; set; }
         
         protected string PlayerName { get; set; }
 
         public void Initialise()
         {
             this.PlayerInfo.JobChanged += this.SetSprites;
-            this.PlayerInfo.CultureChanged += this.SetRandomName;
+            this.PlayerInfo.CultureChanged += this.CultureChangeHandler;
             this.StatisticWindow.ValueChanged += this.ChangedStatistics;
             this.PlayerName_Part1.GetComponent<TextWatcher>().OnTextChange += this.UpdatePlayerName;
             this.PlayerName_Part2.GetComponent<TextWatcher>().OnTextChange += this.UpdatePlayerName;
@@ -38,9 +42,22 @@ namespace JoyLib.Code.Unity.GUI
             this.StatisticWindow.Initialise();
             this.SkillWindow.Initialise();
             this.DerivedValuesWindow.Initialise();
+            this.GUIData = this.GetComponent<SkinnableGUI>();
+            this.GUIData.Awake();
+            this.m_CharacterCreation_Part2.Awake();
             this.PlayerInfo.Initialise();
             this.AbilityWindow.Initialise();
-            //this.GetComponent<FontSizeManager>().ResizeFonts();
+            
+            ISpriteState background = new SpriteState(
+                "Background",
+                this.GameManager.ObjectIconHandler.GetSprites(
+                        "WindowBackground",
+                        "WindowBackground")
+                    .First());
+            background.OverrideColours(this.PlayerInfo.CurrentCulture.BackgroundColours);
+            
+            this.GUIData.SetBackground(background);
+            this.m_CharacterCreation_Part2.SetBackground(background);
         }
 
         public IEntity CreatePlayer()
@@ -80,9 +97,11 @@ namespace JoyLib.Code.Unity.GUI
             this.DerivedValuesWindow.SetDerivedValues(this.GameManager.DerivedValueHandler.GetEntityStandardBlock(stats.Values));
         }
 
-        public void SetRandomName(object sender, EventArgs args)
+        public void CultureChangeHandler(object sender, EventArgs args)
         {
             this.SetRandomName();
+            this.GUIData.SetColours(this.PlayerInfo.CurrentCulture.BackgroundColours);
+            this.m_CharacterCreation_Part2.SetColours(this.PlayerInfo.CurrentCulture.BackgroundColours);
         }
 
         public void SetRandomName()
@@ -105,16 +124,18 @@ namespace JoyLib.Code.Unity.GUI
 
         public void GoToSkillsAndAbilities()
         {
-            this.GameManager.GUIManager.CloseGUI(this.name);
+            //this.GameManager.GUIManager.CloseGUI(this.name);
             this.GameManager.GUIManager.OpenGUI(GUINames.CHARACTER_CREATION_PART_2);
+            this.GameManager.GUIManager.BringToFront(GUINames.CHARACTER_CREATION_PART_2);
             this.SkillWindow.SetSkills(this.SkillWindow.GetSkillNames());
             this.AbilityWindow.GetAvailableAbilities(this.PlayerInfo.CurrentTemplate, this.StatisticWindow.GetStatistics(), this.SkillWindow.GetSkillsBlock());
         }
 
         public void GoToPlayerInfo()
         {
-            this.GameManager.GUIManager.CloseGUI(GUINames.CHARACTER_CREATION_PART_2);
+            //this.GameManager.GUIManager.CloseGUI(GUINames.CHARACTER_CREATION_PART_2);
             this.GameManager.GUIManager.OpenGUI(this.name);
+            this.GameManager.GUIManager.BringToFront(this.name);
         }
 
         protected void UpdatePlayerName(GameObject sender, TextChangedEventArgs args)

@@ -220,14 +220,14 @@ namespace JoyLib.Code.Graphics
         }
     }
 
-    public struct SpriteData
+    public class SpriteData
     {
         public string m_Name;
         public string m_State;
         public List<SpritePart> m_Parts;
     }
 
-    public struct SpritePart
+    public class SpritePart
     {
         public string m_Name;
         public int m_Frames;
@@ -238,5 +238,7 @@ namespace JoyLib.Code.Graphics
         public List<Color> m_PossibleColours;
         public int m_SelectedColour;
         public int m_SortingOrder;
+
+        public Color SelectedColour => this.m_PossibleColours[this.m_SelectedColour];
     }
 }

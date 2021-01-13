@@ -18,15 +18,15 @@ namespace JoyLib.Code.Cultures
         protected List<string> m_RulerTypes;
         protected List<string> m_Crimes;
         protected List<NameData> m_NameData;
-        protected Dictionary<string, int> m_SexPrevelence;
-        protected Dictionary<string, int> m_SexualityPrevelence;
-        protected Dictionary<string, int> m_RomancePrevelence;
-        protected Dictionary<string, int> m_GenderPrevelence;
+        protected Dictionary<string, int> m_SexPrevalence;
+        protected Dictionary<string, int> m_SexualityPrevalence;
+        protected Dictionary<string, int> m_RomancePrevalence;
+        protected Dictionary<string, int> m_GenderPrevalence;
 
         //The first number is the chance, the second is the actual number it can vary by
         protected Dictionary<string, Tuple<int, int>> m_StatVariance;
         protected List<string> m_RelationshipTypes;
-        Dictionary<string, int> m_JobPrevelence;
+        Dictionary<string, int> m_JobPrevalence;
         List<string> m_Inhabitants;
 
         public int LastGroup { get; protected set; }
@@ -43,15 +43,15 @@ namespace JoyLib.Code.Cultures
 
         public string[] RelationshipTypes => this.m_RelationshipTypes.ToArray();
 
-        public string[] RomanceTypes => this.m_RomancePrevelence.Keys.ToArray();
+        public string[] RomanceTypes => this.m_RomancePrevalence.Keys.ToArray();
 
-        public string[] Sexes => this.m_SexPrevelence.Keys.ToArray();
+        public string[] Sexes => this.m_SexPrevalence.Keys.ToArray();
 
-        public string[] Sexualities => this.m_SexualityPrevelence.Keys.ToArray();
+        public string[] Sexualities => this.m_SexualityPrevalence.Keys.ToArray();
 
-        public string[] Genders => this.m_GenderPrevelence.Keys.ToArray();
+        public string[] Genders => this.m_GenderPrevalence.Keys.ToArray();
 
-        public string[] Jobs => this.m_JobPrevelence.Keys.ToArray();
+        public string[] Jobs => this.m_JobPrevalence.Keys.ToArray();
 
         public int NonConformingGenderChance { get; protected set; }
 
@@ -60,6 +60,7 @@ namespace JoyLib.Code.Cultures
         public RNG Roller { get; protected set; }
 
         public IDictionary<string, Color> CursorColours { get; protected set; }
+        public IDictionary<string, Color> BackgroundColours { get; protected set; }
 
         protected const int NO_GROUP = int.MinValue;
 
@@ -74,33 +75,35 @@ namespace JoyLib.Code.Cultures
             List<NameData> namesRef,
             Dictionary<string, int> jobRef,
             List<string> inhabitantsNameRef,
-            Dictionary<string, int> sexualityPrevelenceRef,
-            Dictionary<string, int> sexPrevelence,
+            Dictionary<string, int> sexualityPrevalenceRef,
+            Dictionary<string, int> sexPrevalence,
             Dictionary<string, Tuple<int, int>> statVariance,
             List<string> relationshipTypes,
-            Dictionary<string, int> romancePrevelence,
-            Dictionary<string, int> genderPrevelence,
+            Dictionary<string, int> romancePrevalence,
+            Dictionary<string, int> genderPrevalence,
             int nonConformingGenderChance,
             IDictionary<string, Color> cursorColours,
+            IDictionary<string, Color> backgroundColours,
             RNG roller = null)
         {
-            this.Roller = roller is null ? new RNG() : roller;
+            this.Roller = roller ?? new RNG();
             this.Tileset = tileset;
             this.CultureName = nameRef;
             this.m_RulerTypes = rulersRef;
             this.m_Crimes = crimesRef;
             this.m_NameData = namesRef;
             this.m_Inhabitants = inhabitantsNameRef;
-            this.m_SexPrevelence = sexPrevelence;
+            this.m_SexPrevalence = sexPrevalence;
             this.m_StatVariance = statVariance;
-            this.m_JobPrevelence = jobRef;
-            this.m_SexualityPrevelence = sexualityPrevelenceRef;
+            this.m_JobPrevalence = jobRef;
+            this.m_SexualityPrevalence = sexualityPrevalenceRef;
             this.m_StatVariance = statVariance;
             this.m_RelationshipTypes = relationshipTypes;
-            this.m_RomancePrevelence = romancePrevelence;
-            this.m_GenderPrevelence = genderPrevelence;
+            this.m_RomancePrevalence = romancePrevalence;
+            this.m_GenderPrevalence = genderPrevalence;
             this.NonConformingGenderChance = nonConformingGenderChance;
             this.CursorColours = cursorColours;
+            this.BackgroundColours = backgroundColours;
 
             this.ClearLastGroup();
         }
@@ -194,14 +197,14 @@ namespace JoyLib.Code.Cultures
         public IBioSex ChooseSex(IEnumerable<IBioSex> sexes)
         {
             int totalSex = 0;
-            foreach (int value in this.m_SexPrevelence.Values)
+            foreach (int value in this.m_SexPrevalence.Values)
             {
                 totalSex += value;
             }
 
             int result = this.Roller.Roll(0, totalSex);
             int soFar = 0;
-            foreach (KeyValuePair<string, int> pair in this.m_SexPrevelence)
+            foreach (KeyValuePair<string, int> pair in this.m_SexPrevalence)
             {
                 soFar += pair.Value;
                 if (result < soFar)
@@ -217,14 +220,14 @@ namespace JoyLib.Code.Cultures
         {
             int soFar = 0;
             int totalSexuality = 0;
-            foreach (int value in this.m_SexualityPrevelence.Values)
+            foreach (int value in this.m_SexualityPrevalence.Values)
             {
                 totalSexuality += value;
             }
 
             int result = this.Roller.Roll(0, totalSexuality);
 
-            foreach (KeyValuePair<string, int> pair in this.m_SexualityPrevelence)
+            foreach (KeyValuePair<string, int> pair in this.m_SexualityPrevalence)
             {
                 soFar += pair.Value;
                 if (result < soFar)
@@ -241,14 +244,14 @@ namespace JoyLib.Code.Cultures
         {
             int soFar = 0;
             int totalRomance = 0;
-            foreach (int value in this.m_RomancePrevelence.Values)
+            foreach (int value in this.m_RomancePrevalence.Values)
             {
                 totalRomance += value;
             }
 
             int result = this.Roller.Roll(0, totalRomance);
 
-            foreach (KeyValuePair<string, int> pair in this.m_RomancePrevelence)
+            foreach (KeyValuePair<string, int> pair in this.m_RomancePrevalence)
             {
                 soFar += pair.Value;
                 if (result < soFar)
@@ -267,14 +270,14 @@ namespace JoyLib.Code.Cultures
             {
                 int soFar = 0;
                 int totalGender = 0;
-                foreach (int value in this.m_GenderPrevelence.Values)
+                foreach (int value in this.m_GenderPrevalence.Values)
                 {
                     totalGender += value;
                 }
 
                 int result = this.Roller.Roll(0, totalGender);
 
-                foreach (KeyValuePair<string, int> pair in this.m_GenderPrevelence)
+                foreach (KeyValuePair<string, int> pair in this.m_GenderPrevalence)
                 {
                     soFar += pair.Value;
                     if (result < soFar)
@@ -296,14 +299,14 @@ namespace JoyLib.Code.Cultures
         {
             int soFar = 0;
             int totalJob = 0;
-            foreach (int value in this.m_JobPrevelence.Values)
+            foreach (int value in this.m_JobPrevalence.Values)
             {
                 totalJob += value;
             }
 
             int result = this.Roller.Roll(0, totalJob);
 
-            foreach (KeyValuePair<string, int> pair in this.m_JobPrevelence)
+            foreach (KeyValuePair<string, int> pair in this.m_JobPrevalence)
             {
                 soFar += pair.Value;
                 if (result < soFar)

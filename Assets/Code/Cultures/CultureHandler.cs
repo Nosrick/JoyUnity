@@ -128,6 +128,24 @@ namespace JoyLib.Code.Cultures
                         GlobalConstants.ActionLog.AddText("Could not find cursor colours in file " + file, LogLevel.Error);
                         cursorColours.Add("default", Color.magenta);
                     }
+
+                    IDictionary<string, Color> backgroundColours = new Dictionary<string, Color>();
+                    try
+                    {
+                        backgroundColours = (from colours in culture.Element("UIColours")
+                                    .Elements("Colour")
+                                select new KeyValuePair<string, Color>(
+                                    colours.Element("Name").GetAs<string>(),
+                                    ColourHelper.ParseHTMLString(colours.Element("Value").GetAs<string>())))
+                            .ToDictionary(x => x.Key, x => x.Value);
+                    }
+                    catch (Exception e)
+                    {
+                        GlobalConstants.ActionLog.AddText(e.Message, LogLevel.Error);
+                        GlobalConstants.ActionLog.AddText(e.StackTrace, LogLevel.Error);
+                        GlobalConstants.ActionLog.AddText("Could not find UI colours in file " + file, LogLevel.Error);
+                        cursorColours.Add("default", Color.magenta);
+                    }
                     
                     /*
                     ColorUtility.TryParseHtmlString(
@@ -163,7 +181,8 @@ namespace JoyLib.Code.Cultures
                             romanceDictionary,
                             genderDictionary,
                             nonConformingGenderChance,
-                            cursorColours));
+                            cursorColours,
+                            backgroundColours));
                 }
             }
 

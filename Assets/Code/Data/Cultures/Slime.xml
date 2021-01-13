@@ -143,5 +143,16 @@
 				<Value>#73dcffff</Value>
 			</Colour>
 		</CursorColours>
+
+		<UIColours>
+			<Colour>
+				<Name>background</Name>
+				<Value>#4196dcff</Value>
+			</Colour>
+			<Colour>
+				<Name>border</Name>
+				<Value>#73dcffff</Value>
+			</Colour>
+		</UIColours>
 	</Culture>
 </Cultures>

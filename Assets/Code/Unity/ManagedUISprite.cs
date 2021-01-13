@@ -28,6 +28,21 @@ namespace JoyLib.Code.Unity
                 part.gameObject.SetActive(false);
             }
         }
+
+        public override void OverrideAllColours(IDictionary<string, Color> colours)
+        {
+            foreach (ISpriteState state in this.m_States.Values)
+            {
+                state.OverrideColours(colours);
+            }
+            
+            for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
+            {
+                this.ImageParts[i].color = this.CurrentSpriteState.SpriteData.m_Parts[i].SelectedColour; 
+            }
+
+            this.IsDirty = true;
+        }
         
         protected override void UpdateSprites()
         {

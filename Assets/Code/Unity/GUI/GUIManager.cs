@@ -125,15 +125,15 @@ namespace JoyLib.Code.Unity.GUI
             GUIData toFront = this.ActiveGUIs.First(g => g.name.Equals(name, StringComparison.OrdinalIgnoreCase));
             foreach (GUIData gui in this.ActiveGUIs)
             {
-                if (toFront.Equals(gui))
+                if (toFront.Equals(gui) || gui.m_AlwaysOnTop)
                 {
                     continue;
                 }
 
-                //gui.transform.parent.GetComponent<CanvasGroup>() = int.MinValue;
+                gui.MyCanvas.sortingOrder = gui.DefaultSortingOrder;
             }
 
-            //toFront.transform.parent.GetComponent<Canvas>().sortingOrder = 1;
+            toFront.MyCanvas.sortingOrder = this.ActiveGUIs.Max(data => data.DefaultSortingOrder) - 1;
         }
 
         public void CloseAllOtherGUIs(string activeName = "")

@@ -180,6 +180,20 @@ namespace JoyLib.Code.Unity
             }
         }
 
+        public virtual void OverrideAllColours(IDictionary<string, Color> colours)
+        {
+            foreach (ISpriteState state in this.m_States.Values)
+            {
+                state.OverrideColours(colours);
+            }
+
+            for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
+            {
+                this.SpriteParts[i].color = this.CurrentSpriteState.SpriteData.m_Parts[i].SelectedColour; 
+            }
+            this.IsDirty = true;
+        }
+
         protected virtual void UpdateSprites()
         {
             foreach (SpriteRenderer spritePart in this.SpriteParts)

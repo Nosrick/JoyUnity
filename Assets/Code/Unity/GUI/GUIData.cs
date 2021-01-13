@@ -5,9 +5,14 @@ using UnityEngine.EventSystems;
 namespace JoyLib.Code.Unity.GUI
 {
     [DisallowMultipleComponent]
+    [RequireComponent(typeof(Canvas))]
     public class GUIData : MonoBehaviour, IPointerDownHandler
     {
         protected IGUIManager m_GUIManager;
+        
+        public Canvas MyCanvas { get; protected set; }
+        
+        public int DefaultSortingOrder { get; protected set; }
 
         public IGUIManager GUIManager
         {
@@ -24,6 +29,8 @@ namespace JoyLib.Code.Unity.GUI
 
         public virtual void Awake()
         {
+            this.MyCanvas = this.GetComponent<Canvas>();
+            this.DefaultSortingOrder = this.MyCanvas.sortingOrder;
         }
 
         public virtual void OnPointerDown(PointerEventData eventData)
@@ -72,7 +79,7 @@ namespace JoyLib.Code.Unity.GUI
 
         public bool m_AlwaysOpen;
 
-        public int m_Index;
+        public bool m_AlwaysOnTop;
 
         public virtual event GUIClosedEventHandler OnGUIClose;
         public virtual event GUIOpenedEventHandler OnGUIOpen;
