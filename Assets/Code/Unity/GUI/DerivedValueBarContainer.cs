@@ -12,13 +12,51 @@ namespace JoyLib.Code.Unity.GUI
 
         [SerializeField] public Color BarColour;
         [SerializeField] public Color TextColour;
+        [SerializeField] public Color OutlineColour;
+
+        [SerializeField] protected bool InvertWhenEmptying = true;
+        
+        protected RectTransform ValueRect { get; set; }
+        protected RectTransform NameRect { get; set; }
+        
+        protected float ValueMid { get; set; }
+        protected float NameMid { get; set; }
+
+        public void Initialise()
+        {
+            this.ValueRect = this.ValueText.GetComponent<RectTransform>();
+            this.NameRect = this.NameText.GetComponent<RectTransform>();
+
+            this.ValueMid = (this.ValueRect.anchorMin.x + this.ValueRect.anchorMax.x) / 2;
+            this.NameMid = (this.NameRect.anchorMin.x + this.NameRect.anchorMax.x) / 2;
+        }
 
         protected void SetFillAmount()
         {
-            this.BarImage.color = this.BarColour;
-            this.NameText.color = this.TextColour;
-            this.ValueText.color = this.TextColour;
             this.BarImage.fillAmount = this.Value / (float)this.Maximum;
+            this.BarImage.color = this.BarColour;
+
+            if (this.BarImage.fillAmount < this.ValueMid && this.InvertWhenEmptying)
+            {
+                this.ValueText.color = this.OutlineColour;
+                this.ValueText.outlineColor = this.TextColour;
+            }
+            else
+            {
+                this.ValueText.color = this.TextColour;
+                this.ValueText.outlineColor = this.OutlineColour;
+            }
+
+            if (this.BarImage.fillAmount < this.NameMid && this.InvertWhenEmptying)
+            {
+                this.NameText.color = this.OutlineColour;
+                this.NameText.outlineColor = this.TextColour;
+            }
+            else
+            {
+                this.NameText.color = this.TextColour;
+                this.NameText.outlineColor = this.OutlineColour;
+            }
         }
 
         public override int Value

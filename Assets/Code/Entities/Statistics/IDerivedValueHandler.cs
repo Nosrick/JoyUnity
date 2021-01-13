@@ -19,5 +19,6 @@ namespace JoyLib.Code.Entities.Statistics
 
         Color GetBackgroundColour(string name);
         Color GetTextColour(string name);
+        Color GetOutlineColour(string name);
     }
 }

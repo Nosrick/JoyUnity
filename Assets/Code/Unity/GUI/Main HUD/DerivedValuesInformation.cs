@@ -65,19 +65,24 @@ namespace JoyLib.Code.Unity.GUI
                     DerivedValueBarContainer newItem =
                         Instantiate(this.DerivedValuePrefab, this.transform).GetComponent<DerivedValueBarContainer>();
                     newItem.gameObject.SetActive(true);
+                    newItem.Initialise();
                     this.Items.Add(valueList[i].Name, newItem);
                 }
             }
             
             for(int i = 0; i < valueList.Count; i++)
             {
+                this.Items[valueList[i].Name].Name = valueList[i].Name;
+                
                 this.Items[valueList[i].Name].BarColour =
                     this.GameManager.DerivedValueHandler.GetBackgroundColour(valueList[i].Name);
                 
                 this.Items[valueList[i].Name].TextColour =
                     this.GameManager.DerivedValueHandler.GetTextColour(valueList[i].Name);
+
+                this.Items[valueList[i].Name].OutlineColour =
+                    this.GameManager.DerivedValueHandler.GetOutlineColour(valueList[i].Name);
                 
-                this.Items[valueList[i].Name].Name = valueList[i].Name;
                 this.Items[valueList[i].Name].DirectValueSet(valueList[i].Value);
                 this.Items[valueList[i].Name].Minimum = -valueList[i].Maximum;
                 this.Items[valueList[i].Name].Maximum = valueList[i].Maximum;

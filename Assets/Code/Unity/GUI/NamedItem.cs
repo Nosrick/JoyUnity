@@ -46,6 +46,7 @@ namespace JoyLib.Code.Unity.GUI
             set
             {
                 this.m_Name = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(value);
+                this.gameObject.name = this.m_Name;
                 this.m_NameText.text = this.m_Name;
             }
         }

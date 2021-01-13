@@ -167,6 +167,15 @@ namespace JoyLib.Code.Entities.Statistics
             }
             return Color.gray;
         }
+        
+        public Color GetOutlineColour(string name)
+        {
+            if (this.DerivedValueOutlineColours.ContainsKey(name))
+            {
+                return this.DerivedValueOutlineColours[name];
+            }
+            return Color.gray;
+        }
 
         public int Calculate<T>(IEnumerable<IBasicValue<T>> components, string formula)
             where T : struct
