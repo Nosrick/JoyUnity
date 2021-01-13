@@ -1891,6 +1891,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: -1121508618558734787, guid: 50742e3046ccf1d428b419796c7eeddf,
         type: 2}
+    - target: {fileID: 3329086532230608727, guid: f5c5db5e3a07376478c5b68cc4bf537c,
+        type: 3}
+      propertyPath: m_WrapAround
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4764807512481541285, guid: f5c5db5e3a07376478c5b68cc4bf537c,
         type: 3}
       propertyPath: m_fontSize
