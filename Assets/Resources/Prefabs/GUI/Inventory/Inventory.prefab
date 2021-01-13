@@ -34,10 +34,10 @@ RectTransform:
   m_Father: {fileID: 7087841497948643125}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.05, y: 0.90900004}
+  m_AnchorMin: {x: 0.0066666673, y: 0.90900004}
   m_AnchorMax: {x: 0.94500005, y: 0.99300003}
-  m_AnchoredPosition: {x: 1.5864258, y: -0.24023438}
-  m_SizeDelta: {x: 2.999939, y: -1.0667725}
+  m_AnchoredPosition: {x: 1.7600098, y: -0.24023438}
+  m_SizeDelta: {x: 2.6478882, y: -1.0667725}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6475840526688284855
 CanvasRenderer:
@@ -209,8 +209,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Inventory
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 50742e3046ccf1d428b419796c7eeddf, type: 2}
-  m_sharedMaterial: {fileID: -1121508618558734787, guid: 50742e3046ccf1d428b419796c7eeddf,
+  m_fontAsset: {fileID: 11400000, guid: b9520502238a8364192ef01b6beb8fe3, type: 2}
+  m_sharedMaterial: {fileID: -7173046790076521433, guid: b9520502238a8364192ef01b6beb8fe3,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -235,7 +235,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 17.7
+  m_fontSize: 35.45
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -623,10 +623,10 @@ RectTransform:
   m_Father: {fileID: 7087841497948643125}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.05, y: 0.07054545}
+  m_AnchorMin: {x: 0.0066666673, y: 0.0112727275}
   m_AnchorMax: {x: 0.95000005, y: 0.90900004}
-  m_AnchoredPosition: {x: 0.08630371, y: 0.33007812}
-  m_SizeDelta: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 0.43597412, y: 0.33007812}
+  m_SizeDelta: {x: -0.43597412, y: 0.22244263}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &7087841499281627285
 MonoBehaviour:
@@ -641,14 +641,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 0
+    m_Left: 5
     m_Right: 0
-    m_Top: 0
+    m_Top: 5
     m_Bottom: 0
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 50, y: 50}
+  m_CellSize: {x: 52, y: 52}
   m_Spacing: {x: 4, y: 4}
   m_Constraint: 1
   m_ConstraintCount: 10
@@ -10624,6 +10624,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6296772926489511444, guid: 170a10e9e51de134b9b56ec34ceaebf2,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 30.55
       objectReference: {fileID: 0}
     - target: {fileID: 7129824930873053387, guid: 170a10e9e51de134b9b56ec34ceaebf2,
         type: 3}

@@ -569,8 +569,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Quest Journal
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 50742e3046ccf1d428b419796c7eeddf, type: 2}
-  m_sharedMaterial: {fileID: -1121508618558734787, guid: 50742e3046ccf1d428b419796c7eeddf,
+  m_fontAsset: {fileID: 11400000, guid: b9520502238a8364192ef01b6beb8fe3, type: 2}
+  m_sharedMaterial: {fileID: -7173046790076521433, guid: b9520502238a8364192ef01b6beb8fe3,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -595,7 +595,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 21.4
+  m_fontSize: 42.85
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -779,6 +779,11 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 6296772926489511444, guid: 170a10e9e51de134b9b56ec34ceaebf2,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 34.35
+      objectReference: {fileID: 0}
     - target: {fileID: 7129824930873053387, guid: 170a10e9e51de134b9b56ec34ceaebf2,
         type: 3}
       propertyPath: m_Name
@@ -799,101 +804,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8862829972381363170}
     m_Modifications:
-    - target: {fileID: 257897233816187207, guid: 42c1a7a5174d50a4f95259b8ebc00fa8,
-        type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 257897233816187207, guid: 42c1a7a5174d50a4f95259b8ebc00fa8,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 257897233816187207, guid: 42c1a7a5174d50a4f95259b8ebc00fa8,
-        type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 257897233816187207, guid: 42c1a7a5174d50a4f95259b8ebc00fa8,
-        type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 257897233816187207, guid: 42c1a7a5174d50a4f95259b8ebc00fa8,
-        type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0.015075684
-      objectReference: {fileID: 0}
-    - target: {fileID: 257897233816187207, guid: 42c1a7a5174d50a4f95259b8ebc00fa8,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: -0.0025634766
-      objectReference: {fileID: 0}
-    - target: {fileID: 257897233816187207, guid: 42c1a7a5174d50a4f95259b8ebc00fa8,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -0.5015793
-      objectReference: {fileID: 0}
-    - target: {fileID: 257897233816187207, guid: 42c1a7a5174d50a4f95259b8ebc00fa8,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -0.0012702942
-      objectReference: {fileID: 0}
-    - target: {fileID: 306621609409101372, guid: 42c1a7a5174d50a4f95259b8ebc00fa8,
-        type: 3}
-      propertyPath: m_fontSize
-      value: 50.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 306621609409101372, guid: 42c1a7a5174d50a4f95259b8ebc00fa8,
-        type: 3}
-      propertyPath: m_margin.w
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 306621609409101372, guid: 42c1a7a5174d50a4f95259b8ebc00fa8,
-        type: 3}
-      propertyPath: m_margin.x
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 306621609409101372, guid: 42c1a7a5174d50a4f95259b8ebc00fa8,
-        type: 3}
-      propertyPath: m_margin.y
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 306621609409101372, guid: 42c1a7a5174d50a4f95259b8ebc00fa8,
-        type: 3}
-      propertyPath: m_margin.z
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 306621609409101372, guid: 42c1a7a5174d50a4f95259b8ebc00fa8,
-        type: 3}
-      propertyPath: m_VerticalAlignment
-      value: 512
-      objectReference: {fileID: 0}
-    - target: {fileID: 306621609409101372, guid: 42c1a7a5174d50a4f95259b8ebc00fa8,
-        type: 3}
-      propertyPath: m_HorizontalAlignment
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 530811122136162167, guid: 42c1a7a5174d50a4f95259b8ebc00fa8,
-        type: 3}
-      propertyPath: m_Layer
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6499125706948611308, guid: 42c1a7a5174d50a4f95259b8ebc00fa8,
-        type: 3}
-      propertyPath: m_FontData.m_BestFit
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6499125706948611311, guid: 42c1a7a5174d50a4f95259b8ebc00fa8,
-        type: 3}
-      propertyPath: m_SizeDelta.x
-      value: -0.000061035156
-      objectReference: {fileID: 0}
-    - target: {fileID: 6499125706948611311, guid: 42c1a7a5174d50a4f95259b8ebc00fa8,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6499125707579083668, guid: 42c1a7a5174d50a4f95259b8ebc00fa8,
         type: 3}
       propertyPath: m_Pivot.x
@@ -1004,16 +914,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Quest Menu Item
       objectReference: {fileID: 0}
-    - target: {fileID: 6499125707579083671, guid: 42c1a7a5174d50a4f95259b8ebc00fa8,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6499125707579083754, guid: 42c1a7a5174d50a4f95259b8ebc00fa8,
-        type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 42c1a7a5174d50a4f95259b8ebc00fa8, type: 3}
 --- !u!1 &2363985745292612440 stripped
