@@ -5,9 +5,24 @@ namespace Code.Collections
 {
     public class GameObjectPool
     {
+        /// <summary>
+        /// The active GameObjects
+        /// </summary>
         protected List<GameObject> Objects { get; set; }
+        
+        /// <summary>
+        /// The GameObjects which have been 'retired'
+        /// </summary>
         protected List<GameObject> InactiveObjects { get; set; }
+        
+        /// <summary>
+        /// The prefab we use to instantiate
+        /// </summary>
         protected GameObject Prefab { get; set; }
+        
+        /// <summary>
+        /// This is the GameObject that new instances will be parented to
+        /// </summary>
         protected GameObject Parent { get; set; }
 
         public GameObjectPool(GameObject prefab, GameObject parent)
