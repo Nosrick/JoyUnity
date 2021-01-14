@@ -7,6 +7,9 @@ namespace JoyLib.Code.Unity.GUI
     public class SkinnableGUI : GUIData
     {
         [SerializeField] protected ManagedUISprite m_Background;
+        
+        public bool HasBackground { get; protected set; }
+        public bool HasColours { get; protected set; }
 
         public override void Awake()
         {
@@ -18,6 +21,7 @@ namespace JoyLib.Code.Unity.GUI
         {
             this.m_Background.Clear();
             this.m_Background.AddSpriteState(sprite);
+            this.HasBackground = true;
         }
 
         public void SetColours(IDictionary<string, Color> colours)
@@ -30,6 +34,7 @@ namespace JoyLib.Code.Unity.GUI
             }
 
             this.m_Background.OverrideAllColours(colours);
+            this.HasColours = true;
         }
     }
 }

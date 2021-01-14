@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using JoyLib.Code.Graphics;
+using UnityEngine;
 
 namespace JoyLib.Code.Unity.GUI
 {
@@ -8,6 +10,11 @@ namespace JoyLib.Code.Unity.GUI
     {
         protected HashSet<GUIData> GUIs { get; set; }
         protected HashSet<GUIData> ActiveGUIs { get; set; }
+        
+        protected ISpriteState Background { get; set; }
+        
+        protected IDictionary<string, Color> CursorColours { get; set; }
+        protected IDictionary<string, Color> BackgroundColours { get; set; }
 
         public GUIManager()
         {
@@ -20,7 +27,22 @@ namespace JoyLib.Code.Unity.GUI
             {
                 this.GUIs = new HashSet<GUIData>();
                 this.ActiveGUIs = new HashSet<GUIData>();
+                this.Background = new SpriteState(
+                    "Background",
+                    GlobalConstants.GameManager.ObjectIconHandler.GetSprites(
+                            "WindowBackground",
+                            "WindowBackground")
+                        .First());
+
+                this.CursorColours = new Dictionary<string, Color>();
+                this.BackgroundColours = new Dictionary<string, Color>();
             }
+        }
+
+        public void SetUIColours(IDictionary<string, Color> background, IDictionary<string, Color> cursor)
+        {
+            this.BackgroundColours = background;
+            this.CursorColours = cursor;
         }
 
         public void AddGUI(GUIData gui)
@@ -34,6 +56,10 @@ namespace JoyLib.Code.Unity.GUI
             gui.Awake();
             gui.GUIManager = this;
             gui.Close();
+            if (gui is SkinnableGUI skinnableGUI && skinnableGUI.HasBackground == false)
+            {
+                skinnableGUI.SetBackground(this.Background);
+            }
             this.GUIs.Add(gui);
         }
 
@@ -54,7 +80,7 @@ namespace JoyLib.Code.Unity.GUI
             }
         }
 
-        public GUIData OpenGUI(string name)
+        public GUIData OpenGUI(string name, bool bringToFront = true)
         {
             if (this.ActiveGUIs.Any(widget => widget.name.Equals(name, StringComparison.OrdinalIgnoreCase)))
             {
@@ -72,9 +98,24 @@ namespace JoyLib.Code.Unity.GUI
                     this.CloseGUI(widget.name);
                 }
             }
+            
+            if (toOpen is SkinnableGUI skinnableGUI)
+            {
+                if (GlobalConstants.GameManager.Player is null == false 
+                    && skinnableGUI.HasColours == false)
+                {
+                    skinnableGUI.SetColours(this.BackgroundColours);
+                }
+            }
 
             toOpen.Show();
+            
             this.ActiveGUIs.Add(toOpen);
+
+            if (bringToFront)
+            {
+                this.BringToFront(toOpen.name);
+            }
             return toOpen;
         }
 
@@ -133,7 +174,7 @@ namespace JoyLib.Code.Unity.GUI
                 gui.MyCanvas.sortingOrder = gui.DefaultSortingOrder;
             }
 
-            toFront.MyCanvas.sortingOrder = this.ActiveGUIs.Max(data => data.DefaultSortingOrder) - 1;
+            toFront.MyCanvas.sortingOrder = this.ActiveGUIs.Max(data => data.DefaultSortingOrder) + 1;
         }
 
         public void CloseAllOtherGUIs(string activeName = "")

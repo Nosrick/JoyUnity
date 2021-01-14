@@ -124,6 +124,13 @@ namespace JoyLib.Code.Unity.GUI
             this.GameManager.GUIManager.GetGUI(GUINames.CURSOR)
                 .GetComponent<Cursor>()
                 .SetCursorColours(this.CurrentCulture.CursorColours);
+            
+            this.GameManager.GUIManager.GetGUI(GUINames.CHARACTER_CREATION_PART_1)
+                .GetComponent<SkinnableGUI>()
+                .SetColours(this.CurrentCulture.BackgroundColours);
+            this.GameManager.GUIManager.GetGUI(GUINames.CHARACTER_CREATION_PART_2)
+                .GetComponent<SkinnableGUI>()
+                .SetColours(this.CurrentCulture.BackgroundColours);
         }
 
         protected void SetStatistics()

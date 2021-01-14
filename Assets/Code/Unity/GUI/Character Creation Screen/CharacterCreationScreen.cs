@@ -67,6 +67,10 @@ namespace JoyLib.Code.Unity.GUI
                 this.PlayerInfo.CurrentTemplate.CreatureType, "idle");
             List<SpriteState> spriteStates = data.Select(d => new SpriteState(d.m_Name, d)).ToList();
 
+            this.GameManager.GUIManager.SetUIColours(
+                this.PlayerInfo.CurrentCulture.BackgroundColours,
+                this.PlayerInfo.CurrentCulture.CursorColours);
+
             return this.GameManager.EntityFactory.CreateFromTemplate(
                 this.PlayerInfo.CurrentTemplate,
                 GlobalConstants.NO_TARGET,
@@ -100,8 +104,6 @@ namespace JoyLib.Code.Unity.GUI
         public void CultureChangeHandler(object sender, EventArgs args)
         {
             this.SetRandomName();
-            this.GUIData.SetColours(this.PlayerInfo.CurrentCulture.BackgroundColours);
-            this.m_CharacterCreation_Part2.SetColours(this.PlayerInfo.CurrentCulture.BackgroundColours);
         }
 
         public void SetRandomName()
@@ -124,7 +126,6 @@ namespace JoyLib.Code.Unity.GUI
 
         public void GoToSkillsAndAbilities()
         {
-            //this.GameManager.GUIManager.CloseGUI(this.name);
             this.GameManager.GUIManager.OpenGUI(GUINames.CHARACTER_CREATION_PART_2);
             this.GameManager.GUIManager.BringToFront(GUINames.CHARACTER_CREATION_PART_2);
             this.SkillWindow.SetSkills(this.SkillWindow.GetSkillNames());
@@ -133,7 +134,6 @@ namespace JoyLib.Code.Unity.GUI
 
         public void GoToPlayerInfo()
         {
-            //this.GameManager.GUIManager.CloseGUI(GUINames.CHARACTER_CREATION_PART_2);
             this.GameManager.GUIManager.OpenGUI(this.name);
             this.GameManager.GUIManager.BringToFront(this.name);
         }

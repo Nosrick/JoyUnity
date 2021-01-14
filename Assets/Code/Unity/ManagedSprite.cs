@@ -224,6 +224,7 @@ namespace JoyLib.Code.Unity
                 this.SpriteParts[i].color = data[i].Item1;
                 this.SpriteParts[i].sortingOrder = this.CurrentSpriteState.SpriteData.m_Parts[i].m_SortingOrder;
                 this.SpriteParts[i].sortingLayerName = this.SortingLayer;
+                this.SpriteParts[i].drawMode = this.CurrentSpriteState.SpriteData.m_Parts[i].m_SpriteDrawMode;
             }
         }
     }

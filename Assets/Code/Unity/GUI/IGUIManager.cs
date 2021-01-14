@@ -1,4 +1,7 @@
-﻿namespace JoyLib.Code.Unity.GUI
+﻿using System.Collections.Generic;
+using UnityEngine;
+
+namespace JoyLib.Code.Unity.GUI
 {
     public interface IGUIManager
     {
@@ -6,7 +9,9 @@
 
         void ToggleGUI(string name);
 
-        GUIData OpenGUI(string name);
+        void SetUIColours(IDictionary<string, Color> background, IDictionary<string, Color> cursor);
+
+        GUIData OpenGUI(string name, bool bringToFront = true);
 
         void CloseGUI(string activeName);
 

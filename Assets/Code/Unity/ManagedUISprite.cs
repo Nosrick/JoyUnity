@@ -65,6 +65,7 @@ namespace JoyLib.Code.Unity
                 this.ImageParts[i].gameObject.SetActive(true);
                 this.ImageParts[i].sprite = data[i].Item2;
                 this.ImageParts[i].color = data[i].Item1;
+                this.ImageParts[i].type = this.CurrentSpriteState.SpriteData.m_Parts[i].m_ImageFillType;
             }
         }
     }

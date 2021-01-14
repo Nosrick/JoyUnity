@@ -72,12 +72,12 @@ public class GameManager : MonoBehaviour, IGameManager
 
         this.RelationshipHandler = new EntityRelationshipHandler();
 
-        this.GUIManager = new GUIManager();
-
         this.AbilityHandler = new AbilityHandler();
 
         this.MaterialHandler = new MaterialHandler();
         this.ObjectIconHandler = new ObjectIconHandler(this.Roller);
+
+        this.GUIManager = new GUIManager();
 
         this.VisionProviderHandler = new VisionProviderHandler();
 

@@ -6,6 +6,7 @@ using System.Xml.Linq;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Rollers;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace JoyLib.Code.Graphics
 {
@@ -157,9 +158,11 @@ namespace JoyLib.Code.Graphics
                                 .ToList(),
                             m_PossibleColours = part.Elements("Colour").Any() 
                                 ? (from colour in part.Elements("Colour")
-                                select ColourHelper.ParseHTMLString(colour.GetAs<string>())).ToList()
+                                select GraphicsHelper.ParseHTMLString(colour.GetAs<string>())).ToList()
                                 : new List<Color> { Color.white },
-                            m_SortingOrder = part.Element("SortOrder").DefaultIfEmpty(0)
+                            m_SortingOrder = part.Element("SortOrder").DefaultIfEmpty(0),
+                            m_ImageFillType = GraphicsHelper.ParseFillMethodString(part.Element("FillType").DefaultIfEmpty("filled")),
+                            m_SpriteDrawMode = GraphicsHelper.ParseDrawModeString(part.Element("FillType").DefaultIfEmpty("simple"))
                         }).ToList()
                 };
 
@@ -174,6 +177,7 @@ namespace JoyLib.Code.Graphics
 
         public SpriteData ReturnDefaultIcon()
         {
+            SpriteRenderer v = new SpriteRenderer();
             return this.Icons["DEFAULT"].First().Item2;
         }
 
@@ -238,6 +242,8 @@ namespace JoyLib.Code.Graphics
         public List<Color> m_PossibleColours;
         public int m_SelectedColour;
         public int m_SortingOrder;
+        public Image.Type m_ImageFillType;
+        public SpriteDrawMode m_SpriteDrawMode;
 
         public Color SelectedColour => this.m_PossibleColours[this.m_SelectedColour];
     }

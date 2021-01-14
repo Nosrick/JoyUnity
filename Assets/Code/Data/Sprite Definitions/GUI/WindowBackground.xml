@@ -12,6 +12,7 @@
                 <Frames>1</Frames>
                 <Position>0</Position>
                 <SortOrder>1</SortOrder>
+                <FillType>sliced</FillType>
             </Part>
             <Part>
                 <Name>border</Name>
@@ -20,6 +21,7 @@
                 <Frames>1</Frames>
                 <Position>0</Position>
                 <SortOrder>2</SortOrder>
+                <FillType>tiled</FillType>
             </Part>
         </SpriteData>
     </TileSet>

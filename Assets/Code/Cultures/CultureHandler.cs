@@ -118,7 +118,7 @@ namespace JoyLib.Code.Cultures
                                 .Elements("Colour")
                                 select new KeyValuePair<string, Color>(
                                     colours.Element("Name").GetAs<string>(),
-                                    ColourHelper.ParseHTMLString(colours.Element("Value").GetAs<string>())))
+                                    GraphicsHelper.ParseHTMLString(colours.Element("Value").GetAs<string>())))
                             .ToDictionary(x => x.Key, x => x.Value);
                     }
                     catch (Exception e)
@@ -136,7 +136,7 @@ namespace JoyLib.Code.Cultures
                                     .Elements("Colour")
                                 select new KeyValuePair<string, Color>(
                                     colours.Element("Name").GetAs<string>(),
-                                    ColourHelper.ParseHTMLString(colours.Element("Value").GetAs<string>())))
+                                    GraphicsHelper.ParseHTMLString(colours.Element("Value").GetAs<string>())))
                             .ToDictionary(x => x.Key, x => x.Value);
                     }
                     catch (Exception e)
