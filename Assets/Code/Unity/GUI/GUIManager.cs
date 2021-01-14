@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Xml.Linq;
 using JoyLib.Code.Graphics;
+using JoyLib.Code.Helpers;
+using TMPro;
 using UnityEngine;
 
 namespace JoyLib.Code.Unity.GUI
@@ -12,6 +16,8 @@ namespace JoyLib.Code.Unity.GUI
         protected HashSet<GUIData> ActiveGUIs { get; set; }
         
         protected ISpriteState Background { get; set; }
+        
+        protected TMP_FontAsset FontToUse { get; set; }
         
         protected IDictionary<string, Color> CursorColours { get; set; }
         protected IDictionary<string, Color> BackgroundColours { get; set; }
@@ -36,6 +42,35 @@ namespace JoyLib.Code.Unity.GUI
 
                 this.CursorColours = new Dictionary<string, Color>();
                 this.BackgroundColours = new Dictionary<string, Color>();
+                this.FontToUse = Resources.Load<TMP_FontAsset>("Fonts/Kenney Pixel SDF");
+                this.LoadDefaults();
+            }
+        }
+
+        protected void LoadDefaults()
+        {
+            string file = Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "/GUIDefaults.xml";
+
+            if (File.Exists(file))
+            {
+                XElement doc = XElement.Load(file);
+                foreach (XElement data in doc.Elements("Data"))
+                {
+                    switch (data.Element("Name").GetAs<string>())
+                    {
+                        case "Font":
+                            this.FontToUse =
+                                Resources.Load<TMP_FontAsset>("Fonts/" + data.Element("Value").GetAs<string>());
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                GlobalConstants.ActionLog.AddText("COULD NOT FIND GUI DEFAULTS.", LogLevel.Error);
             }
         }
 
@@ -43,6 +78,11 @@ namespace JoyLib.Code.Unity.GUI
         {
             this.BackgroundColours = background;
             this.CursorColours = cursor;
+        }
+
+        public void SetFont(TMP_FontAsset font)
+        {
+            
         }
 
         public void AddGUI(GUIData gui)
@@ -105,6 +145,11 @@ namespace JoyLib.Code.Unity.GUI
                     && skinnableGUI.HasColours == false)
                 {
                     skinnableGUI.SetColours(this.BackgroundColours);
+                }
+
+                if (skinnableGUI.HasFont == false)
+                {
+                    skinnableGUI.SetFont(this.FontToUse);
                 }
             }
 

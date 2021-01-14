@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using JoyLib.Code.Graphics;
+using TMPro;
 using UnityEngine;
 
 namespace JoyLib.Code.Unity.GUI
@@ -10,6 +11,8 @@ namespace JoyLib.Code.Unity.GUI
         
         public bool HasBackground { get; protected set; }
         public bool HasColours { get; protected set; }
+        
+        public bool HasFont { get; protected set; }
 
         public override void Awake()
         {
@@ -35,6 +38,17 @@ namespace JoyLib.Code.Unity.GUI
 
             this.m_Background.OverrideAllColours(colours);
             this.HasColours = true;
+        }
+
+        public void SetFont(TMP_FontAsset font)
+        {
+            TextMeshProUGUI[] texts = this.GetComponentsInChildren<TextMeshProUGUI>(true);
+            foreach (TextMeshProUGUI text in texts)
+            {
+                text.font = font;
+            }
+
+            this.HasFont = true;
         }
     }
 }
