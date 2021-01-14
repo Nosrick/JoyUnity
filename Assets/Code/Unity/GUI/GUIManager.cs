@@ -22,6 +22,9 @@ namespace JoyLib.Code.Unity.GUI
         
         public IDictionary<string, Color> CursorColours { get; protected set; }
         public IDictionary<string, Color> BackgroundColours { get; protected set; }
+        
+        public float MinFontSize { get; protected set; }
+        public float MaxFontSize { get; protected set; }
 
         public GUIManager()
         {
@@ -50,6 +53,8 @@ namespace JoyLib.Code.Unity.GUI
                 this.CursorColours = new Dictionary<string, Color>();
                 this.BackgroundColours = new Dictionary<string, Color>();
                 this.FontToUse = Resources.Load<TMP_FontAsset>("Fonts/OpenDyslexic3");
+                this.MinFontSize = 10f;
+                this.MaxFontSize = 36f;
                 this.LoadDefaults();
             }
         }
@@ -68,6 +73,8 @@ namespace JoyLib.Code.Unity.GUI
                         case "Font":
                             this.FontToUse =
                                 Resources.Load<TMP_FontAsset>("Fonts/" + data.Element("Value").GetAs<string>());
+                            this.MinFontSize = data.Element("MinFontSize").DefaultIfEmpty(10f);
+                            this.MaxFontSize = data.Element("MaxFontSize").DefaultIfEmpty(36f);
                             break;
 
                         default:
@@ -127,6 +134,7 @@ namespace JoyLib.Code.Unity.GUI
                 if (font.HasFont == false)
                 {
                     font.SetFonts(this.FontToUse);
+                    font.SetMinMaxFontSizes(this.MinFontSize, this.MaxFontSize);
                 }
             }
             this.GUIs.Add(gui);

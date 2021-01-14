@@ -41,5 +41,8 @@ namespace JoyLib.Code.Unity.GUI
         IDictionary<string, Color> CursorColours { get; }
         
         IDictionary<string, Color> BackgroundColours { get; }
+        
+        float MinFontSize { get; }
+        float MaxFontSize { get; }
     }
 }

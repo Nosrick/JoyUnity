@@ -56,15 +56,10 @@ namespace JoyLib.Code.Unity.GUI
             }
         }
 
-        public void SetFontSizes(float size, float min = 0, float max = 0)
+        public void SetMinMaxFontSizes(float min, float max)
         {
-            if (this.Initialised == false)
-            {
-                this.Awake();
-            }
             foreach (var text in this.Texts)
             {
-                text.fontSize = size;
                 if (min > 0)
                 {
                     text.fontSizeMin = min;
@@ -74,6 +69,18 @@ namespace JoyLib.Code.Unity.GUI
                 {
                     text.fontSizeMax = max;
                 }
+            }
+        }
+
+        public void SetFontSizes(float size)
+        {
+            if (this.Initialised == false)
+            {
+                this.Awake();
+            }
+            foreach (var text in this.Texts)
+            {
+                text.fontSize = size;
             }
         }
     }
