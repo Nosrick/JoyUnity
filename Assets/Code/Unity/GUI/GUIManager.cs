@@ -42,7 +42,7 @@ namespace JoyLib.Code.Unity.GUI
 
                 this.CursorColours = new Dictionary<string, Color>();
                 this.BackgroundColours = new Dictionary<string, Color>();
-                this.FontToUse = Resources.Load<TMP_FontAsset>("Fonts/Kenney Pixel");
+                this.FontToUse = Resources.Load<TMP_FontAsset>("Fonts/OpenDyslexic3");
                 this.LoadDefaults();
             }
         }
