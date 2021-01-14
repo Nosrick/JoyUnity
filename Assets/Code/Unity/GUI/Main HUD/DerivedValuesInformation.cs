@@ -11,6 +11,7 @@ namespace JoyLib.Code.Unity.GUI
     {
         [SerializeField] protected DerivedValueBarContainer DerivedValuePrefab;
         [SerializeField] protected GameManager GameManager;
+        [SerializeField] protected Transform m_Container;
 
         protected Dictionary<string, DerivedValueBarContainer> Items { get; set; }
         protected IEntity Player { get; set; }
@@ -63,7 +64,7 @@ namespace JoyLib.Code.Unity.GUI
                 for (int i = this.Items.Count; i < valueList.Count; i++)
                 {
                     DerivedValueBarContainer newItem =
-                        Instantiate(this.DerivedValuePrefab, this.transform).GetComponent<DerivedValueBarContainer>();
+                        Instantiate(this.DerivedValuePrefab, this.m_Container).GetComponent<DerivedValueBarContainer>();
                     newItem.gameObject.SetActive(true);
                     newItem.Initialise();
                     this.Items.Add(valueList[i].Name, newItem);
@@ -93,20 +94,18 @@ namespace JoyLib.Code.Unity.GUI
 
         protected void ResizeMe()
         {
-            VerticalLayoutGroup layoutGroup = this.GetComponent<VerticalLayoutGroup>();
+            VerticalLayoutGroup layoutGroup = this.m_Container.GetComponent<VerticalLayoutGroup>();
             RectTransform childRect = this.DerivedValuePrefab.GetComponent<RectTransform>();
-            RectTransform parentRect = this.transform.parent.GetComponent<RectTransform>();
-            float height = this.transform.childCount *
+            float height = this.m_Container.childCount *
                            (childRect.rect.height
                             + layoutGroup.padding.top
                             + layoutGroup.padding.bottom
                             + layoutGroup.spacing);
 
             float width = childRect.rect.width + layoutGroup.padding.left + layoutGroup.padding.right;
-
-            this.RectTransform.anchorMin = new Vector2(1.0f - (width / parentRect.rect.width), 0);
-
-            this.RectTransform.anchorMax = new Vector2(1, (height/ parentRect.rect.height));
+            
+            this.RectTransform.anchorMin = new Vector2(1.0f - width / Screen.width, 0);
+            this.RectTransform.anchorMax = new Vector2(1, height / Screen.height);
             
             this.RectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
             this.RectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
