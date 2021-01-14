@@ -42,7 +42,7 @@ namespace JoyLib.Code.Unity.GUI
 
                 this.CursorColours = new Dictionary<string, Color>();
                 this.BackgroundColours = new Dictionary<string, Color>();
-                this.FontToUse = Resources.Load<TMP_FontAsset>("Fonts/Kenney Pixel SDF");
+                this.FontToUse = Resources.Load<TMP_FontAsset>("Fonts/Kenney Pixel");
                 this.LoadDefaults();
             }
         }
@@ -96,9 +96,25 @@ namespace JoyLib.Code.Unity.GUI
             gui.Awake();
             gui.GUIManager = this;
             gui.Close();
-            if (gui is SkinnableGUI skinnableGUI && skinnableGUI.HasBackground == false)
+
+            if (gui.TryGetComponent(out ManagedBackground background))
             {
-                skinnableGUI.SetBackground(this.Background);
+                if (background.HasBackground == false)
+                {
+                    background.SetBackground(this.Background);
+                }
+                if (GlobalConstants.GameManager.Player is null == false
+                    && background.HasColours == false)
+                {
+                    background.SetColours(this.BackgroundColours);
+                }
+            }
+            if(gui.TryGetComponent(out ManagedFonts font))
+            {
+                if (font.HasFont == false)
+                {
+                    font.SetFonts(this.FontToUse);
+                }
             }
             this.GUIs.Add(gui);
         }
@@ -138,24 +154,23 @@ namespace JoyLib.Code.Unity.GUI
                     this.CloseGUI(widget.name);
                 }
             }
-            
-            if (toOpen is SkinnableGUI skinnableGUI)
-            {
-                if (GlobalConstants.GameManager.Player is null == false 
-                    && skinnableGUI.HasColours == false)
-                {
-                    skinnableGUI.SetColours(this.BackgroundColours);
-                }
-
-                if (skinnableGUI.HasFont == false)
-                {
-                    skinnableGUI.SetFont(this.FontToUse);
-                }
-            }
 
             toOpen.Show();
             
             this.ActiveGUIs.Add(toOpen);
+
+            if (toOpen.TryGetComponent(out ManagedBackground background))
+            {
+                if (background.HasBackground == false)
+                {
+                    background.SetBackground(this.Background);
+                }
+                if (GlobalConstants.GameManager.Player is null == false
+                    && background.HasColours == false)
+                {
+                    background.SetColours(this.BackgroundColours);
+                }
+            }
 
             if (bringToFront)
             {

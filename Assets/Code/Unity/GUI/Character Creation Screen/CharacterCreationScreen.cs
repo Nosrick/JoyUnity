@@ -10,7 +10,6 @@ using UnityEngine;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    [RequireComponent(typeof(SkinnableGUI))]
     public class CharacterCreationScreen : MonoBehaviour
     {
         [SerializeField] protected GameManager GameManager;
@@ -24,9 +23,6 @@ namespace JoyLib.Code.Unity.GUI
         [SerializeField] protected ManagedUISprite PlayerSprite_Part2;
         [SerializeField] protected TMP_InputField PlayerName_Part1;
         [SerializeField] protected TMP_InputField PlayerName_Part2;
-        [SerializeField] protected SkinnableGUI m_CharacterCreation_Part2;
-        
-        protected SkinnableGUI GUIData { get; set; }
         
         protected string PlayerName { get; set; }
 
@@ -42,22 +38,8 @@ namespace JoyLib.Code.Unity.GUI
             this.StatisticWindow.Initialise();
             this.SkillWindow.Initialise();
             this.DerivedValuesWindow.Initialise();
-            this.GUIData = this.GetComponent<SkinnableGUI>();
-            this.GUIData.Awake();
-            this.m_CharacterCreation_Part2.Awake();
             this.PlayerInfo.Initialise();
             this.AbilityWindow.Initialise();
-            
-            ISpriteState background = new SpriteState(
-                "Background",
-                this.GameManager.ObjectIconHandler.GetSprites(
-                        "WindowBackground",
-                        "WindowBackground")
-                    .First());
-            background.OverrideColours(this.PlayerInfo.CurrentCulture.BackgroundColours);
-            
-            this.GUIData.SetBackground(background);
-            this.m_CharacterCreation_Part2.SetBackground(background);
         }
 
         public IEntity CreatePlayer()

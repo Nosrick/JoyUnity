@@ -533,12 +533,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7265820668172797019}
-  - component: {fileID: 7265820668172797018}
   - component: {fileID: 7265820668172797016}
   - component: {fileID: 7265820668172797017}
   - component: {fileID: 7265820668172797023}
   - component: {fileID: 2029339562}
-  - component: {fileID: 7265820667470346645}
+  - component: {fileID: 5782540482175945443}
+  - component: {fileID: 4007919242165623138}
   m_Layer: 5
   m_Name: Tooltip
   m_TagString: Untagged
@@ -568,26 +568,6 @@ RectTransform:
   m_AnchoredPosition: {x: -0.5, y: -4.81}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &7265820668172797018
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7265820668172797012}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64f1dde3e6fc40ba9fa988fa7b485d9c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Title: {fileID: 7265820668663487646}
-  m_Text: {fileID: 7265820668081123753}
-  m_Icon: {fileID: 8439859475433882032}
-  m_IconSlot: {fileID: 7265820667781865521}
-  m_Background: {fileID: 7265820666756524092}
-  m_ItemPrefab: {fileID: 7265820666729403734}
-  m_ParentLayout: {fileID: 7265820667142493886}
-  m_PositionOffset: {x: 0, y: 0}
 --- !u!225 &7265820668172797016
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -660,7 +640,7 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 50
   m_TargetDisplay: 0
---- !u!114 &7265820667470346645
+--- !u!114 &5782540482175945443
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -675,7 +655,27 @@ MonoBehaviour:
   m_RemovesControl: 0
   m_ClosesOthers: 0
   m_AlwaysOpen: 0
-  m_Index: 0
+  m_AlwaysOnTop: 0
+--- !u!114 &4007919242165623138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7265820668172797012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64f1dde3e6fc40ba9fa988fa7b485d9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Title: {fileID: 7265820668663487646}
+  m_Text: {fileID: 7265820668081123753}
+  m_Icon: {fileID: 8439859475433882032}
+  m_IconSlot: {fileID: 7265820667781865521}
+  m_Background: {fileID: 7265820666756524092}
+  m_ItemPrefab: {fileID: 7265820666729403734}
+  m_ParentLayout: {fileID: 7265820667142493886}
+  m_PositionOffset: {x: 0, y: 0}
 --- !u!1 &7265820668663487640
 GameObject:
   m_ObjectHideFlags: 0

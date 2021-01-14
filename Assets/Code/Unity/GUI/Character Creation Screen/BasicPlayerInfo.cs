@@ -126,10 +126,10 @@ namespace JoyLib.Code.Unity.GUI
                 .SetCursorColours(this.CurrentCulture.CursorColours);
             
             this.GameManager.GUIManager.GetGUI(GUINames.CHARACTER_CREATION_PART_1)
-                .GetComponent<SkinnableGUI>()
+                .GetComponent<ManagedBackground>()
                 .SetColours(this.CurrentCulture.BackgroundColours);
             this.GameManager.GUIManager.GetGUI(GUINames.CHARACTER_CREATION_PART_2)
-                .GetComponent<SkinnableGUI>()
+                .GetComponent<ManagedBackground>()
                 .SetColours(this.CurrentCulture.BackgroundColours);
         }
 
