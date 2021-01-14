@@ -100,8 +100,6 @@ namespace JoyLib.Code.States
             this.m_ActiveWorld.Player.Tick();
 
             this.SetEntityWorld(this.Overworld);
-
-            this.SetUpUi();
         }
 
         public override void Stop()

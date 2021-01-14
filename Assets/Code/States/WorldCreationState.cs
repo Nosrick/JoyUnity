@@ -32,7 +32,6 @@ namespace JoyLib.Code.States
 
         public override void Start()
         {
-            this.SetUpUi();
             this.CreateWorld();
         }
 
@@ -46,7 +45,6 @@ namespace JoyLib.Code.States
 
         public override void SetUpUi()
         {
-            base.SetUpUi();
         }
 
         private void CreateWorld()

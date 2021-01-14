@@ -10,6 +10,8 @@ namespace Joy.Code.Managers
         public StateManager()
         {
             this.m_ActiveState = new MainMenuState();
+            this.m_ActiveState.Start();
+            this.m_ActiveState.SetUpUi();
 
             InputSystem.onActionChange -= this.OnMove;
             InputSystem.onActionChange += this.OnMove;
@@ -21,6 +23,7 @@ namespace Joy.Code.Managers
             this.m_ActiveState = newState;
             this.m_ActiveState.Start();
             this.m_ActiveState.LoadContent();
+            this.m_ActiveState.SetUpUi();
         }
 
         public void LoadContent()

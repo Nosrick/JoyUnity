@@ -9,6 +9,8 @@ namespace JoyLib.Code.Unity.GUI
     {
         [SerializeField] protected ManagedUISprite m_BackgroundPrefab;
         
+        protected bool Initialised { get; set; }
+        
         public bool HasBackground { get; protected set; }
         public bool HasColours { get; protected set; }
 
@@ -16,6 +18,11 @@ namespace JoyLib.Code.Unity.GUI
 
         public void Awake()
         {
+            if (this.Initialised)
+            {
+                return;
+            }
+            
             this.m_BackgroundInstance = Instantiate(this.m_BackgroundPrefab, this.transform);
             this.m_BackgroundInstance.gameObject.AddComponent<LayoutElement>().ignoreLayout = true;
             this.m_BackgroundInstance.Awake();
@@ -26,10 +33,16 @@ namespace JoyLib.Code.Unity.GUI
             backgroundRect.anchorMax = Vector2.one;
             backgroundRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, myRect.rect.width);
             backgroundRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, myRect.rect.height);
+
+            this.Initialised = true;
         }
         
         public void SetBackground(ISpriteState sprite)
         {
+            if (this.Initialised == false)
+            {
+                this.Awake();
+            }
             this.m_BackgroundInstance.Clear();
             this.m_BackgroundInstance.AddSpriteState(sprite);
             this.HasBackground = true;
@@ -37,6 +50,10 @@ namespace JoyLib.Code.Unity.GUI
 
         public void SetColours(IDictionary<string, Color> colours)
         {
+            if (this.Initialised == false)
+            {
+                this.Awake();
+            }
             if (this.m_BackgroundInstance.CurrentSpriteState is null)
             {
                 GlobalConstants.ActionLog.AddText("Trying to set colours of a null sprite state. " + this.name);

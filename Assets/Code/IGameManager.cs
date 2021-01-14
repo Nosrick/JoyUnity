@@ -20,6 +20,7 @@ using JoyLib.Code.Helpers;
 using JoyLib.Code.Physics;
 using JoyLib.Code.Quests;
 using JoyLib.Code.Rollers;
+using JoyLib.Code.States;
 using JoyLib.Code.Unity.GUI;
 using JoyLib.Code.World;
 using UnityEngine;
@@ -71,5 +72,6 @@ namespace JoyLib.Code
         GameObjectPool EntityPool { get; }
         GameObjectPool ItemPool { get; }
         GameObjectPool FogPool { get; }
+        void SetNextState(IGameState nextState = null);
     }
 }

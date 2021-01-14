@@ -10,19 +10,19 @@ namespace JoyLib.Code.Unity.GUI
     public class DerivedValuesInformation : MonoBehaviour
     {
         [SerializeField] protected DerivedValueBarContainer DerivedValuePrefab;
-        [SerializeField] protected GameManager GameManager;
         [SerializeField] protected Transform m_Container;
 
         protected Dictionary<string, DerivedValueBarContainer> Items { get; set; }
         protected IEntity Player { get; set; }
         
-        protected RectTransform RectTransform { get; set; }
-
+        protected RectTransform RectTransform { get; set; }       
+        protected IGameManager GameManager { get; set; }
+        
         public void OnEnable()
         {
             if (this.GameManager is null)
             {
-                return;
+                this.GameManager = GlobalConstants.GameManager;
             }
 
             if (this.Items is null)

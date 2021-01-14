@@ -24,6 +24,12 @@ namespace JoyLib.Code.Unity.GUI.Character_Sheet
             }
 
             this.Player = GlobalConstants.GameManager.Player;
+
+            if (this.Player is null)
+            {
+                return;
+            }
+            
             this.Statistics.SetValues(this.Player.Statistics.Values);
             this.Skills.SetValues(this.Player.Skills.Values);
             this.Abilities.SetValues(this.Player.Abilities);

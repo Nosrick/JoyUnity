@@ -5,6 +5,8 @@ namespace JoyLib.Code.Unity.GUI
 {
     public class ManagedFonts : MonoBehaviour
     {
+        protected bool Initialised { get; set; }
+        
         protected TextMeshProUGUI[] Texts { get; set; }
         
         public bool HasFont { get; protected set; }
@@ -12,10 +14,15 @@ namespace JoyLib.Code.Unity.GUI
         public void Awake()
         {
             this.Texts = this.GetComponentsInChildren<TextMeshProUGUI>(true);
+            this.Initialised = true;
         }
 
         public void SetFonts(TMP_FontAsset font)
         {
+            if (this.Initialised == false)
+            {
+                this.Awake();
+            }
             foreach (var text in this.Texts)
             {
                 text.font = font;
@@ -26,6 +33,10 @@ namespace JoyLib.Code.Unity.GUI
 
         public void SetColour(Color colour)
         {
+            if (this.Initialised == false)
+            {
+                this.Awake();
+            }
             foreach (var text in this.Texts)
             {
                 text.color = colour;
@@ -34,6 +45,10 @@ namespace JoyLib.Code.Unity.GUI
 
         public void SetOutline(Color colour, float thickness = 0)
         {
+            if (this.Initialised == false)
+            {
+                this.Awake();
+            }
             foreach (var text in this.Texts)
             {
                 text.outlineWidth = thickness;
@@ -43,6 +58,10 @@ namespace JoyLib.Code.Unity.GUI
 
         public void SetFontSizes(float size, float min = 0, float max = 0)
         {
+            if (this.Initialised == false)
+            {
+                this.Awake();
+            }
             foreach (var text in this.Texts)
             {
                 text.fontSize = size;

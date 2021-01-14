@@ -2,6 +2,7 @@ using System.Threading;
 using JoyLib.Code.Unity.GUI;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Cursor = JoyLib.Code.Unity.GUI.Cursor;
 
 namespace JoyLib.Code.States
 {
@@ -17,12 +18,19 @@ namespace JoyLib.Code.States
         public virtual void SetUpUi()
         {
             Thread.Sleep(500);
-            
-            GUIData[] guiData = Object.FindObjectsOfType<GUIData>();
+
+            this.GUIManager.Clear();
+            GUIData[] guiData = GameObject.FindObjectsOfType<GUIData>();
             foreach (GUIData data in guiData)
             {
                 this.GUIManager.AddGUI(data);
             }
+
+            Cursor cursor = this.GUIManager.OpenGUI(GUINames.CURSOR)
+                .GetComponent<Cursor>();
+            cursor.SetCursorSprites(this.GUIManager.Cursor);
+            cursor.SetCursorColours(this.GUIManager.CursorColours);
+            this.GUIManager.CloseAllOtherGUIs(GUINames.CURSOR);
         }
 
         public abstract void Start();

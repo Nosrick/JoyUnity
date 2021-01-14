@@ -11,17 +11,18 @@ namespace JoyLib.Code.Unity.GUI
 {
     public class AbilityWindow : ValueContainer
     {
-        [SerializeField] protected GameManager GameManager;
         [SerializeField] protected TextMeshProUGUI PointsRemainingText;
         [SerializeField] protected AbilityItem AbilityItemPrefab;
         [SerializeField] protected BasicPlayerInfo PlayerInfo;
         [SerializeField] protected StatisticWindow StatisticWindow;
         [SerializeField] protected SkillWindow SkillWindow;
         
-        protected List<AbilityItem> Items { get; set; }
-
+        protected List<AbilityItem> Items { get; set; }        
+        protected IGameManager GameManager { get; set; }
+        
         public void Initialise()
         {
+            this.GameManager = GlobalConstants.GameManager;
             base.OnEnable();
             this.Items = new List<AbilityItem>();
             this.Value = this.Maximum;

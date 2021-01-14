@@ -9,16 +9,17 @@ namespace JoyLib.Code.Unity.GUI
 {
     public class SkillWindow : ValueContainer
     {
-        [SerializeField] protected GameManager GameManager;
         [SerializeField] protected NamedItem ValueContainerPrefab;
         [SerializeField] protected TextMeshProUGUI PointsRemainingText;
         [SerializeField] protected BasicPlayerInfo PlayerInfo;
         protected List<NamedItem> Items { get; set; }
+        protected IGameManager GameManager { get; set; }
         
         protected IDictionary<string, IEntitySkill> Skills { get; set; }
 
         public void Initialise()
         {
+            this.GameManager = GlobalConstants.GameManager;
             base.OnEnable();
             this.ValueContainerPrefab.gameObject.SetActive(false);
             this.Items = new List<NamedItem>();

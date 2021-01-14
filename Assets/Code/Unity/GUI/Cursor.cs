@@ -14,13 +14,8 @@ namespace JoyLib.Code.Unity.GUI
         protected ManagedUISprite CursorObject { get; set; }
         protected CanvasGroup CanvasGroup { get; set; }
         protected RectTransform MyRect { get; set; }
-        
-        public int FrameIndex { get; protected set; }
-        public string ChosenSpriteState { get; protected set; }
-        public string TileSet { get; protected set; }
-        public float TimeSinceLastChange { get; protected set; }
-        public bool IsAnimated { get; set; }
-        
+
+        protected bool Initialised { get; set; }
         protected ManagedUISprite DragObject { get; set; }
 
         public void Awake()
@@ -45,6 +40,8 @@ namespace JoyLib.Code.Unity.GUI
                 this.CursorObject = Instantiate(this.m_PartPrefab, this.transform);
                 this.CursorObject.Awake();
             }
+
+            this.Initialised = true;
         }
 
         public void Update()
@@ -60,6 +57,10 @@ namespace JoyLib.Code.Unity.GUI
 
         public void SetCursorSize(int width, int height)
         {
+            if (this.Initialised == false)
+            {
+                this.Awake();
+            }
             this.MyRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
             this.MyRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
             RectTransform cursorRect = this.CursorObject.GetComponent<RectTransform>();
@@ -72,6 +73,10 @@ namespace JoyLib.Code.Unity.GUI
 
         public void SetCursorSprites(ISpriteState state)
         {
+            if (this.Initialised == false)
+            {
+                this.Awake();
+            }
             this.CursorObject.gameObject.SetActive(true);
             this.CursorObject.Clear();
             this.CursorObject.AddSpriteState(state, true);
@@ -79,6 +84,10 @@ namespace JoyLib.Code.Unity.GUI
 
         public void SetCursorColours(IDictionary<string, Color> colours)
         {
+            if (this.Initialised == false)
+            {
+                this.Awake();
+            }
             foreach (ISpriteState state in this.CursorObject.States)
             {
                 for (int j = 0; j < state.SpriteData.m_Parts.Count; j++)
@@ -93,12 +102,17 @@ namespace JoyLib.Code.Unity.GUI
                     state.SpriteData.m_Parts[j] = part;
                     this.CursorObject.Clear();
                 }
-                this.CursorObject.AddSpriteState(state, true);
+                this.CursorObject.Clear();
+                this.CursorObject.AddSpriteState(state);
             }
         }
 
         public void Show(ISpriteState replacement)
         {
+            if (this.Initialised == false)
+            {
+                this.Awake();
+            }
             this.DragObject.Clear();
             this.DragObject.gameObject.SetActive(false);
             if (replacement is null)
@@ -111,6 +125,10 @@ namespace JoyLib.Code.Unity.GUI
 
         public void Reset()
         {
+            if (this.Initialised == false)
+            {
+                this.Awake();
+            }
             this.DragObject.Clear();
         }
     }

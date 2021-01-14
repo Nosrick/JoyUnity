@@ -1,6 +1,5 @@
 ﻿using Code.Collections;
 using Joy.Code.Managers;
-using JoyLib.Code;
 using JoyLib.Code.Combat;
 using JoyLib.Code.Conversation;
 using JoyLib.Code.Conversation.Conversations;
@@ -28,171 +27,189 @@ using JoyLib.Code.States;
 using JoyLib.Code.Unity.GUI;
 using JoyLib.Code.World;
 using UnityEngine;
-using Cursor = JoyLib.Code.Unity.GUI.Cursor;
+using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour, IGameManager
+namespace JoyLib.Code
 {
-    protected StateManager m_StateManager;
-
-    // Use this for initialization
-	protected void Awake ()
+    public class GameManager : MonoBehaviour, IGameManager
     {
-        if (GlobalConstants.GameManager is null)
+        protected StateManager m_StateManager;
+
+        protected IGameState NextState { get; set; }
+
+        // Use this for initialization
+        protected void Awake()
         {
-            GlobalConstants.GameManager = this;
+            if (GlobalConstants.GameManager is null)
+            {
+                GlobalConstants.GameManager = this;
+            }
+
+            SceneManager.sceneLoaded += (arg0, mode) => this.OnSceneLoad();
+
+            DontDestroyOnLoad(this);
+            DontDestroyOnLoad(GameObject.Find("WorldHolder"));
+
+            this.ActionLog = new ActionLog();
+
+            GlobalConstants.ActionLog = this.ActionLog;
+
+            GameObject objectHolder = GameObject.Find("WorldObjects");
+            GameObject entityHolder = GameObject.Find("WorldEntities");
+            GameObject fogHolder = GameObject.Find("WorldFog");
+            GameObject wallHolder = GameObject.Find("WorldWalls");
+            GameObject floorHolder = GameObject.Find("WorldFloors");
+
+            GameObject prefab = Resources.Load<GameObject>("Prefabs/MonoBehaviourHandler");
+            GameObject itemPrefab = Resources.Load<GameObject>("Prefabs/ItemInstance");
+            GameObject positionableSprite = Resources.Load<GameObject>("Prefabs/PositionableSprite");
+            GameObject fog = Resources.Load<GameObject>("Prefabs/Fog of War");
+            this.FloorPool = new GameObjectPool(positionableSprite, floorHolder);
+            this.WallPool = new GameObjectPool(prefab, wallHolder);
+            this.EntityPool = new GameObjectPool(prefab, entityHolder);
+            this.ItemPool = new GameObjectPool(itemPrefab, objectHolder);
+            this.FogPool = new GameObjectPool(fog, fogHolder);
+
+            this.MyGameObject = this.gameObject;
+
+            this.Roller = new RNG();
+
+            this.CombatEngine = new CombatEngine();
+
+            this.PhysicsManager = new PhysicsManager();
+
+            this.RelationshipHandler = new EntityRelationshipHandler();
+
+            this.AbilityHandler = new AbilityHandler();
+
+            this.MaterialHandler = new MaterialHandler();
+            this.ObjectIconHandler = new ObjectIconHandler(this.Roller);
+
+            this.GUIManager = new GUIManager();
+
+            this.VisionProviderHandler = new VisionProviderHandler();
+
+            this.StatisticHandler = new EntityStatisticHandler();
+            this.NeedHandler = new NeedHandler();
+            this.CultureHandler = new CultureHandler();
+            this.BioSexHandler = new EntityBioSexHandler();
+            this.SexualityHandler = new EntitySexualityHandler();
+            this.RomanceHandler = new EntityRomanceHandler();
+            this.JobHandler = new JobHandler(this.AbilityHandler, this.Roller);
+            this.GenderHandler = new GenderHandler();
+            this.SkillHandler = new EntitySkillHandler(this.NeedHandler);
+            this.EntityTemplateHandler = new EntityTemplateHandler(
+                this.SkillHandler,
+                this.VisionProviderHandler,
+                this.AbilityHandler);
+
+            this.DerivedValueHandler = new DerivedValueHandler(this.StatisticHandler, this.SkillHandler);
+
+            this.WorldInfoHandler = new WorldInfoHandler(this.ObjectIconHandler);
+
+            this.ParameterProcessorHandler = new ParameterProcessorHandler();
+
+            this.EntityHandler = new LiveEntityHandler();
+            this.ItemHandler = new LiveItemHandler(this.ObjectIconHandler, this.MaterialHandler, this.AbilityHandler,
+                this.Roller);
+
+            this.EntityFactory = new EntityFactory(this.NeedHandler, this.ObjectIconHandler, this.CultureHandler,
+                this.SexualityHandler, this.BioSexHandler, this.GenderHandler, this.RomanceHandler, this.JobHandler,
+                this.PhysicsManager, this.SkillHandler,
+                this.DerivedValueHandler, this.Roller);
+
+            this.ItemFactory = new ItemFactory(this.ItemHandler, this.ObjectIconHandler,
+                this.DerivedValueHandler,
+                this.ItemPool, this.Roller);
+
+            this.QuestProvider =
+                new QuestProvider(this.RelationshipHandler, this.ItemHandler, this.ItemFactory, this.Roller);
+            this.QuestTracker = new QuestTracker();
+
+            this.ConversationEngine = new ConversationEngine(this.RelationshipHandler);
+
+            this.NaturalWeaponHelper = new NaturalWeaponHelper(this.MaterialHandler, this.ItemFactory);
+
+            this.m_StateManager = new StateManager();
+
+            TradeWindow.RelationshipHandler = this.RelationshipHandler;
+
+            TopicData.ConversationEngine = this.ConversationEngine;
+            TopicData.RelationshipHandler = this.RelationshipHandler;
+
+            Entity.QuestTracker = this.QuestTracker;
+            Entity.RelationshipHandler = this.RelationshipHandler;
+            Entity.SkillHandler = this.SkillHandler;
+            Entity.NaturalWeaponHelper = this.NaturalWeaponHelper;
+            Entity.DerivedValueHandler = this.DerivedValueHandler;
+
+            //this.m_StateManager.ChangeState(new MainMenuState());
         }
 
-        this.ActionLog = new ActionLog();
+        // Update is called once per frame
+        protected void Update()
+        {
+            this.m_StateManager?.Update();
+            this.ActionLog.Update();
+        }
 
-        GlobalConstants.ActionLog = this.ActionLog;
-        
-        GameObject objectHolder = GameObject.Find("WorldObjects");
-        GameObject entityHolder = GameObject.Find("WorldEntities");
-        GameObject fogHolder = GameObject.Find("WorldFog");
-        GameObject wallHolder = GameObject.Find("WorldWalls");
-        GameObject floorHolder = GameObject.Find("WorldFloors");
-            
-        GameObject prefab = Resources.Load<GameObject>("Prefabs/MonoBehaviourHandler");
-        GameObject itemPrefab = Resources.Load<GameObject>("Prefabs/ItemInstance");
-        GameObject positionableSprite = Resources.Load<GameObject>("Prefabs/PositionableSprite");
-        GameObject fog = Resources.Load<GameObject>("Prefabs/Fog of War");
-        this.FloorPool = new GameObjectPool(positionableSprite, floorHolder);
-        this.WallPool = new GameObjectPool(prefab, wallHolder);
-        this.EntityPool = new GameObjectPool(prefab, entityHolder);
-        this.ItemPool = new GameObjectPool(itemPrefab, objectHolder);
-        this.FogPool = new GameObjectPool(fog, fogHolder);
+        public void SetNextState(IGameState nextState = null)
+        {
+            this.NextState = nextState;
+        }
 
-        this.MyGameObject = this.gameObject;
+        protected void OnSceneLoad()
+        {
+            if (this.NextState is null)
+            {
+                return;
+            }
 
-        this.Roller = new RNG();
+            GlobalConstants.ActionLog.AddText(SceneManager.GetActiveScene().name);
+            this.m_StateManager.ChangeState(this.NextState);
+        }
 
-        this.CombatEngine = new CombatEngine();
+        public ActionLog ActionLog { get; protected set; }
+        public ICombatEngine CombatEngine { get; protected set; }
+        public IQuestTracker QuestTracker { get; protected set; }
+        public IQuestProvider QuestProvider { get; protected set; }
+        public IEntityRelationshipHandler RelationshipHandler { get; protected set; }
+        public IObjectIconHandler ObjectIconHandler { get; protected set; }
+        public IMaterialHandler MaterialHandler { get; protected set; }
+        public ICultureHandler CultureHandler { get; protected set; }
+        public IEntityStatisticHandler StatisticHandler { get; protected set; }
+        public IEntityTemplateHandler EntityTemplateHandler { get; protected set; }
+        public IEntityBioSexHandler BioSexHandler { get; protected set; }
+        public IEntitySexualityHandler SexualityHandler { get; protected set; }
+        public IJobHandler JobHandler { get; protected set; }
+        public IEntityRomanceHandler RomanceHandler { get; protected set; }
+        public IGenderHandler GenderHandler { get; protected set; }
+        public IGUIManager GUIManager { get; protected set; }
+        public IParameterProcessorHandler ParameterProcessorHandler { get; protected set; }
+        public ILiveEntityHandler EntityHandler { get; protected set; }
+        public ILiveItemHandler ItemHandler { get; protected set; }
+        public INeedHandler NeedHandler { get; protected set; }
+        public IEntitySkillHandler SkillHandler { get; protected set; }
+        public IWorldInfoHandler WorldInfoHandler { get; protected set; }
+        public IPhysicsManager PhysicsManager { get; protected set; }
+        public IConversationEngine ConversationEngine { get; protected set; }
+        public IAbilityHandler AbilityHandler { get; protected set; }
+        public IDerivedValueHandler DerivedValueHandler { get; protected set; }
+        public IVisionProviderHandler VisionProviderHandler { get; protected set; }
 
-        this.PhysicsManager = new PhysicsManager();
+        public NaturalWeaponHelper NaturalWeaponHelper { get; protected set; }
+        public RNG Roller { get; protected set; }
 
-        this.RelationshipHandler = new EntityRelationshipHandler();
+        public IEntityFactory EntityFactory { get; protected set; }
+        public IItemFactory ItemFactory { get; protected set; }
+        public GameObject MyGameObject { get; protected set; }
 
-        this.AbilityHandler = new AbilityHandler();
+        public IEntity Player { get; set; }
 
-        this.MaterialHandler = new MaterialHandler();
-        this.ObjectIconHandler = new ObjectIconHandler(this.Roller);
-
-        this.GUIManager = new GUIManager();
-
-        this.VisionProviderHandler = new VisionProviderHandler();
-
-        this.StatisticHandler = new EntityStatisticHandler();
-        this.NeedHandler = new NeedHandler();
-        this.CultureHandler = new CultureHandler();
-        this.BioSexHandler = new EntityBioSexHandler();
-        this.SexualityHandler = new EntitySexualityHandler();
-        this.RomanceHandler = new EntityRomanceHandler();
-        this.JobHandler = new JobHandler(this.AbilityHandler, this.Roller);
-        this.GenderHandler = new GenderHandler();
-        this.SkillHandler = new EntitySkillHandler(this.NeedHandler);
-        this.EntityTemplateHandler = new EntityTemplateHandler(
-            this.SkillHandler, 
-            this.VisionProviderHandler,
-            this.AbilityHandler);
-        
-        this.DerivedValueHandler = new DerivedValueHandler(this.StatisticHandler, this.SkillHandler);
-
-        this.WorldInfoHandler = new WorldInfoHandler(this.ObjectIconHandler);
-
-        this.ParameterProcessorHandler = new ParameterProcessorHandler();
-
-        this.EntityHandler = new LiveEntityHandler();
-        this.ItemHandler = new LiveItemHandler(this.ObjectIconHandler, this.MaterialHandler, this.AbilityHandler, this.Roller);
-
-        this.EntityFactory = new EntityFactory(this.NeedHandler, this.ObjectIconHandler, this.CultureHandler, this.SexualityHandler, this.BioSexHandler, this.GenderHandler, this.RomanceHandler, this.JobHandler, this.PhysicsManager, this.SkillHandler,
-            this.DerivedValueHandler, this.Roller);
-
-        this.ItemFactory = new ItemFactory(this.ItemHandler, this.ObjectIconHandler,
-            this.DerivedValueHandler,
-            this.ItemPool, this.Roller);
-
-        this.QuestProvider = new QuestProvider(this.RelationshipHandler, this.ItemHandler, this.ItemFactory, this.Roller);
-        this.QuestTracker = new QuestTracker();
-
-        this.ConversationEngine = new ConversationEngine(this.RelationshipHandler);
-
-        this.NaturalWeaponHelper = new NaturalWeaponHelper(this.MaterialHandler, this.ItemFactory);
-
-        this.m_StateManager = new StateManager();
-
-        TradeWindow.RelationshipHandler = this.RelationshipHandler;
-        
-        TopicData.ConversationEngine = this.ConversationEngine;
-        TopicData.RelationshipHandler = this.RelationshipHandler;
-
-        Entity.QuestTracker = this.QuestTracker;
-        Entity.RelationshipHandler = this.RelationshipHandler;
-        Entity.SkillHandler = this.SkillHandler;
-        Entity.NaturalWeaponHelper = this.NaturalWeaponHelper;
-        Entity.DerivedValueHandler = this.DerivedValueHandler;
-
-        Cursor cursor = this.GUIManager.OpenGUI(GUINames.CURSOR)
-            .GetComponent<Cursor>();
-        cursor.SetCursorSprites(new SpriteState(
-            "Cursor",
-            this.ObjectIconHandler.GetFrame("DefaultCursor", "DefaultCursor")));
-        cursor.SetCursorSize(64, 64);
-
-        this.m_StateManager.ChangeState(new CharacterCreationState());
+        public GameObjectPool FloorPool { get; protected set; }
+        public GameObjectPool WallPool { get; protected set; }
+        public GameObjectPool EntityPool { get; protected set; }
+        public GameObjectPool ItemPool { get; protected set; }
+        public GameObjectPool FogPool { get; protected set; }
     }
-	
-	// Update is called once per frame
-	protected void Update()
-    {
-        this.m_StateManager?.Update();
-        this.ActionLog.Update();
-    }
-
-    public void NextState()
-    {
-        this.m_StateManager.NextState();
-    }
-    
-    public ActionLog ActionLog { get; protected set; }
-    public ICombatEngine CombatEngine { get; protected set; }
-    public IQuestTracker QuestTracker { get; protected set; }
-    public IQuestProvider QuestProvider { get; protected set; }
-    public IEntityRelationshipHandler RelationshipHandler { get; protected set; }
-    public IObjectIconHandler ObjectIconHandler { get; protected set; }
-    public IMaterialHandler MaterialHandler { get; protected set; }
-    public ICultureHandler CultureHandler { get; protected set; }
-    public IEntityStatisticHandler StatisticHandler { get; protected set; }
-    public IEntityTemplateHandler EntityTemplateHandler { get; protected set; }
-    public IEntityBioSexHandler BioSexHandler { get; protected set; }
-    public IEntitySexualityHandler SexualityHandler { get; protected set; }
-    public IJobHandler JobHandler { get; protected set; }
-    public IEntityRomanceHandler RomanceHandler { get; protected set; }
-    public IGenderHandler GenderHandler { get; protected set; }
-    public IGUIManager GUIManager { get; protected set; }
-    public IParameterProcessorHandler ParameterProcessorHandler { get; protected set; }
-    public ILiveEntityHandler EntityHandler { get; protected set; }
-    public ILiveItemHandler ItemHandler { get; protected set; }
-    public INeedHandler NeedHandler { get; protected set; }
-    public IEntitySkillHandler SkillHandler { get; protected set; }
-    public IWorldInfoHandler WorldInfoHandler { get; protected set; }
-    public IPhysicsManager PhysicsManager { get; protected set; }
-    public IConversationEngine ConversationEngine { get; protected set; }
-    public IAbilityHandler AbilityHandler { get; protected set; }
-    public IDerivedValueHandler DerivedValueHandler { get; protected set; }
-    public IVisionProviderHandler VisionProviderHandler { get; protected set; }
-
-    public NaturalWeaponHelper NaturalWeaponHelper { get; protected set; }
-    public RNG Roller { get; protected set; }
-
-    public IEntityFactory EntityFactory { get; protected set; }
-    public IItemFactory ItemFactory { get; protected set; }
-    public GameObject MyGameObject { get; protected set; }
-
-    public IEntity Player { get; set; }
-    
-    public GameObjectPool FloorPool { get; protected set; }
-    public GameObjectPool WallPool { get; protected set; }
-    public GameObjectPool EntityPool { get; protected set; }
-    public GameObjectPool ItemPool { get; protected set; }
-    public GameObjectPool FogPool { get; protected set; }
 }

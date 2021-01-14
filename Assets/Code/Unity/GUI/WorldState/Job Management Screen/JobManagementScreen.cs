@@ -14,7 +14,6 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
 {
     public class JobManagementScreen : ValueContainer
     {
-        [SerializeField] protected GameManager GameManager;
         [SerializeField] protected TextMeshProUGUI ExperienceRemaining;
         [SerializeField] protected GrowingNamedItem namedItemPrefab;
         [SerializeField] protected AbilityItem AbilityItemPrefab;
@@ -43,7 +42,7 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
 
         public override void OnEnable()
         {
-            if (this.GameManager.Player is null)
+            if (GlobalConstants.GameManager.Player is null)
             {
                 return;
             }
@@ -63,7 +62,15 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
                 this.Abilities = new List<AbilityItem>();
             }
 
-            this.Player = this.GameManager.Player;
+            this.Player = GlobalConstants.GameManager.Player;
+
+            /*
+            if (this.Player is null)
+            {
+                return;
+            }
+            */
+            
             this.CurrentJob = this.Player.CurrentJob;
             this.Minimum = 0;
             this.Maximum = this.CurrentJob.Experience;

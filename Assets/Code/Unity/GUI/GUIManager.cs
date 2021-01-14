@@ -15,12 +15,13 @@ namespace JoyLib.Code.Unity.GUI
         protected HashSet<GUIData> GUIs { get; set; }
         protected HashSet<GUIData> ActiveGUIs { get; set; }
         
-        protected ISpriteState Background { get; set; }
+        public ISpriteState Background { get; protected set; }
+        public ISpriteState Cursor { get; protected set; }
         
-        protected TMP_FontAsset FontToUse { get; set; }
+        public TMP_FontAsset FontToUse { get; protected set; }
         
-        protected IDictionary<string, Color> CursorColours { get; set; }
-        protected IDictionary<string, Color> BackgroundColours { get; set; }
+        public IDictionary<string, Color> CursorColours { get; protected set; }
+        public IDictionary<string, Color> BackgroundColours { get; protected set; }
 
         public GUIManager()
         {
@@ -39,6 +40,12 @@ namespace JoyLib.Code.Unity.GUI
                             "WindowBackground",
                             "WindowBackground")
                         .First());
+
+                this.Cursor = new SpriteState(
+                    "Cursor",
+                    GlobalConstants.GameManager.ObjectIconHandler.GetFrame(
+                        "DefaultCursor",
+                        "DefaultCursor"));
 
                 this.CursorColours = new Dictionary<string, Color>();
                 this.BackgroundColours = new Dictionary<string, Color>();
@@ -82,7 +89,13 @@ namespace JoyLib.Code.Unity.GUI
 
         public void SetFont(TMP_FontAsset font)
         {
-            
+            this.FontToUse = font;
+        }
+
+        public void Clear()
+        {
+            this.ActiveGUIs.Clear();
+            this.GUIs.Clear();
         }
 
         public void AddGUI(GUIData gui)
@@ -97,7 +110,7 @@ namespace JoyLib.Code.Unity.GUI
             gui.GUIManager = this;
             gui.Close();
 
-            if (gui.TryGetComponent(out ManagedBackground background))
+            foreach (ManagedBackground background in gui.GetComponentsInChildren<ManagedBackground>(true))
             {
                 if (background.HasBackground == false)
                 {
@@ -109,7 +122,7 @@ namespace JoyLib.Code.Unity.GUI
                     background.SetColours(this.BackgroundColours);
                 }
             }
-            if(gui.TryGetComponent(out ManagedFonts font))
+            foreach(ManagedFonts font in gui.GetComponentsInChildren<ManagedFonts>(true))
             {
                 if (font.HasFont == false)
                 {
@@ -136,7 +149,7 @@ namespace JoyLib.Code.Unity.GUI
             }
         }
 
-        public GUIData OpenGUI(string name, bool bringToFront = true)
+        public GUIData OpenGUI(string name, bool bringToFront = false)
         {
             if (this.ActiveGUIs.Any(widget => widget.name.Equals(name, StringComparison.OrdinalIgnoreCase)))
             {
@@ -234,7 +247,13 @@ namespace JoyLib.Code.Unity.GUI
                 gui.MyCanvas.sortingOrder = gui.DefaultSortingOrder;
             }
 
-            toFront.MyCanvas.sortingOrder = this.ActiveGUIs.Max(data => data.DefaultSortingOrder) + 1;
+            GUIData[] found = this.ActiveGUIs
+                .Where(data => data.m_AlwaysOpen == false)
+                .ToArray();
+            if (found.Any())
+            {
+                toFront.MyCanvas.sortingOrder = found.Max(data => data.DefaultSortingOrder) + 1;
+            }
         }
 
         public void CloseAllOtherGUIs(string activeName = "")
@@ -262,7 +281,7 @@ namespace JoyLib.Code.Unity.GUI
 
         public GUIData GetGUI(string name)
         {
-            return this.GUIs.First(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            return this.GUIs.FirstOrDefault(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
 
         public bool IsActive(string name)

@@ -55,6 +55,11 @@ namespace JoyLib.Code.Unity.GUI
 
         public virtual void Close()
         {
+            if (this.m_AlwaysOpen)
+            {
+                return;
+            }
+            
             this.gameObject.SetActive(false);
             GUIData[] children = this.gameObject.GetComponentsInChildren<GUIData>(true);
             foreach (GUIData child in children)

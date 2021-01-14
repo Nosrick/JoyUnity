@@ -1,7 +1,4 @@
-﻿using System.Linq;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Jobs;
-using JoyLib.Code.Unity.GUI;
+﻿using JoyLib.Code.Unity.GUI;
 using UnityEngine.InputSystem;
 
 namespace JoyLib.Code.States
@@ -16,7 +13,6 @@ namespace JoyLib.Code.States
 
         public override void Start()
         {
-            this.SetUpUi();
         }
 
         public override void Stop()
@@ -30,11 +26,15 @@ namespace JoyLib.Code.States
         public override void SetUpUi()
         {
             base.SetUpUi();
+
+            Cursor cursor = this.GUIManager.GetGUI(GUINames.CURSOR).GetComponent<Cursor>();
+            cursor.SetCursorSprites(this.GUIManager.Cursor);
+
             this.CharacterCreationScreen = this.GUIManager
                 .GetGUI(GUINames.CHARACTER_CREATION_PART_1)
                 .GetComponent<CharacterCreationScreen>();
             this.CharacterCreationScreen.Initialise();
-            this.GUIManager.OpenGUI(GUINames.CHARACTER_CREATION_PART_1);
+            this.GUIManager.OpenGUI(GUINames.CHARACTER_CREATION_PART_1, true);
         }
 
         public override void HandleInput(object data, InputActionChange action)
@@ -47,6 +47,7 @@ namespace JoyLib.Code.States
 
         public override GameState GetNextState()
         {
+            /*
             IEntity player = this.CharacterCreationScreen.CreatePlayer();
             GlobalConstants.GameManager.Player = player;
             player.AddExperience(500);
@@ -58,6 +59,8 @@ namespace JoyLib.Code.States
             }
             
             return new WorldCreationState(player);
+            */
+            return null;
         }
     }
 }

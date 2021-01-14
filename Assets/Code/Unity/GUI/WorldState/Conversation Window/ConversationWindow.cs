@@ -9,7 +9,6 @@ namespace JoyLib.Code.Unity.GUI
 {
     public class ConversationWindow : MonoBehaviour
     {
-        [SerializeField] protected GameManager GameManager;
         [SerializeField] protected TextMeshProUGUI LastSaidGUI;
         [SerializeField] protected ManagedUISprite LastSpokeIcon;
         [SerializeField] protected TextMeshProUGUI LastSpokeName;
@@ -28,10 +27,10 @@ namespace JoyLib.Code.Unity.GUI
         {
             this.MenuItem.SetActive(false);
             
-            if (this.GameManager.ConversationEngine is null == false && this.ConversationEngine is null)
+            if (GlobalConstants.GameManager.ConversationEngine is null == false && this.ConversationEngine is null)
             {
                 this.MenuList = new List<ConversationMenu>();
-                this.ConversationEngine = this.GameManager.ConversationEngine;
+                this.ConversationEngine = GlobalConstants.GameManager.ConversationEngine;
                 this.ConversationEngine.OnOpen += new EventHandler(this.SetActors);
                 this.ConversationEngine.OnConverse += new EventHandler(this.SetTitle);
                 this.ConversationEngine.OnConverse += new EventHandler(this.CreateMenuItems);
@@ -41,7 +40,7 @@ namespace JoyLib.Code.Unity.GUI
 
         protected void CloseMe(object sender, EventArgs args)
         {
-            this.GameManager.GUIManager.CloseGUI(GUINames.CONVERSATION);
+            GlobalConstants.GameManager.GUIManager.CloseGUI(GUINames.CONVERSATION);
         }
 
         protected void SetActors(object sender, EventArgs args)

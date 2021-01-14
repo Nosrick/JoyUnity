@@ -16,7 +16,6 @@ namespace JoyLib.Code.Unity.GUI
 {
     public class BasicPlayerInfo : MonoBehaviour
     {
-        [SerializeField] protected GameManager GameManager;
         [SerializeField] protected StatisticWindow StatisticWindow;
         
         [SerializeField] protected ConstrainedValueContainer PlayerType;
@@ -28,6 +27,7 @@ namespace JoyLib.Code.Unity.GUI
         [SerializeField] protected ConstrainedValueContainer RomanceContainer;
         
         public List<IEntityTemplate> Templates { get; protected set; }
+        protected IGameManager GameManager { get; set; }
 
         public IEntityTemplate CurrentTemplate
         {
@@ -49,7 +49,8 @@ namespace JoyLib.Code.Unity.GUI
 
         public void Initialise()
         {
-            this.Templates = this.GameManager.EntityTemplateHandler.Templates.ToList();
+            this.GameManager = GlobalConstants.GameManager;
+            this.Templates = GlobalConstants.GameManager.EntityTemplateHandler.Templates.ToList();
             this.Roller = new RNG();
             int result = this.Roller.Roll(0, this.Templates.Count);
             this.ChangeTemplate(this.Templates[result]);
@@ -124,7 +125,6 @@ namespace JoyLib.Code.Unity.GUI
             this.GameManager.GUIManager.GetGUI(GUINames.CURSOR)
                 .GetComponent<Cursor>()
                 .SetCursorColours(this.CurrentCulture.CursorColours);
-            
             this.GameManager.GUIManager.GetGUI(GUINames.CHARACTER_CREATION_PART_1)
                 .GetComponent<ManagedBackground>()
                 .SetColours(this.CurrentCulture.BackgroundColours);

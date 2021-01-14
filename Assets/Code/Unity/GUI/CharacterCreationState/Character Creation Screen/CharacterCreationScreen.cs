@@ -5,14 +5,15 @@ using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.AI.Drivers;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
+using JoyLib.Code.States;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace JoyLib.Code.Unity.GUI
 {
     public class CharacterCreationScreen : MonoBehaviour
     {
-        [SerializeField] protected GameManager GameManager;
         [SerializeField] protected StatisticWindow StatisticWindow;
         [SerializeField] protected DerivedValuesWindow DerivedValuesWindow;
         [SerializeField] protected SkillWindow SkillWindow;
@@ -25,9 +26,11 @@ namespace JoyLib.Code.Unity.GUI
         [SerializeField] protected TMP_InputField PlayerName_Part2;
         
         protected string PlayerName { get; set; }
+        protected IGameManager GameManager { get; set; }
 
         public void Initialise()
         {
+            this.GameManager = GlobalConstants.GameManager;
             this.PlayerInfo.JobChanged += this.SetSprites;
             this.PlayerInfo.CultureChanged += this.CultureChangeHandler;
             this.StatisticWindow.ValueChanged += this.ChangedStatistics;
@@ -42,7 +45,7 @@ namespace JoyLib.Code.Unity.GUI
             this.AbilityWindow.Initialise();
         }
 
-        public IEntity CreatePlayer()
+        public void CreatePlayer()
         {
             var data = this.GameManager.ObjectIconHandler.GetSprites(
                 this.PlayerInfo.CurrentCulture.CultureName,
@@ -53,7 +56,7 @@ namespace JoyLib.Code.Unity.GUI
                 this.PlayerInfo.CurrentCulture.BackgroundColours,
                 this.PlayerInfo.CurrentCulture.CursorColours);
 
-            return this.GameManager.EntityFactory.CreateFromTemplate(
+            IEntity player = this.GameManager.EntityFactory.CreateFromTemplate(
                 this.PlayerInfo.CurrentTemplate,
                 GlobalConstants.NO_TARGET,
                 this.PlayerName,
@@ -70,6 +73,9 @@ namespace JoyLib.Code.Unity.GUI
                 spriteStates,
                 null,
                 new PlayerDriver());
+            
+            this.GameManager.SetNextState(new WorldCreationState(player));
+            SceneManager.LoadScene("MainGame");
         }
 
         protected void ChangedStatistics(object sender, EventArgs args)
@@ -108,16 +114,14 @@ namespace JoyLib.Code.Unity.GUI
 
         public void GoToSkillsAndAbilities()
         {
-            this.GameManager.GUIManager.OpenGUI(GUINames.CHARACTER_CREATION_PART_2);
-            this.GameManager.GUIManager.BringToFront(GUINames.CHARACTER_CREATION_PART_2);
+            this.GameManager.GUIManager.OpenGUI(GUINames.CHARACTER_CREATION_PART_2, true);
             this.SkillWindow.SetSkills(this.SkillWindow.GetSkillNames());
             this.AbilityWindow.GetAvailableAbilities(this.PlayerInfo.CurrentTemplate, this.StatisticWindow.GetStatistics(), this.SkillWindow.GetSkillsBlock());
         }
 
         public void GoToPlayerInfo()
         {
-            this.GameManager.GUIManager.OpenGUI(this.name);
-            this.GameManager.GUIManager.BringToFront(this.name);
+            this.GameManager.GUIManager.OpenGUI(this.name, true);
         }
 
         protected void UpdatePlayerName(GameObject sender, TextChangedEventArgs args)
