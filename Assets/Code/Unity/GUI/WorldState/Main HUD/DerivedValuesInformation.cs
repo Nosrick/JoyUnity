@@ -18,8 +18,20 @@ namespace JoyLib.Code.Unity.GUI
         protected RectTransform RectTransform { get; set; }       
         protected IGameManager GameManager { get; set; }
         
-        public void OnEnable()
+        protected bool Initialised { get; set; }
+
+        public void FixedUpdate()
         {
+            this.Initialise();
+        }
+
+        protected void Initialise()
+        {
+            if (this.Initialised)
+            {
+                return;
+            }
+            
             if (this.GameManager is null)
             {
                 this.GameManager = GlobalConstants.GameManager;
@@ -43,6 +55,8 @@ namespace JoyLib.Code.Unity.GUI
             this.Player.OnMaximumChange -= this.DerivedValueMaximumChange;
             this.Player.OnMaximumChange += this.DerivedValueMaximumChange;
             this.SetUpDerivedValues(this.Player.DerivedValues);
+
+            this.Initialised = true;
         }
 
         protected void DerivedValueChange(object sender, ValueChangedEventArgs args)
