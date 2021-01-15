@@ -1,5 +1,6 @@
 ﻿using System;
 using JoyLib.Code.Entities.Needs;
+using JoyLib.Code.Entities.Statistics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -60,6 +61,10 @@ namespace JoyLib.Code.Unity.Cheats
         {
             if (this.Active)
             {
+                if (GlobalConstants.GameManager.Player is null)
+                {
+                    return;
+                }
                 if (GUILayout.Button("Fill Needs"))
                 {
                     foreach (INeed need in GlobalConstants.GameManager.Player.Needs.Values)
@@ -74,6 +79,27 @@ namespace JoyLib.Code.Unity.Cheats
                     {
                         need.Decay(need.Value);
                     }
+                }
+
+                if (GUILayout.Button("Knock Player Unconscious"))
+                {
+                    GlobalConstants.GameManager.Player.SetValue(
+                        DerivedValueName.HITPOINTS,
+                        0);
+                }
+
+                if (GUILayout.Button("Kill Player"))
+                {
+                    GlobalConstants.GameManager.Player.SetValue(
+                        DerivedValueName.HITPOINTS,
+                        -GlobalConstants.GameManager.Player.GetMaximum(DerivedValueName.HITPOINTS));
+                }
+
+                if (GUILayout.Button("Fully Heal Player"))
+                {
+                    GlobalConstants.GameManager.Player.SetValue(
+                        DerivedValueName.HITPOINTS,
+                        GlobalConstants.GameManager.Player.GetMaximum(DerivedValueName.HITPOINTS));
                 }
             }
         }
