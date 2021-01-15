@@ -680,5 +680,34 @@ namespace JoyLib.Code.World
         {
             get { return this.m_Costs; }
         }
+
+        public void Dispose()
+        {
+            foreach (IEntity entity in this.m_Entities)
+            {
+                entity.Dispose();
+            }
+            this.m_Entities = new List<IEntity>();
+
+            foreach (IJoyObject joyObject in this.m_Objects)
+            {
+                joyObject.Dispose();
+            }
+            this.m_Objects = new List<IJoyObject>();
+
+            foreach (IJoyObject wall in this.m_Walls.Values)
+            {
+                wall.Dispose();
+            }
+            this.m_Walls = new Dictionary<Vector2Int, IJoyObject>();
+            
+            foreach (IWorldInstance child in this.m_Areas.Values)
+            {
+                child.Dispose();
+            }
+            this.m_Areas = new Dictionary<Vector2Int, IWorldInstance>();
+
+            GUIDManager.Instance.ReleaseGUID(this.GUID);
+        }
     }
 }

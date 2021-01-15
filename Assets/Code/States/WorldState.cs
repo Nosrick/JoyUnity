@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Code.States;
 using JoyLib.Code.Conversation;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Relationships;
+using JoyLib.Code.Events;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.IO;
 using JoyLib.Code.Physics;
@@ -12,6 +14,7 @@ using JoyLib.Code.Unity.GUI;
 using JoyLib.Code.World;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 namespace JoyLib.Code.States
 {
@@ -59,6 +62,11 @@ namespace JoyLib.Code.States
 
             this.TickTimer = this.TickEvent();
             this.GameManager.MyGameObject.GetComponent<MonoBehaviour>().StartCoroutine(this.TickTimer);
+
+            GlobalConstants.GameManager.Player.AliveChange -= this.OnPlayerDeath;
+            GlobalConstants.GameManager.Player.AliveChange += this.OnPlayerDeath;
+            GlobalConstants.GameManager.Player.ConsciousnessChange -= this.OnPlayerConsciousChange;
+            GlobalConstants.GameManager.Player.ConsciousnessChange += this.OnPlayerConsciousChange;
 
             //GlobalConstants.GameManager.Player = m_ActiveWorld.Player;
 
@@ -158,15 +166,38 @@ namespace JoyLib.Code.States
             }
         }
 
+        protected void OnPlayerDeath(object sender, BooleanChangeEventArgs args)
+        {
+            if (args.Value == false)
+            {
+                this.AutoTurn = false;
+                this.GameManager.SetNextState(new GameOverState(this.m_Overworld));
+                SceneManager.LoadScene("GameOver");
+            }
+        }
+
+        protected void OnPlayerConsciousChange(object sender, BooleanChangeEventArgs args)
+        {
+            this.AutoTurn = !args.Value;
+        }
+
         public override void HandleInput(object data, InputActionChange change)
         {
             bool hasMoved = false;
 
             IEntity player = this.m_ActiveWorld.Player;
 
-            if (player.FulfillmentData.Counter <= 0 && this.AutoTurn)
+            if ((player.FulfillmentData is null || player.FulfillmentData.Counter <= 0) 
+                && this.AutoTurn
+                && player.Conscious)
             {
                 this.ManualAutoTurn = false;
+                this.AutoTurn = false;
+            }
+            else if (player.FulfillmentData is null == false
+                     && player.FulfillmentData.Counter > 0
+                     && this.AutoTurn == false)
+            {
                 this.AutoTurn = true;
             }
 

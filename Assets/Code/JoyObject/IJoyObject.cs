@@ -8,7 +8,7 @@ using JoyLib.Code.World;
 
 namespace JoyLib.Code
 {
-    public interface IJoyObject : ITagged, IPosition, IDerivedValueContainer, IDataContainer
+    public interface IJoyObject : ITagged, IPosition, IDerivedValueContainer, IDataContainer, IDisposable
     {
         List<ISpriteState> States { get; }
         bool IsDestructible { get; }

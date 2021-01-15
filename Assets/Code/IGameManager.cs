@@ -29,6 +29,11 @@ namespace JoyLib.Code
 {
     public interface IGameManager
     {
+        bool Initialised { get; }
+        int LoadingPercentage { get; }
+        
+        string LoadingMessage { get; }
+        
         ActionLog ActionLog { get; }
         ICombatEngine CombatEngine { get; }
         IQuestTracker QuestTracker { get; }

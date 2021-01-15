@@ -1,4 +1,5 @@
-﻿using Code.Collections;
+﻿using System.Collections;
+using Code.Collections;
 using Joy.Code.Managers;
 using JoyLib.Code.Combat;
 using JoyLib.Code.Conversation;
@@ -50,10 +51,18 @@ namespace JoyLib.Code
             DontDestroyOnLoad(this);
             DontDestroyOnLoad(GameObject.Find("WorldHolder"));
 
+            this.LoadingMessage = "Just waking up";
+        }
+
+        public IEnumerator Initialise()
+        {
+            this.BegunInitialisation = true;
+            this.LoadingMessage = "Initialising action log";
             this.ActionLog = new ActionLog();
 
             GlobalConstants.ActionLog = this.ActionLog;
 
+            this.LoadingMessage = "Initialising object pools";
             GameObject objectHolder = GameObject.Find("WorldObjects");
             GameObject entityHolder = GameObject.Find("WorldEntities");
             GameObject fogHolder = GameObject.Find("WorldFog");
@@ -74,6 +83,7 @@ namespace JoyLib.Code
 
             this.Roller = new RNG();
 
+            this.LoadingMessage = "Revving up engines";
             this.CombatEngine = new CombatEngine();
 
             this.PhysicsManager = new PhysicsManager();
@@ -89,6 +99,7 @@ namespace JoyLib.Code
 
             this.VisionProviderHandler = new VisionProviderHandler();
 
+            this.LoadingMessage = "Initialising entity gubbinz";
             this.StatisticHandler = new EntityStatisticHandler();
             this.NeedHandler = new NeedHandler();
             this.CultureHandler = new CultureHandler();
@@ -132,6 +143,7 @@ namespace JoyLib.Code
 
             this.m_StateManager = new StateManager();
 
+            this.LoadingMessage = "Setting static bad things";
             TradeWindow.RelationshipHandler = this.RelationshipHandler;
 
             TopicData.ConversationEngine = this.ConversationEngine;
@@ -143,7 +155,10 @@ namespace JoyLib.Code
             Entity.NaturalWeaponHelper = this.NaturalWeaponHelper;
             Entity.DerivedValueHandler = this.DerivedValueHandler;
 
-            //this.m_StateManager.ChangeState(new MainMenuState());
+            this.Initialised = true;
+            this.LoadingMessage = "Done!";
+
+            yield return null;
         }
 
         // Update is called once per frame
@@ -168,6 +183,14 @@ namespace JoyLib.Code
             GlobalConstants.ActionLog.AddText(SceneManager.GetActiveScene().name);
             this.m_StateManager.ChangeState(this.NextState);
         }
+        
+        public bool BegunInitialisation { get; protected set; }
+
+        public bool Initialised { get; protected set; }
+
+        public int LoadingPercentage { get; protected set; }
+
+        public string LoadingMessage { get; protected set; }
 
         public ActionLog ActionLog { get; protected set; }
         public ICombatEngine CombatEngine { get; protected set; }

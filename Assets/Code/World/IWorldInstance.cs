@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace JoyLib.Code.World
 {
-    public interface IWorldInstance : ITagged
+    public interface IWorldInstance : ITagged, IDisposable
     {
         WorldTile[,] Tiles { get; }
         byte[,] Costs { get; }

@@ -468,6 +468,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Job Management
       objectReference: {fileID: 0}
+    - target: {fileID: 6811491300632675710, guid: 69e87f40ba8abb445b6be4949c353366,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6811491300632675711, guid: 69e87f40ba8abb445b6be4949c353366,
         type: 3}
       propertyPath: m_Pivot.x
@@ -817,6 +822,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: UICursor
+      objectReference: {fileID: 0}
+    - target: {fileID: 2934162237568890715, guid: ca198771cedc79f449e66f1067c0033a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8720408643588432779, guid: ca198771cedc79f449e66f1067c0033a,
         type: 3}
@@ -8734,7 +8744,7 @@ PrefabInstance:
     - target: {fileID: 2939313942964652417, guid: 9c35b03af1fc36949a51da64477b007f,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -11.240784
+      value: -11.243103
       objectReference: {fileID: 0}
     - target: {fileID: 7087841497910087752, guid: 9c35b03af1fc36949a51da64477b007f,
         type: 3}

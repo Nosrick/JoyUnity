@@ -18,5 +18,6 @@
         public const string INVENTORY_CONTAINER = "Inventory Container";
         public const string CURSOR = "UICursor";
         public const string ACTION_LOG = "ActionLog";
+        public const string GAME_OVER = "Game Over";
     }
 }

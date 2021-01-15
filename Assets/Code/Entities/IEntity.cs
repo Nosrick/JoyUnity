@@ -87,6 +87,9 @@ namespace JoyLib.Code.Entities
         event ValueChangedEventHandler SkillChange;
         event ValueChangedEventHandler ExperienceChange;
         event JobChangedEventHandler JobChange;
+        event BooleanChangedEventHandler ConsciousnessChange;
+
+        event BooleanChangedEventHandler AliveChange;
 
     }
 }

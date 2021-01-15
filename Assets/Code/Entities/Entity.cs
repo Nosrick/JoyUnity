@@ -36,6 +36,8 @@ namespace JoyLib.Code.Entities
         public event ValueChangedEventHandler SkillChange;
         public event ValueChangedEventHandler ExperienceChange;
         public event JobChangedEventHandler JobChange;
+        public event BooleanChangedEventHandler ConsciousnessChange;
+        public event BooleanChangedEventHandler AliveChange;
         protected IDictionary<string, IRollableValue<int>> m_Statistics;
         protected IDictionary<string, IEntitySkill> m_Skills;
         protected IDictionary<string, INeed> m_Needs;
@@ -897,14 +899,41 @@ namespace JoyLib.Code.Entities
                 return this.Skills[name].Value;
             }
 
-            return base.ModifyValue(name, value);
+            bool lastConscious = this.Conscious;
+            bool lastAlive = this.Alive;
+            int result = base.ModifyValue(name, value);
+            if (this.Conscious != lastConscious)
+            {
+                this.ConsciousnessChange?.Invoke(this, new BooleanChangeEventArgs { Value = this.Conscious});
+            }
+
+            if (this.Alive != lastAlive)
+            {
+                this.AliveChange?.Invoke(this, new BooleanChangeEventArgs { Value = this.Alive });
+            }
+            
+            return result;
         }
 
         public override int SetValue(string name, int value)
         {
             if (!this.Statistics.ContainsKey(name) && !this.Skills.ContainsKey(name))
             {
-                return base.SetValue(name, value);
+
+                bool lastConscious = this.Conscious;
+                bool lastAlive = this.Alive;
+                int result = base.SetValue(name, value);
+                if (this.Conscious != lastConscious)
+                {
+                    this.ConsciousnessChange?.Invoke(this, new BooleanChangeEventArgs { Value = this.Conscious});
+                }
+
+                if (this.Alive != lastAlive)
+                {
+                    this.AliveChange?.Invoke(this, new BooleanChangeEventArgs { Value = this.Alive });
+                }
+            
+                return result;
             }
 
             if (this.Statistics.ContainsKey(name))

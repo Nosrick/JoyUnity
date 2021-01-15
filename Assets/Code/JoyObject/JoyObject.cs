@@ -168,11 +168,6 @@ namespace JoyLib.Code
             //this.Tooltip = new List<Tuple<string, string>>();
         }
 
-        ~JoyObject()
-        {
-            GUIDManager.Instance.ReleaseGUID(this.GUID);
-        }
-
         public IJoyAction FetchAction(string name)
         {
             return this.CachedActions.First(action => action.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
@@ -383,6 +378,17 @@ namespace JoyLib.Code
         public void AttachMonoBehaviourHandler(MonoBehaviourHandler mbh)
         {
             this.MonoBehaviourHandler = mbh;
+        }
+
+        public void Dispose()
+        {
+            GUIDManager.Instance.ReleaseGUID(this.GUID);
+            GC.SuppressFinalize(this);
+        }
+
+        ~JoyObject()
+        {
+            this.Dispose();
         }
     }    
 }

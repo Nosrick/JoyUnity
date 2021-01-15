@@ -3,19 +3,30 @@ using JoyLib.Code.States;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace JoyLib.Code.Unity.GUI.MainMenuState
+namespace JoyLib.Code.Unity.GUI.GameOver
 {
-    public class MainMenuHandler : MonoBehaviour
+    public class GameOverHandler : MonoBehaviour
     {
-        public void NewGame()
+        public void ToMainMenu()
         {
-            GlobalConstants.GameManager.SetNextState(new CharacterCreationState());
-            this.StartCoroutine(this.LoadSceneAsync());
+            GlobalConstants.GameManager.SetNextState(new States.MainMenuState());
+            this.StartCoroutine(this.LoadSceneAsync("MainMenu"));
         }
 
-        protected IEnumerator LoadSceneAsync()
+        public void NewCharacter()
         {
-            AsyncOperation operation = SceneManager.LoadSceneAsync("CharacterCreation");
+            GlobalConstants.GameManager.SetNextState(new CharacterCreationState());
+            this.StartCoroutine(this.LoadSceneAsync("CharacterCreation"));
+        }
+
+        public void QuitGame()
+        {
+            Application.Quit();
+        }
+
+        protected IEnumerator LoadSceneAsync(string name)
+        {
+            AsyncOperation operation = SceneManager.LoadSceneAsync(name);
             operation.allowSceneActivation = false;
             while (operation.progress < 0.9f)
             {
@@ -25,11 +36,6 @@ namespace JoyLib.Code.Unity.GUI.MainMenuState
             operation.allowSceneActivation = true;
             GlobalConstants.ActionLog.AddText("Done loading!");
             yield return operation;
-        }
-
-        public void ExitGame()
-        {
-            Application.Quit();
         }
     }
 }
