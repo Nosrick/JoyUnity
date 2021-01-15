@@ -14,14 +14,14 @@ namespace JoyLib.Code.Unity.GUI
     {
         protected HashSet<GUIData> GUIs { get; set; }
         protected HashSet<GUIData> ActiveGUIs { get; set; }
-
+        
         public ISpriteState Background { get; protected set; }
         public ISpriteState Cursor { get; protected set; }
 
         public ISpriteState AccentBackground { get; protected set; }
 
         public TMP_FontAsset FontToUse { get; protected set; }
-
+        
         public IDictionary<string, Color> CursorColours { get; protected set; }
         public IDictionary<string, Color> BackgroundColours { get; protected set; }
 
@@ -193,25 +193,46 @@ namespace JoyLib.Code.Unity.GUI
             {
                 foreach (ManagedBackground background in gui.GetComponentsInChildren<ManagedBackground>(true))
                 {
-                    background.SetBackground(this.Background);
-                    background.SetColours(this.BackgroundColours);
+                    if (background.HasBackground == false)
+                    {
+                        background.SetBackground(this.Background);
+                    }
+                    if (background.HasColours == false)
+                    {
+                        background.SetColours(this.BackgroundColours);
+                    }
                 }
-
-                foreach (ManagedFonts font in gui.GetComponentsInChildren<ManagedFonts>(true))
+                foreach(ManagedFonts font in gui.GetComponentsInChildren<ManagedFonts>(true))
                 {
-                    font.SetFonts(this.FontToUse);
-                    font.SetMinMaxFontSizes(this.MinFontSize, this.MaxFontSize);
+                    if (font.HasFont == false)
+                    {
+                        font.SetFonts(this.FontToUse);
+                        font.SetMinMaxFontSizes(this.MinFontSize, this.MaxFontSize);
+                    }
                 }
 
                 foreach (ManagedAccent accent in gui.GetComponentsInChildren<ManagedAccent>(true))
                 {
-                    accent.SetFonts(this.FontToUse);
-                    accent.SetMinMaxFontSizes(this.MinFontSize, this.MaxFontSize);
+                    if (accent.HasFont == false)
+                    {
+                        accent.SetFonts(this.FontToUse);
+                        accent.SetMinMaxFontSizes(this.MinFontSize, this.MaxFontSize);
+                    }
 
-                    accent.SetFontColour(this.AccentFontColour);
+                    if (accent.HasFontColours == false)
+                    {
+                        accent.SetFontColour(this.AccentFontColour);
+                    }
 
-                    accent.SetBackgrounds(this.AccentBackground);
-                    accent.SetBackgroundColours(this.AccentColours);
+                    if (accent.HasBackgroundImage == false)
+                    {
+                        accent.SetBackgrounds(this.AccentBackground);
+                    }
+
+                    if (accent.HasBackgroundColours == false)
+                    {
+                        accent.SetBackgroundColours(this.AccentColours);
+                    }
                 }
             }
 
@@ -219,7 +240,6 @@ namespace JoyLib.Code.Unity.GUI
             this.GUIs.FirstOrDefault(data => data.TryGetComponent(out cursor));
             if (cursor is null == false)
             {
-                cursor.SetCursorSprites(this.Cursor);
                 cursor.SetCursorColours(this.CursorColours);
             }
         }
@@ -383,9 +403,7 @@ namespace JoyLib.Code.Unity.GUI
 
         public bool RemovesControl()
         {
-            IEnumerable<GUIData> data = this.ActiveGUIs.Where(gui => gui.GetType().Equals(typeof(GUIData)))
-                .Cast<GUIData>();
-            return data.Any(gui => gui.m_RemovesControl);
+            return this.ActiveGUIs.Any(gui => gui.m_RemovesControl);
         }
 
         public GUIData GetGUI(string name)
