@@ -218,5 +218,19 @@
 				<Value>#490606ff</Value>
 			</Colour>
 		</UIColours>
+
+		<AccentBackgroundColours>
+			<Colour>
+				<Name>background</Name>
+				<Value>#490606ff</Value>
+			</Colour>
+		</AccentBackgroundColours>
+
+		<AccentFontColours>
+			<Colour>
+				<Name>default</Name>
+				<Value>#ffffffff</Value>
+			</Colour>
+		</AccentFontColours>
 	</Culture>
 </Cultures>

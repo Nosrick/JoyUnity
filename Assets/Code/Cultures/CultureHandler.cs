@@ -146,22 +146,39 @@ namespace JoyLib.Code.Cultures
                         GlobalConstants.ActionLog.AddText("Could not find UI colours in file " + file, LogLevel.Error);
                         cursorColours.Add("default", Color.magenta);
                     }
-                    
-                    /*
-                    ColorUtility.TryParseHtmlString(
-                        culture.Element("CursorColours").Element("First").DefaultIfEmpty("#d9d9d9ff"), out Color colour);
-                    cursorColours.Add(colour);
 
-                    ColorUtility.TryParseHtmlString(
-                        culture.Element("CursorColours").Element("Second").DefaultIfEmpty("#beb4aaff"),
-                        out colour);
-                    cursorColours.Add(colour);
+                    IDictionary<string, Color> accentBackgroundColours = new Dictionary<string, Color>();
+                    try
+                    {
+                        accentBackgroundColours = (from colours in culture.Element("AccentBackgroundColours")
+                                    .Elements("Colour")
+                                select new KeyValuePair<string, Color>(
+                                    colours.Element("Name").GetAs<string>(),
+                                    GraphicsHelper.ParseHTMLString(colours.Element("Value").GetAs<string>())))
+                            .ToDictionary(x => x.Key, x => x.Value);
+                    }
+                    catch (Exception e)
+                    {
+                        GlobalConstants.ActionLog.AddText(e.Message, LogLevel.Error);
+                        GlobalConstants.ActionLog.AddText(e.StackTrace, LogLevel.Error);
+                        GlobalConstants.ActionLog.AddText("Could not find accent background colours in file " + file, LogLevel.Error);
+                        accentBackgroundColours.Add("default", Color.magenta);
+                    }
 
-                    ColorUtility.TryParseHtmlString(
-                        culture.Element("CursorColours").Element("Third").DefaultIfEmpty("#737d73ff"), out colour);
-                    cursorColours.Add(colour);
-                    */
-                    //string filename = culture.Element("TileSet").Element("Filename").DefaultIfEmpty("");
+                    Color accentFontColour = Color.black;
+                    try
+                    {
+                        accentFontColour = GraphicsHelper.ParseHTMLString(culture.Element("AccentFontColours")
+                                            .Element("Colour")
+                                            .Element("Value").GetAs<string>());
+                    }
+                    catch (Exception e)
+                    {
+                        GlobalConstants.ActionLog.AddText(e.Message, LogLevel.Error);
+                        GlobalConstants.ActionLog.AddText(e.StackTrace, LogLevel.Error);
+                        GlobalConstants.ActionLog.AddText("Could not find accent font colour in file " + file, LogLevel.Error);
+                        accentBackgroundColours.Add("default", Color.black);
+                    }
 
                     objectIcons.AddSpriteDataFromXML(tileSet, tileSetElement);
 
@@ -182,7 +199,9 @@ namespace JoyLib.Code.Cultures
                             genderDictionary,
                             nonConformingGenderChance,
                             cursorColours,
-                            backgroundColours));
+                            backgroundColours,
+                            accentBackgroundColours,
+                            accentFontColour));
                 }
             }
 

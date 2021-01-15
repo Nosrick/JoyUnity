@@ -1,6 +1,5 @@
 ﻿using JoyLib.Code.Cultures;
 using JoyLib.Code.IO;
-using JoyLib.Code.Unity.GUI;
 using JoyLib.Code.World;
 using UnityEngine.InputSystem;
 
@@ -23,18 +22,15 @@ namespace JoyLib.Code.States
 
         public override void SetUpUi()
         {
-            base.SetUpUi();
-            ManagedBackground mainMenu = this.GUIManager.OpenGUI("Main Menu").GetComponent<ManagedBackground>();
-            Cursor cursor = this.GUIManager.OpenGUI(GUINames.CURSOR).GetComponent<Cursor>();
-
             ICulture[] cultures = GlobalConstants.GameManager.CultureHandler.Cultures;
             int result = GlobalConstants.GameManager.Roller.Roll(0, cultures.Length);
             ICulture randomCulture = cultures[result];
-            mainMenu.SetBackground(this.GUIManager.Background);
-            mainMenu.SetColours(randomCulture.BackgroundColours);
-            //cursor.SetCursorSprites(this.GUIManager.Cursor);
-            //cursor.SetCursorSize(64, 64);
-            cursor.SetCursorColours(randomCulture.CursorColours);
+            this.GUIManager.SetUIColours(
+                randomCulture.BackgroundColours,
+                randomCulture.CursorColours,
+                randomCulture.AccentBackgroundColours,
+                randomCulture.AccentFontColour);
+            base.SetUpUi();
         }
 
         public override void Start()

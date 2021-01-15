@@ -36,7 +36,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.06775624, y: 0.11000001}
   m_AnchorMax: {x: 0.42718908, y: 0.155}
-  m_AnchoredPosition: {x: -0.6999817, y: 0}
+  m_AnchoredPosition: {x: -0.6999512, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2665062934591285519
@@ -329,6 +329,7 @@ GameObject:
   - component: {fileID: 6514809575011565651}
   - component: {fileID: 6514809575011565652}
   - component: {fileID: 8797990026204663781}
+  - component: {fileID: 3087441835460621912}
   m_Layer: 0
   m_Name: Player Name Input
   m_TagString: Untagged
@@ -500,6 +501,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cbb5776801864298b3c239363b4230d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3087441835460621912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6514809575011565654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9494a29e1b84457ca857e893dadfa29a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &6514809575038883892
@@ -780,7 +793,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 33.95
+  m_fontSize: 31.8
   m_fontSizeBase: 14
   m_fontWeight: 400
   m_enableAutoSizing: 1

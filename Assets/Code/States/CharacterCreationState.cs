@@ -27,9 +27,6 @@ namespace JoyLib.Code.States
         {
             base.SetUpUi();
 
-            Cursor cursor = this.GUIManager.GetGUI(GUINames.CURSOR).GetComponent<Cursor>();
-            cursor.SetCursorSprites(this.GUIManager.Cursor);
-
             this.CharacterCreationScreen = this.GUIManager
                 .GetGUI(GUINames.CHARACTER_CREATION_PART_1)
                 .GetComponent<CharacterCreationScreen>();

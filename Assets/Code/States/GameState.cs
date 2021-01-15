@@ -2,7 +2,6 @@ using System.Threading;
 using JoyLib.Code.Unity.GUI;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Cursor = JoyLib.Code.Unity.GUI.Cursor;
 
 namespace JoyLib.Code.States
 {
@@ -26,10 +25,7 @@ namespace JoyLib.Code.States
                 this.GUIManager.AddGUI(data);
             }
 
-            Cursor cursor = this.GUIManager.OpenGUI(GUINames.CURSOR)
-                .GetComponent<Cursor>();
-            cursor.SetCursorSprites(this.GUIManager.Cursor);
-            cursor.SetCursorColours(this.GUIManager.CursorColours);
+            this.GUIManager.RecolourGUIs();
             this.GUIManager.CloseAllOtherGUIs(GUINames.CURSOR);
         }
 

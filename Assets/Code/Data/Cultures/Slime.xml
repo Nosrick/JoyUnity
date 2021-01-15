@@ -154,5 +154,19 @@
 				<Value>#73dcffff</Value>
 			</Colour>
 		</UIColours>
+
+		<AccentBackgroundColours>
+			<Colour>
+				<Name>background</Name>
+				<Value>#73dcffff</Value>
+			</Colour>
+		</AccentBackgroundColours>
+
+		<AccentFontColours>
+			<Colour>
+				<Name>default</Name>
+				<Value>#23234bff</Value>
+			</Colour>
+		</AccentFontColours>
 	</Culture>
 </Cultures>

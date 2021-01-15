@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Objects>
+    <TileSet>
+        <Name>AccentBackground</Name>
+        <SpriteData>
+            <Name>AccentBackground</Name>
+
+            <Part>
+                <Name>background</Name>
+                <Filename>UI/background-tile</Filename>
+                <Data>default</Data>
+                <Frames>1</Frames>
+                <Position>0</Position>
+                <SortOrder>1</SortOrder>
+                <FillType>sliced</FillType>
+            </Part>
+        </SpriteData>
+    </TileSet>
+</Objects>

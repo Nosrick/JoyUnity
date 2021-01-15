@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 464444769986571588}
   - component: {fileID: 464444769986571589}
   - component: {fileID: 6360928965088183513}
+  - component: {fileID: 5015303037284575073}
   m_Layer: 0
   m_Name: AbilityItem
   m_TagString: Untagged
@@ -166,6 +167,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_AspectMode: 1
   m_AspectRatio: 10
+--- !u!114 &5015303037284575073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 464444769986571611}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9494a29e1b84457ca857e893dadfa29a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &464444770675075713
 GameObject:
   m_ObjectHideFlags: 0

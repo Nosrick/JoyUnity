@@ -64,5 +64,8 @@ namespace JoyLib.Code.Cultures
         
         IDictionary<string, Color> CursorColours { get; }
         IDictionary<string, Color> BackgroundColours { get; }
+        
+        IDictionary<string, Color> AccentBackgroundColours { get; }
+        Color AccentFontColour { get; }
     }
 }
