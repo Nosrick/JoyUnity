@@ -193,46 +193,21 @@ namespace JoyLib.Code.Unity.GUI
             {
                 foreach (ManagedBackground background in gui.GetComponentsInChildren<ManagedBackground>(true))
                 {
-                    if (background.HasBackground == false)
-                    {
-                        background.SetBackground(this.Background);
-                    }
-                    if (background.HasColours == false)
-                    {
-                        background.SetColours(this.BackgroundColours);
-                    }
+                    background.SetBackground(this.Background);
+                    background.SetColours(this.BackgroundColours);
                 }
                 foreach(ManagedFonts font in gui.GetComponentsInChildren<ManagedFonts>(true))
                 {
-                    if (font.HasFont == false)
-                    {
-                        font.SetFonts(this.FontToUse);
-                        font.SetMinMaxFontSizes(this.MinFontSize, this.MaxFontSize);
-                    }
+                    font.SetFonts(this.FontToUse);
+                    font.SetMinMaxFontSizes(this.MinFontSize, this.MaxFontSize);
                 }
 
                 foreach (ManagedAccent accent in gui.GetComponentsInChildren<ManagedAccent>(true))
                 {
-                    if (accent.HasFont == false)
-                    {
                         accent.SetFonts(this.FontToUse);
                         accent.SetMinMaxFontSizes(this.MinFontSize, this.MaxFontSize);
-                    }
-
-                    if (accent.HasFontColours == false)
-                    {
                         accent.SetFontColour(this.AccentFontColour);
-                    }
-
-                    if (accent.HasBackgroundImage == false)
-                    {
-                        accent.SetBackgrounds(this.AccentBackground);
-                    }
-
-                    if (accent.HasBackgroundColours == false)
-                    {
                         accent.SetBackgroundColours(this.AccentColours);
-                    }
                 }
             }
 
@@ -240,6 +215,7 @@ namespace JoyLib.Code.Unity.GUI
             this.GUIs.FirstOrDefault(data => data.TryGetComponent(out cursor));
             if (cursor is null == false)
             {
+                cursor.SetCursorSprites(this.Cursor);
                 cursor.SetCursorColours(this.CursorColours);
             }
         }
