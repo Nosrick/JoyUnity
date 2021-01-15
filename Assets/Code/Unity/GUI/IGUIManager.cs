@@ -13,7 +13,12 @@ namespace JoyLib.Code.Unity.GUI
 
         void ToggleGUI(string name);
 
-        void SetUIColours(IDictionary<string, Color> background, IDictionary<string, Color> cursor);
+        void SetUIColours(IDictionary<string, Color> background,
+            IDictionary<string, Color> cursor,
+            IDictionary<string, Color> accentColours,
+            Color accentFonts);
+
+        void RecolourGUIs();
 
         GUIData OpenGUI(string name, bool bringToFront = false);
 

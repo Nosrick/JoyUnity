@@ -61,6 +61,8 @@ namespace JoyLib.Code.Cultures
 
         public IDictionary<string, Color> CursorColours { get; protected set; }
         public IDictionary<string, Color> BackgroundColours { get; protected set; }
+        public IDictionary<string, Color> AccentBackgroundColours { get; protected set; }
+        public Color AccentFontColour { get; protected set; }
 
         protected const int NO_GROUP = int.MinValue;
 
@@ -84,6 +86,8 @@ namespace JoyLib.Code.Cultures
             int nonConformingGenderChance,
             IDictionary<string, Color> cursorColours,
             IDictionary<string, Color> backgroundColours,
+            IDictionary<string, Color> accentBackgroundColours,
+            Color accentFontColour,
             RNG roller = null)
         {
             this.Roller = roller ?? new RNG();
@@ -102,8 +106,11 @@ namespace JoyLib.Code.Cultures
             this.m_RomancePrevalence = romancePrevalence;
             this.m_GenderPrevalence = genderPrevalence;
             this.NonConformingGenderChance = nonConformingGenderChance;
+            
             this.CursorColours = cursorColours;
             this.BackgroundColours = backgroundColours;
+            this.AccentBackgroundColours = accentBackgroundColours;
+            this.AccentFontColour = accentFontColour;
 
             this.ClearLastGroup();
         }

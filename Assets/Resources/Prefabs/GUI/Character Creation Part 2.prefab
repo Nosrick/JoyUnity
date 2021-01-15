@@ -205,7 +205,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 39.65
+  m_fontSize: 45.55
   m_fontSizeBase: 16
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -259,6 +259,7 @@ GameObject:
   - component: {fileID: 2698762306688159286}
   - component: {fileID: 6425485372839249370}
   - component: {fileID: 2248576739566586959}
+  - component: {fileID: 7801820549648529088}
   m_Layer: 5
   m_Name: Back Button
   m_TagString: Untagged
@@ -377,6 +378,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &7801820549648529088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2815468755934341405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9494a29e1b84457ca857e893dadfa29a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3027721343660026452
 GameObject:
   m_ObjectHideFlags: 0
@@ -906,6 +919,7 @@ GameObject:
   - component: {fileID: 7146581880329319987}
   - component: {fileID: 7146581880329319996}
   - component: {fileID: 7146581880329319997}
+  - component: {fileID: 4095066984913582003}
   m_Layer: 5
   m_Name: Create Character Button
   m_TagString: Untagged
@@ -1024,6 +1038,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &4095066984913582003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7146581880329319999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9494a29e1b84457ca857e893dadfa29a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7146581880405668793
 GameObject:
   m_ObjectHideFlags: 0
@@ -1116,7 +1142,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 44.3
+  m_fontSize: 51.25
   m_fontSizeBase: 16
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1250,7 +1276,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 44.4
+  m_fontSize: 51.35
   m_fontSizeBase: 16
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1624,7 +1650,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 39.65
+  m_fontSize: 45.55
   m_fontSizeBase: 16
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1735,7 +1761,6 @@ MonoBehaviour:
   IncreaseDelta: 1
   AllowIncrease: 1
   AllowDecrease: 1
-  GameManager: {fileID: 0}
   ValueContainerPrefab: {fileID: 6983571690065667194}
   PointsRemainingText: {fileID: 7146581880405668799}
   PlayerInfo: {fileID: 0}
@@ -1834,7 +1859,6 @@ MonoBehaviour:
   IncreaseDelta: 1
   AllowIncrease: 1
   AllowDecrease: 1
-  GameManager: {fileID: 0}
   PointsRemainingText: {fileID: 7146581880527862861}
   AbilityItemPrefab: {fileID: 7146581879945301915}
   PlayerInfo: {fileID: 0}
@@ -2291,6 +2315,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 6514809575038883891, guid: 3de0d9976eafaf0499595f4bb0447a1c,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.50000095
+      objectReference: {fileID: 0}
     - target: {fileID: 6514809575038883892, guid: 3de0d9976eafaf0499595f4bb0447a1c,
         type: 3}
       propertyPath: m_Layer
@@ -2310,7 +2339,7 @@ PrefabInstance:
     - target: {fileID: 6514809576526926231, guid: 3de0d9976eafaf0499595f4bb0447a1c,
         type: 3}
       propertyPath: m_fontSize
-      value: 27.05
+      value: 25.2
       objectReference: {fileID: 0}
     - target: {fileID: 6514809576526926231, guid: 3de0d9976eafaf0499595f4bb0447a1c,
         type: 3}

@@ -10,8 +10,9 @@ namespace JoyLib.Code.Unity.GUI
         protected TextMeshProUGUI[] Texts { get; set; }
         
         public bool HasFont { get; protected set; }
+        public bool HasFontColours { get; protected set; }
 
-        public void Awake()
+        public virtual void Awake()
         {
             this.Texts = this.GetComponentsInChildren<TextMeshProUGUI>(true);
             this.Initialised = true;
@@ -31,7 +32,7 @@ namespace JoyLib.Code.Unity.GUI
             this.HasFont = true;
         }
 
-        public void SetColour(Color colour)
+        public void SetFontColour(Color colour)
         {
             if (this.Initialised == false)
             {
@@ -41,6 +42,8 @@ namespace JoyLib.Code.Unity.GUI
             {
                 text.color = colour;
             }
+
+            this.HasFontColours = true;
         }
 
         public void SetOutline(Color colour, float thickness = 0)

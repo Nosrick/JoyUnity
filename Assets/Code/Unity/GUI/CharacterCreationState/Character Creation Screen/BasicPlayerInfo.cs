@@ -122,15 +122,11 @@ namespace JoyLib.Code.Unity.GUI
             this.CultureChanged?.Invoke(this, EventArgs.Empty);
             this.SetStatistics();
 
-            this.GameManager.GUIManager.GetGUI(GUINames.CURSOR)
-                .GetComponent<Cursor>()
-                .SetCursorColours(this.CurrentCulture.CursorColours);
-            this.GameManager.GUIManager.GetGUI(GUINames.CHARACTER_CREATION_PART_1)
-                .GetComponent<ManagedBackground>()
-                .SetColours(this.CurrentCulture.BackgroundColours);
-            this.GameManager.GUIManager.GetGUI(GUINames.CHARACTER_CREATION_PART_2)
-                .GetComponent<ManagedBackground>()
-                .SetColours(this.CurrentCulture.BackgroundColours);
+            this.GameManager.GUIManager.SetUIColours(
+                this.CurrentCulture.BackgroundColours,
+                this.CurrentCulture.CursorColours,
+                this.CurrentCulture.AccentBackgroundColours,
+                this.CurrentCulture.AccentFontColour);
         }
 
         protected void SetStatistics()
