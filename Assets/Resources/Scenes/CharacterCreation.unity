@@ -868,6 +868,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5465748784011869128, guid: 7bd804c0116f9ee458ad95e65b8c1ab3,
         type: 3}
+      propertyPath: m_ClosesOthers
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5465748784011869128, guid: 7bd804c0116f9ee458ad95e65b8c1ab3,
+        type: 3}
       propertyPath: m_RemovesControl
       value: 0
       objectReference: {fileID: 0}
@@ -1190,6 +1195,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c976475fb4bf4ea9b061cd78dcc79483, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1417606214 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5573507357685518258, guid: 7bd804c0116f9ee458ad95e65b8c1ab3,
+    type: 3}
+  m_PrefabInstance: {fileID: 1417606209}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1417606215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1417606214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9494a29e1b84457ca857e893dadfa29a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1475517614
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1206,6 +1229,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: GoToPlayerInfo
+      objectReference: {fileID: 0}
+    - target: {fileID: 4126566721154309308, guid: 6229c614b0c8a034486bd88788e61a0d,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4126566721898218219, guid: 6229c614b0c8a034486bd88788e61a0d,
         type: 3}
@@ -1327,6 +1355,51 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7146581879945301914, guid: 6229c614b0c8a034486bd88788e61a0d,
+        type: 3}
+      propertyPath: m_Colors.m_PressedColor.b
+      value: 0.49056602
+      objectReference: {fileID: 0}
+    - target: {fileID: 7146581879945301914, guid: 6229c614b0c8a034486bd88788e61a0d,
+        type: 3}
+      propertyPath: m_Colors.m_PressedColor.g
+      value: 0.49056602
+      objectReference: {fileID: 0}
+    - target: {fileID: 7146581879945301914, guid: 6229c614b0c8a034486bd88788e61a0d,
+        type: 3}
+      propertyPath: m_Colors.m_PressedColor.r
+      value: 0.49056602
+      objectReference: {fileID: 0}
+    - target: {fileID: 7146581879945301914, guid: 6229c614b0c8a034486bd88788e61a0d,
+        type: 3}
+      propertyPath: m_Colors.m_SelectedColor.b
+      value: 0.49019608
+      objectReference: {fileID: 0}
+    - target: {fileID: 7146581879945301914, guid: 6229c614b0c8a034486bd88788e61a0d,
+        type: 3}
+      propertyPath: m_Colors.m_SelectedColor.g
+      value: 0.49019608
+      objectReference: {fileID: 0}
+    - target: {fileID: 7146581879945301914, guid: 6229c614b0c8a034486bd88788e61a0d,
+        type: 3}
+      propertyPath: m_Colors.m_SelectedColor.r
+      value: 0.49019608
+      objectReference: {fileID: 0}
+    - target: {fileID: 7146581879945301914, guid: 6229c614b0c8a034486bd88788e61a0d,
+        type: 3}
+      propertyPath: m_Colors.m_HighlightedColor.b
+      value: 0.754717
+      objectReference: {fileID: 0}
+    - target: {fileID: 7146581879945301914, guid: 6229c614b0c8a034486bd88788e61a0d,
+        type: 3}
+      propertyPath: m_Colors.m_HighlightedColor.g
+      value: 0.754717
+      objectReference: {fileID: 0}
+    - target: {fileID: 7146581879945301914, guid: 6229c614b0c8a034486bd88788e61a0d,
+        type: 3}
+      propertyPath: m_Colors.m_HighlightedColor.r
+      value: 0.754717
+      objectReference: {fileID: 0}
     - target: {fileID: 7146581880329319997, guid: 6229c614b0c8a034486bd88788e61a0d,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -1396,6 +1469,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AlwaysOpen
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8263116098360839882, guid: 6229c614b0c8a034486bd88788e61a0d,
+        type: 3}
+      propertyPath: m_ClosesOthers
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8263116098360839882, guid: 6229c614b0c8a034486bd88788e61a0d,
         type: 3}

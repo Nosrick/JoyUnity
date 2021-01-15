@@ -219,6 +219,7 @@ namespace JoyLib.Code.Unity.GUI
             this.GUIs.FirstOrDefault(data => data.TryGetComponent(out cursor));
             if (cursor is null == false)
             {
+                cursor.SetCursorSprites(this.Cursor);
                 cursor.SetCursorColours(this.CursorColours);
             }
         }
@@ -245,7 +246,12 @@ namespace JoyLib.Code.Unity.GUI
         {
             if (this.ActiveGUIs.Any(widget => widget.name.Equals(name, StringComparison.OrdinalIgnoreCase)))
             {
-                return this.ActiveGUIs.First(ui => ui.name.Equals(name, StringComparison.OrdinalIgnoreCase));
+                GUIData openGUI = this.ActiveGUIs.First(ui => ui.name.Equals(name, StringComparison.OrdinalIgnoreCase));
+                if (bringToFront)
+                {
+                    this.BringToFront(openGUI.name);
+                }
+                return openGUI;
             }
 
             GUIData toOpen = this.GUIs.First(gui =>
