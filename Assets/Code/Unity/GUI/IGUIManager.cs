@@ -23,6 +23,8 @@ namespace JoyLib.Code.Unity.GUI
 
         void CloseAllOtherGUIs(string activeName = "");
 
+        void CloseAllGUIs();
+
         bool RemovesControl();
 
         bool RemoveActiveGUI(string name);

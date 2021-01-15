@@ -266,16 +266,24 @@ namespace JoyLib.Code.Unity.GUI
 
         public void CloseAllOtherGUIs(string activeName = "")
         {
-            GUIData[] toClose = this.ActiveGUIs
-                .Where(gui => gui.name.Equals(activeName, StringComparison.OrdinalIgnoreCase) == false).ToArray();
+            IEnumerable<GUIData> toClose = this.ActiveGUIs
+                .Where(gui => gui.name.Equals(activeName, StringComparison.OrdinalIgnoreCase) == false
+                        && gui.m_AlwaysOpen == false);
 
             foreach (GUIData data in toClose)
             {
-                if (data.m_AlwaysOpen)
-                {
-                    continue;
-                }
+                this.ActiveGUIs.Remove(data);
+                data.Close();
+            }
+        }
 
+        public void CloseAllGUIs()
+        {
+            IEnumerable<GUIData> toClose = this.ActiveGUIs
+                .Where(gui => gui.m_AlwaysOpen == false);
+
+            foreach (GUIData data in toClose)
+            {
                 this.ActiveGUIs.Remove(data);
                 data.Close();
             }

@@ -38,6 +38,8 @@ namespace JoyLib.Code.Entities.Abilities
                     new object[] { "hunger", item.ItemType.Value, 10 }
                 );
                 user.RemoveContents(item);
+                
+                GlobalConstants.GameManager.GUIManager?.CloseAllGUIs();
                 return true;
             }
             return false;
