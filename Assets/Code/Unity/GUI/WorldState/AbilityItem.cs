@@ -11,8 +11,6 @@ namespace JoyLib.Code.Unity.GUI
     public class AbilityItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         [SerializeField] protected ValueContainer m_Parent;
-        [SerializeField] protected Color32 SelectedColour;
-        [SerializeField] protected Color32 IdleColour;
         [SerializeField] public int Delta = 1;
         public bool Selected { get; protected set; }
 
@@ -44,7 +42,6 @@ namespace JoyLib.Code.Unity.GUI
             }
 
             this.Image = this.GetComponent<Image>();
-            this.Image.color = this.IdleColour;
             this.Text = this.GetComponentInChildren<TextMeshProUGUI>();
         }
         
@@ -69,16 +66,6 @@ namespace JoyLib.Code.Unity.GUI
             if (this.m_Parent.Value < this.Delta && this.Selected == false)
             {
                 return;
-            }
-
-            this.Selected = !this.Selected;
-            if (this.Selected)
-            {
-                this.Image.color = this.SelectedColour;
-            }
-            else
-            {
-                this.Image.color = this.IdleColour;
             }
 
             this.OnSelect?.Invoke(this, new ValueChangedEventArgs
