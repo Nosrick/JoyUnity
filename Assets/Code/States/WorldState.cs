@@ -91,7 +91,7 @@ namespace JoyLib.Code.States
 
         public override void SetUpUi()
         {
-            this.GUIManager.CloseAllOtherGUIs();
+            base.SetUpUi();
             this.GUIManager.OpenGUI(GUINames.NEEDSRECT);
             this.GUIManager.OpenGUI(GUINames.DERIVED_VALUES);
             this.GUIManager.OpenGUI(GUINames.ACTION_LOG);

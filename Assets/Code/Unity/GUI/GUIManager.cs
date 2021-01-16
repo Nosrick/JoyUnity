@@ -7,6 +7,7 @@ using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace JoyLib.Code.Unity.GUI
 {
@@ -14,6 +15,8 @@ namespace JoyLib.Code.Unity.GUI
     {
         protected HashSet<GUIData> GUIs { get; set; }
         protected HashSet<GUIData> ActiveGUIs { get; set; }
+        
+        protected Canvas MainUI { get; set; }
         
         public ISpriteState Background { get; protected set; }
         public ISpriteState Cursor { get; protected set; }
@@ -40,6 +43,7 @@ namespace JoyLib.Code.Unity.GUI
         {
             if (this.GUIs is null)
             {
+                this.MainUI = GameObject.Find("MainUI").GetComponent<Canvas>();
                 this.GUIs = new HashSet<GUIData>();
                 this.ActiveGUIs = new HashSet<GUIData>();
                 this.Background = new SpriteState(
@@ -124,6 +128,19 @@ namespace JoyLib.Code.Unity.GUI
         {
             this.ActiveGUIs.Clear();
             this.GUIs.Clear();
+        }
+
+        public void FindGUIs()
+        {
+            Canvas mainUI = null;
+            SceneManager.GetActiveScene().GetRootGameObjects().First(o => o.TryGetComponent(out mainUI));
+            this.MainUI = mainUI;
+            
+            GUIData[] guiData = this.MainUI.GetComponentsInChildren<GUIData>(true);
+            foreach (GUIData data in guiData)
+            {
+                this.AddGUI(data);
+            }
         }
 
         public void AddGUI(GUIData gui)
@@ -372,9 +389,9 @@ namespace JoyLib.Code.Unity.GUI
 
             foreach (GUIData data in toClose)
             {
-                this.ActiveGUIs.Remove(data);
                 data.Close();
             }
+            this.ActiveGUIs.RemoveWhere(guiData => guiData.m_AlwaysOpen == false);
         }
 
         public bool RemovesControl()

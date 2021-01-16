@@ -1,6 +1,4 @@
-using System.Threading;
 using JoyLib.Code.Unity.GUI;
-using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace JoyLib.Code.States
@@ -16,14 +14,10 @@ namespace JoyLib.Code.States
 
         public virtual void SetUpUi()
         {
-            Thread.Sleep(500);
+            //Thread.Sleep(200);
 
             this.GUIManager.Clear();
-            GUIData[] guiData = GameObject.FindObjectsOfType<GUIData>();
-            foreach (GUIData data in guiData)
-            {
-                this.GUIManager.AddGUI(data);
-            }
+            this.GUIManager.FindGUIs();
 
             this.GUIManager.RecolourGUIs();
             this.GUIManager.CloseAllOtherGUIs(GUINames.CURSOR);

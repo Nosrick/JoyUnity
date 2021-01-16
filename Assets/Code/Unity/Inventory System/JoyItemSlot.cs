@@ -73,7 +73,7 @@ namespace JoyLib.Code.Unity.GUI
 
             if (Raycaster is null)
             {
-                Raycaster = GameObject.Find("Main UI").GetComponent<GraphicRaycaster>();
+                Raycaster = GameObject.Find("MainUI").GetComponent<GraphicRaycaster>();
             }
             this.m_Icon.Awake();
         }

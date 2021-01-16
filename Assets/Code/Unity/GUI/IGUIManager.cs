@@ -8,6 +8,8 @@ namespace JoyLib.Code.Unity.GUI
     public interface IGUIManager
     {
         void Clear();
+
+        void FindGUIs();
         
         void AddGUI(GUIData gui);
 
