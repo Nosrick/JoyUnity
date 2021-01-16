@@ -4,6 +4,7 @@ using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Events;
+using JoyLib.Code.Helpers;
 using JoyLib.Code.Scripting;
 using TMPro;
 using UnityEngine;
@@ -86,7 +87,7 @@ namespace JoyLib.Code.Unity.GUI
             //LayoutRebuilder.ForceRebuildLayoutImmediate(this.RectTransform);
         }
 
-        public bool Trade()
+        protected bool Trade()
         {
             int leftValue = 0;
             int rightValue = 0;
@@ -134,6 +135,16 @@ namespace JoyLib.Code.Unity.GUI
             this.SetActors(this.Left, this.Right);
 
             return true;
+        }
+
+        public void TradeButton()
+        {
+            bool result = this.Trade();
+            if (!result)
+            {
+                GlobalConstants.ActionLog.AddText(
+                    "Trade failed between " + this.Left.JoyName + " and " + this.Right.JoyName, LogLevel.Warning);
+            }
         }
 
         protected void Tally()

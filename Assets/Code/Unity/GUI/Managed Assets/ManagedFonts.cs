@@ -1,15 +1,14 @@
-﻿using TMPro;
+﻿using JoyLib.Code.Unity.GUI.Managed_Assets;
+using TMPro;
 using UnityEngine;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public class ManagedFonts : MonoBehaviour
+    public class ManagedFonts : ManagedElement
     {
         [SerializeField] protected bool m_OverrideSize = true;
         [SerializeField] protected bool m_OverrideColour = true;
         [SerializeField] protected bool m_OverrideOutline = true;
-        
-        protected bool Initialised { get; set; }
         
         protected TextMeshProUGUI[] Texts { get; set; }
         

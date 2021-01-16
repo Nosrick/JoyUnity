@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6434927217899800316}
   - component: {fileID: 2824128685589543839}
+  - component: {fileID: 3771633027565515648}
   m_Layer: 0
   m_Name: Panel
   m_TagString: Untagged
@@ -46,6 +47,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 753773545059106223}
   m_CullTransparentMesh: 0
+--- !u!114 &3771633027565515648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 753773545059106223}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9494a29e1b84457ca857e893dadfa29a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ElementName: SlotBackground
 --- !u!1 &1285802512727624299
 GameObject:
   m_ObjectHideFlags: 0
@@ -193,6 +207,7 @@ GameObject:
   - component: {fileID: 6665615501670980203}
   - component: {fileID: 6665615501670980198}
   - component: {fileID: 8562720405407632609}
+  - component: {fileID: 4074758963628961486}
   m_Layer: 0
   m_Name: Previous Value Button
   m_TagString: Untagged
@@ -300,6 +315,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_AspectMode: 1
   m_AspectRatio: 1
+--- !u!114 &4074758963628961486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6665615501670980201}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9494a29e1b84457ca857e893dadfa29a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ElementName: AccentBackground
 --- !u!1 &6665615501808216171
 GameObject:
   m_ObjectHideFlags: 0
@@ -313,6 +341,7 @@ GameObject:
   - component: {fileID: 6665615501808216165}
   - component: {fileID: 6665615501808216160}
   - component: {fileID: 6482037851070666526}
+  - component: {fileID: 7141262766092507413}
   m_Layer: 0
   m_Name: Next Value Button
   m_TagString: Untagged
@@ -420,6 +449,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_AspectMode: 1
   m_AspectRatio: 1
+--- !u!114 &7141262766092507413
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6665615501808216171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9494a29e1b84457ca857e893dadfa29a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ElementName: AccentBackground
 --- !u!1 &6665615501869021042
 GameObject:
   m_ObjectHideFlags: 0
@@ -699,6 +741,7 @@ GameObject:
   - component: {fileID: 4590537629553967856}
   - component: {fileID: 5460360650046778700}
   - component: {fileID: 3329086532230608727}
+  - component: {fileID: 3813700618549209583}
   m_Layer: 0
   m_Name: Panel
   m_TagString: Untagged
@@ -755,6 +798,19 @@ MonoBehaviour:
   AllowDecrease: 1
   NameText: {fileID: 4764807512481541285}
   m_WrapAround: 0
+--- !u!114 &3813700618549209583
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6703053173984015869}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9494a29e1b84457ca857e893dadfa29a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ElementName: SlotBackground
 --- !u!1 &8904385615583707134
 GameObject:
   m_ObjectHideFlags: 0
@@ -899,7 +955,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5055705766856660808}
   - component: {fileID: 6672070957931238575}
-  - component: {fileID: 2937876172673233459}
   - component: {fileID: 6518514522075411979}
   m_Layer: 0
   m_Name: Value Container
@@ -945,19 +1000,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_AspectMode: 1
   m_AspectRatio: 13.333333
---- !u!114 &2937876172673233459
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9104911138174652607}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9494a29e1b84457ca857e893dadfa29a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ElementName: AccentBackground
 --- !u!114 &6518514522075411979
 MonoBehaviour:
   m_ObjectHideFlags: 0

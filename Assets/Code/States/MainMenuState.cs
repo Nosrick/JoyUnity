@@ -29,8 +29,8 @@ namespace JoyLib.Code.States
                 randomCulture.BackgroundColours,
                 randomCulture.CursorColours,
                 randomCulture.AccentBackgroundColours, 
-                randomCulture.MainFontColour,
-                randomCulture.AccentFontColour);
+                randomCulture.MainFontColours,
+                randomCulture.AccentFontColours);
             base.SetUpUi();
         }
 

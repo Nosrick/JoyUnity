@@ -18,23 +18,23 @@ namespace JoyLib.Code.Unity.GUI
         
         protected Canvas MainUI { get; set; }
         
-        public ISpriteState Background { get; protected set; }
-        public ISpriteState Cursor { get; protected set; }
+        public IDictionary<string, ISpriteState> Backgrounds { get; protected set; }
+        public IDictionary<string, ISpriteState> Cursors { get; protected set; }
 
-        public ISpriteState AccentBackground { get; protected set; }
+        public IDictionary<string, ISpriteState> AccentBackgrounds { get; protected set; }
 
-        public TMP_FontAsset FontToUse { get; protected set; }
+        public IDictionary<string, TMP_FontAsset> FontsToUse { get; protected set; }
         
-        public IDictionary<string, Color> CursorColours { get; protected set; }
-        public IDictionary<string, Color> BackgroundColours { get; protected set; }
+        public IDictionary<string, IDictionary<string, Color>> CursorColours { get; protected set; }
+        public IDictionary<string, IDictionary<string, Color>> BackgroundColours { get; protected set; }
 
-        public IDictionary<string, Color> AccentColours { get; protected set; }
-        public Color AccentFontColour { get; protected set; }
+        public IDictionary<string, IDictionary<string, Color>> AccentColours { get; protected set; }
+        public IDictionary<string, Color> AccentFontColours { get; protected set; }
 
         public float MinFontSize { get; protected set; }
         public float MaxFontSize { get; protected set; }
         
-        public Color FontColour { get; protected set; } 
+        public IDictionary<string, Color> FontColours { get; protected set; } 
 
         public GUIManager()
         {
@@ -48,31 +48,37 @@ namespace JoyLib.Code.Unity.GUI
                 this.MainUI = GameObject.Find("MainUI").GetComponent<Canvas>();
                 this.GUIs = new HashSet<GUIData>();
                 this.ActiveGUIs = new HashSet<GUIData>();
-                this.Background = new SpriteState(
-                    "WindowBackground",
-                    GlobalConstants.GameManager.ObjectIconHandler.GetSprites(
-                            "WindowBackground",
-                            "WindowBackground")
-                        .First());
+                this.Backgrounds = GlobalConstants.GameManager.ObjectIconHandler.GetTileSet("Windows")
+                    .Select(data => new SpriteState(data.m_Name, data))
+                    .Cast<ISpriteState>()
+                    .ToDictionary(state => state.Name, state => state);
+                    
 
-                this.Cursor = new SpriteState(
-                    "Cursor",
-                    GlobalConstants.GameManager.ObjectIconHandler.GetFrame(
-                        "DefaultCursor",
-                        "DefaultCursor"));
+                this.Cursors = GlobalConstants.GameManager.ObjectIconHandler.GetTileSet("Cursors")
+                    .Select(data => new SpriteState(data.m_Name, data))
+                    .Cast<ISpriteState>()
+                    .ToDictionary(state => state.Name, state => state);
 
-                this.AccentBackground = new SpriteState(
-                    "AccentBackground",
-                    GlobalConstants.GameManager.ObjectIconHandler.GetFrame(
-                        "AccentBackground",
-                        "AccentBackground"));
+                this.AccentBackgrounds = GlobalConstants.GameManager.ObjectIconHandler.GetTileSet("Accent")
+                    .Select(data => new SpriteState(data.m_Name, data))
+                    .Cast<ISpriteState>()
+                    .ToDictionary(state => state.Name, state => state);
 
-                this.CursorColours = new Dictionary<string, Color>();
-                this.BackgroundColours = new Dictionary<string, Color>();
-                this.AccentColours = new Dictionary<string, Color>();
-                this.FontToUse = Resources.Load<TMP_FontAsset>("Fonts/OpenDyslexic3");
-                this.AccentFontColour = Color.black;
-                this.FontColour = Color.black;
+                this.CursorColours = new Dictionary<string, IDictionary<string, Color>>();
+                this.BackgroundColours = new Dictionary<string, IDictionary<string, Color>>();
+                this.AccentColours = new Dictionary<string, IDictionary<string, Color>>();
+                this.FontsToUse = new Dictionary<string, TMP_FontAsset>
+                {
+                    {"default", Resources.Load<TMP_FontAsset>("Fonts/OpenDyslexic3")}
+                };
+                this.AccentFontColours = new Dictionary<string, Color>
+                {
+                    {"default", Color.black}
+                };
+                this.FontColours = new Dictionary<string, Color>
+                {
+                    {"default", Color.black}
+                };
                 this.MinFontSize = 10f;
                 this.MaxFontSize = 36f;
                 this.LoadDefaults();
@@ -91,11 +97,11 @@ namespace JoyLib.Code.Unity.GUI
                     switch (data.Element("Name").GetAs<string>())
                     {
                         case "Font":
-                            this.FontToUse =
+                            this.FontsToUse["default"] =
                                 Resources.Load<TMP_FontAsset>("Fonts/" + data.Element("Value").GetAs<string>());
                             this.MinFontSize = data.Element("MinFontSize").DefaultIfEmpty(10f);
                             this.MaxFontSize = data.Element("MaxFontSize").DefaultIfEmpty(36f);
-                            this.FontColour =
+                            this.FontColours["default"] = 
                                 GraphicsHelper.ParseHTMLString(data.Element("FontColour").DefaultIfEmpty("#000000ff"));
                             break;
 
@@ -111,24 +117,19 @@ namespace JoyLib.Code.Unity.GUI
         }
 
         public void SetUIColours(
-            IDictionary<string, Color> background,
-            IDictionary<string, Color> cursor,
-            IDictionary<string, Color> accentColours,
-            Color mainFontColour,
-            Color accentFontColour)
+            IDictionary<string, IDictionary<string, Color>> background,
+            IDictionary<string, IDictionary<string, Color>> cursor,
+            IDictionary<string, IDictionary<string, Color>> accentColours,
+            IDictionary<string, Color> mainFontColours,
+            IDictionary<string, Color> accentFontColours)
         {
-            this.BackgroundColours = background;
-            this.CursorColours = cursor;
-            this.FontColour = mainFontColour;
-            this.AccentColours = accentColours;
-            this.AccentFontColour = accentFontColour;
+                this.BackgroundColours = background;
+                this.CursorColours = cursor;
+                this.FontColours = mainFontColours;
+                this.AccentColours = accentColours;
+                this.AccentFontColours = accentFontColours;
 
             this.RecolourGUIs();
-        }
-
-        public void SetFont(TMP_FontAsset font)
-        {
-            this.FontToUse = font;
         }
 
         public void Clear()
@@ -178,8 +179,8 @@ namespace JoyLib.Code.Unity.GUI
             this.GUIs.FirstOrDefault(data => data.TryGetComponent(out cursor));
             if (cursor is null == false)
             {
-                cursor.SetCursorSprites(this.Cursor);
-                cursor.SetCursorColours(this.CursorColours);
+                cursor.SetCursorSprites(this.Cursors["DefaultCursor"]);
+                cursor.SetCursorColours(this.CursorColours["DefaultCursor"]);
             }
         }
 
@@ -187,24 +188,31 @@ namespace JoyLib.Code.Unity.GUI
         {
             foreach (ManagedBackground background in gui.GetComponentsInChildren<ManagedBackground>(true))
             {
-                background.SetBackground(this.Background);
-                background.SetColours(this.BackgroundColours);
+                background.SetBackground(this.Backgrounds[background.ElementName]);
+                background.SetColours(this.BackgroundColours[background.ElementName]);
             }
             foreach(ManagedFonts font in gui.GetComponentsInChildren<ManagedFonts>(true))
             {
-                font.SetFonts(this.FontToUse);
+                font.SetFonts(this.FontsToUse[font.ElementName]);
                 font.SetMinMaxFontSizes(this.MinFontSize, this.MaxFontSize);
-                font.SetFontColour(this.FontColour);
+                font.SetFontColour(this.FontColours[font.ElementName]);
             }
 
             foreach (ManagedAccent accent in gui.GetComponentsInChildren<ManagedAccent>(true))
             {
-                accent.SetBackgrounds(this.AccentBackground);
-                accent.SetBackgroundColours(this.AccentColours);
+                try
+                {
+                    accent.SetBackgrounds(this.AccentBackgrounds[accent.ElementName]);
+                }
+                catch
+                {
+                    GlobalConstants.ActionLog.AddText("Could not find accent element " + accent.ElementName, LogLevel.Error);
+                }
+                accent.SetBackgroundColours(this.AccentColours[accent.ElementName]);
 
                 if (accent.TryGetComponent(out ManagedFonts fonts))
                 {
-                    fonts.SetFontColour(this.AccentFontColour);
+                    fonts.SetFontColour(this.AccentFontColours[accent.ElementName]);
                 }
             }
         }
@@ -259,13 +267,13 @@ namespace JoyLib.Code.Unity.GUI
             {
                 if (background.HasBackground == false)
                 {
-                    background.SetBackground(this.Background);
+                    background.SetBackground(this.Backgrounds[background.ElementName]);
                 }
 
                 if (GlobalConstants.GameManager.Player is null == false
                     && background.HasColours == false)
                 {
-                    background.SetColours(this.BackgroundColours);
+                    background.SetColours(this.BackgroundColours[background.ElementName]);
                 }
             }
 

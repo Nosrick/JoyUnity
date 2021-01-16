@@ -10,7 +10,7 @@ using UnityEngine;
 namespace JoyLib.Code.Cultures
 {
     public class CultureHandler : ICultureHandler
-    {        
+    {
         protected Dictionary<string, ICulture> m_Cultures;
 
         public CultureHandler()
@@ -36,36 +36,36 @@ namespace JoyLib.Code.Cultures
                 foreach (XElement culture in element.Elements("Culture"))
                 {
                     List<string> rulers = (from ruler in culture.Element("Rulers")
-                                            .Elements("Ruler")
-                                           select ruler.GetAs<string>()).ToList();
+                            .Elements("Ruler")
+                        select ruler.GetAs<string>()).ToList();
 
                     List<string> crimes = (from crime in culture.Element("Crimes")
-                                                    .Elements("Crime")
-                                           select crime.GetAs<string>()).ToList();
+                            .Elements("Crime")
+                        select crime.GetAs<string>()).ToList();
 
                     List<string> inhabitants = (from inhabitant in culture.Element("Inhabitants")
-                                                    .Elements("Inhabitant")
-                                                select inhabitant.GetAs<string>()).ToList();
+                            .Elements("Inhabitant")
+                        select inhabitant.GetAs<string>()).ToList();
 
                     List<string> relationships = (from relationship in culture.Element("Relationships")
-                                                    .Elements("RelationshipType")
-                                                  select relationship.GetAs<string>()).ToList();
+                            .Elements("RelationshipType")
+                        select relationship.GetAs<string>()).ToList();
 
                     List<NameData> nameDataList = (from nameData in culture.Element("Names")
-                                                    .Elements("NameData")
-                                                   select new NameData(
-                                                      nameData.Element("Name").GetAs<string>(),
-                                                      nameData.Elements("Chain").Select(x => x.GetAs<int>()).ToArray(),
-                                                      nameData.Elements("Gender").Select(x => x.GetAs<string>()).ToArray(),
-                                                      nameData.Elements("Group").Select(x => x.GetAs<int>()).ToArray()
-                                                      )).ToList();
+                            .Elements("NameData")
+                        select new NameData(
+                            nameData.Element("Name").GetAs<string>(),
+                            nameData.Elements("Chain").Select(x => x.GetAs<int>()).ToArray(),
+                            nameData.Elements("Gender").Select(x => x.GetAs<string>()).ToArray(),
+                            nameData.Elements("Group").Select(x => x.GetAs<int>()).ToArray()
+                        )).ToList();
 
                     Dictionary<string, int> sexualitiesDictionary = (from sexualities in culture.Element("Sexualities")
-                                                                        .Elements("Sexuality")
-                                                                     select new KeyValuePair<string, int>(
-                                                                      sexualities.Element("Name").GetAs<string>(),
-                                                                      sexualities.Element("Chance").GetAs<int>()
-                                                                      )).ToDictionary(x => x.Key, x => x.Value);
+                            .Elements("Sexuality")
+                        select new KeyValuePair<string, int>(
+                            sexualities.Element("Name").GetAs<string>(),
+                            sexualities.Element("Chance").GetAs<int>()
+                        )).ToDictionary(x => x.Key, x => x.Value);
 
                     Dictionary<string, int> romanceDictionary = (from romances in culture.Element("Romances")
                                 .Elements("Romance")
@@ -75,11 +75,11 @@ namespace JoyLib.Code.Cultures
                         .ToDictionary(x => x.Key, x => x.Value);
 
                     Dictionary<string, int> sexesDictionary = (from sexes in culture.Element("Sexes")
-                                                                    .Elements("Sex")
-                                                               select new KeyValuePair<string, int>(
-                                                              sexes.Element("Name").GetAs<string>(),
-                                                              sexes.Element("Chance").GetAs<int>()))
-                                                                   .ToDictionary(x => x.Key, x => x.Value);
+                                .Elements("Sex")
+                            select new KeyValuePair<string, int>(
+                                sexes.Element("Name").GetAs<string>(),
+                                sexes.Element("Chance").GetAs<int>()))
+                        .ToDictionary(x => x.Key, x => x.Value);
 
                     Dictionary<string, int> genderDictionary = (from genders in culture.Element("Genders")
                                 .Elements("Gender")
@@ -87,22 +87,23 @@ namespace JoyLib.Code.Cultures
                                 genders.Element("Name").GetAs<string>(),
                                 genders.Element("Chance").GetAs<int>()))
                         .ToDictionary(x => x.Key, x => x.Value);
-                    
-                    Dictionary<string, Tuple<int, int>> statVarianceDictionary = (from statVariances in culture.Element("Statistics")
-                                                                                    .Elements("StatVariance")
-                                                                                  select new KeyValuePair<string, Tuple<int, int>>(
-                                                                                    statVariances.Element("Name").GetAs<string>(),
-                                                                                    new Tuple<int, int>(
-                                                                                        statVariances.Element("Chance").GetAs<int>(),
-                                                                                        statVariances.Element("Magnitude").GetAs<int>())))
-                                                                                          .ToDictionary(x => x.Key, x => x.Value);
+
+                    Dictionary<string, Tuple<int, int>> statVarianceDictionary = (from statVariances in culture
+                                .Element("Statistics")
+                                .Elements("StatVariance")
+                            select new KeyValuePair<string, Tuple<int, int>>(
+                                statVariances.Element("Name").GetAs<string>(),
+                                new Tuple<int, int>(
+                                    statVariances.Element("Chance").GetAs<int>(),
+                                    statVariances.Element("Magnitude").GetAs<int>())))
+                        .ToDictionary(x => x.Key, x => x.Value);
 
                     Dictionary<string, int> jobPrevelenceDictionary = (from jobPrevelence in culture.Element("Jobs")
-                                                                            .Elements("Job")
-                                                                       select new KeyValuePair<string, int>(
-                                                                      jobPrevelence.Element("Name").GetAs<string>(),
-                                                                      jobPrevelence.Element("Chance").GetAs<int>()))
-                                                                           .ToDictionary(x => x.Key, x => x.Value);
+                                .Elements("Job")
+                            select new KeyValuePair<string, int>(
+                                jobPrevelence.Element("Name").GetAs<string>(),
+                                jobPrevelence.Element("Chance").GetAs<int>()))
+                        .ToDictionary(x => x.Key, x => x.Value);
 
                     string cultureName = culture.Element("CultureName").GetAs<string>();
 
@@ -111,88 +112,104 @@ namespace JoyLib.Code.Cultures
                     XElement tileSetElement = culture.Element("TileSet");
                     string tileSet = tileSetElement.Element("Name").DefaultIfEmpty("");
 
-                    IDictionary<string, Color> cursorColours = new Dictionary<string, Color>();
+                    XElement uiColours = culture.Element("UIColours");
+                    IDictionary<string, IDictionary<string, Color>> cursorColours =
+                        new Dictionary<string, IDictionary<string, Color>>();
                     try
                     {
-                        cursorColours = (from colours in culture.Element("CursorColours")
-                                .Elements("Colour")
+                        cursorColours = this.ExtractColourData(uiColours, "CursorColours");
+                    }
+                    catch (Exception e)
+                    {
+                        GlobalConstants.ActionLog.AddText(e.Message, LogLevel.Error);
+                        GlobalConstants.ActionLog.AddText(e.StackTrace, LogLevel.Error);
+                        GlobalConstants.ActionLog.AddText("Could not find cursor colours in file " + file,
+                            LogLevel.Error);
+                        cursorColours.Add(
+                            "DefaultCursor", 
+                            new Dictionary<string, Color>
+                            {
+                                {"default", Color.magenta}
+                            });
+                    }
+
+                    IDictionary<string, IDictionary<string, Color>> backgroundColours =
+                        new Dictionary<string, IDictionary<string, Color>>();
+                    try
+                    {
+                        backgroundColours = this.ExtractColourData(uiColours, "BackgroundColours");
+                    }
+                    catch (Exception e)
+                    {
+                        GlobalConstants.ActionLog.AddText(e.Message, LogLevel.Error);
+                        GlobalConstants.ActionLog.AddText(e.StackTrace, LogLevel.Error);
+                        GlobalConstants.ActionLog.AddText("Could not find background colours in file " + file, LogLevel.Error);
+                        backgroundColours.Add(
+                            "DefaultWindow", 
+                            new Dictionary<string, Color>
+                            {
+                                {"default", Color.magenta}
+                            });
+                    }
+
+                    IDictionary<string, Color> mainFontColours = new Dictionary<string, Color>();
+                    try
+                    {
+                        mainFontColours = (from fontColour in uiColours.Elements("MainFontColours")
                                 select new KeyValuePair<string, Color>(
-                                    colours.Element("Name").GetAs<string>(),
-                                    GraphicsHelper.ParseHTMLString(colours.Element("Value").GetAs<string>())))
-                            .ToDictionary(x => x.Key, x => x.Value);
+                                    fontColour.Element("Name").GetAs<string>(),
+                                    GraphicsHelper.ParseHTMLString(fontColour.Element("Value").GetAs<string>())))
+                            .ToDictionary(pair => pair.Key, pair => pair.Value);
                     }
                     catch (Exception e)
                     {
                         GlobalConstants.ActionLog.AddText(e.Message, LogLevel.Error);
                         GlobalConstants.ActionLog.AddText(e.StackTrace, LogLevel.Error);
-                        GlobalConstants.ActionLog.AddText("Could not find cursor colours in file " + file, LogLevel.Error);
-                        cursorColours.Add("default", Color.magenta);
+                        GlobalConstants.ActionLog.AddText("Could not find main font colour in file " + file,
+                            LogLevel.Error);
+                        mainFontColours.Add(
+                            "Font",
+                            Color.black);
                     }
 
-                    IDictionary<string, Color> backgroundColours = new Dictionary<string, Color>();
+                    IDictionary<string, IDictionary<string, Color>> accentBackgroundColours =
+                        new Dictionary<string, IDictionary<string, Color>>();
                     try
                     {
-                        backgroundColours = (from colours in culture.Element("UIColours")
-                                    .Elements("Colour")
+                        accentBackgroundColours = ExtractColourData(uiColours, "AccentBackgroundColours");
+                    }
+                    catch (Exception e)
+                    {
+                        GlobalConstants.ActionLog.AddText(e.Message, LogLevel.Error);
+                        GlobalConstants.ActionLog.AddText(e.StackTrace, LogLevel.Error);
+                        GlobalConstants.ActionLog.AddText("Could not find accent background colours in file " + file,
+                            LogLevel.Error);
+                        accentBackgroundColours.Add(
+                            "AccentBackground", 
+                            new Dictionary<string, Color>
+                            {
+                                {"default", Color.magenta}
+                            });
+                    }
+
+                    IDictionary<string, Color> accentFontColours = new Dictionary<string, Color>();
+                    try
+                    {
+                        accentFontColours = (from fontColour in uiColours.Elements("MainFontColours")
                                 select new KeyValuePair<string, Color>(
-                                    colours.Element("Name").GetAs<string>(),
-                                    GraphicsHelper.ParseHTMLString(colours.Element("Value").GetAs<string>())))
-                            .ToDictionary(x => x.Key, x => x.Value);
+                                    fontColour.Element("Name").GetAs<string>(),
+                                    GraphicsHelper.ParseHTMLString(fontColour.Element("Value").GetAs<string>())))
+                            .ToDictionary(pair => pair.Key, pair => pair.Value);
                     }
                     catch (Exception e)
                     {
                         GlobalConstants.ActionLog.AddText(e.Message, LogLevel.Error);
                         GlobalConstants.ActionLog.AddText(e.StackTrace, LogLevel.Error);
-                        GlobalConstants.ActionLog.AddText("Could not find UI colours in file " + file, LogLevel.Error);
-                        cursorColours.Add("default", Color.magenta);
-                    }
-
-                    Color mainFontColour = Color.black;
-                    try
-                    {
-                        mainFontColour = GraphicsHelper.ParseHTMLString(culture.Element("MainFontColours")
-                                            .Element("Colour")
-                                            .Element("Value").GetAs<string>());
-                    }
-                    catch (Exception e)
-                    {
-                        GlobalConstants.ActionLog.AddText(e.Message, LogLevel.Error);
-                        GlobalConstants.ActionLog.AddText(e.StackTrace, LogLevel.Error);
-                        GlobalConstants.ActionLog.AddText("Could not find accent font colour in file " + file, LogLevel.Error);
-                        mainFontColour = Color.black;
-                    }
-
-                    IDictionary<string, Color> accentBackgroundColours = new Dictionary<string, Color>();
-                    try
-                    {
-                        accentBackgroundColours = (from colours in culture.Element("AccentBackgroundColours")
-                                    .Elements("Colour")
-                                select new KeyValuePair<string, Color>(
-                                    colours.Element("Name").GetAs<string>(),
-                                    GraphicsHelper.ParseHTMLString(colours.Element("Value").GetAs<string>())))
-                            .ToDictionary(x => x.Key, x => x.Value);
-                    }
-                    catch (Exception e)
-                    {
-                        GlobalConstants.ActionLog.AddText(e.Message, LogLevel.Error);
-                        GlobalConstants.ActionLog.AddText(e.StackTrace, LogLevel.Error);
-                        GlobalConstants.ActionLog.AddText("Could not find accent background colours in file " + file, LogLevel.Error);
-                        accentBackgroundColours.Add("default", Color.magenta);
-                    }
-
-                    Color accentFontColour = Color.black;
-                    try
-                    {
-                        accentFontColour = GraphicsHelper.ParseHTMLString(culture.Element("AccentFontColours")
-                                            .Element("Colour")
-                                            .Element("Value").GetAs<string>());
-                    }
-                    catch (Exception e)
-                    {
-                        GlobalConstants.ActionLog.AddText(e.Message, LogLevel.Error);
-                        GlobalConstants.ActionLog.AddText(e.StackTrace, LogLevel.Error);
-                        GlobalConstants.ActionLog.AddText("Could not find accent font colour in file " + file, LogLevel.Error);
-                        accentFontColour = Color.black;
+                        GlobalConstants.ActionLog.AddText("Could not find accent font colour in file " + file,
+                            LogLevel.Error);
+                        accentFontColours.Add(
+                            "Font",
+                            Color.black);
                     }
 
                     objectIcons.AddSpriteDataFromXML(tileSet, tileSetElement);
@@ -212,25 +229,40 @@ namespace JoyLib.Code.Cultures
                             relationships,
                             romanceDictionary,
                             genderDictionary,
-                            nonConformingGenderChance,
-                            cursorColours,
+                            nonConformingGenderChance, 
                             backgroundColours,
-                            accentBackgroundColours, 
-                            mainFontColour,
-                            accentFontColour));
+                            cursorColours, 
+                            accentBackgroundColours,
+                            mainFontColours,
+                            accentFontColours));
                 }
             }
 
             return cultures;
         }
 
+        protected IDictionary<string, IDictionary<string, Color>> ExtractColourData(
+            XElement element, 
+            string elementName)
+        {
+            return (from colours in element.Elements(elementName)
+                    select new KeyValuePair<string, IDictionary<string, Color>>(
+                        colours.Element("Name").GetAs<string>(),
+                        (from singular in colours.Elements("Colour")
+                            select new KeyValuePair<string, Color>(
+                                singular.Element("Name").GetAs<string>(),
+                                GraphicsHelper.ParseHTMLString(singular.Element("Value").GetAs<string>())))
+                        .ToDictionary(pair => pair.Key, pair => pair.Value)))
+                .ToDictionary(pair => pair.Key, pair => pair.Value);
+        }
+
         public ICulture GetByCultureName(string name)
         {
-            if(this.m_Cultures is null)
+            if (this.m_Cultures is null)
             {
                 this.LoadCultures();
             }
-            
+
             if (this.m_Cultures.ContainsKey(name))
             {
                 return this.m_Cultures[name];
@@ -241,7 +273,7 @@ namespace JoyLib.Code.Cultures
 
         public List<ICulture> GetByCreatureType(string type)
         {
-            if(this.m_Cultures is null)
+            if (this.m_Cultures is null)
             {
                 this.LoadCultures();
             }
@@ -249,8 +281,8 @@ namespace JoyLib.Code.Cultures
             try
             {
                 Dictionary<string, ICulture> cultures = this.m_Cultures.Where(
-                    culture => culture.Value.Inhabitants.Contains(
-                        type, GlobalConstants.STRING_COMPARER))
+                        culture => culture.Value.Inhabitants.Contains(
+                            type, GlobalConstants.STRING_COMPARER))
                     .ToDictionary(pair => pair.Key, pair => pair.Value);
                 return cultures.Values.ToList();
             }
@@ -265,10 +297,11 @@ namespace JoyLib.Code.Cultures
         {
             get
             {
-                if(this.m_Cultures is null)
+                if (this.m_Cultures is null)
                 {
                     this.m_Cultures = this.LoadCultures();
                 }
+
                 return this.m_Cultures.Values.ToArray();
             }
         }

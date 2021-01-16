@@ -56,8 +56,8 @@ namespace JoyLib.Code.Unity.GUI
                 this.PlayerInfo.CurrentCulture.BackgroundColours,
                 this.PlayerInfo.CurrentCulture.CursorColours,
                 this.PlayerInfo.CurrentCulture.AccentBackgroundColours, 
-                this.PlayerInfo.CurrentCulture.MainFontColour,
-                this.PlayerInfo.CurrentCulture.AccentFontColour);
+                this.PlayerInfo.CurrentCulture.MainFontColours,
+                this.PlayerInfo.CurrentCulture.AccentFontColours);
 
             IEntity player = this.GameManager.EntityFactory.CreateFromTemplate(
                 this.PlayerInfo.CurrentTemplate,

@@ -169,7 +169,6 @@ GameObject:
   - component: {fileID: 4802263448509604742}
   - component: {fileID: 4539092107047490646}
   - component: {fileID: 8073272137993143847}
-  - component: {fileID: 1379241629636497988}
   - component: {fileID: 6585752674298197295}
   m_Layer: 5
   m_Name: ActionLog
@@ -301,19 +300,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 32
---- !u!114 &1379241629636497988
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8522065347417231758}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9494a29e1b84457ca857e893dadfa29a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ElementName: AccentBackground
 --- !u!114 &6585752674298197295
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -425,6 +411,7 @@ GameObject:
   - component: {fileID: 8522065348983690788}
   - component: {fileID: 8522065348983690790}
   - component: {fileID: 8522065348983690785}
+  - component: {fileID: 2365279405334431183}
   m_Layer: 5
   m_Name: DragHandle
   m_TagString: Untagged
@@ -527,6 +514,19 @@ MonoBehaviour:
   onEnd:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2365279405334431183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8522065348983690789}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9494a29e1b84457ca857e893dadfa29a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ElementName: AccentBackground
 --- !u!1001 &6082465865701778543
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -20,10 +20,11 @@ namespace JoyLib.Code.Unity
             this.Initialise();
         }
 
-        protected void Initialise()
+        protected override void Initialise()
         {
-            if (LiveItemHandler is null)
+            if (this.Initialised == false)
             {
+                base.Initialise();
                 LiveItemHandler = GlobalConstants.GameManager.ItemHandler;
             }
         }

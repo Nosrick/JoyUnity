@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Objects>
     <TileSet>
-        <Name>DefaultCursor</Name>
+        <Name>Cursors</Name>
         <SpriteData>
             <Name>DefaultCursor</Name>
 

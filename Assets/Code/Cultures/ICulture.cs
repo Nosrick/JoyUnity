@@ -62,12 +62,11 @@ namespace JoyLib.Code.Cultures
         
         RNG Roller { get; }
         
-        IDictionary<string, Color> CursorColours { get; }
-        IDictionary<string, Color> BackgroundColours { get; }
+        IDictionary<string, IDictionary<string, Color>> CursorColours { get; }
+        IDictionary<string, IDictionary<string, Color>> BackgroundColours { get; }
+        IDictionary<string, IDictionary<string, Color>> AccentBackgroundColours { get; }
         
-        Color MainFontColour { get; }
-        
-        IDictionary<string, Color> AccentBackgroundColours { get; }
-        Color AccentFontColour { get; }
+        IDictionary<string, Color> AccentFontColours { get; }
+        IDictionary<string, Color> MainFontColours { get; }
     }
 }

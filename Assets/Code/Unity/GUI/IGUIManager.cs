@@ -15,11 +15,11 @@ namespace JoyLib.Code.Unity.GUI
 
         void ToggleGUI(string name);
 
-        void SetUIColours(IDictionary<string, Color> background,
-            IDictionary<string, Color> cursor,
-            IDictionary<string, Color> accentColours,
-            Color mainFontColour,
-            Color accentFontColour);
+        void SetUIColours(IDictionary<string, IDictionary<string, Color>> background,
+            IDictionary<string, IDictionary<string, Color>> cursor,
+            IDictionary<string, IDictionary<string, Color>> accentColours,
+            IDictionary<string, Color> mainFontColours,
+            IDictionary<string, Color> accentFontColours);
 
         void RecolourGUIs();
 
@@ -43,14 +43,16 @@ namespace JoyLib.Code.Unity.GUI
 
         bool AreAnyOpen();
 
-        ISpriteState Background { get; }
-        ISpriteState Cursor { get; }
+        IDictionary<string, ISpriteState> Backgrounds { get; }
+        IDictionary<string, ISpriteState> Cursors { get; }
 
-        TMP_FontAsset FontToUse { get; }
+        IDictionary<string, TMP_FontAsset> FontsToUse { get; }
         
-        IDictionary<string, Color> CursorColours { get; }
+        IDictionary<string, IDictionary<string, Color>> CursorColours { get; }
         
-        IDictionary<string, Color> BackgroundColours { get; }
+        IDictionary<string, IDictionary<string, Color>> BackgroundColours { get; }
+        
+        IDictionary<string, IDictionary<string, Color>> AccentColours { get; }
         
         float MinFontSize { get; }
         float MaxFontSize { get; }

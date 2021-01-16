@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 272295328214672636}
   - component: {fileID: 272295328214672634}
+  - component: {fileID: 5335036087366903687}
   m_Layer: 0
   m_Name: StatisticPanel
   m_TagString: Untagged
@@ -46,6 +47,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 272295328214672637}
   m_CullTransparentMesh: 0
+--- !u!114 &5335036087366903687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 272295328214672637}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9494a29e1b84457ca857e893dadfa29a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ElementName: SlotBackground
 --- !u!1 &272295328736128933
 GameObject:
   m_ObjectHideFlags: 0
@@ -59,6 +73,7 @@ GameObject:
   - component: {fileID: 272295328736128931}
   - component: {fileID: 272295328736128928}
   - component: {fileID: 4278857939589642836}
+  - component: {fileID: 2925968331797393906}
   m_Layer: 0
   m_Name: DecreaseButton
   m_TagString: Untagged
@@ -166,6 +181,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_AspectMode: 1
   m_AspectRatio: 1
+--- !u!114 &2925968331797393906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 272295328736128933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9494a29e1b84457ca857e893dadfa29a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ElementName: AccentBackground
 --- !u!1 &272295328799682861
 GameObject:
   m_ObjectHideFlags: 0
@@ -313,6 +341,7 @@ GameObject:
   - component: {fileID: 272295329016218252}
   - component: {fileID: 272295329016218249}
   - component: {fileID: 4138076268206224047}
+  - component: {fileID: 8193633891902427577}
   m_Layer: 0
   m_Name: IncreaseButton
   m_TagString: Untagged
@@ -420,6 +449,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_AspectMode: 1
   m_AspectRatio: 1
+--- !u!114 &8193633891902427577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 272295329016218254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9494a29e1b84457ca857e893dadfa29a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ElementName: AccentBackground
 --- !u!1 &272295329296506154
 GameObject:
   m_ObjectHideFlags: 0
@@ -565,7 +607,6 @@ GameObject:
   - component: {fileID: 272295329559688960}
   - component: {fileID: 272295329559688975}
   - component: {fileID: 7921584393079986366}
-  - component: {fileID: 8143451239579754989}
   - component: {fileID: 1934582309651794871}
   m_Layer: 0
   m_Name: Value Item
@@ -632,19 +673,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_AspectMode: 1
   m_AspectRatio: 12.4
---- !u!114 &8143451239579754989
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 272295329559688961}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9494a29e1b84457ca857e893dadfa29a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ElementName: AccentBackground
 --- !u!114 &1934582309651794871
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -804,6 +832,7 @@ GameObject:
   m_Component:
   - component: {fileID: 272295329970670972}
   - component: {fileID: 272295329970670970}
+  - component: {fileID: 325960450533137541}
   m_Layer: 0
   m_Name: NumberPanel
   m_TagString: Untagged
@@ -840,6 +869,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 272295329970670973}
   m_CullTransparentMesh: 0
+--- !u!114 &325960450533137541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 272295329970670973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9494a29e1b84457ca857e893dadfa29a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ElementName: SlotBackground
 --- !u!1 &272295330146475808
 GameObject:
   m_ObjectHideFlags: 0

@@ -59,12 +59,12 @@ namespace JoyLib.Code.Cultures
 
         public RNG Roller { get; protected set; }
 
-        public IDictionary<string, Color> CursorColours { get; protected set; }
-        public IDictionary<string, Color> BackgroundColours { get; protected set; }
-        public IDictionary<string, Color> AccentBackgroundColours { get; protected set; }
+        public IDictionary<string, IDictionary<string, Color>> CursorColours { get; protected set; }
+        public IDictionary<string, IDictionary<string, Color>> BackgroundColours { get; protected set; }
+        public IDictionary<string, IDictionary<string, Color>> AccentBackgroundColours { get; protected set; }
         
-        public Color MainFontColour { get; protected set; }
-        public Color AccentFontColour { get; protected set; }
+        public IDictionary<string, Color> AccentFontColours { get; protected set; }
+        public IDictionary<string, Color> MainFontColours { get; protected set; }
 
         protected const int NO_GROUP = int.MinValue;
 
@@ -86,11 +86,11 @@ namespace JoyLib.Code.Cultures
             Dictionary<string, int> romancePrevalence,
             Dictionary<string, int> genderPrevalence,
             int nonConformingGenderChance,
-            IDictionary<string, Color> cursorColours,
-            IDictionary<string, Color> backgroundColours,
-            IDictionary<string, Color> accentBackgroundColours,
-            Color mainFontColour,
-            Color accentFontColour,
+            IDictionary<string, IDictionary<string, Color>> background,
+            IDictionary<string, IDictionary<string, Color>> cursor,
+            IDictionary<string, IDictionary<string, Color>> accentColours,
+            IDictionary<string, Color> mainFontColours,
+            IDictionary<string, Color> accentFontColours,
             RNG roller = null)
         {
             this.Roller = roller ?? new RNG();
@@ -110,11 +110,11 @@ namespace JoyLib.Code.Cultures
             this.m_GenderPrevalence = genderPrevalence;
             this.NonConformingGenderChance = nonConformingGenderChance;
             
-            this.CursorColours = cursorColours;
-            this.BackgroundColours = backgroundColours;
-            this.MainFontColour = mainFontColour;
-            this.AccentBackgroundColours = accentBackgroundColours;
-            this.AccentFontColour = accentFontColour;
+            this.CursorColours = cursor;
+            this.BackgroundColours = background;
+            this.MainFontColours = mainFontColours;
+            this.AccentBackgroundColours = accentColours;
+            this.AccentFontColours = accentFontColours;
 
             this.ClearLastGroup();
         }

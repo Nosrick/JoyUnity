@@ -3,20 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
 using JoyLib.Code.Graphics;
+using JoyLib.Code.Unity.GUI.Managed_Assets;
 using UnityEngine;
 
 namespace JoyLib.Code.Unity
 {
     [RequireComponent(typeof(RectTransform))]
-    public class ManagedSprite : MonoBehaviour, IAnimated
+    public class ManagedSprite : ManagedElement, IAnimated
     {
         [SerializeField] protected GameObject m_Prefab;
         
         protected string SortingLayer { get; set; }
         
         protected RectTransform MyRect { get; set; }
-        
-        protected bool Initialised { get; set; }
 
         public ISpriteState CurrentSpriteState
         {

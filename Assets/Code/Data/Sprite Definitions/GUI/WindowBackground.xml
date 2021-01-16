@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Objects>
     <TileSet>
-        <Name>WindowBackground</Name>
+        <Name>Windows</Name>
         <SpriteData>
-            <Name>WindowBackground</Name>
+            <Name>DefaultWindow</Name>
 
             <Part>
                 <Name>background</Name>

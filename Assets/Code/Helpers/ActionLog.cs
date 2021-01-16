@@ -78,7 +78,20 @@ namespace JoyLib.Code.Helpers
         {
             if (this.IsEditor)
             {
-                Debug.Log(stringToAdd);
+                switch (logLevel)
+                {
+                    case LogLevel.Warning:
+                        Debug.LogWarning(stringToAdd);
+                        break;
+                    
+                    case LogLevel.Error:
+                        Debug.LogError(stringToAdd);
+                        break;
+                    
+                    default:
+                        Debug.Log(stringToAdd);
+                        break;
+                }
             }
 
             LogEntry entry = new LogEntry

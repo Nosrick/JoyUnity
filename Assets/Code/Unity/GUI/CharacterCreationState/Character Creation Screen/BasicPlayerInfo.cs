@@ -126,8 +126,8 @@ namespace JoyLib.Code.Unity.GUI
                 this.CurrentCulture.BackgroundColours,
                 this.CurrentCulture.CursorColours,
                 this.CurrentCulture.AccentBackgroundColours, 
-                this.CurrentCulture.MainFontColour,
-                this.CurrentCulture.AccentFontColour);
+                this.CurrentCulture.MainFontColours,
+                this.CurrentCulture.AccentFontColours);
         }
 
         protected void SetStatistics()

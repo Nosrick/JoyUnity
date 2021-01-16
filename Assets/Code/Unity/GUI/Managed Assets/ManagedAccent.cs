@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using JoyLib.Code.Graphics;
+using JoyLib.Code.Unity.GUI.Managed_Assets;
 using UnityEngine;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public class ManagedAccent : MonoBehaviour
+
+    public class ManagedAccent : ManagedElement
     {
-        [SerializeField] protected string m_ElementName = "AccentBackground";
-        
-        public bool Initialised { get; protected set; }
         public bool HasBackgroundColours { get; protected set; }
         public bool HasBackgroundImage { get; protected set; }
         
@@ -34,7 +33,7 @@ namespace JoyLib.Code.Unity.GUI
         {
             this.Initialise();
 
-            if (state.Name.Equals(this.m_ElementName, StringComparison.OrdinalIgnoreCase) == false)
+            if (state.Name.Equals(this.ElementName, StringComparison.OrdinalIgnoreCase) == false)
             {
                 return;
             }

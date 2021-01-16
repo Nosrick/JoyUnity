@@ -144,7 +144,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9494a29e1b84457ca857e893dadfa29a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ElementName: AccentBackground
+  m_ElementName: SlotBackground
 --- !u!1 &464444770675075713
 GameObject:
   m_ObjectHideFlags: 0

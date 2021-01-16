@@ -1,16 +1,15 @@
 ﻿using System.Collections.Generic;
 using JoyLib.Code.Graphics;
+using JoyLib.Code.Unity.GUI.Managed_Assets;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public class ManagedBackground : MonoBehaviour
+    public class ManagedBackground : ManagedElement
     {
         [SerializeField] protected ManagedUISprite m_BackgroundPrefab;
-        
-        protected bool Initialised { get; set; }
-        
+
         public bool HasBackground { get; protected set; }
         public bool HasColours { get; protected set; }
 
