@@ -18,7 +18,8 @@ namespace JoyLib.Code.Unity.GUI
         void SetUIColours(IDictionary<string, Color> background,
             IDictionary<string, Color> cursor,
             IDictionary<string, Color> accentColours,
-            Color accentFonts);
+            Color mainFontColour,
+            Color accentFontColour);
 
         void RecolourGUIs();
 

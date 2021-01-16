@@ -160,7 +160,18 @@
 				<Name>background</Name>
 				<Value>#73dcffff</Value>
 			</Colour>
+			<Colour>
+				<Name>border</Name>
+				<Value>#4196dcff</Value>
+			</Colour>
 		</AccentBackgroundColours>
+
+		<MainFontColours>
+			<Colour>
+				<Name>default</Name>
+				<Value>#23234bff</Value>
+			</Colour>
+		</MainFontColours>
 
 		<AccentFontColours>
 			<Colour>

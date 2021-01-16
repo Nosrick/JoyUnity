@@ -11,17 +11,24 @@ namespace JoyLib.Code.Unity
 
         public override void Awake()
         {
-            if (this.ImageParts is null == false)
+            this.Initialise();
+        }
+
+        protected override void Initialise()
+        {
+            if (this.Initialised)
             {
                 return;
             }
             
-            base.Awake();
+            base.Initialise();
             this.ImageParts = new List<Image>();
         }
 
         public override void Clear()
         {
+            this.Initialise();
+
             this.m_States = new Dictionary<string, ISpriteState>();
             foreach (Image part in this.ImageParts)
             {
@@ -31,6 +38,8 @@ namespace JoyLib.Code.Unity
 
         public override void OverrideAllColours(IDictionary<string, Color> colours)
         {
+            this.Initialise();
+
             foreach (ISpriteState state in this.m_States.Values)
             {
                 state.OverrideColours(colours);
@@ -46,6 +55,8 @@ namespace JoyLib.Code.Unity
         
         protected override void UpdateSprites()
         {
+            this.Initialise();
+
             foreach (Image spritePart in this.ImageParts)
             {
                 spritePart.gameObject.SetActive(false);

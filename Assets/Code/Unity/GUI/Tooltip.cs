@@ -15,9 +15,9 @@ namespace JoyLib.Code.Unity.GUI
     {
         [SerializeField] protected TextMeshProUGUI m_Title;
         [SerializeField] protected TextMeshProUGUI m_Text;
-        [SerializeField] protected ManagedUISprite m_Icon;
         [SerializeField] protected RectTransform m_IconSlot;
-        [SerializeField] protected Image m_Background;
+        [SerializeField] protected ManagedUISprite m_Icon;
+        [SerializeField] protected GameObject m_Background;
         [SerializeField] protected StringPairContainer m_ItemPrefab;
         [SerializeField] protected LayoutGroup m_ParentLayout;
         [SerializeField] protected Vector2 m_PositionOffset;
@@ -137,7 +137,7 @@ namespace JoyLib.Code.Unity.GUI
                 }
             }
            
-            this.m_Background.gameObject.SetActive(showBackground);
+            this.m_Background.SetActive(showBackground);
             
             LayoutRebuilder.ForceRebuildLayoutImmediate(this.RectTransform);
         }

@@ -33,6 +33,8 @@ namespace JoyLib.Code.Unity.GUI
 
         public float MinFontSize { get; protected set; }
         public float MaxFontSize { get; protected set; }
+        
+        public Color FontColour { get; protected set; } 
 
         public GUIManager()
         {
@@ -70,6 +72,7 @@ namespace JoyLib.Code.Unity.GUI
                 this.AccentColours = new Dictionary<string, Color>();
                 this.FontToUse = Resources.Load<TMP_FontAsset>("Fonts/OpenDyslexic3");
                 this.AccentFontColour = Color.black;
+                this.FontColour = Color.black;
                 this.MinFontSize = 10f;
                 this.MaxFontSize = 36f;
                 this.LoadDefaults();
@@ -92,6 +95,8 @@ namespace JoyLib.Code.Unity.GUI
                                 Resources.Load<TMP_FontAsset>("Fonts/" + data.Element("Value").GetAs<string>());
                             this.MinFontSize = data.Element("MinFontSize").DefaultIfEmpty(10f);
                             this.MaxFontSize = data.Element("MaxFontSize").DefaultIfEmpty(36f);
+                            this.FontColour =
+                                GraphicsHelper.ParseHTMLString(data.Element("FontColour").DefaultIfEmpty("#000000ff"));
                             break;
 
                         default:
@@ -109,10 +114,12 @@ namespace JoyLib.Code.Unity.GUI
             IDictionary<string, Color> background,
             IDictionary<string, Color> cursor,
             IDictionary<string, Color> accentColours,
+            Color mainFontColour,
             Color accentFontColour)
         {
             this.BackgroundColours = background;
             this.CursorColours = cursor;
+            this.FontColour = mainFontColour;
             this.AccentColours = accentColours;
             this.AccentFontColour = accentFontColour;
 
@@ -155,51 +162,7 @@ namespace JoyLib.Code.Unity.GUI
             gui.GUIManager = this;
             gui.Close();
 
-            foreach (ManagedBackground background in gui.GetComponentsInChildren<ManagedBackground>(true))
-            {
-                if (background.HasBackground == false)
-                {
-                    background.SetBackground(this.Background);
-                }
-
-                if (background.HasColours == false)
-                {
-                    background.SetColours(this.BackgroundColours);
-                }
-            }
-
-            foreach (ManagedFonts font in gui.GetComponentsInChildren<ManagedFonts>(true))
-            {
-                if (font.HasFont == false)
-                {
-                    font.SetFonts(this.FontToUse);
-                    font.SetMinMaxFontSizes(this.MinFontSize, this.MaxFontSize);
-                }
-            }
-
-            foreach (ManagedAccent accent in gui.GetComponentsInChildren<ManagedAccent>(true))
-            {
-                if (accent.HasFont == false)
-                {
-                    accent.SetFonts(this.FontToUse);
-                    accent.SetMinMaxFontSizes(this.MinFontSize, this.MaxFontSize);
-                }
-
-                if (accent.HasFontColours == false)
-                {
-                    accent.SetFontColour(this.AccentFontColour);
-                }
-
-                if (accent.HasBackgroundImage == false)
-                {
-                    accent.SetBackgrounds(this.AccentBackground);
-                }
-
-                if (accent.HasBackgroundColours == false)
-                {
-                    accent.SetBackgroundColours(this.AccentColours);
-                }
-            }
+            this.SetupManagedComponents(gui);
 
             this.GUIs.Add(gui);
         }
@@ -208,24 +171,7 @@ namespace JoyLib.Code.Unity.GUI
         {
             foreach (GUIData gui in this.GUIs)
             {
-                foreach (ManagedBackground background in gui.GetComponentsInChildren<ManagedBackground>(true))
-                {
-                    background.SetBackground(this.Background);
-                    background.SetColours(this.BackgroundColours);
-                }
-                foreach(ManagedFonts font in gui.GetComponentsInChildren<ManagedFonts>(true))
-                {
-                    font.SetFonts(this.FontToUse);
-                    font.SetMinMaxFontSizes(this.MinFontSize, this.MaxFontSize);
-                }
-
-                foreach (ManagedAccent accent in gui.GetComponentsInChildren<ManagedAccent>(true))
-                {
-                        accent.SetFonts(this.FontToUse);
-                        accent.SetMinMaxFontSizes(this.MinFontSize, this.MaxFontSize);
-                        accent.SetFontColour(this.AccentFontColour);
-                        accent.SetBackgroundColours(this.AccentColours);
-                }
+                this.SetupManagedComponents(gui);
             }
 
             Cursor cursor = null;
@@ -234,6 +180,32 @@ namespace JoyLib.Code.Unity.GUI
             {
                 cursor.SetCursorSprites(this.Cursor);
                 cursor.SetCursorColours(this.CursorColours);
+            }
+        }
+
+        protected void SetupManagedComponents(GUIData gui)
+        {
+            foreach (ManagedBackground background in gui.GetComponentsInChildren<ManagedBackground>(true))
+            {
+                background.SetBackground(this.Background);
+                background.SetColours(this.BackgroundColours);
+            }
+            foreach(ManagedFonts font in gui.GetComponentsInChildren<ManagedFonts>(true))
+            {
+                font.SetFonts(this.FontToUse);
+                font.SetMinMaxFontSizes(this.MinFontSize, this.MaxFontSize);
+                font.SetFontColour(this.FontColour);
+            }
+
+            foreach (ManagedAccent accent in gui.GetComponentsInChildren<ManagedAccent>(true))
+            {
+                accent.SetBackgrounds(this.AccentBackground);
+                accent.SetBackgroundColours(this.AccentColours);
+
+                if (accent.TryGetComponent(out ManagedFonts fonts))
+                {
+                    fonts.SetFontColour(this.AccentFontColour);
+                }
             }
         }
 

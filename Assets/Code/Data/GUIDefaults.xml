@@ -3,5 +3,7 @@
     <Data>
         <Name>Font</Name>
         <Value>OpenDyslexic3</Value>
+        <MinFontSize>8</MinFontSize>
+        <MaxFontSize>24</MaxFontSize>
     </Data>
 </GUIData>

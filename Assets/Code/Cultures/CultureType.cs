@@ -62,6 +62,8 @@ namespace JoyLib.Code.Cultures
         public IDictionary<string, Color> CursorColours { get; protected set; }
         public IDictionary<string, Color> BackgroundColours { get; protected set; }
         public IDictionary<string, Color> AccentBackgroundColours { get; protected set; }
+        
+        public Color MainFontColour { get; protected set; }
         public Color AccentFontColour { get; protected set; }
 
         protected const int NO_GROUP = int.MinValue;
@@ -87,6 +89,7 @@ namespace JoyLib.Code.Cultures
             IDictionary<string, Color> cursorColours,
             IDictionary<string, Color> backgroundColours,
             IDictionary<string, Color> accentBackgroundColours,
+            Color mainFontColour,
             Color accentFontColour,
             RNG roller = null)
         {
@@ -109,6 +112,7 @@ namespace JoyLib.Code.Cultures
             
             this.CursorColours = cursorColours;
             this.BackgroundColours = backgroundColours;
+            this.MainFontColour = mainFontColour;
             this.AccentBackgroundColours = accentBackgroundColours;
             this.AccentFontColour = accentFontColour;
 

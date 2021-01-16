@@ -147,6 +147,21 @@ namespace JoyLib.Code.Cultures
                         cursorColours.Add("default", Color.magenta);
                     }
 
+                    Color mainFontColour = Color.black;
+                    try
+                    {
+                        mainFontColour = GraphicsHelper.ParseHTMLString(culture.Element("MainFontColours")
+                                            .Element("Colour")
+                                            .Element("Value").GetAs<string>());
+                    }
+                    catch (Exception e)
+                    {
+                        GlobalConstants.ActionLog.AddText(e.Message, LogLevel.Error);
+                        GlobalConstants.ActionLog.AddText(e.StackTrace, LogLevel.Error);
+                        GlobalConstants.ActionLog.AddText("Could not find accent font colour in file " + file, LogLevel.Error);
+                        mainFontColour = Color.black;
+                    }
+
                     IDictionary<string, Color> accentBackgroundColours = new Dictionary<string, Color>();
                     try
                     {
@@ -177,7 +192,7 @@ namespace JoyLib.Code.Cultures
                         GlobalConstants.ActionLog.AddText(e.Message, LogLevel.Error);
                         GlobalConstants.ActionLog.AddText(e.StackTrace, LogLevel.Error);
                         GlobalConstants.ActionLog.AddText("Could not find accent font colour in file " + file, LogLevel.Error);
-                        accentBackgroundColours.Add("default", Color.black);
+                        accentFontColour = Color.black;
                     }
 
                     objectIcons.AddSpriteDataFromXML(tileSet, tileSetElement);
@@ -200,7 +215,8 @@ namespace JoyLib.Code.Cultures
                             nonConformingGenderChance,
                             cursorColours,
                             backgroundColours,
-                            accentBackgroundColours,
+                            accentBackgroundColours, 
+                            mainFontColour,
                             accentFontColour));
                 }
             }

@@ -5,6 +5,10 @@ namespace JoyLib.Code.Unity.GUI
 {
     public class ManagedFonts : MonoBehaviour
     {
+        [SerializeField] protected bool m_OverrideSize = true;
+        [SerializeField] protected bool m_OverrideColour = true;
+        [SerializeField] protected bool m_OverrideOutline = true;
+        
         protected bool Initialised { get; set; }
         
         protected TextMeshProUGUI[] Texts { get; set; }
@@ -38,6 +42,12 @@ namespace JoyLib.Code.Unity.GUI
             {
                 this.Awake();
             }
+
+            if (this.m_OverrideColour == false)
+            {
+                return;
+            }
+            
             foreach (var text in this.Texts)
             {
                 text.color = colour;
@@ -52,6 +62,11 @@ namespace JoyLib.Code.Unity.GUI
             {
                 this.Awake();
             }
+
+            if (this.m_OverrideOutline == false)
+            {
+                return;
+            }
             foreach (var text in this.Texts)
             {
                 text.outlineWidth = thickness;
@@ -61,6 +76,11 @@ namespace JoyLib.Code.Unity.GUI
 
         public void SetMinMaxFontSizes(float min, float max)
         {
+            if (this.m_OverrideSize == false)
+            {
+                return;
+            }
+            
             foreach (var text in this.Texts)
             {
                 if (min > 0)
@@ -77,6 +97,10 @@ namespace JoyLib.Code.Unity.GUI
 
         public void SetFontSizes(float size)
         {
+            if (this.m_OverrideSize == false)
+            {
+                return;
+            }
             if (this.Initialised == false)
             {
                 this.Awake();

@@ -15,6 +15,8 @@ namespace JoyLib.Code.Unity
         protected string SortingLayer { get; set; }
         
         protected RectTransform MyRect { get; set; }
+        
+        protected bool Initialised { get; set; }
 
         public ISpriteState CurrentSpriteState
         {
@@ -80,7 +82,12 @@ namespace JoyLib.Code.Unity
 
         public virtual void Awake()
         {
-            if (this.m_States is null == false)
+            this.Initialise();
+        }
+
+        protected virtual void Initialise()
+        {
+            if (this.Initialised)
             {
                 return;
             }
@@ -88,10 +95,13 @@ namespace JoyLib.Code.Unity
             this.SpriteParts = new List<SpriteRenderer>();
             this.m_States = new Dictionary<string, ISpriteState>();
             this.MyRect = this.GetComponent<RectTransform>();
+
+            this.Initialised = true;
         }
 
         public virtual void AddSpriteState(ISpriteState state, bool changeToNew = true)
         {
+            this.Initialise();
             this.m_States.Add(state.Name, state);
             this.IsDirty = true;
             if (changeToNew)
@@ -102,6 +112,8 @@ namespace JoyLib.Code.Unity
 
         public virtual void SetSpriteLayer(string layerName)
         {
+            this.Initialise();
+
             this.SortingLayer = layerName;
             foreach (SpriteRenderer spriteRenderer in this.SpriteParts)
             {
@@ -127,6 +139,8 @@ namespace JoyLib.Code.Unity
 
         public virtual void ChangeState(string name)
         {
+            this.Initialise();
+
             if (this.m_States.ContainsKey(name))
             {
                 this.ChosenSprite = name;
@@ -150,6 +164,8 @@ namespace JoyLib.Code.Unity
 
         public virtual void Clear()
         {
+            this.Initialise();
+
             this.m_States = new Dictionary<string, ISpriteState>();
             foreach (SpriteRenderer part in this.SpriteParts)
             {
@@ -182,6 +198,8 @@ namespace JoyLib.Code.Unity
 
         public virtual void OverrideAllColours(IDictionary<string, Color> colours)
         {
+            this.Initialise();
+
             foreach (ISpriteState state in this.m_States.Values)
             {
                 state.OverrideColours(colours);
@@ -196,6 +214,8 @@ namespace JoyLib.Code.Unity
 
         protected virtual void UpdateSprites()
         {
+            this.Initialise();
+
             foreach (SpriteRenderer spritePart in this.SpriteParts)
             {
                 spritePart.gameObject.SetActive(false);

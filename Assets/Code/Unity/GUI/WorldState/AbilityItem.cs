@@ -7,7 +7,6 @@ using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    [RequireComponent(typeof(Image))]
     public class AbilityItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         [SerializeField] protected ValueContainer m_Parent;
@@ -67,6 +66,8 @@ namespace JoyLib.Code.Unity.GUI
             {
                 return;
             }
+
+            this.Selected = !this.Selected;
 
             this.OnSelect?.Invoke(this, new ValueChangedEventArgs
             {

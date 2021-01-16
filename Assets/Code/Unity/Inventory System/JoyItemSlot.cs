@@ -3,6 +3,7 @@ using System.Linq;
 using JoyLib.Code.Conversation;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -17,10 +18,10 @@ namespace JoyLib.Code.Unity.GUI
         protected Image m_CooldownOverlay;
         
         [SerializeField]
-        protected Text m_Cooldown;
+        protected TextMeshProUGUI m_Cooldown;
         
         [SerializeField]
-        protected Text m_ItemName;
+        protected TextMeshProUGUI m_ItemName;
         
         [SerializeField]
         protected bool m_UseRarityColor = false;
@@ -29,7 +30,7 @@ namespace JoyLib.Code.Unity.GUI
         protected ManagedUISprite m_Icon;
         
         [SerializeField]
-        protected Text m_Stack;
+        protected TextMeshProUGUI m_Stack;
 
         public string m_Slot;
         
