@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
@@ -195,7 +196,7 @@ namespace JoyLib.Code.Unity
             }
         }
 
-        public virtual void OverrideAllColours(IDictionary<string, Color> colours)
+        public virtual void OverrideAllColours(IDictionary<string, Color> colours, bool crossFade = false)
         {
             this.Initialise();
 
@@ -203,10 +204,17 @@ namespace JoyLib.Code.Unity
             {
                 state.OverrideColours(colours);
             }
-
-            for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
+            
+            if (crossFade)
             {
-                this.SpriteParts[i].color = this.CurrentSpriteState.SpriteData.m_Parts[i].SelectedColour; 
+                this.StartColourTransition(colours.First().Value, 0.4f);
+            }
+            else
+            {
+                for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
+                {
+                    this.SpriteParts[i].color = this.CurrentSpriteState.SpriteData.m_Parts[i].SelectedColour; 
+                }
             }
             this.IsDirty = true;
         }
@@ -244,6 +252,30 @@ namespace JoyLib.Code.Unity
                 this.SpriteParts[i].sortingOrder = this.CurrentSpriteState.SpriteData.m_Parts[i].m_SortingOrder;
                 this.SpriteParts[i].sortingLayerName = this.SortingLayer;
                 this.SpriteParts[i].drawMode = this.CurrentSpriteState.SpriteData.m_Parts[i].m_SpriteDrawMode;
+            }
+        }
+
+        public virtual void StartColourTransition(Color colour, float duration)
+        {
+            foreach (SpriteRenderer part in this.SpriteParts.Where(spriteRenderer => spriteRenderer.enabled))
+            {
+                this.StartCoroutine(this.ColourLerp(colour, duration, part));
+            }
+        }
+
+        protected virtual IEnumerator ColourLerp(Color newColour, float duration, SpriteRenderer spriteRenderer)
+        {
+            Color original = spriteRenderer.color;
+
+            float startTime = Time.time;
+            float percentage = 0f;
+
+            while (percentage < 1f)
+            {
+                float elapsedTime = Time.time - startTime;
+                percentage = elapsedTime / duration;
+                spriteRenderer.color = Color.Lerp(original, newColour, percentage);
+                yield return null;
             }
         }
     }

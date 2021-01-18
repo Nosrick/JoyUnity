@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using JoyLib.Code.Graphics;
 using UnityEngine;
 using UnityEngine.UI;
@@ -36,7 +37,7 @@ namespace JoyLib.Code.Unity
             }
         }
 
-        public override void OverrideAllColours(IDictionary<string, Color> colours)
+        public override void OverrideAllColours(IDictionary<string, Color> colours, bool crossFade = false)
         {
             this.Initialise();
 
@@ -45,11 +46,18 @@ namespace JoyLib.Code.Unity
                 state.OverrideColours(colours);
             }
             
-            for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
+            if (crossFade)
             {
-                this.ImageParts[i].color = this.CurrentSpriteState.SpriteData.m_Parts[i].SelectedColour; 
+                this.StartColourTransition(colours.First().Value, 0.4f);
             }
-
+            else
+            {
+                for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
+                {
+                    this.ImageParts[i].color = this.CurrentSpriteState.SpriteData.m_Parts[i].SelectedColour; 
+                }
+            }
+            
             this.IsDirty = true;
         }
         
@@ -77,6 +85,14 @@ namespace JoyLib.Code.Unity
                 this.ImageParts[i].sprite = data[i].Item2;
                 this.ImageParts[i].color = data[i].Item1;
                 this.ImageParts[i].type = this.CurrentSpriteState.SpriteData.m_Parts[i].m_ImageFillType;
+            }
+        }
+
+        public override void StartColourTransition(Color colour, float duration)
+        {
+            foreach (Image part in this.ImageParts.Where(image => image.enabled))
+            {
+                part.CrossFadeColor(colour, duration, false, true);
             }
         }
     }

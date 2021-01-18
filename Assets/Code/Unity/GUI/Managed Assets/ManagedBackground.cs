@@ -60,7 +60,7 @@ namespace JoyLib.Code.Unity.GUI
                 return;
             }
 
-            this.m_BackgroundInstance.OverrideAllColours(colours);
+            this.m_BackgroundInstance.OverrideAllColours(colours, true);
             this.HasColours = true;
         }
     }
