@@ -15,26 +15,23 @@ namespace JoyLib.Code.Unity.GUI
     {
         protected HashSet<GUIData> GUIs { get; set; }
         protected HashSet<GUIData> ActiveGUIs { get; set; }
-        
+
         protected Canvas MainUI { get; set; }
-        
+
         public IDictionary<string, ISpriteState> Backgrounds { get; protected set; }
         public IDictionary<string, ISpriteState> Cursors { get; protected set; }
 
         public IDictionary<string, ISpriteState> AccentBackgrounds { get; protected set; }
 
         public IDictionary<string, TMP_FontAsset> FontsToUse { get; protected set; }
-        
+
         public IDictionary<string, IDictionary<string, Color>> CursorColours { get; protected set; }
         public IDictionary<string, IDictionary<string, Color>> BackgroundColours { get; protected set; }
 
-        public IDictionary<string, IDictionary<string, Color>> AccentColours { get; protected set; }
-        public IDictionary<string, Color> AccentFontColours { get; protected set; }
-
         public float MinFontSize { get; protected set; }
         public float MaxFontSize { get; protected set; }
-        
-        public IDictionary<string, Color> FontColours { get; protected set; } 
+
+        public IDictionary<string, Color> FontColours { get; protected set; }
 
         public GUIManager()
         {
@@ -52,7 +49,7 @@ namespace JoyLib.Code.Unity.GUI
                     .Select(data => new SpriteState(data.m_Name, data))
                     .Cast<ISpriteState>()
                     .ToDictionary(state => state.Name, state => state);
-                    
+
 
                 this.Cursors = GlobalConstants.GameManager.ObjectIconHandler.GetTileSet("Cursors")
                     .Select(data => new SpriteState(data.m_Name, data))
@@ -66,14 +63,9 @@ namespace JoyLib.Code.Unity.GUI
 
                 this.CursorColours = new Dictionary<string, IDictionary<string, Color>>();
                 this.BackgroundColours = new Dictionary<string, IDictionary<string, Color>>();
-                this.AccentColours = new Dictionary<string, IDictionary<string, Color>>();
                 this.FontsToUse = new Dictionary<string, TMP_FontAsset>
                 {
                     {"default", Resources.Load<TMP_FontAsset>("Fonts/OpenDyslexic3")}
-                };
-                this.AccentFontColours = new Dictionary<string, Color>
-                {
-                    {"default", Color.black}
                 };
                 this.FontColours = new Dictionary<string, Color>
                 {
@@ -94,20 +86,13 @@ namespace JoyLib.Code.Unity.GUI
                 XElement doc = XElement.Load(file);
                 foreach (XElement data in doc.Elements("Data"))
                 {
-                    switch (data.Element("Name").GetAs<string>())
-                    {
-                        case "Font":
-                            this.FontsToUse["default"] =
-                                Resources.Load<TMP_FontAsset>("Fonts/" + data.Element("Value").GetAs<string>());
-                            this.MinFontSize = data.Element("MinFontSize").DefaultIfEmpty(10f);
-                            this.MaxFontSize = data.Element("MaxFontSize").DefaultIfEmpty(36f);
-                            this.FontColours["default"] = 
-                                GraphicsHelper.ParseHTMLString(data.Element("FontColour").DefaultIfEmpty("#000000ff"));
-                            break;
-
-                        default:
-                            break;
-                    }
+                    this.FontsToUse.Add(
+                        data.Element("Name").GetAs<string>(),
+                        Resources.Load<TMP_FontAsset>("Fonts/" + data.Element("Value").GetAs<string>()));
+                    this.MinFontSize = data.Element("MinFontSize").DefaultIfEmpty(10f);
+                    this.MaxFontSize = data.Element("MaxFontSize").DefaultIfEmpty(36f);
+                    this.FontColours["default"] =
+                        GraphicsHelper.ParseHTMLString(data.Element("FontColour").DefaultIfEmpty("#000000ff"));
                 }
             }
             else
@@ -116,18 +101,13 @@ namespace JoyLib.Code.Unity.GUI
             }
         }
 
-        public void SetUIColours(
-            IDictionary<string, IDictionary<string, Color>> background,
+        public void SetUIColours(IDictionary<string, IDictionary<string, Color>> background,
             IDictionary<string, IDictionary<string, Color>> cursor,
-            IDictionary<string, IDictionary<string, Color>> accentColours,
-            IDictionary<string, Color> mainFontColours,
-            IDictionary<string, Color> accentFontColours)
+            IDictionary<string, Color> mainFontColours)
         {
-                this.BackgroundColours = background;
-                this.CursorColours = cursor;
-                this.FontColours = mainFontColours;
-                this.AccentColours = accentColours;
-                this.AccentFontColours = accentFontColours;
+            this.BackgroundColours = background;
+            this.CursorColours = cursor;
+            this.FontColours = mainFontColours;
 
             this.RecolourGUIs();
         }
@@ -143,7 +123,7 @@ namespace JoyLib.Code.Unity.GUI
             Canvas mainUI = null;
             SceneManager.GetActiveScene().GetRootGameObjects().First(o => o.TryGetComponent(out mainUI));
             this.MainUI = mainUI;
-            
+
             GUIData[] guiData = this.MainUI.GetComponentsInChildren<GUIData>(true);
             foreach (GUIData data in guiData)
             {
@@ -188,31 +168,97 @@ namespace JoyLib.Code.Unity.GUI
         {
             foreach (ManagedBackground background in gui.GetComponentsInChildren<ManagedBackground>(true))
             {
-                background.SetBackground(this.Backgrounds[background.ElementName]);
-                background.SetColours(this.BackgroundColours[background.ElementName]);
+                if (this.Backgrounds.TryGetValue(background.ElementName, out ISpriteState state))
+                {
+                    background.SetBackground(state);
+                }
+                else
+                {
+                    GlobalConstants.ActionLog.AddText(
+                        "Could not find background " + background.ElementName + " on element " +
+                        background.name, LogLevel.Warning);
+                }
+
+                if (this.BackgroundColours.TryGetValue(background.ElementName, out IDictionary<string, Color> colours))
+                {
+                    background.SetColours(colours);
+                }
+                else
+                {
+                    GlobalConstants.ActionLog.AddText("Could not find background colours " + background.ElementName +
+                                                      " on element " +
+                                                      background.name, LogLevel.Warning);
+                }
             }
-            foreach(ManagedFonts font in gui.GetComponentsInChildren<ManagedFonts>(true))
+
+            foreach (ManagedFonts font in gui.GetComponentsInChildren<ManagedFonts>(true))
             {
-                font.SetFonts(this.FontsToUse[font.ElementName]);
+                if (this.FontsToUse.TryGetValue(font.ElementName, out TMP_FontAsset fontToUse))
+                {
+                    font.SetFonts(fontToUse);
+                }
+                else
+                {
+                    GlobalConstants.ActionLog.AddText("Could not find font " + font.ElementName + " on element " +
+                                                      font.name, LogLevel.Warning);
+                }
+
                 font.SetMinMaxFontSizes(this.MinFontSize, this.MaxFontSize);
-                font.SetFontColour(this.FontColours[font.ElementName]);
+
+                if (this.FontColours.TryGetValue(font.ElementName, out Color colour))
+                {
+                    font.SetFontColour(colour);
+                }
+                else
+                {
+                    GlobalConstants.ActionLog.AddText("Could not find font colour " + font.ElementName +
+                                                      " on element " + font.name,
+                        LogLevel.Warning);
+                }
             }
 
             foreach (ManagedAccent accent in gui.GetComponentsInChildren<ManagedAccent>(true))
             {
-                try
+                if (this.AccentBackgrounds.TryGetValue(accent.ElementName, out ISpriteState state))
                 {
-                    accent.SetBackgrounds(this.AccentBackgrounds[accent.ElementName]);
+                    accent.SetBackgrounds(state);
                 }
-                catch
+                else
                 {
-                    GlobalConstants.ActionLog.AddText("Could not find accent element " + accent.ElementName, LogLevel.Error);
+                    GlobalConstants.ActionLog.AddText("Could not find accent element " + accent.ElementName
+                        + " on element " + accent.name,
+                        LogLevel.Warning);
                 }
-                accent.SetBackgroundColours(this.AccentColours[accent.ElementName]);
 
-                if (accent.TryGetComponent(out ManagedFonts fonts))
+                if (this.BackgroundColours.TryGetValue(accent.ElementName, out IDictionary<string, Color> colours))
                 {
-                    fonts.SetFontColour(this.AccentFontColours[accent.ElementName]);
+                    accent.SetBackgroundColours(colours);
+                }
+                else
+                {
+                    GlobalConstants.ActionLog.AddText("Could not find accent colour element " + accent.ElementName
+                        + " on element " + accent.name,
+                        LogLevel.Warning);
+                }
+
+                if (!accent.TryGetComponent(out ManagedFonts fonts))
+                {
+                    continue;
+                }
+
+                if (this.FontColours.TryGetValue(fonts.ElementName, out Color accentColour))
+                {
+                    fonts.SetFontColour(accentColour);
+                }
+                else if (this.FontColours.TryGetValue(fonts.ElementName, out Color mainColour))
+                {
+                    fonts.SetFontColour(mainColour);
+                }
+                else
+                {
+                    GlobalConstants.ActionLog.AddText("Could not find font colour " + fonts.ElementName
+                        + " on element " + fonts.name,
+                        LogLevel.Warning);
                 }
             }
         }
@@ -244,6 +290,7 @@ namespace JoyLib.Code.Unity.GUI
                 {
                     this.BringToFront(openGUI.name);
                 }
+
                 return openGUI;
             }
 
@@ -371,6 +418,7 @@ namespace JoyLib.Code.Unity.GUI
             {
                 data.Close();
             }
+
             this.ActiveGUIs.RemoveWhere(guiData => guiData.m_AlwaysOpen == false);
         }
 

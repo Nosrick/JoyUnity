@@ -193,7 +193,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9494a29e1b84457ca857e893dadfa29a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ElementName: AccentBackground
+  m_ElementName: SlotBackground
 --- !u!1 &272295328799682861
 GameObject:
   m_ObjectHideFlags: 0
@@ -461,7 +461,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9494a29e1b84457ca857e893dadfa29a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ElementName: AccentBackground
+  m_ElementName: SlotBackground
 --- !u!1 &272295329296506154
 GameObject:
   m_ObjectHideFlags: 0
@@ -685,6 +685,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 633ae74873e44ccbaf68a8b7d041f428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_ElementName: AccentFont
   m_OverrideSize: 1
   m_OverrideColour: 1
   m_OverrideOutline: 1

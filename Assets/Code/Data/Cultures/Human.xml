@@ -187,78 +187,80 @@
 
 		<UIColours>
 			<CursorColours>
-				<Name>DefaultCursor</Name>
-				<Colour>
-					<Name>CursorHighlight</Name>
-					<Value>#b45a50ff</Value>
-				</Colour>
-				<Colour>
-					<Name>CursorBright</Name>
-					<Value>#823219ff</Value>
-				</Colour>
-				<Colour>
-					<Name>CursorMid</Name>
-					<Value>#823219ff</Value>
-				</Colour>
-				<Colour>
-					<Name>CursorDark</Name>
-					<Value>#d77e4bff</Value>
-				</Colour>
-				<Colour>
-					<Name>CursorOutline</Name>
-					<Value>#490606ff</Value>
-				</Colour>
+				<Data>
+					<Name>DefaultCursor</Name>
+					<Colour>
+						<Name>CursorHighlight</Name>
+						<Value>#b45a50ff</Value>
+					</Colour>
+					<Colour>
+						<Name>CursorBright</Name>
+						<Value>#823219ff</Value>
+					</Colour>
+					<Colour>
+						<Name>CursorMid</Name>
+						<Value>#823219ff</Value>
+					</Colour>
+					<Colour>
+						<Name>CursorDark</Name>
+						<Value>#d77e4bff</Value>
+					</Colour>
+					<Colour>
+						<Name>CursorOutline</Name>
+						<Value>#490606ff</Value>
+					</Colour>
+				</Data>
 			</CursorColours>
 
 			<BackgroundColours>
-				<Name>DefaultWindow</Name>
-				<Colour>
-					<Name>background</Name>
-					<Value>#823219ff</Value>
-				</Colour>
-				<Colour>
-					<Name>border</Name>
-					<Value>#490606ff</Value>
-				</Colour>
+				<Data>
+					<Name>DefaultWindow</Name>
+					<Colour>
+						<Name>background</Name>
+						<Value>#823219ff</Value>
+					</Colour>
+					<Colour>
+						<Name>border</Name>
+						<Value>#490606ff</Value>
+					</Colour>
+				</Data>
+				<Data>
+					<Name>SlotBackground</Name>
+					<Colour>
+						<Name>background</Name>
+						<Value>#490606ff</Value>
+					</Colour>
+					<Colour>
+						<Name>border</Name>
+						<Value>#823219ff</Value>
+					</Colour>
+				</Data>
+				<Data>
+					<Name>AccentBackground</Name>
+					<Colour>
+						<Name>background</Name>
+						<Value>#490606ff</Value>
+					</Colour>
+				</Data>
+				<Data>
+					<Name>SecondaryAccent</Name>
+					<Colour>
+						<Name>background</Name>
+						<Value>#823219ff</Value>
+					</Colour>
+				</Data>
 			</BackgroundColours>
 
-			<AccentBackgroundColours>
-				<Name>SlotBackground</Name>
-				<Colour>
-					<Name>background</Name>
-					<Value>#490606ff</Value>
-				</Colour>
-				<Colour>
-					<Name>border</Name>
-					<Value>#823219ff</Value>
-				</Colour>
-			</AccentBackgroundColours>
-
-			<AccentBackgroundColours>
-				<Name>AccentBackground</Name>
-				<Colour>
-					<Name>background</Name>
-					<Value>#490606ff</Value>
-				</Colour>
-			</AccentBackgroundColours>
-
-			<AccentBackgroundColours>
-				<Name>SecondaryAccent</Name>
-				<Colour>
-					<Name>background</Name>
-					<Value>#823219ff</Value>
-				</Colour>
-			</AccentBackgroundColours>
-
-			<MainFontColours>
-				<Name>Font</Name>
-				<Value>#fafaebff</Value>
-			</MainFontColours>
-
-			<AccentFontColours>
-				<Name>AccentFont</Name>
-				<Value>#fafaebff</Value>
-			</AccentFontColours>
+			<FontColours>
+				<Data>
+					<Name>Font</Name>
+					<Value>#fafaebff</Value>
+				</Data>
+				<Data>
+					<Name>AccentFont</Name>
+					<Value>#fafaebff</Value>
+				</Data>
+			</FontColours>
 		</UIColours>
 	</Culture>
 </Cultures>

@@ -266,6 +266,7 @@ GameObject:
   - component: {fileID: 150677012}
   - component: {fileID: 2663578033129893344}
   - component: {fileID: 8211727653587921917}
+  - component: {fileID: 2095365021}
   m_Layer: 5
   m_Name: Context Menu
   m_TagString: Untagged
@@ -434,6 +435,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ElementName: AccentBackground
+--- !u!114 &2095365021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9212209383375231398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 633ae74873e44ccbaf68a8b7d041f428, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ElementName: AccentFont
+  m_OverrideSize: 1
+  m_OverrideColour: 1
+  m_OverrideOutline: 1
 --- !u!1 &9212209383858053044
 GameObject:
   m_ObjectHideFlags: 0
@@ -579,6 +596,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 633ae74873e44ccbaf68a8b7d041f428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_ElementName: AccentFont
   m_OverrideSize: 1
   m_OverrideColour: 1
   m_OverrideOutline: 1

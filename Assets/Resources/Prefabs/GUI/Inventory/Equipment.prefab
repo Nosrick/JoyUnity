@@ -200,6 +200,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce97fd3bc25a4005a0401f7989f05d84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_ElementName: DefaultWindow
   m_BackgroundPrefab: {fileID: 8300874287365320679, guid: a2de3cfe6abfcb648ac806bc92ce0d02,
     type: 3}
 --- !u!114 &3890359077314946480
@@ -214,6 +215,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 633ae74873e44ccbaf68a8b7d041f428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_ElementName: Font
   m_OverrideSize: 1
   m_OverrideColour: 1
   m_OverrideOutline: 1
@@ -876,6 +878,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4484802662267518619}
     m_Modifications:
+    - target: {fileID: 5640304421386276966, guid: 7435434ce2cd01846bbae819ddbb2414,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8604156884670249675, guid: 7435434ce2cd01846bbae819ddbb2414,
         type: 3}
       propertyPath: m_AnchoredPosition.x

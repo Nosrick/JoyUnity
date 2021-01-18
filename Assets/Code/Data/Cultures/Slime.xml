@@ -1,201 +1,202 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Cultures>
-	<Culture>
-		<CultureName>slime conglomerate</CultureName>
+    <Culture>
+        <CultureName>slime conglomerate</CultureName>
 
-		<Inhabitants>
-			<Inhabitant>slime</Inhabitant>
-		</Inhabitants>
+        <Inhabitants>
+            <Inhabitant>slime</Inhabitant>
+        </Inhabitants>
 
-		<Rulers>
-			<Ruler>great slime</Ruler>
-		</Rulers>
+        <Rulers>
+            <Ruler>great slime</Ruler>
+        </Rulers>
 
-		<Crimes>
-		</Crimes>
+        <Crimes>
+        </Crimes>
 
-		<TileSet>
-			<Name>slime conglomerate</Name>
-			
-			<SpriteData>
-				<Name>slime</Name>
-				<State>idle</State>
-				<Part>
-					<Name>body</Name>
-					<Frames>2</Frames>
-					<Filename>cultures/slime</Filename>
-					<Data>default</Data>
-					<Position>12</Position>
-				</Part>
-			</SpriteData>
-		</TileSet>
+        <TileSet>
+            <Name>slime conglomerate</Name>
 
-		<Sexualities>
-			<Sexuality>
-				<Name>bisexual</Name>
-				<Chance>95</Chance>
-			</Sexuality>
+            <SpriteData>
+                <Name>slime</Name>
+                <State>idle</State>
+                <Part>
+                    <Name>body</Name>
+                    <Frames>2</Frames>
+                    <Filename>cultures/slime</Filename>
+                    <Data>default</Data>
+                    <Position>12</Position>
+                </Part>
+            </SpriteData>
+        </TileSet>
 
-			<Sexuality>
-				<Name>asexual</Name>
-				<Chance>5</Chance>
-			</Sexuality>
-		</Sexualities>
-		
-		<Romances>
-			<Romance>
-				<Name>aromantic</Name>
-				<Chance>100</Chance>
-			</Romance>
-		</Romances>
+        <Sexualities>
+            <Sexuality>
+                <Name>bisexual</Name>
+                <Chance>95</Chance>
+            </Sexuality>
 
-		<Sexes>
-			<Sex>
-				<Name>neutral</Name>
-				<Chance>100</Chance>
-			</Sex>
-		</Sexes>
+            <Sexuality>
+                <Name>asexual</Name>
+                <Chance>5</Chance>
+            </Sexuality>
+        </Sexualities>
 
-		<Genders>
-			<Gender>
-				<Name>neutral</Name>
-				<Chance>100</Chance>
-			</Gender>
-		</Genders>
+        <Romances>
+            <Romance>
+                <Name>aromantic</Name>
+                <Chance>100</Chance>
+            </Romance>
+        </Romances>
 
-		<Jobs>
-			<Job>
-				<Name>warrior</Name>
-				<Chance>10</Chance>
-			</Job>
-		</Jobs>
+        <Sexes>
+            <Sex>
+                <Name>neutral</Name>
+                <Chance>100</Chance>
+            </Sex>
+        </Sexes>
 
-		<Relationships>
-			<RelationshipType>polyamorous</RelationshipType>
-		</Relationships>
+        <Genders>
+            <Gender>
+                <Name>neutral</Name>
+                <Chance>100</Chance>
+            </Gender>
+        </Genders>
 
-		<Statistics>
-		</Statistics>
+        <Jobs>
+            <Job>
+                <Name>warrior</Name>
+                <Chance>10</Chance>
+            </Job>
+        </Jobs>
 
-		<Names>
-			<NameData>
-				<Name>Glorp</Name>
-				<Gender>all</Gender>
-				<Chain>0</Chain>
-			</NameData>
+        <Relationships>
+            <RelationshipType>polyamorous</RelationshipType>
+        </Relationships>
 
-			<NameData>
-				<Name>Blip</Name>
-				<Gender>all</Gender>
-				<Chain>0</Chain>
-			</NameData>
+        <Statistics>
+        </Statistics>
 
-			<NameData>
-				<Name>Slorp</Name>
-				<Gender>all</Gender>
-				<Chain>0</Chain>
-			</NameData>
+        <Names>
+            <NameData>
+                <Name>Glorp</Name>
+                <Gender>all</Gender>
+                <Chain>0</Chain>
+            </NameData>
 
-			<NameData>
-				<Name>Glurg</Name>
-				<Gender>all</Gender>
-				<Chain>0</Chain>
-			</NameData>
+            <NameData>
+                <Name>Blip</Name>
+                <Gender>all</Gender>
+                <Chain>0</Chain>
+            </NameData>
 
-			<NameData>
-				<Name>The</Name>
-				<Gender>all</Gender>
-				<Chain>1</Chain>
-			</NameData>
-			
-			<NameData>
-				<Name>Von</Name>
-				<Gender>all</Gender>
-				<Chain>1</Chain>
-			</NameData>
+            <NameData>
+                <Name>Slorp</Name>
+                <Gender>all</Gender>
+                <Chain>0</Chain>
+            </NameData>
 
-			<NameData>
-				<Name>Slimy</Name>
-				<Gender>all</Gender>
-				<Chain>2</Chain>
-			</NameData>
-		</Names>
+            <NameData>
+                <Name>Glurg</Name>
+                <Gender>all</Gender>
+                <Chain>0</Chain>
+            </NameData>
 
-		<UIColours>
-			<CursorColours>
-				<Name>DefaultCursor</Name>
+            <NameData>
+                <Name>The</Name>
+                <Gender>all</Gender>
+                <Chain>1</Chain>
+            </NameData>
 
-				<Colour>
-					<Name>CursorHighlight</Name>
-					<Value>#4196dcff</Value>
-				</Colour>
-				<Colour>
-					<Name>CursorBright</Name>
-					<Value>#4196dcff</Value>
-				</Colour>
-				<Colour>
-					<Name>CursorMid</Name>
-					<Value>#4196dcff</Value>
-				</Colour>
-				<Colour>
-					<Name>CursorDark</Name>
-					<Value>#4196dcff</Value>
-				</Colour>
-				<Colour>
-					<Name>CursorOutline</Name>
-					<Value>#73dcffff</Value>
-				</Colour>
-			</CursorColours>
+            <NameData>
+                <Name>Von</Name>
+                <Gender>all</Gender>
+                <Chain>1</Chain>
+            </NameData>
 
-			<BackgroundColours>
-				<Name>DefaultWindow</Name>
-				<Colour>
-					<Name>background</Name>
-					<Value>#4196dcff</Value>
-				</Colour>
-				<Colour>
-					<Name>border</Name>
-					<Value>#73dcffff</Value>
-				</Colour>
-			</BackgroundColours>
+            <NameData>
+                <Name>Slimy</Name>
+                <Gender>all</Gender>
+                <Chain>2</Chain>
+            </NameData>
+        </Names>
 
-			<AccentBackgroundColours>
-				<Name>SlotBackground</Name>
-				<Colour>
-					<Name>background</Name>
-					<Value>#73dcffff</Value>
-				</Colour>
-				<Colour>
-					<Name>border</Name>
-					<Value>#4196dcff</Value>
-				</Colour>
-			</AccentBackgroundColours>
+        <UIColours>
+            <CursorColours>
+                <Data>
+                    <Name>DefaultCursor</Name>
+                    <Colour>
+                        <Name>CursorHighlight</Name>
+                        <Value>#4196dcff</Value>
+                    </Colour>
+                    <Colour>
+                        <Name>CursorBright</Name>
+                        <Value>#4196dcff</Value>
+                    </Colour>
+                    <Colour>
+                        <Name>CursorMid</Name>
+                        <Value>#4196dcff</Value>
+                    </Colour>
+                    <Colour>
+                        <Name>CursorDark</Name>
+                        <Value>#4196dcff</Value>
+                    </Colour>
+                    <Colour>
+                        <Name>CursorOutline</Name>
+                        <Value>#73dcffff</Value>
+                    </Colour>
+                </Data>
+            </CursorColours>
 
-			<AccentBackgroundColours>
-				<Name>AccentBackground</Name>
-				<Colour>
-					<Name>background</Name>
-					<Value>#73dcffff</Value>
-				</Colour>
-			</AccentBackgroundColours>
+            <BackgroundColours>
+                <Data>
+                    <Name>DefaultWindow</Name>
+                    <Colour>
+                        <Name>background</Name>
+                        <Value>#4196dcff</Value>
+                    </Colour>
+                    <Colour>
+                        <Name>border</Name>
+                        <Value>#73dcffff</Value>
+                    </Colour>
+                </Data>
+                <Data>
+					<Name>SlotBackground</Name>
+					<Colour>
+						<Name>background</Name>
+						<Value>#73dcffff</Value>
+					</Colour>
+					<Colour>
+						<Name>border</Name>
+						<Value>#4196dcff</Value>
+					</Colour>
+                </Data>
+                <Data>
+					<Name>AccentBackground</Name>
+					<Colour>
+						<Name>background</Name>
+						<Value>#73dcffff</Value>
+					</Colour>
+                </Data>
+                <Data>
+					<Name>SecondaryAccent</Name>
+					<Colour>
+						<Name>background</Name>
+						<Value>#4196dcff</Value>
+					</Colour>
+                </Data>
+            </BackgroundColours>
 
-			<AccentBackgroundColours>
-				<Name>SecondaryAccent</Name>
-				<Colour>
-					<Name>background</Name>
-					<Value>#4196dcff</Value>
-				</Colour>
-			</AccentBackgroundColours>
-
-			<MainFontColours>
-				<Name>Font</Name>
-				<Value>#23234bff</Value>
-			</MainFontColours>
-
-			<AccentFontColours>
-				<Name>AccentFont</Name>
-				<Value>#23234bff</Value>
-			</AccentFontColours>
-		</UIColours>
-	</Culture>
+            <FontColours>
+				<Data>
+					<Name>Font</Name>
+					<Value>#23234bff</Value>
+				</Data>
+				<Data>
+					<Name>AccentFont</Name>
+					<Value>#23234bff</Value>
+				</Data>
+            </FontColours>
+        </UIColours>
+    </Culture>
 </Cultures>

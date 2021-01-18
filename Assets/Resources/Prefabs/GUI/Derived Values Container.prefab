@@ -129,7 +129,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DerivedValuePrefab: {fileID: 8717019312778341513}
-  GameManager: {fileID: 0}
   m_Container: {fileID: 89502630740241310}
 --- !u!223 &2081868985
 Canvas:
@@ -180,6 +179,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce97fd3bc25a4005a0401f7989f05d84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_ElementName: DefaultWindow
   m_BackgroundPrefab: {fileID: 8300874287365320679, guid: a2de3cfe6abfcb648ac806bc92ce0d02,
     type: 3}
 --- !u!114 &486838985607503702
@@ -194,6 +194,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 633ae74873e44ccbaf68a8b7d041f428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_ElementName: AccentFont
+  m_OverrideSize: 1
+  m_OverrideColour: 1
+  m_OverrideOutline: 1
 --- !u!1001 &8424862891749147227
 PrefabInstance:
   m_ObjectHideFlags: 0

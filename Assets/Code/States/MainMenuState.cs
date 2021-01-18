@@ -28,9 +28,7 @@ namespace JoyLib.Code.States
             this.GUIManager.SetUIColours(
                 randomCulture.BackgroundColours,
                 randomCulture.CursorColours,
-                randomCulture.AccentBackgroundColours, 
-                randomCulture.MainFontColours,
-                randomCulture.AccentFontColours);
+                randomCulture.FontColours);
             base.SetUpUi();
         }
 

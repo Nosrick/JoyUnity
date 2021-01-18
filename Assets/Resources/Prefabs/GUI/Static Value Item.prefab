@@ -256,6 +256,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 633ae74873e44ccbaf68a8b7d041f428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_ElementName: AccentFont
   m_OverrideSize: 1
   m_OverrideColour: 1
   m_OverrideOutline: 1

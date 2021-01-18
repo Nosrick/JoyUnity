@@ -479,22 +479,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 633ae74873e44ccbaf68a8b7d041f428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_ElementName: AccentFont
   m_OverrideSize: 1
   m_OverrideColour: 1
   m_OverrideOutline: 1
---- !u!114 &6812006427949170369
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4472159991537099453}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9494a29e1b84457ca857e893dadfa29a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ElementName: SlotBackground
 --- !u!114 &2250022625888043737
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -509,6 +497,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ValueContainer: {fileID: 3451215572570767825}
   ValueChange: 0
+--- !u!114 &6812006427949170369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4472159991537099453}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9494a29e1b84457ca857e893dadfa29a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ElementName: SlotBackground
 --- !u!114 &50610985464351700
 MonoBehaviour:
   m_ObjectHideFlags: 0

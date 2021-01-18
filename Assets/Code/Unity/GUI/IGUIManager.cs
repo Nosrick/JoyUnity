@@ -17,9 +17,7 @@ namespace JoyLib.Code.Unity.GUI
 
         void SetUIColours(IDictionary<string, IDictionary<string, Color>> background,
             IDictionary<string, IDictionary<string, Color>> cursor,
-            IDictionary<string, IDictionary<string, Color>> accentColours,
-            IDictionary<string, Color> mainFontColours,
-            IDictionary<string, Color> accentFontColours);
+            IDictionary<string, Color> mainFontColours);
 
         void RecolourGUIs();
 
@@ -51,8 +49,6 @@ namespace JoyLib.Code.Unity.GUI
         IDictionary<string, IDictionary<string, Color>> CursorColours { get; }
         
         IDictionary<string, IDictionary<string, Color>> BackgroundColours { get; }
-        
-        IDictionary<string, IDictionary<string, Color>> AccentColours { get; }
         
         float MinFontSize { get; }
         float MaxFontSize { get; }

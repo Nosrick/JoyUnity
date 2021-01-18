@@ -121,12 +121,12 @@ namespace JoyLib.Code.Cultures
                     }
                     catch (Exception e)
                     {
-                        GlobalConstants.ActionLog.AddText(e.Message, LogLevel.Error);
-                        GlobalConstants.ActionLog.AddText(e.StackTrace, LogLevel.Error);
+                        GlobalConstants.ActionLog.AddText(e.Message, LogLevel.Warning);
+                        GlobalConstants.ActionLog.AddText(e.StackTrace, LogLevel.Warning);
                         GlobalConstants.ActionLog.AddText("Could not find cursor colours in file " + file,
                             LogLevel.Error);
                         cursorColours.Add(
-                            "DefaultCursor", 
+                            "DefaultCursor",
                             new Dictionary<string, Color>
                             {
                                 {"default", Color.magenta}
@@ -143,9 +143,10 @@ namespace JoyLib.Code.Cultures
                     {
                         GlobalConstants.ActionLog.AddText(e.Message, LogLevel.Error);
                         GlobalConstants.ActionLog.AddText(e.StackTrace, LogLevel.Error);
-                        GlobalConstants.ActionLog.AddText("Could not find background colours in file " + file, LogLevel.Error);
+                        GlobalConstants.ActionLog.AddText("Could not find background colours in file " + file,
+                            LogLevel.Warning);
                         backgroundColours.Add(
-                            "DefaultWindow", 
+                            "DefaultWindow",
                             new Dictionary<string, Color>
                             {
                                 {"default", Color.magenta}
@@ -155,7 +156,8 @@ namespace JoyLib.Code.Cultures
                     IDictionary<string, Color> mainFontColours = new Dictionary<string, Color>();
                     try
                     {
-                        mainFontColours = (from fontColour in uiColours.Elements("MainFontColours")
+                        mainFontColours = (from fontColour in uiColours.Element("FontColours")
+                                    .Elements("Data")
                                 select new KeyValuePair<string, Color>(
                                     fontColour.Element("Name").GetAs<string>(),
                                     GraphicsHelper.ParseHTMLString(fontColour.Element("Value").GetAs<string>())))
@@ -163,51 +165,11 @@ namespace JoyLib.Code.Cultures
                     }
                     catch (Exception e)
                     {
-                        GlobalConstants.ActionLog.AddText(e.Message, LogLevel.Error);
-                        GlobalConstants.ActionLog.AddText(e.StackTrace, LogLevel.Error);
+                        GlobalConstants.ActionLog.AddText(e.Message, LogLevel.Warning);
+                        GlobalConstants.ActionLog.AddText(e.StackTrace, LogLevel.Warning);
                         GlobalConstants.ActionLog.AddText("Could not find main font colour in file " + file,
-                            LogLevel.Error);
+                            LogLevel.Warning);
                         mainFontColours.Add(
-                            "Font",
-                            Color.black);
-                    }
-
-                    IDictionary<string, IDictionary<string, Color>> accentBackgroundColours =
-                        new Dictionary<string, IDictionary<string, Color>>();
-                    try
-                    {
-                        accentBackgroundColours = ExtractColourData(uiColours, "AccentBackgroundColours");
-                    }
-                    catch (Exception e)
-                    {
-                        GlobalConstants.ActionLog.AddText(e.Message, LogLevel.Error);
-                        GlobalConstants.ActionLog.AddText(e.StackTrace, LogLevel.Error);
-                        GlobalConstants.ActionLog.AddText("Could not find accent background colours in file " + file,
-                            LogLevel.Error);
-                        accentBackgroundColours.Add(
-                            "AccentBackground", 
-                            new Dictionary<string, Color>
-                            {
-                                {"default", Color.magenta}
-                            });
-                    }
-
-                    IDictionary<string, Color> accentFontColours = new Dictionary<string, Color>();
-                    try
-                    {
-                        accentFontColours = (from fontColour in uiColours.Elements("MainFontColours")
-                                select new KeyValuePair<string, Color>(
-                                    fontColour.Element("Name").GetAs<string>(),
-                                    GraphicsHelper.ParseHTMLString(fontColour.Element("Value").GetAs<string>())))
-                            .ToDictionary(pair => pair.Key, pair => pair.Value);
-                    }
-                    catch (Exception e)
-                    {
-                        GlobalConstants.ActionLog.AddText(e.Message, LogLevel.Error);
-                        GlobalConstants.ActionLog.AddText(e.StackTrace, LogLevel.Error);
-                        GlobalConstants.ActionLog.AddText("Could not find accent font colour in file " + file,
-                            LogLevel.Error);
-                        accentFontColours.Add(
                             "Font",
                             Color.black);
                     }
@@ -229,12 +191,10 @@ namespace JoyLib.Code.Cultures
                             relationships,
                             romanceDictionary,
                             genderDictionary,
-                            nonConformingGenderChance, 
+                            nonConformingGenderChance,
                             backgroundColours,
-                            cursorColours, 
-                            accentBackgroundColours,
-                            mainFontColours,
-                            accentFontColours));
+                            cursorColours,
+                            mainFontColours));
                 }
             }
 
@@ -242,10 +202,11 @@ namespace JoyLib.Code.Cultures
         }
 
         protected IDictionary<string, IDictionary<string, Color>> ExtractColourData(
-            XElement element, 
+            XElement element,
             string elementName)
         {
             return (from colours in element.Elements(elementName)
+                    .Elements("Data")
                     select new KeyValuePair<string, IDictionary<string, Color>>(
                         colours.Element("Name").GetAs<string>(),
                         (from singular in colours.Elements("Colour")

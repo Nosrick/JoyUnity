@@ -124,10 +124,8 @@ namespace JoyLib.Code.Unity.GUI
 
             this.GameManager.GUIManager.SetUIColours(
                 this.CurrentCulture.BackgroundColours,
-                this.CurrentCulture.CursorColours,
-                this.CurrentCulture.AccentBackgroundColours, 
-                this.CurrentCulture.MainFontColours,
-                this.CurrentCulture.AccentFontColours);
+                this.CurrentCulture.CursorColours, 
+                this.CurrentCulture.FontColours);
         }
 
         protected void SetStatistics()
