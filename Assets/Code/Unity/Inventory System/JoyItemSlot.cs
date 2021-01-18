@@ -264,7 +264,8 @@ namespace JoyLib.Code.Unity.GUI
             GlobalConstants.ActionLog.AddText(eventData.pointerCurrentRaycast.gameObject.name);
 
             GameObject goResult = eventData.pointerCurrentRaycast.gameObject;
-            if (goResult.TryGetComponent(out JoyItemSlot resultSlot))
+            JoyItemSlot resultSlot = goResult.GetComponentInParent<JoyItemSlot>();
+            if (resultSlot is null == false)
             {
                 if (resultSlot.Container is null == false
                     && resultSlot.Container != this.Container
@@ -274,25 +275,25 @@ namespace JoyLib.Code.Unity.GUI
                     this.Container.StackOrSwap(resultSlot.Container, this.Item);
                 }
             }
-            else if (goResult.TryGetComponent(out ItemContainer container))
-            {
-                if (container is null == false
-                    && container != this.Container
-                    && this.Container.CanDrag
-                    && container.CanDrag)
-                {
-                    this.Container.StackOrSwap(container, this.Item);
-                }
-            }
             else
             {
-                if (this.Container.CanDropItems)
+                ItemContainer container = goResult.GetComponentInParent<ItemContainer>();
+                if (container is null == false)
                 {
-                    this.DropItem();
+                    if (container != this.Container
+                        && this.Container.CanDrag
+                        && container.CanDrag)
+                    {
+                        this.Container.StackOrSwap(container, this.Item);
+                    }
                 }
-                
-                this.EndDrag();
-                return;
+                else
+                {
+                    if (this.Container.CanDropItems)
+                    {
+                        this.DropItem();
+                    }
+                }
             }
             
             this.EndDrag();

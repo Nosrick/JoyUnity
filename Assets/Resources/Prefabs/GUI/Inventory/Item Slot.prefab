@@ -59,7 +59,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -193,7 +193,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0.6431373}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -219,6 +219,7 @@ GameObject:
   - component: {fileID: 8604156886097528881}
   - component: {fileID: 8604156886097528883}
   - component: {fileID: 7594581071963496037}
+  - component: {fileID: 7344554214280618712}
   m_Layer: 5
   m_Name: Item Slot
   m_TagString: Untagged
@@ -276,6 +277,18 @@ MonoBehaviour:
   m_Icon: {fileID: 78009085674407300}
   m_Stack: {fileID: 5937449665469716960}
   m_Slot: 
+--- !u!225 &7344554214280618712
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8604156886097528880}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!114 &1948736087820751878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -405,6 +418,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8300874287365320679, guid: a2de3cfe6abfcb648ac806bc92ce0d02,
+        type: 3}
+      propertyPath: m_Prefab
+      value: 
+      objectReference: {fileID: 1949383421893784, guid: fc0c5c6df1dde9649a50d9ed7547fa80,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a2de3cfe6abfcb648ac806bc92ce0d02, type: 3}
 --- !u!224 &7325031476899468133 stripped
@@ -541,6 +560,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8300874287365320679, guid: a2de3cfe6abfcb648ac806bc92ce0d02,
+        type: 3}
+      propertyPath: m_Prefab
+      value: 
+      objectReference: {fileID: 1949383421893784, guid: fc0c5c6df1dde9649a50d9ed7547fa80,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a2de3cfe6abfcb648ac806bc92ce0d02, type: 3}
 --- !u!1 &8796254847009950312 stripped
