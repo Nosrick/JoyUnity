@@ -21,8 +21,6 @@ namespace JoyLib.Code.Unity.GUI
         public IDictionary<string, ISpriteState> Backgrounds { get; protected set; }
         public IDictionary<string, ISpriteState> Cursors { get; protected set; }
 
-        public IDictionary<string, ISpriteState> AccentBackgrounds { get; protected set; }
-
         public IDictionary<string, TMP_FontAsset> FontsToUse { get; protected set; }
 
         public IDictionary<string, IDictionary<string, Color>> CursorColours { get; protected set; }
@@ -52,11 +50,6 @@ namespace JoyLib.Code.Unity.GUI
 
 
                 this.Cursors = GlobalConstants.GameManager.ObjectIconHandler.GetTileSet("Cursors")
-                    .Select(data => new SpriteState(data.m_Name, data))
-                    .Cast<ISpriteState>()
-                    .ToDictionary(state => state.Name, state => state);
-
-                this.AccentBackgrounds = GlobalConstants.GameManager.ObjectIconHandler.GetTileSet("Accent")
                     .Select(data => new SpriteState(data.m_Name, data))
                     .Cast<ISpriteState>()
                     .ToDictionary(state => state.Name, state => state);
@@ -219,7 +212,7 @@ namespace JoyLib.Code.Unity.GUI
 
             foreach (ManagedAccent accent in gui.GetComponentsInChildren<ManagedAccent>(true))
             {
-                if (this.AccentBackgrounds.TryGetValue(accent.ElementName, out ISpriteState state))
+                if (this.Backgrounds.TryGetValue(accent.ElementName, out ISpriteState state))
                 {
                     accent.SetBackgrounds(state);
                 }

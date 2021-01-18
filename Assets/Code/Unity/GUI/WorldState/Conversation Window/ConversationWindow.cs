@@ -67,6 +67,7 @@ namespace JoyLib.Code.Unity.GUI
                 for (int i = this.MenuList.Count; i < this.ConversationEngine.CurrentTopics.Length; i++)
                 {
                     ConversationMenu child = Instantiate(this.MenuItem, this.Window.transform).GetComponent<ConversationMenu>();
+                    child.Awake();
                     this.MenuList.Add(child);
                 }
             }

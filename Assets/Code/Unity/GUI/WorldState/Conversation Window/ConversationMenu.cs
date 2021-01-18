@@ -36,9 +36,9 @@ namespace JoyLib.Code.Unity.GUI
             if (ConversationEngine is null)
             {
                 ConversationEngine = GlobalConstants.GameManager.ConversationEngine;
-
-                this.Text = this.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
             }
+
+            this.Text = this.transform.GetComponentInChildren<TextMeshProUGUI>();
         }
 
         public void OnPointerDown(PointerEventData eventData)
