@@ -81,6 +81,24 @@ namespace JoyLib.Code.Unity.GUI
             GUIManager.CloseGUI(GUINames.TOOLTIP);
         }
 
+        public virtual void DecreaseValueButtonPress()
+        {
+            if (this.AllowDecrease == false)
+            {
+                return;
+            }
+            this.DecreaseValue(this.DecreaseDelta);
+        }
+
+        public virtual void IncreaseValueButtonPress()
+        {
+            if (this.AllowIncrease == false)
+            {
+                return;
+            }
+            this.IncreaseValue(this.IncreaseDelta);
+        }
+
         public virtual int DecreaseValue(int delta = 1)
         {
             if (this.Value - delta >= this.Minimum)

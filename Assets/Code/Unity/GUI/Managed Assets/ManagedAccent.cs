@@ -51,7 +51,7 @@ namespace JoyLib.Code.Unity.GUI
             this.Initialise();
             foreach (ManagedUISprite sprite in this.ManagedUISprites)
             {
-                sprite.OverrideAllColours(colours, true);
+                sprite.OverrideAllColours(colours);
             }
             this.HasBackgroundColours = true;
         }

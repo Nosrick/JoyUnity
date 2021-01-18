@@ -62,6 +62,20 @@ namespace JoyLib.Code.Graphics
             }
         }
 
+        public void OverrideWithSingleColour(Color colour)
+        {
+            for (int i = 0; i < this.SpriteData.m_Parts.Count; i++)
+            {
+                SpritePart part = this.SpriteData.m_Parts[i];
+                part.m_PossibleColours = new List<Color>
+                {
+                    colour
+                };
+                part.m_SelectedColour = 0;
+                this.SpriteData.m_Parts[i] = part;
+            }
+        }
+
         public List<int> GetIndices()
         {
             return this.SpriteData.m_Parts.Select(part => part.m_SelectedColour).ToList();

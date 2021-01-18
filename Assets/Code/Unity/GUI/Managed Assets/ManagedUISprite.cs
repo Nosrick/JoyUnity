@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using JoyLib.Code.Graphics;
 using UnityEngine;
 using UnityEngine.UI;
@@ -48,7 +47,40 @@ namespace JoyLib.Code.Unity
             
             if (crossFade)
             {
-                this.StartColourTransition(colours.First().Value, 0.4f);
+                for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
+                {
+                    if (colours.TryGetValue(this.ImageParts[i].name, out Color colour))
+                    {
+                        this.StartColourTransition(this.ImageParts[i].gameObject, colour, 0.1f);
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
+                {
+                    this.ImageParts[i].color = this.CurrentSpriteState.SpriteData.m_Parts[i].SelectedColour; 
+                }
+            }
+            
+            this.IsDirty = true;
+        }
+
+        public override void OverrideWithSingleColour(Color colour, bool crossFade = false)
+        {
+            this.Initialise();
+
+            foreach (ISpriteState state in this.m_States.Values)
+            {
+                state.OverrideWithSingleColour(colour);
+            }
+            
+            if (crossFade)
+            {
+                for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
+                {
+                    this.StartColourTransition(this.ImageParts[i].gameObject, colour, 0.1f);
+                }
             }
             else
             {
@@ -88,9 +120,9 @@ namespace JoyLib.Code.Unity
             }
         }
 
-        public override void StartColourTransition(Color colour, float duration)
+        protected override void StartColourTransition(GameObject gameObject, Color colour, float duration)
         {
-            foreach (Image part in this.ImageParts.Where(image => image.enabled))
+            if(gameObject.TryGetComponent(out Image part))
             {
                 part.CrossFadeColor(colour, duration, false, true);
             }

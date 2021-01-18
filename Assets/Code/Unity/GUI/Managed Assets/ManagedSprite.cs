@@ -207,7 +207,10 @@ namespace JoyLib.Code.Unity
             
             if (crossFade)
             {
-                this.StartColourTransition(colours.First().Value, 0.4f);
+                for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
+                {
+                    this.StartColourTransition(this.SpriteParts[i].gameObject, colours.First().Value, 0.1f);
+                }
             }
             else
             {
@@ -216,6 +219,33 @@ namespace JoyLib.Code.Unity
                     this.SpriteParts[i].color = this.CurrentSpriteState.SpriteData.m_Parts[i].SelectedColour; 
                 }
             }
+            this.IsDirty = true;
+        }
+
+        public virtual void OverrideWithSingleColour(Color colour, bool crossFade = false)
+        {
+            this.Initialise();
+
+            foreach (ISpriteState state in this.m_States.Values)
+            {
+                state.OverrideWithSingleColour(colour);
+            }
+            
+            if (crossFade)
+            {
+                for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
+                {
+                    this.StartColourTransition(this.SpriteParts[i].gameObject, colour, 0.1f);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
+                {
+                    this.SpriteParts[i].color = this.CurrentSpriteState.SpriteData.m_Parts[i].SelectedColour; 
+                }
+            }
+            
             this.IsDirty = true;
         }
 
@@ -255,9 +285,9 @@ namespace JoyLib.Code.Unity
             }
         }
 
-        public virtual void StartColourTransition(Color colour, float duration)
+        protected virtual void StartColourTransition(GameObject gameObject, Color colour, float duration)
         {
-            foreach (SpriteRenderer part in this.SpriteParts.Where(spriteRenderer => spriteRenderer.enabled))
+            if(gameObject.TryGetComponent(out SpriteRenderer part))
             {
                 this.StartCoroutine(this.ColourLerp(colour, duration, part));
             }

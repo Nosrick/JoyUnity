@@ -1562,6 +1562,36 @@ PrefabInstance:
       propertyPath: m_fontSize
       value: 26.7
       objectReference: {fileID: 0}
+    - target: {fileID: 7636288911901167622, guid: 1ea26b2f5a227ab42b1c53682940f1b6,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7636288911901167622, guid: 1ea26b2f5a227ab42b1c53682940f1b6,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7636288911901167622, guid: 1ea26b2f5a227ab42b1c53682940f1b6,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 5573507356558727695}
+    - target: {fileID: 7636288911901167622, guid: 1ea26b2f5a227ab42b1c53682940f1b6,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7636288911901167622, guid: 1ea26b2f5a227ab42b1c53682940f1b6,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: GoToSkillsAndAbilities
+      objectReference: {fileID: 0}
+    - target: {fileID: 7636288911901167622, guid: 1ea26b2f5a227ab42b1c53682940f1b6,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1ea26b2f5a227ab42b1c53682940f1b6, type: 3}
 --- !u!224 &5607926706060639615 stripped
