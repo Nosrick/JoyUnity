@@ -205,7 +205,6 @@ GameObject:
   - component: {fileID: 6665615501670980202}
   - component: {fileID: 6665615501670980197}
   - component: {fileID: 5268823048949951233}
-  - component: {fileID: 6665615501670980198}
   - component: {fileID: 8562720405407632609}
   - component: {fileID: 4074758963628961486}
   m_Layer: 0
@@ -283,7 +282,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 3329086532230608727}
-        m_MethodName: IncreaseValueButtonPress
+        m_MethodName: DecreaseValueButtonPress
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -293,20 +292,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &6665615501670980198
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6665615501670980201}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5616cd6aadf1478aa786005296b68b9e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ValueContainer: {fileID: 3329086532230608727}
-  ValueChange: 1
 --- !u!114 &8562720405407632609
 MonoBehaviour:
   m_ObjectHideFlags: 0
