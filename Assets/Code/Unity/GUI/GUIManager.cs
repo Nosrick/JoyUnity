@@ -122,6 +122,14 @@ namespace JoyLib.Code.Unity.GUI
             {
                 this.AddGUI(data);
             }
+
+            Cursor cursor = this.GUIs.First(data => data.name.Equals(GUINames.CURSOR)).GetComponent<Cursor>();
+            if (cursor is null)
+            {
+                return;
+            }
+            cursor.SetCursorSprites(this.Cursors["DefaultCursor"]);
+            cursor.SetCursorColours(this.CursorColours["DefaultCursor"]);
         }
 
         public void AddGUI(GUIData gui)

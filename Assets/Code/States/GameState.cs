@@ -19,7 +19,6 @@ namespace JoyLib.Code.States
             this.GUIManager.Clear();
             this.GUIManager.FindGUIs();
 
-            this.GUIManager.RecolourGUIs();
             this.GUIManager.CloseAllOtherGUIs(GUINames.CURSOR);
         }
 
