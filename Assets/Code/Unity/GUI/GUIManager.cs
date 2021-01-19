@@ -217,51 +217,6 @@ namespace JoyLib.Code.Unity.GUI
                         LogLevel.Warning);
                 }
             }
-
-            foreach (ManagedAccent accent in gui.GetComponentsInChildren<ManagedAccent>(true))
-            {
-                if (this.Backgrounds.TryGetValue(accent.ElementName, out ISpriteState state))
-                {
-                    accent.SetBackgrounds(state);
-                }
-                else
-                {
-                    GlobalConstants.ActionLog.AddText("Could not find accent element " + accent.ElementName
-                        + " on element " + accent.name,
-                        LogLevel.Warning);
-                }
-
-                if (this.BackgroundColours.TryGetValue(accent.ElementName, out IDictionary<string, Color> colours))
-                {
-                    accent.SetBackgroundColours(colours);
-                }
-                else
-                {
-                    GlobalConstants.ActionLog.AddText("Could not find accent colour element " + accent.ElementName
-                        + " on element " + accent.name,
-                        LogLevel.Warning);
-                }
-
-                if (!accent.TryGetComponent(out ManagedFonts fonts))
-                {
-                    continue;
-                }
-
-                if (this.FontColours.TryGetValue(fonts.ElementName, out Color accentColour))
-                {
-                    fonts.SetFontColour(accentColour);
-                }
-                else if (this.FontColours.TryGetValue(fonts.ElementName, out Color mainColour))
-                {
-                    fonts.SetFontColour(mainColour);
-                }
-                else
-                {
-                    GlobalConstants.ActionLog.AddText("Could not find font colour " + fonts.ElementName
-                        + " on element " + fonts.name,
-                        LogLevel.Warning);
-                }
-            }
         }
 
         public void ToggleGUI(string name)

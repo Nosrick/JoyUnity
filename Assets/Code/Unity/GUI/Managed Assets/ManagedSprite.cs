@@ -13,10 +13,12 @@ namespace JoyLib.Code.Unity
     public class ManagedSprite : ManagedElement, IAnimated
     {
         [SerializeField] protected GameObject m_Prefab;
-        
+
         protected string SortingLayer { get; set; }
         
         protected RectTransform MyRect { get; set; }
+        
+        protected Color Tint { get; set; }
 
         public ISpriteState CurrentSpriteState
         {
@@ -209,7 +211,7 @@ namespace JoyLib.Code.Unity
             {
                 for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
                 {
-                    this.StartColourTransition(this.SpriteParts[i].gameObject, colours.First().Value, 0.1f);
+                    this.StartCoroutine(this.ColourLerp(this.SpriteParts[i].gameObject, colours.First().Value, 0.1f));
                 }
             }
             else
@@ -222,20 +224,17 @@ namespace JoyLib.Code.Unity
             this.IsDirty = true;
         }
 
-        public virtual void OverrideWithSingleColour(Color colour, bool crossFade = false)
+        public virtual void TintWithSingleColour(Color colour, bool crossFade = false)
         {
             this.Initialise();
 
-            foreach (ISpriteState state in this.m_States.Values)
-            {
-                state.OverrideWithSingleColour(colour);
-            }
+            this.Tint = colour;
             
             if (crossFade)
             {
                 for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
                 {
-                    this.StartColourTransition(this.SpriteParts[i].gameObject, colour, 0.1f);
+                    this.StartCoroutine(this.ColourLerp(this.SpriteParts[i].gameObject, colour, 0.1f));
                 }
             }
             else
@@ -285,17 +284,17 @@ namespace JoyLib.Code.Unity
             }
         }
 
-        protected virtual void StartColourTransition(GameObject gameObject, Color colour, float duration)
+        protected virtual IEnumerator ColourLerp(GameObject gameObject, Color newColour, float duration)
         {
-            if(gameObject.TryGetComponent(out SpriteRenderer part))
-            {
-                this.StartCoroutine(this.ColourLerp(colour, duration, part));
-            }
-        }
-
-        protected virtual IEnumerator ColourLerp(Color newColour, float duration, SpriteRenderer spriteRenderer)
-        {
+            SpriteRenderer spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
             Color original = spriteRenderer.color;
+            Color multiplied = original * newColour;
+            if (newColour == Color.white)
+            {
+                multiplied = this.CurrentSpriteState.SpriteData.m_Parts
+                    .First(part => part.m_Name.Equals(gameObject.name, StringComparison.OrdinalIgnoreCase))
+                    .SelectedColour;
+            }
 
             float startTime = Time.time;
             float percentage = 0f;
@@ -304,7 +303,7 @@ namespace JoyLib.Code.Unity
             {
                 float elapsedTime = Time.time - startTime;
                 percentage = elapsedTime / duration;
-                spriteRenderer.color = Color.Lerp(original, newColour, percentage);
+                spriteRenderer.color = Color.Lerp(original, multiplied, percentage);
                 yield return null;
             }
         }

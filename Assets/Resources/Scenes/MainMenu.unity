@@ -520,8 +520,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ElementName: DefaultWindow
-  m_BackgroundPrefab: {fileID: 8300874287365320679, guid: a2de3cfe6abfcb648ac806bc92ce0d02,
-    type: 3}
+  m_Prefab: {fileID: 1949383421893784, guid: 9f1a4cc05dc2d5e46b5333696b04d343, type: 3}
 --- !u!114 &924525196
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1029,7 +1028,6 @@ GameObject:
   - component: {fileID: 1452348061}
   - component: {fileID: 1452348062}
   - component: {fileID: 1452348063}
-  - component: {fileID: 1452348064}
   - component: {fileID: 1452348065}
   m_Layer: 5
   m_Name: Button Container
@@ -1056,10 +1054,10 @@ RectTransform:
   m_Father: {fileID: 924525191}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000038146973, y: -250}
-  m_SizeDelta: {x: 500, y: 0}
+  m_AnchorMin: {x: 0.3555795, y: 0.1694815}
+  m_AnchorMax: {x: 0.6446821, y: 0.36800003}
+  m_AnchoredPosition: {x: -0.5, y: -0.5}
+  m_SizeDelta: {x: 1, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1452348062
 MonoBehaviour:
@@ -1100,19 +1098,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 0
   m_VerticalFit: 1
---- !u!114 &1452348064
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1452348060}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9494a29e1b84457ca857e893dadfa29a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ElementName: SlotBackground
 --- !u!114 &1452348065
 MonoBehaviour:
   m_ObjectHideFlags: 0

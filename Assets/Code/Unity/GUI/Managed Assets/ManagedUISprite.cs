@@ -1,4 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using Castle.Core.Internal;
 using JoyLib.Code.Graphics;
 using UnityEngine;
 using UnityEngine.UI;
@@ -51,7 +55,7 @@ namespace JoyLib.Code.Unity
                 {
                     if (colours.TryGetValue(this.ImageParts[i].name, out Color colour))
                     {
-                        this.StartColourTransition(this.ImageParts[i].gameObject, colour, 0.1f);
+                        this.StartCoroutine(this.ColourLerp(this.ImageParts[i].gameObject, colour, 0.1f));
                     }
                 }
             }
@@ -66,20 +70,20 @@ namespace JoyLib.Code.Unity
             this.IsDirty = true;
         }
 
-        public override void OverrideWithSingleColour(Color colour, bool crossFade = false)
+        public override void TintWithSingleColour(Color colour, bool crossFade = false)
         {
             this.Initialise();
 
-            foreach (ISpriteState state in this.m_States.Values)
+            if (this.m_States.IsNullOrEmpty())
             {
-                state.OverrideWithSingleColour(colour);
+                return;
             }
-            
+
             if (crossFade)
             {
                 for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
                 {
-                    this.StartColourTransition(this.ImageParts[i].gameObject, colour, 0.1f);
+                    this.StartCoroutine(this.ColourLerp(this.ImageParts[i].gameObject, colour, 0.1f));
                 }
             }
             else
@@ -120,11 +124,27 @@ namespace JoyLib.Code.Unity
             }
         }
 
-        protected override void StartColourTransition(GameObject gameObject, Color colour, float duration)
+        protected override IEnumerator ColourLerp(GameObject gameObject, Color newColour, float duration)
         {
-            if(gameObject.TryGetComponent(out Image part))
+            Image image = gameObject.GetComponent<Image>();
+            Color original = image.color;
+            Color multiplied = original * newColour;
+            if (newColour == Color.white)
             {
-                part.CrossFadeColor(colour, duration, false, true);
+                multiplied = this.CurrentSpriteState.SpriteData.m_Parts
+                    .First(part => part.m_Name.Equals(gameObject.name, StringComparison.OrdinalIgnoreCase))
+                    .SelectedColour;
+            }
+
+            float startTime = Time.time;
+            float percentage = 0f;
+
+            while (percentage < 1f)
+            {
+                float elapsedTime = Time.time - startTime;
+                percentage = elapsedTime / duration;
+                image.color = Color.Lerp(original, multiplied, percentage);
+                yield return null;
             }
         }
     }

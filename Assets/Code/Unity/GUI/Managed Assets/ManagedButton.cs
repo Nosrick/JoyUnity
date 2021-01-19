@@ -1,16 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using JoyLib.Code.Graphics;
-using JoyLib.Code.Unity;
+using JoyLib.Code.Unity.GUI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using SpriteState = UnityEngine.UI.SpriteState;
 
 namespace Code.Unity.GUI.Managed_Assets
 {
     public class ManagedButton : 
-        UIBehaviour,
+        ManagedBackground,
         IMoveHandler,
         IPointerDownHandler, 
         IPointerUpHandler,
@@ -32,28 +31,17 @@ namespace Code.Unity.GUI.Managed_Assets
             selectedColor = new Color(0.8f, 0.8f, 0.8f, 1f)
         };
 
-        [SerializeField] 
-        protected SpriteState m_SpriteState;
-        
         [SerializeField]
         protected AnimationTriggers m_AnimationTriggers = new AnimationTriggers();
 
         [SerializeField]
         protected Selectable.Transition m_Transition = Selectable.Transition.ColorTint;
-
-        [SerializeField] 
-        protected ManagedUISprite m_SpritePrefab;
-
-        [SerializeField] 
-        protected bool m_CreateFromPrefab = true;
         
         [SerializeField]
         protected bool m_Interactable = true;
 
         [SerializeField]
         protected Button.ButtonClickedEvent m_OnClick = new Button.ButtonClickedEvent();
-        
-        protected ManagedUISprite ManagedUISprite { get; set; }
 
         protected SelectionState CurrentSelectionState
         {
@@ -90,35 +78,21 @@ namespace Code.Unity.GUI.Managed_Assets
 
         protected readonly List<CanvasGroup> m_CanvasGroupCache = new List<CanvasGroup>();
 
-        protected override void Awake()
+        protected void OnEnable()
         {
-            if(this.ManagedUISprite is null)
-            {
-                this.ManagedUISprite = this.m_CreateFromPrefab 
-                ? Instantiate(this.m_SpritePrefab, this.transform) 
-                : this.m_SpritePrefab;
-                this.ManagedUISprite.Awake();
-            }
-        }
-
-        protected override void OnEnable()
-        {
-            base.OnEnable();
-            if (this.ManagedUISprite.CurrentSpriteState is null == false)
+            if (this.CurrentSpriteState is null == false)
             {
                 this.DoStateTransition(this.CurrentSelectionState, false);
             }
         }
 
-        protected override void OnTransformParentChanged()
+        protected void OnTransformParentChanged()
         {
-            base.OnTransformParentChanged();
-
             // If our parenting changes figure out if we are under a new CanvasGroup.
             this.OnCanvasGroupChanged();
         }
         
-        protected override void OnCanvasGroupChanged()
+        protected void OnCanvasGroupChanged()
         {
             // Figure out if parent groups allow interaction
             // If no interaction is alowed... then we need
@@ -167,32 +141,32 @@ namespace Code.Unity.GUI.Managed_Assets
             {
                 case SelectionState.Normal:
                     tintColor = this.m_ColourBlock.normalColor;
-                    transitionSprite = null;
+                    //transitionSprite = null;
                     triggerName = this.m_AnimationTriggers.normalTrigger;
                     break;
                 case SelectionState.Highlighted:
                     tintColor = this.m_ColourBlock.highlightedColor;
-                    transitionSprite = this.m_SpriteState.highlightedSprite;
+                    //transitionSprite = this.m_SpriteState.highlightedSprite;
                     triggerName = this.m_AnimationTriggers.highlightedTrigger;
                     break;
                 case SelectionState.Pressed:
                     tintColor = this.m_ColourBlock.pressedColor;
-                    transitionSprite = this.m_SpriteState.pressedSprite;
+                    //transitionSprite = this.m_SpriteState.pressedSprite;
                     triggerName = this.m_AnimationTriggers.pressedTrigger;
                     break;
                 case SelectionState.Selected:
                     tintColor = this.m_ColourBlock.selectedColor;
-                    transitionSprite = this.m_SpriteState.selectedSprite;
+                    //transitionSprite = this.m_SpriteState.selectedSprite;
                     triggerName = this.m_AnimationTriggers.selectedTrigger;
                     break;
                 case SelectionState.Disabled:
                     tintColor = this.m_ColourBlock.disabledColor;
-                    transitionSprite = this.m_SpriteState.disabledSprite;
+                    //transitionSprite = this.m_SpriteState.disabledSprite;
                     triggerName = this.m_AnimationTriggers.disabledTrigger;
                     break;
                 default:
                     tintColor = Color.black;
-                    transitionSprite = null;
+                    //transitionSprite = null;
                     triggerName = string.Empty;
                     break;
             }
@@ -200,25 +174,15 @@ namespace Code.Unity.GUI.Managed_Assets
             switch (this.m_Transition)
             {
                 case Selectable.Transition.ColorTint:
-                    this.StartColorTween(tintColor * this.m_ColourBlock.colorMultiplier, crossFade);
+                    this.TintWithSingleColour(tintColor * this.m_ColourBlock.colorMultiplier, crossFade);
                     break;
                 case Selectable.Transition.SpriteSwap:
-                    this.DoSpriteSwap(transitionSprite);
+                    //this.DoSpriteSwap(transitionSprite);
                     break;
                 case Selectable.Transition.Animation:
                     this.TriggerAnimation(triggerName);
                     break;
             }
-        }
-        
-        protected virtual void StartColorTween(Color targetColor, bool crossFade)
-        {
-            if (this.ManagedUISprite is null)
-            {
-                return;
-            }
-
-            this.ManagedUISprite.OverrideWithSingleColour(targetColor, crossFade);
         }
 
         protected virtual void DoSpriteSwap(Sprite sprite)
@@ -228,8 +192,8 @@ namespace Code.Unity.GUI.Managed_Assets
                 return;
             }
             
-            this.ManagedUISprite.Clear();
-            this.ManagedUISprite.AddSpriteState(
+            this.Clear();
+            this.AddSpriteState(
                 new JoyLib.Code.Graphics.SpriteState(
                     "Button",
                     new SpriteData
@@ -278,7 +242,7 @@ namespace Code.Unity.GUI.Managed_Assets
         
         protected virtual void EvaluateAndTransitionToSelectionState()
         {
-            if (!this.IsActive() || !this.IsInteractable())
+            if (!this.enabled || !this.IsInteractable())
             {
                 return;
             }
@@ -358,7 +322,7 @@ namespace Code.Unity.GUI.Managed_Assets
 
             // if we get set disabled during the press
             // don't run the coroutine.
-            if (!this.IsActive() || !this.IsInteractable())
+            if (!this.enabled || !this.IsInteractable())
             {
                 return;
             }
@@ -369,7 +333,7 @@ namespace Code.Unity.GUI.Managed_Assets
         
         protected virtual void Press()
         {
-            if (!this.IsActive() || !this.IsInteractable())
+            if (!this.enabled || !this.IsInteractable())
             {
                 return;
             }

@@ -1183,7 +1183,6 @@ GameObject:
   - component: {fileID: 387996033}
   - component: {fileID: 387996032}
   - component: {fileID: 387996034}
-  - component: {fileID: 458119974344112133}
   m_Layer: 5
   m_Name: Stack
   m_TagString: Untagged
@@ -1316,19 +1315,6 @@ MonoBehaviour:
   m_OverrideSize: 1
   m_OverrideColour: 1
   m_OverrideOutline: 1
---- !u!114 &458119974344112133
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1274803826109484199}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9494a29e1b84457ca857e893dadfa29a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ElementName: AccentBackground
 --- !u!1 &1274803826115966037
 GameObject:
   m_ObjectHideFlags: 0
