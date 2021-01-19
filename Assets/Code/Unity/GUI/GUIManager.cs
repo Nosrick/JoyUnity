@@ -96,13 +96,17 @@ namespace JoyLib.Code.Unity.GUI
 
         public void SetUIColours(IDictionary<string, IDictionary<string, Color>> background,
             IDictionary<string, IDictionary<string, Color>> cursor,
-            IDictionary<string, Color> mainFontColours)
+            IDictionary<string, Color> mainFontColours,
+            bool recolour = true)
         {
             this.BackgroundColours = background;
             this.CursorColours = cursor;
             this.FontColours = mainFontColours;
 
-            this.RecolourGUIs();
+            if (recolour)
+            {
+                this.RecolourGUIs();
+            }
         }
 
         public void Clear()
@@ -165,7 +169,7 @@ namespace JoyLib.Code.Unity.GUI
             }
         }
 
-        protected void SetupManagedComponents(GUIData gui)
+        public void SetupManagedComponents(GUIData gui)
         {
             ManagedBackground[] backgrounds = gui.GetComponentsInChildren<ManagedBackground>(true);
             foreach (ManagedBackground background in backgrounds)
@@ -356,9 +360,10 @@ namespace JoyLib.Code.Unity.GUI
 
         public void CloseAllOtherGUIs(string activeName = "")
         {
-            IEnumerable<GUIData> toClose = this.ActiveGUIs
+            GUIData[] toClose = this.ActiveGUIs
                 .Where(gui => gui.name.Equals(activeName, StringComparison.OrdinalIgnoreCase) == false
-                              && gui.m_AlwaysOpen == false);
+                              && gui.m_AlwaysOpen == false)
+                .ToArray();
 
             foreach (GUIData data in toClose)
             {

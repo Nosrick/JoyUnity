@@ -536,8 +536,9 @@ GameObject:
   m_Component:
   - component: {fileID: 8604156886097528881}
   - component: {fileID: 8604156886097528883}
-  - component: {fileID: -8336268010190734863}
   - component: {fileID: 6845158268629664666}
+  - component: {fileID: 3589690501601817822}
+  - component: {fileID: 3560634077954359043}
   m_Layer: 5
   m_Name: Equipment Slot
   m_TagString: Untagged
@@ -578,24 +579,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8604156886097528880}
   m_CullTransparentMesh: 0
---- !u!114 &-8336268010190734863
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8604156886097528880}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0641692108564ac39651851503d52a32, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_CooldownOverlay: {fileID: 8604156884983650608}
-  m_Cooldown: {fileID: 959327178627231613}
-  m_UseRarityColor: 0
-  m_Icon: {fileID: 512288162385156327}
-  m_Stack: {fileID: 4552644192906814519}
-  m_Slot: 
 --- !u!114 &6845158268629664666
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -610,6 +593,41 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_AspectMode: 2
   m_AspectRatio: 2.837991
+--- !u!114 &3589690501601817822
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8604156886097528880}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8d1c5b3265d456da3701fbb43ad3ea4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_CooldownOverlay: {fileID: 8604156884983650608}
+  m_Cooldown: {fileID: 959327178627231613}
+  m_UseRarityColor: 0
+  m_Icon: {fileID: 512288162385156327}
+  m_Stack: {fileID: 4552644192906814519}
+  m_Slot: 
+  m_SlotName: {fileID: 321593076036725092}
+--- !u!114 &3560634077954359043
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8604156886097528880}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 633ae74873e44ccbaf68a8b7d041f428, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ElementName: Font
+  m_OverrideSize: 1
+  m_OverrideColour: 1
+  m_OverrideOutline: 1
 --- !u!1001 &8371807366262273792
 PrefabInstance:
   m_ObjectHideFlags: 0

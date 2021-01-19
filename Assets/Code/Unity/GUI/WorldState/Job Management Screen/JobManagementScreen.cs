@@ -187,6 +187,7 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
                 this.Statistics[i].DirectValueSet(this.OriginalStatistics[i].Value);
                 this.Statistics[i].ValueChanged += this.OnStatisticChange;
                 this.Statistics[i].Minimum = this.OriginalStatistics[i].Value;
+                this.Statistics[i].Parent = this;
                 this.SetUpStatisticDeltas();
             }
         }
@@ -225,6 +226,7 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
                 this.Skills[i].DirectValueSet(this.OriginalSkills[i].Value);
                 this.Skills[i].ValueChanged += this.OnSkillChange;
                 this.Skills[i].Minimum = this.OriginalSkills[i].Value;
+                this.Skills[i].Parent = this;
                 this.SetUpSkillDeltas();
             }
         }
@@ -266,6 +268,7 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
                 this.Abilities[i].OnSelect -= this.OnAbilityChange;
                 this.Abilities[i].OnSelect += this.OnAbilityChange;
                 this.Abilities[i].Tooltip = builder.ToString();
+                this.Abilities[i].Parent = this;
                 if (this.Abilities[i].Selected)
                 {
                     this.Abilities[i].ToggleMe();

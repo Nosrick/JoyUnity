@@ -101,6 +101,11 @@ namespace JoyLib.Code.Unity.Cheats
                         DerivedValueName.HITPOINTS,
                         GlobalConstants.GameManager.Player.GetMaximum(DerivedValueName.HITPOINTS));
                 }
+
+                if (GUILayout.Button("Give 100 JX"))
+                {
+                    GlobalConstants.GameManager.Player.CurrentJob.AddExperience(100);
+                }
             }
         }
     }

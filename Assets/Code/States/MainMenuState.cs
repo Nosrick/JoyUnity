@@ -28,8 +28,10 @@ namespace JoyLib.Code.States
             this.GUIManager.SetUIColours(
                 randomCulture.BackgroundColours,
                 randomCulture.CursorColours,
-                randomCulture.FontColours);
+                randomCulture.FontColours,
+                false);
             base.SetUpUi();
+            this.GUIManager.RecolourGUIs();
         }
 
         public override void Start()

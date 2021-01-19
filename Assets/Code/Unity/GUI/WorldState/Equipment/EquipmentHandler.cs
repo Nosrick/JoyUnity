@@ -2,7 +2,6 @@
 using Castle.Core.Internal;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
-using TMPro;
 
 namespace JoyLib.Code.Unity.GUI
 {
@@ -42,14 +41,19 @@ namespace JoyLib.Code.Unity.GUI
             
             for (int i = 0; i < slots.Count; i++)
             {
-                this.Slots[i].gameObject.SetActive(true);
-                TextMeshProUGUI slotName = this.Slots[i].GetComponentInChildren<TextMeshProUGUI>();
-                slotName.text = slots[i].Item1;
-                this.Slots[i].name = slots[i].Item1;
-                this.Slots[i].Container = this;
-                this.Slots[i].m_Slot = slots[i].Item1;
-                this.Slots[i].Item = slots[i].Item2;
+                if (!(this.Slots[i] is JoyEquipmentSlot equipmentSlot))
+                {
+                    continue;
+                }
+                equipmentSlot.gameObject.SetActive(true);
+                equipmentSlot.SlotName.text = slots[i].Item1;
+                equipmentSlot.name = slots[i].Item1;
+                equipmentSlot.Container = this;
+                equipmentSlot.m_Slot = slots[i].Item1;
+                equipmentSlot.Item = slots[i].Item2;
             }
+            
+            this.GUIManager.SetupManagedComponents(this.GetComponent<GUIData>());
         }
 
         protected override bool StackOrAdd(IEnumerable<JoyItemSlot> slots, IItemInstance item)
