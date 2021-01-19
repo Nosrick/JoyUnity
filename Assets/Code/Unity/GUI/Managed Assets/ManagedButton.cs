@@ -131,7 +131,9 @@ namespace Code.Unity.GUI.Managed_Assets
         protected void DoStateTransition(SelectionState state, bool crossFade)
         {
             if (!this.gameObject.activeInHierarchy)
+            {
                 return;
+            }
 
             Color tintColor;
             Sprite transitionSprite;
@@ -247,7 +249,7 @@ namespace Code.Unity.GUI.Managed_Assets
                 return;
             }
 
-            this.DoStateTransition(CurrentSelectionState, true);
+            this.DoStateTransition(this.CurrentSelectionState, true);
         }
 
         public virtual void OnMove(AxisEventData eventData)

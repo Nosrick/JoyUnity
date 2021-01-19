@@ -59,6 +59,8 @@ namespace JoyLib.Code.Unity.GUI
             this.PlayerType.ValueChanged += this.ChangeTemplateHandler;
             this.CultureContainer.ValueChanged += this.ChangeCultureHandler;
             //this.JobContainer.ValueChanged += this.ChangeJobHandler;
+
+            this.SetCultureSpecificData(this.CurrentCulture);
         }
         
         protected void ChangeTemplate(IEntityTemplate template)
@@ -69,7 +71,6 @@ namespace JoyLib.Code.Unity.GUI
                                             .Select(culture => culture.CultureName)
                                             .ToList();
             this.CurrentCulture = this.CurrentCultures[this.CultureContainer.Value];
-            this.SetCultureSpecificData(this.CurrentCulture);
         }
 
         protected void ChangeTemplateHandler(object sender, ValueChangedEventArgs args)
@@ -125,7 +126,10 @@ namespace JoyLib.Code.Unity.GUI
             this.GameManager.GUIManager.SetUIColours(
                 this.CurrentCulture.BackgroundColours,
                 this.CurrentCulture.CursorColours, 
-                this.CurrentCulture.FontColours);
+                this.CurrentCulture.FontColours,
+                true,
+                true,
+                0.4f);
         }
 
         protected void SetStatistics()

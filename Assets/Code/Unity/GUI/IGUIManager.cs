@@ -15,14 +15,16 @@ namespace JoyLib.Code.Unity.GUI
 
         void ToggleGUI(string name);
 
-        void SetupManagedComponents(GUIData gui);
+        void SetupManagedComponents(GUIData gui, bool crossFade = false, float duration = 0.1f);
 
         void SetUIColours(IDictionary<string, IDictionary<string, Color>> background,
             IDictionary<string, IDictionary<string, Color>> cursor,
-            IDictionary<string, Color> mainFontColours, 
-            bool recolour = true);
+            IDictionary<string, Color> mainFontColours,
+            bool recolour = true,
+            bool crossFade = false, 
+            float duration = 0.1f);
 
-        void RecolourGUIs();
+        void RecolourGUIs(bool crossFade = false, float duration = 0.1f);
 
         GUIData OpenGUI(string name, bool bringToFront = false);
 

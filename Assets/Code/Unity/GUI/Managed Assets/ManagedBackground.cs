@@ -28,7 +28,7 @@ namespace JoyLib.Code.Unity.GUI
             this.HasBackground = true;
         }
 
-        public void SetColours(IDictionary<string, Color> colours)
+        public void SetColours(IDictionary<string, Color> colours, bool crossFade = false, float duration = 0.1f)
         {
             this.Awake();
             if (this.CurrentSpriteState is null)
@@ -38,7 +38,7 @@ namespace JoyLib.Code.Unity.GUI
                 return;
             }
 
-            this.OverrideAllColours(colours, false);
+            this.OverrideAllColours(colours, crossFade, duration);
             this.HasColours = true;
         }
 

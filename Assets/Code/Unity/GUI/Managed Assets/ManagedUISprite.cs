@@ -40,13 +40,21 @@ namespace JoyLib.Code.Unity
             }
         }
 
-        public override void OverrideAllColours(IDictionary<string, Color> colours, bool crossFade = false)
+        public override void OverrideAllColours(
+            IDictionary<string, Color> colours, 
+            bool crossFade = false, 
+            float duration = 0.1f)
         {
             this.Initialise();
 
             foreach (ISpriteState state in this.m_States.Values)
             {
                 state.OverrideColours(colours);
+            }
+
+            if (this.isActiveAndEnabled == false)
+            {
+                return;
             }
             
             if (crossFade)
@@ -55,7 +63,12 @@ namespace JoyLib.Code.Unity
                 {
                     if (colours.TryGetValue(this.ImageParts[i].name, out Color colour))
                     {
-                        this.StartCoroutine(this.ColourLerp(this.ImageParts[i].gameObject, colour, 0.1f));
+                        this.StartCoroutine(
+                            this.ColourLerp(
+                                this.ImageParts[i].gameObject, 
+                                colour, 
+                                duration, 
+                                true));
                     }
                 }
             }
@@ -124,8 +137,13 @@ namespace JoyLib.Code.Unity
             }
         }
 
-        protected override IEnumerator ColourLerp(GameObject gameObject, Color newColour, float duration)
+        protected override IEnumerator ColourLerp(
+            GameObject gameObject, 
+            Color newColour, 
+            float duration, 
+            bool permanent = false)
         {
+            GlobalConstants.ActionLog.AddText("Duration of Lerp is " + duration);
             Image image = gameObject.GetComponent<Image>();
             Color original = image.color;
             Color multiplied = original * newColour;
@@ -135,6 +153,10 @@ namespace JoyLib.Code.Unity
                     .First(part => part.m_Name.Equals(gameObject.name, StringComparison.OrdinalIgnoreCase))
                     .SelectedColour;
             }
+            else if (permanent)
+            {
+                multiplied = newColour;
+            }
 
             float startTime = Time.time;
             float percentage = 0f;
@@ -142,6 +164,7 @@ namespace JoyLib.Code.Unity
             while (percentage < 1f)
             {
                 float elapsedTime = Time.time - startTime;
+                //GlobalConstants.ActionLog.AddText("Elapsed time since lerp start: " + elapsedTime);
                 percentage = elapsedTime / duration;
                 image.color = Color.Lerp(original, multiplied, percentage);
                 yield return null;

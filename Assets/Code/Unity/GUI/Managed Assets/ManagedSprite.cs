@@ -198,7 +198,11 @@ namespace JoyLib.Code.Unity
             }
         }
 
-        public virtual void OverrideAllColours(IDictionary<string, Color> colours, bool crossFade = false)
+        public virtual void OverrideAllColours(
+            IDictionary<string, 
+                Color> colours, 
+            bool crossFade = false,
+            float duration = 0.1f)
         {
             this.Initialise();
 
@@ -206,12 +210,25 @@ namespace JoyLib.Code.Unity
             {
                 state.OverrideColours(colours);
             }
+
+            if (this.isActiveAndEnabled == false)
+            {
+                return;
+            }
             
             if (crossFade)
             {
                 for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
                 {
-                    this.StartCoroutine(this.ColourLerp(this.SpriteParts[i].gameObject, colours.First().Value, 0.1f));
+                    if (colours.TryGetValue(this.SpriteParts[i].name, out Color colour))
+                    {
+                        this.StartCoroutine(
+                            this.ColourLerp(
+                                this.SpriteParts[i].gameObject, 
+                                colour, 
+                                duration, 
+                                true));
+                    }
                 }
             }
             else
@@ -284,7 +301,11 @@ namespace JoyLib.Code.Unity
             }
         }
 
-        protected virtual IEnumerator ColourLerp(GameObject gameObject, Color newColour, float duration)
+        protected virtual IEnumerator ColourLerp(
+            GameObject gameObject, 
+            Color newColour, 
+            float duration,
+            bool permanent = false)
         {
             SpriteRenderer spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
             Color original = spriteRenderer.color;
@@ -294,6 +315,10 @@ namespace JoyLib.Code.Unity
                 multiplied = this.CurrentSpriteState.SpriteData.m_Parts
                     .First(part => part.m_Name.Equals(gameObject.name, StringComparison.OrdinalIgnoreCase))
                     .SelectedColour;
+            }
+            else if (permanent)
+            {
+                multiplied = newColour;
             }
 
             float startTime = Time.time;

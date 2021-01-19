@@ -97,7 +97,9 @@ namespace JoyLib.Code.Unity.GUI
         public void SetUIColours(IDictionary<string, IDictionary<string, Color>> background,
             IDictionary<string, IDictionary<string, Color>> cursor,
             IDictionary<string, Color> mainFontColours,
-            bool recolour = true)
+            bool recolour = true, 
+            bool crossFade = false,
+            float duration = 0.1f)
         {
             this.BackgroundColours = background;
             this.CursorColours = cursor;
@@ -105,7 +107,7 @@ namespace JoyLib.Code.Unity.GUI
 
             if (recolour)
             {
-                this.RecolourGUIs();
+                this.RecolourGUIs(crossFade, duration);
             }
         }
 
@@ -153,11 +155,11 @@ namespace JoyLib.Code.Unity.GUI
             this.GUIs.Add(gui);
         }
 
-        public void RecolourGUIs()
+        public void RecolourGUIs(bool crossFade = false, float duration = 0.1f)
         {
             foreach (GUIData gui in this.GUIs)
             {
-                this.SetupManagedComponents(gui);
+                this.SetupManagedComponents(gui, crossFade, duration);
             }
 
             Cursor cursor = null;
@@ -169,7 +171,7 @@ namespace JoyLib.Code.Unity.GUI
             }
         }
 
-        public void SetupManagedComponents(GUIData gui)
+        public void SetupManagedComponents(GUIData gui, bool crossFade = false, float duration = 0.1f)
         {
             ManagedBackground[] backgrounds = gui.GetComponentsInChildren<ManagedBackground>(true);
             foreach (ManagedBackground background in backgrounds)
@@ -187,7 +189,7 @@ namespace JoyLib.Code.Unity.GUI
 
                 if (this.BackgroundColours.TryGetValue(background.ElementName, out IDictionary<string, Color> colours))
                 {
-                    background.SetColours(colours);
+                    background.SetColours(colours, crossFade, duration);
                 }
                 else
                 {
