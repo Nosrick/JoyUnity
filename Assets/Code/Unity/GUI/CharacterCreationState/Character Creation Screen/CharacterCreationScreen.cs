@@ -43,6 +43,8 @@ namespace JoyLib.Code.Unity.GUI
             this.DerivedValuesWindow.Initialise();
             this.PlayerInfo.Initialise();
             this.AbilityWindow.Initialise();
+            
+            this.GameManager.GUIManager.RecolourGUIs();
         }
 
         public void CreatePlayer()

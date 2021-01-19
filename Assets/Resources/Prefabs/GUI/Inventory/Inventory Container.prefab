@@ -359,9 +359,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b886057594c6471c9e3301af0910e0c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UseAction: 
-  m_SlotParent: {fileID: 0}
-  m_SlotPrefab: {fileID: 0}
+  m_UseAction: right mouse
+  m_SlotParent: {fileID: 6156505942237814527}
+  m_SlotPrefab: {fileID: 7594581071963496037, guid: c91df744336ef4641921f1d3a3cdb97e,
+    type: 3}
   m_CanDrag: 1
   m_CanDropItems: 1
   m_CanUseItems: 0
@@ -514,7 +515,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ElementName: DefaultWindow
-  m_Prefab: {fileID: 0}
+  m_Prefab: {fileID: 1949383421893784, guid: fc0c5c6df1dde9649a50d9ed7547fa80, type: 3}
 --- !u!114 &8251676246649404464
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3776,7 +3777,7 @@ PrefabInstance:
     - target: {fileID: 6296772926489511444, guid: 170a10e9e51de134b9b56ec34ceaebf2,
         type: 3}
       propertyPath: m_fontSize
-      value: 39
+      value: 39.15
       objectReference: {fileID: 0}
     - target: {fileID: 7129824930873053387, guid: 170a10e9e51de134b9b56ec34ceaebf2,
         type: 3}

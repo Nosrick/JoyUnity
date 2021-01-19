@@ -9,13 +9,13 @@ namespace JoyLib.Code.Unity.GUI
     {
         protected string m_Name;
 
-        [SerializeField] protected ValueContainer m_Parent;
+        public ValueContainer Parent { get; set; }
         [SerializeField] protected TextMeshProUGUI m_ValueText;
         [SerializeField] protected TextMeshProUGUI m_NameText;
 
         public override int IncreaseValue(int delta = 1)
         {
-            if (this.m_Parent.Value >= delta)
+            if (this.Parent.Value >= delta)
             {
                 return base.IncreaseValue(delta);
             }

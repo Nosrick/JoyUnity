@@ -145,7 +145,6 @@ GameObject:
   - component: {fileID: 45986810656440416}
   - component: {fileID: 7506016300017063204}
   - component: {fileID: 8003699697767801336}
-  - component: {fileID: 4687092941540814187}
   - component: {fileID: 8403975637019894361}
   - component: {fileID: 3771862732396527235}
   m_Layer: 5
@@ -197,19 +196,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_AspectMode: 1
   m_AspectRatio: 1
---- !u!114 &4687092941540814187
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7129824930873053387}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9494a29e1b84457ca857e893dadfa29a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ElementName: AccentBackground
 --- !u!114 &8403975637019894361
 MonoBehaviour:
   m_ObjectHideFlags: 0

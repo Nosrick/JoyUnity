@@ -19,10 +19,7 @@ namespace JoyLib.Code.Unity.GUI
         
         [SerializeField]
         protected TextMeshProUGUI m_Cooldown;
-        
-        [SerializeField]
-        protected TextMeshProUGUI m_ItemName;
-        
+
         [SerializeField]
         protected bool m_UseRarityColor = false;
         
@@ -93,11 +90,6 @@ namespace JoyLib.Code.Unity.GUI
         
         public virtual void Repaint()
         {
-            if (this.m_ItemName != null)
-            {
-                this.m_ItemName.text = this.IsEmpty ? string.Empty : this.Item.JoyName;
-            }
-
             if (this.m_Icon is null == false)
             {
                 if (!this.IsEmpty)

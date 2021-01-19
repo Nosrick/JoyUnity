@@ -491,7 +491,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ElementName: DefaultWindow
-  m_Prefab: {fileID: 0}
+  m_Prefab: {fileID: 1949383421893784, guid: fc0c5c6df1dde9649a50d9ed7547fa80, type: 3}
 --- !u!114 &4602737652539341377
 MonoBehaviour:
   m_ObjectHideFlags: 0

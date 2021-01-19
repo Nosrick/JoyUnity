@@ -9,7 +9,7 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
 
         public override int IncreaseValue(int delta = 1)
         {
-            if (this.m_Parent.Value >= this.IncreaseCost)
+            if (this.Parent.Value >= this.IncreaseCost)
             {
                 return base.IncreaseValue(delta);
             }

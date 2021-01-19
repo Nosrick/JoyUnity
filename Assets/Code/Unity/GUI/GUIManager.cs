@@ -167,7 +167,8 @@ namespace JoyLib.Code.Unity.GUI
 
         protected void SetupManagedComponents(GUIData gui)
         {
-            foreach (ManagedBackground background in gui.GetComponentsInChildren<ManagedBackground>(true))
+            ManagedBackground[] backgrounds = gui.GetComponentsInChildren<ManagedBackground>(true);
+            foreach (ManagedBackground background in backgrounds)
             {
                 if (this.Backgrounds.TryGetValue(background.ElementName, out ISpriteState state))
                 {
@@ -192,7 +193,8 @@ namespace JoyLib.Code.Unity.GUI
                 }
             }
 
-            foreach (ManagedFonts font in gui.GetComponentsInChildren<ManagedFonts>(true))
+            ManagedFonts[] fonts = gui.GetComponentsInChildren<ManagedFonts>(true);
+            foreach (ManagedFonts font in fonts)
             {
                 if (this.FontsToUse.TryGetValue(font.ElementName, out TMP_FontAsset fontToUse))
                 {

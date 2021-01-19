@@ -9,7 +9,7 @@ namespace JoyLib.Code.Unity.GUI
 {
     public class AbilityItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
-        [SerializeField] protected ValueContainer m_Parent;
+        public ValueContainer Parent { get; set; }
         [SerializeField] public int Delta = 1;
         public bool Selected { get; protected set; }
 
@@ -62,7 +62,7 @@ namespace JoyLib.Code.Unity.GUI
 
         public void ToggleMe()
         {
-            if (this.m_Parent.Value < this.Delta && this.Selected == false)
+            if (this.Parent.Value < this.Delta && this.Selected == false)
             {
                 return;
             }

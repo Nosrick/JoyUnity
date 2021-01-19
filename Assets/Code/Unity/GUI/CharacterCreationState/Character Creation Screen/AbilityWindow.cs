@@ -76,6 +76,7 @@ namespace JoyLib.Code.Unity.GUI
                     AbilityItem newItem =
                         Instantiate(this.AbilityItemPrefab, this.transform).GetComponent<AbilityItem>();
                     newItem.gameObject.SetActive(true);
+                    newItem.Parent = this;
                     this.Items.Add(newItem);
                 }
             }

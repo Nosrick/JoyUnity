@@ -60,6 +60,7 @@ namespace JoyLib.Code.Unity.GUI
                     NamedItem newItem =
                         Instantiate(this.ValueContainerPrefab, this.transform).GetComponent<NamedItem>();
                     newItem.gameObject.SetActive(true);
+                    newItem.Parent = this;
                     this.Items.Add(newItem);
                 }
             }
@@ -70,6 +71,7 @@ namespace JoyLib.Code.Unity.GUI
                 this.Items[i].ValueChanged -= this.ChangeSkill;
                 this.Items[i].DirectValueSet(skills[i].Value);
                 this.Items[i].Minimum = skills[i].Value;
+                this.Items[i].Maximum = 3;
                 this.Items[i].ValueChanged += this.ChangeSkill;
                 //Items[i].Tooltip = skills[i].Key;
             }
