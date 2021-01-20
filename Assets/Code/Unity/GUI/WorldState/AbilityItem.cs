@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using Code.Unity.GUI.Managed_Assets;
 using JoyLib.Code.Events;
 using TMPro;
 using UnityEngine;
@@ -7,13 +8,16 @@ using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity.GUI
 {
+    [RequireComponent(typeof(ManagedButton))]
     public class AbilityItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         public ValueContainer Parent { get; set; }
         [SerializeField] public int Delta = 1;
-        public bool Selected { get; protected set; }
-
         public string Tooltip { get; set; }
+        
+        protected ManagedButton MyButton { get; set; }
+
+        public bool Selected => this.MyButton.Toggled;
 
         public string Name
         {
@@ -42,6 +46,7 @@ namespace JoyLib.Code.Unity.GUI
 
             this.Image = this.GetComponent<Image>();
             this.Text = this.GetComponentInChildren<TextMeshProUGUI>();
+            this.MyButton = this.GetComponent<ManagedButton>();
         }
         
         public void OnPointerEnter(PointerEventData data)
@@ -62,18 +67,17 @@ namespace JoyLib.Code.Unity.GUI
 
         public void ToggleMe()
         {
-            if (this.Parent.Value < this.Delta && this.Selected == false)
+            if (this.Parent.Value < this.Delta && this.MyButton.Toggled)
             {
+                this.MyButton.Toggled = false;
                 return;
             }
-
-            this.Selected = !this.Selected;
 
             this.OnSelect?.Invoke(this, new ValueChangedEventArgs
             {
                 Name = this.Name,
-                NewValue = this.Selected ? this.Delta : -this.Delta,
-                Delta = this.Selected ? this.Delta : -this.Delta 
+                NewValue = this.MyButton.Toggled ? this.Delta : -this.Delta,
+                Delta = this.MyButton.Toggled ? this.Delta : -this.Delta 
             });
         }
     }

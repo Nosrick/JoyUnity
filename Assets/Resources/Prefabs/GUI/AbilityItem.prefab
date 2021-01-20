@@ -79,6 +79,7 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Transition: 1
   m_Interactable: 1
+  m_Toggleable: 1
   m_OnClick:
     m_PersistentCalls:
       m_Calls:

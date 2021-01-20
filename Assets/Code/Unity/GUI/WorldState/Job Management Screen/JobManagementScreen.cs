@@ -101,6 +101,8 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
             }
 
             this.SetUp();
+            
+            GUIManager.SetupManagedComponents(this.GetComponent<GUIData>());
         }
 
         public void OnDisable()
