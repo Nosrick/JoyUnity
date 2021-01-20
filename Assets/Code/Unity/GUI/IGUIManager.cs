@@ -44,7 +44,7 @@ namespace JoyLib.Code.Unity.GUI
 
         bool IsActive(string name);
 
-        bool AreAnyOpen();
+        bool AreAnyOpen(bool includeAlwaysOpen = false);
 
         IDictionary<string, ISpriteState> Backgrounds { get; }
         IDictionary<string, ISpriteState> Cursors { get; }

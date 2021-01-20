@@ -402,9 +402,14 @@ namespace JoyLib.Code.Unity.GUI
             return this.ActiveGUIs.Any(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
 
-        public bool AreAnyOpen()
+        public bool AreAnyOpen(bool includeAlwaysOpen = false)
         {
-            return this.ActiveGUIs.Count > 0;
+            if (includeAlwaysOpen)
+            {
+                return this.ActiveGUIs.Count > 0;
+            }
+
+            return this.ActiveGUIs.Count(data => data.m_AlwaysOpen == false) > 0;
         }
     }
 }
