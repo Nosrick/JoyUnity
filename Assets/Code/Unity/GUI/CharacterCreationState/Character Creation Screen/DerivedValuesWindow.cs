@@ -39,6 +39,7 @@ namespace JoyLib.Code.Unity.GUI
                     NamedItem newItem =
                         Instantiate(this.DerivedValuePrefab, this.transform).GetComponent<NamedItem>();
                     newItem.gameObject.SetActive(true);
+                    newItem.Parent = this;
                     this.Items.Add(newItem);
                 }
             }
