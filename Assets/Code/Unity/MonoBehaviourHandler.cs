@@ -87,6 +87,12 @@ namespace JoyLib.Code.Unity
         public void OnPointerEnter(PointerEventData eventData)
         {
             this.PointerOver = true;
+
+            if (GUIManager.RemovesControl())
+            {
+                return;
+            }
+            
             if (GUIManager.IsActive(GUINames.CONTEXT_MENU) == false
                 && GlobalConstants.GameManager.Player.VisionProvider.CanSee(
                     GlobalConstants.GameManager.Player,
