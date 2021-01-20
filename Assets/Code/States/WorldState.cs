@@ -234,7 +234,14 @@ namespace JoyLib.Code.States
 
             if (inputAction.name.Equals("close all windows", StringComparison.OrdinalIgnoreCase))
             {
-                this.GUIManager.CloseAllOtherGUIs(GUINames.NEEDSRECT);
+                if (this.GUIManager.AreAnyOpen() == false)
+                {
+                    this.GUIManager.OpenGUI(GUINames.PAUSE);
+                }
+                else
+                {
+                    this.GUIManager.CloseAllGUIs();
+                }
             }
 
             if (inputAction.name.Equals("toggle inventory", StringComparison.OrdinalIgnoreCase))
