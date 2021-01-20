@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Castle.Core.Internal;
 using JoyLib.Code.Graphics;
 using UnityEngine;
@@ -67,8 +65,7 @@ namespace JoyLib.Code.Unity
                             this.ColourLerp(
                                 this.ImageParts[i].gameObject, 
                                 colour, 
-                                duration, 
-                                true));
+                                duration));
                     }
                 }
             }
@@ -83,7 +80,10 @@ namespace JoyLib.Code.Unity
             this.IsDirty = true;
         }
 
-        public override void TintWithSingleColour(Color colour, bool crossFade = false)
+        public override void TintWithSingleColour(
+            Color colour, 
+            bool crossFade = false, 
+            float duration = 0.1f)
         {
             this.Initialise();
 
@@ -96,7 +96,12 @@ namespace JoyLib.Code.Unity
             {
                 for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
                 {
-                    this.StartCoroutine(this.ColourLerp(this.ImageParts[i].gameObject, colour, 0.1f));
+                    this.StartCoroutine(
+                        this.ColourLerp(
+                            this.ImageParts[i].gameObject, 
+                            colour, 
+                            duration, 
+                            true));
                 }
             }
             else
@@ -140,34 +145,28 @@ namespace JoyLib.Code.Unity
         protected override IEnumerator ColourLerp(
             GameObject gameObject, 
             Color newColour, 
-            float duration, 
-            bool permanent = false)
+            float duration,
+            params bool[] args)
         {
-            GlobalConstants.ActionLog.AddText("Duration of Lerp is " + duration);
             Image image = gameObject.GetComponent<Image>();
-            Color original = image.color;
-            Color multiplied = original * newColour;
-            if (newColour == Color.white)
+            if (args.Length == 0 || args[0] == false)
             {
-                multiplied = this.CurrentSpriteState.SpriteData.m_Parts
-                    .First(part => part.m_Name.Equals(gameObject.name, StringComparison.OrdinalIgnoreCase))
-                    .SelectedColour;
-            }
-            else if (permanent)
-            {
-                multiplied = newColour;
-            }
+                Color original = image.color;
 
-            float startTime = Time.time;
-            float percentage = 0f;
+                float startTime = Time.time;
+                float percentage = 0f;
 
-            while (percentage < 1f)
+                while (percentage < 1f)
+                {
+                    float elapsedTime = Time.time - startTime;
+                    percentage = elapsedTime / duration;
+                    image.color = Color.Lerp(original, newColour, percentage);
+                    yield return null;
+                }
+            }
+            else if(args[0])
             {
-                float elapsedTime = Time.time - startTime;
-                //GlobalConstants.ActionLog.AddText("Elapsed time since lerp start: " + elapsedTime);
-                percentage = elapsedTime / duration;
-                image.color = Color.Lerp(original, multiplied, percentage);
-                yield return null;
+                image.CrossFadeColor(newColour, duration, false, true);
             }
         }
     }

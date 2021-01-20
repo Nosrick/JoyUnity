@@ -226,8 +226,7 @@ namespace JoyLib.Code.Unity
                             this.ColourLerp(
                                 this.SpriteParts[i].gameObject, 
                                 colour, 
-                                duration, 
-                                true));
+                                duration));
                     }
                 }
             }
@@ -241,7 +240,10 @@ namespace JoyLib.Code.Unity
             this.IsDirty = true;
         }
 
-        public virtual void TintWithSingleColour(Color colour, bool crossFade = false)
+        public virtual void TintWithSingleColour(
+            Color colour, 
+            bool crossFade = false, 
+            float duration = 0.1f)
         {
             this.Initialise();
 
@@ -251,7 +253,7 @@ namespace JoyLib.Code.Unity
             {
                 for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
                 {
-                    this.StartCoroutine(this.ColourLerp(this.SpriteParts[i].gameObject, colour, 0.1f));
+                    this.StartCoroutine(this.ColourLerp(this.SpriteParts[i].gameObject, colour, duration));
                 }
             }
             else
@@ -301,36 +303,12 @@ namespace JoyLib.Code.Unity
             }
         }
 
-        protected virtual IEnumerator ColourLerp(
-            GameObject gameObject, 
-            Color newColour, 
+        protected virtual IEnumerator ColourLerp(GameObject gameObject,
+            Color newColour,
             float duration,
-            bool permanent = false)
+            params bool[] args)
         {
-            SpriteRenderer spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
-            Color original = spriteRenderer.color;
-            Color multiplied = original * newColour;
-            if (newColour == Color.white)
-            {
-                multiplied = this.CurrentSpriteState.SpriteData.m_Parts
-                    .First(part => part.m_Name.Equals(gameObject.name, StringComparison.OrdinalIgnoreCase))
-                    .SelectedColour;
-            }
-            else if (permanent)
-            {
-                multiplied = newColour;
-            }
-
-            float startTime = Time.time;
-            float percentage = 0f;
-
-            while (percentage < 1f)
-            {
-                float elapsedTime = Time.time - startTime;
-                percentage = elapsedTime / duration;
-                spriteRenderer.color = Color.Lerp(original, multiplied, percentage);
-                yield return null;
-            }
+            yield return null;
         }
     }
 }

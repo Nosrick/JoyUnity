@@ -293,6 +293,7 @@ namespace Code.Unity.GUI.Managed_Assets
         public virtual void OnPointerExit(PointerEventData eventData)
         {
             this.IsPointerInside = false;
+            this.HasSelection = false;
             this.EvaluateAndTransitionToSelectionState();
         }
 

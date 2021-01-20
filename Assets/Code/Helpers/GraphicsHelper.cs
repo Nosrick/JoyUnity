@@ -22,5 +22,18 @@ namespace JoyLib.Code.Helpers
         {
             return Enum.TryParse(data, true, out SpriteDrawMode drawMode) ? drawMode : SpriteDrawMode.Simple;
         }
+
+        public static float GetPowerOfColour(Color colour, bool includeAlpha = false)
+        {
+            float power = colour.r + colour.g + colour.b;
+            int division = 3;
+            if (includeAlpha)
+            {
+                power += colour.a;
+                division++;
+            }
+
+            return power / division;
+        }
     }
 }
