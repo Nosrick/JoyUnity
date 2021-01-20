@@ -40,6 +40,8 @@ namespace Code.Unity.GUI.Managed_Assets
         [SerializeField]
         protected bool m_Interactable = true;
 
+        [SerializeField] protected bool m_Toggleable = false;
+
         [SerializeField]
         protected Button.ButtonClickedEvent m_OnClick = new Button.ButtonClickedEvent();
 
@@ -52,7 +54,7 @@ namespace Code.Unity.GUI.Managed_Assets
                     return SelectionState.Disabled;
                 }
 
-                if (this.IsPointerDown)
+                if (this.IsPointerDown || this.Toggled)
                 {
                     return SelectionState.Pressed;
                 }
@@ -73,6 +75,8 @@ namespace Code.Unity.GUI.Managed_Assets
         protected bool IsPointerInside { get; set; }
         protected bool IsPointerDown { get; set; }
         protected bool HasSelection { get; set; }
+        
+        public bool Toggled { get; set; }
         
         protected bool m_GroupsAllowInteraction = true;
 
@@ -269,6 +273,11 @@ namespace Code.Unity.GUI.Managed_Assets
                 EventSystem.current.SetSelectedGameObject(this.gameObject, eventData);
             }
 
+            if (this.m_Toggleable)
+            {
+                this.Toggled = !this.Toggled;
+            }
+
             this.IsPointerDown = true;
             this.EvaluateAndTransitionToSelectionState();
         }
@@ -279,7 +288,7 @@ namespace Code.Unity.GUI.Managed_Assets
             {
                 return;
             }
-
+            
             this.IsPointerDown = false;
             this.EvaluateAndTransitionToSelectionState();
         }
