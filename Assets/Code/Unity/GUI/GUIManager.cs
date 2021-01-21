@@ -65,6 +65,7 @@ namespace JoyLib.Code.Unity.GUI
                 {
                     {"default", Resources.Load<TMP_FontAsset>("Fonts/OpenDyslexic3")}
                 };
+
                 this.DyslexicModeFont = this.LoadedFonts["default"];
                 this.FontColours = new Dictionary<string, Color>
                 {
@@ -124,6 +125,8 @@ namespace JoyLib.Code.Unity.GUI
             {
                 GlobalConstants.ActionLog.AddText("COULD NOT FIND GUI DEFAULTS.", LogLevel.Error);
             }
+
+            this.FontsInUse = this.LoadedFonts;
         }
 
         public void SetUIColours(IDictionary<string, IDictionary<string, Color>> background,
