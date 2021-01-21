@@ -5,7 +5,7 @@ namespace GameSettings
     public abstract class GameSetting : ScriptableObject
     {
         public abstract string settingName { get; }
-        protected string saveKey => $"GameSettings/{settingName}/{GetInstanceID()}";
+        protected string saveKey => $"GameSettings/{settingName}";
 
         public abstract object objectValue { get; set; }
 

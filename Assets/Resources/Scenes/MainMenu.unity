@@ -405,7 +405,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -711,20 +711,15 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 818007317}
     m_Modifications:
-    - target: {fileID: 90302588064362716, guid: d63b0e6a27e7b9a4090dd2a3464e2d1e,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1670644497353140549, guid: d63b0e6a27e7b9a4090dd2a3464e2d1e,
+    - target: {fileID: 6593690767998759611, guid: d63b0e6a27e7b9a4090dd2a3464e2d1e,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 179.91992
+      value: 0.5339966
       objectReference: {fileID: 0}
-    - target: {fileID: 1670644497353140549, guid: d63b0e6a27e7b9a4090dd2a3464e2d1e,
+    - target: {fileID: 6593690767998759611, guid: d63b0e6a27e7b9a4090dd2a3464e2d1e,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 26.599854
+      value: -0.00021362305
       objectReference: {fileID: 0}
     - target: {fileID: 7964575617704449680, guid: d63b0e6a27e7b9a4090dd2a3464e2d1e,
         type: 3}
@@ -840,11 +835,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7964575618185316069, guid: d63b0e6a27e7b9a4090dd2a3464e2d1e,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0.9998474
       objectReference: {fileID: 0}
     - target: {fileID: 7964575618771352302, guid: d63b0e6a27e7b9a4090dd2a3464e2d1e,
         type: 3}

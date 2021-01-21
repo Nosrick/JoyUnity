@@ -6,6 +6,7 @@ using System.Xml.Linq;
 using JoyLib.Code.Events;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
+using JoyLib.Code.Settings;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -82,25 +83,31 @@ namespace JoyLib.Code.Unity.GUI
 
         protected void SettingChanged(SettingChangedEventArgs args)
         {
-            if (args.Setting.settingName.Equals("dyslexic", StringComparison.OrdinalIgnoreCase))
+            if (args.Setting is DyslexicModeSetting dyslexicModeSetting)
             {
-                if ((bool)args.Setting.objectValue)
-                {
-                    foreach (string key in this.FontsInUse.Keys)
-                    {
-                        this.FontsInUse[key] = this.DyslexicModeFont;
-                    }
-                }
-                else
-                {
-                    foreach (string key in this.FontsInUse.Keys)
-                    {
-                        this.FontsInUse[key] = this.LoadedFonts[key];
-                    }
-                }
-                
-                this.RecolourGUIs();
+                this.UseDyslexicFont(dyslexicModeSetting.value);
             }
+        }
+
+        protected void UseDyslexicFont(bool value)
+        {
+            var keys = this.FontsInUse.Keys.ToArray();
+            if (value)
+            {
+                foreach (string key in keys)
+                {
+                    this.FontsInUse[key] = this.DyslexicModeFont;
+                }
+            }
+            else
+            {
+                foreach (string key in keys)
+                {
+                    this.FontsInUse[key] = this.LoadedFonts[key];
+                }
+            }
+                
+            this.RecolourGUIs();
         }
 
         protected void LoadDefaults()
@@ -126,7 +133,10 @@ namespace JoyLib.Code.Unity.GUI
                 GlobalConstants.ActionLog.AddText("COULD NOT FIND GUI DEFAULTS.", LogLevel.Error);
             }
 
-            this.FontsInUse = this.LoadedFonts;
+            this.FontsInUse = new Dictionary<string, TMP_FontAsset>(this.LoadedFonts);
+            this.UseDyslexicFont(
+                (bool)GlobalConstants.GameManager.SettingsManager
+                    .GetSetting(SettingNames.DYSLEXIC_MODE).objectValue);
         }
 
         public void SetUIColours(IDictionary<string, IDictionary<string, Color>> background,

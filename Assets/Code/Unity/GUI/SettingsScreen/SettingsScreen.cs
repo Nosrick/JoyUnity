@@ -42,6 +42,7 @@ namespace Code.Unity.GUI.SettingsScreen
             {
                 SettingItem newItem = Instantiate(this.m_SettingItemPrefab, this.m_Container.transform);
                 newItem.MySetting = setting;
+                this.SettingItems.Add(newItem);
             }
         }
 
