@@ -24,6 +24,7 @@ using JoyLib.Code.Helpers;
 using JoyLib.Code.Physics;
 using JoyLib.Code.Quests;
 using JoyLib.Code.Rollers;
+using JoyLib.Code.Settings;
 using JoyLib.Code.States;
 using JoyLib.Code.Unity.GUI;
 using JoyLib.Code.World;
@@ -61,6 +62,8 @@ namespace JoyLib.Code
             this.ActionLog = new ActionLog();
 
             GlobalConstants.ActionLog = this.ActionLog;
+
+            this.SettingsManager = new SettingsManager();
 
             this.LoadingMessage = "Initialising object pools";
             GameObject objectHolder = GameObject.Find("WorldObjects");
@@ -222,7 +225,7 @@ namespace JoyLib.Code
 
         public NaturalWeaponHelper NaturalWeaponHelper { get; protected set; }
         public RNG Roller { get; protected set; }
-
+        public SettingsManager SettingsManager { get; protected set; }
         public IEntityFactory EntityFactory { get; protected set; }
         public IItemFactory ItemFactory { get; protected set; }
         public GameObject MyGameObject { get; protected set; }

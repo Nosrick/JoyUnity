@@ -1,35 +1,30 @@
-﻿using System.Collections;
+﻿using JoyLib.Code.Helpers;
 using JoyLib.Code.States;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace JoyLib.Code.Unity.GUI.MainMenuState
 {
-    public class MainMenuHandler : MonoBehaviour
+    public class MainMenuHandler : ScreenHandler
     {
         public void NewGame()
         {
             GlobalConstants.GameManager.SetNextState(new CharacterCreationState());
-            this.StartCoroutine(this.LoadSceneAsync());
+            this.StartCoroutine(this.LoadSceneAsync("CharacterCreation"));
         }
 
-        protected IEnumerator LoadSceneAsync()
+        public void LoadGame()
         {
-            AsyncOperation operation = SceneManager.LoadSceneAsync("CharacterCreation");
-            operation.allowSceneActivation = false;
-            while (operation.progress < 0.9f)
-            {
-                GlobalConstants.ActionLog.AddText("Loading... " + (operation.progress * 100) + "%");
-                yield return new WaitForSeconds(0.2f);
-            }
-            operation.allowSceneActivation = true;
-            GlobalConstants.ActionLog.AddText("Done loading!");
-            yield return operation;
+            GlobalConstants.ActionLog.AddText("Not quite implemented yet!", LogLevel.Warning);
         }
 
         public void ExitGame()
         {
             Application.Quit();
+        }
+
+        public void GoToSettings()
+        {
+            GlobalConstants.GameManager.GUIManager.OpenGUI(GUINames.SETTINGS);
         }
     }
 }

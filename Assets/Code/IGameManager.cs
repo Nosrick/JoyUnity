@@ -20,6 +20,7 @@ using JoyLib.Code.Helpers;
 using JoyLib.Code.Physics;
 using JoyLib.Code.Quests;
 using JoyLib.Code.Rollers;
+using JoyLib.Code.Settings;
 using JoyLib.Code.States;
 using JoyLib.Code.Unity.GUI;
 using JoyLib.Code.World;
@@ -65,6 +66,8 @@ namespace JoyLib.Code
         NaturalWeaponHelper NaturalWeaponHelper { get; }
         
         RNG Roller { get; }
+        
+        SettingsManager SettingsManager { get; }
         
         IEntityFactory EntityFactory { get; }
         IItemFactory ItemFactory { get; }

@@ -49,7 +49,7 @@ namespace JoyLib.Code.Unity.GUI
         IDictionary<string, ISpriteState> Backgrounds { get; }
         IDictionary<string, ISpriteState> Cursors { get; }
 
-        IDictionary<string, TMP_FontAsset> FontsToUse { get; }
+        IDictionary<string, TMP_FontAsset> LoadedFonts { get; }
         
         IDictionary<string, IDictionary<string, Color>> CursorColours { get; }
         

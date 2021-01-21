@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using JoyLib.Code.Events;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
 using TMPro;
@@ -21,7 +22,11 @@ namespace JoyLib.Code.Unity.GUI
         public IDictionary<string, ISpriteState> Backgrounds { get; protected set; }
         public IDictionary<string, ISpriteState> Cursors { get; protected set; }
 
-        public IDictionary<string, TMP_FontAsset> FontsToUse { get; protected set; }
+        public IDictionary<string, TMP_FontAsset> LoadedFonts { get; protected set; }
+        
+        protected IDictionary<string, TMP_FontAsset> FontsInUse { get; set; }
+        
+        protected TMP_FontAsset DyslexicModeFont { get; set; }
 
         public IDictionary<string, IDictionary<string, Color>> CursorColours { get; protected set; }
         public IDictionary<string, IDictionary<string, Color>> BackgroundColours { get; protected set; }
@@ -56,10 +61,11 @@ namespace JoyLib.Code.Unity.GUI
 
                 this.CursorColours = new Dictionary<string, IDictionary<string, Color>>();
                 this.BackgroundColours = new Dictionary<string, IDictionary<string, Color>>();
-                this.FontsToUse = new Dictionary<string, TMP_FontAsset>
+                this.LoadedFonts = new Dictionary<string, TMP_FontAsset>
                 {
                     {"default", Resources.Load<TMP_FontAsset>("Fonts/OpenDyslexic3")}
                 };
+                this.DyslexicModeFont = this.LoadedFonts["default"];
                 this.FontColours = new Dictionary<string, Color>
                 {
                     {"default", Color.black}
@@ -67,6 +73,32 @@ namespace JoyLib.Code.Unity.GUI
                 this.MinFontSize = 10f;
                 this.MaxFontSize = 36f;
                 this.LoadDefaults();
+
+                GlobalConstants.GameManager.SettingsManager.OnSettingChange -= this.SettingChanged;
+                GlobalConstants.GameManager.SettingsManager.OnSettingChange += this.SettingChanged;
+            }
+        }
+
+        protected void SettingChanged(SettingChangedEventArgs args)
+        {
+            if (args.Setting.settingName.Equals("dyslexic", StringComparison.OrdinalIgnoreCase))
+            {
+                if ((bool)args.Setting.objectValue)
+                {
+                    foreach (string key in this.FontsInUse.Keys)
+                    {
+                        this.FontsInUse[key] = this.DyslexicModeFont;
+                    }
+                }
+                else
+                {
+                    foreach (string key in this.FontsInUse.Keys)
+                    {
+                        this.FontsInUse[key] = this.LoadedFonts[key];
+                    }
+                }
+                
+                this.RecolourGUIs();
             }
         }
 
@@ -79,7 +111,7 @@ namespace JoyLib.Code.Unity.GUI
                 XElement doc = XElement.Load(file);
                 foreach (XElement data in doc.Elements("Data"))
                 {
-                    this.FontsToUse.Add(
+                    this.LoadedFonts.Add(
                         data.Element("Name").GetAs<string>(),
                         Resources.Load<TMP_FontAsset>("Fonts/" + data.Element("Value").GetAs<string>()));
                     this.MinFontSize = data.Element("MinFontSize").DefaultIfEmpty(10f);
@@ -202,7 +234,7 @@ namespace JoyLib.Code.Unity.GUI
             ManagedFonts[] fonts = gui.GetComponentsInChildren<ManagedFonts>(true);
             foreach (ManagedFonts font in fonts)
             {
-                if (this.FontsToUse.TryGetValue(font.ElementName, out TMP_FontAsset fontToUse))
+                if (this.FontsInUse.TryGetValue(font.ElementName, out TMP_FontAsset fontToUse))
                 {
                     font.SetFonts(fontToUse);
                 }
