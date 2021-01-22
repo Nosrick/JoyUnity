@@ -7,7 +7,8 @@
         "Unity.InputSystem",
         "CaseyDeCoder.GameSettings.Runtime",
         "CaseyDeCoder.GameSettings.UI.Runtime",
-        "CaseyDeCoder.GameSettings.UI.TMPro.Runtime"
+        "CaseyDeCoder.GameSettings.UI.TMPro.Runtime",
+        "OdinSerializer"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -5,9 +5,11 @@ using JoyLib.Code.Events;
 
 namespace JoyLib.Code.Entities.Items
 {
+    [Serializable]
     public class EquipmentStorage : JoyObject, IItemContainer
     {
         protected List<Tuple<string, IItemInstance>> m_Slots;
+        
         public IReadOnlyList<Tuple<string, IItemInstance>> Slots => this.m_Slots.AsReadOnly();
 
         public IEnumerable<IItemInstance> Contents =>

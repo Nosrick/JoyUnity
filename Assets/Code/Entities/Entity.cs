@@ -24,10 +24,12 @@ using JoyLib.Code.Quests;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.World;
+using OdinSerializer;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities
 {
+    [Serializable]
     public class Entity : JoyObject, IEntity
     {
         //public event ValueChangedEventHandler OnDerivedValueChange;
@@ -38,49 +40,82 @@ namespace JoyLib.Code.Entities
         public event JobChangedEventHandler JobChange;
         public event BooleanChangedEventHandler ConsciousnessChange;
         public event BooleanChangedEventHandler AliveChange;
+        
+        [OdinSerialize]
         protected IDictionary<string, IRollableValue<int>> m_Statistics;
+        
+        [OdinSerialize]
         protected IDictionary<string, IEntitySkill> m_Skills;
+        
+        [OdinSerialize]
         protected IDictionary<string, INeed> m_Needs;
+        
+        [OdinSerialize]
         protected List<IAbility> m_Abilities;
+        
+        [OdinSerialize]
         protected EquipmentStorage m_Equipment;
+        
+        [OdinSerialize]
         protected List<IItemInstance> m_Backpack;
+        
+        [OdinSerialize]
         protected IItemInstance m_NaturalWeapons;
+        
+        [OdinSerialize]
         protected ISexuality m_Sexuality;
+        
+        [OdinSerialize]
         protected IRomance m_Romance;
 
+        [OdinSerialize]
         protected List<string> m_IdentifiedItems;
 
+        [OdinSerialize]
         protected IJob m_CurrentJob;
 
+        [OdinSerialize]
         protected List<string> m_Slots;
 
+        [OdinSerialize]
         protected List<ICulture> m_Cultures;
 
+        [OdinSerialize]
         protected int m_Size;
 
+        [OdinSerialize]
         protected IVision m_VisionProvider;
 
+        [OdinSerialize]
         protected FulfillmentData m_FulfillmentData;
 
+        [OdinSerialize]
         protected NeedAIData m_CurrentTarget;
 
+        [OdinSerialize]
         protected IDriver m_Driver;
 
+        [OdinSerialize]
         protected IPathfinder m_Pathfinder;
 
+        [OdinSerialize]
         protected Queue<Vector2Int> m_PathfindingData;
 
+        [NonSerialized]
         protected IWorldInstance m_MyWorld;
-
-        protected const int XP_PER_LEVEL = 100;
-        protected const int NEED_FULFILMENT_COUNTER = 5;
+        
+        [NonSerialized]
         protected const int REGEN_TICK_TIME = 10;
 
+        [NonSerialized]
         protected const int ATTACK_THRESHOLD = -50;
-
+        
         public static IEntityRelationshipHandler RelationshipHandler { get; set; }
+        
         public static IEntitySkillHandler SkillHandler { get; set; }
+        
         public static IQuestTracker QuestTracker { get; set; }
+        
         public static NaturalWeaponHelper NaturalWeaponHelper { get; set; }
         
         public static IDerivedValueHandler DerivedValueHandler { get; set; }
@@ -969,10 +1004,13 @@ namespace JoyLib.Code.Entities
         public event ItemRemovedEventHandler ItemRemoved;
         public event ItemAddedEventHandler ItemAdded;
 
+        [OdinSerialize]
         public string CreatureType { get; protected set; }
 
+        [OdinSerialize]
         public IBioSex Sex { get; protected set; }
 
+        [OdinSerialize]
         public IGender Gender { get; protected set; }
 
         public NeedAIData CurrentTarget
@@ -1022,6 +1060,7 @@ namespace JoyLib.Code.Entities
             get { return this.m_VisionProvider.Vision; }
         }
 
+        [OdinSerialize]
         public bool PlayerControlled { get; set; }
 
         public List<IItemInstance> Backpack => this.m_Backpack;
@@ -1029,8 +1068,10 @@ namespace JoyLib.Code.Entities
         public IItemInstance NaturalWeapons => this.m_NaturalWeapons;
 
         public List<string> IdentifiedItems => this.m_IdentifiedItems;
+        
         public IJob CurrentJob => this.m_CurrentJob;
 
+        [OdinSerialize]
         public bool HasMoved { get; set; }
 
         public FulfillmentData FulfillmentData
@@ -1058,6 +1099,7 @@ namespace JoyLib.Code.Entities
             set => this.m_Romance = value;
         }
 
+        [OdinSerialize]
         public IAbility TargetingAbility { get; set; }
 
         public int Mana
@@ -1090,10 +1132,13 @@ namespace JoyLib.Code.Entities
             get { return this.DerivedValues[DerivedValueName.CONCENTRATION].Value; }
         }
 
+        [OdinSerialize]
         public Vector2Int TargetPoint { get; set; }
 
+        [OdinSerialize]
         protected int RegenTicker { get; set; }
 
+        [OdinSerialize]
         public Quest QuestOffered { get; set; }
 
         public List<ICulture> Cultures => this.m_Cultures;
@@ -1133,6 +1178,7 @@ namespace JoyLib.Code.Entities
 
         public bool Conscious => this.HitPointsRemaining > 0;
 
+        [OdinSerialize]
         public List<IJob> Jobs { get; protected set; }
 
         public override IEnumerable<Tuple<string, string>> Tooltip => this.ConstructDescription();

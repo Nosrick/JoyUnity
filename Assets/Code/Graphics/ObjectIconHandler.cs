@@ -224,6 +224,7 @@ namespace JoyLib.Code.Graphics
         }
     }
 
+    [Serializable]
     public class SpriteData
     {
         public string m_Name;
@@ -231,6 +232,7 @@ namespace JoyLib.Code.Graphics
         public List<SpritePart> m_Parts;
     }
 
+    [Serializable]
     public class SpritePart
     {
         public string m_Name;

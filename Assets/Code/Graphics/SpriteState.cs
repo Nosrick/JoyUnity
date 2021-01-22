@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace JoyLib.Code.Graphics
 {
+    [Serializable]
     public class SpriteState : ISpriteState
     {
         public SpriteData SpriteData { get; protected set; }

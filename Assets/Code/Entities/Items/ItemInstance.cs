@@ -17,6 +17,7 @@ namespace JoyLib.Code.Entities.Items
     [Serializable]
     public class ItemInstance : JoyObject, IItemInstance
     {
+        [NonSerialized]
         protected const string DURABILITY = "durability";
 
         protected IEntity User { get; set; }
@@ -58,6 +59,7 @@ namespace JoyLib.Code.Entities.Items
         public IEnumerable<ISpriteState> Sprites => this.States;
 
         public static ILiveItemHandler ItemHandler { get; set; }
+        
         public static ILiveEntityHandler EntityHandler { get; set; }
 
         public ItemInstance(
@@ -410,7 +412,7 @@ namespace JoyLib.Code.Entities.Items
             protected set => this.m_Identified = value;
         }
 
-        public bool Broken => this.HitPointsRemaining <= 0;
+        public bool Broken => this.GetValue(DerivedValueName.DURABILITY) <= 0;
 
         public int Efficiency => (int)(this.m_Type.Material.Bonus * (this.GetValue(DURABILITY) / (float)this.GetMaximum(DURABILITY)));
 

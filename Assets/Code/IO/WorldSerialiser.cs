@@ -4,7 +4,7 @@ using JoyLib.Code.Entities;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.World;
-using Newtonsoft.Json;
+using OdinSerializer;
 
 namespace JoyLib.Code.IO
 {
@@ -28,10 +28,14 @@ namespace JoyLib.Code.IO
             }
             try
             {
+                byte[] array = SerializationUtility.SerializeValue(world, DataFormat.JSON);
+                File.WriteAllBytes(Directory.GetCurrentDirectory() + "/save/" + world.Name + "/sav.dat", array);
+                /*
                 StreamWriter writer = new StreamWriter(Directory.GetCurrentDirectory() + "/save/" + world.Name + "/sav.dat", false);
                 JsonSerializer serializer = JsonSerializer.CreateDefault();
                 serializer.Serialize(writer, world);
                 writer.Close();
+                */
             }
             catch(Exception e)
             {
@@ -42,10 +46,15 @@ namespace JoyLib.Code.IO
 
         public IWorldInstance Deserialise(string worldName)
         {
+            /*
             StreamReader reader = new StreamReader(Directory.GetCurrentDirectory() + "/save/" + worldName + "/sav.dat");
             JsonSerializer serializer = JsonSerializer.CreateDefault();
             IWorldInstance world = serializer.Deserialize<IWorldInstance>(new JsonTextReader(reader));
             reader.Close();
+            */
+            
+            byte[] array = File.ReadAllBytes(Directory.GetCurrentDirectory() + "/save/" + worldName + "/sav.dat");
+            IWorldInstance world = SerializationUtility.DeserializeValue<IWorldInstance>(array, DataFormat.JSON);
             
             this.LinkWorlds(world);
             this.EntityWorldKnowledge(world);

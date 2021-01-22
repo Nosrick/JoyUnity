@@ -440,8 +440,9 @@ namespace JoyLib.Code.Unity.GUI
 
         public void CloseAllGUIs()
         {
-            IEnumerable<GUIData> toClose = this.ActiveGUIs
-                .Where(gui => gui.m_AlwaysOpen == false);
+            GUIData[] toClose = this.ActiveGUIs
+                .Where(gui => gui.m_AlwaysOpen == false)
+                .ToArray();
 
             foreach (GUIData data in toClose)
             {

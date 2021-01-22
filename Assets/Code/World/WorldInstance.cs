@@ -7,6 +7,7 @@ using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Managers;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.World.Lighting;
+using OdinSerializer;
 using UnityEngine;
 
 namespace JoyLib.Code.World
@@ -16,19 +17,24 @@ namespace JoyLib.Code.World
     {
         protected WorldTile[,] m_Tiles;
         protected byte[,] m_Costs;
-
-        [NonSerialized] protected int m_PlayerIndex;
+        
+        [NonSerialized]
+        protected int m_PlayerIndex;
 
         protected readonly Vector2Int m_Dimensions;
 
+        [OdinSerialize]
         //Worlds and where to access them
         protected Dictionary<Vector2Int, IWorldInstance> m_Areas;
-
-        [NonSerialized] protected IWorldInstance m_Parent;
+        
+        [NonSerialized]
+        protected IWorldInstance m_Parent;
 
         protected List<IEntity> m_Entities;
 
         protected List<IJoyObject> m_Objects;
+        
+        [OdinSerialize]
         protected Dictionary<Vector2Int, IJoyObject> m_Walls;
 
         protected Vector2Int m_SpawnPoint;
@@ -38,15 +44,27 @@ namespace JoyLib.Code.World
         protected string m_Name;
         protected long m_GUID;
         
+        [OdinSerialize]
         public LightCalculator LightCalculator { get; protected set; }
-
-        [NonSerialized] protected GameObject m_FogOfWarHolder;
-        [NonSerialized] protected GameObject m_WallHolder;
-        [NonSerialized] protected GameObject m_ObjectHolder;
-        [NonSerialized] protected GameObject m_EntityHolder;
-
-        [NonSerialized] protected ILiveEntityHandler EntityHandler;
-        [NonSerialized] protected RNG Roller;
+        
+        [NonSerialized]
+        protected GameObject m_FogOfWarHolder;
+        
+        [NonSerialized]
+        protected GameObject m_WallHolder;
+        
+        [NonSerialized]
+        protected GameObject m_ObjectHolder;
+        
+        [NonSerialized]
+        protected GameObject m_EntityHolder;
+        
+        [NonSerialized]
+        protected ILiveEntityHandler EntityHandler;
+        
+        protected RNG Roller;
+        
+        [OdinSerialize]
         protected List<string> m_Tags;
 
         /// <summary>
@@ -674,6 +692,7 @@ namespace JoyLib.Code.World
             get { return this.m_Dimensions; }
         }
 
+        [OdinSerialize]
         public bool IsDirty { get; protected set; }
 
         public byte[,] Costs

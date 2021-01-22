@@ -10,6 +10,7 @@ using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.Unity;
 using JoyLib.Code.World;
+using OdinSerializer;
 using UnityEngine;
 
 namespace JoyLib.Code
@@ -22,6 +23,7 @@ namespace JoyLib.Code
         
         protected List<string> m_Tags;
         
+        [OdinSerialize]
         public IDictionary<string, IDerivedValue> DerivedValues { get; protected set; }
         
         public Vector2Int WorldPosition { get; protected set; }
@@ -32,14 +34,18 @@ namespace JoyLib.Code
             protected set => this.m_Tags = new List<string>(value);
         }
 
+        [OdinSerialize]
         public bool IsWall { get; protected set; }
 
+        [OdinSerialize]
         public bool IsDestructible { get; protected set; }
         
         public IWorldInstance MyWorld { get; set; }
 
+        [OdinSerialize]
         public long GUID { get; protected set; }
 
+        [OdinSerialize]
         public string JoyName { get; protected set; }
 
         public int HitPointsRemaining => this.GetValue("hitpoints");
@@ -48,10 +54,13 @@ namespace JoyLib.Code
 
         public bool Alive => this.HitPointsRemaining > (this.HitPoints * (-1));
         
+        [OdinSerialize]
         protected NonUniqueDictionary<object, object> Data { get; set; }
 
+        [OdinSerialize]
         public List<ISpriteState> States { get; protected set; }
 
+        [OdinSerialize]
         public List<IJoyAction> CachedActions { get; protected set; }
         
         public MonoBehaviourHandler MonoBehaviourHandler { get; protected set; }
@@ -70,6 +79,7 @@ namespace JoyLib.Code
             }
         }
         
+        [OdinSerialize]
         protected IEnumerable<Tuple<string, string>> m_Tooltip;
 
         public JoyObject()
