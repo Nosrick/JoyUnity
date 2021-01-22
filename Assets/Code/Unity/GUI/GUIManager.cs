@@ -10,6 +10,8 @@ using JoyLib.Code.Settings;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using SpriteState = JoyLib.Code.Graphics.SpriteState;
 
 namespace JoyLib.Code.Unity.GUI
 {
@@ -100,6 +102,7 @@ namespace JoyLib.Code.Unity.GUI
             {
                 this.DyslexicMode = dyslexicModeSetting.value;
                 this.RecolourGUIs();
+                LayoutRebuilder.MarkLayoutForRebuild(this.MainUI.GetComponent<RectTransform>());
             }
         }
 
