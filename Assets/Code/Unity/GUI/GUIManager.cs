@@ -105,7 +105,7 @@ namespace JoyLib.Code.Unity.GUI
 
         protected void LoadDefaults()
         {
-            string file = Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "/GUIDefaults.xml";
+            string file = Directory.GetCurrentDirectory() + GlobalConstants.SETTINGS_FOLDER + "/GUIDefaults.xml";
 
             if (File.Exists(file))
             {
@@ -131,7 +131,7 @@ namespace JoyLib.Code.Unity.GUI
                 GlobalConstants.ActionLog.AddText("COULD NOT FIND GUI DEFAULTS.", LogLevel.Error);
             }
 
-            file = Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "/DyslexicMode.xml";
+            file = Directory.GetCurrentDirectory() + GlobalConstants.SETTINGS_FOLDER + "/DyslexicMode.xml";
 
             if (File.Exists(file))
             {
