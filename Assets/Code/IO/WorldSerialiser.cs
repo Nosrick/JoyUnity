@@ -2,8 +2,9 @@
 using System.IO;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Graphics;
+using JoyLib.Code.Helpers;
 using JoyLib.Code.World;
-using UnityEngine;
+using Newtonsoft.Json;
 
 namespace JoyLib.Code.IO
 {
@@ -22,36 +23,33 @@ namespace JoyLib.Code.IO
             }
             catch (Exception e)
             {
-                Console.WriteLine("Cannot open directory. Quitting.");
-                Console.WriteLine(e.Message);
-                Environment.Exit(-1);
+                GlobalConstants.ActionLog.AddText("Cannot open save directory.", LogLevel.Error);
+                GlobalConstants.ActionLog.AddText(e.Message, LogLevel.Error);
             }
             try
             {
-                string worldString = JsonUtility.ToJson(world);
-
                 StreamWriter writer = new StreamWriter(Directory.GetCurrentDirectory() + "/save/" + world.Name + "/sav.dat", false);
-                writer.WriteLine(worldString);
+                JsonSerializer serializer = JsonSerializer.CreateDefault();
+                serializer.Serialize(writer, world);
                 writer.Close();
             }
             catch(Exception e)
             {
-                Console.WriteLine("Cannot serialise and/or write world to file. Quitting.");
-                Console.WriteLine(e.Message);
-                Environment.Exit(-1);
+                GlobalConstants.ActionLog.AddText("Cannot serialise and/or write world to file.", LogLevel.Error);
+                GlobalConstants.ActionLog.AddText(e.Message, LogLevel.Error);
             }
         }
 
         public IWorldInstance Deserialise(string worldName)
         {
             StreamReader reader = new StreamReader(Directory.GetCurrentDirectory() + "/save/" + worldName + "/sav.dat");
-            string worldString = reader.ReadToEnd();
+            JsonSerializer serializer = JsonSerializer.CreateDefault();
+            IWorldInstance world = serializer.Deserialize<IWorldInstance>(new JsonTextReader(reader));
+            reader.Close();
             
-            IWorldInstance world = JsonUtility.FromJson<WorldInstance>(worldString);
             this.LinkWorlds(world);
             this.EntityWorldKnowledge(world);
-            this.AssignIcons(world);
-            reader.Close();
+            //this.AssignIcons(world);
             return world;
         }
 

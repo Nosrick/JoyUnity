@@ -17,6 +17,7 @@ using JoyLib.Code.Entities.Sexuality;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
+using JoyLib.Code.IO;
 using JoyLib.Code.Physics;
 using JoyLib.Code.Quests;
 using JoyLib.Code.Rollers;
@@ -68,6 +69,8 @@ namespace JoyLib.Code
         RNG Roller { get; }
         
         SettingsManager SettingsManager { get; }
+        
+        WorldSerialiser WorldSerialiser { get; }
         
         IEntityFactory EntityFactory { get; }
         IItemFactory ItemFactory { get; }

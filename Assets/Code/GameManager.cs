@@ -21,6 +21,7 @@ using JoyLib.Code.Entities.Sexuality;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
+using JoyLib.Code.IO;
 using JoyLib.Code.Physics;
 using JoyLib.Code.Quests;
 using JoyLib.Code.Rollers;
@@ -146,6 +147,8 @@ namespace JoyLib.Code
 
             this.m_StateManager = new StateManager();
 
+            this.WorldSerialiser = new WorldSerialiser();
+
             this.LoadingMessage = "Setting static bad things";
             TradeWindow.RelationshipHandler = this.RelationshipHandler;
 
@@ -195,6 +198,7 @@ namespace JoyLib.Code
 
         public string LoadingMessage { get; protected set; }
 
+        public WorldSerialiser WorldSerialiser { get; protected set; }
         public ActionLog ActionLog { get; protected set; }
         public ICombatEngine CombatEngine { get; protected set; }
         public IQuestTracker QuestTracker { get; protected set; }
