@@ -1,8 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <GUIData>
     <Data>
+        <Name>Font</Name>
         <Value>OpenDyslexic3</Value>
         <MinFontSize>8</MinFontSize>
         <MaxFontSize>36</MaxFontSize>
+    </Data>
+    <Data>
+        <Name>AccentFont</Name>
+        <Value>OpenDyslexic3</Value>
+        <MinFontSize>8</MinFontSize>
+        <MaxFontSize>24</MaxFontSize>
     </Data>
 </GUIData>

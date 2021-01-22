@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using JoyLib.Code.Graphics;
 using TMPro;
 using UnityEngine;
@@ -49,13 +50,12 @@ namespace JoyLib.Code.Unity.GUI
         IDictionary<string, ISpriteState> Backgrounds { get; }
         IDictionary<string, ISpriteState> Cursors { get; }
 
-        IDictionary<string, TMP_FontAsset> LoadedFonts { get; }
+        IDictionary<string, TMP_FontAsset> FontsInUse { get; }
         
         IDictionary<string, IDictionary<string, Color>> CursorColours { get; }
         
         IDictionary<string, IDictionary<string, Color>> BackgroundColours { get; }
         
-        float MinFontSizeInUse { get; }
-        float MaxFontSizeInUse { get; }
+        IDictionary<string, Tuple<float, float>> FontSizesInUse { get; }
     }
 }
