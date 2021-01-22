@@ -71,7 +71,7 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
---- !u!114 &1120176956186418397
+--- !u!114 &4807777115871754243
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -83,7 +83,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 633ae74873e44ccbaf68a8b7d041f428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ElementName: AccentFont
+  m_ElementName: Font
   m_OverrideSize: 0
   m_OverrideColour: 1
   m_OverrideOutline: 1
@@ -201,7 +201,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ElementName: Font
-  m_OverrideSize: 1
+  m_OverrideSize: 0
   m_OverrideColour: 1
   m_OverrideOutline: 1
 --- !u!1 &7265820667781865522
@@ -624,7 +624,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ElementName: AccentFont
-  m_OverrideSize: 1
+  m_OverrideSize: 0
   m_OverrideColour: 1
   m_OverrideOutline: 1
 --- !u!1 &7265820668663487640

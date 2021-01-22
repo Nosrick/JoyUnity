@@ -27,13 +27,22 @@ namespace JoyLib.Code.Unity.GUI
         
         protected IDictionary<string, TMP_FontAsset> FontsInUse { get; set; }
         
-        protected TMP_FontAsset DyslexicModeFont { get; set; }
 
         public IDictionary<string, IDictionary<string, Color>> CursorColours { get; protected set; }
         public IDictionary<string, IDictionary<string, Color>> BackgroundColours { get; protected set; }
 
-        public float MinFontSize { get; protected set; }
-        public float MaxFontSize { get; protected set; }
+        protected float MinFontSize { get; set; }
+        protected float MaxFontSize { get; set; }
+        
+        protected bool DyslexicMode { get; set; }
+        protected TMP_FontAsset DyslexicModeFont { get; set; }
+        public float MinDyslexicFontSize { get; protected set; }
+        public float MaxDyslexicFontSize { get; protected set; }
+
+        public float MinFontSizeInUse => this.DyslexicMode ? this.MinDyslexicFontSize : this.MinFontSize;
+        public float MaxFontSizeInUse => this.DyslexicMode ? this.MaxDyslexicFontSize : this.MaxFontSize;
+        
+        
 
         public IDictionary<string, Color> FontColours { get; protected set; }
 
@@ -133,10 +142,23 @@ namespace JoyLib.Code.Unity.GUI
                 GlobalConstants.ActionLog.AddText("COULD NOT FIND GUI DEFAULTS.", LogLevel.Error);
             }
 
+            file = Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "/DyslexicMode.xml";
+
+            if (File.Exists(file))
+            {
+                XElement doc = XElement.Load(file);
+                foreach (XElement data in doc.Elements("Data"))
+                {
+                    this.DyslexicModeFont = Resources.Load<TMP_FontAsset>("Fonts/" + data.Element("Value"));
+                    this.MinDyslexicFontSize = data.Element("MinFontSize").DefaultIfEmpty(8f);
+                    this.MaxDyslexicFontSize = data.Element("MaxFontSize").DefaultIfEmpty(36f);
+                }
+            }
+
             this.FontsInUse = new Dictionary<string, TMP_FontAsset>(this.LoadedFonts);
-            this.UseDyslexicFont(
-                (bool)GlobalConstants.GameManager.SettingsManager
-                    .GetSetting(SettingNames.DYSLEXIC_MODE).objectValue);
+            this.DyslexicMode = (bool) GlobalConstants.GameManager.SettingsManager
+                .GetSetting(SettingNames.DYSLEXIC_MODE).objectValue;
+            this.UseDyslexicFont(this.DyslexicMode);
         }
 
         public void SetUIColours(IDictionary<string, IDictionary<string, Color>> background,
@@ -257,7 +279,7 @@ namespace JoyLib.Code.Unity.GUI
                                                       font.name, LogLevel.Warning);
                 }
 
-                font.SetMinMaxFontSizes(this.MinFontSize, this.MaxFontSize);
+                font.SetMinMaxFontSizes(this.MinFontSizeInUse, this.MaxFontSizeInUse);
 
                 if (this.FontColours.TryGetValue(font.ElementName, out Color colour))
                 {

@@ -55,7 +55,7 @@ namespace JoyLib.Code.Unity.GUI
         
         IDictionary<string, IDictionary<string, Color>> BackgroundColours { get; }
         
-        float MinFontSize { get; }
-        float MaxFontSize { get; }
+        float MinFontSizeInUse { get; }
+        float MaxFontSizeInUse { get; }
     }
 }
