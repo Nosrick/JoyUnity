@@ -19,6 +19,8 @@ namespace JoyLib.Code.Unity
         protected RectTransform MyRect { get; set; }
         
         protected Color Tint { get; set; }
+        public bool Finished { get; protected set; }
+        protected bool ForwardAnimation { get; set; }
 
         public ISpriteState CurrentSpriteState
         {
@@ -67,12 +69,13 @@ namespace JoyLib.Code.Unity
         }
         protected string m_ChosenState;
         
+        protected int FramesInCurrentState { get; set; }
+        
         protected string LastState { get; set; }
         protected string LastSprite { get; set; }
         
         public string TileSet { get; protected set; }
         public float TimeSinceLastChange { get; protected set; }
-        public bool IsAnimated { get; protected set; }
         
         public IEnumerable<ISpriteState> States => this.m_States.Values;
 
@@ -106,6 +109,7 @@ namespace JoyLib.Code.Unity
             this.Initialise();
             this.m_States.Add(state.Name, state);
             this.IsDirty = true;
+
             if (changeToNew)
             {
                 this.ChangeState(state);
@@ -147,14 +151,12 @@ namespace JoyLib.Code.Unity
             {
                 this.ChosenSprite = name;
                 this.ChosenState = this.m_States[this.ChosenSprite].SpriteData.m_State;
-                if (this.CurrentSpriteState.SpriteData.m_Parts.Max(part => part.m_Frames) > 1)
-                {
-                    this.IsAnimated = true;
-                }
-                else
-                {
-                    this.IsAnimated = false;
-                }
+
+                this.FramesInCurrentState = this.CurrentSpriteState.SpriteData.m_Parts.Max(part => part.m_Frames);
+
+                this.FrameIndex = 0;
+                this.Finished = false;
+                
                 this.UpdateSprites();
             }
         }
@@ -177,7 +179,7 @@ namespace JoyLib.Code.Unity
 
         public virtual void FixedUpdate()
         {
-            if (!this.IsAnimated)
+            if (!this.CurrentSpriteState.IsAnimated || this.Finished)
             {
                 return;
             }
@@ -190,8 +192,53 @@ namespace JoyLib.Code.Unity
 
             int lastIndex = this.FrameIndex;
             this.TimeSinceLastChange = 0f;
-            this.FrameIndex += 1;
-            this.FrameIndex %= this.CurrentSpriteState.SpriteData.m_Parts.Max(part => part.m_Frames);
+            
+            switch (this.CurrentSpriteState.AnimationType)
+            {
+                case AnimationType.Forward:
+                    this.FrameIndex += 1;
+                    if (this.FrameIndex == this.FramesInCurrentState)
+                    {
+                        this.FrameIndex = 0;
+                        if (this.CurrentSpriteState.Looping == false)
+                        {
+                            this.Finished = true;
+                        }
+                    }
+                    break;
+                
+                case AnimationType.Reverse:
+                    this.FrameIndex -= 1;
+                    if (this.FrameIndex < 0)
+                    {
+                        this.FrameIndex = this.FramesInCurrentState - 1;
+                        if (this.CurrentSpriteState.Looping == false)
+                        {
+                            this.Finished = true;
+                        }
+                    }
+                    break;
+                
+                case AnimationType.PingPong:
+                    if (this.FrameIndex == 0)
+                    {
+                        this.ForwardAnimation = true;
+                    }
+                    else if (this.FrameIndex == this.FramesInCurrentState - 1)
+                    {
+                        this.ForwardAnimation = false;
+                    }
+
+                    if (this.ForwardAnimation)
+                    {
+                        this.FrameIndex += 1;
+                    }
+                    else
+                    {
+                        this.FrameIndex -= 1;
+                    }
+                    break;
+            }
             if (lastIndex != this.FrameIndex)
             {
                 this.UpdateSprites();

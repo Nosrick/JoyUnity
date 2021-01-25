@@ -7,6 +7,6 @@
         string ChosenSprite { get; }
         string TileSet { get; }
         float TimeSinceLastChange { get; }
-        bool IsAnimated { get; }
+        bool Finished { get; }
     }
 }

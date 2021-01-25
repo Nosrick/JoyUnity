@@ -18,5 +18,17 @@ namespace JoyLib.Code.Graphics
         void OverrideWithSingleColour(Color colour);
 
         List<int> GetIndices();
+        
+        AnimationType AnimationType { get; }
+        bool Looping { get; }
+        
+        bool IsAnimated { get; set; }
+    }
+
+    public enum AnimationType
+    {
+        Forward,
+        Reverse,
+        PingPong
     }
 }
