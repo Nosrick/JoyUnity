@@ -172,11 +172,28 @@
                 <Name>demon</Name>
                 <State>idle</State>
                 <Part>
-                    <Name>body</Name>
-                    <Frames>2</Frames>
-                    <Filename>cultures/demon</Filename>
+                    <Name>body-light</Name>
+                    <Frames>3</Frames>
+                    <Filename>cultures/demon-light-body</Filename>
+                    <SortOrder>0</SortOrder>
                     <Data>default</Data>
-                    <Position>0</Position>
+                    <Colour>#3c9b6eff</Colour>
+                </Part>
+                <Part>
+                    <Name>body-dark</Name>
+                    <Frames>3</Frames>
+                    <Filename>cultures/demon-dark-body</Filename>
+                    <SortOrder>1</SortOrder>
+                    <Data>default</Data>
+                    <Colour>#3c9b6eff</Colour>
+                </Part>
+                <Part>
+                    <Name>eyes</Name>
+                    <Frames>3</Frames>
+                    <Filename>cultures/demon-eyes</Filename>
+                    <SortOrder>2</SortOrder>
+                    <Data>default</Data>
+                    <Colour>#f04b36ff</Colour>
                 </Part>
             </SpriteData>
 
@@ -185,8 +202,8 @@
                 <State>idle</State>
                 <Part>
                     <Name>body</Name>
-                    <Frames>2</Frames>
-                    <Filename>cultures/human-body</Filename>
+                    <Frames>3</Frames>
+                    <Filename>cultures/human-body32</Filename>
                     <Data>default</Data>
                     <Position>0</Position>
                     <SortOrder>0</SortOrder>
@@ -195,8 +212,8 @@
                 </Part>
                 <Part>
                     <Name>eyes</Name>
-                    <Frames>2</Frames>
-                    <Filename>cultures/human-eyes</Filename>
+                    <Frames>3</Frames>
+                    <Filename>cultures/human-eyes32</Filename>
                     <Data>default</Data>
                     <Position>0</Position>
                     <SortOrder>1</SortOrder>
@@ -206,8 +223,8 @@
                 </Part>
                 <Part>
                     <Name>horns</Name>
-                    <Frames>2</Frames>
-                    <Filename>cultures/human-horns</Filename>
+                    <Frames>3</Frames>
+                    <Filename>cultures/human-horns32</Filename>
                     <Data>default</Data>
                     <Position>0</Position>
                     <SortOrder>2</SortOrder>

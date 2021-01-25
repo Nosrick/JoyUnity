@@ -1,13 +1,16 @@
 fileFormatVersion: 2
-guid: 80452bdf22752824681aa3def1ea7f79
+guid: 751122930e8b25c4e975c0bd6408797b
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7043333071422532210
-    second: human-horns_0
+      213: 3089722546177962971
+    second: demon-light-body_0
   - first:
-      213: -2493768557174551069
-    second: human-horns_1
+      213: 6122601817212971268
+    second: demon-light-body_1
+  - first:
+      213: -3162354211900036830
+    second: demon-light-body_2
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -48,10 +51,10 @@ TextureImporter:
   compressionQuality: 50
   spriteMode: 2
   spriteExtrude: 1
-  spriteMeshType: 1
+  spriteMeshType: 0
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 16
+  spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -105,13 +108,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: human-horns_0
+      name: demon-light-body_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 16
-        height: 16
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -119,20 +122,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 27aa6ec7c12feb160800000000000000
-      internalID: 7043333071422532210
+      spriteID: bd3f3732946e0ea20800000000000000
+      internalID: 3089722546177962971
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: human-horns_1
+      name: demon-light-body_1
       rect:
         serializedVersion: 2
-        x: 16
+        x: 32
         y: 0
-        width: 16
-        height: 16
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -140,8 +143,29 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3ed8295b5ba546dd0800000000000000
-      internalID: -2493768557174551069
+      spriteID: 409e320f9e9d7f450800000000000000
+      internalID: 6122601817212971268
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: demon-light-body_2
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 229ecb1699f0d14d0800000000000000
+      internalID: -3162354211900036830
       vertices: []
       indices: 
       edges: []
