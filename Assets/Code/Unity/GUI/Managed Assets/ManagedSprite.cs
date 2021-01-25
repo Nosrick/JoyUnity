@@ -179,6 +179,11 @@ namespace JoyLib.Code.Unity
 
         public virtual void FixedUpdate()
         {
+            if (this.CurrentSpriteState is null)
+            {
+                return;
+            }
+            
             if (!this.CurrentSpriteState.IsAnimated || this.Finished)
             {
                 return;

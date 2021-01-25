@@ -33,11 +33,36 @@
 				<Name>naga</Name>
 				<State>idle</State>
 				<Part>
-					<Name>body</Name>
-					<Frames>2</Frames>
-					<Filename>cultures/naga</Filename>
+					<Name>body-light</Name>
+					<Frames>3</Frames>
+					<Filename>cultures/naga-light-body</Filename>
+					<SortOrder>0</SortOrder>
 					<Data>default</Data>
-					<Position>0</Position>
+					<Colour>#ffb35bff</Colour>
+				</Part>
+				<Part>
+					<Name>body-dark</Name>
+					<Frames>3</Frames>
+					<Filename>cultures/naga-dark-body</Filename>
+					<SortOrder>1</SortOrder>
+					<Data>default</Data>
+					<Colour>#ff851bff</Colour>
+				</Part>
+				<Part>
+					<Name>eyes</Name>
+					<Frames>3</Frames>
+					<Filename>cultures/naga-eyes</Filename>
+					<SortOrder>2</SortOrder>
+					<Data>default</Data>
+					<Colour>#373741ff</Colour>
+				</Part>
+				<Part>
+					<Name>tongue</Name>
+					<Frames>3</Frames>
+					<Filename>cultures/naga-tongue</Filename>
+					<SortOrder>3</SortOrder>
+					<Data>default</Data>
+					<Colour>#f01436ff</Colour>
 				</Part>
 			</SpriteData>
 		</TileSet>
