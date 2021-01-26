@@ -253,41 +253,53 @@ namespace JoyLib.Code.Unity.GUI
 
         public virtual void OnEndDrag(PointerEventData eventData)
         {
-            GlobalConstants.ActionLog.AddText(eventData.pointerCurrentRaycast.gameObject.name);
+            //GlobalConstants.ActionLog.AddText(eventData.pointerCurrentRaycast.gameObject.name);
 
             GameObject goResult = eventData.pointerCurrentRaycast.gameObject;
-            JoyItemSlot resultSlot = goResult.GetComponentInParent<JoyItemSlot>();
-            if (resultSlot is null == false)
+
+            if (goResult is null)
             {
-                if (resultSlot.Container is null == false
-                    && resultSlot.Container != this.Container
-                    && this.Container.CanDrag
-                    && resultSlot.Container.CanDrag)
+                if (this.Container.CanDrag
+                    && this.Container.CanDropItems)
                 {
-                    this.Container.StackOrSwap(resultSlot.Container, this.Item);
+                    this.DropItem();
                 }
             }
             else
             {
-                ItemContainer container = goResult.GetComponentInParent<ItemContainer>();
-                if (container is null == false)
+                JoyItemSlot resultSlot = goResult.GetComponentInParent<JoyItemSlot>();
+                if (resultSlot is null == false)
                 {
-                    if (container != this.Container
+                    if (resultSlot.Container is null == false
+                        && resultSlot.Container != this.Container
                         && this.Container.CanDrag
-                        && container.CanDrag)
+                        && resultSlot.Container.CanDrag)
                     {
-                        this.Container.StackOrSwap(container, this.Item);
+                        this.Container.StackOrSwap(resultSlot.Container, this.Item);
                     }
                 }
                 else
                 {
-                    if (this.Container.CanDropItems)
+                    ItemContainer container = goResult.GetComponentInParent<ItemContainer>();
+                    if (container is null == false)
                     {
-                        this.DropItem();
+                        if (container != this.Container
+                            && this.Container.CanDrag
+                            && container.CanDrag)
+                        {
+                            this.Container.StackOrSwap(container, this.Item);
+                        }
+                    }
+                    else
+                    {
+                        if (this.Container.CanDropItems)
+                        {
+                            this.DropItem();
+                        }
                     }
                 }
             }
-            
+
             this.EndDrag();
         }
 
