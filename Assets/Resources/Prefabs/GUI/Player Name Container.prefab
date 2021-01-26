@@ -34,10 +34,10 @@ RectTransform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.06775624, y: 0.11000001}
-  m_AnchorMax: {x: 0.42718908, y: 0.155}
-  m_AnchoredPosition: {x: -0.6999512, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -209.42, y: -245.14}
+  m_SizeDelta: {x: 640.87744, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2665062934591285519
 MonoBehaviour:
@@ -539,7 +539,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.5}
+  m_AnchoredPosition: {x: 0, y: -0.50001526}
   m_SizeDelta: {x: -20, y: -13}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6514809575038883890
@@ -782,7 +782,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 33.95
+  m_fontSize: 68.25
   m_fontSizeBase: 14
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -873,12 +873,12 @@ PrefabInstance:
     - target: {fileID: 1693415750243514630, guid: a2de3cfe6abfcb648ac806bc92ce0d02,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0.42651367
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1693415750243514630, guid: a2de3cfe6abfcb648ac806bc92ce0d02,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0.49542236
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1693415750243514630, guid: a2de3cfe6abfcb648ac806bc92ce0d02,
         type: 3}
@@ -918,12 +918,12 @@ PrefabInstance:
     - target: {fileID: 1693415750243514630, guid: a2de3cfe6abfcb648ac806bc92ce0d02,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.08999634
+      value: -0.3499756
       objectReference: {fileID: 0}
     - target: {fileID: 1693415750243514630, guid: a2de3cfe6abfcb648ac806bc92ce0d02,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000011444092
+      value: 0.0000038146973
       objectReference: {fileID: 0}
     - target: {fileID: 1693415750243514630, guid: a2de3cfe6abfcb648ac806bc92ce0d02,
         type: 3}
