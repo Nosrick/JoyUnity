@@ -11,11 +11,22 @@
 			<SpriteData>
 				<Name>SurroundFloor</Name>
 				<Part>
-					<Name>SurroundFloor</Name>
-					<Position>103</Position>
+					<Name>dirt</Name>
+					<Position>4</Position>
 					<Data>default</Data>
 					<Frames>1</Frames>
-					<Filename>Floor</Filename>
+					<Filename>environments/overworld-dirt</Filename>
+					<SortOrder>0</SortOrder>
+					<Colour>#352626ff</Colour>
+				</Part>
+				<Part>
+					<Name>grass</Name>
+					<Position>4</Position>
+					<Data>default</Data>
+					<Frames>1</Frames>
+					<Filename>environments/overworld-grass</Filename>
+					<SortOrder>1</SortOrder>
+					<Colour>#c8ff64ff</Colour>
 				</Part>
 			</SpriteData>
 		</TileSet>
