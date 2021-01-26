@@ -42,9 +42,9 @@ namespace JoyLib.Code
 
         public string JoyName { get; protected set; }
 
-        public int HitPointsRemaining => this.GetValue("hitpoints");
+        public virtual int HitPointsRemaining => this.GetValue("hitpoints");
 
-        public int HitPoints => this.GetMaximum("hitpoints");
+        public virtual int HitPoints => this.GetMaximum("hitpoints");
 
         public bool Alive => this.HitPointsRemaining > (this.HitPoints * (-1));
         
