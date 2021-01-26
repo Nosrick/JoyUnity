@@ -21,11 +21,24 @@
                 <Name>slime</Name>
                 <State>idle</State>
                 <Part>
-                    <Name>body</Name>
-                    <Frames>2</Frames>
-                    <Filename>cultures/slime</Filename>
+                    <Name>body-light</Name>
+                    <Frames>3</Frames>
+                    <Filename>cultures/slime-light-body</Filename>
                     <Data>default</Data>
-                    <Position>12</Position>
+                    <SortOrder>0</SortOrder>
+                    <Position>0</Position>
+                    <Colour>#73dcffff</Colour>
+                    <Colour>#ac60bfff</Colour>
+                </Part>
+                <Part>
+                    <Name>body-dark</Name>
+                    <Frames>3</Frames>
+                    <Filename>cultures/slime-dark-body</Filename>
+                    <Data>default</Data>
+                    <SortOrder>1</SortOrder>
+                    <Position>0</Position>
+                    <Colour>#73dcffff</Colour>
+                    <Colour>#ac60bfff</Colour>
                 </Part>
             </SpriteData>
         </TileSet>

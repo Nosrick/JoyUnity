@@ -301,12 +301,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 43
+  m_fontSize: 48
   m_fontSizeBase: 16
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 14
-  m_fontSizeMax: 43
+  m_fontSizeMax: 48
   m_fontStyle: 0
   m_HorizontalAlignment: 4
   m_VerticalAlignment: 512
@@ -380,10 +380,10 @@ RectTransform:
   m_Father: {fileID: 6937800664264896211}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.90810114}
+  m_AnchorMin: {x: 0, y: 0.89134896}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.1796875, y: 0.2998047}
-  m_SizeDelta: {x: -0.35894775, y: 0}
+  m_AnchoredPosition: {x: 0.39642334, y: 0.8200073}
+  m_SizeDelta: {x: 0.64105225, y: -2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &8894184558729823354
 MonoBehaviour:
@@ -536,8 +536,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0.45100003, y: 1}
-  m_AnchoredPosition: {x: -0.4897461, y: -0.07368469}
-  m_SizeDelta: {x: -0.63391113, y: 0.6725311}
+  m_AnchoredPosition: {x: -0.30993652, y: -0.5000191}
+  m_SizeDelta: {x: -0.63391113, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &6127378413933794236
 GameObject:
@@ -571,10 +571,10 @@ RectTransform:
   m_Father: {fileID: 7623997236991320388}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.112, y: 0}
+  m_AnchorMin: {x: 0.14036334, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 5.6400146, y: 0}
-  m_SizeDelta: {x: -10.0772705, y: -0.0000076293945}
+  m_AnchoredPosition: {x: 0.13369751, y: 0}
+  m_SizeDelta: {x: 0.93533325, y: -0.0000076293945}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3562050269258900026
 CanvasRenderer:
@@ -631,12 +631,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
+  m_fontSize: 48
   m_fontSizeBase: 16
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 14
-  m_fontSizeMax: 72
+  m_fontSizeMax: 48
   m_fontStyle: 0
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
@@ -747,9 +747,9 @@ RectTransform:
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 0.90810114}
-  m_AnchoredPosition: {x: 0.3203125, y: 0.1796875}
-  m_SizeDelta: {x: 0.64105225, y: 0.26885986}
+  m_AnchorMax: {x: 1, y: 0.89134896}
+  m_AnchoredPosition: {x: 0.3203125, y: 0.8595886}
+  m_SizeDelta: {x: 0.64105225, y: 1.6287231}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &8751988797427351651
 MonoBehaviour:
@@ -766,12 +766,12 @@ MonoBehaviour:
   m_Content: {fileID: 5274891040145920890}
   m_Horizontal: 0
   m_Vertical: 1
-  m_MovementType: 1
+  m_MovementType: 2
   m_Elasticity: 0.1
   m_Inertia: 0
   m_DecelerationRate: 0.135
   m_ScrollSensitivity: 5
-  m_Viewport: {fileID: 0}
+  m_Viewport: {fileID: 5287252985236059200}
   m_HorizontalScrollbar: {fileID: 0}
   m_VerticalScrollbar: {fileID: 0}
   m_HorizontalScrollbarVisibility: 0
@@ -808,7 +808,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 9f571dcb95e366e4a971ae4b416d8033, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1159,7 +1159,7 @@ PrefabInstance:
     - target: {fileID: 1693415750243514630, guid: a2de3cfe6abfcb648ac806bc92ce0d02,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0.14036334
       objectReference: {fileID: 0}
     - target: {fileID: 1693415750243514630, guid: a2de3cfe6abfcb648ac806bc92ce0d02,
         type: 3}
@@ -1224,12 +1224,12 @@ PrefabInstance:
     - target: {fileID: 1693415750243514630, guid: a2de3cfe6abfcb648ac806bc92ce0d02,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: -0.17999268
       objectReference: {fileID: 0}
     - target: {fileID: 1693415750243514630, guid: a2de3cfe6abfcb648ac806bc92ce0d02,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -0.00002670288
       objectReference: {fileID: 0}
     - target: {fileID: 1693415750243514630, guid: a2de3cfe6abfcb648ac806bc92ce0d02,
         type: 3}

@@ -28,3 +28,4 @@ sysinfo.txt
 
 InitScene*
 /player.log
+*.~lock.*

@@ -12,6 +12,9 @@ namespace JoyLib.Code.Entities.Items
         
         public IReadOnlyList<Tuple<string, IItemInstance>> Slots => this.m_Slots.AsReadOnly();
 
+        public override int HitPointsRemaining => 1;
+        public override int HitPoints => 1;
+
         public IEnumerable<IItemInstance> Contents =>
             this.m_Slots.Where(tuple => tuple.Item2 is null == false)
                 .Select(tuple => tuple.Item2)

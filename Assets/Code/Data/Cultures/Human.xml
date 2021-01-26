@@ -163,8 +163,8 @@
 				<State>idle</State>
 				<Part>
 					<Name>body</Name>
-					<Frames>2</Frames>
-					<Filename>cultures/human-body</Filename>
+					<Frames>3</Frames>
+					<Filename>cultures/human-body32</Filename>
 					<Data>default</Data>
 					<Position>0</Position>
 					<SortOrder>0</SortOrder>
@@ -173,8 +173,8 @@
 				</Part>
 				<Part>
 					<Name>eyes</Name>
-					<Frames>2</Frames>
-					<Filename>cultures/human-eyes</Filename>
+					<Frames>3</Frames>
+					<Filename>cultures/human-eyes32</Filename>
 					<Data>default</Data>
 					<Position>0</Position>
 					<SortOrder>1</SortOrder>

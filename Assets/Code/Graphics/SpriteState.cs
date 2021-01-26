@@ -12,14 +12,37 @@ namespace JoyLib.Code.Graphics
 
         public string Name { get; protected set; }
 
+        public AnimationType AnimationType { get; protected set; }
+
+        public bool Looping { get; protected set; }
+
+        public bool IsAnimated { get; set; }
+
         public SpriteState(
             string name,
             SpriteData spriteData,
+            AnimationType animationType = AnimationType.PingPong,
+            bool animated = true,
+            bool looping = true,
             bool randomiseColours = false)
         {
             this.SpriteData = spriteData;
             
             this.Name = name;
+
+            this.AnimationType = animationType;
+
+            this.IsAnimated = animated;
+            this.Looping = looping;
+
+            if (this.SpriteData.m_Parts.Max(part => part.m_Frames) == 1)
+            {
+                this.IsAnimated = false;
+            }
+            else
+            {
+                this.IsAnimated = true;
+            }
 
             if (randomiseColours)
             {
