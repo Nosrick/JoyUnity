@@ -12,25 +12,15 @@
 			<Name>Naga Pits</Name>
 
 			<SpriteData>
-				<Name>SoloFloor</Name>
-				<Part>
-					<Name>SoloFloor</Name>
-					<Frames>1</Frames>
-					<Filename>environments/naga pits</Filename>
-					<Position>4</Position>
-					<Data>Floor</Data>
-				</Part>
-			</SpriteData>
-
-			<SpriteData>
 				<Name>SurroundFloor</Name>
 				<Part>
 					<Name>SurroundFloor</Name>
-					<Position>6</Position>
+					<Position>4</Position>
 					<Data>Floor</Data>
 					<Data>Default</Data>
-					<Filename>environments/naga pits</Filename>
+					<Filename>environments/naga-pits32</Filename>
 					<Frames>1</Frames>
+					<Colour>#4196dcff</Colour>
 				</Part>
 			</SpriteData>
 
@@ -41,8 +31,9 @@
 					<Position>19</Position>
 					<Data>Floor</Data>
 					<Data>Default</Data>
-					<Filename>environments/naga pits</Filename>
+					<Filename>environments/naga-pits32</Filename>
 					<Frames>1</Frames>
+					<Colour>#325082ff</Colour>
 				</Part>
 			</SpriteData>
 		</TileSet>
