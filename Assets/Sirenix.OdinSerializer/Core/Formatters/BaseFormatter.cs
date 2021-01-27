@@ -16,15 +16,16 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+
+#if (UNITY_EDITOR || UNITY_STANDALONE) && !ENABLE_IL2CPP
+#define CAN_EMIT
+#endif
+
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Sirenix.OdinSerializer.Utilities;
-
-#if (UNITY_EDITOR || UNITY_STANDALONE) && !ENABLE_IL2CPP
-#define CAN_EMIT
-#endif
 
 namespace Sirenix.OdinSerializer
 {
