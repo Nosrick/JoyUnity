@@ -57,14 +57,21 @@ namespace JoyLib.Code
         [OdinSerialize]
         protected NonUniqueDictionary<object, object> Data { get; set; }
 
+        public List<ISpriteState> States
+        {
+            get => this.m_States;
+            protected set => this.m_States = value;
+        }
+
         [OdinSerialize]
-        public List<ISpriteState> States { get; protected set; }
+        protected List<ISpriteState> m_States;
 
         [OdinSerialize]
         public List<IJoyAction> CachedActions { get; protected set; }
         
         public MonoBehaviourHandler MonoBehaviourHandler { get; protected set; }
 
+        [OdinSerialize]
         public IRollable Roller { get; protected set; }
 
         public virtual IEnumerable<Tuple<string, string>> Tooltip
@@ -394,6 +401,11 @@ namespace JoyLib.Code
         {
             GUIDManager.Instance.ReleaseGUID(this.GUID);
             GC.SuppressFinalize(this);
+        }
+
+        public void SetStates(IEnumerable<ISpriteState> states)
+        {
+            this.m_States = states.ToList();
         }
 
         ~JoyObject()

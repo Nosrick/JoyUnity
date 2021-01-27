@@ -238,6 +238,7 @@ namespace JoyLib.Code.Graphics
         public string m_Name;
         public int m_Frames;
         public IEnumerable<string> m_Data;
+        [NonSerialized]
         public List<Sprite> m_FrameSprites;
         public string m_Filename;
         public int m_Position;

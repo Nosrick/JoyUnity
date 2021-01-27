@@ -87,11 +87,26 @@ namespace JoyLib.Code.IO
         private void AssignIcons(IWorldInstance parent)
         {
             /*
-            foreach(IJoyObject obj in parent.Objects)
+            foreach (IJoyObject obj in parent.Objects)
             {
-                obj.Sprites = s_ObjectIcons.GetSprites(obj.TileSet, obj.JoyName).ToArray();
+                if (obj is IItemInstance item)
+                {
+                    List<SpriteState> states = (from sprite in
+                                s_ObjectIcons.GetSprites(item.ItemType.SpriteSheet, item.ItemType.UnidentifiedName)
+                            select new SpriteState(sprite.m_Name, sprite))
+                        .ToList();
+                    
+                    item.SetStates(states);
+                }
             }
 
+            foreach (IEntity entity in parent.Entities)
+            {
+                
+            }
+            */
+
+            /*
             foreach(IEntity entity in parent.Entities)
             {
                 entity.Sprites = s_ObjectIcons.GetSprites(entity.TileSet, entity.CreatureType).ToArray();

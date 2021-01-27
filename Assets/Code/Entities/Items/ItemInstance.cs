@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
+using JoyLib.Code.Collections;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Events;
@@ -9,6 +10,7 @@ using JoyLib.Code.Graphics;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.Unity;
+using Sirenix.OdinSerializer;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -22,16 +24,24 @@ namespace JoyLib.Code.Entities.Items
 
         protected IEntity User { get; set; }
         
+        [OdinSerialize]
         protected bool m_Identified;
 
+        [OdinSerialize]
         protected List<long> m_Contents;
+        
+        [OdinSerialize]
         protected BaseItemType m_Type;
 
+        [OdinSerialize]
         protected long m_OwnerGUID;
+        
+        [OdinSerialize]
         protected string m_OwnerString;
         
         protected int StateIndex { get; set; }
 
+        [OdinSerialize]
         protected int m_Value;
 
         public long OwnerGUID
@@ -52,12 +62,13 @@ namespace JoyLib.Code.Entities.Items
             get => this.m_OwnerString;
         }
 
+        [OdinSerialize]
         public IEnumerable<IAbility> UniqueAbilities { get; protected set; }
         
         protected GameObject Prefab { get; set; }
 
         public IEnumerable<ISpriteState> Sprites => this.States;
-
+        
         public static ILiveItemHandler ItemHandler { get; set; }
         
         public static ILiveEntityHandler EntityHandler { get; set; }
@@ -240,6 +251,7 @@ namespace JoyLib.Code.Entities.Items
             {
                 return;
             }
+            this.Data = new NonUniqueDictionary<object, object>();
             ItemHandler = GlobalConstants.GameManager.ItemHandler;
             EntityHandler = GlobalConstants.GameManager.EntityHandler;
         }

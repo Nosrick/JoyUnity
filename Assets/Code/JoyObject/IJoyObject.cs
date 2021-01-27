@@ -31,5 +31,7 @@ namespace JoyLib.Code
         IJoyAction FetchAction(string name);
 
         void AttachMonoBehaviourHandler(MonoBehaviourHandler behaviourHandler);
+
+        void SetStates(IEnumerable<ISpriteState> states);
     }
 }

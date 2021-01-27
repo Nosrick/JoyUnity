@@ -1,10 +1,13 @@
 ﻿using System;
+using Sirenix.OdinSerializer;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities.Statistics
 {
+    [Serializable]
     public class ConcreteDerivedIntValue : IDerivedValue
     {
+        [OdinSerialize]
         public string Name
         {
             get;
@@ -13,14 +16,17 @@ namespace JoyLib.Code.Entities.Statistics
 
         public int Maximum => this.Base + this.Enhancement;
 
+        [OdinSerialize]
         public int Value
         {
             get;
             protected set;
         }
 
+        [OdinSerialize]
         public int Base { get; protected set; }
 
+        [OdinSerialize]
         public int Enhancement { get; protected set; }
 
         public ConcreteDerivedIntValue()

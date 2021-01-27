@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Castle.Core.Internal;
+using JoyLib.Code.Collections;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.AI;
@@ -241,6 +242,7 @@ namespace JoyLib.Code.Entities
 
             this.m_Driver = driver;
             this.PlayerControlled = driver.PlayerControlled;
+            this.Data = new NonUniqueDictionary<object, object>();
 
             this.SetCurrentTarget();
             this.ConstructDescription();

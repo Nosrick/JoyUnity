@@ -70,6 +70,7 @@ namespace JoyLib.Code.World
         [NonSerialized]
         protected ILiveEntityHandler EntityHandler;
         
+        [OdinSerialize]
         protected RNG Roller;
         
         [OdinSerialize]
@@ -691,6 +692,11 @@ namespace JoyLib.Code.World
                     return null;
                 }
 
+                if (this.m_Entities[this.m_PlayerIndex].PlayerControlled == false)
+                {
+                    this.m_PlayerIndex = this.m_Entities.FindIndex(entity => entity.PlayerControlled);
+                }
+                
                 return this.m_Entities[this.m_PlayerIndex];
             }
         }

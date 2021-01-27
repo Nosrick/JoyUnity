@@ -16,7 +16,7 @@ namespace JoyLib.Code.Unity.GUI
 
         public IGUIManager GUIManager
         {
-            get => this.m_GUIManager;
+            get => this.m_GUIManager ?? (this.m_GUIManager = GlobalConstants.GameManager.GUIManager);
             set
             {
                 this.m_GUIManager = value;

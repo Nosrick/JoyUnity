@@ -35,10 +35,6 @@ namespace JoyLib.Code.States
             this.InstantiateWorld();
         }
 
-        public override void SetUpUi()
-        {
-        }
-
         public override void Stop()
         {
         }

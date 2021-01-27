@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using Sirenix.OdinSerializer;
+using UnityEngine;
 
 namespace JoyLib.Code.Unity.GUI.Managed_Assets
 {
-    public class ManagedElement : MonoBehaviour
+    public class ManagedElement : SerializedMonoBehaviour
     {
         [SerializeField] protected string m_ElementName;
         public string ElementName => this.m_ElementName;

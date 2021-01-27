@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Sirenix.OdinSerializer;
 using UnityEngine;
 
 namespace JoyLib.Code.Graphics
@@ -8,14 +9,25 @@ namespace JoyLib.Code.Graphics
     [Serializable]
     public class SpriteState : ISpriteState
     {
-        public SpriteData SpriteData { get; protected set; }
+        public SpriteData SpriteData
+        {
+            get => this.m_SpriteData;
+            protected set => this.m_SpriteData = value;
+        }
 
+        [SerializeField]
+        protected SpriteData m_SpriteData;
+
+        [OdinSerialize]
         public string Name { get; protected set; }
 
+        [OdinSerialize]
         public AnimationType AnimationType { get; protected set; }
 
+        [OdinSerialize]
         public bool Looping { get; protected set; }
 
+        [OdinSerialize]
         public bool IsAnimated { get; set; }
 
         public SpriteState(
