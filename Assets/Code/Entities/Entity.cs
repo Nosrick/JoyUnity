@@ -24,7 +24,7 @@ using JoyLib.Code.Quests;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.World;
-using OdinSerializer;
+using Sirenix.OdinSerializer;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities

@@ -7,7 +7,7 @@ using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Managers;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.World.Lighting;
-using OdinSerializer;
+using Sirenix.OdinSerializer;
 using UnityEngine;
 
 namespace JoyLib.Code.World
@@ -15,12 +15,14 @@ namespace JoyLib.Code.World
     [Serializable]
     public class WorldInstance : IWorldInstance
     {
+        [OdinSerialize]
         protected WorldTile[,] m_Tiles;
         protected byte[,] m_Costs;
         
         [NonSerialized]
         protected int m_PlayerIndex;
 
+        [OdinSerialize]
         protected readonly Vector2Int m_Dimensions;
 
         [OdinSerialize]
@@ -30,18 +32,24 @@ namespace JoyLib.Code.World
         [NonSerialized]
         protected IWorldInstance m_Parent;
 
+        [OdinSerialize]
         protected List<IEntity> m_Entities;
 
+        [OdinSerialize]
         protected List<IJoyObject> m_Objects;
         
         [OdinSerialize]
         protected Dictionary<Vector2Int, IJoyObject> m_Walls;
 
+        [OdinSerialize]
         protected Vector2Int m_SpawnPoint;
 
         protected static DateTime s_DateTime;
 
+        [OdinSerialize]
         protected string m_Name;
+        
+        [OdinSerialize]
         protected long m_GUID;
         
         [OdinSerialize]

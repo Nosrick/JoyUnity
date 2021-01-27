@@ -10,7 +10,7 @@ using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.Unity;
 using JoyLib.Code.World;
-using OdinSerializer;
+using Sirenix.OdinSerializer;
 using UnityEngine;
 
 namespace JoyLib.Code

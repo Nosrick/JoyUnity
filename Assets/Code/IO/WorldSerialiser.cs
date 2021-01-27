@@ -4,7 +4,7 @@ using JoyLib.Code.Entities;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.World;
-using OdinSerializer;
+using Sirenix.OdinSerializer;
 
 namespace JoyLib.Code.IO
 {

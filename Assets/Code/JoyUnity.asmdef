@@ -8,7 +8,7 @@
         "CaseyDeCoder.GameSettings.Runtime",
         "CaseyDeCoder.GameSettings.UI.Runtime",
         "CaseyDeCoder.GameSettings.UI.TMPro.Runtime",
-        "OdinSerializer"
+        "Sirenix.OdinSerializer"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
