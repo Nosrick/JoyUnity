@@ -28,7 +28,7 @@ namespace JoyLib.Code.Entities.Items
         protected bool m_Identified;
 
         [OdinSerialize]
-        protected List<long> m_Contents;
+        protected List<IItemInstance> m_Contents;
         
         [OdinSerialize]
         protected BaseItemType m_Type;
@@ -83,6 +83,7 @@ namespace JoyLib.Code.Entities.Items
             IEnumerable<IAbility> uniqueAbilities = null,
             IEnumerable<IJoyAction> actions = null,
             GameObject gameObject = null,
+            List<IItemInstance> contents = null,
             bool active = false)
             : base(
                 type.UnidentifiedName,
@@ -90,6 +91,7 @@ namespace JoyLib.Code.Entities.Items
                 position,
                 actions,
                 sprites,
+                type.SpriteSheet,
                 roller,
                 type.Tags)
         {
@@ -108,7 +110,7 @@ namespace JoyLib.Code.Entities.Items
             
             this.Identified = identified;
 
-            this.m_Contents = new List<long>();
+            this.m_Contents = contents ?? new List<IItemInstance>();
 
             this.UniqueAbilities = uniqueAbilities is null == false ? new List<IAbility>(uniqueAbilities) : new List<IAbility>();
 
@@ -304,7 +306,7 @@ namespace JoyLib.Code.Entities.Items
         {
             if(index > 0 && index < this.m_Contents.Count)
             {
-                IItemInstance item = ItemHandler?.GetItem(this.m_Contents[index]);
+                IItemInstance item = this.m_Contents[index];
                 this.m_Contents.RemoveAt(index);
                 return item;
             }
@@ -349,7 +351,7 @@ namespace JoyLib.Code.Entities.Items
         {
             if(this.CanAddContents(actor))
             {
-                this.m_Contents.Add(actor.GUID);
+                this.m_Contents.Add(actor);
 
                 this.CalculateValue();
                 this.ConstructDescription();
@@ -365,8 +367,7 @@ namespace JoyLib.Code.Entities.Items
         {
             IEnumerable<IItemInstance> itemInstances = actors as IItemInstance[] ?? actors.ToArray();
             this.m_Contents.AddRange(itemInstances.Where(actor => 
-                    this.m_Contents.Any(itemGUID => itemGUID == actor.GUID) == false)
-                .Select(actor => actor.GUID));
+                    this.m_Contents.Any(item => item.GUID == actor.GUID) == false));
 
             this.CalculateValue();
             this.ConstructDescription();
@@ -380,7 +381,7 @@ namespace JoyLib.Code.Entities.Items
 
         public bool RemoveContents(IItemInstance actor)
         {
-            if (!this.m_Contents.Remove(actor.GUID))
+            if (!this.m_Contents.Remove(actor))
             {
                 return false;
             }
@@ -497,10 +498,7 @@ namespace JoyLib.Code.Entities.Items
 
         public IEnumerable<IItemInstance> Contents
         {
-            get
-            {
-                return this.m_Contents.Select(itemGUID => ItemHandler?.GetItem(itemGUID)).ToList();
-            }
+            get => this.m_Contents;
         }
 
         public string ContentString

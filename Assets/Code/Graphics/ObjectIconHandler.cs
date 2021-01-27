@@ -187,6 +187,16 @@ namespace JoyLib.Code.Graphics
             return frames.Length >= frame ? frames[frame] : this.ReturnDefaultIcon();
         }
 
+        public List<Sprite> GetRawFrames(string tileSet, string tileName, string partName, string state = "DEFAULT")
+        {
+            List<Sprite> sprites = this.GetSprites(tileSet, tileName, state).SelectMany(data => data.m_Parts)
+                .Where(part => part.m_Name.Equals(partName, StringComparison.OrdinalIgnoreCase))
+                .SelectMany(part => part.m_FrameSprites)
+                .ToList();
+
+            return sprites;
+        }
+
         public IEnumerable<SpriteData> GetSprites(string tileSet, string tileName, string state = "DEFAULT")
         {
             List<SpriteData> data = this.Icons.Where(x => x.Key.Equals(tileSet, StringComparison.OrdinalIgnoreCase))

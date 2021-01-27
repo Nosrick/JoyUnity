@@ -48,6 +48,9 @@ namespace JoyLib.Code
         [OdinSerialize]
         public string JoyName { get; protected set; }
 
+        [OdinSerialize]
+        public string TileSet { get; protected set; }
+
         public virtual int HitPointsRemaining => this.GetValue("hitpoints");
 
         public virtual int HitPoints => this.GetMaximum("hitpoints");
@@ -110,9 +113,11 @@ namespace JoyLib.Code
             Vector2Int position, 
             IEnumerable<string> actions,
             IEnumerable<ISpriteState> sprites, 
+            string tileSet,
             RNG roller = null,
             params string[] tags)
         {
+            this.TileSet = tileSet;
             this.Roller = roller is null ? new RNG() : roller; 
             List<IJoyAction> tempActions = new List<IJoyAction>(); 
             foreach(string action in actions)
@@ -135,9 +140,11 @@ namespace JoyLib.Code
             Vector2Int position,
             IEnumerable<IJoyAction> actions,
             IEnumerable<ISpriteState> sprites,
+            string tileSet,
             IRollable roller = null,
             params string[] tags)
         {
+            this.TileSet = tileSet;
             this.Roller = roller is null ? new RNG() : roller; 
             this.Initialise(
                 name,

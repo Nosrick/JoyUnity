@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using JoyLib.Code.Entities;
+using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.World;
@@ -58,7 +59,7 @@ namespace JoyLib.Code.IO
             
             this.LinkWorlds(world);
             this.EntityWorldKnowledge(world);
-            //this.AssignIcons(world);
+            this.AssignIcons(world);
             return world;
         }
 
@@ -86,37 +87,65 @@ namespace JoyLib.Code.IO
         
         private void AssignIcons(IWorldInstance parent)
         {
-            /*
             foreach (IJoyObject obj in parent.Objects)
             {
-                if (obj is IItemInstance item)
+                foreach (ISpriteState state in obj.States)
                 {
-                    List<SpriteState> states = (from sprite in
-                                s_ObjectIcons.GetSprites(item.ItemType.SpriteSheet, item.ItemType.UnidentifiedName)
-                            select new SpriteState(sprite.m_Name, sprite))
-                        .ToList();
-                    
-                    item.SetStates(states);
+                    this.SetUpSpriteStates(obj.TileSet, state);
+                }
+
+                if (obj is IItemContainer container)
+                {
+                    this.HandleContents(container);
+                }
+            }
+
+            foreach (IJoyObject wall in parent.Walls.Values)
+            {
+                foreach (ISpriteState state in wall.States)
+                {
+                    this.SetUpSpriteStates(wall.TileSet, state);
                 }
             }
 
             foreach (IEntity entity in parent.Entities)
             {
-                
-            }
-            */
+                foreach (ISpriteState state in entity.States)
+                {
+                    this.SetUpSpriteStates(entity.TileSet, state);
+                }
 
-            /*
-            foreach(IEntity entity in parent.Entities)
-            {
-                entity.Sprites = s_ObjectIcons.GetSprites(entity.TileSet, entity.CreatureType).ToArray();
+                this.HandleContents(entity);
             }
 
             foreach(IWorldInstance world in parent.Areas.Values)
             {
                 this.AssignIcons(world);
             }
-            */
+        }
+
+        protected void SetUpSpriteStates(string tileSet, ISpriteState state)
+        {
+            foreach (SpritePart part in state.SpriteData.m_Parts)
+            {
+                part.m_FrameSprites = s_ObjectIcons.GetRawFrames(tileSet, state.Name, part.m_Name, state.SpriteData.m_State);
+            }
+        }
+
+        protected void HandleContents(IItemContainer container)
+        {
+            foreach (IItemInstance item in container.Contents)
+            {
+                foreach (ISpriteState state in item.States)
+                {
+                    this.SetUpSpriteStates(item.TileSet, state);
+                }
+
+                foreach (IItemInstance content in item.Contents)
+                {
+                    this.HandleContents(content);
+                }
+            }
         }
     }
 }

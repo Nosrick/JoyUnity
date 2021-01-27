@@ -43,10 +43,6 @@ namespace JoyLib.Code.States
         {
         }
 
-        public override void SetUpUi()
-        {
-        }
-
         private void CreateWorld()
         {
             //Make a new overworld generator

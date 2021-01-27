@@ -192,6 +192,7 @@ namespace JoyLib.Code.Entities
                 position,
                 STANDARD_ACTIONS,
                 sprites,
+                cultures.First().CultureName,
                 roller,
                 template.Tags.ToArray())
         {

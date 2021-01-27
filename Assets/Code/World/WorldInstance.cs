@@ -23,7 +23,7 @@ namespace JoyLib.Code.World
         protected int m_PlayerIndex;
 
         [OdinSerialize]
-        protected readonly Vector2Int m_Dimensions;
+        protected Vector2Int m_Dimensions;
 
         [OdinSerialize]
         //Worlds and where to access them
