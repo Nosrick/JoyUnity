@@ -5,6 +5,7 @@ using JoyLib.Code;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Relationships;
+using JoyLib.Code.Helpers;
 using JoyLib.Code.Quests;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
@@ -33,6 +34,8 @@ namespace Tests
         [SetUp]
         public void SetUp()
         {
+            ActionLog actionLog = new ActionLog();
+            GlobalConstants.ActionLog = actionLog;
             scriptingEngine = new ScriptingEngine();
 
             IItemInstance item = Mock.Of<IItemInstance>();
@@ -126,6 +129,7 @@ namespace Tests
         public void TearDown()
         {
             GlobalConstants.GameManager = null;
+            GlobalConstants.ActionLog.Dispose();
         }
     }
 }

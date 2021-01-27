@@ -8,6 +8,7 @@ using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Helpers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.World;
 using Moq;
@@ -33,6 +34,8 @@ namespace Tests
         [SetUp]
         public void SetUp()
         {
+            GlobalConstants.ActionLog = new ActionLog();
+            
             prefab = Resources.Load<GameObject>("Prefabs/MonoBehaviourHandler");
 
             scriptingEngine = new ScriptingEngine();
@@ -165,6 +168,7 @@ namespace Tests
         public void TearDown()
         {
             GlobalConstants.GameManager = null;
+            GlobalConstants.ActionLog.Dispose();
         }
     }
 }

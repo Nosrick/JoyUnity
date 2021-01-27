@@ -20,9 +20,8 @@ namespace Tests
         [SetUp]
         public void SetUp()
         {
+            GlobalConstants.ActionLog = new ActionLog();
             this.abilityHandler = new AbilityHandler();
-            this.log = new ActionLog();
-            GlobalConstants.ActionLog = this.log;
             this.target = new JobHandler(this.abilityHandler, new RNG());
         }
 
@@ -49,7 +48,7 @@ namespace Tests
         [TearDown]
         public void TearDown()
         {
-            GlobalConstants.ActionLog = null;
+            GlobalConstants.ActionLog.Dispose();
         }
     }
 }

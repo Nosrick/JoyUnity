@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace JoyLib.Code.Helpers
 {
-    public class ActionLog
+    public class ActionLog : IDisposable
     {
         public List<string> History { get; protected set; } 
         
@@ -104,6 +104,25 @@ namespace JoyLib.Code.Helpers
             {
                 this.History.Add(stringToAdd);
             }
+        }
+
+        ~ActionLog()
+        {
+            Dispose(false);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                this.Writer?.Dispose();
+            }
+        }
+
+        public void Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 

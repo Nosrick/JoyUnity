@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using JoyLib.Code;
 using JoyLib.Code.Entities.Needs;
+using JoyLib.Code.Helpers;
 using JoyLib.Code.Scripting;
 using NUnit.Framework;
 using UnityEngine.TestTools;
@@ -16,6 +17,7 @@ namespace Tests
         [SetUp]
         public void SetUp()
         {
+            GlobalConstants.ActionLog = new ActionLog();
             ScriptingEngine = new ScriptingEngine();
             
             target = new NeedHandler();
@@ -43,6 +45,7 @@ namespace Tests
         public void TearDown()
         {
             GlobalConstants.GameManager = null;
+            GlobalConstants.ActionLog.Dispose();
         }
     }
 }

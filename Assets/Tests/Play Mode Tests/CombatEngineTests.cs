@@ -54,7 +54,6 @@ namespace Tests
         [SetUp]
         public void SetUp()
         {
-
             this.logger = new ActionLog();
             GlobalConstants.ActionLog = this.logger;
             
@@ -843,7 +842,7 @@ namespace Tests
         [TearDown]
         public void TearDown()
         {
-            GlobalConstants.ActionLog = null;
+            GlobalConstants.ActionLog.Dispose();
         }
     }
 }

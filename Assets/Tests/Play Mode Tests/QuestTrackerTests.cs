@@ -2,6 +2,7 @@
 using JoyLib.Code;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Needs;
+using JoyLib.Code.Helpers;
 using JoyLib.Code.Quests;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.World;
@@ -30,6 +31,8 @@ namespace Tests
         [SetUp]
         public void SetUp()
         {
+            ActionLog actionLog = new ActionLog();
+            GlobalConstants.ActionLog = actionLog;
             scriptingEngine = new ScriptingEngine();
             
             target = new QuestTracker();
@@ -90,6 +93,7 @@ namespace Tests
         public void TearDown()
         {
             GlobalConstants.GameManager = null;
+            GlobalConstants.ActionLog.Dispose();
         }
     }
 }

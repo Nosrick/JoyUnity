@@ -2,6 +2,7 @@
 using JoyLib.Code;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Relationships;
+using JoyLib.Code.Helpers;
 using JoyLib.Code.Scripting;
 using Moq;
 using NUnit.Framework;
@@ -21,6 +22,7 @@ namespace Tests
         [SetUp]
         public void SetUp()
         {
+            GlobalConstants.ActionLog = new ActionLog();
             scriptingEngine = new ScriptingEngine();
 
             target = new EntityRelationshipHandler();
@@ -68,6 +70,7 @@ namespace Tests
         public void TearDown()
         {
             GlobalConstants.GameManager = null;
+            GlobalConstants.ActionLog.Dispose();
         }
     }
 }
