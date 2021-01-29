@@ -25,6 +25,9 @@ namespace JoyLib.Code.World
         [OdinSerialize]
         protected Vector2Int m_Dimensions;
 
+        [OdinSerialize] 
+        protected Vector2 m_NonIntDimensions;
+
         [OdinSerialize]
         //Worlds and where to access them
         protected Dictionary<Vector2Int, IWorldInstance> m_Areas;
@@ -93,6 +96,8 @@ namespace JoyLib.Code.World
 
             this.m_Dimensions = new Vector2Int(tiles.GetLength(0), tiles.GetLength(1));
 
+            this.m_NonIntDimensions = new Vector2(this.m_Dimensions.x, this.m_Dimensions.y);
+
             this.Name = name;
             this.Tags = new List<string>(tags);
             this.m_Tiles = tiles;
@@ -134,6 +139,8 @@ namespace JoyLib.Code.World
             this.Name = name;
             this.Tags = new List<string>(tags);
             this.m_Tiles = tiles;
+            this.m_Dimensions = new Vector2Int(tiles.GetLength(0), tiles.GetLength(1));
+            this.m_NonIntDimensions = new Vector2(this.m_Dimensions.x, this.m_Dimensions.y);
             this.m_Areas = areas;
             this.m_Entities = entities;
             this.m_Objects = objects;
@@ -703,7 +710,12 @@ namespace JoyLib.Code.World
 
         public Vector2Int Dimensions
         {
-            get { return this.m_Dimensions; }
+            get
+            {
+                return this.m_Dimensions.x == 0 
+                    ? new Vector2Int((int)this.m_NonIntDimensions.x, (int)this.m_NonIntDimensions.y) 
+                    : this.m_Dimensions;
+            }
         }
 
         [OdinSerialize]

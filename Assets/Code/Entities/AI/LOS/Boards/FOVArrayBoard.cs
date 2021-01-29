@@ -1,15 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using Sirenix.OdinSerializer;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities.AI.LOS
 {
+    [Serializable]
     public class FOVArrayBoard : IFOVBoard
     {
+        [OdinSerialize]
         protected bool[,] Visited { get; set; } 
+        
+        [OdinSerialize]
         protected bool[,] VisiblePoints { get; set; }
+        
+        [OdinSerialize]
         protected HashSet<Vector2Int> Walls { get; set; }
 
+        [OdinSerialize]
         protected int m_Width, m_Height;
 
         public FOVArrayBoard(int width, int height, IEnumerable<Vector2Int> walls)

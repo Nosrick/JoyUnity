@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using JoyLib.Code.World;
+using Sirenix.OdinSerializer;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities.AI.LOS
 {
+    [Serializable]
     public class FOVShadowCasting : IFOVHandler
     {
+        [OdinSerialize]
         protected FOVArrayBoard m_Board;
 
         protected readonly Vector2Int[] DIAGONALS = { new Vector2Int(1, -1), new Vector2Int(1, 1), new Vector2Int(-1, 1), new Vector2Int(-1, -1) };
