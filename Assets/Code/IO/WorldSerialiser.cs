@@ -2,6 +2,7 @@
 using System.IO;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
+using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.World;
@@ -58,7 +59,6 @@ namespace JoyLib.Code.IO
             IWorldInstance world = SerializationUtility.DeserializeValue<IWorldInstance>(array, DataFormat.JSON);
             
             this.LinkWorlds(world);
-            this.EntityWorldKnowledge(world);
             this.AssignIcons(world);
             return world;
         }
@@ -69,19 +69,6 @@ namespace JoyLib.Code.IO
             {
                 world.Parent = parent;
                 this.LinkWorlds(world);
-            }
-        }
-
-        private void EntityWorldKnowledge(IWorldInstance parent)
-        {
-            foreach (IEntity entity in parent.Entities)
-            {
-                entity.MyWorld = parent;
-            }
-
-            foreach (IWorldInstance world in parent.Areas.Values)
-            {
-                this.EntityWorldKnowledge(world);
             }
         }
         
@@ -98,6 +85,10 @@ namespace JoyLib.Code.IO
                 {
                     this.HandleContents(container);
                 }
+
+                obj.MyWorld = parent;
+                
+                GlobalConstants.GameManager.ItemHandler.AddItem(obj as IItemInstance);
             }
 
             foreach (IJoyObject wall in parent.Walls.Values)
@@ -106,15 +97,29 @@ namespace JoyLib.Code.IO
                 {
                     this.SetUpSpriteStates(wall.TileSet, state);
                 }
+
+                wall.MyWorld = parent;
             }
 
             foreach (IEntity entity in parent.Entities)
             {
+                GlobalConstants.GameManager.EntityHandler.AddEntity(entity);
+                
                 foreach (ISpriteState state in entity.States)
                 {
                     this.SetUpSpriteStates(entity.TileSet, state);
                 }
 
+                foreach (INeed need in entity.Needs.Values)
+                {
+                    need.FulfillingSprite = new SpriteState(
+                        need.Name, 
+                        GlobalConstants.GameManager.ObjectIconHandler.GetFrame(
+                            "needs", 
+                            need.Name));
+                }
+
+                entity.MyWorld = parent;
                 this.HandleContents(entity);
             }
 

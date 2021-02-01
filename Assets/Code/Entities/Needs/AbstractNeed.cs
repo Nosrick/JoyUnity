@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
+using Sirenix.OdinSerializer;
 
 namespace JoyLib.Code.Entities.Needs
 {
@@ -12,11 +13,13 @@ namespace JoyLib.Code.Entities.Needs
         {
             get => "abstractneed";
         }
+        
+        public ISpriteState FulfillingSprite { get; set; }
 
-        public ISpriteState FulfillingSprite { get; protected set; }
-
+        [OdinSerialize]
         public RNG Roller { get; protected set; }
 
+        [OdinSerialize]
         protected Dictionary<string, IJoyAction> m_CachedActions;
 
         //How quickly the need decays

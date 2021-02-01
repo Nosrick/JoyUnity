@@ -59,6 +59,7 @@ namespace JoyLib.Code.States
                 new ConcreteBasicFloatValue("density", 1)
             };
             
+            this.m_ActiveWorld.Initialise();
             int terrainLayer = LayerMask.NameToLayer("Terrain");
             //Make the upstairs
             if (this.m_ActiveWorld.GUID != this.m_Overworld.GUID)

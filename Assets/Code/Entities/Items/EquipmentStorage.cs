@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code.Events;
+using Sirenix.OdinSerializer;
 
 namespace JoyLib.Code.Entities.Items
 {
     [Serializable]
     public class EquipmentStorage : JoyObject, IItemContainer
     {
+        [OdinSerialize]
         protected List<Tuple<string, IItemInstance>> m_Slots;
         
         public IReadOnlyList<Tuple<string, IItemInstance>> Slots => this.m_Slots.AsReadOnly();

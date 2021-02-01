@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using JoyLib.Code.World;
-using Sirenix.OdinSerializer;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities.AI.LOS
@@ -9,10 +8,10 @@ namespace JoyLib.Code.Entities.AI.LOS
     [Serializable]
     public class FOVShadowCasting : IFOVHandler
     {
-        [OdinSerialize]
+        [SerializeField]
         protected FOVArrayBoard m_Board;
 
-        protected readonly Vector2Int[] DIAGONALS = { new Vector2Int(1, -1), new Vector2Int(1, 1), new Vector2Int(-1, 1), new Vector2Int(-1, -1) };
+        protected static readonly Vector2Int[] DIAGONALS = { new Vector2Int(1, -1), new Vector2Int(1, 1), new Vector2Int(-1, 1), new Vector2Int(-1, -1) };
 
         public IFOVBoard Do(IEntity viewer, IWorldInstance world, Vector2Int dimensions,
             IEnumerable<Vector2Int> walls)
@@ -21,7 +20,7 @@ namespace JoyLib.Code.Entities.AI.LOS
 
             this.m_Board = new FOVArrayBoard(dimensions.x, dimensions.y, walls);
             this.m_Board.Visible(viewerPos.x, viewerPos.y);
-            foreach(Vector2Int direction in this.DIAGONALS)
+            foreach(Vector2Int direction in DIAGONALS)
             {
                 this.CastLight(viewer, world, viewerPos, viewer.VisionMod, 1, 1, 0, 0, direction.x, direction.y, 0);
                 this.CastLight(viewer, world, viewerPos, viewer.VisionMod, 1, 1, 0, direction.x, 0, 0, direction.y);

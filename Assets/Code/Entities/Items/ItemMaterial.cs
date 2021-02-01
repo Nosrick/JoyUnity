@@ -1,6 +1,9 @@
-﻿namespace JoyLib.Code.Entities.Items
+﻿using System;
+using Sirenix.OdinSerializer;
+
+namespace JoyLib.Code.Entities.Items
 {
-    [System.Serializable()]
+    [Serializable]
     public class ItemMaterial : IItemMaterial
     {
         public ItemMaterial()
@@ -21,12 +24,14 @@
             this.ValueMod = valueMod;
         }
 
+        [OdinSerialize]
         public string Name
         {
             get;
             protected set;
         }
 
+        [OdinSerialize]
         //Hardness will be multiplied by the item's size modifier to find its hit points
         public float Hardness
         {
@@ -34,6 +39,7 @@
             protected set;
         }
 
+        [OdinSerialize]
         //The bonus the material applies to any checks made with it
         public int Bonus
         {
@@ -42,6 +48,7 @@
 
         }
 
+        [OdinSerialize]
         //Density is how many grams per cm^3
         public float Density
         {
@@ -49,6 +56,7 @@
             protected set;
         }
 
+        [OdinSerialize]
         //The multiplier for the value of the item
         public float ValueMod
         {

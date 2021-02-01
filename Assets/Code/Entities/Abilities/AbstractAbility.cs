@@ -5,13 +5,17 @@ using Castle.Core.Internal;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Scripting;
+using Sirenix.OdinSerializer;
 
 namespace JoyLib.Code.Entities.Abilities
 {
     public abstract class AbstractAbility : IAbility
     {
+        [OdinSerialize]
         protected readonly Dictionary<string, IJoyAction> m_CachedActions;
-        private List<string> m_Tags;
+        
+        [OdinSerialize]
+        protected List<string> m_Tags;
 
         public AbstractAbility()
         {
@@ -258,42 +262,49 @@ namespace JoyLib.Code.Entities.Abilities
                                 && datum.Item2 >= prereq.Value));
         }
 
+        [OdinSerialize]
         public string Name
         {
             get;
             protected set;
         }
 
+        [OdinSerialize]
         public string InternalName
         {
             get;
             protected set;
         }
 
+        [OdinSerialize]
         public string Description
         {
             get;
             protected set;
         }
 
+        [OdinSerialize]
         public bool Stacking
         {
             get;
             protected set;
         }
 
+        [OdinSerialize]
         public int Counter
         {
             get;
             protected set;
         }
 
+        [OdinSerialize]
         public int Magnitude
         {
             get;
             protected set;
         }
 
+        [OdinSerialize]
         public int Priority
         {
             get;
@@ -316,20 +327,24 @@ namespace JoyLib.Code.Entities.Abilities
             }
         }
 
+        [OdinSerialize]
         public bool Permanent
         {
             get;
             protected set;
         }
 
+        [OdinSerialize]
         public IEnumerable<Tuple<string, int>> Costs
         {
             get;
             protected set;
         }
 
+        [OdinSerialize]
         public IDictionary<string, int> Prerequisites { get; protected set; }
 
+        [OdinSerialize]
         public AbilityTarget TargetType
         {
             get;

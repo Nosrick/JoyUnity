@@ -6,9 +6,11 @@ using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Managers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.World;
+using Sirenix.OdinSerializer;
 
 namespace JoyLib.Code.Quests
 {
+    [Serializable]
     public class Quest : IQuest
     {
         protected List<string> m_Tags;
@@ -145,13 +147,19 @@ namespace JoyLib.Code.Quests
             return fullString;
         }
 
+        [OdinSerialize]
         public List<IQuestStep> Steps { get; protected set; }
+        [OdinSerialize]
         public QuestMorality Morality { get; protected set; }
+        [OdinSerialize]
         public List<IItemInstance> Rewards { get; protected set; }
+        [OdinSerialize]
         public int CurrentStep { get; protected set;  }
 
+        [OdinSerialize]
         public IJoyObject Instigator { get; protected set; }
         
+        [OdinSerialize]
         public long ID { get; protected set; }
 
         public bool IsComplete => this.CurrentStep == this.Steps.Count;

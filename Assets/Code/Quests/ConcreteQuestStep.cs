@@ -4,9 +4,11 @@ using System.Linq;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.World;
+using Sirenix.OdinSerializer;
 
 namespace JoyLib.Code.Quests
 {
+    [Serializable]
     public class ConcreteQuestStep : IQuestStep
     {
         protected string Description { get; set; }
@@ -38,6 +40,7 @@ namespace JoyLib.Code.Quests
             return this.Description ?? (this.Description = this.Action.AssembleDescription());
         }
 
+        [OdinSerialize]
         public IQuestAction Action
         {
             get;

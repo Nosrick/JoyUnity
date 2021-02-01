@@ -5,6 +5,7 @@ using JoyLib.Code.Entities.Relationships;
 
 namespace JoyLib.Code.Entities.Sexuality
 {
+    [Serializable]
     public abstract class AbstractSexuality : ISexuality
     {
         protected List<string> m_Tags;

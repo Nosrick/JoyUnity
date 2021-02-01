@@ -2,17 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code.Entities.Relationships;
+using Sirenix.OdinSerializer;
 
 namespace JoyLib.Code.Entities.Romance
 {
+    [Serializable]
     public abstract class AbstractRomance : IRomance
     {
         public virtual string Name => throw new NotImplementedException("Someone forgot to override Name in " + this.GetType().Name);
 
         public virtual bool DecaysNeed => throw new NotImplementedException("Someone forgot to override DecaysNeed in " + this.GetType().Name);
 
+        [OdinSerialize]
         public virtual int RomanceThreshold { get; set; }
 
+        [OdinSerialize]
         public virtual int BondingThreshold { get; set; }
 
         public IEnumerable<string> Tags

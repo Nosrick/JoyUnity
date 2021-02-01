@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace JoyLib.Code.Entities.Relationships
 {
+    [Serializable]
     public abstract class AbstractRelationship : IRelationship
     {
         protected List<string> m_Tags;

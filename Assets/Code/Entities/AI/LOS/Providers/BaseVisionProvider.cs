@@ -124,6 +124,7 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
         protected IFOVHandler Algorithm
         {
             get;
+            set;
         }
 
         [OdinSerialize]

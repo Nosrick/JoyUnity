@@ -21,11 +21,13 @@ namespace JoyLib.Code
         public event ValueChangedEventHandler OnDerivedValueChange;
         public event ValueChangedEventHandler OnMaximumChange;
         
+        [SerializeField]
         protected List<string> m_Tags;
         
         [OdinSerialize]
         public IDictionary<string, IDerivedValue> DerivedValues { get; protected set; }
         
+        [OdinSerialize]
         public Vector2Int WorldPosition { get; protected set; }
 
         public IEnumerable<string> Tags

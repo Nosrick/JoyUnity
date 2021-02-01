@@ -7,17 +7,25 @@ using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.World;
+using Sirenix.OdinSerializer;
 
 namespace JoyLib.Code.Quests
 {
+    [Serializable]
     public class ExploreQuestAction : IQuestAction
     {
+        [OdinSerialize]
         public string[] Tags { get; protected set; }
+        [OdinSerialize]
         public string Description { get; protected set; }
+        [OdinSerialize]
         public List<IItemInstance> Items { get; protected set; }
+        [OdinSerialize]
         public List<IJoyObject> Actors { get; protected set; }
+        [OdinSerialize]
         public List<IWorldInstance> Areas { get; protected set; }
 
+        [OdinSerialize]
         public RNG Roller { get; protected set; }
 
         public ExploreQuestAction()

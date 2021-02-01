@@ -24,7 +24,11 @@ namespace JoyLib.Code.World
         IEntity Player { get; }
         Vector2Int Dimensions { get; }
         bool IsDirty { get; }
+        
+        bool Initialised { get; }
 
+        void Initialise();
+        
         void SetDateTime(DateTime dateTime);
         void AddObject(IJoyObject objectRef);
         bool RemoveObject(Vector2Int positionRef, IItemInstance itemRef);

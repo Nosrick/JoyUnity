@@ -147,6 +147,7 @@ namespace JoyLib.Code.States
                     new[] {"exploration", "world change"},
                     new object[] {newWorld});
             this.m_ActiveWorld = newWorld;
+            this.m_ActiveWorld.Initialise();
 
             player = this.m_ActiveWorld.Player;
 

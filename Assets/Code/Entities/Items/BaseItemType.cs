@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code.Entities.Abilities;
+using Sirenix.OdinSerializer;
 
 namespace JoyLib.Code.Entities.Items
 {
+    [Serializable]
     public class BaseItemType
     {
         protected string m_ClassName;
@@ -85,54 +87,63 @@ namespace JoyLib.Code.Entities.Items
             return (int)(Math.Max(1, this.Size * this.Material.Hardness));
         }
 
+        [OdinSerialize]
         public string Description
         {
             get;
             protected set;
         }
 
+        [OdinSerialize]
         public string IdentifiedName
         {
             get;
             protected set;
         }
 
+        [OdinSerialize]
         public string UnidentifiedDescription
         {
             get;
             protected set;
         }
 
+        [OdinSerialize]
         public string UnidentifiedName
         {
             get;
             protected set;
         }
 
+        [OdinSerialize]
         public IAbility[] Abilities
         {
             get;
             protected set;
         }
 
+        [OdinSerialize]
         public float Weight
         {
             get;
             protected set;
         }
 
+        [OdinSerialize]
         public float Size
         {
             get;
             protected set;
         }
 
+        [OdinSerialize]
         public IItemMaterial Material
         {
             get;
             protected set;
         }
 
+        [OdinSerialize]
         public string[] Slots
         {
             get;
@@ -155,6 +166,7 @@ namespace JoyLib.Code.Entities.Items
             }
         }
 
+        [OdinSerialize]
         public string GoverningSkill
         {
             get;
@@ -169,12 +181,14 @@ namespace JoyLib.Code.Entities.Items
             }
         }
 
+        [OdinSerialize]
         public string ActionString
         {
             get;
             protected set;
         }
 
+        [OdinSerialize]
         public int Value
         {
             get;
@@ -189,18 +203,21 @@ namespace JoyLib.Code.Entities.Items
             }
         }
 
+        [OdinSerialize]
         public int SpawnWeighting
         {
             get;
             protected set;
         }
 
+        [OdinSerialize]
         public int OwnerGUID
         {
             get;
             set;
         }
 
+        [OdinSerialize]
         public int LightLevel
         {
             get;
@@ -215,6 +232,7 @@ namespace JoyLib.Code.Entities.Items
             }
         }
 
+        [OdinSerialize]
         public string SpriteSheet
         {
             get;

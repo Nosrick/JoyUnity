@@ -17,16 +17,14 @@ namespace JoyLib.Code.World
     {
         [OdinSerialize]
         protected WorldTile[,] m_Tiles;
+        [OdinSerialize]
         protected byte[,] m_Costs;
         
-        [NonSerialized]
+        [SerializeField]
         protected int m_PlayerIndex;
 
         [OdinSerialize]
         protected Vector2Int m_Dimensions;
-
-        [OdinSerialize] 
-        protected Vector2 m_NonIntDimensions;
 
         [OdinSerialize]
         //Worlds and where to access them
@@ -57,7 +55,9 @@ namespace JoyLib.Code.World
         
         [OdinSerialize]
         public LightCalculator LightCalculator { get; protected set; }
-        
+
+        public bool Initialised { get; protected set; }
+
         [NonSerialized]
         protected GameObject m_FogOfWarHolder;
         
@@ -96,8 +96,6 @@ namespace JoyLib.Code.World
 
             this.m_Dimensions = new Vector2Int(tiles.GetLength(0), tiles.GetLength(1));
 
-            this.m_NonIntDimensions = new Vector2(this.m_Dimensions.x, this.m_Dimensions.y);
-
             this.Name = name;
             this.Tags = new List<string>(tags);
             this.m_Tiles = tiles;
@@ -118,10 +116,7 @@ namespace JoyLib.Code.World
                 }
             }
 
-            this.m_FogOfWarHolder = GameObject.Find("WorldFog");
-            this.m_WallHolder = GameObject.Find("WorldWalls");
-            this.m_ObjectHolder = GameObject.Find("WorldObjects");
-            this.m_EntityHolder = GameObject.Find("WorldEntities");
+            this.Initialise();
         }
 
         /// <summary>
@@ -140,18 +135,12 @@ namespace JoyLib.Code.World
             this.Tags = new List<string>(tags);
             this.m_Tiles = tiles;
             this.m_Dimensions = new Vector2Int(tiles.GetLength(0), tiles.GetLength(1));
-            this.m_NonIntDimensions = new Vector2(this.m_Dimensions.x, this.m_Dimensions.y);
             this.m_Areas = areas;
             this.m_Entities = entities;
             this.m_Objects = objects;
             this.m_Walls = walls;
             this.GUID = GUIDManager.Instance.AssignGUID();
             this.CalculatePlayerIndex();
-
-            this.m_FogOfWarHolder = GameObject.Find("WorldFog");
-            this.m_WallHolder = GameObject.Find("WorldWalls");
-            this.m_ObjectHolder = GameObject.Find("WorldObjects");
-            this.m_EntityHolder = GameObject.Find("WorldEntities");
 
             this.m_Costs = new byte[this.m_Tiles.GetLength(0), this.m_Tiles.GetLength(1)];
             for (int x = 0; x < this.m_Costs.GetLength(0); x++)
@@ -168,6 +157,25 @@ namespace JoyLib.Code.World
             {
                 this.m_Costs[position.x, position.y] = byte.MaxValue;
             }
+            
+            this.Initialise();
+        }
+
+        public void Initialise()
+        {
+            if (this.Initialised)
+            {
+                return;
+            }
+
+            this.EntityHandler = GlobalConstants.GameManager.EntityHandler;
+
+            this.m_FogOfWarHolder = GameObject.Find("WorldFog");
+            this.m_WallHolder = GameObject.Find("WorldWalls");
+            this.m_ObjectHolder = GameObject.Find("WorldObjects");
+            this.m_EntityHolder = GameObject.Find("WorldEntities");
+            
+            this.Initialised = true;
         }
 
         public void SetDateTime(DateTime dateTime)
@@ -411,7 +419,9 @@ namespace JoyLib.Code.World
         public IWorldInstance GetPlayerWorld(IWorldInstance parent)
         {
             if (parent.Entities.Any(x => x.PlayerControlled))
+            {
                 return parent;
+            }
 
             foreach (IWorldInstance world in parent.Areas.Values)
             {
@@ -712,9 +722,7 @@ namespace JoyLib.Code.World
         {
             get
             {
-                return this.m_Dimensions.x == 0 
-                    ? new Vector2Int((int)this.m_NonIntDimensions.x, (int)this.m_NonIntDimensions.y) 
-                    : this.m_Dimensions;
+                return this.m_Dimensions;
             }
         }
 

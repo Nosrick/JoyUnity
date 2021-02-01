@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code.Events;
 
 namespace JoyLib.Code.Entities.Items
 {
+    [Serializable]
     public class VirtualStorage : JoyObject, IItemContainer
     {
         protected List<IItemInstance> m_Contents;

@@ -1,13 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code.Entities.Abilities;
+using Sirenix.OdinSerializer;
 
 namespace JoyLib.Code.Entities.Jobs
 {
+    [Serializable]
     public class JobType : IJob
     {
+        [OdinSerialize]
         protected Dictionary<IAbility, int> m_Abilities;
+        [OdinSerialize]
         protected Dictionary<string, int> m_StatisticDiscounts;
+        [OdinSerialize]
         protected Dictionary<string, int> m_SkillDiscounts;
 
         public JobType()
@@ -75,18 +81,21 @@ namespace JoyLib.Code.Entities.Jobs
             return job;
         }
 
+        [OdinSerialize]
         public string Name
         {
             get;
             protected set;
         }
 
+        [OdinSerialize]
         public string Description
         {
             get;
             protected set;
         }
 
+        [OdinSerialize]
         public int Experience { get; protected set; }
 
         public Dictionary<string, int> StatisticDiscounts
