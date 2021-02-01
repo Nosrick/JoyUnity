@@ -10,7 +10,7 @@ namespace JoyLib.Code.World.Lighting
     {
         protected LightBoard m_Board;
 
-        protected readonly Vector2Int[] DIAGONALS = { new Vector2Int(1, -1), new Vector2Int(1, 1), new Vector2Int(-1, 1), new Vector2Int(-1, -1) };
+        protected static readonly Vector2Int[] DIAGONALS = { new Vector2Int(1, -1), new Vector2Int(1, 1), new Vector2Int(-1, 1), new Vector2Int(-1, -1) };
 
         public LightBoard Do(IEnumerable<IItemInstance> items, IWorldInstance world, Vector2Int dimensions,
             IEnumerable<Vector2Int> walls)
@@ -19,16 +19,8 @@ namespace JoyLib.Code.World.Lighting
             foreach (IItemInstance item in items)
             {
                 this.m_Board.ClearVisited();
-                //this.m_Board.AddLight(item.WorldPosition, item.ItemType.LightLevel);
-                foreach (Vector2Int direction in this.DIAGONALS)
-                {
-                    this.Light.DiffuseLight(item.WorldPosition, item.ItemType.LightLevel);
-                    this.DoAdjacent(item.WorldPosition);
-                    //this.CastLight(item, world, item.WorldPosition, 1, 1, 0, 0, direction.x,direction.y, 0);
-                    //this.CastLight(item, world, item.WorldPosition, 1, 1, 0, direction.x, 0, 0, direction.y);
-                }
-            
-                //this.DoDiffuse(item.WorldPosition);
+                this.Light.DiffuseLight(item.WorldPosition, item.ItemType.LightLevel);
+                this.DoAdjacent(item.WorldPosition);
             }
 
             return this.m_Board;
