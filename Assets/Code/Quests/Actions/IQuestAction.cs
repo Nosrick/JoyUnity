@@ -11,9 +11,9 @@ namespace JoyLib.Code.Quests
     {
         string[] Tags { get; }
         string Description { get; }
-        List<IItemInstance> Items { get; }
-        List<IJoyObject> Actors { get; }
-        List<IWorldInstance> Areas { get; }
+        List<long> Items { get; }
+        List<long> Actors { get; }
+        List<long> Areas { get; }
         
         RNG Roller { get; }
 

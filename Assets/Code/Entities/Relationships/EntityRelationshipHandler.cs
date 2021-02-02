@@ -9,8 +9,10 @@ namespace JoyLib.Code.Entities.Relationships
 {
     public class EntityRelationshipHandler : IEntityRelationshipHandler
     {
-        private Dictionary<string, IRelationship> m_RelationshipTypes;
-        private NonUniqueDictionary<long, IRelationship> m_Relationships;
+        protected Dictionary<string, IRelationship> m_RelationshipTypes;
+        protected NonUniqueDictionary<long, IRelationship> m_Relationships;
+
+        public IEnumerable<IRelationship> AllRelationships => this.m_Relationships.Values;
 
         public EntityRelationshipHandler()
         {

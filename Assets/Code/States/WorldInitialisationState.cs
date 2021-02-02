@@ -155,6 +155,7 @@ namespace JoyLib.Code.States
                 mbh.Clear();
                 mbh.AddSpriteState(wall.States.First(), true);
                 mbh.SetSpriteLayer("Walls");
+                wall.AttachMonoBehaviourHandler(mbh);
                 gameObject.SetActive(true);
             }
             
@@ -169,6 +170,7 @@ namespace JoyLib.Code.States
                 gameObject.layer = entityLayer;
                 MonoBehaviourHandler mbh = gameObject.GetComponent<MonoBehaviourHandler>();
                 mbh.AttachJoyObject(entity);
+                entity.AttachMonoBehaviourHandler(mbh);
 
                 if (entity.PlayerControlled)
                 {

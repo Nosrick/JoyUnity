@@ -21,11 +21,11 @@ namespace JoyLib.Code.Quests
         public string Description { get; protected set; }
         
         [OdinSerialize]
-        public List<IItemInstance> Items { get; protected set; }
+        public List<long> Items { get; protected set; }
         [OdinSerialize]
-        public List<IJoyObject> Actors { get; protected set; }
+        public List<long> Actors { get; protected set; }
         [OdinSerialize]
-        public List<IWorldInstance> Areas { get; protected set; }
+        public List<long> Areas { get; protected set; }
 
         [OdinSerialize]
         protected IItemFactory ItemFactory { get; set; }
@@ -38,9 +38,9 @@ namespace JoyLib.Code.Quests
         }
         
         public DeliverQuestAction(
-            List<IItemInstance> items,
-            List<IJoyObject> actors,
-            List<IWorldInstance> areas,
+            IEnumerable<IItemInstance> items,
+            IEnumerable<IJoyObject> actors,
+            IEnumerable<IWorldInstance> areas,
              IEnumerable<string> tags,
             IItemFactory itemFactory = null,
             RNG roller = null)
@@ -48,9 +48,9 @@ namespace JoyLib.Code.Quests
             List<string> tempTags = new List<string>();
             tempTags.Add("deliver");
             tempTags.AddRange(tags);
-            this.Items = items;
-            this.Actors = actors;
-            this.Areas = areas;
+            this.Items = items.Select(instance => instance.GUID).ToList();
+            this.Actors = actors.Select(instance => instance.GUID).ToList();
+            this.Areas = areas.Select(instance => instance.GUID).ToList();
             this.Tags = tempTags.ToArray();
             this.Description = this.AssembleDescription();
 
@@ -75,9 +75,9 @@ namespace JoyLib.Code.Quests
             }
             deliveryItem.SetOwner(endPoint.GUID);
 
-            this.Items = new List<IItemInstance> {deliveryItem};
-            this.Actors = new List<IJoyObject> {endPoint};
-            this.Areas = new List<IWorldInstance>();
+            this.Items = new List<long> {deliveryItem.GUID};
+            this.Actors = new List<long> {endPoint.GUID};
+            this.Areas = new List<long>();
 
             IQuestStep step = new ConcreteQuestStep(
                 this, 
@@ -90,9 +90,9 @@ namespace JoyLib.Code.Quests
 
         public void ExecutePrerequisites(IEntity questor)
         {
-            foreach (IItemInstance item in this.Items)
+            foreach (long itemGUID in this.Items)
             {
-                questor.AddContents(item);
+                questor.AddContents(GlobalConstants.GameManager.ItemHandler.GetItem(itemGUID));
             }
         }
 
@@ -110,7 +110,7 @@ namespace JoyLib.Code.Quests
                 return false;
             }
 
-            if (action.LastParticipants.Intersect(this.Actors).Count() != this.Actors.Count)
+            if (action.LastParticipants.Select(o => o.GUID).Intersect(this.Actors).Count() != this.Actors.Count)
             {
                 return false;
             }
@@ -128,7 +128,8 @@ namespace JoyLib.Code.Quests
                 }
             }
 
-            return items.Intersect(this.Items).Count() == this.Items.Count && action.Successful;
+            return items.Select(instance => instance.GUID).Intersect(this.Items).Count() == this.Items.Count 
+                   && action.Successful;
         }
 
         public string AssembleDescription()
@@ -144,7 +145,9 @@ namespace JoyLib.Code.Quests
                 {
                     itemBuilder.Append("and ");
                 }
-                itemBuilder.Append(this.Items[i].JoyName);
+
+                string name = GlobalConstants.GameManager.ItemHandler.GetItem(this.Items[i]).JoyName;
+                itemBuilder.Append(name);
             }
             
             StringBuilder actorBuilder = new StringBuilder();
@@ -158,9 +161,11 @@ namespace JoyLib.Code.Quests
                 {
                     actorBuilder.Append("or ");
                 }
-                actorBuilder.Append(this.Actors[i].JoyName);
+
+                IEntity entity = GlobalConstants.GameManager.EntityHandler.Get(this.Actors[i]);
+                actorBuilder.Append(entity.JoyName);
                 actorBuilder.Append(" in ");
-                actorBuilder.Append(this.Actors[i].MyWorld.Name);
+                actorBuilder.Append(entity.MyWorld.Name);
             }
 
             return "Deliver " + itemBuilder.ToString() + " to " + actorBuilder.ToString() + ".";

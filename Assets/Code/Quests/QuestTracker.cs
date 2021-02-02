@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Scripting;
 
@@ -8,6 +9,8 @@ namespace JoyLib.Code.Quests
     public class QuestTracker : IQuestTracker
     {
         protected Dictionary<long, List<IQuest>> EntityQuests { get; set; }
+
+        public List<IQuest> AllQuests => this.EntityQuests.Values.SelectMany(list => list).ToList();
 
         public QuestTracker()
         {

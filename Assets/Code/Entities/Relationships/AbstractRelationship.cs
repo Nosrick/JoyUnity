@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Sirenix.OdinSerializer;
 
 namespace JoyLib.Code.Entities.Relationships
 {
     [Serializable]
     public abstract class AbstractRelationship : IRelationship
     {
+        [OdinSerialize]
         protected List<string> m_Tags;
         
         public virtual string Name => "abstractrelationship";
@@ -21,7 +23,9 @@ namespace JoyLib.Code.Entities.Relationships
         
         //Yeesh, this is messy
         //But this is a key value pair for how each participant feels about the other in the relationship
+        [OdinSerialize]
         protected SortedDictionary<long, Dictionary<long, int>> m_Values;
+        [OdinSerialize]
         protected SortedDictionary<long, IJoyObject> m_Participants;
 
         public AbstractRelationship()

@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Needs;
+using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
+using JoyLib.Code.Quests;
 using JoyLib.Code.World;
 using Sirenix.OdinSerializer;
 
@@ -16,11 +19,12 @@ namespace JoyLib.Code.IO
 
         public void Serialise(IWorldInstance world)
         {
+            string directory = Directory.GetCurrentDirectory() + "/save/" + world.Name;
             try
             {
-                if (!Directory.Exists(Directory.GetCurrentDirectory() + "/save/" + world.Name))
+                if (!Directory.Exists(directory))
                 {
-                    Directory.CreateDirectory(Directory.GetCurrentDirectory() + "/save/" + world.Name);
+                    Directory.CreateDirectory(directory);
                 }
             }
             catch (Exception e)
@@ -31,13 +35,23 @@ namespace JoyLib.Code.IO
             try
             {
                 byte[] array = SerializationUtility.SerializeValue(world, DataFormat.JSON);
-                File.WriteAllBytes(Directory.GetCurrentDirectory() + "/save/" + world.Name + "/sav.dat", array);
+                File.WriteAllBytes(directory + "/world.dat", array);
                 /*
                 StreamWriter writer = new StreamWriter(Directory.GetCurrentDirectory() + "/save/" + world.Name + "/sav.dat", false);
                 JsonSerializer serializer = JsonSerializer.CreateDefault();
                 serializer.Serialize(writer, world);
                 writer.Close();
                 */
+
+                array = SerializationUtility.SerializeValue(GlobalConstants.GameManager.QuestTracker.AllQuests,
+                    DataFormat.JSON);
+                File.WriteAllBytes(directory + "/quests.dat", array);
+
+                array = SerializationUtility.SerializeValue(
+                    GlobalConstants.GameManager.RelationshipHandler.AllRelationships,
+                    DataFormat.JSON);
+                File.WriteAllBytes(directory + "/relationships.dat", array);
+
             }
             catch(Exception e)
             {
@@ -54,12 +68,23 @@ namespace JoyLib.Code.IO
             IWorldInstance world = serializer.Deserialize<IWorldInstance>(new JsonTextReader(reader));
             reader.Close();
             */
-            
-            byte[] array = File.ReadAllBytes(Directory.GetCurrentDirectory() + "/save/" + worldName + "/sav.dat");
+
+            string directory = Directory.GetCurrentDirectory() + "/save/" + worldName;
+            byte[] array = File.ReadAllBytes(directory + "/world.dat");
             IWorldInstance world = SerializationUtility.DeserializeValue<IWorldInstance>(array, DataFormat.JSON);
             
             this.LinkWorlds(world);
             this.AssignIcons(world);
+
+            array = File.ReadAllBytes(directory + "/quests.dat");
+            IEnumerable<IQuest> quests = SerializationUtility.DeserializeValue<IEnumerable<IQuest>>(array, DataFormat.JSON);
+            this.Quests(quests);
+
+            array = File.ReadAllBytes(directory + "/relationships.dat");
+            IEnumerable<IRelationship> relationships =
+                SerializationUtility.DeserializeValue<IEnumerable<IRelationship>>(array, DataFormat.JSON);
+            this.Relationships(relationships);
+            
             return world;
         }
 
@@ -155,6 +180,22 @@ namespace JoyLib.Code.IO
                     }
                     this.HandleContents(content);
                 }
+            }
+        }
+
+        private void Quests(IEnumerable<IQuest> quests)
+        {
+            foreach (IQuest quest in quests)
+            {
+                GlobalConstants.GameManager.QuestTracker.AddQuest(quest.Questor, quest);
+            }
+        }
+
+        private void Relationships(IEnumerable<IRelationship> relationships)
+        {
+            foreach (IRelationship relationship in relationships)
+            {
+                GlobalConstants.GameManager.RelationshipHandler.AddRelationship(relationship);
             }
         }
     }

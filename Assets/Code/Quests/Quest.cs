@@ -19,13 +19,15 @@ namespace JoyLib.Code.Quests
             List<IQuestStep> steps,
             QuestMorality morality,
             List<IItemInstance> rewards,
-            IJoyObject instigator,
+            long instigator,
+            long questor,
             IEnumerable<string> tags)
         {
             this.Steps = steps;
             this.Morality = morality;
             this.Rewards = rewards;
             this.Instigator = instigator;
+            this.Questor = questor;
             this.CurrentStep = 0;
             this.ID = GUIDManager.Instance.AssignGUID();
             this.Tags = new List<string>(tags);
@@ -62,15 +64,15 @@ namespace JoyLib.Code.Quests
             {
                 case IItemInstance itemInstance:
                 {
-                    return this.Steps[this.CurrentStep].Items.Contains(itemInstance);
+                    return this.Steps[this.CurrentStep].Items.Contains(itemInstance.GUID);
                 }
                 case IEntity entity:
                 {
-                    return this.Steps[this.CurrentStep].Actors.Contains(entity);
+                    return this.Steps[this.CurrentStep].Actors.Contains(entity.GUID);
                 }
                 case IWorldInstance worldInstance:
                 {
-                    return this.Steps[this.CurrentStep].Areas.Contains(worldInstance);
+                    return this.Steps[this.CurrentStep].Areas.Contains(worldInstance.GUID);
                 }
                 default:
                     return false;
@@ -149,16 +151,22 @@ namespace JoyLib.Code.Quests
 
         [OdinSerialize]
         public List<IQuestStep> Steps { get; protected set; }
+        
         [OdinSerialize]
         public QuestMorality Morality { get; protected set; }
+        
         [OdinSerialize]
         public List<IItemInstance> Rewards { get; protected set; }
+        
         [OdinSerialize]
         public int CurrentStep { get; protected set;  }
 
         [OdinSerialize]
-        public IJoyObject Instigator { get; protected set; }
-        
+        public long Instigator { get; protected set; }
+
+        [OdinSerialize] 
+        public long Questor { get; protected set; }
+
         [OdinSerialize]
         public long ID { get; protected set; }
 

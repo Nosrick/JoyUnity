@@ -12,7 +12,9 @@ namespace JoyLib.Code.Quests
         List<IItemInstance> Rewards { get; }
         int CurrentStep { get; }
         
-        IJoyObject Instigator { get; }
+        long Instigator { get; }
+        
+        long Questor { get; }
         
         long ID { get; }
         

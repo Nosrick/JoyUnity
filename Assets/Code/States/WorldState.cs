@@ -63,8 +63,6 @@ namespace JoyLib.Code.States
             this.TickTimer = this.TickEvent();
             this.GameManager.MyGameObject.GetComponent<MonoBehaviour>().StartCoroutine(this.TickTimer);
 
-            GlobalConstants.GameManager.Player = this.m_ActiveWorld.Player;
-
             GlobalConstants.GameManager.Player.AliveChange -= this.OnPlayerDeath;
             GlobalConstants.GameManager.Player.AliveChange += this.OnPlayerDeath;
             GlobalConstants.GameManager.Player.ConsciousnessChange -= this.OnPlayerConsciousChange;

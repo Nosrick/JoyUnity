@@ -234,7 +234,7 @@ namespace JoyLib.Code
         public IItemFactory ItemFactory { get; protected set; }
         public GameObject MyGameObject { get; protected set; }
 
-        public IEntity Player { get; set; }
+        public IEntity Player => this.EntityHandler.GetPlayer();
 
         public GameObjectPool FloorPool { get; protected set; }
         public GameObjectPool WallPool { get; protected set; }

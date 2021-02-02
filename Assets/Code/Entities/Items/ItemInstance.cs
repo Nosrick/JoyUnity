@@ -136,13 +136,15 @@ namespace JoyLib.Code.Entities.Items
         {
             if (gameObject is null)
             {
-                GameObject newOne = Object.Instantiate(this.Prefab);
-                newOne.GetComponent<MonoBehaviourHandler>().AttachJoyObject(this);
+                MonoBehaviourHandler monoBehaviourHandler = Object.Instantiate(this.Prefab).GetComponent<MonoBehaviourHandler>();
+                monoBehaviourHandler.AttachJoyObject(this);
+                this.AttachMonoBehaviourHandler(monoBehaviourHandler);
             }
             else
             {
                 MonoBehaviourHandler monoBehaviourHandler = gameObject.GetComponent<MonoBehaviourHandler>();
                 monoBehaviourHandler.AttachJoyObject(this);
+                this.AttachMonoBehaviourHandler(monoBehaviourHandler);
             }
             this.MonoBehaviourHandler.Clear();
             this.MonoBehaviourHandler.AddSpriteState(this.States[this.StateIndex]);

@@ -59,7 +59,13 @@ namespace JoyLib.Code.Quests
 
             IEnumerable<string> tagsForAllSteps = steps.SelectMany(step => step.Tags);
             
-            return new Quest(steps, QuestMorality.Neutral, this.GetRewards(questor, provider, steps), provider, tagsForAllSteps);
+            return new Quest(
+                steps, 
+                QuestMorality.Neutral, 
+                this.GetRewards(questor, provider, steps), 
+                provider.GUID, 
+                questor.GUID, 
+                tagsForAllSteps);
         }
 
         public IEnumerable<IQuest> MakeOneOfEachType(IEntity questor, IEntity provider, IWorldInstance overworldRef)
@@ -74,7 +80,13 @@ namespace JoyLib.Code.Quests
                     new List<IJoyObject>(),
                     new List<IWorldInstance>());
                 List<IQuestStep> steps = new List<IQuestStep>{newAction.Make(questor, provider, overworldRef, newAction.Tags)};
-                quests.Add(new Quest(steps, QuestMorality.Neutral, this.GetRewards(questor, provider, steps), provider, new string[0]));
+                quests.Add(new Quest(
+                    steps, 
+                    QuestMorality.Neutral, 
+                    this.GetRewards(questor, provider, steps), 
+                    provider.GUID, 
+                    questor.GUID, 
+                    new string[0]));
             }
 
             return quests;

@@ -737,7 +737,7 @@ namespace JoyLib.Code.World
                     else
                     {
                         GlobalConstants.ActionLog.AddText(
-                            "Still no player found! Something has gone terrible wrong.", LogLevel.Error);
+                            "Still no player found! Something has gone terribly wrong.", LogLevel.Error);
                         throw new InvalidOperationException("No player found in world.");
                     }
                 }

@@ -91,7 +91,6 @@ namespace JoyLib.Code.World
     {
         public string name;
         public string[] inhabitants;
-
         public string[] tags;
     }
 }
