@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.AI;
+using JoyLib.Code.Entities.AI.Drivers;
 using JoyLib.Code.Entities.Items;
+using JoyLib.Code.Helpers;
 using JoyLib.Code.Managers;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.World.Lighting;
@@ -174,6 +176,8 @@ namespace JoyLib.Code.World
             this.m_WallHolder = GameObject.Find("WorldWalls");
             this.m_ObjectHolder = GameObject.Find("WorldObjects");
             this.m_EntityHolder = GameObject.Find("WorldEntities");
+            
+            this.CalculatePlayerIndex();
             
             this.Initialised = true;
         }
@@ -704,14 +708,38 @@ namespace JoyLib.Code.World
         {
             get
             {
+                try
+                {
+                    if (this.m_PlayerIndex >= this.m_Entities.Count 
+                        || this.m_PlayerIndex < 0
+                        || this.m_Entities[this.m_PlayerIndex].PlayerControlled == false)
+                    {
+                        this.m_PlayerIndex = this.m_Entities.FindIndex(entity => entity.PlayerControlled);
+                    }
+                }
+                catch
+                {
+                    GlobalConstants.ActionLog.AddText("Could not find player!", LogLevel.Error);
+                }
+                
                 if (!this.m_Entities.Any(x => x.PlayerControlled))
                 {
-                    return null;
-                }
+                    GlobalConstants.ActionLog.AddText("No player found! Attempting to find player.", LogLevel.Error);
 
-                if (this.m_Entities[this.m_PlayerIndex].PlayerControlled == false)
-                {
-                    this.m_PlayerIndex = this.m_Entities.FindIndex(entity => entity.PlayerControlled);
+                    if (this.m_Entities.Any(entity => entity.Driver is PlayerDriver))
+                    {
+                        this.m_PlayerIndex = this.m_Entities.FindIndex(entity => entity.Driver is PlayerDriver);
+                        if (this.m_PlayerIndex >= 0)
+                        {
+                            this.m_Entities[this.m_PlayerIndex].PlayerControlled = true;
+                        }
+                    }
+                    else
+                    {
+                        GlobalConstants.ActionLog.AddText(
+                            "Still no player found! Something has gone terrible wrong.", LogLevel.Error);
+                        throw new InvalidOperationException("No player found in world.");
+                    }
                 }
                 
                 return this.m_Entities[this.m_PlayerIndex];
