@@ -15,7 +15,9 @@ namespace JoyLib.Code.IO
 {
     public class WorldSerialiser
     {
-        protected static IObjectIconHandler s_ObjectIcons = GlobalConstants.GameManager.ObjectIconHandler; 
+        protected static IObjectIconHandler s_ObjectIcons = GlobalConstants.GameManager.ObjectIconHandler;
+
+        protected const DataFormat DATA_FORMAT = DataFormat.JSON;
 
         public void Serialise(IWorldInstance world)
         {
@@ -30,11 +32,11 @@ namespace JoyLib.Code.IO
             catch (Exception e)
             {
                 GlobalConstants.ActionLog.AddText("Cannot open save directory.", LogLevel.Error);
-                GlobalConstants.ActionLog.AddText(e.Message, LogLevel.Error);
+                GlobalConstants.ActionLog.StackTrace(e);
             }
             try
             {
-                byte[] array = SerializationUtility.SerializeValue(world, DataFormat.JSON);
+                byte[] array = SerializationUtility.SerializeValue(world, DATA_FORMAT);
                 File.WriteAllBytes(directory + "/world.dat", array);
                 /*
                 StreamWriter writer = new StreamWriter(Directory.GetCurrentDirectory() + "/save/" + world.Name + "/sav.dat", false);
@@ -44,19 +46,24 @@ namespace JoyLib.Code.IO
                 */
 
                 array = SerializationUtility.SerializeValue(GlobalConstants.GameManager.QuestTracker.AllQuests,
-                    DataFormat.JSON);
+                    DATA_FORMAT);
                 File.WriteAllBytes(directory + "/quests.dat", array);
 
                 array = SerializationUtility.SerializeValue(
                     GlobalConstants.GameManager.RelationshipHandler.AllRelationships,
-                    DataFormat.JSON);
+                    DATA_FORMAT);
                 File.WriteAllBytes(directory + "/relationships.dat", array);
+
+                array = SerializationUtility.SerializeValue(
+                    GlobalConstants.GameManager.ItemHandler.AllItems,
+                    DATA_FORMAT);
+                File.WriteAllBytes(directory + "/items.dat", array);
 
             }
             catch(Exception e)
             {
                 GlobalConstants.ActionLog.AddText("Cannot serialise and/or write world to file.", LogLevel.Error);
-                GlobalConstants.ActionLog.AddText(e.Message, LogLevel.Error);
+                GlobalConstants.ActionLog.StackTrace(e);
             }
         }
 
@@ -71,19 +78,24 @@ namespace JoyLib.Code.IO
 
             string directory = Directory.GetCurrentDirectory() + "/save/" + worldName;
             byte[] array = File.ReadAllBytes(directory + "/world.dat");
-            IWorldInstance world = SerializationUtility.DeserializeValue<IWorldInstance>(array, DataFormat.JSON);
+            IWorldInstance world = SerializationUtility.DeserializeValue<IWorldInstance>(array, DATA_FORMAT);
             
             this.LinkWorlds(world);
             this.AssignIcons(world);
 
             array = File.ReadAllBytes(directory + "/quests.dat");
-            IEnumerable<IQuest> quests = SerializationUtility.DeserializeValue<IEnumerable<IQuest>>(array, DataFormat.JSON);
+            IEnumerable<IQuest> quests = SerializationUtility.DeserializeValue<IEnumerable<IQuest>>(array, DATA_FORMAT);
             this.Quests(quests);
 
             array = File.ReadAllBytes(directory + "/relationships.dat");
             IEnumerable<IRelationship> relationships =
-                SerializationUtility.DeserializeValue<IEnumerable<IRelationship>>(array, DataFormat.JSON);
+                SerializationUtility.DeserializeValue<IEnumerable<IRelationship>>(array, DATA_FORMAT);
             this.Relationships(relationships);
+
+            array = File.ReadAllBytes(directory + "/items.dat");
+            IEnumerable<IItemInstance> items =
+                SerializationUtility.DeserializeValue<IEnumerable<IItemInstance>>(array, DATA_FORMAT);
+            this.Items(items);
             
             return world;
         }
@@ -196,6 +208,14 @@ namespace JoyLib.Code.IO
             foreach (IRelationship relationship in relationships)
             {
                 GlobalConstants.GameManager.RelationshipHandler.AddRelationship(relationship);
+            }
+        }
+
+        private void Items(IEnumerable<IItemInstance> items)
+        {
+            foreach (IItemInstance item in items)
+            {
+                GlobalConstants.GameManager.ItemHandler.AddItem(item);
             }
         }
     }

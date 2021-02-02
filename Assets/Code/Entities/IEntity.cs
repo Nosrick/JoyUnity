@@ -26,7 +26,6 @@ namespace JoyLib.Code.Entities
         IDictionary<string, INeed> Needs { get; }
         List<IAbility> Abilities { get; }
         EquipmentStorage Equipment { get; }
-        List<IItemInstance> Backpack { get; }
         IItemInstance NaturalWeapons { get; }
         IBioSex Sex { get; }
         ISexuality Sexuality { get; }
@@ -73,7 +72,7 @@ namespace JoyLib.Code.Entities
         bool RemoveEquipment(IItemInstance item);
         IItemInstance[] SearchBackpackForItemType(IEnumerable<string> tags);
         bool EquipItem(IItemInstance itemRef);
-        IEnumerable<IItemInstance> GetEquipment(string slotRef);
+        IItemInstance GetEquipment(string slotRef);
         bool UnequipItem(IItemInstance actor);
 
         void AddExperience(int value);

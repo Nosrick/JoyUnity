@@ -180,12 +180,12 @@ namespace JoyLib.Code.Entities.Needs
         {
             base.Tick(actor);
 
-            if (actor.Backpack.Count == 0)
+            if (actor.Contents.Any() == false)
             {
                 return false;
             }
 
-            this.Fulfill(actor.Backpack.Count);
+            this.Fulfill(actor.Contents.Count());
             return true;
         }
     }

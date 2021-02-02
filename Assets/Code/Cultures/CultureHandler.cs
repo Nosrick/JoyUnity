@@ -121,10 +121,9 @@ namespace JoyLib.Code.Cultures
                     }
                     catch (Exception e)
                     {
-                        GlobalConstants.ActionLog.AddText(e.Message, LogLevel.Warning);
-                        GlobalConstants.ActionLog.AddText(e.StackTrace, LogLevel.Warning);
                         GlobalConstants.ActionLog.AddText("Could not find cursor colours in file " + file,
                             LogLevel.Error);
+                        GlobalConstants.ActionLog.StackTrace(e);
                         cursorColours.Add(
                             "DefaultCursor",
                             new Dictionary<string, Color>
@@ -141,10 +140,9 @@ namespace JoyLib.Code.Cultures
                     }
                     catch (Exception e)
                     {
-                        GlobalConstants.ActionLog.AddText(e.Message, LogLevel.Error);
-                        GlobalConstants.ActionLog.AddText(e.StackTrace, LogLevel.Error);
                         GlobalConstants.ActionLog.AddText("Could not find background colours in file " + file,
                             LogLevel.Warning);
+                        GlobalConstants.ActionLog.StackTrace(e);
                         backgroundColours.Add(
                             "DefaultWindow",
                             new Dictionary<string, Color>
@@ -165,10 +163,9 @@ namespace JoyLib.Code.Cultures
                     }
                     catch (Exception e)
                     {
-                        GlobalConstants.ActionLog.AddText(e.Message, LogLevel.Warning);
-                        GlobalConstants.ActionLog.AddText(e.StackTrace, LogLevel.Warning);
                         GlobalConstants.ActionLog.AddText("Could not find main font colour in file " + file,
                             LogLevel.Warning);
+                        GlobalConstants.ActionLog.StackTrace(e);
                         mainFontColours.Add(
                             "Font",
                             Color.black);

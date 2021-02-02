@@ -129,7 +129,7 @@ namespace JoyLib.Code.States
                     new object[] {true});
             }
 
-            foreach (IItemInstance item in this.m_Player.Backpack)
+            foreach (IItemInstance item in this.m_Player.Contents)
             {
                 GlobalConstants.GameManager.ItemPool.Retire(item.MonoBehaviourHandler.gameObject);
             }

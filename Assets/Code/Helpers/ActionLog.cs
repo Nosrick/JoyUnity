@@ -106,6 +106,20 @@ namespace JoyLib.Code.Helpers
             }
         }
 
+        public void StackTrace(Exception exception)
+        {
+            this.AddText(exception.Message, LogLevel.Error);
+            this.AddText(exception.StackTrace, LogLevel.Error);
+
+            Exception innerException = exception.InnerException;
+            while (innerException is null == false)
+            {
+                this.AddText(innerException.Message, LogLevel.Error);
+                this.AddText(innerException.StackTrace, LogLevel.Error);
+                innerException = innerException.InnerException;
+            }
+        }
+
         ~ActionLog()
         {
             Dispose(false);

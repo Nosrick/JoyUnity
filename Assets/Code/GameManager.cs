@@ -161,6 +161,9 @@ namespace JoyLib.Code
             Entity.NaturalWeaponHelper = this.NaturalWeaponHelper;
             Entity.DerivedValueHandler = this.DerivedValueHandler;
 
+            ItemInstance.EntityHandler = this.EntityHandler;
+            ItemInstance.ItemHandler = this.ItemHandler;
+
             this.Initialised = true;
             this.LoadingMessage = "Done!";
 

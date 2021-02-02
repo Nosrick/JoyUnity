@@ -204,7 +204,7 @@ namespace JoyLib.Code.World
                 .ToList();
 
             objects.AddRange(this.m_Entities.SelectMany(entity =>
-                entity.Backpack.Where(instance => instance.ItemType.LightLevel > 0)));
+                entity.Contents.Where(instance => instance.ItemType.LightLevel > 0)));
 
             this.LightCalculator.Do(objects, this, this.Dimensions, this.Walls.Keys);
         }

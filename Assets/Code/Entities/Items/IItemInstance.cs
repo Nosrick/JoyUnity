@@ -15,7 +15,7 @@ namespace JoyLib.Code.Entities.Items
 
         void IdentifyMe();
 
-        IItemInstance TakeMyItem(int index);
+        long TakeMyItem(int index);
         
         bool Identified { get; }
         

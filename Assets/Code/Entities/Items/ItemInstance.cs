@@ -28,7 +28,7 @@ namespace JoyLib.Code.Entities.Items
         protected bool m_Identified;
 
         [OdinSerialize]
-        protected List<IItemInstance> m_Contents;
+        protected List<long> m_Contents;
         
         [OdinSerialize]
         protected BaseItemType m_Type;
@@ -110,7 +110,7 @@ namespace JoyLib.Code.Entities.Items
             
             this.Identified = identified;
 
-            this.m_Contents = contents ?? new List<IItemInstance>();
+            this.m_Contents = contents is null ? new List<long>() : contents.Select(instance => instance.GUID).ToList();
 
             this.UniqueAbilities = uniqueAbilities is null == false ? new List<IAbility>(uniqueAbilities) : new List<IAbility>();
 
@@ -287,7 +287,7 @@ namespace JoyLib.Code.Entities.Items
                 user.AddIdentifiedItem(this.DisplayName);
             }
             //Identify any identical items the user is carrying
-            foreach (IItemInstance item in user.Backpack)
+            foreach (IItemInstance item in user.Contents)
             {
                 if(item.DisplayName.Equals(this.DisplayName) && !item.Identified)
                 {
@@ -304,21 +304,21 @@ namespace JoyLib.Code.Entities.Items
             this.ConstructDescription();
         }
 
-        public IItemInstance TakeMyItem(int index)
+        public long TakeMyItem(int index)
         {
             if(index > 0 && index < this.m_Contents.Count)
             {
-                IItemInstance item = this.m_Contents[index];
+                long item = this.m_Contents[index];
                 this.m_Contents.RemoveAt(index);
                 return item;
             }
 
-            return null;
+            throw new InvalidOperationException("No item to take at selected index!");
         }
 
         public bool Contains(IItemInstance actor)
         {
-            if (this.Contents.Contains(actor))
+            if (this.m_Contents.Contains(actor.GUID))
             {
                 return true;
             }
@@ -353,7 +353,7 @@ namespace JoyLib.Code.Entities.Items
         {
             if(this.CanAddContents(actor))
             {
-                this.m_Contents.Add(actor);
+                this.m_Contents.Add(actor.GUID);
 
                 this.CalculateValue();
                 this.ConstructDescription();
@@ -369,7 +369,8 @@ namespace JoyLib.Code.Entities.Items
         {
             IEnumerable<IItemInstance> itemInstances = actors as IItemInstance[] ?? actors.ToArray();
             this.m_Contents.AddRange(itemInstances.Where(actor => 
-                    this.m_Contents.Any(item => item.GUID == actor.GUID) == false));
+                    this.m_Contents.Any(item => item == actor.GUID) == false)
+                .Select(instance => instance.GUID));
 
             this.CalculateValue();
             this.ConstructDescription();
@@ -383,7 +384,7 @@ namespace JoyLib.Code.Entities.Items
 
         public bool RemoveContents(IItemInstance actor)
         {
-            if (!this.m_Contents.Remove(actor))
+            if (!this.m_Contents.Remove(actor.GUID))
             {
                 return false;
             }
@@ -500,7 +501,7 @@ namespace JoyLib.Code.Entities.Items
 
         public IEnumerable<IItemInstance> Contents
         {
-            get => this.m_Contents;
+            get => ItemHandler.GetItems(this.m_Contents);
         }
 
         public string ContentString

@@ -21,88 +21,96 @@ namespace Tests
         private IQuestTracker questTracker;
 
         private IQuestProvider target;
-        
+
         private IGameManager gameManager;
-        
+
         private ScriptingEngine scriptingEngine;
 
+        private IWorldInstance overworld;
         private IWorldInstance world;
-        
+
         private IEntity left;
         private IEntity right;
-        
+
         [SetUp]
         public void SetUp()
         {
             ActionLog actionLog = new ActionLog();
             GlobalConstants.ActionLog = actionLog;
-            scriptingEngine = new ScriptingEngine();
+            this.scriptingEngine = new ScriptingEngine();
 
             IItemInstance item = Mock.Of<IItemInstance>();
 
-            world = Mock.Of<IWorldInstance>(
-                w => w.GetRandomSentientWorldWide() == Mock.Of<IEntity>(
-                         entity => entity.GUID == 3
-                         && entity.MyWorld == world
-                         && entity.Backpack == new List<IItemInstance> { item })
-                && w.GetWorlds(It.IsAny<IWorldInstance>()) == new List<IWorldInstance>
-                {
-                    Mock.Of<IWorldInstance>(mock => mock.Name == "TEST2")
-                }
-                && w.Name == "TEST");
-            
-            left = Mock.Of<IEntity>(
+            this.overworld = Mock.Of<IWorldInstance>(
+                w => w.Name == "overworld"
+                     && w.GetWorlds(It.IsAny<IWorldInstance>()) == new List<IWorldInstance>
+                     {
+                         Mock.Of<IWorldInstance>(
+                             instance => instance.GUID == 200)
+                     }
+                     && w.GetRandomSentientWorldWide() == Mock.Of<IEntity>(
+                         entity => entity.GUID == 2
+                                   && entity.MyWorld == this.world
+                                   && entity.Contents == new List<IItemInstance> {item}));
+
+            this.world = Mock.Of<IWorldInstance>(
+                w => w.GetOverworld() == this.overworld
+                     && w.Name == "TEST"
+                     && w.GUID == 200);
+
+            this.left = Mock.Of<IEntity>(
                 entity => entity.GUID == 1
                           && entity.PlayerControlled == true
-                          && entity.MyWorld == world
+                          && entity.MyWorld == this.world
                           && entity.HasDataKey(It.IsAny<string>()) == false);
-            
-            right = Mock.Of<IEntity>(
+
+            this.right = Mock.Of<IEntity>(
                 entity => entity.GUID == 2
-                && entity.MyWorld == world
-                && entity.Backpack == new List<IItemInstance> { item });
+                          && entity.MyWorld == this.world
+                          && entity.Contents == new List<IItemInstance> {item});
 
             IRelationship friendship = Mock.Of<IRelationship>(
                 relationship => relationship.GetRelationshipValue(It.IsAny<long>(), It.IsAny<long>()) == 0);
-            
+
             IEntityRelationshipHandler relationshipHandler = Mock.Of<IEntityRelationshipHandler>(
                 handler => handler.Get(It.IsAny<IJoyObject[]>(), It.IsAny<string[]>(), It.IsAny<bool>())
-                == new IRelationship[] { friendship });
+                           == new[] {friendship});
             ILiveItemHandler itemHandler = Mock.Of<ILiveItemHandler>();
             IItemFactory itemFactory = Mock.Of<IItemFactory>(
                 factory => factory.CreateRandomItemOfType(
-                               It.IsAny<string[]>(), 
+                               It.IsAny<string[]>(),
                                It.IsAny<bool>()) == item
-                && factory.CreateSpecificType(
-                    It.IsAny<string>(), 
-                    It.IsAny<string[]>(), 
-                    It.IsAny<bool>())== item
-                && factory.CreateCompletelyRandomItem(
-                    It.IsAny<bool>(), 
-                    It.IsAny<bool>()) == item);
+                           && factory.CreateSpecificType(
+                               It.IsAny<string>(),
+                               It.IsAny<string[]>(),
+                               It.IsAny<bool>()) == item
+                           && factory.CreateCompletelyRandomItem(
+                               It.IsAny<bool>(),
+                               It.IsAny<bool>()) == item);
 
-            gameManager = Mock.Of<IGameManager>(
-                manager => manager.ItemFactory == itemFactory);
+            this.gameManager = Mock.Of<IGameManager>(
+                manager => manager.ItemFactory == itemFactory
+                           && manager.Player == this.left);
 
-            GlobalConstants.GameManager = gameManager;
+            GlobalConstants.GameManager = this.gameManager;
 
-            target = new QuestProvider(
+            this.target = new QuestProvider(
                 relationshipHandler,
                 itemHandler,
                 itemFactory,
                 new RNG());
-            questTracker = new QuestTracker();
+            this.questTracker = new QuestTracker();
         }
 
         [UnityTest]
         public IEnumerator QuestProvider_ShouldHave_NonZeroQuests()
         {
             //given
-            
+
             //when
-            
+
             //then
-            Assert.That(target.Actions, Is.Not.Empty);
+            Assert.That(this.target.Actions, Is.Not.Empty);
 
             return null;
         }
@@ -111,9 +119,9 @@ namespace Tests
         public IEnumerator QuestProvider_ShouldGenerate_ValidQuest()
         {
             //given
-            
+
             //when
-            IQuest[] quests = target.MakeOneOfEachType(left, right, world).ToArray();
+            IQuest[] quests = this.target.MakeOneOfEachType(this.left, this.right, this.overworld).ToArray();
 
             //then
             foreach (IQuest quest in quests)

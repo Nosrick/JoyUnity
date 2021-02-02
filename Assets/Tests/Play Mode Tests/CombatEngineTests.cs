@@ -8,6 +8,7 @@ using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Managers;
 using JoyLib.Code.Rollers;
@@ -21,12 +22,16 @@ namespace Tests
     public class CombatEngineTests
     {
         private ICombatEngine target;
+        private IGameManager GameManager;
 
         private INeedHandler needHandler;
         private IEntityStatisticHandler statisticHandler;
         private IEntitySkillHandler skillHandler;
         private IDerivedValueHandler derivedValueHandler;
         private IAbilityHandler abilityHandler;
+        private ILiveItemHandler itemHandler;
+        private IMaterialHandler materialHandler;
+        private IObjectIconHandler objectIconHandler;
 
         private ActionLog logger;
 
@@ -64,12 +69,28 @@ namespace Tests
                 && roller.RollSuccesses(
                     It.IsAny<int>(),
                     It.IsNotIn(7)) == 2));
-
-            this.needHandler = new NeedHandler();
             this.statisticHandler = new EntityStatisticHandler();
             this.skillHandler = new EntitySkillHandler(this.needHandler);
             this.derivedValueHandler = new DerivedValueHandler(this.statisticHandler, this.skillHandler);
             this.abilityHandler = new AbilityHandler();
+
+            this.materialHandler = new MaterialHandler();
+
+            this.objectIconHandler = new ObjectIconHandler(new RNG());
+            
+            this.itemHandler = new LiveItemHandler(
+                this.objectIconHandler,
+                this.materialHandler,
+                this.abilityHandler,
+                new RNG());
+
+            ItemInstance.ItemHandler = this.itemHandler;
+
+            GlobalConstants.GameManager = Mock.Of<IGameManager>(
+                manager => manager.ItemHandler == this.itemHandler
+                && manager.ObjectIconHandler == this.objectIconHandler);
+
+            this.needHandler = new NeedHandler();
         }
 
         [SetUp]
@@ -139,25 +160,27 @@ namespace Tests
             for (int i = 0; i < attackerQuantity; i++)
             {
                 this.attackerEquipment.AddSlot("hand");
-                this.attackerEquipment.AddContents(
-                    Mock.Of<IItemInstance>(
-                            item => item.Efficiency == attackerValue
-                                    && item.GUID == GUIDManager.Instance.AssignGUID()
-                                    && item.Tags == new[] { "weapon", attackTypeTag }
-                                    && item.ItemType == Mock.Of<BaseItemType>(
-                                        type => type.Slots == new[] { "hand" })));
+                IItemInstance instance = Mock.Of<IItemInstance>(
+                    item => item.Efficiency == attackerValue
+                            && item.GUID == GUIDManager.Instance.AssignGUID()
+                            && item.Tags == new[] {"weapon", attackTypeTag}
+                            && item.ItemType == Mock.Of<BaseItemType>(
+                                type => type.Slots == new[] {"hand"}));
+                this.attackerEquipment.AddContents(instance);
+                this.itemHandler.AddItem(instance);
             }
 
             for (int i = 0; i < defenderQuantity; i++)
             {
                 this.defenderEquipment.AddSlot("torso");
-                this.defenderEquipment.AddContents(
-                    Mock.Of<IItemInstance>(
-                            item => item.Efficiency == defenderValue
-                                    && item.GUID == GUIDManager.Instance.AssignGUID()
-                                    && item.Tags == new[] {"armour", attackTypeTag}
-                                    && item.ItemType == Mock.Of<BaseItemType>(
-                                        type => type.Slots == new[] { "torso" })));
+                IItemInstance instance = Mock.Of<IItemInstance>(
+                    item => item.Efficiency == defenderValue
+                            && item.GUID == GUIDManager.Instance.AssignGUID()
+                            && item.Tags == new[] {"armour", attackTypeTag}
+                            && item.ItemType == Mock.Of<BaseItemType>(
+                                type => type.Slots == new[] {"torso"}));
+                this.defenderEquipment.AddContents(instance);
+                this.itemHandler.AddItem(instance);
             }
         }
 

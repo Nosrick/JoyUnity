@@ -58,7 +58,7 @@ namespace JoyLib.Code.Entities
         protected EquipmentStorage m_Equipment;
         
         [OdinSerialize]
-        protected List<IItemInstance> m_Backpack;
+        protected List<long> m_Backpack;
         
         [OdinSerialize]
         protected IItemInstance m_NaturalWeapons;
@@ -110,6 +110,8 @@ namespace JoyLib.Code.Entities
 
         [NonSerialized]
         protected const int ATTACK_THRESHOLD = -50;
+
+        public IEnumerable<IItemInstance> Contents => GlobalConstants.GameManager.ItemHandler.GetItems(this.m_Backpack);
         
         public static IEntityRelationshipHandler RelationshipHandler { get; set; }
         
@@ -222,7 +224,7 @@ namespace JoyLib.Code.Entities
 
             this.m_NaturalWeapons = naturalWeapons;
             this.m_Equipment = equipment;
-            this.m_Backpack = backpack.ToList();
+            this.m_Backpack = backpack.Select(instance => instance.GUID).ToList();
             this.Sex = sex;
             this.m_VisionProvider = template.VisionType.Copy();
 
@@ -566,10 +568,11 @@ namespace JoyLib.Code.Entities
             //Check backpack
             foreach (string tag in tagArray)
             {
-                int identifiedNames = this.m_Backpack.Count(item =>
+                IEnumerable<IItemInstance> backpack = this.Contents;
+                int identifiedNames = backpack.Count(item =>
                     item.IdentifiedName.Equals(tag, StringComparison.OrdinalIgnoreCase));
 
-                int unidentifiedNames = this.m_Backpack.Count(item =>
+                int unidentifiedNames = backpack.Count(item =>
                     item.ItemType.UnidentifiedName.Equals(tag, StringComparison.OrdinalIgnoreCase));
 
                 if (identifiedNames > 0)
@@ -716,7 +719,7 @@ namespace JoyLib.Code.Entities
         public new void Move(Vector2Int position)
         {
             base.Move(position);
-            foreach (IJoyObject joyObject in this.Backpack)
+            foreach (IJoyObject joyObject in this.Contents)
             {
                 joyObject.Move(position);
             }
@@ -724,9 +727,9 @@ namespace JoyLib.Code.Entities
 
         public virtual bool RemoveContents(IItemInstance item)
         {
-            if (this.m_Backpack.Contains(item))
+            if (this.m_Backpack.Contains(item.GUID))
             {
-                this.m_Backpack.Remove(item);
+                this.m_Backpack.Remove(item.GUID);
                 this.ItemRemoved?.Invoke(this, new ItemChangedEventArgs(){ Item = item });
                 return true;
             }
@@ -754,7 +757,7 @@ namespace JoyLib.Code.Entities
             try
             {
                 List<IItemInstance> matchingItems = new List<IItemInstance>();
-                foreach (IItemInstance item in this.m_Backpack)
+                foreach (IItemInstance item in this.Contents)
                 {
                     int matches = 0;
                     foreach (string tag in tags)
@@ -815,12 +818,10 @@ namespace JoyLib.Code.Entities
             this.DamageValue(DerivedValueName.HITPOINTS, damage);
         }
 
-        public IEnumerable<IItemInstance> GetEquipment(string slotRef)
+        public IItemInstance GetEquipment(string slotRef)
         {
             return this.Equipment.GetSlotContents(slotRef);
         }
-
-        public IEnumerable<IItemInstance> Contents => this.m_Backpack;
 
         public virtual bool AddContents(IItemInstance actor)
         {
@@ -837,9 +838,9 @@ namespace JoyLib.Code.Entities
                 goItem.MonoBehaviourHandler.gameObject.SetActive(false);
             }
 
-            if (this.m_Backpack.Contains(actor) == false)
+            if (this.m_Backpack.Contains(actor.GUID) == false)
             {
-                this.m_Backpack.Add(actor);
+                this.m_Backpack.Add(actor.GUID);
             }
             
             this.ItemAdded?.Invoke(this, new ItemChangedEventArgs { Item = actor });
@@ -854,13 +855,13 @@ namespace JoyLib.Code.Entities
         public virtual bool Contains(IItemInstance actor)
         {
             bool result = false;
-            result |= this.Backpack.Contains(actor);
+            result |= this.m_Backpack.Contains(actor.GUID);
             if (result)
             {
                 return true;
             }
 
-            foreach (IItemInstance item in this.Backpack)
+            foreach (IItemInstance item in this.Contents)
             {
                 result |= item.Contains(actor);
                 if (result)
@@ -883,7 +884,8 @@ namespace JoyLib.Code.Entities
             }
 
             this.m_Backpack.AddRange(
-                actors.Where(actor => this.m_Backpack.Any(item => item.GUID == actor.GUID) == false));
+                actors.Where(actor => this.m_Backpack.Any(item => item == actor.GUID) == false)
+                    .Select(instance => instance.GUID));
             foreach (IItemInstance actor in actors)
             {
                 this.ItemAdded?.Invoke(this, new ItemChangedEventArgs() { Item = actor });
@@ -1066,8 +1068,6 @@ namespace JoyLib.Code.Entities
         [OdinSerialize]
         public bool PlayerControlled { get; set; }
 
-        public List<IItemInstance> Backpack => this.m_Backpack;
-
         public IItemInstance NaturalWeapons => this.m_NaturalWeapons;
 
         public List<string> IdentifiedItems => this.m_IdentifiedItems;
@@ -1172,7 +1172,7 @@ namespace JoyLib.Code.Entities
             set
             {
                 this.m_MyWorld = value;
-                foreach (IItemInstance item in this.Backpack)
+                foreach (IItemInstance item in this.Contents)
                 {
                     item.MyWorld = value;
                 }

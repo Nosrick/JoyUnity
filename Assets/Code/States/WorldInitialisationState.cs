@@ -179,7 +179,7 @@ namespace JoyLib.Code.States
                 mbh.Clear();
                 mbh.AddSpriteState(entity.States.First(), true);
                 mbh.SetSpriteLayer("Entities");
-                this.CreateItems(entity.Backpack, false);
+                this.CreateItems(entity.Contents, false);
                 this.CreateItems(entity.Equipment.Contents, false);
             }
 

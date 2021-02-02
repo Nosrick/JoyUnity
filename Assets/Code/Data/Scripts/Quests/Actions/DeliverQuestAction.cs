@@ -61,7 +61,7 @@ namespace JoyLib.Code.Quests
         public IQuestStep Make(IEntity questor, IEntity provider, IWorldInstance overworld, IEnumerable<string> tags)
         {
             IItemInstance deliveryItem = null;
-            List<IItemInstance> backpack = provider.Backpack;
+            List<IItemInstance> backpack = provider.Contents.ToList();
             if (backpack.Count > 0)
             {
                 int result = this.Roller.Roll(0, backpack.Count);

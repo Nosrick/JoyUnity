@@ -154,6 +154,11 @@ namespace JoyLib.Code.Entities.Items
             return true;
         }
 
+        public bool AddItems(IEnumerable<IItemInstance> items, bool addToWorld = false)
+        {
+            return items.Aggregate(true, (current, item) => current & this.AddItem(item));
+        }
+
         public bool RemoveItemFromWorld(long GUID)
         {
             if (!this.LiveItems.ContainsKey(GUID))
@@ -200,6 +205,21 @@ namespace JoyLib.Code.Entities.Items
             throw new InvalidOperationException("No item found with GUID " + GUID);
         }
 
+        public IEnumerable<IItemInstance> GetItems(IEnumerable<long> guids)
+        {
+            List<IItemInstance> items = new List<IItemInstance>();
+
+            foreach (long guid in guids)
+            {
+                if (this.LiveItems.TryGetValue(guid, out IItemInstance item))
+                {
+                    items.Add(item);
+                }
+            }
+
+            return items;
+        }
+
         public List<BaseItemType> ItemDatabase
         {
             get
@@ -225,5 +245,7 @@ namespace JoyLib.Code.Entities.Items
                 return this.m_LiveItems;
             }
         }
+
+        public IEnumerable<IItemInstance> AllItems => this.LiveItems.Values.ToList();
     }
 }

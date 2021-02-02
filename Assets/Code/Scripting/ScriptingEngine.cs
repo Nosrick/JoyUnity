@@ -149,8 +149,7 @@ namespace JoyLib.Code.Scripting
             }
             catch (Exception e)
             {
-                GlobalConstants.ActionLog.AddText(e.Message);
-                GlobalConstants.ActionLog.AddText(e.StackTrace);
+                GlobalConstants.ActionLog.StackTrace(e);
                 throw new InvalidOperationException("Error when searching for Type in ScriptingEngine, " +
                                                     typeof(T).Name);
             }
