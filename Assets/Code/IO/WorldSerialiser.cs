@@ -85,7 +85,7 @@ namespace JoyLib.Code.IO
                 {
                     this.HandleContents(container);
                 }
-
+                
                 obj.MyWorld = parent;
                 
                 GlobalConstants.GameManager.ItemHandler.AddItem(obj as IItemInstance);
@@ -121,6 +121,7 @@ namespace JoyLib.Code.IO
 
                 entity.MyWorld = parent;
                 this.HandleContents(entity);
+                this.HandleContents(entity.Equipment);
             }
 
             foreach(IWorldInstance world in parent.Areas.Values)
@@ -148,6 +149,10 @@ namespace JoyLib.Code.IO
 
                 foreach (IItemInstance content in item.Contents)
                 {
+                    foreach (ISpriteState state in content.States)
+                    {
+                        this.SetUpSpriteStates(content.TileSet, state);
+                    }
                     this.HandleContents(content);
                 }
             }

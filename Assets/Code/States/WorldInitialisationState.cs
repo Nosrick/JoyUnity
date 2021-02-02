@@ -178,6 +178,7 @@ namespace JoyLib.Code.States
                 mbh.AddSpriteState(entity.States.First(), true);
                 mbh.SetSpriteLayer("Entities");
                 this.CreateItems(entity.Backpack, false);
+                this.CreateItems(entity.Equipment.Contents, false);
             }
 
             Camera camera = GameObject.Find("Main Camera").GetComponent<Camera>();

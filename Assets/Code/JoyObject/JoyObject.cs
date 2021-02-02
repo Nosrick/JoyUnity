@@ -157,7 +157,7 @@ namespace JoyLib.Code
                 tags);
         }
 
-        protected void Initialise(
+        public void Initialise(
             string name, 
             IDictionary<string, IDerivedValue> derivedValues, 
             Vector2Int position, 

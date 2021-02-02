@@ -141,13 +141,13 @@ namespace JoyLib.Code.States
             IWorldInstance oldWorld = this.m_ActiveWorld;
             IEntity player = oldWorld.Player;
 
+            newWorld.Initialise();
             player.FetchAction("enterworldaction")
                 .Execute(
                     new IJoyObject[] {player},
                     new[] {"exploration", "world change"},
                     new object[] {newWorld});
             this.m_ActiveWorld = newWorld;
-            this.m_ActiveWorld.Initialise();
 
             player = this.m_ActiveWorld.Player;
 
