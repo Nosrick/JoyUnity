@@ -27,6 +27,6 @@ sysinfo.txt
 /ProjectSettings/*
 /.idea/*
 
-InitScene*
+*InitTestScene*
 /player.log
 *.~lock.*
