@@ -71,10 +71,21 @@ namespace JoyLib.Code.Graphics
             
             if (frame < maxFrames)
             {
+                List<Tuple<Color, Sprite>> data = new List<Tuple<Color, Sprite>>();
+                foreach (SpritePart part in this.SpriteData.m_Parts)
+                {
+                    Color colour = part.SelectedColour;
+                    Sprite sprite = part.m_FrameSprites[frame];
+                    data.Add(new Tuple<Color, Sprite>(colour, sprite));
+                }
+
+                return data;
+                /*
                 return this.SpriteData.m_Parts.Select(part =>
                     new Tuple<Color, Sprite>(
                         part.m_PossibleColours[part.m_SelectedColour],
                         part.m_FrameSprites[frame])).ToList();
+                        */
             }
 
             return this.GetSpriteForFrame(0);

@@ -79,9 +79,6 @@ namespace JoyLib.Code.IO
             string directory = Directory.GetCurrentDirectory() + "/save/" + worldName;
             byte[] array = File.ReadAllBytes(directory + "/world.dat");
             IWorldInstance world = SerializationUtility.DeserializeValue<IWorldInstance>(array, DATA_FORMAT);
-            
-            this.LinkWorlds(world);
-            this.AssignIcons(world);
 
             array = File.ReadAllBytes(directory + "/quests.dat");
             IEnumerable<IQuest> quests = SerializationUtility.DeserializeValue<IEnumerable<IQuest>>(array, DATA_FORMAT);
@@ -96,6 +93,9 @@ namespace JoyLib.Code.IO
             IEnumerable<IItemInstance> items =
                 SerializationUtility.DeserializeValue<IEnumerable<IItemInstance>>(array, DATA_FORMAT);
             this.Items(items);
+            
+            this.LinkWorlds(world);
+            this.AssignIcons(world);
             
             return world;
         }
