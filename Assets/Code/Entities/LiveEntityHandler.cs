@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace JoyLib.Code.Entities
 {
@@ -7,6 +8,8 @@ namespace JoyLib.Code.Entities
     {
         protected Dictionary<long, IEntity> m_Entities;
         protected IEntity m_Player;
+
+        public IEnumerable<IEntity> AllEntities => this.m_Entities.Values.ToList();
 
         public bool AddEntity(IEntity created)
         {

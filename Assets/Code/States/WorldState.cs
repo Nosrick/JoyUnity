@@ -121,9 +121,9 @@ namespace JoyLib.Code.States
 
         protected void SetEntityWorld(IWorldInstance world)
         {
-            for (int i = 0; i < world.Entities.Count; i++)
+            foreach (IEntity entity in world.Entities)
             {
-                world.Entities[i].MyWorld = world;
+                entity.MyWorld = this.m_ActiveWorld;
             }
 
             foreach (IWorldInstance nextWorld in world.Areas.Values)

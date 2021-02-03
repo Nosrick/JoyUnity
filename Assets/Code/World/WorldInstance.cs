@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.AI;
-using JoyLib.Code.Entities.AI.Drivers;
 using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Helpers;
 using JoyLib.Code.Managers;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.World.Lighting;
@@ -21,9 +19,6 @@ namespace JoyLib.Code.World
         protected WorldTile[,] m_Tiles;
         [OdinSerialize]
         protected byte[,] m_Costs;
-        
-        [SerializeField]
-        protected int m_PlayerIndex;
 
         [OdinSerialize]
         protected Vector2Int m_Dimensions;
@@ -35,11 +30,29 @@ namespace JoyLib.Code.World
         [NonSerialized]
         protected IWorldInstance m_Parent;
 
-        [OdinSerialize]
-        protected List<IEntity> m_Entities;
+        [OdinSerialize] 
+        public HashSet<long> EntityGUIDs
+        {
+            get => this.m_EntityGUIDs;
+            protected set => this.m_EntityGUIDs = value;
+        }
 
-        [OdinSerialize]
-        protected List<IJoyObject> m_Objects;
+        protected HashSet<long> m_EntityGUIDs;
+        
+        protected HashSet<IEntity> m_Entities;
+
+        public HashSet<IEntity> Entities => this.m_Entities;
+
+        [OdinSerialize] 
+        public HashSet<long> ItemGUIDs
+        {
+            get => this.m_ItemGUIDs;
+            protected set => this.m_ItemGUIDs = value;
+        }
+
+        protected HashSet<long> m_ItemGUIDs;
+
+        protected HashSet<IJoyObject> m_Objects;
         
         [OdinSerialize]
         protected Dictionary<Vector2Int, IJoyObject> m_Walls;
@@ -60,17 +73,13 @@ namespace JoyLib.Code.World
 
         public bool Initialised { get; protected set; }
 
-        [NonSerialized]
-        protected GameObject m_FogOfWarHolder;
+        protected static GameObject FogOfWarHolder { get; set; }
         
-        [NonSerialized]
-        protected GameObject m_WallHolder;
+        protected static GameObject WallHolder { get; set; }
         
-        [NonSerialized]
-        protected GameObject m_ObjectHolder;
+        protected static GameObject ObjectHolder { get; set; }
         
-        [NonSerialized]
-        protected GameObject m_EntityHolder;
+        protected static GameObject EntityHolder { get; set; }
         
         [NonSerialized]
         protected ILiveEntityHandler EntityHandler;
@@ -102,8 +111,10 @@ namespace JoyLib.Code.World
             this.Tags = new List<string>(tags);
             this.m_Tiles = tiles;
             this.m_Areas = new Dictionary<Vector2Int, IWorldInstance>();
-            this.m_Entities = new List<IEntity>();
-            this.m_Objects = new List<IJoyObject>();
+            this.m_Entities = new HashSet<IEntity>();
+            this.m_EntityGUIDs = new HashSet<long>();
+            this.m_Objects = new HashSet<IJoyObject>();
+            this.m_ItemGUIDs = new HashSet<long>();
             this.m_Walls = new Dictionary<Vector2Int, IJoyObject>();
             this.GUID = GUIDManager.Instance.AssignGUID();
 
@@ -130,8 +141,8 @@ namespace JoyLib.Code.World
         /// <param name="objects"></param>
         /// <param name="tags"></param>
         /// <param name="name"></param>
-        public WorldInstance(WorldTile[,] tiles, Dictionary<Vector2Int, IWorldInstance> areas, List<IEntity> entities,
-            List<IJoyObject> objects, Dictionary<Vector2Int, IJoyObject> walls, string[] tags, string name)
+        public WorldInstance(WorldTile[,] tiles, Dictionary<Vector2Int, IWorldInstance> areas, HashSet<IEntity> entities,
+            HashSet<IJoyObject> objects, Dictionary<Vector2Int, IJoyObject> walls, string[] tags, string name)
         {
             this.Name = name;
             this.Tags = new List<string>(tags);
@@ -139,7 +150,9 @@ namespace JoyLib.Code.World
             this.m_Dimensions = new Vector2Int(tiles.GetLength(0), tiles.GetLength(1));
             this.m_Areas = areas;
             this.m_Entities = entities;
+            this.m_EntityGUIDs = new HashSet<long>(this.m_Entities.Select(entity => entity.GUID));
             this.m_Objects = objects;
+            this.m_ItemGUIDs = new HashSet<long>(this.m_Objects.Select(o => o.GUID).ToList());
             this.m_Walls = walls;
             this.GUID = GUIDManager.Instance.AssignGUID();
             this.CalculatePlayerIndex();
@@ -172,10 +185,20 @@ namespace JoyLib.Code.World
 
             this.EntityHandler = GlobalConstants.GameManager.EntityHandler;
 
-            this.m_FogOfWarHolder = GameObject.Find("WorldFog");
-            this.m_WallHolder = GameObject.Find("WorldWalls");
-            this.m_ObjectHolder = GameObject.Find("WorldObjects");
-            this.m_EntityHolder = GameObject.Find("WorldEntities");
+            FogOfWarHolder = FogOfWarHolder ? FogOfWarHolder : GameObject.Find("WorldFog");
+            WallHolder = WallHolder ? WallHolder : GameObject.Find("WorldWalls");
+            ObjectHolder = ObjectHolder ? ObjectHolder : GameObject.Find("WorldObjects");
+            EntityHolder = EntityHolder ? EntityHolder : GameObject.Find("WorldEntities");
+            
+            this.m_Objects = new HashSet<IJoyObject>();
+            this.m_Entities = new HashSet<IEntity>();
+            //this.m_EntityGUIDs = new List<long>();
+            //this.m_ItemGUIDs = new List<long>();
+
+            foreach (IWorldInstance child in this.m_Areas.Values)
+            {
+                child.Initialise();
+            }
             
             this.CalculatePlayerIndex();
             
@@ -189,10 +212,10 @@ namespace JoyLib.Code.World
 
         protected void CalculatePlayerIndex()
         {
-            this.m_PlayerIndex = this.m_Entities.FindIndex(entity => entity.PlayerControlled);
-            if (this.m_PlayerIndex > 0 && this.m_PlayerIndex < this.m_Entities.Count)
+            IEntity player = this.m_Entities.First(entity => entity.PlayerControlled);
+            if (player is null == false)
             {
-                this.EntityHandler.SetPlayer(this.m_Entities[this.m_PlayerIndex]);
+                this.EntityHandler.SetPlayer(player);
             }
         }
 
@@ -218,6 +241,7 @@ namespace JoyLib.Code.World
             else
             {
                 this.m_Objects.Add(objectRef);
+                this.m_ItemGUIDs.Add(objectRef.GUID);
             }
 
             objectRef.MyWorld = this;
@@ -240,7 +264,7 @@ namespace JoyLib.Code.World
                 return false;
             }
 
-            removed = this.m_Objects.Remove(itemRef);
+            removed = this.m_Objects.Remove(itemRef) & this.m_ItemGUIDs.Remove(itemRef.GUID);
 
             if (removed)
             {
@@ -253,17 +277,9 @@ namespace JoyLib.Code.World
             return removed;
         }
 
-        public IJoyObject GetObject(Vector2Int WorldPosition)
+        public IJoyObject GetObject(Vector2Int worldPosition)
         {
-            for (int i = 0; i < this.m_Objects.Count; i++)
-            {
-                if (this.m_Objects[i].WorldPosition == WorldPosition)
-                {
-                    return this.m_Objects[i];
-                }
-            }
-
-            return null;
+            return this.m_Objects.FirstOrDefault(o => o.WorldPosition == worldPosition);
         }
 
         public void Tick()
@@ -459,7 +475,7 @@ namespace JoyLib.Code.World
                         tags.ToArray(),
                         new object[] {newOwner});
 
-                this.m_Objects.Remove(item);
+                this.RemoveObject(entityRef.WorldPosition, item);
 
                 return item;
             }
@@ -470,6 +486,7 @@ namespace JoyLib.Code.World
         public void AddEntity(IEntity entityRef)
         {
             this.m_Entities.Add(entityRef);
+            this.m_EntityGUIDs.Add(entityRef.GUID);
             this.EntityHandler.AddEntity(entityRef);
 
             //Initialise a new GameObject here at some point
@@ -482,19 +499,18 @@ namespace JoyLib.Code.World
 
         public void RemoveEntity(Vector2Int positionRef)
         {
-            IEntity entity = null;
-            for (int i = 0; i < this.m_Entities.Count; i++)
+            IEntity entity = this.m_Entities.FirstOrDefault(e => e.WorldPosition == positionRef);
+
+            if (entity is null)
             {
-                if (this.m_Entities[i].WorldPosition.Equals(positionRef))
-                {
-                    entity = this.m_Entities[i];
-                    this.m_Entities.RemoveAt(i);
-                    break;
-                }
+                return;
             }
 
-            this.CalculatePlayerIndex();
+            this.m_Entities.Remove(entity);
+            this.m_EntityGUIDs.Remove(entity.GUID);
             this.EntityHandler.Remove(entity.GUID);
+
+            this.CalculatePlayerIndex();
 
             GlobalConstants.GameManager?.EntityPool.Retire(entity.MonoBehaviourHandler.gameObject);
 
@@ -665,12 +681,7 @@ namespace JoyLib.Code.World
             get { return this.m_Areas; }
         }
 
-        public List<IEntity> Entities
-        {
-            get { return this.m_Entities; }
-        }
-
-        public List<IJoyObject> Objects
+        public HashSet<IJoyObject> Objects
         {
             get { return this.m_Objects; }
         }
@@ -706,44 +717,8 @@ namespace JoyLib.Code.World
 
         public IEntity Player
         {
-            get
-            {
-                try
-                {
-                    if (this.m_PlayerIndex >= this.m_Entities.Count 
-                        || this.m_PlayerIndex < 0
-                        || this.m_Entities[this.m_PlayerIndex].PlayerControlled == false)
-                    {
-                        this.m_PlayerIndex = this.m_Entities.FindIndex(entity => entity.PlayerControlled);
-                    }
-                }
-                catch
-                {
-                    GlobalConstants.ActionLog.AddText("Could not find player!", LogLevel.Error);
-                }
-                
-                if (!this.m_Entities.Any(x => x.PlayerControlled))
-                {
-                    GlobalConstants.ActionLog.AddText("No player found! Attempting to find player.", LogLevel.Error);
-
-                    if (this.m_Entities.Any(entity => entity.Driver is PlayerDriver))
-                    {
-                        this.m_PlayerIndex = this.m_Entities.FindIndex(entity => entity.Driver is PlayerDriver);
-                        if (this.m_PlayerIndex >= 0)
-                        {
-                            this.m_Entities[this.m_PlayerIndex].PlayerControlled = true;
-                        }
-                    }
-                    else
-                    {
-                        GlobalConstants.ActionLog.AddText(
-                            "Still no player found! Something has gone terribly wrong.", LogLevel.Error);
-                        throw new InvalidOperationException("No player found in world.");
-                    }
-                }
-                
-                return this.m_Entities[this.m_PlayerIndex];
-            }
+            get;
+            protected set;
         }
 
         public Vector2Int Dimensions
@@ -768,13 +743,13 @@ namespace JoyLib.Code.World
             {
                 entity.Dispose();
             }
-            this.m_Entities = new List<IEntity>();
+            this.m_Entities = new HashSet<IEntity>();
 
             foreach (IJoyObject joyObject in this.m_Objects)
             {
                 joyObject.Dispose();
             }
-            this.m_Objects = new List<IJoyObject>();
+            this.m_Objects = new HashSet<IJoyObject>();
 
             foreach (IJoyObject wall in this.m_Walls.Values)
             {

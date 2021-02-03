@@ -10,12 +10,14 @@ namespace JoyLib.Code.World
 {
     public interface IWorldInstance : ITagged, IDisposable
     {
+        HashSet<long> EntityGUIDs { get; }
+        HashSet<long> ItemGUIDs { get; }
         WorldTile[,] Tiles { get; }
         byte[,] Costs { get; }
         LightCalculator LightCalculator { get; }
         Dictionary<Vector2Int, IWorldInstance> Areas { get; }
-        List<IEntity> Entities { get; }
-        List<IJoyObject> Objects { get; }
+        HashSet<IJoyObject> Objects { get; }
+        HashSet<IEntity> Entities { get; }
         Dictionary<Vector2Int, IJoyObject> Walls { get; }
         Vector2Int SpawnPoint { get; set; }
         IWorldInstance Parent { get; set; }
