@@ -59,13 +59,17 @@ namespace JoyLib.Code.Quests
 
             IEnumerable<string> tagsForAllSteps = steps.SelectMany(step => step.Tags);
             
-            return new Quest(
+            Quest quest = new Quest(
                 steps, 
                 QuestMorality.Neutral, 
                 this.GetRewards(questor, provider, steps), 
                 provider.GUID, 
                 questor.GUID, 
                 tagsForAllSteps);
+            
+            GlobalConstants.GameManager.ItemHandler.AddQuestRewards(quest.ID, quest.Rewards);
+
+            return quest;
         }
 
         public IEnumerable<IQuest> MakeOneOfEachType(IEntity questor, IEntity provider, IWorldInstance overworldRef)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using JoyLib.Code.Collections;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
@@ -48,6 +49,8 @@ namespace JoyLib.Code.Entities.Items
         protected void Initialise()
         {
             this.m_LiveItems = new Dictionary<long, IItemInstance>();
+
+            this.QuestRewards = new NonUniqueDictionary<long, IItemInstance>();
 
             s_ItemPrefab = Resources.Load<GameObject>("Prefabs/ItemInstance");
 
@@ -205,6 +208,42 @@ namespace JoyLib.Code.Entities.Items
             throw new InvalidOperationException("No item found with GUID " + GUID);
         }
 
+        public IEnumerable<IItemInstance> GetQuestRewards(long questID)
+        {
+            return this.QuestRewards[questID];
+        }
+
+        public void CleanUpRewards(IEnumerable<long> GUIDs)
+        {
+            NonUniqueDictionary<long, IItemInstance> cleanUp = new NonUniqueDictionary<long, IItemInstance>();
+            foreach (var tuple in this.QuestRewards)
+            {
+                if (GUIDs.Contains(tuple.Item2.GUID))
+                {
+                    cleanUp.Add(tuple.Item1, tuple.Item2);
+                }
+                else
+                {
+                    GlobalConstants.GameManager.ItemPool.Retire(tuple.Item2.MonoBehaviourHandler.gameObject);
+                }
+            }
+
+            this.QuestRewards = cleanUp;
+        }
+
+        public void AddQuestReward(long questID, IItemInstance reward)
+        {
+            this.QuestRewards.Add(questID, reward);
+        }
+
+        public void AddQuestRewards(long questID, IEnumerable<IItemInstance> rewards)
+        {
+            foreach (IItemInstance reward in rewards)
+            {
+                this.AddQuestReward(questID, reward);
+            }
+        }
+
         public IEnumerable<IItemInstance> GetItems(IEnumerable<long> guids)
         {
             List<IItemInstance> items = new List<IItemInstance>();
@@ -244,6 +283,12 @@ namespace JoyLib.Code.Entities.Items
 
                 return this.m_LiveItems;
             }
+        }
+
+        public NonUniqueDictionary<long, IItemInstance> QuestRewards
+        {
+            get;
+            protected set;
         }
 
         public IEnumerable<IItemInstance> AllItems => this.LiveItems.Values.ToList();

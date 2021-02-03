@@ -25,7 +25,7 @@ namespace JoyLib.Code.Quests
         {
             this.Steps = steps;
             this.Morality = morality;
-            this.Rewards = rewards;
+            this.RewardGUIDs = rewards.Select(instance => instance.GUID).ToList();
             this.Instigator = instigator;
             this.Questor = questor;
             this.CurrentStep = 0;
@@ -156,7 +156,10 @@ namespace JoyLib.Code.Quests
         public QuestMorality Morality { get; protected set; }
         
         [OdinSerialize]
-        public List<IItemInstance> Rewards { get; protected set; }
+        public List<long> RewardGUIDs { get; protected set; }
+
+        public List<IItemInstance> Rewards =>
+            GlobalConstants.GameManager.ItemHandler.GetItems(this.RewardGUIDs).ToList();
         
         [OdinSerialize]
         public int CurrentStep { get; protected set;  }

@@ -28,6 +28,9 @@ namespace JoyLib.Code.Entities.Relationships
         [OdinSerialize]
         protected SortedDictionary<long, IJoyObject> m_Participants;
 
+        public IDictionary<long, long> Participants => this.m_Participants.ToDictionary(
+            pair => pair.Key, pair => pair.Value.GUID);
+
         public AbstractRelationship()
         {
             this.m_Participants = new SortedDictionary<long, IJoyObject>();

@@ -90,11 +90,6 @@ namespace JoyLib.Code.IO
             IEnumerable<IQuest> quests = SerializationUtility.DeserializeValue<IEnumerable<IQuest>>(array, DATA_FORMAT);
             this.Quests(quests);
 
-            array = File.ReadAllBytes(directory + "/relationships.dat");
-            IEnumerable<IRelationship> relationships =
-                SerializationUtility.DeserializeValue<IEnumerable<IRelationship>>(array, DATA_FORMAT);
-            this.Relationships(relationships);
-
             array = File.ReadAllBytes(directory + "/items.dat");
             IEnumerable<IItemInstance> items =
                 SerializationUtility.DeserializeValue<IEnumerable<IItemInstance>>(array, DATA_FORMAT);
@@ -104,6 +99,11 @@ namespace JoyLib.Code.IO
             IEnumerable<IEntity> entities =
                 SerializationUtility.DeserializeValue<IEnumerable<IEntity>>(array, DATA_FORMAT);
             this.Entities(entities);
+
+            array = File.ReadAllBytes(directory + "/relationships.dat");
+            IEnumerable<IRelationship> relationships =
+                SerializationUtility.DeserializeValue<IEnumerable<IRelationship>>(array, DATA_FORMAT);
+            this.Relationships(relationships);
             
             this.LinkWorlds(world);
             this.AssignIcons(world);

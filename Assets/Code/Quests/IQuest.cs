@@ -9,6 +9,9 @@ namespace JoyLib.Code.Quests
     {
         List<IQuestStep> Steps { get; }
         QuestMorality Morality { get; }
+        
+        List<long> RewardGUIDs { get; }
+        
         List<IItemInstance> Rewards { get; }
         int CurrentStep { get; }
         

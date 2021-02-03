@@ -212,9 +212,10 @@ namespace JoyLib.Code.World
 
         protected void CalculatePlayerIndex()
         {
-            IEntity player = this.m_Entities.First(entity => entity.PlayerControlled);
+            IEntity player = this.m_Entities.FirstOrDefault(entity => entity.PlayerControlled);
             if (player is null == false)
             {
+                this.Player = player;
                 this.EntityHandler.SetPlayer(player);
             }
         }
@@ -338,7 +339,7 @@ namespace JoyLib.Code.World
         {
             List<IEntity> searchEntities = new List<IEntity>();
 
-            foreach (Entity entity in this.m_Entities)
+            foreach (IEntity entity in this.m_Entities)
             {
                 if (actor.GUID == entity.GUID
                     || !actor.VisionProvider.CanSee(actor, this, entity.WorldPosition))

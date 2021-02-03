@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using JoyLib.Code.Collections;
 using JoyLib.Code.World;
 
 namespace JoyLib.Code.Entities.Items
@@ -17,11 +18,18 @@ namespace JoyLib.Code.Entities.Items
         bool AddItemToWorld(WorldInstance world, long GUID);
 
         IItemInstance GetItem(long GUID);
+        IEnumerable<IItemInstance> GetQuestRewards(long questID);
+
+        void CleanUpRewards(IEnumerable<long> GUIDs);
+        void AddQuestReward(long questID, IItemInstance reward);
+        void AddQuestRewards(long questID, IEnumerable<IItemInstance> rewards);
 
         IEnumerable<IItemInstance> GetItems(IEnumerable<long> guids);
         
         List<BaseItemType> ItemDatabase { get; }
         
         IEnumerable<IItemInstance> AllItems { get; }
+        
+        NonUniqueDictionary<long, IItemInstance> QuestRewards { get; }
     }
 }

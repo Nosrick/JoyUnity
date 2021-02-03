@@ -61,6 +61,13 @@ namespace JoyLib.Code.Quests
         {
             quest.CompleteQuest(questor);
             this.EntityQuests[questor.GUID].Remove(quest);
+            this.CleanUpRewards();
+        }
+
+        protected void CleanUpRewards()
+        {
+            GlobalConstants.GameManager.ItemHandler.CleanUpRewards(
+                this.AllQuests.SelectMany(quest => quest.RewardGUIDs));
         }
 
         public void AbandonQuest(IEntity questor, IQuest quest)
