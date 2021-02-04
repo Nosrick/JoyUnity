@@ -122,7 +122,7 @@ namespace JoyLib.Code.Unity
                 {
                     slot.OnEnable();
                     slot.Container = this;
-                    slot.Item = null;
+                    //slot.Item = null;
                 }
 
                 if (this.Slots.Count < container.Contents.Count())
@@ -138,6 +138,11 @@ namespace JoyLib.Code.Unity
                 foreach (IItemInstance item in contents)
                 {
                     this.StackOrAdd(item);
+                }
+
+                foreach (JoyItemSlot slot in this.Slots.Where(slot => slot.isActiveAndEnabled))
+                {
+                    slot.Repaint();
                 }
             }
         }
