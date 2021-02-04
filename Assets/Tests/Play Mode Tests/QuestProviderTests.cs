@@ -75,7 +75,8 @@ namespace Tests
             IEntityRelationshipHandler relationshipHandler = Mock.Of<IEntityRelationshipHandler>(
                 handler => handler.Get(It.IsAny<IJoyObject[]>(), It.IsAny<string[]>(), It.IsAny<bool>())
                            == new[] {friendship});
-            ILiveItemHandler itemHandler = Mock.Of<ILiveItemHandler>();
+            ILiveItemHandler itemHandler = Mock.Of<ILiveItemHandler>(
+                handler => handler.GetQuestRewards(It.IsAny<long>()) == new List<IItemInstance> { item });
             IItemFactory itemFactory = Mock.Of<IItemFactory>(
                 factory => factory.CreateRandomItemOfType(
                                It.IsAny<string[]>(),
@@ -90,7 +91,8 @@ namespace Tests
 
             this.gameManager = Mock.Of<IGameManager>(
                 manager => manager.ItemFactory == itemFactory
-                           && manager.Player == this.left);
+                           && manager.Player == this.left
+                           && manager.ItemHandler == itemHandler);
 
             GlobalConstants.GameManager = this.gameManager;
 

@@ -50,7 +50,7 @@ namespace JoyLib.Code.Entities.Items
         {
             this.m_LiveItems = new Dictionary<long, IItemInstance>();
 
-            this.QuestRewards = new NonUniqueDictionary<long, IItemInstance>();
+            this.QuestRewards = new NonUniqueDictionary<long, long>();
 
             s_ItemPrefab = Resources.Load<GameObject>("Prefabs/ItemInstance");
 
@@ -210,38 +210,54 @@ namespace JoyLib.Code.Entities.Items
 
         public IEnumerable<IItemInstance> GetQuestRewards(long questID)
         {
-            return this.QuestRewards[questID];
+            return this.QuestRewards.ContainsKey(questID) 
+                ? this.GetItems(this.QuestRewards.FetchValuesForKey(questID)) 
+                : new IItemInstance[0];
         }
 
         public void CleanUpRewards(IEnumerable<long> GUIDs)
         {
-            NonUniqueDictionary<long, IItemInstance> cleanUp = new NonUniqueDictionary<long, IItemInstance>();
+            NonUniqueDictionary<long, long> cleanUp = new NonUniqueDictionary<long, long>();
             foreach (var tuple in this.QuestRewards)
             {
-                if (GUIDs.Contains(tuple.Item2.GUID))
+                if (GUIDs.Contains(tuple.Item2))
                 {
                     cleanUp.Add(tuple.Item1, tuple.Item2);
                 }
                 else
                 {
-                    GlobalConstants.GameManager.ItemPool.Retire(tuple.Item2.MonoBehaviourHandler.gameObject);
+                    IItemInstance item = this.GetItem(tuple.Item2);
+                    if (item.MonoBehaviourHandler is null)
+                    {
+                        GlobalConstants.ActionLog.AddText("No MBH found on " + item);
+                    }
+                    else
+                    {
+                        GlobalConstants.GameManager.ItemPool.Retire(
+                            item.MonoBehaviourHandler.gameObject);
+                    }
                 }
             }
 
             this.QuestRewards = cleanUp;
         }
 
-        public void AddQuestReward(long questID, IItemInstance reward)
+        public void AddQuestReward(long questID, long reward)
         {
             this.QuestRewards.Add(questID, reward);
         }
 
+        public void AddQuestRewards(long questID, IEnumerable<long> rewards)
+        {
+            foreach (long reward in rewards)
+            {
+                this.QuestRewards.Add(questID, reward);
+            }
+        }
+
         public void AddQuestRewards(long questID, IEnumerable<IItemInstance> rewards)
         {
-            foreach (IItemInstance reward in rewards)
-            {
-                this.AddQuestReward(questID, reward);
-            }
+            this.AddQuestRewards(questID, rewards.Select(instance => instance.GUID));
         }
 
         public IEnumerable<IItemInstance> GetItems(IEnumerable<long> guids)
@@ -284,8 +300,8 @@ namespace JoyLib.Code.Entities.Items
                 return this.m_LiveItems;
             }
         }
-
-        public NonUniqueDictionary<long, IItemInstance> QuestRewards
+        
+        public NonUniqueDictionary<long, long> QuestRewards
         {
             get;
             protected set;

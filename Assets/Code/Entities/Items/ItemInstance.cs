@@ -12,7 +12,6 @@ using JoyLib.Code.Scripting;
 using JoyLib.Code.Unity;
 using Sirenix.OdinSerializer;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace JoyLib.Code.Entities.Items
 {
@@ -128,15 +127,16 @@ namespace JoyLib.Code.Entities.Items
 
             if (this.Prefab is null == false)
             {
-                this.Instantiate(gameObject, active);
+                this.Instantiate(true, gameObject, active);
             }
         }
 
-        public void Instantiate(GameObject gameObject = null, bool active = false)
+        public void Instantiate(bool recursive = true, GameObject gameObject = null, bool active = false)
         {
             if (gameObject is null)
             {
-                MonoBehaviourHandler monoBehaviourHandler = Object.Instantiate(this.Prefab).GetComponent<MonoBehaviourHandler>();
+                MonoBehaviourHandler monoBehaviourHandler = GlobalConstants.GameManager.ItemPool.Get()
+                    .GetComponent<MonoBehaviourHandler>();
                 monoBehaviourHandler.AttachJoyObject(this);
                 this.AttachMonoBehaviourHandler(monoBehaviourHandler);
             }
@@ -149,6 +149,19 @@ namespace JoyLib.Code.Entities.Items
             this.MonoBehaviourHandler.Clear();
             this.MonoBehaviourHandler.AddSpriteState(this.States[this.StateIndex]);
             this.MonoBehaviourHandler.gameObject.SetActive(active);
+            
+            if (!recursive)
+            {
+                return;
+            }
+            
+            foreach (IItemInstance item in this.Contents)
+            {
+                if (item is ItemInstance instance)
+                {
+                    instance.Instantiate(true, gameObject);
+                }
+            }
         }
 
         public IItemInstance Copy(IItemInstance copy)

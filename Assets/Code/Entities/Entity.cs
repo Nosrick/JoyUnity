@@ -835,6 +835,10 @@ namespace JoyLib.Code.Entities
 
             if (actor is ItemInstance goItem)
             {
+                if (goItem.MonoBehaviourHandler is null)
+                {
+                    goItem.Instantiate();
+                }
                 goItem.MonoBehaviourHandler.gameObject.SetActive(false);
             }
 

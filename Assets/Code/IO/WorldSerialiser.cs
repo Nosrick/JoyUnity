@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using JoyLib.Code.Collections;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Needs;
@@ -49,6 +50,10 @@ namespace JoyLib.Code.IO
                     DATA_FORMAT);
                 File.WriteAllBytes(directory + "/quests.dat", array);
 
+                array = SerializationUtility.SerializeValue(GlobalConstants.GameManager.ItemHandler.QuestRewards,
+                    DATA_FORMAT);
+                File.WriteAllBytes(directory + "/rewards.dat", array);
+
                 array = SerializationUtility.SerializeValue(
                     GlobalConstants.GameManager.RelationshipHandler.AllRelationships,
                     DATA_FORMAT);
@@ -86,14 +91,19 @@ namespace JoyLib.Code.IO
             IWorldInstance world = SerializationUtility.DeserializeValue<IWorldInstance>(array, DATA_FORMAT);
             world.Initialise();
 
-            array = File.ReadAllBytes(directory + "/quests.dat");
-            IEnumerable<IQuest> quests = SerializationUtility.DeserializeValue<IEnumerable<IQuest>>(array, DATA_FORMAT);
-            this.Quests(quests);
-
             array = File.ReadAllBytes(directory + "/items.dat");
             IEnumerable<IItemInstance> items =
                 SerializationUtility.DeserializeValue<IEnumerable<IItemInstance>>(array, DATA_FORMAT);
             this.Items(items);
+
+            array = File.ReadAllBytes(directory + "/quests.dat");
+            IEnumerable<IQuest> quests = SerializationUtility.DeserializeValue<IEnumerable<IQuest>>(array, DATA_FORMAT);
+            this.Quests(quests);
+
+            array = File.ReadAllBytes(directory + "/rewards.dat");
+            NonUniqueDictionary<long, long> rewards =
+                SerializationUtility.DeserializeValue<NonUniqueDictionary<long, long>>(array, DATA_FORMAT);
+            this.QuestRewards(rewards);
 
             array = File.ReadAllBytes(directory + "/entities.dat");
             IEnumerable<IEntity> entities =
@@ -122,24 +132,6 @@ namespace JoyLib.Code.IO
         
         private void AssignIcons(IWorldInstance parent)
         {
-            List<long> guids = new List<long>(parent.ItemGUIDs);
-            foreach (long guid in guids)
-            {
-                IItemInstance item = GlobalConstants.GameManager.ItemHandler.GetItem(guid);
-                foreach (ISpriteState state in item.States)
-                {
-                    this.SetUpSpriteStates(item.TileSet, state);
-                }
-
-                if (item is IItemContainer container)
-                {
-                    this.HandleContents(container);
-                }
-
-                parent.AddObject(item);
-                item.MyWorld = parent;
-            }
-
             foreach (IJoyObject wall in parent.Walls.Values)
             {
                 foreach (ISpriteState state in wall.States)
@@ -150,29 +142,11 @@ namespace JoyLib.Code.IO
                 wall.MyWorld = parent;
             }
 
-            guids = new List<long>(parent.EntityGUIDs);
-            foreach (long guid in guids)
+            foreach (long guid in parent.EntityGUIDs)
             {
                 IEntity entity = GlobalConstants.GameManager.EntityHandler.Get(guid);
-                
-                foreach (ISpriteState state in entity.States)
-                {
-                    this.SetUpSpriteStates(entity.TileSet, state);
-                }
-
-                foreach (INeed need in entity.Needs.Values)
-                {
-                    need.FulfillingSprite = new SpriteState(
-                        need.Name, 
-                        GlobalConstants.GameManager.ObjectIconHandler.GetFrame(
-                            "needs", 
-                            need.Name));
-                }
-
                 parent.AddEntity(entity);
                 entity.MyWorld = parent;
-                this.HandleContents(entity);
-                this.HandleContents(entity.Equipment);
             }
 
             foreach(IWorldInstance world in parent.Areas.Values)
@@ -209,6 +183,14 @@ namespace JoyLib.Code.IO
             }
         }
 
+        private void QuestRewards(NonUniqueDictionary<long, long> rewards)
+        {
+            foreach (long questID in rewards.Keys)
+            {
+                GlobalConstants.GameManager.ItemHandler.AddQuestRewards(questID, rewards.FetchValuesForKey(questID));
+            }
+        }
+
         private void Quests(IEnumerable<IQuest> quests)
         {
             foreach (IQuest quest in quests)
@@ -229,6 +211,15 @@ namespace JoyLib.Code.IO
         {
             foreach (IItemInstance item in items)
             {
+                foreach (ISpriteState state in item.States)
+                {
+                    this.SetUpSpriteStates(item.TileSet, state);
+                }
+
+                if (item is IItemContainer container)
+                {
+                    //this.HandleContents(container);
+                }
                 GlobalConstants.GameManager.ItemHandler.AddItem(item);
             }
         }
@@ -237,6 +228,23 @@ namespace JoyLib.Code.IO
         {
             foreach (IEntity entity in entities)
             {
+                foreach (ISpriteState state in entity.States)
+                {
+                    this.SetUpSpriteStates(entity.TileSet, state);
+                }
+
+                foreach (INeed need in entity.Needs.Values)
+                {
+                    need.FulfillingSprite = new SpriteState(
+                        need.Name, 
+                        GlobalConstants.GameManager.ObjectIconHandler.GetFrame(
+                            "needs", 
+                            need.Name));
+                }
+                
+                //this.HandleContents(entity);
+                //this.HandleContents(entity.Equipment);
+
                 GlobalConstants.GameManager.EntityHandler.AddEntity(entity);
             }
         }

@@ -11,7 +11,7 @@ namespace JoyLib.Code.Entities.Relationships
         int GetHighestRelationshipValue(long GUID);
         
         IJoyObject GetParticipant(long GUID);
-        IJoyObject[] GetParticipants();
+        IEnumerable<IJoyObject> GetParticipants();
 
         int ModifyValueOfParticipant(long actor, long observer, int value);
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code.Entities;
+using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Scripting;
 
 namespace JoyLib.Code.Quests
@@ -9,11 +10,14 @@ namespace JoyLib.Code.Quests
     public class QuestTracker : IQuestTracker
     {
         protected Dictionary<long, List<IQuest>> EntityQuests { get; set; }
+        
+        protected ILiveItemHandler ItemHandler { get; set; }
 
         public List<IQuest> AllQuests => this.EntityQuests.Values.SelectMany(list => list).ToList();
 
-        public QuestTracker()
+        public QuestTracker(ILiveItemHandler itemHandler = null)
         {
+            this.ItemHandler = itemHandler ?? GlobalConstants.GameManager.ItemHandler;
             this.Initialise();
         }
         
@@ -66,7 +70,7 @@ namespace JoyLib.Code.Quests
 
         protected void CleanUpRewards()
         {
-            GlobalConstants.GameManager.ItemHandler.CleanUpRewards(
+            this.ItemHandler.CleanUpRewards(
                 this.AllQuests.SelectMany(quest => quest.RewardGUIDs));
         }
 

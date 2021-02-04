@@ -29,7 +29,7 @@ namespace JoyLib.Code.Unity.GUI
                 slot.gameObject.SetActive(false);
             }
             
-            var slots = this.Player.Equipment.Slots.ToList();
+            var slots = this.Player.Equipment.GetSlotsAndContents().ToList();
 
             for (int i = this.Slots.Count; i < slots.Count; i++)
             {

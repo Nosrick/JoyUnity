@@ -12,25 +12,11 @@ namespace JoyLib.Code.Entities.Items
         [OdinSerialize]
         protected List<Tuple<string, long>> m_Slots;
 
-        public IEnumerable<Tuple<string, IItemInstance>> Slots
-        {
-            get
-            {
-                return this.m_Slots
-                    .Where(tuple => tuple.Item2 > 0)
-                    .Select(tuple =>
-                    new Tuple<string, IItemInstance>(tuple.Item1,
-                        GlobalConstants.GameManager.ItemHandler.GetItem(tuple.Item2)));
-            }
-        }
-
         public override int HitPointsRemaining => 1;
         public override int HitPoints => 1;
 
         public IEnumerable<IItemInstance> Contents =>
-            this.Slots
-                .Select(tuple => tuple.Item2)
-                .Distinct();
+            this.GetSlotsAndContents(false).Select(tuple => tuple.Item2);
 
         public EquipmentStorage()
         {
@@ -104,6 +90,23 @@ namespace JoyLib.Code.Entities.Items
             }
 
             return null;
+        }
+
+        public virtual IEnumerable<Tuple<string, IItemInstance>> GetSlotsAndContents(bool getEmpty = true)
+        {
+            if (getEmpty == false)
+            {
+                return this.m_Slots
+                    .Where(tuple => tuple.Item2 > 0)
+                    .Select(tuple =>
+                        new Tuple<string, IItemInstance>(tuple.Item1,
+                            GlobalConstants.GameManager.ItemHandler.GetItem(tuple.Item2)));
+            }
+
+            return this.m_Slots
+                .Select(tuple => new Tuple<string, IItemInstance>(
+                    tuple.Item1,
+                    tuple.Item2 > 0 ? GlobalConstants.GameManager.ItemHandler.GetItem(tuple.Item2) : null));
         }
 
         public virtual bool CanAddContents(IItemInstance actor)

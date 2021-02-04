@@ -139,7 +139,7 @@ namespace JoyLib.Code
 
             this.QuestProvider =
                 new QuestProvider(this.RelationshipHandler, this.ItemHandler, this.ItemFactory, this.Roller);
-            this.QuestTracker = new QuestTracker();
+            this.QuestTracker = new QuestTracker(this.ItemHandler);
 
             this.ConversationEngine = new ConversationEngine(this.RelationshipHandler);
 

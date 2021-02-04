@@ -21,7 +21,8 @@ namespace JoyLib.Code.Entities.Items
         IEnumerable<IItemInstance> GetQuestRewards(long questID);
 
         void CleanUpRewards(IEnumerable<long> GUIDs);
-        void AddQuestReward(long questID, IItemInstance reward);
+        void AddQuestReward(long questID, long reward);
+        void AddQuestRewards(long questID, IEnumerable<long> rewards);
         void AddQuestRewards(long questID, IEnumerable<IItemInstance> rewards);
 
         IEnumerable<IItemInstance> GetItems(IEnumerable<long> guids);
@@ -30,6 +31,6 @@ namespace JoyLib.Code.Entities.Items
         
         IEnumerable<IItemInstance> AllItems { get; }
         
-        NonUniqueDictionary<long, IItemInstance> QuestRewards { get; }
+        NonUniqueDictionary<long, long> QuestRewards { get; }
     }
 }

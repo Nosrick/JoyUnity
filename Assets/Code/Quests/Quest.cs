@@ -88,6 +88,10 @@ namespace JoyLib.Code.Quests
 
             foreach (IItemInstance reward in this.Rewards)
             {
+                if (reward is ItemInstance item)
+                {
+                    item.Instantiate();
+                }
                 questor.AddContents(reward);
             }
 
@@ -159,7 +163,7 @@ namespace JoyLib.Code.Quests
         public List<long> RewardGUIDs { get; protected set; }
 
         public List<IItemInstance> Rewards =>
-            GlobalConstants.GameManager.ItemHandler.GetItems(this.RewardGUIDs).ToList();
+            GlobalConstants.GameManager.ItemHandler.GetQuestRewards(this.ID).ToList();
         
         [OdinSerialize]
         public int CurrentStep { get; protected set;  }

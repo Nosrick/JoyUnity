@@ -58,16 +58,16 @@ namespace JoyLib.Code.Quests
             }
 
             IEnumerable<string> tagsForAllSteps = steps.SelectMany(step => step.Tags);
-            
+            var rewards = this.GetRewards(questor, provider, steps);
             Quest quest = new Quest(
                 steps, 
                 QuestMorality.Neutral, 
-                this.GetRewards(questor, provider, steps), 
+                rewards, 
                 provider.GUID, 
                 questor.GUID, 
                 tagsForAllSteps);
             
-            GlobalConstants.GameManager.ItemHandler.AddQuestRewards(quest.ID, quest.Rewards);
+            GlobalConstants.GameManager.ItemHandler.AddQuestRewards(quest.ID, rewards);
 
             return quest;
         }

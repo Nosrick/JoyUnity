@@ -25,6 +25,11 @@ namespace Tests
             GlobalConstants.ActionLog = new ActionLog();
             scriptingEngine = new ScriptingEngine();
 
+            ILiveEntityHandler entityHandler = new LiveEntityHandler();
+            IGameManager gameManager = Mock.Of<IGameManager>(
+                manager => manager.EntityHandler == entityHandler);
+            GlobalConstants.GameManager = gameManager;
+
             target = new EntityRelationshipHandler();
         }
 
