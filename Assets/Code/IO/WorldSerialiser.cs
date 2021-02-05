@@ -20,7 +20,7 @@ namespace JoyLib.Code.IO
     {
         protected static IObjectIconHandler s_ObjectIcons = GlobalConstants.GameManager.ObjectIconHandler;
 
-        protected const DataFormat DATA_FORMAT = DataFormat.JSON;
+        protected const DataFormat DEFAULT_DATA_FORMAT = DataFormat.Binary;
 
         public void Serialise(IWorldInstance world)
         {
@@ -39,7 +39,7 @@ namespace JoyLib.Code.IO
             }
             try
             {
-                byte[] array = SerializationUtility.SerializeValue(world, DATA_FORMAT);
+                byte[] array = SerializationUtility.SerializeValue(world, DEFAULT_DATA_FORMAT);
                 File.WriteAllBytes(directory + "/world.dat", array);
                 /*
                 StreamWriter writer = new StreamWriter(Directory.GetCurrentDirectory() + "/save/" + world.Name + "/sav.dat", false);
@@ -49,28 +49,29 @@ namespace JoyLib.Code.IO
                 */
 
                 array = SerializationUtility.SerializeValue(GlobalConstants.GameManager.QuestTracker.AllQuests,
-                    DATA_FORMAT);
+                    DEFAULT_DATA_FORMAT);
                 File.WriteAllBytes(directory + "/quests.dat", array);
 
                 array = SerializationUtility.SerializeValue(GlobalConstants.GameManager.ItemHandler.QuestRewards,
-                    DATA_FORMAT);
+                    DEFAULT_DATA_FORMAT);
                 File.WriteAllBytes(directory + "/rewards.dat", array);
 
                 array = SerializationUtility.SerializeValue(
                     GlobalConstants.GameManager.RelationshipHandler.AllRelationships,
-                    DATA_FORMAT);
+                    DEFAULT_DATA_FORMAT);
                 File.WriteAllBytes(directory + "/relationships.dat", array);
 
                 array = SerializationUtility.SerializeValue(
                     GlobalConstants.GameManager.ItemHandler.AllItems,
-                    DATA_FORMAT);
+                    DEFAULT_DATA_FORMAT);
                 File.WriteAllBytes(directory + "/items.dat", array);
 
                 array = SerializationUtility.SerializeValue(
                     GlobalConstants.GameManager.EntityHandler.AllEntities,
-                    DATA_FORMAT);
+                    DEFAULT_DATA_FORMAT);
                 File.WriteAllBytes(directory + "/entities.dat", array);
-
+                
+                File.WriteAllText(directory + "/data_format.dat", DEFAULT_DATA_FORMAT.ToString());
             }
             catch(Exception e)
             {
@@ -87,34 +88,41 @@ namespace JoyLib.Code.IO
             IWorldInstance world = serializer.Deserialize<IWorldInstance>(new JsonTextReader(reader));
             reader.Close();
             */
+            
 
             string directory = Directory.GetCurrentDirectory() + "/save/" + worldName;
+
+            if (!Enum.TryParse(File.ReadAllText(directory + "/data_format.dat"), out DataFormat dataFormat))
+            {
+                dataFormat = DEFAULT_DATA_FORMAT;
+            }
+            
             byte[] array = File.ReadAllBytes(directory + "/world.dat");
-            IWorldInstance world = SerializationUtility.DeserializeValue<IWorldInstance>(array, DATA_FORMAT);
+            IWorldInstance world = SerializationUtility.DeserializeValue<IWorldInstance>(array, dataFormat);
             world.Initialise();
 
             array = File.ReadAllBytes(directory + "/items.dat");
             IEnumerable<IItemInstance> items =
-                SerializationUtility.DeserializeValue<IEnumerable<IItemInstance>>(array, DATA_FORMAT);
+                SerializationUtility.DeserializeValue<IEnumerable<IItemInstance>>(array, dataFormat);
             this.Items(items);
 
             array = File.ReadAllBytes(directory + "/quests.dat");
-            IEnumerable<IQuest> quests = SerializationUtility.DeserializeValue<IEnumerable<IQuest>>(array, DATA_FORMAT);
+            IEnumerable<IQuest> quests = SerializationUtility.DeserializeValue<IEnumerable<IQuest>>(array, dataFormat);
             this.Quests(quests);
 
             array = File.ReadAllBytes(directory + "/rewards.dat");
             NonUniqueDictionary<long, long> rewards =
-                SerializationUtility.DeserializeValue<NonUniqueDictionary<long, long>>(array, DATA_FORMAT);
+                SerializationUtility.DeserializeValue<NonUniqueDictionary<long, long>>(array, dataFormat);
             this.QuestRewards(rewards);
 
             array = File.ReadAllBytes(directory + "/entities.dat");
             IEnumerable<IEntity> entities =
-                SerializationUtility.DeserializeValue<IEnumerable<IEntity>>(array, DATA_FORMAT);
+                SerializationUtility.DeserializeValue<IEnumerable<IEntity>>(array, dataFormat);
             this.Entities(entities, world);
 
             array = File.ReadAllBytes(directory + "/relationships.dat");
             IEnumerable<IRelationship> relationships =
-                SerializationUtility.DeserializeValue<IEnumerable<IRelationship>>(array, DATA_FORMAT);
+                SerializationUtility.DeserializeValue<IEnumerable<IRelationship>>(array, dataFormat);
             this.Relationships(relationships);
             
             this.LinkWorlds(world);
