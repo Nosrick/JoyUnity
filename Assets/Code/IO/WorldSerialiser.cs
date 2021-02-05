@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using JoyLib.Code.Collections;
+using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Needs;
@@ -223,6 +224,10 @@ namespace JoyLib.Code.IO
             List<IWorldInstance> worlds = overworld.GetWorlds(overworld);
             foreach (IEntity entity in entities)
             {
+                List<ICulture> cultures = entity.CultureNames.Select(name => GlobalConstants.GameManager.CultureHandler.GetByCultureName(name)).ToList();
+
+                entity.Deserialise(cultures);
+                
                 foreach (ISpriteState state in entity.States)
                 {
                     this.SetUpSpriteStates(entity.TileSet, state);

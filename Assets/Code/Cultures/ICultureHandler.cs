@@ -7,6 +7,6 @@ namespace JoyLib.Code.Cultures
         ICulture GetByCultureName(string name);
         List<ICulture> GetByCreatureType(string type);
         
-        ICulture[] Cultures { get; }
+        IEnumerable<ICulture> Cultures { get; }
     }
 }

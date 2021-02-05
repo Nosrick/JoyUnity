@@ -251,7 +251,7 @@ namespace JoyLib.Code.Cultures
             }
         }
 
-        public ICulture[] Cultures
+        public IEnumerable<ICulture> Cultures
         {
             get
             {

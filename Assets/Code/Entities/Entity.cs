@@ -78,7 +78,6 @@ namespace JoyLib.Code.Entities
         [OdinSerialize]
         protected List<string> m_Slots;
 
-        [OdinSerialize]
         protected List<ICulture> m_Cultures;
 
         [OdinSerialize]
@@ -298,6 +297,13 @@ namespace JoyLib.Code.Entities
                 NaturalWeaponHelper?.MakeNaturalWeapon(template.Size), new EquipmentStorage(template.Slots),
                 new List<IItemInstance>(), new List<string>(), new List<IJob> { job }, world, driver, roller, name)
         {
+        }
+
+        public void Deserialise(
+            IEnumerable<ICulture> cultures)
+        {
+            this.m_Cultures = cultures.ToList();
+            
         }
 
         protected IEnumerable<Tuple<string, string>> ConstructDescription()
@@ -1189,5 +1195,22 @@ namespace JoyLib.Code.Entities
         public List<IJob> Jobs { get; protected set; }
 
         public override IEnumerable<Tuple<string, string>> Tooltip => this.ConstructDescription();
+
+        [OdinSerialize]
+        public List<string> CultureNames
+        {
+            get
+            {
+                if (this.m_CultureNames is null)
+                {
+                    this.m_CultureNames = this.Cultures.Select(culture => culture.CultureName).ToList();
+                }
+
+                return this.m_CultureNames;
+            }
+            protected set => this.m_CultureNames = value;
+        }
+
+        protected List<string> m_CultureNames;
     }
 }

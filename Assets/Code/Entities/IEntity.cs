@@ -64,6 +64,11 @@ namespace JoyLib.Code.Entities
         
         bool Alive { get; }
         
+        List<string> CultureNames { get; }
+
+        void Deserialise(
+            IEnumerable<ICulture> cultures);
+        
         void Tick();
         void AddQuest(IQuest quest);
         IEnumerable<Tuple<string, int>> GetData(IEnumerable<string> tags, params object[] args);
