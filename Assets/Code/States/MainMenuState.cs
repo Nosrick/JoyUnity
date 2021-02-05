@@ -1,4 +1,5 @@
-﻿using JoyLib.Code.Cultures;
+﻿using System.Linq;
+using JoyLib.Code.Cultures;
 using JoyLib.Code.IO;
 using JoyLib.Code.World;
 using UnityEngine.InputSystem;
@@ -22,7 +23,7 @@ namespace JoyLib.Code.States
 
         public override void SetUpUi()
         {
-            ICulture[] cultures = GlobalConstants.GameManager.CultureHandler.Cultures;
+            ICulture[] cultures = GlobalConstants.GameManager.CultureHandler.Cultures.ToArray();
             int result = GlobalConstants.GameManager.Roller.Roll(0, cultures.Length);
             ICulture randomCulture = cultures[result];
             this.GUIManager.SetUIColours(

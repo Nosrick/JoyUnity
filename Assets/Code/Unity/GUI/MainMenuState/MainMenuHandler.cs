@@ -1,4 +1,5 @@
-﻿using JoyLib.Code.IO;
+﻿using JoyLib.Code.Cultures;
+using JoyLib.Code.IO;
 using JoyLib.Code.States;
 using JoyLib.Code.World;
 using UnityEngine;
@@ -17,6 +18,11 @@ namespace JoyLib.Code.Unity.GUI.MainMenuState
         {
             WorldSerialiser serialiser = new WorldSerialiser();
             IWorldInstance world = serialiser.Deserialise("Everse");
+            ICulture culture = GlobalConstants.GameManager.Player.Cultures[0];
+            GlobalConstants.GameManager.GUIManager.SetUIColours(
+                culture.BackgroundColours,
+                culture.CursorColours,
+                culture.FontColours);
             GlobalConstants.GameManager.SetNextState(new WorldInitialisationState(world, world.GetPlayerWorld(world)));
             this.StartCoroutine(this.LoadSceneAsync("MainGame"));
         }
