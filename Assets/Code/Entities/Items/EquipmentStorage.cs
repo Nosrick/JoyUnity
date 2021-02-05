@@ -77,7 +77,7 @@ namespace JoyLib.Code.Entities.Items
         
         public virtual bool Contains(IItemInstance actor)
         {
-            return this.m_Slots.Any(tuple => actor.Equals(tuple.Item2));
+            return this.m_Slots.Any(tuple => actor.GUID.Equals(tuple.Item2));
         }
 
         public virtual IItemInstance GetSlotContents(string slot)

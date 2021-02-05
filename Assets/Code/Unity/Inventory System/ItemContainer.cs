@@ -122,7 +122,7 @@ namespace JoyLib.Code.Unity
                 {
                     slot.OnEnable();
                     slot.Container = this;
-                    //slot.Item = null;
+                    slot.Item = null;
                 }
 
                 if (this.Slots.Count < container.Contents.Count())
