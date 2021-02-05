@@ -67,7 +67,7 @@ namespace JoyLib.Code.Unity.GUI
                 this.DerivedValuesWindow.GetDerivedValues(),
                 this.SkillWindow.GetSkillsBlock(), 
                 this.AbilityWindow.GetPickedAbilities(),
-                this.PlayerInfo.CurrentCultures,
+                new[] { this.PlayerInfo.CurrentCulture },
                 this.GameManager.GenderHandler.Get(this.PlayerInfo.Gender),
                 this.GameManager.BioSexHandler.Get(this.PlayerInfo.Sex),
                 this.GameManager.SexualityHandler.Get(this.PlayerInfo.Sexuality),

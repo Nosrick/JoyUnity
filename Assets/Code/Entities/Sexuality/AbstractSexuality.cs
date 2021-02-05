@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code.Entities.Relationships;
+using Sirenix.OdinSerializer;
 
 namespace JoyLib.Code.Entities.Sexuality
 {
     [Serializable]
     public abstract class AbstractSexuality : ISexuality
     {
+        [OdinSerialize]
         protected List<string> m_Tags;
         
         public virtual string Name => throw new NotImplementedException("Someone forgot to override Name in " + this.GetType().Name);

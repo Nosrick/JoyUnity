@@ -25,6 +25,7 @@ namespace JoyLib.Code.Entities.Romance
             protected set => this.m_Tags = new List<string>(value);
         }
 
+        [OdinSerialize]
         protected List<string> m_Tags;
 
         public AbstractRomance()

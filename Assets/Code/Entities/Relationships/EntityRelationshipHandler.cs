@@ -91,11 +91,11 @@ namespace JoyLib.Code.Entities.Relationships
                     continue;
                 }
                 
-                if (tags != null && tags.Intersect(pair.Item2.Tags).Count() > 0)
+                if (tags.IsNullOrEmpty() == false && tags.Intersect(pair.Item2.Tags).Any())
                 {
                     relationships.Add(pair.Item2);
                 }
-                else if (tags is null)
+                else if (tags.IsNullOrEmpty())
                 {
                     relationships.Add(pair.Item2);
                 }

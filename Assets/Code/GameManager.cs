@@ -223,6 +223,20 @@ namespace JoyLib.Code
             this.ConversationEngine = new ConversationEngine(this.RelationshipHandler);
 
             this.NaturalWeaponHelper = new NaturalWeaponHelper(this.MaterialHandler, this.ItemFactory);
+            
+            TradeWindow.RelationshipHandler = this.RelationshipHandler;
+
+            TopicData.ConversationEngine = this.ConversationEngine;
+            TopicData.RelationshipHandler = this.RelationshipHandler;
+
+            Entity.QuestTracker = this.QuestTracker;
+            Entity.RelationshipHandler = this.RelationshipHandler;
+            Entity.SkillHandler = this.SkillHandler;
+            Entity.NaturalWeaponHelper = this.NaturalWeaponHelper;
+            Entity.DerivedValueHandler = this.DerivedValueHandler;
+
+            ItemInstance.EntityHandler = this.EntityHandler;
+            ItemInstance.ItemHandler = this.ItemHandler;
         }
         
         public bool BegunInitialisation { get; protected set; }
