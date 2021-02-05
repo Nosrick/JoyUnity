@@ -9,12 +9,14 @@ namespace JoyLib.Code.Unity.GUI.GameOver
     {
         public void ToMainMenu()
         {
+            GlobalConstants.GameManager.Reset();
             GlobalConstants.GameManager.SetNextState(new States.MainMenuState());
             this.StartCoroutine(this.LoadSceneAsync("MainMenu"));
         }
 
         public void NewCharacter()
         {
+            GlobalConstants.GameManager.Reset();
             GlobalConstants.GameManager.SetNextState(new CharacterCreationState());
             this.StartCoroutine(this.LoadSceneAsync("CharacterCreation"));
         }

@@ -10,6 +10,7 @@ using JoyLib.Code.Graphics;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.Unity;
+using JoyLib.Code.World;
 using Sirenix.OdinSerializer;
 using UnityEngine;
 
@@ -42,6 +43,21 @@ namespace JoyLib.Code.Entities.Items
 
         [OdinSerialize]
         protected int m_Value;
+
+        public override IWorldInstance MyWorld
+        {
+            get => this.m_World;
+            set
+            {
+                this.m_World = value;
+                foreach (IItemInstance content in this.Contents)
+                {
+                    content.MyWorld = value;
+                }
+            }
+        }
+
+        protected IWorldInstance m_World;
 
         public long OwnerGUID
         {
@@ -146,6 +162,7 @@ namespace JoyLib.Code.Entities.Items
                 monoBehaviourHandler.AttachJoyObject(this);
                 this.AttachMonoBehaviourHandler(monoBehaviourHandler);
             }
+            this.MonoBehaviourHandler.SetSpriteLayer("Objects");
             this.MonoBehaviourHandler.Clear();
             this.MonoBehaviourHandler.AddSpriteState(this.States[this.StateIndex]);
             this.MonoBehaviourHandler.gameObject.SetActive(active);

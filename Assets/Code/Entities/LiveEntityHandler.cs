@@ -26,8 +26,7 @@ namespace JoyLib.Code.Entities
             }
             catch(Exception e)
             {
-                GlobalConstants.ActionLog.AddText(e.Message);
-                GlobalConstants.ActionLog.AddText(e.StackTrace);
+                GlobalConstants.ActionLog.StackTrace(e);
                 return false;
             }
         }

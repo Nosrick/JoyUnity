@@ -1170,7 +1170,7 @@ namespace JoyLib.Code.Entities
             get { return this.m_Pathfinder; }
         }
 
-        public new IWorldInstance MyWorld
+        public override IWorldInstance MyWorld
         {
             get => this.m_MyWorld;
             set

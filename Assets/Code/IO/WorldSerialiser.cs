@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using JoyLib.Code.Collections;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
@@ -108,7 +109,7 @@ namespace JoyLib.Code.IO
             array = File.ReadAllBytes(directory + "/entities.dat");
             IEnumerable<IEntity> entities =
                 SerializationUtility.DeserializeValue<IEnumerable<IEntity>>(array, DATA_FORMAT);
-            this.Entities(entities);
+            this.Entities(entities, world);
 
             array = File.ReadAllBytes(directory + "/relationships.dat");
             IEnumerable<IRelationship> relationships =
@@ -140,13 +141,6 @@ namespace JoyLib.Code.IO
                 }
 
                 wall.MyWorld = parent;
-            }
-
-            foreach (long guid in parent.EntityGUIDs)
-            {
-                IEntity entity = GlobalConstants.GameManager.EntityHandler.Get(guid);
-                parent.AddEntity(entity);
-                entity.MyWorld = parent;
             }
 
             foreach(IWorldInstance world in parent.Areas.Values)
@@ -224,8 +218,9 @@ namespace JoyLib.Code.IO
             }
         }
 
-        private void Entities(IEnumerable<IEntity> entities)
+        private void Entities(IEnumerable<IEntity> entities, IWorldInstance overworld)
         {
+            List<IWorldInstance> worlds = overworld.GetWorlds(overworld);
             foreach (IEntity entity in entities)
             {
                 foreach (ISpriteState state in entity.States)
@@ -241,11 +236,8 @@ namespace JoyLib.Code.IO
                             "needs", 
                             need.Name));
                 }
-                
-                //this.HandleContents(entity);
-                //this.HandleContents(entity.Equipment);
 
-                GlobalConstants.GameManager.EntityHandler.AddEntity(entity);
+                worlds.First(world => world.EntityGUIDs.Contains(entity.GUID))?.AddEntity(entity);
             }
         }
     }

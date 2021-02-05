@@ -16,6 +16,7 @@
         public void SaveAndQuit()
         {
             this.Save();
+            GlobalConstants.GameManager.Reset();
             GlobalConstants.GameManager.SetNextState(new States.MainMenuState());
             this.StartCoroutine(this.LoadSceneAsync("MainMenu"));
         }
@@ -28,6 +29,7 @@
 
         public void QuitNoSave()
         {
+            GlobalConstants.GameManager.Reset();
             GlobalConstants.GameManager.SetNextState(new States.MainMenuState());
             this.StartCoroutine(this.LoadSceneAsync("MainMenu"));
         }

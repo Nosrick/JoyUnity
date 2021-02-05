@@ -42,7 +42,7 @@ namespace JoyLib.Code
         [OdinSerialize]
         public bool IsDestructible { get; protected set; }
         
-        public IWorldInstance MyWorld { get; set; }
+        public virtual IWorldInstance MyWorld { get; set; }
 
         [OdinSerialize]
         public long GUID { get; protected set; }

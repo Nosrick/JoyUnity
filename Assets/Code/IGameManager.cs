@@ -84,5 +84,7 @@ namespace JoyLib.Code
         GameObjectPool ItemPool { get; }
         GameObjectPool FogPool { get; }
         void SetNextState(IGameState nextState = null);
+
+        void Reset();
     }
 }
