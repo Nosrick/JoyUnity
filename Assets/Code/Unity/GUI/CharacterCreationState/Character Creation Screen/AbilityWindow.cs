@@ -26,7 +26,8 @@ namespace JoyLib.Code.Unity.GUI
             base.OnEnable();
             this.Items = new List<AbilityItem>();
             this.Value = this.Maximum;
-            this.PointsRemainingText.text = "Picks Remaining: " + this.Value;
+            this.SetPicksRemaining();
+            this.SkillWindow.ValueChanged -= this.GetAvailableAbilities;
             this.SkillWindow.ValueChanged += this.GetAvailableAbilities;
         }
 
@@ -50,6 +51,24 @@ namespace JoyLib.Code.Unity.GUI
         public void ChangePicksRemaining(object sender, ValueChangedEventArgs args)
         {
             this.Value -= args.Delta;
+            this.SetPicksRemaining();
+        }
+
+        public void Reset()
+        {
+            foreach (AbilityItem item in this.Items)
+            {
+                if (item.Selected)
+                {
+                    item.ToggleMe();
+                }
+            }
+            this.Value = this.Maximum;
+            this.SetPicksRemaining();
+        }
+
+        public void SetPicksRemaining()
+        {
             this.PointsRemainingText.text = "Picks Remaining: " + this.Value;
         }
 

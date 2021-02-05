@@ -117,7 +117,10 @@ namespace JoyLib.Code.Unity.GUI
 
         public void GoToSkillsAndAbilities()
         {
+            this.SkillWindow.Value = this.SkillWindow.Maximum;
+            this.SkillWindow.SetPointsRemaining();
             this.SkillWindow.SetSkills(this.SkillWindow.GetSkillNames());
+            this.AbilityWindow.Reset();
             this.AbilityWindow.GetAvailableAbilities(this.PlayerInfo.CurrentTemplate, this.StatisticWindow.GetStatistics(), this.SkillWindow.GetSkillsBlock());
             this.GameManager.GUIManager.SetupManagedComponents(
                 this.GameManager.GUIManager.OpenGUI(
