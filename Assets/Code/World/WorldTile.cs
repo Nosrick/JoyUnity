@@ -1,9 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Sirenix.OdinSerializer;
 
 namespace JoyLib.Code.World
 {
+    [Serializable]
     public class WorldTile
     {
+        [OdinSerialize]
         protected HashSet<string> m_Tags;
 
         public WorldTile(string tileName, string tileSet, IEnumerable<string> tags)
@@ -31,14 +35,18 @@ namespace JoyLib.Code.World
             }
         }
 
+        [OdinSerialize]
         public string TileName
         {
             get;
+            protected set;
         }
 
+        [OdinSerialize]
         public string TileSet
         {
             get;
+            protected set;
         }
     }
 }
