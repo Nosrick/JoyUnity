@@ -1,8 +1,14 @@
-﻿namespace JoyLib.Code.Entities.Statistics
+﻿using System;
+using Sirenix.OdinSerializer;
+
+namespace JoyLib.Code.Entities.Statistics
 {
+    [Serializable]
     public class ConcreteBasicFloatValue : IBasicValue<float>
     {
+        [OdinSerialize]
         public string Name { get; protected set; }
+        [OdinSerialize]
         public float Value { get; protected set; }
 
         public ConcreteBasicFloatValue()

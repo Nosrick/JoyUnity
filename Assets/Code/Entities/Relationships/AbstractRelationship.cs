@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Sirenix.OdinSerializer;
 
 namespace JoyLib.Code.Entities.Relationships
 {
+    [Serializable]
     public abstract class AbstractRelationship : IRelationship
     {
+        [OdinSerialize]
         protected List<string> m_Tags;
         
         public virtual string Name => "abstractrelationship";
@@ -20,36 +23,44 @@ namespace JoyLib.Code.Entities.Relationships
         
         //Yeesh, this is messy
         //But this is a key value pair for how each participant feels about the other in the relationship
+        [OdinSerialize]
         protected SortedDictionary<long, Dictionary<long, int>> m_Values;
-        protected SortedDictionary<long, IJoyObject> m_Participants;
+        [OdinSerialize]
+        protected List<long> m_Participants;
 
-        public AbstractRelationship()
+        protected static ILiveEntityHandler EntityHandler { get; set; }
+
+        public AbstractRelationship(ILiveEntityHandler entityHandler = null)
         {
-            this.m_Participants = new SortedDictionary<long, IJoyObject>();
+            this.m_Participants = new List<long>();
             this.m_Values = new SortedDictionary<long, Dictionary<long, int>>();
             this.Tags = new List<string>();
+
+            if (EntityHandler is null)
+            {
+                EntityHandler = entityHandler ?? GlobalConstants.GameManager.EntityHandler;
+            }
         }
 
         public long GenerateHashFromInstance()
         {
-            return GenerateHash(this.m_Participants.Keys);
+            return GenerateHash(this.m_Participants);
         }
+        
 
         public virtual bool AddParticipant(IJoyObject newParticipant)
         {
-            if(this.m_Participants.ContainsKey(newParticipant.GUID) == false)
+            if(this.m_Participants.Contains(newParticipant.GUID) == false)
             {
-                this.m_Participants.Add(newParticipant.GUID, newParticipant);
+                this.m_Participants.Add(newParticipant.GUID);
 
                 this.m_Values.Add(newParticipant.GUID, new Dictionary<long, int>());
-
-                List<long> participantGUIDs = this.m_Participants.Keys.ToList();
 
                 foreach(KeyValuePair<long, Dictionary<long, int>> pair in this.m_Values)
                 {
                     if(pair.Key == newParticipant.GUID)
                     {
-                        foreach(long guid in participantGUIDs)
+                        foreach(long guid in this.m_Participants)
                         {
                             this.m_Values[newParticipant.GUID].Add(guid, 0);
                         }
@@ -104,16 +115,19 @@ namespace JoyLib.Code.Entities.Relationships
 
         public IJoyObject GetParticipant(long GUID)
         {
-            if(this.m_Participants.ContainsKey(GUID))
-            {
-                return this.m_Participants[GUID];
-            }
-            return null;
+            return this.m_Participants.Contains(GUID) 
+                ? GlobalConstants.GameManager.EntityHandler.Get(GUID) 
+                : null;
         }
 
-        public IJoyObject[] GetParticipants()
+        public IEnumerable<IJoyObject> GetParticipants()
         {
-            return this.m_Participants.Values.ToArray();
+            List<IEntity> participants = new List<IEntity>();
+            foreach (long participant in this.m_Participants)
+            {
+                participants.Add(GlobalConstants.GameManager.EntityHandler.Get(participant));
+            }
+            return participants;
         }
 
         public int GetHighestRelationshipValue(long GUID)
@@ -165,7 +179,7 @@ namespace JoyLib.Code.Entities.Relationships
             {
                 if (this.m_Values[guid].Keys.Count == 0)
                 {
-                    foreach (long participant in this.m_Participants.Keys)
+                    foreach (long participant in this.m_Participants)
                     {
                         if (guid != participant)
                         {
@@ -186,7 +200,7 @@ namespace JoyLib.Code.Entities.Relationships
 
         public bool RemoveParticipant(long currentGUID)
         {
-            if(this.m_Participants.ContainsKey(currentGUID))
+            if(this.m_Participants.Contains(currentGUID))
             {
                 this.m_Participants.Remove(currentGUID);
                 this.m_Values.Remove(currentGUID);

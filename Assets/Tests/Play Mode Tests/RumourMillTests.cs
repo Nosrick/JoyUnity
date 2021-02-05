@@ -8,6 +8,7 @@ using JoyLib.Code.Entities.Gender;
 using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Helpers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.World;
 using Moq;
@@ -31,6 +32,8 @@ namespace Tests
         [SetUp]
         public void SetUp()
         {
+            ActionLog actionLog = new ActionLog();
+            GlobalConstants.ActionLog = actionLog;
             scriptingEngine = new ScriptingEngine();
             
             target = new ConcreteRumourMill();
@@ -94,6 +97,7 @@ namespace Tests
         public void TearDown()
         {
             GlobalConstants.GameManager = null;
+            GlobalConstants.ActionLog.Dispose();
         }
     }
 }

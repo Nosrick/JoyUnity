@@ -7,26 +7,37 @@ using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.World;
+using Sirenix.OdinSerializer;
 
 namespace JoyLib.Code.Quests
 {
+    [Serializable]
     public class ExploreQuestAction : IQuestAction
     {
+        [OdinSerialize]
         public string[] Tags { get; protected set; }
+        [OdinSerialize]
         public string Description { get; protected set; }
-        public List<IItemInstance> Items { get; protected set; }
-        public List<IJoyObject> Actors { get; protected set; }
-        public List<IWorldInstance> Areas { get; protected set; }
+        
+        [OdinSerialize]
+        public List<long> Items { get; protected set; }
+        
+        [OdinSerialize]
+        public List<long> Actors { get; protected set; }
+        
+        [OdinSerialize]
+        public List<long> Areas { get; protected set; }
 
+        [OdinSerialize]
         public RNG Roller { get; protected set; }
 
         public ExploreQuestAction()
         {}
         
         public ExploreQuestAction(
-            List<IItemInstance> items,
-            List<IJoyObject> actors,
-            List<IWorldInstance> areas,
+            IEnumerable<IItemInstance> items,
+            IEnumerable<IJoyObject> actors,
+            IEnumerable<IWorldInstance> areas,
             IEnumerable<string> tags,
             RNG roller = null)
         {
@@ -34,9 +45,9 @@ namespace JoyLib.Code.Quests
             List<string> tempTags = new List<string>();
             tempTags.Add("exploration");
             tempTags.AddRange(tags);
-            this.Items = items;
-            this.Actors = actors;
-            this.Areas = areas;
+            this.Items = items.Select(instance => instance.GUID).ToList();
+            this.Actors = actors.Select(instance => instance.GUID).ToList();
+            this.Areas = areas.Select(instance => instance.GUID).ToList();
             this.Tags = tempTags.ToArray();
             this.Description = this.AssembleDescription();
         }
@@ -62,9 +73,9 @@ namespace JoyLib.Code.Quests
                 throw new InvalidOperationException(questor.JoyName + " has explored the whole world!");
             }
 
-            this.Items = new List<IItemInstance>();
-            this.Actors = new List<IJoyObject>();
-            this.Areas = new List<IWorldInstance> { worlds[result] };
+            this.Items = new List<long>();
+            this.Actors = new List<long>();
+            this.Areas = new List<long> { worlds[result].GUID };
 
             IQuestStep step = new ConcreteQuestStep(
                 this, 
@@ -82,22 +93,32 @@ namespace JoyLib.Code.Quests
                 return false;
             }
 
-            if (action.LastArgs.Intersect(this.Areas).Count() != this.Areas.Count)
+            foreach (object obj in action.LastArgs)
             {
-                return false;
+                if (obj is IWorldInstance world)
+                {
+                    if (this.Areas.Contains(world.GUID) == false)
+                    {
+                        return false;
+                    }
+                }
             }
 
-            if (this.Areas.Any(world => !action.LastParticipants[0].HasDataKey(world.Name)))
-            {
-                return false;
-            }
-
-            return action.Successful;
+            IWorldInstance overworld = GlobalConstants.GameManager.Player.MyWorld.GetOverworld();
+            List<IWorldInstance> worlds = overworld.GetWorlds(overworld)
+                .Where(instance => this.Areas.Contains(instance.GUID))
+                .ToList();
+            return worlds.All(world => action.LastParticipants[0].HasDataKey(world.Name)) && action.Successful;
         }
 
         public string AssembleDescription()
         {
             StringBuilder builder = new StringBuilder();
+
+            IWorldInstance overworld = GlobalConstants.GameManager.Player.MyWorld.GetOverworld();
+            List<IWorldInstance> worlds = overworld.GetWorlds(overworld)
+                .Where(instance => this.Areas.Contains(instance.GUID))
+                .ToList();
 
             for(int i = 0; i < this.Areas.Count; i++)
             {
@@ -109,10 +130,10 @@ namespace JoyLib.Code.Quests
                 {
                     builder.Append("and ");
                 }
-                builder.Append(this.Areas[i].Name);
+                builder.Append(worlds[i].Name);
             }
             
-            return "Go to " + builder.ToString() + ".";
+            return "Go to " + builder + ".";
         }
 
         public void ExecutePrerequisites(IEntity questor)

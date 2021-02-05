@@ -3,11 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code.Helpers;
+using Sirenix.OdinSerializer;
 
 namespace JoyLib.Code.Collections
 {
+    [Serializable]
     public class NonUniqueDictionary<K, T> : IEnumerable<Tuple<K, T>>
     {
+        [OdinSerialize]
         protected List<Tuple<K, T>> m_KeyValues;
 
         public NonUniqueDictionary()

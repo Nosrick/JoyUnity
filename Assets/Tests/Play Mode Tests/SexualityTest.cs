@@ -6,6 +6,7 @@ using JoyLib.Code.Entities.Gender;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Entities.Sexes;
 using JoyLib.Code.Entities.Sexuality;
+using JoyLib.Code.Helpers;
 using JoyLib.Code.Scripting;
 using Moq;
 using NUnit.Framework;
@@ -43,6 +44,8 @@ namespace Tests
         [SetUp]
         public void SetUp()
         {
+            ActionLog actionLog = new ActionLog();
+            GlobalConstants.ActionLog = actionLog;
             scriptingEngine = new ScriptingEngine();
             
             target = new EntitySexualityHandler();
@@ -202,6 +205,7 @@ namespace Tests
         public void TearDown()
         {
             GlobalConstants.GameManager = null;
+            GlobalConstants.ActionLog.Dispose();
         }
     }
 }

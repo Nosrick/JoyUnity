@@ -77,12 +77,14 @@ namespace JoyLib.Code
         
         GameObject MyGameObject { get; }
         
-        IEntity Player { get; set; }
+        IEntity Player { get; }
         GameObjectPool FloorPool { get; }
         GameObjectPool WallPool { get; }
         GameObjectPool EntityPool { get; }
         GameObjectPool ItemPool { get; }
         GameObjectPool FogPool { get; }
         void SetNextState(IGameState nextState = null);
+
+        void Reset();
     }
 }

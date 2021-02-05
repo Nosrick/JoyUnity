@@ -82,8 +82,7 @@ namespace JoyLib.Code.Entities.Statistics
                 }
                 catch (Exception e)
                 {
-                    GlobalConstants.ActionLog.AddText(e.Message, LogLevel.Error);
-                    GlobalConstants.ActionLog.AddText(e.StackTrace, LogLevel.Error);
+                    GlobalConstants.ActionLog.StackTrace(e);
                     throw;
                 }
             }

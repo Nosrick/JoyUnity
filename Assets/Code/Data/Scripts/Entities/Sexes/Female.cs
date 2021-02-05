@@ -2,6 +2,7 @@
 
 namespace JoyLib.Code.Entities.Sexes
 {
+    [Serializable]
     public class Female : IBioSex
     {
         public bool CanBirth

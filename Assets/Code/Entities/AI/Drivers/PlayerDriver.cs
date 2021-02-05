@@ -5,7 +5,7 @@ namespace JoyLib.Code.Entities.AI.Drivers
 {
     public class PlayerDriver : AbstractDriver
     {
-        protected static IPhysicsManager s_PhysicsManager;
+        protected static IPhysicsManager s_PhysicsManager = GlobalConstants.GameManager.PhysicsManager;
 
         public override bool PlayerControlled => true;
 

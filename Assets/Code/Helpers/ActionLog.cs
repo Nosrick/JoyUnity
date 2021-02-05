@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace JoyLib.Code.Helpers
 {
-    public class ActionLog
+    public class ActionLog : IDisposable
     {
         public List<string> History { get; protected set; } 
         
@@ -104,6 +104,39 @@ namespace JoyLib.Code.Helpers
             {
                 this.History.Add(stringToAdd);
             }
+        }
+
+        public void StackTrace(Exception exception)
+        {
+            this.AddText(exception.Message, LogLevel.Error);
+            this.AddText(exception.StackTrace, LogLevel.Error);
+
+            Exception innerException = exception.InnerException;
+            while (innerException is null == false)
+            {
+                this.AddText(innerException.Message, LogLevel.Error);
+                this.AddText(innerException.StackTrace, LogLevel.Error);
+                innerException = innerException.InnerException;
+            }
+        }
+
+        ~ActionLog()
+        {
+            Dispose(false);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                this.Writer?.Dispose();
+            }
+        }
+
+        public void Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 

@@ -80,8 +80,7 @@ namespace JoyLib.Code.World
             catch (Exception e)
             {
                 GlobalConstants.ActionLog.AddText("ERROR GETTING WORLD INFO", LogLevel.Error);
-                GlobalConstants.ActionLog.AddText(e.Message, LogLevel.Error);
-                GlobalConstants.ActionLog.AddText(e.StackTrace, LogLevel.Error);
+                GlobalConstants.ActionLog.StackTrace(e);
                 throw new InvalidOperationException("Error getting world info for " + name);
             }
         }
@@ -91,7 +90,6 @@ namespace JoyLib.Code.World
     {
         public string name;
         public string[] inhabitants;
-
         public string[] tags;
     }
 }

@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using Algorithms;
+using Sirenix.OdinSerializer;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities.AI
 {
+    [Serializable]
     public struct PathFinderNode
     {
-        #region Variables Declaration
         public int F;
         public int G;
         public int H;
@@ -16,24 +17,36 @@ namespace JoyLib.Code.Entities.AI
         public int Y;
         public int PX; // Parent
         public int PY;
-        #endregion
     }
 
+    [Serializable]
     public class CustomPathfinder : IPathfinder
     {
+        [OdinSerialize]
         public bool Stopped { get; set; }
 
+        [OdinSerialize]
         public bool Diagonals { get; set; }
+        [OdinSerialize]
         public bool HeavyDiagonals { get; set; }
+        [OdinSerialize]
         public int HeuristicEstimate { get; set; }
+        [OdinSerialize]
         public bool PunishChangeDirection { get; set; }
+        [OdinSerialize]
         public bool ReopenCloseNodes { get; set; }
+        [OdinSerialize]
         public bool TieBreaker { get; set; }
+        [OdinSerialize]
         public int SearchLimit { get; set; }
+        [OdinSerialize]
         public double CompletedTime { get; set; }
+        [OdinSerialize]
         public bool DebugProgress { get; set; }
+        [OdinSerialize]
         public bool DebugFoundPath { get; set; }
 
+        [OdinSerialize]
         protected int HorizontalPunishment { get; set; }
 
         public CustomPathfinder()

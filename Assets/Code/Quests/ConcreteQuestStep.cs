@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.World;
+using Sirenix.OdinSerializer;
 
 namespace JoyLib.Code.Quests
 {
+    [Serializable]
     public class ConcreteQuestStep : IQuestStep
     {
         protected string Description { get; set; }
@@ -21,15 +21,15 @@ namespace JoyLib.Code.Quests
         
         public ConcreteQuestStep(
             IQuestAction action, 
-            List<IItemInstance> objects, 
-            List<IJoyObject> actors,
-            List<IWorldInstance> areas,
+            IEnumerable<long> objects, 
+            IEnumerable<long> actors,
+            IEnumerable<long> areas,
             IEnumerable<string> tags)
         {
             this.Action = action;
-            this.Items = objects;
-            this.Actors = actors;
-            this.Areas = areas;
+            this.Items = objects.ToList();
+            this.Actors = actors.ToList();
+            this.Areas = areas.ToList();
             this.Tags = new List<string>(tags);
         }
 
@@ -38,25 +38,26 @@ namespace JoyLib.Code.Quests
             return this.Description ?? (this.Description = this.Action.AssembleDescription());
         }
 
+        [OdinSerialize]
         public IQuestAction Action
         {
             get;
             protected set;
         }
 
-        public List<IItemInstance> Items
+        public List<long> Items
         {
             get;
             protected set;
         }
 
-        public List<IJoyObject> Actors
+        public List<long> Actors
         {
             get;
             protected set;
         }
 
-        public List<IWorldInstance> Areas
+        public List<long> Areas
         {
             get;
             protected set;

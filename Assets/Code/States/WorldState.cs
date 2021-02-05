@@ -112,7 +112,6 @@ namespace JoyLib.Code.States
 
         public override void Stop()
         {
-            this.m_WorldSerialiser.Serialise(this.m_Overworld);
         }
 
         public override void Update()
@@ -121,9 +120,9 @@ namespace JoyLib.Code.States
 
         protected void SetEntityWorld(IWorldInstance world)
         {
-            for (int i = 0; i < world.Entities.Count; i++)
+            foreach (IEntity entity in world.Entities)
             {
-                world.Entities[i].MyWorld = world;
+                entity.MyWorld = world;
             }
 
             foreach (IWorldInstance nextWorld in world.Areas.Values)
@@ -139,6 +138,7 @@ namespace JoyLib.Code.States
             IWorldInstance oldWorld = this.m_ActiveWorld;
             IEntity player = oldWorld.Player;
 
+            newWorld.Initialise();
             player.FetchAction("enterworldaction")
                 .Execute(
                     new IJoyObject[] {player},

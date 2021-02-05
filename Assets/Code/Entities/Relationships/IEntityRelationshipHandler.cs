@@ -5,6 +5,8 @@ namespace JoyLib.Code.Entities.Relationships
 {
     public interface IEntityRelationshipHandler
     {
+        IEnumerable<IRelationship> AllRelationships { get; }
+        
         bool AddRelationship(IRelationship relationship);
         bool RemoveRelationship(long ID);
         

@@ -53,6 +53,9 @@ namespace JoyLib.Code.Scripting
                             MetadataReference.CreateFromFile(typeof(Queue<bool>).Assembly.Location),
                             MetadataReference.CreateFromFile(typeof(IQueryable).Assembly.Location),
                             MetadataReference.CreateFromFile(typeof(Castle.Core.Internal.CollectionExtensions).Assembly
+                                .Location),
+                            MetadataReference.CreateFromFile(typeof(Sirenix.OdinSerializer.FormatterEmitter)
+                                .Assembly
                                 .Location)
                         };
                         CSharpCompilation compilation = CSharpCompilation.Create("JoyScripts", builtFiles, libs,
@@ -146,8 +149,7 @@ namespace JoyLib.Code.Scripting
             }
             catch (Exception e)
             {
-                GlobalConstants.ActionLog.AddText(e.Message);
-                GlobalConstants.ActionLog.AddText(e.StackTrace);
+                GlobalConstants.ActionLog.StackTrace(e);
                 throw new InvalidOperationException("Error when searching for Type in ScriptingEngine, " +
                                                     typeof(T).Name);
             }

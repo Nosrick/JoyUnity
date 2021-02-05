@@ -23,7 +23,7 @@ namespace JoyLib.Code.Helpers
                 ItemFactory = GlobalConstants.GameManager.ItemFactory;
             }
             
-            IItemInstance bag = ItemFactory.CreateRandomItemOfType(new string[] { "container"}, true);
+            IItemInstance bag = ItemFactory.CreateRandomItemOfType(new[] { "container"}, true);
             List<IItemInstance> coins = new List<IItemInstance>();
             int gold = count / 100;
             int silver = (count - (gold * 100))  / 10;
@@ -31,7 +31,7 @@ namespace JoyLib.Code.Helpers
 
             if (gold > 0)
             {
-                IItemInstance goldCoin = ItemFactory.CreateSpecificType("gold coin", new string[] {"currency"}, true);
+                IItemInstance goldCoin = ItemFactory.CreateSpecificType("gold coin", new[] {"currency"}, true);
                 for (int i = 0; i < gold; i++)
                 {
                     coins.Add(goldCoin.Copy(goldCoin));
@@ -40,7 +40,7 @@ namespace JoyLib.Code.Helpers
             
             if (silver > 0)
             {
-                IItemInstance silverCoin = ItemFactory.CreateSpecificType("silver coin", new string[] {"currency"}, true);
+                IItemInstance silverCoin = ItemFactory.CreateSpecificType("silver coin", new[] {"currency"}, true);
                 for (int i = 0; i < silver; i++)
                 {
                     coins.Add(silverCoin.Copy(silverCoin));
@@ -49,7 +49,7 @@ namespace JoyLib.Code.Helpers
 
             if (copper > 0)
             {
-                IItemInstance copperCoin = ItemFactory.CreateSpecificType("copper coin", new string[] {"currency"}, true);
+                IItemInstance copperCoin = ItemFactory.CreateSpecificType("copper coin", new[] {"currency"}, true);
                 for (int i = 0; i < copper; i++)
                 {
                     coins.Add(copperCoin.Copy(copperCoin));

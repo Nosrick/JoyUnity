@@ -35,10 +35,6 @@ namespace JoyLib.Code.States
             this.InstantiateWorld();
         }
 
-        public override void SetUpUi()
-        {
-        }
-
         public override void Stop()
         {
         }
@@ -63,6 +59,7 @@ namespace JoyLib.Code.States
                 new ConcreteBasicFloatValue("density", 1)
             };
             
+            this.m_ActiveWorld.Initialise();
             int terrainLayer = LayerMask.NameToLayer("Terrain");
             //Make the upstairs
             if (this.m_ActiveWorld.GUID != this.m_Overworld.GUID)
@@ -158,6 +155,7 @@ namespace JoyLib.Code.States
                 mbh.Clear();
                 mbh.AddSpriteState(wall.States.First(), true);
                 mbh.SetSpriteLayer("Walls");
+                wall.AttachMonoBehaviourHandler(mbh);
                 gameObject.SetActive(true);
             }
             
@@ -172,6 +170,7 @@ namespace JoyLib.Code.States
                 gameObject.layer = entityLayer;
                 MonoBehaviourHandler mbh = gameObject.GetComponent<MonoBehaviourHandler>();
                 mbh.AttachJoyObject(entity);
+                entity.AttachMonoBehaviourHandler(mbh);
 
                 if (entity.PlayerControlled)
                 {
@@ -180,7 +179,8 @@ namespace JoyLib.Code.States
                 mbh.Clear();
                 mbh.AddSpriteState(entity.States.First(), true);
                 mbh.SetSpriteLayer("Entities");
-                this.CreateItems(entity.Backpack, false);
+                this.CreateItems(entity.Contents, false);
+                this.CreateItems(entity.Equipment.Contents, false);
             }
 
             Camera camera = GameObject.Find("Main Camera").GetComponent<Camera>();

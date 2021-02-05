@@ -51,6 +51,7 @@ namespace JoyLib.Code.Entities.Needs
         ISpriteState FulfillingSprite
         {
             get;
+            set;
         }
 
         int HappinessThreshold

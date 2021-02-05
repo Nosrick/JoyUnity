@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using JoyLib.Code.Collections;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
@@ -48,6 +49,8 @@ namespace JoyLib.Code.Entities.Items
         protected void Initialise()
         {
             this.m_LiveItems = new Dictionary<long, IItemInstance>();
+
+            this.QuestRewards = new NonUniqueDictionary<long, long>();
 
             s_ItemPrefab = Resources.Load<GameObject>("Prefabs/ItemInstance");
 
@@ -154,6 +157,11 @@ namespace JoyLib.Code.Entities.Items
             return true;
         }
 
+        public bool AddItems(IEnumerable<IItemInstance> items, bool addToWorld = false)
+        {
+            return items.Aggregate(true, (current, item) => current & this.AddItem(item));
+        }
+
         public bool RemoveItemFromWorld(long GUID)
         {
             if (!this.LiveItems.ContainsKey(GUID))
@@ -200,6 +208,73 @@ namespace JoyLib.Code.Entities.Items
             throw new InvalidOperationException("No item found with GUID " + GUID);
         }
 
+        public IEnumerable<IItemInstance> GetQuestRewards(long questID)
+        {
+            return this.QuestRewards.ContainsKey(questID) 
+                ? this.GetItems(this.QuestRewards.FetchValuesForKey(questID)) 
+                : new IItemInstance[0];
+        }
+
+        public void CleanUpRewards(IEnumerable<long> GUIDs)
+        {
+            NonUniqueDictionary<long, long> cleanUp = new NonUniqueDictionary<long, long>();
+            foreach (var tuple in this.QuestRewards)
+            {
+                if (GUIDs.Contains(tuple.Item2))
+                {
+                    cleanUp.Add(tuple.Item1, tuple.Item2);
+                }
+                else
+                {
+                    IItemInstance item = this.GetItem(tuple.Item2);
+                    if (item.MonoBehaviourHandler is null)
+                    {
+                        GlobalConstants.ActionLog.AddText("No MBH found on " + item);
+                    }
+                    else
+                    {
+                        GlobalConstants.GameManager.ItemPool.Retire(
+                            item.MonoBehaviourHandler.gameObject);
+                    }
+                }
+            }
+
+            this.QuestRewards = cleanUp;
+        }
+
+        public void AddQuestReward(long questID, long reward)
+        {
+            this.QuestRewards.Add(questID, reward);
+        }
+
+        public void AddQuestRewards(long questID, IEnumerable<long> rewards)
+        {
+            foreach (long reward in rewards)
+            {
+                this.QuestRewards.Add(questID, reward);
+            }
+        }
+
+        public void AddQuestRewards(long questID, IEnumerable<IItemInstance> rewards)
+        {
+            this.AddQuestRewards(questID, rewards.Select(instance => instance.GUID));
+        }
+
+        public IEnumerable<IItemInstance> GetItems(IEnumerable<long> guids)
+        {
+            List<IItemInstance> items = new List<IItemInstance>();
+
+            foreach (long guid in guids)
+            {
+                if (this.LiveItems.TryGetValue(guid, out IItemInstance item))
+                {
+                    items.Add(item);
+                }
+            }
+
+            return items;
+        }
+
         public List<BaseItemType> ItemDatabase
         {
             get
@@ -225,5 +300,13 @@ namespace JoyLib.Code.Entities.Items
                 return this.m_LiveItems;
             }
         }
+        
+        public NonUniqueDictionary<long, long> QuestRewards
+        {
+            get;
+            protected set;
+        }
+
+        public IEnumerable<IItemInstance> AllItems => this.LiveItems.Values.ToList();
     }
 }

@@ -139,6 +139,11 @@ namespace JoyLib.Code.Unity
                 {
                     this.StackOrAdd(item);
                 }
+
+                foreach (JoyItemSlot slot in this.Slots.Where(slot => slot.isActiveAndEnabled))
+                {
+                    slot.Repaint();
+                }
             }
         }
 

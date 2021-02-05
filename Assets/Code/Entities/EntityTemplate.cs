@@ -5,24 +5,29 @@ using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.AI.LOS.Providers;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Helpers;
+using Sirenix.OdinSerializer;
 
 namespace JoyLib.Code.Entities
 {
+    [Serializable]
     public class EntityTemplate : IEntityTemplate
     {
-        protected readonly string m_CreatureType;
-        protected readonly string m_Type;
+        protected string m_CreatureType;
+        protected string m_Type;
 
-        protected readonly Dictionary<string, IRollableValue<int>> m_Statistics;
-        protected readonly Dictionary<string, IEntitySkill> m_Skills;
-        protected readonly string[] m_Needs;
-        protected readonly IAbility[] m_Abilities;
-        protected readonly string[] m_Slots;
-        protected readonly HashSet<string> m_Tags;
+        [OdinSerialize]
+        protected Dictionary<string, IRollableValue<int>> m_Statistics;
+        [OdinSerialize]
+        protected Dictionary<string, IEntitySkill> m_Skills;
+        protected string[] m_Needs;
+        protected IAbility[] m_Abilities;
+        protected string[] m_Slots;
+        [OdinSerialize]
+        protected HashSet<string> m_Tags;
         
-        protected readonly int m_Size;
+        protected int m_Size;
 
-        protected readonly bool m_Sentient;
+        protected bool m_Sentient;
 
         public EntityTemplate(
             Dictionary<string, IRollableValue<int>> statistics, 
@@ -152,6 +157,7 @@ namespace JoyLib.Code.Entities
             }
         }
 
+        [OdinSerialize]
         public IVision VisionType
         {
             get;

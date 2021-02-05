@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code.Graphics;
+using Sirenix.OdinSerializer;
 
 namespace JoyLib.Code.Entities.Needs
 {
     public class Health : AbstractNeed
     {
+        [OdinSerialize]
         protected bool CleanBonusApplied
         {
             get;

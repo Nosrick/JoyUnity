@@ -43,10 +43,6 @@ namespace JoyLib.Code.States
         {
         }
 
-        public override void SetUpUi()
-        {
-        }
-
         private void CreateWorld()
         {
             //Make a new overworld generator
@@ -133,7 +129,7 @@ namespace JoyLib.Code.States
                     new object[] {true});
             }
 
-            foreach (IItemInstance item in this.m_Player.Backpack)
+            foreach (IItemInstance item in this.m_Player.Contents)
             {
                 GlobalConstants.GameManager.ItemPool.Retire(item.MonoBehaviourHandler.gameObject);
             }

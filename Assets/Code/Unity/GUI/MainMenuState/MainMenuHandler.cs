@@ -1,5 +1,7 @@
-﻿using JoyLib.Code.Helpers;
+﻿using JoyLib.Code.Cultures;
+using JoyLib.Code.IO;
 using JoyLib.Code.States;
+using JoyLib.Code.World;
 using UnityEngine;
 
 namespace JoyLib.Code.Unity.GUI.MainMenuState
@@ -14,7 +16,15 @@ namespace JoyLib.Code.Unity.GUI.MainMenuState
 
         public void LoadGame()
         {
-            GlobalConstants.ActionLog.AddText("Not quite implemented yet!", LogLevel.Warning);
+            WorldSerialiser serialiser = new WorldSerialiser();
+            IWorldInstance world = serialiser.Deserialise("Everse");
+            ICulture culture = GlobalConstants.GameManager.Player.Cultures[0];
+            GlobalConstants.GameManager.GUIManager.SetUIColours(
+                culture.BackgroundColours,
+                culture.CursorColours,
+                culture.FontColours);
+            GlobalConstants.GameManager.SetNextState(new WorldInitialisationState(world, world.GetPlayerWorld(world)));
+            this.StartCoroutine(this.LoadSceneAsync("MainGame"));
         }
 
         public void ExitGame()

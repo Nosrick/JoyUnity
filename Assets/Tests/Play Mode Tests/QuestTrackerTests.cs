@@ -1,8 +1,13 @@
 ﻿using System.Collections;
 using JoyLib.Code;
 using JoyLib.Code.Entities;
+using JoyLib.Code.Entities.Abilities;
+using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Needs;
+using JoyLib.Code.Graphics;
+using JoyLib.Code.Helpers;
 using JoyLib.Code.Quests;
+using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.World;
 using Moq;
@@ -21,6 +26,7 @@ namespace Tests
 
         private INeedHandler NeedHandler;
         private IEntitySkillHandler SkillHandler;
+        private ILiveItemHandler ItemHandler;
 
         private WorldInstance world;
         
@@ -30,9 +36,19 @@ namespace Tests
         [SetUp]
         public void SetUp()
         {
+            ActionLog actionLog = new ActionLog();
+            GlobalConstants.ActionLog = actionLog;
             scriptingEngine = new ScriptingEngine();
+
+            this.ItemHandler = new LiveItemHandler(
+                Mock.Of<IObjectIconHandler>(),
+                new MaterialHandler(),
+                Mock.Of<IAbilityHandler>(),
+                new RNG());
+            IGameManager gameManager = Mock.Of<IGameManager>(
+                manager => manager.ItemHandler == this.ItemHandler);
             
-            target = new QuestTracker();
+            target = new QuestTracker(this.ItemHandler);
         }
         
         [SetUp]
@@ -90,6 +106,7 @@ namespace Tests
         public void TearDown()
         {
             GlobalConstants.GameManager = null;
+            GlobalConstants.ActionLog.Dispose();
         }
     }
 }

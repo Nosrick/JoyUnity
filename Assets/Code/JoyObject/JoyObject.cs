@@ -10,7 +10,7 @@ using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.Unity;
 using JoyLib.Code.World;
-using OdinSerializer;
+using Sirenix.OdinSerializer;
 using UnityEngine;
 
 namespace JoyLib.Code
@@ -21,11 +21,13 @@ namespace JoyLib.Code
         public event ValueChangedEventHandler OnDerivedValueChange;
         public event ValueChangedEventHandler OnMaximumChange;
         
+        [SerializeField]
         protected List<string> m_Tags;
         
         [OdinSerialize]
         public IDictionary<string, IDerivedValue> DerivedValues { get; protected set; }
         
+        [OdinSerialize]
         public Vector2Int WorldPosition { get; protected set; }
 
         public IEnumerable<string> Tags
@@ -40,13 +42,16 @@ namespace JoyLib.Code
         [OdinSerialize]
         public bool IsDestructible { get; protected set; }
         
-        public IWorldInstance MyWorld { get; set; }
+        public virtual IWorldInstance MyWorld { get; set; }
 
         [OdinSerialize]
         public long GUID { get; protected set; }
 
         [OdinSerialize]
         public string JoyName { get; protected set; }
+
+        [OdinSerialize]
+        public string TileSet { get; protected set; }
 
         public virtual int HitPointsRemaining => this.GetValue("hitpoints");
 
@@ -57,14 +62,21 @@ namespace JoyLib.Code
         [OdinSerialize]
         protected NonUniqueDictionary<object, object> Data { get; set; }
 
+        public List<ISpriteState> States
+        {
+            get => this.m_States;
+            protected set => this.m_States = value;
+        }
+
         [OdinSerialize]
-        public List<ISpriteState> States { get; protected set; }
+        protected List<ISpriteState> m_States;
 
         [OdinSerialize]
         public List<IJoyAction> CachedActions { get; protected set; }
         
         public MonoBehaviourHandler MonoBehaviourHandler { get; protected set; }
 
+        [OdinSerialize]
         public IRollable Roller { get; protected set; }
 
         public virtual IEnumerable<Tuple<string, string>> Tooltip
@@ -103,9 +115,11 @@ namespace JoyLib.Code
             Vector2Int position, 
             IEnumerable<string> actions,
             IEnumerable<ISpriteState> sprites, 
+            string tileSet,
             RNG roller = null,
             params string[] tags)
         {
+            this.TileSet = tileSet;
             this.Roller = roller is null ? new RNG() : roller; 
             List<IJoyAction> tempActions = new List<IJoyAction>(); 
             foreach(string action in actions)
@@ -128,9 +142,11 @@ namespace JoyLib.Code
             Vector2Int position,
             IEnumerable<IJoyAction> actions,
             IEnumerable<ISpriteState> sprites,
+            string tileSet,
             IRollable roller = null,
             params string[] tags)
         {
+            this.TileSet = tileSet;
             this.Roller = roller is null ? new RNG() : roller; 
             this.Initialise(
                 name,
@@ -141,7 +157,7 @@ namespace JoyLib.Code
                 tags);
         }
 
-        protected void Initialise(
+        public void Initialise(
             string name, 
             IDictionary<string, IDerivedValue> derivedValues, 
             Vector2Int position, 
@@ -394,6 +410,11 @@ namespace JoyLib.Code
         {
             GUIDManager.Instance.ReleaseGUID(this.GUID);
             GC.SuppressFinalize(this);
+        }
+
+        public void SetStates(IEnumerable<ISpriteState> states)
+        {
+            this.m_States = states.ToList();
         }
 
         ~JoyObject()

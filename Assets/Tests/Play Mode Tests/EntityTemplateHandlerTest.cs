@@ -7,6 +7,7 @@ using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.AI.LOS.Providers;
 using JoyLib.Code.Entities.Needs;
+using JoyLib.Code.Helpers;
 using Moq;
 using NUnit.Framework;
 using UnityEngine.TestTools;
@@ -20,7 +21,8 @@ namespace Tests
         [SetUp]
         public void SetUp()
         {
-            
+            ActionLog actionLog = new ActionLog();
+            GlobalConstants.ActionLog = actionLog;
             IEntitySkillHandler skillHandler = Mock.Of<IEntitySkillHandler>(
                 handler => handler.GetCoefficients(It.IsAny<List<string>>(), It.IsAny<string>())
                 == new NonUniqueDictionary<INeed, float>());
@@ -60,6 +62,7 @@ namespace Tests
         public void TearDown()
         {
             GlobalConstants.GameManager = null;
+            GlobalConstants.ActionLog.Dispose();
         }
     }
 }

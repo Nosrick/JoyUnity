@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Linq;
+using UnityEngine;
 
 namespace JoyLib.Code.Graphics
 {
@@ -13,6 +14,7 @@ namespace JoyLib.Code.Graphics
         IEnumerable<SpriteData> GetTileSet(string tileSet);
         IEnumerable<SpriteData> GetSprites(string tileSet, string tileName, string state = "DEFAULT");
         SpriteData GetFrame(string tileSet, string tileName, string state = "DEFAULT", int frame = 0);
+        List<Sprite> GetRawFrames(string tileSet, string tileName, string partName, string state = "DEFAULT");
         int SpriteSize { get; }
     }
 }

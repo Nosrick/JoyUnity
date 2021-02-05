@@ -1,7 +1,9 @@
 ﻿using System;
+using Sirenix.OdinSerializer;
 
 namespace JoyLib.Code.Entities.Statistics
 {
+    [Serializable]
     public class EntityStatistic : IRollableValue<int>
     {
         public const string STRENGTH    =   "strength";
@@ -43,18 +45,21 @@ namespace JoyLib.Code.Entities.Statistics
             return this.Value;
         }
 
+        [OdinSerialize]
         public string Name
         {
             get;
             set;
         }
 
+        [OdinSerialize]
         public int Value
         {
             get;
             set;
         }
 
+        [OdinSerialize]
         public int SuccessThreshold
         {
             get;

@@ -1,13 +1,19 @@
-﻿namespace JoyLib.Code.Entities.Statistics
+﻿using System;
+using Sirenix.OdinSerializer;
+
+namespace JoyLib.Code.Entities.Statistics
 {
+    [Serializable]
     public class ConcreteBasicIntValue : IBasicValue<int>
     {
+        [OdinSerialize]
         public string Name
         {
             get;
             protected set;
         }
 
+        [OdinSerialize]
         public int Value
         {
             get;

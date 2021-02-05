@@ -1,46 +1,82 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using JoyLib.Code.Collections;
+using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities;
+using JoyLib.Code.Entities.Items;
+using JoyLib.Code.Entities.Needs;
+using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
+using JoyLib.Code.Quests;
 using JoyLib.Code.World;
-using OdinSerializer;
+using Sirenix.OdinSerializer;
 
 namespace JoyLib.Code.IO
 {
     public class WorldSerialiser
     {
-        protected static IObjectIconHandler s_ObjectIcons = GlobalConstants.GameManager.ObjectIconHandler; 
+        protected static IObjectIconHandler s_ObjectIcons = GlobalConstants.GameManager.ObjectIconHandler;
+
+        protected const DataFormat DEFAULT_DATA_FORMAT = DataFormat.Binary;
 
         public void Serialise(IWorldInstance world)
         {
+            string directory = Directory.GetCurrentDirectory() + "/save/" + world.Name;
             try
             {
-                if (!Directory.Exists(Directory.GetCurrentDirectory() + "/save/" + world.Name))
+                if (!Directory.Exists(directory))
                 {
-                    Directory.CreateDirectory(Directory.GetCurrentDirectory() + "/save/" + world.Name);
+                    Directory.CreateDirectory(directory);
                 }
             }
             catch (Exception e)
             {
                 GlobalConstants.ActionLog.AddText("Cannot open save directory.", LogLevel.Error);
-                GlobalConstants.ActionLog.AddText(e.Message, LogLevel.Error);
+                GlobalConstants.ActionLog.StackTrace(e);
             }
             try
             {
-                byte[] array = SerializationUtility.SerializeValue(world, DataFormat.JSON);
-                File.WriteAllBytes(Directory.GetCurrentDirectory() + "/save/" + world.Name + "/sav.dat", array);
+                byte[] array = SerializationUtility.SerializeValue(world, DEFAULT_DATA_FORMAT);
+                File.WriteAllBytes(directory + "/world.dat", array);
                 /*
                 StreamWriter writer = new StreamWriter(Directory.GetCurrentDirectory() + "/save/" + world.Name + "/sav.dat", false);
                 JsonSerializer serializer = JsonSerializer.CreateDefault();
                 serializer.Serialize(writer, world);
                 writer.Close();
                 */
+
+                array = SerializationUtility.SerializeValue(GlobalConstants.GameManager.QuestTracker.AllQuests,
+                    DEFAULT_DATA_FORMAT);
+                File.WriteAllBytes(directory + "/quests.dat", array);
+
+                array = SerializationUtility.SerializeValue(GlobalConstants.GameManager.ItemHandler.QuestRewards,
+                    DEFAULT_DATA_FORMAT);
+                File.WriteAllBytes(directory + "/rewards.dat", array);
+
+                array = SerializationUtility.SerializeValue(
+                    GlobalConstants.GameManager.RelationshipHandler.AllRelationships,
+                    DEFAULT_DATA_FORMAT);
+                File.WriteAllBytes(directory + "/relationships.dat", array);
+
+                array = SerializationUtility.SerializeValue(
+                    GlobalConstants.GameManager.ItemHandler.AllItems,
+                    DEFAULT_DATA_FORMAT);
+                File.WriteAllBytes(directory + "/items.dat", array);
+
+                array = SerializationUtility.SerializeValue(
+                    GlobalConstants.GameManager.EntityHandler.AllEntities,
+                    DEFAULT_DATA_FORMAT);
+                File.WriteAllBytes(directory + "/entities.dat", array);
+                
+                File.WriteAllText(directory + "/data_format.dat", DEFAULT_DATA_FORMAT.ToString());
             }
             catch(Exception e)
             {
                 GlobalConstants.ActionLog.AddText("Cannot serialise and/or write world to file.", LogLevel.Error);
-                GlobalConstants.ActionLog.AddText(e.Message, LogLevel.Error);
+                GlobalConstants.ActionLog.StackTrace(e);
             }
         }
 
@@ -53,12 +89,45 @@ namespace JoyLib.Code.IO
             reader.Close();
             */
             
-            byte[] array = File.ReadAllBytes(Directory.GetCurrentDirectory() + "/save/" + worldName + "/sav.dat");
-            IWorldInstance world = SerializationUtility.DeserializeValue<IWorldInstance>(array, DataFormat.JSON);
+
+            string directory = Directory.GetCurrentDirectory() + "/save/" + worldName;
+
+            if (!Enum.TryParse(File.ReadAllText(directory + "/data_format.dat"), out DataFormat dataFormat))
+            {
+                dataFormat = DEFAULT_DATA_FORMAT;
+            }
+            
+            byte[] array = File.ReadAllBytes(directory + "/world.dat");
+            IWorldInstance world = SerializationUtility.DeserializeValue<IWorldInstance>(array, dataFormat);
+            world.Initialise();
+
+            array = File.ReadAllBytes(directory + "/items.dat");
+            IEnumerable<IItemInstance> items =
+                SerializationUtility.DeserializeValue<IEnumerable<IItemInstance>>(array, dataFormat);
+            this.Items(items);
+
+            array = File.ReadAllBytes(directory + "/quests.dat");
+            IEnumerable<IQuest> quests = SerializationUtility.DeserializeValue<IEnumerable<IQuest>>(array, dataFormat);
+            this.Quests(quests);
+
+            array = File.ReadAllBytes(directory + "/rewards.dat");
+            NonUniqueDictionary<long, long> rewards =
+                SerializationUtility.DeserializeValue<NonUniqueDictionary<long, long>>(array, dataFormat);
+            this.QuestRewards(rewards);
+
+            array = File.ReadAllBytes(directory + "/entities.dat");
+            IEnumerable<IEntity> entities =
+                SerializationUtility.DeserializeValue<IEnumerable<IEntity>>(array, dataFormat);
+            this.Entities(entities, world);
+
+            array = File.ReadAllBytes(directory + "/relationships.dat");
+            IEnumerable<IRelationship> relationships =
+                SerializationUtility.DeserializeValue<IEnumerable<IRelationship>>(array, dataFormat);
+            this.Relationships(relationships);
             
             this.LinkWorlds(world);
-            this.EntityWorldKnowledge(world);
-            //this.AssignIcons(world);
+            this.AssignIcons(world);
+            
             return world;
         }
 
@@ -70,38 +139,119 @@ namespace JoyLib.Code.IO
                 this.LinkWorlds(world);
             }
         }
-
-        private void EntityWorldKnowledge(IWorldInstance parent)
-        {
-            foreach (IEntity entity in parent.Entities)
-            {
-                entity.MyWorld = parent;
-            }
-
-            foreach (IWorldInstance world in parent.Areas.Values)
-            {
-                this.EntityWorldKnowledge(world);
-            }
-        }
         
         private void AssignIcons(IWorldInstance parent)
         {
-            /*
-            foreach(IJoyObject obj in parent.Objects)
+            foreach (IJoyObject wall in parent.Walls.Values)
             {
-                obj.Sprites = s_ObjectIcons.GetSprites(obj.TileSet, obj.JoyName).ToArray();
-            }
+                foreach (ISpriteState state in wall.States)
+                {
+                    this.SetUpSpriteStates(wall.TileSet, state);
+                }
 
-            foreach(IEntity entity in parent.Entities)
-            {
-                entity.Sprites = s_ObjectIcons.GetSprites(entity.TileSet, entity.CreatureType).ToArray();
+                wall.MyWorld = parent;
             }
 
             foreach(IWorldInstance world in parent.Areas.Values)
             {
                 this.AssignIcons(world);
             }
-            */
+        }
+
+        protected void SetUpSpriteStates(string tileSet, ISpriteState state)
+        {
+            foreach (SpritePart part in state.SpriteData.m_Parts)
+            {
+                part.m_FrameSprites = s_ObjectIcons.GetRawFrames(tileSet, state.Name, part.m_Name, state.SpriteData.m_State);
+            }
+        }
+
+        protected void HandleContents(IItemContainer container)
+        {
+            foreach (IItemInstance item in container.Contents)
+            {
+                foreach (ISpriteState state in item.States)
+                {
+                    this.SetUpSpriteStates(item.TileSet, state);
+                }
+
+                foreach (IItemInstance content in item.Contents)
+                {
+                    foreach (ISpriteState state in content.States)
+                    {
+                        this.SetUpSpriteStates(content.TileSet, state);
+                    }
+                    this.HandleContents(content);
+                }
+            }
+        }
+
+        private void QuestRewards(NonUniqueDictionary<long, long> rewards)
+        {
+            foreach (long questID in rewards.Keys)
+            {
+                GlobalConstants.GameManager.ItemHandler.AddQuestRewards(questID, rewards.FetchValuesForKey(questID));
+            }
+        }
+
+        private void Quests(IEnumerable<IQuest> quests)
+        {
+            foreach (IQuest quest in quests)
+            {
+                GlobalConstants.GameManager.QuestTracker.AddQuest(quest.Questor, quest);
+            }
+        }
+
+        private void Relationships(IEnumerable<IRelationship> relationships)
+        {
+            foreach (IRelationship relationship in relationships)
+            {
+                GlobalConstants.GameManager.RelationshipHandler.AddRelationship(relationship);
+            }
+        }
+
+        private void Items(IEnumerable<IItemInstance> items)
+        {
+            foreach (IItemInstance item in items)
+            {
+                foreach (ISpriteState state in item.States)
+                {
+                    this.SetUpSpriteStates(item.TileSet, state);
+                }
+
+                if (item is IItemContainer container)
+                {
+                    //this.HandleContents(container);
+                }
+                GlobalConstants.GameManager.ItemHandler.AddItem(item);
+            }
+        }
+
+        private void Entities(IEnumerable<IEntity> entities, IWorldInstance overworld)
+        {
+            List<IWorldInstance> worlds = overworld.GetWorlds(overworld);
+            foreach (IEntity entity in entities)
+            {
+                List<ICulture> cultures = entity.CultureNames.Select(name => GlobalConstants.GameManager.CultureHandler.GetByCultureName(name)).ToList();
+
+                entity.Deserialise(cultures);
+                
+                foreach (ISpriteState state in entity.States)
+                {
+                    this.SetUpSpriteStates(entity.TileSet, state);
+                }
+
+                foreach (INeed need in entity.Needs.Values)
+                {
+                    need.FulfillingSprite = new SpriteState(
+                        need.Name, 
+                        GlobalConstants.GameManager.ObjectIconHandler.GetFrame(
+                            "needs", 
+                            need.Name));
+                }
+
+                worlds.First(world => world.EntityGUIDs.Contains(entity.GUID))?.AddEntity(entity);
+            }
         }
     }
 }

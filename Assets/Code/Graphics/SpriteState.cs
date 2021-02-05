@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Sirenix.OdinSerializer;
 using UnityEngine;
 
 namespace JoyLib.Code.Graphics
@@ -8,14 +9,25 @@ namespace JoyLib.Code.Graphics
     [Serializable]
     public class SpriteState : ISpriteState
     {
-        public SpriteData SpriteData { get; protected set; }
+        public SpriteData SpriteData
+        {
+            get => this.m_SpriteData;
+            protected set => this.m_SpriteData = value;
+        }
 
+        [SerializeField]
+        protected SpriteData m_SpriteData;
+
+        [OdinSerialize]
         public string Name { get; protected set; }
 
+        [OdinSerialize]
         public AnimationType AnimationType { get; protected set; }
 
+        [OdinSerialize]
         public bool Looping { get; protected set; }
 
+        [OdinSerialize]
         public bool IsAnimated { get; set; }
 
         public SpriteState(
@@ -59,10 +71,21 @@ namespace JoyLib.Code.Graphics
             
             if (frame < maxFrames)
             {
+                List<Tuple<Color, Sprite>> data = new List<Tuple<Color, Sprite>>();
+                foreach (SpritePart part in this.SpriteData.m_Parts)
+                {
+                    Color colour = part.SelectedColour;
+                    Sprite sprite = part.m_FrameSprites[frame];
+                    data.Add(new Tuple<Color, Sprite>(colour, sprite));
+                }
+
+                return data;
+                /*
                 return this.SpriteData.m_Parts.Select(part =>
                     new Tuple<Color, Sprite>(
                         part.m_PossibleColours[part.m_SelectedColour],
                         part.m_FrameSprites[frame])).ToList();
+                        */
             }
 
             return this.GetSpriteForFrame(0);

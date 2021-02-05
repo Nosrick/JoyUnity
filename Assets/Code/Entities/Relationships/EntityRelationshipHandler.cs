@@ -9,8 +9,10 @@ namespace JoyLib.Code.Entities.Relationships
 {
     public class EntityRelationshipHandler : IEntityRelationshipHandler
     {
-        private Dictionary<string, IRelationship> m_RelationshipTypes;
-        private NonUniqueDictionary<long, IRelationship> m_Relationships;
+        protected Dictionary<string, IRelationship> m_RelationshipTypes;
+        protected NonUniqueDictionary<long, IRelationship> m_Relationships;
+
+        public IEnumerable<IRelationship> AllRelationships => this.m_Relationships.Values;
 
         public EntityRelationshipHandler()
         {
@@ -89,11 +91,11 @@ namespace JoyLib.Code.Entities.Relationships
                     continue;
                 }
                 
-                if (tags != null && tags.Intersect(pair.Item2.Tags).Count() > 0)
+                if (tags.IsNullOrEmpty() == false && tags.Intersect(pair.Item2.Tags).Any())
                 {
                     relationships.Add(pair.Item2);
                 }
-                else if (tags is null)
+                else if (tags.IsNullOrEmpty())
                 {
                     relationships.Add(pair.Item2);
                 }

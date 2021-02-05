@@ -6,6 +6,8 @@ namespace JoyLib.Code.Quests
 {
     public interface IQuestTracker
     {
+        List<IQuest> AllQuests { get; }
+
         List<IQuest> GetQuestsForEntity(long GUID);
 
         IQuest GetPrimaryQuestForEntity(long GUID);

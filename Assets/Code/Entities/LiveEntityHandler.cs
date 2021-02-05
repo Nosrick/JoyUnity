@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace JoyLib.Code.Entities
 {
@@ -7,6 +8,8 @@ namespace JoyLib.Code.Entities
     {
         protected Dictionary<long, IEntity> m_Entities;
         protected IEntity m_Player;
+
+        public IEnumerable<IEntity> AllEntities => this.m_Entities.Values.ToList();
 
         public bool AddEntity(IEntity created)
         {
@@ -23,8 +26,7 @@ namespace JoyLib.Code.Entities
             }
             catch(Exception e)
             {
-                GlobalConstants.ActionLog.AddText(e.Message);
-                GlobalConstants.ActionLog.AddText(e.StackTrace);
+                GlobalConstants.ActionLog.StackTrace(e);
                 return false;
             }
         }
@@ -56,7 +58,6 @@ namespace JoyLib.Code.Entities
         public void SetPlayer(IEntity entity)
         {
             this.m_Player = entity;
-            GlobalConstants.GameManager.Player = this.m_Player;
         }
 
         protected Dictionary<long, IEntity> Entities

@@ -6,6 +6,7 @@ using JoyLib.Code.Helpers;
 using JoyLib.Code.Physics;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
+using Sirenix.OdinSerializer;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities.AI.Drivers
@@ -14,8 +15,9 @@ namespace JoyLib.Code.Entities.AI.Drivers
     {
         protected static IJoyAction s_WanderAction = ScriptingEngine.Instance.FetchAction("wanderaction");
 
-        protected static IPhysicsManager s_PhysicsManager;
+        protected static IPhysicsManager s_PhysicsManager = GlobalConstants.GameManager.PhysicsManager;
         
+        [OdinSerialize]
         protected RNG Roller { get; set; }
 
         public StandardDriver(IPhysicsManager physicsManager = null, RNG roller = null)

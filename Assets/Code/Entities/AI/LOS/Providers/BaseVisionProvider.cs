@@ -1,20 +1,35 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
 using JoyLib.Code.World;
+using Sirenix.OdinSerializer;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities.AI.LOS.Providers
 {
+    [Serializable]
     public class BaseVisionProvider : IVision
     {
+        [OdinSerialize]
         public string Name { get; protected set; }
+        
+        [OdinSerialize]
         public int MinimumLightLevel { get; protected set; }
+        
+        [OdinSerialize]
         public int MaximumLightLevel { get; protected set; }
+        
+        [OdinSerialize]
         public int MinimumComfortLevel { get; protected set; }
+        
+        [OdinSerialize]
         public int MaximumComfortLevel { get; protected set; }
 
+        [OdinSerialize]
         public Color DarkColour { get; protected set; }
+        
+        [OdinSerialize]
         public Color LightColour { get; protected set; }
 
         protected HashSet<Vector2Int> m_Vision;
@@ -105,11 +120,14 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
             protected set => this.m_Vision = new HashSet<Vector2Int>(value);
         }
 
+        [OdinSerialize]
         protected IFOVHandler Algorithm
         {
             get;
+            set;
         }
 
+        [OdinSerialize]
         protected IFOVBoard Board
         {
             get;

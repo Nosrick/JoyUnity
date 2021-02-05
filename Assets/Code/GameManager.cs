@@ -139,7 +139,7 @@ namespace JoyLib.Code
 
             this.QuestProvider =
                 new QuestProvider(this.RelationshipHandler, this.ItemHandler, this.ItemFactory, this.Roller);
-            this.QuestTracker = new QuestTracker();
+            this.QuestTracker = new QuestTracker(this.ItemHandler);
 
             this.ConversationEngine = new ConversationEngine(this.RelationshipHandler);
 
@@ -160,6 +160,9 @@ namespace JoyLib.Code
             Entity.SkillHandler = this.SkillHandler;
             Entity.NaturalWeaponHelper = this.NaturalWeaponHelper;
             Entity.DerivedValueHandler = this.DerivedValueHandler;
+
+            ItemInstance.EntityHandler = this.EntityHandler;
+            ItemInstance.ItemHandler = this.ItemHandler;
 
             this.Initialised = true;
             this.LoadingMessage = "Done!";
@@ -188,6 +191,52 @@ namespace JoyLib.Code
 
             GlobalConstants.ActionLog.AddText(SceneManager.GetActiveScene().name);
             this.m_StateManager.ChangeState(this.NextState);
+        }
+
+        public void Reset()
+        {
+            this.EntityPool.RetireAll();
+            this.FloorPool.RetireAll();
+            this.FogPool.RetireAll();
+            this.ItemPool.RetireAll();
+            this.WallPool.RetireAll();
+
+            this.RelationshipHandler = new EntityRelationshipHandler();
+
+            this.EntityHandler = new LiveEntityHandler();
+            this.ItemHandler = new LiveItemHandler(this.ObjectIconHandler, this.MaterialHandler, this.AbilityHandler,
+                this.Roller);
+
+            this.EntityFactory = new EntityFactory(this.NeedHandler, this.ObjectIconHandler, this.CultureHandler,
+                this.SexualityHandler, this.BioSexHandler, this.GenderHandler, this.RomanceHandler, this.JobHandler,
+                this.PhysicsManager, this.SkillHandler,
+                this.DerivedValueHandler, this.Roller);
+
+            this.ItemFactory = new ItemFactory(this.ItemHandler, this.ObjectIconHandler,
+                this.DerivedValueHandler,
+                this.ItemPool, this.Roller);
+
+            this.QuestProvider =
+                new QuestProvider(this.RelationshipHandler, this.ItemHandler, this.ItemFactory, this.Roller);
+            this.QuestTracker = new QuestTracker(this.ItemHandler);
+
+            this.ConversationEngine = new ConversationEngine(this.RelationshipHandler);
+
+            this.NaturalWeaponHelper = new NaturalWeaponHelper(this.MaterialHandler, this.ItemFactory);
+            
+            TradeWindow.RelationshipHandler = this.RelationshipHandler;
+
+            TopicData.ConversationEngine = this.ConversationEngine;
+            TopicData.RelationshipHandler = this.RelationshipHandler;
+
+            Entity.QuestTracker = this.QuestTracker;
+            Entity.RelationshipHandler = this.RelationshipHandler;
+            Entity.SkillHandler = this.SkillHandler;
+            Entity.NaturalWeaponHelper = this.NaturalWeaponHelper;
+            Entity.DerivedValueHandler = this.DerivedValueHandler;
+
+            ItemInstance.EntityHandler = this.EntityHandler;
+            ItemInstance.ItemHandler = this.ItemHandler;
         }
         
         public bool BegunInitialisation { get; protected set; }
@@ -234,7 +283,7 @@ namespace JoyLib.Code
         public IItemFactory ItemFactory { get; protected set; }
         public GameObject MyGameObject { get; protected set; }
 
-        public IEntity Player { get; set; }
+        public IEntity Player => this.EntityHandler.GetPlayer();
 
         public GameObjectPool FloorPool { get; protected set; }
         public GameObjectPool WallPool { get; protected set; }

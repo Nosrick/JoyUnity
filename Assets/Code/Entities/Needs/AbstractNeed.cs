@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
+using Sirenix.OdinSerializer;
 
 namespace JoyLib.Code.Entities.Needs
 {
@@ -12,36 +13,49 @@ namespace JoyLib.Code.Entities.Needs
         {
             get => "abstractneed";
         }
+        
+        public ISpriteState FulfillingSprite { get; set; }
 
-        public ISpriteState FulfillingSprite { get; protected set; }
-
+        [OdinSerialize]
         public RNG Roller { get; protected set; }
 
+        [OdinSerialize]
         protected Dictionary<string, IJoyAction> m_CachedActions;
 
         //How quickly the need decays
         //The higher the number, the slower it decays
+        
+        [OdinSerialize]
         protected int m_Decay;
+        [OdinSerialize]
         protected int m_DecayCounter;
+        [OdinSerialize]
         protected bool m_DoesDecay;
 
-        //How much of an impacy this need has on overall happiness
+        [OdinSerialize]
+        //How much of an impact this need has on overall happiness
         protected int m_Priority;
 
+        [OdinSerialize]
         //How high the value has to be before it contributes to happiness
         protected int m_HappinessThreshold;
 
         //Current value
+        [OdinSerialize]
         protected int m_Value;
+        [OdinSerialize]
         protected int m_MaximumValue;
 
+        [OdinSerialize]
         //Average for the day
         //Will be calculated by adding the value every hour, then dividing by 24 when the day is up
         protected int m_AverageForDay;
 
+        [OdinSerialize]
         //Average for the week
         //Calculated by adding value for the day every day, then dividing by 7 when the week is up
         protected int m_AverageForWeek;
+        [OdinSerialize]
         protected int m_AverageForMonth;
 
         public AbstractNeed(

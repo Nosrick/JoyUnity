@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Castle.Core.Internal;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
@@ -28,7 +29,7 @@ namespace JoyLib.Code.Unity.GUI
                 slot.gameObject.SetActive(false);
             }
             
-            var slots = this.Player.Equipment.Slots;
+            var slots = this.Player.Equipment.GetSlotsAndContents().ToList();
 
             for (int i = this.Slots.Count; i < slots.Count; i++)
             {

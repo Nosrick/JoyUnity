@@ -16,6 +16,8 @@ namespace JoyLib.Code
         string JoyName { get; }
         long GUID { get; }
         
+        string TileSet { get; }
+        
         IRollable Roller { get; }
         
         IWorldInstance MyWorld { get; set; }
@@ -31,5 +33,7 @@ namespace JoyLib.Code
         IJoyAction FetchAction(string name);
 
         void AttachMonoBehaviourHandler(MonoBehaviourHandler behaviourHandler);
+
+        void SetStates(IEnumerable<ISpriteState> states);
     }
 }

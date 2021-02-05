@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Security.Cryptography;
+using Sirenix.OdinSerializer;
 
 namespace JoyLib.Code.Rollers
 {
     public class RNG : IRollable
     {
+        [OdinSerialize]
         protected RNGCryptoServiceProvider RandomEngine { get; set; }
+        [OdinSerialize]
         protected byte[] Buffer { get; set; }
+        [OdinSerialize]
         protected int BufferPosition { get; set; }
 
+        [OdinSerialize]
         public bool IsRandomPoolEnabled { get; protected set; }
 
         public RNG() : this(true) { }

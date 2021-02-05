@@ -1,9 +1,11 @@
 ﻿using System;
 using JoyLib.Code.Collections;
 using JoyLib.Code.Entities.Needs;
+using Sirenix.OdinSerializer;
 
 namespace JoyLib.Code.Entities.Statistics
 {
+    [Serializable]
     public class EntitySkill : IEntitySkill
     {
         protected const int MAXIMUM_XP = 100;
@@ -36,24 +38,28 @@ namespace JoyLib.Code.Entities.Statistics
             return this.Value;
         }
 
+        [OdinSerialize]
         public string Name
         {
             get;
             protected set;
         }
 
+        [OdinSerialize]
         public int Value
         {
             get;
             protected set;
         }
 
+        [OdinSerialize]
         public int SuccessThreshold
         {
             get;
             protected set;
         }
 
+        [OdinSerialize]
         public NonUniqueDictionary<INeed, float> GoverningNeeds
         {
             get;

@@ -6,9 +6,11 @@ using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Managers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.World;
+using Sirenix.OdinSerializer;
 
 namespace JoyLib.Code.Quests
 {
+    [Serializable]
     public class Quest : IQuest
     {
         protected List<string> m_Tags;
@@ -17,13 +19,15 @@ namespace JoyLib.Code.Quests
             List<IQuestStep> steps,
             QuestMorality morality,
             List<IItemInstance> rewards,
-            IJoyObject instigator,
+            long instigator,
+            long questor,
             IEnumerable<string> tags)
         {
             this.Steps = steps;
             this.Morality = morality;
-            this.Rewards = rewards;
+            this.RewardGUIDs = rewards.Select(instance => instance.GUID).ToList();
             this.Instigator = instigator;
+            this.Questor = questor;
             this.CurrentStep = 0;
             this.ID = GUIDManager.Instance.AssignGUID();
             this.Tags = new List<string>(tags);
@@ -60,15 +64,15 @@ namespace JoyLib.Code.Quests
             {
                 case IItemInstance itemInstance:
                 {
-                    return this.Steps[this.CurrentStep].Items.Contains(itemInstance);
+                    return this.Steps[this.CurrentStep].Items.Contains(itemInstance.GUID);
                 }
                 case IEntity entity:
                 {
-                    return this.Steps[this.CurrentStep].Actors.Contains(entity);
+                    return this.Steps[this.CurrentStep].Actors.Contains(entity.GUID);
                 }
                 case IWorldInstance worldInstance:
                 {
-                    return this.Steps[this.CurrentStep].Areas.Contains(worldInstance);
+                    return this.Steps[this.CurrentStep].Areas.Contains(worldInstance.GUID);
                 }
                 default:
                     return false;
@@ -84,6 +88,10 @@ namespace JoyLib.Code.Quests
 
             foreach (IItemInstance reward in this.Rewards)
             {
+                if (reward is ItemInstance item)
+                {
+                    item.Instantiate();
+                }
                 questor.AddContents(reward);
             }
 
@@ -145,13 +153,28 @@ namespace JoyLib.Code.Quests
             return fullString;
         }
 
+        [OdinSerialize]
         public List<IQuestStep> Steps { get; protected set; }
+        
+        [OdinSerialize]
         public QuestMorality Morality { get; protected set; }
-        public List<IItemInstance> Rewards { get; protected set; }
+        
+        [OdinSerialize]
+        public List<long> RewardGUIDs { get; protected set; }
+
+        public List<IItemInstance> Rewards =>
+            GlobalConstants.GameManager.ItemHandler.GetQuestRewards(this.ID).ToList();
+        
+        [OdinSerialize]
         public int CurrentStep { get; protected set;  }
 
-        public IJoyObject Instigator { get; protected set; }
-        
+        [OdinSerialize]
+        public long Instigator { get; protected set; }
+
+        [OdinSerialize] 
+        public long Questor { get; protected set; }
+
+        [OdinSerialize]
         public long ID { get; protected set; }
 
         public bool IsComplete => this.CurrentStep == this.Steps.Count;

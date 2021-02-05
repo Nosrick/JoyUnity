@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
+using JoyLib.Code.Collections;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Events;
@@ -9,8 +10,9 @@ using JoyLib.Code.Graphics;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.Unity;
+using JoyLib.Code.World;
+using Sirenix.OdinSerializer;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace JoyLib.Code.Entities.Items
 {
@@ -22,17 +24,40 @@ namespace JoyLib.Code.Entities.Items
 
         protected IEntity User { get; set; }
         
+        [OdinSerialize]
         protected bool m_Identified;
 
+        [OdinSerialize]
         protected List<long> m_Contents;
+        
+        [OdinSerialize]
         protected BaseItemType m_Type;
 
+        [OdinSerialize]
         protected long m_OwnerGUID;
+        
+        [OdinSerialize]
         protected string m_OwnerString;
         
         protected int StateIndex { get; set; }
 
+        [OdinSerialize]
         protected int m_Value;
+
+        public override IWorldInstance MyWorld
+        {
+            get => this.m_World;
+            set
+            {
+                this.m_World = value;
+                foreach (IItemInstance content in this.Contents)
+                {
+                    content.MyWorld = value;
+                }
+            }
+        }
+
+        protected IWorldInstance m_World;
 
         public long OwnerGUID
         {
@@ -52,12 +77,13 @@ namespace JoyLib.Code.Entities.Items
             get => this.m_OwnerString;
         }
 
+        [OdinSerialize]
         public IEnumerable<IAbility> UniqueAbilities { get; protected set; }
         
         protected GameObject Prefab { get; set; }
 
         public IEnumerable<ISpriteState> Sprites => this.States;
-
+        
         public static ILiveItemHandler ItemHandler { get; set; }
         
         public static ILiveEntityHandler EntityHandler { get; set; }
@@ -72,6 +98,7 @@ namespace JoyLib.Code.Entities.Items
             IEnumerable<IAbility> uniqueAbilities = null,
             IEnumerable<IJoyAction> actions = null,
             GameObject gameObject = null,
+            List<IItemInstance> contents = null,
             bool active = false)
             : base(
                 type.UnidentifiedName,
@@ -79,6 +106,7 @@ namespace JoyLib.Code.Entities.Items
                 position,
                 actions,
                 sprites,
+                type.SpriteSheet,
                 roller,
                 type.Tags)
         {
@@ -97,7 +125,7 @@ namespace JoyLib.Code.Entities.Items
             
             this.Identified = identified;
 
-            this.m_Contents = new List<long>();
+            this.m_Contents = contents is null ? new List<long>() : contents.Select(instance => instance.GUID).ToList();
 
             this.UniqueAbilities = uniqueAbilities is null == false ? new List<IAbility>(uniqueAbilities) : new List<IAbility>();
 
@@ -115,25 +143,42 @@ namespace JoyLib.Code.Entities.Items
 
             if (this.Prefab is null == false)
             {
-                this.Instantiate(gameObject, active);
+                this.Instantiate(true, gameObject, active);
             }
         }
 
-        public void Instantiate(GameObject gameObject = null, bool active = false)
+        public void Instantiate(bool recursive = true, GameObject gameObject = null, bool active = false)
         {
             if (gameObject is null)
             {
-                GameObject newOne = Object.Instantiate(this.Prefab);
-                newOne.GetComponent<MonoBehaviourHandler>().AttachJoyObject(this);
+                MonoBehaviourHandler monoBehaviourHandler = GlobalConstants.GameManager.ItemPool.Get()
+                    .GetComponent<MonoBehaviourHandler>();
+                monoBehaviourHandler.AttachJoyObject(this);
+                this.AttachMonoBehaviourHandler(monoBehaviourHandler);
             }
             else
             {
                 MonoBehaviourHandler monoBehaviourHandler = gameObject.GetComponent<MonoBehaviourHandler>();
                 monoBehaviourHandler.AttachJoyObject(this);
+                this.AttachMonoBehaviourHandler(monoBehaviourHandler);
             }
+            this.MonoBehaviourHandler.SetSpriteLayer("Objects");
             this.MonoBehaviourHandler.Clear();
             this.MonoBehaviourHandler.AddSpriteState(this.States[this.StateIndex]);
             this.MonoBehaviourHandler.gameObject.SetActive(active);
+            
+            if (!recursive)
+            {
+                return;
+            }
+            
+            foreach (IItemInstance item in this.Contents)
+            {
+                if (item is ItemInstance instance)
+                {
+                    instance.Instantiate(true, gameObject);
+                }
+            }
         }
 
         public IItemInstance Copy(IItemInstance copy)
@@ -240,6 +285,7 @@ namespace JoyLib.Code.Entities.Items
             {
                 return;
             }
+            this.Data = new NonUniqueDictionary<object, object>();
             ItemHandler = GlobalConstants.GameManager.ItemHandler;
             EntityHandler = GlobalConstants.GameManager.EntityHandler;
         }
@@ -271,7 +317,7 @@ namespace JoyLib.Code.Entities.Items
                 user.AddIdentifiedItem(this.DisplayName);
             }
             //Identify any identical items the user is carrying
-            foreach (IItemInstance item in user.Backpack)
+            foreach (IItemInstance item in user.Contents)
             {
                 if(item.DisplayName.Equals(this.DisplayName) && !item.Identified)
                 {
@@ -288,21 +334,21 @@ namespace JoyLib.Code.Entities.Items
             this.ConstructDescription();
         }
 
-        public IItemInstance TakeMyItem(int index)
+        public long TakeMyItem(int index)
         {
             if(index > 0 && index < this.m_Contents.Count)
             {
-                IItemInstance item = ItemHandler?.GetItem(this.m_Contents[index]);
+                long item = this.m_Contents[index];
                 this.m_Contents.RemoveAt(index);
                 return item;
             }
 
-            return null;
+            throw new InvalidOperationException("No item to take at selected index!");
         }
 
         public bool Contains(IItemInstance actor)
         {
-            if (this.Contents.Contains(actor))
+            if (this.m_Contents.Contains(actor.GUID))
             {
                 return true;
             }
@@ -353,8 +399,8 @@ namespace JoyLib.Code.Entities.Items
         {
             IEnumerable<IItemInstance> itemInstances = actors as IItemInstance[] ?? actors.ToArray();
             this.m_Contents.AddRange(itemInstances.Where(actor => 
-                    this.m_Contents.Any(itemGUID => itemGUID == actor.GUID) == false)
-                .Select(actor => actor.GUID));
+                    this.m_Contents.Any(item => item == actor.GUID) == false)
+                .Select(instance => instance.GUID));
 
             this.CalculateValue();
             this.ConstructDescription();
@@ -485,10 +531,7 @@ namespace JoyLib.Code.Entities.Items
 
         public IEnumerable<IItemInstance> Contents
         {
-            get
-            {
-                return this.m_Contents.Select(itemGUID => ItemHandler?.GetItem(itemGUID)).ToList();
-            }
+            get => ItemHandler.GetItems(this.m_Contents);
         }
 
         public string ContentString
