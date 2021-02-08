@@ -12,7 +12,7 @@
                 <Frames>1</Frames>
                 <Position>0</Position>
                 <SortOrder>1</SortOrder>
-                <FillType>sliced</FillType>
+                <FillType>simple</FillType>
             </Part>
             <Part>
                 <Name>icon</Name>
@@ -21,7 +21,7 @@
                 <Frames>1</Frames>
                 <Position>0</Position>
                 <SortOrder>2</SortOrder>
-                <FillType>sliced</FillType>
+                <FillType>simple</FillType>
             </Part>
         </SpriteData>
         
@@ -35,7 +35,7 @@
                 <Frames>1</Frames>
                 <Position>0</Position>
                 <SortOrder>1</SortOrder>
-                <FillType>sliced</FillType>
+                <FillType>simple</FillType>
             </Part>
             <Part>
                 <Name>icon</Name>
@@ -44,7 +44,7 @@
                 <Frames>1</Frames>
                 <Position>0</Position>
                 <SortOrder>2</SortOrder>
-                <FillType>sliced</FillType>
+                <FillType>simple</FillType>
             </Part>
         </SpriteData>
         
@@ -58,7 +58,7 @@
                 <Frames>1</Frames>
                 <Position>0</Position>
                 <SortOrder>1</SortOrder>
-                <FillType>sliced</FillType>
+                <FillType>simple</FillType>
             </Part>
             <Part>
                 <Name>icon</Name>
@@ -67,7 +67,7 @@
                 <Frames>1</Frames>
                 <Position>0</Position>
                 <SortOrder>2</SortOrder>
-                <FillType>sliced</FillType>
+                <FillType>simple</FillType>
             </Part>
         </SpriteData>
         
@@ -81,7 +81,7 @@
                 <Frames>1</Frames>
                 <Position>0</Position>
                 <SortOrder>1</SortOrder>
-                <FillType>sliced</FillType>
+                <FillType>simple</FillType>
             </Part>
             <Part>
                 <Name>icon</Name>
@@ -90,7 +90,7 @@
                 <Frames>1</Frames>
                 <Position>0</Position>
                 <SortOrder>2</SortOrder>
-                <FillType>sliced</FillType>
+                <FillType>simple</FillType>
             </Part>
         </SpriteData>
         
@@ -104,7 +104,7 @@
                 <Frames>1</Frames>
                 <Position>0</Position>
                 <SortOrder>1</SortOrder>
-                <FillType>sliced</FillType>
+                <FillType>simple</FillType>
             </Part>
             <Part>
                 <Name>icon</Name>
@@ -113,7 +113,7 @@
                 <Frames>1</Frames>
                 <Position>0</Position>
                 <SortOrder>2</SortOrder>
-                <FillType>sliced</FillType>
+                <FillType>simple</FillType>
             </Part>
         </SpriteData>
     </TileSet>
