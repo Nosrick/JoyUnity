@@ -19,7 +19,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
                 }, 
                 "", 
                 0, 
-                new string[0], 
+                null, 
                 Speaker.LISTENER)
         {
             this.Initialise();

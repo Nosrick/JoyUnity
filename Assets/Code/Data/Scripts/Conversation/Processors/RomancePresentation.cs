@@ -19,7 +19,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
             },
             "Is a <1> relationship okay?",
             0,
-            new string[0],
+            null,
             Speaker.LISTENER,
             new RNG())
         {

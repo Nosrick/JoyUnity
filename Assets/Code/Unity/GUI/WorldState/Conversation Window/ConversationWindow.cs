@@ -27,14 +27,23 @@ namespace JoyLib.Code.Unity.GUI
         {
             this.MenuItem.SetActive(false);
             
-            if (GlobalConstants.GameManager.ConversationEngine is null == false && this.ConversationEngine is null)
+            if (GlobalConstants.GameManager.ConversationEngine is null == false 
+                && (this.ConversationEngine is null
+                || this.ConversationEngine.GUID != GlobalConstants.GameManager.ConversationEngine?.GUID))
             {
                 this.MenuList = new List<ConversationMenu>();
+                
                 this.ConversationEngine = GlobalConstants.GameManager.ConversationEngine;
-                this.ConversationEngine.OnOpen += new EventHandler(this.SetActors);
-                this.ConversationEngine.OnConverse += new EventHandler(this.SetTitle);
-                this.ConversationEngine.OnConverse += new EventHandler(this.CreateMenuItems);
-                this.ConversationEngine.OnClose += new EventHandler(this.CloseMe);
+                
+                this.ConversationEngine.OnOpen -= this.SetActors;
+                this.ConversationEngine.OnConverse -= this.SetTitle;
+                this.ConversationEngine.OnConverse -= this.CreateMenuItems;
+                this.ConversationEngine.OnClose -= this.CloseMe;
+                
+                this.ConversationEngine.OnOpen += this.SetActors;
+                this.ConversationEngine.OnConverse += this.SetTitle;
+                this.ConversationEngine.OnConverse += this.CreateMenuItems;
+                this.ConversationEngine.OnClose += this.CloseMe;
             }
         }
 

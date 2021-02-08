@@ -36,6 +36,7 @@ namespace JoyLib.Code.Quests
         ~Quest()
         {
             GUIDManager.Instance.ReleaseGUID(this.ID);
+            GlobalConstants.GameManager.ItemHandler.CleanUpRewards(this.RewardGUIDs);
         }
 
         public bool AdvanceStep()

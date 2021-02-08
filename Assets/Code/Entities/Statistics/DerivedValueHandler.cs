@@ -18,24 +18,18 @@ namespace JoyLib.Code.Entities.Statistics
         protected Dictionary<string, Color> DerivedValueTextColours { get; set; }
         protected Dictionary<string, Color> DerivedValueOutlineColours { get; set; }
         
-        protected static IEntityStatisticHandler StatisticHandler { get; set; }
-        protected static IEntitySkillHandler SkillHandler { get; set; }
+        protected IEntityStatisticHandler StatisticHandler { get; set; }
+        protected IEntitySkillHandler SkillHandler { get; set; }
 
         protected readonly string ENTITY_FILE;
         protected readonly string ITEM_FILE;
 
-        public DerivedValueHandler(IEntityStatisticHandler statisticHandler = null,
-            IEntitySkillHandler skillHandler = null)
+        public DerivedValueHandler(
+            IEntityStatisticHandler statisticHandler,
+            IEntitySkillHandler skillHandler)
         {
-            if (StatisticHandler is null)
-            {
-                StatisticHandler = statisticHandler;
-            }
-
-            if (SkillHandler is null)
-            {
-                SkillHandler = skillHandler;
-            }
+            this.StatisticHandler = statisticHandler;
+            this.SkillHandler = skillHandler;
 
             this.ENTITY_FILE = Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER +
                                "EntityDerivedValues.xml";

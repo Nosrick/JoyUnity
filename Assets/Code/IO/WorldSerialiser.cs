@@ -215,6 +215,8 @@ namespace JoyLib.Code.IO
             List<IWorldInstance> worlds = overworld.GetWorlds(overworld);
             foreach (IItemInstance item in items)
             {
+                item.Deserialise();
+                
                 foreach (ISpriteState state in item.States)
                 {
                     this.SetUpSpriteStates(item.TileSet, state);

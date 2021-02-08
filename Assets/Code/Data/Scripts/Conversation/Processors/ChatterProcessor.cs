@@ -6,7 +6,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
 {
     public class ChatterProcessor : TopicData
     {
-        protected static IRumourMill RumourMill
+        protected IRumourMill RumourMill
         {
             get;
             set;
@@ -19,7 +19,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
                 new[] { "Thanks" }, 
                 "", 
                 0, 
-                new string[0], 
+                null, 
                 Speaker.LISTENER,
                 new RNG())
         {
@@ -28,25 +28,30 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
 
         protected void Initialise()
         {
-            if (RumourMill is null)
+            if (this.RumourMill is null)
             {
-                RumourMill = new ConcreteRumourMill();
+                this.RumourMill = GlobalConstants.GameManager?.RumourMill;
             }
         }
 
         protected override ITopic[] FetchNextTopics()
         {
+            this.Initialise();
+            
             return new ITopic[]
             {
                 new TopicData(
                     new ITopicCondition[0],
                     "ChatterTopic",
                     new string[] {"Thanks"},
-                    RumourMill.GetRandom(ConversationEngine.Listener.MyWorld.GetOverworld()).Words,
+                    this.RumourMill.GetRandom(ConversationEngine.Listener.MyWorld.GetOverworld()).Words,
                     0,
-                    new string[0],
+                    null,
                     Speaker.LISTENER,
-                    new RNG())
+                    new RNG(),
+                    "",
+                    this.ConversationEngine,
+                    this.RelationshipHandler)
             };
         }
     }

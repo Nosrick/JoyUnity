@@ -8,6 +8,7 @@ using JoyLib.Code.Conversation.Conversations;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Helpers;
+using JoyLib.Code.Managers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.Unity.GUI;
 using UnityEngine;
@@ -46,6 +47,12 @@ namespace JoyLib.Code.Conversation
             get;
             protected set;
         }
+
+        public long GUID
+        {
+            get;
+            protected set;
+        }
         
         public string ListenerInfo { get; protected set; }
 
@@ -63,6 +70,8 @@ namespace JoyLib.Code.Conversation
             this.m_Topics = this.LoadTopics();
 
             this.m_CurrentTopics = new List<ITopic>();
+
+            this.GUID = GUIDManager.Instance.AssignGUID();
         }
 
         protected List<ITopic> LoadTopics()
@@ -108,8 +117,10 @@ namespace JoyLib.Code.Conversation
                             conditions.Add(this.ParseCondition(condition));
                         }
 
-                        string[] actions = (from actionElement in line.Elements("Action")
+                        string[] actionStrings = (from actionElement in line.Elements("Action")
                             select actionElement.GetAs<string>()).ToArray();
+
+                        IEnumerable<IJoyAction> actions = ScriptingEngine.Instance.FetchActions(actionStrings);
 
                         if (processor.Equals("NONE", StringComparison.OrdinalIgnoreCase) == false)
                         {
@@ -154,7 +165,9 @@ namespace JoyLib.Code.Conversation
                                     actions,
                                     speakerEnum,
                                     null,
-                                    link));
+                                    link,
+                                    this,
+                                    this.RelationshipHandler));
                         }
                     }
                 }
@@ -194,7 +207,9 @@ namespace JoyLib.Code.Conversation
                             link.Priority,
                             link.CachedActions,
                             link.Speaker,
-                            link.Link);
+                            link.Link,
+                            this,
+                            this.RelationshipHandler);
                     }
                     linked.Remove(topic);
                 }
@@ -401,6 +416,11 @@ namespace JoyLib.Code.Conversation
             {
                 throw new InvalidOperationException("Could not parse conversation condition line " + conditionString);
             }
+        }
+
+        ~ConversationEngine()
+        {
+            GUIDManager.Instance.ReleaseGUID(this.GUID);
         }
 
         public ITopic[] CurrentTopics

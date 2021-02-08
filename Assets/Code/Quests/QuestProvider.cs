@@ -18,7 +18,7 @@ namespace JoyLib.Code.Quests
 
         public List<IQuestAction> Actions { get; protected set; }
         
-        protected static BagOfGoldHelper BagOfGoldHelper { get; set; }
+        protected BagOfGoldHelper BagOfGoldHelper { get; set; }
 
         public QuestProvider(
             IEntityRelationshipHandler entityRelationshipHandler,
@@ -26,7 +26,7 @@ namespace JoyLib.Code.Quests
             IItemFactory itemFactory,
             RNG roller)
         {
-            BagOfGoldHelper = new BagOfGoldHelper(itemHandler, itemFactory);
+            this.BagOfGoldHelper = new BagOfGoldHelper(itemHandler, itemFactory);
             this.Roller = roller;
             this.EntityRelationshipHandler = entityRelationshipHandler;
 
@@ -105,7 +105,7 @@ namespace JoyLib.Code.Quests
         {
             List<IItemInstance> rewards = new List<IItemInstance>();
             int reward = ((steps.Count * 100) + (this.EntityRelationshipHandler.GetHighestRelationshipValue(provider, questor)));
-            rewards.Add(BagOfGoldHelper.GetBagOfGold(reward));
+            rewards.Add(this.BagOfGoldHelper.GetBagOfGold(reward));
             foreach (IItemInstance item in rewards)
             {
                 item.SetOwner(questor.GUID);

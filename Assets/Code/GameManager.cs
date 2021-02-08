@@ -141,6 +141,8 @@ namespace JoyLib.Code
                 new QuestProvider(this.RelationshipHandler, this.ItemHandler, this.ItemFactory, this.Roller);
             this.QuestTracker = new QuestTracker(this.ItemHandler);
 
+            this.RumourMill = new ConcreteRumourMill();
+
             this.ConversationEngine = new ConversationEngine(this.RelationshipHandler);
 
             this.NaturalWeaponHelper = new NaturalWeaponHelper(this.MaterialHandler, this.ItemFactory);
@@ -148,21 +150,6 @@ namespace JoyLib.Code
             this.m_StateManager = new StateManager();
 
             this.WorldSerialiser = new WorldSerialiser();
-
-            this.LoadingMessage = "Setting static bad things";
-            TradeWindow.RelationshipHandler = this.RelationshipHandler;
-
-            TopicData.ConversationEngine = this.ConversationEngine;
-            TopicData.RelationshipHandler = this.RelationshipHandler;
-
-            Entity.QuestTracker = this.QuestTracker;
-            Entity.RelationshipHandler = this.RelationshipHandler;
-            Entity.SkillHandler = this.SkillHandler;
-            Entity.NaturalWeaponHelper = this.NaturalWeaponHelper;
-            Entity.DerivedValueHandler = this.DerivedValueHandler;
-
-            ItemInstance.EntityHandler = this.EntityHandler;
-            ItemInstance.ItemHandler = this.ItemHandler;
 
             this.Initialised = true;
             this.LoadingMessage = "Done!";
@@ -223,20 +210,6 @@ namespace JoyLib.Code
             this.ConversationEngine = new ConversationEngine(this.RelationshipHandler);
 
             this.NaturalWeaponHelper = new NaturalWeaponHelper(this.MaterialHandler, this.ItemFactory);
-            
-            TradeWindow.RelationshipHandler = this.RelationshipHandler;
-
-            TopicData.ConversationEngine = this.ConversationEngine;
-            TopicData.RelationshipHandler = this.RelationshipHandler;
-
-            Entity.QuestTracker = this.QuestTracker;
-            Entity.RelationshipHandler = this.RelationshipHandler;
-            Entity.SkillHandler = this.SkillHandler;
-            Entity.NaturalWeaponHelper = this.NaturalWeaponHelper;
-            Entity.DerivedValueHandler = this.DerivedValueHandler;
-
-            ItemInstance.EntityHandler = this.EntityHandler;
-            ItemInstance.ItemHandler = this.ItemHandler;
         }
         
         public bool BegunInitialisation { get; protected set; }
@@ -275,6 +248,8 @@ namespace JoyLib.Code
         public IAbilityHandler AbilityHandler { get; protected set; }
         public IDerivedValueHandler DerivedValueHandler { get; protected set; }
         public IVisionProviderHandler VisionProviderHandler { get; protected set; }
+        
+        public IRumourMill RumourMill { get; protected set; }
 
         public NaturalWeaponHelper NaturalWeaponHelper { get; protected set; }
         public RNG Roller { get; protected set; }

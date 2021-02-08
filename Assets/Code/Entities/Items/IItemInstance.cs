@@ -15,6 +15,8 @@ namespace JoyLib.Code.Entities.Items
 
         void IdentifyMe();
 
+        void Deserialise();
+
         long TakeMyItem(int index);
         
         bool Identified { get; }

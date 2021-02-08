@@ -64,6 +64,8 @@ namespace JoyLib.Code
         IDerivedValueHandler DerivedValueHandler { get; }
         IVisionProviderHandler VisionProviderHandler { get; }
         
+        IRumourMill RumourMill { get; }
+        
         NaturalWeaponHelper NaturalWeaponHelper { get; }
         
         RNG Roller { get; }

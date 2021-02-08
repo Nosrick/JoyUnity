@@ -15,7 +15,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
             new[] { "BaseTopics" },
             "It certainly is.",
             0,
-            new string[0], 
+            null,
             Speaker.LISTENER,
             new RNG())
         {

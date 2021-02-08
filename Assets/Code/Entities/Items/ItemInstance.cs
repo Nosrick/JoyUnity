@@ -84,9 +84,9 @@ namespace JoyLib.Code.Entities.Items
 
         public IEnumerable<ISpriteState> Sprites => this.States;
         
-        public static ILiveItemHandler ItemHandler { get; set; }
+        public ILiveItemHandler ItemHandler { get; set; }
         
-        public static ILiveEntityHandler EntityHandler { get; set; }
+        public ILiveEntityHandler EntityHandler { get; set; }
 
         public ItemInstance(
             BaseItemType type, 
@@ -141,10 +141,19 @@ namespace JoyLib.Code.Entities.Items
                 this.StateIndex = 0;
             }
 
+            this.ItemHandler = GlobalConstants.GameManager.ItemHandler;
+            this.EntityHandler = GlobalConstants.GameManager.EntityHandler;
+
             if (this.Prefab is null == false)
             {
                 this.Instantiate(true, gameObject, active);
             }
+        }
+
+        public void Deserialise()
+        {
+            this.EntityHandler = GlobalConstants.GameManager?.EntityHandler;
+            this.ItemHandler = GlobalConstants.GameManager?.ItemHandler;
         }
 
         public void Instantiate(bool recursive = true, GameObject gameObject = null, bool active = false)
@@ -195,7 +204,7 @@ namespace JoyLib.Code.Entities.Items
                 copy.UniqueAbilities,
                 copy.CachedActions.ToArray());
 
-            ItemHandler.AddItem(newItem);
+            this.ItemHandler.AddItem(newItem);
             return newItem;
         }
 

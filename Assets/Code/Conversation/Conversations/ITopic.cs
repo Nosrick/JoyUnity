@@ -1,6 +1,7 @@
-﻿using JoyLib.Code.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using JoyLib.Code.Entities;
+using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 
@@ -63,19 +64,11 @@ namespace JoyLib.Code.Conversation.Conversations
             string[] nextTopics,
             string words,
             int priority,
-            string[] cachedActions,
+            IEnumerable<IJoyAction> cachedActions,
             Speaker speaker,
-            string link = "");
-        
-        void Initialise(
-            ITopicCondition[] conditions,
-            string ID,
-            string[] nextTopics,
-            string words,
-            int priority,
-            IJoyAction[] actions,
-            Speaker speaker,
-            string link);
+            string link = "",
+            IConversationEngine conversationEngine = null,
+            IEntityRelationshipHandler relationshipHandler = null);
     }
 
     public class TopicComparer : IComparer<ITopic>

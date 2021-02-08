@@ -17,7 +17,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
                 new []{ "ListenerThanks" }, 
                 "I can do that.", 
                 0, 
-                new string[0], 
+                null, 
                 Speaker.INSTIGATOR)
         {
             this.Initialise();

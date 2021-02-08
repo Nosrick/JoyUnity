@@ -33,7 +33,9 @@ namespace JoyLib.Code.Unity.GUI
 
         public void Awake()
         {
-            if (ConversationEngine is null)
+            if (GlobalConstants.GameManager.ConversationEngine is null == false 
+                && (ConversationEngine is null
+                    || ConversationEngine.GUID != GlobalConstants.GameManager.ConversationEngine?.GUID))
             {
                 ConversationEngine = GlobalConstants.GameManager.ConversationEngine;
             }

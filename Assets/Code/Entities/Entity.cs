@@ -112,15 +112,15 @@ namespace JoyLib.Code.Entities
 
         public IEnumerable<IItemInstance> Contents => GlobalConstants.GameManager.ItemHandler.GetItems(this.m_Backpack);
         
-        public static IEntityRelationshipHandler RelationshipHandler { get; set; }
+        public IEntityRelationshipHandler RelationshipHandler { get; set; }
         
-        public static IEntitySkillHandler SkillHandler { get; set; }
+        public IEntitySkillHandler SkillHandler { get; set; }
         
-        public static IQuestTracker QuestTracker { get; set; }
+        public IQuestTracker QuestTracker { get; set; }
         
-        public static NaturalWeaponHelper NaturalWeaponHelper { get; set; }
+        public NaturalWeaponHelper NaturalWeaponHelper { get; set; }
         
-        public static IDerivedValueHandler DerivedValueHandler { get; set; }
+        public IDerivedValueHandler DerivedValueHandler { get; set; }
 
         protected readonly static string[] STANDARD_ACTIONS = new string[]
         {
@@ -246,6 +246,8 @@ namespace JoyLib.Code.Entities
             this.PlayerControlled = driver.PlayerControlled;
             this.Data = new NonUniqueDictionary<object, object>();
 
+            this.Initialise();
+
             this.SetCurrentTarget();
             this.ConstructDescription();
 
@@ -294,16 +296,24 @@ namespace JoyLib.Code.Entities
             RNG roller = null,
             string name = null) :
             this(template, statistics, derivedValues, needs, skills, abilities, cultures, job, gender, sex, sexuality, romance, position, sprites,
-                NaturalWeaponHelper?.MakeNaturalWeapon(template.Size), new EquipmentStorage(template.Slots),
+                GlobalConstants.GameManager.NaturalWeaponHelper?.MakeNaturalWeapon(template.Size), new EquipmentStorage(template.Slots),
                 new List<IItemInstance>(), new List<string>(), new List<IJob> { job }, world, driver, roller, name)
         {
+        }
+
+        protected void Initialise()
+        {
+            this.RelationshipHandler = GlobalConstants.GameManager.RelationshipHandler;
+            this.QuestTracker = GlobalConstants.GameManager.QuestTracker;
+            this.SkillHandler = GlobalConstants.GameManager.SkillHandler;
+            this.DerivedValueHandler = GlobalConstants.GameManager.DerivedValueHandler;
+            this.NaturalWeaponHelper = GlobalConstants.GameManager.NaturalWeaponHelper;
         }
 
         public void Deserialise(
             IEnumerable<ICulture> cultures)
         {
             this.m_Cultures = cultures.ToList();
-            
         }
 
         protected IEnumerable<Tuple<string, string>> ConstructDescription()

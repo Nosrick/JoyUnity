@@ -12,7 +12,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
                 new []{ "BaseTopics" },
                 decision,
                 0,
-                new string[0], 
+                null, 
                 Speaker.LISTENER,
                 new RNG())
         {}

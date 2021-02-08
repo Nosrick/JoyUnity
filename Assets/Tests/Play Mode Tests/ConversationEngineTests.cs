@@ -9,6 +9,7 @@ using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Helpers;
+using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.World;
 using Moq;
@@ -98,13 +99,13 @@ namespace Tests
                                                   && entity.Sentient == true
                                                   && entity.GUID == 2);
 
-            target = new ConversationEngine(relationshipHandler);
+            GlobalConstants.GameManager = Mock.Of<IGameManager>(
+                manager => manager.Player == this.instigator
+                           && manager.ConversationEngine == new ConversationEngine(relationshipHandler)
+                           && manager.RelationshipHandler == relationshipHandler
+                           && manager.RumourMill == new ConcreteRumourMill(new RNG()));
 
-            TopicData.ConversationEngine = target;
-            TopicData.RelationshipHandler = relationshipHandler;
-
-            IGameManager gameManager = Mock.Of<IGameManager>(
-                manager => manager.Player == instigator);
+            this.target = GlobalConstants.GameManager.ConversationEngine;
             
             friendship.AddParticipant(listener);
             friendship.AddParticipant(instigator);

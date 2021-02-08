@@ -25,9 +25,9 @@ namespace JoyLib.Code.Conversation.Conversations
         
         public IJoyAction[] CachedActions { get; protected set; }
         
-        public static IConversationEngine ConversationEngine { get; set; }
+        public IConversationEngine ConversationEngine { get; set; }
         
-        public static IEntityRelationshipHandler RelationshipHandler { get; set; }
+        public IEntityRelationshipHandler RelationshipHandler { get; set; }
         
         public TopicData(
             ITopicCondition[] conditions,
@@ -35,12 +35,14 @@ namespace JoyLib.Code.Conversation.Conversations
             string[] nextTopics,
             string words,
             int priority,
-            string[] cachedActions,
+            IEnumerable<IJoyAction> cachedActions,
             Speaker speaker,
             RNG roller = null,
-            string link = "")
+            string link = "",
+            IConversationEngine conversationEngine = null,
+            IEntityRelationshipHandler relationshipHandler = null)
         {
-            this.Roller = roller is null ? new RNG( ): roller;
+            this.Roller = roller ?? new RNG();
 
             this.Initialise(
                 conditions,
@@ -50,7 +52,9 @@ namespace JoyLib.Code.Conversation.Conversations
                 priority,
                 cachedActions,
                 speaker,
-                link);
+                link,
+                conversationEngine,
+                relationshipHandler);
         }
         
         public string[] GetConditionTags()
@@ -131,9 +135,11 @@ namespace JoyLib.Code.Conversation.Conversations
             string[] nextTopics, 
             string words, 
             int priority,
-            string[] cachedActions,
+            IEnumerable<IJoyAction> cachedActions,
             Speaker speaker,
-            string link = "")
+            string link = "",
+            IConversationEngine conversationEngine = null,
+            IEntityRelationshipHandler relationshipHandler = null)
         {
             this.Conditions = conditions;
             this.ID = ID;
@@ -141,45 +147,43 @@ namespace JoyLib.Code.Conversation.Conversations
             this.Words = words;
             this.Priority = priority;
 
-            this.CachedActions = this.GetCachedActions(cachedActions);
+            List<IJoyAction> actions = cachedActions is null ? new List<IJoyAction>() : cachedActions.ToList();
+            actions.AddRange(this.GetStandardActions());
+
+            this.CachedActions = actions.ToArray();
+
+            this.ConversationEngine = conversationEngine ?? GlobalConstants.GameManager?.ConversationEngine;
+            this.RelationshipHandler = relationshipHandler ?? GlobalConstants.GameManager?.RelationshipHandler;
 
             this.Speaker = speaker;
             this.Link = link;
         }
 
-        public void Initialise(
-            ITopicCondition[] conditions,
-            string ID,
-            string[] nextTopics,
-            string words,
-            int priority,
-            IJoyAction[] actions,
-            Speaker speaker,
-            string link)
+        protected IJoyAction[] GetStandardActions()
         {
-            this.Conditions = conditions;
-            this.ID = ID;
-            this.NextTopics = nextTopics;
-            this.Words = words;
-            this.Priority = priority;
+            string[] standardActions = {"fulfillneedaction", "modifyrelationshippointsaction"};
+            IJoyAction[] actions = (ScriptingEngine.Instance.FetchActions(standardActions)).ToArray();
 
-            this.CachedActions = actions;
-
-            this.Speaker = speaker;
-            this.Link = link;
+            return actions;
         }
 
-        protected IJoyAction[] GetCachedActions(string[] actionNames)
+        protected void GetBits()
         {
-            List<IJoyAction> actions = new List<IJoyAction>(ScriptingEngine.Instance.FetchActions(actionNames));
-            string[] standardActions = new[] {"fulfillneedaction", "modifyrelationshippointsaction"};
-            actions.AddRange(ScriptingEngine.Instance.FetchActions(standardActions));
+            if (this.ConversationEngine is null)
+            {
+                this.ConversationEngine = GlobalConstants.GameManager?.ConversationEngine;
+            }
 
-            return actions.ToArray();
+            if (this.RelationshipHandler is null)
+            {
+                this.RelationshipHandler = GlobalConstants.GameManager?.RelationshipHandler;
+            }
         }
 
         public virtual ITopic[] Interact(IEntity instigator, IEntity listener)
         {
+            this.GetBits();
+            
             IJoyAction fulfillNeed = this.CachedActions.First(action => action.Name.Equals("fulfillneedaction", StringComparison.OrdinalIgnoreCase));
             IJoyAction influence = this.CachedActions.First(action =>
                 action.Name.Equals("modifyrelationshippointsaction", StringComparison.OrdinalIgnoreCase));
@@ -202,7 +206,7 @@ namespace JoyLib.Code.Conversation.Conversations
                 tags,
                 new object[] { listener.Statistics[EntityStatistic.PERSONALITY].Value });
 
-            bool? isFamily = RelationshipHandler?.IsFamily(instigator, listener);
+            bool? isFamily = this.RelationshipHandler?.IsFamily(instigator, listener);
             
             if (isFamily is null == false && isFamily == true)
             {
@@ -217,7 +221,7 @@ namespace JoyLib.Code.Conversation.Conversations
 
         protected virtual ITopic[] FetchNextTopics()
         {
-            List<ITopic> nextTopics = ConversationEngine.AllTopics
+            List<ITopic> nextTopics = this.ConversationEngine.AllTopics
                 .Where(topic => this.NextTopics.Contains(topic.ID))
                 .ToList();
 

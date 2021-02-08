@@ -26,12 +26,6 @@
     <Speaker>instigator</Speaker>
   </Line>
   <Line>
-    <Text>I have something for you.</Text>
-    <Processor>GiftProcessor</Processor>
-    <Next>ListenerThanks</Next>
-    <Speaker>instigator</Speaker>
-  </Line>
-  <Line>
     <Text>Fancy a quicky?</Text>
     <Processor>SexProposalProcessor</Processor>
     <Next>SexProposal</Next>

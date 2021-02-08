@@ -20,7 +20,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
                 new []{ "Thanks" },
                 "",
                 0,
-                new string[0], 
+                null, 
                 Speaker.LISTENER,
                 new RNG())
         {
@@ -41,7 +41,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
                     "LocalAreaInfo",
                     new []{ "Thanks" }, this.GetAreaInfo(this.Listener),
                     0,
-                    new string[0], 
+                    null, 
                     Speaker.LISTENER,
                     new RNG()) 
             };

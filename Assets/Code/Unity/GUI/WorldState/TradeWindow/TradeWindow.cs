@@ -28,7 +28,7 @@ namespace JoyLib.Code.Unity.GUI
         [SerializeField] protected ItemContainer RightInventory;
         [SerializeField] protected ItemContainer RightOffering;
 
-        public static IEntityRelationshipHandler RelationshipHandler { get; set; }
+        public IEntityRelationshipHandler RelationshipHandler { get; set; }
 
         protected RectTransform RectTransform { get; set; }
 
@@ -46,6 +46,8 @@ namespace JoyLib.Code.Unity.GUI
             this.LeftOffering.OnRemoveItem += this.Tally;
             this.RightOffering.OnAddItem += this.Tally;
             this.RightOffering.OnRemoveItem += this.Tally;
+
+            this.RelationshipHandler = GlobalConstants.GameManager.RelationshipHandler;
         }
 
         public void OnDisable()

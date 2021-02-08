@@ -18,7 +18,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
                 }, 
                 offeredQuest.ToString(), 
                 0,
-                new string[0], 
+                null,
                 Speaker.LISTENER)
         {
             this.OfferedQuest = offeredQuest;

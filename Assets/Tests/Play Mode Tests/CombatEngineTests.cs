@@ -84,8 +84,6 @@ namespace Tests
                 this.abilityHandler,
                 new RNG());
 
-            ItemInstance.ItemHandler = this.itemHandler;
-
             GlobalConstants.GameManager = Mock.Of<IGameManager>(
                 manager => manager.ItemHandler == this.itemHandler
                 && manager.ObjectIconHandler == this.objectIconHandler);

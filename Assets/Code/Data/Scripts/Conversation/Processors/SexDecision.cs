@@ -15,7 +15,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
                 new string[0],
                 decision,
                 0,
-                new string[0],
+                null,
                 Speaker.LISTENER)
         {
             this.Happening = happening;
@@ -70,7 +70,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
                         new string[0],
                         this.Words,
                         0,
-                        new string[0],
+                        null,
                         Speaker.LISTENER)
                 };
             }

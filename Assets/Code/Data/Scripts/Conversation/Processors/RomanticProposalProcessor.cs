@@ -18,7 +18,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
                 }, 
                 "words", 
                 0, 
-                new string[0], 
+                null,
                 Speaker.INSTIGATOR)
         {
         }
@@ -53,7 +53,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
                         new[] {"BaseTopics"},
                         "Uh, no thanks.",
                         0,
-                        new string[0],
+                        null,
                         Speaker.LISTENER)
                 };
             }

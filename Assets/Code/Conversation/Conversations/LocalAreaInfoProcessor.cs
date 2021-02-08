@@ -13,7 +13,7 @@ namespace JoyLib.Code.Conversation.Conversations
                 new [] { "Thanks" }, 
                 "Can you tell me anything about this place?", 
                 0, 
-                new string[0],
+                null,
                 Speaker.INSTIGATOR)
         {
         }
@@ -53,7 +53,7 @@ namespace JoyLib.Code.Conversation.Conversations
                     },
                     words,
                     0,
-                    new string[0],
+                    null,
                     Speaker.LISTENER)
             };
         }
