@@ -8,7 +8,7 @@ namespace JoyLib.Code.Entities.Items
     {
         BaseItemType[] FindItemsOfType(string[] tags, int tolerance = 1);
 
-        bool AddItem(IItemInstance item, bool addToWorld = false);
+        bool AddItem(IItemInstance item);
         bool AddItems(IEnumerable<IItemInstance> item, bool addToWorld = false);
 
         bool RemoveItemFromWorld(long GUID);

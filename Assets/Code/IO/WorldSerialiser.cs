@@ -104,7 +104,7 @@ namespace JoyLib.Code.IO
             array = File.ReadAllBytes(directory + "/items.dat");
             IEnumerable<IItemInstance> items =
                 SerializationUtility.DeserializeValue<IEnumerable<IItemInstance>>(array, dataFormat);
-            this.Items(items);
+            this.Items(items, world);
 
             array = File.ReadAllBytes(directory + "/quests.dat");
             IEnumerable<IQuest> quests = SerializationUtility.DeserializeValue<IEnumerable<IQuest>>(array, dataFormat);
@@ -210,8 +210,9 @@ namespace JoyLib.Code.IO
             }
         }
 
-        private void Items(IEnumerable<IItemInstance> items)
+        private void Items(IEnumerable<IItemInstance> items, IWorldInstance overworld)
         {
+            List<IWorldInstance> worlds = overworld.GetWorlds(overworld);
             foreach (IItemInstance item in items)
             {
                 foreach (ISpriteState state in item.States)
@@ -219,10 +220,8 @@ namespace JoyLib.Code.IO
                     this.SetUpSpriteStates(item.TileSet, state);
                 }
 
-                if (item is IItemContainer container)
-                {
-                    //this.HandleContents(container);
-                }
+                item.MyWorld = worlds.FirstOrDefault(world => world.ItemGUIDs.Contains(item.GUID));
+                
                 GlobalConstants.GameManager.ItemHandler.AddItem(item);
             }
         }

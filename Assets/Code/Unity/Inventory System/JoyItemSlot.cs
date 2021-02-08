@@ -214,6 +214,7 @@ namespace JoyLib.Code.Unity.GUI
                 }
 
                 this.Container.RemoveItem(this.Item);
+                this.Item.InWorld = true;
                 this.Item = null;
             }
         }

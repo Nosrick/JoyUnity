@@ -140,7 +140,7 @@ namespace JoyLib.Code.Entities.Items
             return matchingTypes.ToArray();
         }
 
-        public bool AddItem(IItemInstance item, bool addToWorld = false)
+        public bool AddItem(IItemInstance item)
         {
             if (this.LiveItems.ContainsKey(item.GUID))
             {
@@ -148,7 +148,7 @@ namespace JoyLib.Code.Entities.Items
             }
 
             this.LiveItems.Add(item.GUID, item);
-            if (addToWorld 
+            if (item.InWorld 
                 && item.MyWorld is null == false 
                 && item.MyWorld.Objects.Any(o => o.GUID == item.GUID) == false)
             {

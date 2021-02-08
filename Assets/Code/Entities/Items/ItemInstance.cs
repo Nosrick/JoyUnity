@@ -387,6 +387,8 @@ namespace JoyLib.Code.Entities.Items
 
                 this.CalculateValue();
                 this.ConstructDescription();
+
+                actor.InWorld = false;
                 
                 this.ItemAdded?.Invoke(this, new ItemChangedEventArgs() { Item = actor });
                 return true;
@@ -514,6 +516,13 @@ namespace JoyLib.Code.Entities.Items
             {
                 return this.m_Type.Weight + this.Contents.Sum(item => item.Weight);
             }
+        }
+
+        [OdinSerialize]
+        public bool InWorld
+        {
+            get;
+            set;
         }
 
         public string WeightString 

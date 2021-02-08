@@ -243,6 +243,10 @@ namespace JoyLib.Code.World
             {
                 this.m_Objects.Add(objectRef);
                 this.m_ItemGUIDs.Add(objectRef.GUID);
+                if (objectRef is IItemInstance item)
+                {
+                    item.InWorld = true;
+                }
             }
 
             objectRef.MyWorld = this;
@@ -271,6 +275,7 @@ namespace JoyLib.Code.World
             {
                 this.IsDirty = true;
 
+                itemRef.InWorld = false;
                 itemRef.MyWorld = null;
                 itemRef.MonoBehaviourHandler.gameObject.SetActive(false);
             }

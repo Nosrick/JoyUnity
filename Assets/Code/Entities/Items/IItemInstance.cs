@@ -40,5 +40,7 @@ namespace JoyLib.Code.Entities.Items
         BaseItemType ItemType { get; }
         
         int Value { get; }
+
+        bool InWorld { get; set; }
     }
 }
