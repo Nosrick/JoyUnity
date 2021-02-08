@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using Code.Unity.GUI.Managed_Assets;
 using JoyLib.Code.Events;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
@@ -22,7 +23,7 @@ namespace JoyLib.Code.Unity.GUI
 
         protected Canvas MainUI { get; set; }
 
-        public IDictionary<string, ISpriteState> Backgrounds { get; protected set; }
+        public IDictionary<string, ISpriteState> UISprites { get; protected set; }
         public IDictionary<string, ISpriteState> Cursors { get; protected set; }
 
         protected IDictionary<string, TMP_FontAsset> LoadedFonts { get; set; }
@@ -36,7 +37,7 @@ namespace JoyLib.Code.Unity.GUI
         protected IDictionary<string, Tuple<float, float>> StandardFontSizes { get; set; }
         protected IDictionary<string, Tuple<float, float>> DyslexicModeFontSizes { get; set; }
         public IDictionary<string, IDictionary<string, Color>> CursorColours { get; protected set; }
-        public IDictionary<string, IDictionary<string, Color>> BackgroundColours { get; protected set; }
+        public IDictionary<string, IDictionary<string, Color>> UISpriteColours { get; protected set; }
 
         protected bool DyslexicMode { get; set; }
         protected IDictionary<string, TMP_FontAsset> DyslexicModeFonts { get; set; }
@@ -55,7 +56,7 @@ namespace JoyLib.Code.Unity.GUI
                 this.MainUI = GameObject.Find("MainUI").GetComponent<Canvas>();
                 this.GUIs = new HashSet<GUIData>();
                 this.ActiveGUIs = new HashSet<GUIData>();
-                this.Backgrounds = GlobalConstants.GameManager.ObjectIconHandler.GetTileSet("Windows")
+                this.UISprites = GlobalConstants.GameManager.ObjectIconHandler.GetTileSet("Windows")
                     .Select(data => new SpriteState(data.m_Name, data))
                     .Cast<ISpriteState>()
                     .ToDictionary(state => state.Name, state => state);
@@ -67,7 +68,7 @@ namespace JoyLib.Code.Unity.GUI
                     .ToDictionary(state => state.Name, state => state);
 
                 this.CursorColours = new Dictionary<string, IDictionary<string, Color>>();
-                this.BackgroundColours = new Dictionary<string, IDictionary<string, Color>>();
+                this.UISpriteColours = new Dictionary<string, IDictionary<string, Color>>();
                 this.LoadedFonts = new Dictionary<string, TMP_FontAsset>
                 {
                     {"default", Resources.Load<TMP_FontAsset>("Fonts/OpenDyslexic3")}
@@ -164,7 +165,7 @@ namespace JoyLib.Code.Unity.GUI
             bool crossFade = false,
             float duration = 0.1f)
         {
-            this.BackgroundColours = background;
+            this.UISpriteColours = background;
             this.CursorColours = cursor;
             this.FontColours = mainFontColours;
 
@@ -239,7 +240,7 @@ namespace JoyLib.Code.Unity.GUI
             ManagedBackground[] backgrounds = gui.GetComponentsInChildren<ManagedBackground>(true);
             foreach (ManagedBackground background in backgrounds)
             {
-                if (this.Backgrounds.TryGetValue(background.ElementName, out ISpriteState state))
+                if (this.UISprites.TryGetValue(background.ElementName, out ISpriteState state))
                 {
                     background.SetBackground(state);
                 }
@@ -250,7 +251,7 @@ namespace JoyLib.Code.Unity.GUI
                         background.name, LogLevel.Warning);
                 }
 
-                if (this.BackgroundColours.TryGetValue(background.ElementName, out IDictionary<string, Color> colours))
+                if (this.UISpriteColours.TryGetValue(background.ElementName, out IDictionary<string, Color> colours))
                 {
                     background.SetColours(colours, crossFade, duration);
                 }
@@ -287,6 +288,32 @@ namespace JoyLib.Code.Unity.GUI
                     GlobalConstants.ActionLog.AddText("Could not find font colour " + font.ElementName +
                                                       " on element " + font.name,
                         LogLevel.Warning);
+                }
+            }
+
+            ManagedIcon[] icons = gui.GetComponentsInChildren<ManagedIcon>(true);
+            foreach (ManagedIcon icon in icons)
+            {
+                if (this.UISprites.TryGetValue(icon.ElementName, out ISpriteState state))
+                {
+                    icon.AddSpriteState(state);
+                }
+                else
+                {
+                    GlobalConstants.ActionLog.AddText(
+                        "Could not find background " + icon.ElementName + " on element " +
+                        icon.name, LogLevel.Warning);
+                }
+
+                if (this.UISpriteColours.TryGetValue(icon.ElementName, out IDictionary<string, Color> colours))
+                {
+                    icon.OverrideAllColours(colours, crossFade, duration);
+                }
+                else
+                {
+                    GlobalConstants.ActionLog.AddText("Could not find background colours " + icon.ElementName +
+                                                      " on element " +
+                                                      icon.name, LogLevel.Warning);
                 }
             }
         }
@@ -342,13 +369,13 @@ namespace JoyLib.Code.Unity.GUI
             {
                 if (background.HasBackground == false)
                 {
-                    background.SetBackground(this.Backgrounds[background.ElementName]);
+                    background.SetBackground(this.UISprites[background.ElementName]);
                 }
 
                 if (GlobalConstants.GameManager.Player is null == false
                     && background.HasColours == false)
                 {
-                    background.SetColours(this.BackgroundColours[background.ElementName]);
+                    background.SetColours(this.UISpriteColours[background.ElementName]);
                 }
             }
 

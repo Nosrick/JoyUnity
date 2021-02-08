@@ -47,14 +47,14 @@ namespace JoyLib.Code.Unity.GUI
 
         bool AreAnyOpen(bool includeAlwaysOpen = false);
 
-        IDictionary<string, ISpriteState> Backgrounds { get; }
+        IDictionary<string, ISpriteState> UISprites { get; }
         IDictionary<string, ISpriteState> Cursors { get; }
 
         IDictionary<string, TMP_FontAsset> FontsInUse { get; }
         
         IDictionary<string, IDictionary<string, Color>> CursorColours { get; }
         
-        IDictionary<string, IDictionary<string, Color>> BackgroundColours { get; }
+        IDictionary<string, IDictionary<string, Color>> UISpriteColours { get; }
         
         IDictionary<string, Tuple<float, float>> FontSizesInUse { get; }
     }
