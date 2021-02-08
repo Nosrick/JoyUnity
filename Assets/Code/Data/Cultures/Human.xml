@@ -249,12 +249,16 @@
 						<Value>#823219ff</Value>
 					</Colour>
 				</Data>
+				
 				<Data>
-					<Name>CharacterSheetIcon</Name>
+					<Name>IconBackground</Name>
 					<Colour>
 						<Name>background</Name>
 						<Value>#823219ff</Value>
 					</Colour>
+				</Data>
+				<Data>
+					<Name>CharacterSheetIcon</Name>
 					<Colour>
 						<Name>icon</Name>
 						<Value>#490606ff</Value>
@@ -263,20 +267,12 @@
 				<Data>
 					<Name>InventoryIcon</Name>
 					<Colour>
-						<Name>background</Name>
-						<Value>#823219ff</Value>
-					</Colour>
-					<Colour>
 						<Name>icon</Name>
 						<Value>#490606ff</Value>
 					</Colour>
 				</Data>
 				<Data>
 					<Name>EquipmentIcon</Name>
-					<Colour>
-						<Name>background</Name>
-						<Value>#823219ff</Value>
-					</Colour>
 					<Colour>
 						<Name>icon</Name>
 						<Value>#490606ff</Value>
@@ -285,20 +281,12 @@
 				<Data>
 					<Name>JobManagementIcon</Name>
 					<Colour>
-						<Name>background</Name>
-						<Value>#823219ff</Value>
-					</Colour>
-					<Colour>
 						<Name>icon</Name>
 						<Value>#490606ff</Value>
 					</Colour>
 				</Data>
 				<Data>
 					<Name>QuestJournalIcon</Name>
-					<Colour>
-						<Name>background</Name>
-						<Value>#823219ff</Value>
-					</Colour>
 					<Colour>
 						<Name>icon</Name>
 						<Value>#490606ff</Value>

@@ -110,19 +110,18 @@ namespace JoyLib.Code.Unity.GUI
         {
             VerticalLayoutGroup layoutGroup = this.m_Container.GetComponent<VerticalLayoutGroup>();
             RectTransform childRect = this.DerivedValuePrefab.GetComponent<RectTransform>();
+            float spacingFix = this.m_Container.childCount > 1 ? layoutGroup.spacing : 0;
             float height = this.m_Container.childCount *
                            (childRect.rect.height
-                            + layoutGroup.padding.top
-                            + layoutGroup.padding.bottom
-                            + layoutGroup.spacing);
+                            + layoutGroup.spacing)
+                           + layoutGroup.padding.top
+                           + layoutGroup.padding.bottom
+                           - spacingFix;
 
             float width = childRect.rect.width + layoutGroup.padding.left + layoutGroup.padding.right;
-            
+
             this.RectTransform.anchorMin = new Vector2(1.0f - width / Screen.width, 0);
             this.RectTransform.anchorMax = new Vector2(1, height / Screen.height);
-            
-            this.RectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
-            this.RectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
         }
     }
 }

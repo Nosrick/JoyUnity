@@ -894,6 +894,49 @@
 						<Value>#b43232ff</Value>
 					</Colour>
 				</Data>
+
+				<Data>
+					<Name>IconBackground</Name>
+					<Colour>
+						<Name>background</Name>
+						<Value>#f04b36ff</Value>
+					</Colour>
+				</Data>
+				<Data>
+					<Name>CharacterSheetIcon</Name>
+					<Colour>
+						<Name>icon</Name>
+						<Value>#b43232ff</Value>
+					</Colour>
+				</Data>
+				<Data>
+					<Name>InventoryIcon</Name>
+					<Colour>
+						<Name>icon</Name>
+						<Value>#b43232ff</Value>
+					</Colour>
+				</Data>
+				<Data>
+					<Name>EquipmentIcon</Name>
+					<Colour>
+						<Name>icon</Name>
+						<Value>#b43232ff</Value>
+					</Colour>
+				</Data>
+				<Data>
+					<Name>JobManagementIcon</Name>
+					<Colour>
+						<Name>icon</Name>
+						<Value>#b43232ff</Value>
+					</Colour>
+				</Data>
+				<Data>
+					<Name>QuestJournalIcon</Name>
+					<Colour>
+						<Name>icon</Name>
+						<Value>#b43232ff</Value>
+					</Colour>
+				</Data>
 			</BackgroundColours>
 
 			<FontColours>

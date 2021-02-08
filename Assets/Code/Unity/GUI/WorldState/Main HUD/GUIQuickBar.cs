@@ -42,7 +42,7 @@ namespace JoyLib.Code.Unity.GUI
             Vector2 anchorDif = myRect.anchorMax - myRect.anchorMin;
 
             myRect.anchorMin = new Vector2(myRect.anchorMin.x, this.m_DerivedValuesContainer.RectTransform.anchorMax.y);
-            myRect.anchorMax = new Vector2(myRect.anchorMax.x , myRect.anchorMin.y + anchorDif.y);
+            myRect.anchorMax = new Vector2(1.0f , myRect.anchorMin.y + anchorDif.y);
             //myRect.anchoredPosition = Vector2.zero;
             
             this.Initialised = true;
