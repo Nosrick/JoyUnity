@@ -15,6 +15,11 @@ namespace JoyLib.Code.Entities
         {
             try
             {
+                if (this.Entities.ContainsKey(created.GUID))
+                {
+                    return false;
+                }
+                
                 this.Entities.Add(created.GUID, created);
 
                 if(created.PlayerControlled)

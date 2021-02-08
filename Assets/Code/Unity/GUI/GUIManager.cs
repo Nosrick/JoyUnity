@@ -56,11 +56,8 @@ namespace JoyLib.Code.Unity.GUI
                 this.MainUI = GameObject.Find("MainUI").GetComponent<Canvas>();
                 this.GUIs = new HashSet<GUIData>();
                 this.ActiveGUIs = new HashSet<GUIData>();
-                this.UISprites = GlobalConstants.GameManager.ObjectIconHandler.GetTileSet("Windows")
-                    .Select(data => new SpriteState(data.m_Name, data))
-                    .Cast<ISpriteState>()
-                    .ToDictionary(state => state.Name, state => state);
 
+                this.UISprites = new Dictionary<string, ISpriteState>();
 
                 this.Cursors = GlobalConstants.GameManager.ObjectIconHandler.GetTileSet("Cursors")
                     .Select(data => new SpriteState(data.m_Name, data))
@@ -91,6 +88,7 @@ namespace JoyLib.Code.Unity.GUI
                     {"default", new Tuple<float, float>(8f, 36f)}
                 };
                 this.LoadDefaults();
+                this.LoadDefinitions();
 
                 GlobalConstants.GameManager.SettingsManager.OnSettingChange -= this.SettingChanged;
                 GlobalConstants.GameManager.SettingsManager.OnSettingChange += this.SettingChanged;
@@ -144,7 +142,7 @@ namespace JoyLib.Code.Unity.GUI
                 {
                     string name = data.Element("Name").GetAs<string>();
                     this.DyslexicModeFonts.Add(
-                        name, 
+                        name,
                         Resources.Load<TMP_FontAsset>("Fonts/" + data.Element("Value")));
                     this.DyslexicModeFontSizes.Add(
                         name,
@@ -158,10 +156,35 @@ namespace JoyLib.Code.Unity.GUI
                 .GetSetting(SettingNames.DYSLEXIC_MODE).objectValue;
         }
 
+        protected void LoadDefinitions()
+        {
+            string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER +
+                                                "Sprite Definitions/GUI/",
+                                                "*.xml",
+                                                SearchOption.AllDirectories);
+
+            foreach (string file in files)
+            {
+                XElement doc = XElement.Load(file);
+
+                string tileSet = doc.Element("TileSet").Element("Name").GetAs<string>();
+
+                var spriteData = GlobalConstants.GameManager.ObjectIconHandler.GetTileSet(tileSet);
+                foreach (SpriteData data in spriteData)
+                {
+                    if (this.UISprites.ContainsKey(data.m_Name))
+                    {
+                        continue;
+                    }
+                    this.UISprites.Add(data.m_Name, new SpriteState(data.m_Name, data));
+                }
+            }
+        }
+
         public void SetUIColours(IDictionary<string, IDictionary<string, Color>> background,
             IDictionary<string, IDictionary<string, Color>> cursor,
             IDictionary<string, Color> mainFontColours,
-            bool recolour = true, 
+            bool recolour = true,
             bool crossFade = false,
             float duration = 0.1f)
         {
@@ -198,6 +221,7 @@ namespace JoyLib.Code.Unity.GUI
             {
                 return;
             }
+
             cursor.SetCursorSprites(this.Cursors["DefaultCursor"]);
             cursor.SetCursorColours(this.CursorColours["DefaultCursor"]);
         }
@@ -296,6 +320,7 @@ namespace JoyLib.Code.Unity.GUI
             {
                 if (this.UISprites.TryGetValue(icon.ElementName, out ISpriteState state))
                 {
+                    icon.Clear();
                     icon.AddSpriteState(state);
                 }
                 else

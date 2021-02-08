@@ -15,10 +15,10 @@ namespace JoyLib.Code.Unity.GUI
         protected Dictionary<string, DerivedValueBarContainer> Items { get; set; }
         protected IEntity Player { get; set; }
         
-        protected RectTransform RectTransform { get; set; }       
+        public RectTransform RectTransform { get; protected set; }       
         protected IGameManager GameManager { get; set; }
         
-        protected bool Initialised { get; set; }
+        public bool Initialised { get; protected set; }
 
         public void FixedUpdate()
         {
