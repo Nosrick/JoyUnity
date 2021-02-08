@@ -204,16 +204,12 @@ namespace JoyLib.Code.States
             {
                 if (item is ItemInstance itemInstance)
                 {
-                    itemInstance.Instantiate(gameManager.ItemPool.Get());
+                    itemInstance.Instantiate(true, gameManager.ItemPool.Get(), active);
                     itemInstance.MonoBehaviourHandler.gameObject.layer = itemLayer;
-                    itemInstance.MonoBehaviourHandler.gameObject.SetActive(active);
                     if (itemInstance.Contents.IsNullOrEmpty() == false)
                     {
                         this.CreateItems(itemInstance.Contents, false);
                     }
-                    itemInstance.MonoBehaviourHandler.Clear();
-                    itemInstance.MonoBehaviourHandler.AddSpriteState(itemInstance.States.First(), true);
-                    itemInstance.MonoBehaviourHandler.SetSpriteLayer("Objects");
                 }
             }
         }
