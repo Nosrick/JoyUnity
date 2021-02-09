@@ -64,13 +64,6 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
 
             this.Player = GlobalConstants.GameManager.Player;
 
-            /*
-            if (this.Player is null)
-            {
-                return;
-            }
-            */
-            
             this.CurrentJob = this.Player.CurrentJob;
             this.Minimum = 0;
             this.Maximum = this.CurrentJob.Experience;
