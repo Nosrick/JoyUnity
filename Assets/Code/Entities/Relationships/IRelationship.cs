@@ -1,28 +1,29 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace JoyLib.Code.Entities.Relationships
 {
     public interface IRelationship : ITagged
     {
-        Dictionary<long, int> GetValuesOfParticipant(long GUID);
+        Dictionary<Guid, int> GetValuesOfParticipant(Guid GUID);
 
-        int GetRelationshipValue(long left, long right);
+        int GetRelationshipValue(Guid left, Guid right);
 
-        int GetHighestRelationshipValue(long GUID);
+        int GetHighestRelationshipValue(Guid GUID);
         
-        IJoyObject GetParticipant(long GUID);
+        IJoyObject GetParticipant(Guid GUID);
         IEnumerable<IJoyObject> GetParticipants();
 
-        int ModifyValueOfParticipant(long actor, long observer, int value);
+        int ModifyValueOfParticipant(Guid actor, Guid observer, int value);
 
-        int ModifyValueOfOtherParticipants(long actor, int value);
+        int ModifyValueOfOtherParticipants(Guid actor, int value);
 
         int ModifyValueOfAllParticipants(int value);
 
         bool AddParticipant(IJoyObject newParticipant);
         bool AddParticipants(IEnumerable<IJoyObject> participants);
         
-        bool RemoveParticipant(long currentGUID);
+        bool RemoveParticipant(Guid currentGUID);
 
         long GenerateHashFromInstance();
 

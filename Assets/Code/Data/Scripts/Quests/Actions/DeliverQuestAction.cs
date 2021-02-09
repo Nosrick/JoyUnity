@@ -21,11 +21,11 @@ namespace JoyLib.Code.Quests
         public string Description { get; protected set; }
         
         [OdinSerialize]
-        public List<long> Items { get; protected set; }
+        public List<Guid> Items { get; protected set; }
         [OdinSerialize]
-        public List<long> Actors { get; protected set; }
+        public List<Guid> Actors { get; protected set; }
         [OdinSerialize]
-        public List<long> Areas { get; protected set; }
+        public List<Guid> Areas { get; protected set; }
 
         [OdinSerialize]
         protected IItemFactory ItemFactory { get; set; }
@@ -48,9 +48,9 @@ namespace JoyLib.Code.Quests
             List<string> tempTags = new List<string>();
             tempTags.Add("deliver");
             tempTags.AddRange(tags);
-            this.Items = items.Select(instance => instance.GUID).ToList();
-            this.Actors = actors.Select(instance => instance.GUID).ToList();
-            this.Areas = areas.Select(instance => instance.GUID).ToList();
+            this.Items = items.Select(instance => instance.Guid).ToList();
+            this.Actors = actors.Select(instance => instance.Guid).ToList();
+            this.Areas = areas.Select(instance => instance.Guid).ToList();
             this.Tags = tempTags.ToArray();
             this.Description = this.AssembleDescription();
 
@@ -73,11 +73,11 @@ namespace JoyLib.Code.Quests
             {
                 deliveryItem = this.ItemFactory.CreateCompletelyRandomItem();
             }
-            deliveryItem.SetOwner(endPoint.GUID);
+            deliveryItem.SetOwner(endPoint.Guid);
 
-            this.Items = new List<long> {deliveryItem.GUID};
-            this.Actors = new List<long> {endPoint.GUID};
-            this.Areas = new List<long>();
+            this.Items = new List<Guid> {deliveryItem.Guid};
+            this.Actors = new List<Guid> {endPoint.Guid};
+            this.Areas = new List<Guid>();
 
             IQuestStep step = new ConcreteQuestStep(
                 this, 
@@ -90,7 +90,7 @@ namespace JoyLib.Code.Quests
 
         public void ExecutePrerequisites(IEntity questor)
         {
-            foreach (long itemGUID in this.Items)
+            foreach (Guid itemGUID in this.Items)
             {
                 questor.AddContents(GlobalConstants.GameManager.ItemHandler.GetItem(itemGUID));
             }
@@ -110,7 +110,7 @@ namespace JoyLib.Code.Quests
                 return false;
             }
 
-            if (action.LastParticipants.Select(o => o.GUID).Intersect(this.Actors).Count() != this.Actors.Count)
+            if (action.LastParticipants.Select(o => o.Guid).Intersect(this.Actors).Count() != this.Actors.Count)
             {
                 return false;
             }
@@ -128,7 +128,7 @@ namespace JoyLib.Code.Quests
                 }
             }
 
-            return items.Select(instance => instance.GUID).Intersect(this.Items).Count() == this.Items.Count 
+            return items.Select(instance => instance.Guid).Intersect(this.Items).Count() == this.Items.Count 
                    && action.Successful;
         }
 
@@ -172,9 +172,9 @@ namespace JoyLib.Code.Quests
         }
 
         public IQuestAction Create(IEnumerable<string> tags,
-            List<IItemInstance> items,
-            List<IJoyObject> actors,
-            List<IWorldInstance> areas,
+            IEnumerable<IItemInstance> items,
+            IEnumerable<IJoyObject> actors,
+            IEnumerable<IWorldInstance> areas,
             IItemFactory itemFactory = null)
         {
             return new DeliverQuestAction(

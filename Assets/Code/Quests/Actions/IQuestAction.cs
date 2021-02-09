@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Rollers;
@@ -11,9 +12,9 @@ namespace JoyLib.Code.Quests
     {
         string[] Tags { get; }
         string Description { get; }
-        List<long> Items { get; }
-        List<long> Actors { get; }
-        List<long> Areas { get; }
+        List<Guid> Items { get; }
+        List<Guid> Actors { get; }
+        List<Guid> Areas { get; }
         
         RNG Roller { get; }
 
@@ -26,9 +27,9 @@ namespace JoyLib.Code.Quests
 
         IQuestAction Create(
             IEnumerable<string> tags,
-            List<IItemInstance> items,
-            List<IJoyObject> actors,
-            List<IWorldInstance> areas,
+            IEnumerable<IItemInstance> items,
+            IEnumerable<IJoyObject> actors,
+            IEnumerable<IWorldInstance> areas,
             IItemFactory itemFactory = null);
     }
 }

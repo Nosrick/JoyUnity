@@ -1,4 +1,5 @@
-﻿using JoyLib.Code.Entities.Jobs;
+﻿using System;
+using JoyLib.Code.Entities.Jobs;
 
 namespace JoyLib.Code.Events
 {
@@ -7,6 +8,6 @@ namespace JoyLib.Code.Events
     public class JobChangedEventArgs
     {
         public IJob NewJob { get; set; }
-        public long GUID { get; set; }
+        public Guid GUID { get; set; }
     }
 }

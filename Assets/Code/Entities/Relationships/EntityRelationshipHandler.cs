@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
 using JoyLib.Code.Collections;
+using JoyLib.Code.Helpers;
 using JoyLib.Code.Scripting;
 
 namespace JoyLib.Code.Entities.Relationships
@@ -52,10 +53,10 @@ namespace JoyLib.Code.Entities.Relationships
                     .First(t => tags.Any(tag => tag.Equals(t.Key, StringComparison.OrdinalIgnoreCase))).Value
                     .Create(participants);
                 
-                List<long> GUIDs = new List<long>();
+                List<Guid> GUIDs = new List<Guid>();
                 foreach(IJoyObject participant in participants)
                 {
-                    GUIDs.Add(participant.GUID);
+                    GUIDs.Add(participant.Guid);
                 }
 
                 newRelationship.ModifyValueOfAllParticipants(0);
@@ -79,7 +80,7 @@ namespace JoyLib.Code.Entities.Relationships
         public IEnumerable<IRelationship> Get(IEnumerable<IJoyObject> participants, IEnumerable<string> tags = null,
             bool createNewIfNone = false)
         {
-            IEnumerable<long> GUIDs = participants.Select(p => p.GUID);
+            IEnumerable<Guid> GUIDs = participants.Select(p => p.Guid);
             long hash = AbstractRelationship.GenerateHash(GUIDs);
 
             List<IRelationship> relationships = new List<IRelationship>();
@@ -119,14 +120,11 @@ namespace JoyLib.Code.Entities.Relationships
             try
             {
                 return this.GetBestRelationship(speaker, listener, tags)
-                    .GetRelationshipValue(speaker.GUID, listener.GUID);
+                    .GetRelationshipValue(speaker.Guid, listener.Guid);
             }
             catch (Exception e)
             {
-                GlobalConstants.ActionLog.AddText("No relationship found for " + speaker + " and " + listener + ".");
-                GlobalConstants.ActionLog.AddText("No relationship found for " + speaker + " and " + listener + ".");
-                GlobalConstants.ActionLog.AddText(e.Message);
-                GlobalConstants.ActionLog.AddText(e.StackTrace);
+                GlobalConstants.ActionLog.AddText("No relationship found for " + speaker + " and " + listener + ".", LogLevel.Warning);
                 return 0;
             }
         }
@@ -141,7 +139,7 @@ namespace JoyLib.Code.Entities.Relationships
             IRelationship bestMatch = null;
             foreach (IRelationship relationship in relationships)
             {
-                int value = relationship.GetRelationshipValue(speaker.GUID, listener.GUID);
+                int value = relationship.GetRelationshipValue(speaker.Guid, listener.Guid);
                 if (value > highestValue)
                 {
                     highestValue = value;
@@ -159,7 +157,7 @@ namespace JoyLib.Code.Entities.Relationships
 
         public IEnumerable<IRelationship> GetAllForObject(IJoyObject actor)
         {
-            return this.m_Relationships.Where(tuple => tuple.Item2.GetParticipant(actor.GUID) is null == false)
+            return this.m_Relationships.Where(tuple => tuple.Item2.GetParticipant(actor.Guid) is null == false)
                 .Select(tuple => tuple.Item2)
                 .ToArray();
         }

@@ -4,7 +4,7 @@ using JoyLib.Code.Entities;
 
 namespace JoyLib.Code.Conversation
 {
-    public interface IConversationEngine
+    public interface IConversationEngine : IGuidHolder
     {
         void SetActors(IEntity instigator, IEntity listener);
         ITopic[] Converse(string topic, int index = 0);
@@ -15,8 +15,6 @@ namespace JoyLib.Code.Conversation
         IEntity Instigator { get; }
         IEntity Listener { get; }
 
-        long GUID { get; }
-        
         string ListenerInfo { get; }
         string LastSaidWords { get; }
 

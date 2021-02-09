@@ -33,7 +33,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
 
             foreach (IRelationship relationship in relationships)
             {
-                int value = relationship.GetRelationshipValue(instigator.GUID, listener.GUID);
+                int value = relationship.GetRelationshipValue(instigator.Guid, listener.Guid);
                 if (value > highestValue)
                 {
                     highestValue = value;

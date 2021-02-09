@@ -8,10 +8,10 @@ using UnityEngine;
 
 namespace JoyLib.Code.World
 {
-    public interface IWorldInstance : ITagged, IDisposable
+    public interface IWorldInstance : ITagged, IDisposable, IGuidHolder
     {
-        HashSet<long> EntityGUIDs { get; }
-        HashSet<long> ItemGUIDs { get; }
+        HashSet<Guid> EntityGUIDs { get; }
+        HashSet<Guid> ItemGUIDs { get; }
         WorldTile[,] Tiles { get; }
         byte[,] Costs { get; }
         LightCalculator LightCalculator { get; }
@@ -21,7 +21,6 @@ namespace JoyLib.Code.World
         Dictionary<Vector2Int, IJoyObject> Walls { get; }
         Vector2Int SpawnPoint { get; set; }
         IWorldInstance Parent { get; set; }
-        long GUID { get; }
         string Name { get; }
         IEntity Player { get; }
         Vector2Int Dimensions { get; }

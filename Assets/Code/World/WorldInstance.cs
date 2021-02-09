@@ -4,7 +4,6 @@ using System.Linq;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.AI;
 using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Managers;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.World.Lighting;
 using Sirenix.OdinSerializer;
@@ -31,26 +30,26 @@ namespace JoyLib.Code.World
         protected IWorldInstance m_Parent;
 
         [OdinSerialize] 
-        public HashSet<long> EntityGUIDs
+        public HashSet<Guid> EntityGUIDs
         {
             get => this.m_EntityGUIDs;
             protected set => this.m_EntityGUIDs = value;
         }
 
-        protected HashSet<long> m_EntityGUIDs;
+        protected HashSet<Guid> m_EntityGUIDs;
         
         protected HashSet<IEntity> m_Entities;
 
         public HashSet<IEntity> Entities => this.m_Entities;
 
         [OdinSerialize] 
-        public HashSet<long> ItemGUIDs
+        public HashSet<Guid> ItemGUIDs
         {
             get => this.m_ItemGUIDs;
             protected set => this.m_ItemGUIDs = value;
         }
 
-        protected HashSet<long> m_ItemGUIDs;
+        protected HashSet<Guid> m_ItemGUIDs;
 
         protected HashSet<IJoyObject> m_Objects;
         
@@ -66,7 +65,7 @@ namespace JoyLib.Code.World
         protected string m_Name;
         
         [OdinSerialize]
-        protected long m_GUID;
+        protected Guid m_GUID;
         
         [OdinSerialize]
         public LightCalculator LightCalculator { get; protected set; }
@@ -112,11 +111,11 @@ namespace JoyLib.Code.World
             this.m_Tiles = tiles;
             this.m_Areas = new Dictionary<Vector2Int, IWorldInstance>();
             this.m_Entities = new HashSet<IEntity>();
-            this.m_EntityGUIDs = new HashSet<long>();
+            this.m_EntityGUIDs = new HashSet<Guid>();
             this.m_Objects = new HashSet<IJoyObject>();
-            this.m_ItemGUIDs = new HashSet<long>();
+            this.m_ItemGUIDs = new HashSet<Guid>();
             this.m_Walls = new Dictionary<Vector2Int, IJoyObject>();
-            this.GUID = GUIDManager.Instance.AssignGUID();
+            this.Guid = GlobalConstants.GameManager.GUIDManager.AssignGUID();
 
             this.LightCalculator = new LightCalculator();
 
@@ -150,11 +149,11 @@ namespace JoyLib.Code.World
             this.m_Dimensions = new Vector2Int(tiles.GetLength(0), tiles.GetLength(1));
             this.m_Areas = areas;
             this.m_Entities = entities;
-            this.m_EntityGUIDs = new HashSet<long>(this.m_Entities.Select(entity => entity.GUID));
+            this.m_EntityGUIDs = new HashSet<Guid>(this.m_Entities.Select(entity => entity.Guid));
             this.m_Objects = objects;
-            this.m_ItemGUIDs = new HashSet<long>(this.m_Objects.Select(o => o.GUID).ToList());
+            this.m_ItemGUIDs = new HashSet<Guid>(this.m_Objects.Select(o => o.Guid).ToList());
             this.m_Walls = walls;
-            this.GUID = GUIDManager.Instance.AssignGUID();
+            this.Guid = GlobalConstants.GameManager.GUIDManager.AssignGUID();
             this.CalculatePlayerIndex();
 
             this.m_Costs = new byte[this.m_Tiles.GetLength(0), this.m_Tiles.GetLength(1)];
@@ -242,7 +241,7 @@ namespace JoyLib.Code.World
             else
             {
                 this.m_Objects.Add(objectRef);
-                this.m_ItemGUIDs.Add(objectRef.GUID);
+                this.m_ItemGUIDs.Add(objectRef.Guid);
                 if (objectRef is IItemInstance item)
                 {
                     item.InWorld = true;
@@ -264,12 +263,12 @@ namespace JoyLib.Code.World
         {
             bool removed = false;
 
-            if (this.m_Objects.Any(o => o.WorldPosition.Equals(positionRef) && itemRef.GUID.Equals(o.GUID)) == false)
+            if (this.m_Objects.Any(o => o.WorldPosition.Equals(positionRef) && itemRef.Guid.Equals(o.Guid)) == false)
             {
                 return false;
             }
 
-            removed = this.m_Objects.Remove(itemRef) & this.m_ItemGUIDs.Remove(itemRef.GUID);
+            removed = this.m_Objects.Remove(itemRef) & this.m_ItemGUIDs.Remove(itemRef.Guid);
 
             if (removed)
             {
@@ -346,7 +345,7 @@ namespace JoyLib.Code.World
 
             foreach (IEntity entity in this.m_Entities)
             {
-                if (actor.GUID == entity.GUID
+                if (actor.Guid == entity.Guid
                     || !actor.VisionProvider.CanSee(actor, this, entity.WorldPosition))
                 {
                     continue;
@@ -374,7 +373,7 @@ namespace JoyLib.Code.World
 
             if (!(this.Player is null))
             {
-                sentients = sentients.Where(entity => entity.GUID.Equals(this.Player.GUID) == false).ToList();
+                sentients = sentients.Where(entity => entity.Guid.Equals(this.Player.Guid) == false).ToList();
             }
 
             return sentients.Count > 0 ? sentients[this.Roller.Roll(0, sentients.Count)] : null;
@@ -421,7 +420,7 @@ namespace JoyLib.Code.World
         {
             foreach (KeyValuePair<Vector2Int, IWorldInstance> pair in this.Parent.Areas)
             {
-                if (pair.Value.GUID == this.GUID)
+                if (pair.Value.Guid == this.Guid)
                 {
                     return pair.Key;
                 }
@@ -470,7 +469,7 @@ namespace JoyLib.Code.World
             {
                 List<string> tags = new List<string> {"pick up"};
                 bool newOwner = true;
-                if (item.OwnerGUID != default && item.OwnerGUID != entityRef.GUID)
+                if (item.OwnerGUID != default && item.OwnerGUID != entityRef.Guid)
                 {
                     tags.Add("theft");
                     newOwner = false;
@@ -492,7 +491,7 @@ namespace JoyLib.Code.World
         public void AddEntity(IEntity entityRef)
         {
             this.m_Entities.Add(entityRef);
-            this.m_EntityGUIDs.Add(entityRef.GUID);
+            this.m_EntityGUIDs.Add(entityRef.Guid);
             this.EntityHandler.AddEntity(entityRef);
 
             //Initialise a new GameObject here at some point
@@ -513,8 +512,8 @@ namespace JoyLib.Code.World
             }
 
             this.m_Entities.Remove(entity);
-            this.m_EntityGUIDs.Remove(entity.GUID);
-            this.EntityHandler.Remove(entity.GUID);
+            this.m_EntityGUIDs.Remove(entity.Guid);
+            this.EntityHandler.Remove(entity.Guid);
 
             this.CalculatePlayerIndex();
 
@@ -709,7 +708,7 @@ namespace JoyLib.Code.World
             set { this.m_Parent = value; }
         }
 
-        public long GUID
+        public Guid Guid
         {
             get { return this.m_GUID; }
             protected set { this.m_GUID = value; }
@@ -769,7 +768,7 @@ namespace JoyLib.Code.World
             }
             this.m_Areas = new Dictionary<Vector2Int, IWorldInstance>();
 
-            GUIDManager.Instance.ReleaseGUID(this.GUID);
+            GlobalConstants.GameManager.GUIDManager.ReleaseGUID(this.Guid);
         }
     }
 }

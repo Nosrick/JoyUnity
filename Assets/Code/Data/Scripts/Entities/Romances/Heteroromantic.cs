@@ -24,7 +24,7 @@ namespace JoyLib.Code.Entities.Romances
                 return false;
             }
             
-            int highestValue = relationships.Max(relationship => relationship.GetRelationshipValue(me.GUID, them.GUID));
+            int highestValue = relationships.Max(relationship => relationship.GetRelationshipValue(me.Guid, them.Guid));
             if(highestValue < this.RomanceThreshold || me.Gender.Name.Equals(them.Gender.Name, StringComparison.OrdinalIgnoreCase))
             {
                 return false;

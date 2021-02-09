@@ -15,6 +15,7 @@ namespace JoyLib.Code.World.Generators.Interiors
             RNG roller)
         {
             DungeonInteriorGenerator interiorGenerator = new DungeonInteriorGenerator(
+                gameManager.GUIDManager,
                 gameManager.ObjectIconHandler,
                 gameManager.DerivedValueHandler,
                 roller);

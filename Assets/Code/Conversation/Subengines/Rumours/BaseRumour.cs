@@ -139,7 +139,7 @@ namespace JoyLib.Code.Conversation.Conversations.Rumours
             {
                 if (participant is Entity entity)
                 {
-                    IJoyObject[] others = participants.Where(p => p.GUID.Equals(participant.GUID) == false).ToArray();
+                    IJoyObject[] others = participants.Where(p => p.Guid.Equals(participant.Guid) == false).ToArray();
                     values.AddRange(entity.GetData(criteria, others));                    
                 }
             }

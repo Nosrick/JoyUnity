@@ -64,7 +64,7 @@ namespace JoyLib.Code.Unity
                 this.SpeechBubble = transform.GetComponent<ManagedSprite>();
             }
 
-            this.name = this.JoyObject.JoyName + ":" + this.JoyObject.GUID;
+            this.name = this.JoyObject.JoyName + ":" + this.JoyObject.Guid;
             this.transform.position = new Vector3(this.JoyObject.WorldPosition.x, this.JoyObject.WorldPosition.y, 0.0f);
             this.SetSpeechBubble(false);
         }
@@ -212,8 +212,8 @@ namespace JoyLib.Code.Unity
             int bestRelationship = int.MinValue;
             foreach (IRelationship relationship in relationships)
             {
-                relationship.ModifyValueOfOtherParticipants(player.GUID, -50);
-                int value = relationship.GetRelationshipValue(defender.GUID, player.GUID);
+                relationship.ModifyValueOfOtherParticipants(player.Guid, -50);
+                int value = relationship.GetRelationshipValue(defender.Guid, player.Guid);
                 if (value > bestRelationship)
                 {
                     bestRelationship = value;

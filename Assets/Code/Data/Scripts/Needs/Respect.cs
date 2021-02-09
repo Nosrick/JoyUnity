@@ -156,7 +156,7 @@ namespace JoyLib.Code.Entities.Needs
                 
                 int average = (int)Math.Ceiling(
                     relationships.Average(relationship => 
-                        relationship.GetHighestRelationshipValue(actor.GUID)));
+                        relationship.GetHighestRelationshipValue(actor.Guid)));
 
                 this.Fulfill(average);
                 base.Tick(actor);

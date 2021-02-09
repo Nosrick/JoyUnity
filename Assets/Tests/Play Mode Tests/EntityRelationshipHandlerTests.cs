@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using JoyLib.Code;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Relationships;
@@ -36,8 +37,8 @@ namespace Tests
         [SetUp]
         public void SetUpEntities()
         {
-            left = Mock.Of<IEntity>(entity => entity.GUID == 1);
-            right = Mock.Of<IEntity>(entity => entity.GUID == 2);
+            left = Mock.Of<IEntity>(entity => entity.Guid == Guid.NewGuid());
+            right = Mock.Of<IEntity>(entity => entity.Guid == Guid.NewGuid());
         }
 
         [UnityTest]
@@ -49,7 +50,7 @@ namespace Tests
             //when
 
             //then
-            Assert.That(relationship.GetRelationshipValue(left.GUID, right.GUID), Is.EqualTo(0));
+            Assert.That(relationship.GetRelationshipValue(this.left.Guid, this.right.Guid), Is.EqualTo(0));
 
             return null;
         }
@@ -66,7 +67,7 @@ namespace Tests
             //when
             
             //then
-            Assert.That(relationship.GetRelationshipValue(left.GUID, right.GUID), Is.EqualTo(50));
+            Assert.That(relationship.GetRelationshipValue(this.left.Guid, this.right.Guid), Is.EqualTo(50));
 
             return null;
         }

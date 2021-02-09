@@ -20,13 +20,13 @@ namespace JoyLib.Code.Quests
         public string Description { get; protected set; }
         
         [OdinSerialize]
-        public List<long> Items { get; protected set; }
+        public List<Guid> Items { get; protected set; }
         
         [OdinSerialize]
-        public List<long> Actors { get; protected set; }
+        public List<Guid> Areas { get; protected set; }
         
         [OdinSerialize]
-        public List<long> Areas { get; protected set; }
+        public List<Guid> Actors { get; protected set; }
 
         [OdinSerialize]
         public RNG Roller { get; protected set; }
@@ -45,9 +45,9 @@ namespace JoyLib.Code.Quests
             List<string> tempTags = new List<string>();
             tempTags.Add("exploration");
             tempTags.AddRange(tags);
-            this.Items = items.Select(instance => instance.GUID).ToList();
-            this.Actors = actors.Select(instance => instance.GUID).ToList();
-            this.Areas = areas.Select(instance => instance.GUID).ToList();
+            this.Items = items.Select(instance => instance.Guid).ToList();
+            this.Actors = actors.Select(instance => instance.Guid).ToList();
+            this.Areas = areas.Select(instance => instance.Guid).ToList();
             this.Tags = tempTags.ToArray();
             this.Description = this.AssembleDescription();
         }
@@ -73,9 +73,9 @@ namespace JoyLib.Code.Quests
                 throw new InvalidOperationException(questor.JoyName + " has explored the whole world!");
             }
 
-            this.Items = new List<long>();
-            this.Actors = new List<long>();
-            this.Areas = new List<long> { worlds[result].GUID };
+            this.Items = new List<Guid>();
+            this.Actors = new List<Guid>();
+            this.Areas = new List<Guid> { worlds[result].Guid };
 
             IQuestStep step = new ConcreteQuestStep(
                 this, 
@@ -97,7 +97,7 @@ namespace JoyLib.Code.Quests
             {
                 if (obj is IWorldInstance world)
                 {
-                    if (this.Areas.Contains(world.GUID) == false)
+                    if (this.Areas.Contains(world.Guid) == false)
                     {
                         return false;
                     }
@@ -106,7 +106,7 @@ namespace JoyLib.Code.Quests
 
             IWorldInstance overworld = GlobalConstants.GameManager.Player.MyWorld.GetOverworld();
             List<IWorldInstance> worlds = overworld.GetWorlds(overworld)
-                .Where(instance => this.Areas.Contains(instance.GUID))
+                .Where(instance => this.Areas.Contains(instance.Guid))
                 .ToList();
             return worlds.All(world => action.LastParticipants[0].HasDataKey(world.Name)) && action.Successful;
         }
@@ -117,7 +117,7 @@ namespace JoyLib.Code.Quests
 
             IWorldInstance overworld = GlobalConstants.GameManager.Player.MyWorld.GetOverworld();
             List<IWorldInstance> worlds = overworld.GetWorlds(overworld)
-                .Where(instance => this.Areas.Contains(instance.GUID))
+                .Where(instance => this.Areas.Contains(instance.Guid))
                 .ToList();
 
             for(int i = 0; i < this.Areas.Count; i++)
@@ -141,9 +141,9 @@ namespace JoyLib.Code.Quests
         }
 
         public IQuestAction Create(IEnumerable<string> tags,
-            List<IItemInstance> items,
-            List<IJoyObject> actors,
-            List<IWorldInstance> areas,
+            IEnumerable<IItemInstance> items,
+            IEnumerable<IJoyObject> actors,
+            IEnumerable<IWorldInstance> areas,
             IItemFactory itemFactory = null)
         {
             return new ExploreQuestAction(

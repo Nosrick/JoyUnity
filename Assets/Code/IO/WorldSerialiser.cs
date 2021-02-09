@@ -10,6 +10,7 @@ using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
+using JoyLib.Code.Managers;
 using JoyLib.Code.Quests;
 using JoyLib.Code.World;
 using Sirenix.OdinSerializer;
@@ -70,6 +71,11 @@ namespace JoyLib.Code.IO
                     GlobalConstants.GameManager.EntityHandler.AllEntities,
                     DEFAULT_DATA_FORMAT);
                 File.WriteAllBytes(directory + "/entities.dat", array);
+
+                array = SerializationUtility.SerializeValue(
+                    GlobalConstants.GameManager.GUIDManager,
+                    DEFAULT_DATA_FORMAT);
+                File.WriteAllBytes(directory + "/guids.dat", array);
                 
                 File.WriteAllText(directory + "/data_format.dat", DEFAULT_DATA_FORMAT.ToString());
             }
@@ -111,8 +117,8 @@ namespace JoyLib.Code.IO
             this.Quests(quests);
 
             array = File.ReadAllBytes(directory + "/rewards.dat");
-            NonUniqueDictionary<long, long> rewards =
-                SerializationUtility.DeserializeValue<NonUniqueDictionary<long, long>>(array, dataFormat);
+            NonUniqueDictionary<Guid, Guid> rewards =
+                SerializationUtility.DeserializeValue<NonUniqueDictionary<Guid, Guid>>(array, dataFormat);
             this.QuestRewards(rewards);
 
             array = File.ReadAllBytes(directory + "/entities.dat");
@@ -124,6 +130,12 @@ namespace JoyLib.Code.IO
             IEnumerable<IRelationship> relationships =
                 SerializationUtility.DeserializeValue<IEnumerable<IRelationship>>(array, dataFormat);
             this.Relationships(relationships);
+
+            array = File.ReadAllBytes(directory + "/guids.dat");
+            GUIDManager guidManager =
+                SerializationUtility.DeserializeValue<GUIDManager>(array, dataFormat);
+
+            GlobalConstants.GameManager.GUIDManager.Deserialise(guidManager.RecycleList);
             
             this.LinkWorlds(world);
             this.AssignIcons(world);
@@ -186,9 +198,9 @@ namespace JoyLib.Code.IO
             }
         }
 
-        private void QuestRewards(NonUniqueDictionary<long, long> rewards)
+        private void QuestRewards(NonUniqueDictionary<Guid, Guid> rewards)
         {
-            foreach (long questID in rewards.Keys)
+            foreach (Guid questID in rewards.Keys)
             {
                 GlobalConstants.GameManager.ItemHandler.AddQuestRewards(questID, rewards.FetchValuesForKey(questID));
             }
@@ -222,7 +234,7 @@ namespace JoyLib.Code.IO
                     this.SetUpSpriteStates(item.TileSet, state);
                 }
 
-                item.MyWorld = worlds.FirstOrDefault(world => world.ItemGUIDs.Contains(item.GUID));
+                item.MyWorld = worlds.FirstOrDefault(world => world.ItemGUIDs.Contains(item.Guid));
                 
                 GlobalConstants.GameManager.ItemHandler.AddItem(item);
             }
@@ -251,7 +263,7 @@ namespace JoyLib.Code.IO
                             need.Name));
                 }
 
-                worlds.First(world => world.EntityGUIDs.Contains(entity.GUID))?.AddEntity(entity);
+                worlds.First(world => world.EntityGUIDs.Contains(entity.Guid))?.AddEntity(entity);
             }
         }
     }

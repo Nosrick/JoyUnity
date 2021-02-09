@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Scripting;
 
@@ -8,11 +9,11 @@ namespace JoyLib.Code.Quests
     {
         List<IQuest> AllQuests { get; }
 
-        List<IQuest> GetQuestsForEntity(long GUID);
+        List<IQuest> GetQuestsForEntity(Guid GUID);
 
-        IQuest GetPrimaryQuestForEntity(long GUID);
+        IQuest GetPrimaryQuestForEntity(Guid GUID);
 
-        void AddQuest(long GUID, IQuest quest);
+        void AddQuest(Guid GUID, IQuest quest);
 
         void CompleteQuest(IEntity questor, IQuest quest);
 

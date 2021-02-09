@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using JoyLib.Code.Entities;
 
 namespace JoyLib.Code.Quests
@@ -6,9 +7,9 @@ namespace JoyLib.Code.Quests
     public interface IQuestStep : ITagged
     {
         IQuestAction Action { get; }
-        List<long> Items { get; }
-        List<long> Actors { get; }
-        List<long> Areas { get; }
+        List<Guid> Items { get; }
+        List<Guid> Actors { get; }
+        List<Guid> Areas { get; }
 
         void StartQuest(IEntity questor);
     }

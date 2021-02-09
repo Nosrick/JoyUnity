@@ -10,7 +10,7 @@ namespace JoyLib.Code.Entities.Items
     public class EquipmentStorage : JoyObject, IItemContainer
     {
         [OdinSerialize]
-        protected List<Tuple<string, long>> m_Slots;
+        protected List<Tuple<string, Guid>> m_Slots;
 
         public override int HitPointsRemaining => 1;
         public override int HitPoints => 1;
@@ -20,16 +20,16 @@ namespace JoyLib.Code.Entities.Items
 
         public EquipmentStorage()
         {
-            this.m_Slots = new List<Tuple<string, long>>();
+            this.m_Slots = new List<Tuple<string, Guid>>();
             this.JoyName = "Equipment";
         }
 
         public EquipmentStorage(IEnumerable<string> slots)
         {
-            this.m_Slots = new List<Tuple<string, long>>();
+            this.m_Slots = new List<Tuple<string, Guid>>();
             foreach (string slot in slots)
             {
-                this.m_Slots.Add(new Tuple<string, long>(slot, -1));
+                this.m_Slots.Add(new Tuple<string, Guid>(slot, Guid.Empty));
             }
             this.JoyName = "Equipment";
         }
@@ -58,12 +58,12 @@ namespace JoyLib.Code.Entities.Items
 
             Dictionary<string, int> copySlots = new Dictionary<string, int>(requiredSlots);
 
-            foreach (Tuple<string, long> tuple in this.m_Slots)
+            foreach (Tuple<string, Guid> tuple in this.m_Slots)
             {
                 foreach (KeyValuePair<string, int> pair in requiredSlots)
                 {
                     if (pair.Key.Equals(tuple.Item1, StringComparison.OrdinalIgnoreCase)
-                        && tuple.Item2 == -1
+                        && tuple.Item2 == Guid.Empty
                         && copySlots[pair.Key] > 0)
                     {
                         copySlots[pair.Key] -= 1;
@@ -77,14 +77,14 @@ namespace JoyLib.Code.Entities.Items
         
         public virtual bool Contains(IItemInstance actor)
         {
-            return this.m_Slots.Any(tuple => actor.GUID.Equals(tuple.Item2));
+            return this.m_Slots.Any(tuple => actor.Guid.Equals(tuple.Item2));
         }
 
         public virtual IItemInstance GetSlotContents(string slot)
         {
-            Tuple<string, long> slotTuple =
+            Tuple<string, Guid> slotTuple =
                 this.m_Slots.FirstOrDefault(tuple => tuple.Item1.Equals(slot, StringComparison.OrdinalIgnoreCase));
-            if (slotTuple is null == false && slotTuple.Item2 > 0)
+            if (slotTuple is null == false && slotTuple.Item2 != Guid.Empty)
             {
                 return GlobalConstants.GameManager.ItemHandler.GetItem(slotTuple.Item2);
             }
@@ -97,7 +97,7 @@ namespace JoyLib.Code.Entities.Items
             if (getEmpty == false)
             {
                 return this.m_Slots
-                    .Where(tuple => tuple.Item2 > 0)
+                    .Where(tuple => tuple.Item2 != Guid.Empty)
                     .Select(tuple =>
                         new Tuple<string, IItemInstance>(tuple.Item1,
                             GlobalConstants.GameManager.ItemHandler.GetItem(tuple.Item2)));
@@ -106,7 +106,7 @@ namespace JoyLib.Code.Entities.Items
             return this.m_Slots
                 .Select(tuple => new Tuple<string, IItemInstance>(
                     tuple.Item1,
-                    tuple.Item2 > 0 ? GlobalConstants.GameManager.ItemHandler.GetItem(tuple.Item2) : null));
+                    tuple.Item2 != Guid.Empty ? GlobalConstants.GameManager.ItemHandler.GetItem(tuple.Item2) : null));
         }
 
         public virtual bool CanAddContents(IItemInstance actor)
@@ -163,8 +163,8 @@ namespace JoyLib.Code.Entities.Items
             {
                 int index = this.m_Slots.FindIndex(
                     s => s.Item1.Equals(slot, StringComparison.InvariantCulture)
-                         && s.Item2 == -1);
-                this.m_Slots[index] = new Tuple<string, long>(slot, actor.GUID);
+                         && s.Item2 == Guid.Empty);
+                this.m_Slots[index] = new Tuple<string, Guid>(slot, actor.Guid);
             }
             
             this.ItemAdded?.Invoke(this, new ItemChangedEventArgs() { Item = actor });
@@ -180,20 +180,20 @@ namespace JoyLib.Code.Entities.Items
 
         public virtual bool RemoveContents(IItemInstance actor)
         {
-            if (this.m_Slots.All(s => actor.GUID.Equals(s.Item2) == false))
+            if (this.m_Slots.All(s => actor.Guid.Equals(s.Item2) == false))
             {
                 return false;
             }
-            List<Tuple<string, long>> slots = this.m_Slots.Where(s => actor.GUID.Equals(s.Item2)).ToList();
+            List<Tuple<string, Guid>> slots = this.m_Slots.Where(s => actor.Guid.Equals(s.Item2)).ToList();
             if (slots.Any() == false)
             {
                 return false;
             }
 
-            foreach (Tuple<string, long> slot in slots)
+            foreach (Tuple<string, Guid> slot in slots)
             {
                 int index = this.m_Slots.IndexOf(slot);
-                this.m_Slots[index] = new Tuple<string, long>(slot.Item1, -1);
+                this.m_Slots[index] = new Tuple<string, Guid>(slot.Item1, Guid.Empty);
             }
             this.ItemRemoved?.Invoke(this, new ItemChangedEventArgs { Item = actor });
 
@@ -216,7 +216,7 @@ namespace JoyLib.Code.Entities.Items
 
         public virtual int AddSlot(string slot)
         {
-            this.m_Slots.Add(new Tuple<string, long>(slot, -1));
+            this.m_Slots.Add(new Tuple<string, Guid>(slot, Guid.Empty));
 
             return this.m_Slots.Count(s => s.Item1.Equals(slot, StringComparison.OrdinalIgnoreCase));
         }

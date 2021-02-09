@@ -97,7 +97,7 @@ namespace JoyLib.Code.Entities.Needs
                 
                 foreach (IRelationship relationship in relationships)
                 {
-                    int thisRelationship = relationship.GetRelationshipValue(actor.GUID, possible.GUID);
+                    int thisRelationship = relationship.GetRelationshipValue(actor.Guid, possible.Guid);
                     if (bestRelationship < thisRelationship)
                     {
                         bestRelationship = thisRelationship;

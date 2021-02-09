@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code.Entities.AI;
 using JoyLib.Code.Entities.Items;
@@ -109,7 +110,7 @@ namespace JoyLib.Code.Entities.Needs
             }
 
             List<string> tags = new List<string> {"pickup", "property"};
-            if (item.OwnerGUID != actor.GUID && item.OwnerGUID != 0)
+            if (item.OwnerGUID != actor.Guid && item.OwnerGUID != Guid.Empty)
             {
                 tags.Add("theft");
             }

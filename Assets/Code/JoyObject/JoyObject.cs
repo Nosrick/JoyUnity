@@ -5,7 +5,6 @@ using JoyLib.Code.Collections;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Events;
 using JoyLib.Code.Graphics;
-using JoyLib.Code.Managers;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.Unity;
@@ -45,7 +44,7 @@ namespace JoyLib.Code
         public virtual IWorldInstance MyWorld { get; set; }
 
         [OdinSerialize]
-        public long GUID { get; protected set; }
+        public Guid Guid { get; protected set; }
 
         [OdinSerialize]
         public string JoyName { get; protected set; }
@@ -96,7 +95,7 @@ namespace JoyLib.Code
 
         public JoyObject()
         {
-            this.GUID = GUIDManager.Instance.AssignGUID();
+            this.Guid = Guid.Empty;
         }
 
         /// <summary>
@@ -111,6 +110,7 @@ namespace JoyLib.Code
         /// <param name="isWall"></param>
         public JoyObject(
             string name, 
+            Guid guid,
             IDictionary<string, IDerivedValue> derivedValues, 
             Vector2Int position, 
             IEnumerable<string> actions,
@@ -128,7 +128,8 @@ namespace JoyLib.Code
             }
 
             this.Initialise(
-                name,
+                name, 
+                guid,
                 derivedValues,
                 position,
                 tempActions.ToArray(),
@@ -138,6 +139,7 @@ namespace JoyLib.Code
 
         public JoyObject(
             string name, 
+            Guid guid,
             IDictionary<string, IDerivedValue> derivedValues, 
             Vector2Int position,
             IEnumerable<IJoyAction> actions,
@@ -150,6 +152,7 @@ namespace JoyLib.Code
             this.Roller = roller is null ? new RNG() : roller; 
             this.Initialise(
                 name,
+                guid,
                 derivedValues,
                 position,
                 actions,
@@ -159,6 +162,7 @@ namespace JoyLib.Code
 
         public void Initialise(
             string name, 
+            Guid guid,
             IDictionary<string, IDerivedValue> derivedValues, 
             Vector2Int position, 
             IEnumerable<IJoyAction> actions,
@@ -168,7 +172,7 @@ namespace JoyLib.Code
             this.Data = new NonUniqueDictionary<object, object>();
             
             this.JoyName = name;
-            this.GUID = GUIDManager.Instance.AssignGUID();
+            this.Guid = guid;
 
             this.DerivedValues = derivedValues;
 
@@ -354,7 +358,7 @@ namespace JoyLib.Code
                     return 1;
                 
                 case JoyObject joyObject:
-                    return this.GUID.CompareTo(joyObject.GUID);
+                    return this.Guid.CompareTo(joyObject.Guid);
                 
                 default:
                     throw new ArgumentException("Object is not a JoyObject");
@@ -363,7 +367,7 @@ namespace JoyLib.Code
 
         public override string ToString()
         {
-            return "{ " + this.JoyName + " : " + this.GUID + " }";
+            return "{ " + this.JoyName + " : " + this.Guid + " }";
         }
 
         public bool AddData(object key, object value)
@@ -406,9 +410,9 @@ namespace JoyLib.Code
             this.MonoBehaviourHandler = mbh;
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
-            GUIDManager.Instance.ReleaseGUID(this.GUID);
+            GlobalConstants.GameManager.GUIDManager.ReleaseGUID(this.Guid);
             GC.SuppressFinalize(this);
         }
 

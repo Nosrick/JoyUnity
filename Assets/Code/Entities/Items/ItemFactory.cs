@@ -4,6 +4,7 @@ using Code.Collections;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
+using JoyLib.Code.Managers;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using UnityEngine;
@@ -19,18 +20,22 @@ namespace JoyLib.Code.Entities.Items
         protected IObjectIconHandler ObjectIcons { get; set; }
 
         protected IDerivedValueHandler DerivedValueHandler { get; set; }
+        
+        protected GUIDManager GuidManager { get; set; }
 
         protected GameObjectPool ItemPool { get; set; }
 
         protected RNG Roller { get; set; }
 
         public ItemFactory(
+            GUIDManager guidManager,
             ILiveItemHandler itemHandler,
             IObjectIconHandler objectIconHandler,
             IDerivedValueHandler derivedValueHandler,
             GameObjectPool itemPool,
             RNG roller = null)
         {
+            this.GuidManager = guidManager;
             this.ItemHandler = itemHandler;
             this.ObjectIcons = objectIconHandler;
             this.DerivedValueHandler = derivedValueHandler;
@@ -135,6 +140,7 @@ namespace JoyLib.Code.Entities.Items
             }
 
             ItemInstance itemInstance = new ItemInstance(
+                this.GuidManager.AssignGUID(),
                 itemType,
                 this.DerivedValueHandler.GetItemStandardBlock(values),
                 new Vector2Int(-1, -1),

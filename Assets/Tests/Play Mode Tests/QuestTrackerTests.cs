@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using JoyLib.Code;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Abilities;
@@ -38,7 +39,7 @@ namespace Tests
         {
             ActionLog actionLog = new ActionLog();
             GlobalConstants.ActionLog = actionLog;
-            scriptingEngine = new ScriptingEngine();
+            this.scriptingEngine = new ScriptingEngine();
 
             this.ItemHandler = new LiveItemHandler(
                 Mock.Of<IObjectIconHandler>(),
@@ -47,21 +48,23 @@ namespace Tests
                 new RNG());
             IGameManager gameManager = Mock.Of<IGameManager>(
                 manager => manager.ItemHandler == this.ItemHandler);
-            
-            target = new QuestTracker(this.ItemHandler);
+
+            GlobalConstants.GameManager = gameManager;
+
+            this.target = new QuestTracker(this.ItemHandler);
         }
         
         [SetUp]
         public void SetUpEntities()
         {
-            left = Mock.Of<IEntity>(
-                entity => entity.GUID == 1
+            this.left = Mock.Of<IEntity>(
+                entity => entity.Guid == Guid.NewGuid()
                 && entity.JoyName == "TEST1"
                 && entity.PlayerControlled == true);
 
-            right = Mock.Of<IEntity>(
+            this.right = Mock.Of<IEntity>(
                 entity => entity.JoyName == "TEST2"
-                && entity.GUID == 2);
+                && entity.Guid == Guid.NewGuid());
         }
 
         [UnityTest]
@@ -71,10 +74,10 @@ namespace Tests
             IQuest quest = Mock.Of<IQuest>();
             
             //when
-            target.AddQuest(left.GUID, quest);
+            this.target.AddQuest(this.left.Guid, quest);
 
             //then
-            Assert.That(target.GetQuestsForEntity(left.GUID), Is.Not.Empty);
+            Assert.That(this.target.GetQuestsForEntity(this.left.Guid), Is.Not.Empty);
 
             return null;
         }
@@ -86,18 +89,18 @@ namespace Tests
             IJoyAction action = Mock.Of<IJoyAction>();
             IQuest quest = Mock.Of<IQuest>(
                 q => q.AdvanceStep() == true
-                && q.FulfilsRequirements(left, action) == true
-                && q.CompleteQuest(left) == true
+                && q.FulfilsRequirements(this.left, action) == true
+                && q.CompleteQuest(this.left) == true
                 && q.IsComplete == true);
-            
-            target.AddQuest(left.GUID, quest);
-            quest.StartQuest(left);
+
+            this.target.AddQuest(this.left.Guid, quest);
+            quest.StartQuest(this.left);
             
             //when
-            target.PerformQuestAction(left, quest, action);
+            this.target.PerformQuestAction(this.left, quest, action);
 
             //then
-            Assert.That(target.GetQuestsForEntity(left.GUID), Is.Empty);
+            Assert.That(this.target.GetQuestsForEntity(this.left.Guid), Is.Empty);
 
             return null;
         }

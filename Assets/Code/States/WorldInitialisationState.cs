@@ -62,7 +62,7 @@ namespace JoyLib.Code.States
             this.m_ActiveWorld.Initialise();
             int terrainLayer = LayerMask.NameToLayer("Terrain");
             //Make the upstairs
-            if (this.m_ActiveWorld.GUID != this.m_Overworld.GUID)
+            if (this.m_ActiveWorld.Guid != this.m_Overworld.Guid)
             {
                 GameObject child = gameManager.FloorPool.Get();
                 child.layer = terrainLayer;

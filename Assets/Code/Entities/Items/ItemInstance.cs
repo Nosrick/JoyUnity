@@ -28,13 +28,13 @@ namespace JoyLib.Code.Entities.Items
         protected bool m_Identified;
 
         [OdinSerialize]
-        protected List<long> m_Contents;
+        protected List<Guid> m_Contents;
         
         [OdinSerialize]
         protected BaseItemType m_Type;
 
         [OdinSerialize]
-        protected long m_OwnerGUID;
+        protected Guid m_OwnerGUID;
         
         [OdinSerialize]
         protected string m_OwnerString;
@@ -59,7 +59,7 @@ namespace JoyLib.Code.Entities.Items
 
         protected IWorldInstance m_World;
 
-        public long OwnerGUID
+        public Guid OwnerGUID
         {
             get
             {
@@ -89,6 +89,7 @@ namespace JoyLib.Code.Entities.Items
         public ILiveEntityHandler EntityHandler { get; set; }
 
         public ItemInstance(
+            Guid guid,
             BaseItemType type, 
             IDictionary<string, IDerivedValue> derivedValues,
             Vector2Int position, 
@@ -101,7 +102,8 @@ namespace JoyLib.Code.Entities.Items
             List<IItemInstance> contents = null,
             bool active = false)
             : base(
-                type.UnidentifiedName,
+                type.UnidentifiedName, 
+                guid,
                 derivedValues,
                 position,
                 actions,
@@ -125,7 +127,7 @@ namespace JoyLib.Code.Entities.Items
             
             this.Identified = identified;
 
-            this.m_Contents = contents is null ? new List<long>() : contents.Select(instance => instance.GUID).ToList();
+            this.m_Contents = contents is null ? new List<Guid>() : contents.Select(instance => instance.Guid).ToList();
 
             this.UniqueAbilities = uniqueAbilities is null == false ? new List<IAbility>(uniqueAbilities) : new List<IAbility>();
 
@@ -195,6 +197,7 @@ namespace JoyLib.Code.Entities.Items
             this.Initialise();
 
             ItemInstance newItem = new ItemInstance(
+                copy.Guid,
                 copy.ItemType,
                 copy.DerivedValues,
                 copy.WorldPosition,
@@ -283,11 +286,6 @@ namespace JoyLib.Code.Entities.Items
             this.ConstructDescription();
         }
 
-        public override string ToString()
-        {
-            return "{ " + this.JoyName + " : " + this.GUID + "}";
-        }
-
         protected void Initialise()
         {
             if (GlobalConstants.GameManager is null)
@@ -299,7 +297,7 @@ namespace JoyLib.Code.Entities.Items
             EntityHandler = GlobalConstants.GameManager.EntityHandler;
         }
         
-        public void SetOwner(long newOwner, bool recursive = false)
+        public void SetOwner(Guid newOwner, bool recursive = false)
         {
             this.OwnerGUID = newOwner;
 
@@ -343,11 +341,11 @@ namespace JoyLib.Code.Entities.Items
             this.ConstructDescription();
         }
 
-        public long TakeMyItem(int index)
+        public Guid TakeMyItem(int index)
         {
             if(index > 0 && index < this.m_Contents.Count)
             {
-                long item = this.m_Contents[index];
+                Guid item = this.m_Contents[index];
                 this.m_Contents.RemoveAt(index);
                 return item;
             }
@@ -357,7 +355,7 @@ namespace JoyLib.Code.Entities.Items
 
         public bool Contains(IItemInstance actor)
         {
-            if (this.m_Contents.Contains(actor.GUID))
+            if (this.m_Contents.Contains(actor.Guid))
             {
                 return true;
             }
@@ -378,7 +376,7 @@ namespace JoyLib.Code.Entities.Items
 
         public bool CanAddContents(IItemInstance actor)
         {
-            if (actor.GUID == this.GUID 
+            if (actor.Guid == this.Guid 
             || this.Contains(actor) 
             || actor.Contains(this))
             {
@@ -392,7 +390,7 @@ namespace JoyLib.Code.Entities.Items
         {
             if(this.CanAddContents(actor))
             {
-                this.m_Contents.Add(actor.GUID);
+                this.m_Contents.Add(actor.Guid);
 
                 this.CalculateValue();
                 this.ConstructDescription();
@@ -410,8 +408,8 @@ namespace JoyLib.Code.Entities.Items
         {
             IEnumerable<IItemInstance> itemInstances = actors as IItemInstance[] ?? actors.ToArray();
             this.m_Contents.AddRange(itemInstances.Where(actor => 
-                    this.m_Contents.Any(item => item == actor.GUID) == false)
-                .Select(instance => instance.GUID));
+                    this.m_Contents.Any(item => item == actor.Guid) == false)
+                .Select(instance => instance.Guid));
 
             this.CalculateValue();
             this.ConstructDescription();
@@ -425,7 +423,7 @@ namespace JoyLib.Code.Entities.Items
 
         public bool RemoveContents(IItemInstance actor)
         {
-            if (!this.m_Contents.Remove(actor.GUID))
+            if (!this.m_Contents.Remove(actor.Guid))
             {
                 return false;
             }
@@ -461,6 +459,24 @@ namespace JoyLib.Code.Entities.Items
             {
                 this.m_Value += item.Value;
             }
+        }
+
+        public override void Dispose()
+        {
+            if (this.MonoBehaviourHandler)
+            {
+                GlobalConstants.GameManager.ItemPool.Retire(this.MonoBehaviourHandler.gameObject);
+            }
+            base.Dispose();
+            foreach (IItemInstance content in this.Contents)
+            {
+                content.Dispose();
+            }
+        }
+
+        ~ItemInstance()
+        {
+            this.Dispose();
         }
 
         public bool Identified
@@ -549,7 +565,7 @@ namespace JoyLib.Code.Entities.Items
 
         public IEnumerable<IItemInstance> Contents
         {
-            get => ItemHandler.GetItems(this.m_Contents);
+            get => this.ItemHandler.GetItems(this.m_Contents);
         }
 
         public string ContentString

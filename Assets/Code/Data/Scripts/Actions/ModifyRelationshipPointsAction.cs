@@ -55,7 +55,7 @@ namespace JoyLib.Code.Scripting.Actions
                     }
                     else
                     {
-                        relationship.ModifyValueOfOtherParticipants(participants[0].GUID, relationshipMod);
+                        relationship.ModifyValueOfOtherParticipants(participants[0].Guid, relationshipMod);
                     }
                 }
 

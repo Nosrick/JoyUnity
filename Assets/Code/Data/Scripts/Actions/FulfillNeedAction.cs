@@ -32,7 +32,7 @@ namespace JoyLib.Code.Scripting.Actions
 
             bool doAll = args.Length < 4 ? false : (bool) args[3];
 
-            IJoyObject[] fellowActors = participants.Where(p => p.GUID != actor.GUID).ToArray();
+            IJoyObject[] fellowActors = participants.Where(p => p.Guid != actor.Guid).ToArray();
             
             actor.Needs[need].Fulfill(value);
             actor.FulfillmentData = new Entities.Needs.FulfillmentData(need, counter, fellowActors);
@@ -43,7 +43,7 @@ namespace JoyLib.Code.Scripting.Actions
                 {
                     if (jo is Entity entity)
                     {
-                        IJoyObject[] others = participants.Where(p => p.GUID != entity.GUID).ToArray();
+                        IJoyObject[] others = participants.Where(p => p.Guid != entity.Guid).ToArray();
                         entity.Needs[need].Fulfill(value);
                         actor.FulfillmentData = new Entities.Needs.FulfillmentData(need, counter, others);
                     }

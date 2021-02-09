@@ -9,7 +9,7 @@ namespace JoyLib.Code.Quests
 {
     public class QuestTracker : IQuestTracker
     {
-        protected Dictionary<long, List<IQuest>> EntityQuests { get; set; }
+        protected Dictionary<Guid, List<IQuest>> EntityQuests { get; set; }
         
         protected ILiveItemHandler ItemHandler { get; set; }
 
@@ -25,11 +25,11 @@ namespace JoyLib.Code.Quests
         {
             if (this.EntityQuests is null)
             {
-                this.EntityQuests = new Dictionary<long, List<IQuest>>();
+                this.EntityQuests = new Dictionary<Guid, List<IQuest>>();
             }
         }
 
-        public List<IQuest> GetQuestsForEntity(long GUID)
+        public List<IQuest> GetQuestsForEntity(Guid GUID)
         {
             if (this.EntityQuests.ContainsKey(GUID))
             {
@@ -39,7 +39,7 @@ namespace JoyLib.Code.Quests
             return new List<IQuest>();
         }
 
-        public IQuest GetPrimaryQuestForEntity(long GUID)
+        public IQuest GetPrimaryQuestForEntity(Guid GUID)
         {
             if (this.EntityQuests.ContainsKey(GUID) && this.EntityQuests[GUID].Count > 0)
             {
@@ -49,7 +49,7 @@ namespace JoyLib.Code.Quests
             throw new InvalidOperationException("No quests found for " + GUID + ".");
         }
 
-        public void AddQuest(long GUID, IQuest quest)
+        public void AddQuest(Guid GUID, IQuest quest)
         {
             if (this.EntityQuests.ContainsKey(GUID))
             {
@@ -64,24 +64,18 @@ namespace JoyLib.Code.Quests
         public void CompleteQuest(IEntity questor, IQuest quest)
         {
             quest.CompleteQuest(questor);
-            this.EntityQuests[questor.GUID].Remove(quest);
-            this.CleanUpRewards();
-        }
-
-        protected void CleanUpRewards()
-        {
-            this.ItemHandler.CleanUpRewards(
-                this.AllQuests.SelectMany(quest => quest.RewardGUIDs));
+            this.EntityQuests[questor.Guid].Remove(quest);
+            GlobalConstants.GameManager.ItemHandler.CleanUpRewards();
         }
 
         public void AbandonQuest(IEntity questor, IQuest quest)
         {
-            this.EntityQuests[questor.GUID].Remove(quest);
+            this.EntityQuests[questor.Guid].Remove(quest);
         }
 
         public void FailQuest(IEntity questor, IQuest quest)
         {
-            this.EntityQuests[questor.GUID].Remove(quest);
+            this.EntityQuests[questor.Guid].Remove(quest);
         }
 
         public void PerformQuestAction(IEntity questor, IQuest quest, IJoyAction completedAction)
@@ -94,7 +88,7 @@ namespace JoyLib.Code.Quests
 
         public void PerformQuestAction(IEntity questor, IJoyAction completedAction)
         {
-            List<IQuest> copy = new List<IQuest>(this.GetQuestsForEntity(questor.GUID));
+            List<IQuest> copy = new List<IQuest>(this.GetQuestsForEntity(questor.Guid));
             foreach (IQuest quest in copy)
             {
                 this.PerformQuestAction(questor, quest, completedAction);

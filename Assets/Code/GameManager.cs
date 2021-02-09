@@ -22,6 +22,7 @@ using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.IO;
+using JoyLib.Code.Managers;
 using JoyLib.Code.Physics;
 using JoyLib.Code.Quests;
 using JoyLib.Code.Rollers;
@@ -61,6 +62,8 @@ namespace JoyLib.Code
             this.BegunInitialisation = true;
             this.LoadingMessage = "Initialising action log";
             this.ActionLog = new ActionLog();
+
+            this.GUIDManager = new GUIDManager();
 
             GlobalConstants.ActionLog = this.ActionLog;
 
@@ -128,12 +131,25 @@ namespace JoyLib.Code
             this.ItemHandler = new LiveItemHandler(this.ObjectIconHandler, this.MaterialHandler, this.AbilityHandler,
                 this.Roller);
 
-            this.EntityFactory = new EntityFactory(this.NeedHandler, this.ObjectIconHandler, this.CultureHandler,
-                this.SexualityHandler, this.BioSexHandler, this.GenderHandler, this.RomanceHandler, this.JobHandler,
-                this.PhysicsManager, this.SkillHandler,
-                this.DerivedValueHandler, this.Roller);
+            this.EntityFactory = new EntityFactory(
+                this.GUIDManager, 
+                this.NeedHandler, 
+                this.ObjectIconHandler, 
+                this.CultureHandler,
+                this.SexualityHandler, 
+                this.BioSexHandler, 
+                this.GenderHandler, 
+                this.RomanceHandler, 
+                this.JobHandler,
+                this.PhysicsManager, 
+                this.SkillHandler,
+                this.DerivedValueHandler,
+                this.Roller);
 
-            this.ItemFactory = new ItemFactory(this.ItemHandler, this.ObjectIconHandler,
+            this.ItemFactory = new ItemFactory(
+                this.GUIDManager, 
+                this.ItemHandler, 
+                this.ObjectIconHandler,
                 this.DerivedValueHandler,
                 this.ItemPool, this.Roller);
 
@@ -143,7 +159,7 @@ namespace JoyLib.Code
 
             this.RumourMill = new ConcreteRumourMill();
 
-            this.ConversationEngine = new ConversationEngine(this.RelationshipHandler);
+            this.ConversationEngine = new ConversationEngine(this.RelationshipHandler, this.GUIDManager.AssignGUID());
 
             this.NaturalWeaponHelper = new NaturalWeaponHelper(this.MaterialHandler, this.ItemFactory);
 
@@ -190,24 +206,30 @@ namespace JoyLib.Code
 
             this.RelationshipHandler = new EntityRelationshipHandler();
 
+            this.GUIDManager = new GUIDManager();
+
             this.EntityHandler = new LiveEntityHandler();
             this.ItemHandler = new LiveItemHandler(this.ObjectIconHandler, this.MaterialHandler, this.AbilityHandler,
                 this.Roller);
 
-            this.EntityFactory = new EntityFactory(this.NeedHandler, this.ObjectIconHandler, this.CultureHandler,
+            this.EntityFactory = new EntityFactory(this.GUIDManager, this.NeedHandler, this.ObjectIconHandler, this.CultureHandler,
                 this.SexualityHandler, this.BioSexHandler, this.GenderHandler, this.RomanceHandler, this.JobHandler,
                 this.PhysicsManager, this.SkillHandler,
                 this.DerivedValueHandler, this.Roller);
 
-            this.ItemFactory = new ItemFactory(this.ItemHandler, this.ObjectIconHandler,
+            this.ItemFactory = new ItemFactory(
+                this.GUIDManager, 
+                this.ItemHandler, 
+                this.ObjectIconHandler,
                 this.DerivedValueHandler,
-                this.ItemPool, this.Roller);
+                this.ItemPool, 
+                this.Roller);
 
             this.QuestProvider =
                 new QuestProvider(this.RelationshipHandler, this.ItemHandler, this.ItemFactory, this.Roller);
             this.QuestTracker = new QuestTracker(this.ItemHandler);
 
-            this.ConversationEngine = new ConversationEngine(this.RelationshipHandler);
+            this.ConversationEngine = new ConversationEngine(this.RelationshipHandler, this.GUIDManager.AssignGUID());
 
             this.NaturalWeaponHelper = new NaturalWeaponHelper(this.MaterialHandler, this.ItemFactory);
         }
@@ -258,6 +280,8 @@ namespace JoyLib.Code
         public IItemFactory ItemFactory { get; protected set; }
         public GameObject MyGameObject { get; protected set; }
 
+        public GUIDManager GUIDManager { get; protected set; }
+        
         public IEntity Player => this.EntityHandler.GetPlayer();
 
         public GameObjectPool FloorPool { get; protected set; }

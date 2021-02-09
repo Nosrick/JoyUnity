@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code;
@@ -6,6 +7,7 @@ using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Helpers;
+using JoyLib.Code.Managers;
 using JoyLib.Code.Quests;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
@@ -46,37 +48,37 @@ namespace Tests
                      && w.GetWorlds(It.IsAny<IWorldInstance>()) == new List<IWorldInstance>
                      {
                          Mock.Of<IWorldInstance>(
-                             instance => instance.GUID == 200)
+                             instance => instance.Guid == Guid.NewGuid())
                      }
                      && w.GetRandomSentientWorldWide() == Mock.Of<IEntity>(
-                         entity => entity.GUID == 2
+                         entity => entity.Guid == Guid.NewGuid()
                                    && entity.MyWorld == this.world
                                    && entity.Contents == new List<IItemInstance> {item}));
 
             this.world = Mock.Of<IWorldInstance>(
                 w => w.GetOverworld() == this.overworld
                      && w.Name == "TEST"
-                     && w.GUID == 200);
+                     && w.Guid == Guid.NewGuid());
 
             this.left = Mock.Of<IEntity>(
-                entity => entity.GUID == 1
+                entity => entity.Guid == Guid.NewGuid()
                           && entity.PlayerControlled == true
                           && entity.MyWorld == this.world
                           && entity.HasDataKey(It.IsAny<string>()) == false);
 
             this.right = Mock.Of<IEntity>(
-                entity => entity.GUID == 2
+                entity => entity.Guid == Guid.NewGuid()
                           && entity.MyWorld == this.world
                           && entity.Contents == new List<IItemInstance> {item});
 
             IRelationship friendship = Mock.Of<IRelationship>(
-                relationship => relationship.GetRelationshipValue(It.IsAny<long>(), It.IsAny<long>()) == 0);
+                relationship => relationship.GetRelationshipValue(It.IsAny<Guid>(), It.IsAny<Guid>()) == 0);
 
             IEntityRelationshipHandler relationshipHandler = Mock.Of<IEntityRelationshipHandler>(
                 handler => handler.Get(It.IsAny<IJoyObject[]>(), It.IsAny<string[]>(), It.IsAny<bool>())
                            == new[] {friendship});
             ILiveItemHandler itemHandler = Mock.Of<ILiveItemHandler>(
-                handler => handler.GetQuestRewards(It.IsAny<long>()) == new List<IItemInstance> { item });
+                handler => handler.GetQuestRewards(It.IsAny<Guid>()) == new List<IItemInstance> { item });
             IItemFactory itemFactory = Mock.Of<IItemFactory>(
                 factory => factory.CreateRandomItemOfType(
                                It.IsAny<string[]>(),
@@ -92,7 +94,8 @@ namespace Tests
             this.gameManager = Mock.Of<IGameManager>(
                 manager => manager.ItemFactory == itemFactory
                            && manager.Player == this.left
-                           && manager.ItemHandler == itemHandler);
+                           && manager.ItemHandler == itemHandler
+                           && manager.GUIDManager == new GUIDManager());
 
             GlobalConstants.GameManager = this.gameManager;
 

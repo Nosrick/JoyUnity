@@ -23,7 +23,7 @@ namespace JoyLib.Code.Entities.Items
 
         public bool CanAddContents(IItemInstance actor)
         {
-            return this.GUID != actor.GUID && !this.Contains(actor);
+            return this.Guid != actor.Guid && !this.Contains(actor);
         }
 
         public bool AddContents(IItemInstance actor)
@@ -42,7 +42,7 @@ namespace JoyLib.Code.Entities.Items
 
         public bool AddContents(IEnumerable<IItemInstance> actors)
         {
-            this.m_Contents.AddRange(actors.Where(actor => this.Contents.Any(item => item.GUID == actor.GUID) == false));
+            this.m_Contents.AddRange(actors.Where(actor => this.Contents.Any(item => item.Guid == actor.Guid) == false));
             
             foreach (IItemInstance actor in actors)
             {

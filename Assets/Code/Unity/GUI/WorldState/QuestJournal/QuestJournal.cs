@@ -43,7 +43,7 @@ namespace JoyLib.Code.Unity.GUI
 
             this.QuestTracker = GlobalConstants.GameManager.QuestTracker ?? this.QuestTracker;
             this.EntityHandler = GlobalConstants.GameManager.EntityHandler ?? this.EntityHandler;
-            this.Player = this.EntityHandler is null == false ? this.Player is null ? this.EntityHandler.GetPlayer() : this.Player : this.Player;
+            this.Player = this.EntityHandler?.GetPlayer();
         }
 
         public void Repaint()
@@ -53,7 +53,7 @@ namespace JoyLib.Code.Unity.GUI
                 return;
             }
             
-            List<IQuest> quests = this.QuestTracker.GetQuestsForEntity(this.Player.GUID);
+            List<IQuest> quests = this.QuestTracker.GetQuestsForEntity(this.Player.Guid);
             if (quests.Count > this.MenuItems.Count)
             {
                 int difference = quests.Count - this.MenuItems.Count;

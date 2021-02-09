@@ -1,40 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
+using Sirenix.OdinSerializer;
 
 namespace JoyLib.Code.Managers
 {
+    [Serializable]
     public class GUIDManager
     {
-        private static Lazy<GUIDManager> lazy = new Lazy<GUIDManager>(() => new GUIDManager());
+        [OdinSerialize]
+        public Queue<Guid> RecycleList { get; protected set; }
 
-        private long m_GUIDCounter = 0;
-
-        private List<long> m_RecycleList = new List<long>();
-
-        public long AssignGUID()
+        public GUIDManager()
         {
-            if (this.m_RecycleList.Count > 0)
-            {
-                long GUID = this.m_RecycleList[0];
-                this.m_RecycleList.RemoveAt(0);
-                return GUID;
-            }
-
-            this.m_GUIDCounter += 1;
-            return this.m_GUIDCounter;
+            this.RecycleList = new Queue<Guid>();
         }
 
-        public void ReleaseGUID(long GUIDRef)
+        public void Deserialise(Queue<Guid> recycleList)
         {
-            this.m_RecycleList.Add(GUIDRef);
+            this.RecycleList = recycleList;
         }
 
-        public static GUIDManager Instance
+        public Guid AssignGUID()
         {
-            get
+            /*
+            if (this.RecycleList.Count > 0)
             {
-                return lazy.Value;
+                return this.RecycleList.Dequeue();
             }
+            */
+
+            return Guid.NewGuid();
+        }
+
+        public void ReleaseGUID(Guid GUIDRef)
+        {
+            this.RecycleList.Enqueue(GUIDRef);
         }
     }
 }

@@ -1,11 +1,13 @@
-﻿namespace JoyLib.Code.Entities.Items
+﻿using System;
+
+namespace JoyLib.Code.Entities.Items
 {
     public interface IOwnable
     {
         string OwnerString { get; }
         
-        long OwnerGUID { get; }
+        Guid OwnerGUID { get; }
 
-        void SetOwner(long newOwner, bool recursive = false);
+        void SetOwner(Guid newOwner, bool recursive = false);
     }
 }

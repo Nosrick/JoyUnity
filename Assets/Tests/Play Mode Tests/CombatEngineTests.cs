@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code;
@@ -10,7 +11,6 @@ using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
-using JoyLib.Code.Managers;
 using JoyLib.Code.Rollers;
 using Moq;
 using NUnit.Framework;
@@ -160,7 +160,7 @@ namespace Tests
                 this.attackerEquipment.AddSlot("hand");
                 IItemInstance instance = Mock.Of<IItemInstance>(
                     item => item.Efficiency == attackerValue
-                            && item.GUID == GUIDManager.Instance.AssignGUID()
+                            && item.Guid == Guid.NewGuid()
                             && item.Tags == new[] {"weapon", attackTypeTag}
                             && item.ItemType == Mock.Of<BaseItemType>(
                                 type => type.Slots == new[] {"hand"}));
@@ -173,7 +173,7 @@ namespace Tests
                 this.defenderEquipment.AddSlot("torso");
                 IItemInstance instance = Mock.Of<IItemInstance>(
                     item => item.Efficiency == defenderValue
-                            && item.GUID == GUIDManager.Instance.AssignGUID()
+                            && item.Guid == Guid.NewGuid()
                             && item.Tags == new[] {"armour", attackTypeTag}
                             && item.ItemType == Mock.Of<BaseItemType>(
                                 type => type.Slots == new[] {"torso"}));

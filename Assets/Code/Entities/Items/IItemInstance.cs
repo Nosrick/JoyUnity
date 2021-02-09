@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using JoyLib.Code.Entities.Abilities;
 
 namespace JoyLib.Code.Entities.Items
@@ -17,7 +18,7 @@ namespace JoyLib.Code.Entities.Items
 
         void Deserialise();
 
-        long TakeMyItem(int index);
+        Guid TakeMyItem(int index);
         
         bool Identified { get; }
         

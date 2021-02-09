@@ -8,7 +8,6 @@ using JoyLib.Code.Conversation.Conversations;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Helpers;
-using JoyLib.Code.Managers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.Unity.GUI;
 using UnityEngine;
@@ -48,7 +47,7 @@ namespace JoyLib.Code.Conversation
             protected set;
         }
 
-        public long GUID
+        public Guid Guid
         {
             get;
             protected set;
@@ -63,7 +62,8 @@ namespace JoyLib.Code.Conversation
         protected IEntityRelationshipHandler RelationshipHandler { get; set; }
 
         public ConversationEngine(
-            IEntityRelationshipHandler relationshipHandler)
+            IEntityRelationshipHandler relationshipHandler,
+            Guid guid)
         {
             this.RelationshipHandler = relationshipHandler;
 
@@ -71,7 +71,7 @@ namespace JoyLib.Code.Conversation
 
             this.m_CurrentTopics = new List<ITopic>();
 
-            this.GUID = GUIDManager.Instance.AssignGUID();
+            this.Guid = guid;
         }
 
         protected List<ITopic> LoadTopics()
@@ -237,7 +237,7 @@ namespace JoyLib.Code.Conversation
                         break;
                     }
                     
-                    int value = relationship.GetRelationshipValue(this.Instigator.GUID, this.Listener.GUID);
+                    int value = relationship.GetRelationshipValue(this.Instigator.Guid, this.Listener.Guid);
                     if (value > best)
                     {
                         best = value;
@@ -420,7 +420,7 @@ namespace JoyLib.Code.Conversation
 
         ~ConversationEngine()
         {
-            GUIDManager.Instance.ReleaseGUID(this.GUID);
+            GlobalConstants.GameManager.GUIDManager.ReleaseGUID(this.Guid);
         }
 
         public ITopic[] CurrentTopics

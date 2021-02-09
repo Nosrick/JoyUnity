@@ -8,13 +8,12 @@ using JoyLib.Code.World;
 
 namespace JoyLib.Code
 {
-    public interface IJoyObject : ITagged, IPosition, IDerivedValueContainer, IDataContainer, IDisposable
+    public interface IJoyObject : ITagged, IPosition, IDerivedValueContainer, IDataContainer, IDisposable, IGuidHolder
     {
         List<ISpriteState> States { get; }
         bool IsDestructible { get; }
         bool IsWall { get; }
         string JoyName { get; }
-        long GUID { get; }
         
         string TileSet { get; }
         

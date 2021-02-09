@@ -31,11 +31,11 @@ namespace JoyLib.Code.Scripting.Actions
             if (newOwner && container is IEntity owner)
             {
                 if (tags is null == false 
-                    && (tags.Any(tag => tag.Equals("theft", StringComparison.OrdinalIgnoreCase)) 
-                        && owner.GUID != item.OwnerGUID)
-                    || item.OwnerGUID == 0)
+                    && tags.Any(tag => tag.Equals("theft", StringComparison.OrdinalIgnoreCase)) 
+                    && owner.Guid != item.OwnerGUID
+                    && item.OwnerGUID != Guid.Empty)
                 {
-                    item.SetOwner(owner.GUID);
+                    item.SetOwner(owner.Guid);
                 }
             }
 

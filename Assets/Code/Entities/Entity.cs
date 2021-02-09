@@ -58,7 +58,7 @@ namespace JoyLib.Code.Entities
         protected EquipmentStorage m_Equipment;
         
         [OdinSerialize]
-        protected List<long> m_Backpack;
+        protected List<Guid> m_Backpack;
         
         [OdinSerialize]
         protected IItemInstance m_NaturalWeapons;
@@ -141,6 +141,7 @@ namespace JoyLib.Code.Entities
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="guid"></param>
         /// <param name="template"></param>
         /// <param name="statistics"></param>
         /// <param name="derivedValues"></param>
@@ -163,8 +164,10 @@ namespace JoyLib.Code.Entities
         /// <param name="world"></param>
         /// <param name="driver"></param>
         /// <param name="roller"></param>
+        /// <param name="name"></param>
         /// <param name="jobLevels"></param>
         public Entity(
+            Guid guid,
             IEntityTemplate template,
             IDictionary<string, IRollableValue<int>> statistics,
             IDictionary<string, IDerivedValue> derivedValues,
@@ -189,6 +192,7 @@ namespace JoyLib.Code.Entities
             RNG roller = null,
             string name = null) :
             base(name,
+                guid,
                 derivedValues,
                 position,
                 STANDARD_ACTIONS,
@@ -223,7 +227,7 @@ namespace JoyLib.Code.Entities
 
             this.m_NaturalWeapons = naturalWeapons;
             this.m_Equipment = equipment;
-            this.m_Backpack = backpack.Select(instance => instance.GUID).ToList();
+            this.m_Backpack = backpack.Select(instance => instance.Guid).ToList();
             this.Sex = sex;
             this.m_VisionProvider = template.VisionType.Copy();
 
@@ -258,10 +262,11 @@ namespace JoyLib.Code.Entities
         /// Create a new entity, naked and squirming
         /// Created with no equipment, knowledge, family, etc
         /// </summary>
+        /// <param name="guid"></param>
         /// <param name="template">The template the entity is based upon</param>
-        /// <param name="needs">The entity's needs</param>
         /// <param name="statistics">The entity's statistic block</param>
         /// <param name="derivedValues">The derived values of the entity</param>
+        /// <param name="needs">The entity's needs</param>
         /// <param name="skills">The entity's skill block</param>
         /// <param name="abilities">Any abilities the entity may have</param>
         /// <param name="cultures">The cultures the entity belongs to</param>
@@ -277,6 +282,7 @@ namespace JoyLib.Code.Entities
         /// <param name="roller">The RNG used for this entity</param>
         /// <param name="name">The name of the entity</param>
         public Entity(
+            Guid guid,
             IEntityTemplate template,
             IDictionary<string, IRollableValue<int>> statistics,
             IDictionary<string, IDerivedValue> derivedValues,
@@ -295,7 +301,7 @@ namespace JoyLib.Code.Entities
             IDriver driver,
             RNG roller = null,
             string name = null) :
-            this(template, statistics, derivedValues, needs, skills, abilities, cultures, job, gender, sex, sexuality, romance, position, sprites,
+            this(guid, template, statistics, derivedValues, needs, skills, abilities, cultures, job, gender, sex, sexuality, romance, position, sprites,
                 GlobalConstants.GameManager.NaturalWeaponHelper?.MakeNaturalWeapon(template.Size), new EquipmentStorage(template.Slots),
                 new List<IItemInstance>(), new List<string>(), new List<IJob> { job }, world, driver, roller, name)
         {
@@ -471,7 +477,7 @@ namespace JoyLib.Code.Entities
         public void AddQuest(IQuest quest)
         {
             quest.StartQuest(this);
-            QuestTracker?.AddQuest(this.GUID, quest);
+            QuestTracker?.AddQuest(this.Guid, quest);
         }
 
         public bool AddJob(IJob job)
@@ -491,7 +497,7 @@ namespace JoyLib.Code.Entities
                 this.m_CurrentJob = this.Jobs.First(j => j.Name.Equals(job, StringComparison.OrdinalIgnoreCase));
                 this.JobChange?.Invoke(this, new JobChangedEventArgs()
                 {
-                    GUID = this.GUID,
+                    GUID = this.Guid,
                     NewJob = this.m_CurrentJob
                 });
                 return true;
@@ -509,7 +515,7 @@ namespace JoyLib.Code.Entities
             this.m_CurrentJob = job;
             this.JobChange?.Invoke(this, new JobChangedEventArgs()
             {
-                GUID = this.GUID,
+                GUID = this.Guid,
                 NewJob = this.m_CurrentJob
             });
 
@@ -698,7 +704,7 @@ namespace JoyLib.Code.Entities
                     {
                         if (relationship.Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase)))
                         {
-                            int relationshipValue = relationship.GetRelationshipValue(this.GUID, other.GUID);
+                            int relationshipValue = relationship.GetRelationshipValue(this.Guid, other.Guid);
                             data.Add(new Tuple<string, int>(tag, 1));
                             data.Add(new Tuple<string, int>("relationship", relationshipValue));
                         }
@@ -743,9 +749,9 @@ namespace JoyLib.Code.Entities
 
         public virtual bool RemoveContents(IItemInstance item)
         {
-            if (this.m_Backpack.Contains(item.GUID))
+            if (this.m_Backpack.Contains(item.Guid))
             {
-                this.m_Backpack.Remove(item.GUID);
+                this.m_Backpack.Remove(item.Guid);
                 this.ItemRemoved?.Invoke(this, new ItemChangedEventArgs(){ Item = item });
                 return true;
             }
@@ -858,9 +864,9 @@ namespace JoyLib.Code.Entities
                 goItem.MonoBehaviourHandler.gameObject.SetActive(false);
             }
 
-            if (this.m_Backpack.Contains(actor.GUID) == false)
+            if (this.m_Backpack.Contains(actor.Guid) == false)
             {
-                this.m_Backpack.Add(actor.GUID);
+                this.m_Backpack.Add(actor.Guid);
             }
             
             this.ItemAdded?.Invoke(this, new ItemChangedEventArgs { Item = actor });
@@ -875,7 +881,7 @@ namespace JoyLib.Code.Entities
         public virtual bool Contains(IItemInstance actor)
         {
             bool result = false;
-            result |= this.m_Backpack.Contains(actor.GUID);
+            result |= this.m_Backpack.Contains(actor.Guid);
             if (result)
             {
                 return true;
@@ -904,8 +910,8 @@ namespace JoyLib.Code.Entities
             }
 
             this.m_Backpack.AddRange(
-                actors.Where(actor => this.m_Backpack.Any(item => item == actor.GUID) == false)
-                    .Select(instance => instance.GUID));
+                actors.Where(actor => this.m_Backpack.Any(item => item == actor.Guid) == false)
+                    .Select(instance => instance.Guid));
             foreach (IItemInstance actor in actors)
             {
                 this.ItemAdded?.Invoke(this, new ItemChangedEventArgs() { Item = actor });
@@ -1023,6 +1029,23 @@ namespace JoyLib.Code.Entities
             }
 
             throw new InvalidOperationException("No value of " + name + " found on " + this.JoyName);
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            foreach (IItemInstance item in this.Contents)
+            {
+                item.Dispose();
+            }
+
+            foreach (IItemInstance equipment in this.Equipment.Contents)
+            {
+                equipment.Dispose();
+            }
+            
+            this.m_NaturalWeapons.Dispose();
+            GlobalConstants.GameManager.EntityPool.Retire(this.MonoBehaviourHandler.gameObject);
         }
 
         public string ContentString { get; }

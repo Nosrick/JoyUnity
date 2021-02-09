@@ -13,6 +13,7 @@ using JoyLib.Code.Entities.Sexes;
 using JoyLib.Code.Entities.Sexuality;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
+using JoyLib.Code.Managers;
 using JoyLib.Code.Physics;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.World;
@@ -44,9 +45,12 @@ namespace JoyLib.Code.Entities
         
         protected IDerivedValueHandler DerivedValueHandler { get; set; }
         
+        protected GUIDManager GuidManager { get; set; }
+        
         protected RNG Roller { get; set; }
 
         public EntityFactory(
+            GUIDManager guidManager,
             INeedHandler needHandler,
             IObjectIconHandler objectIconHandler,
             ICultureHandler cultureHandler,
@@ -60,6 +64,7 @@ namespace JoyLib.Code.Entities
             IDerivedValueHandler derivedValueHandler,
             RNG roller)
         {
+            this.GuidManager = guidManager;
             this.Roller = roller;
             this.NeedHandler = needHandler;
             this.ObjectIcons = objectIconHandler;
@@ -209,6 +214,7 @@ namespace JoyLib.Code.Entities
             }
 
             IEntity entity = new Entity(
+                this.GuidManager.AssignGUID(), 
                 template, 
                 selectedStatistics, 
                 selectedDVs, 
@@ -271,6 +277,7 @@ namespace JoyLib.Code.Entities
             }
 
             IEntity entity = new Entity(
+                this.GuidManager.AssignGUID(),
                 template,
                 statistics, 
                 derivedValues, 

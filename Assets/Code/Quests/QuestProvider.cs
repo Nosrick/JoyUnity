@@ -42,6 +42,8 @@ namespace JoyLib.Code.Quests
 
         public IQuest MakeRandomQuest(IEntity questor, IEntity provider, IWorldInstance overworldRef)
         {
+            GlobalConstants.GameManager.ItemHandler.CleanUpRewards();
+            
             List<IQuestStep> steps = new List<IQuestStep>();
 
             //int numberOfSteps = RNG.instance.Roll(1, 4);
@@ -63,8 +65,8 @@ namespace JoyLib.Code.Quests
                 steps, 
                 QuestMorality.Neutral, 
                 rewards, 
-                provider.GUID, 
-                questor.GUID, 
+                provider.Guid, 
+                questor.Guid, 
                 tagsForAllSteps);
             
             GlobalConstants.GameManager.ItemHandler.AddQuestRewards(quest.ID, rewards);
@@ -88,8 +90,8 @@ namespace JoyLib.Code.Quests
                     steps, 
                     QuestMorality.Neutral, 
                     this.GetRewards(questor, provider, steps), 
-                    provider.GUID, 
-                    questor.GUID, 
+                    provider.Guid, 
+                    questor.Guid, 
                     new string[0]));
             }
 
@@ -108,7 +110,7 @@ namespace JoyLib.Code.Quests
             rewards.Add(this.BagOfGoldHelper.GetBagOfGold(reward));
             foreach (IItemInstance item in rewards)
             {
-                item.SetOwner(questor.GUID);
+                item.SetOwner(questor.Guid);
             }
 
             return rewards;

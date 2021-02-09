@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace JoyLib.Code.Entities
 {
@@ -8,9 +9,9 @@ namespace JoyLib.Code.Entities
         
         bool AddEntity(IEntity created);
 
-        bool Remove(long GUID);
+        bool Remove(Guid GUID);
 
-        IEntity Get(long GUID);
+        IEntity Get(Guid GUID);
 
         IEntity GetPlayer();
 

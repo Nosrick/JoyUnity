@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Managers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.World;
 using Sirenix.OdinSerializer;
@@ -18,25 +17,25 @@ namespace JoyLib.Code.Quests
         public Quest(
             List<IQuestStep> steps,
             QuestMorality morality,
-            List<IItemInstance> rewards,
-            long instigator,
-            long questor,
+            IEnumerable<IItemInstance> rewards,
+            Guid instigator,
+            Guid questor,
             IEnumerable<string> tags)
         {
             this.Steps = steps;
             this.Morality = morality;
-            this.RewardGUIDs = rewards.Select(instance => instance.GUID).ToList();
+            this.RewardGUIDs = rewards.Select(instance => instance.Guid).ToList();
             this.Instigator = instigator;
             this.Questor = questor;
             this.CurrentStep = 0;
-            this.ID = GUIDManager.Instance.AssignGUID();
+            this.ID = GlobalConstants.GameManager.GUIDManager.AssignGUID();
             this.Tags = new List<string>(tags);
         }
 
         ~Quest()
         {
-            GUIDManager.Instance.ReleaseGUID(this.ID);
-            GlobalConstants.GameManager.ItemHandler.CleanUpRewards(this.RewardGUIDs);
+            GlobalConstants.GameManager.GUIDManager.ReleaseGUID(this.ID);
+            GlobalConstants.GameManager.ItemHandler.CleanUpRewards();
         }
 
         public bool AdvanceStep()
@@ -65,15 +64,15 @@ namespace JoyLib.Code.Quests
             {
                 case IItemInstance itemInstance:
                 {
-                    return this.Steps[this.CurrentStep].Items.Contains(itemInstance.GUID);
+                    return this.Steps[this.CurrentStep].Items.Contains(itemInstance.Guid);
                 }
                 case IEntity entity:
                 {
-                    return this.Steps[this.CurrentStep].Actors.Contains(entity.GUID);
+                    return this.Steps[this.CurrentStep].Actors.Contains(entity.Guid);
                 }
                 case IWorldInstance worldInstance:
                 {
-                    return this.Steps[this.CurrentStep].Areas.Contains(worldInstance.GUID);
+                    return this.Steps[this.CurrentStep].Areas.Contains(worldInstance.Guid);
                 }
                 default:
                     return false;
@@ -161,7 +160,7 @@ namespace JoyLib.Code.Quests
         public QuestMorality Morality { get; protected set; }
         
         [OdinSerialize]
-        public List<long> RewardGUIDs { get; protected set; }
+        public List<Guid> RewardGUIDs { get; protected set; }
 
         public List<IItemInstance> Rewards =>
             GlobalConstants.GameManager.ItemHandler.GetQuestRewards(this.ID).ToList();
@@ -170,13 +169,13 @@ namespace JoyLib.Code.Quests
         public int CurrentStep { get; protected set;  }
 
         [OdinSerialize]
-        public long Instigator { get; protected set; }
+        public Guid Instigator { get; protected set; }
 
         [OdinSerialize] 
-        public long Questor { get; protected set; }
+        public Guid Questor { get; protected set; }
 
         [OdinSerialize]
-        public long ID { get; protected set; }
+        public Guid ID { get; protected set; }
 
         public bool IsComplete => this.CurrentStep == this.Steps.Count;
 

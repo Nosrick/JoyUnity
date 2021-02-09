@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Scripting;
@@ -10,16 +11,16 @@ namespace JoyLib.Code.Quests
         List<IQuestStep> Steps { get; }
         QuestMorality Morality { get; }
         
-        List<long> RewardGUIDs { get; }
+        List<Guid> RewardGUIDs { get; }
         
         List<IItemInstance> Rewards { get; }
         int CurrentStep { get; }
         
-        long Instigator { get; }
+        Guid Instigator { get; }
         
-        long Questor { get; }
+        Guid Questor { get; }
         
-        long ID { get; }
+        Guid ID { get; }
         
         bool IsComplete { get; }
 

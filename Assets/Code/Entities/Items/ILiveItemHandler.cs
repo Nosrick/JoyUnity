@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using JoyLib.Code.Collections;
 using JoyLib.Code.World;
 
@@ -11,26 +12,26 @@ namespace JoyLib.Code.Entities.Items
         bool AddItem(IItemInstance item);
         bool AddItems(IEnumerable<IItemInstance> item, bool addToWorld = false);
 
-        bool RemoveItemFromWorld(long GUID);
+        bool RemoveItemFromWorld(Guid GUID);
 
         bool RemoveItemFromWorld(IItemInstance item);
 
-        bool AddItemToWorld(WorldInstance world, long GUID);
+        bool AddItemToWorld(WorldInstance world, Guid GUID);
 
-        IItemInstance GetItem(long GUID);
-        IEnumerable<IItemInstance> GetQuestRewards(long questID);
+        IItemInstance GetItem(Guid GUID);
+        IEnumerable<IItemInstance> GetQuestRewards(Guid questID);
 
-        void CleanUpRewards(IEnumerable<long> GUIDs);
-        void AddQuestReward(long questID, long reward);
-        void AddQuestRewards(long questID, IEnumerable<long> rewards);
-        void AddQuestRewards(long questID, IEnumerable<IItemInstance> rewards);
+        void CleanUpRewards();
+        void AddQuestReward(Guid questID, Guid reward);
+        void AddQuestRewards(Guid questID, IEnumerable<Guid> rewards);
+        void AddQuestRewards(Guid questID, IEnumerable<IItemInstance> rewards);
 
-        IEnumerable<IItemInstance> GetItems(IEnumerable<long> guids);
+        IEnumerable<IItemInstance> GetItems(IEnumerable<Guid> guids);
         
         List<BaseItemType> ItemDatabase { get; }
         
         IEnumerable<IItemInstance> AllItems { get; }
         
-        NonUniqueDictionary<long, long> QuestRewards { get; }
+        NonUniqueDictionary<Guid, Guid> QuestRewards { get; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using JoyLib.Code;
 using JoyLib.Code.Cultures;
@@ -81,47 +82,47 @@ namespace Tests
             heterofemaleHuman = Mock.Of<IEntity>(
                 human => human.Gender == femaleGender
                 && human.Romance == heteroromantic
-                && human.GUID == 1);
+                && human.Guid == Guid.NewGuid());
 
             heteroMaleHuman = Mock.Of<IEntity>(
                 human => human.Gender == maleGender
                          && human.Romance == heteroromantic
-                         && human.GUID == 2);
+                         && human.Guid == Guid.NewGuid());
 
             homoMaleHumanLeft = Mock.Of<IEntity>(
                 human => human.Gender == maleGender
                          && human.Romance == homoromantic
-                         && human.GUID == 3);
+                         && human.Guid == Guid.NewGuid());
 
             homoMaleHumanRight = Mock.Of<IEntity>(
                 human => human.Gender == maleGender
                          && human.Romance == homoromantic
-                         && human.GUID == 4);
+                         && human.Guid == Guid.NewGuid());
 
             homofemaleHumanLeft = Mock.Of<IEntity>(
                 human => human.Gender == femaleGender
                          && human.Romance == homoromantic
-                         && human.GUID == 5);
+                         && human.Guid == Guid.NewGuid());
 
             homofemaleHumanRight = Mock.Of<IEntity>(
                 human => human.Gender == femaleGender
                          && human.Romance == homoromantic
-                         && human.GUID == 6);
+                         && human.Guid == Guid.NewGuid());
 
             biMaleHuman = Mock.Of<IEntity>(
                 human => human.Gender == maleGender
                          && human.Romance == biromantic
-                         && human.GUID == 7);
+                         && human.Guid == Guid.NewGuid());
 
             bifemaleHuman = Mock.Of<IEntity>(
                 human => human.Gender == femaleGender
                          && human.Romance == biromantic
-                         && human.GUID == 8);
+                         && human.Guid == Guid.NewGuid());
 
             aroMaleHuman = Mock.Of<IEntity>(
                 human => human.Gender == maleGender
                          && human.Romance == aromantic
-                         && human.GUID == 9);
+                         && human.Guid == Guid.NewGuid());
 
 
             IEntity[] heteroCouple = new IEntity[] { heterofemaleHuman, heteroMaleHuman };

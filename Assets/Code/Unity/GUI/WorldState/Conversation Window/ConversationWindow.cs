@@ -29,7 +29,7 @@ namespace JoyLib.Code.Unity.GUI
             
             if (GlobalConstants.GameManager.ConversationEngine is null == false 
                 && (this.ConversationEngine is null
-                || this.ConversationEngine.GUID != GlobalConstants.GameManager.ConversationEngine?.GUID))
+                || this.ConversationEngine.Guid != GlobalConstants.GameManager.ConversationEngine?.Guid))
             {
                 this.MenuList = new List<ConversationMenu>();
                 

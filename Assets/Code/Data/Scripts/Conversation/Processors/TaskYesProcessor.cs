@@ -40,7 +40,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
         {
             base.Interact(instigator, listener);
             QuestTracker.AddQuest(
-                instigator.GUID,
+                instigator.Guid,
                 this.OfferedQuest);
 
             foreach (string next in this.NextTopics)

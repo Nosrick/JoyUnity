@@ -21,9 +21,9 @@ namespace JoyLib.Code.Quests
         
         public ConcreteQuestStep(
             IQuestAction action, 
-            IEnumerable<long> objects, 
-            IEnumerable<long> actors,
-            IEnumerable<long> areas,
+            IEnumerable<Guid> objects, 
+            IEnumerable<Guid> actors,
+            IEnumerable<Guid> areas,
             IEnumerable<string> tags)
         {
             this.Action = action;
@@ -45,19 +45,19 @@ namespace JoyLib.Code.Quests
             protected set;
         }
 
-        public List<long> Items
+        public List<Guid> Items
         {
             get;
             protected set;
         }
 
-        public List<long> Actors
+        public List<Guid> Actors
         {
             get;
             protected set;
         }
 
-        public List<long> Areas
+        public List<Guid> Areas
         {
             get;
             protected set;

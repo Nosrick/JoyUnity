@@ -322,7 +322,7 @@ namespace JoyLib.Code.Unity
                 return false;
             }
 
-            if (item is ItemInstance instance && instance.GUID != this.Owner.GUID)
+            if (item is ItemInstance instance && instance.Guid != this.Owner.Guid)
             {
                 if (this.Owner is IItemContainer container)
                 {
@@ -415,12 +415,12 @@ namespace JoyLib.Code.Unity
                 return false;
             }
 
-            if (item.GUID != this.Owner.GUID)
+            if (item.Guid != this.Owner.Guid)
             {
                 if (this.Owner is IItemContainer container)
                 {
                     if (container.Contains(item) == false ||
-                        this.Slots.Any(slot => !(slot.Item is null) && slot.Item.GUID == item.GUID) == false)
+                        this.Slots.Any(slot => !(slot.Item is null) && slot.Item.Guid == item.Guid) == false)
                     {
                         return false;
                     }

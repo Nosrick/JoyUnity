@@ -2,6 +2,7 @@
 using System.Linq;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
+using JoyLib.Code.Managers;
 using JoyLib.Code.Rollers;
 using UnityEngine;
 
@@ -11,15 +12,18 @@ namespace JoyLib.Code.World.Generators.Interiors
     {
         protected GeneratorTileType[,] m_UntreatedTiles;
 
+        protected GUIDManager GuidManager { get; set; }
         protected IObjectIconHandler ObjectIcons { get; set; }
         protected IDerivedValueHandler DerivedValueHandler { get; set; }
         protected RNG Roller { get; set; }
 
         public DungeonInteriorGenerator(
+            GUIDManager guidManager,
             IObjectIconHandler objectIconHandler,
             IDerivedValueHandler derivedValueHandler,
             RNG roller)
         {
+            this.GuidManager = guidManager;
             this.DerivedValueHandler = derivedValueHandler;
             this.Roller = roller;
             this.ObjectIcons = objectIconHandler;
@@ -84,6 +88,7 @@ namespace JoyLib.Code.World.Generators.Interiors
                         walls.Add(
                             new JoyObject(
                                 "Wall", 
+                                this.GuidManager.AssignGUID(),
                                 this.DerivedValueHandler.GetItemStandardBlock(values), 
                                 new Vector2Int(i, j), 
                                 new string[] {}, 

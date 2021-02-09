@@ -43,7 +43,7 @@ namespace JoyLib.Code.Entities.Sexuality
                 return false;
             }
             
-            int highestValue = relationships.Max(relationship => relationship.GetRelationshipValue(me.GUID, them.GUID));
+            int highestValue = relationships.Max(relationship => relationship.GetRelationshipValue(me.Guid, them.Guid));
             if(highestValue < this.MatingThreshold
                 || me.Gender.Name.Equals(them.Gender.Name))
             {

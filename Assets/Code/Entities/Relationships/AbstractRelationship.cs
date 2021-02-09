@@ -24,16 +24,16 @@ namespace JoyLib.Code.Entities.Relationships
         //Yeesh, this is messy
         //But this is a key value pair for how each participant feels about the other in the relationship
         [OdinSerialize]
-        protected SortedDictionary<long, Dictionary<long, int>> m_Values;
+        protected SortedDictionary<Guid, Dictionary<Guid, int>> m_Values;
         [OdinSerialize]
-        protected List<long> m_Participants;
+        protected List<Guid> m_Participants;
 
         protected static ILiveEntityHandler EntityHandler { get; set; }
 
         public AbstractRelationship(ILiveEntityHandler entityHandler = null)
         {
-            this.m_Participants = new List<long>();
-            this.m_Values = new SortedDictionary<long, Dictionary<long, int>>();
+            this.m_Participants = new List<Guid>();
+            this.m_Values = new SortedDictionary<Guid, Dictionary<Guid, int>>();
             this.Tags = new List<string>();
 
             if (EntityHandler is null)
@@ -50,24 +50,24 @@ namespace JoyLib.Code.Entities.Relationships
 
         public virtual bool AddParticipant(IJoyObject newParticipant)
         {
-            if(this.m_Participants.Contains(newParticipant.GUID) == false)
+            if(this.m_Participants.Contains(newParticipant.Guid) == false)
             {
-                this.m_Participants.Add(newParticipant.GUID);
+                this.m_Participants.Add(newParticipant.Guid);
 
-                this.m_Values.Add(newParticipant.GUID, new Dictionary<long, int>());
+                this.m_Values.Add(newParticipant.Guid, new Dictionary<Guid, int>());
 
-                foreach(KeyValuePair<long, Dictionary<long, int>> pair in this.m_Values)
+                foreach(KeyValuePair<Guid, Dictionary<Guid, int>> pair in this.m_Values)
                 {
-                    if(pair.Key == newParticipant.GUID)
+                    if(pair.Key == newParticipant.Guid)
                     {
-                        foreach(long guid in this.m_Participants)
+                        foreach(Guid guid in this.m_Participants)
                         {
-                            this.m_Values[newParticipant.GUID].Add(guid, 0);
+                            this.m_Values[newParticipant.Guid].Add(guid, 0);
                         }
                     }
                     else
                     {
-                        this.m_Values[pair.Key].Add(newParticipant.GUID, 0);
+                        this.m_Values[pair.Key].Add(newParticipant.Guid, 0);
                     }
                 }
 
@@ -113,7 +113,7 @@ namespace JoyLib.Code.Entities.Relationships
             return false;
         }
 
-        public IJoyObject GetParticipant(long GUID)
+        public IJoyObject GetParticipant(Guid GUID)
         {
             return this.m_Participants.Contains(GUID) 
                 ? GlobalConstants.GameManager.EntityHandler.Get(GUID) 
@@ -123,29 +123,14 @@ namespace JoyLib.Code.Entities.Relationships
         public IEnumerable<IJoyObject> GetParticipants()
         {
             List<IEntity> participants = new List<IEntity>();
-            foreach (long participant in this.m_Participants)
+            foreach (Guid participant in this.m_Participants)
             {
                 participants.Add(GlobalConstants.GameManager.EntityHandler.Get(participant));
             }
             return participants;
         }
 
-        public int GetHighestRelationshipValue(long GUID)
-        {
-            return this.m_Values.Where(pair => pair.Key.Equals(GUID))
-                .Max(pair => pair.Value.Max(valuePair => valuePair.Value));
-        }
-
-        public Dictionary<long, int> GetValuesOfParticipant(long GUID)
-        {
-            if(this.m_Values.ContainsKey(GUID))
-            {
-                return this.m_Values[GUID];
-            }
-            return null;
-        }
-
-        public int ModifyValueOfParticipant(long actor, long observer, int value)
+        public int ModifyValueOfParticipant(Guid actor, Guid observer, int value)
         {
             if(this.m_Values.ContainsKey(observer))
             {
@@ -158,10 +143,25 @@ namespace JoyLib.Code.Entities.Relationships
             return 0;
         }
 
-        public int ModifyValueOfOtherParticipants(long actor, int value)
+        public int GetHighestRelationshipValue(Guid GUID)
         {
-            List<long> participantKeys = this.m_Values.Keys.ToList();
-            foreach (long guid in participantKeys)
+            return this.m_Values.Where(pair => pair.Key.Equals(GUID))
+                .Max(pair => pair.Value.Max(valuePair => valuePair.Value));
+        }
+
+        public Dictionary<Guid, int> GetValuesOfParticipant(Guid GUID)
+        {
+            if(this.m_Values.ContainsKey(GUID))
+            {
+                return this.m_Values[GUID];
+            }
+            return null;
+        }
+
+        public int ModifyValueOfOtherParticipants(Guid actor, int value)
+        {
+            List<Guid> participantKeys = this.m_Values.Keys.ToList();
+            foreach (Guid guid in participantKeys)
             {
                 if (guid != actor)
                 {
@@ -174,12 +174,12 @@ namespace JoyLib.Code.Entities.Relationships
 
         public int ModifyValueOfAllParticipants(int value)
         {
-            List<long> participantKeys = this.m_Values.Keys.ToList();
-            foreach(long guid in participantKeys)
+            List<Guid> participantKeys = this.m_Values.Keys.ToList();
+            foreach(Guid guid in participantKeys)
             {
                 if (this.m_Values[guid].Keys.Count == 0)
                 {
-                    foreach (long participant in this.m_Participants)
+                    foreach (Guid participant in this.m_Participants)
                     {
                         if (guid != participant)
                         {
@@ -187,9 +187,9 @@ namespace JoyLib.Code.Entities.Relationships
                         }
                     }
                 }
-                List<long> involvedKeys = this.m_Values[guid].Keys.ToList();
+                List<Guid> involvedKeys = this.m_Values[guid].Keys.ToList();
                 
-                foreach(long involvedGUID in involvedKeys)
+                foreach(Guid involvedGUID in involvedKeys)
                 {
                     this.m_Values[guid][involvedGUID] += value;
                 }
@@ -198,13 +198,13 @@ namespace JoyLib.Code.Entities.Relationships
             return value;
         }
 
-        public bool RemoveParticipant(long currentGUID)
+        public bool RemoveParticipant(Guid currentGUID)
         {
             if(this.m_Participants.Contains(currentGUID))
             {
                 this.m_Participants.Remove(currentGUID);
                 this.m_Values.Remove(currentGUID);
-                foreach (Dictionary<long, int> relationship in this.m_Values.Values)
+                foreach (Dictionary<Guid, int> relationship in this.m_Values.Values)
                 {
                     if(relationship.ContainsKey(currentGUID))
                     {
@@ -216,7 +216,7 @@ namespace JoyLib.Code.Entities.Relationships
             return false;
         }
 
-        public static long GenerateHash(IEnumerable<long> participants)
+        public static long GenerateHash(IEnumerable<Guid> participants)
         {
             long hash = 0;
 
@@ -225,18 +225,18 @@ namespace JoyLib.Code.Entities.Relationships
 
             int hashMagic = 65521;
 
-            List<long> sortedList = new List<long>(participants);
+            List<Guid> sortedList = new List<Guid>(participants);
             sortedList.Sort();
-            foreach(long GUID in sortedList)
+            foreach(Guid GUID in sortedList)
             {
-                s1 = (s1 + GUID) % hashMagic;
+                s1 = (s1 + GUID.GetHashCode()) % hashMagic;
                 s2 = (s2 + s1) % hashMagic;
             }
             hash = (s2 << 16) | s1;
             return hash;
         }
 
-        public int GetRelationshipValue(long left, long right)
+        public int GetRelationshipValue(Guid left, Guid right)
         {
             if(this.m_Values.ContainsKey(left))
             {

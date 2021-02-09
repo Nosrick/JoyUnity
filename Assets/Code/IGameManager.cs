@@ -18,6 +18,7 @@ using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.IO;
+using JoyLib.Code.Managers;
 using JoyLib.Code.Physics;
 using JoyLib.Code.Quests;
 using JoyLib.Code.Rollers;
@@ -63,6 +64,8 @@ namespace JoyLib.Code
         IAbilityHandler AbilityHandler { get; }
         IDerivedValueHandler DerivedValueHandler { get; }
         IVisionProviderHandler VisionProviderHandler { get; }
+        
+        GUIDManager GUIDManager { get; }
         
         IRumourMill RumourMill { get; }
         

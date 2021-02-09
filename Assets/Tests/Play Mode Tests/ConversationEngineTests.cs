@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code;
@@ -91,17 +92,17 @@ namespace Tests
                           && entity.Needs == needs
                           && entity.Statistics == stats
                           && entity.Sentient == true
-                          && entity.GUID == 1);
+                          && entity.Guid == Guid.NewGuid());
 
             listener = Mock.Of<IEntity>(entity => entity.MyWorld == world
                                                   && entity.Needs == needs
                                                   && entity.Statistics == stats
                                                   && entity.Sentient == true
-                                                  && entity.GUID == 2);
+                                                  && entity.Guid == Guid.NewGuid());
 
             GlobalConstants.GameManager = Mock.Of<IGameManager>(
                 manager => manager.Player == this.instigator
-                           && manager.ConversationEngine == new ConversationEngine(relationshipHandler)
+                           && manager.ConversationEngine == new ConversationEngine(relationshipHandler, Guid.NewGuid())
                            && manager.RelationshipHandler == relationshipHandler
                            && manager.RumourMill == new ConcreteRumourMill(new RNG()));
 

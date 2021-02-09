@@ -6,7 +6,7 @@ namespace JoyLib.Code.Entities
 {
     public class LiveEntityHandler : ILiveEntityHandler
     {
-        protected Dictionary<long, IEntity> m_Entities;
+        protected Dictionary<Guid, IEntity> m_Entities;
         protected IEntity m_Player;
 
         public IEnumerable<IEntity> AllEntities => this.m_Entities.Values.ToList();
@@ -15,12 +15,12 @@ namespace JoyLib.Code.Entities
         {
             try
             {
-                if (this.Entities.ContainsKey(created.GUID))
+                if (this.Entities.ContainsKey(created.Guid))
                 {
                     return false;
                 }
                 
-                this.Entities.Add(created.GUID, created);
+                this.Entities.Add(created.Guid, created);
 
                 if(created.PlayerControlled)
                 {
@@ -36,7 +36,7 @@ namespace JoyLib.Code.Entities
             }
         }
 
-        public bool Remove(long GUID)
+        public bool Remove(Guid GUID)
         {
             if(this.Entities.ContainsKey(GUID))
             {
@@ -46,7 +46,7 @@ namespace JoyLib.Code.Entities
             return false;
         }
 
-        public IEntity Get(long GUID)
+        public IEntity Get(Guid GUID)
         {
             if(this.Entities.ContainsKey(GUID))
             {
@@ -65,13 +65,13 @@ namespace JoyLib.Code.Entities
             this.m_Player = entity;
         }
 
-        protected Dictionary<long, IEntity> Entities
+        protected Dictionary<Guid, IEntity> Entities
         {
             get
             {
                 if(this.m_Entities is null)
                 {
-                    this.m_Entities = new Dictionary<long, IEntity>();
+                    this.m_Entities = new Dictionary<Guid, IEntity>();
                 }
 
                 return this.m_Entities;

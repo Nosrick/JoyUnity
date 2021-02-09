@@ -122,7 +122,7 @@ namespace JoyLib.Code.Unity.GUI
                 RelationshipHandler?.Get(new IJoyObject[] {this.Left, this.Right});
             foreach (IRelationship relationship in relationships)
             {
-                relationship.ModifyValueOfParticipant(this.Left.GUID, this.Right.GUID, difference);
+                relationship.ModifyValueOfParticipant(this.Left.Guid, this.Right.Guid, difference);
             }
 
             ScriptingEngine.Instance.FetchAction("tradeaction").Execute(

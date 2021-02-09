@@ -71,7 +71,7 @@ namespace JoyLib.Code.Unity
             
             IJoyObject otherObj = other.gameObject.GetComponent<MonoBehaviourHandler>()?.JoyObject;
 
-            if (otherObj is IEntity entity && entity.GUID.Equals(this.EntityInRange.GUID))
+            if (otherObj is IEntity entity && entity.Guid.Equals(this.EntityInRange.Guid))
             {
                 this.EntityInRange = null;
             }
@@ -90,7 +90,7 @@ namespace JoyLib.Code.Unity
                 new IJoyObject[] {this.EntityInRange, item},
                 new string[] {"pickup"},
                 new object[] {true});
-            result &= LiveItemHandler.RemoveItemFromWorld(item.GUID);
+            result &= LiveItemHandler.RemoveItemFromWorld(item.Guid);
 
             return result;
         }

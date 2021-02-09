@@ -35,7 +35,7 @@ namespace JoyLib.Code.Unity.GUI
         {
             if (GlobalConstants.GameManager.ConversationEngine is null == false 
                 && (ConversationEngine is null
-                    || ConversationEngine.GUID != GlobalConstants.GameManager.ConversationEngine?.GUID))
+                    || ConversationEngine.Guid != GlobalConstants.GameManager.ConversationEngine?.Guid))
             {
                 ConversationEngine = GlobalConstants.GameManager.ConversationEngine;
             }
