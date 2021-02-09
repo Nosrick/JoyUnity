@@ -6,8 +6,8 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
 {
     public class TradeProcessor : TopicData
     {
-        protected static TradeWindow TradeWindow { get; set; }
-        protected static IGUIManager GUIManager { get; set; }
+        protected TradeWindow TradeWindow { get; set; }
+        protected IGUIManager GUIManager { get; set; }
 
         public TradeProcessor()
             : base(
@@ -24,12 +24,12 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
 
         protected void Initialise()
         {
-            if (TradeWindow is null || GUIManager is null)
+            if (this.TradeWindow == null || this.GUIManager is null)
             {
                 try
                 {
-                    GUIManager = GlobalConstants.GameManager.GUIManager;
-                    TradeWindow = GUIManager.GetGUI(GUINames.TRADE).GetComponent<TradeWindow>();
+                    this.GUIManager = GlobalConstants.GameManager.GUIManager;
+                    this.TradeWindow = this.GUIManager.GetGUI(GUINames.TRADE).GetComponent<TradeWindow>();
                 }
                 catch
                 {
@@ -41,9 +41,9 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
         public override ITopic[] Interact(IEntity instigator, IEntity listener)
         {
             this.Initialise();
-            TradeWindow.SetActors(instigator, listener);
+            this.TradeWindow.SetActors(instigator, listener);
             
-            GUIManager.OpenGUI("Trade");
+            this.GUIManager.OpenGUI("Trade");
             
             return base.Interact(instigator, listener);
         }
