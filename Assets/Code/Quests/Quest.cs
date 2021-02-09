@@ -29,6 +29,7 @@ namespace JoyLib.Code.Quests
             this.Questor = questor;
             this.CurrentStep = 0;
             this.ID = GlobalConstants.GameManager.GUIDManager.AssignGUID();
+            GlobalConstants.GameManager.ItemHandler.AddQuestRewards(this.ID, this.RewardGUIDs);
             this.Tags = new List<string>(tags);
         }
 

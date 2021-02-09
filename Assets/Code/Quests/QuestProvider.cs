@@ -68,8 +68,6 @@ namespace JoyLib.Code.Quests
                 provider.Guid, 
                 questor.Guid, 
                 tagsForAllSteps);
-            
-            GlobalConstants.GameManager.ItemHandler.AddQuestRewards(quest.ID, rewards);
 
             return quest;
         }
