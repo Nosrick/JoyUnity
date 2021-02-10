@@ -7,7 +7,7 @@ namespace JoyLib.Code.Entities.Abilities
     public class GenericNonAlcoholicDrink : AbstractAbility
     {
         public GenericNonAlcoholicDrink() : base(
-            "drink",
+            "Drink",
             "genericnonalcoholicdrink",
             "Quench your thirst with a cool refreshment.",
             false,

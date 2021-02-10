@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code.Conversation;
 using JoyLib.Code.Entities;
+using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.Items;
 using TMPro;
 using UnityEngine;
@@ -147,9 +149,14 @@ namespace JoyLib.Code.Unity.GUI
                     menu.AddMenuItem("Open", this.OpenContainer);
                 }
 
-                if (this.Container.CanUseItems)
+                List<IAbility> abilities = this.Item.AllAbilities.ToList();
+                if (this.Container.CanUseItems && abilities.Any())
                 {
-                    menu.AddMenuItem("Use", this.OnUse);
+                    foreach (IAbility ability in abilities)
+                    {
+                        menu.AddMenuItem(ability.Name, this.OnUse);
+                    }
+                    //menu.AddMenuItem("Use", this.OnUse);
                 }
 
                 GUIManager.OpenGUI(GUINames.CONTEXT_MENU);

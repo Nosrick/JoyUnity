@@ -7,7 +7,7 @@ namespace JoyLib.Code.Entities.Abilities
     public class FoodItem : AbstractAbility
     {
         public FoodItem() : base(
-            "eat",
+            "Eat",
             "fooditem",
             "Sate your hunger with a tasty meal.",
             false,
