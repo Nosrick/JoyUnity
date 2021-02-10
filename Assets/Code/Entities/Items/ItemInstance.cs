@@ -165,13 +165,11 @@ namespace JoyLib.Code.Entities.Items
                 MonoBehaviourHandler monoBehaviourHandler = GlobalConstants.GameManager.ItemPool.Get()
                     .GetComponent<MonoBehaviourHandler>();
                 monoBehaviourHandler.AttachJoyObject(this);
-                this.AttachMonoBehaviourHandler(monoBehaviourHandler);
             }
             else
             {
                 MonoBehaviourHandler monoBehaviourHandler = gameObject.GetComponent<MonoBehaviourHandler>();
                 monoBehaviourHandler.AttachJoyObject(this);
-                this.AttachMonoBehaviourHandler(monoBehaviourHandler);
             }
             this.MonoBehaviourHandler.SetSpriteLayer("Objects");
             this.MonoBehaviourHandler.Clear();
@@ -187,7 +185,7 @@ namespace JoyLib.Code.Entities.Items
             {
                 if (item is ItemInstance instance)
                 {
-                    instance.Instantiate(true, gameObject);
+                    instance.Instantiate(true, GlobalConstants.GameManager.ItemPool.Get());
                 }
             }
         }
