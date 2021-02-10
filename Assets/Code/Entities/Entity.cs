@@ -1211,7 +1211,9 @@ namespace JoyLib.Code.Entities
                 {
                     return this.LastConditionString;
                 }
-                string condition = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(this.Gender.PersonalSubject) 
+                string condition = this.Equals(GlobalConstants.GameManager.Player) 
+                    ? "You are " 
+                    : CultureInfo.CurrentCulture.TextInfo.ToTitleCase(this.Gender.PersonalSubject) 
                                    + " " + this.Gender.IsOrAre + " ";
                 if (this.Conscious == false)
                 {
