@@ -14,6 +14,8 @@ namespace JoyLib.Code.World
     [Serializable]
     public class WorldInstance : IWorldInstance
     {
+        public event EventHandler OnTick;
+        
         [OdinSerialize]
         protected WorldTile[,] m_Tiles;
         [OdinSerialize]
@@ -300,10 +302,13 @@ namespace JoyLib.Code.World
                 s_DateTime = s_DateTime.AddSeconds(6.0);
             }
 
+            /*
             foreach (Entity entity in this.m_Entities)
             {
                 entity.Tick();
             }
+            */
+            this.OnTick?.Invoke(this, EventArgs.Empty);
 
             this.IsDirty = false;
         }

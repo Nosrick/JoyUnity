@@ -58,6 +58,13 @@ namespace JoyLib.Code.Unity
 
             this.JoyObject = joyObject;
             this.JoyObject.AttachMonoBehaviourHandler(this);
+            if (this.JoyObject.MyWorld is null == false)
+            {
+                GlobalConstants.ActionLog.AddText("Adding Tick event");
+                this.JoyObject.MyWorld.OnTick -= this.Tick;
+                this.JoyObject.MyWorld.OnTick += this.Tick;
+            }
+
             Transform transform = this.transform.Find("Speech Bubble");
             if (transform is null == false)
             {
@@ -105,6 +112,11 @@ namespace JoyLib.Code.Unity
                     this.CurrentSpriteState,
                     this.JoyObject.Tooltip);
             }
+        }
+
+        protected void Tick(object sender, EventArgs args)
+        {
+            this.JoyObject?.Tick();
         }
 
         public void OnPointerExit(PointerEventData eventData)

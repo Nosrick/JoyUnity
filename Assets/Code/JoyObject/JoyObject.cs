@@ -370,6 +370,10 @@ namespace JoyLib.Code
             return "{ " + this.JoyName + " : " + this.Guid + " }";
         }
 
+        public virtual void Tick()
+        {
+        }
+
         public bool AddData(object key, object value)
         {
             this.Data.Add(key, value);

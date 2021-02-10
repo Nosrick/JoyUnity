@@ -448,7 +448,7 @@ namespace JoyLib.Code.Entities
             this.m_CurrentTarget.targetPoint = GlobalConstants.NO_TARGET;
         }
 
-        public void Tick()
+        public override void Tick()
         {
             if (this.m_FulfillmentData.Counter > 0 && this.m_FulfillmentData.DecrementCounter() == 0)
             {

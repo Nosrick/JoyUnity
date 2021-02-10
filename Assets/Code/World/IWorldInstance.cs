@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace JoyLib.Code.World
 {
-    public interface IWorldInstance : ITagged, IDisposable, IGuidHolder
+    public interface IWorldInstance : ITagged, IDisposable, IGuidHolder, ITickable
     {
         HashSet<Guid> EntityGUIDs { get; }
         HashSet<Guid> ItemGUIDs { get; }
@@ -52,5 +52,7 @@ namespace JoyLib.Code.World
         List<Vector2Int> GetVisibleWalls(IEntity viewer);
         Dictionary<Vector2Int, IJoyObject> GetObjectsOfType(string[] tags);
         void AddArea(Vector2Int key, IWorldInstance value);
+
+        event EventHandler OnTick;
     }
 }
