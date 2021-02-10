@@ -26,6 +26,8 @@ namespace JoyLib.Code.Entities.Items
         void AddQuestRewards(Guid questID, IEnumerable<Guid> rewards);
         void AddQuestRewards(Guid questID, IEnumerable<IItemInstance> rewards);
 
+        void ClearLiveItems();
+
         IEnumerable<IItemInstance> GetItems(IEnumerable<Guid> guids);
         
         List<BaseItemType> ItemDatabase { get; }

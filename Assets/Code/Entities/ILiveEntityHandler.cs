@@ -16,7 +16,7 @@ namespace JoyLib.Code.Entities
         IEntity GetPlayer();
 
         void SetPlayer(IEntity entity);
-        
-        
+
+        void ClearLiveEntities();
     }
 }

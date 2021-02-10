@@ -65,6 +65,11 @@ namespace JoyLib.Code.Entities
             this.m_Player = entity;
         }
 
+        public void ClearLiveEntities()
+        {
+            this.m_Entities = new Dictionary<Guid, IEntity>();
+        }
+
         protected Dictionary<Guid, IEntity> Entities
         {
             get

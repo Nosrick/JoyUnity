@@ -270,6 +270,11 @@ namespace JoyLib.Code.Entities.Items
             return items;
         }
 
+        public void ClearLiveItems()
+        {
+            this.m_LiveItems = new Dictionary<Guid, IItemInstance>();
+        }
+
         public List<BaseItemType> ItemDatabase
         {
             get

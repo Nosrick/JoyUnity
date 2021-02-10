@@ -204,13 +204,14 @@ namespace JoyLib.Code
             this.ItemPool.RetireAll();
             this.WallPool.RetireAll();
 
+            //this.ObjectIconHandler = new ObjectIconHandler(this.Roller);
+
             this.RelationshipHandler = new EntityRelationshipHandler();
 
             this.GUIDManager = new GUIDManager();
 
-            this.EntityHandler = new LiveEntityHandler();
-            this.ItemHandler = new LiveItemHandler(this.ObjectIconHandler, this.MaterialHandler, this.AbilityHandler,
-                this.Roller);
+            this.EntityHandler.ClearLiveEntities();
+            this.ItemHandler.ClearLiveItems();
 
             this.EntityFactory = new EntityFactory(this.GUIDManager, this.NeedHandler, this.ObjectIconHandler, this.CultureHandler,
                 this.SexualityHandler, this.BioSexHandler, this.GenderHandler, this.RomanceHandler, this.JobHandler,
