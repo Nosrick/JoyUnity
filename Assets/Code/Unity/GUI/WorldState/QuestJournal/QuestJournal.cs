@@ -67,8 +67,14 @@ namespace JoyLib.Code.Unity.GUI
             
             for (int i = 0; i < quests.Count; i++)
             {
-                this.MenuItems[i].GetComponentInChildren<TextMeshProUGUI>().text = quests[i].ToString();
+                IQuest quest = quests[i];
+                this.MenuItems[i].GetComponentInChildren<TextMeshProUGUI>().text = quest.ToString();
                 this.MenuItems[i].gameObject.SetActive(true);
+                this.MenuItems[i].Trigger.AddListener(
+                    delegate
+                    {
+                        this.SetUpContextMenu(quest);
+                    });
             }
 
             for (int i = quests.Count; i < this.MenuItems.Count; i++)
@@ -87,7 +93,30 @@ namespace JoyLib.Code.Unity.GUI
 
                 this.MenuItems[0].GetComponentInChildren<TextMeshProUGUI>().text = "You have no quests.";
                 this.MenuItems[0].gameObject.SetActive(true);
+                this.MenuItems[0].Trigger = null;
             }
+        }
+
+        protected void SetUpContextMenu(IQuest quest)
+        {
+            ContextMenu contextMenu = GlobalConstants.GameManager.GUIManager.OpenGUI(GUINames.CONTEXT_MENU)
+                .GetComponent<ContextMenu>();
+            
+            contextMenu.Clear();
+
+            contextMenu.AddMenuItem("Abandon",
+                delegate
+                {
+                    this.AbandonQuest(quest);
+                });
+            
+            contextMenu.Show();
+        }
+
+        protected void AbandonQuest(IQuest quest)
+        {
+            this.QuestTracker.AbandonQuest(this.Player, quest);
+            this.Repaint();
         }
     }
 }
