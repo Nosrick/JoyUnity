@@ -115,18 +115,7 @@ namespace JoyLib.Code.States
                         newItem
                     },
                     new[] {"pickup"},
-                    new object[] {true});
-
-                IItemInstance bag =
-                    GlobalConstants.GameManager.ItemFactory.CreateRandomItemOfType(new[] {"container"}, true);
-                addItemAction.Execute(
-                    new IJoyObject[]
-                    {
-                        this.m_Player,
-                        bag
-                    },
-                    new[] {"pickup"},
-                    new object[] {true});
+                    true);
             }
 
             foreach (IItemInstance item in this.m_Player.Contents)
