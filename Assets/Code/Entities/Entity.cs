@@ -320,6 +320,7 @@ namespace JoyLib.Code.Entities
             IEnumerable<ICulture> cultures)
         {
             this.m_Cultures = cultures.ToList();
+            this.Initialise();
         }
 
         protected IEnumerable<Tuple<string, string>> ConstructDescription()
@@ -336,8 +337,11 @@ namespace JoyLib.Code.Entities
                 string relationshipName = "Stranger";
                 try
                 {
-                    relationshipName = RelationshipHandler.GetBestRelationship(this, GlobalConstants.GameManager.Player)
-                        .Name;
+                    relationshipName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(
+                        this.RelationshipHandler.GetBestRelationship(
+                            this, 
+                            GlobalConstants.GameManager.Player)
+                                .DisplayName);
                 }
                 catch (Exception e)
                 {
