@@ -353,7 +353,7 @@ namespace JoyLib.Code.Entities
                 new Tuple<string, string>("", textInfo.ToTitleCase(this.CurrentJob.Name)),
                 new Tuple<string, string>("", textInfo.ToTitleCase(this.Gender.Name)),
                 relationship,
-                new Tuple<string, string>("", this.WorldPosition.ToString())
+                new Tuple<string, string>("", this.ConditionString)
             };
 
             return data;
@@ -1197,6 +1197,55 @@ namespace JoyLib.Code.Entities
         {
             get { return this.m_Statistics[EntityStatistic.CUNNING].Value + GlobalConstants.MINIMUM_VISION_DISTANCE; }
         }
+
+        protected string ConditionString
+        {
+            get
+            {
+                float percentage = this.HitPointsRemaining / (float) this.HitPoints;
+                if (this.LastPercentage == percentage && this.LastConditionString.IsNullOrEmpty() == false)
+                {
+                    return this.LastConditionString;
+                }
+                string condition = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(this.Gender.PersonalSubject) 
+                                   + " " + this.Gender.IsOrAre + " ";
+                if (this.Conscious == false)
+                {
+                    condition += "unconscious";
+                }
+                else if (percentage > 0.9f)
+                {
+                    condition += "uninjured";
+                }
+                else if (percentage > 0.7f)
+                {
+                    condition += "lightly injured";
+                }
+                else if (percentage > 0.5f)
+                {
+                    condition += "moderately injured";
+                }
+                else if (percentage > 0.3f)
+                {
+                    condition += "severely injured";
+                }
+                else if (percentage > 0.1f)
+                {
+                    condition += "gravely injured";
+                }
+                else
+                {
+                    condition += "barely conscious";
+                }
+
+                this.LastPercentage = percentage;
+                this.LastConditionString = condition;
+                return condition;
+            }
+        }
+        
+        protected float LastPercentage { get; set; }
+        protected string LastConditionString { get; set; }
 
         public Queue<Vector2Int> PathfindingData
         {
