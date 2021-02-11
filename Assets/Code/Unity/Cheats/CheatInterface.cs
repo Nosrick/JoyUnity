@@ -3,6 +3,7 @@ using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Statistics;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 
 namespace JoyLib.Code.Unity.Cheats
 {
@@ -36,18 +37,16 @@ namespace JoyLib.Code.Unity.Cheats
             {
                 this.ActionCount += 1;
             }
-            else if (action.name.Equals("close all windows", StringComparison.OrdinalIgnoreCase))
+            else if(action.name.Equals("click", StringComparison.OrdinalIgnoreCase) == false 
+            && action.activeControl is ButtonControl)
             {
                 this.ResetCount();
-            }
-            else
-            {
-                this.ActionCount = 0;
             }
 
             if (this.ActionCount >= this.m_ActionsRequired)
             {
-                this.Active = true;
+                this.Active = !this.Active;
+                this.ActionCount = 0;
             }
         }
 
