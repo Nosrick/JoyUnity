@@ -41,85 +41,98 @@ namespace JoyLib.Code.Entities
         public event JobChangedEventHandler JobChange;
         public event BooleanChangedEventHandler ConsciousnessChange;
         public event BooleanChangedEventHandler AliveChange;
-        
-        [OdinSerialize]
-        protected IDictionary<string, IRollableValue<int>> m_Statistics;
-        
-        [OdinSerialize]
-        protected IDictionary<string, IEntitySkill> m_Skills;
-        
-        [OdinSerialize]
-        protected IDictionary<string, INeed> m_Needs;
-        
-        [OdinSerialize]
-        protected List<IAbility> m_Abilities;
-        
-        [OdinSerialize]
-        protected EquipmentStorage m_Equipment;
-        
-        [OdinSerialize]
-        protected List<Guid> m_Backpack;
-        
-        [OdinSerialize]
-        protected IItemInstance m_NaturalWeapons;
-        
-        [OdinSerialize]
-        protected ISexuality m_Sexuality;
-        
-        [OdinSerialize]
-        protected IRomance m_Romance;
 
-        [OdinSerialize]
-        protected List<string> m_IdentifiedItems;
+        [OdinSerialize] protected IDictionary<string, IRollableValue<int>> m_Statistics;
 
-        [OdinSerialize]
-        protected IJob m_CurrentJob;
+        [OdinSerialize] protected IDictionary<string, IEntitySkill> m_Skills;
 
-        [OdinSerialize]
-        protected List<string> m_Slots;
+        [OdinSerialize] protected IDictionary<string, INeed> m_Needs;
+
+        [OdinSerialize] protected List<IAbility> m_Abilities;
+
+        [OdinSerialize] protected EquipmentStorage m_Equipment;
+
+        [OdinSerialize] protected List<Guid> m_Backpack;
+
+        [OdinSerialize] protected IItemInstance m_NaturalWeapons;
+
+        [OdinSerialize] protected ISexuality m_Sexuality;
+
+        [OdinSerialize] protected IRomance m_Romance;
+
+        [OdinSerialize] protected List<string> m_IdentifiedItems;
+
+        [OdinSerialize] protected IJob m_CurrentJob;
+
+        [OdinSerialize] protected List<string> m_Slots;
 
         protected List<ICulture> m_Cultures;
 
-        [OdinSerialize]
-        protected int m_Size;
+        [OdinSerialize] protected int m_Size;
 
-        [OdinSerialize]
-        protected IVision m_VisionProvider;
+        [OdinSerialize] protected IVision m_VisionProvider;
 
-        [OdinSerialize]
-        protected FulfillmentData m_FulfillmentData;
+        [OdinSerialize] protected FulfillmentData m_FulfillmentData;
 
-        [OdinSerialize]
         protected NeedAIData m_CurrentTarget;
 
         [OdinSerialize]
-        protected IDriver m_Driver;
+        protected NeedDataSerialisable CurrentTargetSerialise
+        {
+            get => new NeedDataSerialisable
+            {
+                idle = this.CurrentTarget.idle,
+                intent = this.CurrentTarget.intent,
+                need = this.CurrentTarget.need,
+                searching = this.CurrentTarget.searching,
+                targetGuid = this.CurrentTarget.target?.Guid ?? Guid.Empty,
+                targetPoint = this.CurrentTarget.targetPoint,
+                targetType = this.CurrentTarget.target is null ? "none" : this.CurrentTarget.target.GetType().Name
+            };
+            set
+            {
+                this.m_CurrentTarget = new NeedAIData
+                {
+                    idle = value.idle,
+                    intent = value.intent,
+                    need = value.need,
+                    searching = value.searching,
+                    targetPoint = value.targetPoint
+                };
 
-        [OdinSerialize]
-        protected IPathfinder m_Pathfinder;
+                if (value.targetType == typeof(IEntity).Name)
+                {
+                    this.m_CurrentTarget.target = GlobalConstants.GameManager.EntityHandler.Get(value.targetGuid);
+                }
+                else if (value.targetType == typeof(IItemInstance).Name)
+                {
+                    this.m_CurrentTarget.target = GlobalConstants.GameManager.ItemHandler.GetItem(value.targetGuid);
+                }
+            }
+        }
 
-        [OdinSerialize]
-        protected Queue<Vector2Int> m_PathfindingData;
+        [OdinSerialize] protected IDriver m_Driver;
 
-        [NonSerialized]
-        protected IWorldInstance m_MyWorld;
-        
-        [NonSerialized]
-        protected const int REGEN_TICK_TIME = 10;
+        [OdinSerialize] protected IPathfinder m_Pathfinder;
 
-        [NonSerialized]
-        protected const int ATTACK_THRESHOLD = -50;
+        [OdinSerialize] protected Queue<Vector2Int> m_PathfindingData;
+
+        [NonSerialized] protected IWorldInstance m_MyWorld;
+
+        [NonSerialized] protected const int REGEN_TICK_TIME = 10;
+
+        [NonSerialized] protected const int ATTACK_THRESHOLD = -50;
 
         public IEnumerable<IItemInstance> Contents => GlobalConstants.GameManager.ItemHandler.GetItems(this.m_Backpack);
-        
+
         public IEntityRelationshipHandler RelationshipHandler { get; set; }
-        
+
         public IEntitySkillHandler SkillHandler { get; set; }
-        
+
         public IQuestTracker QuestTracker { get; set; }
-        
+
         public NaturalWeaponHelper NaturalWeaponHelper { get; set; }
-        
+
         public IDerivedValueHandler DerivedValueHandler { get; set; }
 
         protected readonly static string[] STANDARD_ACTIONS = new string[]
@@ -135,8 +148,7 @@ namespace JoyLib.Code.Entities
         };
 
         public Entity()
-        {
-        }
+        { }
 
         /// <summary>
         /// 
@@ -213,7 +225,7 @@ namespace JoyLib.Code.Entities
             this.Romance = romance;
             this.m_IdentifiedItems = identifiedItems.ToList();
             this.m_Statistics = statistics;
-            
+
             this.m_Needs = needs;
 
             this.m_Skills = skills;
@@ -301,11 +313,12 @@ namespace JoyLib.Code.Entities
             IDriver driver,
             RNG roller = null,
             string name = null) :
-            this(guid, template, statistics, derivedValues, needs, skills, abilities, cultures, job, gender, sex, sexuality, romance, position, sprites,
-                GlobalConstants.GameManager.NaturalWeaponHelper?.MakeNaturalWeapon(template.Size), new EquipmentStorage(template.Slots),
-                new List<IItemInstance>(), new List<string>(), new List<IJob> { job }, world, driver, roller, name)
-        {
-        }
+            this(guid, template, statistics, derivedValues, needs, skills, abilities, cultures, job, gender, sex,
+                sexuality, romance, position, sprites,
+                GlobalConstants.GameManager.NaturalWeaponHelper?.MakeNaturalWeapon(template.Size),
+                new EquipmentStorage(template.Slots),
+                new List<IItemInstance>(), new List<string>(), new List<IJob> {job}, world, driver, roller, name)
+        { }
 
         protected void Initialise()
         {
@@ -339,13 +352,13 @@ namespace JoyLib.Code.Entities
                 {
                     relationshipName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(
                         this.RelationshipHandler.GetBestRelationship(
-                            this, 
-                            GlobalConstants.GameManager.Player)
-                                .DisplayName);
+                                this,
+                                GlobalConstants.GameManager.Player)
+                            .DisplayName);
                 }
                 catch (Exception e)
-                {
-                }
+                { }
+
                 relationship = new Tuple<string, string>(
                     "",
                     relationshipName);
@@ -382,6 +395,7 @@ namespace JoyLib.Code.Entities
                 {
                     continue;
                 }
+
                 this.OnMaximumChanged(this, new ValueChangedEventArgs
                 {
                     Delta = dv.Maximum - this.DerivedValues[name].Maximum,
@@ -395,7 +409,7 @@ namespace JoyLib.Code.Entities
         protected string GetNameFromMultipleCultures()
         {
             const int groupChance = 10;
-            
+
             List<string> nameList = new List<string>();
             int maxNames = this.m_Cultures.SelectMany(x => x.NameData)
                 .SelectMany(y => y.chain)
@@ -423,15 +437,14 @@ namespace JoyLib.Code.Entities
                     {
                         lastGroup = groups[this.Roller.Roll(0, groups.Length)];
                         if (random.NameData.Any(data => random.NameData.SelectMany(d => d.chain)
-                                                            .Min(d => d) == i 
-                                                && data.groups.Contains(lastGroup)) == false)
+                                                            .Min(d => d) == i
+                                                        && data.groups.Contains(lastGroup)) == false)
                         {
                             lastGroup = Int32.MinValue;
                         }
                     }
-                    
                 }
-                
+
                 nameList.Add(random.GetNameForChain(i, this.Gender.Name, lastGroup));
             }
 
@@ -441,11 +454,14 @@ namespace JoyLib.Code.Entities
 
         protected void SetCurrentTarget()
         {
-            this.m_CurrentTarget.idle = true;
-            this.m_CurrentTarget.intent = Intent.Interact;
-            this.m_CurrentTarget.searching = false;
-            this.m_CurrentTarget.target = null;
-            this.m_CurrentTarget.targetPoint = GlobalConstants.NO_TARGET;
+            this.m_CurrentTarget = new NeedAIData
+            {
+                idle = true,
+                intent = Intent.Interact,
+                searching = false,
+                target = null,
+                targetPoint = GlobalConstants.NO_TARGET
+            };
         }
 
         public override void Tick()
@@ -456,8 +472,7 @@ namespace JoyLib.Code.Entities
             }
 
             if (this.m_FulfillmentData.Counter == 0)
-            {
-            }
+            { }
 
             this.RegenTicker += 1;
             if (this.RegenTicker == REGEN_TICK_TIME)
@@ -490,6 +505,7 @@ namespace JoyLib.Code.Entities
             {
                 return false;
             }
+
             this.Jobs.Add(job);
             return true;
         }
@@ -516,6 +532,7 @@ namespace JoyLib.Code.Entities
             {
                 this.Jobs.Add(job);
             }
+
             this.m_CurrentJob = job;
             this.JobChange?.Invoke(this, new JobChangedEventArgs()
             {
@@ -756,7 +773,7 @@ namespace JoyLib.Code.Entities
             if (this.m_Backpack.Contains(item.Guid))
             {
                 this.m_Backpack.Remove(item.Guid);
-                this.ItemRemoved?.Invoke(this, new ItemChangedEventArgs(){ Item = item });
+                this.ItemRemoved?.Invoke(this, new ItemChangedEventArgs() {Item = item});
                 return true;
             }
 
@@ -865,6 +882,7 @@ namespace JoyLib.Code.Entities
                 {
                     goItem.Instantiate();
                 }
+
                 goItem.MonoBehaviourHandler.gameObject.SetActive(false);
             }
 
@@ -872,8 +890,8 @@ namespace JoyLib.Code.Entities
             {
                 this.m_Backpack.Add(actor.Guid);
             }
-            
-            this.ItemAdded?.Invoke(this, new ItemChangedEventArgs { Item = actor });
+
+            this.ItemAdded?.Invoke(this, new ItemChangedEventArgs {Item = actor});
             return true;
         }
 
@@ -918,8 +936,9 @@ namespace JoyLib.Code.Entities
                     .Select(instance => instance.Guid));
             foreach (IItemInstance actor in actors)
             {
-                this.ItemAdded?.Invoke(this, new ItemChangedEventArgs() { Item = actor });
+                this.ItemAdded?.Invoke(this, new ItemChangedEventArgs() {Item = actor});
             }
+
             return true;
         }
 
@@ -974,14 +993,14 @@ namespace JoyLib.Code.Entities
             int result = base.ModifyValue(name, value);
             if (this.Conscious != lastConscious)
             {
-                this.ConsciousnessChange?.Invoke(this, new BooleanChangeEventArgs { Value = this.Conscious});
+                this.ConsciousnessChange?.Invoke(this, new BooleanChangeEventArgs {Value = this.Conscious});
             }
 
             if (this.Alive != lastAlive)
             {
-                this.AliveChange?.Invoke(this, new BooleanChangeEventArgs { Value = this.Alive });
+                this.AliveChange?.Invoke(this, new BooleanChangeEventArgs {Value = this.Alive});
             }
-            
+
             return result;
         }
 
@@ -989,20 +1008,19 @@ namespace JoyLib.Code.Entities
         {
             if (!this.Statistics.ContainsKey(name) && !this.Skills.ContainsKey(name))
             {
-
                 bool lastConscious = this.Conscious;
                 bool lastAlive = this.Alive;
                 int result = base.SetValue(name, value);
                 if (this.Conscious != lastConscious)
                 {
-                    this.ConsciousnessChange?.Invoke(this, new BooleanChangeEventArgs { Value = this.Conscious});
+                    this.ConsciousnessChange?.Invoke(this, new BooleanChangeEventArgs {Value = this.Conscious});
                 }
 
                 if (this.Alive != lastAlive)
                 {
-                    this.AliveChange?.Invoke(this, new BooleanChangeEventArgs { Value = this.Alive });
+                    this.AliveChange?.Invoke(this, new BooleanChangeEventArgs {Value = this.Alive});
                 }
-            
+
                 return result;
             }
 
@@ -1047,7 +1065,7 @@ namespace JoyLib.Code.Entities
             {
                 equipment.Dispose();
             }
-            
+
             this.m_NaturalWeapons.Dispose();
             GlobalConstants.GameManager.EntityPool.Retire(this.MonoBehaviourHandler.gameObject);
         }
@@ -1056,14 +1074,11 @@ namespace JoyLib.Code.Entities
         public event ItemRemovedEventHandler ItemRemoved;
         public event ItemAddedEventHandler ItemAdded;
 
-        [OdinSerialize]
-        public string CreatureType { get; protected set; }
+        [OdinSerialize] public string CreatureType { get; protected set; }
 
-        [OdinSerialize]
-        public IBioSex Sex { get; protected set; }
+        [OdinSerialize] public IBioSex Sex { get; protected set; }
 
-        [OdinSerialize]
-        public IGender Gender { get; protected set; }
+        [OdinSerialize] public IGender Gender { get; protected set; }
 
         public NeedAIData CurrentTarget
         {
@@ -1112,17 +1127,15 @@ namespace JoyLib.Code.Entities
             get { return this.m_VisionProvider.Vision; }
         }
 
-        [OdinSerialize]
-        public bool PlayerControlled { get; set; }
+        [OdinSerialize] public bool PlayerControlled { get; set; }
 
         public IItemInstance NaturalWeapons => this.m_NaturalWeapons;
 
         public List<string> IdentifiedItems => this.m_IdentifiedItems;
-        
+
         public IJob CurrentJob => this.m_CurrentJob;
 
-        [OdinSerialize]
-        public bool HasMoved { get; set; }
+        [OdinSerialize] public bool HasMoved { get; set; }
 
         public FulfillmentData FulfillmentData
         {
@@ -1130,9 +1143,11 @@ namespace JoyLib.Code.Entities
             set
             {
                 this.m_FulfillmentData = value;
-                if (this.m_FulfillmentData.Name.Equals("none", StringComparison.OrdinalIgnoreCase) == false && this.m_FulfillmentData.Name.IsNullOrEmpty() == false)
+                if (this.m_FulfillmentData.Name.Equals("none", StringComparison.OrdinalIgnoreCase) == false &&
+                    this.m_FulfillmentData.Name.IsNullOrEmpty() == false)
                 {
-                    this.MonoBehaviourHandler.SetSpeechBubble(this.m_FulfillmentData.Counter > 0, this.m_Needs[this.m_FulfillmentData.Name].FulfillingSprite);
+                    this.MonoBehaviourHandler.SetSpeechBubble(this.m_FulfillmentData.Counter > 0,
+                        this.m_Needs[this.m_FulfillmentData.Name].FulfillingSprite);
                 }
             }
         }
@@ -1149,8 +1164,7 @@ namespace JoyLib.Code.Entities
             set => this.m_Romance = value;
         }
 
-        [OdinSerialize]
-        public IAbility TargetingAbility { get; set; }
+        [OdinSerialize] public IAbility TargetingAbility { get; set; }
 
         public int Mana
         {
@@ -1182,14 +1196,11 @@ namespace JoyLib.Code.Entities
             get { return this.DerivedValues[DerivedValueName.CONCENTRATION].Value; }
         }
 
-        [OdinSerialize]
-        public Vector2Int TargetPoint { get; set; }
+        [OdinSerialize] public Vector2Int TargetPoint { get; set; }
 
-        [OdinSerialize]
-        protected int RegenTicker { get; set; }
+        [OdinSerialize] protected int RegenTicker { get; set; }
 
-        [OdinSerialize]
-        public Quest QuestOffered { get; set; }
+        [OdinSerialize] public Quest QuestOffered { get; set; }
 
         public List<ICulture> Cultures => this.m_Cultures;
 
@@ -1211,10 +1222,11 @@ namespace JoyLib.Code.Entities
                 {
                     return this.LastConditionString;
                 }
-                string condition = this.Equals(GlobalConstants.GameManager.Player) 
-                    ? "You are " 
-                    : CultureInfo.CurrentCulture.TextInfo.ToTitleCase(this.Gender.PersonalSubject) 
-                                   + " " + this.Gender.IsOrAre + " ";
+
+                string condition = this.Equals(GlobalConstants.GameManager.Player)
+                    ? "You are "
+                    : CultureInfo.CurrentCulture.TextInfo.ToTitleCase(this.Gender.PersonalSubject)
+                      + " " + this.Gender.IsOrAre + " ";
                 if (this.Conscious == false)
                 {
                     condition += "unconscious";
@@ -1249,7 +1261,7 @@ namespace JoyLib.Code.Entities
                 return condition;
             }
         }
-        
+
         protected float LastPercentage { get; set; }
         protected string LastConditionString { get; set; }
 
@@ -1279,8 +1291,7 @@ namespace JoyLib.Code.Entities
 
         public bool Conscious => this.HitPointsRemaining > 0;
 
-        [OdinSerialize]
-        public List<IJob> Jobs { get; protected set; }
+        [OdinSerialize] public List<IJob> Jobs { get; protected set; }
 
         public override IEnumerable<Tuple<string, string>> Tooltip => this.ConstructDescription();
 

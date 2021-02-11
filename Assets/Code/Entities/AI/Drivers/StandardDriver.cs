@@ -34,7 +34,7 @@ namespace JoyLib.Code.Entities.AI.Drivers
             throw new System.NotImplementedException();
         }
 
-        public override void Locomotion(Entity vehicle)
+        public override void Locomotion(IEntity vehicle)
         {
             //If you're idle
             if (vehicle.CurrentTarget.idle == true)
@@ -43,7 +43,7 @@ namespace JoyLib.Code.Entities.AI.Drivers
                 List<INeed> needs = vehicle.Needs.Values.OrderByDescending(x => x.Priority).ToList();
                 //Act on first need
 
-                bool idle = true;
+                bool idle = false;
                 bool wander = false;
                 foreach (INeed need in needs)
                 {
@@ -52,11 +52,11 @@ namespace JoyLib.Code.Entities.AI.Drivers
                         continue;
                     }
 
-                    need.FindFulfilmentObject(vehicle);
+                    idle |= need.FindFulfilmentObject(vehicle);
                     break;
                 }
 
-                if(idle == true)
+                if(idle)
                 {
                     int result = this.Roller.Roll(0, 10);
                     if (result < 1)
@@ -65,31 +65,19 @@ namespace JoyLib.Code.Entities.AI.Drivers
                     }
                 }
 
-                if(wander == true)
+                if(wander)
                 {
                     s_WanderAction.Execute(
-                        new JoyObject[] { vehicle },
+                        new IJoyObject[] { vehicle },
                         new[] { "wander", "idle"});
                 }
-            }
-
-            //If we're wandering, select a point we can see and wander there
-            if (vehicle.CurrentTarget.searching && vehicle.CurrentTarget.targetPoint == GlobalConstants.NO_TARGET)
-            {
-                List<Vector2Int> visibleSpots = new List<Vector2Int>(vehicle.Vision);
-
-                //Pick a random spot to wander to
-                int result = this.Roller.Roll(0, visibleSpots.Count);
-                NeedAIData currentTarget = vehicle.CurrentTarget;
-                currentTarget.targetPoint = visibleSpots[result];
-                vehicle.CurrentTarget = currentTarget;
             }
 
             //If we have somewhere to be, move there
             if (vehicle.WorldPosition != vehicle.CurrentTarget.targetPoint 
                 || vehicle.CurrentTarget.target != null)
             {
-                if (vehicle.CurrentTarget.target is ItemInstance 
+                if (vehicle.CurrentTarget.target is IItemInstance 
                     && vehicle.WorldPosition != vehicle.CurrentTarget.target.WorldPosition)
                 {
                     if (vehicle.CurrentTarget.targetPoint.Equals(GlobalConstants.NO_TARGET))
@@ -108,7 +96,7 @@ namespace JoyLib.Code.Entities.AI.Drivers
 
                     this.MoveToTarget(vehicle);
                 }
-                else if(vehicle.CurrentTarget.target is Entity
+                else if(vehicle.CurrentTarget.target is IEntity
                     && AdjacencyHelper.IsAdjacent(vehicle.WorldPosition, vehicle.CurrentTarget.target.WorldPosition) == false)
                 {
                     this.MoveToTarget(vehicle);
@@ -166,7 +154,7 @@ namespace JoyLib.Code.Entities.AI.Drivers
             }
         }
 
-        private void MoveToTarget(Entity vehicle)
+        protected void MoveToTarget(IEntity vehicle)
         {
             if (!vehicle.HasMoved && vehicle.PathfindingData.Count > 0)
             {

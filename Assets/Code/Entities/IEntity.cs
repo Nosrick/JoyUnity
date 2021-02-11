@@ -46,7 +46,7 @@ namespace JoyLib.Code.Entities
         NeedAIData CurrentTarget { get; set;  }
         IDriver Driver { get; }
         IPathfinder Pathfinder { get; }
-        Queue<Vector2Int> PathfindingData { get; }
+        Queue<Vector2Int> PathfindingData { get; set; }
         
         Vector2Int TargetPoint { get; set; }
         IAbility TargetingAbility { get; set; }
@@ -56,9 +56,11 @@ namespace JoyLib.Code.Entities
         
         int VisionMod { get; }
         
+        IEnumerable<Vector2Int> Vision { get; }
+        
         string CreatureType { get; }
         
-        bool HasMoved { get; }
+        bool HasMoved { get; set; }
 
         bool Conscious { get; }
         

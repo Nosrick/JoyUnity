@@ -4,7 +4,7 @@ namespace JoyLib.Code.Entities.AI.Drivers
     {
         bool PlayerControlled { get; }
         
-        void Locomotion(Entity vehicle);
+        void Locomotion(IEntity vehicle);
 
         void Interact();
     }

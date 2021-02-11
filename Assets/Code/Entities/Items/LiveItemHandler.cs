@@ -275,6 +275,14 @@ namespace JoyLib.Code.Entities.Items
             this.m_LiveItems = new Dictionary<Guid, IItemInstance>();
         }
 
+        ~LiveItemHandler()
+        {
+            foreach (IItemInstance item in this.AllItems)
+            {
+                item.Dispose();
+            }
+        }
+
         public List<BaseItemType> ItemDatabase
         {
             get

@@ -1,5 +1,8 @@
+using System.Collections.Generic;
+using System.Linq;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.AI;
+using UnityEngine;
 
 namespace JoyLib.Code.Scripting.Actions
 {
@@ -18,18 +21,27 @@ namespace JoyLib.Code.Scripting.Actions
                 return false;
             }
 
+            List<Vector2Int> visibleWalls = actor.MyWorld.GetVisibleWalls(actor);
+            Vector2Int[] viablePoints = actor.Vision
+                .Where(i => visibleWalls.Contains(i) == false)
+                .ToArray();
+
+            Vector2Int result = GlobalConstants.NO_TARGET;
+
+            if (viablePoints.Length > 0)
+            {
+                result = viablePoints[GlobalConstants.GameManager.Roller.Roll(0, viablePoints.Length)];
+            }
+
             NeedAIData needAIData = new NeedAIData
             {
                 idle = false,
                 intent = Intent.Interact,
                 searching = true,
-                targetPoint = GlobalConstants.NO_TARGET
+                targetPoint = result
             };
+            
             GlobalConstants.ActionLog.AddText(actor.JoyName + " is wandering.");
-            foreach (string tag in tags)
-            {
-                GlobalConstants.ActionLog.AddText(tag);
-            }
 
             actor.CurrentTarget = needAIData;
 

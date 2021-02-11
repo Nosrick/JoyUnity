@@ -19,7 +19,7 @@ namespace JoyLib.Code.Entities.AI.Drivers
             throw new System.NotImplementedException();
         }
 
-        public override void Locomotion(Entity vehicle)
+        public override void Locomotion(IEntity vehicle)
         {
             if (!vehicle.HasMoved && vehicle.PathfindingData.Count > 0)
             {

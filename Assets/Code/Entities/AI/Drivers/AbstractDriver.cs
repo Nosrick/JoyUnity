@@ -6,6 +6,6 @@ namespace JoyLib.Code.Entities.AI.Drivers
 
         public abstract void Interact();
 
-        public abstract void Locomotion(Entity vehicle);
+        public abstract void Locomotion(IEntity vehicle);
     }
 }
