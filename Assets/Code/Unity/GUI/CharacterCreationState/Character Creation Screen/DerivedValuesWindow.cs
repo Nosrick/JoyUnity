@@ -71,7 +71,8 @@ namespace JoyLib.Code.Unity.GUI
                     item.Name.ToLower(),
                     new ConcreteDerivedIntValue(
                         item.Name.ToLower(),
-                        item.Value,
+                        item.Minimum,
+                        item.Value - item.Minimum,
                         item.Value));
             }
 

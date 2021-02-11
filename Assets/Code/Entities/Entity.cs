@@ -334,6 +334,9 @@ namespace JoyLib.Code.Entities
         {
             this.m_Cultures = cultures.ToList();
             this.Initialise();
+
+            this.StatisticChange -= this.RecalculateDVs;
+            this.StatisticChange += this.RecalculateDVs;
         }
 
         protected IEnumerable<Tuple<string, string>> ConstructDescription()
@@ -396,13 +399,13 @@ namespace JoyLib.Code.Entities
                     continue;
                 }
 
+                this.DerivedValues[name].SetBase(dv.Base);
                 this.OnMaximumChanged(this, new ValueChangedEventArgs
                 {
                     Delta = dv.Maximum - this.DerivedValues[name].Maximum,
                     Name = name,
-                    NewValue = dv.Maximum
+                    NewValue = this.DerivedValues[name].Maximum
                 });
-                this.DerivedValues[name].SetBase(dv.Base);
             }
         }
 
