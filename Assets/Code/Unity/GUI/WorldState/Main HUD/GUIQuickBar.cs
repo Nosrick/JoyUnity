@@ -6,6 +6,7 @@ namespace JoyLib.Code.Unity.GUI
     public class GUIQuickBar : MonoBehaviour
     {
         [SerializeField] protected DerivedValuesInformation m_DerivedValuesContainer;
+        [SerializeField] protected float m_AnchorOffsetY = 0.01f;
         
         protected IEntity Player { get; set; }
         
@@ -39,10 +40,12 @@ namespace JoyLib.Code.Unity.GUI
             this.GUIManager = GlobalConstants.GameManager.GUIManager;
 
             RectTransform myRect = this.GetComponent<RectTransform>();
-            Vector2 anchorDif = myRect.anchorMax - myRect.anchorMin;
+            Vector2 anchorMin = myRect.anchorMin;
+            Vector2 anchorDif = myRect.anchorMax - anchorMin;
 
-            myRect.anchorMin = new Vector2(myRect.anchorMin.x, this.m_DerivedValuesContainer.RectTransform.anchorMax.y);
-            myRect.anchorMax = new Vector2(1.0f , myRect.anchorMin.y + anchorDif.y);
+            anchorMin = new Vector2(anchorMin.x, this.m_DerivedValuesContainer.RectTransform.anchorMax.y + this.m_AnchorOffsetY);
+            myRect.anchorMin = anchorMin;
+            myRect.anchorMax = new Vector2(1.0f , anchorMin.y + anchorDif.y);
             //myRect.anchoredPosition = Vector2.zero;
             
             this.Initialised = true;
