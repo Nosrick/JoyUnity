@@ -60,12 +60,12 @@ namespace JoyLib.Code.Unity.GUI
             }
             else
             {
-                offset -= new Vector2(this.RectTransform.sizeDelta.x * 0.5f, 0) + this.m_PositionOffset;
+                offset -= new Vector2(this.RectTransform.sizeDelta.x * 0.5f, 0) - this.m_PositionOffset;
             }
 
             if (mousePosition.y > Screen.height - this.RectTransform.sizeDelta.y)
             {
-                offset -= new Vector2(0, this.RectTransform.sizeDelta.y * 0.5f) + this.m_PositionOffset;
+                offset -= new Vector2(0, this.RectTransform.sizeDelta.y * 0.5f) - this.m_PositionOffset;
             }
             else
             {

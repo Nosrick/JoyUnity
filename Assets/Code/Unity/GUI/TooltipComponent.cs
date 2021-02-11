@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Castle.Core.Internal;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Unity.GUI;
 using UnityEngine;
@@ -13,10 +12,12 @@ namespace JoyLib.Code.Unity
     public class TooltipComponent : GridPosition, IPointerEnterHandler, IPointerExitHandler, IPosition
     {
         public delegate IEnumerable<Tuple<string, string>> SetTooltip(IPosition positionable);
+
+        [SerializeField] protected bool m_ShowIcon = true;
         
         protected ManagedSprite ManagedSprite { get; set; }
         protected ISpriteState Sprite { get; set; }
-        public static IGUIManager GUIManager { get; set; }
+        public IGUIManager GUIManager { get; set; }
 
         public IEnumerable<Tuple<string, string>> Tooltip { get; set; }
 
@@ -24,9 +25,9 @@ namespace JoyLib.Code.Unity
 
         public void Awake()
         {
-            if (GUIManager is null)
+            if (this.GUIManager is null)
             {
-                GUIManager = GlobalConstants.GameManager.GUIManager;
+                this.GUIManager = GlobalConstants.GameManager.GUIManager;
             }
             if (!(this.ManagedSprite is null))
             {
@@ -41,26 +42,24 @@ namespace JoyLib.Code.Unity
         
         public void OnPointerEnter(PointerEventData eventData)
         {
-            if (this.Tooltip.IsNullOrEmpty() && this.RefreshTooltip is null)
+            if (this.RefreshTooltip is null == false)
             {
-                return;
+                List<Tuple<string, string>> tooltipData = this.RefreshTooltip(this).ToList();
+                this.Tooltip = tooltipData;
             }
-            
-            List<Tuple<string, string>> tooltipData = this.RefreshTooltip(this).ToList();
-            this.Tooltip = tooltipData;
 
-            GUIManager.OpenGUI(GUINames.TOOLTIP)
+            this.GUIManager.OpenGUI(GUINames.TOOLTIP)
                 .GetComponent<Tooltip>()
                 .Show(
                     this.gameObject.name,
                     null,
-                    this.Sprite,
+                    this.m_ShowIcon ? this.Sprite : null,
                     this.Tooltip);
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {            
-            GUIManager.CloseGUI(GUINames.TOOLTIP);
+            this.GUIManager.CloseGUI(GUINames.TOOLTIP);
         }
     }
 }

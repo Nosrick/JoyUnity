@@ -418,7 +418,7 @@ PrefabInstance:
     - target: {fileID: 6579073132780374019, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
       propertyPath: m_Name
-      value: Job Management Button
+      value: Open Job Management
       objectReference: {fileID: 0}
     - target: {fileID: 7636288911901167622, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
@@ -518,6 +518,20 @@ MonoBehaviour:
     SerializationNodes: []
   m_ElementName: JobManagementIcon
   m_Prefab: {fileID: 1949383421893784, guid: fc0c5c6df1dde9649a50d9ed7547fa80, type: 3}
+--- !u!114 &51485778
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 51485775}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d41f46dbbd37e8548939ee9c94a0df79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_WorldPosition: {x: 0, y: 0}
+  m_ShowIcon: 0
 --- !u!1 &205221779
 GameObject:
   m_ObjectHideFlags: 0
@@ -1239,7 +1253,7 @@ PrefabInstance:
     - target: {fileID: 6579073132780374019, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
       propertyPath: m_Name
-      value: Character Sheet Button
+      value: Open Character Sheet
       objectReference: {fileID: 0}
     - target: {fileID: 7636288911901167622, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
@@ -1339,6 +1353,20 @@ MonoBehaviour:
     SerializationNodes: []
   m_ElementName: CharacterSheetIcon
   m_Prefab: {fileID: 1949383421893784, guid: fc0c5c6df1dde9649a50d9ed7547fa80, type: 3}
+--- !u!114 &502211826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 502211823}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d41f46dbbd37e8548939ee9c94a0df79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_WorldPosition: {x: 0, y: 0}
+  m_ShowIcon: 0
 --- !u!224 &514357402 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7964575617926831942, guid: d63b0e6a27e7b9a4090dd2a3464e2d1e,
@@ -1677,7 +1705,7 @@ PrefabInstance:
     - target: {fileID: 6579073132780374019, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
       propertyPath: m_Name
-      value: Equipment Button
+      value: Open Equipment
       objectReference: {fileID: 0}
     - target: {fileID: 7636288911901167622, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
@@ -1777,6 +1805,20 @@ MonoBehaviour:
     SerializationNodes: []
   m_ElementName: EquipmentIcon
   m_Prefab: {fileID: 1949383421893784, guid: fc0c5c6df1dde9649a50d9ed7547fa80, type: 3}
+--- !u!114 &610335000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 610334997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d41f46dbbd37e8548939ee9c94a0df79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_WorldPosition: {x: 0, y: 0}
+  m_ShowIcon: 0
 --- !u!1 &751156336
 GameObject:
   m_ObjectHideFlags: 0
@@ -2349,7 +2391,7 @@ PrefabInstance:
     - target: {fileID: 6579073132780374019, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
       propertyPath: m_Name
-      value: Quest Journal Button
+      value: Open Quest Journal
       objectReference: {fileID: 0}
     - target: {fileID: 7636288911901167622, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
@@ -2449,6 +2491,20 @@ MonoBehaviour:
     SerializationNodes: []
   m_ElementName: QuestJournalIcon
   m_Prefab: {fileID: 1949383421893784, guid: fc0c5c6df1dde9649a50d9ed7547fa80, type: 3}
+--- !u!114 &938450803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 938450800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d41f46dbbd37e8548939ee9c94a0df79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_WorldPosition: {x: 0, y: 0}
+  m_ShowIcon: 0
 --- !u!1001 &990688721
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3105,7 +3161,7 @@ PrefabInstance:
     - target: {fileID: 6579073132780374019, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
       propertyPath: m_Name
-      value: Inventory Button
+      value: Open Inventory
       objectReference: {fileID: 0}
     - target: {fileID: 7636288911901167622, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
@@ -3205,6 +3261,20 @@ MonoBehaviour:
     SerializationNodes: []
   m_ElementName: InventoryIcon
   m_Prefab: {fileID: 1949383421893784, guid: fc0c5c6df1dde9649a50d9ed7547fa80, type: 3}
+--- !u!114 &1400735564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1400735561}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d41f46dbbd37e8548939ee9c94a0df79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_WorldPosition: {x: 0, y: 0}
+  m_ShowIcon: 0
 --- !u!224 &1557228372 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6179860079273761956, guid: 58b8f5cefbccc3c409aba03bf15712d4,
