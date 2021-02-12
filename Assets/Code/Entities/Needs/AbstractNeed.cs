@@ -18,6 +18,8 @@ namespace JoyLib.Code.Entities.Needs
 
         [OdinSerialize]
         public RNG Roller { get; protected set; }
+        
+        protected bool Initialised { get; set; }
 
         [OdinSerialize]
         protected Dictionary<string, IJoyAction> m_CachedActions;

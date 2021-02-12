@@ -73,14 +73,17 @@ namespace JoyLib.Code.Entities.Needs
 
         protected void Initialise()
         {
-            if (GlobalConstants.GameManager is null == false && this.RelationshipHandler is null)
+            if (this.Initialised)
             {
-                this.RelationshipHandler = GlobalConstants.GameManager.RelationshipHandler;
+                return;
             }
+            this.RelationshipHandler = GlobalConstants.GameManager.RelationshipHandler;
+            this.Initialised = true;
         }
 
         public override bool FindFulfilmentObject(IEntity actor)
         {
+            this.Initialise();
             IEnumerable<string> tags = actor.Tags.Where(x => x.Contains("sentient"));
 
             List<IEntity> possibleListeners = actor.MyWorld.SearchForEntities(actor, tags).ToList();
@@ -149,6 +152,7 @@ namespace JoyLib.Code.Entities.Needs
 
         public override bool Interact(IEntity actor, IJoyObject obj)
         {
+            this.Initialise();
             this.m_CachedActions["fulfillneedaction"].Execute(
                 new[] {actor, obj},
                 new[] {"need", "family", "fulfill"},

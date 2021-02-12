@@ -69,10 +69,13 @@ namespace JoyLib.Code.Entities.Needs
 
         protected void Initialise()
         {
-            if(GlobalConstants.GameManager is null == false && this.EntityRelationshipHandler is null)
+            if (this.Initialised)
             {
-                this.EntityRelationshipHandler = GlobalConstants.GameManager.RelationshipHandler;
+                return;
             }
+            
+            this.EntityRelationshipHandler = GlobalConstants.GameManager.RelationshipHandler;
+            this.Initialised = true;
         }
 
         public override INeed Copy()
@@ -92,6 +95,7 @@ namespace JoyLib.Code.Entities.Needs
 
         public override bool FindFulfilmentObject(IEntity actor)
         {
+            this.Initialise();
             IEnumerable<string> tags = actor.Tags.Where(x => x.Contains("sentient"));
 
             List<IEntity> possibleMates = actor.MyWorld.SearchForEntities(actor, tags).ToList();
@@ -141,6 +145,8 @@ namespace JoyLib.Code.Entities.Needs
             {
                 return false;
             }
+            
+            this.Initialise();
 
             if (actor.Sexuality.WillMateWith(actor, partner, this.EntityRelationshipHandler.Get(
                     new IJoyObject[] { actor, partner },
@@ -158,17 +164,15 @@ namespace JoyLib.Code.Entities.Needs
                 if (actor.FulfillmentData.Name.Equals(this.Name) && 
                     partner.FulfillmentData.Name.Equals(this.Name))
                 {
-                    HashSet<IJoyObject> userParticipants = new HashSet<IJoyObject>(actor.FulfillmentData.Targets);
-                    userParticipants.Add(actor);
-                    userParticipants.Add(partner);
+                    HashSet<IJoyObject> userParticipants =
+                        new HashSet<IJoyObject>(actor.FulfillmentData.Targets) {actor, partner};
                     this.m_CachedActions["fulfillneedaction"].Execute(
                         userParticipants.ToArray(),
                         new string[] { "sex", "need", "fulfill" },
                         new object[] { this.Name, satisfaction, time });
 
-                    HashSet<IJoyObject> partnerParticipants = new HashSet<IJoyObject>(partner.FulfillmentData.Targets);
-                    partnerParticipants.Add(partner);
-                    partnerParticipants.Add(actor);
+                    HashSet<IJoyObject> partnerParticipants =
+                        new HashSet<IJoyObject>(partner.FulfillmentData.Targets) {partner, actor};
                     this.m_CachedActions["fulfillneedaction"].Execute(
                         partnerParticipants.ToArray(),
                         new string[] { "sex", "need", "fulfill" },

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace JoyLib.Code.Entities.Needs
 {
     public class FulfillmentData
@@ -27,7 +29,7 @@ namespace JoyLib.Code.Entities.Needs
             protected set;
         }
 
-        public IJoyObject[] Targets
+        public IEnumerable<IJoyObject> Targets
         {
             get;
             protected set;

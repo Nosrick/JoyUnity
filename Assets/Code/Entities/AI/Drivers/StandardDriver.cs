@@ -19,15 +19,25 @@ namespace JoyLib.Code.Entities.AI.Drivers
         
         [OdinSerialize]
         protected RNG Roller { get; set; }
+        
+        protected bool Initialised { get; set; }
 
         public StandardDriver(IPhysicsManager physicsManager = null, RNG roller = null)
         {
-            this.WanderAction = ScriptingEngine.Instance.FetchAction("wanderaction");
-            this.Roller = roller is null ? new RNG() : roller;
-            if(this.PhysicsManager is null)
+            this.Roller = roller ?? new RNG();
+            this.Initialise();
+        }
+
+        protected void Initialise()
+        {
+            if (this.Initialised)
             {
-                this.PhysicsManager = physicsManager ?? GlobalConstants.GameManager.PhysicsManager;
+                return;
             }
+
+            this.WanderAction = ScriptingEngine.Instance.FetchAction("wanderaction");
+            this.PhysicsManager = GlobalConstants.GameManager.PhysicsManager;
+            this.Initialised = true;
         }
 
         public override void Interact()
@@ -37,6 +47,7 @@ namespace JoyLib.Code.Entities.AI.Drivers
 
         public override void Locomotion(IEntity vehicle)
         {
+            this.Initialise();
             //If you're idle
             if (vehicle.CurrentTarget.idle == true)
             {

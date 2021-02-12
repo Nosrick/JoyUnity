@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
+using JoyLib.Code.Helpers;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.World;
@@ -54,24 +55,16 @@ namespace JoyLib.Code.Quests
         
         public IQuestStep Make(IEntity questor, IEntity provider, IWorldInstance overworld, IEnumerable<string> tags)
         {
-            List<IWorldInstance> worlds = overworld.GetWorlds(overworld); 
+            List<IWorldInstance> worlds = overworld.GetWorlds(overworld);
 
+            worlds = worlds.Where(instance => questor.HasDataKey(instance.Name) == false).ToList();
+            if (worlds.Any() == false)
+            {
+                GlobalConstants.ActionLog.AddText(questor + " has explored the whole world!", LogLevel.Warning);
+                worlds = overworld.GetWorlds(overworld);
+            }
+            
             int result = this.Roller.Roll(0, worlds.Count);
-
-            int breakout = 0;
-
-            while (questor.HasDataKey(worlds[result].Name) && breakout < worlds.Count)
-            {
-                result++;
-                result %= worlds.Count;
-
-                breakout++;
-            }
-
-            if (breakout == worlds.Count)
-            {
-                throw new InvalidOperationException(questor.JoyName + " has explored the whole world!");
-            }
 
             this.Items = new List<Guid>();
             this.Actors = new List<Guid>();
