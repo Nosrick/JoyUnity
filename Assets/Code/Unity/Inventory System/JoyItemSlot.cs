@@ -160,13 +160,17 @@ namespace JoyLib.Code.Unity.GUI
                 }
 
                 this.GUIManager.OpenGUI(GUINames.CONTEXT_MENU);
+                this.GUIManager.CloseGUI(GUINames.TOOLTIP);
                 menu.Show();
             }
         }
         
         public virtual void OnPointerEnter(PointerEventData eventData)
         {
-            this.ShowTooltip();
+            if (this.GUIManager.IsActive(GUINames.CONTEXT_MENU) == false)
+            {
+                this.ShowTooltip();
+            }
         }
 
         public virtual void OnPointerExit(PointerEventData eventData)

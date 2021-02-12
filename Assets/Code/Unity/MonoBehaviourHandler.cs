@@ -158,6 +158,7 @@ namespace JoyLib.Code.Unity
 
             if (contextMenu.GetComponentsInChildren<MenuItem>().Length > 0)
             {
+                this.GUIManager.CloseGUI(GUINames.TOOLTIP);
                 this.GUIManager.OpenGUI(GUINames.CONTEXT_MENU);
                 contextMenu.Show();
             }
