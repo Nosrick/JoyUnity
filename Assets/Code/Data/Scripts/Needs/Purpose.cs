@@ -24,13 +24,13 @@ namespace JoyLib.Code.Entities.Needs
         protected const int MAX_VALUE_MIN = HAPPINESS_THRESHOLD_MAX;
         protected const int MAX_VALUE_MAX = MAX_VALUE_MIN * 4;
 
-        protected static IEntityRelationshipHandler RelationshipHandler
+        protected IEntityRelationshipHandler RelationshipHandler
         {
             get;
             set;
         }
 
-        protected static IQuestProvider QuestProvider
+        protected IQuestProvider QuestProvider
         {
             get;
             set;
@@ -47,6 +47,7 @@ namespace JoyLib.Code.Entities.Needs
             1,
             new string[0])
         {
+            this.Initialise();
         }
 
         public Purpose(
@@ -73,14 +74,15 @@ namespace JoyLib.Code.Entities.Needs
                 averageForDayRef,
                 averageForWeekRef)
         {
+            this.Initialise();
         }
 
         protected void Initialise()
         {
-            if (GlobalConstants.GameManager is null == false && RelationshipHandler is null)
+            if (GlobalConstants.GameManager is null == false && this.RelationshipHandler is null)
             {
-                RelationshipHandler = GlobalConstants.GameManager.RelationshipHandler;
-                QuestProvider = GlobalConstants.GameManager.QuestProvider;
+                this.RelationshipHandler = GlobalConstants.GameManager.RelationshipHandler;
+                this.QuestProvider = GlobalConstants.GameManager.QuestProvider;
             }
         }
 
@@ -99,7 +101,7 @@ namespace JoyLib.Code.Entities.Needs
                 List<IJoyObject> participants = new List<IJoyObject> {actor, possible};
 
                 string[] relationshipTags = new[] {"friendship"};
-                IEnumerable<IRelationship> relationships = RelationshipHandler?.Get(participants, relationshipTags);
+                IEnumerable<IRelationship> relationships = this.RelationshipHandler?.Get(participants, relationshipTags);
 
                 if (relationships is null)
                 {
@@ -145,7 +147,7 @@ namespace JoyLib.Code.Entities.Needs
                 new[] {"need", "friendship", "fulfill"},
                 new object[] {"friendship", actor.Statistics[EntityStatistic.PERSONALITY].Value, 0, true});
 
-            if (RelationshipHandler.IsFamily(actor, listener))
+            if (this.RelationshipHandler.IsFamily(actor, listener))
             {
                 this.m_CachedActions["fulfillneedaction"].Execute(
                     new IJoyObject[] {actor, listener},
@@ -153,10 +155,9 @@ namespace JoyLib.Code.Entities.Needs
                     new object[] {"family", actor.Statistics[EntityStatistic.PERSONALITY].Value, 0, true});
             }
 
-            if (QuestProvider is null == false)
+            if (this.QuestProvider is null == false)
             {
-                actor.AddQuest(
-                    QuestProvider.MakeRandomQuest(
+                actor.AddQuest(this.QuestProvider.MakeRandomQuest(
                         actor, 
                         listener, 
                         actor.MyWorld.GetOverworld()));

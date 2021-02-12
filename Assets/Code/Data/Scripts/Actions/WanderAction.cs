@@ -41,7 +41,7 @@ namespace JoyLib.Code.Scripting.Actions
                 targetPoint = result
             };
             
-            GlobalConstants.ActionLog.AddText(actor.JoyName + " is wandering.");
+            //GlobalConstants.ActionLog.AddText(actor.JoyName + " is wandering.");
 
             actor.CurrentTarget = needAIData;
 

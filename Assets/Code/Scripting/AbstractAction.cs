@@ -5,11 +5,11 @@ namespace JoyLib.Code.Scripting
 {
     public abstract class AbstractAction : IJoyAction
     {
-        public AbstractAction(IQuestTracker questTracker = null)
+        protected AbstractAction(IQuestTracker questTracker = null)
         {
             if (GlobalConstants.GameManager is null == false)
             {
-                QuestTracker = questTracker is null ? GlobalConstants.GameManager.QuestTracker : questTracker;
+                this.QuestTracker = questTracker ?? GlobalConstants.GameManager.QuestTracker;
             }
         }
         
@@ -29,8 +29,8 @@ namespace JoyLib.Code.Scripting
             this.LastTags = tags;
             this.LastArgs = args;
             this.Successful = true;
-            
-            QuestTracker?.PerformQuestAction(this.LastParticipants[0] as Entity, this);
+
+            this.QuestTracker?.PerformQuestAction(this.LastParticipants[0] as Entity, this);
         }
 
         public virtual string Name => "abstractaction";
@@ -39,6 +39,6 @@ namespace JoyLib.Code.Scripting
         public string[] LastTags { get; protected set; }
         public object[] LastArgs { get; protected set; }
         public bool Successful { get; protected set; }
-        public static IQuestTracker QuestTracker { get; set; }
+        public IQuestTracker QuestTracker { get; set; }
     }
 }

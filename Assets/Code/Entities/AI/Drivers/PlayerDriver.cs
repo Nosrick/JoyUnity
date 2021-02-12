@@ -5,13 +5,13 @@ namespace JoyLib.Code.Entities.AI.Drivers
 {
     public class PlayerDriver : AbstractDriver
     {
-        protected static IPhysicsManager s_PhysicsManager = GlobalConstants.GameManager.PhysicsManager;
+        protected IPhysicsManager PhysicsManager { get; set; }
 
         public override bool PlayerControlled => true;
 
         public PlayerDriver()
         {
-            s_PhysicsManager = GlobalConstants.GameManager.PhysicsManager;
+            this.PhysicsManager = GlobalConstants.GameManager.PhysicsManager;
         }
 
         public override void Interact()
@@ -24,7 +24,7 @@ namespace JoyLib.Code.Entities.AI.Drivers
             if (!vehicle.HasMoved && vehicle.PathfindingData.Count > 0)
             {
                 Vector2Int nextPoint = vehicle.PathfindingData.Peek();
-                PhysicsResult physicsResult = s_PhysicsManager.IsCollision(vehicle.WorldPosition, nextPoint, vehicle.MyWorld);
+                PhysicsResult physicsResult = this.PhysicsManager.IsCollision(vehicle.WorldPosition, nextPoint, vehicle.MyWorld);
                 if (physicsResult != PhysicsResult.EntityCollision && physicsResult != PhysicsResult.WallCollision)
                 {
                     vehicle.PathfindingData.Dequeue();

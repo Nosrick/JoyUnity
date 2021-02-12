@@ -13,19 +13,20 @@ namespace JoyLib.Code.Entities.AI.Drivers
 {
     public class StandardDriver : AbstractDriver
     {
-        protected static IJoyAction s_WanderAction = ScriptingEngine.Instance.FetchAction("wanderaction");
+        protected IJoyAction WanderAction { get; set; }
 
-        protected static IPhysicsManager s_PhysicsManager = GlobalConstants.GameManager.PhysicsManager;
+        protected IPhysicsManager PhysicsManager { get; set; }
         
         [OdinSerialize]
         protected RNG Roller { get; set; }
 
         public StandardDriver(IPhysicsManager physicsManager = null, RNG roller = null)
         {
+            this.WanderAction = ScriptingEngine.Instance.FetchAction("wanderaction");
             this.Roller = roller is null ? new RNG() : roller;
-            if(s_PhysicsManager is null)
+            if(this.PhysicsManager is null)
             {
-                s_PhysicsManager = physicsManager is null ? null : physicsManager;
+                this.PhysicsManager = physicsManager ?? GlobalConstants.GameManager.PhysicsManager;
             }
         }
 
@@ -67,7 +68,7 @@ namespace JoyLib.Code.Entities.AI.Drivers
 
                 if(wander)
                 {
-                    s_WanderAction.Execute(
+                    this.WanderAction.Execute(
                         new IJoyObject[] { vehicle },
                         new[] { "wander", "idle"});
                 }
@@ -159,7 +160,7 @@ namespace JoyLib.Code.Entities.AI.Drivers
             if (!vehicle.HasMoved && vehicle.PathfindingData.Count > 0)
             {
                 Vector2Int nextPoint = vehicle.PathfindingData.Peek();
-                PhysicsResult physicsResult = s_PhysicsManager.IsCollision(vehicle.WorldPosition, nextPoint, vehicle.MyWorld);
+                PhysicsResult physicsResult = this.PhysicsManager.IsCollision(vehicle.WorldPosition, nextPoint, vehicle.MyWorld);
                 if (physicsResult != PhysicsResult.EntityCollision)
                 {
                     vehicle.PathfindingData.Dequeue();

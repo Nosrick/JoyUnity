@@ -10,7 +10,7 @@ namespace JoyLib.Code.States
     {
         protected GameState m_NextState;
 
-        protected WorldSerialiser m_WorldSerialiser = new WorldSerialiser();
+        protected WorldSerialiser m_WorldSerialiser = new WorldSerialiser(GlobalConstants.GameManager.ObjectIconHandler);
 
         public MainMenuState() :
             base()

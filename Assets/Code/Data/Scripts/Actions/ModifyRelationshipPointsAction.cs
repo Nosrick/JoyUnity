@@ -10,13 +10,13 @@ namespace JoyLib.Code.Scripting.Actions
 
         public override string ActionString => "modification of relationship points";
 
-        protected static IEntityRelationshipHandler RelationshipHandler { get; set; }
+        protected IEntityRelationshipHandler RelationshipHandler { get; set; }
 
         public ModifyRelationshipPointsAction()
         {
             if (GlobalConstants.GameManager is null == false)
             {
-                RelationshipHandler = GlobalConstants.GameManager.RelationshipHandler;
+                this.RelationshipHandler = GlobalConstants.GameManager.RelationshipHandler;
             }
         }
 
@@ -36,12 +36,12 @@ namespace JoyLib.Code.Scripting.Actions
             
             int relationshipMod = (int)args[0];
 
-            if (RelationshipHandler is null)
+            if (this.RelationshipHandler is null)
             {
                 return false;
             }
 
-            IEnumerable<IRelationship> relationships = RelationshipHandler?.Get(participants, tags, true);
+            IEnumerable<IRelationship> relationships = this.RelationshipHandler?.Get(participants, tags, true);
 
             bool doAll = args.Length >= 2 && (bool)args[1];
 

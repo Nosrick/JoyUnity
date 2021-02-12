@@ -25,7 +25,7 @@ namespace JoyLib.Code.Unity.GUI
             set;
         }
         
-        protected static IConversationEngine ConversationEngine
+        protected IConversationEngine ConversationEngine
         {
             get;
             set;
@@ -34,10 +34,10 @@ namespace JoyLib.Code.Unity.GUI
         public void Awake()
         {
             if (GlobalConstants.GameManager.ConversationEngine is null == false 
-                && (ConversationEngine is null
-                    || ConversationEngine.Guid != GlobalConstants.GameManager.ConversationEngine?.Guid))
+                && (this.ConversationEngine is null
+                    || this.ConversationEngine.Guid != GlobalConstants.GameManager.ConversationEngine?.Guid))
             {
-                ConversationEngine = GlobalConstants.GameManager.ConversationEngine;
+                this.ConversationEngine = GlobalConstants.GameManager.ConversationEngine;
             }
 
             this.Text = this.transform.GetComponentInChildren<TextMeshProUGUI>();
@@ -45,7 +45,7 @@ namespace JoyLib.Code.Unity.GUI
 
         public void OnPointerDown(PointerEventData eventData)
         {
-            ConversationEngine.Converse(this.Index);
+            this.ConversationEngine.Converse(this.Index);
         }
 
         public void SetText(string text)

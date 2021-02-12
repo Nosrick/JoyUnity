@@ -49,9 +49,9 @@ namespace Tests
         {
             ActionLog actionLog = new ActionLog();
             GlobalConstants.ActionLog = actionLog;
-            scriptingEngine = new ScriptingEngine();
+            this.scriptingEngine = new ScriptingEngine();
 
-            RelationshipHandler = new EntityRelationshipHandler();
+            this.RelationshipHandler = new EntityRelationshipHandler();
 
             ICultureHandler cultureHandler = Mock.Of<ICultureHandler>(
                 handler => handler.Cultures == new ICulture[]
@@ -65,12 +65,17 @@ namespace Tests
                                                      "aromantic"
                                                  })
                 });
-            target = new EntityRomanceHandler();
 
-            heteroromantic = target.Get("heteroromantic");
-            homoromantic = target.Get("homoromantic");
-            biromantic = target.Get("biromantic");
-            aromantic = target.Get("aromantic");
+            GlobalConstants.GameManager = Mock.Of<IGameManager>(
+                manager => manager.RelationshipHandler == this.RelationshipHandler
+                && manager.CultureHandler == cultureHandler);
+
+            this.target = new EntityRomanceHandler();
+
+            this.heteroromantic = this.target.Get("heteroromantic");
+            this.homoromantic = this.target.Get("homoromantic");
+            this.biromantic = this.target.Get("biromantic");
+            this.aromantic = this.target.Get("aromantic");
         }
 
         [SetUp]
@@ -79,73 +84,73 @@ namespace Tests
             IGender femaleGender = Mock.Of<IGender>(gender => gender.Name == "female");
             IGender maleGender = Mock.Of<IGender>(gender => gender.Name == "male");
 
-            heterofemaleHuman = Mock.Of<IEntity>(
+            this.heterofemaleHuman = Mock.Of<IEntity>(
                 human => human.Gender == femaleGender
-                && human.Romance == heteroromantic
+                && human.Romance == this.heteroromantic
                 && human.Guid == Guid.NewGuid());
 
-            heteroMaleHuman = Mock.Of<IEntity>(
+            this.heteroMaleHuman = Mock.Of<IEntity>(
                 human => human.Gender == maleGender
-                         && human.Romance == heteroromantic
+                         && human.Romance == this.heteroromantic
                          && human.Guid == Guid.NewGuid());
 
-            homoMaleHumanLeft = Mock.Of<IEntity>(
+            this.homoMaleHumanLeft = Mock.Of<IEntity>(
                 human => human.Gender == maleGender
-                         && human.Romance == homoromantic
+                         && human.Romance == this.homoromantic
                          && human.Guid == Guid.NewGuid());
 
-            homoMaleHumanRight = Mock.Of<IEntity>(
+            this.homoMaleHumanRight = Mock.Of<IEntity>(
                 human => human.Gender == maleGender
-                         && human.Romance == homoromantic
+                         && human.Romance == this.homoromantic
                          && human.Guid == Guid.NewGuid());
 
-            homofemaleHumanLeft = Mock.Of<IEntity>(
+            this.homofemaleHumanLeft = Mock.Of<IEntity>(
                 human => human.Gender == femaleGender
-                         && human.Romance == homoromantic
+                         && human.Romance == this.homoromantic
                          && human.Guid == Guid.NewGuid());
 
-            homofemaleHumanRight = Mock.Of<IEntity>(
+            this.homofemaleHumanRight = Mock.Of<IEntity>(
                 human => human.Gender == femaleGender
-                         && human.Romance == homoromantic
+                         && human.Romance == this.homoromantic
                          && human.Guid == Guid.NewGuid());
 
-            biMaleHuman = Mock.Of<IEntity>(
+            this.biMaleHuman = Mock.Of<IEntity>(
                 human => human.Gender == maleGender
-                         && human.Romance == biromantic
+                         && human.Romance == this.biromantic
                          && human.Guid == Guid.NewGuid());
 
-            bifemaleHuman = Mock.Of<IEntity>(
+            this.bifemaleHuman = Mock.Of<IEntity>(
                 human => human.Gender == femaleGender
-                         && human.Romance == biromantic
+                         && human.Romance == this.biromantic
                          && human.Guid == Guid.NewGuid());
 
-            aroMaleHuman = Mock.Of<IEntity>(
+            this.aroMaleHuman = Mock.Of<IEntity>(
                 human => human.Gender == maleGender
-                         && human.Romance == aromantic
+                         && human.Romance == this.aromantic
                          && human.Guid == Guid.NewGuid());
 
 
-            IEntity[] heteroCouple = new IEntity[] { heterofemaleHuman, heteroMaleHuman };
-            IEntity[] homofemaleCouple = new IEntity[] { homofemaleHumanLeft, homofemaleHumanRight };
-            IEntity[] homoMaleCouple = new IEntity[] { homoMaleHumanLeft, homoMaleHumanRight };
-            IEntity[] biCoupleLeft = new IEntity[] { bifemaleHuman, homofemaleHumanLeft };
-            IEntity[] biCoupleRight = new IEntity[] { bifemaleHuman, biMaleHuman };
-            IEntity[] asexualCouple = new IEntity[] {aroMaleHuman, bifemaleHuman};
+            IEntity[] heteroCouple = new IEntity[] {this.heterofemaleHuman, this.heteroMaleHuman };
+            IEntity[] homofemaleCouple = new IEntity[] {this.homofemaleHumanLeft, this.homofemaleHumanRight };
+            IEntity[] homoMaleCouple = new IEntity[] {this.homoMaleHumanLeft, this.homoMaleHumanRight };
+            IEntity[] biCoupleLeft = new IEntity[] {this.bifemaleHuman, this.homofemaleHumanLeft };
+            IEntity[] biCoupleRight = new IEntity[] {this.bifemaleHuman, this.biMaleHuman };
+            IEntity[] asexualCouple = new IEntity[] {this.aroMaleHuman, this.bifemaleHuman};
 
-            RelationshipHandler.CreateRelationshipWithValue(heteroCouple, new[]{ "monoamorous" }, 500);
-            RelationshipHandler.CreateRelationshipWithValue(homofemaleCouple, new[]{ "monoamorous" }, 500);
-            RelationshipHandler.CreateRelationshipWithValue(homoMaleCouple, new[]{ "monoamorous" }, 500);
-            RelationshipHandler.CreateRelationshipWithValue(biCoupleLeft, new[]{ "monoamorous" }, 500);
-            RelationshipHandler.CreateRelationshipWithValue(biCoupleRight, new[]{ "monoamorous" }, 500);
-            RelationshipHandler.CreateRelationshipWithValue(asexualCouple, new[]{ "monoamorous" }, 500);
+            this.RelationshipHandler.CreateRelationshipWithValue(heteroCouple, new[]{ "monoamorous" }, 500);
+            this.RelationshipHandler.CreateRelationshipWithValue(homofemaleCouple, new[]{ "monoamorous" }, 500);
+            this.RelationshipHandler.CreateRelationshipWithValue(homoMaleCouple, new[]{ "monoamorous" }, 500);
+            this.RelationshipHandler.CreateRelationshipWithValue(biCoupleLeft, new[]{ "monoamorous" }, 500);
+            this.RelationshipHandler.CreateRelationshipWithValue(biCoupleRight, new[]{ "monoamorous" }, 500);
+            this.RelationshipHandler.CreateRelationshipWithValue(asexualCouple, new[]{ "monoamorous" }, 500);
         }
 
         [UnityTest]
         public IEnumerator Heteroromantic_Compatible_AcceptsHeteroPartners()
         {
-            IJoyObject[] participants = new [] { heterofemaleHuman, heteroMaleHuman };
-            IEnumerable<IRelationship> relationships = RelationshipHandler.Get(participants);
-            Assert.IsTrue(heteroromantic.WillRomance(heterofemaleHuman, heteroMaleHuman, relationships));
+            IJoyObject[] participants = new [] {this.heterofemaleHuman, this.heteroMaleHuman };
+            IEnumerable<IRelationship> relationships = this.RelationshipHandler.Get(participants);
+            Assert.IsTrue(this.heteroromantic.WillRomance(this.heterofemaleHuman, this.heteroMaleHuman, relationships));
 
             return null;
         }
@@ -153,9 +158,9 @@ namespace Tests
         [UnityTest]
         public IEnumerator Heteroromantic_Compatible_RejectsHomoPartners()
         {
-            IJoyObject[] participants = new [] { heterofemaleHuman, homofemaleHumanLeft };
-            IEnumerable<IRelationship> relationships = RelationshipHandler.Get(participants);
-            Assert.IsFalse(heteroromantic.WillRomance(heterofemaleHuman, homofemaleHumanLeft, relationships));
+            IJoyObject[] participants = new [] {this.heterofemaleHuman, this.homofemaleHumanLeft };
+            IEnumerable<IRelationship> relationships = this.RelationshipHandler.Get(participants);
+            Assert.IsFalse(this.heteroromantic.WillRomance(this.heterofemaleHuman, this.homofemaleHumanLeft, relationships));
 
             return null;
         }
@@ -163,9 +168,9 @@ namespace Tests
         [UnityTest]
         public IEnumerator Homoromantic_Compatible_AcceptsHomoPartners()
         {
-            IJoyObject[] participants = new [] { homoMaleHumanLeft, homoMaleHumanRight };
-            IEnumerable<IRelationship> relationships = RelationshipHandler.Get(participants);
-            Assert.IsTrue(homoromantic.WillRomance(homoMaleHumanLeft, homoMaleHumanRight, relationships));
+            IJoyObject[] participants = new [] {this.homoMaleHumanLeft, this.homoMaleHumanRight };
+            IEnumerable<IRelationship> relationships = this.RelationshipHandler.Get(participants);
+            Assert.IsTrue(this.homoromantic.WillRomance(this.homoMaleHumanLeft, this.homoMaleHumanRight, relationships));
 
             return null;
         }
@@ -173,9 +178,9 @@ namespace Tests
         [UnityTest]
         public IEnumerator Homoromantic_Compatible_RejectsHeteroPartners()
         {
-            IJoyObject[] participants = new[] { homofemaleHumanLeft, homofemaleHumanRight };
-            IEnumerable<IRelationship> relationships = RelationshipHandler.Get(participants);
-            Assert.IsFalse(homoromantic.WillRomance(homoMaleHumanLeft, homofemaleHumanRight, relationships));
+            IJoyObject[] participants = new[] {this.homofemaleHumanLeft, this.homofemaleHumanRight };
+            IEnumerable<IRelationship> relationships = this.RelationshipHandler.Get(participants);
+            Assert.IsFalse(this.homoromantic.WillRomance(this.homoMaleHumanLeft, this.homofemaleHumanRight, relationships));
 
             return null;
         }
@@ -183,9 +188,9 @@ namespace Tests
         [UnityTest]
         public IEnumerator Biromantic_Compatible_WillAcceptHomoPartners()
         {
-            IJoyObject[] participants = new[] { bifemaleHuman, homofemaleHumanLeft };
-            IEnumerable<IRelationship> relationships = RelationshipHandler.Get(participants);
-            Assert.IsTrue(biromantic.WillRomance(bifemaleHuman, homofemaleHumanLeft, relationships));
+            IJoyObject[] participants = new[] {this.bifemaleHuman, this.homofemaleHumanLeft };
+            IEnumerable<IRelationship> relationships = this.RelationshipHandler.Get(participants);
+            Assert.IsTrue(this.biromantic.WillRomance(this.bifemaleHuman, this.homofemaleHumanLeft, relationships));
 
             return null;
         }
@@ -193,9 +198,9 @@ namespace Tests
         [UnityTest]
         public IEnumerator Biromantic_Compatible_WillAcceptHeteroPartners()
         {
-            IJoyObject[] participants = new[] { bifemaleHuman, biMaleHuman };
-            IEnumerable<IRelationship> relationships = RelationshipHandler.Get(participants);
-            Assert.IsTrue(biromantic.WillRomance(bifemaleHuman, biMaleHuman, relationships));
+            IJoyObject[] participants = new[] {this.bifemaleHuman, this.biMaleHuman };
+            IEnumerable<IRelationship> relationships = this.RelationshipHandler.Get(participants);
+            Assert.IsTrue(this.biromantic.WillRomance(this.bifemaleHuman, this.biMaleHuman, relationships));
 
             return null;
         }
@@ -203,9 +208,9 @@ namespace Tests
         [UnityTest]
         public IEnumerator Aromantic_Compatible_WillRejectPartner()
         {
-            IJoyObject[] participants = new[] { aroMaleHuman, bifemaleHuman };
-            IEnumerable<IRelationship> relationships = RelationshipHandler.Get(participants);
-            Assert.IsFalse(aromantic.WillRomance(aroMaleHuman, bifemaleHuman, relationships));
+            IJoyObject[] participants = new[] {this.aroMaleHuman, this.bifemaleHuman };
+            IEnumerable<IRelationship> relationships = this.RelationshipHandler.Get(participants);
+            Assert.IsFalse(this.aromantic.WillRomance(this.aroMaleHuman, this.bifemaleHuman, relationships));
 
             return null;
         }

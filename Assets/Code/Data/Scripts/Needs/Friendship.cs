@@ -10,7 +10,7 @@ namespace JoyLib.Code.Entities.Needs
     {
         public override string Name => "friendship";
 
-        protected static IEntityRelationshipHandler EntityRelationshipHandler
+        protected IEntityRelationshipHandler EntityRelationshipHandler
         {
             get;
             set;
@@ -71,9 +71,9 @@ namespace JoyLib.Code.Entities.Needs
 
         protected void Initialise()
         {
-            if(GlobalConstants.GameManager is null == false && EntityRelationshipHandler is null)
+            if(GlobalConstants.GameManager is null == false && this.EntityRelationshipHandler is null)
             {
-                EntityRelationshipHandler = GlobalConstants.GameManager.RelationshipHandler;
+                this.EntityRelationshipHandler = GlobalConstants.GameManager.RelationshipHandler;
             }
         }
 
@@ -92,8 +92,7 @@ namespace JoyLib.Code.Entities.Needs
                 participants.Add(possible);
 
                 string[] relationshipTags = new[] {"friendship"};
-                IEnumerable<IRelationship> relationships =
-                    EntityRelationshipHandler.Get(participants, relationshipTags);
+                IEnumerable<IRelationship> relationships = this.EntityRelationshipHandler.Get(participants, relationshipTags);
                 
                 foreach (IRelationship relationship in relationships)
                 {

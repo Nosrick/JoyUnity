@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using Code.States;
 using JoyLib.Code.Conversation;
 using JoyLib.Code.Entities;
@@ -46,7 +45,7 @@ namespace JoyLib.Code.States
 
         public WorldState(IWorldInstance overworldRef, IWorldInstance activeWorldRef) : base()
         {
-            this.m_WorldSerialiser = new WorldSerialiser();
+            this.m_WorldSerialiser = new WorldSerialiser(GlobalConstants.GameManager.ObjectIconHandler);
 
             this.m_ActiveWorld = activeWorldRef;
             this.m_Overworld = overworldRef;
@@ -71,19 +70,6 @@ namespace JoyLib.Code.States
             //GlobalConstants.GameManager.Player = m_ActiveWorld.Player;
 
             this.Tick();
-        }
-
-        public static IEnumerable<Tuple<string, string>> GetTooltipData(IPosition positionable)
-        {
-            return new List<Tuple<string, string>>
-            {
-                new Tuple<string, string>(
-                    "Light Level", GlobalConstants.GameManager.Player.MyWorld.LightCalculator.Light
-                        .GetLight(positionable.WorldPosition)
-                        .ToString()),
-                new Tuple<string, string>(
-                    "", positionable.WorldPosition.ToString())
-            };
         }
 
         public override void LoadContent()

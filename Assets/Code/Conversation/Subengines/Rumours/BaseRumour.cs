@@ -42,7 +42,7 @@ namespace JoyLib.Code.Conversation.Conversations.Rumours
 
         protected string m_Words;
 
-        protected static IParameterProcessorHandler ProcessorHandler
+        protected IParameterProcessorHandler ProcessorHandler
         {
             get;
             set;
@@ -79,9 +79,9 @@ namespace JoyLib.Code.Conversation.Conversations.Rumours
 
         protected void Initialise()
         {
-            if (GlobalConstants.GameManager is null == false && ProcessorHandler is null)
+            if (GlobalConstants.GameManager is null == false && this.ProcessorHandler is null)
             {
-                ProcessorHandler = GlobalConstants.GameManager.ParameterProcessorHandler;
+                this.ProcessorHandler = GlobalConstants.GameManager.ParameterProcessorHandler;
             }
         }
 
@@ -184,7 +184,7 @@ namespace JoyLib.Code.Conversation.Conversations.Rumours
                     participantNumber++;
                 }
 
-                string replacement = ProcessorHandler?
+                string replacement = this.ProcessorHandler?
                     .Get(this.Parameters[i])
                     .Parse(this.Parameters[i], obj);
 

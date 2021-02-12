@@ -28,18 +28,11 @@ namespace JoyLib.Code.Entities.Relationships
         [OdinSerialize]
         protected List<Guid> m_Participants;
 
-        protected static ILiveEntityHandler EntityHandler { get; set; }
-
         public AbstractRelationship(ILiveEntityHandler entityHandler = null)
         {
             this.m_Participants = new List<Guid>();
             this.m_Values = new SortedDictionary<Guid, Dictionary<Guid, int>>();
             this.Tags = new List<string>();
-
-            if (EntityHandler is null)
-            {
-                EntityHandler = entityHandler ?? GlobalConstants.GameManager.EntityHandler;
-            }
         }
 
         public long GenerateHashFromInstance()

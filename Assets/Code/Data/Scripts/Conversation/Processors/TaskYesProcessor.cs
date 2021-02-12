@@ -5,10 +5,12 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
 {
     public class TaskYesProcessor : TopicData
     {
-        protected static IQuestTracker QuestTracker { get; set; }
-        protected static IEntity Player { get; set; }
+        protected IQuestTracker QuestTracker { get; set; }
+        protected IEntity Player { get; set; }
         
         protected IQuest OfferedQuest { get; set; }
+        
+        protected bool Initialised { get; set; }
         
         public TaskYesProcessor(IQuest offeredQuest) 
             : base(
@@ -26,20 +28,23 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
 
         protected void Initialise()
         {
-            if (!(QuestTracker is null))
+            if (!(this.QuestTracker is null) || this.Initialised)
             {
                 return;
             }
 
             IGameManager gameManager = GlobalConstants.GameManager;
-            QuestTracker = gameManager.QuestTracker;
-            Player = gameManager.EntityHandler.GetPlayer();
+            this.QuestTracker = gameManager.QuestTracker;
+            this.Player = gameManager.EntityHandler.GetPlayer();
+
+            this.Initialised = true;
         }
 
         public override ITopic[] Interact(IEntity instigator, IEntity listener)
         {
+            this.Initialise();
             base.Interact(instigator, listener);
-            QuestTracker.AddQuest(
+            this.QuestTracker.AddQuest(
                 instigator.Guid,
                 this.OfferedQuest);
 

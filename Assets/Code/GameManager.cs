@@ -165,7 +165,7 @@ namespace JoyLib.Code
 
             this.m_StateManager = new StateManager();
 
-            this.WorldSerialiser = new WorldSerialiser();
+            this.WorldSerialiser = new WorldSerialiser(GlobalConstants.GameManager.ObjectIconHandler);
 
             this.Initialised = true;
             this.LoadingMessage = "Done!";

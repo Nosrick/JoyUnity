@@ -54,13 +54,13 @@ namespace JoyLib.Code.Unity.GUI
         
         protected static InputAction UnstackKey { get; set; }
         
-        public static IConversationEngine ConversationEngine { get; set; }
+        public IConversationEngine ConversationEngine { get; set; }
 
-        public static IGUIManager GUIManager { get; set; }
+        public IGUIManager GUIManager { get; set; }
 
-        public static ILiveEntityHandler EntityHandler { get; set; }
+        public ILiveEntityHandler EntityHandler { get; set; }
 
-        protected static IEntity Player { get; set; }
+        protected IEntity Player { get; set; }
         
         protected static DragObject DragObject { get; set; }
         
@@ -80,14 +80,14 @@ namespace JoyLib.Code.Unity.GUI
 
         protected void GetBits()
         {
-            if (GlobalConstants.GameManager is null || GUIManager is null == false)
+            if (GlobalConstants.GameManager is null || this.GUIManager is null == false)
             {
                 return;
             }
             UnstackKey = InputSystem.ListEnabledActions().First(action => action.name.Equals("unstack", StringComparison.OrdinalIgnoreCase));
-            ConversationEngine = GlobalConstants.GameManager.ConversationEngine;
-            GUIManager = GlobalConstants.GameManager.GUIManager;
-            EntityHandler = GlobalConstants.GameManager.EntityHandler;
+            this.ConversationEngine = GlobalConstants.GameManager.ConversationEngine;
+            this.GUIManager = GlobalConstants.GameManager.GUIManager;
+            this.EntityHandler = GlobalConstants.GameManager.EntityHandler;
         }
         
         public virtual void Repaint()
@@ -133,7 +133,7 @@ namespace JoyLib.Code.Unity.GUI
                 return;
             }
 
-            ContextMenu menu = GUIManager.GetGUI(GUINames.CONTEXT_MENU).GetComponent<ContextMenu>();
+            ContextMenu menu = this.GUIManager.GetGUI(GUINames.CONTEXT_MENU).GetComponent<ContextMenu>();
             if (menu is null || this.Container.UseContextMenu == false)
             {
                 return;
@@ -159,7 +159,7 @@ namespace JoyLib.Code.Unity.GUI
                     //menu.AddMenuItem("Use", this.OnUse);
                 }
 
-                GUIManager.OpenGUI(GUINames.CONTEXT_MENU);
+                this.GUIManager.OpenGUI(GUINames.CONTEXT_MENU);
                 menu.Show();
             }
         }
@@ -178,7 +178,7 @@ namespace JoyLib.Code.Unity.GUI
         {
             if (this.Container.ShowTooltips && this.Item is null == false)
             {
-                GUIManager.OpenGUI(GUINames.TOOLTIP)
+                this.GUIManager.OpenGUI(GUINames.TOOLTIP)
                     .GetComponent<Tooltip>()
                     .Show(
                         this.Item.JoyName,
@@ -192,7 +192,7 @@ namespace JoyLib.Code.Unity.GUI
         {
             if (this.Container.ShowTooltips)
             {
-                GUIManager.CloseGUI(GUINames.TOOLTIP);
+                this.GUIManager.CloseGUI(GUINames.TOOLTIP);
             }
         }
 
@@ -200,8 +200,8 @@ namespace JoyLib.Code.Unity.GUI
         {
             if (this.Item.HasTag("container"))
             {
-                GUIManager?.OpenGUI(GUINames.INVENTORY_CONTAINER);
-                ItemContainer container = GUIManager?.GetGUI(GUINames.INVENTORY_CONTAINER)
+                this.GUIManager?.OpenGUI(GUINames.INVENTORY_CONTAINER);
+                ItemContainer container = this.GUIManager?.GetGUI(GUINames.INVENTORY_CONTAINER)
                     .GetComponent<ItemContainer>();
                 container.Owner = this.Item;
                 container.OnEnable();
@@ -242,7 +242,7 @@ namespace JoyLib.Code.Unity.GUI
                 }
                 else
                 {
-                    GUIManager.OpenGUI(GUINames.CURSOR)
+                    this.GUIManager.OpenGUI(GUINames.CURSOR)
                         .GetComponent<Cursor>()
                         .Show(this.Item.MonoBehaviourHandler.CurrentSpriteState);
                     DragObject = new DragObject
@@ -318,7 +318,7 @@ namespace JoyLib.Code.Unity.GUI
         protected virtual void EndDrag()
         {
             this.Repaint();
-            GUIManager.GetGUI(GUINames.CURSOR).GetComponent<Cursor>().Reset();
+            this.GUIManager.GetGUI(GUINames.CURSOR).GetComponent<Cursor>().Reset();
         }
 
         public virtual void OnPointerDown(PointerEventData eventData)

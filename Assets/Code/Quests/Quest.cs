@@ -89,6 +89,11 @@ namespace JoyLib.Code.Quests
                 return false;
             }
 
+            if (this.Rewards.Any() == false)
+            {
+                GlobalConstants.ActionLog.AddText("Quest " + this.ID + " has no rewards!");
+            }
+
             foreach (IItemInstance reward in this.Rewards)
             {
                 if (reward is ItemInstance item)

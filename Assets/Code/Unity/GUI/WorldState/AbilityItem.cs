@@ -33,15 +33,15 @@ namespace JoyLib.Code.Unity.GUI
         protected Image Image { get; set; }
         protected TextMeshProUGUI Text { get; set; }
         
-        protected static IGUIManager GUIManager { get; set; }
+        protected IGUIManager GUIManager { get; set; }
 
         public event ValueChangedEventHandler OnSelect;
 
         public void Awake()
         {
-            if (GUIManager is null)
+            if (this.GUIManager is null)
             {
-                GUIManager = GlobalConstants.GameManager.GUIManager;
+                this.GUIManager = GlobalConstants.GameManager.GUIManager;
             }
 
             this.Image = this.GetComponent<Image>();
@@ -56,13 +56,13 @@ namespace JoyLib.Code.Unity.GUI
                 return;
             }
 
-            Tooltip tooltip = GUIManager.OpenGUI(GUINames.TOOLTIP).GetComponent<Tooltip>();
+            Tooltip tooltip = this.GUIManager.OpenGUI(GUINames.TOOLTIP).GetComponent<Tooltip>();
             tooltip.Show(null, this.Tooltip);
         }
 
         public void OnPointerExit(PointerEventData data)
         {
-            GUIManager.CloseGUI(GUINames.TOOLTIP);
+            this.GUIManager.CloseGUI(GUINames.TOOLTIP);
         }
 
         public void ToggleMe()

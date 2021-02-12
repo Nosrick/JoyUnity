@@ -11,7 +11,7 @@ namespace JoyLib.Code.Entities.Needs
     {
         public override string Name => "sex";
         
-        protected static IEntityRelationshipHandler EntityRelationshipHandler { get; set; }
+        protected IEntityRelationshipHandler EntityRelationshipHandler { get; set; }
 
         protected const int DECAY_MIN = 200;
         protected const int DECAY_MAX = 600;
@@ -69,9 +69,9 @@ namespace JoyLib.Code.Entities.Needs
 
         protected void Initialise()
         {
-            if(GlobalConstants.GameManager is null == false && EntityRelationshipHandler is null)
+            if(GlobalConstants.GameManager is null == false && this.EntityRelationshipHandler is null)
             {
-                EntityRelationshipHandler = GlobalConstants.GameManager.RelationshipHandler;
+                this.EntityRelationshipHandler = GlobalConstants.GameManager.RelationshipHandler;
             }
         }
 
@@ -104,7 +104,7 @@ namespace JoyLib.Code.Entities.Needs
                 participants.Add(actor);
                 participants.Add(mate);
                 string[] relationshipTags = new string[] { "sexual" };
-                IEnumerable<IRelationship> relationships = EntityRelationshipHandler.Get(participants, relationshipTags);
+                IEnumerable<IRelationship> relationships = this.EntityRelationshipHandler.Get(participants, relationshipTags);
 
                 foreach (IRelationship relationship in relationships)
                 {
@@ -142,8 +142,7 @@ namespace JoyLib.Code.Entities.Needs
                 return false;
             }
 
-            if (actor.Sexuality.WillMateWith(actor, partner, 
-                EntityRelationshipHandler.Get(
+            if (actor.Sexuality.WillMateWith(actor, partner, this.EntityRelationshipHandler.Get(
                     new IJoyObject[] { actor, partner },
                     new string[] { "sexual" })))
             {

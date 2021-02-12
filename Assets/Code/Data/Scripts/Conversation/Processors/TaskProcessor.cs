@@ -5,7 +5,7 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
 {
     public class TaskProcessor : TopicData
     {
-        protected static IQuestProvider QuestProvider { get; set; }
+        protected IQuestProvider QuestProvider { get; set; }
         
         protected IQuest OfferedQuest { get; set; }
         
@@ -27,18 +27,17 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
 
         protected void Initialise()
         {
-            if (!(QuestProvider is null))
+            if (!(this.QuestProvider is null))
             {
                 return;
             }
 
-            IGameManager gameManager = GlobalConstants.GameManager;
-            QuestProvider = gameManager.QuestProvider;
+            this.QuestProvider = GlobalConstants.GameManager?.QuestProvider;
         }
 
         public override ITopic[] Interact(IEntity instigator, IEntity listener)
         {
-            this.OfferedQuest = QuestProvider.MakeRandomQuest(
+            this.OfferedQuest = this.QuestProvider.MakeRandomQuest(
                 instigator,
                 listener,
                 instigator.MyWorld.GetOverworld());

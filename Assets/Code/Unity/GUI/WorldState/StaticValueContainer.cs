@@ -14,13 +14,13 @@ namespace JoyLib.Code.Unity.GUI
         protected int m_Value;
         protected string m_Name;
 
-        protected static IGUIManager GUIManager { get; set; }
+        protected IGUIManager GUIManager { get; set; }
 
         public void OnEnable()
         {
-            if (GUIManager is null)
+            if (this.GUIManager is null)
             {
-                GUIManager = GlobalConstants.GameManager.GUIManager;
+                this.GUIManager = GlobalConstants.GameManager.GUIManager;
             }
         }
 
@@ -31,13 +31,13 @@ namespace JoyLib.Code.Unity.GUI
                 return;
             }
 
-            Tooltip tooltip = GUIManager.OpenGUI(GUINames.TOOLTIP).GetComponent<Tooltip>();
+            Tooltip tooltip = this.GUIManager.OpenGUI(GUINames.TOOLTIP).GetComponent<Tooltip>();
             tooltip.Show(null, this.Tooltip);
         }
 
         public void OnPointerExit(PointerEventData data)
         {
-            GUIManager.CloseGUI(GUINames.TOOLTIP);
+            this.GUIManager.CloseGUI(GUINames.TOOLTIP);
         }
         
         public int DecreaseValue(int delta = 1)
@@ -82,10 +82,10 @@ namespace JoyLib.Code.Unity.GUI
             set
             {
                 this.m_Tooltip = value;
-                if (GUIManager.IsActive(GUINames.TOOLTIP))
+                if (this.GUIManager.IsActive(GUINames.TOOLTIP))
                 {
-                    GUIManager.CloseGUI(GUINames.TOOLTIP);
-                    GUIManager.OpenGUI(GUINames.TOOLTIP).GetComponent<Tooltip>().Show(null, this.Tooltip);
+                    this.GUIManager.CloseGUI(GUINames.TOOLTIP);
+                    this.GUIManager.OpenGUI(GUINames.TOOLTIP).GetComponent<Tooltip>().Show(null, this.Tooltip);
                 }
             }
         }

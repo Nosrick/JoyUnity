@@ -11,8 +11,7 @@ namespace JoyLib.Code.Unity
     {
         public IEntity EntityInRange { get; protected set; }
 
-        public static ILiveItemHandler LiveItemHandler { get; set; }
-        public static ILiveEntityHandler LiveEntityHandler { get; set; }
+        public ILiveItemHandler LiveItemHandler { get; set; }
 
         public override void Awake()
         {
@@ -25,7 +24,7 @@ namespace JoyLib.Code.Unity
             if (this.Initialised == false)
             {
                 base.Initialise();
-                LiveItemHandler = GlobalConstants.GameManager.ItemHandler;
+                this.LiveItemHandler = GlobalConstants.GameManager.ItemHandler;
             }
         }
 
@@ -90,7 +89,7 @@ namespace JoyLib.Code.Unity
                 new IJoyObject[] {this.EntityInRange, item},
                 new string[] {"pickup"},
                 new object[] {true});
-            result &= LiveItemHandler.RemoveItemFromWorld(item.Guid);
+            result &= this.LiveItemHandler.RemoveItemFromWorld(item.Guid);
 
             return result;
         }

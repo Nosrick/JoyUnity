@@ -20,7 +20,7 @@ namespace JoyLib.Code.Unity
         protected ManagedSprite SpeechBubble { get; set; }
         protected bool PointerOver { get; set; }
 
-        protected static IGUIManager GUIManager { get; set; }
+        protected IGUIManager GUIManager { get; set; }
 
         public override void FixedUpdate()
         {
@@ -51,9 +51,9 @@ namespace JoyLib.Code.Unity
 
         public virtual void AttachJoyObject(IJoyObject joyObject)
         {
-            if (GUIManager is null)
+            if (this.GUIManager is null)
             {
-                GUIManager = GlobalConstants.GameManager.GUIManager;
+                this.GUIManager = GlobalConstants.GameManager.GUIManager;
             }
 
             this.JoyObject = joyObject;
@@ -94,18 +94,18 @@ namespace JoyLib.Code.Unity
         {
             this.PointerOver = true;
 
-            if (GUIManager.RemovesControl())
+            if (this.GUIManager.RemovesControl())
             {
                 return;
             }
             
-            if (GUIManager.IsActive(GUINames.CONTEXT_MENU) == false
+            if (this.GUIManager.IsActive(GUINames.CONTEXT_MENU) == false
                 && GlobalConstants.GameManager.Player.VisionProvider.CanSee(
                     GlobalConstants.GameManager.Player,
                     this.JoyObject.MyWorld,
                     this.JoyObject.WorldPosition))
             {
-                GUIManager.OpenGUI(GUINames.TOOLTIP).GetComponent<Tooltip>().Show(
+                this.GUIManager.OpenGUI(GUINames.TOOLTIP).GetComponent<Tooltip>().Show(
                     this.JoyObject.JoyName,
                     null,
                     this.CurrentSpriteState,
@@ -121,12 +121,12 @@ namespace JoyLib.Code.Unity
         public void OnPointerExit(PointerEventData eventData)
         {
             this.PointerOver = false;
-            GUIManager.CloseGUI(GUINames.TOOLTIP);
+            this.GUIManager.CloseGUI(GUINames.TOOLTIP);
         }
 
         protected virtual void OpenContextMenu()
         {
-            ContextMenu contextMenu = GUIManager.GetGUI(GUINames.CONTEXT_MENU).GetComponent<ContextMenu>();
+            ContextMenu contextMenu = this.GUIManager.GetGUI(GUINames.CONTEXT_MENU).GetComponent<ContextMenu>();
             contextMenu.Clear();
 
             if (this.JoyObject.Equals(GlobalConstants.GameManager.Player) == false
@@ -158,7 +158,7 @@ namespace JoyLib.Code.Unity
 
             if (contextMenu.GetComponentsInChildren<MenuItem>().Length > 0)
             {
-                GUIManager.OpenGUI(GUINames.CONTEXT_MENU);
+                this.GUIManager.OpenGUI(GUINames.CONTEXT_MENU);
                 contextMenu.Show();
             }
         }
@@ -188,13 +188,13 @@ namespace JoyLib.Code.Unity
 
         protected void OpenInventory()
         {
-            GUIManager.OpenGUI(GUINames.INVENTORY);
+            this.GUIManager.OpenGUI(GUINames.INVENTORY);
         }
 
         protected void TalkToPlayer()
         {
-            GUIManager.CloseGUI(GUINames.CONTEXT_MENU);
-            GUIManager.OpenGUI(GUINames.CONVERSATION);
+            this.GUIManager.CloseGUI(GUINames.CONTEXT_MENU);
+            this.GUIManager.OpenGUI(GUINames.CONVERSATION);
             GlobalConstants.GameManager.ConversationEngine.SetActors(
                 GlobalConstants.GameManager.Player,
                 this.JoyObject as IEntity);
@@ -204,7 +204,7 @@ namespace JoyLib.Code.Unity
 
         protected void CallOver()
         {
-            GUIManager.CloseGUI(GUINames.CONTEXT_MENU);
+            this.GUIManager.CloseGUI(GUINames.CONTEXT_MENU);
             this.JoyObject.FetchAction("seekaction")
                 .Execute(
                     new IJoyObject[] {this.JoyObject, GlobalConstants.GameManager.Player},

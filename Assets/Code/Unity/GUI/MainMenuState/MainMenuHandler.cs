@@ -16,7 +16,7 @@ namespace JoyLib.Code.Unity.GUI.MainMenuState
 
         public void LoadGame()
         {
-            WorldSerialiser serialiser = new WorldSerialiser();
+            WorldSerialiser serialiser = new WorldSerialiser(GlobalConstants.GameManager.ObjectIconHandler);
             IWorldInstance world = serialiser.Deserialise("Everse");
             ICulture culture = GlobalConstants.GameManager.Player.Cultures[0];
             GlobalConstants.GameManager.GUIManager.SetUIColours(

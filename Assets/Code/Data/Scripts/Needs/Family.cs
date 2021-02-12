@@ -21,7 +21,7 @@ namespace JoyLib.Code.Entities.Needs
 
         protected const int MAX_VALUE_MIN = HAPPINESS_THRESHOLD_MAX;
         protected const int MAX_VALUE_MAX = MAX_VALUE_MIN * 4;
-        protected static IEntityRelationshipHandler RelationshipHandler
+        protected IEntityRelationshipHandler RelationshipHandler
         {
             get;
             set;
@@ -73,9 +73,9 @@ namespace JoyLib.Code.Entities.Needs
 
         protected void Initialise()
         {
-            if (GlobalConstants.GameManager is null == false && RelationshipHandler is null)
+            if (GlobalConstants.GameManager is null == false && this.RelationshipHandler is null)
             {
-                RelationshipHandler = GlobalConstants.GameManager.RelationshipHandler;
+                this.RelationshipHandler = GlobalConstants.GameManager.RelationshipHandler;
             }
         }
 
@@ -94,7 +94,7 @@ namespace JoyLib.Code.Entities.Needs
                 participants.Add(possible);
 
                 string[] relationshipTags = new[] {"family"};
-                IEnumerable<IRelationship> relationships = RelationshipHandler.Get(participants.ToArray(), relationshipTags);
+                IEnumerable<IRelationship> relationships = this.RelationshipHandler.Get(participants.ToArray(), relationshipTags);
 
                 foreach (IRelationship relationship in relationships)
                 {
@@ -116,7 +116,7 @@ namespace JoyLib.Code.Entities.Needs
                     participants.Add(possible);
 
                     string[] relationshipTags = new[] {"friendship"};
-                    IEnumerable<IRelationship> relationships = RelationshipHandler.Get(participants, relationshipTags);
+                    IEnumerable<IRelationship> relationships = this.RelationshipHandler.Get(participants, relationshipTags);
 
                     foreach (IRelationship relationship in relationships)
                     {

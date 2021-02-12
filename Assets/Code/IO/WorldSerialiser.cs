@@ -19,10 +19,15 @@ namespace JoyLib.Code.IO
 {
     public class WorldSerialiser
     {
-        protected static IObjectIconHandler s_ObjectIcons = GlobalConstants.GameManager.ObjectIconHandler;
+        protected IObjectIconHandler ObjectIcons { get; set; }
 
         protected const DataFormat DEFAULT_DATA_FORMAT = DataFormat.Binary;
 
+        public WorldSerialiser(IObjectIconHandler objectIcons)
+        {
+            this.ObjectIcons = objectIcons;
+        }
+        
         public void Serialise(IWorldInstance world)
         {
             string directory = Directory.GetCurrentDirectory() + "/save/" + world.Name;
@@ -112,15 +117,6 @@ namespace JoyLib.Code.IO
                 SerializationUtility.DeserializeValue<IEnumerable<IItemInstance>>(array, dataFormat);
             this.Items(items, world);
 
-            array = File.ReadAllBytes(directory + "/quests.dat");
-            IEnumerable<IQuest> quests = SerializationUtility.DeserializeValue<IEnumerable<IQuest>>(array, dataFormat);
-            this.Quests(quests);
-
-            array = File.ReadAllBytes(directory + "/rewards.dat");
-            NonUniqueDictionary<Guid, Guid> rewards =
-                SerializationUtility.DeserializeValue<NonUniqueDictionary<Guid, Guid>>(array, dataFormat);
-            this.QuestRewards(rewards);
-
             array = File.ReadAllBytes(directory + "/entities.dat");
             IEnumerable<IEntity> entities =
                 SerializationUtility.DeserializeValue<IEnumerable<IEntity>>(array, dataFormat);
@@ -130,6 +126,15 @@ namespace JoyLib.Code.IO
             IEnumerable<IRelationship> relationships =
                 SerializationUtility.DeserializeValue<IEnumerable<IRelationship>>(array, dataFormat);
             this.Relationships(relationships);
+
+            array = File.ReadAllBytes(directory + "/quests.dat");
+            IEnumerable<IQuest> quests = SerializationUtility.DeserializeValue<IEnumerable<IQuest>>(array, dataFormat);
+            this.Quests(quests);
+
+            array = File.ReadAllBytes(directory + "/rewards.dat");
+            NonUniqueDictionary<Guid, Guid> rewards =
+                SerializationUtility.DeserializeValue<NonUniqueDictionary<Guid, Guid>>(array, dataFormat);
+            this.QuestRewards(rewards);
 
             array = File.ReadAllBytes(directory + "/guids.dat");
             GUIDManager guidManager =
@@ -174,7 +179,7 @@ namespace JoyLib.Code.IO
         {
             foreach (SpritePart part in state.SpriteData.m_Parts)
             {
-                part.m_FrameSprites = s_ObjectIcons.GetRawFrames(tileSet, state.Name, part.m_Name, state.SpriteData.m_State);
+                part.m_FrameSprites = this.ObjectIcons.GetRawFrames(tileSet, state.Name, part.m_Name, state.SpriteData.m_State);
             }
         }
 
