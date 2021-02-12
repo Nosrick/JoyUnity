@@ -29,9 +29,7 @@ namespace JoyLib.Code.Entities.Needs
             }
             catch(Exception ex)
             {
-                GlobalConstants.ActionLog.AddText(ex.Message);
-                GlobalConstants.ActionLog.AddText(ex.StackTrace);
-                GlobalConstants.ActionLog.AddText(ex.InnerException.StackTrace);
+                GlobalConstants.ActionLog.StackTrace(ex);
                 return new Dictionary<string, INeed>();
             }
         }

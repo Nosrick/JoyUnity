@@ -29,6 +29,8 @@ namespace JoyLib.Code.Quests
             this.Questor = questor;
             this.CurrentStep = 0;
             this.ID = GlobalConstants.GameManager.GUIDManager.AssignGUID();
+            GlobalConstants.ActionLog.AddText("Rewards for quest " + this.ID);
+            GlobalConstants.ActionLog.PrintCollection(rewards);
             GlobalConstants.GameManager.ItemHandler.AddQuestRewards(this.ID, this.RewardGUIDs);
             this.Tags = new List<string>(tags);
         }
@@ -93,6 +95,7 @@ namespace JoyLib.Code.Quests
                 {
                     item.Instantiate();
                 }
+                GlobalConstants.ActionLog.AddText("Adding " + reward + " to " + questor + " inventory as reward");
                 questor.AddContents(reward);
             }
 

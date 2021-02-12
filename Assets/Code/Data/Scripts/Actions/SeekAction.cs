@@ -34,7 +34,7 @@ namespace JoyLib.Code.Scripting.Actions
             };
 
             actor.CurrentTarget = needAIData;
-            GlobalConstants.ActionLog.AddText(actor.JoyName + " is seeking " + participants[1].JoyName + " for " + needName);
+            //GlobalConstants.ActionLog.AddText(actor.JoyName + " is seeking " + participants[1].JoyName + " for " + needName);
 
             this.SetLastParameters(participants, tags, args);
 

@@ -299,7 +299,6 @@ namespace JoyLib.Code.States
 
             if (inputAction.name.Equals("skip turn", StringComparison.OrdinalIgnoreCase))
             {
-                GlobalConstants.ActionLog.AddText("TICK");
                 this.Tick();
             }
             //North

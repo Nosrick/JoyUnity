@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using JoyLib.Code.Entities;
+using JoyLib.Code.Entities.Items;
 using UnityEngine;
 
 namespace JoyLib.Code.Helpers
@@ -120,9 +121,21 @@ namespace JoyLib.Code.Helpers
             }
         }
 
+        public void PrintCollection(IEnumerable<object> collection)
+        {
+            foreach (object o in collection)
+            {
+                this.AddText(o.ToString());
+                if (o is IItemContainer container)
+                {
+                    this.PrintCollection(container.Contents);
+                }
+            }
+        }
+
         ~ActionLog()
         {
-            Dispose(false);
+            this.Dispose(true);
         }
 
         private void Dispose(bool disposing)

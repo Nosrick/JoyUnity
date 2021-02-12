@@ -71,19 +71,15 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
                         }
                         catch (Exception e)
                         {
-                            GlobalConstants.ActionLog.AddText(e.Message);
-                            GlobalConstants.ActionLog.AddText(e.StackTrace);
                             GlobalConstants.ActionLog.AddText("Could not parse vision type in file " + file);
-                            GlobalConstants.ActionLog.AddText("Could not parse vision type in file " + file);
+                            GlobalConstants.ActionLog.StackTrace(e);
                         }
                     }
                 }
                 catch (Exception e)
                 {
-                    GlobalConstants.ActionLog.AddText(e.Message);
-                    GlobalConstants.ActionLog.AddText(e.StackTrace);
                     GlobalConstants.ActionLog.AddText("Could not load vision types from file " + file);
-                    GlobalConstants.ActionLog.AddText("Could not load vision types from file " + file);
+                    GlobalConstants.ActionLog.StackTrace(e);
                 }
             }
         }

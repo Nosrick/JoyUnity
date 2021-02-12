@@ -95,12 +95,8 @@ namespace JoyLib.Code.Entities
                             {
                                 GlobalConstants.ActionLog.AddText(
                                     "Suppressing Exception when trying to add Skill Coefficient. Skill is "
-                                    + skillName + ", with need name " + tuple.Item1);
-                                GlobalConstants.ActionLog.AddText(
-                                    "Suppressing Exception when trying to add Skill Coefficient. Skill is "
-                                                 + skillName + ", with need name " + tuple.Item1);
-                                GlobalConstants.ActionLog.AddText(e.Message);
-                                GlobalConstants.ActionLog.AddText(e.StackTrace);
+                                    + skillName + ", with need name " + tuple.Item1, LogLevel.Warning);
+                                GlobalConstants.ActionLog.StackTrace(e);
                             }
                         }
                     }

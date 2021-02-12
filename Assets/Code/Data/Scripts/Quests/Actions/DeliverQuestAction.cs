@@ -92,6 +92,7 @@ namespace JoyLib.Code.Quests
         {
             foreach (Guid itemGUID in this.Items)
             {
+                GlobalConstants.ActionLog.AddText("Adding " + itemGUID + " to " + questor + " inventory");
                 questor.AddContents(GlobalConstants.GameManager.ItemHandler.GetItem(itemGUID));
             }
         }

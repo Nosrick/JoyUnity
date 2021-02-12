@@ -105,9 +105,7 @@ namespace JoyLib.Code.Conversation.Conversations
                 catch (Exception e)
                 {
                     GlobalConstants.ActionLog.AddText("Could not load rumours from file " + file);
-                    GlobalConstants.ActionLog.AddText("Could not load rumours from file " + file);
-                    GlobalConstants.ActionLog.AddText(e.Message);
-                    GlobalConstants.ActionLog.AddText(e.StackTrace);
+                    GlobalConstants.ActionLog.StackTrace(e);
                 }
             }
 

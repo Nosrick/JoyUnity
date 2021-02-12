@@ -302,12 +302,6 @@ namespace JoyLib.Code.World
                 s_DateTime = s_DateTime.AddSeconds(6.0);
             }
 
-            /*
-            foreach (Entity entity in this.m_Entities)
-            {
-                entity.Tick();
-            }
-            */
             this.OnTick?.Invoke(this, EventArgs.Empty);
 
             this.IsDirty = false;

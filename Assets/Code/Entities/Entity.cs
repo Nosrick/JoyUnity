@@ -824,9 +824,8 @@ namespace JoyLib.Code.Entities
             }
             catch (Exception ex)
             {
-                GlobalConstants.ActionLog.AddText("ERROR WHEN SEARCHING BACKPACK OF " + this.ToString());
-                GlobalConstants.ActionLog.AddText(ex.Message);
-                GlobalConstants.ActionLog.AddText(ex.StackTrace);
+                GlobalConstants.ActionLog.AddText("ERROR WHEN SEARCHING BACKPACK OF " + this);
+                GlobalConstants.ActionLog.StackTrace(ex);
                 return new List<IItemInstance>().ToArray();
             }
         }

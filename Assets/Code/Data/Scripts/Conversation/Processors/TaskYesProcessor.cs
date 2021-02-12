@@ -43,11 +43,6 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
                 instigator.Guid,
                 this.OfferedQuest);
 
-            foreach (string next in this.NextTopics)
-            {
-                GlobalConstants.ActionLog.AddText(next);
-            }
-
             this.OfferedQuest.StartQuest(instigator);
 
             this.Words = this.OfferedQuest.ToString();

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using CodingSeb.ExpressionEvaluator;
+using JoyLib.Code.Helpers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
@@ -73,8 +74,9 @@ namespace JoyLib.Code.Scripting
                                     continue;
                                 }
 
-                                GlobalConstants.ActionLog.AddText(diagnostic.Severity.ToString());
-                                GlobalConstants.ActionLog.AddText(diagnostic.GetMessage());
+                                GlobalConstants.ActionLog.AddText(diagnostic.Severity.ToString(), LogLevel.Error);
+                                GlobalConstants.ActionLog.AddText(diagnostic.GetMessage(), LogLevel.Error);
+                                GlobalConstants.ActionLog.AddText(diagnostic.Location.ToString(), LogLevel.Error);
                             }
                         }
 
@@ -98,8 +100,7 @@ namespace JoyLib.Code.Scripting
                 }
                 catch (Exception ex)
                 {
-                    GlobalConstants.ActionLog.AddText(ex.Message);
-                    GlobalConstants.ActionLog.AddText(ex.StackTrace);
+                    GlobalConstants.ActionLog.StackTrace(ex);
                 }
             }
         }
@@ -114,8 +115,7 @@ namespace JoyLib.Code.Scripting
             }
             catch (Exception ex)
             {
-                GlobalConstants.ActionLog.AddText(ex.Message);
-                GlobalConstants.ActionLog.AddText(ex.StackTrace);
+                GlobalConstants.ActionLog.StackTrace(ex);
                 throw new InvalidOperationException("Error when searching for Type in ScriptingEngine, type name " + type);
             }
         }
@@ -128,8 +128,7 @@ namespace JoyLib.Code.Scripting
             }
             catch (Exception e)
             {
-                GlobalConstants.ActionLog.AddText(e.Message);
-                GlobalConstants.ActionLog.AddText(e.StackTrace);
+                GlobalConstants.ActionLog.StackTrace(e);
                 throw new InvalidOperationException("Error when searching for Type " + typeof(T).Name);
             }
         }
@@ -177,8 +176,7 @@ namespace JoyLib.Code.Scripting
             }
             catch (Exception ex)
             {
-                GlobalConstants.ActionLog.AddText(ex.Message);
-                GlobalConstants.ActionLog.AddText(ex.StackTrace);
+                GlobalConstants.ActionLog.StackTrace(ex);
                 throw new InvalidOperationException("Error when searching for Type in ScriptingEngine, " + typeName);
             }
         }
@@ -193,8 +191,7 @@ namespace JoyLib.Code.Scripting
             }
             catch (Exception e)
             {
-                GlobalConstants.ActionLog.AddText(e.Message);
-                GlobalConstants.ActionLog.AddText(e.StackTrace);
+                GlobalConstants.ActionLog.StackTrace(e);
                 throw new InvalidOperationException(
                     "Error when searching for Type in ScriptingEngine, " + type.FullName);
             }
@@ -211,8 +208,7 @@ namespace JoyLib.Code.Scripting
             }
             catch (Exception e)
             {
-                GlobalConstants.ActionLog.AddText(e.Message);
-                GlobalConstants.ActionLog.AddText(e.StackTrace);
+                GlobalConstants.ActionLog.StackTrace(e);
                 throw new InvalidOperationException("Error when finding action, no such action " + actionName);
             }
         }

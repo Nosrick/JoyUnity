@@ -60,7 +60,6 @@ namespace JoyLib.Code.Unity
             this.JoyObject.AttachMonoBehaviourHandler(this);
             if (this.JoyObject.MyWorld is null == false)
             {
-                GlobalConstants.ActionLog.AddText("Adding Tick event");
                 this.JoyObject.MyWorld.OnTick -= this.Tick;
                 this.JoyObject.MyWorld.OnTick += this.Tick;
             }
@@ -236,12 +235,12 @@ namespace JoyLib.Code.Unity
             if (defender.Alive == false)
             {
                 player.MyWorld.RemoveEntity(defender.WorldPosition);
-                GlobalConstants.ActionLog.AddText(player.JoyName + " has killed " + defender.JoyName + "!");
+                GlobalConstants.ActionLog.AddText(player.JoyName + " has killed " + defender.JoyName + "!", LogLevel.Gameplay);
             }
             else if (defender.Conscious == false)
             {
                 GlobalConstants.ActionLog.AddText(player.JoyName + " has knocked " + defender.JoyName +
-                                                  " unconscious!");
+                                                  " unconscious!", LogLevel.Gameplay);
             }
             else if (defender.Conscious)
             {

@@ -85,11 +85,7 @@ namespace JoyLib.Code.Entities.Jobs
                         catch(Exception e)
                         {
                             GlobalConstants.ActionLog.AddText("ERROR LOADING ABILITIES FOR JOB, FILE " + file);
-                            GlobalConstants.ActionLog.AddText(e.Message);
-                            GlobalConstants.ActionLog.AddText(e.StackTrace);
-                            GlobalConstants.ActionLog.AddText("ERROR LOADING ABILITIES FOR JOB, FILE " + file);
-                            GlobalConstants.ActionLog.AddText(e.Message);
-                            GlobalConstants.ActionLog.AddText(e.StackTrace);
+                            GlobalConstants.ActionLog.StackTrace(e);
                         }
                                                                         
 
@@ -102,11 +98,7 @@ namespace JoyLib.Code.Entities.Jobs
                 catch(Exception e)
                 {
                     GlobalConstants.ActionLog.AddText("ERROR LOADING JOBS, FILE " + file);
-                    GlobalConstants.ActionLog.AddText(e.Message);
-                    GlobalConstants.ActionLog.AddText(e.StackTrace);
-                    GlobalConstants.ActionLog.AddText("ERROR LOADING JOB FROM FILE " + file);
-                    GlobalConstants.ActionLog.AddText(e.Message);
-                    GlobalConstants.ActionLog.AddText(e.StackTrace);
+                    GlobalConstants.ActionLog.StackTrace(e);
                 }
             }
 

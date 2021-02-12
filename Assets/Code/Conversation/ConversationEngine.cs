@@ -174,9 +174,7 @@ namespace JoyLib.Code.Conversation
                 catch (Exception e)
                 {
                     GlobalConstants.ActionLog.AddText("Could not load conversations from file " + file);
-                    GlobalConstants.ActionLog.AddText("Could not load conversations from file " + file);
-                    GlobalConstants.ActionLog.AddText(e.Message);
-                    GlobalConstants.ActionLog.AddText(e.StackTrace);
+                    GlobalConstants.ActionLog.StackTrace(e);
                 }
             }
 
