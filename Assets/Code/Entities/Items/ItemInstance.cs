@@ -579,27 +579,21 @@ namespace JoyLib.Code.Entities.Items
                     return contentString;
                 }
 
-                while (items.Count > 0)
+                IDictionary<string, int> occurrences = new Dictionary<string, int>();
+                foreach (IItemInstance item in items)
                 {
-                    List<IItemInstance> types = items.Where(x => x.JoyName == items[0].JoyName).ToList();
-                    string name = types[0].JoyName;
-                    contentString += types.Count + " " + name + (types.Count > 1 ? "s, " : ", ");
-
-                    List<IItemInstance> itemsToRemove = new List<IItemInstance>();
-                    for (int i = 0; i < items.Count; i++)
+                    if (occurrences.ContainsKey(item.JoyName))
                     {
-                        if (items[i].JoyName == name)
-                        {
-                            itemsToRemove.Add(items[i]);
-                        }
+                        occurrences[item.JoyName] += 1;
                     }
-
-                    for (int i = 0; i < itemsToRemove.Count; i++)
+                    else
                     {
-                        items.Remove(itemsToRemove[i]);
+                        occurrences.Add(item.JoyName, 1);
                     }
                 }
-                contentString = contentString.Substring(0, contentString.Length - 2) + ".";
+
+                IEnumerable<string> itemNames = occurrences.Select(pair => pair.Value > 1 ? pair.Key + "s" : pair.Key);
+                contentString += string.Join(", ", itemNames);
                 return contentString;
             }
         }
