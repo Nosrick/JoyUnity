@@ -1,6 +1,4 @@
-﻿using Lean.Common;
-using UnityEditor;
-using UnityEngine;
+﻿using UnityEngine;
 using FSA = UnityEngine.Serialization.FormerlySerializedAsAttribute;
 
 namespace Lean.Gui
@@ -137,6 +135,8 @@ namespace Lean.Gui
 #if UNITY_EDITOR
 namespace Lean.Gui.Inspector
 {
+	using UnityEditor;
+
 	[CanEditMultipleObjects]
 	[CustomEditor(typeof(LeanConstrainAnchoredPosition))]
 	public class LeanConstrainAnchoredPosition_Inspector : LeanInspector<LeanConstrainAnchoredPosition>

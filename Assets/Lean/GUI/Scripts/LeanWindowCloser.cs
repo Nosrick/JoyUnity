@@ -86,13 +86,10 @@ namespace Lean.Gui
 		{
 			if (this == Instances[0])
 			{
-				//TODO: New input system
-				/*
 				if (LeanInput.GetDown(CloseKey) == true)
 				{
 					CloseTopMost();
 				}
-				*/
 			}
 		}
 

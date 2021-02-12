@@ -1,5 +1,4 @@
 ﻿using Lean.Common;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using FSA = UnityEngine.Serialization.FormerlySerializedAsAttribute;
@@ -139,6 +138,8 @@ namespace Lean.Gui
 #if UNITY_EDITOR
 namespace Lean.Gui.Inspector
 {
+	using UnityEditor;
+
 	[CanEditMultipleObjects]
 	[CustomEditor(typeof(LeanSnap))]
 	public class LeanSnap_Inspector : LeanInspector<LeanSnap>

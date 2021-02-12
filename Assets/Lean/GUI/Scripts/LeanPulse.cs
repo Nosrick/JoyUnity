@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Lean.Transition;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -168,6 +167,8 @@ namespace Lean.Gui
 #if UNITY_EDITOR
 namespace Lean.Gui.Inspector
 {
+	using UnityEditor;
+
 	[CanEditMultipleObjects]
 	[CustomEditor(typeof(LeanPulse))]
 	public class LeanPulse_Inspector : Lean.Common.LeanInspector<LeanPulse>

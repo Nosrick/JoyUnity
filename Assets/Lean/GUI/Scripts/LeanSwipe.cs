@@ -1,6 +1,4 @@
-using Lean.Common;
 using Lean.Transition;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -137,6 +135,8 @@ namespace Lean.Gui
 #if UNITY_EDITOR
 namespace Lean.Gui.Inspector
 {
+	using UnityEditor;
+
 	[CanEditMultipleObjects]
 	[CustomEditor(typeof(LeanSwipe))]
 	public class LeanSwipe_Inspector : LeanInspector<LeanSwipe>

@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using Lean.Common;
-using UnityEditor;
 using UnityEngine;
 
 namespace Lean.Transition
@@ -642,6 +640,8 @@ namespace Lean.Transition
 #if UNITY_EDITOR
 namespace Lean.Transition.Inspector
 {
+	using UnityEditor;
+
 	[CanEditMultipleObjects]
 	[CustomEditor(typeof(LeanTransition))]
 	public class LeanTransition_Inspector : LeanInspector<LeanTransition>

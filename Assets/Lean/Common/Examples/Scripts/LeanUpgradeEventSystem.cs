@@ -1,5 +1,4 @@
-﻿using UnityEditor;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Lean.Common.Examples
 {
@@ -29,6 +28,8 @@ namespace Lean.Common.Examples
 #if UNITY_EDITOR
 namespace Lean.Common.Examples
 {
+	using UnityEditor;
+
 	[CanEditMultipleObjects]
 	[CustomEditor(typeof(LeanUpgradeEventSystem))]
 	public class LeanUpgradeEventSystem_Editor : LeanInspector<LeanUpgradeEventSystem>

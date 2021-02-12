@@ -1,6 +1,4 @@
-﻿using Lean.Common;
-using UnityEditor;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace Lean.Gui
@@ -81,6 +79,8 @@ namespace Lean.Gui
 #if UNITY_EDITOR
 namespace Lean.Gui.Inspector
 {
+	using UnityEditor;
+
 	[CanEditMultipleObjects]
 	[CustomEditor(typeof(LeanSafeArea))]
 	public class LeanSafeArea_Inspector : LeanInspector<LeanSafeArea>

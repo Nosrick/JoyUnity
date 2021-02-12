@@ -1,7 +1,4 @@
-﻿using UnityEditor;
-using UnityEngine;
-
-namespace Lean.Transition
+﻿namespace Lean.Transition
 {
 	/// <summary>This enum allows you to pick the ease type used by most transition methods.</summary>
 	public enum LeanEase
@@ -61,6 +58,8 @@ namespace Lean.Transition
 #if UNITY_EDITOR
 namespace Lean.Transition.Inspector
 {
+	using UnityEditor;
+
 	[CustomPropertyDrawer(typeof(LeanEase))]
 	public class LeanEase_Drawer : PropertyDrawer
 	{

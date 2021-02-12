@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using Lean.Common;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -164,6 +162,8 @@ namespace Lean.Gui
 #if UNITY_EDITOR
 namespace Lean.Gui.Inspector
 {
+	using UnityEditor;
+
 	[CanEditMultipleObjects]
 	[CustomEditor(typeof(LeanSelectionManager))]
 	public class LeanSelectionManager_Inspector : LeanInspector<LeanSelectionManager>
