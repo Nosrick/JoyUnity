@@ -37,7 +37,7 @@
 		<SpriteData>
 			<Name>dagger</Name>
 			<Part>
-				<Name>dagger</Name>
+				<Name>dagger_0</Name>
 				<Frames>1</Frames>
 				<Filename>ShortWep</Filename>
 				<Data>default</Data>
@@ -48,7 +48,7 @@
 		<SpriteData>
 			<Name>dagger</Name>
 			<Part>
-				<Name>dagger</Name>
+				<Name>dagger_1</Name>
 				<Frames>1</Frames>
 				<Filename>ShortWep</Filename>
 				<Data>default</Data>
@@ -59,7 +59,7 @@
 		<SpriteData>
 			<Name>dagger</Name>
 			<Part>
-				<Name>dagger</Name>
+				<Name>dagger_2</Name>
 				<Frames>1</Frames>
 				<Filename>ShortWep</Filename>
 				<Data>default</Data>
@@ -70,7 +70,7 @@
 		<SpriteData>
 			<Name>dagger</Name>
 			<Part>
-				<Name>dagger</Name>
+				<Name>dagger_3</Name>
 				<Frames>1</Frames>
 				<Filename>ShortWep</Filename>
 				<Data>default</Data>
@@ -81,7 +81,7 @@
 		<SpriteData>
 			<Name>dagger</Name>
 			<Part>
-				<Name>dagger</Name>
+				<Name>dagger_4</Name>
 				<Frames>1</Frames>
 				<Filename>ShortWep</Filename>
 				<Data>default</Data>
@@ -92,7 +92,7 @@
 		<SpriteData>
 			<Name>dagger</Name>
 			<Part>
-				<Name>dagger</Name>
+				<Name>dagger_5</Name>
 				<Frames>1</Frames>
 				<Filename>ShortWep</Filename>
 				<Data>default</Data>
@@ -103,7 +103,7 @@
 		<SpriteData>
 			<Name>dagger</Name>
 			<Part>
-				<Name>dagger</Name>
+				<Name>dagger_6</Name>
 				<Frames>1</Frames>
 				<Filename>ShortWep</Filename>
 				<Data>default</Data>
@@ -114,7 +114,7 @@
 		<SpriteData>
 			<Name>dagger</Name>
 			<Part>
-				<Name>dagger</Name>
+				<Name>dagger_7</Name>
 				<Frames>1</Frames>
 				<Filename>ShortWep</Filename>
 				<Data>default</Data>
@@ -125,7 +125,7 @@
 		<SpriteData>
 			<Name>dagger</Name>
 			<Part>
-				<Name>dagger</Name>
+				<Name>dagger_8</Name>
 				<Frames>1</Frames>
 				<Filename>ShortWep</Filename>
 				<Data>default</Data>
@@ -136,7 +136,7 @@
 		<SpriteData>
 			<Name>dagger</Name>
 			<Part>
-				<Name>dagger</Name>
+				<Name>dagger_9</Name>
 				<Frames>1</Frames>
 				<Filename>ShortWep</Filename>
 				<Data>default</Data>

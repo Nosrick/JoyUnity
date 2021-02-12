@@ -37,7 +37,7 @@
         <SpriteData>
             <Name>greatsword</Name>
             <Part>
-                <Name>greatsword</Name>
+                <Name>greatsword_0</Name>
                 <Frames>1</Frames>
                 <Filename>LongWep</Filename>
                 <Data>default</Data>
@@ -48,7 +48,7 @@
         <SpriteData>
             <Name>greatsword</Name>
             <Part>
-                <Name>greatsword</Name>
+                <Name>greatsword_1</Name>
                 <Frames>1</Frames>
                 <Filename>LongWep</Filename>
                 <Data>default</Data>
@@ -59,7 +59,7 @@
         <SpriteData>
             <Name>greatsword</Name>
             <Part>
-                <Name>greatsword</Name>
+                <Name>greatsword_2</Name>
                 <Frames>1</Frames>
                 <Filename>LongWep</Filename>
                 <Data>default</Data>
@@ -70,7 +70,7 @@
         <SpriteData>
             <Name>greatsword</Name>
             <Part>
-                <Name>greatsword</Name>
+                <Name>greatsword_3</Name>
                 <Frames>1</Frames>
                 <Filename>LongWep</Filename>
                 <Data>default</Data>
@@ -81,7 +81,7 @@
         <SpriteData>
             <Name>greatsword</Name>
             <Part>
-                <Name>greatsword</Name>
+                <Name>greatsword_4</Name>
                 <Frames>1</Frames>
                 <Filename>LongWep</Filename>
                 <Data>default</Data>
@@ -92,7 +92,7 @@
         <SpriteData>
             <Name>greatsword</Name>
             <Part>
-                <Name>greatsword</Name>
+                <Name>greatsword_5</Name>
                 <Frames>1</Frames>
                 <Filename>LongWep</Filename>
                 <Data>default</Data>

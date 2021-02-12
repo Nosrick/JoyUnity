@@ -132,12 +132,9 @@ namespace JoyLib.Code.Entities.Items
                         itemType.UnidentifiedName)
                     select new SpriteState(sprite.m_Name, sprite))
                 .ToList();
-            
-            states[0].RandomiseColours();
-            for (int i = 1; i < states.Count; i++)
-            {
-                states[i].SetColourIndices(states[0].GetIndices());
-            }
+
+            ISpriteState chosenState = this.Roller.SelectFromCollection(states);
+            chosenState.RandomiseColours();
 
             ItemInstance itemInstance = new ItemInstance(
                 this.GuidManager.AssignGUID(),
@@ -145,7 +142,7 @@ namespace JoyLib.Code.Entities.Items
                 this.DerivedValueHandler.GetItemStandardBlock(values),
                 new Vector2Int(-1, -1),
                 identified, 
-                states,
+                new[] { chosenState },
                 new RNG(),
                 new List<IAbility>(),
                 new List<IJoyAction>(),
