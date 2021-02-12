@@ -303,6 +303,10 @@
 					<Name>AccentFont</Name>
 					<Value>#fafaebff</Value>
 				</Data>
+				<Data>
+					<Name>TitleFont</Name>
+					<Value>#fafaebff</Value>
+				</Data>
 			</FontColours>
 		</UIColours>
 	</Culture>

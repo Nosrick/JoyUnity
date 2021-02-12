@@ -20,5 +20,6 @@
         public const string ACTION_LOG = "ActionLog";
         public const string SETTINGS = "Settings Screen";
         public const string PAUSE = "Pause Screen";
+        public const string ENTRY_BANNER = "Entry Banner";
     }
 }

@@ -12,4 +12,10 @@
         <MinFontSize>8</MinFontSize>
         <MaxFontSize>24</MaxFontSize>
     </Data>
+    <Data>
+        <Name>TitleFont</Name>
+        <Value>Kenney Pixel</Value>
+        <MinFontSize>14</MinFontSize>
+        <MaxFontSize>40</MaxFontSize>
+    </Data>
 </GUIData>

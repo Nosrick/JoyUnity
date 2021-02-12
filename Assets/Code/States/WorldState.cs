@@ -87,6 +87,9 @@ namespace JoyLib.Code.States
 
             EquipmentHandler equipmentHandler = this.GUIManager.GetGUI(GUINames.EQUIPMENT).GetComponentInChildren<EquipmentHandler>();
             equipmentHandler.SetPlayer(this.m_ActiveWorld.Player);
+
+            var entryBanner = this.GUIManager.OpenGUI(GUINames.ENTRY_BANNER).GetComponent<EntryBanner>();
+            entryBanner.Activate(this.m_ActiveWorld.Name);
         }
 
         public override void Start()
@@ -136,6 +139,9 @@ namespace JoyLib.Code.States
 
             player.Move(spawnPoint);
             player.Tick();
+
+            var entryBanner = this.GUIManager.OpenGUI(GUINames.ENTRY_BANNER).GetComponent<EntryBanner>();
+            entryBanner.Activate(this.m_ActiveWorld.Name);
 
             this.Tick();
         }

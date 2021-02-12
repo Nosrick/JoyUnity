@@ -252,6 +252,10 @@
 					<Name>AccentFont</Name>
 					<Value>#23234bff</Value>
 				</Data>
+				<Data>
+					<Name>TitleFont</Name>
+					<Value>#23234bff</Value>
+				</Data>
             </FontColours>
         </UIColours>
     </Culture>
