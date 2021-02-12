@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Security.Cryptography;
 using Sirenix.OdinSerializer;
 
@@ -132,6 +133,24 @@ namespace JoyLib.Code.Rollers
                 }
             }
             return successes;
+        }
+
+        public T SelectFromCollection<T>(ICollection<T> collection)
+        {
+            int result = this.Roll(0, collection.Count);
+            int index = 0;
+            T returnItem = default;
+            foreach (T item in collection)
+            {
+                if (index == result)
+                {
+                    returnItem = item;
+                    break;
+                }
+
+                index++;
+            }
+            return returnItem;
         }
     }
 }
