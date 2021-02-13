@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Lean.Common;
+using UnityEditor;
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace Lean.Gui
@@ -21,8 +23,6 @@ namespace Lean.Gui
 #if UNITY_EDITOR
 namespace Lean.Gui.Inspector
 {
-	using UnityEditor;
-
 	[CanEditMultipleObjects]
 	[CustomEditor(typeof(LeanSnapEvent))]
 	public class LeanSnapEvent_Inspector : LeanInspector<LeanSnapEvent>

@@ -1,4 +1,5 @@
 using Lean.Transition;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -204,8 +205,6 @@ namespace Lean.Gui
 #if UNITY_EDITOR
 namespace Lean.Gui.Inspector
 {
-	using UnityEditor;
-
 	[CanEditMultipleObjects]
 	[CustomEditor(typeof(LeanDrag))]
 	public class LeanDrag_Inspector : LeanSelectable_Inspector<LeanDrag>

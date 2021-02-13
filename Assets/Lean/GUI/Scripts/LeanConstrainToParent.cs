@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Lean.Common;
+using UnityEditor;
+using UnityEngine;
 
 namespace Lean.Gui
 {
@@ -62,8 +64,6 @@ namespace Lean.Gui
 #if UNITY_EDITOR
 namespace Lean.Gui.Inspector
 {
-	using UnityEditor;
-
 	[CanEditMultipleObjects]
 	[CustomEditor(typeof(LeanConstrainToParent))]
 	public class LeanConstrainToParent_Inspector : LeanInspector<LeanConstrainToParent>

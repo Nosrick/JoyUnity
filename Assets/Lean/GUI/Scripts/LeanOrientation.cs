@@ -1,4 +1,6 @@
+using Lean.Common;
 using Lean.Transition;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -224,8 +226,6 @@ namespace Lean.Gui
 #if UNITY_EDITOR
 namespace Lean.Gui.Inspector
 {
-	using UnityEditor;
-
 	[CanEditMultipleObjects]
 	[CustomEditor(typeof(LeanOrientation))]
 	public class LeanOrientation_Inspector : LeanInspector<LeanOrientation>

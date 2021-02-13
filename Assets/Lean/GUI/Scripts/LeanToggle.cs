@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using Lean.Common;
 using Lean.Transition;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -283,8 +285,6 @@ namespace Lean.Gui
 #if UNITY_EDITOR
 namespace Lean.Gui.Inspector
 {
-	using UnityEditor;
-
 	[CanEditMultipleObjects]
 	[CustomEditor(typeof(LeanToggle), true)]
 	public class LeanToggle_Inspector : LeanInspector<LeanToggle>

@@ -1,4 +1,5 @@
-﻿using UnityEngine.UI;
+﻿using UnityEditor;
+using UnityEngine.UI;
 
 namespace Lean.Gui
 {
@@ -19,8 +20,6 @@ namespace Lean.Gui
 #if UNITY_EDITOR
 namespace Lean.Gui.Inspector
 {
-	using UnityEditor;
-
 	public class LeanSelectable_Inspector<T> : Lean.Common.LeanInspector<T>
 		where T : LeanSelectable
 	{
