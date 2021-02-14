@@ -20,7 +20,7 @@
 					<Data>Default</Data>
 					<Filename>environments/naga-pits32</Filename>
 					<Frames>1</Frames>
-					<Colour>#4196dcff</Colour>
+					<Colour>#4d9be6ff</Colour>
 				</Part>
 			</SpriteData>
 
@@ -33,7 +33,7 @@
 					<Data>Default</Data>
 					<Filename>environments/naga-pits32</Filename>
 					<Frames>1</Frames>
-					<Colour>#325082ff</Colour>
+					<Colour>#4d65b4ff</Colour>
 				</Part>
 			</SpriteData>
 		</TileSet>

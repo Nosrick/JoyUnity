@@ -38,7 +38,7 @@
 					<Filename>cultures/naga-light-body</Filename>
 					<SortOrder>0</SortOrder>
 					<Data>default</Data>
-					<Colour>#ffb35bff</Colour>
+					<Colour>#fb6b1dff</Colour>
 				</Part>
 				<Part>
 					<Name>body-dark</Name>
@@ -46,7 +46,7 @@
 					<Filename>cultures/naga-dark-body</Filename>
 					<SortOrder>1</SortOrder>
 					<Data>default</Data>
-					<Colour>#ff851bff</Colour>
+					<Colour>#fb6b1dff</Colour>
 				</Part>
 				<Part>
 					<Name>eyes</Name>
@@ -54,7 +54,7 @@
 					<Filename>cultures/naga-eyes</Filename>
 					<SortOrder>2</SortOrder>
 					<Data>default</Data>
-					<Colour>#373741ff</Colour>
+					<Colour>#3e3546ff</Colour>
 				</Part>
 				<Part>
 					<Name>tongue</Name>
@@ -62,7 +62,7 @@
 					<Filename>cultures/naga-tongue</Filename>
 					<SortOrder>3</SortOrder>
 					<Data>default</Data>
-					<Colour>#f01436ff</Colour>
+					<Colour>#c32454ff</Colour>
 				</Part>
 			</SpriteData>
 		</TileSet>
@@ -836,23 +836,23 @@
 					<Name>DefaultCursor</Name>
 					<Colour>
 						<Name>CursorHighlight</Name>
-						<Value>#ff851bff</Value>
+						<Value>#fbb954ff</Value>
 					</Colour>
 					<Colour>
 						<Name>CursorBright</Name>
-						<Value>#b43232ff</Value>
+						<Value>#fb6b1dff</Value>
 					</Colour>
 					<Colour>
 						<Name>CursorMid</Name>
-						<Value>#b43232ff</Value>
+						<Value>#fb6b1dff</Value>
 					</Colour>
 					<Colour>
 						<Name>CursorDark</Name>
-						<Value>#ffc80aff</Value>
+						<Value>#e83b3bff</Value>
 					</Colour>
 					<Colour>
 						<Name>CursorOutline</Name>
-						<Value>#f04b36ff</Value>
+						<Value>#c32454ff</Value>
 					</Colour>
 				</Data>
 			</CursorColours>
@@ -862,36 +862,36 @@
 					<Name>DefaultWindow</Name>
 					<Colour>
 						<Name>background</Name>
-						<Value>#b43232ff</Value>
+						<Value>#e83b3bff</Value>
 					</Colour>
 					<Colour>
 						<Name>border</Name>
-						<Value>#f04b36ff</Value>
+						<Value>#fb6b1dff</Value>
 					</Colour>
 				</Data>
 				<Data>
 					<Name>SlotBackground</Name>
 					<Colour>
 						<Name>background</Name>
-						<Value>#f04b36ff</Value>
+						<Value>#fb6b1dff</Value>
 					</Colour>
 					<Colour>
 						<Name>border</Name>
-						<Value>#b43232ff</Value>
+						<Value>#e83b3bff</Value>
 					</Colour>
 				</Data>
 				<Data>
 					<Name>AccentBackground</Name>
 					<Colour>
 						<Name>background</Name>
-						<Value>#f04b36ff</Value>
+						<Value>#fb6b1dff</Value>
 					</Colour>
 				</Data>
 				<Data>
 					<Name>SecondaryAccent</Name>
 					<Colour>
 						<Name>background</Name>
-						<Value>#b43232ff</Value>
+						<Value>#e83b3bff</Value>
 					</Colour>
 				</Data>
 
@@ -899,42 +899,42 @@
 					<Name>IconBackground</Name>
 					<Colour>
 						<Name>background</Name>
-						<Value>#f04b36ff</Value>
+						<Value>#fb6b1dff</Value>
 					</Colour>
 				</Data>
 				<Data>
 					<Name>CharacterSheetIcon</Name>
 					<Colour>
 						<Name>icon</Name>
-						<Value>#b43232ff</Value>
+						<Value>#e83b3bff</Value>
 					</Colour>
 				</Data>
 				<Data>
 					<Name>InventoryIcon</Name>
 					<Colour>
 						<Name>icon</Name>
-						<Value>#b43232ff</Value>
+						<Value>#e83b3bff</Value>
 					</Colour>
 				</Data>
 				<Data>
 					<Name>EquipmentIcon</Name>
 					<Colour>
 						<Name>icon</Name>
-						<Value>#b43232ff</Value>
+						<Value>#e83b3bff</Value>
 					</Colour>
 				</Data>
 				<Data>
 					<Name>JobManagementIcon</Name>
 					<Colour>
 						<Name>icon</Name>
-						<Value>#b43232ff</Value>
+						<Value>#e83b3bff</Value>
 					</Colour>
 				</Data>
 				<Data>
 					<Name>QuestJournalIcon</Name>
 					<Colour>
 						<Name>icon</Name>
-						<Value>#b43232ff</Value>
+						<Value>#e83b3bff</Value>
 					</Colour>
 				</Data>
 			</BackgroundColours>

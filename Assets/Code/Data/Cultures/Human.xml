@@ -168,8 +168,8 @@
 					<Data>default</Data>
 					<Position>0</Position>
 					<SortOrder>0</SortOrder>
-					<Colour>#ffb35bff</Colour>
-					<Colour>#864d30ff</Colour>
+					<Colour>#fca790ff</Colour>
+					<Colour>#966c6cff</Colour>
 				</Part>
 				<Part>
 					<Name>eyes</Name>
@@ -178,9 +178,9 @@
 					<Data>default</Data>
 					<Position>0</Position>
 					<SortOrder>1</SortOrder>
-					<Colour>#4196dcff</Colour>
-					<Colour>#3c9b6eff</Colour>
-					<Colour>#b45a50ff</Colour>
+					<Colour>#1ebc73ff</Colour>
+					<Colour>#4d9be6ff</Colour>
+					<Colour>#9e4539ff</Colour>
 				</Part>
 			</SpriteData>
 		</TileSet>
@@ -191,23 +191,23 @@
 					<Name>DefaultCursor</Name>
 					<Colour>
 						<Name>CursorHighlight</Name>
-						<Value>#b45a50ff</Value>
+						<Value>#cd683dff</Value>
 					</Colour>
 					<Colour>
 						<Name>CursorBright</Name>
-						<Value>#823219ff</Value>
+						<Value>#9e4539ff</Value>
 					</Colour>
 					<Colour>
 						<Name>CursorMid</Name>
-						<Value>#823219ff</Value>
+						<Value>#9e4539ff</Value>
 					</Colour>
 					<Colour>
 						<Name>CursorDark</Name>
-						<Value>#d77e4bff</Value>
+						<Value>#7a3045ff</Value>
 					</Colour>
 					<Colour>
 						<Name>CursorOutline</Name>
-						<Value>#490606ff</Value>
+						<Value>#3e3546ff</Value>
 					</Colour>
 				</Data>
 			</CursorColours>
@@ -217,36 +217,36 @@
 					<Name>DefaultWindow</Name>
 					<Colour>
 						<Name>background</Name>
-						<Value>#823219ff</Value>
+						<Value>#7a3045ff</Value>
 					</Colour>
 					<Colour>
 						<Name>border</Name>
-						<Value>#490606ff</Value>
+						<Value>#9e4539ff</Value>
 					</Colour>
 				</Data>
 				<Data>
 					<Name>SlotBackground</Name>
 					<Colour>
 						<Name>background</Name>
-						<Value>#490606ff</Value>
+						<Value>#9e4539ff</Value>
 					</Colour>
 					<Colour>
 						<Name>border</Name>
-						<Value>#823219ff</Value>
+						<Value>#7a3045ff</Value>
 					</Colour>
 				</Data>
 				<Data>
 					<Name>AccentBackground</Name>
 					<Colour>
 						<Name>background</Name>
-						<Value>#490606ff</Value>
+						<Value>#9e4539ff</Value>
 					</Colour>
 				</Data>
 				<Data>
 					<Name>SecondaryAccent</Name>
 					<Colour>
 						<Name>background</Name>
-						<Value>#823219ff</Value>
+						<Value>#7a3045ff</Value>
 					</Colour>
 				</Data>
 				
@@ -254,42 +254,42 @@
 					<Name>IconBackground</Name>
 					<Colour>
 						<Name>background</Name>
-						<Value>#823219ff</Value>
+						<Value>#7a3045ff</Value>
 					</Colour>
 				</Data>
 				<Data>
 					<Name>CharacterSheetIcon</Name>
 					<Colour>
 						<Name>icon</Name>
-						<Value>#490606ff</Value>
+						<Value>#9e4539ff</Value>
 					</Colour>
 				</Data>
 				<Data>
 					<Name>InventoryIcon</Name>
 					<Colour>
 						<Name>icon</Name>
-						<Value>#490606ff</Value>
+						<Value>#9e4539ff</Value>
 					</Colour>
 				</Data>
 				<Data>
 					<Name>EquipmentIcon</Name>
 					<Colour>
 						<Name>icon</Name>
-						<Value>#490606ff</Value>
+						<Value>#9e4539ff</Value>
 					</Colour>
 				</Data>
 				<Data>
 					<Name>JobManagementIcon</Name>
 					<Colour>
 						<Name>icon</Name>
-						<Value>#490606ff</Value>
+						<Value>#9e4539ff</Value>
 					</Colour>
 				</Data>
 				<Data>
 					<Name>QuestJournalIcon</Name>
 					<Colour>
 						<Name>icon</Name>
-						<Value>#490606ff</Value>
+						<Value>#9e4539ff</Value>
 					</Colour>
 				</Data>
 			</BackgroundColours>
@@ -297,15 +297,15 @@
 			<FontColours>
 				<Data>
 					<Name>Font</Name>
-					<Value>#fafaebff</Value>
+					<Value>#e3c896ff</Value>
 				</Data>
 				<Data>
 					<Name>AccentFont</Name>
-					<Value>#fafaebff</Value>
+					<Value>#e3c896ff</Value>
 				</Data>
 				<Data>
 					<Name>TitleFont</Name>
-					<Value>#fafaebff</Value>
+					<Value>#e3c896ff</Value>
 				</Data>
 			</FontColours>
 		</UIColours>

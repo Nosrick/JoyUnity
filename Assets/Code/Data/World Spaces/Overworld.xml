@@ -17,7 +17,7 @@
 					<Frames>1</Frames>
 					<Filename>environments/overworld-dirt</Filename>
 					<SortOrder>0</SortOrder>
-					<Colour>#352626ff</Colour>
+					<Colour>#9e4539ff</Colour>
 				</Part>
 				<Part>
 					<Name>grass</Name>
@@ -26,7 +26,7 @@
 					<Frames>1</Frames>
 					<Filename>environments/overworld-grass</Filename>
 					<SortOrder>1</SortOrder>
-					<Colour>#3c9b6eff</Colour>
+					<Colour>#1ebc73ff</Colour>
 				</Part>
 			</SpriteData>
 		</TileSet>

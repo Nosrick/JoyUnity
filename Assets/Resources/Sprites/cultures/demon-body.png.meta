@@ -1,16 +1,16 @@
 fileFormatVersion: 2
-guid: 5a61ad3fd65412c43929f5656d7c1d3b
+guid: 950eae0e66979c443b777c741136ba65
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 1592528967057224531
-    second: demon-dark-body_0
+      213: 6480823987285904373
+    second: demon-body_0
   - first:
-      213: 7822552144110107076
-    second: demon-dark-body_1
+      213: -5218139248983966781
+    second: demon-body_1
   - first:
-      213: -8979081903910162698
-    second: demon-dark-body_2
+      213: 1011484754478755181
+    second: demon-body_2
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -108,7 +108,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: demon-dark-body_0
+      name: demon-body_0
       rect:
         serializedVersion: 2
         x: 0
@@ -122,14 +122,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 35337ff68acc91610800000000000000
-      internalID: 1592528967057224531
+      spriteID: 5fbc10e541380f950800000000000000
+      internalID: 6480823987285904373
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: demon-dark-body_1
+      name: demon-body_1
       rect:
         serializedVersion: 2
         x: 32
@@ -143,14 +143,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4c937aabab94f8c60800000000000000
-      internalID: 7822552144110107076
+      spriteID: 3cb79cbfff17597b0800000000000000
+      internalID: -5218139248983966781
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: demon-dark-body_2
+      name: demon-body_2
       rect:
         serializedVersion: 2
         x: 64
@@ -164,8 +164,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6feeb44e494e36380800000000000000
-      internalID: -8979081903910162698
+      spriteID: d6ded6e6604890e00800000000000000
+      internalID: 1011484754478755181
       vertices: []
       indices: 
       edges: []
