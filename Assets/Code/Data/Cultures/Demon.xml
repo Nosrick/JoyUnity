@@ -174,18 +174,11 @@
                 <Part>
                     <Name>body-light</Name>
                     <Frames>3</Frames>
-                    <Filename>cultures/demon-light-body</Filename>
+                    <Filename>cultures/demon-body</Filename>
                     <SortOrder>0</SortOrder>
                     <Data>default</Data>
-                    <Colour>#3c9b6eff</Colour>
-                </Part>
-                <Part>
-                    <Name>body-dark</Name>
-                    <Frames>3</Frames>
-                    <Filename>cultures/demon-dark-body</Filename>
-                    <SortOrder>1</SortOrder>
-                    <Data>default</Data>
-                    <Colour>#3c9b6eff</Colour>
+                    <Colour>#1ebc73ff</Colour>
+                    <Colour>#30e1b9ff</Colour>
                 </Part>
                 <Part>
                     <Name>eyes</Name>
@@ -193,7 +186,8 @@
                     <Filename>cultures/demon-eyes</Filename>
                     <SortOrder>2</SortOrder>
                     <Data>default</Data>
-                    <Colour>#f04b36ff</Colour>
+                    <Colour>#c32454ff</Colour>
+                    <Colour>#e83b3bff</Colour>
                 </Part>
             </SpriteData>
 
@@ -207,8 +201,8 @@
                     <Data>default</Data>
                     <Position>0</Position>
                     <SortOrder>0</SortOrder>
-                    <Colour>#f04b36ff</Colour>
-                    <Colour>#c8ff64ff</Colour>
+                    <Colour>#30e1b9ff</Colour>
+                    <Colour>#fbb954ff</Colour>
                 </Part>
                 <Part>
                     <Name>eyes</Name>
@@ -217,9 +211,8 @@
                     <Data>default</Data>
                     <Position>0</Position>
                     <SortOrder>1</SortOrder>
-                    <Colour>#4196dcff</Colour>
-                    <Colour>#3c9b6eff</Colour>
-                    <Colour>#b45a50ff</Colour>
+                    <Colour>#fb6b1dff</Colour>
+                    <Colour>#c32454ff</Colour>
                 </Part>
                 <Part>
                     <Name>horns</Name>
@@ -228,8 +221,8 @@
                     <Data>default</Data>
                     <Position>0</Position>
                     <SortOrder>2</SortOrder>
-                    <Colour>#141414ff</Colour>
-                    <Colour>#64284bff</Colour>
+                    <Colour>#625565ff</Colour>
+                    <Colour>#e3c896ff</Colour>
                 </Part>
             </SpriteData>
         </TileSet>
@@ -240,23 +233,23 @@
                     <Name>DefaultCursor</Name>
                     <Colour>
                         <Name>CursorHighlight</Name>
-                        <Value>#7ee046ff</Value>
+                        <Value>#91db69ff</Value>
                     </Colour>
                     <Colour>
                         <Name>CursorBright</Name>
-                        <Value>#37c22dff</Value>
+                        <Value>#1ebc73ff</Value>
                     </Colour>
                     <Colour>
                         <Name>CursorMid</Name>
-                        <Value>#37c22dff</Value>
+                        <Value>#1ebc73ff</Value>
                     </Colour>
                     <Colour>
                         <Name>CursorDark</Name>
-                        <Value>#9af06cff</Value>
+                        <Value>#0b8a8fff</Value>
                     </Colour>
                     <Colour>
                         <Name>CursorOutline</Name>
-                        <Value>#c41d39ff</Value>
+                        <Value>#c32454ff</Value>
                     </Colour>
                 </Data>
             </CursorColours>
@@ -266,11 +259,11 @@
                     <Name>DefaultWindow</Name>
                     <Colour>
                         <Name>background</Name>
-                        <Value>#3c9b6eff</Value>
+                        <Value>#0b8a8fff</Value>
                     </Colour>
                     <Colour>
                         <Name>border</Name>
-                        <Value>#c41d39ff</Value>
+                        <Value>#1ebc73ff</Value>
                     </Colour>
                 </Data>
 
@@ -278,11 +271,11 @@
                     <Name>SlotBackground</Name>
                     <Colour>
                         <Name>background</Name>
-                        <Value>#c41d39ff</Value>
+                        <Value>#1ebc73ff</Value>
                     </Colour>
                     <Colour>
                         <Name>border</Name>
-                        <Value>#3c9b6eff</Value>
+                        <Value>#0b8a8fff</Value>
                     </Colour>
                 </Data>
 
@@ -290,14 +283,14 @@
                     <Name>AccentBackground</Name>
                     <Colour>
                         <Name>background</Name>
-                        <Value>#c41d39ff</Value>
+                        <Value>#1ebc73ff</Value>
                     </Colour>
                 </Data>
                 <Data>
                     <Name>SecondaryAccent</Name>
                     <Colour>
                         <Name>background</Name>
-                        <Value>#3c9b6eff</Value>
+                        <Value>#0b8a8fff</Value>
                     </Colour>
                 </Data>
 
@@ -306,35 +299,35 @@
                     <Name>CharacterSheetIcon</Name>
                     <Colour>
                         <Name>icon</Name>
-                        <Value>#c41d39ff</Value>
+                        <Value>#1ebc73ff</Value>
                     </Colour>
                 </Data>
                 <Data>
                     <Name>InventoryIcon</Name>
                     <Colour>
                         <Name>icon</Name>
-                        <Value>#c41d39ff</Value>
+                        <Value>#1ebc73ff</Value>
                     </Colour>
                 </Data>
                 <Data>
                     <Name>EquipmentIcon</Name>
                     <Colour>
                         <Name>icon</Name>
-                        <Value>#c41d39ff</Value>
+                        <Value>#1ebc73ff</Value>
                     </Colour>
                 </Data>
                 <Data>
                     <Name>JobManagementIcon</Name>
                     <Colour>
                         <Name>icon</Name>
-                        <Value>#c41d39ff</Value>
+                        <Value>#1ebc73ff</Value>
                     </Colour>
                 </Data>
                 <Data>
                     <Name>QuestJournalIcon</Name>
                     <Colour>
                         <Name>icon</Name>
-                        <Value>#c41d39ff</Value>
+                        <Value>#1ebc73ff</Value>
                     </Colour>
                 </Data>
                 
@@ -342,7 +335,7 @@
                     <Name>IconBackground</Name>
                     <Colour>
                         <Name>background</Name>
-                        <Value>#3c9b6eff</Value>
+                        <Value>#0b8a8fff</Value>
                     </Colour>
                 </Data>
             </BackgroundColours>
