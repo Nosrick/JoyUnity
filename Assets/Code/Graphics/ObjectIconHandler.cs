@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using Castle.Core.Internal;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Rollers;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -165,6 +167,68 @@ namespace JoyLib.Code.Graphics
                             m_SpriteDrawMode = GraphicsHelper.ParseDrawModeString(part.Element("FillType").DefaultIfEmpty("simple"))
                         }).ToList()
                 };
+
+            return this.AddSpriteDataRange(tileSet, spriteData);
+        }
+
+        /// <summary>
+        /// This must be passed the "SpriteData" node of the JSON
+        /// </summary>
+        /// <param name="tileSet">The tileset that the data belongs to</param>
+        /// <param name="spriteDataToken">The JSON to pull the data from. MUST have a root of "SpriteData"</param>
+        /// <returns></returns>
+        public bool AddSpriteDataFromJson(string tileSet, JToken spriteDataToken)
+        {
+            List<SpriteData> spriteData = new List<SpriteData>();
+            foreach (var data in spriteDataToken)
+            {
+                string spriteDataName = (string) data["Name"];
+                string spriteDataState = (string) data["State"];
+                List<SpritePart> parts = new List<SpritePart>();
+                foreach (var part in data["Part"])
+                {
+                    IEnumerable<string> partData = part["Data"].Select(token => (string) token);
+                    string filename = (string) part["Filename"];
+                    int frames = (int) (part["Frames"] ?? 1);
+                    string partName = (string) part["Name"];
+                    int position = (int) (part["Position"] ?? 0);
+                    List<Sprite> frameSprites = Resources.LoadAll<Sprite>("Sprites/" + filename)
+                        .Where((sprite, i) =>
+                            i >= position && i < position + frames)
+                        .ToList();
+                    List<Color> possibleColours = part["Colour"]?.Values<string>()
+                        .Select(colour => GraphicsHelper.ParseHTMLString(colour))
+                        .ToList();
+                    if (possibleColours.IsNullOrEmpty())
+                    {
+                        possibleColours = new List<Color> {Color.white};
+                    }
+
+                    int sortOrder = (int) (part["SortOrder"] ?? 1);
+                    Image.Type imageType = GraphicsHelper.ParseFillMethodString((string) part["FillType"]);
+                    SpriteDrawMode drawMode = GraphicsHelper.ParseDrawModeString((string) part["FillType"]);
+                    parts.Add(
+                        new SpritePart
+                        {
+                            m_Data = partData,
+                            m_Filename = filename,
+                            m_Frames = frames,
+                            m_FrameSprites = frameSprites,
+                            m_ImageFillType = imageType,
+                            m_Name = partName,
+                            m_Position = position,
+                            m_PossibleColours = possibleColours,
+                            m_SortingOrder = sortOrder,
+                            m_SpriteDrawMode = drawMode
+                        });
+                }
+                spriteData.Add(new SpriteData
+                {
+                    m_Name = spriteDataName,
+                    m_Parts = parts,
+                    m_State = spriteDataState
+                });
+            }
 
             return this.AddSpriteDataRange(tileSet, spriteData);
         }

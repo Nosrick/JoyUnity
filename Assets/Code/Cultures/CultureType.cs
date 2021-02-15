@@ -18,15 +18,15 @@ namespace JoyLib.Code.Cultures
         protected List<string> m_RulerTypes;
         protected List<string> m_Crimes;
         protected List<NameData> m_NameData;
-        protected Dictionary<string, int> m_SexPrevalence;
-        protected Dictionary<string, int> m_SexualityPrevalence;
-        protected Dictionary<string, int> m_RomancePrevalence;
-        protected Dictionary<string, int> m_GenderPrevalence;
+        protected IDictionary<string, int> m_SexPrevalence;
+        protected IDictionary<string, int> m_SexualityPrevalence;
+        protected IDictionary<string, int> m_RomancePrevalence;
+        protected IDictionary<string, int> m_GenderPrevalence;
 
         //The first number is the chance, the second is the actual number it can vary by
-        protected Dictionary<string, Tuple<int, int>> m_StatVariance;
+        protected IDictionary<string, Tuple<int, int>> m_StatVariance;
         protected List<string> m_RelationshipTypes;
-        Dictionary<string, int> m_JobPrevalence;
+        protected IDictionary<string, int> m_JobPrevalence;
         List<string> m_Inhabitants;
 
         public int LastGroup { get; protected set; }
@@ -71,17 +71,17 @@ namespace JoyLib.Code.Cultures
         public CultureType(
             string nameRef,
             string tileset,
-            List<string> rulersRef,
-            List<string> crimesRef,
-            List<NameData> namesRef,
-            Dictionary<string, int> jobRef,
-            List<string> inhabitantsNameRef,
-            Dictionary<string, int> sexualityPrevalenceRef,
-            Dictionary<string, int> sexPrevalence,
-            Dictionary<string, Tuple<int, int>> statVariance,
-            List<string> relationshipTypes,
-            Dictionary<string, int> romancePrevalence,
-            Dictionary<string, int> genderPrevalence,
+            IEnumerable<string> rulersRef,
+            IEnumerable<string> crimesRef,
+            IEnumerable<NameData> namesRef,
+            IDictionary<string, int> jobRef,
+            IEnumerable<string> inhabitantsNameRef,
+            IDictionary<string, int> sexualityPrevalenceRef,
+            IDictionary<string, int> sexPrevalence,
+            IDictionary<string, Tuple<int, int>> statVariance,
+            IEnumerable<string> relationshipTypes,
+            IDictionary<string, int> romancePrevalence,
+            IDictionary<string, int> genderPrevalence,
             int nonConformingGenderChance,
             IDictionary<string, IDictionary<string, Color>> background,
             IDictionary<string, IDictionary<string, Color>> cursor,
@@ -91,16 +91,16 @@ namespace JoyLib.Code.Cultures
             this.Roller = roller ?? new RNG();
             this.Tileset = tileset;
             this.CultureName = nameRef;
-            this.m_RulerTypes = rulersRef;
-            this.m_Crimes = crimesRef;
-            this.m_NameData = namesRef;
-            this.m_Inhabitants = inhabitantsNameRef;
+            this.m_RulerTypes = rulersRef.ToList();
+            this.m_Crimes = crimesRef.ToList();
+            this.m_NameData = namesRef.ToList();
+            this.m_Inhabitants = inhabitantsNameRef.ToList();
             this.m_SexPrevalence = sexPrevalence;
             this.m_StatVariance = statVariance;
             this.m_JobPrevalence = jobRef;
             this.m_SexualityPrevalence = sexualityPrevalenceRef;
             this.m_StatVariance = statVariance;
-            this.m_RelationshipTypes = relationshipTypes;
+            this.m_RelationshipTypes = relationshipTypes.ToList();
             this.m_RomancePrevalence = romancePrevalence;
             this.m_GenderPrevalence = genderPrevalence;
             this.NonConformingGenderChance = nonConformingGenderChance;
