@@ -15,7 +15,7 @@ namespace JoyLib.Code.Graphics
     public class ObjectIconHandler : IObjectIconHandler
     {
         protected RNG Roller { get; set; }
-        
+
         protected int m_SpriteSize = 16;
 
         public ObjectIconHandler(RNG roller)
@@ -24,7 +24,7 @@ namespace JoyLib.Code.Graphics
             this.Initalise(GlobalConstants.SPRITE_SIZE);
         }
 
-        protected void Initalise(int spriteSize) 
+        protected void Initalise(int spriteSize)
         {
             this.SpriteSize = spriteSize;
 
@@ -33,7 +33,7 @@ namespace JoyLib.Code.Graphics
 
         protected bool Load()
         {
-            if(!(this.Icons is null))
+            if (!(this.Icons is null))
             {
                 return true;
             }
@@ -50,7 +50,7 @@ namespace JoyLib.Code.Graphics
                 {
                     new SpritePart
                     {
-                        m_Data = new[] { "DEFAULT" },
+                        m_Data = new[] {"DEFAULT"},
                         m_Filename = "Sprites/default",
                         m_Frames = 1,
                         m_Name = "DEFAULT",
@@ -59,7 +59,7 @@ namespace JoyLib.Code.Graphics
                         {
                             defaultSprite
                         },
-                        m_PossibleColours = new List<Color>{ Color.white }
+                        m_PossibleColours = new List<Color> {Color.white}
                     }
                 }
             };
@@ -152,19 +152,23 @@ namespace JoyLib.Code.Graphics
                             m_Frames = part.Element("Frames").DefaultIfEmpty(1),
                             m_Name = part.Element("Name").GetAs<string>(),
                             m_Position = part.Element("Position").DefaultIfEmpty(0),
-                            m_FrameSprites = Resources.LoadAll<Sprite>("Sprites/" + part.Element("Filename").GetAs<string>())
+                            m_FrameSprites = Resources
+                                .LoadAll<Sprite>("Sprites/" + part.Element("Filename").GetAs<string>())
                                 .Where(
-                                    (sprite, i) => 
-                                        i >= part.Element("Position").DefaultIfEmpty(0) 
-                                        && i < part.Element("Position").DefaultIfEmpty(0) + part.Element("Frames").DefaultIfEmpty(1))
+                                    (sprite, i) =>
+                                        i >= part.Element("Position").DefaultIfEmpty(0)
+                                        && i < part.Element("Position").DefaultIfEmpty(0) +
+                                        part.Element("Frames").DefaultIfEmpty(1))
                                 .ToList(),
-                            m_PossibleColours = part.Elements("Colour").Any() 
+                            m_PossibleColours = part.Elements("Colour").Any()
                                 ? (from colour in part.Elements("Colour")
-                                select GraphicsHelper.ParseHTMLString(colour.GetAs<string>())).ToList()
-                                : new List<Color> { Color.white },
+                                    select GraphicsHelper.ParseHTMLString(colour.GetAs<string>())).ToList()
+                                : new List<Color> {Color.white},
                             m_SortingOrder = part.Element("SortOrder").DefaultIfEmpty(0),
-                            m_ImageFillType = GraphicsHelper.ParseFillMethodString(part.Element("FillType").DefaultIfEmpty("filled")),
-                            m_SpriteDrawMode = GraphicsHelper.ParseDrawModeString(part.Element("FillType").DefaultIfEmpty("simple"))
+                            m_ImageFillType =
+                                GraphicsHelper.ParseFillMethodString(part.Element("FillType").DefaultIfEmpty("filled")),
+                            m_SpriteDrawMode =
+                                GraphicsHelper.ParseDrawModeString(part.Element("FillType").DefaultIfEmpty("simple"))
                         }).ToList()
                 };
 
@@ -187,7 +191,9 @@ namespace JoyLib.Code.Graphics
                 List<SpritePart> parts = new List<SpritePart>();
                 foreach (var part in data["Part"])
                 {
-                    IEnumerable<string> partData = part["Data"].Select(token => (string) token);
+                    IEnumerable<string> partData = part["Data"] is null
+                        ? new string[0]
+                        : part["Data"].Select(token => (string) token);
                     string filename = (string) part["Filename"];
                     int frames = (int) (part["Frames"] ?? 1);
                     string partName = (string) part["Name"];
@@ -222,6 +228,7 @@ namespace JoyLib.Code.Graphics
                             m_SpriteDrawMode = drawMode
                         });
                 }
+
                 spriteData.Add(new SpriteData
                 {
                     m_Name = spriteDataName,
@@ -279,22 +286,12 @@ namespace JoyLib.Code.Graphics
                 .Select(pair => pair.Item2);
         }
 
-        protected IDictionary<string, List<Tuple<string, SpriteData>>> Icons
-        {
-            get;
-            set;
-        }
+        protected IDictionary<string, List<Tuple<string, SpriteData>>> Icons { get; set; }
 
         public int SpriteSize
         {
-            get
-            {
-                return this.m_SpriteSize;
-            }
-            protected set
-            {
-                this.m_SpriteSize = value;
-            }
+            get { return this.m_SpriteSize; }
+            protected set { this.m_SpriteSize = value; }
         }
     }
 
@@ -312,8 +309,7 @@ namespace JoyLib.Code.Graphics
         public string m_Name;
         public int m_Frames;
         public IEnumerable<string> m_Data;
-        [NonSerialized]
-        public List<Sprite> m_FrameSprites;
+        [NonSerialized] public List<Sprite> m_FrameSprites;
         public string m_Filename;
         public int m_Position;
         public List<Color> m_PossibleColours;
