@@ -97,7 +97,7 @@ namespace JoyLib.Code.Unity.GUI
             this.SexContainer.Value = this.SexContainer.Container.FindIndex(s => s.Equals(sex.Name, StringComparison.CurrentCulture));
 
             this.GenderContainer.Container = this.CurrentCulture.Genders.ToList();
-            IGender gender = this.CurrentCulture.ChooseGender(sex, this.GameManager.GenderHandler.Genders);
+            IGender gender = this.CurrentCulture.ChooseGender(sex, this.GameManager.GenderHandler.Values);
             this.GenderContainer.Value = this.GenderContainer.Container.FindIndex(s => 
                     s.Equals(gender.Name, StringComparison.Ordinal));
 

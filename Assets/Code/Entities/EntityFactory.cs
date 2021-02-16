@@ -168,7 +168,7 @@ namespace JoyLib.Code.Entities
 
             if (selectedGender is null)
             {
-                selectedGender = dominantCulture.ChooseGender(selectedSex, this.GenderHandler.Genders.ToArray());
+                selectedGender = dominantCulture.ChooseGender(selectedSex, this.GenderHandler.Values);
             }
 
             if (selectedName.IsNullOrEmpty())
