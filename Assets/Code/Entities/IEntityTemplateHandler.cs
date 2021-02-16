@@ -2,10 +2,8 @@
 
 namespace JoyLib.Code.Entities
 {
-    public interface IEntityTemplateHandler
+    public interface IEntityTemplateHandler: IHandler<IEntityTemplate, string>
     {
-        IEnumerable<IEntityTemplate> Templates { get; }
-
         IEntityTemplate Get(string type);
         IEntityTemplate GetRandom();
         

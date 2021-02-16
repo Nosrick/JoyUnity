@@ -17,13 +17,13 @@ namespace JoyLib.Code.Entities
         protected IVisionProviderHandler VisionProviderHandler { get; set; }
         protected IAbilityHandler AbilityHandler { get; set; }
 
-        public IEnumerable<IEntityTemplate> Templates
+        public IEnumerable<IEntityTemplate> Values
         {
             get
             {
                 if (this.m_Templates is null)
                 {
-                    this.m_Templates = this.LoadTypes();
+                    this.m_Templates = this.Load().ToList();
                 }
 
                 return this.m_Templates;
@@ -38,10 +38,10 @@ namespace JoyLib.Code.Entities
             this.AbilityHandler = abilityHandler;
             this.VisionProviderHandler = visionProviderHandler;
             this.SkillHandler = skillHandler;
-            this.m_Templates = this.LoadTypes();
+            this.m_Templates = this.Load().ToList();
         }
 
-        private List<IEntityTemplate> LoadTypes()
+        public IEnumerable<IEntityTemplate> Load()
         {
             List<IEntityTemplate> entities = new List<IEntityTemplate>();
             
@@ -126,9 +126,9 @@ namespace JoyLib.Code.Entities
 
         public IEntityTemplate Get(string type)
         {
-            if(this.Templates.Any(x => x.CreatureType == type))
+            if(this.Values.Any(x => x.CreatureType == type))
             {
-                return this.Templates.First(x => x.CreatureType == type);
+                return this.Values.First(x => x.CreatureType == type);
             }
 
             throw new InvalidOperationException("Could not find entity template of type " + type);
@@ -138,6 +138,16 @@ namespace JoyLib.Code.Entities
         {
             int result = GlobalConstants.GameManager.Roller.Roll(0, this.m_Templates.Count);
             return this.m_Templates[result];
+        }
+
+        public void Dispose()
+        {
+            this.m_Templates = null;
+        }
+
+        ~EntityTemplateHandler()
+        {
+            this.Dispose();
         }
     }
 }
