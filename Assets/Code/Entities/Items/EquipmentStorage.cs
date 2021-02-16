@@ -114,7 +114,7 @@ namespace JoyLib.Code.Entities.Items
             int slots = this.GetRequiredSlots(actor).Count();
             return !this.Contains(actor)
                    && slots > 0
-                   && slots == actor.ItemType.Slots.Length;
+                   && slots == actor.ItemType.Slots.Count();
         }
 
         public virtual bool AddContents(IItemInstance actor)

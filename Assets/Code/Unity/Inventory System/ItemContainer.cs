@@ -356,7 +356,7 @@ namespace JoyLib.Code.Unity
         {
             List<JoyItemSlot> slots = null;
 
-            if (item.ItemType.Slots.Length == 0)
+            if (item.ItemType.Slots.Any() == false)
             {
                 if (this.Slots.Any(slot => slot.IsEmpty && slot.m_Slot.IsNullOrEmpty()))
                 {

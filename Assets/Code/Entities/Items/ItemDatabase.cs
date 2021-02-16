@@ -87,7 +87,9 @@ namespace JoyLib.Code.Entities.Items
                                     IEnumerable<string> slots = identifiedToken["Slots"].IsNullOrEmpty()
                                         ? new List<string>() 
                                         : identifiedToken["Slots"].Select(token => (string) token);
-                                    string skill = ((string) identifiedToken["Skill"]) ?? "none";
+                                    IEnumerable<string> skills = identifiedToken["Skill"].IsNullOrEmpty()
+                                        ? new[] { "none" }
+                                        : identifiedToken["Skill"].Select(token => (string) token);
 
                                     identifiedItems.Add(new IdentifiedItem(
                                         name,
@@ -96,7 +98,7 @@ namespace JoyLib.Code.Entities.Items
                                         value,
                                         abilities.ToArray(),
                                         spawnWeight,
-                                        skill,
+                                        skills,
                                         materials.ToArray(),
                                         size,
                                         slots.ToArray(),
@@ -127,13 +129,14 @@ namespace JoyLib.Code.Entities.Items
 
                                 foreach (IdentifiedItem identifiedItem in identifiedItems)
                                 {
-                                    for (int i = 0; i < identifiedItem.materials.Length; i++)
+                                    string[] materials = identifiedItem.materials.ToArray();
+                                    for (int i = 0; i < materials.Length; i++)
                                     {
                                         UnidentifiedItem[] possibilities = unidentifiedItems.Where(item =>
                                                 item.identifiedName.Equals(identifiedItem.name,
                                                     StringComparison.OrdinalIgnoreCase))
                                             .ToArray();
-                                        string materialName = identifiedItem.materials[i];
+                                        string materialName = materials[i];
                                         UnidentifiedItem selectedItem;
                                         if (possibilities.IsNullOrEmpty())
                                         {
@@ -156,7 +159,7 @@ namespace JoyLib.Code.Entities.Items
                                             identifiedItem.slots,
                                             identifiedItem.size,
                                             this.MaterialHandler.Get(materialName),
-                                            identifiedItem.skill,
+                                            identifiedItem.skills,
                                             actionWord,
                                             identifiedItem.value,
                                             identifiedItem.weighting,

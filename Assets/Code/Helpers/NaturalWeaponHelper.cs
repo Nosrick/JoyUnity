@@ -22,7 +22,7 @@ namespace JoyLib.Code.Helpers
         {
             IItemMaterial itemMaterial = this.MaterialHandler.Get(material);
             BaseItemType baseItem = new BaseItemType(tags, "A claw, fist or psuedopod.", "A claw, fist or psuedopod.", "Natural Weapon", "Natural Weapon", new string[] { "Hand" }, 
-                (wielderSize + 1) * 40.0f, itemMaterial, "Martial Arts", "strikes", 0, 0, "None");
+                (wielderSize + 1) * 40.0f, itemMaterial, new [] {"Martial Arts"}, "strikes", 0, 0, "None");
 
             List<IBasicValue<float>> values = new List<IBasicValue<float>>
             {

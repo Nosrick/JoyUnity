@@ -1,4 +1,5 @@
-﻿using JoyLib.Code.Entities.Abilities;
+﻿using System.Collections.Generic;
+using JoyLib.Code.Entities.Abilities;
 
 namespace JoyLib.Code.Entities.Items
 {
@@ -7,18 +8,29 @@ namespace JoyLib.Code.Entities.Items
         public string name;
         public string description;
         public int value;
-        public IAbility[] abilities;
+        public IEnumerable<IAbility> abilities;
         public int weighting;
         public int lightLevel;
-        public string skill;
-        public string[] materials;
-        public string[] tags;
+        public IEnumerable<string> skills;
+        public IEnumerable<string> materials;
+        public IEnumerable<string> tags;
         public float size;
-        public string[] slots;
+        public IEnumerable<string> slots;
         public string spriteSheet;
 
-        public IdentifiedItem(string nameRef, string[] tagsRef, string descriptionRef, int valueRef, IAbility[] abilitiesRef, int weightingRef,
-            string skillRef, string[] materialsRef, float sizeRef, string[] slotsRef, string spriteSheetRef, int lightLevelRef = 0)
+        public IdentifiedItem(
+            string nameRef, 
+            IEnumerable<string> tagsRef, 
+            string descriptionRef, 
+            int valueRef, 
+            IEnumerable<IAbility> abilitiesRef, 
+            int weightingRef,
+            IEnumerable<string> skills, 
+            IEnumerable<string> materialsRef, 
+            float sizeRef, 
+            IEnumerable<string> slotsRef, 
+            string spriteSheetRef, 
+            int lightLevelRef = 0)
         {
             this.name = nameRef;
             this.tags = tagsRef;
@@ -26,7 +38,7 @@ namespace JoyLib.Code.Entities.Items
             this.value = valueRef;
             this.abilities = abilitiesRef;
             this.weighting = weightingRef;
-            this.skill = skillRef;
+            this.skills = skills;
             this.materials = materialsRef;
             this.size = sizeRef;
             this.slots = slotsRef;
