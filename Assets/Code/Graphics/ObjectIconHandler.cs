@@ -189,6 +189,12 @@ namespace JoyLib.Code.Graphics
                 string spriteDataName = (string) data["Name"];
                 string spriteDataState = (string) data["State"];
                 List<SpritePart> parts = new List<SpritePart>();
+
+                if (data["Part"].IsNullOrEmpty())
+                {
+                    continue;
+                }
+                
                 foreach (var part in data["Part"])
                 {
                     IEnumerable<string> partData = part["Data"] is null
