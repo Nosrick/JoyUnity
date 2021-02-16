@@ -1,0 +1,189 @@
+{
+  "Items": {
+    "ActionWord": "stabs",
+    "IdentifiedItems": [
+      {
+        "Name": "Dagger",
+        "Description": "A short, bladed weapon that is easily concealed and good for stabbing.",
+        "Value": 15,
+        "Skills": [
+          "light blades"
+        ],
+        "SpawnWeight": 10,
+        "Materials": [
+          "Iron",
+          "Steel",
+          "Bronze",
+          "Glass",
+          "Bone"
+        ],
+        "Size": 60,
+        "Slots": [
+          "Hand"
+        ],
+        "Tags": [
+          "weapon",
+          "dagger",
+          "physical",
+          "one-handed",
+          "light blades",
+          "agility",
+          "strength"
+        ],
+        "TileSet": "Weapons"
+      }
+    ],
+    "UnidentifiedItems": [
+      {
+        "Name": "Dagger",
+        "Description": "A short, bladed weapon that is easily concealed and good for stabbing.",
+        "IdentifiedName": "Dagger"
+      }
+    ],
+    "TileSet": {
+      "Name": "Weapons",
+      "SpriteData": [
+        {
+          "Name": "dagger",
+          "Part": [
+            {
+              "Name": "dagger_0",
+              "Frames": 1,
+              "Filename": "ShortWep",
+              "Data": [
+                "default"
+              ],
+              "Position": 0
+            }
+          ]
+        },
+        {
+          "Name": "dagger",
+          "Part": [
+            {
+              "Name": "dagger_1",
+              "Frames": 1,
+              "Filename": "ShortWep",
+              "Data": [
+                "default"
+              ],
+              "Position": 1
+            }
+          ]
+        },
+        {
+          "Name": "dagger",
+          "Part": [
+            {
+              "Name": "dagger_2",
+              "Frames": 1,
+              "Filename": "ShortWep",
+              "Data": [
+                "default"
+              ],
+              "Position": 2
+            }
+          ]
+        },
+        {
+          "Name": "dagger",
+          "Part": [
+            {
+              "Name": "dagger_3",
+              "Frames": 1,
+              "Filename": "ShortWep",
+              "Data": [
+                "default"
+              ],
+              "Position": 3
+            }
+          ]
+        },
+        {
+          "Name": "dagger",
+          "Part": [
+            {
+              "Name": "dagger_4",
+              "Frames": 1,
+              "Filename": "ShortWep",
+              "Data": [
+                "default"
+              ],
+              "Position": 4
+            }
+          ]
+        },
+        {
+          "Name": "dagger",
+          "Part": [
+            {
+              "Name": "dagger_5",
+              "Frames": 1,
+              "Filename": "ShortWep",
+              "Data": [
+                "default"
+              ],
+              "Position": 5
+            }
+          ]
+        },
+        {
+          "Name": "dagger",
+          "Part": [
+            {
+              "Name": "dagger_6",
+              "Frames": 1,
+              "Filename": "ShortWep",
+              "Data": [
+                "default"
+              ],
+              "Position": 6
+            }
+          ]
+        },
+        {
+          "Name": "dagger",
+          "Part": [
+            {
+              "Name": "dagger_7",
+              "Frames": 1,
+              "Filename": "ShortWep",
+              "Data": [
+                "default"
+              ],
+              "Position": 7
+            }
+          ]
+        },
+        {
+          "Name": "dagger",
+          "Part": [
+            {
+              "Name": "dagger_8",
+              "Frames": 1,
+              "Filename": "ShortWep",
+              "Data": [
+                "default"
+              ],
+              "Position": 8
+            }
+          ]
+        },
+        {
+          "Name": "dagger",
+          "Part": [
+            {
+              "Name": "dagger_9",
+              "Frames": 1,
+              "Filename": "ShortWep",
+              "Data": [
+                "default"
+              ],
+              "Position": 9
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
