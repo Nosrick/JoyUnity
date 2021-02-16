@@ -316,5 +316,16 @@ namespace JoyLib.Code.Cultures
                 return this.m_Cultures.Values.ToArray();
             }
         }
+
+        public void Dispose()
+        {
+            string[] keys = this.m_Cultures.Keys.ToArray();
+            foreach (string key in keys)
+            {
+                this.m_Cultures[key] = null;
+            }
+
+            this.m_Cultures = null;
+        }
     }
 }
