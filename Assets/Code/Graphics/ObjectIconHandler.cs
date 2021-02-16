@@ -186,61 +186,69 @@ namespace JoyLib.Code.Graphics
             List<SpriteData> spriteData = new List<SpriteData>();
             foreach (var data in spriteDataToken)
             {
-                string spriteDataName = (string) data["Name"];
-                string spriteDataState = (string) data["State"];
-                List<SpritePart> parts = new List<SpritePart>();
+                try
+                {
+                    string spriteDataName = (string) data["Name"];
+                    string spriteDataState = (string) data["State"];
+                    List<SpritePart> parts = new List<SpritePart>();
 
-                if (data["Part"].IsNullOrEmpty())
-                {
-                    continue;
-                }
-                
-                foreach (var part in data["Part"])
-                {
-                    IEnumerable<string> partData = part["Data"] is null
-                        ? new string[0]
-                        : part["Data"].Select(token => (string) token);
-                    string filename = (string) part["Filename"];
-                    int frames = (int) (part["Frames"] ?? 1);
-                    string partName = (string) part["Name"];
-                    int position = (int) (part["Position"] ?? 0);
-                    List<Sprite> frameSprites = Resources.LoadAll<Sprite>("Sprites/" + filename)
-                        .Where((sprite, i) =>
-                            i >= position && i < position + frames)
-                        .ToList();
-                    List<Color> possibleColours = part["Colour"]?.Values<string>()
-                        .Select(colour => GraphicsHelper.ParseHTMLString(colour))
-                        .ToList();
-                    if (possibleColours.IsNullOrEmpty())
+                    if (data["Part"].IsNullOrEmpty())
                     {
-                        possibleColours = new List<Color> {Color.white};
+                        continue;
                     }
 
-                    int sortOrder = (int) (part["SortOrder"] ?? 1);
-                    Image.Type imageType = GraphicsHelper.ParseFillMethodString((string) part["FillType"]);
-                    SpriteDrawMode drawMode = GraphicsHelper.ParseDrawModeString((string) part["FillType"]);
-                    parts.Add(
-                        new SpritePart
+                    foreach (var part in data["Part"])
+                    {
+                        IEnumerable<string> partData = part["Data"] is null
+                            ? new string[0]
+                            : part["Data"].Select(token => (string) token);
+                        string filename = (string) part["Filename"];
+                        int frames = (int) (part["Frames"] ?? 1);
+                        string partName = (string) part["Name"];
+                        int position = (int) (part["Position"] ?? 0);
+                        List<Sprite> frameSprites = Resources.LoadAll<Sprite>("Sprites/" + filename)
+                            .Where((sprite, i) =>
+                                i >= position && i < position + frames)
+                            .ToList();
+                        List<Color> possibleColours = part["Colour"]?.Values<string>()
+                            .Select(colour => GraphicsHelper.ParseHTMLString(colour))
+                            .ToList();
+                        if (possibleColours.IsNullOrEmpty())
                         {
-                            m_Data = partData,
-                            m_Filename = filename,
-                            m_Frames = frames,
-                            m_FrameSprites = frameSprites,
-                            m_ImageFillType = imageType,
-                            m_Name = partName,
-                            m_Position = position,
-                            m_PossibleColours = possibleColours,
-                            m_SortingOrder = sortOrder,
-                            m_SpriteDrawMode = drawMode
-                        });
-                }
+                            possibleColours = new List<Color> {Color.white};
+                        }
 
-                spriteData.Add(new SpriteData
+                        int sortOrder = (int) (part["SortOrder"] ?? 1);
+                        Image.Type imageType = GraphicsHelper.ParseFillMethodString((string) part["FillType"]);
+                        SpriteDrawMode drawMode = GraphicsHelper.ParseDrawModeString((string) part["FillType"]);
+                        parts.Add(
+                            new SpritePart
+                            {
+                                m_Data = partData,
+                                m_Filename = filename,
+                                m_Frames = frames,
+                                m_FrameSprites = frameSprites,
+                                m_ImageFillType = imageType,
+                                m_Name = partName,
+                                m_Position = position,
+                                m_PossibleColours = possibleColours,
+                                m_SortingOrder = sortOrder,
+                                m_SpriteDrawMode = drawMode
+                            });
+                    }
+
+                    spriteData.Add(new SpriteData
+                    {
+                        m_Name = spriteDataName,
+                        m_Parts = parts,
+                        m_State = spriteDataState
+                    });
+                }
+                catch (Exception e)
                 {
-                    m_Name = spriteDataName,
-                    m_Parts = parts,
-                    m_State = spriteDataState
-                });
+                    GlobalConstants.ActionLog.AddText("Could not load sprite data for " + tileSet);
+                    GlobalConstants.ActionLog.StackTrace(e);
+                }
             }
 
             return this.AddSpriteDataRange(tileSet, spriteData);
