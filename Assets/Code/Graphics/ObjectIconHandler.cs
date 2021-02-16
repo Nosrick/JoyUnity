@@ -189,7 +189,7 @@ namespace JoyLib.Code.Graphics
                 try
                 {
                     string spriteDataName = (string) data["Name"];
-                    string spriteDataState = (string) data["State"];
+                    string spriteDataState = ((string) data["State"]) ?? "DEFAULT";
                     List<SpritePart> parts = new List<SpritePart>();
 
                     if (data["Part"].IsNullOrEmpty())
