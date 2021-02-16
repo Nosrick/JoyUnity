@@ -39,11 +39,14 @@ namespace JoyLib.Code.Entities.Items
     {
         public string name;
         public string description;
+        public string identifiedName;
 
-        public UnidentifiedItem(string nameRef, string descriptionRef)
+        public UnidentifiedItem(string nameRef, string descriptionRef,
+             string identifiedName)
         {
             this.name = nameRef;
             this.description = descriptionRef;
+            this.identifiedName = identifiedName;
         }
     }
 }
