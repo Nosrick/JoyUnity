@@ -106,7 +106,7 @@ namespace JoyLib.Code.Entities
                 }
                 else if (value.targetType == typeof(IItemInstance).Name)
                 {
-                    this.m_CurrentTarget.target = GlobalConstants.GameManager.ItemHandler.GetItem(value.targetGuid);
+                    this.m_CurrentTarget.target = GlobalConstants.GameManager.ItemHandler.Get(value.targetGuid);
                 }
             }
         }

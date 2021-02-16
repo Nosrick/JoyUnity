@@ -41,11 +41,7 @@ namespace Tests
             GlobalConstants.ActionLog = actionLog;
             this.scriptingEngine = new ScriptingEngine();
 
-            this.ItemHandler = new LiveItemHandler(
-                Mock.Of<IObjectIconHandler>(),
-                new MaterialHandler(),
-                Mock.Of<IAbilityHandler>(),
-                new RNG());
+            this.ItemHandler = new LiveItemHandler(new RNG());
             IGameManager gameManager = Mock.Of<IGameManager>(
                 manager => manager.ItemHandler == this.ItemHandler);
 

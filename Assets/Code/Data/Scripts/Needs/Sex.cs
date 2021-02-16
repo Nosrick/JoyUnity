@@ -11,7 +11,7 @@ namespace JoyLib.Code.Entities.Needs
     {
         public override string Name => "sex";
         
-        protected IEntityRelationshipHandler EntityRelationshipHandler { get; set; }
+        protected IEntityRelationshipHandler RelationshipHandler { get; set; }
 
         protected const int DECAY_MIN = 200;
         protected const int DECAY_MAX = 600;
@@ -36,7 +36,6 @@ namespace JoyLib.Code.Entities.Needs
                 1, 
                 new string[0])
         {
-            this.Initialise();
         }
 
         public Sex(
@@ -48,6 +47,7 @@ namespace JoyLib.Code.Entities.Needs
             int valueRef,
             int maxValueRef,
             ISpriteState fulfillingSprite,
+            IEntityRelationshipHandler relationshipHandler = null,
             int averageForDayRef = 0,
             int averageForWeekRef = 0) :
 
@@ -64,18 +64,7 @@ namespace JoyLib.Code.Entities.Needs
                 averageForDayRef,
                 averageForWeekRef)
         {
-            this.Initialise();
-        }
-
-        protected void Initialise()
-        {
-            if (this.Initialised)
-            {
-                return;
-            }
-            
-            this.EntityRelationshipHandler = GlobalConstants.GameManager.RelationshipHandler;
-            this.Initialised = true;
+            this.RelationshipHandler = relationshipHandler ?? GlobalConstants.GameManager?.RelationshipHandler;
         }
 
         public override INeed Copy()
@@ -89,13 +78,15 @@ namespace JoyLib.Code.Entities.Needs
                 this.m_Value,
                 this.m_MaximumValue,
                 this.FulfillingSprite,
+                this.RelationshipHandler,
                 this.m_AverageForDay,
                 this.m_AverageForWeek);
         }
 
         public override bool FindFulfilmentObject(IEntity actor)
         {
-            this.Initialise();
+            this.GetBits();
+            
             IEnumerable<string> tags = actor.Tags.Where(x => x.Contains("sentient"));
 
             List<IEntity> possibleMates = actor.MyWorld.SearchForEntities(actor, tags).ToList();
@@ -108,7 +99,7 @@ namespace JoyLib.Code.Entities.Needs
                 participants.Add(actor);
                 participants.Add(mate);
                 string[] relationshipTags = new string[] { "sexual" };
-                IEnumerable<IRelationship> relationships = this.EntityRelationshipHandler.Get(participants, relationshipTags);
+                IEnumerable<IRelationship> relationships = this.RelationshipHandler.Get(participants, relationshipTags);
 
                 foreach (IRelationship relationship in relationships)
                 {
@@ -146,9 +137,9 @@ namespace JoyLib.Code.Entities.Needs
                 return false;
             }
             
-            this.Initialise();
+            this.GetBits();
 
-            if (actor.Sexuality.WillMateWith(actor, partner, this.EntityRelationshipHandler.Get(
+            if (actor.Sexuality.WillMateWith(actor, partner, this.RelationshipHandler.Get(
                     new IJoyObject[] { actor, partner },
                     new string[] { "sexual" })))
             {
@@ -209,6 +200,9 @@ namespace JoyLib.Code.Entities.Needs
             int decay = this.Roller.Roll(DECAY_MIN, DECAY_MAX);
             int decayCounter = this.Roller.Roll(0, DECAY_MAX);
             int maxValue = this.Roller.Roll(MAX_VALUE_MIN, MAX_VALUE_MAX);
+
+            this.GetBits();
+            
             return new Sex(
                 decay, 
                 decayCounter, 
@@ -216,7 +210,16 @@ namespace JoyLib.Code.Entities.Needs
                 PRIORITY, this.Roller.Roll(HAPPINESS_THRESHOLD_MIN, HAPPINESS_THRESHOLD_MAX), 
                 HAPPINESS_THRESHOLD_MAX, 
                 maxValue,
-                this.FulfillingSprite);
+                this.FulfillingSprite,
+                this.RelationshipHandler);
+        }
+
+        protected void GetBits()
+        {
+            if (this.RelationshipHandler is null)
+            {
+                this.RelationshipHandler = GlobalConstants.GameManager?.RelationshipHandler;
+            }
         }
     }
 }

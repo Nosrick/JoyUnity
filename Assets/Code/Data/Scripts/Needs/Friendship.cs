@@ -39,7 +39,6 @@ namespace JoyLib.Code.Entities.Needs
                 1,
                 new[] { "modifyrelationshippointsaction"})
         {
-            this.Initialise();
         }
         
         public Friendship(
@@ -51,6 +50,7 @@ namespace JoyLib.Code.Entities.Needs
             int valueRef, 
             int maxValueRef,
             ISpriteState fulfillingSprite,
+            IEntityRelationshipHandler relationshipHandler = null,
             int averageForDayRef = 0, 
             int averageForWeekRef = 0) 
             : base(
@@ -66,23 +66,13 @@ namespace JoyLib.Code.Entities.Needs
                 averageForDayRef, 
                 averageForWeekRef)
         {
-            this.Initialise();
-        }
-
-        protected void Initialise()
-        {
-            if (this.Initialised)
-            {
-                return;
-            }
-            
-            this.EntityRelationshipHandler = GlobalConstants.GameManager.RelationshipHandler;
-            this.Initialised = true;
+            this.EntityRelationshipHandler = relationshipHandler ?? GlobalConstants.GameManager?.RelationshipHandler;
         }
 
         public override bool FindFulfilmentObject(IEntity actor)
         {
-            this.Initialise();
+            this.GetBits();
+            
             IEnumerable<string> tags = actor.Tags.Where(x => x.Contains("sentient"));
 
             List<IEntity> possibleListeners = actor.MyWorld.SearchForEntities(actor, tags).ToList();
@@ -128,7 +118,8 @@ namespace JoyLib.Code.Entities.Needs
 
         public override bool Interact(IEntity actor, IJoyObject obj)
         {
-            this.Initialise();
+            this.GetBits();
+            
             this.m_CachedActions["fulfillneedaction"].Execute(
                 new[] {actor, obj},
                 new[] {"need", "friendship", "fulfill"},
@@ -152,6 +143,8 @@ namespace JoyLib.Code.Entities.Needs
 
         public override INeed Copy()
         {
+            this.GetBits();
+            
             return new Friendship(
                 this.m_Decay,
                 this.m_DecayCounter,
@@ -161,7 +154,16 @@ namespace JoyLib.Code.Entities.Needs
                 this.m_Value,
                 this.m_MaximumValue,
                 this.FulfillingSprite,
+                this.EntityRelationshipHandler,
                 this.AverageForWeek);
+        }
+
+        protected void GetBits()
+        {
+            if (this.EntityRelationshipHandler is null)
+            {
+                this.EntityRelationshipHandler = GlobalConstants.GameManager?.RelationshipHandler;
+            }
         }
 
         public override INeed Randomise()
@@ -172,6 +174,8 @@ namespace JoyLib.Code.Entities.Needs
             int happinessThreshold = this.Roller.Roll(HAPPINESS_THRESHOLD_MIN, HAPPINESS_THRESHOLD_MAX);
             int value = this.Roller.Roll(0, HAPPINESS_THRESHOLD_MAX);
             int maxValue = this.Roller.Roll(MAX_VALUE_MIN, MAX_VALUE_MAX);
+
+            this.GetBits();
             
             return new Friendship(
                 decay,
@@ -181,7 +185,8 @@ namespace JoyLib.Code.Entities.Needs
                 happinessThreshold,
                 value,
                 maxValue,
-                this.FulfillingSprite);
+                this.FulfillingSprite,
+                this.EntityRelationshipHandler);
         }
     }
 }

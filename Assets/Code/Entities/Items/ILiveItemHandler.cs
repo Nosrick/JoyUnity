@@ -5,10 +5,8 @@ using JoyLib.Code.World;
 
 namespace JoyLib.Code.Entities.Items
 {
-    public interface ILiveItemHandler
+    public interface ILiveItemHandler : IHandler<IItemInstance, Guid>
     {
-        BaseItemType[] FindItemsOfType(string[] tags, int tolerance = 1);
-
         bool AddItem(IItemInstance item);
         bool AddItems(IEnumerable<IItemInstance> item, bool addToWorld = false);
 
@@ -17,8 +15,6 @@ namespace JoyLib.Code.Entities.Items
         bool RemoveItemFromWorld(IItemInstance item);
 
         bool AddItemToWorld(WorldInstance world, Guid GUID);
-
-        IItemInstance GetItem(Guid GUID);
         IEnumerable<IItemInstance> GetQuestRewards(Guid questID);
 
         void CleanUpRewards();
@@ -30,9 +26,7 @@ namespace JoyLib.Code.Entities.Items
 
         IEnumerable<IItemInstance> GetItems(IEnumerable<Guid> guids);
         
-        List<BaseItemType> ItemDatabase { get; }
-        
-        IEnumerable<IItemInstance> AllItems { get; }
+        IEnumerable<IItemInstance> Values { get; }
         
         NonUniqueDictionary<Guid, Guid> QuestRewards { get; }
     }

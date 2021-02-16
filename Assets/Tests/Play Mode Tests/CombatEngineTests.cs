@@ -78,11 +78,7 @@ namespace Tests
 
             this.objectIconHandler = new ObjectIconHandler(new RNG());
             
-            this.itemHandler = new LiveItemHandler(
-                this.objectIconHandler,
-                this.materialHandler,
-                this.abilityHandler,
-                new RNG());
+            this.itemHandler = new LiveItemHandler(new RNG());
 
             GlobalConstants.GameManager = Mock.Of<IGameManager>(
                 manager => manager.ItemHandler == this.itemHandler

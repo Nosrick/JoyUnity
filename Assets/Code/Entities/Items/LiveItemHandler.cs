@@ -1,143 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Xml.Linq;
 using JoyLib.Code.Collections;
-using JoyLib.Code.Entities.Abilities;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Helpers;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.World;
-using UnityEngine;
 
 namespace JoyLib.Code.Entities.Items
 {
     public class LiveItemHandler : ILiveItemHandler
     {
-        protected Dictionary<Guid, IItemInstance> m_LiveItems;
-
-        protected List<BaseItemType> m_ItemDatabase;
-
-        protected IObjectIconHandler m_ObjectIcons;
-
-        protected IMaterialHandler m_MaterialHandler;
-        
-        protected IAbilityHandler AbilityHandler { get; set; }
+        protected Dictionary<Guid, IItemInstance> LiveItems { get; set; }
         
         protected RNG Roller { get; set; }
 
-        protected static GameObject s_ItemPrefab; 
-
-        public LiveItemHandler(
-            IObjectIconHandler objectIconHandler,
-            IMaterialHandler materialHandler,
-            IAbilityHandler abilityHandler,
-            RNG roller)
+        public LiveItemHandler(RNG roller = null)
         {
-            this.AbilityHandler = abilityHandler;
-            this.Roller = roller;
-            this.m_ObjectIcons = objectIconHandler;
-            this.m_MaterialHandler = materialHandler;
-            
-            if (this.m_ItemDatabase is null)
-            {
-                this.Initialise();
-            }
+            this.Roller = roller ?? new RNG();
+            this.Load();
         }
 
-        protected void Initialise()
+        public IEnumerable<IItemInstance> Load()
         {
-            this.m_LiveItems = new Dictionary<Guid, IItemInstance>();
+            this.LiveItems = new Dictionary<Guid, IItemInstance>();
 
             this.QuestRewards = new NonUniqueDictionary<Guid, Guid>();
-
-            s_ItemPrefab = Resources.Load<GameObject>("Prefabs/ItemInstance");
-
-            this.m_ItemDatabase = this.LoadItems();
-        }
-
-        protected List<BaseItemType> LoadItems()
-        {
-            List<BaseItemType> items = new List<BaseItemType>();
-
-            string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Items", "*.xml", SearchOption.AllDirectories);
-
-            foreach (string file in files)
-            {
-                XElement doc = XElement.Load(file);
-
-                List<IdentifiedItem> identifiedItems = (from item in doc.Elements("IdentifiedItem")
-                                                        select new IdentifiedItem()
-                                                        {
-                                                            name = item.Element("Name").GetAs<string>(),
-                                                            description = item.Element("Description").GetAs<string>(),
-                                                            value = item.Element("Value").GetAs<int>(),
-                                                            size = item.Element("Size").GetAs<int>(),
-                                                            spriteSheet = item.Element("Tileset").GetAs<string>(),
-                                                            skill = item.Element("Skill").DefaultIfEmpty("none"),
-                                                            slots = item.Elements("Slot").Select(slot => slot.DefaultIfEmpty("none")).ToArray(),
-                                                            materials = item.Elements("Material").Select(material => material.GetAs<string>()).ToArray(),
-                                                            tags = item.Elements("Tag").Select(tag => tag.GetAs<string>()).ToArray(),
-                                                            weighting = item.Element("SpawnWeighting").GetAs<int>(),
-                                                            abilities = item.Elements("Effect").Select(ability => ability.GetAs<string>() != null ? this.AbilityHandler?.GetAbility(ability.GetAs<string>()) : null).ToArray(),
-                                                            lightLevel = item.Element("LightLevel").GetAs<int>()
-
-                                                        }).ToList();
-
-                List<UnidentifiedItem> unidentifiedItems = (from item in doc.Elements("UnidentifiedItem")
-                                                            select new UnidentifiedItem()
-                                                            {
-                                                                name = item.Element("Name").GetAs<string>(),
-                                                                description = item.Element("Description").GetAs<string>()
-                                                            }).ToList();
-
-                XElement tileSetElement = doc.Element("TileSet");
-                string tileSet = tileSetElement.Element("Name").GetAs<string>();
-
-                this.m_ObjectIcons.AddSpriteDataFromXML(tileSet, tileSetElement);
-
-                string actionWord = doc.Element("ActionWord").DefaultIfEmpty("strikes");
-
-                for (int j = 0; j < identifiedItems.Count; j++)
-                {
-                    UnidentifiedItem chosenDescription = new UnidentifiedItem(identifiedItems[j].name, identifiedItems[j].description);
-
-                    if (unidentifiedItems.Count != 0)
-                    {
-                        int index = this.Roller.Roll(0, unidentifiedItems.Count);
-                        chosenDescription = unidentifiedItems[index];
-                        unidentifiedItems.RemoveAt(index);
-                    }
-
-                    for (int k = 0; k < identifiedItems[j].materials.Length; k++)
-                    {
-                        BaseItemType baseItemType = new BaseItemType(identifiedItems[j].tags,
-                            identifiedItems[j].description, chosenDescription.description, chosenDescription.name,
-                            identifiedItems[j].name, identifiedItems[j].slots, identifiedItems[j].size, this.m_MaterialHandler.GetMaterial(identifiedItems[j].materials[k]), identifiedItems[j].skill,
-                            actionWord,
-                            identifiedItems[j].value, identifiedItems[j].weighting, identifiedItems[j].spriteSheet,
-                            identifiedItems[j].lightLevel, 
-                            identifiedItems[j].abilities);
-                        items.Add(baseItemType);
-                    }
-                }
-            }
-
-            return items;
-        }
-
-        public BaseItemType[] FindItemsOfType(string[] tags, int tolerance = 1)
-        {
-            List<BaseItemType> matchingTypes = new List<BaseItemType>();
-            foreach (BaseItemType itemType in this.ItemDatabase)
-            {
-                if (itemType.Tags.Intersect(tags).Count() >= tolerance)
-                {
-                    matchingTypes.Add(itemType);
-                }
-            }
-            return matchingTypes.ToArray();
+            return new IItemInstance[0];
         }
 
         public bool AddItem(IItemInstance item)
@@ -169,7 +56,7 @@ namespace JoyLib.Code.Entities.Items
                 return false;
             }
             
-            IItemInstance item = this.GetItem(GUID);
+            IItemInstance item = this.Get(GUID);
             item.MyWorld?.RemoveObject(item.WorldPosition, item);
             //LiveItems.Remove(GUID);
             return true;
@@ -193,19 +80,19 @@ namespace JoyLib.Code.Entities.Items
                 return false;
             }
             
-            IItemInstance item = this.GetItem(GUID);
+            IItemInstance item = this.Get(GUID);
             item.MyWorld = world;
             world.AddObject(item);
             return true;
         }
 
-        public IItemInstance GetItem(Guid GUID)
+        public IItemInstance Get(Guid guid)
         {
-            if (this.LiveItems.ContainsKey(GUID))
+            if (this.LiveItems.ContainsKey(guid))
             {
-                return this.LiveItems[GUID];
+                return this.LiveItems[guid];
             }
-            throw new InvalidOperationException("No item found with GUID " + GUID);
+            throw new InvalidOperationException("No item found with GUID " + guid);
         }
 
         public IEnumerable<IItemInstance> GetQuestRewards(Guid questID)
@@ -228,7 +115,7 @@ namespace JoyLib.Code.Entities.Items
                 .ToList();
             foreach (var guid in cleanup)
             {
-                IItemInstance item = this.GetItem(guid);
+                IItemInstance item = this.Get(guid);
                 if (item.MonoBehaviourHandler is null)
                 {
                     GlobalConstants.ActionLog.AddText("No MBH found on " + item);
@@ -272,49 +159,32 @@ namespace JoyLib.Code.Entities.Items
 
         public void ClearLiveItems()
         {
-            this.m_LiveItems = new Dictionary<Guid, IItemInstance>();
+            this.LiveItems = new Dictionary<Guid, IItemInstance>();
         }
 
         ~LiveItemHandler()
         {
-            foreach (IItemInstance item in this.AllItems)
-            {
-                item.Dispose();
-            }
+            this.Dispose();
         }
 
-        public List<BaseItemType> ItemDatabase
+        public void Dispose()
         {
-            get
+            Guid[] keys = this.LiveItems.Keys.ToArray();
+            foreach (Guid key in keys)
             {
-                if (this.m_ItemDatabase is null)
-                {
-                    this.Initialise();
-                }
-
-                return new List<BaseItemType>(this.m_ItemDatabase);
+                this.LiveItems[key].Dispose();
+                this.LiveItems[key] = null;
             }
+
+            this.LiveItems = null;
         }
 
-        protected Dictionary<Guid, IItemInstance> LiveItems
-        {
-            get
-            {
-                if (this.m_LiveItems is null)
-                {
-                    this.Initialise();
-                }
-
-                return this.m_LiveItems;
-            }
-        }
-        
         public NonUniqueDictionary<Guid, Guid> QuestRewards
         {
             get;
             protected set;
         }
 
-        public IEnumerable<IItemInstance> AllItems => this.LiveItems.Values.ToList();
+        public IEnumerable<IItemInstance> Values => this.LiveItems.Values.ToList();
     }
 }

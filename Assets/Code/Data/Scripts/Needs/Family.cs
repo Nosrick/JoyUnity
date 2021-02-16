@@ -39,7 +39,6 @@ namespace JoyLib.Code.Entities.Needs
                 1,
                 new[] { "modifyrelationshippointsaction"})
         {
-            this.Initialise();
         }
         
         
@@ -51,7 +50,8 @@ namespace JoyLib.Code.Entities.Needs
             int happinessThresholdRef, 
             int valueRef, 
             int maxValueRef,
-            ISpriteState fulfullingSprite,
+            ISpriteState fulfillingSprite,
+            IEntityRelationshipHandler relationshipHandler = null,
             int averageForDayRef = 0,
             int averageForWeekRef = 0) 
             : base(
@@ -63,27 +63,25 @@ namespace JoyLib.Code.Entities.Needs
                 valueRef, 
                 maxValueRef, 
                 new[] { "modifyrelationshippointsaction"},
-                fulfullingSprite,
+                fulfillingSprite,
                 averageForDayRef, 
                 averageForWeekRef)
         {
-            this.Initialise();
-            this.FulfillingSprite = fulfullingSprite;
+            this.RelationshipHandler = relationshipHandler ?? GlobalConstants.GameManager?.RelationshipHandler;
+            this.FulfillingSprite = fulfillingSprite;
         }
 
-        protected void Initialise()
+        protected void GetBits()
         {
-            if (this.Initialised)
+            if (this.RelationshipHandler is null)
             {
-                return;
+                this.RelationshipHandler = GlobalConstants.GameManager?.RelationshipHandler;
             }
-            this.RelationshipHandler = GlobalConstants.GameManager.RelationshipHandler;
-            this.Initialised = true;
         }
 
         public override bool FindFulfilmentObject(IEntity actor)
         {
-            this.Initialise();
+            this.GetBits();
             IEnumerable<string> tags = actor.Tags.Where(x => x.Contains("sentient"));
 
             List<IEntity> possibleListeners = actor.MyWorld.SearchForEntities(actor, tags).ToList();
@@ -152,7 +150,6 @@ namespace JoyLib.Code.Entities.Needs
 
         public override bool Interact(IEntity actor, IJoyObject obj)
         {
-            this.Initialise();
             this.m_CachedActions["fulfillneedaction"].Execute(
                 new[] {actor, obj},
                 new[] {"need", "family", "fulfill"},
@@ -185,6 +182,7 @@ namespace JoyLib.Code.Entities.Needs
                 this.m_Value,
                 this.m_MaximumValue,
                 this.FulfillingSprite,
+                this.RelationshipHandler,
                 this.m_AverageForDay,
                 this.m_AverageForWeek);
         }
@@ -198,6 +196,8 @@ namespace JoyLib.Code.Entities.Needs
             int value = this.Roller.Roll(0, HAPPINESS_THRESHOLD_MAX);
             int maxValue = this.Roller.Roll(MAX_VALUE_MIN, MAX_VALUE_MAX);
             
+            this.GetBits();
+
             return new Family(
                 decay,
                 decayCounter,
@@ -206,7 +206,8 @@ namespace JoyLib.Code.Entities.Needs
                 happinessThreshold,
                 value,
                 maxValue,
-                this.FulfillingSprite);
+                this.FulfillingSprite,
+                this.RelationshipHandler);
         }
     }
 }

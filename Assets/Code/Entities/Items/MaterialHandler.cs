@@ -9,7 +9,9 @@ namespace JoyLib.Code.Entities.Items
 {
     public class MaterialHandler : IMaterialHandler
     {
-        private Dictionary<string, IItemMaterial> m_Materials;
+        protected Dictionary<string, IItemMaterial> m_Materials;
+
+        public IEnumerable<IItemMaterial> Values => this.m_Materials.Values;
 
         public MaterialHandler()
         {
@@ -18,18 +20,27 @@ namespace JoyLib.Code.Entities.Items
 
         public void Initialise()
         {
-            List<IItemMaterial> flatList = this.LoadMaterials();
-            this.m_Materials = new Dictionary<string, IItemMaterial>(flatList.Count);
-
-            foreach(IItemMaterial material in flatList)
-            {
-                this.m_Materials.Add(material.Name, material);
-            }
+            this.m_Materials = this.Load().ToDictionary(material => material.Name, material => material);
 
             this.m_Materials.Add("DEFAULT MATERIAL", new ItemMaterial("DEFAULT MATERIAL", 0.1f, 0, 1.0f, 0.0f));
         }
+        
+        public IItemMaterial Get(string name)
+        {
+            if(this.m_Materials is null)
+            {
+                this.Initialise();
+            }
 
-        public List<IItemMaterial> LoadMaterials()
+            if (this.m_Materials.Any(pair => pair.Value.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+            {
+                return this.m_Materials.First(pair => pair.Value.Name.Equals(name, StringComparison.OrdinalIgnoreCase)).Value;
+            }
+
+            return this.m_Materials["DEFAULT MATERIAL"];
+        }
+
+        public IEnumerable<IItemMaterial> Load()
         {
             List<IItemMaterial> materials = new List<IItemMaterial>();
             
@@ -52,19 +63,15 @@ namespace JoyLib.Code.Entities.Items
             return materials;
         }
 
-        public IItemMaterial GetMaterial(string nameRef)
+        public void Dispose()
         {
-            if(this.m_Materials is null)
+            string[] keys = this.m_Materials.Keys.ToArray();
+            foreach (string key in keys)
             {
-                this.Initialise();
+                this.m_Materials[key] = null;
             }
 
-            if (this.m_Materials.Any(pair => pair.Value.Name.Equals(nameRef, StringComparison.OrdinalIgnoreCase)))
-            {
-                return this.m_Materials.First(pair => pair.Value.Name.Equals(nameRef, StringComparison.OrdinalIgnoreCase)).Value;
-            }
-
-            return this.m_Materials["DEFAULT MATERIAL"];
+            this.m_Materials = null;
         }
     }
 }

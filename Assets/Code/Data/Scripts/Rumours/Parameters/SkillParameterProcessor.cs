@@ -31,7 +31,7 @@ namespace JoyLib.Code.Conversation.Subengines.Rumours
         {
             this.SkillHandler = GlobalConstants.GameManager.SkillHandler;
             this.NeedHandler = GlobalConstants.GameManager.NeedHandler;
-            this.DefaultSkillBlock = this.SkillHandler.GetDefaultSkillBlock(this.NeedHandler.Needs);
+            this.DefaultSkillBlock = this.SkillHandler.GetDefaultSkillBlock(this.NeedHandler.Values);
         }
         
         public bool CanParse(string parameter)

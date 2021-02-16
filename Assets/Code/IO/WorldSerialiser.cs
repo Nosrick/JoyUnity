@@ -68,7 +68,7 @@ namespace JoyLib.Code.IO
                 File.WriteAllBytes(directory + "/relationships.dat", array);
 
                 array = SerializationUtility.SerializeValue(
-                    GlobalConstants.GameManager.ItemHandler.AllItems,
+                    GlobalConstants.GameManager.ItemHandler.Values,
                     DEFAULT_DATA_FORMAT);
                 File.WriteAllBytes(directory + "/items.dat", array);
 

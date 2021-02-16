@@ -15,6 +15,7 @@ namespace JoyLib.Code.Entities.Items
     {
         protected IGameManager GameManager { get; set; }
 
+        protected IItemDatabase ItemDatabase { get; set; }
         protected ILiveItemHandler ItemHandler { get; set; }
 
         protected IObjectIconHandler ObjectIcons { get; set; }
@@ -29,6 +30,7 @@ namespace JoyLib.Code.Entities.Items
 
         public ItemFactory(
             GUIDManager guidManager,
+            IItemDatabase itemDatabase,
             ILiveItemHandler itemHandler,
             IObjectIconHandler objectIconHandler,
             IDerivedValueHandler derivedValueHandler,
@@ -36,6 +38,7 @@ namespace JoyLib.Code.Entities.Items
             RNG roller = null)
         {
             this.GuidManager = guidManager;
+            this.ItemDatabase = itemDatabase;
             this.ItemHandler = itemHandler;
             this.ObjectIcons = objectIconHandler;
             this.DerivedValueHandler = derivedValueHandler;
@@ -45,7 +48,7 @@ namespace JoyLib.Code.Entities.Items
 
         public IItemInstance CreateRandomItemOfType(string[] tags, bool identified = false)
         {
-            BaseItemType[] matchingTypes = this.ItemHandler.FindItemsOfType(tags, tags.Length);
+            BaseItemType[] matchingTypes = this.ItemDatabase.FindItemsOfType(tags, tags.Length).ToArray();
             if (matchingTypes.Length > 0)
             {
                 int result = this.Roller.Roll(0, matchingTypes.Length);
@@ -62,7 +65,7 @@ namespace JoyLib.Code.Entities.Items
 
         public IItemInstance CreateSpecificType(string name, string[] tags, bool identified = false)
         {
-            BaseItemType[] matchingTypes = this.ItemHandler.FindItemsOfType(tags);
+            BaseItemType[] matchingTypes = this.ItemDatabase.FindItemsOfType(tags).ToArray();
             List<BaseItemType> secondRound = new List<BaseItemType>();
             foreach (BaseItemType itemType in matchingTypes)
             {
@@ -100,7 +103,7 @@ namespace JoyLib.Code.Entities.Items
             bool identified = false,
             bool withAbility = false)
         {
-            List<BaseItemType> itemDatabase = this.ItemHandler.ItemDatabase;
+            List<BaseItemType> itemDatabase = this.ItemDatabase.Values.ToList();
 
             int result = this.Roller.Roll(0, itemDatabase.Count);
             BaseItemType itemType = itemDatabase[result];

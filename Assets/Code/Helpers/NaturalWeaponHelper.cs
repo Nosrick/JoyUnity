@@ -20,7 +20,7 @@ namespace JoyLib.Code.Helpers
 
         public IItemInstance MakeNaturalWeapon(int wielderSize, string material = "flesh", params string[] tags)
         {
-            IItemMaterial itemMaterial = this.MaterialHandler.GetMaterial(material);
+            IItemMaterial itemMaterial = this.MaterialHandler.Get(material);
             BaseItemType baseItem = new BaseItemType(tags, "A claw, fist or psuedopod.", "A claw, fist or psuedopod.", "Natural Weapon", "Natural Weapon", new string[] { "Hand" }, 
                 (wielderSize + 1) * 40.0f, itemMaterial, "Martial Arts", "strikes", 0, 0, "None");
 

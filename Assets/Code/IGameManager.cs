@@ -56,6 +56,7 @@ namespace JoyLib.Code
         IParameterProcessorHandler ParameterProcessorHandler { get; }
         ILiveEntityHandler EntityHandler { get; }
         ILiveItemHandler ItemHandler { get; }
+        IItemDatabase ItemDatabase { get; }
         INeedHandler NeedHandler { get; }
         IEntitySkillHandler SkillHandler { get; }
         IWorldInfoHandler WorldInfoHandler { get; }

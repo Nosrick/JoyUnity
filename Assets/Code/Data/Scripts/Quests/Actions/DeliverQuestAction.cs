@@ -92,7 +92,7 @@ namespace JoyLib.Code.Quests
         {
             foreach (Guid itemGUID in this.Items)
             {
-                IItemInstance item = GlobalConstants.GameManager.ItemHandler.GetItem(itemGUID);
+                IItemInstance item = GlobalConstants.GameManager.ItemHandler.Get(itemGUID);
                 GlobalConstants.ActionLog.AddText("Adding " + item + " to " + questor + " inventory");
                 questor.AddContents(item);
             }
@@ -148,7 +148,7 @@ namespace JoyLib.Code.Quests
                     itemBuilder.Append("and ");
                 }
 
-                string name = GlobalConstants.GameManager.ItemHandler.GetItem(this.Items[i]).JoyName;
+                string name = GlobalConstants.GameManager.ItemHandler.Get(this.Items[i]).JoyName;
                 itemBuilder.Append(name);
             }
             
