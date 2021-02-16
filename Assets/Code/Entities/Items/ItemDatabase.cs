@@ -181,69 +181,6 @@ namespace JoyLib.Code.Entities.Items
             }
 
             return items;
-
-            /*
-            foreach (string file in files)
-            {
-                XElement doc = XElement.Load(file);
-
-                List<IdentifiedItem> identifiedItems = (from item in doc.Elements("IdentifiedItem")
-                                                        select new IdentifiedItem()
-                                                        {
-                                                            name = item.Element("Name").GetAs<string>(),
-                                                            description = item.Element("Description").GetAs<string>(),
-                                                            value = item.Element("Value").GetAs<int>(),
-                                                            size = item.Element("Size").GetAs<int>(),
-                                                            spriteSheet = item.Element("Tileset").GetAs<string>(),
-                                                            skill = item.Element("Skill").DefaultIfEmpty("none"),
-                                                            slots = item.Elements("Slot").Select(slot => slot.DefaultIfEmpty("none")).ToArray(),
-                                                            materials = item.Elements("Material").Select(material => material.GetAs<string>()).ToArray(),
-                                                            tags = item.Elements("Tag").Select(tag => tag.GetAs<string>()).ToArray(),
-                                                            weighting = item.Element("SpawnWeighting").GetAs<int>(),
-                                                            abilities = item.Elements("Effect").Select(ability => ability.GetAs<string>() != null ? this.AbilityHandler?.GetAbility(ability.GetAs<string>()) : null).ToArray(),
-                                                            lightLevel = item.Element("LightLevel").GetAs<int>()
-
-                                                        }).ToList();
-
-                List<UnidentifiedItem> unidentifiedItems = (from item in doc.Elements("UnidentifiedItem")
-                                                            select new UnidentifiedItem()
-                                                            {
-                                                                name = item.Element("Name").GetAs<string>(),
-                                                                description = item.Element("Description").GetAs<string>()
-                                                            }).ToList();
-
-                XElement tileSetElement = doc.Element("TileSet");
-                string tileSet = tileSetElement.Element("Name").GetAs<string>();
-
-                this.ObjectIcons.AddSpriteDataFromXML(tileSet, tileSetElement);
-
-                string actionWord = doc.Element("ActionWord").DefaultIfEmpty("strikes");
-
-                for (int j = 0; j < identifiedItems.Count; j++)
-                {
-                    UnidentifiedItem chosenDescription = new UnidentifiedItem(identifiedItems[j].name, identifiedItems[j].description);
-
-                    if (unidentifiedItems.Count != 0)
-                    {
-                        int index = this.Roller.Roll(0, unidentifiedItems.Count);
-                        chosenDescription = unidentifiedItems[index];
-                        unidentifiedItems.RemoveAt(index);
-                    }
-
-                    for (int k = 0; k < identifiedItems[j].materials.Length; k++)
-                    {
-                        BaseItemType baseItemType = new BaseItemType(identifiedItems[j].tags,
-                            identifiedItems[j].description, chosenDescription.description, chosenDescription.name,
-                            identifiedItems[j].name, identifiedItems[j].slots, identifiedItems[j].size, this.MaterialHandler.Get(identifiedItems[j].materials[k]), identifiedItems[j].skill,
-                            actionWord,
-                            identifiedItems[j].value, identifiedItems[j].weighting, identifiedItems[j].spriteSheet,
-                            identifiedItems[j].lightLevel, 
-                            identifiedItems[j].abilities);
-                        items.Add(baseItemType);
-                    }
-                }
-            }
-            */
         }
         
         public BaseItemType Get(string name)
