@@ -4,12 +4,15 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using Castle.Core.Internal;
+using JoyLib.Code;
 using JoyLib.Code.Conversation.Conversations;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.Unity.GUI;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 namespace JoyLib.Code.Conversation
@@ -20,12 +23,6 @@ namespace JoyLib.Code.Conversation
         protected List<ITopic> m_CurrentTopics;
 
         protected GameObject m_Window;
-
-        protected IGUIManager GUIManager
-        {
-            get;
-            set;
-        }
 
         protected ITopic LastSaid
         {
@@ -80,101 +77,116 @@ namespace JoyLib.Code.Conversation
 
             string[] files = Directory.GetFiles(
                 Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Conversation",
-                "*.xml",
+                "*.json",
                 SearchOption.AllDirectories);
 
             foreach (string file in files)
             {
-                try
+                using (StreamReader reader = new StreamReader(file))
                 {
-                    XElement doc = XElement.Load(file);
-                    string topicName = doc.Element("Name").GetAs<string>();
-
-                    foreach (XElement line in doc.Elements("Line"))
+                    using (JsonTextReader jsonReader = new JsonTextReader(reader))
                     {
-                        string text = line.Element("Text").GetAs<string>("SOMEONE FORGOT TO INCLUDE TEXT.");
-                        string processor = line.Element("Processor").DefaultIfEmpty("NONE");
-
-                        string[] conditionStrings = (from conditionElement in line.Elements("Condition")
-                            select conditionElement.GetAs<string>()).ToArray();
-
-                        string[] nextTopics = (from nextTopicElement in line.Elements("Next")
-                            select nextTopicElement.GetAs<string>()).ToArray();
-                        
-                        int priority = line.Element("Priority").DefaultIfEmpty(0);
-
-                        string speaker = line.Element("Speaker").DefaultIfEmpty("instigator");
-
-                        string link = line.Element("Link").DefaultIfEmpty("");
-
-                        Speaker speakerEnum = speaker.Equals("instigator", StringComparison.OrdinalIgnoreCase)
-                            ? Speaker.INSTIGATOR
-                            : Speaker.LISTENER;
-
-                        List<ITopicCondition> conditions = new List<ITopicCondition>();
-                        foreach (string condition in conditionStrings)
+                        try
                         {
-                            conditions.Add(this.ParseCondition(condition));
-                        }
+                            JObject jToken = JObject.Load(jsonReader);
 
-                        string[] actionStrings = (from actionElement in line.Elements("Action")
-                            select actionElement.GetAs<string>()).ToArray();
-
-                        IEnumerable<IJoyAction> actions = ScriptingEngine.Instance.FetchActions(actionStrings);
-
-                        if (processor.Equals("NONE", StringComparison.OrdinalIgnoreCase) == false)
-                        {
-                            try
+                            if (jToken.IsNullOrEmpty())
                             {
-                                ITopic processorObject = (ITopic)ScriptingEngine.Instance.FetchAndInitialise(processor);
-                                processorObject.Initialise(
-                                    conditions.ToArray(),
-                                    topicName,
-                                    nextTopics.ToArray(),
-                                    text,
-                                    priority,
-                                    actions,
-                                    speakerEnum,
-                                    link);
-                                
-                                topics.Add(processorObject);
+                                continue;
                             }
-                            catch (Exception e)
+
+                            foreach (JToken child in jToken.Values())
                             {
-                                GlobalConstants.ActionLog.AddText("Could not find topic processor " + processor);
-                                topics.Add(new TopicData(
-                                    conditions.ToArray(),
-                                    topicName,
-                                    nextTopics.ToArray(),
-                                    text,
-                                    priority,
-                                    actions,
-                                    speakerEnum,
-                                    null,
-                                    link));
+                                string topicName = (string) child["Name"];
+                                foreach (JToken line in child["Lines"])
+                                {
+                                    string text = (string) line["Text"];
+                                    string processor = ((string) line["Processor"]) ?? "NONE";
+
+                                    string[] conditionStrings = line["Conditions"] is null 
+                                        ? new string[0]
+                                        : line["Conditions"].Select(token => (string) token).ToArray();
+
+                                    string[] nextTopics = line["Next"] is null
+                                        ? new string[0]
+                                        : line["Next"].Select(token => (string) token).ToArray();
+
+                                    int priority = (int) (line["Priority"] ?? 0);
+
+                                    string speaker = (string) line["Speaker"] ?? "instigator";
+
+                                    string link = (string) line["Link"] ?? "";
+
+                                    Speaker speakerEnum = (Speaker) Enum.Parse(typeof(Speaker), speaker, true);
+
+                                    List<ITopicCondition> conditions = new List<ITopicCondition>();
+                                    foreach (string condition in conditionStrings)
+                                    {
+                                        conditions.Add(this.ParseCondition(condition));
+                                    }
+
+                                    string[] actionStrings = line["Actions"] is null
+                                        ? new string[0]
+                                        : line["Actions"].Select(token => (string) token).ToArray();
+
+                                    IEnumerable<IJoyAction> actions = ScriptingEngine.Instance.FetchActions(actionStrings);
+
+                                    if (processor.Equals("NONE", StringComparison.OrdinalIgnoreCase) == false)
+                                    {
+                                        try
+                                        {
+                                            ITopic processorObject = (ITopic)ScriptingEngine.Instance.FetchAndInitialise(processor);
+                                            processorObject.Initialise(
+                                                conditions.ToArray(),
+                                                topicName,
+                                                nextTopics.ToArray(),
+                                                text,
+                                                priority,
+                                                actions,
+                                                speakerEnum,
+                                                link);
+                                            
+                                            topics.Add(processorObject);
+                                        }
+                                        catch
+                                        {
+                                            GlobalConstants.ActionLog.AddText("Could not find topic processor " + processor);
+                                            topics.Add(new TopicData(
+                                                conditions.ToArray(),
+                                                topicName,
+                                                nextTopics.ToArray(),
+                                                text,
+                                                priority,
+                                                actions,
+                                                speakerEnum,
+                                                null,
+                                                link));
+                                        }
+                                    }
+                                    else
+                                    {
+                                        topics.Add(new TopicData(
+                                                conditions.ToArray(),
+                                                topicName,
+                                                nextTopics.ToArray(),
+                                                text,
+                                                priority,
+                                                actions,
+                                                speakerEnum,
+                                                null,
+                                                link,
+                                                this,
+                                                this.RelationshipHandler));
+                                    }
+                                }
                             }
                         }
-                        else
+                        catch (Exception e)
                         {
-                            topics.Add(new TopicData(
-                                    conditions.ToArray(),
-                                    topicName,
-                                    nextTopics.ToArray(),
-                                    text,
-                                    priority,
-                                    actions,
-                                    speakerEnum,
-                                    null,
-                                    link,
-                                    this,
-                                    this.RelationshipHandler));
+                            GlobalConstants.ActionLog.AddText("Could not load conversations for " + file);
+                            GlobalConstants.ActionLog.StackTrace(e);
                         }
                     }
-                }
-                catch (Exception e)
-                {
-                    GlobalConstants.ActionLog.AddText("Could not load conversations from file " + file);
-                    GlobalConstants.ActionLog.StackTrace(e);
                 }
             }
 
