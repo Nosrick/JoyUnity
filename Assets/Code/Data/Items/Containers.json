@@ -1,0 +1,68 @@
+{
+  "Items": {
+    "Category": "Containers",
+    "IdentifiedItems": [
+      {
+        "Name": "Leather Bag",
+        "Description": "A simple leather bag, used to store things.",
+        "Value": 5,
+        "Materials": [
+          "leather"
+        ],
+        "Size": 100,
+        "TileSet": "Containers",
+        "Tags": [
+          "container",
+          "leather"
+        ]
+      },
+      {
+        "Name": "Canvas Bag",
+        "Description": "A simple canvas bag, used to store things.",
+        "Value": 5,
+        "Materials": [
+          "canvas"
+        ],
+        "Size": 100,
+        "TileSet": "Containers",
+        "Tags": [
+          "container",
+          "cloth"
+        ]
+      }
+    ],
+    "TileSet": {
+      "Name": "Containers",
+      "SpriteData": [
+        {
+          "Name": "canvas bag",
+          "Part": [
+            {
+              "Name": "bag",
+              "Frames": 1,
+              "Filename": "Chest0",
+              "Data": [
+                "default"
+              ],
+              "Position": 12
+            }
+          ]
+        },
+        {
+          "Name": "leather bag",
+          "Part": [
+            {
+              "Name": "bag",
+              "Frames": 1,
+              "Filename": "Chest0",
+              "Data": [
+                "default"
+              ],
+              "Position": 12
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
