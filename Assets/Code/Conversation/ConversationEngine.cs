@@ -362,7 +362,7 @@ namespace JoyLib.Code.Conversation
                 {
                     tuples.AddRange(this.Listener.GetData(
                         new [] {condition.Criteria}, 
-                        new object[] {this.Listener }));
+                        this.Listener));
                 }
 
                 if(topic.FulfilsConditions(tuples.ToArray()))
