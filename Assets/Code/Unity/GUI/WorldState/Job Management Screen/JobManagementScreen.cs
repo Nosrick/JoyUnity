@@ -34,7 +34,7 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
         
         protected Dictionary<string, IAbility> PurchasedAbilities { get; set; }
         
-        protected List<IRollableValue<int>> OriginalStatistics { get; set; }
+        protected List<IEntityStatistic> OriginalStatistics { get; set; }
         protected List<IEntitySkill> OriginalSkills { get; set; }
         
         protected Dictionary<string, int> StatisticsDeltas { get; set; }

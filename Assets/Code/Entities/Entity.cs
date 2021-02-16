@@ -42,7 +42,7 @@ namespace JoyLib.Code.Entities
         public event BooleanChangedEventHandler ConsciousnessChange;
         public event BooleanChangedEventHandler AliveChange;
 
-        [OdinSerialize] protected IDictionary<string, IRollableValue<int>> m_Statistics;
+        [OdinSerialize] protected IDictionary<string, IEntityStatistic> m_Statistics;
 
         [OdinSerialize] protected IDictionary<string, IEntitySkill> m_Skills;
 
@@ -181,7 +181,7 @@ namespace JoyLib.Code.Entities
         public Entity(
             Guid guid,
             IEntityTemplate template,
-            IDictionary<string, IRollableValue<int>> statistics,
+            IDictionary<string, IEntityStatistic> statistics,
             IDictionary<string, IDerivedValue> derivedValues,
             IDictionary<string, INeed> needs,
             IDictionary<string, IEntitySkill> skills,
@@ -296,7 +296,7 @@ namespace JoyLib.Code.Entities
         public Entity(
             Guid guid,
             IEntityTemplate template,
-            IDictionary<string, IRollableValue<int>> statistics,
+            IDictionary<string, IEntityStatistic> statistics,
             IDictionary<string, IDerivedValue> derivedValues,
             IDictionary<string, INeed> needs,
             IDictionary<string, IEntitySkill> skills,
@@ -1092,7 +1092,7 @@ namespace JoyLib.Code.Entities
 
         public EquipmentStorage Equipment => this.m_Equipment;
 
-        public IDictionary<string, IRollableValue<int>> Statistics
+        public IDictionary<string, IEntityStatistic> Statistics
         {
             get { return this.m_Statistics; }
         }

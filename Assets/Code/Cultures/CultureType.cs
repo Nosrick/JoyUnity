@@ -322,9 +322,9 @@ namespace JoyLib.Code.Cultures
             throw new InvalidOperationException("Could not assign job from culture " + this.CultureName + ".");
         }
 
-        public IDictionary<string, IRollableValue<int>> GetStats(IDictionary<string, IRollableValue<int>> baseStats)
+        public IDictionary<string, IEntityStatistic> GetStats(IDictionary<string, IEntityStatistic> baseStats)
         {
-            Dictionary<string, IRollableValue<int>> stats = new Dictionary<string, IRollableValue<int>>(baseStats);
+            Dictionary<string, IEntityStatistic> stats = new Dictionary<string, IEntityStatistic>(baseStats);
             foreach (string stat in baseStats.Keys)
             {
                 stats[stat].ModifyValue(this.GetStatVariance(stat));

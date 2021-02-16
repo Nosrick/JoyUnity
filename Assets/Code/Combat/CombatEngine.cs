@@ -26,7 +26,7 @@ namespace JoyLib.Code.Combat
         {
             List<IRollableValue<int>> attackerStuff = attacker.Statistics
                 .Where(pair => attackerTags.Any(tag => tag.Equals(pair.Key, StringComparison.OrdinalIgnoreCase)))
-                .Select(pair => pair.Value)
+                .Select(pair => (IRollableValue<int>) pair.Value)
                 .ToList();
 
             attackerStuff.AddRange(attacker.Skills
@@ -35,7 +35,7 @@ namespace JoyLib.Code.Combat
 
             List<IRollableValue<int>> defenderStuff = defender.Statistics
                 .Where(pair => defenderTags.Any(tag => tag.Equals(pair.Key, StringComparison.OrdinalIgnoreCase)))
-                .Select(pair => pair.Value)
+                .Select(pair => (IRollableValue<int>) pair.Value)
                 .ToList();
 
             defenderStuff.AddRange(defender.Skills

@@ -57,7 +57,7 @@ namespace JoyLib.Code.Entities.Abilities
         }
 
         public IEnumerable<IAbility> GetAvailableAbilities(IEntityTemplate template,
-            IDictionary<string, IRollableValue<int>> stats,
+            IDictionary<string, IEntityStatistic> stats,
             IDictionary<string, IEntitySkill> skills)
         {
             this.Initialise();

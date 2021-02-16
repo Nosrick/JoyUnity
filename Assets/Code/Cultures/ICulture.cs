@@ -26,7 +26,7 @@ namespace JoyLib.Code.Cultures
 
         IJob ChooseJob(IEnumerable<IJob> jobs);
 
-        IDictionary<string, IRollableValue<int>> GetStats(IDictionary<string, IRollableValue<int>> baseStats);
+        IDictionary<string, IEntityStatistic> GetStats(IDictionary<string, IEntityStatistic> baseStats);
 
         void ClearLastGroup();
 

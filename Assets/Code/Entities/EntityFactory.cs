@@ -82,7 +82,7 @@ namespace JoyLib.Code.Entities
         public IEntity CreateFromTemplate(IEntityTemplate template,
             Vector2Int position,
             string name = null,
-            IDictionary<string, IRollableValue<int>> statistics = null,
+            IDictionary<string, IEntityStatistic> statistics = null,
             IDictionary<string, IDerivedValue> derivedValues = null,
             IDictionary<string, IEntitySkill> skills = null,
             IEnumerable<IAbility> abilities = null,
@@ -105,7 +105,7 @@ namespace JoyLib.Code.Entities
             IEnumerable<ISpriteState> selectedSprites = sprites;
             List<ICulture> creatureCultures = new List<ICulture>();
             IDriver selectedDriver = driver;
-            IDictionary<string, IRollableValue<int>> selectedStatistics = statistics;
+            IDictionary<string, IEntityStatistic> selectedStatistics = statistics;
             IDictionary<string, IDerivedValue>  selectedDVs = derivedValues;
             IDictionary<string, IEntitySkill> selectedSkills = skills;
             IEnumerable<IAbility> selectedAbilities = abilities;
@@ -239,7 +239,7 @@ namespace JoyLib.Code.Entities
 
         public IEntity CreateLong(IEntityTemplate template,
             IDictionary<string, INeed> needs,
-            IDictionary<string, IRollableValue<int>> statistics,
+            IDictionary<string, IEntityStatistic> statistics,
             IDictionary<string, IDerivedValue> derivedValues,
             IDictionary<string, IEntitySkill> skills,
             IEnumerable<IAbility> abilities,
