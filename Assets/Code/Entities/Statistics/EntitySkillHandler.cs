@@ -26,7 +26,7 @@ namespace JoyLib.Code.Entities
 
         public IDictionary<string, IEntitySkill> GetDefaultSkillBlock()
         {
-            return this.DefaultSkills;
+            return this.DefaultSkills.Copy();
         }
 
         public IEntitySkill Get(string name)
