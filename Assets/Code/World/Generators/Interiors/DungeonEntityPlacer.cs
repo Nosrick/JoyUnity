@@ -45,7 +45,9 @@ namespace JoyLib.Code.World.Generators.Interiors
                 for (int j = 0; j < worldRef.Tiles.GetLength(1); j++)
                 {
                     Vector2Int point = new Vector2Int(i, j);
-                    if (this.PhysicsManager.IsCollision(point, point, worldRef) == PhysicsResult.None && point != worldRef.SpawnPoint)
+                    if (this.PhysicsManager.IsCollision(point, point, worldRef) == PhysicsResult.None 
+                        && point != worldRef.SpawnPoint
+                        && worldRef.Areas.ContainsKey(point) == false)
                     {
                         availablePoints.Add(point);
                     }
