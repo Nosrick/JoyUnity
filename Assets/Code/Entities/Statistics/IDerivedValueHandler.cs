@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace JoyLib.Code.Entities.Statistics
 {
-    public interface IDerivedValueHandler
+    public interface IDerivedValueHandler : IHandler<IDerivedValue, string>
     {
         IDerivedValue Calculate<T>(string name, IEnumerable<IBasicValue<T>> components)
             where T : struct;

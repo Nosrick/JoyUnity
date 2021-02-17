@@ -3,20 +3,27 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using Castle.Core.Internal;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Scripting;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities.Statistics
 {
     public class DerivedValueHandler : IDerivedValueHandler
     {
-        protected Dictionary<string, string> Formulas { get; set; }
-        protected Dictionary<string, string> EntityStandardFormulas { get; set; }
-        protected Dictionary<string, string> ItemStandardFormulas { get; set; }
-        protected Dictionary<string, Color> DerivedValueBackgroundColours { get; set; }
-        protected Dictionary<string, Color> DerivedValueTextColours { get; set; }
-        protected Dictionary<string, Color> DerivedValueOutlineColours { get; set; }
+        protected IDictionary<string, string> Formulas { get; set; }
+        protected IDictionary<string, string> EntityStandardFormulas { get; set; }
+        protected IDictionary<string, string> ItemStandardFormulas { get; set; }
+        protected IDictionary<string, IDerivedValue> DerivedValues { get; set; }
+        
+        protected IDictionary<string, Color> DerivedValueBackgroundColours { get; set; }
+        protected IDictionary<string, Color> DerivedValueTextColours { get; set; }
+        protected IDictionary<string, Color> DerivedValueOutlineColours { get; set; }
+
+        public IEnumerable<IDerivedValue> Values => this.DerivedValues.Values;
         
         protected IEntityStatisticHandler StatisticHandler { get; set; }
         protected IEntitySkillHandler SkillHandler { get; set; }
@@ -32,52 +39,92 @@ namespace JoyLib.Code.Entities.Statistics
             this.SkillHandler = skillHandler;
 
             this.ENTITY_FILE = Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER +
-                               "EntityDerivedValues.xml";
+                               "EntityDerivedValues.json";
 
-            this.ITEM_FILE = Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "ItemDerivedValues.xml";
+            this.ITEM_FILE = Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "ItemDerivedValues.json";
 
             this.DerivedValueOutlineColours = new Dictionary<string, Color>();
             this.DerivedValueBackgroundColours = new Dictionary<string, Color>();
             this.DerivedValueTextColours = new Dictionary<string, Color>();
-            this.EntityStandardFormulas = this.LoadFormulasFromFile(this.ENTITY_FILE);
-            this.ItemStandardFormulas = this.LoadFormulasFromFile(this.ITEM_FILE);
+            this.Load();
             this.Formulas = new Dictionary<string, string>(this.EntityStandardFormulas);
             foreach (KeyValuePair<string, string> pair in this.ItemStandardFormulas)
             {
                 this.Formulas.Add(pair.Key, pair.Value);
             }
         }
+        
+        public IDerivedValue Get(string name)
+        {
+            return this.DerivedValues.TryGetValue(name, out IDerivedValue value) ? value.Copy() : null;
+        }
+
+        public IEnumerable<IDerivedValue> Load()
+        {
+            this.EntityStandardFormulas = this.LoadFormulasFromFile(this.ENTITY_FILE);
+            this.ItemStandardFormulas = this.LoadFormulasFromFile(this.ITEM_FILE);
+
+            this.DerivedValues = new Dictionary<string, IDerivedValue>();
+            foreach (var pair in this.EntityStandardFormulas)
+            {
+                this.DerivedValues.Add(
+                    pair.Key,
+                    new ConcreteDerivedIntValue());
+            }
+
+            foreach (var pair in this.ItemStandardFormulas)
+            {
+                this.DerivedValues.Add(
+                    pair.Key,
+                    new ConcreteDerivedIntValue());
+            }
+
+            return this.DerivedValues.Values;
+        }
 
         public Dictionary<string, string> LoadFormulasFromFile(string file)
         {
             Dictionary<string, string> formulas = new Dictionary<string, string>();
             
-            XElement doc = XElement.Load(file);
-            foreach (XElement dv in doc.Elements("DerivedValue"))
+            using (StreamReader reader = new StreamReader(file))
             {
-                try
+                using (JsonTextReader jsonReader = new JsonTextReader(reader))
                 {
-                    string name = dv.Element("Name").GetAs<string>().ToLower();
-                    string colourCode = dv.Element("BackgroundColour").DefaultIfEmpty("#888888FF");
-                    Color colour = new Color();
-                    ColorUtility.TryParseHtmlString(colourCode, out colour);
-                    formulas.Add(
-                        name,
-                        dv.Element("Formula").GetAs<string>().ToLower()); 
-                    this.DerivedValueBackgroundColours.Add(name, colour);
+                    try
+                    {
+                        JObject jToken = JObject.Load(jsonReader);
 
-                    colourCode = dv.Element("TextColour").DefaultIfEmpty("#FFFFFFFF");
-                    ColorUtility.TryParseHtmlString(colourCode, out colour);
-                    this.DerivedValueTextColours.Add(name, colour);
+                        if (jToken["DerivedValues"].IsNullOrEmpty() == false)
+                        {
+                            foreach (JToken value in jToken["DerivedValues"])
+                            {
+                                string name = (string) value["Name"];
 
-                    colourCode = dv.Element("OutlineColour").DefaultIfEmpty("#000000FF");
-                    ColorUtility.TryParseHtmlString(colourCode, out colour);
-                    this.DerivedValueOutlineColours.Add(name, colour);
-                }
-                catch (Exception e)
-                {
-                    GlobalConstants.ActionLog.StackTrace(e);
-                    throw;
+                                if (name.IsNullOrEmpty())
+                                {
+                                    continue;
+                                }
+                                
+                                formulas.Add(
+                                    name,
+                                    (string) value["Formula"]);
+
+                                string colourCode = (string) (value["BackgroundColour"] ?? "#888888ff");
+                                this.DerivedValueBackgroundColours.Add(name, GraphicsHelper.ParseHTMLString(colourCode));
+
+                                colourCode = (string) value["TextColour"] ?? "#ffffffff";
+                                this.DerivedValueTextColours.Add(name, GraphicsHelper.ParseHTMLString(colourCode));
+
+                                colourCode = (string) value["OutlineColour"] ?? "#000000FF";
+                                this.DerivedValueOutlineColours.Add(name, GraphicsHelper.ParseHTMLString(colourCode));
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        GlobalConstants.ActionLog.AddText("Could not load derived values from " + file);
+                        GlobalConstants.ActionLog.StackTrace(e);
+                    }
                 }
             }
 
@@ -180,6 +227,21 @@ namespace JoyLib.Code.Entities.Statistics
             }
 
             return ScriptingEngine.Instance.Evaluate<int>(eval);
+        }
+
+        public void Dispose()
+        {
+            this.DerivedValues = null;
+            this.DerivedValueBackgroundColours = null;
+            this.DerivedValueOutlineColours = null;
+            this.DerivedValueTextColours = null;
+            this.EntityStandardFormulas = null;
+            this.ItemStandardFormulas = null;
+        }
+
+        ~DerivedValueHandler()
+        {
+            this.Dispose();
         }
     }
 }
