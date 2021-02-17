@@ -97,14 +97,17 @@ namespace JoyLib.Code.World
         /// <param name="tiles"></param>
         /// <param name="tags"></param>
         /// <param name="name"></param>
-        public WorldInstance(WorldTile[,] tiles, 
-            string[] tags, 
+        /// <param name="entityHandler"></param>
+        /// <param name="roller"></param>
+        public WorldInstance(
+            WorldTile[,] tiles, 
+            IEnumerable<string> tags, 
             string name, 
             ILiveEntityHandler entityHandler,
-            RNG roller)
+            RNG roller = null)
         {
             this.EntityHandler = entityHandler;
-            this.Roller = roller;
+            this.Roller = roller ?? new RNG();
 
             this.m_Dimensions = new Vector2Int(tiles.GetLength(0), tiles.GetLength(1));
 

@@ -50,7 +50,7 @@ namespace JoyLib.Code.States
 
             //Generate the basic overworld
             this.m_World = new WorldInstance(
-                overworldGen.GenerateWorldSpace(WORLD_SIZE, "plains"),
+                overworldGen.GenerateWorldSpace(WORLD_SIZE, "overworld"),
                 new string[] {"overworld", "exterior"},
                 "Everse",
                 GlobalConstants.GameManager.EntityHandler,
@@ -74,7 +74,7 @@ namespace JoyLib.Code.States
             //m_World.AddEntity(m_Player);
 
             //Begin the first floor of the Naga Pits
-            WorldInfo worldInfo = this.m_WorldInfoHandler.GetWorldInfo("naga pits")[0];
+            WorldInfo worldInfo = this.m_WorldInfoHandler.GetRandom("interior");
 
             DungeonGenerator dungeonGenerator = new DungeonGenerator();
             WorldInstance dungeon = dungeonGenerator.GenerateDungeon(

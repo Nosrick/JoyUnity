@@ -54,7 +54,7 @@ namespace JoyLib.Code.World.Generators.Interiors
 
                 List<IItemInstance> items = itemPlacer.PlaceItems(worldInstance);
 
-                List<IEntity> entities = entityPlacer.PlaceEntities(worldInstance, entitiesToPlace, roller);
+                IEnumerable<IEntity> entities = entityPlacer.PlaceEntities(worldInstance, entitiesToPlace, roller);
                 foreach(IEntity entity in entities)
                 {
                     worldInstance.AddEntity(entity);

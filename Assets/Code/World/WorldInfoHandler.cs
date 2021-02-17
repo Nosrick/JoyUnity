@@ -2,94 +2,133 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Xml.Linq;
+using Castle.Core.Internal;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace JoyLib.Code.World
 {
-    public interface IWorldInfoHandler
+    public interface IWorldInfoHandler : IHandler<WorldInfo, string>
     {
-        WorldInfo[] GetWorldInfo(string name);
+        WorldInfo GetRandom(params string[] tags);
     }
 
     public class WorldInfoHandler : IWorldInfoHandler
     {
         protected IObjectIconHandler ObjectIcons { get; set; }
 
-        protected List<WorldInfo> WorldInfo { get; set; }
+        protected IDictionary<string, WorldInfo> WorldInfoDict { get; set; }
+
+        public IEnumerable<WorldInfo> Values => this.WorldInfoDict.Values;
 
         public WorldInfoHandler(IObjectIconHandler objectIconHandler)
         {
             this.ObjectIcons = objectIconHandler;
 
-            this.Load();
+            this.WorldInfoDict = this.Load().ToDictionary(info => info.name, info => info);
         }
 
-        protected bool Load()
+        public WorldInfo Get(string name)
         {
-            if (this.WorldInfo is null == false)
-            {
-                return true;
-            }
+            return this.WorldInfoDict.TryGetValue(name, out WorldInfo worldInfo)
+                ? worldInfo
+                : new WorldInfo
+                {
+                    name = "SOMETHING HAS GONE TERRIBLY WRONG"
+                };
+        }
 
-            string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "World Spaces", "*.xml", SearchOption.AllDirectories);
-            this.WorldInfo = new List<WorldInfo>();
+        public IEnumerable<WorldInfo> Load()
+        {
+            string[] files =
+                Directory.GetFiles(Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "World Spaces",
+                    "*.json", SearchOption.AllDirectories);
+            List<WorldInfo> worldInfos = new List<WorldInfo>();
 
             foreach (string file in files)
             {
-                XElement doc = XElement.Load(file);
-
-                foreach (XElement worldInfo in doc.Elements("WorldInfo"))
+                using (StreamReader reader = new StreamReader(file))
                 {
-                    WorldInfo info = new WorldInfo()
+                    using (JsonTextReader jsonReader = new JsonTextReader(reader))
                     {
-                        name = worldInfo.Element("Name").GetAs<string>(),
-                        inhabitants = worldInfo.Elements("Inhabitant")
-                            .Select(x => x.GetAs<string>())
-                            .ToArray(),
-                        tags = worldInfo.Elements("Tag")
-                            .Select(x => x.GetAs<string>())
-                            .ToArray()
-                    };
+                        try
+                        {
+                            JObject jToken = JObject.Load(jsonReader);
 
-                    foreach (XElement tileset in worldInfo.Elements("TileSet"))
-                    {
-                        this.ObjectIcons.AddSpriteDataFromXML(info.name, tileset);
+                            if (jToken.IsNullOrEmpty())
+                            {
+                                continue;
+                            }
+
+                            foreach (JToken child in jToken["WorldInfo"])
+                            {
+                                string name = (string) child["Name"];
+                                if (name.IsNullOrEmpty())
+                                {
+                                    continue;
+                                }
+
+                                IEnumerable<string> inhabitants = child["Inhabitants"] is null
+                                    ? new string[0]
+                                    : child["Inhabitants"].Select(token => (string) token);
+
+                                string[] tags = child["Tags"] is null
+                                    ? new string[0]
+                                    : child["Tags"].Select(token => (string) token).ToArray();
+
+                                if (child["TileSet"].IsNullOrEmpty())
+                                {
+                                    continue;
+                                }
+
+                                JToken tileSet = child["TileSet"];
+                                string tileSetName = (string) tileSet["Name"];
+                                this.ObjectIcons.AddSpriteDataFromJson(tileSetName, tileSet["SpriteData"]);
+
+                                worldInfos.Add(new WorldInfo
+                                {
+                                    inhabitants = inhabitants,
+                                    name = name,
+                                    tags = tags
+                                });
+
+                                StandardWorldTiles.instance.AddType(
+                                    new WorldTile(
+                                        name,
+                                        tileSetName,
+                                        tags));
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            GlobalConstants.ActionLog.AddText("Error loading world space definition from " + file, LogLevel.Error);
+                            GlobalConstants.ActionLog.StackTrace(e);
+                        }
                     }
-
-                    this.WorldInfo.Add(info);
-
-                    StandardWorldTiles.instance.AddType(
-                        new WorldTile(
-                            info.name,
-                            info.name,
-                            info.tags));
                 }
             }
-
-            return true;
+            return worldInfos;
         }
 
-        public WorldInfo[] GetWorldInfo(string name)
+        public WorldInfo GetRandom(params string[] tags)
         {
-            try
-            {
-                return this.WorldInfo.Where(info => info.name.StartsWith(name, StringComparison.OrdinalIgnoreCase)).ToArray();
-            }
-            catch (Exception e)
-            {
-                GlobalConstants.ActionLog.AddText("ERROR GETTING WORLD INFO", LogLevel.Error);
-                GlobalConstants.ActionLog.StackTrace(e);
-                throw new InvalidOperationException("Error getting world info for " + name);
-            }
+            IEnumerable<WorldInfo> matching = this.WorldInfoDict.Values.Where(info =>
+                info.tags.Intersect(tags, StringComparer.OrdinalIgnoreCase).Any());
+            return GlobalConstants.GameManager.Roller.SelectFromCollection(matching);
+        }
+
+        public void Dispose()
+        {
+            this.WorldInfoDict = null;
         }
     }
 
     public struct WorldInfo
     {
         public string name;
-        public string[] inhabitants;
-        public string[] tags;
+        public IEnumerable<string> inhabitants;
+        public IEnumerable<string> tags;
     }
 }
