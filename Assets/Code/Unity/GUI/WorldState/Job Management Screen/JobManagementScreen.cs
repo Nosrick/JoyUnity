@@ -42,6 +42,7 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
 
         public override void OnEnable()
         {
+            base.OnEnable();
             if (GlobalConstants.GameManager.Player is null)
             {
                 return;
@@ -95,12 +96,12 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
 
             this.SetUp();
             
-            GUIManager.SetupManagedComponents(this.GetComponent<GUIData>());
+            this.GUIManager.SetupManagedComponents(this.GetComponent<GUIData>());
         }
 
         public void OnDisable()
         {
-            GUIManager?.CloseGUI(GUINames.TOOLTIP);
+            this.GUIManager?.CloseGUI(GUINames.TOOLTIP);
         }
 
         protected void OnAbilityChange(object sender, ValueChangedEventArgs args)
