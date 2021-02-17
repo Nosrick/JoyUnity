@@ -25,7 +25,7 @@ namespace Tests
             GlobalConstants.ActionLog = actionLog;
             IEntitySkillHandler skillHandler = Mock.Of<IEntitySkillHandler>();
             IVisionProviderHandler visionProviderHandler = Mock.Of<IVisionProviderHandler>(
-                handler => handler.GetVision(It.IsAny<string>()) == Mock.Of<IVision>());
+                handler => handler.Get(It.IsAny<string>()) == Mock.Of<IVision>());
             IAbilityHandler abilityHandler = Mock.Of<IAbilityHandler>();
             
             this.target = new EntityTemplateHandler(

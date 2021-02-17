@@ -79,7 +79,7 @@ namespace JoyLib.Code.Entities
                                 string creatureType = (string) child["CreatureType"];
                                 string type = (string) child["Type"];
                                 string visionType = (string) child["VisionType"];
-                                IVision vision = this.VisionProviderHandler.GetVision(visionType);
+                                IVision vision = this.VisionProviderHandler.Get(visionType);
                                 int size = (int) (child["Size"] ?? 0);
 
                                 IDictionary<string, IEntityStatistic> statistics = child["Statistics"] is null

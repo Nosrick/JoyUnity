@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml.Linq;
 using Castle.Core.Internal;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Scripting;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities.AI.LOS.Providers
@@ -13,75 +16,81 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
     {
         protected Dictionary<string, IVision> VisionTypes { get; set; }
 
+        public IEnumerable<IVision> Values => this.VisionTypes.Values;
+
         public VisionProviderHandler()
         {
-            this.LoadVisionTypes();
+            this.VisionTypes = this.Load().ToDictionary(vision => vision.Name, vision => vision);
         }
 
-        protected void LoadVisionTypes()
+        public IEnumerable<IVision> Load()
         {
-            if (this.VisionTypes.IsNullOrEmpty() == false)
-            {
-                return;
-            }
-            this.VisionTypes = new Dictionary<string, IVision>();
+            List<IVision> visionTypes = new List<IVision>();
 
             string[] files = Directory.GetFiles(
                 Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Vision Types",
-                "*.xml",
+                "*.json",
                 SearchOption.AllDirectories);
 
             foreach (string file in files)
             {
-                try
+                using (StreamReader reader = new StreamReader(file))
                 {
-                    XElement doc = XElement.Load(file);
-                    foreach (XElement visionType in doc.Elements("VisionType"))
+                    using (JsonTextReader jsonReader = new JsonTextReader(reader))
                     {
                         try
                         {
-                            string name = visionType.Element("Name").GetAs<string>();
-                            if (this.HasVision(name))
+                            JObject jToken = JObject.Load(jsonReader);
+
+                            if (jToken.IsNullOrEmpty())
                             {
                                 continue;
                             }
 
-                            ColorUtility.TryParseHtmlString(
-                                visionType.Element("DarkColour").DefaultIfEmpty("#000000FF"), out Color darkColour);
-                            ColorUtility.TryParseHtmlString(
-                                visionType.Element("LightColour").DefaultIfEmpty("#FFFFFFFF"), out Color lightColour);
-                            string fovHandler = visionType.Element("Handler").DefaultIfEmpty("FOVShadowCasting");
-                            IFOVHandler handler = (IFOVHandler) ScriptingEngine.Instance.FetchAndInitialise(fovHandler);
-                            int minimumLightLevel = visionType.Element("MinimumLight").DefaultIfEmpty(0);
-                            int maximumLightLevel = visionType.Element("MaximumLight")
-                                .DefaultIfEmpty(GlobalConstants.MAX_LIGHT);
-                            int minimumComfortLevel =
-                                visionType.Element("MinimumComfort").DefaultIfEmpty(minimumLightLevel);
-                            int maximumComfortLevel =
-                                visionType.Element("MaximumComfort").DefaultIfEmpty(maximumLightLevel);
-                            this.AddVision(new BaseVisionProvider(
-                                darkColour,
-                                lightColour,
-                                handler,
-                                minimumLightLevel,
-                                minimumComfortLevel,
-                                maximumLightLevel,
-                                maximumComfortLevel,
-                                name));
+                            foreach (JToken child in jToken["VisionTypes"])
+                            {
+                                string name = (string) child["Name"];
+                                Color lightColour = child["LightColour"] is null
+                                    ? Color.white
+                                    : GraphicsHelper.ParseHTMLString((string) child["LightColour"]);
+
+                                Color darkColour = child["DarkColour"] is null
+                                    ? Color.black
+                                    : GraphicsHelper.ParseHTMLString((string) child["DarkColour"]);
+
+                                string fovHandler = (string) child["Handler"] ?? "FOVShadowCasting";
+                                IFOVHandler handler =
+                                    (IFOVHandler) ScriptingEngine.Instance.FetchAndInitialise(fovHandler);
+
+                                int minimumLight = (int) (child["MinimumLight"] ?? 0);
+                                int maximumLight = (int) (child["MaximumLight"] ?? GlobalConstants.MAX_LIGHT);
+
+                                int minimumComfort = (int) (child["MinimumComfort"] ?? minimumLight);
+                                int maximumComfort = (int) (child["MaximumComfort"] ?? maximumLight);
+
+                                visionTypes.Add(
+                                    new BaseVisionProvider(
+                                        darkColour,
+                                        lightColour,
+                                        handler,
+                                        minimumLight,
+                                        minimumComfort,
+                                        maximumLight,
+                                        maximumComfort,
+                                        name));
+                            }
                         }
                         catch (Exception e)
                         {
-                            GlobalConstants.ActionLog.AddText("Could not parse vision type in file " + file);
+                            GlobalConstants.ActionLog.AddText("Could not parse vision type in file ", LogLevel.Error);
                             GlobalConstants.ActionLog.StackTrace(e);
                         }
                     }
                 }
-                catch (Exception e)
-                {
-                    GlobalConstants.ActionLog.AddText("Could not load vision types from file " + file);
-                    GlobalConstants.ActionLog.StackTrace(e);
-                }
+
             }
+
+            return visionTypes;
         }
 
         public bool AddVision(
@@ -130,7 +139,7 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
             return this.VisionTypes.ContainsKey(name);
         }
 
-        public IVision GetVision(string name)
+        public IVision Get(string name)
         {
             if (this.VisionTypes.ContainsKey(name))
             {
@@ -138,6 +147,11 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
             }
 
             throw new InvalidOperationException("Could not find vision type with name " + name);
+        }
+
+        public void Dispose()
+        {
+            this.VisionTypes = null;
         }
     }
 }
