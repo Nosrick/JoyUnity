@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using Castle.Core.Internal;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Rollers;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace JoyLib.Code.Entities.Jobs
 {
@@ -49,59 +52,80 @@ namespace JoyLib.Code.Entities.Jobs
 
             string[] files = Directory.GetFiles(
                 Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Jobs", 
-                "*.xml", 
+                "*.json", 
                 SearchOption.AllDirectories);
 
-            foreach(string file in files)
+            foreach (string file in files)
             {
-                try
+                using (StreamReader reader = new StreamReader(file))
                 {
-                    XElement doc = XElement.Load(file);
-
-                    foreach(XElement jobElement in doc.Elements("Job"))
+                    using (JsonTextReader jsonReader = new JsonTextReader(reader))
                     {
-                        Dictionary<string, int> statDiscounts = (from discount in jobElement.Elements("Statistic")
-                                                                 select new KeyValuePair<string, int>(
-                                                                     discount.Element("Name").GetAs<string>(),
-                                                                     discount.Element("Discount").GetAs<int>()))
-                                                                     .ToDictionary(x => x.Key, x => x.Value);
-
-                        Dictionary<string, int> skillDiscounts = (from discount in jobElement.Elements("Skill")
-                                                                select new KeyValuePair<string, int>(
-                                                                    discount.Element("Name").GetAs<string>(),
-                                                                    discount.Element("Discount").GetAs<int>()))
-                                                                    .ToDictionary(x => x.Key, x => x.Value);
-
-                        Dictionary<IAbility, int> abilities = new Dictionary<IAbility, int>();
-                        //TODO: Remove this nastiness
                         try
                         {
-                            abilities = (from ability in jobElement.Elements("Ability")
-                                select new KeyValuePair<IAbility, int>(
-                                    this.AbilityHandler.GetAbility(ability.Element("Name").GetAs<string>()),
-                                    ability.Element("Cost").GetAs<int>()))
-                                .ToDictionary(x => x.Key, x => x.Value);
+                            JObject jToken = JObject.Load(jsonReader);
+
+                            if (jToken.IsNullOrEmpty())
+                            {
+                                continue;
+                            }
+
+                            foreach (JToken child in jToken["Jobs"])
+                            {
+                                string name = (string) child["Name"];
+                                string description = (string) child["Description"] ?? "NO DESCRIPTION PROVIDED.";
+
+                                IDictionary<string, int> statisticDiscounts = new Dictionary<string, int>();
+                                if (child["Statistics"].IsNullOrEmpty() == false)
+                                {
+                                    foreach (JToken statistic in child["Statistics"])
+                                    {
+                                        statisticDiscounts.Add(
+                                            (string) statistic["Name"],
+                                            (int) statistic["Discount"]);
+                                    }
+                                }
+
+                                IDictionary<string, int> skillDiscounts = new Dictionary<string, int>();
+                                if (child["Skills"].IsNullOrEmpty() == false)
+                                {
+                                    foreach (JToken skill in child["Skills"])
+                                    {
+                                        skillDiscounts.Add(
+                                            (string) skill["Name"],
+                                            (int) skill["Discount"]);
+                                    }
+                                }
+
+                                IDictionary<IAbility, int> abilityCosts = new Dictionary<IAbility, int>();
+                                if (child["Abilities"].IsNullOrEmpty() == false)
+                                {
+                                    foreach (JToken ability in child["Abilities"])
+                                    {
+                                        abilityCosts.Add(
+                                            this.AbilityHandler.GetAbility((string) ability["Name"]),
+                                            (int) ability["Cost"]);
+                                    }
+                                }
+                                
+                                jobTypes.Add(
+                                    new JobType(
+                                        name,
+                                        description,
+                                        statisticDiscounts,
+                                        skillDiscounts,
+                                        abilityCosts));
+                            }
                         }
-                        catch(Exception e)
+                        catch (Exception e)
                         {
-                            GlobalConstants.ActionLog.AddText("ERROR LOADING ABILITIES FOR JOB, FILE " + file);
+                            GlobalConstants.ActionLog.AddText("ERROR LOADING JOB, FILE " + file, LogLevel.Error);
                             GlobalConstants.ActionLog.StackTrace(e);
                         }
-                                                                        
-
-                        string name = jobElement.Element("Name").GetAs<string>();
-                        string description = jobElement.Element("Description").DefaultIfEmpty("NO DESCRIPTION PROVIDED.");
-
-                        jobTypes.Add(new JobType(name, description, statDiscounts, skillDiscounts, abilities));
                     }
                 }
-                catch(Exception e)
-                {
-                    GlobalConstants.ActionLog.AddText("ERROR LOADING JOBS, FILE " + file);
-                    GlobalConstants.ActionLog.StackTrace(e);
-                }
             }
-
+            
             return jobTypes;
         }
 

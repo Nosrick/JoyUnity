@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code.Entities.Abilities;
+using JoyLib.Code.Helpers;
 using Sirenix.OdinSerializer;
 
 namespace JoyLib.Code.Entities.Jobs
@@ -10,11 +11,11 @@ namespace JoyLib.Code.Entities.Jobs
     public class JobType : IJob
     {
         [OdinSerialize]
-        protected Dictionary<IAbility, int> m_Abilities;
+        protected IDictionary<IAbility, int> m_Abilities;
         [OdinSerialize]
-        protected Dictionary<string, int> m_StatisticDiscounts;
+        protected IDictionary<string, int> m_StatisticDiscounts;
         [OdinSerialize]
-        protected Dictionary<string, int> m_SkillDiscounts;
+        protected IDictionary<string, int> m_SkillDiscounts;
 
         public JobType()
         {
@@ -23,9 +24,9 @@ namespace JoyLib.Code.Entities.Jobs
         public JobType(
             string name, 
             string description, 
-            Dictionary<string, int> statDiscounts, 
-            Dictionary<string, int> skillDiscounts,
-            Dictionary<IAbility, int> abilities)
+            IDictionary<string, int> statDiscounts, 
+            IDictionary<string, int> skillDiscounts,
+            IDictionary<IAbility, int> abilities)
         {
             this.Name = name;
             this.Description = description;
@@ -98,7 +99,7 @@ namespace JoyLib.Code.Entities.Jobs
         [OdinSerialize]
         public int Experience { get; protected set; }
 
-        public Dictionary<string, int> StatisticDiscounts
+        public IDictionary<string, int> StatisticDiscounts
         {
             get
             {
@@ -106,15 +107,15 @@ namespace JoyLib.Code.Entities.Jobs
             }
         }
 
-        public Dictionary<string, int> SkillDiscounts
+        public IDictionary<string, int> SkillDiscounts
         {
             get
             {
-                return this.m_SkillDiscounts.ToDictionary(k => k.Key, v => v.Value);
+                return this.m_SkillDiscounts.Copy();
             }
         }
 
-        public Dictionary<IAbility, int> Abilities
+        public IDictionary<IAbility, int> Abilities
         {
             get => this.m_Abilities;
             protected set => this.m_Abilities = value;
