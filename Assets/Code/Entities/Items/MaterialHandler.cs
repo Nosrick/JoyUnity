@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Xml.Linq;
-using JoyLib.Code.Helpers;
+using Castle.Core.Internal;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace JoyLib.Code.Entities.Items
 {
@@ -44,20 +45,47 @@ namespace JoyLib.Code.Entities.Items
         {
             List<IItemMaterial> materials = new List<IItemMaterial>();
             
-            string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Materials", "*.xml", SearchOption.AllDirectories);
+            string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Materials", "*.json", SearchOption.AllDirectories);
 
-            for (int i = 0; i < files.Length; i++)
+            foreach (string file in files)
             {
-                XElement reader = XElement.Load(files[i]);
-                
-                materials.AddRange(
-                    (from material in reader.Elements("Material")
-                        select new ItemMaterial(
-                            material.Element("Name").GetAs<string>(),
-                            material.Element("Hardness").DefaultIfEmpty(1.0f),
-                            material.Element("Bonus").DefaultIfEmpty(0),
-                            material.Element("Weight").GetAs<float>(),
-                            material.Element("Value").DefaultIfEmpty(1.0f))));
+                using (StreamReader reader = new StreamReader(file))
+                {
+                    using (JsonTextReader jsonReader = new JsonTextReader(reader))
+                    {
+                        try
+                        {
+                            JObject jToken = JObject.Load(jsonReader);
+
+                            if (jToken.IsNullOrEmpty())
+                            {
+                                continue;
+                            }
+
+                            foreach (JToken child in jToken["Materials"])
+                            {
+                                string name = (string) child["Name"];
+                                float hardness = (float) (child["Hardness"] ?? 1.0f);
+                                int bonus = (int) (child["Bonus"] ?? 1);
+                                float weight = (float) (child["Weight"] ?? 1.0f);
+                                float value = (float) (child["Value"] ?? 1.0f);
+                                
+                                materials.Add(
+                                    new ItemMaterial(
+                                        name,
+                                        hardness,
+                                        bonus,
+                                        weight,
+                                        value));
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            GlobalConstants.ActionLog.AddText("Error loading materials from " + file);
+                            GlobalConstants.ActionLog.StackTrace(e);
+                        }
+                    }
+                }
             }
 
             return materials;
