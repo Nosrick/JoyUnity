@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using Castle.Core.Internal;
 using Code.Unity.GUI.Managed_Assets;
 using JoyLib.Code.Events;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Settings;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -107,53 +110,78 @@ namespace JoyLib.Code.Unity.GUI
 
         protected void LoadDefaults()
         {
-            string file = Directory.GetCurrentDirectory() + GlobalConstants.SETTINGS_FOLDER + "/GUIDefaults.xml";
+            string file = Directory.GetCurrentDirectory() + GlobalConstants.SETTINGS_FOLDER + "/GUIDefaults.json";
 
             if (File.Exists(file))
             {
-                XElement doc = XElement.Load(file);
-                foreach (XElement data in doc.Elements("Data"))
-                {
-                    string name = data.Element("Name").GetAs<string>();
-                    this.LoadedFonts.Add(
-                        name,
-                        Resources.Load<TMP_FontAsset>("Fonts/" + data.Element("Value").GetAs<string>()));
-                    this.StandardFontSizes.Add(
-                        name,
-                        new Tuple<float, float>(
-                            data.Element("MinFontSize").DefaultIfEmpty(8f),
-                            data.Element("MaxFontSize").DefaultIfEmpty(36f)));
-                    this.FontColours.Add(
-                        name,
-                        GraphicsHelper.ParseHTMLString(data.Element("FontColour").DefaultIfEmpty("#000000ff")));
-                }
+                this.LoadFontSettings(
+                    file,
+                    this.StandardFontSizes,
+                    this.LoadedFonts);
             }
             else
             {
                 GlobalConstants.ActionLog.AddText("COULD NOT FIND GUI DEFAULTS.", LogLevel.Error);
             }
 
-            file = Directory.GetCurrentDirectory() + GlobalConstants.SETTINGS_FOLDER + "/DyslexicMode.xml";
+            file = Directory.GetCurrentDirectory() + GlobalConstants.SETTINGS_FOLDER + "/DyslexicMode.json";
 
             if (File.Exists(file))
             {
-                XElement doc = XElement.Load(file);
-                foreach (XElement data in doc.Elements("Data"))
-                {
-                    string name = data.Element("Name").GetAs<string>();
-                    this.DyslexicModeFonts.Add(
-                        name,
-                        Resources.Load<TMP_FontAsset>("Fonts/" + data.Element("Value")));
-                    this.DyslexicModeFontSizes.Add(
-                        name,
-                        new Tuple<float, float>(
-                            data.Element("MinFontSize").DefaultIfEmpty(8f),
-                            data.Element("MaxFontSize").DefaultIfEmpty(24f)));
-                }
+                this.LoadFontSettings(
+                    file,
+                    this.DyslexicModeFontSizes,
+                    this.DyslexicModeFonts);
             }
 
             this.DyslexicMode = (bool) GlobalConstants.GameManager.SettingsManager
                 .GetSetting(SettingNames.DYSLEXIC_MODE).objectValue;
+        }
+
+        protected void LoadFontSettings(
+            string file, 
+            IDictionary<string, Tuple<float, float>> sizes, 
+            IDictionary<string, TMP_FontAsset> fonts)
+        {
+            using (StreamReader reader = new StreamReader(file))
+            {
+                using (JsonTextReader jsonReader = new JsonTextReader(reader))
+                {
+                    try
+                    {
+                        JObject jToken = JObject.Load(jsonReader);
+
+                        if (jToken.IsNullOrEmpty())
+                        {
+                            return;
+                        }
+
+                        foreach (JToken child in jToken["GUIData"])
+                        {
+                            string name = (string) child["Name"] ?? "default";
+                            TMP_FontAsset font = child["Value"] is null
+                                ? this.LoadedFonts["default"]
+                                : Resources.Load<TMP_FontAsset>("Fonts/" + child["Value"]);
+
+                            float minSize = (float) (child["MinFontSize"] ?? 8);
+                            float maxSize = (float) (child["MaxFontSize"] ?? 24);
+
+                            sizes.Add(
+                                name,
+                                new Tuple<float, float>(
+                                    minSize,
+                                    maxSize));
+
+                            fonts.Add(name, font);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        GlobalConstants.ActionLog.AddText("Failed loading default GUI settings in " + file);
+                        GlobalConstants.ActionLog.StackTrace(e);
+                    }
+                }
+            }
         }
 
         protected void LoadDefinitions()
