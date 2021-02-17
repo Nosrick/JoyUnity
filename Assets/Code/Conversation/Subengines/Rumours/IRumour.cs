@@ -64,13 +64,13 @@ namespace JoyLib.Code.Conversation.Subengines.Rumours
         string ConstructString();
 
         IRumour Create(
-            IJoyObject[] participants,
-            string[] tags,
+            IEnumerable<IJoyObject> participants,
+            IEnumerable<string> tags,
             float viralPotential,
-            ITopicCondition[] conditions,
-            string[] parameters,
+            IEnumerable<ITopicCondition> conditions,
+            IEnumerable<string> parameters,
             string words,
-            float lifetimeMultiplier = 1f,
+            float lifetimeMultiplier = 1F,
             int lifetime = 5000,
             bool baseless = false);
     }
