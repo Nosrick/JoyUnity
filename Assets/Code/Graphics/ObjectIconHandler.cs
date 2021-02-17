@@ -210,8 +210,8 @@ namespace JoyLib.Code.Graphics
                             .Where((sprite, i) =>
                                 i >= position && i < position + frames)
                             .ToList();
-                        List<Color> possibleColours = part["Colour"]?.Values<string>()
-                            .Select(colour => GraphicsHelper.ParseHTMLString(colour))
+                        List<Color> possibleColours = part["Colour"]?
+                            .Select(colour => GraphicsHelper.ParseHTMLString((string) colour))
                             .ToList();
                         if (possibleColours.IsNullOrEmpty())
                         {

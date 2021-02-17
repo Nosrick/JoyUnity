@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Physics;
@@ -27,13 +28,13 @@ namespace JoyLib.Code.World.Generators.Interiors
             this.EntityHandler = entityHandler;
         }
 
-        public List<IEntity> PlaceEntities(IWorldInstance worldRef, List<string> entityTypes, RNG roller, bool makeNewRollers = true)
+        public IEnumerable<IEntity> PlaceEntities(IWorldInstance worldRef, IEnumerable<string> entityTypes, RNG roller)
         {
             this.Roller = roller;
             List<IEntity> entities = new List<IEntity>();
 
-            List<IEntityTemplate> templates = this.EntityTemplateHandler.Values.ToList();
-            templates = templates.Where(x => entityTypes.Contains(x.CreatureType)).ToList();
+            List<IEntityTemplate> templates = this.EntityTemplateHandler.Values
+                .Where(x => entityTypes.Contains(x.CreatureType, StringComparer.OrdinalIgnoreCase)).ToList();
 
             int numberToPlace = (worldRef.Tiles.GetLength(0) * worldRef.Tiles.GetLength(1)) / 50;
             //int numberToPlace = 1;
@@ -59,8 +60,6 @@ namespace JoyLib.Code.World.Generators.Interiors
                 int pointIndex = this.Roller.Roll(0, availablePoints.Count);
 
                 int entityIndex = this.Roller.Roll(0, templates.Count);
-
-                RNG newRoller = makeNewRollers ? new RNG() : roller; 
 
                 IEntity newEntity = this.EntityFactory.CreateFromTemplate(
                     templates[entityIndex], 
