@@ -75,10 +75,10 @@ namespace Tests
             IDictionary<string, INeed> needs = new Dictionary<string, INeed>();
             needs.Add("friendship", friendshipMock);
             
-            IRollableValue<int> mockPersonality = Mock.Of<IRollableValue<int>>(
+            IRollableValue<int> mockPersonality = Mock.Of<IEntityStatistic>(
                 value => value.Value == 4
                          && value.Name == "personality");
-            IDictionary<string, IRollableValue<int>> stats = new Dictionary<string, IRollableValue<int>>();
+            IDictionary<string, IEntityStatistic> stats = new Dictionary<string, IEntityStatistic>();
             stats.Add(
                 "personality", 
                 new EntityStatistic(

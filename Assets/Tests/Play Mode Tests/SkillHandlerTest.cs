@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using JoyLib.Code;
 using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Scripting;
@@ -16,7 +15,6 @@ namespace Tests
         private ScriptingEngine ScriptingEngine;
         
         private IEntitySkillHandler target;
-        private INeedHandler NeedHandler;
     
         [SetUp]
         public void Initialise()
@@ -25,25 +23,19 @@ namespace Tests
             GlobalConstants.ActionLog = actionLog;
             ScriptingEngine = new ScriptingEngine();
             
-            NeedHandler = new NeedHandler();
-            target = new EntitySkillHandler(NeedHandler);
+            target = new EntitySkillHandler();
         }
     
         [UnityTest]
         public IEnumerator GetDefaultSkillBlock_ShouldHave_ValidData()
         {
-            IDictionary<string, INeed> needs = new Dictionary<string, INeed>();
-            ICollection<INeed> collection = NeedHandler.GetManyRandomised(NeedHandler.NeedNames);
-            foreach (INeed need in collection)
-            {
-                needs.Add(need.Name, need);
-            }
+            IDictionary<string, IEntitySkill> skills = this.target.GetDefaultSkillBlock();
     
-            IDictionary<string, IEntitySkill> skills = target.GetDefaultSkillBlock(needs.Values);
-    
-            foreach (EntitySkill skill in skills.Values)
+            foreach (IEntitySkill skill in skills.Values)
             {
-                Assert.That(skill.GoverningNeeds, Is.Not.Empty);
+                Assert.That(skill.Name, Is.Not.Empty);
+                Assert.That(skill.Value, Is.Zero);
+                Assert.That(skill.SuccessThreshold, Is.EqualTo(GlobalConstants.DEFAULT_SUCCESS_THRESHOLD));
             }
 
             return null;

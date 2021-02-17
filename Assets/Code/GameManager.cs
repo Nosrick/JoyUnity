@@ -115,7 +115,7 @@ namespace JoyLib.Code
             this.RomanceHandler = new EntityRomanceHandler();
             this.JobHandler = new JobHandler(this.AbilityHandler, this.Roller);
             this.GenderHandler = new GenderHandler();
-            this.SkillHandler = new EntitySkillHandler(this.NeedHandler);
+            this.SkillHandler = new EntitySkillHandler();
             this.EntityTemplateHandler = new EntityTemplateHandler(
                 this.SkillHandler,
                 this.VisionProviderHandler,

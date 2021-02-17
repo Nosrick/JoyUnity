@@ -98,8 +98,7 @@ namespace JoyLib.Code.Entities
                                             token => new EntitySkill(
                                                 (string) token["Name"],
                                                 (int) (token["Value"] ?? 0),
-                                                (int) (token["Threshold"] ?? GlobalConstants.DEFAULT_SUCCESS_THRESHOLD),
-                                                new NonUniqueDictionary<INeed, float>()))
+                                                (int) (token["Threshold"] ?? GlobalConstants.DEFAULT_SUCCESS_THRESHOLD)))
                                         .ToDictionary(skill => skill.Name, skill => (IEntitySkill) skill);
 
                                 IEnumerable<string> tags = child["Tags"] is null

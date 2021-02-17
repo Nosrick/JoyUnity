@@ -144,7 +144,7 @@ namespace JoyLib.Code.Entities
 
             if (selectedSkills is null)
             {
-                selectedSkills = this.SkillHandler.GetDefaultSkillBlock(needs.Values);
+                selectedSkills = this.SkillHandler.GetDefaultSkillBlock();
                 foreach (EntitySkill skill in template.Skills.Values)
                 {
                     selectedSkills.Add(skill.Name, skill);
@@ -158,7 +158,7 @@ namespace JoyLib.Code.Entities
 
             if(selectedJob is null)
             {
-                selectedJob = dominantCulture.ChooseJob(this.JobHandler.Jobs);
+                selectedJob = dominantCulture.ChooseJob(this.JobHandler.Values);
             }
 
             if(selectedSex is null)

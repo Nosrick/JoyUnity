@@ -23,7 +23,7 @@ namespace JoyLib.Code.Entities.Jobs
         {
             this.AbilityHandler = abilityHandler;
             this.Roller = roller;
-            this.m_Jobs = this.LoadTypes();
+            this.m_Jobs = this.Load().ToList();
         }
 
         public IJob Get(string jobName)
@@ -43,7 +43,7 @@ namespace JoyLib.Code.Entities.Jobs
             return this.m_Jobs[result].Copy(this.m_Jobs[result]);
         }
 
-        protected List<IJob> LoadTypes()
+        public IEnumerable<IJob> Load()
         {
             List<IJob> jobTypes = new List<IJob>();
 
@@ -105,17 +105,16 @@ namespace JoyLib.Code.Entities.Jobs
             return jobTypes;
         }
 
-        public IEnumerable<IJob> Jobs
-        {
-            get
-            {
-                if(this.m_Jobs is null)
-                {
-                    this.m_Jobs = this.LoadTypes();
-                }
+        public IEnumerable<IJob> Values => this.m_Jobs ?? (this.m_Jobs = this.Load().ToList());
 
-                return this.m_Jobs;
-            }
+        public void Dispose()
+        {
+            this.m_Jobs = null;
+        }
+
+        ~JobHandler()
+        {
+            this.Dispose();
         }
     }
 }

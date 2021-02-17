@@ -109,7 +109,7 @@ namespace JoyLib.Code.Unity.GUI
                         StringComparison.OrdinalIgnoreCase));
 
             this.JobContainer.Container = this.CurrentCulture.Jobs.ToList();
-            IJob job = this.CurrentCulture.ChooseJob(this.GameManager.JobHandler.Jobs);
+            IJob job = this.CurrentCulture.ChooseJob(this.GameManager.JobHandler.Values);
             this.JobContainer.Value = this.JobContainer.Container.FindIndex(s =>
                     s.Equals(job.Name,
                         StringComparison.OrdinalIgnoreCase));

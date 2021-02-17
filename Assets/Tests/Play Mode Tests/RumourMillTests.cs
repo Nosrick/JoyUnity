@@ -47,7 +47,7 @@ namespace Tests
                                handler => handler.GetManyRandomised(It.IsAny<IEnumerable<string>>())
                                == new List<INeed>())
                 && manager.SkillHandler == Mock.Of<IEntitySkillHandler>(
-                    handler => handler.GetDefaultSkillBlock(It.IsAny<IEnumerable<INeed>>())
+                    handler => handler.GetDefaultSkillBlock()
                     == new Dictionary<string, IEntitySkill>
                     {
                         {
@@ -55,8 +55,7 @@ namespace Tests
                             new EntitySkill(
                                 "light blades", 
                                 5, 
-                                7, 
-                                new NonUniqueDictionary<INeed, float>())
+                                7)
                         }
                     })
                 && manager.RelationshipHandler == Mock.Of<IEntityRelationshipHandler>()
@@ -67,8 +66,7 @@ namespace Tests
             IGender gender = Mock.Of<IGender>(
                 g => g.PersonalSubject == "her");
 
-            IDictionary<string, IEntitySkill> skills = gameManager.SkillHandler.GetDefaultSkillBlock(
-                gameManager.NeedHandler.GetManyRandomised(gameManager.NeedHandler.NeedNames));
+            IDictionary<string, IEntitySkill> skills = gameManager.SkillHandler.GetDefaultSkillBlock();
 
             left = Mock.Of<IEntity>(
                 entity => entity.PlayerControlled == true
