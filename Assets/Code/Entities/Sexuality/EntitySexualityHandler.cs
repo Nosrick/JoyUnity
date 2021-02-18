@@ -53,13 +53,14 @@ namespace JoyLib.Code.Entities.Sexuality
                                 string name = (string) child["Name"];
                                 bool decaysNeed = (bool) (child["DecaysNeed"] ?? true);
                                 int matingThreshold = (int) (child["MatingThreshold"] ?? 0);
+                                string processorString = (string) (child["Processor"] ?? "Asexual");
                                 IEnumerable<string> tags = child["Tags"] is null
                                     ? new string[0]
                                     : child["Tags"].Select(token => (string) token);
 
                                 ISexualityPreferenceProcessor processor =
                                     this.PreferenceProcessors.Values.FirstOrDefault(preferenceProcessor => 
-                                        preferenceProcessor.Name.Equals(name, StringComparison.OrdinalIgnoreCase)) ??
+                                        preferenceProcessor.Name.Equals(processorString, StringComparison.OrdinalIgnoreCase)) ??
                                     new AsexualProcessor();
                                 
                                 sexualities.Add(
