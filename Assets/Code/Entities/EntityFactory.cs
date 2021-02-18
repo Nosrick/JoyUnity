@@ -178,7 +178,7 @@ namespace JoyLib.Code.Entities
 
             if (selectedRomance is null)
             {
-                selectedRomance = dominantCulture.ChooseRomance(this.RomanceHandler.Romances);
+                selectedRomance = dominantCulture.ChooseRomance(this.RomanceHandler.Values);
             }
 
             if(selectedSexuality is null)

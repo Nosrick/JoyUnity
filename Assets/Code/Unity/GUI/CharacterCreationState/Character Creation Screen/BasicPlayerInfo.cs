@@ -114,7 +114,7 @@ namespace JoyLib.Code.Unity.GUI
                         StringComparison.OrdinalIgnoreCase));
 
             this.RomanceContainer.Container = this.CurrentCulture.RomanceTypes.ToList();
-            IRomance romance = this.CurrentCulture.ChooseRomance(this.GameManager.RomanceHandler.Romances);
+            IRomance romance = this.CurrentCulture.ChooseRomance(this.GameManager.RomanceHandler.Values);
             this.RomanceContainer.Value = this.RomanceContainer.Container.FindIndex(s => s.Equals(
                     romance.Name, StringComparison.OrdinalIgnoreCase));
 

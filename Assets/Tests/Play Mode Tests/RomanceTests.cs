@@ -61,7 +61,7 @@ namespace Tests
                                                  {
                                                      "heteroromantic",
                                                      "homoromantic",
-                                                     "biromantic",
+                                                     "panromantic",
                                                      "aromantic"
                                                  })
                 });
@@ -74,7 +74,7 @@ namespace Tests
 
             this.heteroromantic = this.target.Get("heteroromantic");
             this.homoromantic = this.target.Get("homoromantic");
-            this.biromantic = this.target.Get("biromantic");
+            this.biromantic = this.target.Get("panromantic");
             this.aromantic = this.target.Get("aromantic");
         }
 
