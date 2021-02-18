@@ -1,68 +1,113 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using Castle.Core.Internal;
 using JoyLib.Code.Scripting;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace JoyLib.Code.Entities.Sexuality
 {
     public class EntitySexualityHandler : IEntitySexualityHandler
     {
-        protected Dictionary<string, ISexuality> m_Sexualities;
+        public IEnumerable<ISexuality> Values => this.Sexualities.Values;
+        
+        protected IDictionary<string, ISexuality> Sexualities { get; set; }
+        
+        protected IDictionary<string, ISexualityPreferenceProcessor> PreferenceProcessors { get; set; }
 
         public EntitySexualityHandler()
         {
-            this.Initialise();
+            this.Sexualities = this.Load().ToDictionary(sexuality => sexuality.Name, sexuality => sexuality);
         }
 
-        protected void Initialise()
+        public IEnumerable<ISexuality> Load()
         {
-            this.Load();
-        }
+            this.PreferenceProcessors = ScriptingEngine.Instance
+                .FetchAndInitialiseChildren<ISexualityPreferenceProcessor>()
+                .ToDictionary(processor => processor.Name, processor => processor);
 
-        protected bool Load()
-        {
-            if (this.m_Sexualities != null)
+            List<ISexuality> sexualities = new List<ISexuality>();
+
+            string[] files =
+                Directory.GetFiles(Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "/Sexualities",
+                    "*.json", SearchOption.AllDirectories);
+            foreach(string file in files)
             {
-                return true;
+                using (StreamReader reader = new StreamReader(file))
+                {
+                    using (JsonTextReader jsonReader = new JsonTextReader(reader))
+                    {
+                        try
+                        {
+                            JObject jToken = JObject.Load(jsonReader);
+
+                            if (jToken.IsNullOrEmpty())
+                            {
+                                continue;
+                            }
+
+                            foreach (JToken child in jToken["Sexualities"])
+                            {
+                                string name = (string) child["Name"];
+                                bool decaysNeed = (bool) (child["DecaysNeed"] ?? true);
+                                int matingThreshold = (int) (child["MatingThreshold"] ?? 0);
+                                IEnumerable<string> tags = child["Tags"] is null
+                                    ? new string[0]
+                                    : child["Tags"].Select(token => (string) token);
+
+                                ISexualityPreferenceProcessor processor =
+                                    this.PreferenceProcessors.Values.FirstOrDefault(preferenceProcessor => 
+                                        preferenceProcessor.Name.Equals(name, StringComparison.OrdinalIgnoreCase)) ??
+                                    new AsexualProcessor();
+                                
+                                sexualities.Add(
+                                    new BaseSexuality(
+                                        name,
+                                        decaysNeed,
+                                        matingThreshold,
+                                        processor,
+                                        tags));
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            GlobalConstants.ActionLog.AddText("Could not load sexualities in " + file);
+                            GlobalConstants.ActionLog.StackTrace(e);
+                        }
+                    }
+                }
             }
+            IEnumerable<ISexuality> extraSexualities = ScriptingEngine.Instance.FetchAndInitialiseChildren<ISexuality>();
+            sexualities.AddRange(extraSexualities);
 
-            this.m_Sexualities = new Dictionary<string, ISexuality>();
-
-            IEnumerable<ISexuality> sexualities = ScriptingEngine.Instance.FetchAndInitialiseChildren<ISexuality>();
-
-            foreach (ISexuality sexuality in sexualities)
-            {
-                this.m_Sexualities.Add(sexuality.Name, sexuality);
-            }
-
-            return true;
+            return sexualities;
         }
 
         public ISexuality Get(string sexuality)
         {
-            if (this.m_Sexualities is null)
+            if (this.Sexualities is null)
             {
-                throw new InvalidOperationException("Sexuality search was null.");
+                throw new InvalidOperationException("Sexuality index was null.");
             }
 
-            if (this.m_Sexualities.ContainsKey(sexuality))
+            if (this.Sexualities.Any(pair => pair.Key.Equals(sexuality, StringComparison.OrdinalIgnoreCase)))
             {
-                return this.m_Sexualities[sexuality];
+                return this.Sexualities.First(pair => pair.Key.Equals(sexuality, StringComparison.OrdinalIgnoreCase)).Value;
             }
             throw new InvalidOperationException("Sexuality of type " + sexuality + " not found.");
         }
 
-        public ISexuality[] Sexualities
+        public void Dispose()
         {
-            get
-            {
-                if (this.m_Sexualities is null)
-                {
-                    this.Initialise();
-                }
+            this.Sexualities = null;
+            this.PreferenceProcessors = null;
+        }
 
-                return this.m_Sexualities.Values.ToArray();
-            }
+        ~EntitySexualityHandler()
+        {
+            this.Dispose();
         }
     }
 }

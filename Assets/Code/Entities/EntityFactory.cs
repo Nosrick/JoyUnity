@@ -183,7 +183,7 @@ namespace JoyLib.Code.Entities
 
             if(selectedSexuality is null)
             {
-                selectedSexuality = dominantCulture.ChooseSexuality(this.SexualityHandler.Sexualities);
+                selectedSexuality = dominantCulture.ChooseSexuality(this.SexualityHandler.Values);
             }
 
             if(selectedSprites is null)

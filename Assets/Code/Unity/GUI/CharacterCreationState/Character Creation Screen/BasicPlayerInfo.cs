@@ -103,7 +103,7 @@ namespace JoyLib.Code.Unity.GUI
 
 
             this.SexualityContainer.Container = this.CurrentCulture.Sexualities.ToList();
-            ISexuality sexuality = this.CurrentCulture.ChooseSexuality(this.GameManager.SexualityHandler.Sexualities);
+            ISexuality sexuality = this.CurrentCulture.ChooseSexuality(this.GameManager.SexualityHandler.Values);
             this.SexualityContainer.Value = this.SexualityContainer.Container.FindIndex(s => 
                     s.Equals(sexuality.Name,
                         StringComparison.OrdinalIgnoreCase));

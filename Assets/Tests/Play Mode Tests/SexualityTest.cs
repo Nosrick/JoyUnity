@@ -68,7 +68,7 @@ namespace Tests
 
             heterosexual = target.Get("heterosexual");
             homosexual = target.Get("homosexual");
-            bisexual = target.Get("bisexual");
+            bisexual = target.Get("pansexual");
             asexual = target.Get("asexual");
 
             heterofemaleHuman = Mock.Of<IEntity>(

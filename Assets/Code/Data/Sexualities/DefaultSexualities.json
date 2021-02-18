@@ -1,0 +1,28 @@
+﻿{
+  "Sexualities": [
+    {
+      "Name": "Heterosexual",
+      "DecaysNeed": "true",
+      "MatingThreshold": "0",
+      "Tags": ["hetero"]
+    },
+    {
+      "Name": "Homosexual",
+      "DecaysNeed": "true",
+      "MatingThreshold": "0",
+      "Tags": ["homo"]
+    },
+    {
+      "Name": "Asexual",
+      "DecaysNeed": "false",
+      "MatingThreshold": "0",
+      "Tags": ["ace"]
+    },
+    {
+      "Name": "Pansexual",
+      "DecaysNeed": "true",
+      "MatingThreshold": "0",
+      "Tags": ["pan"]
+    }
+  ]
+}
