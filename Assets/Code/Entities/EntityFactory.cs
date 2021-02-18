@@ -163,7 +163,7 @@ namespace JoyLib.Code.Entities
 
             if(selectedSex is null)
             {
-                selectedSex = dominantCulture.ChooseSex(this.BioSexHandler.Sexes);
+                selectedSex = dominantCulture.ChooseSex(this.BioSexHandler.Values);
             }
 
             if (selectedGender is null)

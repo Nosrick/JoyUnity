@@ -1,4 +1,7 @@
 ﻿//This identifies whether a creature can give birth or not, etc
+
+using System.Collections.Generic;
+
 namespace JoyLib.Code.Entities.Sexes
 {
     public interface IBioSex
@@ -8,11 +11,16 @@ namespace JoyLib.Code.Entities.Sexes
             get;
         }
 
+        bool CanFertilise
+        {
+            get;
+        }
+
         string Name
         {
             get;
         }
 
-        Entity CreateChild(Entity[] parents);
+        IEntity CreateChild(IEnumerable<IEntity> parents);
     }
 }

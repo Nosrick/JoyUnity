@@ -213,7 +213,7 @@ namespace JoyLib.Code.Cultures
                 soFar += pair.Value;
                 if (result < soFar)
                 {
-                    return sexes.First(sex => sex.Name.Equals(pair.Key));
+                    return sexes.First(sex => sex.Name.Equals(pair.Key, StringComparison.OrdinalIgnoreCase));
                 }
             }
 

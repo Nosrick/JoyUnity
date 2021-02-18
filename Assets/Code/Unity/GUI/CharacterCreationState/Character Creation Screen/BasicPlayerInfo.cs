@@ -93,15 +93,14 @@ namespace JoyLib.Code.Unity.GUI
         {
             this.CurrentCulture = culture;
             this.SexContainer.Container = this.CurrentCulture.Sexes.ToList();
-            IBioSex sex = this.CurrentCulture.ChooseSex(this.GameManager.BioSexHandler.Sexes);
-            this.SexContainer.Value = this.SexContainer.Container.FindIndex(s => s.Equals(sex.Name, StringComparison.CurrentCulture));
+            IBioSex sex = this.CurrentCulture.ChooseSex(this.GameManager.BioSexHandler.Values);
+            this.SexContainer.Value = this.SexContainer.Container.FindIndex(s => s.Equals(sex.Name, StringComparison.OrdinalIgnoreCase));
 
             this.GenderContainer.Container = this.CurrentCulture.Genders.ToList();
             IGender gender = this.CurrentCulture.ChooseGender(sex, this.GameManager.GenderHandler.Values);
             this.GenderContainer.Value = this.GenderContainer.Container.FindIndex(s => 
-                    s.Equals(gender.Name, StringComparison.Ordinal));
-
-
+                    s.Equals(gender.Name, StringComparison.OrdinalIgnoreCase));
+            
             this.SexualityContainer.Container = this.CurrentCulture.Sexualities.ToList();
             ISexuality sexuality = this.CurrentCulture.ChooseSexuality(this.GameManager.SexualityHandler.Values);
             this.SexualityContainer.Value = this.SexualityContainer.Container.FindIndex(s => 
