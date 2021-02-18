@@ -6,6 +6,7 @@ using System.Xml.Linq;
 using Castle.Core.Internal;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Rollers;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -71,25 +72,36 @@ namespace JoyLib.Code.Graphics
 
             string[] files =
                 Directory.GetFiles(
-                    Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "/Sprite Definitions", "*.xml",
+                    Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "/Sprite Definitions", "*.json",
                     SearchOption.AllDirectories);
 
             foreach (string file in files)
             {
-                try
+                using (StreamReader reader = new StreamReader(file))
                 {
-                    XElement doc = XElement.Load(file);
-
-                    foreach (XElement tileSetElement in doc.Elements("TileSet"))
+                    using (JsonTextReader jsonReader = new JsonTextReader(reader))
                     {
-                        string tileSet = tileSetElement.Element("Name").GetAs<string>();
+                        try
+                        {
+                            JObject jToken = JObject.Load(jsonReader);
 
-                        this.AddSpriteDataFromXML(tileSet, tileSetElement);
+                            if (jToken["Objects"].IsNullOrEmpty())
+                            {
+                                continue;
+                            }
+
+                            JToken tileSet = jToken["Objects"]["TileSet"];
+
+                            string name = (string) tileSet["Name"];
+
+                            this.AddSpriteDataFromJson(name, tileSet["SpriteData"]);
+                        }
+                        catch (Exception e)
+                        {
+                            GlobalConstants.ActionLog.AddText("Cannot load sprite definitions from " + file);
+                            GlobalConstants.ActionLog.StackTrace(e);
+                        }
                     }
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
                 }
             }
 
@@ -134,45 +146,6 @@ namespace JoyLib.Code.Graphics
         public bool AddSpriteDataRange(string tileSet, IEnumerable<SpriteData> dataToAdd)
         {
             return dataToAdd.Aggregate(true, (current, data) => current & this.AddSpriteData(tileSet, data));
-        }
-
-        public bool AddSpriteDataFromXML(string tileSet, XElement spriteDataElement)
-        {
-            IEnumerable<SpriteData> spriteData = from data in spriteDataElement.Elements("SpriteData")
-                select new SpriteData
-                {
-                    m_Name = data.Element("Name").GetAs<string>(),
-                    m_State = data.Element("State").DefaultIfEmpty("DEFAULT"),
-                    m_Parts = (from part in data.Elements("Part")
-                        select new SpritePart
-                        {
-                            m_Data = from d in part.Elements("Data")
-                                select d.GetAs<string>(),
-                            m_Filename = part.Element("Filename").GetAs<string>(),
-                            m_Frames = part.Element("Frames").DefaultIfEmpty(1),
-                            m_Name = part.Element("Name").GetAs<string>(),
-                            m_Position = part.Element("Position").DefaultIfEmpty(0),
-                            m_FrameSprites = Resources
-                                .LoadAll<Sprite>("Sprites/" + part.Element("Filename").GetAs<string>())
-                                .Where(
-                                    (sprite, i) =>
-                                        i >= part.Element("Position").DefaultIfEmpty(0)
-                                        && i < part.Element("Position").DefaultIfEmpty(0) +
-                                        part.Element("Frames").DefaultIfEmpty(1))
-                                .ToList(),
-                            m_PossibleColours = part.Elements("Colour").Any()
-                                ? (from colour in part.Elements("Colour")
-                                    select GraphicsHelper.ParseHTMLString(colour.GetAs<string>())).ToList()
-                                : new List<Color> {Color.white},
-                            m_SortingOrder = part.Element("SortOrder").DefaultIfEmpty(0),
-                            m_ImageFillType =
-                                GraphicsHelper.ParseFillMethodString(part.Element("FillType").DefaultIfEmpty("filled")),
-                            m_SpriteDrawMode =
-                                GraphicsHelper.ParseDrawModeString(part.Element("FillType").DefaultIfEmpty("simple"))
-                        }).ToList()
-                };
-
-            return this.AddSpriteDataRange(tileSet, spriteData);
         }
 
         /// <summary>

@@ -1,0 +1,161 @@
+﻿{
+  "Objects": {
+    "TileSet": {
+      "Name": "Needs",
+      "SpriteData": [
+        {
+          "Name": "Hunger",
+          "Part": [
+            {
+              "Name": "Hunger",
+              "Frames": 1,
+              "Filename": "Needs32",
+              "Data": [
+                "default"
+              ],
+              "Position": 0
+            }]
+        },
+        {
+          "Name": "Thirst",
+          "Part": [
+            {
+              "Name": "Thirst",
+              "Frames": 1,
+              "Filename": "Needs32",
+              "Data": [
+                "default"
+              ],
+              "Position": 1
+            }]
+        },
+        {
+          "Name": "Sex",
+          "Part": [
+            {
+              "Name": "Sex",
+              "Frames": 1,
+              "Filename": "Needs32",
+              "Data": [
+                "default"
+              ],
+              "Position": 2
+            }]
+        },
+        {
+          "Name": "Sleep",
+          "Part": [
+            {
+              "Name": "Sleep",
+              "Frames": 1,
+              "Filename": "Needs32",
+              "Data": [
+                "default"
+              ],
+              "Position": 3
+            }]
+        },
+        {
+          "Name": "Health",
+          "Part": [
+            {
+              "Name": "Health",
+              "Frames": 1,
+              "Filename": "Needs32",
+              "Data": [
+                "default"
+              ],
+              "Position": 4
+            }]
+        },
+        {
+          "Name": "Purpose",
+          "Part": [
+            {
+              "Name": "Purpose",
+              "Frames": 1,
+              "Filename": "Needs32",
+              "Data": [
+                "default"
+              ],
+              "Position": 5
+            }]
+        },
+        {
+          "Name": "Property",
+          "Part": [
+            {
+              "Name": "Property",
+              "Frames": 1,
+              "Filename": "Needs32",
+              "Data": [
+                "default"
+              ],
+              "Position": 6
+            }]
+        },
+        {
+          "Name": "Friendship",
+          "Part": [
+            {
+              "Name": "Friendship",
+              "Frames": 1,
+              "Filename": "Needs32",
+              "Data": [
+                "default"
+              ],
+              "Position": 7
+            }]
+        },
+        {
+          "Name": "Family",
+          "Part": [
+            {
+              "Name": "Family",
+              "Frames": 1,
+              "Filename": "Needs32",
+              "Data": [
+                "default"
+              ],
+              "Position": 8
+            }]
+        },
+        {
+          "Name": "Morality",
+          "Part": [
+            {
+              "Name": "Morality",
+              "Frames": 1,
+              "Filename": "Needs32",
+              "Data": ["default"],
+              "Position": 9
+            }]
+        },
+        {
+          "Name": "Confidence",
+          "Part": [
+            {
+              "Name": "Confidence",
+              "Frames": 1,
+              "Filename": "Needs32",
+              "Data": ["default"],
+              "Position": 10
+            }]
+        },
+        {
+          "Name": "Respect",
+          "Part": [
+            {
+              "Name": "Respect",
+              "Frames": 1,
+              "Filename": "Needs32",
+              "Data": [
+                "default"
+              ],
+              "Position": 11
+            }]
+        }
+      ]
+    }
+  }
+}

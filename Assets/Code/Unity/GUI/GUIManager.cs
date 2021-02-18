@@ -188,23 +188,43 @@ namespace JoyLib.Code.Unity.GUI
         {
             string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER +
                                                 "Sprite Definitions/GUI/",
-                                                "*.xml",
-                                                SearchOption.AllDirectories);
+                "*.json",
+                SearchOption.AllDirectories);
 
             foreach (string file in files)
             {
-                XElement doc = XElement.Load(file);
-
-                string tileSet = doc.Element("TileSet").Element("Name").GetAs<string>();
-
-                var spriteData = GlobalConstants.GameManager.ObjectIconHandler.GetTileSet(tileSet);
-                foreach (SpriteData data in spriteData)
+                using (StreamReader reader = new StreamReader(file))
                 {
-                    if (this.UISprites.ContainsKey(data.m_Name))
+                    using (JsonTextReader jsonReader = new JsonTextReader(reader))
                     {
-                        continue;
+                        try
+                        {
+                            JObject jToken = JObject.Load(jsonReader);
+
+                            if (jToken.IsNullOrEmpty())
+                            {
+                                continue;
+                            }
+
+                            JToken child = jToken["Objects"]["TileSet"];
+
+                            string tileSetName = (string) child["Name"];
+                            var spriteData = GlobalConstants.GameManager.ObjectIconHandler.GetTileSet(tileSetName);
+                            foreach (SpriteData data in spriteData)
+                            {
+                                if (this.UISprites.ContainsKey(data.m_Name))
+                                {
+                                    continue;
+                                }
+                                this.UISprites.Add(data.m_Name, new SpriteState(data.m_Name, data));
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            GlobalConstants.ActionLog.AddText("Could not load GUI definitions from " + file);
+                            GlobalConstants.ActionLog.StackTrace(e);
+                        }
                     }
-                    this.UISprites.Add(data.m_Name, new SpriteState(data.m_Name, data));
                 }
             }
         }
