@@ -108,8 +108,8 @@ namespace Tests
 
             this.target = GlobalConstants.GameManager.ConversationEngine;
             
-            friendship.AddParticipant(listener);
-            friendship.AddParticipant(instigator);
+            friendship.AddParticipant(this.listener.Guid);
+            friendship.AddParticipant(this.instigator.Guid);
         }
 
         [UnityTest]

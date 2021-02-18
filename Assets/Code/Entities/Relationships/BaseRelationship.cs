@@ -1,38 +1,74 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Castle.Core.Internal;
 using Sirenix.OdinSerializer;
 
 namespace JoyLib.Code.Entities.Relationships
 {
     [Serializable]
-    public abstract class AbstractRelationship : IRelationship
+    public class BaseRelationship : IRelationship
     {
         [OdinSerialize]
-        protected List<string> m_Tags;
+        protected HashSet<string> m_Tags;
         
-        public virtual string Name => "abstractrelationship";
+        [OdinSerialize]
+        public string Name { get; protected set; }
 
-        public IEnumerable<string> Tags
-        {
-            get => this.m_Tags;
-            protected set => this.m_Tags = new List<string>(value);
-        }
+        [OdinSerialize]
+        public string DisplayName { get; protected set; }
 
-        public virtual string DisplayName => "SOMEONE FORGOT TO OVERRIDE THE DISPLAYNAME";
-        
+        [OdinSerialize]
+        public bool Unique { get; protected set; }
+
+        [OdinSerialize]
+        public int MaxParticipants { get; protected set; }
+
         //Yeesh, this is messy
         //But this is a key value pair for how each participant feels about the other in the relationship
         [OdinSerialize]
-        protected SortedDictionary<Guid, Dictionary<Guid, int>> m_Values;
+        protected IDictionary<Guid, IDictionary<Guid, int>> m_Values;
+        
         [OdinSerialize]
         protected List<Guid> m_Participants;
-
-        public AbstractRelationship(ILiveEntityHandler entityHandler = null)
+        
+        public IEnumerable<string> Tags
         {
+            get => this.m_Tags;
+            protected set => this.m_Tags = new HashSet<string>(value);
+        }
+
+        public BaseRelationship()
+        {
+            this.Name = "DEFAULT";
+            this.DisplayName = "DEFAULT";
+            this.Unique = false;
+            this.MaxParticipants = 1;
             this.m_Participants = new List<Guid>();
-            this.m_Values = new SortedDictionary<Guid, Dictionary<Guid, int>>();
-            this.Tags = new List<string>();
+            this.m_Values = new Dictionary<Guid, IDictionary<Guid, int>>();
+            this.m_Tags = new HashSet<string>();
+        }
+        
+        public BaseRelationship(
+            string name,
+            string displayName,
+            bool unique,
+            int maxParticipants,
+            IEnumerable<Guid> participants = null,
+            IDictionary<Guid, IDictionary<Guid, int>> values = null,
+            IEnumerable<string> tags = null)
+        {
+            this.Name = name;
+            this.DisplayName = displayName;
+            this.Unique = unique;
+            this.MaxParticipants = maxParticipants;
+            this.m_Participants = new List<Guid>();
+            this.m_Values = values ?? new SortedDictionary<Guid, IDictionary<Guid, int>>();
+            this.Tags = tags ?? new HashSet<string>();
+            if (participants.IsNullOrEmpty() == false)
+            {
+                this.AddParticipants(participants);
+            }
         }
 
         public long GenerateHashFromInstance()
@@ -41,26 +77,28 @@ namespace JoyLib.Code.Entities.Relationships
         }
         
 
-        public virtual bool AddParticipant(IJoyObject newParticipant)
+        public virtual bool AddParticipant(Guid newParticipant)
         {
-            if(this.m_Participants.Contains(newParticipant.Guid) == false)
+            if(this.m_Participants.Contains(newParticipant) == false 
+                && (this.MaxParticipants < 0 
+                || this.m_Participants.Count + 1 <= this.MaxParticipants))
             {
-                this.m_Participants.Add(newParticipant.Guid);
+                this.m_Participants.Add(newParticipant);
 
-                this.m_Values.Add(newParticipant.Guid, new Dictionary<Guid, int>());
+                this.m_Values.Add(newParticipant, new Dictionary<Guid, int>());
 
-                foreach(KeyValuePair<Guid, Dictionary<Guid, int>> pair in this.m_Values)
+                foreach(KeyValuePair<Guid, IDictionary<Guid, int>> pair in this.m_Values)
                 {
-                    if(pair.Key == newParticipant.Guid)
+                    if(pair.Key == newParticipant)
                     {
                         foreach(Guid guid in this.m_Participants)
                         {
-                            this.m_Values[newParticipant.Guid].Add(guid, 0);
+                            this.m_Values[newParticipant].Add(guid, 0);
                         }
                     }
                     else
                     {
-                        this.m_Values[pair.Key].Add(newParticipant.Guid, 0);
+                        this.m_Values[pair.Key].Add(newParticipant, 0);
                     }
                 }
 
@@ -69,15 +107,9 @@ namespace JoyLib.Code.Entities.Relationships
             return false;
         }
 
-        public bool AddParticipants(IEnumerable<IJoyObject> participants)
+        public bool AddParticipants(IEnumerable<Guid> participants)
         {
-            bool result = true;
-            foreach (IJoyObject participant in participants)
-            {
-                result &= this.AddParticipant(participant);
-            }
-
-            return result;
+            return participants.Aggregate(true, (current, participant) => current & this.AddParticipant(participant));
         }
 
         public bool HasTag(string tag)
@@ -142,7 +174,7 @@ namespace JoyLib.Code.Entities.Relationships
                 .Max(pair => pair.Value.Max(valuePair => valuePair.Value));
         }
 
-        public Dictionary<Guid, int> GetValuesOfParticipant(Guid GUID)
+        public IDictionary<Guid, int> GetValuesOfParticipant(Guid GUID)
         {
             if(this.m_Values.ContainsKey(GUID))
             {
@@ -241,7 +273,28 @@ namespace JoyLib.Code.Entities.Relationships
             return 0;
         }
 
-        public abstract IRelationship Create(IEnumerable<IJoyObject> participants);
-        public abstract IRelationship CreateWithValue(IEnumerable<IJoyObject> participants, int value);
+        public IRelationship Create(
+            IEnumerable<IJoyObject> participants)
+        {
+            return new BaseRelationship(
+                this.Name,
+                this.DisplayName,
+                this.Unique,
+                this.MaxParticipants,
+                participants.Select(o => o.Guid),
+                null,
+                this.Tags);
+        }
+
+        public IRelationship CreateWithValue(
+            IEnumerable<IJoyObject> participants,
+            int value)
+        {
+            IRelationship relationship = this.Create(participants);
+
+            relationship.ModifyValueOfAllParticipants(value);
+
+            return relationship;
+        }
     }
 }

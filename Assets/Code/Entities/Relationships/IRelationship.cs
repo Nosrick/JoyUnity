@@ -5,7 +5,7 @@ namespace JoyLib.Code.Entities.Relationships
 {
     public interface IRelationship : ITagged
     {
-        Dictionary<Guid, int> GetValuesOfParticipant(Guid GUID);
+        IDictionary<Guid, int> GetValuesOfParticipant(Guid GUID);
 
         int GetRelationshipValue(Guid left, Guid right);
 
@@ -20,18 +20,23 @@ namespace JoyLib.Code.Entities.Relationships
 
         int ModifyValueOfAllParticipants(int value);
 
-        bool AddParticipant(IJoyObject newParticipant);
-        bool AddParticipants(IEnumerable<IJoyObject> participants);
+        bool AddParticipant(Guid newParticipant);
+        bool AddParticipants(IEnumerable<Guid> participants);
         
         bool RemoveParticipant(Guid currentGUID);
 
         long GenerateHashFromInstance();
 
         IRelationship Create(IEnumerable<IJoyObject> participants);
+        
         IRelationship CreateWithValue(IEnumerable<IJoyObject> participants, int value);
 
         string Name { get; }
 
         string DisplayName { get; }
+        
+        bool Unique { get; }
+        
+        int MaxParticipants { get; }
     }
 }

@@ -1,37 +1,91 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Castle.Core.Internal;
 using JoyLib.Code.Collections;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Scripting;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace JoyLib.Code.Entities.Relationships
 {
     public class EntityRelationshipHandler : IEntityRelationshipHandler
     {
-        protected Dictionary<string, IRelationship> m_RelationshipTypes;
+        protected IDictionary<string, IRelationship> m_RelationshipTypes;
         protected NonUniqueDictionary<long, IRelationship> m_Relationships;
 
-        public IEnumerable<IRelationship> AllRelationships => this.m_Relationships.Values;
+        public IEnumerable<IRelationship> Values => this.m_Relationships.Values;
 
         public EntityRelationshipHandler()
         {
-            this.Initialise();
+            this.m_Relationships = new NonUniqueDictionary<long, IRelationship>();
+            this.m_RelationshipTypes =
+                this.Load().ToDictionary(relationship => relationship.Name, relationship => relationship);
         }
 
-        public bool Initialise()
+        public IRelationship Get(long name)
         {
-            this.m_RelationshipTypes = new Dictionary<string, IRelationship>();
-            this.m_Relationships = new NonUniqueDictionary<long, IRelationship>();
+            return this.m_Relationships[name].First();
+        }
 
-            IEnumerable<IRelationship> types = ScriptingEngine.Instance.FetchAndInitialiseChildren<IRelationship>();
-            foreach(IRelationship type in types)
+        public IEnumerable<IRelationship> Load()
+        {
+            List<IRelationship> relationships = new List<IRelationship>();
+            
+            string[] files =
+                Directory.GetFiles(Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "/Relationships",
+                    "*.json", SearchOption.AllDirectories);
+
+            foreach (string file in files)
             {
-                this.m_RelationshipTypes.Add(type.Name, type);
+                using (StreamReader reader = new StreamReader(file))
+                {
+                    using (JsonTextReader jsonReader = new JsonTextReader(reader))
+                    {
+                        try
+                        {
+                            JObject jToken = JObject.Load(jsonReader);
+
+                            if (jToken.IsNullOrEmpty())
+                            {
+                                continue;
+                            }
+
+                            foreach (JToken child in jToken["Relationships"])
+                            {
+                                string name = (string) child["Name"];
+                                string displayName = (string) child["DisplayName"];
+                                bool unique = (bool) (child["Unique"] ?? false);
+                                int maxParticipants = (int) (child["MaxParticipants"] ?? -1);
+                                IEnumerable<string> tags = child["Tags"] is null
+                                    ? new string[0]
+                                    : child["Tags"].Select(token => (string) token);
+                                
+                                relationships.Add(
+                                    new BaseRelationship(
+                                        name,
+                                        displayName,
+                                        unique,
+                                        maxParticipants,
+                                        null,
+                                        null,
+                                        tags));
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            GlobalConstants.ActionLog.AddText("Error loading relationships from " + file);
+                            GlobalConstants.ActionLog.StackTrace(e);
+                        }
+                    }
+                }
             }
 
-            return true;
+            relationships.AddRange(ScriptingEngine.Instance.FetchAndInitialiseChildren<IRelationship>());
+
+            return relationships;
         }
 
         public bool AddRelationship(IRelationship relationship)
@@ -47,25 +101,58 @@ namespace JoyLib.Code.Entities.Relationships
 
         public IRelationship CreateRelationship(IEnumerable<IJoyObject> participants, IEnumerable<string> tags)
         {
-            if(this.m_RelationshipTypes.Any(t => tags.Any(tag => tag.Equals(t.Key, StringComparison.OrdinalIgnoreCase))))
+            long hash = BaseRelationship.GenerateHash(participants.Select(o => o.Guid));
+            if (this.m_Relationships.ContainsKey(hash))
             {
-                IRelationship newRelationship = this.m_RelationshipTypes
-                    .First(t => tags.Any(tag => tag.Equals(t.Key, StringComparison.OrdinalIgnoreCase))).Value
-                    .Create(participants);
-                
-                List<Guid> GUIDs = new List<Guid>();
-                foreach(IJoyObject participant in participants)
+                List<IRelationship> relationships = this.m_Relationships[hash];
+                int matching = 0;
+                IRelationship returnRelationship = null;
+                foreach (IRelationship relationship in relationships)
                 {
-                    GUIDs.Add(participant.Guid);
+                    int matches = relationship.Tags.Intersect(tags, StringComparer.OrdinalIgnoreCase).Count();
+                    if (matches <= matching)
+                    {
+                        continue;
+                    }
+                    matching = matches;
+                    returnRelationship = relationship;
                 }
 
-                newRelationship.ModifyValueOfAllParticipants(0);
+                if (returnRelationship is null == false)
+                {
+                    return returnRelationship;
+                }
+            }
+            
+            if(this.m_RelationshipTypes.Any(t => tags.Intersect(t.Value.Tags, StringComparer.OrdinalIgnoreCase).Any()))
+            {
+                int matching = 0;
+                IRelationship found = null;
+                foreach (IRelationship relationship in this.m_RelationshipTypes.Values)
+                {
+                    int matches = relationship.Tags.Intersect(tags, StringComparer.OrdinalIgnoreCase).Count();
+                    if (matches <= matching)
+                    {
+                        continue;
+                    }
+                    matching = matches;
+                    found = relationship;
+                }
+
+                if (found is null)
+                {
+                    return null;
+                }
+                
+                IRelationship newRelationship = found.Create(participants);
+
+                //newRelationship.ModifyValueOfAllParticipants(0);
 
                 this.m_Relationships.Add(newRelationship.GenerateHashFromInstance(), newRelationship);
                 return newRelationship;
             }
 
-            throw new InvalidOperationException("Relationship type " + tags + " not found.");
+            throw new InvalidOperationException("Relationship type " + tags.Print() + " not found.");
         }
 
         public IRelationship CreateRelationshipWithValue(IEnumerable<IJoyObject> participants, IEnumerable<string> tags,
@@ -81,7 +168,7 @@ namespace JoyLib.Code.Entities.Relationships
             bool createNewIfNone = false)
         {
             IEnumerable<Guid> GUIDs = participants.Select(p => p.Guid);
-            long hash = AbstractRelationship.GenerateHash(GUIDs);
+            long hash = BaseRelationship.GenerateHash(GUIDs);
 
             List<IRelationship> relationships = new List<IRelationship>();
             
@@ -170,19 +257,16 @@ namespace JoyLib.Code.Entities.Relationships
             return relationships.Any();
         }
 
-        public NonUniqueDictionary<long, IRelationship> Relationships
+        public List<IRelationship> RelationshipTypes => this.m_RelationshipTypes.Values.ToList();
+        public void Dispose()
         {
-            get
-            {
-                if(this.m_Relationships is null)
-                {
-                    this.Initialise();
-                }
-                
-                return this.m_Relationships;
-            }
+            this.m_RelationshipTypes = null;
+            this.m_Relationships = null;
         }
 
-        public List<IRelationship> RelationshipTypes => this.m_RelationshipTypes.Values.ToList();
+        ~EntityRelationshipHandler()
+        {
+            this.Dispose();
+        }
     }
 }

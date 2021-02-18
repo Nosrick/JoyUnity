@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Text;
 
 namespace JoyLib.Code.Helpers
 {
@@ -9,6 +11,18 @@ namespace JoyLib.Code.Helpers
         private static readonly MethodInfo CloneMethod =
             typeof(Object).GetMethod("MemberwiseClone", BindingFlags.NonPublic | BindingFlags.Instance);
 
+        public static string Print(this IEnumerable collection)
+        {
+            StringBuilder builder = new StringBuilder();
+
+            foreach (var item in collection)
+            { 
+                builder.AppendLine(item.ToString());
+            }
+            
+            return builder.ToString();
+        }
+        
         public static bool IsPrimitive(this Type type)
         {
             if (type == typeof(String))
