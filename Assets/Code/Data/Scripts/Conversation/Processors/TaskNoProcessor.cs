@@ -1,6 +1,6 @@
 ﻿using JoyLib.Code.Conversation.Conversations;
 
-namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
+namespace JoyLib.Code.Entities.Conversation.Processors
 {
     public class TaskNoProcessor : TopicData
     {

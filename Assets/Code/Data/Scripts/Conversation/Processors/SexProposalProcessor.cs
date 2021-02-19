@@ -6,7 +6,7 @@ using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Scripting;
 
-namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
+namespace JoyLib.Code.Entities.Conversation.Processors
 {
     public class SexProposalProcessor : TopicData
     {

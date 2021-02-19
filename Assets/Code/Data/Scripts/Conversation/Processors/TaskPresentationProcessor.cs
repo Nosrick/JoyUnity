@@ -1,7 +1,7 @@
 ﻿using JoyLib.Code.Conversation.Conversations;
 using JoyLib.Code.Quests;
 
-namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
+namespace JoyLib.Code.Entities.Conversation.Processors
 {
     public class TaskPresentationProcessor : TopicData
     {

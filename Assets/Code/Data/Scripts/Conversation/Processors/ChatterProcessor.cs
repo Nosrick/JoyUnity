@@ -2,7 +2,7 @@
 using JoyLib.Code.Conversation.Subengines.Rumours;
 using JoyLib.Code.Rollers;
 
-namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
+namespace JoyLib.Code.Entities.Conversation.Processors
 {
     public class ChatterProcessor : TopicData
     {

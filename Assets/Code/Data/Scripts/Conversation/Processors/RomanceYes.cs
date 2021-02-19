@@ -2,7 +2,7 @@
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Rollers;
 
-namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
+namespace JoyLib.Code.Entities.Conversation.Processors
 {
     public class RomanceYes : TopicData
     {
@@ -24,8 +24,8 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
 
         public override ITopic[] Interact(IEntity instigator, IEntity listener)
         {
-            this.SelectedRelationship.Create(new IJoyObject[] {listener, instigator});
-            RelationshipHandler.AddRelationship(this.SelectedRelationship);
+            var newRelationship = this.SelectedRelationship.Create(new IJoyObject[] {listener, instigator});
+            this.RelationshipHandler.AddRelationship(newRelationship);
             
             return base.Interact(instigator, listener);
         }

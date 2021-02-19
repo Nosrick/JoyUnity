@@ -2,7 +2,7 @@
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Unity.GUI;
 
-namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
+namespace JoyLib.Code.Entities.Conversation.Processors
 {
     public class TradeProcessor : TopicData
     {

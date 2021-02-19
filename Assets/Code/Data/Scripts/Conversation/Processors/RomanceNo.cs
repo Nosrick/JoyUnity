@@ -5,7 +5,7 @@ using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 
-namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
+namespace JoyLib.Code.Entities.Conversation.Processors
 {
     public class RomanceNo : TopicData
     {

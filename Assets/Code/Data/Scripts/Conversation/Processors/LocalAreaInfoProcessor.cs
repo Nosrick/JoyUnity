@@ -3,7 +3,7 @@ using JoyLib.Code.Helpers;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.World;
 
-namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
+namespace JoyLib.Code.Entities.Conversation.Processors
 {
     public class LocalAreaInfoProcessor : TopicData
     {

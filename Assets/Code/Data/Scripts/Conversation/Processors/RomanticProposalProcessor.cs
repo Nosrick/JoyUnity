@@ -4,7 +4,7 @@ using System.Linq;
 using JoyLib.Code.Conversation.Conversations;
 using JoyLib.Code.Entities.Relationships;
 
-namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
+namespace JoyLib.Code.Entities.Conversation.Processors
 {
     public class RomanticProposalProcessor : TopicData
     {
@@ -25,9 +25,11 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
 
         protected override ITopic[] FetchNextTopics()
         {
-            IEntity listener = ConversationEngine.Listener;
-            IEntity instigator = ConversationEngine.Instigator;
-            IEnumerable<IRelationship> relationships = RelationshipHandler.Get(new IJoyObject[] {instigator, listener});
+            IEntity listener = this.ConversationEngine.Listener;
+            IEntity instigator = this.ConversationEngine.Instigator;
+            List<IRelationship> relationships = this.RelationshipHandler
+                .Get(new IJoyObject[] {instigator, listener})
+                .ToList();
             if (listener.Romance.WillRomance(listener, instigator, relationships)
             && instigator.Romance.WillRomance(instigator, listener, relationships))
             {
@@ -35,28 +37,40 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
                 int relationshipTypeResult = this.Roller.Roll(0, listener.Cultures[cultureResult].RelationshipTypes.Length);
     
                 string relationshipType = listener.Cultures[cultureResult].RelationshipTypes[relationshipTypeResult];
-                IRelationship selectedRelationship = RelationshipHandler.RelationshipTypes.First(relationship =>
+                IRelationship selectedRelationship = this.RelationshipHandler.RelationshipTypes.First(relationship =>
                     relationship.Name.Equals(relationshipType, StringComparison.OrdinalIgnoreCase));
 
-                return new ITopic[]
+                relationships = this.RelationshipHandler.GetAllForObject(instigator).ToList();
+
+                bool unique = relationships.Any(relationship =>
+                    relationship.Name.Equals(selectedRelationship.Name)
+                    && (relationship.Unique || selectedRelationship.Unique));
+
+                relationships = this.RelationshipHandler.GetAllForObject(listener).ToList();
+                
+                unique |= relationships.Any(relationship =>
+                    relationship.Name.Equals(selectedRelationship.Name)
+                    && (relationship.Unique || selectedRelationship.Unique));
+
+                if (unique == false)
                 {
-                    new RomancePresentation(selectedRelationship)
-                };
+                    return new ITopic[]
+                    {
+                        new RomancePresentation(selectedRelationship)
+                    };
+                }
             }
-            else
+            return new ITopic[]
             {
-                return new ITopic[]
-                {
-                    new TopicData(
-                        new ITopicCondition[0],
-                        "RomanceTurnDown",
-                        new[] {"BaseTopics"},
-                        "Uh, no thanks.",
-                        0,
-                        null,
-                        Speaker.LISTENER)
-                };
-            }
+                new TopicData(
+                    new ITopicCondition[0],
+                    "RomanceTurnDown",
+                    new[] {"BaseTopics"},
+                    "Uh, no thanks.",
+                    0,
+                    null,
+                    Speaker.LISTENER)
+            };
         }
     }
 }
