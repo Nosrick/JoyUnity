@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Castle.Core.Internal;
 using JoyLib.Code.Conversation.Subengines.Rumours;
 using JoyLib.Code.Entities;
 
@@ -54,21 +55,21 @@ namespace JoyLib.Code.Conversation.Conversations.Rumours
         }
 
         public BaseRumour(
-            IJoyObject[] participants,
-            string[] tags,
+            IEnumerable<IJoyObject> participants,
+            IEnumerable<string> tags,
             float viralPotential,
-            ITopicCondition[] conditions,
-            string[] parameters,
+            IEnumerable<ITopicCondition> conditions,
+            IEnumerable<string> parameters,
             string words,
             float lifetimeMultiplier = 1f,
             int lifetime = DEFAULT_LIFETIME,
             bool baseless = false)
         {
-            this.Participants = participants;
-            this.Tags = tags;
+            this.Participants = participants is null ? new IJoyObject[0] : participants.ToArray();
+            this.Tags = tags is null ? new string[0] : tags.ToArray();
             this.ViralPotential = viralPotential;
-            this.Conditions = conditions;
-            this.Parameters = parameters;
+            this.Conditions = conditions is null ? new ITopicCondition[0] : conditions.ToArray();
+            this.Parameters = parameters is null ? new string[0] : parameters.ToArray();
             this.Words = words;
             this.LifetimeMultiplier = lifetimeMultiplier;
             this.Lifetime = (int)Math.Ceiling(lifetime * this.LifetimeMultiplier);
@@ -154,7 +155,7 @@ namespace JoyLib.Code.Conversation.Conversations.Rumours
 
         public string ConstructString()
         {
-            if (this.Participants is null)
+            if (this.Participants.IsNullOrEmpty())
             {
                 return this.m_Words;
             }
@@ -180,6 +181,10 @@ namespace JoyLib.Code.Conversation.Conversations.Rumours
             {
                 if (this.Parameters[i].Equals("participant", StringComparison.OrdinalIgnoreCase))
                 {
+                    if (participantNumber >= this.Participants.Length)
+                    {
+                        this.m_Words = "PARTICIPANT/PARAMETER COUNT MISMATCH.";
+                    }
                     obj = this.Participants[participantNumber];
                     participantNumber++;
                 }
@@ -194,11 +199,12 @@ namespace JoyLib.Code.Conversation.Conversations.Rumours
             return this.m_Words;
         }
 
-        public IRumour Create(IJoyObject[] participants,
-            string[] tags,
+        public IRumour Create(
+            IEnumerable<IJoyObject> participants,
+            IEnumerable<string> tags,
             float viralPotential,
-            ITopicCondition[] conditions,
-            string[] parameters,
+            IEnumerable<ITopicCondition> conditions,
+            IEnumerable<string> parameters,
             string words,
             float lifetimeMultiplier = 1F,
             int lifetime = 5000,

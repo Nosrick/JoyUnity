@@ -1,0 +1,84 @@
+{
+  "Items": {
+    "Category": "Armour",
+    "IdentifiedItems": [
+      {
+        "Name": "Breastplate",
+        "Description": "A piece of torso armour.",
+        "Value": 150,
+        "Materials": [
+          "steel",
+          "iron",
+          "bronze"
+        ],
+        "Size": 300,
+        "TileSet": "armour",
+        "SpawnWeight": 2,
+        "Slots": [
+          "torso"
+        ],
+        "Tags": [
+          "armour",
+          "torso",
+          "metal",
+          "physical",
+          "heavy armour"
+        ]
+      },
+      {
+        "Name": "Leather Armour",
+        "Description": "A basic piece of leather torso armour.",
+        "Value": 90,
+        "Materials": [
+          "leather"
+        ],
+        "Size": 300,
+        "TileSet": "armour",
+        "SpawnWeight": 4,
+        "Slots": [
+          "torso"
+        ],
+        "Tags": [
+          "armour",
+          "torso",
+          "leather",
+          "physical",
+          "light armour"
+        ]
+      }
+    ],
+    "TileSet": {
+      "Name": "Armour",
+      "SpriteData": [
+        {
+          "Name": "breastplate",
+          "Part": [
+            {
+              "Name": "breastplate",
+              "Frames": 1,
+              "Filename": "Armor",
+              "Data": [
+                "default"
+              ],
+              "Position": 5
+            }
+          ]
+        },
+        {
+          "Name": "leather armour",
+          "Part": [
+            {
+              "Name": "leather armour",
+              "Frames": 1,
+              "Filename": "Armor",
+              "Data": [
+                "default"
+              ],
+              "Position": 1
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

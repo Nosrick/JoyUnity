@@ -2,7 +2,7 @@
 
 namespace JoyLib.Code.Entities.AI.LOS.Providers
 {
-    public interface IVisionProviderHandler
+    public interface IVisionProviderHandler : IHandler<IVision, string>
     {
         bool AddVision(string name,
             Color darkColour,
@@ -13,8 +13,6 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
             int maximumLightLevel = 32, int maximumComfortLevel = 32);
 
         bool AddVision(IVision vision);
-        
-        IVision GetVision(string name);
 
         bool HasVision(string name);
     }

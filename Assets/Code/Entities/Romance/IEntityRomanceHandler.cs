@@ -1,9 +1,6 @@
 ﻿namespace JoyLib.Code.Entities.Romance
 {
-    public interface IEntityRomanceHandler
+    public interface IEntityRomanceHandler : IHandler<IRomance, string>
     {
-        IRomance Get(string romance);
-        
-        IRomance[] Romances { get; }
     }
 }

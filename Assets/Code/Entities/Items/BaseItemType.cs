@@ -16,21 +16,21 @@ namespace JoyLib.Code.Entities.Items
         {}
 
         public BaseItemType(
-            string[] tags, 
+            IEnumerable<string> tags, 
             string description, 
             string unidentifiedDescriptionRef, 
             string unidentifiedNameRef, 
             string identifiedNameRef, 
-            string[] slotsRef, 
+            IEnumerable<string> slotsRef, 
             float size, 
             IItemMaterial material, 
-            string governingSkillRef, 
+            IEnumerable<string> governingSkills, 
             string actionStringRef, 
             int valueRef, 
             int spawnRef, 
             string spriteSheet, 
             int lightLevel = 0,
-            IAbility[] abilities = null)
+            IEnumerable<IAbility> abilities = null)
         {
             this.m_Tags = tags.ToList();
             
@@ -45,7 +45,7 @@ namespace JoyLib.Code.Entities.Items
             this.Material = material;
             this.Weight = this.Size * this.Material.Density;
             this.Slots = slotsRef;
-            this.GoverningSkill = governingSkillRef;
+            this.GoverningSkills = governingSkills;
             this.ActionString = actionStringRef;
             this.LightLevel = lightLevel;
             this.SpriteSheet = spriteSheet;
@@ -116,7 +116,7 @@ namespace JoyLib.Code.Entities.Items
         }
 
         [OdinSerialize]
-        public IAbility[] Abilities
+        public IEnumerable<IAbility> Abilities
         {
             get;
             protected set;
@@ -144,7 +144,7 @@ namespace JoyLib.Code.Entities.Items
         }
 
         [OdinSerialize]
-        public string[] Slots
+        public IEnumerable<string> Slots
         {
             get;
             protected set;
@@ -167,7 +167,7 @@ namespace JoyLib.Code.Entities.Items
         }
 
         [OdinSerialize]
-        public string GoverningSkill
+        public IEnumerable<string> GoverningSkills
         {
             get;
             protected set;

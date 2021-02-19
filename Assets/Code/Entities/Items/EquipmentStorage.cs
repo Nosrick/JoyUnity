@@ -86,7 +86,7 @@ namespace JoyLib.Code.Entities.Items
                 this.m_Slots.FirstOrDefault(tuple => tuple.Item1.Equals(slot, StringComparison.OrdinalIgnoreCase));
             if (slotTuple is null == false && slotTuple.Item2 != Guid.Empty)
             {
-                return GlobalConstants.GameManager.ItemHandler.GetItem(slotTuple.Item2);
+                return GlobalConstants.GameManager.ItemHandler.Get(slotTuple.Item2);
             }
 
             return null;
@@ -100,13 +100,13 @@ namespace JoyLib.Code.Entities.Items
                     .Where(tuple => tuple.Item2 != Guid.Empty)
                     .Select(tuple =>
                         new Tuple<string, IItemInstance>(tuple.Item1,
-                            GlobalConstants.GameManager.ItemHandler.GetItem(tuple.Item2)));
+                            GlobalConstants.GameManager.ItemHandler.Get(tuple.Item2)));
             }
 
             return this.m_Slots
                 .Select(tuple => new Tuple<string, IItemInstance>(
                     tuple.Item1,
-                    tuple.Item2 != Guid.Empty ? GlobalConstants.GameManager.ItemHandler.GetItem(tuple.Item2) : null));
+                    tuple.Item2 != Guid.Empty ? GlobalConstants.GameManager.ItemHandler.Get(tuple.Item2) : null));
         }
 
         public virtual bool CanAddContents(IItemInstance actor)
@@ -114,7 +114,7 @@ namespace JoyLib.Code.Entities.Items
             int slots = this.GetRequiredSlots(actor).Count();
             return !this.Contains(actor)
                    && slots > 0
-                   && slots == actor.ItemType.Slots.Length;
+                   && slots == actor.ItemType.Slots.Count();
         }
 
         public virtual bool AddContents(IItemInstance actor)

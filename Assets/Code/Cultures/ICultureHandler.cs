@@ -2,7 +2,7 @@
 
 namespace JoyLib.Code.Cultures
 {
-    public interface ICultureHandler
+    public interface ICultureHandler : IHandler<ICulture, string>
     {
         ICulture GetByCultureName(string name);
         List<ICulture> GetByCreatureType(string type);

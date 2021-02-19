@@ -38,8 +38,8 @@ namespace Tests
         private IEntity attacker;
         private IEntity defender;
 
-        private IDictionary<string, IRollableValue<int>> attackerStats;
-        private IDictionary<string, IRollableValue<int>> defenderStats;
+        private IDictionary<string, IEntityStatistic> attackerStats;
+        private IDictionary<string, IEntityStatistic> defenderStats;
 
         private IDictionary<string, IEntitySkill> attackerSkills;
         private IDictionary<string, IEntitySkill> defenderSkills;
@@ -70,7 +70,7 @@ namespace Tests
                     It.IsAny<int>(),
                     It.IsNotIn(7)) == 2));
             this.statisticHandler = new EntityStatisticHandler();
-            this.skillHandler = new EntitySkillHandler(this.needHandler);
+            this.skillHandler = new EntitySkillHandler();
             this.derivedValueHandler = new DerivedValueHandler(this.statisticHandler, this.skillHandler);
             this.abilityHandler = new AbilityHandler();
 
@@ -78,11 +78,7 @@ namespace Tests
 
             this.objectIconHandler = new ObjectIconHandler(new RNG());
             
-            this.itemHandler = new LiveItemHandler(
-                this.objectIconHandler,
-                this.materialHandler,
-                this.abilityHandler,
-                new RNG());
+            this.itemHandler = new LiveItemHandler(new RNG());
 
             GlobalConstants.GameManager = Mock.Of<IGameManager>(
                 manager => manager.ItemHandler == this.itemHandler
@@ -113,16 +109,16 @@ namespace Tests
             int defenderValue = 3, 
             int defenderThreshold = 7)
         {
-            this.attackerStats = new Dictionary<string, IRollableValue<int>>();
-            this.defenderStats = new Dictionary<string, IRollableValue<int>>();
+            this.attackerStats = new Dictionary<string, IEntityStatistic>();
+            this.defenderStats = new Dictionary<string, IEntityStatistic>();
             foreach (string name in this.statisticHandler.StatisticNames)
             {
-                this.attackerStats.Add(name, Mock.Of<IRollableValue<int>>(
+                this.attackerStats.Add(name, Mock.Of<IEntityStatistic>(
                     stat => stat.Name == name
                             && stat.Value == attackerValue
                             && stat.SuccessThreshold == attackerThreshold));
 
-                this.defenderStats.Add(name, Mock.Of<IRollableValue<int>>(
+                this.defenderStats.Add(name, Mock.Of<IEntityStatistic>(
                     stat => stat.Name == name
                             && stat.Value == defenderValue
                             && stat.SuccessThreshold == defenderThreshold));

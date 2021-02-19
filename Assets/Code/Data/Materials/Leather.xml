@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<Materials>
-  <Material>
-    <Name>Leather</Name>
-    <Hardness>1</Hardness>
-    <Bonus>1</Bonus>
-    <Weight>2</Weight>
-  </Material>
-</Materials>

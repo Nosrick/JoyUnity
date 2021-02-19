@@ -83,7 +83,7 @@ namespace JoyLib.Code.Unity.GUI
 
         protected void ChangedStatistics(object sender, EventArgs args)
         {
-            IDictionary<string, IRollableValue<int>> stats = this.StatisticWindow.GetStatistics();
+            IDictionary<string, IEntityStatistic> stats = this.StatisticWindow.GetStatistics();
             if (stats.Count == 0)
             {
                 return;

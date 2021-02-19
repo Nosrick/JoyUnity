@@ -3,13 +3,18 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using Castle.Core.Internal;
 using JoyLib.Code.Helpers;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace JoyLib.Code.Entities.Gender
 {
     public class GenderHandler : IGenderHandler
     {
-        public HashSet<IGender> Genders { get; protected set; }
+        protected HashSet<IGender> Genders { get; set; }
+
+        public IEnumerable<IGender> Values => this.Genders;
 
         public GenderHandler()
         {
@@ -20,42 +25,65 @@ namespace JoyLib.Code.Entities.Gender
         {
             if (this.Genders is null)
             {
-                this.Genders = this.LoadGenders();
+                this.Genders = new HashSet<IGender>(this.Load());
             }
         }
 
-        protected HashSet<IGender> LoadGenders()
+        public IEnumerable<IGender> Load()
         {
             HashSet<IGender> genders = new HashSet<IGender>();
-            try
-            {
                 string[] files =
                     Directory.GetFiles(Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "/Genders",
-                        "*.xml", SearchOption.AllDirectories);
+                        "*.json", SearchOption.AllDirectories);
 
                 foreach (string file in files)
                 {
-                    XElement doc = XElement.Load(file);
 
-                    genders = new HashSet<IGender>(from gender in doc.Elements("Gender")
-                        select new BaseGender(
-                            gender.Element("Name").GetAs<string>(),
-                            gender.Element("Possessive").GetAs<string>(),
-                            gender.Element("PersonalSubject").GetAs<string>(),
-                            gender.Element("PersonalObject").GetAs<string>(),
-                            gender.Element("Reflexive").GetAs<string>(),
-                            gender.Element("PossessivePlural").GetAs<string>(),
-                            gender.Element("ReflexivePlural").GetAs<string>(),
-                            gender.Element("IsOrAre").DefaultIfEmpty("is")));
+                    using (StreamReader reader = new StreamReader(file))
+                    {
+                        using (JsonTextReader jsonReader = new JsonTextReader(reader))
+                        {
+                            try
+                            {
+                                JObject jToken = JObject.Load(jsonReader);
+
+                                if (jToken.IsNullOrEmpty())
+                                {
+                                    continue;
+                                }
+
+                                foreach (JToken child in jToken["Genders"])
+                                {
+                                    string name = (string) child["Name"];
+                                    string possessive = (string) child["Possessive"];
+                                    string personalSubject = (string) child["PersonalSubject"];
+                                    string personalObject = (string) child["PersonalObject"];
+                                    string reflexive = (string) child["Reflexive"];
+                                    string possessivePlural = (string) child["PossessivePlural"];
+                                    string reflexivePlural = (string) child["ReflexivePlural"];
+                                    string isOrAre = (string) child["IsOrAre"];
+
+                                    genders.Add(new BaseGender(
+                                        name,
+                                        possessive,
+                                        personalSubject,
+                                        personalObject,
+                                        reflexive,
+                                        possessivePlural,
+                                        reflexivePlural,
+                                        isOrAre));
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                GlobalConstants.ActionLog.AddText("Error loading genders from " + file);
+                                GlobalConstants.ActionLog.StackTrace(e);
+                            }
+                        }
+                    }
                 }
 
                 return genders;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return genders;
-            }
         }
 
         public IGender Get(string name)
@@ -66,6 +94,11 @@ namespace JoyLib.Code.Entities.Gender
             }
 
             return this.Genders.First(gender => gender.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public void Dispose()
+        {
+            this.Genders = null;
         }
     }
 }

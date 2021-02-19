@@ -1,0 +1,19 @@
+﻿{
+  "VisionTypes": [
+    {
+      "Name": "diurnal vision",
+      "DarkColour": "#0d000dff",
+      "LightColour": "#dbd5adff",
+      "MinimumLight": 8,
+      "MinimumComfort": 14
+    },
+    {
+      "Name": "nocturnal vision",
+      "DarkColour": "#0E3613FF",
+      "LightColour": "#addbb3FF",
+      "MaximumLight": 24,
+      "MaximumComfort": 16,
+      "MinimumComfort": 3
+    }
+  ]
+}

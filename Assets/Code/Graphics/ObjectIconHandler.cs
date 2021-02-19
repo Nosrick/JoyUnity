@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using Castle.Core.Internal;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Rollers;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,7 +16,7 @@ namespace JoyLib.Code.Graphics
     public class ObjectIconHandler : IObjectIconHandler
     {
         protected RNG Roller { get; set; }
-        
+
         protected int m_SpriteSize = 16;
 
         public ObjectIconHandler(RNG roller)
@@ -22,7 +25,7 @@ namespace JoyLib.Code.Graphics
             this.Initalise(GlobalConstants.SPRITE_SIZE);
         }
 
-        protected void Initalise(int spriteSize) 
+        protected void Initalise(int spriteSize)
         {
             this.SpriteSize = spriteSize;
 
@@ -31,7 +34,7 @@ namespace JoyLib.Code.Graphics
 
         protected bool Load()
         {
-            if(!(this.Icons is null))
+            if (!(this.Icons is null))
             {
                 return true;
             }
@@ -48,7 +51,7 @@ namespace JoyLib.Code.Graphics
                 {
                     new SpritePart
                     {
-                        m_Data = new[] { "DEFAULT" },
+                        m_Data = new[] {"DEFAULT"},
                         m_Filename = "Sprites/default",
                         m_Frames = 1,
                         m_Name = "DEFAULT",
@@ -57,7 +60,7 @@ namespace JoyLib.Code.Graphics
                         {
                             defaultSprite
                         },
-                        m_PossibleColours = new List<Color>{ Color.white }
+                        m_PossibleColours = new List<Color> {Color.white}
                     }
                 }
             };
@@ -69,25 +72,36 @@ namespace JoyLib.Code.Graphics
 
             string[] files =
                 Directory.GetFiles(
-                    Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "/Sprite Definitions", "*.xml",
+                    Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "/Sprite Definitions", "*.json",
                     SearchOption.AllDirectories);
 
             foreach (string file in files)
             {
-                try
+                using (StreamReader reader = new StreamReader(file))
                 {
-                    XElement doc = XElement.Load(file);
-
-                    foreach (XElement tileSetElement in doc.Elements("TileSet"))
+                    using (JsonTextReader jsonReader = new JsonTextReader(reader))
                     {
-                        string tileSet = tileSetElement.Element("Name").GetAs<string>();
+                        try
+                        {
+                            JObject jToken = JObject.Load(jsonReader);
 
-                        this.AddSpriteDataFromXML(tileSet, tileSetElement);
+                            if (jToken["Objects"].IsNullOrEmpty())
+                            {
+                                continue;
+                            }
+
+                            JToken tileSet = jToken["Objects"]["TileSet"];
+
+                            string name = (string) tileSet["Name"];
+
+                            this.AddSpriteDataFromJson(name, tileSet["SpriteData"]);
+                        }
+                        catch (Exception e)
+                        {
+                            GlobalConstants.ActionLog.AddText("Cannot load sprite definitions from " + file);
+                            GlobalConstants.ActionLog.StackTrace(e);
+                        }
                     }
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
                 }
             }
 
@@ -134,37 +148,81 @@ namespace JoyLib.Code.Graphics
             return dataToAdd.Aggregate(true, (current, data) => current & this.AddSpriteData(tileSet, data));
         }
 
-        public bool AddSpriteDataFromXML(string tileSet, XElement spriteDataElement)
+        /// <summary>
+        /// This must be passed the "SpriteData" node of the JSON
+        /// </summary>
+        /// <param name="tileSet">The tileset that the data belongs to</param>
+        /// <param name="spriteDataToken">The JSON to pull the data from. MUST have a root of "SpriteData"</param>
+        /// <returns></returns>
+        public bool AddSpriteDataFromJson(string tileSet, JToken spriteDataToken)
         {
-            IEnumerable<SpriteData> spriteData = from data in spriteDataElement.Elements("SpriteData")
-                select new SpriteData
+            List<SpriteData> spriteData = new List<SpriteData>();
+            foreach (var data in spriteDataToken)
+            {
+                try
                 {
-                    m_Name = data.Element("Name").GetAs<string>(),
-                    m_State = data.Element("State").DefaultIfEmpty("DEFAULT"),
-                    m_Parts = (from part in data.Elements("Part")
-                        select new SpritePart
+                    string spriteDataName = (string) data["Name"];
+                    string spriteDataState = ((string) data["State"]) ?? "DEFAULT";
+                    List<SpritePart> parts = new List<SpritePart>();
+
+                    if (data["Part"].IsNullOrEmpty())
+                    {
+                        continue;
+                    }
+
+                    foreach (var part in data["Part"])
+                    {
+                        IEnumerable<string> partData = part["Data"] is null
+                            ? new string[0]
+                            : part["Data"].Select(token => (string) token);
+                        string filename = (string) part["Filename"];
+                        int frames = (int) (part["Frames"] ?? 1);
+                        string partName = (string) part["Name"];
+                        int position = (int) (part["Position"] ?? 0);
+                        List<Sprite> frameSprites = Resources.LoadAll<Sprite>("Sprites/" + filename)
+                            .Where((sprite, i) =>
+                                i >= position && i < position + frames)
+                            .ToList();
+                        List<Color> possibleColours = part["Colour"]?
+                            .Select(colour => GraphicsHelper.ParseHTMLString((string) colour))
+                            .ToList();
+                        if (possibleColours.IsNullOrEmpty())
                         {
-                            m_Data = from d in part.Elements("Data")
-                                select d.GetAs<string>(),
-                            m_Filename = part.Element("Filename").GetAs<string>(),
-                            m_Frames = part.Element("Frames").DefaultIfEmpty(1),
-                            m_Name = part.Element("Name").GetAs<string>(),
-                            m_Position = part.Element("Position").DefaultIfEmpty(0),
-                            m_FrameSprites = Resources.LoadAll<Sprite>("Sprites/" + part.Element("Filename").GetAs<string>())
-                                .Where(
-                                    (sprite, i) => 
-                                        i >= part.Element("Position").DefaultIfEmpty(0) 
-                                        && i < part.Element("Position").DefaultIfEmpty(0) + part.Element("Frames").DefaultIfEmpty(1))
-                                .ToList(),
-                            m_PossibleColours = part.Elements("Colour").Any() 
-                                ? (from colour in part.Elements("Colour")
-                                select GraphicsHelper.ParseHTMLString(colour.GetAs<string>())).ToList()
-                                : new List<Color> { Color.white },
-                            m_SortingOrder = part.Element("SortOrder").DefaultIfEmpty(0),
-                            m_ImageFillType = GraphicsHelper.ParseFillMethodString(part.Element("FillType").DefaultIfEmpty("filled")),
-                            m_SpriteDrawMode = GraphicsHelper.ParseDrawModeString(part.Element("FillType").DefaultIfEmpty("simple"))
-                        }).ToList()
-                };
+                            possibleColours = new List<Color> {Color.white};
+                        }
+
+                        int sortOrder = (int) (part["SortOrder"] ?? 1);
+                        Image.Type imageType = GraphicsHelper.ParseFillMethodString((string) part["FillType"]);
+                        SpriteDrawMode drawMode = GraphicsHelper.ParseDrawModeString((string) part["FillType"]);
+                        parts.Add(
+                            new SpritePart
+                            {
+                                m_Data = partData,
+                                m_Filename = filename,
+                                m_Frames = frames,
+                                m_FrameSprites = frameSprites,
+                                m_ImageFillType = imageType,
+                                m_Name = partName,
+                                m_Position = position,
+                                m_PossibleColours = possibleColours,
+                                m_SortingOrder = sortOrder,
+                                m_SpriteDrawMode = drawMode
+                            });
+                    }
+
+                    spriteData.Add(new SpriteData
+                    {
+                        m_Name = spriteDataName,
+                        m_Parts = parts,
+                        m_State = spriteDataState
+                    });
+                }
+                catch (Exception e)
+                {
+                    GlobalConstants.ActionLog.AddText("Could not load sprite data for " + tileSet);
+                    GlobalConstants.ActionLog.StackTrace(e);
+                }
+            }
 
             return this.AddSpriteDataRange(tileSet, spriteData);
         }
@@ -215,22 +273,12 @@ namespace JoyLib.Code.Graphics
                 .Select(pair => pair.Item2);
         }
 
-        protected IDictionary<string, List<Tuple<string, SpriteData>>> Icons
-        {
-            get;
-            set;
-        }
+        protected IDictionary<string, List<Tuple<string, SpriteData>>> Icons { get; set; }
 
         public int SpriteSize
         {
-            get
-            {
-                return this.m_SpriteSize;
-            }
-            protected set
-            {
-                this.m_SpriteSize = value;
-            }
+            get { return this.m_SpriteSize; }
+            protected set { this.m_SpriteSize = value; }
         }
     }
 
@@ -248,8 +296,7 @@ namespace JoyLib.Code.Graphics
         public string m_Name;
         public int m_Frames;
         public IEnumerable<string> m_Data;
-        [NonSerialized]
-        public List<Sprite> m_FrameSprites;
+        [NonSerialized] public List<Sprite> m_FrameSprites;
         public string m_Filename;
         public int m_Position;
         public List<Color> m_PossibleColours;

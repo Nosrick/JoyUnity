@@ -1,12 +1,20 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using Castle.Core.Internal;
+using JoyLib.Code.Collections;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.AI.LOS.Providers;
+using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Helpers;
+using JoyLib.Code.Rollers;
+using JoyLib.Code.Scripting;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace JoyLib.Code.Entities
 {
@@ -17,13 +25,13 @@ namespace JoyLib.Code.Entities
         protected IVisionProviderHandler VisionProviderHandler { get; set; }
         protected IAbilityHandler AbilityHandler { get; set; }
 
-        public IEnumerable<IEntityTemplate> Templates
+        public IEnumerable<IEntityTemplate> Values
         {
             get
             {
                 if (this.m_Templates is null)
                 {
-                    this.m_Templates = this.LoadTypes();
+                    this.m_Templates = this.Load().ToList();
                 }
 
                 return this.m_Templates;
@@ -38,86 +46,98 @@ namespace JoyLib.Code.Entities
             this.AbilityHandler = abilityHandler;
             this.VisionProviderHandler = visionProviderHandler;
             this.SkillHandler = skillHandler;
-            this.m_Templates = this.LoadTypes();
+            this.m_Templates = this.Load().ToList();
         }
 
-        private List<IEntityTemplate> LoadTypes()
+        public IEnumerable<IEntityTemplate> Load()
         {
             List<IEntityTemplate> entities = new List<IEntityTemplate>();
-            
-            string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Entities", "*.xml", SearchOption.AllDirectories);
+
+            string[] files =
+                Directory.GetFiles(
+                    Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Entities", 
+                    "*.json",
+                    SearchOption.AllDirectories);
 
             foreach (string file in files)
             {
-                try
+                using (StreamReader reader = new StreamReader(file))
                 {
-                    XElement doc = XElement.Load(file);
-
-                    foreach(XElement entity in doc.Elements("Entity"))
+                    using (JsonTextReader jsonReader = new JsonTextReader(reader))
                     {
-                        Dictionary<string, IRollableValue<int>> statistics = (from stat in entity.Elements("Statistic")
-                                select new KeyValuePair<string, IRollableValue<int>>(
-                                    stat.Element("Name").GetAs<string>(),
-                                    new EntityStatistic(
-                                        stat.Element("Name").DefaultIfEmpty("DEFAULT"),
-                                        stat.Element("Value").DefaultIfEmpty(4),
-                                        stat.Element("Threshold").DefaultIfEmpty(GlobalConstants.DEFAULT_SUCCESS_THRESHOLD))))
-                            .ToDictionary(x => x.Key, x => x.Value);
-
-                        List<string> needs = (from need in entity.Elements("Need")
-                                                select need.DefaultIfEmpty("DEFAULT")).ToList();
-
-                        Dictionary<string, IEntitySkill> skills = (from skill in entity.Elements("Skill")
-                                                                  select new KeyValuePair<string, IEntitySkill>(
-                                                                      skill.Element("Name").GetAs<string>(), 
-                                                                      new EntitySkill(skill.Element("Name").DefaultIfEmpty("DEFAULT"),
-                                                                          skill.Element("Value").DefaultIfEmpty(0),
-                                                                          skill.Element("Threshold").DefaultIfEmpty(GlobalConstants.DEFAULT_SUCCESS_THRESHOLD),
-                                                                          this.SkillHandler.GetCoefficients(needs, skill.Element("Name").DefaultIfEmpty("DEFAULT")))))
-                                                                .ToDictionary(x => x.Key, x => x.Value);
-
-                        string creatureType = entity.Element("CreatureType").DefaultIfEmpty("DEFAULT");
-                        string type = entity.Element("Type").DefaultIfEmpty("DEFAULT");
-                        string visionType = entity.Element("VisionType").DefaultIfEmpty("diurnal vision");
-                        IVision vision = this.VisionProviderHandler.GetVision(visionType);
-
-                        int size = entity.Element("Size").DefaultIfEmpty<int>(0);
-
-                        List<string> tags = (from tag in entity.Elements("Tag")
-                                             select tag.DefaultIfEmpty("NULL")).ToList();
-
-                        List<string> slots = (from slot in entity.Elements("Slot")
-                                              select slot.DefaultIfEmpty("NULL")).ToList();
-
-                        List<IAbility> abilities = new List<IAbility>();
                         try
                         {
-                            abilities = (from ability in entity.Elements("Ability")
-                                                    select this.AbilityHandler.GetAbility(ability.GetAs<string>())).ToList();
+                            JObject jToken = JObject.Load(jsonReader);
+
+                            if (jToken.IsNullOrEmpty())
+                            {
+                                continue;
+                            }
+
+                            foreach (JToken child in jToken["Entities"])
+                            {
+                                string creatureType = (string) child["CreatureType"];
+                                string type = (string) child["Type"];
+                                string visionType = (string) child["VisionType"];
+                                IVision vision = this.VisionProviderHandler.Get(visionType);
+                                int size = (int) (child["Size"] ?? 0);
+
+                                IDictionary<string, IEntityStatistic> statistics = child["Statistics"] is null
+                                    ? new Dictionary<string, IEntityStatistic>()
+                                    : child["Statistics"].Select(
+                                            token => new EntityStatistic(
+                                                (string) token["Name"],
+                                                (int) token["Value"],
+                                                (int) ((token["Threshold"]) ??
+                                                       GlobalConstants.DEFAULT_SUCCESS_THRESHOLD)))
+                                        .ToDictionary(statistic => statistic.Name, statistic => (IEntityStatistic) statistic);
+
+                                IDictionary<string, IEntitySkill> skills = child["Skills"] is null
+                                    ? new Dictionary<string, IEntitySkill>()
+                                    : child["Skills"].Select(
+                                            token => new EntitySkill(
+                                                (string) token["Name"],
+                                                (int) (token["Value"] ?? 0),
+                                                (int) (token["Threshold"] ?? GlobalConstants.DEFAULT_SUCCESS_THRESHOLD)))
+                                        .ToDictionary(skill => skill.Name, skill => (IEntitySkill) skill);
+
+                                IEnumerable<string> tags = child["Tags"] is null
+                                    ? new List<string>()
+                                    : child["Tags"].Select(token => (string) token);
+
+                                IEnumerable<string> slots = child["Slots"] is null
+                                    ? new List<string>()
+                                    : child["Slots"].Select(token => (string) token);
+
+                                IEnumerable<string> needs = child["Needs"] is null
+                                    ? new List<string>()
+                                    : child["Needs"].Select(token => (string) token);
+
+                                IEnumerable<IAbility> abilities = child["Abilities"] is null
+                                    ? new List<IAbility>()
+                                    : child["Abilities"].Select(token =>
+                                        this.AbilityHandler.GetAbility((string) token));
+                                
+                                entities.Add(
+                                    new EntityTemplate(
+                                        statistics,
+                                        skills,
+                                        needs.ToArray(),
+                                        abilities.ToArray(),
+                                        slots.ToArray(),
+                                        size,
+                                        vision,
+                                        creatureType,
+                                        type,
+                                        tags.ToArray()));
+                            }
                         }
-                        catch(Exception e)
+                        catch (Exception e)
                         {
-                            GlobalConstants.ActionLog.AddText("ERROR LOADING ABILITY FOR ENTITY TEMPLATE " + file);
+                            GlobalConstants.ActionLog.AddText("Failed to load entities in " + file);
                             GlobalConstants.ActionLog.StackTrace(e);
                         }
-                        
-                        entities.Add(new EntityTemplate(
-                                            statistics, 
-                                            skills,
-                                            needs.ToArray(), 
-                                            abilities.ToArray(), 
-                                            slots.ToArray(),
-                                            size, 
-                                            vision, 
-                                            creatureType, 
-                                            type, 
-                                            tags.ToArray()));
                     }
-                }
-                catch (Exception e)
-                {
-                    GlobalConstants.ActionLog.AddText("ERROR LOADING ENTITY TEMPLATES, FILE " + file);
-                    GlobalConstants.ActionLog.StackTrace(e);
                 }
             }
 
@@ -126,9 +146,9 @@ namespace JoyLib.Code.Entities
 
         public IEntityTemplate Get(string type)
         {
-            if(this.Templates.Any(x => x.CreatureType == type))
+            if(this.Values.Any(x => x.CreatureType == type))
             {
-                return this.Templates.First(x => x.CreatureType == type);
+                return this.Values.First(x => x.CreatureType == type);
             }
 
             throw new InvalidOperationException("Could not find entity template of type " + type);
@@ -138,6 +158,16 @@ namespace JoyLib.Code.Entities
         {
             int result = GlobalConstants.GameManager.Roller.Roll(0, this.m_Templates.Count);
             return this.m_Templates[result];
+        }
+
+        public void Dispose()
+        {
+            this.m_Templates = null;
+        }
+
+        ~EntityTemplateHandler()
+        {
+            this.Dispose();
         }
     }
 }

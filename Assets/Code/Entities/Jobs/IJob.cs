@@ -14,7 +14,7 @@ namespace JoyLib.Code.Entities.Jobs
 
         IJob Copy(IJob original);
 
-        Dictionary<IAbility, int> Abilities { get; }
+        IDictionary<IAbility, int> Abilities { get; }
         
         string Name { get; }
         
@@ -22,8 +22,8 @@ namespace JoyLib.Code.Entities.Jobs
         
         int Experience { get; }
         
-        Dictionary<string, int> StatisticDiscounts { get; }
+        IDictionary<string, int> StatisticDiscounts { get; }
         
-        Dictionary<string, int> SkillDiscounts { get; }
+        IDictionary<string, int> SkillDiscounts { get; }
     }
 }

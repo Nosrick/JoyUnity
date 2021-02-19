@@ -6,11 +6,24 @@ namespace JoyLib.Code.Entities.Needs
 {
     public class NeedHandler : INeedHandler
     {
-        protected Dictionary<string, INeed> m_Needs;
+        protected Dictionary<string, INeed> m_NeedsMasters;
 
         public NeedHandler()
         {
-            this.m_Needs = Initialise();
+            this.m_NeedsMasters = this.Load().ToDictionary(need => need.Name, need => need);
+        }
+
+        public IEnumerable<INeed> Load()
+        {
+            try
+            {
+                return Scripting.ScriptingEngine.Instance.FetchAndInitialiseChildren<INeed>().ToList();
+            }
+            catch(Exception ex)
+            {
+                GlobalConstants.ActionLog.StackTrace(ex);
+                return new List<INeed>();
+            }
         }
 
         protected static Dictionary<string, INeed> Initialise()
@@ -36,26 +49,26 @@ namespace JoyLib.Code.Entities.Needs
 
         public INeed Get(string name)
         {
-            if(this.m_Needs is null)
+            if(this.m_NeedsMasters is null)
             {
-                this.m_Needs = Initialise();
+                this.m_NeedsMasters = Initialise();
             }
 
-            if(this.m_Needs.ContainsKey(name))
+            if(this.m_NeedsMasters.ContainsKey(name))
             {
-                return this.m_Needs[name].Copy();
+                return this.m_NeedsMasters[name].Copy();
             }
             throw new InvalidOperationException("Need not found, looking for " + name);
         }
 
         public ICollection<INeed> GetMany(IEnumerable<string> names)
         {
-            if (this.m_Needs is null)
+            if (this.m_NeedsMasters is null)
             {
-                this.m_Needs = Initialise();
+                this.m_NeedsMasters = Initialise();
             }
 
-            INeed[] needs = this.m_Needs
+            INeed[] needs = this.m_NeedsMasters
                 .Where(pair => names.Any(
                     name => name.Equals(pair.Key, StringComparison.OrdinalIgnoreCase)))
                 .Select(pair => pair.Value)
@@ -80,27 +93,27 @@ namespace JoyLib.Code.Entities.Needs
 
         public INeed GetRandomised(string name)
         {
-            if(this.m_Needs is null)
+            if(this.m_NeedsMasters is null)
             {
-                this.m_Needs = Initialise();
+                this.m_NeedsMasters = Initialise();
             }
 
-            if(this.m_Needs.ContainsKey(name))
+            if(this.m_NeedsMasters.ContainsKey(name))
             {
-                return this.m_Needs[name].Randomise();
+                return this.m_NeedsMasters[name].Randomise();
             }
             throw new InvalidOperationException("Need not found, looking for " + name);
         }
 
-        public IEnumerable<INeed> Needs
+        public IEnumerable<INeed> Values
         {
             get
             {
-                if (this.m_Needs is null)
+                if (this.m_NeedsMasters is null)
                 {
-                    this.m_Needs = Initialise();
+                    this.m_NeedsMasters = Initialise();
                 }
-                return new List<INeed>(this.m_Needs.Values);
+                return new List<INeed>(this.m_NeedsMasters.Values);
             }
         }
 
@@ -108,13 +121,29 @@ namespace JoyLib.Code.Entities.Needs
         {
             get
             {
-                if (this.m_Needs is null)
+                if (this.m_NeedsMasters is null)
                 {
-                    this.m_Needs = Initialise();
+                    this.m_NeedsMasters = Initialise();
                 }
 
-                return new List<string>(this.m_Needs.Keys);
+                return new List<string>(this.m_NeedsMasters.Keys);
             }
+        }
+
+        public void Dispose()
+        {
+            string[] keys = this.m_NeedsMasters.Keys.ToArray();
+            foreach (string key in keys)
+            {
+                this.m_NeedsMasters[key] = null;
+            }
+
+            this.m_NeedsMasters = null;
+        }
+
+        ~NeedHandler()
+        {
+            this.Dispose();
         }
     }
 }

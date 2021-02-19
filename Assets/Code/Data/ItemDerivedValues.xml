@@ -1,7 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<DerivedValues>
-    <DerivedValue>
-        <Name>durability</Name>
-        <Formula>(size * hardness) + bonus</Formula>
-    </DerivedValue>
-</DerivedValues>

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Linq;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 namespace JoyLib.Code.Graphics
@@ -8,7 +9,7 @@ namespace JoyLib.Code.Graphics
     {
         bool AddSpriteData(string tileSet, SpriteData dataToAdd);
         bool AddSpriteDataRange(string tileSet, IEnumerable<SpriteData> dataToAdd);
-        bool AddSpriteDataFromXML(string tileSet, XElement spriteDataElement);
+        bool AddSpriteDataFromJson(string tileSet, JToken spriteDataToken);
         IEnumerable<SpriteData> ReturnDefaultData();
         SpriteData ReturnDefaultIcon();
         IEnumerable<SpriteData> GetTileSet(string tileSet);

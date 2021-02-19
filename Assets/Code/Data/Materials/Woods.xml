@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<Materials>
-  <Material>
-    <Name>White Pine</Name>
-    <Hardness>0.4</Hardness>
-    <Bonus>0</Bonus>
-    <Weight>0.5</Weight>
-  </Material>
-</Materials>

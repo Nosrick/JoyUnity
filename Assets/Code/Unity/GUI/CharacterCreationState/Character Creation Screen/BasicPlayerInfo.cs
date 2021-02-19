@@ -50,7 +50,7 @@ namespace JoyLib.Code.Unity.GUI
         public void Initialise()
         {
             this.GameManager = GlobalConstants.GameManager;
-            this.Templates = GlobalConstants.GameManager.EntityTemplateHandler.Templates.ToList();
+            this.Templates = GlobalConstants.GameManager.EntityTemplateHandler.Values.ToList();
             this.Roller = new RNG();
             int result = this.Roller.Roll(0, this.Templates.Count);
             this.ChangeTemplate(this.Templates[result]);
@@ -93,29 +93,28 @@ namespace JoyLib.Code.Unity.GUI
         {
             this.CurrentCulture = culture;
             this.SexContainer.Container = this.CurrentCulture.Sexes.ToList();
-            IBioSex sex = this.CurrentCulture.ChooseSex(this.GameManager.BioSexHandler.Sexes);
-            this.SexContainer.Value = this.SexContainer.Container.FindIndex(s => s.Equals(sex.Name, StringComparison.CurrentCulture));
+            IBioSex sex = this.CurrentCulture.ChooseSex(this.GameManager.BioSexHandler.Values);
+            this.SexContainer.Value = this.SexContainer.Container.FindIndex(s => s.Equals(sex.Name, StringComparison.OrdinalIgnoreCase));
 
             this.GenderContainer.Container = this.CurrentCulture.Genders.ToList();
-            IGender gender = this.CurrentCulture.ChooseGender(sex, this.GameManager.GenderHandler.Genders);
+            IGender gender = this.CurrentCulture.ChooseGender(sex, this.GameManager.GenderHandler.Values);
             this.GenderContainer.Value = this.GenderContainer.Container.FindIndex(s => 
-                    s.Equals(gender.Name, StringComparison.Ordinal));
-
-
+                    s.Equals(gender.Name, StringComparison.OrdinalIgnoreCase));
+            
             this.SexualityContainer.Container = this.CurrentCulture.Sexualities.ToList();
-            ISexuality sexuality = this.CurrentCulture.ChooseSexuality(this.GameManager.SexualityHandler.Sexualities);
+            ISexuality sexuality = this.CurrentCulture.ChooseSexuality(this.GameManager.SexualityHandler.Values);
             this.SexualityContainer.Value = this.SexualityContainer.Container.FindIndex(s => 
                     s.Equals(sexuality.Name,
                         StringComparison.OrdinalIgnoreCase));
 
             this.JobContainer.Container = this.CurrentCulture.Jobs.ToList();
-            IJob job = this.CurrentCulture.ChooseJob(this.GameManager.JobHandler.Jobs);
+            IJob job = this.CurrentCulture.ChooseJob(this.GameManager.JobHandler.Values);
             this.JobContainer.Value = this.JobContainer.Container.FindIndex(s =>
                     s.Equals(job.Name,
                         StringComparison.OrdinalIgnoreCase));
 
             this.RomanceContainer.Container = this.CurrentCulture.RomanceTypes.ToList();
-            IRomance romance = this.CurrentCulture.ChooseRomance(this.GameManager.RomanceHandler.Romances);
+            IRomance romance = this.CurrentCulture.ChooseRomance(this.GameManager.RomanceHandler.Values);
             this.RomanceContainer.Value = this.RomanceContainer.Container.FindIndex(s => s.Equals(
                     romance.Name, StringComparison.OrdinalIgnoreCase));
 

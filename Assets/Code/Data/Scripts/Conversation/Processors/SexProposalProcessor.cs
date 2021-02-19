@@ -27,16 +27,15 @@ namespace JoyLib.Code.Entities.Abilities.Conversation.Processors
         {
             this.Happening = false;
 
-            IJoyObject[] participants = new[] {instigator, listener};
+            IJoyObject[] participants = {instigator, listener};
             
-            List<IRelationship> relationships =
-                RelationshipHandler.Get(participants, new[] {"sexual"}, false).ToList();
+            List<IRelationship> relationships = this.RelationshipHandler.Get(participants, new[] {"sexual"}, false).ToList();
 
             if (relationships.IsNullOrEmpty()
                 && listener.Sexuality.Compatible(listener, instigator)
                 && instigator.Sexuality.Compatible(instigator, listener))
             {
-                relationships.Add(RelationshipHandler.CreateRelationship(participants, new string[] {"sexual"}));
+                relationships.Add(this.RelationshipHandler.CreateRelationship(participants, new string[] {"sexual"}));
             }
             
             if (listener.Sexuality.WillMateWith(listener, instigator, relationships) == false

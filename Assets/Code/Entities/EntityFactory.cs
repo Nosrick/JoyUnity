@@ -82,7 +82,7 @@ namespace JoyLib.Code.Entities
         public IEntity CreateFromTemplate(IEntityTemplate template,
             Vector2Int position,
             string name = null,
-            IDictionary<string, IRollableValue<int>> statistics = null,
+            IDictionary<string, IEntityStatistic> statistics = null,
             IDictionary<string, IDerivedValue> derivedValues = null,
             IDictionary<string, IEntitySkill> skills = null,
             IEnumerable<IAbility> abilities = null,
@@ -105,7 +105,7 @@ namespace JoyLib.Code.Entities
             IEnumerable<ISpriteState> selectedSprites = sprites;
             List<ICulture> creatureCultures = new List<ICulture>();
             IDriver selectedDriver = driver;
-            IDictionary<string, IRollableValue<int>> selectedStatistics = statistics;
+            IDictionary<string, IEntityStatistic> selectedStatistics = statistics;
             IDictionary<string, IDerivedValue>  selectedDVs = derivedValues;
             IDictionary<string, IEntitySkill> selectedSkills = skills;
             IEnumerable<IAbility> selectedAbilities = abilities;
@@ -144,7 +144,7 @@ namespace JoyLib.Code.Entities
 
             if (selectedSkills is null)
             {
-                selectedSkills = this.SkillHandler.GetDefaultSkillBlock(needs.Values);
+                selectedSkills = this.SkillHandler.GetDefaultSkillBlock();
                 foreach (EntitySkill skill in template.Skills.Values)
                 {
                     selectedSkills.Add(skill.Name, skill);
@@ -158,17 +158,17 @@ namespace JoyLib.Code.Entities
 
             if(selectedJob is null)
             {
-                selectedJob = dominantCulture.ChooseJob(this.JobHandler.Jobs);
+                selectedJob = dominantCulture.ChooseJob(this.JobHandler.Values);
             }
 
             if(selectedSex is null)
             {
-                selectedSex = dominantCulture.ChooseSex(this.BioSexHandler.Sexes);
+                selectedSex = dominantCulture.ChooseSex(this.BioSexHandler.Values);
             }
 
             if (selectedGender is null)
             {
-                selectedGender = dominantCulture.ChooseGender(selectedSex, this.GenderHandler.Genders.ToArray());
+                selectedGender = dominantCulture.ChooseGender(selectedSex, this.GenderHandler.Values);
             }
 
             if (selectedName.IsNullOrEmpty())
@@ -178,12 +178,12 @@ namespace JoyLib.Code.Entities
 
             if (selectedRomance is null)
             {
-                selectedRomance = dominantCulture.ChooseRomance(this.RomanceHandler.Romances);
+                selectedRomance = dominantCulture.ChooseRomance(this.RomanceHandler.Values);
             }
 
             if(selectedSexuality is null)
             {
-                selectedSexuality = dominantCulture.ChooseSexuality(this.SexualityHandler.Sexualities);
+                selectedSexuality = dominantCulture.ChooseSexuality(this.SexualityHandler.Values);
             }
 
             if(selectedSprites is null)
@@ -239,7 +239,7 @@ namespace JoyLib.Code.Entities
 
         public IEntity CreateLong(IEntityTemplate template,
             IDictionary<string, INeed> needs,
-            IDictionary<string, IRollableValue<int>> statistics,
+            IDictionary<string, IEntityStatistic> statistics,
             IDictionary<string, IDerivedValue> derivedValues,
             IDictionary<string, IEntitySkill> skills,
             IEnumerable<IAbility> abilities,

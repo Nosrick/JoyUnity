@@ -1,0 +1,133 @@
+{
+  "Items": {
+    "ActionWord": "cuts",
+    "IdentifiedItems": [
+      {
+        "Name": "Greatsword",
+        "Description": "A long, bladed weapon capable of devastating strikes.",
+        "Value": 50,
+        "Skills": [
+          "heavy blades"
+        ],
+        "SpawnWeight": 10,
+        "Materials": [
+          "Iron",
+          "Steel",
+          "Bronze",
+          "Glass",
+          "Bone"
+        ],
+        "Size": 500,
+        "Slots": [
+          "Hand",
+          "Hand"
+        ],
+        "Tags": [
+          "weapon",
+          "two-handed",
+          "sword",
+          "physical",
+          "heavy blades",
+          "strength"
+        ],
+        "TileSet": "Weapons"
+      }
+    ],
+    "UnidentifiedItems": [
+      {
+        "Name": "Greatsword",
+        "Description": "A long, bladed weapon capable of devastating strikes.",
+        "IdentifiedName": "Greatsword"
+      }
+    ],
+    "TileSet": {
+      "Name": "Weapons",
+      "SpriteData": [
+        {
+          "Name": "greatsword",
+          "Part": [
+            {
+              "Name": "greatsword_0",
+              "Frames": 1,
+              "Filename": "LongWep",
+              "Data": [
+                "default"
+              ],
+              "Position": 7
+            }
+          ]
+        },
+        {
+          "Name": "greatsword",
+          "Part": [
+            {
+              "Name": "greatsword_1",
+              "Frames": 1,
+              "Filename": "LongWep",
+              "Data": [
+                "default"
+              ],
+              "Position": 8
+            }
+          ]
+        },
+        {
+          "Name": "greatsword",
+          "Part": [
+            {
+              "Name": "greatsword_2",
+              "Frames": 1,
+              "Filename": "LongWep",
+              "Data": [
+                "default"
+              ],
+              "Position": 9
+            }
+          ]
+        },
+        {
+          "Name": "greatsword",
+          "Part": [
+            {
+              "Name": "greatsword_3",
+              "Frames": 1,
+              "Filename": "LongWep",
+              "Data": [
+                "default"
+              ],
+              "Position": 10
+            }
+          ]
+        },
+        {
+          "Name": "greatsword",
+          "Part": [
+            {
+              "Name": "greatsword_4",
+              "Frames": 1,
+              "Filename": "LongWep",
+              "Data": [
+                "default"
+              ],
+              "Position": 11
+            }
+          ]
+        },
+        {
+          "Name": "greatsword",
+          "Part": [
+            {
+              "Name": "greatsword_5",
+              "Frames": 1,
+              "Filename": "LongWep",
+              "Data": [
+                "default"
+              ],
+              "Position": 12
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

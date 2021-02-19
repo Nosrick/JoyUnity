@@ -27,9 +27,9 @@ namespace JoyLib.Code.Unity.GUI
             this.SetRemainingPointsText();
         }
 
-        public IDictionary<string, IRollableValue<int>> GetStatistics()
+        public IDictionary<string, IEntityStatistic> GetStatistics()
         {
-            IDictionary<string, IRollableValue<int>> stats = new Dictionary<string, IRollableValue<int>>();
+            IDictionary<string, IEntityStatistic> stats = new Dictionary<string, IEntityStatistic>();
             foreach (NamedItem item in this.Items)
             {
                 stats.Add(

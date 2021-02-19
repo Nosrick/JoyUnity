@@ -1,8 +1,6 @@
 ﻿namespace JoyLib.Code.Entities.Sexuality
 {
-    public interface IEntitySexualityHandler
+    public interface IEntitySexualityHandler : IHandler<ISexuality, string>
     {
-        ISexuality Get(string sexuality);
-        ISexuality[] Sexualities { get; }
     }
 }

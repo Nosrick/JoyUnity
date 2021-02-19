@@ -4,7 +4,7 @@ using Sirenix.OdinSerializer;
 namespace JoyLib.Code.Entities.Statistics
 {
     [Serializable]
-    public class EntityStatistic : IRollableValue<int>
+    public class EntityStatistic : IEntityStatistic
     {
         public const string STRENGTH    =   "strength";
         public const string AGILITY     =   "agility";

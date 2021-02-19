@@ -16,9 +16,9 @@ namespace JoyLib.Code.Entities
         protected string m_Type;
 
         [OdinSerialize]
-        protected Dictionary<string, IRollableValue<int>> m_Statistics;
+        protected IDictionary<string, IEntityStatistic> m_Statistics;
         [OdinSerialize]
-        protected Dictionary<string, IEntitySkill> m_Skills;
+        protected IDictionary<string, IEntitySkill> m_Skills;
         protected string[] m_Needs;
         protected IAbility[] m_Abilities;
         protected string[] m_Slots;
@@ -30,8 +30,8 @@ namespace JoyLib.Code.Entities
         protected bool m_Sentient;
 
         public EntityTemplate(
-            Dictionary<string, IRollableValue<int>> statistics, 
-            Dictionary<string, IEntitySkill> skills, 
+            IDictionary<string, IEntityStatistic> statistics, 
+            IDictionary<string, IEntitySkill> skills, 
             string[] needs,
             IAbility[] abilities,
             string[] slots, 
@@ -94,14 +94,14 @@ namespace JoyLib.Code.Entities
             }
         }
 
-        public IDictionary<string, IRollableValue<int>> Statistics
+        public IDictionary<string, IEntityStatistic> Statistics
         {
             get
             {
-                IDictionary<string, IRollableValue<int>> stats = new Dictionary<string, IRollableValue<int>>();
-                foreach (KeyValuePair<string, IRollableValue<int>> stat in this.m_Statistics)
+                IDictionary<string, IEntityStatistic> stats = new Dictionary<string, IEntityStatistic>();
+                foreach (KeyValuePair<string, IEntityStatistic> stat in this.m_Statistics)
                 {
-                    stats.Add(new KeyValuePair<string, IRollableValue<int>>(
+                    stats.Add(new KeyValuePair<string, IEntityStatistic>(
                         ObjectExtensions.Copy(stat.Key), 
                         ObjectExtensions.Copy(stat.Value)));
                 }

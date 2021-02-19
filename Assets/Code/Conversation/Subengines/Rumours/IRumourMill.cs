@@ -8,7 +8,7 @@ using JoyLib.Code.World;
 
 namespace JoyLib.Code.Conversation.Subengines.Rumours
 {
-    public interface IRumourMill
+    public interface IRumourMill : IDisposable
     {
         List<IRumour> Rumours
         {

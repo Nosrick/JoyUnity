@@ -5,6 +5,5 @@ namespace JoyLib.Code.Entities.Statistics
 {
     public interface IEntitySkill : IRollableValue<int>
     {
-        NonUniqueDictionary<INeed, float> GoverningNeeds { get; }
     }
 }

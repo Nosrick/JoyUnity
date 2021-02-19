@@ -8,7 +8,7 @@ namespace JoyLib.Code.Entities
     public interface IEntityTemplate : ITagged
     {
         IEnumerable<string> Slots { get; }
-        IDictionary<string, IRollableValue<int>> Statistics { get; }
+        IDictionary<string, IEntityStatistic> Statistics { get; }
         IDictionary<string, IEntitySkill> Skills { get; }
         IEnumerable<string> Needs { get; }
         IEnumerable<IAbility> Abilities { get; }

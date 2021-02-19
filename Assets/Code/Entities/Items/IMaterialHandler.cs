@@ -1,7 +1,6 @@
 ﻿namespace JoyLib.Code.Entities.Items
 {
-    public interface IMaterialHandler
+    public interface IMaterialHandler : IHandler<IItemMaterial, string>
     {
-        IItemMaterial GetMaterial(string nameRef);
     }
 }

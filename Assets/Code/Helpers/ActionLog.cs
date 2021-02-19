@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
 using UnityEngine;
@@ -121,16 +123,31 @@ namespace JoyLib.Code.Helpers
             }
         }
 
-        public void PrintCollection(IEnumerable<object> collection)
+        public void PrintCollection(IEnumerable collection)
         {
+            this.AddText(this.CollectionWalk(collection));
+        }
+
+        protected string CollectionWalk(IEnumerable collection)
+        {
+            StringBuilder builder = new StringBuilder();
             foreach (object o in collection)
             {
-                this.AddText(o.ToString());
-                if (o is IItemContainer container)
+                builder.AppendLine(o.ToString());
+                switch (o)
                 {
-                    this.PrintCollection(container.Contents);
+                    case IItemContainer container:
+                        builder.AppendLine("Contents:");
+                        builder.AppendLine(this.CollectionWalk(container.Contents));
+                        break;
+                    case IEnumerable child:
+                        builder.AppendLine("Contents:");
+                        builder.AppendLine(this.CollectionWalk(child));
+                        break;
                 }
             }
+
+            return builder.ToString();
         }
 
         ~ActionLog()

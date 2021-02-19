@@ -3,38 +3,91 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using Castle.Core.Internal;
 using JoyLib.Code.Helpers;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace JoyLib.Code.Entities.Statistics
 {
     public class EntityStatisticHandler : IEntityStatisticHandler
     {
-        public IEnumerable<string> StatisticNames { get; protected set; }
+        public IEnumerable<string> StatisticNames => this.Statistics.Keys;
+
+        public IEnumerable<IEntityStatistic> Values => this.Statistics.Values;
+        
+        protected IDictionary<string, IEntityStatistic> Statistics { get; set; }
+        protected IDictionary<string, IEntityStatistic> DefaultStatistics { get; set; }
 
         public EntityStatisticHandler()
         {
-            this.StatisticNames = this.LoadStatisticNames();
+            this.Statistics = this.Load().ToDictionary(statistic => statistic.Name, stat => stat);
         }
 
-        protected IEnumerable<string> LoadStatisticNames()
+        public IEnumerable<IEntityStatistic> Load()
         {
-            string file = Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Statistics.xml";
+            string file = Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "/Statistics/Statistics.json";
 
-            List<string> names = new List<string>();
+            List<IEntityStatistic> statistics = new List<IEntityStatistic>();
 
-            try
+            using (StreamReader reader = new StreamReader(file))
             {
-                XElement doc = XElement.Load(file);
+                using (JsonTextReader jsonReader = new JsonTextReader(reader))
+                {
+                    try
+                    {
+                        JObject jToken = JObject.Load(jsonReader);
 
-                names.AddRange(from stat in doc.Elements("Statistic")
-                    select stat.GetAs<string>());
+                        if (jToken["Statistics"].IsNullOrEmpty() == false)
+                        {
+                            statistics.AddRange(jToken["Statistics"].Select(child =>
+                                new EntityStatistic((string) child, 0, GlobalConstants.DEFAULT_SUCCESS_THRESHOLD)));
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        GlobalConstants.ActionLog.AddText("Could not load skills from " + file);
+                        GlobalConstants.ActionLog.StackTrace(e);
+                    }
+                }
             }
-            catch (Exception e)
-            {
-                GlobalConstants.ActionLog.StackTrace(e);
-            }
+
+            this.DefaultStatistics = statistics.ToDictionary(stat => stat.Name, statistic => statistic);
             
-            return names;
+            return statistics;
+        }
+        
+        public IEntityStatistic Get(string name)
+        {
+            return this.Statistics.TryGetValue(name, out IEntityStatistic statistic) ? statistic.Copy() : null;
+        }
+
+        public IDictionary<string, IEntityStatistic> GetDefaultBlock()
+        {
+            return this.DefaultStatistics.Copy();
+        }
+
+        public void Dispose()
+        {
+            string[] keys = this.StatisticNames.ToArray();
+            foreach (string key in keys)
+            {
+                this.Statistics[key] = null;
+            }
+
+            keys = this.DefaultStatistics.Keys.ToArray();
+            foreach (string key in keys)
+            {
+                this.DefaultStatistics[key] = null;
+            }
+
+            this.Statistics = null;
+            this.DefaultStatistics = null;
+        }
+
+        ~EntityStatisticHandler()
+        {
+            this.Dispose();
         }
     }
 }

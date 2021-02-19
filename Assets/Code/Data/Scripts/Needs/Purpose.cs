@@ -47,7 +47,6 @@ namespace JoyLib.Code.Entities.Needs
             1,
             new string[0])
         {
-            this.Initialise();
         }
 
         public Purpose(
@@ -59,6 +58,8 @@ namespace JoyLib.Code.Entities.Needs
             int valueRef, 
             int maxValueRef,
             ISpriteState fulfillingSprite,
+            IEntityRelationshipHandler relationshipHandler = null,
+            IQuestProvider questProvider = null,
             int averageForDayRef = 0, 
             int averageForWeekRef = 0) 
             : base(
@@ -74,22 +75,16 @@ namespace JoyLib.Code.Entities.Needs
                 averageForDayRef,
                 averageForWeekRef)
         {
-            this.Initialise();
-        }
-
-        protected void Initialise()
-        {
-            if (GlobalConstants.GameManager is null == false && this.RelationshipHandler is null)
-            {
-                this.RelationshipHandler = GlobalConstants.GameManager.RelationshipHandler;
-                this.QuestProvider = GlobalConstants.GameManager.QuestProvider;
-            }
+            this.RelationshipHandler = relationshipHandler ?? GlobalConstants.GameManager?.RelationshipHandler;
+            this.QuestProvider = questProvider ?? GlobalConstants.GameManager?.QuestProvider;
         }
 
         //Currently, the questing and employment systems are not (fully) in.
         //This will just seek out a random person and ask for a quest stub.
         public override bool FindFulfilmentObject(IEntity actor)
         {
+            this.GetBits();
+            
             IEnumerable<string> tags = actor.Tags.Where(x => x.IndexOf("sentient", StringComparison.OrdinalIgnoreCase) >= 0);
 
             List<IEntity> possibleListeners = actor.MyWorld.SearchForEntities(actor, tags).ToList();
@@ -141,6 +136,8 @@ namespace JoyLib.Code.Entities.Needs
                 return false;
             }
             
+            this.GetBits();
+            
             //Asking to do something for your friend increases your relationship
             this.m_CachedActions["fulfillneedaction"].Execute(
                 new IJoyObject[] {actor, listener},
@@ -173,6 +170,8 @@ namespace JoyLib.Code.Entities.Needs
 
         public override INeed Copy()
         {
+            this.GetBits();
+            
             return new Purpose(
                 this.m_Decay,
                 this.m_DecayCounter,
@@ -182,7 +181,22 @@ namespace JoyLib.Code.Entities.Needs
                 this.m_Value,
                 this.m_MaximumValue,
                 this.FulfillingSprite,
+                this.RelationshipHandler,
+                this.QuestProvider,
                 this.AverageForDay);
+        }
+
+        protected void GetBits()
+        {
+            if (this.QuestProvider is null)
+            {
+                this.QuestProvider = GlobalConstants.GameManager?.QuestProvider;
+            }
+
+            if (this.RelationshipHandler is null)
+            {
+                this.RelationshipHandler = GlobalConstants.GameManager?.RelationshipHandler;
+            }
         }
 
         public override INeed Randomise()
@@ -193,6 +207,8 @@ namespace JoyLib.Code.Entities.Needs
             int happinessThreshold = this.Roller.Roll(HAPPINESS_THRESHOLD_MIN, HAPPINESS_THRESHOLD_MAX);
             int value = this.Roller.Roll(0, HAPPINESS_THRESHOLD_MAX);
             int maxValue = this.Roller.Roll(MAX_VALUE_MIN, MAX_VALUE_MAX);
+
+            this.GetBits();
             
             return new Purpose(
                 decay,
@@ -202,7 +218,9 @@ namespace JoyLib.Code.Entities.Needs
                 happinessThreshold,
                 value,
                 maxValue,
-                this.FulfillingSprite);
+                this.FulfillingSprite,
+                this.RelationshipHandler,
+                this.QuestProvider);
         }
     }
 }

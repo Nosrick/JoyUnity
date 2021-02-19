@@ -1,8 +1,6 @@
 ﻿namespace JoyLib.Code.Entities.Sexes
 {
-    public interface IEntityBioSexHandler
+    public interface IEntityBioSexHandler : IHandler<IBioSex, string>
     {
-        IBioSex Get(string name);
-        IBioSex[] Sexes { get; }
     }
 }

@@ -23,11 +23,9 @@ namespace Tests
         {
             ActionLog actionLog = new ActionLog();
             GlobalConstants.ActionLog = actionLog;
-            IEntitySkillHandler skillHandler = Mock.Of<IEntitySkillHandler>(
-                handler => handler.GetCoefficients(It.IsAny<List<string>>(), It.IsAny<string>())
-                == new NonUniqueDictionary<INeed, float>());
+            IEntitySkillHandler skillHandler = Mock.Of<IEntitySkillHandler>();
             IVisionProviderHandler visionProviderHandler = Mock.Of<IVisionProviderHandler>(
-                handler => handler.GetVision(It.IsAny<string>()) == Mock.Of<IVision>());
+                handler => handler.Get(It.IsAny<string>()) == Mock.Of<IVision>());
             IAbilityHandler abilityHandler = Mock.Of<IAbilityHandler>();
             
             this.target = new EntityTemplateHandler(
@@ -40,7 +38,7 @@ namespace Tests
         public IEnumerator LoadTypes_ShouldHaveValidData()
         {
             //given
-            List<IEntityTemplate> entityTemplates = this.target.Templates.ToList();
+            List<IEntityTemplate> entityTemplates = this.target.Values.ToList();
 
             //when
 

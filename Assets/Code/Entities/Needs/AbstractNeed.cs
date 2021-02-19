@@ -13,26 +13,21 @@ namespace JoyLib.Code.Entities.Needs
         {
             get => "abstractneed";
         }
-        
+
         public ISpriteState FulfillingSprite { get; set; }
 
-        [OdinSerialize]
-        public RNG Roller { get; protected set; }
-        
+        [OdinSerialize] public RNG Roller { get; protected set; }
+
         protected bool Initialised { get; set; }
 
-        [OdinSerialize]
-        protected Dictionary<string, IJoyAction> m_CachedActions;
+        [OdinSerialize] protected Dictionary<string, IJoyAction> m_CachedActions;
 
         //How quickly the need decays
         //The higher the number, the slower it decays
-        
-        [OdinSerialize]
-        protected int m_Decay;
-        [OdinSerialize]
-        protected int m_DecayCounter;
-        [OdinSerialize]
-        protected bool m_DoesDecay;
+
+        [OdinSerialize] protected int m_Decay;
+        [OdinSerialize] protected int m_DecayCounter;
+        [OdinSerialize] protected bool m_DoesDecay;
 
         [OdinSerialize]
         //How much of an impact this need has on overall happiness
@@ -43,10 +38,8 @@ namespace JoyLib.Code.Entities.Needs
         protected int m_HappinessThreshold;
 
         //Current value
-        [OdinSerialize]
-        protected int m_Value;
-        [OdinSerialize]
-        protected int m_MaximumValue;
+        [OdinSerialize] protected int m_Value;
+        [OdinSerialize] protected int m_MaximumValue;
 
         [OdinSerialize]
         //Average for the day
@@ -57,20 +50,20 @@ namespace JoyLib.Code.Entities.Needs
         //Average for the week
         //Calculated by adding value for the day every day, then dividing by 7 when the week is up
         protected int m_AverageForWeek;
-        [OdinSerialize]
-        protected int m_AverageForMonth;
+
+        [OdinSerialize] protected int m_AverageForMonth;
 
         public AbstractNeed(
-            int decayRef, 
-            int decayCounterRef, 
-            bool doesDecayRef, 
-            int priorityRef, 
+            int decayRef,
+            int decayCounterRef,
+            bool doesDecayRef,
+            int priorityRef,
             int happinessThresholdRef,
-            int valueRef, 
-            int maxValueRef, 
+            int valueRef,
+            int maxValueRef,
             IEnumerable<string> actions,
             ISpriteState fulfillingSprite = null,
-            int averageForDayRef = 0, 
+            int averageForDayRef = 0,
             int averageForWeekRef = 0,
             RNG roller = null)
         {
@@ -99,19 +92,20 @@ namespace JoyLib.Code.Entities.Needs
             this.m_AverageForWeek = averageForWeekRef;
 
             this.FulfillingSprite = fulfillingSprite;
-
-            foreach(string action in actions)
+            if (this.FulfillingSprite is null)
             {
-                this.m_CachedActions.Add(action, ScriptingEngine.Instance.FetchAction(action));
+                SpriteData data = GlobalConstants.GameManager.ObjectIconHandler?.GetFrame(
+                    "needs",
+                    this.Name);
+                if (data is null == false)
+                {
+                    this.FulfillingSprite = new SpriteState(this.Name, data);
+                }
             }
 
-            if (GlobalConstants.GameManager is null == false)
+            foreach (string action in actions)
             {
-                this.FulfillingSprite = new SpriteState(
-                    this.Name, 
-                    GlobalConstants.GameManager.ObjectIconHandler.GetFrame(
-                        "needs", 
-                        this.Name));
+                this.m_CachedActions.Add(action, ScriptingEngine.Instance.FetchAction(action));
             }
         }
 
@@ -131,6 +125,7 @@ namespace JoyLib.Code.Entities.Needs
                 this.Decay(1);
                 return true;
             }
+
             return false;
         }
 
@@ -170,70 +165,37 @@ namespace JoyLib.Code.Entities.Needs
 
         public int Priority
         {
-            get
-            {
-                return this.m_Priority;
-            }
-            protected set
-            {
-                this.m_Priority = value;
-            }
+            get { return this.m_Priority; }
+            protected set { this.m_Priority = value; }
         }
 
         public bool ContributingHappiness
         {
-            get
-            {
-                return this.m_Value >= this.m_HappinessThreshold;
-            }
+            get { return this.m_Value >= this.m_HappinessThreshold; }
         }
 
         public int Value
         {
-            get
-            {
-                return this.m_Value;
-            }
-            set
-            {
-                this.m_Value = value;
-            }
+            get { return this.m_Value; }
+            set { this.m_Value = value; }
         }
 
         public int AverageForDay
         {
-            get
-            {
-                return this.m_AverageForDay;
-            }
-            protected set
-            {
-                this.m_AverageForDay = value;
-            }
+            get { return this.m_AverageForDay; }
+            protected set { this.m_AverageForDay = value; }
         }
 
         public int AverageForWeek
         {
-            get
-            {
-                return this.m_AverageForWeek;
-            }
-            protected set
-            {
-                this.m_AverageForWeek = value;
-            }
+            get { return this.m_AverageForWeek; }
+            protected set { this.m_AverageForWeek = value; }
         }
 
         public int AverageForMonth
         {
-            get
-            {
-                return this.m_AverageForMonth;
-            }
-            protected set
-            {
-                this.m_AverageForMonth = value;
-            }
+            get { return this.m_AverageForMonth; }
+            protected set { this.m_AverageForMonth = value; }
         }
 
         public int HappinessThreshold => this.m_HappinessThreshold;

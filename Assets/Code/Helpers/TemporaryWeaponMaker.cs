@@ -25,7 +25,7 @@ namespace JoyLib.Code.Helpers
                 new string[] { "None" }, 
                 size, 
                 material, 
-                skill, 
+                new []{skill}, 
                 actionString, 
                 0, 
                 0, 

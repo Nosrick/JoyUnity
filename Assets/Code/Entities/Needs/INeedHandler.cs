@@ -2,14 +2,11 @@
 
 namespace JoyLib.Code.Entities.Needs
 {
-    public interface INeedHandler
+    public interface INeedHandler : IHandler<INeed, string>
     {
-        INeed Get(string name);
         ICollection<INeed> GetMany(IEnumerable<string> names);
         ICollection<INeed> GetManyRandomised(IEnumerable<string> names);
         INeed GetRandomised(string name);
-        
-        IEnumerable<INeed> Needs { get; }
         IEnumerable<string> NeedNames { get; }
     }
 }

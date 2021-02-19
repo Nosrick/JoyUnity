@@ -8,8 +8,6 @@ namespace JoyLib.Code.Entities.Statistics
     [Serializable]
     public class EntitySkill : IEntitySkill
     {
-        protected const int MAXIMUM_XP = 100;
-
         public EntitySkill()
         {
         }
@@ -17,13 +15,11 @@ namespace JoyLib.Code.Entities.Statistics
         public EntitySkill(
             string name, 
             int value, 
-            int successThreshold, 
-            NonUniqueDictionary<INeed, float> governingNeeds)
+            int successThreshold)
         {
             this.Name = name;
             this.Value = value;
             this.SuccessThreshold = successThreshold;
-            this.GoverningNeeds = governingNeeds;
         }
 
         public int ModifyValue(int value)
@@ -54,13 +50,6 @@ namespace JoyLib.Code.Entities.Statistics
 
         [OdinSerialize]
         public int SuccessThreshold
-        {
-            get;
-            protected set;
-        }
-
-        [OdinSerialize]
-        public NonUniqueDictionary<INeed, float> GoverningNeeds
         {
             get;
             protected set;

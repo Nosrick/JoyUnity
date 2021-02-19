@@ -115,7 +115,7 @@ namespace JoyLib.Code
             this.RomanceHandler = new EntityRomanceHandler();
             this.JobHandler = new JobHandler(this.AbilityHandler, this.Roller);
             this.GenderHandler = new GenderHandler();
-            this.SkillHandler = new EntitySkillHandler(this.NeedHandler);
+            this.SkillHandler = new EntitySkillHandler();
             this.EntityTemplateHandler = new EntityTemplateHandler(
                 this.SkillHandler,
                 this.VisionProviderHandler,
@@ -127,9 +127,14 @@ namespace JoyLib.Code
 
             this.ParameterProcessorHandler = new ParameterProcessorHandler();
 
-            this.EntityHandler = new LiveEntityHandler();
-            this.ItemHandler = new LiveItemHandler(this.ObjectIconHandler, this.MaterialHandler, this.AbilityHandler,
+            this.ItemDatabase = new ItemDatabase(
+                this.ObjectIconHandler,
+                this.MaterialHandler,
+                this.AbilityHandler,
                 this.Roller);
+            
+            this.EntityHandler = new LiveEntityHandler();
+            this.ItemHandler = new LiveItemHandler(this.Roller);
 
             this.EntityFactory = new EntityFactory(
                 this.GUIDManager, 
@@ -148,6 +153,7 @@ namespace JoyLib.Code
 
             this.ItemFactory = new ItemFactory(
                 this.GUIDManager, 
+                this.ItemDatabase,
                 this.ItemHandler, 
                 this.ObjectIconHandler,
                 this.DerivedValueHandler,
@@ -220,6 +226,7 @@ namespace JoyLib.Code
 
             this.ItemFactory = new ItemFactory(
                 this.GUIDManager, 
+                this.ItemDatabase,
                 this.ItemHandler, 
                 this.ObjectIconHandler,
                 this.DerivedValueHandler,
@@ -263,6 +270,7 @@ namespace JoyLib.Code
         public IParameterProcessorHandler ParameterProcessorHandler { get; protected set; }
         public ILiveEntityHandler EntityHandler { get; protected set; }
         public ILiveItemHandler ItemHandler { get; protected set; }
+        public IItemDatabase ItemDatabase { get; protected set; }
         public INeedHandler NeedHandler { get; protected set; }
         public IEntitySkillHandler SkillHandler { get; protected set; }
         public IWorldInfoHandler WorldInfoHandler { get; protected set; }

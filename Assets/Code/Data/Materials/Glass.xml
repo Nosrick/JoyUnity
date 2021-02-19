@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<Materials>
-  <Material>
-    <Name>Glass</Name>
-    <Bonus>0</Bonus>
-    <Hardness>0.01</Hardness>
-    <Weight>2.7</Weight>
-  </Material>
-</Materials>

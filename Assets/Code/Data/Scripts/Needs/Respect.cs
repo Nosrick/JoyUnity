@@ -35,7 +35,6 @@ namespace JoyLib.Code.Entities.Needs
                 1,
                 new string[0])
         {
-            this.Initialise();
         }
         
         public Respect(
@@ -47,6 +46,7 @@ namespace JoyLib.Code.Entities.Needs
             int valueRef,
             int maxValueRef,
             ISpriteState fulfillingSprite,
+            IEntityRelationshipHandler relationshipHandler = null,
             int averageForDayRef = 0,
             int averageForWeekRef = 0) 
             : base(
@@ -62,23 +62,12 @@ namespace JoyLib.Code.Entities.Needs
                 averageForDayRef, 
                 averageForWeekRef)
         {
-            this.Initialise();
-        }
-
-        protected void Initialise()
-        {
-            if (this.Initialised)
-            {
-                return;
-            }
-            this.RelationshipHandler = GlobalConstants.GameManager.RelationshipHandler;
-            this.Initialised = true;
+            this.RelationshipHandler = relationshipHandler ?? GlobalConstants.GameManager?.RelationshipHandler;
         }
 
         //This is to do with others, so look for something to do
         public override bool FindFulfilmentObject(IEntity actor)
         {
-            this.Initialise();
             INeed[] needs = actor.Needs.Where(need => 
                 need.Key.Equals("family", StringComparison.OrdinalIgnoreCase)
                 || need.Key.Equals("friendship", StringComparison.OrdinalIgnoreCase)
@@ -108,7 +97,6 @@ namespace JoyLib.Code.Entities.Needs
 
         public override bool Interact(IEntity actor, IJoyObject obj)
         {
-            this.Initialise();
             return false;
         }
 
@@ -123,6 +111,7 @@ namespace JoyLib.Code.Entities.Needs
                 this.m_Value,
                 this.m_MaximumValue,
                 this.FulfillingSprite,
+                this.RelationshipHandler,
                 this.m_AverageForDay,
                 this.m_AverageForWeek);
         }

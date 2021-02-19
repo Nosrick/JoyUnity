@@ -2,10 +2,8 @@
 
 namespace JoyLib.Code.Entities.Gender
 {
-    public interface IGenderHandler
+    public interface IGenderHandler : IHandler<IGender, string>
     {
-        HashSet<IGender> Genders { get; }
-
-        IGender Get(string name);
+        
     }
 }

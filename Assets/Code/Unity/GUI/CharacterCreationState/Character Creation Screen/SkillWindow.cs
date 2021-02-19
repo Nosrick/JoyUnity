@@ -31,7 +31,7 @@ namespace JoyLib.Code.Unity.GUI
 
         public List<KeyValuePair<string, int>> GetSkillNames()
         {
-            this.Skills = this.GameManager.SkillHandler.GetDefaultSkillBlock(this.GameManager.NeedHandler.Needs);
+            this.Skills = this.GameManager.SkillHandler.GetDefaultSkillBlock();
 
             foreach (KeyValuePair<string, IEntitySkill> pair in this.PlayerInfo.CurrentTemplate.Skills)
             {

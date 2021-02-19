@@ -31,7 +31,7 @@ namespace Tests
             //given
 
             //when
-            IJob[] jobs = target.Jobs.ToArray();
+            IJob[] jobs = target.Values.ToArray();
 
             //then
             Assert.That(jobs, Is.Not.Empty);
