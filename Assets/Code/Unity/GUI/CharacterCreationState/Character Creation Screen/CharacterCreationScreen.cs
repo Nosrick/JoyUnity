@@ -49,11 +49,6 @@ namespace JoyLib.Code.Unity.GUI
 
         public void CreatePlayer()
         {
-            var data = this.GameManager.ObjectIconHandler.GetSprites(
-                this.PlayerInfo.CurrentCulture.CultureName,
-                this.PlayerInfo.CurrentTemplate.CreatureType, "idle");
-            List<SpriteState> spriteStates = data.Select(d => new SpriteState(d.m_Name, d)).ToList();
-
             this.GameManager.GUIManager.SetUIColours(
                 this.PlayerInfo.CurrentCulture.BackgroundColours,
                 this.PlayerInfo.CurrentCulture.CursorColours, 
@@ -73,7 +68,7 @@ namespace JoyLib.Code.Unity.GUI
                 this.GameManager.SexualityHandler.Get(this.PlayerInfo.Sexuality),
                 this.GameManager.RomanceHandler.Get(this.PlayerInfo.Romance),
                 this.GameManager.JobHandler.Get(this.PlayerInfo.Job), 
-                spriteStates,
+                this.PlayerSprite_Part1.States,
                 null,
                 new PlayerDriver());
             
