@@ -230,7 +230,7 @@ namespace JoyLib.Code.Graphics
         public IEnumerable<SpriteData> ReturnDefaultData()
         {
             return this.Icons["DEFAULT"]
-                .Select(tuple => tuple.Item2);
+                .Select(tuple => tuple.Item2.Copy());
         }
 
         public SpriteData ReturnDefaultIcon()
@@ -260,7 +260,7 @@ namespace JoyLib.Code.Graphics
             List<SpriteData> data = this.Icons.Where(x => x.Key.Equals(tileSet, StringComparison.OrdinalIgnoreCase))
                 .SelectMany(x => x.Value.Where(pair => pair.Item1.Equals(tileName, StringComparison.OrdinalIgnoreCase)))
                 .Where(pair => pair.Item2.m_State.Equals(state, StringComparison.OrdinalIgnoreCase))
-                .Select(x => x.Item2)
+                .Select(x => x.Item2.Copy())
                 .ToList();
 
             return data.Any() == false ? this.ReturnDefaultData() : data;
