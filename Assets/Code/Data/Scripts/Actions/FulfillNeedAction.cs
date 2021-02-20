@@ -1,5 +1,9 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using Castle.Core.Internal;
 using JoyLib.Code.Entities;
+using JoyLib.Code.Entities.Needs;
 
 namespace JoyLib.Code.Scripting.Actions
 {
@@ -9,44 +13,62 @@ namespace JoyLib.Code.Scripting.Actions
 
         public override string ActionString => "fulfilling need";
 
-        public override bool Execute(IJoyObject[] participants, string[] tags = null, params object[] args)
+        public override bool Execute(
+            IJoyObject[] participants,
+            IEnumerable<string> tags = null,
+            IDictionary<string, object> args = null)
         {
             this.ClearLastParameters();
             
-            if(!(participants[0] is Entity actor))
+            if(!(participants[0] is IEntity actor))
             {
                 return false;
             }
 
-            if(!(args[0] is string need))
+            if (args.IsNullOrEmpty())
             {
                 return false;
             }
 
-            if(!(args[1] is int value))
+            if(!(args.TryGetValue("need", out object arg)))
             {
                 return false;
             }
 
-            int counter = args[2] is null ? 0 : (int) args[2];
+            string need = (string) arg;
 
-            bool doAll = args.Length < 4 ? false : (bool) args[3];
+            if(!(args.TryGetValue("value", out arg)))
+            {
+                return false;
+            }
+
+            int value = (int) arg;
+
+            int counter = args.TryGetValue("counter", out arg) ? (int) arg : 0;
+
+            bool doAll = args.TryGetValue("doAll", out arg) && (bool) arg;
 
             IJoyObject[] fellowActors = participants.Where(p => p.Guid != actor.Guid).ToArray();
             
             actor.Needs[need].Fulfill(value);
-            actor.FulfillmentData = new Entities.Needs.FulfillmentData(need, counter, fellowActors);
+            actor.FulfillmentData = actor.FulfillmentData is null 
+                ? new FulfillmentData(need, counter, fellowActors) 
+                : new FulfillmentData(need, actor.FulfillmentData.Counter + counter, fellowActors);
 
             if (doAll)
             {
-                foreach (JoyObject jo in fellowActors)
+                foreach (IJoyObject jo in fellowActors)
                 {
-                    if (jo is Entity entity)
+                    if (!(jo is IEntity entity))
                     {
-                        IJoyObject[] others = participants.Where(p => p.Guid != entity.Guid).ToArray();
-                        entity.Needs[need].Fulfill(value);
-                        actor.FulfillmentData = new Entities.Needs.FulfillmentData(need, counter, others);
+                        continue;
                     }
+                    
+                    IJoyObject[] others = participants.Where(p => p.Guid != entity.Guid).ToArray();
+                    entity.Needs[need].Fulfill(value);
+                    entity.FulfillmentData = entity.FulfillmentData is null 
+                        ? new FulfillmentData(need, counter, fellowActors) 
+                        : new FulfillmentData(need, entity.FulfillmentData.Counter + counter, fellowActors);
                 }
             }
 

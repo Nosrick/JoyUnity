@@ -1,11 +1,17 @@
-using JoyLib.Code.Quests;
+using System.Collections.Generic;
 
 namespace JoyLib.Code.Scripting
 {
     public interface IJoyAction
     {
-        bool Execute(IJoyObject[] participants, string[] tags = null, params object[] args);
-        void SetLastParameters(IJoyObject[] participants, string[] tags = null, params object[] args);
+        bool Execute(
+            IJoyObject[] participants, 
+            IEnumerable<string> tags = null, 
+            IDictionary<string, object> args = null);
+        void SetLastParameters(
+            IEnumerable<IJoyObject> participants, 
+            IEnumerable<string> tags = null, 
+            IDictionary<string, object> args = null);
 
         void ClearLastParameters();
 
@@ -19,17 +25,17 @@ namespace JoyLib.Code.Scripting
             get;
         }
 
-        IJoyObject[] LastParticipants
+        IEnumerable<IJoyObject> LastParticipants
         {
             get;
         }
 
-        string[] LastTags
+        IEnumerable<string> LastTags
         {
             get;
         }
 
-        object[] LastArgs
+        IDictionary<string, object> LastArgs
         {
             get;
         }

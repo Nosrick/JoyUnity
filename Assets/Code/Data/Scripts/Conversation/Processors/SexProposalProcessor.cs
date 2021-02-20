@@ -44,8 +44,6 @@ namespace JoyLib.Code.Entities.Conversation.Processors
                 return base.Interact(instigator, listener);
             }
             
-            base.Interact(instigator, listener);
-            
             IJoyAction fulfillNeed = instigator.FetchAction("fulfillneedaction");
 
             int listenerSatisfaction = (
@@ -59,13 +57,15 @@ namespace JoyLib.Code.Entities.Conversation.Processors
                 + listener.Statistics[EntityStatistic.PERSONALITY].Value) / 3;
             
             fulfillNeed.Execute(
-                new IJoyObject[] {instigator},
+                new IJoyObject[] {instigator, listener},
                 new[] {"sex", "need"},
                 new object[] {"sex", instigatorSatisfaction, 5});
             fulfillNeed.Execute(
-                new IJoyObject[] {listener},
+                new IJoyObject[] {listener, instigator},
                 new[] {"sex", "need"},
                 new object[] {"sex", listenerSatisfaction, 5});
+            
+            base.Interact(instigator, listener);
 
             this.Happening = true;
 

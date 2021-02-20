@@ -105,6 +105,21 @@ namespace JoyLib.Code.States
 
         public override void Update()
         {
+            IEntity player = this.m_ActiveWorld.Player;
+
+            if ((player.FulfillmentData is null || player.FulfillmentData.Counter <= 0) 
+                && this.AutoTurn
+                && player.Conscious)
+            {
+                this.ManualAutoTurn = false;
+                this.AutoTurn = false;
+            }
+            else if (player.FulfillmentData is null == false
+                     && player.FulfillmentData.Counter > 0
+                     && this.AutoTurn == false)
+            {
+                this.AutoTurn = true;
+            }
         }
 
         protected void SetEntityWorld(IWorldInstance world)
@@ -175,28 +190,13 @@ namespace JoyLib.Code.States
 
         public override void HandleInput(object data, InputActionChange change)
         {
-            bool hasMoved = false;
-
-            IEntity player = this.m_ActiveWorld.Player;
-
-            if ((player.FulfillmentData is null || player.FulfillmentData.Counter <= 0) 
-                && this.AutoTurn
-                && player.Conscious)
-            {
-                this.ManualAutoTurn = false;
-                this.AutoTurn = false;
-            }
-            else if (player.FulfillmentData is null == false
-                     && player.FulfillmentData.Counter > 0
-                     && this.AutoTurn == false)
-            {
-                this.AutoTurn = true;
-            }
-
             if (this.AutoTurn)
             {
                 return;
             }
+            
+            bool hasMoved = false;
+            IEntity player = this.m_ActiveWorld.Player;
 
             /*
             if(Input.GetMouseButtonDown(0))

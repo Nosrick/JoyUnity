@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Castle.Core.Internal;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
 
@@ -8,42 +9,52 @@ namespace JoyLib.Code.Scripting.Actions
 {
     public class TradeAction : AbstractAction
     {
-        public override bool Execute(IJoyObject[] participants, string[] tags = null, params object[] args)
+        public override bool Execute(
+            IJoyObject[] participants, 
+            IEnumerable<string> tags = null,
+            IDictionary<string, object> args = null)
         {
             if (participants.Length != 2)
             {
                 return false;
             }
 
-            if (args.Length == 0)
+            if (args.IsNullOrEmpty())
             {
                 return false;
             }
 
-            IEntity left, right;
             if (!(participants[0] is IEntity)
                 && !(participants[1] is IEntity))
             {
                 return false;
             }
             
-            left = participants[0] as IEntity;
-            right = participants[1] as IEntity;
+            IEntity left = participants[0] as IEntity;
+            IEntity right = participants[1] as IEntity;
 
-            if (!(args[0] is IEnumerable<IItemInstance> leftOffering))
+            IEnumerable<IItemInstance> leftOffering = new IItemInstance[0];
+            if (args.TryGetValue("leftOffering", out object arg))
             {
-                return false;
+                leftOffering = (IEnumerable<IItemInstance>) arg;
+            }
+            IEnumerable<IItemInstance> rightOffering = new IItemInstance[0];
+            if (args.TryGetValue("rightOffering", out arg))
+            {
+                rightOffering = (IEnumerable<IItemInstance>) arg;
             }
 
-            IEnumerable<IItemInstance> rightOffering =
-                args.Length == 2 
-                    ? args[1] as IEnumerable<IItemInstance> 
-                    : new List<IItemInstance>();
+            if (left is null == false)
+            {
+                left.AddContents(rightOffering);
+                left.RemoveContents(leftOffering);
+            }
 
-            left.AddContents(rightOffering);
-            left.RemoveContents(leftOffering);
-            right.AddContents(leftOffering);
-            right.RemoveContents(rightOffering);
+            if (right is null == false)
+            {
+                right.AddContents(leftOffering);
+                right.RemoveContents(rightOffering);
+            }
 
             HashSet<string> myTags = tags is null ? new HashSet<string>() : new HashSet<string>(tags);
             if (myTags.Any(tag => tag.Equals("trade", StringComparison.OrdinalIgnoreCase)) == false)

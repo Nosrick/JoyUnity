@@ -1,4 +1,6 @@
-﻿using JoyLib.Code.Entities;
+﻿using System;
+using System.Collections.Generic;
+using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
 
 namespace JoyLib.Code.Scripting.Actions
@@ -8,7 +10,8 @@ namespace JoyLib.Code.Scripting.Actions
         public override string Name => "placeiteminworldaction";
         public override string ActionString => "placing item in world";
 
-        public override bool Execute(IJoyObject[] participants, string[] tags = null, params object[] args)
+        public override bool Execute(IJoyObject[] participants, IEnumerable<string> tags = null,
+            IDictionary<string, object> args = null)
         {
             this.ClearLastParameters();
             

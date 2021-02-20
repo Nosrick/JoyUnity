@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using Castle.Core.Internal;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.AI;
 
@@ -9,16 +12,26 @@ namespace JoyLib.Code.Scripting.Actions
 
         public override string ActionString => "seeking";
 
-        public override bool Execute(IJoyObject[] participants, string[] tags = null, params object[] args)
+        public override bool Execute(
+            IJoyObject[] participants, 
+            IEnumerable<string> tags = null,
+            IDictionary<string, object> args = null)
         {
             this.ClearLastParameters();
+
+            if (args.IsNullOrEmpty())
+            {
+                return false;
+            }
             
             if(!(participants[0] is Entity actor))
             {
                 return false;
             }
 
-            if(!(args[0] is string needName))
+            string needName = args.TryGetValue("need", out object arg) ? (string) arg : null;
+            
+            if(needName.IsNullOrEmpty())
             {
                 return false;
             }

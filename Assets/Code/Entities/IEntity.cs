@@ -42,7 +42,7 @@ namespace JoyLib.Code.Entities
         int Size { get; }
         
         IVision VisionProvider { get; }
-        FulfillmentData FulfillmentData { get; }
+        FulfillmentData FulfillmentData { get; set; }
         NeedAIData CurrentTarget { get; set;  }
         IDriver Driver { get; }
         IPathfinder Pathfinder { get; }

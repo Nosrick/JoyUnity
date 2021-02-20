@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code.Entities;
@@ -12,7 +13,8 @@ namespace JoyLib.Code.Scripting.Actions
 
         public override string ActionString => "wandering";
 
-        public override bool Execute(IJoyObject[] participants, string[] tags = null, params object[] args)
+        public override bool Execute(IJoyObject[] participants, IEnumerable<string> tags = null,
+            IDictionary<string, object> args = null)
         {
             this.ClearLastParameters();
             

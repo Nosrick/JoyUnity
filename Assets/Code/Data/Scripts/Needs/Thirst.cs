@@ -134,7 +134,7 @@ namespace JoyLib.Code.Entities.Needs
 
             this.m_CachedActions["wanderaction"].Execute(
                 new IJoyObject[] { actor },
-                new string[] { "need", "thirst", "wander" });
+                new string[] { "need", "thirst", "wander" }, null);
 
             return false;
         }

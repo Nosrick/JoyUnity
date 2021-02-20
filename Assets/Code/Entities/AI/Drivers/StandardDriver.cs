@@ -48,8 +48,15 @@ namespace JoyLib.Code.Entities.AI.Drivers
         public override void Locomotion(IEntity vehicle)
         {
             this.Initialise();
+            
+            //Don't move if you're currently busy
+            if (vehicle.FulfillmentData.Counter > 0)
+            {
+                return;
+            }
+            
             //If you're idle
-            if (vehicle.CurrentTarget.idle == true)
+            if (vehicle.CurrentTarget.idle)
             {
                 //Let's find something to do
                 List<INeed> needs = vehicle.Needs.Values.OrderByDescending(x => x.Priority).ToList();
@@ -81,7 +88,7 @@ namespace JoyLib.Code.Entities.AI.Drivers
                 {
                     this.WanderAction.Execute(
                         new IJoyObject[] { vehicle },
-                        new[] { "wander", "idle"});
+                        new[] { "wander", "idle"}, null);
                 }
             }
 

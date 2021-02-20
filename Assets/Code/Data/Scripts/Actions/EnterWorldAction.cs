@@ -1,4 +1,7 @@
-﻿using JoyLib.Code.Entities;
+﻿using System;
+using System.Collections.Generic;
+using Castle.Core.Internal;
+using JoyLib.Code.Entities;
 using JoyLib.Code.World;
 
 namespace JoyLib.Code.Scripting.Actions
@@ -9,11 +12,17 @@ namespace JoyLib.Code.Scripting.Actions
 
         public override string ActionString => "enters";
 
-        public override bool Execute(IJoyObject[] participants, string[] tags = null, params object[] args)
+        public override bool Execute(IJoyObject[] participants, IEnumerable<string> tags = null,
+            IDictionary<string, object> args = null)
         {
             this.ClearLastParameters();
+
+            if (args.IsNullOrEmpty())
+            {
+                return false;
+            }
             
-            if (participants.Length != 1 || args.Length != 1)
+            if (participants.Length != 1 || args.TryGetValue("world", out object arg) == false)
             {
                 return false;
             }
@@ -23,7 +32,7 @@ namespace JoyLib.Code.Scripting.Actions
                 return false;
             }
 
-            if (!(args[0] is WorldInstance worldInstance))
+            if (!(arg is IWorldInstance worldInstance))
             {
                 return false;
             }

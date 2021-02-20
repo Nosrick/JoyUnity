@@ -107,7 +107,7 @@ namespace JoyLib.Code.Unity
             IJoyAction placeInWorldAction = dropper.FetchAction("placeiteminworldaction");
             placeInWorldAction.Execute(
                 new IJoyObject[] {dropper, itemInstance},
-                new string[] { "drop" });
+                new string[] { "drop" }, null);
             this.gameObject.SetActive(true);
         }
 

@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Castle.Core.Internal;
 using JoyLib.Code.Entities.Relationships;
 
 namespace JoyLib.Code.Scripting.Actions
@@ -20,11 +22,12 @@ namespace JoyLib.Code.Scripting.Actions
             }
         }
 
-        public override bool Execute(IJoyObject[] participants, string[] tags = null, params object[] args)
+        public override bool Execute(IJoyObject[] participants, IEnumerable<string> tags = null,
+            IDictionary<string, object> args = null)
         {
             this.ClearLastParameters();
             
-            if (args.Length == 0)
+            if (args.IsNullOrEmpty())
             {
                 return false;
             }
@@ -33,8 +36,8 @@ namespace JoyLib.Code.Scripting.Actions
             {
                 return false;
             }
-            
-            int relationshipMod = (int)args[0];
+
+            int relationshipMod = args.TryGetValue("value", out object arg) ? (int) arg : 0;
 
             if (this.RelationshipHandler is null)
             {
@@ -43,7 +46,7 @@ namespace JoyLib.Code.Scripting.Actions
 
             IEnumerable<IRelationship> relationships = this.RelationshipHandler?.Get(participants, tags, true);
 
-            bool doAll = args.Length >= 2 && (bool)args[1];
+            bool doAll = args.TryGetValue("doAll", out arg) && (bool) arg;
 
             if(relationships.Any())
             {

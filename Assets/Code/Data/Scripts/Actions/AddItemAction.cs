@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using Castle.Core.Internal;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
 
@@ -11,7 +13,8 @@ namespace JoyLib.Code.Scripting.Actions
 
         public override string ActionString => "adding item";
 
-        public override bool Execute(IJoyObject[] participants, string[] tags = null, params object[] args)
+        public override bool Execute(IJoyObject[] participants, IEnumerable<string> tags = null,
+            IDictionary<string, object> args = null)
         {
             this.ClearLastParameters();
             
@@ -25,7 +28,11 @@ namespace JoyLib.Code.Scripting.Actions
                 return false;
             }
 
-            bool newOwner = args.Length > 0 && (bool)args[0];
+            bool newOwner = false;
+            if (args.IsNullOrEmpty() == false)
+            {
+                newOwner = args.TryGetValue("newOwner", out object arg) && (bool) arg;
+            }
 
             bool result = true;
             if (newOwner && container is IEntity owner)
