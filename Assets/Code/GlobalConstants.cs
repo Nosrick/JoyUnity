@@ -25,18 +25,8 @@ namespace JoyLib.Code
 
         public static readonly StringComparer STRING_COMPARER = StringComparer.OrdinalIgnoreCase;
 
-        public static IGameManager GameManager
-        {
-            get => m_GameManager;
-            set => m_GameManager = value;
-        }
+        public static IGameManager GameManager { get; set; }
 
-        public static ActionLog ActionLog
-        {
-            get;
-            set;
-        }
-
-        private static IGameManager m_GameManager;
+        public static ActionLog ActionLog { get; set; }
     }
 }

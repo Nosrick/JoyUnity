@@ -17,18 +17,9 @@ namespace JoyLib.Code.Graphics
     {
         protected RNG Roller { get; set; }
 
-        protected int m_SpriteSize = 16;
-
         public ObjectIconHandler(RNG roller)
         {
             this.Roller = roller;
-            this.Initalise(GlobalConstants.SPRITE_SIZE);
-        }
-
-        protected void Initalise(int spriteSize)
-        {
-            this.SpriteSize = spriteSize;
-
             this.Load();
         }
 
@@ -274,12 +265,6 @@ namespace JoyLib.Code.Graphics
         }
 
         protected IDictionary<string, List<Tuple<string, SpriteData>>> Icons { get; set; }
-
-        public int SpriteSize
-        {
-            get { return this.m_SpriteSize; }
-            protected set { this.m_SpriteSize = value; }
-        }
     }
 
     [Serializable]

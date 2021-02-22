@@ -16,6 +16,5 @@ namespace JoyLib.Code.Graphics
         IEnumerable<SpriteData> GetSprites(string tileSet, string tileName, string state = "DEFAULT");
         SpriteData GetFrame(string tileSet, string tileName, string state = "DEFAULT", int frame = 0);
         List<Sprite> GetRawFrames(string tileSet, string tileName, string partName, string state = "DEFAULT");
-        int SpriteSize { get; }
     }
 }
