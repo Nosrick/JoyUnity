@@ -128,8 +128,11 @@ namespace JoyLib.Code.Unity.GUI
             ScriptingEngine.Instance.FetchAction("tradeaction").Execute(
                 new IJoyObject[] {this.Left, this.Right},
                 new[] {"trade", "give", "item"},
-                this.LeftOffering.Contents,
-                    this.RightOffering.Contents);
+                new Dictionary<string, object>
+                {
+                    {"leftOffering", this.LeftOffering.Contents},
+                    {"rightOffering", this.RightOffering.Contents}
+                });
 
             this.LeftOffering.RemoveAllItems();
             this.RightOffering.RemoveAllItems();

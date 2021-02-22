@@ -101,7 +101,7 @@ namespace JoyLib.Code.Quests
             List<IWorldInstance> worlds = overworld.GetWorlds(overworld)
                 .Where(instance => this.Areas.Contains(instance.Guid))
                 .ToList();
-            return worlds.All(world => action.LastParticipants[0].HasDataKey(world.Name)) && action.Successful;
+            return worlds.All(world => action.LastParticipants.First().HasDataKey(world.Name)) && action.Successful;
         }
 
         public string AssembleDescription()

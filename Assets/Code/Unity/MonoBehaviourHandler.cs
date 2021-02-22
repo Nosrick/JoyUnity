@@ -208,9 +208,12 @@ namespace JoyLib.Code.Unity
             this.GUIManager.CloseGUI(GUINames.CONTEXT_MENU);
             this.JoyObject.FetchAction("seekaction")
                 .Execute(
-                    new IJoyObject[] {this.JoyObject, GlobalConstants.GameManager.Player},
+                    new[] {this.JoyObject, GlobalConstants.GameManager.Player},
                     new[] {"call over"},
-                    new object[] {"friendship"});
+                    new Dictionary<string, object>
+                    {
+                        {"need", "friendship"}
+                    });
         }
 
         protected void Attack()

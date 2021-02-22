@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using Code.States;
 using JoyLib.Code.Conversation;
 using JoyLib.Code.Entities;
@@ -147,7 +148,10 @@ namespace JoyLib.Code.States
                 .Execute(
                     new IJoyObject[] {player},
                     new[] {"exploration", "world change"},
-                    new object[] {newWorld});
+                    new Dictionary<string, object>
+                    {
+                        {"world", newWorld}
+                    });
             this.m_ActiveWorld = newWorld;
 
             player = this.m_ActiveWorld.Player;

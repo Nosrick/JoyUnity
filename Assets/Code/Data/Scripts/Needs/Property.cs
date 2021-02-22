@@ -91,14 +91,17 @@ namespace JoyLib.Code.Entities.Needs
             {
                 this.m_CachedActions["wanderaction"].Execute(
                     new IJoyObject[] { actor },
-                    new string[] { "need", "property", "wander" }, null);
+                    new[] { "need", "property", "wander" });
                 return false;
             }
 
             this.m_CachedActions["seekaction"].Execute(
                 new IJoyObject[] {actor, chosenItem},
                 new[] {"need", "property", "seek"},
-                new object[] {"property"});
+                new Dictionary<string, object>
+                {
+                    {"need", "property"}
+                });
             return true;
         }
 
@@ -118,7 +121,10 @@ namespace JoyLib.Code.Entities.Needs
             if (this.m_CachedActions["additemaction"].Execute(
                 new[] {actor, obj},
                 tags.ToArray(),
-                new object[] {true}))
+                new Dictionary<string, object>
+                {
+                    {"newOwner", true}
+                }))
             {
                 if (actor.MyWorld.RemoveObject(actor.WorldPosition, item))
                 {
@@ -133,10 +139,7 @@ namespace JoyLib.Code.Entities.Needs
                     };
                     return true;
                 }
-                else
-                {
-                    this.FindFulfilmentObject(actor);
-                }
+                this.FindFulfilmentObject(actor);
             }
 
             return false;

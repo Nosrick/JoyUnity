@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code.Conversation.Conversations;
 using JoyLib.Code.Entities.Statistics;
@@ -33,7 +34,10 @@ namespace JoyLib.Code.Entities.Conversation.Processors
                     instigator
                 },
                 new[] {"friendship"},
-                new object[] {-instigator.Statistics[EntityStatistic.PERSONALITY].Value});
+                new Dictionary<string, object>
+                {
+                    {"value", -instigator.Statistics[EntityStatistic.PERSONALITY].Value}
+                });
             
             return this.FetchNextTopics();
         }

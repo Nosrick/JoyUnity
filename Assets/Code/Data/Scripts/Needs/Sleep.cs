@@ -68,14 +68,17 @@ namespace JoyLib.Code.Entities.Needs
                     this.m_CachedActions["seekaction"].Execute(
                         new [] {actor, pair.Value},
                         new[] {"need", "sleep", "seek"},
-                        new object[] {"sleep"});
+                        new Dictionary<string, object>
+                        {
+                            {"need", "sleep"}
+                        });
                     return true;
                 }
             }
 
             this.m_CachedActions["wanderaction"].Execute(
                 new IJoyObject[] {actor},
-                new[] {"need", "sleep", "wander"}, null);
+                new[] {"need", "sleep", "wander"});
             return false;
 
         }

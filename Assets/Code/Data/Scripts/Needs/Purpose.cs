@@ -118,14 +118,17 @@ namespace JoyLib.Code.Entities.Needs
             {
                 this.m_CachedActions["wanderaction"].Execute(
                     new IJoyObject[] {actor},
-                    new[] {"wander", "need", "purpose"}, null);
+                    new[] {"wander", "need", "purpose"});
                 return false;
             }
 
             this.m_CachedActions["seekaction"].Execute(
                 new IJoyObject[] {actor, bestMatch},
                 new[] {"need", "seek", "purpose"},
-                new object[] {"purpose"});
+                new Dictionary<string, object>
+                {
+                    {"need", "purpose"}
+                });
             return true;
         }
 
@@ -142,14 +145,26 @@ namespace JoyLib.Code.Entities.Needs
             this.m_CachedActions["fulfillneedaction"].Execute(
                 new IJoyObject[] {actor, listener},
                 new[] {"need", "friendship", "fulfill"},
-                new object[] {"friendship", actor.Statistics[EntityStatistic.PERSONALITY].Value, 0, true});
+                new Dictionary<string, object>
+                {
+                    {"need", "friendship"}, 
+                    {"value" , actor.Statistics[EntityStatistic.PERSONALITY].Value},
+                    {"counter", 0},
+                    {"doAll", true}
+                });
 
             if (this.RelationshipHandler.IsFamily(actor, listener))
             {
                 this.m_CachedActions["fulfillneedaction"].Execute(
                     new IJoyObject[] {actor, listener},
                     new[] {"need", "family", "fulfill"},
-                    new object[] {"family", actor.Statistics[EntityStatistic.PERSONALITY].Value, 0, true});
+                    new Dictionary<string, object>
+                    {
+                        {"need", "family"}, 
+                        {"value" , actor.Statistics[EntityStatistic.PERSONALITY].Value},
+                        {"counter", 0},
+                        {"doAll", true}
+                    });
             }
 
             if (this.QuestProvider is null == false)
@@ -163,7 +178,13 @@ namespace JoyLib.Code.Entities.Needs
             this.m_CachedActions["fulfillneedaction"].Execute(
                 new IJoyObject[] {actor},
                 new[] {"need", "purpose", "fulfill"},
-                new object[] {"purpose", listener.Statistics[EntityStatistic.PERSONALITY].Value, 0, false});
+                new Dictionary<string, object>
+                {
+                    {"need", "purpose"}, 
+                    {"value" , listener.Statistics[EntityStatistic.PERSONALITY].Value},
+                    {"counter", 0},
+                    {"doAll", true}
+                });
 
             return true;
         }

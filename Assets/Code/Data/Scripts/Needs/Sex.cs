@@ -116,8 +116,7 @@ namespace JoyLib.Code.Entities.Needs
             {
                 this.m_CachedActions["wanderaction"].Execute(
                     new IJoyObject[] { actor },
-                    new [] { "need", "wander", "sex" },
-                    new object[] {});
+                    new [] { "need", "wander", "sex" });
                 return false;
             }
             else
@@ -125,7 +124,10 @@ namespace JoyLib.Code.Entities.Needs
                 this.m_CachedActions["seekaction"].Execute(
                     new IJoyObject[] { actor, bestMate },
                     new [] { "need", "seek", "sex" },
-                    new object[] { "sex" });
+                    new Dictionary<string, object>
+                    {
+                        {"need", "sex"}
+                    });
                 return true;
             }
         }
@@ -159,15 +161,25 @@ namespace JoyLib.Code.Entities.Needs
                         new HashSet<IJoyObject>(actor.FulfillmentData.Targets) {actor, partner};
                     this.m_CachedActions["fulfillneedaction"].Execute(
                         userParticipants.ToArray(),
-                        new string[] { "sex", "need", "fulfill" },
-                        new object[] { this.Name, satisfaction, time });
+                        new[] { "sex", "need", "fulfill" },
+                        new Dictionary<string, object>
+                        {
+                            {"need", this.Name},
+                            {"value", satisfaction},
+                            {"counter", time }
+                        });
 
                     HashSet<IJoyObject> partnerParticipants =
                         new HashSet<IJoyObject>(partner.FulfillmentData.Targets) {partner, actor};
                     this.m_CachedActions["fulfillneedaction"].Execute(
                         partnerParticipants.ToArray(),
                         new string[] { "sex", "need", "fulfill" },
-                        new object[] { this.Name, satisfaction, time });
+                        new Dictionary<string, object>
+                        {
+                            {"need", this.Name},
+                            {"value", satisfaction},
+                            {"counter", time }
+                        });
                 }
             }
 

@@ -56,14 +56,27 @@ namespace JoyLib.Code.Entities.Conversation.Processors
                 + listener.Statistics[EntityStatistic.ENDURANCE].Value
                 + listener.Statistics[EntityStatistic.PERSONALITY].Value) / 3;
             
+            
             fulfillNeed.Execute(
                 new IJoyObject[] {instigator, listener},
                 new[] {"sex", "need"},
-                new object[] {"sex", instigatorSatisfaction, 5});
+                new Dictionary<string, object>
+                {
+                    {"need", "sex"},
+                    {"value", instigatorSatisfaction},
+                    {"counter", 10},
+                    {"overwrite", true}
+                });
             fulfillNeed.Execute(
                 new IJoyObject[] {listener, instigator},
                 new[] {"sex", "need"},
-                new object[] {"sex", listenerSatisfaction, 5});
+                new Dictionary<string, object>
+                {
+                    {"need", "sex"},
+                    {"value", listenerSatisfaction},
+                    {"counter", 10},
+                    {"overwrite", true}
+                });
             
             base.Interact(instigator, listener);
 
@@ -88,20 +101,17 @@ namespace JoyLib.Code.Entities.Conversation.Processors
                         Speaker.LISTENER)
                 };
             }
-            else
+            return new ITopic[]
             {
-                return new ITopic[]
-                {
-                    new TopicData(
-                        new ITopicCondition[0],
-                        "SexAcceptance",
-                        new string[0],
-                        "words",
-                        0,
-                        null,
-                        Speaker.LISTENER)
-                };
-            }
+                new TopicData(
+                    new ITopicCondition[0],
+                    "SexAcceptance",
+                    new string[0],
+                    "words",
+                    0,
+                    null,
+                    Speaker.LISTENER)
+            };
         }
     }
 }

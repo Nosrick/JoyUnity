@@ -88,7 +88,7 @@ namespace JoyLib.Code.Entities.AI.Drivers
                 {
                     this.WanderAction.Execute(
                         new IJoyObject[] { vehicle },
-                        new[] { "wander", "idle"}, null);
+                        new[] { "wander", "idle"});
                 }
             }
 
@@ -128,8 +128,8 @@ namespace JoyLib.Code.Entities.AI.Drivers
             }
             //If we've arrived at our destination, then we do our thing
             if ((vehicle.WorldPosition == vehicle.CurrentTarget.targetPoint
-                && (vehicle.CurrentTarget.target is ItemInstance || vehicle.CurrentTarget.target is null)
-                || (vehicle.CurrentTarget.target is Entity 
+                && (vehicle.CurrentTarget.target is IItemInstance || vehicle.CurrentTarget.target is null)
+                || (vehicle.CurrentTarget.target is IEntity 
                     && AdjacencyHelper.IsAdjacent(vehicle.WorldPosition, vehicle.CurrentTarget.target.WorldPosition))))
             {
                 //If we have a target
@@ -144,21 +144,13 @@ namespace JoyLib.Code.Entities.AI.Drivers
                         INeed need = vehicle.Needs[vehicle.CurrentTarget.need];
 
                         need.Interact(vehicle, vehicle.CurrentTarget.target);
-                        vehicle.CurrentTarget = new NeedAIData
-                        {
-                            idle = true,
-                            intent = Intent.Interact,
-                            need = "none",
-                            searching = false,
-                            target = null,
-                            targetPoint = GlobalConstants.NO_TARGET
-                        };
+                        vehicle.CurrentTarget = NeedAIData.IdleState();
                     }
                 }
                 //If we do not, we were probably wandering
                 else
                 {
-                    if (vehicle.CurrentTarget.searching == true)
+                    if (vehicle.CurrentTarget.searching)
                     {
                         NeedAIData currentTarget = vehicle.CurrentTarget;
 

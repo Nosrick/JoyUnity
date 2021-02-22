@@ -105,14 +105,16 @@ namespace JoyLib.Code.Entities.Needs
                 this.m_CachedActions["seekaction"].Execute(
                     new IJoyObject[] {actor, bestMatch},
                     new[] {"need", "seek", "friendship"},
-                    new object[] {"friendship"});
+                    new Dictionary<string, object>
+                    {
+                        {"need", "friendship"}
+                    });
                 return true;
             }
 
             this.m_CachedActions["wanderaction"].Execute(
                 new IJoyObject[] {actor},
-                new[] {"wander", "need", "family"},
-                new object[] {});
+                new[] {"wander", "need", "family"});
             return false;
         }
 
@@ -123,20 +125,34 @@ namespace JoyLib.Code.Entities.Needs
             this.m_CachedActions["fulfillneedaction"].Execute(
                 new[] {actor, obj},
                 new[] {"need", "friendship", "fulfill"},
-                new object[] {"friendship", actor.Statistics[EntityStatistic.PERSONALITY].Value, 5, true});
+                new Dictionary<string, object>
+                {
+                    {"need", "friendship"},
+                    {"value", actor.Statistics[EntityStatistic.PERSONALITY].Value},
+                    {"counter", 5},
+                    {"doAll", true}
+                });
 
-            this.m_CachedActions["modifyrelationshippointsaction"].Execute(
-            new []{actor, obj},
-            new[] { "friendship"},
-            new object[] { actor.Statistics[EntityStatistic.PERSONALITY].Value, false });
-
-            if (obj is Entity listener)
+            if (!(obj is IEntity listener))
             {
-                this.m_CachedActions["modifyrelationshippointsaction"].Execute(
-                                new IJoyObject[]{listener, actor},
-                                new[] { "friendship"},
-                                new object[] { listener.Statistics[EntityStatistic.PERSONALITY].Value, false });
+                return true;
             }
+            
+            this.m_CachedActions["modifyrelationshippointsaction"].Execute(
+                new IJoyObject[]{actor, listener},
+                new[] { "friendship", "friendship" },
+                new Dictionary<string, object>
+                {
+                    {"value", listener.Statistics[EntityStatistic.PERSONALITY].Value}
+                });
+                
+            this.m_CachedActions["modifyrelationshippointsaction"].Execute(
+                new IJoyObject[]{listener, actor},
+                new[] { "friendship", "friendship" },
+                new Dictionary<string, object>
+                {
+                    {"value", actor.Statistics[EntityStatistic.PERSONALITY].Value}
+                });
 
             return true;
         }

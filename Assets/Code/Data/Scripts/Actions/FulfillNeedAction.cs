@@ -48,12 +48,17 @@ namespace JoyLib.Code.Scripting.Actions
 
             bool doAll = args.TryGetValue("doAll", out arg) && (bool) arg;
 
+            bool overwrite = args.TryGetValue("overwrite", out arg) && (bool) arg;
+
             IJoyObject[] fellowActors = participants.Where(p => p.Guid != actor.Guid).ToArray();
             
             actor.Needs[need].Fulfill(value);
             actor.FulfillmentData = actor.FulfillmentData is null 
                 ? new FulfillmentData(need, counter, fellowActors) 
-                : new FulfillmentData(need, actor.FulfillmentData.Counter + counter, fellowActors);
+                : new FulfillmentData(
+                    overwrite ? need : actor.FulfillmentData.Name, 
+                    overwrite ? counter : actor.FulfillmentData.Counter + counter,
+                    fellowActors);
 
             if (doAll)
             {
@@ -67,8 +72,11 @@ namespace JoyLib.Code.Scripting.Actions
                     IJoyObject[] others = participants.Where(p => p.Guid != entity.Guid).ToArray();
                     entity.Needs[need].Fulfill(value);
                     entity.FulfillmentData = entity.FulfillmentData is null 
-                        ? new FulfillmentData(need, counter, fellowActors) 
-                        : new FulfillmentData(need, entity.FulfillmentData.Counter + counter, fellowActors);
+                        ? new FulfillmentData(need, counter, others) 
+                        : new FulfillmentData(
+                            overwrite ? need : entity.FulfillmentData.Name, 
+                            overwrite ? counter : entity.FulfillmentData.Counter + counter,
+                            others);
                 }
             }
 

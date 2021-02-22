@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Scripting;
@@ -88,7 +89,10 @@ namespace JoyLib.Code.Unity
             result = addItemAction.Execute(
                 new IJoyObject[] {this.EntityInRange, item},
                 new string[] {"pickup"},
-                new object[] {true});
+                new Dictionary<string, object>
+                {
+                    {"newOwner", true}
+                });
             result &= this.LiveItemHandler.RemoveItemFromWorld(item.Guid);
 
             return result;

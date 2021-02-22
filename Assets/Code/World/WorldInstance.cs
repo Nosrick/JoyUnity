@@ -480,7 +480,10 @@ namespace JoyLib.Code.World
                 entityRef.FetchAction("additemaction")
                     .Execute(new IJoyObject[] {entityRef, item},
                         tags.ToArray(),
-                        new object[] {newOwner});
+                        new Dictionary<string, object>
+                        {
+                            {"newOwner", newOwner}
+                        });
 
                 this.RemoveObject(entityRef.WorldPosition, item);
 

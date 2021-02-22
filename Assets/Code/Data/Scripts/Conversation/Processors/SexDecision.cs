@@ -1,4 +1,5 @@
-﻿using JoyLib.Code.Conversation.Conversations;
+﻿using System.Collections.Generic;
+using JoyLib.Code.Conversation.Conversations;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Scripting;
 
@@ -45,11 +46,21 @@ namespace JoyLib.Code.Entities.Conversation.Processors
             fulfillNeed.Execute(
                 new IJoyObject[] {instigator},
                 new[] {"sex", "need"},
-                new object[] {"sex", instigatorSatisfaction, 5});
+                new Dictionary<string, object>
+                {
+                    {"need", "sex"},
+                    {"value", instigatorSatisfaction},
+                    {"counter", 10}
+                });
             fulfillNeed.Execute(
                 new IJoyObject[] {listener},
                 new[] {"sex", "need"},
-                new object[] {"sex", listenerSatisfaction, 5});
+                new Dictionary<string, object>
+                {
+                    {"need", "sex"},
+                    {"value", listenerSatisfaction},
+                    {"counter", 10}
+                });
 
             return this.FetchNextTopics();
         }

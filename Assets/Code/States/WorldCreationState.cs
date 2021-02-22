@@ -101,7 +101,10 @@ namespace JoyLib.Code.States
             addItemAction.Execute(
                 new IJoyObject[] {this.m_Player, lightSource},
                 new[] {"pickup"},
-                new object[] {true});
+                new Dictionary<string, object>
+                {
+                    {"newOwner", true}
+                });
 
             for (int i = 0; i < 4; i++)
             {
@@ -115,7 +118,10 @@ namespace JoyLib.Code.States
                         newItem
                     },
                     new[] {"pickup"},
-                    true);
+                    new Dictionary<string, object>
+                    {
+                        {"newOwner", true}
+                    });
             }
 
             foreach (IItemInstance item in this.m_Player.Contents)

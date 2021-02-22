@@ -35,7 +35,12 @@ namespace JoyLib.Code.Entities.Abilities
                 this.m_CachedActions["fulfillneedaction"].Execute(
                     new IJoyObject[] { user },
                     new string[] { "hunger", "need", "fulfill" },
-                    new object[] { "hunger", item.ItemType.Value, 10 }
+                    new Dictionary<string, object>
+                    {
+                        {"need", "hunger"}, 
+                        {"value" , item.ItemType.Value}, 
+                        {"counter", 10}
+                    }
                 );
                 user.RemoveContents(item);
                 
