@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Alias: Fade
   Data:
-    Duration: 0.5
+    Duration: 0.7
     Target: {fileID: 0}
     Alpha: 1
     Ease: 250

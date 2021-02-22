@@ -23,45 +23,23 @@ namespace JoyLib.Code.Unity.GUI
         public void Activate(string areaName)
         {
             this.m_AreaName.text = areaName;
-            GlobalConstants.ActionLog.AddText("FadeIn");
-            this.StartCoroutine(this.FadeIn());
             this.MyWindow.On = true;
-            GlobalConstants.ActionLog.AddText("FadeOut");
             this.StartCoroutine(this.FadeOut());
-        }
-
-        protected IEnumerator FadeIn()
-        {
-            while (this.MyCanvasGroup.alpha < 0.95f)
-            {
-                GlobalConstants.ActionLog.AddText("Alpha: " + this.MyCanvasGroup.alpha);
-                yield return new WaitForSeconds(0.1f);
-            }
-
-            yield return null;
         }
 
         protected IEnumerator FadeOut()
         {
-            while (this.MyCanvasGroup.alpha < 0.95f)
-            {
-                GlobalConstants.ActionLog.AddText("Alpha: " + this.MyCanvasGroup.alpha);
-                yield return new WaitForSeconds(0.1f);
-            }
-
             if (this.MyWindow.On)
             {
                 yield return new WaitForSeconds(2.0f);
             }
             
-            GlobalConstants.ActionLog.AddText("Closing Entry Banner");
             this.MyWindow.On = false;
+
+            yield return new WaitForSeconds(1.0f);
+            GlobalConstants.GameManager.GUIManager.CloseGUI(this.name);
             
-            while (this.MyCanvasGroup.alpha > 0)
-            {
-                GlobalConstants.ActionLog.AddText("Alpha: " + this.MyCanvasGroup.alpha);
-                yield return new WaitForSeconds(0.1f);
-            }
+            yield return null;
         }
     }
 }
