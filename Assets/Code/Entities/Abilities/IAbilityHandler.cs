@@ -3,9 +3,8 @@ using JoyLib.Code.Entities.Statistics;
 
 namespace JoyLib.Code.Entities.Abilities
 {
-    public interface IAbilityHandler
+    public interface IAbilityHandler : IHandler<IAbility, string>
     {
-        IAbility GetAbility(string nameRef);
         IEnumerable<IAbility> GetAvailableAbilities(IEntity actor);
 
         IEnumerable<IAbility> GetAvailableAbilities(

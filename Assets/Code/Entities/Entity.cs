@@ -1057,7 +1057,6 @@ namespace JoyLib.Code.Entities
 
         public override void Dispose()
         {
-            base.Dispose();
             foreach (IItemInstance item in this.Contents)
             {
                 item.Dispose();
@@ -1069,7 +1068,11 @@ namespace JoyLib.Code.Entities
             }
 
             this.m_NaturalWeapons.Dispose();
-            GlobalConstants.GameManager.EntityPool.Retire(this.MonoBehaviourHandler.gameObject);
+            if (this.MonoBehaviourHandler)
+            {
+                GlobalConstants.GameManager.EntityPool.Retire(this.MonoBehaviourHandler.gameObject);
+            }
+            base.Dispose();
         }
 
         public string ContentString { get; }

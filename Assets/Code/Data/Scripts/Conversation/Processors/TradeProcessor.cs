@@ -29,7 +29,7 @@ namespace JoyLib.Code.Entities.Conversation.Processors
                 try
                 {
                     this.GUIManager = GlobalConstants.GameManager.GUIManager;
-                    this.TradeWindow = this.GUIManager.GetGUI(GUINames.TRADE).GetComponent<TradeWindow>();
+                    this.TradeWindow = this.GUIManager.Get(GUINames.TRADE).GetComponent<TradeWindow>();
                 }
                 catch
                 {

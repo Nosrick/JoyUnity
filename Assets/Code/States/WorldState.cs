@@ -83,10 +83,10 @@ namespace JoyLib.Code.States
             this.GUIManager.OpenGUI(GUINames.DERIVED_VALUES);
             this.GUIManager.OpenGUI(GUINames.ACTION_LOG);
 
-            this.GUIManager.GetGUI(GUINames.INVENTORY).GetComponent<ItemContainer>().Owner = this.PlayerWorld.Player;
+            this.GUIManager.Get(GUINames.INVENTORY).GetComponent<ItemContainer>().Owner = this.PlayerWorld.Player;
             //GUIManager.GetGUI(GUINames.EQUIPMENT).GetComponent<ItemContainer>().Owner = this.PlayerWorld.Player;
 
-            EquipmentHandler equipmentHandler = this.GUIManager.GetGUI(GUINames.EQUIPMENT).GetComponentInChildren<EquipmentHandler>();
+            EquipmentHandler equipmentHandler = this.GUIManager.Get(GUINames.EQUIPMENT).GetComponentInChildren<EquipmentHandler>();
             equipmentHandler.SetPlayer(this.m_ActiveWorld.Player);
 
             var entryBanner = this.GUIManager.OpenGUI(GUINames.ENTRY_BANNER).GetComponent<EntryBanner>();

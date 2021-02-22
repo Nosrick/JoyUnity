@@ -465,7 +465,12 @@ namespace JoyLib.Code.Entities.Items
             {
                 GlobalConstants.GameManager.ItemPool.Retire(this.MonoBehaviourHandler.gameObject);
             }
+            
             base.Dispose();
+            if (this.Contents is null)
+            {
+                return;
+            }
             foreach (IItemInstance content in this.Contents)
             {
                 content.Dispose();
@@ -563,7 +568,7 @@ namespace JoyLib.Code.Entities.Items
 
         public IEnumerable<IItemInstance> Contents
         {
-            get => this.ItemHandler.GetItems(this.m_Contents);
+            get => this.ItemHandler?.GetItems(this.m_Contents);
         }
 
         public string ContentString

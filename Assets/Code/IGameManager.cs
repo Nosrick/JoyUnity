@@ -1,4 +1,5 @@
-﻿using Code.Collections;
+﻿using System;
+using Code.Collections;
 using JoyLib.Code.Combat;
 using JoyLib.Code.Conversation;
 using JoyLib.Code.Conversation.Subengines.Rumours;
@@ -30,7 +31,7 @@ using UnityEngine;
 
 namespace JoyLib.Code
 {
-    public interface IGameManager
+    public interface IGameManager : IDisposable
     {
         bool Initialised { get; }
         int LoadingPercentage { get; }

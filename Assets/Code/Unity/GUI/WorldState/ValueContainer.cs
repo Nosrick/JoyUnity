@@ -71,8 +71,7 @@ namespace JoyLib.Code.Unity.GUI
                 return;
             }
 
-            Tooltip tooltip = this.GUIManager.GetGUI(GUINames.TOOLTIP).GetComponent<Tooltip>();
-            this.GUIManager.OpenGUI(GUINames.TOOLTIP);
+            Tooltip tooltip = this.GUIManager.OpenGUI(GUINames.TOOLTIP).GetComponent<Tooltip>();
             tooltip.Show(null, this.Tooltip);
         }
 

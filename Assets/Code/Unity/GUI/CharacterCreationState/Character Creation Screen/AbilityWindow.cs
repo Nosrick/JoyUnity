@@ -42,7 +42,7 @@ namespace JoyLib.Code.Unity.GUI
             IEnumerable<string> names = this.Items.Where(item => item.Selected).Select(item => item.Name);
             foreach (string name in names)
             {
-                abilities.Add(this.GameManager.AbilityHandler.GetAbility(name));
+                abilities.Add(this.GameManager.AbilityHandler.Get(name));
             }
 
             return abilities;

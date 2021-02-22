@@ -103,7 +103,7 @@ namespace JoyLib.Code.Entities.Jobs
                                     foreach (JToken ability in child["Abilities"])
                                     {
                                         abilityCosts.Add(
-                                            this.AbilityHandler.GetAbility((string) ability["Name"]),
+                                            this.AbilityHandler.Get((string) ability["Name"]),
                                             (int) ability["Cost"]);
                                     }
                                 }

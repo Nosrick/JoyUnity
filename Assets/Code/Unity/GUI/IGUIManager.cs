@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public interface IGUIManager
+    public interface IGUIManager : IHandler<GUIData, string>
     {
         void Clear();
 
@@ -40,8 +40,6 @@ namespace JoyLib.Code.Unity.GUI
         bool RemovesControl();
 
         bool RemoveActiveGUI(string name);
-
-        GUIData GetGUI(string name);
 
         bool IsActive(string name);
 

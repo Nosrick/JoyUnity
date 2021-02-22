@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using JoyLib.Code.Helpers;
 
 namespace JoyLib.Code.Entities
 {
@@ -78,12 +79,7 @@ namespace JoyLib.Code.Entities
 
         public void Dispose()
         {
-            Guid[] keys = this.m_Entities.Keys.ToArray();
-            foreach (Guid key in keys)
-            {
-                this.m_Entities[key] = null;
-            }
-            
+            GarbageMan.Dispose(this.m_Entities);
             this.m_Entities = null;
         }
     }

@@ -116,7 +116,7 @@ namespace JoyLib.Code.Entities
                                 IEnumerable<IAbility> abilities = child["Abilities"] is null
                                     ? new List<IAbility>()
                                     : child["Abilities"].Select(token =>
-                                        this.AbilityHandler.GetAbility((string) token));
+                                        this.AbilityHandler.Get((string) token));
                                 
                                 entities.Add(
                                     new EntityTemplate(

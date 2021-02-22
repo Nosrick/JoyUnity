@@ -56,7 +56,11 @@ namespace JoyLib.Code.Scripting.Actions
             actor.FulfillmentData = actor.FulfillmentData is null 
                 ? new FulfillmentData(need, counter, fellowActors) 
                 : new FulfillmentData(
-                    overwrite ? need : actor.FulfillmentData.Name, 
+                    overwrite 
+                    || actor.FulfillmentData.Name.IsNullOrEmpty() 
+                    || actor.FulfillmentData.Name.Equals("none", StringComparison.OrdinalIgnoreCase)
+                        ? need 
+                        : actor.FulfillmentData.Name, 
                     overwrite ? counter : actor.FulfillmentData.Counter + counter,
                     fellowActors);
 

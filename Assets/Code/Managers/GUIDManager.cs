@@ -5,7 +5,7 @@ using Sirenix.OdinSerializer;
 namespace JoyLib.Code.Managers
 {
     [Serializable]
-    public class GUIDManager
+    public class GUIDManager : IDisposable
     {
         [OdinSerialize]
         public Queue<Guid> RecycleList { get; protected set; }
@@ -35,6 +35,11 @@ namespace JoyLib.Code.Managers
         public void ReleaseGUID(Guid GUIDRef)
         {
             this.RecycleList.Enqueue(GUIDRef);
+        }
+
+        public void Dispose()
+        {
+            this.RecycleList = null;
         }
     }
 }

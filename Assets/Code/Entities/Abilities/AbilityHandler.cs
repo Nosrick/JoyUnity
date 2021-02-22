@@ -10,31 +10,20 @@ namespace JoyLib.Code.Entities.Abilities
     {
         protected List<IAbility> Abilities { get; set; }
 
+        public IEnumerable<IAbility> Values => this.Abilities;
+
         public AbilityHandler()
         {
-            this.Initialise();
+            this.Abilities = this.Load().ToList();
         }
 
-        private void Load()
+        public IEnumerable<IAbility> Load()
         {
-            this.Abilities = new List<IAbility>();
-            this.Abilities.AddRange(ScriptingEngine.Instance.FetchAndInitialiseChildren<IAbility>());
+            return ScriptingEngine.Instance.FetchAndInitialiseChildren<IAbility>();
         }
 
-        public bool Initialise()
+        public IAbility Get(string nameRef)
         {
-            if (this.Abilities is null)
-            {
-                this.Load();
-            }
-
-            return true;
-        }
-
-        public IAbility GetAbility(string nameRef)
-        {
-            this.Initialise();
-
             if (this.Abilities.Any(x => x.InternalName.Equals(nameRef, StringComparison.OrdinalIgnoreCase)
                                         || x.Name.Equals(nameRef, StringComparison.OrdinalIgnoreCase)))
             {
@@ -47,8 +36,6 @@ namespace JoyLib.Code.Entities.Abilities
 
         public IEnumerable<IAbility> GetAvailableAbilities(IEntity actor)
         {
-            this.Initialise();
-
             IEnumerable<string> prereqs = this.Abilities.SelectMany(ability => ability.Prerequisites.Select(pair => pair.Key)).Distinct();
 
             IEnumerable<Tuple<string, int>> data = actor.GetData(prereqs);
@@ -60,8 +47,6 @@ namespace JoyLib.Code.Entities.Abilities
             IDictionary<string, IEntityStatistic> stats,
             IDictionary<string, IEntitySkill> skills)
         {
-            this.Initialise();
-
             List<Tuple<string, int>> data =
                 stats.Select(stat => new Tuple<string, int>(stat.Key, stat.Value.Value)).ToList();
 
@@ -69,6 +54,11 @@ namespace JoyLib.Code.Entities.Abilities
             data.Add(new Tuple<string, int>(template.CreatureType, 1));
 
             return this.Abilities.Where(ability => ability.MeetsPrerequisites(data));
+        }
+
+        public void Dispose()
+        {
+            this.Abilities = null;
         }
     }
 }

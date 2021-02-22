@@ -133,7 +133,7 @@ namespace JoyLib.Code.Unity.GUI
                 return;
             }
 
-            ContextMenu menu = this.GUIManager.GetGUI(GUINames.CONTEXT_MENU).GetComponent<ContextMenu>();
+            ContextMenu menu = this.GUIManager.Get(GUINames.CONTEXT_MENU).GetComponent<ContextMenu>();
             if (menu is null || this.Container.UseContextMenu == false)
             {
                 return;
@@ -205,7 +205,7 @@ namespace JoyLib.Code.Unity.GUI
             if (this.Item.HasTag("container"))
             {
                 this.GUIManager?.OpenGUI(GUINames.INVENTORY_CONTAINER);
-                ItemContainer container = this.GUIManager?.GetGUI(GUINames.INVENTORY_CONTAINER)
+                ItemContainer container = this.GUIManager?.Get(GUINames.INVENTORY_CONTAINER)
                     .GetComponent<ItemContainer>();
                 container.Owner = this.Item;
                 container.OnEnable();
@@ -322,7 +322,7 @@ namespace JoyLib.Code.Unity.GUI
         protected virtual void EndDrag()
         {
             this.Repaint();
-            this.GUIManager.GetGUI(GUINames.CURSOR).GetComponent<Cursor>().Reset();
+            this.GUIManager.Get(GUINames.CURSOR).GetComponent<Cursor>().Reset();
         }
 
         public virtual void OnPointerDown(PointerEventData eventData)

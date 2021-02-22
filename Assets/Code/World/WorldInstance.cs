@@ -4,6 +4,7 @@ using System.Linq;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.AI;
 using JoyLib.Code.Entities.Items;
+using JoyLib.Code.Helpers;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.World.Lighting;
 using Sirenix.OdinSerializer;
@@ -753,27 +754,26 @@ namespace JoyLib.Code.World
             {
                 entity.Dispose();
             }
-            this.m_Entities = new HashSet<IEntity>();
+            this.m_Entities = null;
 
             foreach (IJoyObject joyObject in this.m_Objects)
             {
                 joyObject.Dispose();
             }
-            this.m_Objects = new HashSet<IJoyObject>();
+            this.m_Objects = null;
 
-            foreach (IJoyObject wall in this.m_Walls.Values)
-            {
-                wall.Dispose();
-            }
-            this.m_Walls = new Dictionary<Vector2Int, IJoyObject>();
-            
-            foreach (IWorldInstance child in this.m_Areas.Values)
-            {
-                child.Dispose();
-            }
-            this.m_Areas = new Dictionary<Vector2Int, IWorldInstance>();
+            GarbageMan.Dispose(this.Walls);
+            this.m_Walls = null;
+
+            GarbageMan.Dispose(this.m_Areas);
+            this.m_Areas = null;
 
             GlobalConstants.GameManager.GUIDManager.ReleaseGUID(this.Guid);
+        }
+
+        ~WorldInstance()
+        {
+            this.Dispose();
         }
     }
 }

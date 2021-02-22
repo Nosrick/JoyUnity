@@ -60,12 +60,6 @@ namespace JoyLib.Code
         public IEnumerator Initialise()
         {
             this.BegunInitialisation = true;
-            this.LoadingMessage = "Initialising action log";
-            this.ActionLog = new ActionLog();
-
-            this.GUIDManager = new GUIDManager();
-
-            GlobalConstants.ActionLog = this.ActionLog;
 
             this.SettingsManager = new SettingsManager();
 
@@ -88,6 +82,27 @@ namespace JoyLib.Code
 
             this.MyGameObject = this.gameObject;
 
+            this.Load();
+
+            yield return null;
+        }
+
+        // Update is called once per frame
+        protected void Update()
+        {
+            this.m_StateManager?.Update();
+            this.ActionLog.Update();
+        }
+
+        protected void Load()
+        {
+            this.LoadingMessage = "Initialising action log";
+            this.ActionLog = new ActionLog();
+
+            this.GUIDManager = new GUIDManager();
+
+            GlobalConstants.ActionLog = this.ActionLog;
+            
             this.Roller = new RNG();
 
             this.LoadingMessage = "Revving up engines";
@@ -175,15 +190,6 @@ namespace JoyLib.Code
 
             this.Initialised = true;
             this.LoadingMessage = "Done!";
-
-            yield return null;
-        }
-
-        // Update is called once per frame
-        protected void Update()
-        {
-            this.m_StateManager?.Update();
-            this.ActionLog.Update();
         }
 
         public void SetNextState(IGameState nextState = null)
@@ -204,42 +210,17 @@ namespace JoyLib.Code
 
         public void Reset()
         {
+            this.m_StateManager.Stop();
+            
             this.EntityPool.RetireAll();
             this.FloorPool.RetireAll();
             this.FogPool.RetireAll();
             this.ItemPool.RetireAll();
             this.WallPool.RetireAll();
 
-            //this.ObjectIconHandler = new ObjectIconHandler(this.Roller);
-
-            this.RelationshipHandler = new EntityRelationshipHandler();
-
-            this.GUIDManager = new GUIDManager();
-
-            this.EntityHandler.ClearLiveEntities();
-            this.ItemHandler.ClearLiveItems();
-
-            this.EntityFactory = new EntityFactory(this.GUIDManager, this.NeedHandler, this.ObjectIconHandler, this.CultureHandler,
-                this.SexualityHandler, this.BioSexHandler, this.GenderHandler, this.RomanceHandler, this.JobHandler,
-                this.PhysicsManager, this.SkillHandler,
-                this.DerivedValueHandler, this.Roller);
-
-            this.ItemFactory = new ItemFactory(
-                this.GUIDManager, 
-                this.ItemDatabase,
-                this.ItemHandler, 
-                this.ObjectIconHandler,
-                this.DerivedValueHandler,
-                this.ItemPool, 
-                this.Roller);
-
-            this.QuestProvider =
-                new QuestProvider(this.RelationshipHandler, this.ItemHandler, this.ItemFactory, this.Roller);
-            this.QuestTracker = new QuestTracker(this.ItemHandler);
-
-            this.ConversationEngine = new ConversationEngine(this.RelationshipHandler, this.GUIDManager.AssignGUID());
-
-            this.NaturalWeaponHelper = new NaturalWeaponHelper(this.MaterialHandler, this.ItemFactory);
+            this.Dispose();
+            
+            this.Load();
         }
         
         public bool BegunInitialisation { get; protected set; }
@@ -298,5 +279,90 @@ namespace JoyLib.Code
         public GameObjectPool EntityPool { get; protected set; }
         public GameObjectPool ItemPool { get; protected set; }
         public GameObjectPool FogPool { get; protected set; }
+
+        public void Dispose()
+        {
+            this.GUIManager?.Dispose();
+            this.GUIManager = null;
+            
+            this.EntityHandler?.Dispose();
+            this.EntityHandler = null;
+            
+            this.ItemHandler?.Dispose();
+            this.ItemHandler = null;
+            
+            this.RelationshipHandler?.Dispose();
+            this.RelationshipHandler = null;
+            
+            this.MaterialHandler?.Dispose();
+            this.MaterialHandler = null;
+            
+            this.CultureHandler?.Dispose();
+            this.CultureHandler = null;
+            
+            this.StatisticHandler?.Dispose();
+            this.StatisticHandler = null;
+            
+            this.EntityTemplateHandler?.Dispose();
+            this.EntityTemplateHandler = null;
+            
+            this.BioSexHandler?.Dispose();
+            this.BioSexHandler = null;
+            
+            this.SexualityHandler?.Dispose();
+            this.SexualityHandler = null;
+            
+            this.JobHandler?.Dispose();
+            this.JobHandler = null;
+            
+            this.RomanceHandler?.Dispose();
+            this.RomanceHandler = null;
+            
+            this.GenderHandler?.Dispose();
+            this.GenderHandler = null;
+            
+            this.ItemDatabase?.Dispose();
+            this.ItemDatabase = null;
+            
+            this.NeedHandler?.Dispose();
+            this.NeedHandler = null;
+            
+            this.SkillHandler?.Dispose();
+            this.SkillHandler = null;
+            
+            this.WorldInfoHandler?.Dispose();
+            this.WorldInfoHandler = null;
+            
+            this.DerivedValueHandler?.Dispose();
+            this.DerivedValueHandler = null;
+            
+            this.VisionProviderHandler?.Dispose();
+            this.VisionProviderHandler = null;
+            
+            this.AbilityHandler?.Dispose();
+            this.AbilityHandler = null;
+
+            this.ConversationEngine = null;
+            this.PhysicsManager = null;
+
+            this.ParameterProcessorHandler = null;
+
+            this.QuestProvider = null;
+            this.QuestTracker = null;
+            this.CombatEngine = null;
+            
+            this.RumourMill?.Dispose();
+            this.RumourMill = null;
+            
+            this.ActionLog?.Dispose();
+            this.ActionLog = null;
+            
+            this.GUIDManager?.Dispose();
+            this.GUIDManager = null;
+
+            this.EntityFactory = null;
+            this.ItemFactory = null;
+            this.NaturalWeaponHelper = null;
+        }
     }
 }

@@ -14,7 +14,10 @@ using ContextMenu = JoyLib.Code.Unity.GUI.ContextMenu;
 
 namespace JoyLib.Code.Unity
 {
-    public class MonoBehaviourHandler : ManagedSprite, IPointerEnterHandler, IPointerExitHandler
+    public class MonoBehaviourHandler : 
+        ManagedSprite, 
+        IPointerEnterHandler, 
+        IPointerExitHandler
     {
         public IJoyObject JoyObject { get; protected set; }
         protected ManagedSprite SpeechBubble { get; set; }
@@ -34,10 +37,11 @@ namespace JoyLib.Code.Unity
             this.transform.position = new Vector3(this.JoyObject.WorldPosition.x, this.JoyObject.WorldPosition.y);
         }
 
-        public void Start()
+        public void OnEnable()
         {
             InputSystem.onActionChange -= this.HandleInput;
             InputSystem.onActionChange += this.HandleInput;
+            this.GUIManager = GlobalConstants.GameManager?.GUIManager;
         }
 
         public override void SetSpriteLayer(string layerName)
@@ -126,7 +130,7 @@ namespace JoyLib.Code.Unity
 
         protected virtual void OpenContextMenu()
         {
-            ContextMenu contextMenu = this.GUIManager.GetGUI(GUINames.CONTEXT_MENU).GetComponent<ContextMenu>();
+            ContextMenu contextMenu = this.GUIManager.Get(GUINames.CONTEXT_MENU).GetComponent<ContextMenu>();
             contextMenu.Clear();
 
             if (this.JoyObject.Equals(GlobalConstants.GameManager.Player) == false

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Xml.Linq;
 using Castle.Core.Internal;
 using Code.Unity.GUI.Managed_Assets;
 using JoyLib.Code.Events;
@@ -50,6 +49,18 @@ namespace JoyLib.Code.Unity.GUI
         public GUIManager()
         {
             this.Initialise();
+        }
+
+        public IEnumerable<GUIData> Values => this.GUIs;
+        
+        public GUIData Get(string name)
+        {
+            return this.GUIs.FirstOrDefault(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public IEnumerable<GUIData> Load()
+        {
+            return new GUIData[0];
         }
 
         protected void Initialise()
@@ -557,11 +568,6 @@ namespace JoyLib.Code.Unity.GUI
             return this.ActiveGUIs.Any(gui => gui.m_RemovesControl);
         }
 
-        public GUIData GetGUI(string name)
-        {
-            return this.GUIs.FirstOrDefault(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase));
-        }
-
         public bool IsActive(string name)
         {
             return this.ActiveGUIs.Any(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase));
@@ -575,6 +581,35 @@ namespace JoyLib.Code.Unity.GUI
             }
 
             return this.ActiveGUIs.Count(data => data.m_AlwaysOpen == false) > 0;
+        }
+
+        public void Dispose()
+        {
+            this.GUIs = null;
+            this.ActiveGUIs = null;
+
+            GarbageMan.Dispose(this.Cursors);
+            this.Cursors = null;
+
+            GarbageMan.Dispose(this.CursorColours);
+            this.CursorColours = null;
+
+            GarbageMan.Dispose(this.LoadedFonts);
+            this.LoadedFonts = null;
+            GarbageMan.Dispose(this.FontColours);
+            this.FontColours = null;
+
+            GarbageMan.Dispose(this.DyslexicModeFonts);
+            this.DyslexicModeFonts = null;
+
+            GarbageMan.Dispose(this.StandardFontSizes);
+            this.StandardFontSizes = null;
+            
+            GarbageMan.Dispose(this.UISprites);
+            this.UISprites = null;
+            
+            GarbageMan.Dispose(this.UISpriteColours);
+            this.UISpriteColours = null;
         }
     }
 }

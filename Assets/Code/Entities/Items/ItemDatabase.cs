@@ -83,7 +83,7 @@ namespace JoyLib.Code.Entities.Items
                                     IEnumerable<string> abilityNames = identifiedToken["Effects"].IsNullOrEmpty() 
                                                                         ? new List<string>() 
                                                                         : identifiedToken["Effects"].Select(token => (string) token);
-                                    IEnumerable<IAbility> abilities = abilityNames.Select(abilityName => this.AbilityHandler.GetAbility(abilityName));
+                                    IEnumerable<IAbility> abilities = abilityNames.Select(abilityName => this.AbilityHandler.Get(abilityName));
                                     IEnumerable<string> slots = identifiedToken["Slots"].IsNullOrEmpty()
                                         ? new List<string>() 
                                         : identifiedToken["Slots"].Select(token => (string) token);

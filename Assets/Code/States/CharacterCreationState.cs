@@ -28,7 +28,7 @@ namespace JoyLib.Code.States
             base.SetUpUi();
 
             this.CharacterCreationScreen = this.GUIManager
-                .GetGUI(GUINames.CHARACTER_CREATION_PART_1)
+                .Get(GUINames.CHARACTER_CREATION_PART_1)
                 .GetComponent<CharacterCreationScreen>();
             this.CharacterCreationScreen.Initialise();
             this.GUIManager.OpenGUI(GUINames.CHARACTER_CREATION_PART_1, true);
