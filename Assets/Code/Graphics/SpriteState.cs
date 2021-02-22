@@ -150,5 +150,16 @@ namespace JoyLib.Code.Graphics
                 }
             }
         }
+
+        public void Dispose()
+        {
+            this.m_SpriteData?.Dispose();
+            this.m_SpriteData = null;
+        }
+
+        ~SpriteState()
+        {
+            this.Dispose();
+        }
     }
 }

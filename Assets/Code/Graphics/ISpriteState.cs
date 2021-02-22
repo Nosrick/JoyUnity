@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace JoyLib.Code.Graphics
 {
-    public interface ISpriteState
+    public interface ISpriteState : IDisposable
     {
         string Name { get; }
 

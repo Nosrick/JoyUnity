@@ -1055,26 +1055,6 @@ namespace JoyLib.Code.Entities
             throw new InvalidOperationException("No value of " + name + " found on " + this.JoyName);
         }
 
-        public override void Dispose()
-        {
-            foreach (IItemInstance item in this.Contents)
-            {
-                item.Dispose();
-            }
-
-            foreach (IItemInstance equipment in this.Equipment.Contents)
-            {
-                equipment.Dispose();
-            }
-
-            this.m_NaturalWeapons.Dispose();
-            if (this.MonoBehaviourHandler)
-            {
-                GlobalConstants.GameManager.EntityPool.Retire(this.MonoBehaviourHandler.gameObject);
-            }
-            base.Dispose();
-        }
-
         public string ContentString { get; }
         public event ItemRemovedEventHandler ItemRemoved;
         public event ItemAddedEventHandler ItemAdded;
@@ -1316,5 +1296,34 @@ namespace JoyLib.Code.Entities
         }
 
         protected List<string> m_CultureNames;
+
+        public override void Dispose()
+        {
+            foreach (IItemInstance item in this.Contents)
+            {
+                item.Dispose();
+            }
+
+            foreach (IItemInstance equipment in this.Equipment.Contents)
+            {
+                equipment.Dispose();
+            }
+
+            this.m_NaturalWeapons.Dispose();
+            if (this.MonoBehaviourHandler)
+            {
+                GlobalConstants.GameManager.EntityPool.Retire(this.MonoBehaviourHandler.gameObject);
+            }
+
+            for (int i = 0; i < this.States.Count; i++)
+            {
+                this.States[i].Dispose();
+                this.States[i] = null;
+            }
+
+            this.States = null;
+            
+            base.Dispose();
+        }
     }
 }

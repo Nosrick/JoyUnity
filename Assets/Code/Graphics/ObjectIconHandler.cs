@@ -268,15 +268,36 @@ namespace JoyLib.Code.Graphics
     }
 
     [Serializable]
-    public class SpriteData
+    public class SpriteData : IDisposable
     {
         public string m_Name;
         public string m_State;
         public List<SpritePart> m_Parts;
+
+        public void Dispose()
+        {
+            if (this.m_Parts is null == false)
+            {
+                for (int i = 0; i < this.m_Parts.Count; i++)
+                {
+                    this.m_Parts[i]?.Dispose();
+                    this.m_Parts[i] = null;
+                }
+            }
+
+            this.m_Parts = null;
+            this.m_Name = null;
+            this.m_State = null;
+        }
+
+        ~SpriteData()
+        {
+            this.Dispose();
+        }
     }
 
     [Serializable]
-    public class SpritePart
+    public class SpritePart : IDisposable
     {
         public string m_Name;
         public int m_Frames;
@@ -291,5 +312,20 @@ namespace JoyLib.Code.Graphics
         public SpriteDrawMode m_SpriteDrawMode;
 
         public Color SelectedColour => this.m_PossibleColours[this.m_SelectedColour];
+
+        public void Dispose()
+        {
+            for (int i = 0; i < this.m_FrameSprites.Count; i++)
+            {
+                this.m_FrameSprites[i] = null;
+            }
+
+            this.m_FrameSprites = null;
+        }
+
+        ~SpritePart()
+        {
+            this.Dispose();
+        }
     }
 }
