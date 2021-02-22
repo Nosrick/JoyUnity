@@ -73,7 +73,7 @@ namespace JoyLib.Code.IO
                 File.WriteAllBytes(directory + "/items.dat", array);
 
                 array = SerializationUtility.SerializeValue(
-                    GlobalConstants.GameManager.EntityHandler.AllEntities,
+                    GlobalConstants.GameManager.EntityHandler.Values,
                     DEFAULT_DATA_FORMAT);
                 File.WriteAllBytes(directory + "/entities.dat", array);
 

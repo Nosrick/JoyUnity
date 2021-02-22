@@ -6,21 +6,26 @@ namespace JoyLib.Code.Entities
 {
     public class LiveEntityHandler : ILiveEntityHandler
     {
-        protected Dictionary<Guid, IEntity> m_Entities;
+        protected IDictionary<Guid, IEntity> m_Entities;
         protected IEntity m_Player;
 
-        public IEnumerable<IEntity> AllEntities => this.m_Entities.Values.ToList();
+        public IEnumerable<IEntity> Values => this.m_Entities.Values.ToList();
+
+        public LiveEntityHandler()
+        {
+            this.m_Entities = new Dictionary<Guid, IEntity>();
+        }
 
         public bool AddEntity(IEntity created)
         {
             try
             {
-                if (this.Entities.ContainsKey(created.Guid))
+                if (this.m_Entities.ContainsKey(created.Guid))
                 {
                     return false;
                 }
                 
-                this.Entities.Add(created.Guid, created);
+                this.m_Entities.Add(created.Guid, created);
 
                 if(created.PlayerControlled)
                 {
@@ -38,9 +43,9 @@ namespace JoyLib.Code.Entities
 
         public bool Remove(Guid GUID)
         {
-            if(this.Entities.ContainsKey(GUID))
+            if(this.m_Entities.ContainsKey(GUID))
             {
-                return this.Entities.Remove(GUID);
+                return this.m_Entities.Remove(GUID);
             }
 
             return false;
@@ -48,11 +53,12 @@ namespace JoyLib.Code.Entities
 
         public IEntity Get(Guid GUID)
         {
-            if(this.Entities.ContainsKey(GUID))
-            {
-                return this.Entities[GUID];
-            }
-            return null;
+            return this.m_Entities.ContainsKey(GUID) ? this.m_Entities[GUID] : null;
+        }
+
+        public IEnumerable<IEntity> Load()
+        {
+            return new List<IEntity>();
         }
 
         public IEntity GetPlayer()
@@ -70,17 +76,15 @@ namespace JoyLib.Code.Entities
             this.m_Entities = new Dictionary<Guid, IEntity>();
         }
 
-        protected Dictionary<Guid, IEntity> Entities
+        public void Dispose()
         {
-            get
+            Guid[] keys = this.m_Entities.Keys.ToArray();
+            foreach (Guid key in keys)
             {
-                if(this.m_Entities is null)
-                {
-                    this.m_Entities = new Dictionary<Guid, IEntity>();
-                }
-
-                return this.m_Entities;
+                this.m_Entities[key] = null;
             }
+            
+            this.m_Entities = null;
         }
     }
 }

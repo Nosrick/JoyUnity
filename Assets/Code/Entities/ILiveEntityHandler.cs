@@ -3,15 +3,13 @@ using System.Collections.Generic;
 
 namespace JoyLib.Code.Entities
 {
-    public interface ILiveEntityHandler
+    public interface ILiveEntityHandler : IHandler<IEntity, Guid>
     {
-        IEnumerable<IEntity> AllEntities { get; }
+        IEnumerable<IEntity> Values { get; }
         
         bool AddEntity(IEntity created);
 
         bool Remove(Guid GUID);
-
-        IEntity Get(Guid GUID);
 
         IEntity GetPlayer();
 
