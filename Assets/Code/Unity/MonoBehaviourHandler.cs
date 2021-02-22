@@ -17,7 +17,8 @@ namespace JoyLib.Code.Unity
     public class MonoBehaviourHandler : 
         ManagedSprite, 
         IPointerEnterHandler, 
-        IPointerExitHandler
+        IPointerExitHandler,
+        IDisposable
     {
         public IJoyObject JoyObject { get; protected set; }
         protected ManagedSprite SpeechBubble { get; set; }
@@ -350,6 +351,12 @@ namespace JoyLib.Code.Unity
                 player,
                 attackerTags,
                 defenderTags);
+        }
+
+        public void Dispose()
+        {
+            GarbageMan.Dispose(this.m_States);
+            this.m_States = null;
         }
     }
 }

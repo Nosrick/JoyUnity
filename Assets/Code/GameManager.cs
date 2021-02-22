@@ -363,6 +363,8 @@ namespace JoyLib.Code
             this.EntityFactory = null;
             this.ItemFactory = null;
             this.NaturalWeaponHelper = null;
+
+            Resources.UnloadUnusedAssets();
         }
     }
 }

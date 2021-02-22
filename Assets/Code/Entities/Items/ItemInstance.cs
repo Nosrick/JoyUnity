@@ -464,6 +464,7 @@ namespace JoyLib.Code.Entities.Items
             if (this.MonoBehaviourHandler)
             {
                 GlobalConstants.GameManager.ItemPool.Retire(this.MonoBehaviourHandler.gameObject);
+                this.MonoBehaviourHandler.Dispose();
             }
             
             base.Dispose();

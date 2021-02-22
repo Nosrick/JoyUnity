@@ -1128,8 +1128,8 @@ namespace JoyLib.Code.Entities
             set
             {
                 this.m_FulfillmentData = value;
-                if (this.m_FulfillmentData.Name.Equals("none", StringComparison.OrdinalIgnoreCase) == false &&
-                    this.m_FulfillmentData.Name.IsNullOrEmpty() == false)
+                if (this.m_FulfillmentData.Name.IsNullOrEmpty() == false
+                    && this.m_FulfillmentData.Name.Equals("none", StringComparison.OrdinalIgnoreCase) == false)
                 {
                     this.MonoBehaviourHandler.SetSpeechBubble(this.m_FulfillmentData.Counter > 0,
                         this.m_Needs[this.m_FulfillmentData.Name].FulfillingSprite);
@@ -1313,6 +1313,7 @@ namespace JoyLib.Code.Entities
             if (this.MonoBehaviourHandler)
             {
                 GlobalConstants.GameManager.EntityPool.Retire(this.MonoBehaviourHandler.gameObject);
+                this.MonoBehaviourHandler.Dispose();
             }
 
             for (int i = 0; i < this.States.Count; i++)

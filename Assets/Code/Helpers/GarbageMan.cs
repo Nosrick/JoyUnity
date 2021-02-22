@@ -8,6 +8,11 @@ namespace JoyLib.Code.Helpers
     {
         public static void Dispose<T, K>(IDictionary<T, K> collection)
         {
+            if (collection is null)
+            {
+                return;
+            }
+            
             var keys = collection.Keys.ToArray();
             foreach (var key in keys)
             {
