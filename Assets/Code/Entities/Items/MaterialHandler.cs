@@ -69,7 +69,7 @@ namespace JoyLib.Code.Entities.Items
                                 int bonus = (int) (child["Bonus"] ?? 1);
                                 float weight = (float) (child["Weight"] ?? 1.0f);
                                 float value = (float) (child["Value"] ?? 1.0f);
-                                
+
                                 materials.Add(
                                     new ItemMaterial(
                                         name,
@@ -83,6 +83,11 @@ namespace JoyLib.Code.Entities.Items
                         {
                             GlobalConstants.ActionLog.AddText("Error loading materials from " + file);
                             GlobalConstants.ActionLog.StackTrace(e);
+                        }
+                        finally
+                        {
+                            jsonReader.Close();
+                            reader.Close();
                         }
                     }
                 }

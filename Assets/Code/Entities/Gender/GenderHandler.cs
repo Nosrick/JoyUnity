@@ -79,6 +79,11 @@ namespace JoyLib.Code.Entities.Gender
                                 GlobalConstants.ActionLog.AddText("Error loading genders from " + file);
                                 GlobalConstants.ActionLog.StackTrace(e);
                             }
+                            finally
+                            {
+                                jsonReader.Close();
+                                reader.Close();
+                            }
                         }
                     }
                 }

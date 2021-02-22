@@ -78,6 +78,11 @@ namespace JoyLib.Code.Entities.Sexes
                             GlobalConstants.ActionLog.AddText("Could not load sexes in " + file);
                             GlobalConstants.ActionLog.StackTrace(e);
                         }
+                        finally
+                        {
+                            jsonReader.Close();
+                            reader.Close();
+                        }
                     }
                 }
             }

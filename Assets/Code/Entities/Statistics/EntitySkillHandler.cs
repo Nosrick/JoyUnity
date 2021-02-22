@@ -64,6 +64,11 @@ namespace JoyLib.Code.Entities
                         GlobalConstants.ActionLog.AddText("Could not load skills from " + file);
                         GlobalConstants.ActionLog.StackTrace(e);
                     }
+                    finally
+                    {
+                        jsonReader.Close();
+                        reader.Close();
+                    }
                 }
             }
 

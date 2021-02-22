@@ -122,6 +122,11 @@ namespace JoyLib.Code.Entities.Jobs
                             GlobalConstants.ActionLog.AddText("ERROR LOADING JOB, FILE " + file, LogLevel.Error);
                             GlobalConstants.ActionLog.StackTrace(e);
                         }
+                        finally
+                        {
+                            jsonReader.Close();
+                            reader.Close();
+                        }
                     }
                 }
             }

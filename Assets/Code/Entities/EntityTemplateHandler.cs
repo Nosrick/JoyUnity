@@ -137,6 +137,11 @@ namespace JoyLib.Code.Entities
                             GlobalConstants.ActionLog.AddText("Failed to load entities in " + file);
                             GlobalConstants.ActionLog.StackTrace(e);
                         }
+                        finally
+                        {
+                            jsonReader.Close();
+                            reader.Close();
+                        }
                     }
                 }
             }

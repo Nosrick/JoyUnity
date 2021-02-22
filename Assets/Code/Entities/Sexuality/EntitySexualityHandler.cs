@@ -77,6 +77,11 @@ namespace JoyLib.Code.Entities.Sexuality
                             GlobalConstants.ActionLog.AddText("Could not load sexualities in " + file);
                             GlobalConstants.ActionLog.StackTrace(e);
                         }
+                        finally
+                        {
+                            jsonReader.Close();
+                            reader.Close();
+                        }
                     }
                 }
             }

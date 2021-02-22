@@ -79,6 +79,11 @@ namespace JoyLib.Code.Entities.Relationships
                             GlobalConstants.ActionLog.AddText("Error loading relationships from " + file);
                             GlobalConstants.ActionLog.StackTrace(e);
                         }
+                        finally
+                        {
+                            jsonReader.Close();
+                            reader.Close();
+                        }
                     }
                 }
             }

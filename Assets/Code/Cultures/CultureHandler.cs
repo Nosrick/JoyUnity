@@ -239,6 +239,11 @@ namespace JoyLib.Code.Cultures
                                 LogLevel.Error);
                             GlobalConstants.ActionLog.StackTrace(e);
                         }
+                        finally
+                        {
+                            jsonReader.Close();
+                            reader.Close();
+                        }
                     }
                 }
             }

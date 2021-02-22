@@ -106,6 +106,11 @@ namespace JoyLib.Code.World
                             GlobalConstants.ActionLog.AddText("Error loading world space definition from " + file, LogLevel.Error);
                             GlobalConstants.ActionLog.StackTrace(e);
                         }
+                        finally
+                        {
+                            jsonReader.Close();
+                            reader.Close();
+                        }
                     }
                 }
             }

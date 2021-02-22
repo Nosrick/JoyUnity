@@ -176,6 +176,11 @@ namespace JoyLib.Code.Entities.Items
                             GlobalConstants.ActionLog.AddText("Error when loading items from " + file, LogLevel.Warning);
                             GlobalConstants.ActionLog.StackTrace(e);
                         }
+                        finally
+                        {
+                            jsonReader.Close();
+                            reader.Close();
+                        }
                     }
                 }
             }
