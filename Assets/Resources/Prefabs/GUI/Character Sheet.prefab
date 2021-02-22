@@ -621,12 +621,12 @@ MonoBehaviour:
   m_Content: {fileID: 6179860078557775810}
   m_Horizontal: 0
   m_Vertical: 1
-  m_MovementType: 1
+  m_MovementType: 2
   m_Elasticity: 0.1
   m_Inertia: 0
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
-  m_Viewport: {fileID: 0}
+  m_ScrollSensitivity: 5
+  m_Viewport: {fileID: 6179860078122970460}
   m_HorizontalScrollbar: {fileID: 0}
   m_VerticalScrollbar: {fileID: 0}
   m_HorizontalScrollbarVisibility: 0
@@ -778,12 +778,12 @@ MonoBehaviour:
   m_Content: {fileID: 6179860078384154007}
   m_Horizontal: 0
   m_Vertical: 1
-  m_MovementType: 1
+  m_MovementType: 2
   m_Elasticity: 0.1
   m_Inertia: 0
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
-  m_Viewport: {fileID: 0}
+  m_ScrollSensitivity: 5
+  m_Viewport: {fileID: 6179860078319113457}
   m_HorizontalScrollbar: {fileID: 0}
   m_VerticalScrollbar: {fileID: 0}
   m_HorizontalScrollbarVisibility: 0
@@ -1286,12 +1286,12 @@ MonoBehaviour:
   m_Content: {fileID: 6179860079048096962}
   m_Horizontal: 0
   m_Vertical: 1
-  m_MovementType: 1
+  m_MovementType: 2
   m_Elasticity: 0.1
   m_Inertia: 0
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
-  m_Viewport: {fileID: 0}
+  m_ScrollSensitivity: 5
+  m_Viewport: {fileID: 6179860078842302765}
   m_HorizontalScrollbar: {fileID: 0}
   m_VerticalScrollbar: {fileID: 0}
   m_HorizontalScrollbarVisibility: 0
@@ -1864,6 +1864,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce97fd3bc25a4005a0401f7989f05d84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   m_ElementName: DefaultWindow
   m_Prefab: {fileID: 1949383421893784, guid: fc0c5c6df1dde9649a50d9ed7547fa80, type: 3}
 --- !u!114 &526070233348947645
@@ -1878,6 +1887,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 633ae74873e44ccbaf68a8b7d041f428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   m_ElementName: Font
   m_OverrideSize: 1
   m_OverrideColour: 1
@@ -2002,12 +2020,12 @@ MonoBehaviour:
   m_Content: {fileID: 8654064165512726252}
   m_Horizontal: 0
   m_Vertical: 1
-  m_MovementType: 1
+  m_MovementType: 2
   m_Elasticity: 0.1
   m_Inertia: 0
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
-  m_Viewport: {fileID: 0}
+  m_ScrollSensitivity: 5
+  m_Viewport: {fileID: 6749622751932064689}
   m_HorizontalScrollbar: {fileID: 0}
   m_VerticalScrollbar: {fileID: 0}
   m_HorizontalScrollbarVisibility: 0
@@ -2181,6 +2199,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3771862732396527235, guid: 170a10e9e51de134b9b56ec34ceaebf2,
         type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 3771862732396527235, guid: 170a10e9e51de134b9b56ec34ceaebf2,
+        type: 3}
+    - target: {fileID: 3771862732396527235, guid: 170a10e9e51de134b9b56ec34ceaebf2,
+        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -2242,13 +2266,19 @@ PrefabInstance:
     - target: {fileID: 6296772926489511444, guid: 170a10e9e51de134b9b56ec34ceaebf2,
         type: 3}
       propertyPath: m_fontSize
-      value: 35.3
+      value: 35.7
       objectReference: {fileID: 0}
     - target: {fileID: 7129824930873053387, guid: 170a10e9e51de134b9b56ec34ceaebf2,
         type: 3}
       propertyPath: m_Name
       value: Close Button
       objectReference: {fileID: 0}
+    - target: {fileID: 8403975637019894361, guid: 170a10e9e51de134b9b56ec34ceaebf2,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 8403975637019894361, guid: 170a10e9e51de134b9b56ec34ceaebf2,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 170a10e9e51de134b9b56ec34ceaebf2, type: 3}
 --- !u!224 &3369274490352509080 stripped
@@ -2264,6 +2294,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6179860079273761956}
     m_Modifications:
+    - target: {fileID: 1389617077284010975, guid: 897e6e0585525c2479ae107c33d83914,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 1389617077284010975, guid: 897e6e0585525c2479ae107c33d83914,
+        type: 3}
+    - target: {fileID: 1721885790629954532, guid: 897e6e0585525c2479ae107c33d83914,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 1721885790629954532, guid: 897e6e0585525c2479ae107c33d83914,
+        type: 3}
     - target: {fileID: 6419558160874721576, guid: 897e6e0585525c2479ae107c33d83914,
         type: 3}
       propertyPath: m_Name
@@ -2429,6 +2471,12 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 7536972744408934911, guid: 897e6e0585525c2479ae107c33d83914,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 7536972744408934911, guid: 897e6e0585525c2479ae107c33d83914,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 897e6e0585525c2479ae107c33d83914, type: 3}
 --- !u!224 &7253421323461371315 stripped
@@ -2565,6 +2613,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8300874287365320679, guid: a2de3cfe6abfcb648ac806bc92ce0d02,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 8300874287365320679, guid: a2de3cfe6abfcb648ac806bc92ce0d02,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a2de3cfe6abfcb648ac806bc92ce0d02, type: 3}
 --- !u!224 &5822067317729665564 stripped
@@ -2592,6 +2646,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6179860079273761956}
     m_Modifications:
+    - target: {fileID: 3201107306560414808, guid: 82c3709b226eb324c99d867ab7460c4a,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 3201107306560414808, guid: 82c3709b226eb324c99d867ab7460c4a,
+        type: 3}
+    - target: {fileID: 6304832000681243196, guid: 82c3709b226eb324c99d867ab7460c4a,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 6304832000681243196, guid: 82c3709b226eb324c99d867ab7460c4a,
+        type: 3}
     - target: {fileID: 8139831217964238258, guid: 82c3709b226eb324c99d867ab7460c4a,
         type: 3}
       propertyPath: m_Layer
@@ -2784,6 +2850,12 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6179860079273761956}
     m_Modifications:
+    - target: {fileID: 363160730014090863, guid: e5303671e2ae0c446a6dd4d1a795a6bd,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 363160730014090863, guid: e5303671e2ae0c446a6dd4d1a795a6bd,
+        type: 3}
     - target: {fileID: 2450556136503467472, guid: e5303671e2ae0c446a6dd4d1a795a6bd,
         type: 3}
       propertyPath: m_Layer
@@ -2969,6 +3041,18 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 3450342096076661105, guid: e5303671e2ae0c446a6dd4d1a795a6bd,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 3450342096076661105, guid: e5303671e2ae0c446a6dd4d1a795a6bd,
+        type: 3}
+    - target: {fileID: 5338993110758685148, guid: e5303671e2ae0c446a6dd4d1a795a6bd,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 5338993110758685148, guid: e5303671e2ae0c446a6dd4d1a795a6bd,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e5303671e2ae0c446a6dd4d1a795a6bd, type: 3}
 --- !u!114 &7220462004790514218 stripped
