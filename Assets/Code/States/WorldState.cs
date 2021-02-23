@@ -68,7 +68,10 @@ namespace JoyLib.Code.States
             GlobalConstants.GameManager.Player.ConsciousnessChange -= this.OnPlayerConsciousChange;
             GlobalConstants.GameManager.Player.ConsciousnessChange += this.OnPlayerConsciousChange;
 
-            //GlobalConstants.GameManager.Player = m_ActiveWorld.Player;
+            if (Camera.main is null == false)
+            {
+                Camera.main.backgroundColor = GlobalConstants.GameManager.Player.VisionProvider.DarkColour;
+            }
 
             this.Tick();
         }
