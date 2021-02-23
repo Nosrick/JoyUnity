@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Linq;
 using Code.Collections;
 using Joy.Code.Managers;
 using JoyLib.Code.Combat;
@@ -186,10 +188,16 @@ namespace JoyLib.Code
 
             this.m_StateManager = new StateManager();
 
-            this.WorldSerialiser = new WorldSerialiser(GlobalConstants.GameManager.ObjectIconHandler);
+            this.WorldSerialiser = new WorldSerialiser(this.ObjectIconHandler);
 
             this.Initialised = true;
             this.LoadingMessage = "Done!";
+
+            float memoryUsageMB = (GC.GetTotalMemory(false) / 1024f) / 1024f;
+            GlobalConstants.ActionLog.AddText("Memory usage in MB after load " + memoryUsageMB, LogLevel.Warning);
+
+            memoryUsageMB = (GC.GetTotalMemory(true) / 1024f) / 1024f;
+            GlobalConstants.ActionLog.AddText("Memory usage in MB after GC collect " + memoryUsageMB, LogLevel.Warning);
         }
 
         public void SetNextState(IGameState nextState = null)
@@ -219,7 +227,10 @@ namespace JoyLib.Code
             this.WallPool.RetireAll();
 
             this.Dispose();
-            
+
+            float memoryUsageMB = (GC.GetTotalMemory(true) / 1024f) / 1024f;
+            GlobalConstants.ActionLog.AddText("Memory usage in MB after dispose " + memoryUsageMB, LogLevel.Warning);
+
             this.Load();
         }
         
@@ -365,6 +376,7 @@ namespace JoyLib.Code
             this.NaturalWeaponHelper = null;
 
             Resources.UnloadUnusedAssets();
+            GC.Collect();
         }
     }
 }
