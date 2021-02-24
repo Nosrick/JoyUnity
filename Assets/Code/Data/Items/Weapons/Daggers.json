@@ -47,139 +47,44 @@
           "Name": "dagger",
           "Part": [
             {
-              "Name": "dagger_0",
+              "Name": "dagger-blade",
               "Frames": 1,
-              "Filename": "ShortWep",
+              "Filename": "items/dagger-blades",
               "Data": [
                 "default"
               ],
-              "Position": 0
-            }
-          ]
-        },
-        {
-          "Name": "dagger",
-          "Part": [
+              "Position": 0,
+              "Colour": [
+                "#ffffffff",
+                "#99e7f4ff"
+              ]
+            },
             {
-              "Name": "dagger_1",
-              "Frames": 1,
-              "Filename": "ShortWep",
+              "Name": "dagger-crossguard",
+              "Frames" : 1,
+              "Filename": "items/dagger-crossguards",
               "Data": [
                 "default"
               ],
-              "Position": 1
-            }
-          ]
-        },
-        {
-          "Name": "dagger",
-          "Part": [
+              "Position": 0,
+              "Colour": [
+                "#93a5beff",
+                "#424e66ff"
+              ]
+            },
             {
-              "Name": "dagger_2",
-              "Frames": 1,
-              "Filename": "ShortWep",
+              "Name": "dagger-pommel",
+              "Frames" : 1,
+              "Filename": "items/dagger-pommels",
               "Data": [
                 "default"
               ],
-              "Position": 2
-            }
-          ]
-        },
-        {
-          "Name": "dagger",
-          "Part": [
-            {
-              "Name": "dagger_3",
-              "Frames": 1,
-              "Filename": "ShortWep",
-              "Data": [
-                "default"
-              ],
-              "Position": 3
-            }
-          ]
-        },
-        {
-          "Name": "dagger",
-          "Part": [
-            {
-              "Name": "dagger_4",
-              "Frames": 1,
-              "Filename": "ShortWep",
-              "Data": [
-                "default"
-              ],
-              "Position": 4
-            }
-          ]
-        },
-        {
-          "Name": "dagger",
-          "Part": [
-            {
-              "Name": "dagger_5",
-              "Frames": 1,
-              "Filename": "ShortWep",
-              "Data": [
-                "default"
-              ],
-              "Position": 5
-            }
-          ]
-        },
-        {
-          "Name": "dagger",
-          "Part": [
-            {
-              "Name": "dagger_6",
-              "Frames": 1,
-              "Filename": "ShortWep",
-              "Data": [
-                "default"
-              ],
-              "Position": 6
-            }
-          ]
-        },
-        {
-          "Name": "dagger",
-          "Part": [
-            {
-              "Name": "dagger_7",
-              "Frames": 1,
-              "Filename": "ShortWep",
-              "Data": [
-                "default"
-              ],
-              "Position": 7
-            }
-          ]
-        },
-        {
-          "Name": "dagger",
-          "Part": [
-            {
-              "Name": "dagger_8",
-              "Frames": 1,
-              "Filename": "ShortWep",
-              "Data": [
-                "default"
-              ],
-              "Position": 8
-            }
-          ]
-        },
-        {
-          "Name": "dagger",
-          "Part": [
-            {
-              "Name": "dagger_9",
-              "Frames": 1,
-              "Filename": "ShortWep",
-              "Data": [
-                "default"
-              ],
-              "Position": 9
+              "Position": 0,
+              "Colour": [
+                "#980b1cff",
+                "#a65805ff",
+                "#9d2c07ff"
+              ]
             }
           ]
         }
