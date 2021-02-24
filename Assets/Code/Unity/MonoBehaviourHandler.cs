@@ -55,6 +55,9 @@ namespace JoyLib.Code.Unity
             {
                 this.SpeechBubbleBackground.SetSpriteLayer(layerName);
                 this.SpeechBubble.SetSpriteLayer(layerName);
+                Renderer particleRenderer = this.ParticleSystem.GetComponent<Renderer>();
+                particleRenderer.sortingLayerName = layerName;
+                particleRenderer.sortingOrder = 0;
             }
         }
 

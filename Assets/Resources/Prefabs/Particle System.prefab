@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6155926700967965202}
   - component: {fileID: 7730742399316184248}
   - component: {fileID: 6100209406202342285}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Particle System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55,8 +55,8 @@ ParticleSystem:
   prewarm: 0
   playOnAwake: 0
   useUnscaledTime: 0
-  autoRandomSeed: 0
-  useRigidbodyForVelocity: 1
+  autoRandomSeed: 1
+  useRigidbodyForVelocity: 0
   startDelay:
     serializedVersion: 2
     minMaxState: 0
@@ -110,17 +110,17 @@ ParticleSystem:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  moveWithTransform: 0
+  moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: -1104733972
+  randomSeed: 0
   InitialModule:
     serializedVersion: 3
     enabled: 1
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.3
+      scalar: 1
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -173,7 +173,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 5
+      scalar: 2
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -289,7 +289,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.2
+      scalar: 1
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -605,7 +605,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     randomizeRotationDirection: 0
-    maxNumParticles: 30
+    maxNumParticles: 20
     size3D: 0
     rotation3D: 0
     gravityModifier:
@@ -1503,7 +1503,8 @@ ParticleSystem:
     uvChannelMask: -1
     rowMode: 1
     sprites:
-    - sprite: {fileID: 0}
+    - sprite: {fileID: -472032209986883692, guid: 8c5bdb24fe9f36a4daf5abd9ded06230,
+        type: 3}
     flipU: 0
     flipV: 0
   VelocityModule:

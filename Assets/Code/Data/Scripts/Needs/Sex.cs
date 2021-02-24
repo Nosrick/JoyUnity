@@ -154,6 +154,12 @@ namespace JoyLib.Code.Entities.Needs
 
                 int time = this.Roller.Roll(5, 30);
 
+                if (actor.FulfillmentData is null
+                    || partner.FulfillmentData is null)
+                {
+                    return false;
+                }
+                
                 if (actor.FulfillmentData.Name.Equals(this.Name) && 
                     partner.FulfillmentData.Name.Equals(this.Name))
                 {

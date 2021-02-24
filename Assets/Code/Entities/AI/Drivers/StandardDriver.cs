@@ -50,7 +50,7 @@ namespace JoyLib.Code.Entities.AI.Drivers
             this.Initialise();
             
             //Don't move if you're currently busy
-            if (vehicle.FulfillmentData.Counter > 0)
+            if (vehicle.FulfillmentData?.Counter > 0)
             {
                 return;
             }

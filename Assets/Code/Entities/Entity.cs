@@ -469,13 +469,12 @@ namespace JoyLib.Code.Entities
 
         public override void Tick()
         {
-            if (this.m_FulfillmentData.Counter > 0 && this.m_FulfillmentData.DecrementCounter() == 0)
+            if (this.m_FulfillmentData is null == false 
+                && this.m_FulfillmentData.Counter > 0 
+                && this.m_FulfillmentData.DecrementCounter() == 0)
             {
-                this.MonoBehaviourHandler.SetSpeechBubble(false);
+                this.FulfillmentData = null;
             }
-
-            if (this.m_FulfillmentData.Counter == 0)
-            { }
 
             this.RegenTicker += 1;
             if (this.RegenTicker == REGEN_TICK_TIME)
@@ -1128,6 +1127,13 @@ namespace JoyLib.Code.Entities
             set
             {
                 this.m_FulfillmentData = value;
+
+                if (value is null)
+                {
+                    this.MonoBehaviourHandler.SetSpeechBubble(false);
+                    return;
+                }
+                
                 if (this.m_FulfillmentData.Name.IsNullOrEmpty() == false
                     && this.m_FulfillmentData.Name.Equals("none", StringComparison.OrdinalIgnoreCase) == false)
                 {
