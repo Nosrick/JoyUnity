@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code.Entities;
@@ -353,12 +354,39 @@ namespace JoyLib.Code.Unity
 
             defender.MonoBehaviourHandler.SetParticleSystem(this.AttackParticle);
             defender.MonoBehaviourHandler.ParticleSystem.Play();
+            defender.MonoBehaviourHandler.FlashMySprite(Color.red, Color.white);
             
             return GlobalConstants.GameManager.CombatEngine.MakeAttack(
                 aggressor,
                 defender,
                 attackerTags,
                 defenderTags);
+        }
+
+        public void FlashMySprite(Color onColour, Color offColour)
+        {
+            this.StartCoroutine(this.FlashDelay(true, 0.15f, 2, onColour, offColour));
+        }
+
+        protected IEnumerator FlashDelay(bool on, float delay, int cycles, Color onColour, Color offColour)
+        {
+            foreach (var spritePart in this.SpriteParts)
+            {
+                spritePart.material.color = on ? onColour : offColour;
+            }
+
+            yield return new WaitForSeconds(delay);
+
+            if (cycles > 0)
+            {
+                yield return this.FlashDelay(!on, delay, on == false ? cycles - 1 : cycles, onColour, offColour);
+            }
+            else if(on)
+            {
+                yield return this.FlashDelay(false, delay, 0, onColour, offColour);
+            }
+
+            yield return null;
         }
 
         public void Dispose()
