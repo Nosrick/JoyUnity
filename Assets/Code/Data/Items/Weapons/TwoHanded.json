@@ -47,83 +47,44 @@
           "Name": "greatsword",
           "Part": [
             {
-              "Name": "greatsword_0",
+              "Name": "falchion-blade",
               "Frames": 1,
-              "Filename": "LongWep",
+              "Filename": "items/greatsword-blades",
               "Data": [
                 "default"
               ],
-              "Position": 7
-            }
-          ]
-        },
-        {
-          "Name": "greatsword",
-          "Part": [
+              "Position": 0,
+              "Colour": [
+                "#ffffffff",
+                "#99e7f4ff"
+              ] 
+            },
             {
-              "Name": "greatsword_1",
-              "Frames": 1,
-              "Filename": "LongWep",
+              "Name": "falchion-crossguard",
+              "Frames" : 1,
+              "Filename": "items/greatsword-crossguards",
               "Data": [
                 "default"
               ],
-              "Position": 8
-            }
-          ]
-        },
-        {
-          "Name": "greatsword",
-          "Part": [
+              "Position": 0,
+              "Colour": [
+                "#93a5beff",
+                "#424e66ff"
+              ]
+            },
             {
-              "Name": "greatsword_2",
-              "Frames": 1,
-              "Filename": "LongWep",
+              "Name": "falchion-pommel",
+              "Frames" : 1,
+              "Filename": "items/greatsword-pommels",
               "Data": [
                 "default"
               ],
-              "Position": 9
-            }
-          ]
-        },
-        {
-          "Name": "greatsword",
-          "Part": [
-            {
-              "Name": "greatsword_3",
-              "Frames": 1,
-              "Filename": "LongWep",
-              "Data": [
-                "default"
-              ],
-              "Position": 10
-            }
-          ]
-        },
-        {
-          "Name": "greatsword",
-          "Part": [
-            {
-              "Name": "greatsword_4",
-              "Frames": 1,
-              "Filename": "LongWep",
-              "Data": [
-                "default"
-              ],
-              "Position": 11
-            }
-          ]
-        },
-        {
-          "Name": "greatsword",
-          "Part": [
-            {
-              "Name": "greatsword_5",
-              "Frames": 1,
-              "Filename": "LongWep",
-              "Data": [
-                "default"
-              ],
-              "Position": 12
+              "Position": 0,
+              "Colour": [
+                "#980b1cff",
+                "#a65805ff",
+                "#9d2c07ff"
+              ]
             }
           ]
         }
