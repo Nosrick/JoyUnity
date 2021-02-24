@@ -22,12 +22,11 @@ namespace JoyLib.Code.Unity
     {
         public IJoyObject JoyObject { get; protected set; }
         protected ManagedSprite SpeechBubble { get; set; }
-        
         protected ManagedSprite SpeechBubbleBackground { get; set; }
         protected ParticleSystem ParticleSystem { get; set; }
         protected bool PointerOver { get; set; }
-
         protected IGUIManager GUIManager { get; set; }
+        protected Sprite AttackParticle { get; set; }
 
         public override void FixedUpdate()
         {
@@ -46,6 +45,11 @@ namespace JoyLib.Code.Unity
             InputSystem.onActionChange -= this.HandleInput;
             InputSystem.onActionChange += this.HandleInput;
             this.GUIManager = GlobalConstants.GameManager?.GUIManager;
+            this.AttackParticle = GlobalConstants.GameManager?.ObjectIconHandler.GetFrame(
+                "Particles",
+                "AttackParticle")
+                .m_Parts.First()
+                .m_FrameSprites.First();
         }
 
         public override void SetSpriteLayer(string layerName)
@@ -118,16 +122,21 @@ namespace JoyLib.Code.Unity
                 Sprite needSprite = need.SpriteData.m_Parts.First(
                         part => part.m_Data.Any(data => data.Equals("need", StringComparison.OrdinalIgnoreCase)))
                     .m_FrameSprites[0];
-                if (this.ParticleSystem.textureSheetAnimation.spriteCount == 0)
-                {
-                    this.ParticleSystem.textureSheetAnimation.AddSprite(needSprite);
-                }
-                else
-                {
-                    this.ParticleSystem.textureSheetAnimation.SetSprite(0, needSprite);
-                }
+                this.SetParticleSystem(needSprite);
                 
                 this.ParticleSystem.Play();
+            }
+        }
+
+        public virtual void SetParticleSystem(Sprite sprite)
+        {
+            if (this.ParticleSystem.textureSheetAnimation.spriteCount == 0)
+            {
+                this.ParticleSystem.textureSheetAnimation.AddSprite(sprite);
+            }
+            else
+            {
+                this.ParticleSystem.textureSheetAnimation.SetSprite(0, sprite);
             }
         }
 
@@ -184,7 +193,7 @@ namespace JoyLib.Code.Unity
                     if (adjacent)
                     {
                         contextMenu.AddMenuItem("Talk", this.TalkToPlayer);
-                        contextMenu.AddMenuItem("Attack", this.Attack);
+                        contextMenu.AddMenuItem("Attack", this.AttackFromContextMenu);
                     }
                     else
                     {
@@ -257,11 +266,15 @@ namespace JoyLib.Code.Unity
                     });
         }
 
-        protected void Attack()
+        protected void AttackFromContextMenu()
         {
+            if (!(this.JoyObject is IEntity defender))
+            {
+                return;
+            }
+            
             IEntity player = this.JoyObject.MyWorld.Player;
-            IEntity defender = this.JoyObject as IEntity;
-            int playerAttack = this.PlayerAttack(player);
+            int playerAttack = this.Attack(player, defender);
 
             IEnumerable<IRelationship> relationships =
                 GlobalConstants.GameManager.RelationshipHandler.Get(new[] {player, defender});
@@ -291,7 +304,7 @@ namespace JoyLib.Code.Unity
             {
                 if (bestRelationship < -50)
                 {
-                    int defenderAttack = this.MyAttack(player);
+                    int defenderAttack = this.Attack(defender, player);
                     if (defenderAttack > 0)
                     {
                         player.ModifyValue(DerivedValueName.HITPOINTS, -defenderAttack);
@@ -302,17 +315,15 @@ namespace JoyLib.Code.Unity
             this.JoyObject.MyWorld.Tick();
         }
 
-        protected int PlayerAttack(IEntity player)
+        protected int Attack(IEntity aggressor, IEntity defender, string type = "physical")
         {
-            IEntity defender = this.JoyObject as IEntity;
-
             List<string> attackerTags = new List<string>
             {
-                "physical",
+                type,
                 "attack"
             };
-            attackerTags.AddRange(player.Equipment.Contents
-                .Where(equipment => equipment.HasTag("weapon") && equipment.HasTag("physical"))
+            attackerTags.AddRange(aggressor.Equipment.Contents
+                .Where(equipment => equipment.HasTag("weapon") && equipment.HasTag(type))
                 .SelectMany(equipment => equipment.Tags)
                 .Distinct());
             if (attackerTags.Count == 2)
@@ -332,59 +343,20 @@ namespace JoyLib.Code.Unity
                 "evasion",
                 "agility",
                 "defend",
-                "physical"
+                type
             };
             defenderTags.AddRange(defender.Equipment.Contents
-                .Where(equipment => equipment.HasTag("armour") && equipment.HasTag("physical"))
+                .Where(equipment => equipment.HasTag("armour") && equipment.HasTag(type))
                 .SelectMany(equipment => equipment.Tags)
                 .Distinct());
             defenderTags = defenderTags.Distinct().ToList();
+
+            defender.MonoBehaviourHandler.SetParticleSystem(this.AttackParticle);
+            defender.MonoBehaviourHandler.ParticleSystem.Play();
+            
             return GlobalConstants.GameManager.CombatEngine.MakeAttack(
-                player,
+                aggressor,
                 defender,
-                attackerTags,
-                defenderTags);
-        }
-
-        protected int MyAttack(IEntity player)
-        {
-            IEntity myself = this.JoyObject as IEntity;
-
-            List<string> attackerTags = new List<string>
-            {
-                "physical",
-                "attack"
-            };
-            attackerTags.AddRange(myself.Equipment.Contents
-                .Where(equipment => equipment.HasTag("weapon") && equipment.HasTag("physical"))
-                .SelectMany(equipment => equipment.Tags)
-                .Distinct());
-
-            if (attackerTags.Count == 2)
-            {
-                attackerTags.AddRange(new[]
-                {
-                    "agility",
-                    "strength",
-                    "martial arts"
-                });
-            }
-
-            List<string> defenderTags = new List<string>
-            {
-                "evasion",
-                "agility",
-                "physical",
-                "defend"
-            };
-            defenderTags.AddRange(player.Equipment.Contents
-                .Where(equipment => equipment.HasTag("armour") && equipment.HasTag("physical"))
-                .SelectMany(equipment => equipment.Tags)
-                .Distinct());
-            defenderTags = defenderTags.Distinct().ToList();
-            return GlobalConstants.GameManager.CombatEngine.MakeAttack(
-                myself,
-                player,
                 attackerTags,
                 defenderTags);
         }
