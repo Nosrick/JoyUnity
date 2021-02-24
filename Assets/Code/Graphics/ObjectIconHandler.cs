@@ -163,9 +163,9 @@ namespace JoyLib.Code.Graphics
 
                     foreach (var part in data["Part"])
                     {
-                        IEnumerable<string> partData = part["Data"] is null
+                        string[] partData = part["Data"] is null
                             ? new string[0]
-                            : part["Data"].Select(token => (string) token);
+                            : part["Data"].Select(token => (string) token).ToArray();
                         string filename = (string) part["Filename"];
                         int frames = (int) (part["Frames"] ?? 1);
                         string partName = (string) part["Name"];
@@ -301,7 +301,7 @@ namespace JoyLib.Code.Graphics
     {
         public string m_Name;
         public int m_Frames;
-        public IEnumerable<string> m_Data;
+        public string[] m_Data;
         [NonSerialized] public List<Sprite> m_FrameSprites;
         public string m_Filename;
         public int m_Position;

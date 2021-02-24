@@ -22,6 +22,9 @@ namespace JoyLib.Code.Unity
     {
         public IJoyObject JoyObject { get; protected set; }
         protected ManagedSprite SpeechBubble { get; set; }
+        
+        protected ManagedSprite SpeechBubbleBackground { get; set; }
+        protected ParticleSystem ParticleSystem { get; set; }
         protected bool PointerOver { get; set; }
 
         protected IGUIManager GUIManager { get; set; }
@@ -50,6 +53,7 @@ namespace JoyLib.Code.Unity
             base.SetSpriteLayer(layerName);
             if (this.SpeechBubble is null == false)
             {
+                this.SpeechBubbleBackground.SetSpriteLayer(layerName);
                 this.SpeechBubble.SetSpriteLayer(layerName);
             }
         }
@@ -72,7 +76,23 @@ namespace JoyLib.Code.Unity
             Transform transform = this.transform.Find("Speech Bubble");
             if (transform is null == false)
             {
-                this.SpeechBubble = transform.GetComponent<ManagedSprite>();
+                var sprites = transform.GetComponents<ManagedSprite>();
+                this.SpeechBubble = sprites.First(sprite => sprite.ElementName.Equals("NeedForeground"));
+                this.SpeechBubbleBackground =
+                    sprites.First(sprite => sprite.ElementName.Equals("NeedBackground"));
+                this.SpeechBubbleBackground.Clear();
+                this.SpeechBubbleBackground.AddSpriteState(
+                    new SpriteState("NeedBackground",
+                    GlobalConstants.GameManager.ObjectIconHandler.GetFrame("Needs", "NeedBackground"),
+                    AnimationType.Forward,
+                    false,
+                    false));
+            }
+
+            transform = this.transform.Find("Particle System");
+            if (transform is null == false)
+            {
+                this.ParticleSystem = transform.GetComponent<ParticleSystem>();
             }
 
             this.name = this.JoyObject.JoyName + ":" + this.JoyObject.Guid;
@@ -88,10 +108,23 @@ namespace JoyLib.Code.Unity
             }
 
             this.SpeechBubble.gameObject.SetActive(on);
-            if (on)
+            if (on && need is null == false)
             {
                 this.SpeechBubble.Clear();
-                this.SpeechBubble.AddSpriteState(need, true);
+                this.SpeechBubble.AddSpriteState(need);
+                Sprite needSprite = need.SpriteData.m_Parts.First(
+                        part => part.m_Data.Any(data => data.Equals("need", StringComparison.OrdinalIgnoreCase)))
+                    .m_FrameSprites[0];
+                if (this.ParticleSystem.textureSheetAnimation.spriteCount == 0)
+                {
+                    this.ParticleSystem.textureSheetAnimation.AddSprite(needSprite);
+                }
+                else
+                {
+                    this.ParticleSystem.textureSheetAnimation.SetSprite(0, needSprite);
+                }
+                
+                this.ParticleSystem.Play();
             }
         }
 

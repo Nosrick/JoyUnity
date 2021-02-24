@@ -4,6 +4,21 @@
       "Name": "Needs",
       "SpriteData": [
         {
+          "Name": "NeedBackground",
+          "Part": [
+            {
+              "Name": "NeedBackground",
+              "Frames": 1,
+              "Filename": "Needs32",
+              "Data": [
+                "default"
+              ],
+              "Position": 12,
+              "SortOrder": 1
+            }
+          ]
+        },
+        {
           "Name": "Hunger",
           "Part": [
             {
@@ -11,10 +26,13 @@
               "Frames": 1,
               "Filename": "Needs32",
               "Data": [
-                "default"
+                "default",
+                "need"
               ],
-              "Position": 0
-            }]
+              "Position": 0,
+              "SortOrder": 2
+            }
+          ]
         },
         {
           "Name": "Thirst",
@@ -24,10 +42,13 @@
               "Frames": 1,
               "Filename": "Needs32",
               "Data": [
-                "default"
+                "default",
+                "need"
               ],
-              "Position": 1
-            }]
+              "Position": 1,
+              "SortOrder": 2
+            }
+          ]
         },
         {
           "Name": "Sex",
@@ -37,10 +58,13 @@
               "Frames": 1,
               "Filename": "Needs32",
               "Data": [
-                "default"
+                "default",
+                "need"
               ],
-              "Position": 2
-            }]
+              "Position": 2,
+              "SortOrder": 2
+            }
+          ]
         },
         {
           "Name": "Sleep",
@@ -50,10 +74,13 @@
               "Frames": 1,
               "Filename": "Needs32",
               "Data": [
-                "default"
+                "default",
+                "need"
               ],
-              "Position": 3
-            }]
+              "Position": 3,
+              "SortOrder": 2
+            }
+          ]
         },
         {
           "Name": "Health",
@@ -63,10 +90,13 @@
               "Frames": 1,
               "Filename": "Needs32",
               "Data": [
-                "default"
+                "default",
+                "need"
               ],
-              "Position": 4
-            }]
+              "Position": 4,
+              "SortOrder": 2
+            }
+          ]
         },
         {
           "Name": "Purpose",
@@ -76,10 +106,13 @@
               "Frames": 1,
               "Filename": "Needs32",
               "Data": [
-                "default"
+                "default",
+                "need"
               ],
-              "Position": 5
-            }]
+              "Position": 5,
+              "SortOrder": 2
+            }
+          ]
         },
         {
           "Name": "Property",
@@ -89,10 +122,13 @@
               "Frames": 1,
               "Filename": "Needs32",
               "Data": [
-                "default"
+                "default",
+                "need"
               ],
-              "Position": 6
-            }]
+              "Position": 6,
+              "SortOrder": 2
+            }
+          ]
         },
         {
           "Name": "Friendship",
@@ -102,10 +138,13 @@
               "Frames": 1,
               "Filename": "Needs32",
               "Data": [
-                "default"
+                "default",
+                "need"
               ],
-              "Position": 7
-            }]
+              "Position": 7,
+              "SortOrder": 2
+            }
+          ]
         },
         {
           "Name": "Family",
@@ -115,10 +154,13 @@
               "Frames": 1,
               "Filename": "Needs32",
               "Data": [
-                "default"
+                "default",
+                "need"
               ],
-              "Position": 8
-            }]
+              "Position": 8,
+              "SortOrder": 2
+            }
+          ]
         },
         {
           "Name": "Morality",
@@ -127,9 +169,14 @@
               "Name": "Morality",
               "Frames": 1,
               "Filename": "Needs32",
-              "Data": ["default"],
-              "Position": 9
-            }]
+              "Data": [
+                "default",
+                "need"
+              ],
+              "Position": 9,
+              "SortOrder": 2
+            }
+          ]
         },
         {
           "Name": "Confidence",
@@ -138,9 +185,14 @@
               "Name": "Confidence",
               "Frames": 1,
               "Filename": "Needs32",
-              "Data": ["default"],
-              "Position": 10
-            }]
+              "Data": [
+                "default",
+                "need"
+              ],
+              "Position": 10,
+              "SortOrder": 2
+            }
+          ]
         },
         {
           "Name": "Respect",
@@ -150,10 +202,13 @@
               "Frames": 1,
               "Filename": "Needs32",
               "Data": [
-                "default"
+                "default",
+                "need"
               ],
-              "Position": 11
-            }]
+              "Position": 11,
+              "SortOrder": 2
+            }
+          ]
         }
       ]
     }
