@@ -5,7 +5,7 @@
         "Name": "Cider",
         "Description": "Crisp, delicious cider. Made from the finest apples.",
         "Value": 15,
-        "SpawnWeight": 30,
+        "SpawnWeight": 10,
         "Materials": [
           "Glass"
         ],
@@ -37,7 +37,7 @@
         "Name": "Wine",
         "Description": "Red wine, made from grapes.",
         "Value": 50,
-        "SpawnWeight": 3000,
+        "SpawnWeight": 10,
         "Materials": [
           "Glass"
         ],
