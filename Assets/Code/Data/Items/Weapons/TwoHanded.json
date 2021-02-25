@@ -68,7 +68,7 @@
               ],
               "Position": 0,
               "Colour": [
-                "#93a5beff",
+                "#99e7f4ff",
                 "#424e66ff"
               ]
             },
@@ -84,6 +84,19 @@
                 "#980b1cff",
                 "#a65805ff",
                 "#9d2c07ff"
+              ]
+            },
+            {
+              "Name": "falchion-outline",
+              "Frames" : 1,
+              "Filename": "items/greatsword-outlines",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "Colour": [
+                "#424e66ff",
+                "#020a55ff"
               ]
             }
           ]
