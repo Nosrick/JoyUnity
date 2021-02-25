@@ -28,13 +28,69 @@
           "Name": "apple",
           "Part": [
             {
-              "Name": "apple",
+              "Name": "apple-body",
               "Frames": 1,
-              "Filename": "Food",
+              "Filename": "items/food-body",
               "Data": [
-                "apple"
+                "default"
               ],
-              "Position": 16
+              "Position": 0,
+              "SortOrder": 1,
+              "Colour": [
+                "#ee113dff"
+              ]
+            },
+            {
+              "Name": "apple-detail1",
+              "Frames": 1,
+              "Filename": "items/food-detail1",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "SortOrder": 2,
+              "Colour": [
+                "#21b039ff"
+              ]
+            },
+            {
+              "Name": "apple-detail2",
+              "Frames": 1,
+              "Filename": "items/food-detail2",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "SortOrder": 3,
+              "Colour": [
+                "#a65805ff"
+              ]
+            },
+            {
+              "Name": "apple-highlight",
+              "Frames": 1,
+              "Filename": "items/food-highlight",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "SortOrder": 4,
+              "Colour": [
+                "#faa3abff"
+              ]
+            },
+            {
+              "Name": "apple-outline",
+              "Frames": 1,
+              "Filename": "items/food-outline",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "SortOrder": 5,
+              "Colour": [
+                "#3f0409ff"
+              ]
             }
           ]
         }
