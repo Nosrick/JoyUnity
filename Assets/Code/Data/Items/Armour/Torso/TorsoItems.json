@@ -54,13 +54,43 @@
           "Name": "breastplate",
           "Part": [
             {
-              "Name": "breastplate",
+              "Name": "breastplate-body",
               "Frames": 1,
-              "Filename": "Armor",
+              "Filename": "items/armour-body",
               "Data": [
                 "default"
               ],
-              "Position": 5
+              "Position": 0,
+              "SortOrder": 1,
+              "Colour": [
+                "#99e7f4ff"
+              ]
+            },
+            {
+              "Name": "breastplate-highlight",
+              "Frames": 1,
+              "Filename": "items/armour-highlight",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "SortOrder": 2,
+              "Colour": [
+                "#e5fbf3ff"
+              ]
+            },
+            {
+              "Name": "breastplate-outline",
+              "Frames": 1,
+              "Filename": "items/armour-outline",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "SortOrder": 3,
+              "Colour": [
+                "#020a55ff"
+              ]
             }
           ]
         },
@@ -68,13 +98,43 @@
           "Name": "leather armour",
           "Part": [
             {
-              "Name": "leather armour",
+              "Name": "leather-armour-body",
               "Frames": 1,
-              "Filename": "Armor",
+              "Filename": "items/armour-body",
               "Data": [
                 "default"
               ],
-              "Position": 1
+              "Position": 0,
+              "SortOrder": 1,
+              "Colour": [
+                "#a65805ff"
+              ]
+            },
+            {
+              "Name": "leather-armour-highlight",
+              "Frames": 1,
+              "Filename": "items/armour-highlight",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "SortOrder": 2,
+              "Colour": [
+                "#ea7d10ff"
+              ]
+            },
+            {
+              "Name": "leather-armour-outline",
+              "Frames": 1,
+              "Filename": "items/armour-outline",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "SortOrder": 3,
+              "Colour": [
+                "#3c1701ff"
+              ]
             }
           ]
         }
