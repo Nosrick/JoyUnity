@@ -9,7 +9,7 @@ namespace JoyLib.Code.Entities.Abilities
     {
         public Backdraft()
             : base(
-                "backdraft",
+                "Backdraft",
                 "backdraft",
                 "Deal heavy damage to a target, but take a portion of the damage dealt.",
                 false,
@@ -55,10 +55,7 @@ namespace JoyLib.Code.Entities.Abilities
             {
                 return successes *= 2;
             }
-            else
-            {
-                return successes;
-            }
+            return successes;
         }
     }
 }

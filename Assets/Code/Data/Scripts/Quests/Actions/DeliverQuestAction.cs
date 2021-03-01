@@ -71,7 +71,7 @@ namespace JoyLib.Code.Quests
             IEntity endPoint = overworld.GetRandomSentientWorldWide();
             if(deliveryItem == null)
             {
-                deliveryItem = this.ItemFactory.CreateCompletelyRandomItem();
+                deliveryItem = this.ItemFactory.CreateRandomWeightedItem();
             }
             deliveryItem.SetOwner(endPoint.Guid);
 

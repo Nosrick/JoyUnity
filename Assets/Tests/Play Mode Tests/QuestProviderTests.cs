@@ -87,7 +87,7 @@ namespace Tests
                                It.IsAny<string>(),
                                It.IsAny<string[]>(),
                                It.IsAny<bool>()) == item
-                           && factory.CreateCompletelyRandomItem(
+                           && factory.CreateRandomWeightedItem(
                                It.IsAny<bool>(),
                                It.IsAny<bool>()) == item);
 
