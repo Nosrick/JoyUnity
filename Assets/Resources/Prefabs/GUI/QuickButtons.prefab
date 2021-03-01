@@ -27,7 +27,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serializationData:
-    SerializedFormat: 0
+    SerializedFormat: 2
     SerializedBytes: 
     ReferencedUnityObjects: []
     SerializedBytesString: 
@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86710e43de46f6f4bac7c8e50813a599, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_AspectMode: 2
+  m_AspectMode: 1
   m_AspectRatio: 1
 --- !u!114 &5115063870897509684
 MonoBehaviour:
@@ -78,7 +78,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serializationData:
-    SerializedFormat: 0
+    SerializedFormat: 2
     SerializedBytes: 
     ReferencedUnityObjects: []
     SerializedBytesString: 
@@ -100,7 +100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86710e43de46f6f4bac7c8e50813a599, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_AspectMode: 2
+  m_AspectMode: 1
   m_AspectRatio: 1
 --- !u!114 &5115063871224722256
 MonoBehaviour:
@@ -115,7 +115,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serializationData:
-    SerializedFormat: 0
+    SerializedFormat: 2
     SerializedBytes: 
     ReferencedUnityObjects: []
     SerializedBytesString: 
@@ -137,7 +137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86710e43de46f6f4bac7c8e50813a599, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_AspectMode: 2
+  m_AspectMode: 1
   m_AspectRatio: 1
 --- !u!114 &5115063871224722271
 MonoBehaviour:
@@ -180,7 +180,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serializationData:
-    SerializedFormat: 0
+    SerializedFormat: 2
     SerializedBytes: 
     ReferencedUnityObjects: []
     SerializedBytesString: 
@@ -202,7 +202,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86710e43de46f6f4bac7c8e50813a599, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_AspectMode: 2
+  m_AspectMode: 1
   m_AspectRatio: 1
 --- !u!114 &5115063870569436693
 MonoBehaviour:
@@ -231,7 +231,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serializationData:
-    SerializedFormat: 0
+    SerializedFormat: 2
     SerializedBytes: 
     ReferencedUnityObjects: []
     SerializedBytesString: 
@@ -253,7 +253,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86710e43de46f6f4bac7c8e50813a599, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_AspectMode: 2
+  m_AspectMode: 1
   m_AspectRatio: 1
 --- !u!1 &5115063871343755325
 GameObject:
@@ -318,10 +318,10 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 0
-  m_Spacing: 2
-  m_ChildForceExpandWidth: 0
+  m_Spacing: 5
+  m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 0
+  m_ChildControlWidth: 1
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
@@ -414,11 +414,12 @@ PrefabInstance:
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2302843705593454133, guid: ec222c8b1e6f0ae499331511ff65c8f3,
+        type: 3}
     - target: {fileID: 2302843705593454133, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
       propertyPath: serializationData.SerializedFormat
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2302843705593454133, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
@@ -488,12 +489,12 @@ PrefabInstance:
     - target: {fileID: 6579073132780374018, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 33.02722
       objectReference: {fileID: 0}
     - target: {fileID: 6579073132780374018, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 64
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6579073132780374018, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
@@ -533,7 +534,7 @@ PrefabInstance:
     - target: {fileID: 6579073132780374018, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 64.54083
       objectReference: {fileID: 0}
     - target: {fileID: 6579073132780374018, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
@@ -642,11 +643,12 @@ PrefabInstance:
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2302843705593454133, guid: ec222c8b1e6f0ae499331511ff65c8f3,
+        type: 3}
     - target: {fileID: 2302843705593454133, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
       propertyPath: serializationData.SerializedFormat
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2302843705593454133, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
@@ -716,12 +718,12 @@ PrefabInstance:
     - target: {fileID: 6579073132780374018, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 33.02722
       objectReference: {fileID: 0}
     - target: {fileID: 6579073132780374018, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 64
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6579073132780374018, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
@@ -761,7 +763,7 @@ PrefabInstance:
     - target: {fileID: 6579073132780374018, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 26.51361
       objectReference: {fileID: 0}
     - target: {fileID: 6579073132780374018, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
@@ -870,11 +872,12 @@ PrefabInstance:
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2302843705593454133, guid: ec222c8b1e6f0ae499331511ff65c8f3,
+        type: 3}
     - target: {fileID: 2302843705593454133, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
       propertyPath: serializationData.SerializedFormat
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2302843705593454133, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
@@ -944,12 +947,12 @@ PrefabInstance:
     - target: {fileID: 6579073132780374018, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 33.02722
       objectReference: {fileID: 0}
     - target: {fileID: 6579073132780374018, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 64
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6579073132780374018, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
@@ -989,7 +992,7 @@ PrefabInstance:
     - target: {fileID: 6579073132780374018, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 140.59528
       objectReference: {fileID: 0}
     - target: {fileID: 6579073132780374018, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
@@ -1098,11 +1101,12 @@ PrefabInstance:
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2302843705593454133, guid: ec222c8b1e6f0ae499331511ff65c8f3,
+        type: 3}
     - target: {fileID: 2302843705593454133, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
       propertyPath: serializationData.SerializedFormat
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2302843705593454133, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
@@ -1172,12 +1176,12 @@ PrefabInstance:
     - target: {fileID: 6579073132780374018, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 33.02722
       objectReference: {fileID: 0}
     - target: {fileID: 6579073132780374018, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 64
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6579073132780374018, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
@@ -1217,7 +1221,7 @@ PrefabInstance:
     - target: {fileID: 6579073132780374018, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 178.6225
       objectReference: {fileID: 0}
     - target: {fileID: 6579073132780374018, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
@@ -1326,11 +1330,12 @@ PrefabInstance:
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2302843705593454133, guid: ec222c8b1e6f0ae499331511ff65c8f3,
+        type: 3}
     - target: {fileID: 2302843705593454133, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
       propertyPath: serializationData.SerializedFormat
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2302843705593454133, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
@@ -1400,12 +1405,12 @@ PrefabInstance:
     - target: {fileID: 6579073132780374018, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 33.02722
       objectReference: {fileID: 0}
     - target: {fileID: 6579073132780374018, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 64
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6579073132780374018, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
@@ -1445,7 +1450,7 @@ PrefabInstance:
     - target: {fileID: 6579073132780374018, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 102.568054
       objectReference: {fileID: 0}
     - target: {fileID: 6579073132780374018, guid: ec222c8b1e6f0ae499331511ff65c8f3,
         type: 3}
