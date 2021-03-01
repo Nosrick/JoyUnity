@@ -185,7 +185,7 @@ namespace JoyLib.Code.Unity.GUI
                 this.GUIManager.OpenGUI(GUINames.TOOLTIP)
                     .GetComponent<Tooltip>()
                     .Show(
-                        this.Item.JoyName,
+                        this.Item.DisplayName,
                         null,
                         this.Item.MonoBehaviourHandler.CurrentSpriteState,
                         this.Item.Tooltip);
