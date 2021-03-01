@@ -99,18 +99,41 @@ namespace JoyLib.Code.Entities.Items
             throw new ItemTypeNotFoundException(name, "Could not find an item type by the name of " + name);
         }
 
-        public IItemInstance CreateCompletelyRandomItem(
+        public IItemInstance CreateRandomWeightedItem(
             bool identified = false,
             bool withAbility = false)
         {
-            List<BaseItemType> itemDatabase = this.ItemDatabase.Values.ToList();
+            var weights = this.ItemDatabase.ItemWeights;
 
-            int result = this.Roller.Roll(0, itemDatabase.Count);
-            BaseItemType itemType = itemDatabase[result];
+            int totalWeight = weights.Values.Sum();
+            int result = this.Roller.Roll(0, totalWeight);
 
-            IItemInstance itemInstance = this.CreateFromTemplate(itemType, identified);
+            int total = 0;
+            BaseItemType chosenType = null;
+            foreach (var pair in weights)
+            {
+                total += pair.Value;
+
+                if (total > result)
+                {
+                    chosenType = this.ItemDatabase.Get(pair.Key);
+                    break;
+                }
+            }
+
+            if (chosenType is null)
+            {
+                return null;
+            }
+
+            IItemInstance itemInstance = this.CreateFromTemplate(chosenType, identified);
 
             this.ItemHandler.AddItem(itemInstance);
+
+            if (identified)
+            {
+                itemInstance.IdentifyMe();
+            }
             return itemInstance;
         }
 

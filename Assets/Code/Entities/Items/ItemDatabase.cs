@@ -24,6 +24,32 @@ namespace JoyLib.Code.Entities.Items
         protected IAbilityHandler AbilityHandler { get; set; }
 
         public IEnumerable<BaseItemType> Values => this.m_ItemDatabase;
+
+        public IDictionary<string, int> ItemWeights
+        {
+            get
+            {
+                if (this.m_ItemWeights.IsNullOrEmpty())
+                {
+                    this.m_ItemWeights = new Dictionary<string, int>();
+                    foreach (BaseItemType type in this.m_ItemDatabase)
+                    {
+                        if (this.m_ItemWeights.ContainsKey(type.IdentifiedName))
+                        {
+                            this.m_ItemWeights[type.IdentifiedName] += type.SpawnWeighting;
+                        }
+                        else
+                        {
+                            this.m_ItemWeights.Add(type.IdentifiedName, type.SpawnWeighting);
+                        }
+                    }
+                }
+
+                return this.m_ItemWeights;
+            }
+        }
+
+        protected IDictionary<string, int> m_ItemWeights;
         
         protected IRollable Roller { get; set; }
 
@@ -191,7 +217,8 @@ namespace JoyLib.Code.Entities.Items
         public BaseItemType Get(string name)
         {
             return this.m_ItemDatabase.FirstOrDefault(type =>
-                type.UnidentifiedName.Equals(name, StringComparison.OrdinalIgnoreCase));
+                type.IdentifiedName.Equals(name, StringComparison.OrdinalIgnoreCase)
+                || type.UnidentifiedName.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
         
         public IEnumerable<BaseItemType> FindItemsOfType(string[] tags, int tolerance = 1)

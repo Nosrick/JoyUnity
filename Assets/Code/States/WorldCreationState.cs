@@ -108,7 +108,7 @@ namespace JoyLib.Code.States
 
             for (int i = 0; i < 4; i++)
             {
-                IItemInstance newItem = GlobalConstants.GameManager.ItemFactory.CreateCompletelyRandomItem(
+                IItemInstance newItem = GlobalConstants.GameManager.ItemFactory.CreateRandomWeightedItem(
                     true,
                     false);
                 addItemAction.Execute(

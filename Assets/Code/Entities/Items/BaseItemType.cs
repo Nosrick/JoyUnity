@@ -177,7 +177,7 @@ namespace JoyLib.Code.Entities.Items
         {
             get
             {
-                return "It is made of " + this.Material.Name;
+                return "Made of " + this.Material.Name;
             }
         }
 
@@ -193,14 +193,6 @@ namespace JoyLib.Code.Entities.Items
         {
             get;
             protected set;
-        }
-
-        public string ValueString
-        {
-            get
-            {
-                return "It is worth " + this.Value + " gold pieces.";
-            }
         }
 
         [OdinSerialize]

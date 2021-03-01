@@ -248,7 +248,7 @@ namespace JoyLib.Code.Entities.Items
             {
                 data.Add(new Tuple<string, string>(
                     "",
-                    "This is not owned"));
+                    "Not owned"));
             }
             
             data.Add(new Tuple<string, string>(
@@ -321,20 +321,21 @@ namespace JoyLib.Code.Entities.Items
                 this.IdentifyMe();
                 user.AddIdentifiedItem(this.DisplayName);
             }
-            //Identify any identical items the user is carrying
-            foreach (IItemInstance item in user.Contents)
-            {
-                if(item.DisplayName.Equals(this.DisplayName) && !item.Identified)
-                {
-                    item.IdentifyMe();
-                }
-            }
         }
 
         public void IdentifyMe()
         {
             this.Identified = true;
             this.JoyName = this.IdentifiedName;
+
+            var others = this.ItemHandler.Values.Where(instance =>
+                instance.IdentifiedName.Equals(this.IdentifiedName, StringComparison.OrdinalIgnoreCase)
+                && instance.Identified == false);
+
+            foreach (IItemInstance other in others)
+            {
+                other.IdentifyMe();
+            }
             
             this.ConstructDescription();
         }
@@ -533,9 +534,9 @@ namespace JoyLib.Code.Entities.Items
             }
         }
 
-        public string DisplayName => this.Identified ? this.JoyName : this.m_Type.UnidentifiedName;
+        public string DisplayName => this.Identified ? this.m_Type.IdentifiedName : this.m_Type.UnidentifiedName;
 
-        public string IdentifiedName => this.JoyName;
+        public string IdentifiedName => this.m_Type.IdentifiedName;
 
         public string DisplayDescription => this.Identified ? this.m_Type.Description : this.m_Type.UnidentifiedDescription;
 
