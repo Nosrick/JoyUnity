@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity.GUI
 {
@@ -12,6 +13,8 @@ namespace JoyLib.Code.Unity.GUI
     {
         [SerializeField]
         protected MenuItem m_MenuItemPrefab;
+
+        [SerializeField] protected VerticalLayoutGroup m_ItemParent;
         protected List<MenuItem> ItemCache { get; set; }
         protected RectTransform RectTransform { get; set; }
         
@@ -88,10 +91,10 @@ namespace JoyLib.Code.Unity.GUI
             }
 
             item.Text.text = text;
-            item.Trigger.RemoveAllListeners();
+            item.RemoveAllListeners();
             item.gameObject.SetActive(true);
-            item.transform.SetParent(this.RectTransform, false);
-            item.Trigger.AddListener(
+            item.transform.SetParent(this.m_ItemParent.transform, false);
+            item.AddListener(
                 delegate
                 {
                     this.GUIData.GUIManager.CloseGUI(GUINames.CONTEXT_MENU);
@@ -100,6 +103,8 @@ namespace JoyLib.Code.Unity.GUI
                         used.Invoke();
                     }
                 });
+            
+            GlobalConstants.GameManager.GUIManager.SetupManagedComponents(this.GUIData);
             return item;
         }
     }

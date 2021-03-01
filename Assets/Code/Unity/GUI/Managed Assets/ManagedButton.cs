@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Unity.GUI;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -189,6 +190,21 @@ namespace Code.Unity.GUI.Managed_Assets
                     this.TriggerAnimation(triggerName);
                     break;
             }
+        }
+
+        public void AddListener(UnityAction action)
+        {
+            this.m_OnClick.AddListener(action);
+        }
+
+        public void RemoveListener(UnityAction action)
+        {
+            this.m_OnClick.RemoveListener(action);
+        }
+
+        public void RemoveAllListeners()
+        {
+            this.m_OnClick.RemoveAllListeners();
         }
 
         protected virtual void DoSpriteSwap(Sprite sprite)

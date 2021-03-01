@@ -17,7 +17,7 @@ namespace JoyLib.Code.Unity.GUI
         [SerializeField] protected GameObject MenuItem;
         [SerializeField] protected RectTransform TitleRect;
         protected IConversationEngine ConversationEngine { get; set; }
-        protected List<ConversationMenu> MenuList
+        protected List<MenuItem> MenuList
         {
             get;
             set;
@@ -31,7 +31,7 @@ namespace JoyLib.Code.Unity.GUI
                 && (this.ConversationEngine is null
                 || this.ConversationEngine.Guid != GlobalConstants.GameManager.ConversationEngine?.Guid))
             {
-                this.MenuList = new List<ConversationMenu>();
+                this.MenuList = new List<MenuItem>();
                 
                 this.ConversationEngine = GlobalConstants.GameManager.ConversationEngine;
                 
@@ -75,7 +75,7 @@ namespace JoyLib.Code.Unity.GUI
             {
                 for (int i = this.MenuList.Count; i < this.ConversationEngine.CurrentTopics.Length; i++)
                 {
-                    ConversationMenu child = Instantiate(this.MenuItem, this.Window.transform).GetComponent<ConversationMenu>();
+                    MenuItem child = Instantiate(this.MenuItem, this.Window.transform).GetComponent<MenuItem>();
                     child.Awake();
                     this.MenuList.Add(child);
                 }
@@ -83,16 +83,26 @@ namespace JoyLib.Code.Unity.GUI
             
             for(int i = 0; i < this.ConversationEngine.CurrentTopics.Length; i++)
             {
-                this.MenuList[i].TopicID = this.ConversationEngine.CurrentTopics[i].ID;
-                this.MenuList[i].SetText(this.ConversationEngine.CurrentTopics[i].Words);
-                this.MenuList[i].gameObject.SetActive(true);
-                this.MenuList[i].Index = i;
+                var current = this.MenuList[i]; 
+                current.Text.text = this.ConversationEngine.CurrentTopics[i].Words;
+                current.gameObject.SetActive(true);
+                current.AddListener(
+                    delegate
+                    {
+                        this.OnItemClick(current.gameObject);
+                    });
             }
 
             for (int i = this.ConversationEngine.CurrentTopics.Length; i < this.MenuList.Count; i++)
             {
                 this.MenuList[i].gameObject.SetActive(false);
+                this.MenuList[i].RemoveAllListeners();
             }
+        }
+
+        protected void OnItemClick(GameObject go)
+        {
+            this.ConversationEngine.Converse(go.transform.GetSiblingIndex());
         }
     }
 }

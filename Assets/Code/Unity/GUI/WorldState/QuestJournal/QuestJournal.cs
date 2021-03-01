@@ -70,7 +70,7 @@ namespace JoyLib.Code.Unity.GUI
                 IQuest quest = quests[i];
                 this.MenuItems[i].GetComponentInChildren<TextMeshProUGUI>().text = quest.ToString();
                 this.MenuItems[i].gameObject.SetActive(true);
-                this.MenuItems[i].Trigger.AddListener(
+                this.MenuItems[i].AddListener(
                     delegate
                     {
                         this.SetUpContextMenu(quest);
@@ -93,7 +93,7 @@ namespace JoyLib.Code.Unity.GUI
 
                 this.MenuItems[0].GetComponentInChildren<TextMeshProUGUI>().text = "You have no quests.";
                 this.MenuItems[0].gameObject.SetActive(true);
-                this.MenuItems[0].Trigger = null;
+                this.MenuItems[0].RemoveAllListeners();
             }
         }
 

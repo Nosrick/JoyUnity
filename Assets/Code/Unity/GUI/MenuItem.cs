@@ -1,26 +1,13 @@
-﻿using TMPro;
+﻿using Code.Unity.GUI.Managed_Assets;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public class MenuItem : Selectable, IPointerClickHandler
+    public class MenuItem : ManagedButton
     {
-        protected UnityEvent m_Trigger = new UnityEvent();
-        public UnityEvent Trigger {
-            get 
-            {
-                if (this.m_Trigger == null) 
-                {
-                    this.m_Trigger = new UnityEvent ();
-                }
-                return this.m_Trigger;
-            }
-            set => this.m_Trigger = value;
-        }
-
         [SerializeField] protected TextMeshProUGUI m_Text;
 
         public TextMeshProUGUI Text
@@ -31,11 +18,11 @@ namespace JoyLib.Code.Unity.GUI
 
         public void OnPointerClick (PointerEventData eventData)
         {
-            if (!this.IsActive() || !this.IsInteractable() || eventData.button != PointerEventData.InputButton.Left)
+            if (!this.isActiveAndEnabled || !this.IsInteractable() || eventData.button != PointerEventData.InputButton.Left)
             {
                 return;
             }
-            this.Trigger.Invoke();
+            this.m_OnClick.Invoke();
         }
 
 
