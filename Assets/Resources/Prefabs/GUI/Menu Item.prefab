@@ -146,6 +146,7 @@ GameObject:
   - component: {fileID: 6499125707579083755}
   - component: {fileID: 6499125707579083669}
   - component: {fileID: 7358445001684149102}
+  - component: {fileID: 5108326698295553381}
   m_Layer: 5
   m_Name: Menu Item
   m_TagString: Untagged
@@ -250,3 +251,23 @@ MonoBehaviour:
   m_OverrideSize: 1
   m_OverrideColour: 1
   m_OverrideOutline: 1
+--- !u!114 &5108326698295553381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6499125707579083671}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: 60
+  m_FlexibleWidth: 1
+  m_FlexibleHeight: 1
+  m_LayoutPriority: 1
