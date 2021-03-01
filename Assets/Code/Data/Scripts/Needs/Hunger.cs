@@ -147,6 +147,8 @@ namespace JoyLib.Code.Entities.Needs
                 return false;
             }
 
+            actor.AddContents(item);
+            actor.MyWorld.RemoveObject(item.WorldPosition, item);
             item.Interact(actor);
 
             return true;
