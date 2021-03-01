@@ -23,7 +23,7 @@ namespace JoyLib.Code.States
 
         protected const int SIMULATION_TICKS = 600;
 
-        protected const int WORLD_SIZE = 20;
+        protected const int WORLD_SIZE = 35;
 
         public WorldCreationState(IEntity playerRef) : base()
         {

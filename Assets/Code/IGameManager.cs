@@ -25,6 +25,7 @@ using JoyLib.Code.Quests;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Settings;
 using JoyLib.Code.States;
+using JoyLib.Code.Unity.Cheats;
 using JoyLib.Code.Unity.GUI;
 using JoyLib.Code.World;
 using UnityEngine;
@@ -37,6 +38,8 @@ namespace JoyLib.Code
         int LoadingPercentage { get; }
         
         string LoadingMessage { get; }
+        
+        CheatInterface Cheats { get; set; }
         
         ActionLog ActionLog { get; }
         ICombatEngine CombatEngine { get; }

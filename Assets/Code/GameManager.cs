@@ -30,6 +30,7 @@ using JoyLib.Code.Quests;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Settings;
 using JoyLib.Code.States;
+using JoyLib.Code.Unity.Cheats;
 using JoyLib.Code.Unity.GUI;
 using JoyLib.Code.World;
 using UnityEngine;
@@ -290,6 +291,8 @@ namespace JoyLib.Code
         public GameObjectPool EntityPool { get; protected set; }
         public GameObjectPool ItemPool { get; protected set; }
         public GameObjectPool FogPool { get; protected set; }
+        
+        public CheatInterface Cheats { get; set; }
 
         public void Dispose()
         {

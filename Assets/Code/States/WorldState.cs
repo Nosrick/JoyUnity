@@ -89,7 +89,8 @@ namespace JoyLib.Code.States
             this.GUIManager.Get(GUINames.INVENTORY).GetComponent<ItemContainer>().Owner = this.PlayerWorld.Player;
             //GUIManager.GetGUI(GUINames.EQUIPMENT).GetComponent<ItemContainer>().Owner = this.PlayerWorld.Player;
 
-            EquipmentHandler equipmentHandler = this.GUIManager.Get(GUINames.EQUIPMENT).GetComponentInChildren<EquipmentHandler>();
+            EquipmentHandler equipmentHandler =
+                this.GUIManager.Get(GUINames.EQUIPMENT).GetComponentInChildren<EquipmentHandler>();
             equipmentHandler.SetPlayer(this.m_ActiveWorld.Player);
 
             var entryBanner = this.GUIManager.OpenGUI(GUINames.ENTRY_BANNER).GetComponent<EntryBanner>();
@@ -104,14 +105,13 @@ namespace JoyLib.Code.States
         }
 
         public override void Stop()
-        {
-        }
+        { }
 
         public override void Update()
         {
             IEntity player = this.m_ActiveWorld.Player;
 
-            if ((player.FulfillmentData is null || player.FulfillmentData.Counter <= 0) 
+            if ((player.FulfillmentData is null || player.FulfillmentData.Counter <= 0)
                 && this.AutoTurn
                 && player.Conscious)
             {
@@ -201,7 +201,7 @@ namespace JoyLib.Code.States
             {
                 return;
             }
-            
+
             bool hasMoved = false;
             IEntity player = this.m_ActiveWorld.Player;
 
@@ -218,7 +218,7 @@ namespace JoyLib.Code.States
                 autoTurn = true;
             }
             */
-            
+
             if (change != InputActionChange.ActionPerformed)
             {
                 return;
@@ -267,7 +267,7 @@ namespace JoyLib.Code.States
             {
                 this.GUIManager.ToggleGUI(GUINames.CHARACTER_SHEET);
             }
-            
+
             if (this.GUIManager.AreAnyOpen() == false)
             {
                 this.GUIManager.OpenGUI(GUINames.NEEDSRECT);
@@ -278,20 +278,22 @@ namespace JoyLib.Code.States
             {
                 return;
             }
-            
+
             if (inputAction.name.Equals("interact", StringComparison.OrdinalIgnoreCase))
             {
                 //Going up a level
                 if (this.m_ActiveWorld.Parent != null && player.WorldPosition == this.m_ActiveWorld.SpawnPoint &&
-                         !player.HasMoved)
+                    !player.HasMoved)
                 {
                     this.ChangeWorld(this.m_ActiveWorld.Parent, this.m_ActiveWorld.GetTransitionPointForParent());
                     return;
                 }
+
                 //Going down a level
                 if (this.m_ActiveWorld.Areas.ContainsKey(player.WorldPosition) && !player.HasMoved)
                 {
-                    this.ChangeWorld(this.m_ActiveWorld.Areas[player.WorldPosition], this.m_ActiveWorld.Areas[player.WorldPosition].SpawnPoint);
+                    this.ChangeWorld(this.m_ActiveWorld.Areas[player.WorldPosition],
+                        this.m_ActiveWorld.Areas[player.WorldPosition].SpawnPoint);
                     return;
                 }
             }
@@ -355,14 +357,15 @@ namespace JoyLib.Code.States
 
             if (hasMoved)
             {
-                PhysicsResult physicsResult = this.PhysicsManager.IsCollision(player.WorldPosition, newPlayerPoint, this.m_ActiveWorld);
+                PhysicsResult physicsResult =
+                    this.PhysicsManager.IsCollision(player.WorldPosition, newPlayerPoint, this.m_ActiveWorld);
 
                 if (physicsResult == PhysicsResult.EntityCollision)
                 {
                     IEntity tempEntity = this.m_ActiveWorld.GetEntity(newPlayerPoint);
                     this.PlayerWorld.SwapPosition(player, tempEntity);
                     this.Tick();
-                        
+
                     /*
                         if (m_GameplayFlags == GameplayFlags.Interacting)
                         { }
@@ -448,7 +451,8 @@ namespace JoyLib.Code.States
                 }
                 */
 
-            this.m_Camera.transform.position = new Vector3(player.WorldPosition.x, player.WorldPosition.y, this.m_Camera.transform.position.z);
+            this.m_Camera.transform.position = new Vector3(player.WorldPosition.x, player.WorldPosition.y,
+                this.m_Camera.transform.position.z);
         }
 
         protected void Tick()
@@ -465,17 +469,24 @@ namespace JoyLib.Code.States
                 GameObject fog = this.m_FogOfWarHolder.transform.GetChild(i).gameObject;
                 Vector2Int position = fog.GetComponent<GridPosition>().WorldPosition;
 
-                bool canSee = player.VisionProvider.CanSee(player, this.m_ActiveWorld, position);
-                if (canSee)
+                if (this.GameManager.Cheats.CheatBank.TryGetValue("fullbright", out bool cheat) && cheat)
                 {
-                    int lightLevel = this.m_ActiveWorld.LightCalculator.Light.GetLight(position);
-                    fog.GetComponent<SpriteRenderer>().color = LightLevelHelper.GetColour(
-                        lightLevel,
-                        player.VisionProvider);
+                    fog.GetComponent<SpriteRenderer>().color = Color.clear;
                 }
                 else
                 {
-                    fog.GetComponent<SpriteRenderer>().color = player.VisionProvider.DarkColour;
+                    bool canSee = player.VisionProvider.CanSee(player, this.m_ActiveWorld, position);
+                    if (canSee)
+                    {
+                        int lightLevel = this.m_ActiveWorld.LightCalculator.Light.GetLight(position);
+                        fog.GetComponent<SpriteRenderer>().color = LightLevelHelper.GetColour(
+                            lightLevel,
+                            player.VisionProvider);
+                    }
+                    else
+                    {
+                        fog.GetComponent<SpriteRenderer>().color = player.VisionProvider.DarkColour;
+                    }
                 }
             }
         }

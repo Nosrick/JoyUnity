@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Statistics;
 using UnityEngine;
@@ -13,16 +14,28 @@ namespace JoyLib.Code.Unity.Cheats
         
         protected int ActionCount { get; set; }
         protected bool Active { get; set; }
+        
+        public IDictionary<string, bool> CheatBank { get; protected set; }
 
         public void Awake()
         {
             InputSystem.onActionChange += this.HandleInput;
             this.ActionCount = 0;
             this.Active = false;
+            this.CheatBank = new Dictionary<string, bool>();
+            if (GlobalConstants.GameManager is null == false)
+            {
+                GlobalConstants.GameManager.Cheats = this;
+            }
         }
 
         protected void HandleInput(object data, InputActionChange change)
         {
+            if (GlobalConstants.GameManager is null == false
+                && GlobalConstants.GameManager.Cheats is null)
+            {
+                GlobalConstants.GameManager.Cheats = this;
+            }
             if (change != InputActionChange.ActionPerformed)
             {
                 return;
@@ -104,6 +117,18 @@ namespace JoyLib.Code.Unity.Cheats
                 if (GUILayout.Button("Give 100 JX"))
                 {
                     GlobalConstants.GameManager.Player.CurrentJob.AddExperience(100);
+                }
+
+                if (GUILayout.Button("Fullbright Toggle"))
+                {
+                    if (this.CheatBank.ContainsKey("fullbright"))
+                    {
+                        this.CheatBank["fullbright"] = !this.CheatBank["fullbright"];
+                    }
+                    else
+                    {
+                        this.CheatBank.Add("fullbright", true);
+                    }
                 }
             }
         }
