@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1693415750243514630}
   - component: {fileID: 6188583211229116156}
   - component: {fileID: 811320182004860066}
+  - component: {fileID: 6662743162552874318}
   m_Layer: 0
   m_Name: ManagedSprite NoCollision
   m_TagString: Untagged
@@ -57,4 +58,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba118a0926f44e059ea532a8ffa94e86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  m_ElementName: NeedBackground
+  m_Prefab: {fileID: 1949383421893784, guid: 17c147a16df7ef44db294d76011fd83a, type: 3}
+--- !u!114 &6662743162552874318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1949383421893784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba118a0926f44e059ea532a8ffa94e86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  m_ElementName: NeedForeground
   m_Prefab: {fileID: 1949383421893784, guid: 17c147a16df7ef44db294d76011fd83a, type: 3}
