@@ -8,7 +8,9 @@
         "CaseyDeCoder.GameSettings.Runtime",
         "CaseyDeCoder.GameSettings.UI.Runtime",
         "CaseyDeCoder.GameSettings.UI.TMPro.Runtime",
-        "Sirenix.OdinSerializer"
+        "Sirenix.OdinSerializer",
+        "Unity.RenderPipelines.Universal.Runtime",
+        "Unity.RenderPipelines.Core.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

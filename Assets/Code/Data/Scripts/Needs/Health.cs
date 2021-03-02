@@ -154,7 +154,7 @@ namespace JoyLib.Code.Entities.Needs
 
         public override bool Tick(Entity actor)
         {
-            base.Tick(actor);
+            bool result = base.Tick(actor);
 
             bool diseaseFree = actor.Abilities.Any(
                 ability => ability.Tags.Any(
@@ -164,14 +164,16 @@ namespace JoyLib.Code.Entities.Needs
             {
                 this.CleanBonusApplied = true;
                 this.Value += CLEAN_BONUS;
+                result = true;
             }
-            else if (diseaseFree == false && this.CleanBonusApplied == true)
+            else if (diseaseFree == false && this.CleanBonusApplied)
             {
                 this.CleanBonusApplied = false;
                 this.Value -= CLEAN_BONUS;
+                result = true;
             }
 
-            return true;
+            return result;
         }
     }
 }

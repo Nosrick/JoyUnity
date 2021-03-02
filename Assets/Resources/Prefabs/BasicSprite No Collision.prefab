@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6188583211229116156}
   - component: {fileID: 2156144704310128596}
   m_Layer: 0
-  m_Name: BasicSprite NoCollision
+  m_Name: BasicSprite No Collision
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

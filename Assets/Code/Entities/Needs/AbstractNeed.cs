@@ -4,6 +4,7 @@ using JoyLib.Code.Graphics;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using Sirenix.OdinSerializer;
+using UnityEngine;
 
 namespace JoyLib.Code.Entities.Needs
 {
@@ -19,6 +20,8 @@ namespace JoyLib.Code.Entities.Needs
         [OdinSerialize] public RNG Roller { get; protected set; }
 
         protected bool Initialised { get; set; }
+
+        public float PercentageFull => Mathf.Min(1f, this.Value / (float) this.HappinessThreshold);
 
         [OdinSerialize] protected Dictionary<string, IJoyAction> m_CachedActions;
 
@@ -116,6 +119,11 @@ namespace JoyLib.Code.Entities.Needs
         public abstract INeed Randomise();
 
         //This will be called once per in-game minute
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="actor"></param>
+        /// <returns>True if there has been a change</returns>
         public virtual bool Tick(Entity actor)
         {
             this.m_DecayCounter -= 1;

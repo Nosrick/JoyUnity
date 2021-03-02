@@ -142,8 +142,7 @@ namespace JoyLib.Code.Entities.Needs
                         .Average(need => need.Value.Value));
 
                 this.Fulfill(average);
-                base.Tick(actor);
-                return true;
+                return base.Tick(actor);
             }
             
             base.Tick(actor);

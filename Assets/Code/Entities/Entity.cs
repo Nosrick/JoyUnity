@@ -24,6 +24,7 @@ using JoyLib.Code.Helpers;
 using JoyLib.Code.Quests;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
+using JoyLib.Code.Unity;
 using JoyLib.Code.World;
 using Sirenix.OdinSerializer;
 using UnityEngine;
@@ -75,6 +76,30 @@ namespace JoyLib.Code.Entities
         [OdinSerialize] protected FulfillmentData m_FulfillmentData;
 
         protected NeedAIData m_CurrentTarget;
+
+        public float OverallHappiness => this.m_CachedHappiness;
+        protected float m_CachedHappiness;
+
+        public bool HappinessIsDirty
+        {
+            get => this.m_HappinessIsDirty;
+            set
+            {
+                this.m_HappinessIsDirty = value;
+                if (this.m_HappinessIsDirty)
+                {
+                    this.m_CachedHappiness = this.CalculateOverallHappiness();
+                    if (this.PlayerControlled)
+                    {
+                        ManagedSprite.Happiness = this.m_CachedHappiness;
+                    }
+                }
+
+                this.m_HappinessIsDirty = false;
+            }
+        }
+
+        protected bool m_HappinessIsDirty;
 
         [OdinSerialize]
         protected NeedDataSerialisable CurrentTargetSerialise
@@ -262,6 +287,8 @@ namespace JoyLib.Code.Entities
             this.PlayerControlled = driver.PlayerControlled;
             this.Data = new NonUniqueDictionary<object, object>();
 
+            this.HappinessIsDirty = true;
+
             this.Initialise();
 
             this.SetCurrentTarget();
@@ -337,6 +364,7 @@ namespace JoyLib.Code.Entities
 
             this.StatisticChange -= this.RecalculateDVs;
             this.StatisticChange += this.RecalculateDVs;
+            this.HappinessIsDirty = true;
         }
 
         protected IEnumerable<Tuple<string, string>> ConstructDescription()
@@ -469,6 +497,8 @@ namespace JoyLib.Code.Entities
 
         public override void Tick()
         {
+            this.HappinessIsDirty = false;
+            
             if (this.m_FulfillmentData is null == false 
                 && this.m_FulfillmentData.Counter > 0 
                 && this.m_FulfillmentData.DecrementCounter() == 0)
@@ -488,7 +518,7 @@ namespace JoyLib.Code.Entities
 
                 foreach (INeed need in this.m_Needs.Values)
                 {
-                    need.Tick(this);
+                    this.HappinessIsDirty |= need.Tick(this);
                 }
             }
 
@@ -1003,6 +1033,11 @@ namespace JoyLib.Code.Entities
             }
 
             return result;
+        }
+
+        protected float CalculateOverallHappiness()
+        {
+            return this.Needs.Values.Average(need => need.PercentageFull);
         }
 
         public override int SetValue(string name, int value)

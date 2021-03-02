@@ -67,6 +67,10 @@ namespace JoyLib.Code.Entities
         bool Alive { get; }
         
         List<string> CultureNames { get; }
+        
+        float OverallHappiness { get; }
+        
+        bool HappinessIsDirty { get; set; }
 
         void Deserialise(
             IEnumerable<ICulture> cultures);

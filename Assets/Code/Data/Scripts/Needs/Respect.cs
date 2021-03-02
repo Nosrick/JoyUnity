@@ -138,13 +138,14 @@ namespace JoyLib.Code.Entities.Needs
 
         public override bool Tick(Entity actor)
         {
+            bool result = base.Tick(actor);
             if (this.m_DecayCounter == 0 && this.m_DoesDecay)
             {
                 IEnumerable<IRelationship> relationships = this.RelationshipHandler.GetAllForObject(actor);
 
                 if (relationships.Any() == false)
                 {
-                    return false;
+                    return result;
                 }
                 
                 int average = (int)Math.Ceiling(
@@ -152,12 +153,9 @@ namespace JoyLib.Code.Entities.Needs
                         relationship.GetHighestRelationshipValue(actor.Guid)));
 
                 this.Fulfill(average);
-                base.Tick(actor);
                 return true;
             }
-
-            base.Tick(actor);
-            return false;
+            return result;
         }
     }
 }

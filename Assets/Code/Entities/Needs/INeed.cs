@@ -58,6 +58,11 @@ namespace JoyLib.Code.Entities.Needs
         {
             get;
         }
+
+        float PercentageFull
+        {
+            get;
+        }
         
         RNG Roller { get; }
     }

@@ -182,11 +182,11 @@ namespace JoyLib.Code.Entities.Needs
 
         public override bool Tick(Entity actor)
         {
-            base.Tick(actor);
+            bool result = base.Tick(actor);
 
             if (actor.Contents.Any() == false)
             {
-                return false;
+                return result;
             }
 
             this.Fulfill(actor.Contents.Count());

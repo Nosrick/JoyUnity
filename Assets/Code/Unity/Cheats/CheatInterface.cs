@@ -83,6 +83,8 @@ namespace JoyLib.Code.Unity.Cheats
                     {
                         need.Fulfill(need.HappinessThreshold);
                     }
+
+                    GlobalConstants.GameManager.Player.HappinessIsDirty = true;
                 }
 
                 if (GUILayout.Button("Empty Needs"))
@@ -91,6 +93,8 @@ namespace JoyLib.Code.Unity.Cheats
                     {
                         need.Decay(need.Value);
                     }
+
+                    GlobalConstants.GameManager.Player.HappinessIsDirty = true;
                 }
 
                 if (GUILayout.Button("Knock Player Unconscious"))

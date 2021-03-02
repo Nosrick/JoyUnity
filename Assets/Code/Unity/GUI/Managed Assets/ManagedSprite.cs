@@ -4,14 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
 using JoyLib.Code.Graphics;
-using JoyLib.Code.Helpers;
 using JoyLib.Code.Unity.GUI.Managed_Assets;
 using UnityEngine;
 
 namespace JoyLib.Code.Unity
 {
     [RequireComponent(typeof(RectTransform))]
-    public class ManagedSprite : ManagedElement, IAnimated
+    public class ManagedSprite : 
+        ManagedElement, 
+        IAnimated
     {
         [SerializeField] protected GameObject m_Prefab;
 
@@ -22,6 +23,11 @@ namespace JoyLib.Code.Unity
         protected Color Tint { get; set; }
         public bool Finished { get; protected set; }
         protected bool ForwardAnimation { get; set; }
+
+        protected const string _HAPPINESS = "_Happiness";
+        protected const string _TINT_COLOUR = "_TintColour";
+        
+        public static float Happiness { get; set; }
 
         public ISpriteState CurrentSpriteState
         {
@@ -339,20 +345,21 @@ namespace JoyLib.Code.Unity
             var data = this.CurrentSpriteState.GetSpriteForFrame(this.FrameIndex);
             for (int i = 0; i < data.Count; i++)
             {
-                //RectTransform partRect = this.SpriteParts[i].GetComponent<RectTransform>();
-                //partRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, this.MyRect.sizeDelta.x);
-                //partRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, this.MyRect.sizeDelta.y);
+                SpriteRenderer spriteRenderer = this.SpriteParts[i];
                 if (this.SortingLayer.IsNullOrEmpty() == false)
                 {
-                    this.SpriteParts[i].sortingLayerName = this.SortingLayer;
+                    spriteRenderer.sortingLayerName = this.SortingLayer;
                 }
-                this.SpriteParts[i].name = this.CurrentSpriteState.SpriteData.m_Parts[i].m_Name;
-                this.SpriteParts[i].gameObject.SetActive(true);
-                this.SpriteParts[i].sprite = data[i].Item2;
-                this.SpriteParts[i].color = data[i].Item1;
-                this.SpriteParts[i].sortingOrder = this.CurrentSpriteState.SpriteData.m_Parts[i].m_SortingOrder;
-                this.SpriteParts[i].sortingLayerName = this.SortingLayer;
-                this.SpriteParts[i].drawMode = this.CurrentSpriteState.SpriteData.m_Parts[i].m_SpriteDrawMode;
+                spriteRenderer.name = this.CurrentSpriteState.SpriteData.m_Parts[i].m_Name;
+                spriteRenderer.gameObject.SetActive(true);
+                spriteRenderer.sprite = data[i].Item2;
+                //spriteRenderer.color = data[i].Item1;
+                spriteRenderer.sortingOrder = this.CurrentSpriteState.SpriteData.m_Parts[i].m_SortingOrder;
+                spriteRenderer.sortingLayerName = this.SortingLayer;
+                spriteRenderer.drawMode = this.CurrentSpriteState.SpriteData.m_Parts[i].m_SpriteDrawMode;
+                Material material = spriteRenderer.material;
+                material.SetFloat(_HAPPINESS, Happiness);
+                material.SetColor(_TINT_COLOUR, data[i].Item1);
             }
         }
 
