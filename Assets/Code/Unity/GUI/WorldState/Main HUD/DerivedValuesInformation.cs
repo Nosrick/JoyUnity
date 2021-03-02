@@ -84,23 +84,28 @@ namespace JoyLib.Code.Unity.GUI
                     this.Items.Add(valueList[i].Name, newItem);
                 }
             }
+
+            float flexibleHeight = 1f / valueList.Count;
             
             for(int i = 0; i < valueList.Count; i++)
             {
-                this.Items[valueList[i].Name].Name = valueList[i].Name;
+                var item = this.Items[valueList[i].Name];
                 
-                this.Items[valueList[i].Name].BarColour =
+                item.Name = valueList[i].Name;
+                
+                item.BarColour =
                     this.GameManager.DerivedValueHandler.GetBackgroundColour(valueList[i].Name);
                 
-                this.Items[valueList[i].Name].TextColour =
+                item.TextColour =
                     this.GameManager.DerivedValueHandler.GetTextColour(valueList[i].Name);
 
-                this.Items[valueList[i].Name].OutlineColour =
+                item.OutlineColour =
                     this.GameManager.DerivedValueHandler.GetOutlineColour(valueList[i].Name);
                 
-                this.Items[valueList[i].Name].DirectValueSet(valueList[i].Value);
-                this.Items[valueList[i].Name].Minimum = -valueList[i].Maximum;
-                this.Items[valueList[i].Name].Maximum = valueList[i].Maximum;
+                item.DirectValueSet(valueList[i].Value);
+                item.Minimum = -valueList[i].Maximum;
+                item.Maximum = valueList[i].Maximum;
+                item.GetComponent<LayoutElement>().flexibleHeight = flexibleHeight;
             }
             
             this.ResizeMe();
@@ -108,20 +113,12 @@ namespace JoyLib.Code.Unity.GUI
 
         protected void ResizeMe()
         {
-            VerticalLayoutGroup layoutGroup = this.m_Container.GetComponent<VerticalLayoutGroup>();
-            RectTransform childRect = this.DerivedValuePrefab.GetComponent<RectTransform>();
-            float spacingFix = this.m_Container.childCount > 1 ? layoutGroup.spacing : 0;
-            float height = this.m_Container.childCount *
-                           (childRect.rect.height
-                            + layoutGroup.spacing)
-                           + layoutGroup.padding.top
-                           + layoutGroup.padding.bottom
-                           - spacingFix;
+            float height = this.m_Container.childCount * 0.055f;
 
-            float width = childRect.rect.width + layoutGroup.padding.left + layoutGroup.padding.right;
+            float width = 0.25f;
 
-            this.RectTransform.anchorMin = new Vector2(1.0f - width / Screen.width, 0);
-            this.RectTransform.anchorMax = new Vector2(1, height / Screen.height);
+            this.RectTransform.anchorMin = new Vector2(1.0f - width, 0);
+            this.RectTransform.anchorMax = new Vector2(1, height);
         }
     }
 }

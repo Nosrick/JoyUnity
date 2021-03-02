@@ -138,8 +138,6 @@ MonoBehaviour:
   m_ValueText: {fileID: 869813515316750311}
   m_NameText: {fileID: 869813516490654713}
   BarImage: {fileID: 869813515195955870}
-  NameText: {fileID: 869813516490654713}
-  ValueText: {fileID: 869813515316750311}
   BarColour: {r: 0, g: 0, b: 0, a: 0}
   TextColour: {r: 0, g: 0, b: 0, a: 0}
   OutlineColour: {r: 0, g: 0, b: 0, a: 0}
@@ -197,9 +195,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 32
+  m_MinHeight: -1
   m_PreferredWidth: -1
-  m_PreferredHeight: 32
+  m_PreferredHeight: -1
   m_FlexibleWidth: 1
   m_FlexibleHeight: 1
   m_LayoutPriority: 1
