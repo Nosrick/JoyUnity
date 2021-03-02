@@ -156,6 +156,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "Auto Turn",
+                    "type": "Button",
+                    "id": "856d1027-19bc-4b40-98a3-aa44651d25f9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -376,6 +384,17 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "Open Context Menu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d4801dfb-f915-48ce-b5d4-49abf61f1a6c",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Auto Turn",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

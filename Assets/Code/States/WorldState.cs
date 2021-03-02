@@ -113,9 +113,9 @@ namespace JoyLib.Code.States
 
             if ((player.FulfillmentData is null || player.FulfillmentData.Counter <= 0)
                 && this.AutoTurn
-                && player.Conscious)
+                && player.Conscious
+                && this.ManualAutoTurn == false)
             {
-                this.ManualAutoTurn = false;
                 this.AutoTurn = false;
             }
             else if (player.FulfillmentData is null == false
@@ -124,6 +124,9 @@ namespace JoyLib.Code.States
             {
                 this.AutoTurn = true;
             }
+            
+            this.m_Camera.transform.position = new Vector3(player.WorldPosition.x, player.WorldPosition.y,
+                this.m_Camera.transform.position.z);
         }
 
         protected void SetEntityWorld(IWorldInstance world)
@@ -197,11 +200,6 @@ namespace JoyLib.Code.States
 
         public override void HandleInput(object data, InputActionChange change)
         {
-            if (this.AutoTurn)
-            {
-                return;
-            }
-
             bool hasMoved = false;
             IEntity player = this.m_ActiveWorld.Player;
 
@@ -225,6 +223,17 @@ namespace JoyLib.Code.States
             }
 
             if (!(data is InputAction inputAction))
+            {
+                return;
+            }
+
+            if (inputAction.name.Equals("auto turn", StringComparison.OrdinalIgnoreCase))
+            {
+                this.AutoTurn = !this.AutoTurn;
+                this.ManualAutoTurn = this.AutoTurn;
+            }
+            
+            if (this.AutoTurn)
             {
                 return;
             }
@@ -450,9 +459,6 @@ namespace JoyLib.Code.States
                     }
                 }
                 */
-
-            this.m_Camera.transform.position = new Vector3(player.WorldPosition.x, player.WorldPosition.y,
-                this.m_Camera.transform.position.z);
         }
 
         protected void Tick()
