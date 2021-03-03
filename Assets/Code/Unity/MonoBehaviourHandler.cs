@@ -19,7 +19,8 @@ namespace JoyLib.Code.Unity
         ManagedSprite, 
         IPointerEnterHandler, 
         IPointerExitHandler,
-        IDisposable
+        IDisposable,
+        IPosition
     {
         public IJoyObject JoyObject { get; protected set; }
         protected ManagedSprite SpeechBubble { get; set; }
@@ -393,6 +394,14 @@ namespace JoyLib.Code.Unity
         {
             GarbageMan.Dispose(this.m_States);
             this.m_States = null;
+        }
+
+        public Vector2Int WorldPosition => this.JoyObject.WorldPosition;
+        
+        public void Move(Vector2Int position)
+        {
+            this.transform.position = new Vector3(position.x, position.y, 0);
+            this.JoyObject.Move(position);
         }
     }
 }

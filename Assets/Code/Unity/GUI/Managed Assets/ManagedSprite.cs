@@ -353,13 +353,15 @@ namespace JoyLib.Code.Unity
                 spriteRenderer.name = this.CurrentSpriteState.SpriteData.m_Parts[i].m_Name;
                 spriteRenderer.gameObject.SetActive(true);
                 spriteRenderer.sprite = data[i].Item2;
-                //spriteRenderer.color = data[i].Item1;
+                spriteRenderer.color = data[i].Item1;
                 spriteRenderer.sortingOrder = this.CurrentSpriteState.SpriteData.m_Parts[i].m_SortingOrder;
                 spriteRenderer.sortingLayerName = this.SortingLayer;
                 spriteRenderer.drawMode = this.CurrentSpriteState.SpriteData.m_Parts[i].m_SpriteDrawMode;
+                /*
                 Material material = spriteRenderer.material;
                 material.SetFloat(_HAPPINESS, Happiness);
                 material.SetColor(_TINT_COLOUR, data[i].Item1);
+                */
             }
         }
 

@@ -12,9 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de640fe3d0db1804a85f9fc8f5cadab6, type: 3}
   m_Name: URP Asset_Renderer
   m_EditorClassIdentifier: 
-  m_RendererFeatures:
-  - {fileID: 2708940570864953788}
-  m_RendererFeatureMap: bca90cbc18179825
+  m_RendererFeatures: []
+  m_RendererFeatureMap: 
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   shaders:
     blitPS: {fileID: 4800000, guid: c17132b1f77d20942aa75f8429c0f8bc, type: 3}
@@ -36,7 +35,7 @@ MonoBehaviour:
     passOperation: 0
     failOperation: 0
     zFailOperation: 0
-  m_ShadowTransparentReceive: 1
+  m_ShadowTransparentReceive: 0
 --- !u!114 &2708940570864953788
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -52,10 +51,15 @@ MonoBehaviour:
   m_Active: 1
   settings:
     Event: 550
-    blitMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-    blitMaterialPassIndex: 0
-    destination: 0
-    textureId: _MainTex
+    blitMaterial: {fileID: 2100000, guid: 17011cf07c9166146b3ae9e850479320, type: 2}
+    blitMaterialPassIndex: -1
+    setInverseViewMatrix: 0
+    srcType: 1
+    srcTextureId: _MainTex
+    srcTextureObject: {fileID: 0}
+    dstType: 1
+    dstTextureId: _BlitPassTexture
+    dstTextureObject: {fileID: 0}
 --- !u!114 &7361171622175367509
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73,5 +77,10 @@ MonoBehaviour:
     Event: 550
     blitMaterial: {fileID: 2100000, guid: 4e6981316fefd514cacfe5af4235e5f7, type: 2}
     blitMaterialPassIndex: 0
-    destination: 0
-    textureId: _MainTex
+    setInverseViewMatrix: 0
+    srcType: 0
+    srcTextureId: _CameraColorTexture
+    srcTextureObject: {fileID: 0}
+    dstType: 0
+    dstTextureId: _BlitPassTexture
+    dstTextureObject: {fileID: 0}

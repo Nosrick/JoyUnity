@@ -3,7 +3,7 @@
 namespace JoyLib.Code.Unity
 {
     [DisallowMultipleComponent]
-    public class GridPosition : MonoBehaviour
+    public class GridPosition : MonoBehaviour, IPosition
     {
         [SerializeField] protected Vector2Int m_WorldPosition;
 

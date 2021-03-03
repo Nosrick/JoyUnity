@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4867030546924297002}
   - component: {fileID: 3047902681863811201}
   - component: {fileID: 4134087850024821976}
+  - component: {fileID: 5413368100784929374}
   m_Layer: 0
   m_Name: PositionableSprite
   m_TagString: Untagged
@@ -50,6 +51,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba118a0926f44e059ea532a8ffa94e86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   m_ElementName: 
   m_Prefab: {fileID: 1949383421893784, guid: e14ff5d3792717e45b8b7ca9a4ae5737, type: 3}
 --- !u!61 &3047902681863811201
@@ -91,3 +101,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_WorldPosition: {x: 0, y: 0}
+  m_ShowIcon: 1
+--- !u!114 &5413368100784929374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1949383421893784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 230c10e4b7a00a145b83c76b2daeb9ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
