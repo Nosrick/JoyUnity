@@ -2,19 +2,19 @@
   "GUIData": [
     {
       "Name": "Font",
-      "Value": "Kenney Pixel",
+      "Value": "Silver",
       "MinFontSize": 8,
       "MaxFontSize": 60
     },
     {
       "Name": "AccentFont",
-      "Value": "Kenney Pixel",
+      "Value": "Silver",
       "MinFontSize": 8,
       "MaxFontSize": 60
     },
     {
       "Name": "TitleFont",
-      "Value": "Kenney Pixel",
+      "Value": "Silver",
       "MinFontSize": 20,
       "MaxFontSize": 100
     }

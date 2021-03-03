@@ -18,6 +18,11 @@ namespace JoyLib.Code.Unity.GUI
         public virtual void Awake()
         {
             this.Texts = this.GetComponentsInChildren<TextMeshProUGUI>(true);
+
+            foreach (var text in this.Texts)
+            {
+                text.verticalAlignment = VerticalAlignmentOptions.Capline;
+            }
             this.Initialised = true;
         }
 
