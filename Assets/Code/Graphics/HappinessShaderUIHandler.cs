@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using JoyLib.Code.Entities;
+﻿using JoyLib.Code.Entities;
 using JoyLib.Code.Events;
-using JoyLib.Code.Helpers;
 using JoyLib.Code.Settings;
 using JoyLib.Code.Unity;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace JoyLib.Code.Graphics
 {
-    public class HappinessShaderHandler : MonoBehaviour
+    public class HappinessShaderUIHandler : MonoBehaviour
     {
-        protected SpriteRenderer[] SpriteRenderers { get; set; }
+        protected Image[] Images { get; set; }
         protected IPosition GridPosition { get; set; }
         
         protected bool Enabled { get; set; }
@@ -23,7 +20,7 @@ namespace JoyLib.Code.Graphics
         
         protected void Start()
         {
-            this.SpriteRenderers = this.GetComponentsInChildren<SpriteRenderer>();
+            this.Images = this.GetComponentsInChildren<Image>();
             if (this.TryGetComponent(out GridPosition position) == false)
             {
                 this.GridPosition = this.GetComponent<MonoBehaviourHandler>();
@@ -45,9 +42,6 @@ namespace JoyLib.Code.Graphics
             {
                 this.Enabled = shaderSetting.value;
                 this.UpdatedSinceLastSettingChange = false;
-
-                float happiness = GlobalConstants.GameManager?.Player?.OverallHappiness ?? 1f;
-                this.SetHappiness(happiness);
             }
         }
 
@@ -72,7 +66,7 @@ namespace JoyLib.Code.Graphics
                 ? 1f
                 : happinessRef;
 
-            foreach (var renderer in this.SpriteRenderers)
+            foreach (var renderer in this.Images)
             {
                 renderer.material.SetFloat(_HAPPINESS, happiness);
             }
@@ -81,4 +75,3 @@ namespace JoyLib.Code.Graphics
         }
     }
 }
-

@@ -31,6 +31,8 @@ namespace JoyLib.Code.Unity.GUI
         {
             this.MyCanvas = this.GetComponent<Canvas>();
             this.DefaultSortingOrder = this.MyCanvas.sortingOrder;
+
+            this.MyCanvas.sortingLayerName = "GUI";
         }
 
         public virtual void OnPointerDown(PointerEventData eventData)

@@ -98,8 +98,6 @@ namespace JoyLib.Code.Entities
                         NewValue = this.m_CachedHappiness
                     });
                 }
-
-                this.m_HappinessIsDirty = false;
             }
         }
 

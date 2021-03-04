@@ -1541,7 +1541,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 25
+  m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -5605,6 +5605,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 707862917811446610, guid: c0788eed6abd11a45a4b562d7d731f3e,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9212209383375231398, guid: c0788eed6abd11a45a4b562d7d731f3e,
         type: 3}
       propertyPath: m_Name
@@ -6122,15 +6127,15 @@ PrefabInstance:
     - target: {fileID: 2139714864554509570, guid: a01b0356052d4f94ebd1e2520a687e20,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 51.747658
-      objectReference: {fileID: 0}
-    - target: {fileID: 2139714864554509570, guid: a01b0356052d4f94ebd1e2520a687e20,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2139714864554509570, guid: a01b0356052d4f94ebd1e2520a687e20,
         type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 122.58868
+      objectReference: {fileID: 0}
+    - target: {fileID: 2139714864554509570, guid: a01b0356052d4f94ebd1e2520a687e20,
+        type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
@@ -6152,15 +6157,15 @@ PrefabInstance:
     - target: {fileID: 2139714865033846059, guid: a01b0356052d4f94ebd1e2520a687e20,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 51.747658
-      objectReference: {fileID: 0}
-    - target: {fileID: 2139714865033846059, guid: a01b0356052d4f94ebd1e2520a687e20,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2139714865033846059, guid: a01b0356052d4f94ebd1e2520a687e20,
         type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 352.76602
+      objectReference: {fileID: 0}
+    - target: {fileID: 2139714865033846059, guid: a01b0356052d4f94ebd1e2520a687e20,
+        type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
@@ -6182,12 +6187,12 @@ PrefabInstance:
     - target: {fileID: 2139714865277205334, guid: a01b0356052d4f94ebd1e2520a687e20,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 51.747658
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2139714865277205334, guid: a01b0356052d4f94ebd1e2520a687e20,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 199.31445
       objectReference: {fileID: 0}
     - target: {fileID: 2139714865277205334, guid: a01b0356052d4f94ebd1e2520a687e20,
         type: 3}
@@ -6212,12 +6217,12 @@ PrefabInstance:
     - target: {fileID: 2139714865671415464, guid: a01b0356052d4f94ebd1e2520a687e20,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 51.747658
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2139714865671415464, guid: a01b0356052d4f94ebd1e2520a687e20,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 45.862892
       objectReference: {fileID: 0}
     - target: {fileID: 2139714865671415464, guid: a01b0356052d4f94ebd1e2520a687e20,
         type: 3}
@@ -6242,12 +6247,12 @@ PrefabInstance:
     - target: {fileID: 2139714865890663944, guid: a01b0356052d4f94ebd1e2520a687e20,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 51.747658
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2139714865890663944, guid: a01b0356052d4f94ebd1e2520a687e20,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 276.04025
       objectReference: {fileID: 0}
     - target: {fileID: 2139714865890663944, guid: a01b0356052d4f94ebd1e2520a687e20,
         type: 3}
