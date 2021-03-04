@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: -7515236653226157045}
   - component: {fileID: -8787154815911901543}
   - component: {fileID: 760176320974673959}
+  - component: {fileID: -3748277099471521430}
   m_Layer: 0
   m_Name: ItemInstance
   m_TagString: Untagged
@@ -110,6 +111,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.9, y: 0.9}
   m_EdgeRadius: 0
+--- !u!114 &-3748277099471521430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1949383421893784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 230c10e4b7a00a145b83c76b2daeb9ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &5518614999253954099
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -385,6 +398,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6662743162552874318, guid: 008aa6ae6ed3af8498bd4938cfb7840a,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 6662743162552874318, guid: 008aa6ae6ed3af8498bd4938cfb7840a,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 008aa6ae6ed3af8498bd4938cfb7840a, type: 3}
 --- !u!1 &5793896000634015917 stripped

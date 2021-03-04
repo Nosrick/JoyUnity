@@ -46,7 +46,7 @@ namespace JoyLib.Code.Graphics
                 
                 var material = renderer.material;
                 material.SetFloat(_HAPPINESS, happiness);
-                material.SetColor(_VISION_COLOUR, visionColour);
+                //material.SetColor(_VISION_COLOUR, visionColour);
             }
         }
     }

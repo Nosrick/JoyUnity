@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4794871474551134}
   - component: {fileID: 212276263493951536}
   - component: {fileID: 4875226971970980130}
-  - component: {fileID: 5901208530853515726}
+  - component: {fileID: -2141994399243309919}
   m_Layer: 0
   m_Name: Fog of War
   m_TagString: Untagged
@@ -51,7 +51,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 7a09a2b8a3c998445812954bd7ccac9a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -96,7 +96,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_WorldPosition: {x: 0, y: 0}
---- !u!114 &5901208530853515726
+--- !u!114 &-2141994399243309919
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -105,6 +105,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 1949383421893784}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 230c10e4b7a00a145b83c76b2daeb9ee, type: 3}
+  m_Script: {fileID: 11500000, guid: b65b6aea699546c8be1d7a72a594cca3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

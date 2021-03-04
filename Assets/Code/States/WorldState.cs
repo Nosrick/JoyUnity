@@ -469,6 +469,7 @@ namespace JoyLib.Code.States
 
         protected void DrawObjects()
         {
+            /*
             IEntity player = this.m_ActiveWorld.Player;
             for (int i = 0; i < this.m_FogOfWarHolder.transform.childCount; i++)
             {
@@ -495,6 +496,7 @@ namespace JoyLib.Code.States
                     }
                 }
             }
+            */
         }
 
         public override GameState GetNextState()
