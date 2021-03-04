@@ -24,10 +24,7 @@ namespace JoyLib.Code.Unity
         public bool Finished { get; protected set; }
         protected bool ForwardAnimation { get; set; }
 
-        protected const string _HAPPINESS = "_Happiness";
         protected const string _TINT_COLOUR = "_TintColour";
-        
-        public static float Happiness { get; set; }
 
         public ISpriteState CurrentSpriteState
         {
@@ -353,7 +350,6 @@ namespace JoyLib.Code.Unity
                 spriteRenderer.name = this.CurrentSpriteState.SpriteData.m_Parts[i].m_Name;
                 spriteRenderer.gameObject.SetActive(true);
                 spriteRenderer.sprite = data[i].Item2;
-                //spriteRenderer.color = data[i].Item1;
                 spriteRenderer.sortingOrder = this.CurrentSpriteState.SpriteData.m_Parts[i].m_SortingOrder;
                 spriteRenderer.sortingLayerName = this.SortingLayer;
                 spriteRenderer.drawMode = this.CurrentSpriteState.SpriteData.m_Parts[i].m_SpriteDrawMode;
