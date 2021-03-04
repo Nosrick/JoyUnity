@@ -21,8 +21,11 @@ namespace JoyLib.Code.Settings
         {
             DyslexicModeSetting dyslexicModeSetting = ScriptableObject.CreateInstance<DyslexicModeSetting>();
             dyslexicModeSetting.Load();
-
             this.Settings.Add(dyslexicModeSetting.settingName, dyslexicModeSetting);
+
+            JoyShaderSetting joyShaderSetting = ScriptableObject.CreateInstance<JoyShaderSetting>();
+            joyShaderSetting.Load();
+            this.Settings.Add(joyShaderSetting.settingName, joyShaderSetting);
         }
 
         public GameSetting GetSetting(string name)
