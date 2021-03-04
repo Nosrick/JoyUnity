@@ -93,13 +93,14 @@ namespace JoyLib.Code.Entities
         bool ChangeJob(IJob job);
         
         void DamageMe(int value, Entity source);
-        event ValueChangedEventHandler StatisticChange;
-        event ValueChangedEventHandler SkillChange;
-        event ValueChangedEventHandler ExperienceChange;
+        event ValueChangedEventHandler<int> StatisticChange;
+        event ValueChangedEventHandler<int> SkillChange;
+        event ValueChangedEventHandler<int> ExperienceChange;
         event JobChangedEventHandler JobChange;
         event BooleanChangedEventHandler ConsciousnessChange;
 
         event BooleanChangedEventHandler AliveChange;
 
+        event ValueChangedEventHandler<float> HappinessChange;
     }
 }

@@ -31,7 +31,7 @@ namespace JoyLib.Code.Unity.GUI
             this.SkillWindow.ValueChanged += this.GetAvailableAbilities;
         }
 
-        public void GetAvailableAbilities(object sender, ValueChangedEventArgs args)
+        public void GetAvailableAbilities(object sender, ValueChangedEventArgs<int> args)
         {
             this.GetAvailableAbilities(this.PlayerInfo.CurrentTemplate, this.StatisticWindow.GetStatistics(), this.SkillWindow.GetSkillsBlock());
         }
@@ -48,7 +48,7 @@ namespace JoyLib.Code.Unity.GUI
             return abilities;
         }
 
-        public void ChangePicksRemaining(object sender, ValueChangedEventArgs args)
+        public void ChangePicksRemaining(object sender, ValueChangedEventArgs<int> args)
         {
             this.Value -= args.Delta;
             this.SetPicksRemaining();

@@ -79,7 +79,7 @@ namespace JoyLib.Code.Unity.GUI
             return values;
         }
 
-        protected void ChangeDerivedValue(object sender, ValueChangedEventArgs args)
+        protected void ChangeDerivedValue(object sender, ValueChangedEventArgs<int> args)
         {
             this.Value -= args.Delta;
             this.SetRemainingPointsText();

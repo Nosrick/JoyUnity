@@ -104,7 +104,7 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
             this.GUIManager?.CloseGUI(GUINames.TOOLTIP);
         }
 
-        protected void OnAbilityChange(object sender, ValueChangedEventArgs args)
+        protected void OnAbilityChange(object sender, ValueChangedEventArgs<int> args)
         {
             this.Value -= args.Delta;
             if(this.PurchasedAbilities.ContainsKey(args.Name.ToLower()))
@@ -119,21 +119,21 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
             }
         }
 
-        protected void OnSkillChange(object sender, ValueChangedEventArgs args)
+        protected void OnSkillChange(object sender, ValueChangedEventArgs<int> args)
         {
             this.Value -= args.Delta;
 
             this.SetUpSkillDeltas();
         }
 
-        protected void OnStatisticChange(object senver, ValueChangedEventArgs args)
+        protected void OnStatisticChange(object senver, ValueChangedEventArgs<int> args)
         {
             this.Value -= args.Delta;
 
             this.SetUpStatisticDeltas();
         }
 
-        protected void ChangeJob(object sender, ValueChangedEventArgs args)
+        protected void ChangeJob(object sender, ValueChangedEventArgs<int> args)
         {
             this.CurrentJob = this.Player.Jobs.First(job =>
                 job.Name.Equals(this.JobSelection.Selected, StringComparison.OrdinalIgnoreCase));
@@ -355,7 +355,7 @@ namespace JoyLib.Code.Unity.GUI.Job_Management_Screen
             {
                 int previous = this.m_Value;
                 this.m_Value = value;
-                this.OnChangeValue(this, new ValueChangedEventArgs
+                this.OnChangeValue(this, new ValueChangedEventArgs<int>
                 {
                     NewValue = this.m_Value,
                     Delta = this.m_Value - previous

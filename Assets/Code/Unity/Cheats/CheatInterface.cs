@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Statistics;
 using UnityEngine;
@@ -95,6 +96,17 @@ namespace JoyLib.Code.Unity.Cheats
                     }
 
                     GlobalConstants.GameManager.Player.HappinessIsDirty = true;
+                }
+
+                if (GUILayout.Button("Empty Single Need"))
+                {
+                    var need = GlobalConstants.GameManager.Player.Needs.Values.FirstOrDefault(n => n.ContributingHappiness);
+                    need?.Decay(need.Value);
+
+                    if (need is null == false)
+                    {
+                        GlobalConstants.GameManager.Player.HappinessIsDirty = true;
+                    }
                 }
 
                 if (GUILayout.Button("Knock Player Unconscious"))

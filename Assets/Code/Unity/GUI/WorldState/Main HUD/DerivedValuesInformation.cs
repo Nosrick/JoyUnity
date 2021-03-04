@@ -59,12 +59,12 @@ namespace JoyLib.Code.Unity.GUI
             this.Initialised = true;
         }
 
-        protected void DerivedValueChange(object sender, ValueChangedEventArgs args)
+        protected void DerivedValueChange(object sender, ValueChangedEventArgs<int> args)
         {
             this.Items[args.Name].Value = args.NewValue;
         }
 
-        protected void DerivedValueMaximumChange(object sender, ValueChangedEventArgs args)
+        protected void DerivedValueMaximumChange(object sender, ValueChangedEventArgs<int> args)
         {
             this.Items[args.Name].Maximum = args.NewValue;
         }

@@ -31,7 +31,7 @@ namespace JoyLib.Code.Unity.GUI
                 int previous = this.m_Value;
                 this.m_Value = value;
                 this.m_ValueText.text = this.m_Value.ToString();
-                this.ValueChanged?.Invoke(this, new ValueChangedEventArgs()
+                this.ValueChanged?.Invoke(this, new ValueChangedEventArgs<int>
                 {
                     Name = this.Name,
                     NewValue = this.m_Value,
@@ -51,6 +51,6 @@ namespace JoyLib.Code.Unity.GUI
             }
         }
         
-        public override event ValueChangedEventHandler ValueChanged;
+        public override event ValueChangedEventHandler<int> ValueChanged;
     }
 }

@@ -35,7 +35,7 @@ namespace JoyLib.Code.Unity.GUI
         
         protected IGUIManager GUIManager { get; set; }
 
-        public event ValueChangedEventHandler OnSelect;
+        public event ValueChangedEventHandler<int> OnSelect;
 
         public void Awake()
         {
@@ -73,7 +73,7 @@ namespace JoyLib.Code.Unity.GUI
                 return;
             }
 
-            this.OnSelect?.Invoke(this, new ValueChangedEventArgs
+            this.OnSelect?.Invoke(this, new ValueChangedEventArgs<int>
             {
                 Name = this.Name,
                 NewValue = this.MyButton.Toggled ? this.Delta : -this.Delta,

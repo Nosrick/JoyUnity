@@ -16,7 +16,7 @@ namespace JoyLib.Code
         int SetBase(string name, int value);
         int SetEnhancement(string name, int value);
 
-        event ValueChangedEventHandler OnDerivedValueChange;
-        event ValueChangedEventHandler OnMaximumChange;
+        event ValueChangedEventHandler<int> OnDerivedValueChange;
+        event ValueChangedEventHandler<int> OnMaximumChange;
     }
 }

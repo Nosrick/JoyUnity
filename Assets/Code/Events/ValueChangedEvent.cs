@@ -2,12 +2,12 @@
 
 namespace JoyLib.Code.Events
 {
-    public delegate void ValueChangedEventHandler(object sender, ValueChangedEventArgs args);
+    public delegate void ValueChangedEventHandler<T>(object sender, ValueChangedEventArgs<T> args);
     
-    public class ValueChangedEventArgs : EventArgs
+    public class ValueChangedEventArgs<T> : EventArgs
     {
         public string Name { get; set; }
-        public int NewValue { get; set; }
-        public int Delta { get; set; }
+        public T NewValue { get; set; }
+        public T Delta { get; set; }
     }
 }

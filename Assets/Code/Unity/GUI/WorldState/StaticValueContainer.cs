@@ -90,6 +90,6 @@ namespace JoyLib.Code.Unity.GUI
             }
         }
         
-        public event ValueChangedEventHandler ValueChanged;
+        public event ValueChangedEventHandler<int> ValueChanged;
     }
 }

@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Needs;
+using JoyLib.Code.Events;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,9 +24,6 @@ namespace JoyLib.Code.Unity.GUI
         protected List<INeed> PlayerNeeds { get; set; }
         
         protected RectTransform ContainerRect { get; set; }
-
-        protected int Counter { get; set; }
-        protected const int MAXIMUM_FRAMES = 90;
 
         public void Awake()
         {
@@ -50,6 +48,9 @@ namespace JoyLib.Code.Unity.GUI
             {
                 return;
             }
+            
+            this.Player.HappinessChange -= this.UpdateNeeds;
+            this.Player.HappinessChange += this.UpdateNeeds;
                 
             this.PlayerNeeds = this.Player.Needs.Values.ToList();
             this.ChildList = new List<StringPairContainer>();
@@ -58,17 +59,13 @@ namespace JoyLib.Code.Unity.GUI
                 child.gameObject.SetActive(false);
                 this.ChildList.Add(child);
             }
+            
+            this.UpdateNeeds(this, new ValueChangedEventArgs<float>());
         }
 
-        protected void Update()
+        protected void UpdateNeeds(object sender, ValueChangedEventArgs<float> args)
         {
-            this.Counter += 1;
-            this.Counter %= MAXIMUM_FRAMES;
-
-            if(this.Counter == 0)
-            {
-                this.DoText();
-            }
+            this.DoText();
         }
 
         protected void DoText()

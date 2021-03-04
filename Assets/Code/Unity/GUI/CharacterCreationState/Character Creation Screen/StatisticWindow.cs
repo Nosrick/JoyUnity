@@ -73,7 +73,7 @@ namespace JoyLib.Code.Unity.GUI
             this.SetRemainingPointsText();
         }
 
-        protected void ChangeStatistic(object sender, ValueChangedEventArgs args)
+        protected void ChangeStatistic(object sender, ValueChangedEventArgs<int> args)
         {
             this.Value -= args.Delta;
             this.SetRemainingPointsText();

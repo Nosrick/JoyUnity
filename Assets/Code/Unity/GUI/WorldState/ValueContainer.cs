@@ -59,7 +59,7 @@ namespace JoyLib.Code.Unity.GUI
             set;
         }
 
-        protected virtual void OnChangeValue(object sender, ValueChangedEventArgs args)
+        protected virtual void OnChangeValue(object sender, ValueChangedEventArgs<int> args)
         {
             this.ValueChanged?.Invoke(sender, args);
         }
@@ -130,7 +130,7 @@ namespace JoyLib.Code.Unity.GUI
             {
                 int previous = this.m_Value;
                 this.m_Value = value;
-                this.ValueChanged?.Invoke(this, new ValueChangedEventArgs()
+                this.ValueChanged?.Invoke(this, new ValueChangedEventArgs<int>
                 {
                     NewValue = this.m_Value,
                     Delta = this.m_Value - previous
@@ -138,6 +138,6 @@ namespace JoyLib.Code.Unity.GUI
             }
         }
         
-        public virtual event ValueChangedEventHandler ValueChanged;
+        public virtual event ValueChangedEventHandler<int> ValueChanged;
     }
 }

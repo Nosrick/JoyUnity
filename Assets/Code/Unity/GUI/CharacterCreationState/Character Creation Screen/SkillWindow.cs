@@ -82,7 +82,7 @@ namespace JoyLib.Code.Unity.GUI
             this.PointsRemainingText.text = "Points Remaining: " + this.Value;
         }
 
-        protected void ChangeSkill(object sender, ValueChangedEventArgs args)
+        protected void ChangeSkill(object sender, ValueChangedEventArgs<int> args)
         {
             this.Value -= args.Delta;
             this.SetPointsRemaining();

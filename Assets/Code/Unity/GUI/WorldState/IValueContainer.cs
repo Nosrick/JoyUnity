@@ -16,6 +16,6 @@ namespace JoyLib.Code.Unity.GUI
         
         string Name { get; set; }
 
-        event ValueChangedEventHandler ValueChanged;
+        event ValueChangedEventHandler<int> ValueChanged;
     }
 }

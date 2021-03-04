@@ -36,12 +36,13 @@ namespace JoyLib.Code.Entities
     {
         //public event ValueChangedEventHandler OnDerivedValueChange;
         //public event ValueChangedEventHandler OnMaximumChange;
-        public event ValueChangedEventHandler StatisticChange;
-        public event ValueChangedEventHandler SkillChange;
-        public event ValueChangedEventHandler ExperienceChange;
+        public event ValueChangedEventHandler<int> StatisticChange;
+        public event ValueChangedEventHandler<int> SkillChange;
+        public event ValueChangedEventHandler<int> ExperienceChange;
         public event JobChangedEventHandler JobChange;
         public event BooleanChangedEventHandler ConsciousnessChange;
         public event BooleanChangedEventHandler AliveChange;
+        public event ValueChangedEventHandler<float> HappinessChange;
 
         [OdinSerialize] protected IDictionary<string, IEntityStatistic> m_Statistics;
 
@@ -88,11 +89,14 @@ namespace JoyLib.Code.Entities
                 this.m_HappinessIsDirty = value;
                 if (this.m_HappinessIsDirty)
                 {
+                    float oldHappiness = this.m_CachedHappiness;
                     this.m_CachedHappiness = this.CalculateOverallHappiness();
-                    if (this.PlayerControlled)
+                    this.HappinessChange?.Invoke(this, new ValueChangedEventArgs<float>
                     {
-                        ManagedSprite.Happiness = this.m_CachedHappiness;
-                    }
+                        Delta = this.m_CachedHappiness - oldHappiness,
+                        Name = "Happiness",
+                        NewValue = this.m_CachedHappiness
+                    });
                 }
 
                 this.m_HappinessIsDirty = false;
@@ -407,7 +411,7 @@ namespace JoyLib.Code.Entities
             return data;
         }
 
-        protected void RecalculateDVs(object sender, ValueChangedEventArgs args)
+        protected void RecalculateDVs(object sender, ValueChangedEventArgs<int> args)
         {
             if (sender != this)
             {
@@ -428,7 +432,7 @@ namespace JoyLib.Code.Entities
                 }
 
                 this.DerivedValues[name].SetBase(dv.Base);
-                this.OnMaximumChanged(this, new ValueChangedEventArgs
+                this.OnMaximumChanged(this, new ValueChangedEventArgs<int>
                 {
                     Delta = dv.Maximum - this.DerivedValues[name].Maximum,
                     Name = name,
@@ -877,7 +881,7 @@ namespace JoyLib.Code.Entities
         public void AddExperience(int value)
         {
             int result = this.CurrentJob.AddExperience(value);
-            this.ExperienceChange?.Invoke(this, new ValueChangedEventArgs
+            this.ExperienceChange?.Invoke(this, new ValueChangedEventArgs<int>
             {
                 Delta = value,
                 Name = "experience",
@@ -998,7 +1002,7 @@ namespace JoyLib.Code.Entities
             if (this.Statistics.ContainsKey(name))
             {
                 this.Statistics[name].ModifyValue(value);
-                this.StatisticChange?.Invoke(this, new ValueChangedEventArgs
+                this.StatisticChange?.Invoke(this, new ValueChangedEventArgs<int>
                 {
                     Delta = value,
                     Name = name,
@@ -1010,7 +1014,7 @@ namespace JoyLib.Code.Entities
             if (this.Skills.ContainsKey(name))
             {
                 this.Skills[name].ModifyValue(value);
-                this.SkillChange?.Invoke(this, new ValueChangedEventArgs
+                this.SkillChange?.Invoke(this, new ValueChangedEventArgs<int>
                 {
                     Delta = value,
                     Name = name,
@@ -1064,7 +1068,7 @@ namespace JoyLib.Code.Entities
             {
                 int old = this.Statistics[name].Value;
                 this.Statistics[name].SetValue(value);
-                this.StatisticChange?.Invoke(this, new ValueChangedEventArgs
+                this.StatisticChange?.Invoke(this, new ValueChangedEventArgs<int>
                 {
                     Delta = value - old,
                     Name = name,
@@ -1077,7 +1081,7 @@ namespace JoyLib.Code.Entities
             {
                 int old = this.Skills[name].Value;
                 this.Skills[name].SetValue(value);
-                this.SkillChange?.Invoke(this, new ValueChangedEventArgs
+                this.SkillChange?.Invoke(this, new ValueChangedEventArgs<int>
                 {
                     Delta = value - old,
                     Name = name,

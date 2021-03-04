@@ -73,17 +73,17 @@ namespace JoyLib.Code.Unity.GUI
             this.CurrentCulture = this.CurrentCultures[this.CultureContainer.Value];
         }
 
-        protected void ChangeTemplateHandler(object sender, ValueChangedEventArgs args)
+        protected void ChangeTemplateHandler(object sender, ValueChangedEventArgs<int> args)
         {
             this.ChangeTemplate(this.GameManager.EntityTemplateHandler.Get(this.PlayerType.Selected));
         }
 
-        protected void ChangeJobHandler(object sender, ValueChangedEventArgs args)
+        protected void ChangeJobHandler(object sender, ValueChangedEventArgs<int> args)
         {
             this.JobChanged?.Invoke(sender, args);
         }
 
-        protected void ChangeCultureHandler(object sender, ValueChangedEventArgs args)
+        protected void ChangeCultureHandler(object sender, ValueChangedEventArgs<int> args)
         {
             this.SetCultureSpecificData(this.CurrentCultures.First(
                 culture => culture.CultureName.Equals(this.CultureContainer.Selected)));
