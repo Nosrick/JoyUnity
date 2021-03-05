@@ -34,6 +34,11 @@ namespace JoyLib.Code.Unity.GUI
             this.GetBits();
         }
 
+        protected void Update()
+        {
+            this.GetBits();
+        }
+
         protected void GetBits()
         {
             if (GlobalConstants.GameManager is null || !(this.Player is null))
