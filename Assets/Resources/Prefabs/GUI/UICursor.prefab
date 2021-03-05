@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 3087105847453020188}
   - component: {fileID: 1858253053115317217}
   - component: {fileID: 1468946216}
+  - component: {fileID: -2832876682567682856}
   m_Layer: 5
   m_Name: UICursor
   m_TagString: Untagged
@@ -72,7 +73,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 307dbd0cd6f54e84a28e850902b136f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PartPrefab: {fileID: 8300874287365320679, guid: a2de3cfe6abfcb648ac806bc92ce0d02,
+  m_PartPrefab: {fileID: 8300874287365320679, guid: 2377adc567f497e45af8786d4773c773,
     type: 3}
 --- !u!223 &1858253053115317217
 Canvas:
@@ -111,3 +112,15 @@ MonoBehaviour:
   m_ClosesOthers: 0
   m_AlwaysOpen: 1
   m_AlwaysOnTop: 0
+--- !u!114 &-2832876682567682856
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2934162237568890715}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 194e53962cf54aaca9d6bbdcb6fc8cc8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

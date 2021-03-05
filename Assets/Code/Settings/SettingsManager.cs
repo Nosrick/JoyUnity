@@ -23,9 +23,17 @@ namespace JoyLib.Code.Settings
             dyslexicModeSetting.Load();
             this.Settings.Add(dyslexicModeSetting.settingName, dyslexicModeSetting);
 
-            JoyShaderSetting joyShaderSetting = ScriptableObject.CreateInstance<JoyShaderSetting>();
-            joyShaderSetting.Load();
-            this.Settings.Add(joyShaderSetting.settingName, joyShaderSetting);
+            JoyWorldShaderSetting joyWorldShaderSetting = ScriptableObject.CreateInstance<JoyWorldShaderSetting>();
+            joyWorldShaderSetting.Load();
+            this.Settings.Add(joyWorldShaderSetting.settingName, joyWorldShaderSetting);
+
+            JoyUIShaderSetting joyUIShaderSetting = ScriptableObject.CreateInstance<JoyUIShaderSetting>();
+            joyUIShaderSetting.Load();
+            this.Settings.Add(joyUIShaderSetting.settingName, joyUIShaderSetting);
+
+            JoyCursorShaderSetting joyCursorShaderSetting = ScriptableObject.CreateInstance<JoyCursorShaderSetting>();
+            joyCursorShaderSetting.Load();
+            this.Settings.Add(joyCursorShaderSetting.settingName, joyCursorShaderSetting);
         }
 
         public GameSetting GetSetting(string name)

@@ -10,11 +10,7 @@ namespace JoyLib.Code.Graphics
     public class HappinessShaderUIHandler : MonoBehaviour
     {
         protected Image[] Images { get; set; }
-        protected IPosition GridPosition { get; set; }
-
         protected bool Enabled { get; set; }
-
-        protected bool UpdatedSinceLastSettingChange { get; set; }
 
         protected const string _HAPPINESS = "_Happiness";
 
@@ -23,19 +19,11 @@ namespace JoyLib.Code.Graphics
         protected void Start()
         {
             this.Images = this.GetComponentsInChildren<Image>();
-            if (this.TryGetComponent(out GridPosition position) == false)
-            {
-                this.GridPosition = this.GetComponent<MonoBehaviourHandler>();
-            }
-            else
-            {
-                this.GridPosition = position;
-            }
 
             GlobalConstants.GameManager.SettingsManager.OnSettingChange -= this.UpdateSetting;
             GlobalConstants.GameManager.SettingsManager.OnSettingChange += this.UpdateSetting;
             
-            JoyShaderSetting setting = GlobalConstants.GameManager.SettingsManager.GetSetting("Joy Shader") as JoyShaderSetting;
+            JoyUIShaderSetting setting = GlobalConstants.GameManager.SettingsManager.GetSetting("Joy UI Shader") as JoyUIShaderSetting;
             this.Enabled = setting?.value ?? false;
 
             this.SetHappiness(1f);
@@ -43,10 +31,9 @@ namespace JoyLib.Code.Graphics
 
         protected void UpdateSetting(SettingChangedEventArgs args)
         {
-            if (args.Setting is JoyShaderSetting shaderSetting)
+            if (args.Setting is JoyUIShaderSetting shaderSetting)
             {
                 this.Enabled = shaderSetting.value;
-                this.UpdatedSinceLastSettingChange = false;
             }
         }
 
@@ -66,8 +53,7 @@ namespace JoyLib.Code.Graphics
                 player.HappinessIsDirty = true;
             }
             
-            if (player.HappinessIsDirty == false
-                || this.Enabled == false)
+            if (player.HappinessIsDirty == false)
             {
                 return;
             }
@@ -85,8 +71,6 @@ namespace JoyLib.Code.Graphics
             {
                 renderer.material.SetFloat(_HAPPINESS, happiness);
             }
-
-            this.UpdatedSinceLastSettingChange = true;
         }
     }
 }

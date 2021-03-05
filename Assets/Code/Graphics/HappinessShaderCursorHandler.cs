@@ -1,41 +1,39 @@
 ﻿using JoyLib.Code.Entities;
 using JoyLib.Code.Events;
 using JoyLib.Code.Settings;
-using JoyLib.Code.Unity;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace JoyLib.Code.Graphics
 {
-    public class HappinessShaderHandler : MonoBehaviour
+    public class HappinessShaderCursorHandler : MonoBehaviour
     {
-        protected SpriteRenderer[] SpriteRenderers { get; set; }
+        protected Image[] Images { get; set; }
+
         protected bool Enabled { get; set; }
 
         protected const string _HAPPINESS = "_Happiness";
 
         protected bool PlayerDetected { get; set; }
-        
+
         protected void Start()
         {
-            this.SpriteRenderers = this.GetComponentsInChildren<SpriteRenderer>();
+            this.Images = this.GetComponentsInChildren<Image>();
 
             GlobalConstants.GameManager.SettingsManager.OnSettingChange -= this.UpdateSetting;
             GlobalConstants.GameManager.SettingsManager.OnSettingChange += this.UpdateSetting;
             
-            JoyWorldShaderSetting setting = GlobalConstants.GameManager.SettingsManager.GetSetting("Joy World Shader") as JoyWorldShaderSetting;
+            JoyCursorShaderSetting setting = GlobalConstants.GameManager.SettingsManager.GetSetting("Joy Cursor Shader") as JoyCursorShaderSetting;
             this.Enabled = setting?.value ?? false;
-            
+
             this.SetHappiness(1f);
         }
 
         protected void UpdateSetting(SettingChangedEventArgs args)
         {
-            if (args.Setting is JoyWorldShaderSetting shaderSetting)
+            if (args.Setting is JoyCursorShaderSetting shaderSetting)
             {
                 this.Enabled = shaderSetting.value;
-
-                float happiness = GlobalConstants.GameManager?.Player?.OverallHappiness ?? 1f;
-                this.SetHappiness(happiness);
             }
         }
 
@@ -59,7 +57,7 @@ namespace JoyLib.Code.Graphics
             {
                 return;
             }
-            
+
             this.SetHappiness(player.OverallHappiness);
         }
 
@@ -69,11 +67,10 @@ namespace JoyLib.Code.Graphics
                 ? 1f
                 : happinessRef;
 
-            foreach (var renderer in this.SpriteRenderers)
+            foreach (var renderer in this.Images)
             {
                 renderer.material.SetFloat(_HAPPINESS, happiness);
             }
         }
     }
 }
-

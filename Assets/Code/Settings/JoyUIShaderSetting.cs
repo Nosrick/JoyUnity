@@ -2,9 +2,9 @@
 
 namespace JoyLib.Code.Settings
 {
-    public class JoyShaderSetting : BoolSetting
+    public class JoyUIShaderSetting : BoolSetting
     {
-        public override string settingName => "Joy Shader";
+        public override string settingName => "Joy UI Shader";
         public override bool value { get; set; }
 
         public void Awake()
