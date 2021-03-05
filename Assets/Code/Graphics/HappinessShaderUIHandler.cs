@@ -11,13 +11,15 @@ namespace JoyLib.Code.Graphics
     {
         protected Image[] Images { get; set; }
         protected IPosition GridPosition { get; set; }
-        
+
         protected bool Enabled { get; set; }
-        
+
         protected bool UpdatedSinceLastSettingChange { get; set; }
 
         protected const string _HAPPINESS = "_Happiness";
-        
+
+        protected bool PlayerDetected { get; set; }
+
         protected void Start()
         {
             this.Images = this.GetComponentsInChildren<Image>();
@@ -33,6 +35,9 @@ namespace JoyLib.Code.Graphics
             GlobalConstants.GameManager.SettingsManager.OnSettingChange -= this.UpdateSetting;
             GlobalConstants.GameManager.SettingsManager.OnSettingChange += this.UpdateSetting;
             
+            JoyShaderSetting setting = GlobalConstants.GameManager.SettingsManager.GetSetting("Joy Shader") as JoyShaderSetting;
+            this.Enabled = setting?.value ?? false;
+
             this.SetHappiness(1f);
         }
 
@@ -50,13 +55,23 @@ namespace JoyLib.Code.Graphics
         {
             IEntity player = GlobalConstants.GameManager?.Player;
 
-            if (player is null 
-                || player.HappinessIsDirty == false 
+            if (player is null)
+            {
+                return;
+            }
+
+            if (this.PlayerDetected == false)
+            {
+                this.PlayerDetected = true;
+                player.HappinessIsDirty = true;
+            }
+            
+            if (player.HappinessIsDirty == false
                 || this.Enabled == false)
             {
                 return;
             }
-            
+
             this.SetHappiness(player.OverallHappiness);
         }
 
