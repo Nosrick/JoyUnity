@@ -16,7 +16,9 @@ namespace JoyLib.Code.Entities.Items
         public override int HitPoints => 1;
 
         public IEnumerable<IItemInstance> Contents =>
-            this.GetSlotsAndContents(false).Select(tuple => tuple.Item2);
+            this.GetSlotsAndContents(false)
+                .Select(tuple => tuple.Item2)
+                .Distinct();
 
         public EquipmentStorage()
         {
