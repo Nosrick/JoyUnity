@@ -181,25 +181,33 @@ namespace JoyLib.Code.Unity
             ContextMenu contextMenu = this.GUIManager.Get(GUINames.CONTEXT_MENU).GetComponent<ContextMenu>();
             contextMenu.Clear();
 
-            if (this.JoyObject.Equals(GlobalConstants.GameManager.Player) == false
-                && GlobalConstants.GameManager.Player.VisionProvider.CanSee(
-                    GlobalConstants.GameManager.Player,
+            IEntity player = GlobalConstants.GameManager.Player;
+            if (this.JoyObject.Equals(player) == false
+                && player.VisionProvider.CanSee(
+                    player,
                     this.JoyObject.MyWorld,
                     this.JoyObject.WorldPosition))
             {
-                bool adjacent = AdjacencyHelper.IsAdjacent(
-                    this.JoyObject.WorldPosition,
-                    GlobalConstants.GameManager.Player.WorldPosition);
+                bool adjacent = AdjacencyHelper.IsAdjacent(player.WorldPosition, this.JoyObject.WorldPosition);
+                bool inRange = player.Equipment.Contents.Any(instance =>
+                    AdjacencyHelper.IsInRange(
+                        player.WorldPosition,
+                        this.JoyObject.WorldPosition,
+                        instance.ItemType.Range));
                 if (this.JoyObject is IEntity)
                 {
                     if (adjacent)
                     {
                         contextMenu.AddMenuItem("Talk", this.TalkToPlayer);
-                        contextMenu.AddMenuItem("Attack", this.AttackFromContextMenu);
                     }
                     else
                     {
                         contextMenu.AddMenuItem("Call Over", this.CallOver);
+                    }
+
+                    if (inRange)
+                    {
+                        contextMenu.AddMenuItem("Attack", this.AttackFromContextMenu);
                     }
                 }
             }
@@ -304,7 +312,13 @@ namespace JoyLib.Code.Unity
             }
             else if (defender.Conscious)
             {
-                if (bestRelationship < -50)
+                if (bestRelationship < -50 
+                    && (defender.Equipment.Contents.Any(instance => 
+                        AdjacencyHelper.IsInRange(
+                            defender.WorldPosition, 
+                            player.WorldPosition, 
+                            instance.ItemType.Range))
+                    || AdjacencyHelper.IsAdjacent(defender.WorldPosition, player.WorldPosition)))
                 {
                     int defenderAttack = this.Attack(defender, player);
                     if (defenderAttack > 0)
