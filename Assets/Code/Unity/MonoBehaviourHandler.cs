@@ -333,11 +333,15 @@ namespace JoyLib.Code.Unity
 
         protected int Attack(IEntity aggressor, IEntity defender, string type = "physical")
         {
+            bool adjacent = AdjacencyHelper.IsAdjacent(aggressor.WorldPosition, defender.WorldPosition);
             List<string> attackerTags = new List<string>
             {
                 type,
                 "attack"
             };
+
+            attackerTags.Add(adjacent ? "adjacent" : "ranged");
+
             attackerTags.AddRange(aggressor.Equipment.Contents
                 .Where(equipment => equipment.HasTag("weapon") && equipment.HasTag(type))
                 .SelectMany(equipment => equipment.Tags)
@@ -351,7 +355,6 @@ namespace JoyLib.Code.Unity
                     "strength"
                 });
             }
-
             attackerTags = attackerTags.Distinct().ToList();
 
             List<string> defenderTags = new List<string>
@@ -361,6 +364,9 @@ namespace JoyLib.Code.Unity
                 "defend",
                 type
             };
+
+            defenderTags.Add(adjacent ? "adjacent" : "ranged");
+
             defenderTags.AddRange(defender.Equipment.Contents
                 .Where(equipment => equipment.HasTag("armour") && equipment.HasTag(type))
                 .SelectMany(equipment => equipment.Tags)
