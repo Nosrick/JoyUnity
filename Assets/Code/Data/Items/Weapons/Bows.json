@@ -14,7 +14,7 @@
           "Maple"
         ],
         "Size": 300,
-        "Range": 3,
+        "Range": 4,
         "Slots": [
           "Hand",
           "Hand"
@@ -24,8 +24,7 @@
           "bows",
           "physical",
           "ranged",
-          "agility",
-          "ammunition"
+          "agility"
         ],
         "TileSet": "Weapons"
       }
