@@ -6,6 +6,9 @@
         "Name": "Shortbow",
         "Description": "A small bow used for swift, short-range attacks",
         "Value": 15,
+        "Effects": [
+          "strictrangedweapon"
+        ],
         "Skills": [
           "bows"
         ],
