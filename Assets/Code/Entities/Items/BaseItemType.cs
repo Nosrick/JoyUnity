@@ -9,7 +9,7 @@ namespace JoyLib.Code.Entities.Items
     [Serializable]
     public class BaseItemType
     {
-        protected string m_ClassName;
+        [OdinSerialize]
         protected List<string> m_Tags;
         
         public BaseItemType()
@@ -28,7 +28,8 @@ namespace JoyLib.Code.Entities.Items
             string actionStringRef, 
             int valueRef, 
             int spawnRef, 
-            string spriteSheet, 
+            string spriteSheet,
+            int range = 1,
             int lightLevel = 0,
             IEnumerable<IAbility> abilities = null)
         {
@@ -50,6 +51,7 @@ namespace JoyLib.Code.Entities.Items
             this.LightLevel = lightLevel;
             this.SpriteSheet = spriteSheet;
             this.Abilities = abilities;
+            this.Range = range;
         }
 
         public bool AddTag(string tag)
@@ -230,5 +232,8 @@ namespace JoyLib.Code.Entities.Items
             get;
             protected set;
         }
+        
+        [OdinSerialize]
+        public int Range { get; protected set; }
     }
 }

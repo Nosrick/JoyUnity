@@ -103,6 +103,7 @@ namespace JoyLib.Code.Entities.Items
                                     int size = (int) identifiedToken["Size"];
                                     int lightLevel = (int) (identifiedToken["LightLevel"] ?? 0);
                                     int spawnWeight = (int) (identifiedToken["SpawnWeight"] ?? 1);
+                                    int range = (int) (identifiedToken["Range"] ?? 1);
                                     IEnumerable<string> tags =
                                         identifiedToken["Tags"].Select(token => (string) token);
                                     string tileSet = (string) identifiedToken["TileSet"];
@@ -129,6 +130,7 @@ namespace JoyLib.Code.Entities.Items
                                         size,
                                         slots.ToArray(),
                                         tileSet,
+                                        range,
                                         lightLevel));
                                 }
 
@@ -190,6 +192,7 @@ namespace JoyLib.Code.Entities.Items
                                             identifiedItem.value,
                                             identifiedItem.weighting,
                                             identifiedItem.spriteSheet,
+                                            identifiedItem.range,
                                             identifiedItem.lightLevel,
                                             identifiedItem.abilities));
                                     }

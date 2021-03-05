@@ -17,6 +17,7 @@ namespace JoyLib.Code.Entities.Items
         public float size;
         public IEnumerable<string> slots;
         public string spriteSheet;
+        public int range;
 
         public IdentifiedItem(
             string nameRef, 
@@ -30,6 +31,7 @@ namespace JoyLib.Code.Entities.Items
             float sizeRef, 
             IEnumerable<string> slotsRef, 
             string spriteSheetRef, 
+            int range = 1,
             int lightLevelRef = 0)
         {
             this.name = nameRef;
@@ -44,6 +46,7 @@ namespace JoyLib.Code.Entities.Items
             this.slots = slotsRef;
             this.spriteSheet = spriteSheetRef;
             this.lightLevel = lightLevelRef;
+            this.range = range;
         }
     }
 
