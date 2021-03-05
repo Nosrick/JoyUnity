@@ -54,9 +54,15 @@ namespace JoyLib.Code.Combat
 
             List<IAbility> attackerAbilities = attacker.Abilities.Where(ability =>
                 ability.Tags.Intersect(attackerTags).Any()).ToList();
+            attackerAbilities.AddRange(attacker.Equipment.Contents
+                .SelectMany(instance => instance.AllAbilities)
+                .Where(ability => ability.Tags.Intersect(attackerTags).Any()));
 
             List<IAbility> defenderAbilities = defender.Abilities.Where(ability =>
                 ability.Tags.Intersect(attackerTags).Any()).ToList();
+            defenderAbilities.AddRange(defender.Equipment.Contents
+                .SelectMany(instance => instance.AllAbilities)
+                .Where(ability => ability.Tags.Intersect(defenderTags).Any()));
 
             attackerAbilities.ForEach(ability => ability.OnAttack(
                 attacker, 
