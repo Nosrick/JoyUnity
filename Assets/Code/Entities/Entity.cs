@@ -1236,10 +1236,7 @@ namespace JoyLib.Code.Entities
 
         public List<string> Slots => this.m_Slots;
 
-        public int VisionMod
-        {
-            get { return this.m_Statistics[EntityStatistic.CUNNING].Value + GlobalConstants.MINIMUM_VISION_DISTANCE; }
-        }
+        public int VisionMod => 7;
 
         protected string ConditionString
         {
