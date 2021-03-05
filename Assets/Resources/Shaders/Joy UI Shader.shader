@@ -1,53 +1,31 @@
-﻿Shader "Joy Saturation (UI)"
+﻿Shader "Joy UI Shader"
 {
     Properties
     {
-        [PerRendererData] _MainTex("Sprite Texture", 2D) = "white" {}
-        _Color("Tint", Color) = (1,1,1,1)
-
-        [ToggleUI] _Pulse("Pulse", Float) = 1
-        _HighlightColor("Highlight Color", Color) = (1,0.6412213,0,1)
-        _HighlightFrequency("Frequency ", Float) = 1
-        _HighlightStrength("Strength ", Range(0, 1)) = 1
-
-        _StencilComp("Stencil Comparison", Float) = 8
-        _Stencil("Stencil ID", Float) = 0
-        _StencilOp("Stencil Operation", Float) = 0
-        _StencilWriteMask("Stencil Write Mask", Float) = 255
-        _StencilReadMask("Stencil Read Mask", Float) = 255
-
-        _ColorMask("Color Mask", Float) = 15
-
-        [Toggle(UNITY_UI_ALPHACLIP)] _UseUIAlphaClip("Use Alpha Clip", Float) = 0
+        [NoScaleOffset]_MainTex("_MainTex", 2D) = "white" {}
         _Happiness("_Happiness", Range(0, 1)) = 0.5
+
+        _StencilComp ("Stencil Comparison", Float) = 8
+        _Stencil ("Stencil ID", Float) = 0
+        _StencilOp ("Stencil Operation", Float) = 0
+        _StencilWriteMask ("Stencil Write Mask", Float) = 255
+        _StencilReadMask ("Stencil Read Mask", Float) = 255
+
+        _ColorMask ("Color Mask", Float) = 15
+
+        [Toggle(UNITY_UI_ALPHACLIP)] _UseUIAlphaClip ("Use Alpha Clip", Float) = 0
     }
     SubShader
     {
         Tags
         {
             "RenderPipeline"="UniversalPipeline"
-            "Queue" = "Transparent"
-            "IgnoreProjector" = "True"
-            "RenderType" = "Transparent"
-            "PreviewType" = "Plane"
-            "CanUseSpriteAtlas" = "True"
+            "Queue"="Transparent"
+            "IgnoreProjector"="True"
+            "RenderType"="Transparent"
+            "PreviewType"="Plane"
+            "CanUseSpriteAtlas"="True"
         }
-
-        Stencil
-        {
-            Ref[_Stencil]
-            Comp[_StencilComp]
-            Pass[_StencilOp]
-            ReadMask[_StencilReadMask]
-            WriteMask[_StencilWriteMask]
-        }
-
-        Cull Off
-        Lighting Off
-        ZWrite Off
-        ZTest[unity_GUIZTestMode]
-        Blend SrcAlpha OneMinusSrcAlpha
-        ColorMask[_ColorMask]
 
         Pass
         {
@@ -58,9 +36,9 @@
             }
 
             // Render State
-            Blend SrcAlpha OneMinusSrcAlpha, One OneMinusSrcAlpha
+            Blend SrcAlpha OneMinusSrcAlpha
             Cull Back
-            ZTest LEqual
+            ZTest [unity_GUIZTestMode]
             ZWrite Off
             // ColorMask: <None>
 
@@ -90,6 +68,7 @@
 
             // Defines
             #define _SURFACE_TYPE_TRANSPARENT 1
+            #define _AlphaClip 1
             #define ATTRIBUTES_NEED_NORMAL
             #define ATTRIBUTES_NEED_TANGENT
             #define ATTRIBUTES_NEED_TEXCOORD0
@@ -190,7 +169,7 @@
                                     _Combine_A8D255DC_RGBA_4, _Combine_A8D255DC_RGB_5, _Combine_A8D255DC_RG_6);
                 surface.Color = _Combine_A8D255DC_RGB_5;
                 surface.Alpha = _Split_4C4CB1DE_A_4;
-                surface.AlphaClipThreshold = 0;
+                surface.AlphaClipThreshold = 0.5;
                 return surface;
             }
 
@@ -361,6 +340,7 @@
 
             // Defines
             #define _SURFACE_TYPE_TRANSPARENT 1
+            #define _AlphaClip 1
             #define ATTRIBUTES_NEED_NORMAL
             #define ATTRIBUTES_NEED_TANGENT
             #define ATTRIBUTES_NEED_TEXCOORD0
@@ -426,7 +406,7 @@
                 float _Split_4C4CB1DE_B_3 = _Multiply_70C2D85D_Out_2[2];
                 float _Split_4C4CB1DE_A_4 = _Multiply_70C2D85D_Out_2[3];
                 surface.Alpha = _Split_4C4CB1DE_A_4;
-                surface.AlphaClipThreshold = 0;
+                surface.AlphaClipThreshold = 0.5;
                 return surface;
             }
 
@@ -568,7 +548,7 @@
             }
 
             // Render State
-            Blend SrcAlpha OneMinusSrcAlpha
+            Blend SrcAlpha OneMinusSrcAlpha, One OneMinusSrcAlpha
             Cull Back
             ZTest LEqual
             ZWrite On
@@ -597,6 +577,7 @@
 
             // Defines
             #define _SURFACE_TYPE_TRANSPARENT 1
+            #define _AlphaClip 1
             #define ATTRIBUTES_NEED_NORMAL
             #define ATTRIBUTES_NEED_TANGENT
             #define ATTRIBUTES_NEED_TEXCOORD0
@@ -662,7 +643,7 @@
                 float _Split_4C4CB1DE_B_3 = _Multiply_70C2D85D_Out_2[2];
                 float _Split_4C4CB1DE_A_4 = _Multiply_70C2D85D_Out_2[3];
                 surface.Alpha = _Split_4C4CB1DE_A_4;
-                surface.AlphaClipThreshold = 0;
+                surface.AlphaClipThreshold = 0.5;
                 return surface;
             }
 

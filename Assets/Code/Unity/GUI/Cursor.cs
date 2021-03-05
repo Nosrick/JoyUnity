@@ -53,7 +53,8 @@ namespace JoyLib.Code.Unity.GUI
 
             Rect rect = this.MyRect.rect;
             // this.transform.position = Mouse.current.position.ReadValue() + new Vector2(rect.width / 4, -(rect.height / 4));
-            this.transform.position = Mouse.current.position.ReadValue();
+            Vector2 mousePosition = Mouse.current.position.ReadValue();
+            this.transform.position = new Vector3(mousePosition.x, mousePosition.y, 5);
         }
 
         public void SetCursorSize(int width, int height)
