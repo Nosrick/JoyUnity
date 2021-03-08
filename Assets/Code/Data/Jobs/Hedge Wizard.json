@@ -34,7 +34,11 @@
           "Name": "Chaos Magic",
           "Discount": 2
         }
-      ]
+      ],
+      "Colours": {
+        "Background": "#9232ecff",
+        "Icon": "#bd7ceeff"
+      }
     }
   ]
 }
