@@ -20,6 +20,7 @@ namespace JoyLib.Code.Entities.Abilities
             new Tuple<string, int>[0], 
             new Dictionary<string, int>(),
             AbilityTarget.Self,
+            0,
             "passive")
         {
         }

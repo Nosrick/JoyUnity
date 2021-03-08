@@ -24,6 +24,7 @@ namespace JoyLib.Code.Entities.Abilities
                     {"ranged", 1}
                 },
                 AbilityTarget.Self,
+                0,
                 "attack", "ranged", "threshold", "passive")
         {}
         

@@ -23,7 +23,8 @@ namespace JoyLib.Code.Entities.Abilities
                 {
                     {"potion", 1}
                 }, 
-                AbilityTarget.Adjacent,
+                AbilityTarget.Ranged,
+                3,
                 "healing", "active")
         {}
 

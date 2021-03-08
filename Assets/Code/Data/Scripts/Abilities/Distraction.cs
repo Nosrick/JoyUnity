@@ -21,6 +21,7 @@ namespace JoyLib.Code.Entities.Abilities
                 GetCosts(),
                 GetPrerequisites(),
                 AbilityTarget.Ranged,
+                5,
                 new []{ "attack", "mental", "threshold", "passive" })
         {}
         

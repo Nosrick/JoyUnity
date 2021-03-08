@@ -20,7 +20,8 @@ namespace JoyLib.Code.Entities.Abilities
                 new string[0],
                 new Tuple<string, int>[0],
                 GetPrerequisites(),
-                AbilityTarget.Adjacent,
+                AbilityTarget.Ranged,
+                3,
                 "attack", "social", "threshold", "intimidate", "passive")
         {}
         

@@ -19,6 +19,7 @@ namespace JoyLib.Code.Entities.Abilities
             new Tuple<string, int>[0], 
             GetPrerequisites(), 
             AbilityTarget.Self,
+            0,
             "active")
         { }
 
