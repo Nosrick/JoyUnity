@@ -160,6 +160,8 @@ namespace JoyLib.Code.Entities.Abilities
         
         int Range { get; }
         
-        SpriteData UsingSprite { get; }
+        SpriteData SpriteData { get; }
+        
+        Sprite UsingIcon { get; }
     }
 }

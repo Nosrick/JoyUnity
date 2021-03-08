@@ -54,7 +54,10 @@ namespace JoyLib.Code.Entities.Abilities
             this.Prerequisites = prerequisites;
             this.Tags = tags;
             this.Range = range;
-            this.UsingSprite = usingSprite;
+            this.SpriteData = usingSprite;
+            this.UsingIcon = this.SpriteData?.m_Parts
+                .FirstOrDefault(part => part.m_Name.Equals("icon", StringComparison.OrdinalIgnoreCase))?
+                .m_FrameSprites.FirstOrDefault();
 
             this.m_CachedActions = new Dictionary<string, IJoyAction>(actions.Length);
 
@@ -66,7 +69,8 @@ namespace JoyLib.Code.Entities.Abilities
 
         protected static SpriteData GetSprite(string name)
         {
-            return GlobalConstants.GameManager?.ObjectIconHandler?.GetFrame("abilities", name);
+            SpriteData data = GlobalConstants.GameManager?.ObjectIconHandler?.GetFrame("abilities", name);
+            return data;
         }
 
         //When the entity attacks, before any resolution occurs
@@ -401,6 +405,7 @@ namespace JoyLib.Code.Entities.Abilities
 
         public int Range { get; protected set; }
 
-        public SpriteData UsingSprite { get; protected set; }
+        public SpriteData SpriteData { get; protected set; }
+        public Sprite UsingIcon { get; protected set; }
     }
 }
