@@ -21,7 +21,8 @@ namespace JoyLib.Code.Entities.Abilities
             new Dictionary<string, int>(),
             AbilityTarget.Self,
             0,
-            "passive")
+            GetSprite("gourmand"),
+            "passive","ingestion")
         {
         }
 

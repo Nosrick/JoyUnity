@@ -22,6 +22,7 @@ namespace JoyLib.Code.Entities.Abilities
                 GetPrerequisites(),
                 AbilityTarget.Ranged,
                 3,
+                GetSprite("piercinggaze"),
                 "attack", "social", "threshold", "intimidate", "passive")
         {}
         

@@ -4,6 +4,7 @@ using System.Linq;
 using Castle.Core.Internal;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Scripting;
 using Sirenix.OdinSerializer;
@@ -37,6 +38,7 @@ namespace JoyLib.Code.Entities.Abilities
             Dictionary<string, int> prerequisites,
             AbilityTarget target,
             int range = 0,
+            SpriteData usingSprite = null,
             params string[] tags)
         {
             this.Name = name;
@@ -52,6 +54,7 @@ namespace JoyLib.Code.Entities.Abilities
             this.Prerequisites = prerequisites;
             this.Tags = tags;
             this.Range = range;
+            this.UsingSprite = usingSprite;
 
             this.m_CachedActions = new Dictionary<string, IJoyAction>(actions.Length);
 
@@ -59,6 +62,11 @@ namespace JoyLib.Code.Entities.Abilities
             {
                 this.m_CachedActions.Add(action, ScriptingEngine.Instance.FetchAction(action));
             }
+        }
+
+        protected static SpriteData GetSprite(string name)
+        {
+            return GlobalConstants.GameManager?.ObjectIconHandler.GetFrame("abilties", name);
         }
 
         //When the entity attacks, before any resolution occurs
@@ -392,5 +400,7 @@ namespace JoyLib.Code.Entities.Abilities
         }
 
         public int Range { get; protected set; }
+
+        public SpriteData UsingSprite { get; protected set; }
     }
 }

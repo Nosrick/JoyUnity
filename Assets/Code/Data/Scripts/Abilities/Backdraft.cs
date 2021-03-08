@@ -22,6 +22,7 @@ namespace JoyLib.Code.Entities.Abilities
                 GetPrerequisites(), 
                 AbilityTarget.Adjacent,
                 1,
+                GetSprite("backdraft"),
                 new []{ "attack", "success", "active" })
         {}
 

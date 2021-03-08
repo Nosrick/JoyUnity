@@ -20,7 +20,8 @@ namespace JoyLib.Code.Entities.Abilities
             GetPrerequisites(),
             AbilityTarget.Self,
             0,
-            "active")
+            GetSprite("fooditem"),
+            "active", "ingestion")
         { }
 
         protected static Dictionary<string, int> GetPrerequisites()

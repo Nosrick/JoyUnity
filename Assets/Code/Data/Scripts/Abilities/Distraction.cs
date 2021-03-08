@@ -22,6 +22,7 @@ namespace JoyLib.Code.Entities.Abilities
                 GetPrerequisites(),
                 AbilityTarget.Ranged,
                 5,
+                GetSprite("distraction"),
                 new []{ "attack", "mental", "threshold", "passive" })
         {}
         

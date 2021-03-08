@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Graphics;
 using UnityEngine;
 
 namespace JoyLib.Code.Entities.Abilities
@@ -158,5 +159,7 @@ namespace JoyLib.Code.Entities.Abilities
         }
         
         int Range { get; }
+        
+        SpriteData UsingSprite { get; }
     }
 }

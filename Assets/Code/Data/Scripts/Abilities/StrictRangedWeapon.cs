@@ -25,6 +25,7 @@ namespace JoyLib.Code.Entities.Abilities
                 },
                 AbilityTarget.Self,
                 0,
+                GetSprite("strictrangedweapon"),
                 "attack", "ranged", "threshold", "passive")
         {}
         

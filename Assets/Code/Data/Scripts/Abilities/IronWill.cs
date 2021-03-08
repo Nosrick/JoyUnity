@@ -22,6 +22,7 @@ namespace JoyLib.Code.Entities.Abilities
                 GetPrerequisites(),
                 AbilityTarget.Self,
                 0,
+                GetSprite("ironwill"),
                 "defend", "threshold", "mental", "passive")
         {
         }

@@ -25,6 +25,7 @@ namespace JoyLib.Code.Entities.Abilities
                 }, 
                 AbilityTarget.Ranged,
                 3,
+                GetSprite("healingpotion"),
                 "healing", "active")
         {}
 
