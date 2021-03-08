@@ -21,7 +21,7 @@ namespace JoyLib.Code.Entities.Abilities
                 GetCosts(),
                 GetPrerequisites(), 
                 AbilityTarget.Adjacent,
-                new []{ "attack", "success" })
+                new []{ "attack", "success", "active" })
         {}
 
         protected static Tuple<string, int>[] GetCosts()

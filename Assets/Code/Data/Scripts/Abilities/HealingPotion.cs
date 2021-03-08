@@ -24,7 +24,7 @@ namespace JoyLib.Code.Entities.Abilities
                     {"potion", 1}
                 }, 
                 AbilityTarget.Adjacent,
-                "healing")
+                "healing", "active")
         {}
 
         public override bool OnUse(IEntity user, IJoyObject target)

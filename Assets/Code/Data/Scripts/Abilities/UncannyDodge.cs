@@ -21,7 +21,7 @@ namespace JoyLib.Code.Entities.Abilities
                 new Tuple<string, int>[0],
                 GetPrerequisites(),
                 AbilityTarget.Self,
-                new[] {"defend", "success", "cunning", "physical"})
+                "defend", "success", "cunning", "physical", "passive")
         {}
         
         protected static Dictionary<string, int> GetPrerequisites()

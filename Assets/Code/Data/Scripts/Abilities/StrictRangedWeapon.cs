@@ -24,7 +24,7 @@ namespace JoyLib.Code.Entities.Abilities
                     {"ranged", 1}
                 },
                 AbilityTarget.Self,
-                new[] { "attack", "ranged", "threshold"})
+                "attack", "ranged", "threshold", "passive")
         {}
         
         public override int OnCheckRollModifyThreshold(int successThreshold, IEnumerable<IBasicValue<int>> values, IEnumerable<string> attackerTags,
