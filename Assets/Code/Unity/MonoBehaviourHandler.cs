@@ -208,7 +208,7 @@ namespace JoyLib.Code.Unity
                         contextMenu.AddMenuItem("Call Over", this.CallOver);
                     }
 
-                    if (inWeaponRange)
+                    if (inWeaponRange || adjacent)
                     {
                         contextMenu.AddMenuItem("Attack", this.AttackFromContextMenu);
                     }
