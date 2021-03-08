@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Castle.Core.Internal;
 using JoyLib.Code.Entities;
+using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
@@ -15,9 +17,9 @@ using ContextMenu = JoyLib.Code.Unity.GUI.ContextMenu;
 
 namespace JoyLib.Code.Unity
 {
-    public class MonoBehaviourHandler : 
-        ManagedSprite, 
-        IPointerEnterHandler, 
+    public class MonoBehaviourHandler :
+        ManagedSprite,
+        IPointerEnterHandler,
         IPointerExitHandler,
         IDisposable,
         IPosition
@@ -48,8 +50,8 @@ namespace JoyLib.Code.Unity
             InputSystem.onActionChange += this.HandleInput;
             this.GUIManager = GlobalConstants.GameManager?.GUIManager;
             this.AttackParticle = GlobalConstants.GameManager?.ObjectIconHandler.GetFrame(
-                "Particles",
-                "AttackParticle")
+                    "Particles",
+                    "AttackParticle")
                 .m_Parts.First()
                 .m_FrameSprites.First();
         }
@@ -92,10 +94,10 @@ namespace JoyLib.Code.Unity
                 this.SpeechBubbleBackground.Clear();
                 this.SpeechBubbleBackground.AddSpriteState(
                     new SpriteState("NeedBackground",
-                    GlobalConstants.GameManager.ObjectIconHandler.GetFrame("Needs", "NeedBackground"),
-                    AnimationType.Forward,
-                    false,
-                    false));
+                        GlobalConstants.GameManager.ObjectIconHandler.GetFrame("Needs", "NeedBackground"),
+                        AnimationType.Forward,
+                        false,
+                        false));
             }
 
             transform = this.transform.Find("Particle System");
@@ -125,7 +127,7 @@ namespace JoyLib.Code.Unity
                         part => part.m_Data.Any(data => data.Equals("need", StringComparison.OrdinalIgnoreCase)))
                     .m_FrameSprites[0];
                 this.SetParticleSystem(needSprite);
-                
+
                 this.ParticleSystem.Play();
             }
         }
@@ -150,7 +152,7 @@ namespace JoyLib.Code.Unity
             {
                 return;
             }
-            
+
             if (this.GUIManager.IsActive(GUINames.CONTEXT_MENU) == false
                 && GlobalConstants.GameManager.Player.VisionProvider.CanSee(
                     GlobalConstants.GameManager.Player,
@@ -188,14 +190,15 @@ namespace JoyLib.Code.Unity
                     this.JoyObject.MyWorld,
                     this.JoyObject.WorldPosition))
             {
-                bool adjacent = AdjacencyHelper.IsAdjacent(player.WorldPosition, this.JoyObject.WorldPosition);
-                bool inRange = player.Equipment.Contents.Any(instance =>
-                    AdjacencyHelper.IsInRange(
-                        player.WorldPosition,
-                        this.JoyObject.WorldPosition,
-                        instance.ItemType.Range));
                 if (this.JoyObject is IEntity)
                 {
+                    bool adjacent = AdjacencyHelper.IsAdjacent(player.WorldPosition, this.JoyObject.WorldPosition);
+                    bool inWeaponRange = player.Equipment.Contents.Any(instance =>
+                        AdjacencyHelper.IsInRange(
+                            player.WorldPosition,
+                            this.JoyObject.WorldPosition,
+                            instance.ItemType.Range));
+
                     if (adjacent)
                     {
                         contextMenu.AddMenuItem("Talk", this.TalkToPlayer);
@@ -205,23 +208,57 @@ namespace JoyLib.Code.Unity
                         contextMenu.AddMenuItem("Call Over", this.CallOver);
                     }
 
-                    if (inRange)
+                    if (inWeaponRange)
                     {
                         contextMenu.AddMenuItem("Attack", this.AttackFromContextMenu);
+                    }
+
+                    var abilities = player.AllAbilities.Where(ability =>
+                            ability.IsInRange(player, this.JoyObject)
+                            && ability.Tags.Any(tag => tag.Equals("active", StringComparison.OrdinalIgnoreCase)))
+                        .ToList();
+
+                    if (abilities.IsNullOrEmpty() == false)
+                    {
+                        foreach (IAbility ability in abilities)
+                        {
+                            contextMenu.AddMenuItem(ability.Name, delegate
+                            {
+                                ability.OnUse(player, this.JoyObject);
+                            });
+                        }
                     }
                 }
             }
             else
             {
                 contextMenu.AddMenuItem("Open Inventory", this.OpenInventory);
+                
+                var abilities = player.AllAbilities.Where(ability =>
+                        ability.TargetType == AbilityTarget.Self
+                        && ability.Tags.Any(tag => tag.Equals("active", StringComparison.OrdinalIgnoreCase)))
+                    .ToList();
+
+                if (abilities.IsNullOrEmpty() == false)
+                {
+                    foreach (IAbility ability in abilities)
+                    {
+                        contextMenu.AddMenuItem(ability.Name, delegate
+                        {
+                            ability.OnUse(player, player);
+                        });
+                    }
+                }
             }
 
-            if (contextMenu.GetComponentsInChildren<MenuItem>().Length > 0)
+            if (contextMenu.GetComponentsInChildren<MenuItem>().Any() == false)
             {
-                this.GUIManager.CloseGUI(GUINames.TOOLTIP);
-                this.GUIManager.OpenGUI(GUINames.CONTEXT_MENU);
-                contextMenu.Show();
+                return;
             }
+
+            this.GUIManager.CloseGUI(GUINames.TOOLTIP);
+            this.GUIManager.OpenGUI(GUINames.CONTEXT_MENU);
+            contextMenu.Show();
         }
 
         protected virtual void HandleInput(object data, InputActionChange change)
@@ -282,7 +319,7 @@ namespace JoyLib.Code.Unity
             {
                 return;
             }
-            
+
             IEntity player = this.JoyObject.MyWorld.Player;
             int playerAttack = this.Attack(player, defender);
 
@@ -303,7 +340,8 @@ namespace JoyLib.Code.Unity
             if (defender.Alive == false)
             {
                 player.MyWorld.RemoveEntity(defender.WorldPosition);
-                GlobalConstants.ActionLog.AddText(player.JoyName + " has killed " + defender.JoyName + "!", LogLevel.Gameplay);
+                GlobalConstants.ActionLog.AddText(player.JoyName + " has killed " + defender.JoyName + "!",
+                    LogLevel.Gameplay);
             }
             else if (defender.Conscious == false)
             {
@@ -312,13 +350,13 @@ namespace JoyLib.Code.Unity
             }
             else if (defender.Conscious)
             {
-                if (bestRelationship < -50 
-                    && (defender.Equipment.Contents.Any(instance => 
-                        AdjacencyHelper.IsInRange(
-                            defender.WorldPosition, 
-                            player.WorldPosition, 
-                            instance.ItemType.Range))
-                    || AdjacencyHelper.IsAdjacent(defender.WorldPosition, player.WorldPosition)))
+                if (bestRelationship < -50
+                    && (defender.Equipment.Contents.Any(instance =>
+                            AdjacencyHelper.IsInRange(
+                                defender.WorldPosition,
+                                player.WorldPosition,
+                                instance.ItemType.Range))
+                        || AdjacencyHelper.IsAdjacent(defender.WorldPosition, player.WorldPosition)))
                 {
                     int defenderAttack = this.Attack(defender, player);
                     if (defenderAttack > 0)
@@ -355,6 +393,7 @@ namespace JoyLib.Code.Unity
                     "strength"
                 });
             }
+
             attackerTags = attackerTags.Distinct().ToList();
 
             List<string> defenderTags = new List<string>
@@ -376,7 +415,7 @@ namespace JoyLib.Code.Unity
             defender.MonoBehaviourHandler.SetParticleSystem(this.AttackParticle);
             defender.MonoBehaviourHandler.ParticleSystem.Play();
             defender.MonoBehaviourHandler.FlashMySprite(Color.red, Color.white);
-            
+
             return GlobalConstants.GameManager.CombatEngine.MakeAttack(
                 aggressor,
                 defender,
@@ -402,7 +441,7 @@ namespace JoyLib.Code.Unity
             {
                 yield return this.FlashDelay(!on, delay, on == false ? cycles - 1 : cycles, onColour, offColour);
             }
-            else if(on)
+            else if (on)
             {
                 yield return this.FlashDelay(false, delay, 0, onColour, offColour);
             }
@@ -417,7 +456,7 @@ namespace JoyLib.Code.Unity
         }
 
         public Vector2Int WorldPosition => this.JoyObject.WorldPosition;
-        
+
         public void Move(Vector2Int position)
         {
             this.transform.position = new Vector3(position.x, position.y, 0);
