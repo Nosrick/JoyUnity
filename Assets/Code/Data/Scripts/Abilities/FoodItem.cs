@@ -18,7 +18,10 @@ namespace JoyLib.Code.Entities.Abilities
             new string[] { "fulfillneedaction" },
             new Tuple<string, int>[0],
             GetPrerequisites(),
-            AbilityTarget.Self)
+            AbilityTarget.Self,
+            0,
+            GetSprite("fooditem"),
+            "active", "ingestion")
         { }
 
         protected static Dictionary<string, int> GetPrerequisites()

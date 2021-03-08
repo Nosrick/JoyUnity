@@ -23,8 +23,10 @@ namespace JoyLib.Code.Entities.Abilities
                 {
                     {"potion", 1}
                 }, 
-                AbilityTarget.Adjacent,
-                "healing")
+                AbilityTarget.Ranged,
+                3,
+                GetSprite("healingpotion"),
+                "healing", "active")
         {}
 
         public override bool OnUse(IEntity user, IJoyObject target)

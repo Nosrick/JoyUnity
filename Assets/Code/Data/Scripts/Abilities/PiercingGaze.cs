@@ -20,8 +20,10 @@ namespace JoyLib.Code.Entities.Abilities
                 new string[0],
                 new Tuple<string, int>[0],
                 GetPrerequisites(),
-                AbilityTarget.Adjacent,
-                new[] { "attack", "social", "threshold", "intimidate"})
+                AbilityTarget.Ranged,
+                3,
+                GetSprite("piercinggaze"),
+                "attack", "social", "threshold", "intimidate", "passive")
         {}
         
         protected static Dictionary<string, int> GetPrerequisites()

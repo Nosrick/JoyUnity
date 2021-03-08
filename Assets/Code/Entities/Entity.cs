@@ -1108,6 +1108,16 @@ namespace JoyLib.Code.Entities
 
         public IDriver Driver => this.m_Driver;
 
+        public List<IAbility> AllAbilities
+        {
+            get
+            {
+                List<IAbility> allAbilities = this.Abilities;
+                allAbilities.AddRange(this.Equipment.Contents.SelectMany(item => item.AllAbilities));
+                return allAbilities;
+            }
+        }
+
         public EquipmentStorage Equipment => this.m_Equipment;
 
         public IDictionary<string, IEntityStatistic> Statistics

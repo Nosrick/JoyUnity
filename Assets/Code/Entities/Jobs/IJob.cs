@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using JoyLib.Code.Entities.Abilities;
+using UnityEngine;
 
 namespace JoyLib.Code.Entities.Jobs
 {
@@ -25,5 +26,8 @@ namespace JoyLib.Code.Entities.Jobs
         IDictionary<string, int> StatisticDiscounts { get; }
         
         IDictionary<string, int> SkillDiscounts { get; }
+        
+        Color AbilityIconColour { get; }
+        Color AbilityBackgroundColour { get; }
     }
 }

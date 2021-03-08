@@ -21,7 +21,9 @@ namespace JoyLib.Code.Entities.Abilities
                 GetCosts(),
                 GetPrerequisites(),
                 AbilityTarget.Ranged,
-                new []{ "attack", "mental", "threshold" })
+                5,
+                GetSprite("distraction"),
+                new []{ "attack", "mental", "threshold", "passive" })
         {}
         
         protected static Tuple<string, int>[] GetCosts()

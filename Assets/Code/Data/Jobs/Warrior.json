@@ -39,6 +39,10 @@
           "Discount": 1
         }
       ],
+      "Colours": {
+        "Background": "#980b1cff",
+        "Icon": "#ee113dff"
+      },
       "Abilities": [
         {
           "Name": "Backdraft",

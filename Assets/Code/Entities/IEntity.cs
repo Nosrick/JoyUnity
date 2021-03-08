@@ -25,6 +25,7 @@ namespace JoyLib.Code.Entities
         IDictionary<string, IEntitySkill> Skills { get; }
         IDictionary<string, INeed> Needs { get; }
         List<IAbility> Abilities { get; }
+        List<IAbility> AllAbilities { get; }
         EquipmentStorage Equipment { get; }
         IItemInstance NaturalWeapons { get; }
         IBioSex Sex { get; }

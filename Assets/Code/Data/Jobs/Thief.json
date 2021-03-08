@@ -43,6 +43,10 @@
           "Discount": 2
         }
       ],
+      "Colours": {
+        "Background": "#0341b5ff",
+        "Icon": "#99e7f4ff"
+      },
       "Abilities": [
         {
           "Name": "distraction",

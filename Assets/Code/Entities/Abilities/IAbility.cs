@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Graphics;
+using UnityEngine;
 
 namespace JoyLib.Code.Entities.Abilities
 {
@@ -94,6 +96,8 @@ namespace JoyLib.Code.Entities.Abilities
 
         bool MeetsPrerequisites(IEnumerable<Tuple<string, int>> data);
 
+        bool IsInRange(IEntity left, IJoyObject right);
+
         string Name
         {
             get;
@@ -153,5 +157,11 @@ namespace JoyLib.Code.Entities.Abilities
         {
             get;
         }
+        
+        int Range { get; }
+        
+        SpriteData SpriteData { get; }
+        
+        Sprite UsingIcon { get; }
     }
 }

@@ -9,6 +9,7 @@ using JoyLib.Code.Helpers;
 using JoyLib.Code.Rollers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using UnityEngine;
 
 namespace JoyLib.Code.Entities.Jobs
 {
@@ -107,6 +108,16 @@ namespace JoyLib.Code.Entities.Jobs
                                             (int) ability["Cost"]);
                                     }
                                 }
+
+                                Color abilityIconColour = Color.white;
+                                Color abilityBackgroundColour = Color.black;
+                                if (child["Colours"].IsNullOrEmpty() == false)
+                                {
+                                    abilityIconColour =
+                                        GraphicsHelper.ParseHTMLString((string) child["Colours"].SelectToken("Icon"));
+                                    abilityBackgroundColour =
+                                        GraphicsHelper.ParseHTMLString((string) child["Colours"].SelectToken("Background"));
+                                }
                                 
                                 jobTypes.Add(
                                     new JobType(
@@ -114,7 +125,9 @@ namespace JoyLib.Code.Entities.Jobs
                                         description,
                                         statisticDiscounts,
                                         skillDiscounts,
-                                        abilityCosts));
+                                        abilityCosts, 
+                                        abilityIconColour,
+                                        abilityBackgroundColour));
                             }
                         }
                         catch (Exception e)

@@ -19,7 +19,10 @@ namespace JoyLib.Code.Entities.Abilities
             new string[0], 
             new Tuple<string, int>[0], 
             new Dictionary<string, int>(),
-            AbilityTarget.Self)
+            AbilityTarget.Self,
+            0,
+            GetSprite("gourmand"),
+            "passive","ingestion")
         {
         }
 

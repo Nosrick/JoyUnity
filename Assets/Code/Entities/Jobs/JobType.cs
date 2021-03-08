@@ -4,6 +4,7 @@ using System.Linq;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Helpers;
 using Sirenix.OdinSerializer;
+using UnityEngine;
 
 namespace JoyLib.Code.Entities.Jobs
 {
@@ -26,13 +27,17 @@ namespace JoyLib.Code.Entities.Jobs
             string description, 
             IDictionary<string, int> statDiscounts, 
             IDictionary<string, int> skillDiscounts,
-            IDictionary<IAbility, int> abilities)
+            IDictionary<IAbility, int> abilities,
+            Color abilityIconColour,
+            Color abilityBackgroundColour)
         {
             this.Name = name;
             this.Description = description;
             this.Abilities = abilities;
             this.m_StatisticDiscounts = statDiscounts;
             this.m_SkillDiscounts = skillDiscounts;
+            this.AbilityIconColour = abilityIconColour;
+            this.AbilityBackgroundColour = abilityBackgroundColour;
         }
 
         public int GetSkillDiscount(string skillName)
@@ -77,7 +82,9 @@ namespace JoyLib.Code.Entities.Jobs
                 original.Description,
                 original.StatisticDiscounts,
                 original.SkillDiscounts,
-                original.Abilities);
+                original.Abilities, 
+                this.AbilityIconColour, 
+                this.AbilityBackgroundColour);
 
             return job;
         }
@@ -114,6 +121,9 @@ namespace JoyLib.Code.Entities.Jobs
                 return this.m_SkillDiscounts.Copy();
             }
         }
+
+        public Color AbilityIconColour { get; protected set; }
+        public Color AbilityBackgroundColour { get; protected set; }
 
         public IDictionary<IAbility, int> Abilities
         {

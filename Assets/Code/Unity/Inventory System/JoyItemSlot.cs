@@ -149,7 +149,9 @@ namespace JoyLib.Code.Unity.GUI
                     menu.AddMenuItem("Open", this.OpenContainer);
                 }
 
-                List<IAbility> abilities = this.Item.AllAbilities.ToList();
+                List<IAbility> abilities = this.Item.AllAbilities.Where(ability => 
+                        ability.Tags.Any(tag => tag.Equals("active", StringComparison.OrdinalIgnoreCase)))
+                    .ToList();
                 if (this.Container.CanUseItems && abilities.Any())
                 {
                     foreach (IAbility ability in abilities)

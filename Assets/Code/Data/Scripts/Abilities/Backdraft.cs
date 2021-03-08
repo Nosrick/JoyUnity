@@ -21,7 +21,9 @@ namespace JoyLib.Code.Entities.Abilities
                 GetCosts(),
                 GetPrerequisites(), 
                 AbilityTarget.Adjacent,
-                new []{ "attack", "success" })
+                1,
+                GetSprite("backdraft"),
+                new []{ "attack", "success", "active" })
         {}
 
         protected static Tuple<string, int>[] GetCosts()
@@ -41,8 +43,8 @@ namespace JoyLib.Code.Entities.Abilities
         public override bool OnUse(IEntity user, IJoyObject target)
         {
             int hp = user.DerivedValues[DerivedValueName.HITPOINTS].Value;
-            hp -= (hp / 5);
-            user.ModifyValue(DerivedValueName.HITPOINTS, hp);
+            int selfDamage = Math.Max(1, (hp / 5));
+            user.ModifyValue(DerivedValueName.HITPOINTS, -selfDamage);
             return true;
         }
 

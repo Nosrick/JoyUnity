@@ -4,8 +4,11 @@ using System.Linq;
 using Castle.Core.Internal;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Graphics;
+using JoyLib.Code.Helpers;
 using JoyLib.Code.Scripting;
 using Sirenix.OdinSerializer;
+using UnityEngine;
 
 namespace JoyLib.Code.Entities.Abilities
 {
@@ -33,7 +36,9 @@ namespace JoyLib.Code.Entities.Abilities
             string[] actions,
             Tuple<string, int>[] costs, 
             Dictionary<string, int> prerequisites,
-            AbilityTarget target, 
+            AbilityTarget target,
+            int range = 0,
+            SpriteData usingSprite = null,
             params string[] tags)
         {
             this.Name = name;
@@ -48,6 +53,11 @@ namespace JoyLib.Code.Entities.Abilities
             this.TargetType = target;
             this.Prerequisites = prerequisites;
             this.Tags = tags;
+            this.Range = range;
+            this.SpriteData = usingSprite;
+            this.UsingIcon = this.SpriteData?.m_Parts
+                .FirstOrDefault(part => part.m_Name.Equals("icon", StringComparison.OrdinalIgnoreCase))?
+                .m_FrameSprites.FirstOrDefault();
 
             this.m_CachedActions = new Dictionary<string, IJoyAction>(actions.Length);
 
@@ -55,6 +65,12 @@ namespace JoyLib.Code.Entities.Abilities
             {
                 this.m_CachedActions.Add(action, ScriptingEngine.Instance.FetchAction(action));
             }
+        }
+
+        protected static SpriteData GetSprite(string name)
+        {
+            SpriteData data = GlobalConstants.GameManager?.ObjectIconHandler?.GetFrame("abilities", name);
+            return data;
         }
 
         //When the entity attacks, before any resolution occurs
@@ -262,6 +278,36 @@ namespace JoyLib.Code.Entities.Abilities
                                 && datum.Item2 >= prereq.Value));
         }
 
+        public bool IsInRange(IEntity left, IJoyObject right)
+        {
+            Vector2Int leftPos = left.WorldPosition;
+            Vector2Int rightPos = right.WorldPosition;
+
+            int longestRange = 1;
+            if (left.Equipment.Contents.IsNullOrEmpty() == false)
+            {
+                longestRange = left.Equipment.Contents.Max(instance => instance.ItemType.Range);
+            }
+
+            switch (this.TargetType)
+            {
+                case AbilityTarget.Adjacent:
+                    return AdjacencyHelper.IsAdjacent(leftPos, rightPos) || leftPos == rightPos;
+                
+                case AbilityTarget.Ranged:
+                    return AdjacencyHelper.IsInRange(leftPos, rightPos, this.Range);
+                
+                case AbilityTarget.WeaponRange:
+                    return AdjacencyHelper.IsInRange(leftPos, rightPos, longestRange);
+                
+                case AbilityTarget.Self:
+                    return leftPos == rightPos;
+                
+                default:
+                    return false;
+            }
+        }
+
         [OdinSerialize]
         public string Name
         {
@@ -356,6 +402,10 @@ namespace JoyLib.Code.Entities.Abilities
             get => this.m_Tags;
             protected set => this.m_Tags = new List<string>(value);
         }
-            
+
+        public int Range { get; protected set; }
+
+        public SpriteData SpriteData { get; protected set; }
+        public Sprite UsingIcon { get; protected set; }
     }
 }
