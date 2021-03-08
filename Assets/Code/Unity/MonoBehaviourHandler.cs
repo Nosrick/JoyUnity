@@ -126,13 +126,13 @@ namespace JoyLib.Code.Unity
                 Sprite needSprite = need.SpriteData.m_Parts.First(
                         part => part.m_Data.Any(data => data.Equals("need", StringComparison.OrdinalIgnoreCase)))
                     .m_FrameSprites[0];
-                this.SetParticleSystem(needSprite);
+                this.SetParticleSystem(needSprite, Color.white);
 
                 this.ParticleSystem.Play();
             }
         }
 
-        public virtual void SetParticleSystem(Sprite sprite)
+        public virtual void SetParticleSystem(Sprite sprite, Color colour)
         {
             if (this.ParticleSystem.textureSheetAnimation.spriteCount == 0)
             {
@@ -142,6 +142,9 @@ namespace JoyLib.Code.Unity
             {
                 this.ParticleSystem.textureSheetAnimation.SetSprite(0, sprite);
             }
+
+            var renderer = this.ParticleSystem.GetComponent<ParticleSystemRenderer>();
+            renderer.material.color = colour;
         }
 
         public void OnPointerEnter(PointerEventData eventData)
@@ -225,10 +228,7 @@ namespace JoyLib.Code.Unity
                             contextMenu.AddMenuItem(ability.Name, delegate
                             {
                                 ability.OnUse(player, this.JoyObject);
-                                this.SetParticleSystem(
-                                    ability.UsingSprite?.m_Parts
-                                        .FirstOrDefault(part => part.m_Name.Equals("icon"))?
-                                        .m_FrameSprites.FirstOrDefault());
+                                this.SetParticleSystem(ability.UsingIcon, player.CurrentJob.AbilityIconColour);
                                 this.ParticleSystem.Play();
                             });
                         }
@@ -252,8 +252,7 @@ namespace JoyLib.Code.Unity
                         {
                             ability.OnUse(player, player);
                             this.SetParticleSystem(
-                                ability.UsingSprite?.m_Parts
-                                    .First(part => part.m_Name.Equals("icon")).m_FrameSprites.First());
+                                ability.UsingIcon, player.CurrentJob.AbilityIconColour);
                             this.ParticleSystem.Play();
                         });
                     }
@@ -421,7 +420,7 @@ namespace JoyLib.Code.Unity
                 .Distinct());
             defenderTags = defenderTags.Distinct().ToList();
 
-            defender.MonoBehaviourHandler.SetParticleSystem(this.AttackParticle);
+            defender.MonoBehaviourHandler.SetParticleSystem(this.AttackParticle, Color.white);
             defender.MonoBehaviourHandler.ParticleSystem.Play();
             defender.MonoBehaviourHandler.FlashMySprite(Color.red, Color.white);
 

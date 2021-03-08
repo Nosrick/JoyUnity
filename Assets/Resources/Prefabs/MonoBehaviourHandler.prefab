@@ -135,6 +135,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Particle System
       objectReference: {fileID: 0}
+    - target: {fileID: 6100209406202342285, guid: db1dc48822e241b45bdf096f623a6d9e,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 0bbd8e9ff4cf09649a043312e31e2a62, type: 2}
     - target: {fileID: 6155926700967965202, guid: db1dc48822e241b45bdf096f623a6d9e,
         type: 3}
       propertyPath: m_Pivot.x
