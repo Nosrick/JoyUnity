@@ -66,7 +66,7 @@ namespace JoyLib.Code.Entities.Abilities
 
         protected static SpriteData GetSprite(string name)
         {
-            return GlobalConstants.GameManager?.ObjectIconHandler.GetFrame("abilties", name);
+            return GlobalConstants.GameManager?.ObjectIconHandler?.GetFrame("abilities", name);
         }
 
         //When the entity attacks, before any resolution occurs

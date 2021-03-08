@@ -101,6 +101,8 @@ namespace JoyLib.Code
         {
             this.LoadingMessage = "Initialising action log";
             this.ActionLog = new ActionLog();
+            
+            this.LoadingMessage = "Revving up engines";
 
             this.GUIDManager = new GUIDManager();
 
@@ -108,7 +110,7 @@ namespace JoyLib.Code
             
             this.Roller = new RNG();
 
-            this.LoadingMessage = "Revving up engines";
+            this.ObjectIconHandler = new ObjectIconHandler(this.Roller);
             this.CombatEngine = new CombatEngine();
 
             this.PhysicsManager = new PhysicsManager();
@@ -118,7 +120,6 @@ namespace JoyLib.Code
             this.AbilityHandler = new AbilityHandler();
 
             this.MaterialHandler = new MaterialHandler();
-            this.ObjectIconHandler = new ObjectIconHandler(this.Roller);
 
             this.GUIManager = new GUIManager();
 
