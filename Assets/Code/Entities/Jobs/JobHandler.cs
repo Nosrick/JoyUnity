@@ -41,6 +41,25 @@ namespace JoyLib.Code.Entities.Jobs
             return null;
         }
 
+        public bool Add(IJob value)
+        {
+            if (this.m_Jobs.Any(job => job.Name.Equals(value.Name, StringComparison.OrdinalIgnoreCase)))
+            {
+                return false;
+            }
+
+            this.m_Jobs.Add(value);
+            return true;
+        }
+
+        public bool Destroy(string key)
+        {
+            IJob toRemove = this.m_Jobs.FirstOrDefault(job =>
+                job.Name.Equals(key, StringComparison.OrdinalIgnoreCase));
+
+            return !(toRemove is null) && this.m_Jobs.Remove(toRemove);
+        }
+
         public IJob GetRandom()
         {
             int result = this.Roller.Roll(0, this.m_Jobs.Count);

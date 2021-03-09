@@ -105,6 +105,29 @@ namespace JoyLib.Code.Entities.Sexuality
             throw new InvalidOperationException("Sexuality of type " + sexuality + " not found.");
         }
 
+        public bool Add(ISexuality value)
+        {
+            if (this.Sexualities.ContainsKey(value.Name))
+            {
+                return false;
+            }
+
+            this.Sexualities.Add(value.Name, value);
+            return true;
+        }
+
+        public bool Destroy(string key)
+        {
+            if (this.Sexualities.ContainsKey(key) == false)
+            {
+                return false;
+            }
+
+            this.Sexualities[key] = null;
+            this.Sexualities.Remove(key);
+            return true;
+        }
+
         public void Dispose()
         {
             this.Sexualities = null;

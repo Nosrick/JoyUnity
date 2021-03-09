@@ -5,8 +5,8 @@ namespace JoyLib.Code.Entities.Relationships
 {
     public interface IEntityRelationshipHandler : IHandler<IRelationship, long>
     {
-        bool AddRelationship(IRelationship relationship);
-        bool RemoveRelationship(long ID);
+        bool Add(IRelationship relationship);
+        bool Destroy(long ID);
         
         IRelationship CreateRelationship(IEnumerable<IJoyObject> participants, IEnumerable<string> tags);
         IRelationship CreateRelationshipWithValue(IEnumerable<IJoyObject> participants, IEnumerable<string> tags, int value);

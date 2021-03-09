@@ -17,7 +17,7 @@ namespace JoyLib.Code.Entities
             this.m_Entities = new Dictionary<Guid, IEntity>();
         }
 
-        public bool AddEntity(IEntity created)
+        public bool Add(IEntity created)
         {
             try
             {
@@ -42,14 +42,17 @@ namespace JoyLib.Code.Entities
             }
         }
 
-        public bool Remove(Guid GUID)
+        public bool Destroy(Guid key)
         {
-            if(this.m_Entities.ContainsKey(GUID))
+            if (!this.m_Entities.ContainsKey(key))
             {
-                return this.m_Entities.Remove(GUID);
+                return false;
             }
+            this.m_Entities[key].Dispose();
+            this.m_Entities[key] = null;
+            this.m_Entities.Remove(key);
+            return true;
 
-            return false;
         }
 
         public IEntity Get(Guid GUID)

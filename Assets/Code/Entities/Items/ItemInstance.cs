@@ -205,7 +205,7 @@ namespace JoyLib.Code.Entities.Items
                 copy.UniqueAbilities,
                 copy.CachedActions.ToArray());
 
-            this.ItemHandler.AddItem(newItem);
+            this.ItemHandler.Add(newItem);
             return newItem;
         }
 

@@ -13,6 +13,18 @@ namespace JoyLib.Code.Entities.Needs
             this.m_NeedsMasters = this.Load().ToDictionary(need => need.Name, need => need);
         }
 
+        public bool Destroy(string key)
+        {
+            if (!this.m_NeedsMasters.ContainsKey(key))
+            {
+                return false;
+            }
+            this.m_NeedsMasters[key] = null;
+            this.m_NeedsMasters.Remove(key);
+            return true;
+
+        }
+
         public IEnumerable<INeed> Load()
         {
             try
@@ -59,6 +71,17 @@ namespace JoyLib.Code.Entities.Needs
                 return this.m_NeedsMasters[name].Copy();
             }
             throw new InvalidOperationException("Need not found, looking for " + name);
+        }
+
+        public bool Add(INeed value)
+        {
+            if (this.m_NeedsMasters.ContainsKey(value.Name))
+            {
+                return false;
+            }
+
+            this.m_NeedsMasters.Add(value.Name, value);
+            return true;
         }
 
         public ICollection<INeed> GetMany(IEnumerable<string> names)

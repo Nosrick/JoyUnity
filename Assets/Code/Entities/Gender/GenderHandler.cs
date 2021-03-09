@@ -101,6 +101,18 @@ namespace JoyLib.Code.Entities.Gender
             return this.Genders.First(gender => gender.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
 
+        public bool Add(IGender value)
+        {
+            return !this.Genders.Contains(value) && this.Genders.Add(value);
+        }
+        
+        public bool Destroy(string key)
+        {
+            var toRemove =
+                this.Genders.FirstOrDefault(gender => gender.Name.Equals(key, StringComparison.OrdinalIgnoreCase));
+            return !(toRemove is null) && this.Genders.Remove(toRemove);
+        }
+
         public void Dispose()
         {
             this.Genders = null;

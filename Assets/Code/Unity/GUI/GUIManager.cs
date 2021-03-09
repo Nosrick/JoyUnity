@@ -272,7 +272,7 @@ namespace JoyLib.Code.Unity.GUI
             GUIData[] guiData = this.MainUI.GetComponentsInChildren<GUIData>(true);
             foreach (GUIData data in guiData)
             {
-                this.AddGUI(data);
+                this.Add(data);
             }
 
             Cursor cursor = this.GUIs.First(data => data.name.Equals(GUINames.CURSOR)).GetComponent<Cursor>();
@@ -285,12 +285,12 @@ namespace JoyLib.Code.Unity.GUI
             cursor.SetCursorColours(this.CursorColours["DefaultCursor"]);
         }
 
-        public void AddGUI(GUIData gui)
+        public bool Add(GUIData gui)
         {
             this.Initialise();
             if (this.GUIs.Contains(gui))
             {
-                return;
+                return false;
             }
 
             gui.Awake();
@@ -300,6 +300,13 @@ namespace JoyLib.Code.Unity.GUI
             this.SetupManagedComponents(gui);
 
             this.GUIs.Add(gui);
+            return true;
+        }
+
+        public bool Destroy(string key)
+        {
+            GUIData gui = this.GUIs.FirstOrDefault(data => data.name.Equals(key, StringComparison.OrdinalIgnoreCase));
+            return !(gui is null) && this.GUIs.Remove(gui);
         }
 
         public void RecolourGUIs(bool crossFade = false, float duration = 0.1f)

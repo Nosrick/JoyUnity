@@ -9,6 +9,9 @@ namespace JoyLib.Code
 
         T Get(K name);
 
+        bool Add(T value);
+        bool Destroy(K key);
+
         IEnumerable<T> Load();
     }
 }

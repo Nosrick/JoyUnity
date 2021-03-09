@@ -59,6 +59,29 @@ namespace JoyLib.Code.Entities.Statistics
             return this.DerivedValues.TryGetValue(name, out IDerivedValue value) ? value.Copy() : null;
         }
 
+        public bool Add(IDerivedValue value)
+        {
+            if (this.DerivedValues.ContainsKey(value.Name))
+            {
+                return false;
+            }
+
+            this.DerivedValues.Add(value.Name, value);
+            return true;
+        }
+
+        public bool Destroy(string key)
+        {
+            if (this.DerivedValues.ContainsKey(key) == false)
+            {
+                return false;
+            }
+
+            this.DerivedValues[key] = null;
+            this.DerivedValues.Remove(key);
+            return true;
+        }
+
         public IEnumerable<IDerivedValue> Load()
         {
             this.EntityStandardFormulas = this.LoadFormulasFromFile(this.ENTITY_FILE);

@@ -27,7 +27,7 @@ namespace JoyLib.Code.Entities.Items
             return new IItemInstance[0];
         }
 
-        public bool AddItem(IItemInstance item)
+        public bool Add(IItemInstance item)
         {
             if (this.LiveItems.ContainsKey(item.Guid))
             {
@@ -46,7 +46,7 @@ namespace JoyLib.Code.Entities.Items
 
         public bool AddItems(IEnumerable<IItemInstance> items, bool addToWorld = false)
         {
-            return items.Aggregate(true, (current, item) => current & this.AddItem(item));
+            return items.Aggregate(true, (current, item) => current & this.Add(item));
         }
 
         public bool RemoveItemFromWorld(Guid GUID)
@@ -71,6 +71,19 @@ namespace JoyLib.Code.Entities.Items
             }
 
             return item.MyWorld.RemoveObject(item.WorldPosition, item);
+        }
+        
+        public bool Destroy(Guid key)
+        {
+            if (this.LiveItems.ContainsKey(key))
+            {
+                this.LiveItems[key].Dispose();
+                this.LiveItems[key] = null;
+                this.LiveItems.Remove(key);
+                return true;
+            }
+
+            return false;
         }
 
         public bool AddItemToWorld(WorldInstance world, Guid GUID)

@@ -40,6 +40,22 @@ namespace JoyLib.Code.World
                 };
         }
 
+        public bool Add(WorldInfo value)
+        {
+            if (this.WorldInfoDict.ContainsKey(value.name))
+            {
+                return false;
+            }
+
+            this.WorldInfoDict.Add(value.name, value);
+            return true;
+        }
+
+        public bool Destroy(string key)
+        {
+            return this.WorldInfoDict.ContainsKey(key) && this.WorldInfoDict.Remove(key);
+        }
+
         public IEnumerable<WorldInfo> Load()
         {
             string[] files =

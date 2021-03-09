@@ -100,6 +100,29 @@ namespace JoyLib.Code.Entities.Sexes
             return null;
         }
 
+        public bool Add(IBioSex value)
+        {
+            if (this.Sexes.ContainsKey(value.Name))
+            {
+                return false;
+            }
+
+            this.Sexes.Add(value.Name, value);
+            return true;
+        }
+
+        public bool Destroy(string key)
+        {
+            if (!this.Sexes.ContainsKey(key))
+            {
+                return false;
+            }
+            this.Sexes[key] = null;
+            this.Sexes.Remove(key);
+            return true;
+
+        }
+
         public void Dispose()
         {
             this.Sexes = null;

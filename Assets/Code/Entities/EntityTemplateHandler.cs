@@ -159,6 +159,16 @@ namespace JoyLib.Code.Entities
             throw new InvalidOperationException("Could not find entity template of type " + type);
         }
 
+        public bool Add(IEntityTemplate value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Destroy(string key)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEntityTemplate GetRandom()
         {
             int result = GlobalConstants.GameManager.Roller.Roll(0, this.m_Templates.Count);

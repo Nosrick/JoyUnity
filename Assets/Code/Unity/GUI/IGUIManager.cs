@@ -11,8 +11,6 @@ namespace JoyLib.Code.Unity.GUI
         void Clear();
 
         void FindGUIs();
-        
-        void AddGUI(GUIData gui);
 
         void ToggleGUI(string name);
 

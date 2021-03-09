@@ -149,6 +149,29 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
             throw new InvalidOperationException("Could not find vision type with name " + name);
         }
 
+        public bool Add(IVision value)
+        {
+            if (this.VisionTypes.ContainsKey(value.Name))
+            {
+                return false;
+            }
+
+            this.VisionTypes.Add(value.Name, value);
+            return true;
+        }
+
+        public bool Destroy(string key)
+        {
+            if (!this.VisionTypes.ContainsKey(key))
+            {
+                return false;
+            }
+            
+            this.VisionTypes[key] = null;
+            this.VisionTypes.Remove(key);
+            return true;
+        }
+
         public void Dispose()
         {
             this.VisionTypes = null;

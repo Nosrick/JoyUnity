@@ -498,7 +498,7 @@ namespace JoyLib.Code.World
         {
             this.m_Entities.Add(entityRef);
             this.m_EntityGUIDs.Add(entityRef.Guid);
-            this.EntityHandler.AddEntity(entityRef);
+            this.EntityHandler.Add(entityRef);
 
             //Initialise a new GameObject here at some point
 
@@ -508,7 +508,7 @@ namespace JoyLib.Code.World
             entityRef.MyWorld = this;
         }
 
-        public void RemoveEntity(Vector2Int positionRef)
+        public void RemoveEntity(Vector2Int positionRef, bool destroy = false)
         {
             IEntity entity = this.m_Entities.FirstOrDefault(e => e.WorldPosition == positionRef);
 
@@ -519,7 +519,10 @@ namespace JoyLib.Code.World
 
             this.m_Entities.Remove(entity);
             this.m_EntityGUIDs.Remove(entity.Guid);
-            this.EntityHandler.Remove(entity.Guid);
+            if (destroy)
+            {
+                this.EntityHandler.Destroy(entity.Guid);
+            }
 
             this.CalculatePlayerIndex();
 

@@ -107,6 +107,22 @@ namespace JoyLib.Code.Entities.Romance
             throw new InvalidOperationException("Sexuality of type " + romance + " not found.");
         }
 
+        public bool Add(IRomance value)
+        {
+            if (this.RomanceTypes.ContainsKey(value.Name))
+            {
+                return false;
+            }
+
+            this.RomanceTypes.Add(value.Name, value);
+            return true;
+        }
+
+        public bool Destroy(string key)
+        {
+            return this.RomanceTypes.ContainsKey(key) != false && this.RomanceTypes.Remove(key);
+        }
+
         public void Dispose()
         {
             this.RomanceTypes = null;

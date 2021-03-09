@@ -17,6 +17,18 @@ namespace JoyLib.Code.Entities.Abilities
             this.Abilities = this.Load().ToList();
         }
 
+        public bool Destroy(string key)
+        {
+            var found = this.Abilities.FirstOrDefault(ability =>
+                ability.InternalName.Equals(key, StringComparison.OrdinalIgnoreCase));
+            if (found is null)
+            {
+                return false;
+            }
+            this.Abilities.Remove(found);
+            return true;
+        }
+
         public IEnumerable<IAbility> Load()
         {
             return ScriptingEngine.Instance.FetchAndInitialiseChildren<IAbility>();
@@ -32,6 +44,12 @@ namespace JoyLib.Code.Entities.Abilities
             }
 
             throw new InvalidOperationException("Could not find IAbility with name " + nameRef);
+        }
+
+        public bool Add(IAbility value)
+        {
+            this.Abilities.Add(value);
+            return true;
         }
 
         public IEnumerable<IAbility> GetAvailableAbilities(IEntity actor)

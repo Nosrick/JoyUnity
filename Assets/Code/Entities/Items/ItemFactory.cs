@@ -56,7 +56,7 @@ namespace JoyLib.Code.Entities.Items
 
                 IItemInstance itemInstance = this.CreateFromTemplate(itemType, identified);
 
-                this.ItemHandler.AddItem(itemInstance);
+                this.ItemHandler.Add(itemInstance);
                 return itemInstance;
             }
 
@@ -92,7 +92,7 @@ namespace JoyLib.Code.Entities.Items
 
                 IItemInstance itemInstance = this.CreateFromTemplate(itemType, identified);
 
-                this.ItemHandler.AddItem(itemInstance);
+                this.ItemHandler.Add(itemInstance);
                 return itemInstance;
             }
 
@@ -128,7 +128,7 @@ namespace JoyLib.Code.Entities.Items
 
             IItemInstance itemInstance = this.CreateFromTemplate(chosenType, identified);
 
-            this.ItemHandler.AddItem(itemInstance);
+            this.ItemHandler.Add(itemInstance);
 
             if (identified)
             {

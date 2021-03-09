@@ -92,7 +92,7 @@ namespace JoyLib.Code.States
             this.m_Player.Move(dungeon.SpawnPoint);
             dungeon.AddEntity(this.m_Player);
 
-            GlobalConstants.GameManager.EntityHandler.AddEntity(this.m_Player);
+            GlobalConstants.GameManager.EntityHandler.Add(this.m_Player);
 
             IItemInstance lightSource = GlobalConstants.GameManager.ItemFactory.CreateRandomItemOfType(
                 new string[] {"light source"},

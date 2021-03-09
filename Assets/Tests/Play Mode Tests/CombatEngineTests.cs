@@ -161,7 +161,7 @@ namespace Tests
                             && item.ItemType == Mock.Of<BaseItemType>(
                                 type => type.Slots == new[] {"hand"}));
                 this.attackerEquipment.AddContents(instance);
-                this.itemHandler.AddItem(instance);
+                this.itemHandler.Add(instance);
             }
 
             for (int i = 0; i < defenderQuantity; i++)
@@ -174,7 +174,7 @@ namespace Tests
                             && item.ItemType == Mock.Of<BaseItemType>(
                                 type => type.Slots == new[] {"torso"}));
                 this.defenderEquipment.AddContents(instance);
-                this.itemHandler.AddItem(instance);
+                this.itemHandler.Add(instance);
             }
         }
 

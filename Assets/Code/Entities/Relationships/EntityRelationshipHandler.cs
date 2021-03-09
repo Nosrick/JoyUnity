@@ -93,13 +93,13 @@ namespace JoyLib.Code.Entities.Relationships
             return relationships;
         }
 
-        public bool AddRelationship(IRelationship relationship)
+        public bool Add(IRelationship relationship)
         {
             this.m_Relationships.Add(relationship.GenerateHashFromInstance(), relationship);
             return true;
         }
 
-        public bool RemoveRelationship(long ID)
+        public bool Destroy(long ID)
         {
             return this.m_Relationships.RemoveByKey(ID) > 0;
         }

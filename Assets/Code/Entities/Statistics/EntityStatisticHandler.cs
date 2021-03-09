@@ -67,6 +67,29 @@ namespace JoyLib.Code.Entities.Statistics
             return this.Statistics.TryGetValue(name, out IEntityStatistic statistic) ? statistic.Copy() : null;
         }
 
+        public bool Add(IEntityStatistic value)
+        {
+            if (this.Statistics.ContainsKey(value.Name))
+            {
+                return false;
+            }
+
+            this.Statistics.Add(value.Name, value);
+            return true;
+        }
+
+        public bool Destroy(string key)
+        {
+            if (this.Statistics.ContainsKey(key) == false)
+            {
+                return false;
+            }
+
+            this.Statistics[key] = null;
+            this.Statistics.Remove(key);
+            return true;
+        }
+
         public IDictionary<string, IEntityStatistic> GetDefaultBlock()
         {
             return this.DefaultStatistics.Copy();

@@ -347,7 +347,7 @@ namespace JoyLib.Code.Unity
             defender.ModifyValue(DerivedValueName.HITPOINTS, -playerAttack);
             if (defender.Alive == false)
             {
-                player.MyWorld.RemoveEntity(defender.WorldPosition);
+                player.MyWorld.RemoveEntity(defender.WorldPosition, true);
                 GlobalConstants.ActionLog.AddText(player.JoyName + " has killed " + defender.JoyName + "!",
                     LogLevel.Gameplay);
             }

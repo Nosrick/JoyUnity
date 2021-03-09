@@ -35,6 +35,28 @@ namespace JoyLib.Code.Cultures
             return this.GetByCultureName(name);
         }
 
+        public bool Add(ICulture value)
+        {
+            if (this.m_Cultures.ContainsKey(value.CultureName))
+            {
+                return false;
+            }
+            this.m_Cultures.Add(value.CultureName, value);
+            return true;
+        }
+
+        public bool Destroy(string key)
+        {
+            if (!this.m_Cultures.ContainsKey(key))
+            {
+                return false;
+            }
+            this.m_Cultures[key] = null;
+            this.m_Cultures.Remove(key);
+            return true;
+
+        }
+
         public IEnumerable<ICulture> Load()
         {
             string folderPath = Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Cultures";

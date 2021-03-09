@@ -41,6 +41,28 @@ namespace JoyLib.Code.Entities.Items
             return this.m_Materials["DEFAULT MATERIAL"];
         }
 
+        public bool Add(IItemMaterial value)
+        {
+            if (this.m_Materials.ContainsKey(value.Name))
+            {
+                return false;
+            }
+
+            this.m_Materials.Add(value.Name, value);
+            return true;
+        }
+
+        public bool Destroy(string key)
+        {
+            if (!this.m_Materials.ContainsKey(key))
+            {
+                return false;
+            }
+            this.m_Materials[key] = null;
+            this.m_Materials.Remove(key);
+            return true;
+        }
+
         public IEnumerable<IItemMaterial> Load()
         {
             List<IItemMaterial> materials = new List<IItemMaterial>();

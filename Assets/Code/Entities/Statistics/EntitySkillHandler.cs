@@ -34,6 +34,29 @@ namespace JoyLib.Code.Entities
             return this.Skills.TryGetValue(name, out IEntitySkill skill) ? skill.Copy() : null;
         }
 
+        public bool Add(IEntitySkill value)
+        {
+            if (this.Skills.ContainsKey(value.Name))
+            {
+                return false;
+            }
+
+            this.Skills.Add(value.Name, value);
+            return true;
+        }
+
+        public bool Destroy(string key)
+        {
+            if (this.Skills.ContainsKey(key) == false)
+            {
+                return false;
+            }
+
+            this.Skills[key] = null;
+            this.Skills.Remove(key);
+            return true;
+        }
+
         public IEnumerable<IEntitySkill> Load()
         {
             List<IEntitySkill> skills = new List<IEntitySkill>();

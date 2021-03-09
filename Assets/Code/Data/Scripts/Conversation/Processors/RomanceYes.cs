@@ -25,7 +25,7 @@ namespace JoyLib.Code.Entities.Conversation.Processors
         public override ITopic[] Interact(IEntity instigator, IEntity listener)
         {
             var newRelationship = this.SelectedRelationship.Create(new IJoyObject[] {listener, instigator});
-            this.RelationshipHandler.AddRelationship(newRelationship);
+            this.RelationshipHandler.Add(newRelationship);
             
             return base.Interact(instigator, listener);
         }

@@ -46,7 +46,7 @@ namespace JoyLib.Code.World
         void SwapPosition(IEntity left, IEntity right);
         IItemInstance PickUpObject(IEntity entityRef);
         void AddEntity(IEntity entityRef);
-        void RemoveEntity(Vector2Int positionRef);
+        void RemoveEntity(Vector2Int positionRef, bool destroy = false);
         IEntity GetEntity(Vector2Int positionRef);
         Sector GetSectorFromPoint(Vector2Int point);
         List<Vector2Int> GetVisibleWalls(IEntity viewer);

@@ -78,7 +78,7 @@ namespace JoyLib.Code.World.Generators.Interiors
                     null,
                     worldRef);
 
-                this.EntityHandler.AddEntity(newEntity);
+                this.EntityHandler.Add(newEntity);
                 entities.Add(newEntity);
 
                 availablePoints.RemoveAt(pointIndex);

@@ -7,7 +7,7 @@ namespace JoyLib.Code.Entities.Items
 {
     public interface ILiveItemHandler : IHandler<IItemInstance, Guid>
     {
-        bool AddItem(IItemInstance item);
+        bool Add(IItemInstance item);
         bool AddItems(IEnumerable<IItemInstance> item, bool addToWorld = false);
 
         bool RemoveItemFromWorld(Guid GUID);

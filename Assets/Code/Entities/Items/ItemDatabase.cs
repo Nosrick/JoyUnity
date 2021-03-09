@@ -66,7 +66,7 @@ namespace JoyLib.Code.Entities.Items
             
             this.m_ItemDatabase = this.Load().ToList();
         }
-        
+
         public IEnumerable<BaseItemType> Load()
         {
             List<BaseItemType> items = new List<BaseItemType>();
@@ -223,7 +223,27 @@ namespace JoyLib.Code.Entities.Items
                 type.IdentifiedName.Equals(name, StringComparison.OrdinalIgnoreCase)
                 || type.UnidentifiedName.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
-        
+
+        public bool Add(BaseItemType value)
+        {
+            if (this.m_ItemDatabase.Contains(value))
+            {
+                return false;
+            }
+
+            this.m_ItemDatabase.Add(value);
+            return true;
+        }
+
+        public bool Destroy(string key)
+        {
+            var itemType = this.m_ItemDatabase.FirstOrDefault(type =>
+                type.IdentifiedName.Equals(key, StringComparison.OrdinalIgnoreCase) ||
+                type.UnidentifiedName.Equals(key, StringComparison.OrdinalIgnoreCase));
+
+            return !(itemType is null) && this.m_ItemDatabase.Remove(itemType);
+        }
+
         public IEnumerable<BaseItemType> FindItemsOfType(string[] tags, int tolerance = 1)
         {
             List<BaseItemType> matchingTypes = new List<BaseItemType>();

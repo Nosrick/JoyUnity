@@ -223,7 +223,7 @@ namespace JoyLib.Code.IO
         {
             foreach (IRelationship relationship in relationships)
             {
-                GlobalConstants.GameManager.RelationshipHandler.AddRelationship(relationship);
+                GlobalConstants.GameManager.RelationshipHandler.Add(relationship);
             }
         }
 
@@ -241,7 +241,7 @@ namespace JoyLib.Code.IO
 
                 item.MyWorld = worlds.FirstOrDefault(world => world.ItemGUIDs.Contains(item.Guid));
                 
-                GlobalConstants.GameManager.ItemHandler.AddItem(item);
+                GlobalConstants.GameManager.ItemHandler.Add(item);
             }
         }
 
