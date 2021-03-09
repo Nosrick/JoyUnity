@@ -21,7 +21,7 @@ namespace JoyLib.Code.Entities.Needs
 
         protected bool Initialised { get; set; }
 
-        public float PercentageFull => Mathf.Min(1f, this.Value / (float) this.HappinessThreshold);
+        public float PercentageFull => this.HappinessThreshold == 0 ? 1f : Mathf.Min(1f, this.Value / (float) this.HappinessThreshold);
 
         [OdinSerialize] protected Dictionary<string, IJoyAction> m_CachedActions;
 
