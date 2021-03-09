@@ -1,4 +1,4 @@
-﻿Shader "Joy UI Shader"
+﻿Shader "Joy Shaders/Joy UI Shader (DEPRECATED)"
 {
     Properties
     {

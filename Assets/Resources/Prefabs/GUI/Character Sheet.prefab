@@ -1889,8 +1889,7 @@ GameObject:
   - component: {fileID: 6749622751932064689}
   - component: {fileID: 7047005609618949775}
   - component: {fileID: 7888568961696769561}
-  - component: {fileID: 7069633538448453965}
-  - component: {fileID: 301497906022938445}
+  - component: {fileID: 1647195149873835905}
   m_Layer: 5
   m_Name: Derived Values Mask
   m_TagString: Untagged
@@ -1956,7 +1955,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6928842498370754565}
   m_CullTransparentMesh: 0
---- !u!114 &7069633538448453965
+--- !u!114 &1647195149873835905
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1965,39 +1964,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 6928842498370754565}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Script: {fileID: 11500000, guid: 3312d7739989d2b4e91e6319e9a96d76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!114 &301497906022938445
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6928842498370754565}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ShowMaskGraphic: 0
+  m_Padding: {x: 0, y: 0, z: 0, w: 0}
+  m_Softness: {x: 0, y: 0}
 --- !u!1001 &3342077255428399352
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2392,6 +2363,12 @@ PrefabInstance:
         type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 897e6e0585525c2479ae107c33d83914, type: 3}
+--- !u!224 &7253421323461371315 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 6419558160874721577, guid: 897e6e0585525c2479ae107c33d83914,
+    type: 3}
+  m_PrefabInstance: {fileID: 4449431508403188890}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &2422199821288689398 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2027446143425722988, guid: 897e6e0585525c2479ae107c33d83914,
@@ -2404,12 +2381,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 101c6f1ea6c1433fb6b8a35f2601c7a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!224 &7253421323461371315 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 6419558160874721577, guid: 897e6e0585525c2479ae107c33d83914,
-    type: 3}
-  m_PrefabInstance: {fileID: 4449431508403188890}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5137511820224944922
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2738,6 +2709,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 82c3709b226eb324c99d867ab7460c4a, type: 3}
+--- !u!224 &2823959539971444471 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8139831218071469340, guid: 82c3709b226eb324c99d867ab7460c4a,
+    type: 3}
+  m_PrefabInstance: {fileID: 6324959746635477995}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &268629910655103332 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6087908041863086735, guid: 82c3709b226eb324c99d867ab7460c4a,
@@ -2750,12 +2727,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9c070b6f20d4dbe8a79e36cb0549025, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!224 &2823959539971444471 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 8139831218071469340, guid: 82c3709b226eb324c99d867ab7460c4a,
-    type: 3}
-  m_PrefabInstance: {fileID: 6324959746635477995}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7114774150032754887
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -200,6 +200,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce97fd3bc25a4005a0401f7989f05d84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   m_ElementName: DefaultWindow
   m_Prefab: {fileID: 1949383421893784, guid: fc0c5c6df1dde9649a50d9ed7547fa80, type: 3}
 --- !u!114 &3890359077314946480
@@ -214,6 +223,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 633ae74873e44ccbaf68a8b7d041f428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   m_ElementName: Font
   m_OverrideSize: 1
   m_OverrideColour: 1
@@ -421,7 +439,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 34
+  m_fontSize: 18
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -473,9 +491,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4484802663421619780}
   - component: {fileID: 4484802663421619777}
-  - component: {fileID: 4484802663421619782}
-  - component: {fileID: 6847302797944684887}
   - component: {fileID: 4484802664301879305}
+  - component: {fileID: 3644010124851877309}
   m_Layer: 5
   m_Name: Equipment Container
   m_TagString: Untagged
@@ -511,48 +528,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4484802663421619781}
   m_CullTransparentMesh: 0
---- !u!114 &4484802663421619782
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4484802663421619781}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
-  m_RaycastTarget: 1
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!114 &6847302797944684887
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4484802663421619781}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ShowMaskGraphic: 0
 --- !u!114 &4484802664301879305
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -583,6 +558,20 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &3644010124851877309
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4484802663421619781}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3312d7739989d2b4e91e6319e9a96d76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding: {x: 0, y: 0, z: 0, w: 0}
+  m_Softness: {x: 0, y: 0}
 --- !u!1 &5495078052126651665
 GameObject:
   m_ObjectHideFlags: 0
@@ -709,6 +698,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce97fd3bc25a4005a0401f7989f05d84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   m_ElementName: AccentBackground
   m_Prefab: {fileID: 1949383421893784, guid: fc0c5c6df1dde9649a50d9ed7547fa80, type: 3}
 --- !u!1001 &2093179654560242499
@@ -825,6 +823,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3771862732396527235, guid: 170a10e9e51de134b9b56ec34ceaebf2,
         type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 3771862732396527235, guid: 170a10e9e51de134b9b56ec34ceaebf2,
+        type: 3}
+    - target: {fileID: 3771862732396527235, guid: 170a10e9e51de134b9b56ec34ceaebf2,
+        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -886,13 +890,19 @@ PrefabInstance:
     - target: {fileID: 6296772926489511444, guid: 170a10e9e51de134b9b56ec34ceaebf2,
         type: 3}
       propertyPath: m_fontSize
-      value: 34.4
+      value: 26.25
       objectReference: {fileID: 0}
     - target: {fileID: 7129824930873053387, guid: 170a10e9e51de134b9b56ec34ceaebf2,
         type: 3}
       propertyPath: m_Name
       value: Close Button
       objectReference: {fileID: 0}
+    - target: {fileID: 8403975637019894361, guid: 170a10e9e51de134b9b56ec34ceaebf2,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 8403975637019894361, guid: 170a10e9e51de134b9b56ec34ceaebf2,
+        type: 3}
     m_RemovedComponents:
     - {fileID: 4687092941540814187, guid: 170a10e9e51de134b9b56ec34ceaebf2, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 170a10e9e51de134b9b56ec34ceaebf2, type: 3}

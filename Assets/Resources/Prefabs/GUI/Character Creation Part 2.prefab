@@ -1799,6 +1799,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 6514809574835963491, guid: 3de0d9976eafaf0499595f4bb0447a1c,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 2100000, guid: 939cfe50cf45be84eb51e18fe9b9537d, type: 2}
     - target: {fileID: 6514809574835963492, guid: 3de0d9976eafaf0499595f4bb0447a1c,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target

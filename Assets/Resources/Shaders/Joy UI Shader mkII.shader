@@ -56,7 +56,6 @@ Shader "Joy Shaders/UI Saturation Shader"
             #pragma target 2.0
 
             #include "UnityCG.cginc"
-            #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
             #include "UnityUI.cginc"
 
             #pragma multi_compile_local _ UNITY_UI_CLIP_RECT
@@ -81,23 +80,22 @@ Shader "Joy Shaders/UI Saturation Shader"
             };
 
             sampler2D _MainTex;
-            SAMPLER(sampler_MainTex);
             fixed4 _Color;
             fixed4 _TextureSampleAdd;
             float4 _ClipRect;
             float4 _MainTex_ST;
             float _UIMaskSoftnessX;
             float _UIMaskSoftnessY;
-            float _Happiness;
+            half _Happiness;
 
-            void Unity_Clamp_float(float In, float Min, float Max, out float Out)
+            void Unity_Clamp_half(half In, half Min, half Max, out half Out)
             {
                 Out = clamp(In, Min, Max);
             }
 
-            void Unity_Saturation_float(float3 In, float Saturation, out float3 Out)
+            void Unity_Saturation_half(half3 In, half Saturation, out half3 Out)
             {
-                float luma = dot(In, float3(0.2126729, 0.7151522, 0.0721750));
+                float luma = dot(In, float3(0.213, 0.715, 0.072));
                 Out = luma.xxx + Saturation.xxx * (In - luma.xxx);
             }
 
@@ -126,16 +124,15 @@ Shader "Joy Shaders/UI Saturation Shader"
             fixed4 frag(v2f IN) : SV_Target
             {
                 half4 color = IN.color * (tex2D(_MainTex, IN.texcoord) + _TextureSampleAdd);
-                float4 c = tex2D(_MainTex, IN.texcoord);
-                float3 texRGB = float3(c.r, c.g, c.b);
+                const half3 tex_rgb = half3(color.r, color.g, color.b);
                 
-                float happiness;
-                Unity_Clamp_float(_Happiness, 0, 1, happiness);
-                float3 colorResult;
-                Unity_Saturation_float(texRGB, happiness, colorResult);
-                color.r = colorResult.r;
-                color.g = colorResult.g;
-                color.b = colorResult.b;
+                half happiness;
+                Unity_Clamp_half(_Happiness, 0, 1, happiness);
+                half3 color_result;
+                Unity_Saturation_half(tex_rgb, happiness, color_result);
+                color.r = color_result.r;
+                color.g = color_result.g;
+                color.b = color_result.b;
                 
                 #ifdef UNITY_UI_CLIP_RECT
                 half2 m = saturate((_ClipRect.zw - _ClipRect.xy - abs(IN.mask.xy)) * IN.mask.zw);
