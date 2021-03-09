@@ -292,7 +292,7 @@ namespace JoyLib.Code.Entities
 
             this.Initialise();
 
-            this.SetCurrentTarget();
+            this.CurrentTarget = NeedAIData.IdleState();
             this.ConstructDescription();
 
             this.StatisticChange += this.RecalculateDVs;
@@ -482,18 +482,6 @@ namespace JoyLib.Code.Entities
 
             this.m_Cultures.ForEach(culture => culture.ClearLastGroup());
             return String.Join(" ", nameList).Trim();
-        }
-
-        protected void SetCurrentTarget()
-        {
-            this.m_CurrentTarget = new NeedAIData
-            {
-                idle = true,
-                intent = Intent.Interact,
-                searching = false,
-                target = null,
-                targetPoint = GlobalConstants.NO_TARGET
-            };
         }
 
         public override void Tick()

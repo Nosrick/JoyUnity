@@ -46,8 +46,12 @@ namespace JoyLib.Code.Entities.Abilities
                     }
                 );
                 user.RemoveContents(item);
-                
-                GlobalConstants.GameManager.GUIManager?.CloseAllGUIs();
+                GlobalConstants.GameManager.ItemHandler?.Destroy(item.Guid);
+
+                if (user.PlayerControlled)
+                {
+                    GlobalConstants.GameManager.GUIManager?.CloseAllGUIs();
+                }
                 return true;
             }
             return false;
